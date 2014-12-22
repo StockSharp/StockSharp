@@ -1,0 +1,646 @@
+<Window x:Class="StockSharp.Hydra.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:hydra="clr-namespace:StockSharp.Hydra"
+		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml" 
+		xmlns:core="clr-namespace:StockSharp.Hydra.Core;assembly=StockSharp.Hydra.Core" 
+		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:controls1="clr-namespace:wyDay.Controls;assembly=AutomaticUpdaterWPF"
+		xmlns:navigation="clr-namespace:ActiproSoftware.Windows.Controls.Navigation;assembly=ActiproSoftware.Navigation.Wpf"
+		xmlns:docking="clr-namespace:ActiproSoftware.Windows.Controls.Docking;assembly=ActiproSoftware.Docking.Wpf"
+		xmlns:views="clr-namespace:ActiproSoftware.Windows.Controls.Views;assembly=ActiproSoftware.Views.Wpf"
+		xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+        Loaded="MainWindowLoaded" DataContext="{Binding RelativeSource={RelativeSource Self}}"
+		Title="S#.Data" Height="516" Width="1376" WindowState="Normal">
+
+	<Window.CommandBindings>
+		<CommandBinding Command="{x:Static hydra:MainWindow.NewTaskCommand}"
+					Executed="ExecutedNewTaskCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.TaskEnabledChangedCommand}"
+					Executed="ExecutedTaskEnabledChangedCommand"
+					CanExecute="CanExecuteTaskEnabledChangedCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.RemoveTaskCommand}"
+					Executed="ExecutedRemoveTaskCommand"
+					CanExecute="CanExecuteRemoveTaskCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.EditTaskSettingsCommand}"
+					Executed="ExecutedEditTaskSettingsCommand"
+					CanExecute="CanExecuteEditTaskSettingsCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.OpenLogCommand}"
+					Executed="ExecutedOpenLogCommand" />
+		
+		<CommandBinding Command="{x:Static hydra:MainWindow.TargetPlatformCommand}"
+					Executed="ExecutedTargetPlatformCommand" />
+		
+		<CommandBinding Command="{x:Static hydra:MainWindow.HelpCommand}"
+					Executed="ExecutedHelpCommand" />
+		
+		<CommandBinding Command="{x:Static hydra:MainWindow.AboutCommand}"
+					Executed="ExecutedAboutCommand" />
+		
+		<CommandBinding Command="{x:Static hydra:MainWindow.LogDirectoryCommand}"
+					Executed="ExecutedLogDirectoryCommand" />
+		
+		<CommandBinding Command="{x:Static hydra:MainWindow.CopyToBufferCommand}"
+					Executed="ExecutedCopyToBufferCommand"
+					CanExecute="CanExecuteCopyToBufferCommand" />
+		
+		<CommandBinding Command="Close" 
+					Executed="ExecutedExit" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.OpenPaneCommand}"
+					Executed="ExecutedOpenPaneCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.ImportPaneCommand}"
+					Executed="ExecutedImportPaneCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.AnalyticsCommand}"
+					Executed="ExecutedAnalyticsCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.SecuritiesCommand}"
+					Executed="ExecutedSecuritiesCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.BoardsCommand}"
+					Executed="ExecutedBoardsCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.MemoryStatisticsCommand}"
+					Executed="ExecutedMemoryStatisticsCommand" />
+	</Window.CommandBindings>
+
+	<Window.Resources>
+		<converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
+		<converters:InverseBooleanConverter x:Key="BoolToOppositeConverter"/>
+		<converters:MultiBoolToOpacityConverter x:Key="MultiBoolToOpacityConverter"/>
+		<converters:NullImageConverter x:Key="NullImageConverter"/>
+		
+		<LinearGradientBrush x:Key="CheckedBlue" StartPoint="0,0" EndPoint="0,1">
+			<GradientStop Color="#FF285AB3" Offset="0" />
+			<GradientStop Color="#FF4184EC" Offset="0.5" />
+			<GradientStop Color="#FF558BED" Offset="0.5" />
+			<GradientStop Color="#FF7DACF0" Offset="1" />
+		</LinearGradientBrush>
+		<SolidColorBrush x:Key="CheckedBlueBorder" Color="#FF143874" />
+		<Style x:Key="OrangeSwitchStyle" TargetType="{x:Type CheckBox}">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+			<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type CheckBox}">
+						<ControlTemplate.Resources>
+							<Storyboard x:Key="OnChecking">
+								<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="slider" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+									<SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="30" />
+								</DoubleAnimationUsingKeyFrames>
+							</Storyboard>
+							<Storyboard x:Key="OnUnchecking">
+								<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="slider" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+									<SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0" />
+								</DoubleAnimationUsingKeyFrames>
+							</Storyboard>
+						</ControlTemplate.Resources>
+						<DockPanel x:Name="dockPanel">
+							<ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" ContentTemplate="{TemplateBinding ContentTemplate}" RecognizesAccessKey="True" VerticalAlignment="Center" />
+							<Grid>
+								<Border x:Name="BackgroundBorder" BorderBrush="#FF939393" BorderThickness="1" CornerRadius="3" Height="20" Width="60">
+									<Border.Background>
+										<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+											<GradientStop Color="#FFB5B5B5" Offset="0" />
+											<GradientStop Color="#FFDEDEDE" Offset="0.1" />
+											<GradientStop Color="#FFEEEEEE" Offset="0.5" />
+											<GradientStop Color="#FFFAFAFA" Offset="0.5" />
+											<GradientStop Color="#FFFEFEFE" Offset="1" />
+										</LinearGradientBrush>
+									</Border.Background>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition />
+											<ColumnDefinition />
+										</Grid.ColumnDefinitions>
+										<Ellipse x:Name="Off" Width="10" Height="10" Stroke="#FF7A7A7A" StrokeThickness="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										<Line x:Name="On" X1="0" Y1="2" X2="0" Y2="10" Stroke="#FF7A7A7A" StrokeThickness="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+									</Grid>
+								</Border>
+								<Border BorderBrush="#FF939393" HorizontalAlignment="Left" x:Name="slider" Width="30" Height="20" BorderThickness="1" CornerRadius="3" RenderTransformOrigin="0.5,0.5" Margin="0">
+									<Border.RenderTransform>
+										<TransformGroup>
+											<ScaleTransform ScaleX="1" ScaleY="1" />
+											<SkewTransform AngleX="0" AngleY="0" />
+											<RotateTransform Angle="0" />
+											<TranslateTransform X="0" Y="0" />
+										</TransformGroup>
+									</Border.RenderTransform>
+									<Border.Background>
+										<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+											<GradientStop Color="#FFF0F0F0" Offset="0" />
+											<GradientStop Color="#FFCDCDCD" Offset="0.1" />
+											<GradientStop Color="#FFFBFBFB" Offset="1" />
+										</LinearGradientBrush>
+									</Border.Background>
+								</Border>
+							</Grid>
+						</DockPanel>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsChecked" Value="True">
+								<Trigger.ExitActions>
+									<BeginStoryboard Storyboard="{StaticResource OnUnchecking}" x:Name="OnUnchecking_BeginStoryboard" />
+								</Trigger.ExitActions>
+								<Trigger.EnterActions>
+									<BeginStoryboard Storyboard="{StaticResource OnChecking}" x:Name="OnChecking_BeginStoryboard" />
+								</Trigger.EnterActions>
+								<Setter TargetName="On" Property="Stroke" Value="White" />
+								<Setter TargetName="Off" Property="Stroke" Value="White" />
+								<!-- Change Orange or Blue color here -->
+								<Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource CheckedBlue}" />
+								<Setter TargetName="BackgroundBorder" Property="BorderBrush" Value="{StaticResource CheckedBlueBorder}" />
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<!-- ToDo: Add Style for Isenabled == False -->
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style TargetType="ToggleButton" x:Key="ToggleButtonStyle">
+			<Style.Resources>
+				<SolidColorBrush x:Key="ControlForeground" Color="#FF202020" />
+				<SolidColorBrush x:Key="DisabledBorderBrush" Color="#66000000" />
+				<SolidColorBrush x:Key="ControlHighlight" Color="#80FFFFFF" />
+				<SolidColorBrush x:Key="FocusVisualBrush" Color="#00000000" />
+
+				<LinearGradientBrush x:Key="DisabledBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#FF9C9DA0" />
+					<GradientStop Color="#FF8B8C8E" Offset="1" />
+				</LinearGradientBrush>
+
+				<LinearGradientBrush x:Key="ControlBackgroundNormal" EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#FFA0BB0E" Offset="0.176" />
+					<GradientStop Color="#FF6D9700" Offset="0.894" />
+				</LinearGradientBrush>
+
+				<LinearGradientBrush x:Key="ControlBackgroundOver" EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#FFAECC07" Offset="0.228" />
+					<GradientStop Color="#FF83B100" Offset="0.849" />
+				</LinearGradientBrush>
+
+				<Color x:Key="ColorForegroundShadowColor">#FFDEDEDE</Color>
+				<DropShadowEffect x:Key="ControlShadowEffect" BlurRadius="1" Color="#000000" Direction="-90" Opacity="0.55" ShadowDepth="1" />
+			</Style.Resources>
+			<Setter Property="Padding" Value="18,6" />
+			<Setter Property="Foreground" Value="{StaticResource ControlForeground}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ToggleButton">
+						<Grid x:Name="Root">
+							<VisualStateManager.VisualStateGroups>
+								<VisualStateGroup x:Name="CommonStates">
+									<VisualStateGroup.Transitions>
+										<VisualTransition GeneratedDuration="0:0:0.1" />
+										<VisualTransition To="Pressed" />
+										<VisualTransition From="Pressed" />
+									</VisualStateGroup.Transitions>
+									<VisualState x:Name="Normal" />
+									<VisualState x:Name="MouseOver">
+										<Storyboard>
+											<DoubleAnimation Duration="0" Storyboard.TargetName="MouseOverElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Disabled">
+										<Storyboard>
+											<DoubleAnimation Duration="0" Storyboard.TargetName="NormalElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0" />
+											<DoubleAnimation Duration="0" Storyboard.TargetName="DisabledElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
+											<DoubleAnimation Duration="0" Storyboard.TargetName="HighlightElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0.5" />
+											<DoubleAnimation Duration="0" Storyboard.TargetName="ContentHost" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="0.75" />
+										</Storyboard>
+									</VisualState>
+								</VisualStateGroup>
+
+								<VisualStateGroup x:Name="CheckStates">
+									<VisualState x:Name="Checked">
+										<Storyboard>
+											<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="NormalElement" />
+											<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="HighlightElement" />
+											<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="CheckedElement" />
+
+											<!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MouseOverElement">
+												<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}" />
+											</ObjectAnimationUsingKeyFrames>-->
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Unchecked" />
+									<VisualState x:Name="Indeterminate" />
+								</VisualStateGroup>
+
+								<VisualStateGroup x:Name="FocusStates">
+									<VisualState x:Name="Focused">
+										<Storyboard>
+											<DoubleAnimation Duration="0" Storyboard.TargetName="FocusVisualElement" Storyboard.TargetProperty="(FrameworkElement.Opacity)" To="1" />
+										</Storyboard>
+									</VisualState>
+									<VisualState x:Name="Unfocused" />
+								</VisualStateGroup>
+							</VisualStateManager.VisualStateGroups>
+
+							<Border x:Name="DisabledElement" Background="{StaticResource DisabledBrush}" CornerRadius="2" Opacity="0">
+								<Border BorderBrush="{StaticResource DisabledBorderBrush}" BorderThickness="0,0,1,1" CornerRadius="2" />
+							</Border>
+							<Border x:Name="NormalElement" Background="{StaticResource ControlBackgroundNormal}" CornerRadius="2" Effect="{StaticResource ControlShadowEffect}" />
+							<Border x:Name="CheckedElement" CornerRadius="2.5" BorderBrush="#D0494a4d" BorderThickness="1" Margin="0,-1,0,-1" Opacity="0" Background="{StaticResource ControlBackgroundNormal}">
+								<Border BorderBrush="#70303030" BorderThickness="1,1,0,0" CornerRadius="2">
+									<Border BorderBrush="#30303030" BorderThickness="1" CornerRadius="1.5">
+										<Border BorderBrush="#10303030" BorderThickness="1,1,0,0" CornerRadius="1" />
+									</Border>
+								</Border>
+							</Border>
+							<Border x:Name="MouseOverElement" Background="{StaticResource ControlBackgroundOver}" CornerRadius="2" Opacity="0" />
+							<Border x:Name="HighlightElement" BorderBrush="{StaticResource ControlHighlight}" BorderThickness="1,1,0,0" CornerRadius="2" />
+
+							<ContentPresenter x:Name="ContentHost" Margin="{TemplateBinding Padding}"
+											  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+											  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+								<ContentPresenter.Effect>
+									<DropShadowEffect Color="{StaticResource ColorForegroundShadowColor}" Direction="-90" BlurRadius="1" ShadowDepth="1" Opacity="0.5" />
+								</ContentPresenter.Effect>
+							</ContentPresenter>
+
+							<Rectangle x:Name="FocusVisualElement" IsHitTestVisible="False" Margin="1" Opacity="0" RadiusX="1" RadiusY="1" 
+									   Stroke="{StaticResource FocusVisualBrush}" StrokeThickness="1" />
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="TaskListViewItemStyle" TargetType="ListViewItem">
+			<Style.Resources>
+				<converters:BoolToBrushConverter x:Key="BoolToBackground" FalseBrushValue="White" TrueBrushValue="#f8ce53"/>
+				<converters:BoolToBrushConverter x:Key="BoolToBorder" FalseBrushValue="#D0D0D0" TrueBrushValue="#f8ce53"/>
+			</Style.Resources>
+
+			<Setter Property="Background" Value="{Binding Path=(core:IHydraTask.Settings).IsEnabled, Converter={StaticResource BoolToBackground}}"/>
+			<Setter Property="BorderBrush" Value="{Binding Path=(core:IHydraTask.Settings).IsEnabled, Converter={StaticResource BoolToBorder}}" />
+			<Setter Property="BorderThickness" Value="3" />
+			<Setter Property="Margin" Value="2" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="ListViewItem">
+						<Border x:Name="border" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
+								BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+								CornerRadius="3">
+							<StackPanel Margin="5">
+								<StackPanel Orientation="Horizontal">
+									<ex:BmpImage Source="{Binding Path=(core:IHydraTask.Icon), Converter={StaticResource NullImageConverter}}" VerticalAlignment="Center" />
+									<TextBlock FontWeight="Bold" Text="{Binding Path=(core:IHydraTask.Settings).Title}" VerticalAlignment="Center" Margin="5,0,0,0" />
+								</StackPanel>
+
+								<StackPanel Orientation="Horizontal" x:Name="buttons" Visibility="Collapsed" Margin="0,3,0,0">
+									<Button Margin="3" Padding="0" BorderBrush="{x:Null}" Name="btnSettings" Focusable="False" Background="Transparent"
+											Command="{x:Static hydra:MainWindow.EditTaskSettingsCommand}"
+											CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}">
+										<Button.Opacity>
+											<MultiBinding Converter="{StaticResource MultiBoolToOpacityConverter}" ConverterParameter="true">
+												<Binding Path="IsStarted" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}"/>
+												<Binding Path="Settings.IsEnabled"/>
+											</MultiBinding>
+										</Button.Opacity>
+										
+										<Button.Content>
+											<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/edit_24x24.png" ToolTip="{x:Static loc:LocalizedStrings.XamlStr412}" />
+										</Button.Content>
+									</Button>
+
+									<CheckBox Style="{StaticResource OrangeSwitchStyle}" Margin="3" IsChecked="{Binding Settings.IsEnabled}" DockPanel.Dock="Right"
+											  Opacity="{Binding Path=IsStarted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}, Converter={StaticResource BoolToOpacityConverter}, ConverterParameter=true}"
+											  Command="{x:Static hydra:MainWindow.TaskEnabledChangedCommand}"
+											  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}" />
+
+									<Button Background="Transparent" Margin="3" Padding="0" BorderBrush="{x:Null}" Name="btnClose" Focusable="False"
+											Command="{x:Static hydra:MainWindow.RemoveTaskCommand}"
+											CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}}">
+										<Button.Opacity>
+											<MultiBinding Converter="{StaticResource MultiBoolToOpacityConverter}" ConverterParameter="true">
+												<Binding Path="IsStarted" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}"/>
+												<Binding Path="Settings.IsEnabled"/>
+											</MultiBinding>
+										</Button.Opacity>
+										
+										<Button.Content>
+											<ex:BmpImage Source="Images\Close.png" ToolTip="{x:Static loc:LocalizedStrings.XamlStr787}" x:Name="imgClose" />
+										</Button.Content>
+									</Button>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsSelected" Value="True">
+								<Setter TargetName="border" Property="BorderBrush" Value="#f8ce53" />
+								<Setter TargetName="buttons" Property="Visibility" Value="Visible" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<EventSetter Event="MouseDoubleClick" Handler="CurrentTasks_OnSelectionItemDoubleClick"/>
+		</Style>
+
+		<ex:AutoRefreshCollectionViewSource Source="{Binding Path=Tasks}" x:Key="SortedSources" Filter="SortedSources_OnFilter">
+			<ex:AutoRefreshCollectionViewSource.SortDescriptions>
+				<componentModel:SortDescription PropertyName="Settings.IsEnabled" Direction="Descending"/>
+			</ex:AutoRefreshCollectionViewSource.SortDescriptions>
+		</ex:AutoRefreshCollectionViewSource>
+
+		<ex:AutoRefreshCollectionViewSource Source="{Binding Path=Tasks}" x:Key="SortedConverters" Filter="SortedConverters_OnFilter">
+			<ex:AutoRefreshCollectionViewSource.SortDescriptions>
+				<componentModel:SortDescription PropertyName="Settings.IsEnabled" Direction="Descending"/>
+			</ex:AutoRefreshCollectionViewSource.SortDescriptions>
+		</ex:AutoRefreshCollectionViewSource>
+	</Window.Resources>
+
+	<xctk:BusyIndicator Name="BusyIndicator">
+		<DockPanel LastChildFill="True">
+			<Menu DockPanel.Dock="Top">
+				<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr804}">
+					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr140}" Name="SourcesMenu">
+						<MenuItem.ItemsPanel>
+							<ItemsPanelTemplate>
+								<VirtualizingStackPanel Orientation="Vertical"/>
+							</ItemsPanelTemplate>
+						</MenuItem.ItemsPanel>
+
+						<MenuItem x:Name="RussianSourcesMi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
+						<MenuItem x:Name="AmericanSourcesMi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
+						<MenuItem x:Name="ForexSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr812}" />
+						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr258}" />
+						<MenuItem x:Name="OtherSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
+
+						<!--<MenuItem.ItemContainerStyle>
+							<Style TargetType="MenuItem">
+								<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
+								<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+							</Style>
+						</MenuItem.ItemContainerStyle>
+
+						<MenuItem.ItemTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="Auto"/>
+									</Grid.ColumnDefinitions>
+
+									<Image Grid.Column="0" Margin="3" Source="{Binding Path=(core:IHydraTask.Icon)}" Width="20" Height="20"/>
+									<TextBlock Grid.Column="1" Margin="5,3,3,3" FontWeight="Bold" Text="{Binding Path=Name}" VerticalAlignment="Center" />
+								</Grid>
+							</DataTemplate>
+						</MenuItem.ItemTemplate>-->
+					</MenuItem>
+					
+					<Separator/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str3059}" Command="Close"/>
+				</MenuItem>
+
+				<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr200}">
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str187}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Security"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Trade"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Depth"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str646}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Candle"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
+					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2250}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="News"/>
+				</MenuItem>
+
+				<MenuItem Header="{x:Static loc:LocalizedStrings.Str981}">
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str646}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
+					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2250}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
+				</MenuItem>
+
+				<MenuItem Header="{x:Static loc:LocalizedStrings.Str187}">
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2835}" Command="{x:Static hydra:MainWindow.SecuritiesCommand}" />
+					<MenuItem x:Name="GluingData" Header="{x:Static loc:LocalizedStrings.Str2892}" Click="GluingData_Click"/>
+				</MenuItem>
+
+				<MenuItem Header="{x:Static loc:LocalizedStrings.Str2121}">
+					<MenuItem x:Name="Analytics" Header="{x:Static loc:LocalizedStrings.Str1221}" Command="{x:Static hydra:MainWindow.AnalyticsCommand}" />
+					<Separator/>
+					<MenuItem x:Name="ResetSettings" Header="{x:Static loc:LocalizedStrings.Str1520}" Click="ResetSettings_Click" IsEnabled="{Binding Path=IsStarted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}, Converter={StaticResource BoolToOppositeConverter}}"/>
+					<MenuItem x:Name="EraseData" Header="{x:Static loc:LocalizedStrings.XamlStr786}" Click="EraseData_Click" IsEnabled="{Binding Path=IsStarted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}, Converter={StaticResource BoolToOppositeConverter}}"/>
+					<Separator/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2831}" Command="{x:Static hydra:MainWindow.BoardsCommand}" />
+					<MenuItem x:Name="Synchronize" Header="{x:Static loc:LocalizedStrings.XamlStr653}" Click="Synchronize_Click" IsEnabled="{Binding Path=IsStarted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}, Converter={StaticResource BoolToOppositeConverter}}"/>
+					<Separator/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr337}" x:Name="ProxyButton" Click="ProxtSettings_Click"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr339}" x:Name="ServiceButton" Click="Settings_Click"/>
+				</MenuItem>
+
+				<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr507}">
+					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr700}" Command="{x:Static hydra:MainWindow.HelpCommand}"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1470}" Name="MnuCheckForUpdates"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr610}" Name="MnuTargetPlatform" Command="{x:Static hydra:MainWindow.TargetPlatformCommand}"/>
+					<Separator/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr367}" Command="{x:Static hydra:MainWindow.AboutCommand}"/>
+				</MenuItem>
+			</Menu>
+
+			<DockPanel DockPanel.Dock="Top">
+				<ToolBar ToolBarTray.IsLocked="True">
+					<ToggleButton x:Name="StartStop" Click="StartStopClick" Width="100" Height="29"  Margin="3,0,2,0" Content="{x:Static loc:LocalizedStrings.Str2421}" Style="{StaticResource ToggleButtonStyle}"/>
+
+					<xctk:DropDownButton x:Name="Logs" Width="100" Height="30"  Margin="0,0,2,0" VerticalAlignment="Bottom">
+						<xctk:DropDownButton.DropDownContent>
+							<Menu Name="LogsMenu">
+								<Menu.ItemsPanel>
+									<ItemsPanelTemplate>
+										<VirtualizingStackPanel Orientation="Vertical"/>
+									</ItemsPanelTemplate>
+								</Menu.ItemsPanel>
+								<!--<Menu.ItemContainerStyle>
+									<Style TargetType="MenuItem">
+										<Setter Property="Command" Value="{x:Static hydra:MainWindow.OpenLogCommand}" />
+									</Style>
+								</Menu.ItemContainerStyle>-->
+								<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr106}" Command="{x:Static hydra:MainWindow.OpenLogCommand}" />
+								<!--<MenuItem Header="Ошибки и предупреждения" CommandParameter="error" />
+								<MenuItem Header="Все сообщения" CommandParameter="full" />-->
+								<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr129}" Command="{x:Static hydra:MainWindow.LogDirectoryCommand}"/>
+								<MenuItem x:Name="MemoryStatMenuItem" Header="{x:Static loc:LocalizedStrings.XamlStr715}" IsCheckable="True" Command="{x:Static hydra:MainWindow.MemoryStatisticsCommand}"/>
+							</Menu>
+						</xctk:DropDownButton.DropDownContent>
+						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+							<ex:BmpImage x:Name="WarnErrorImg" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/warning_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
+							<ex:BmpImage x:Name="LogErrorImg" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/error_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
+							<Label VerticalContentAlignment="Top"><TextBlock Text="{x:Static loc:LocalizedStrings.Str3237}"/></Label>
+						</StackPanel>
+					</xctk:DropDownButton>
+				</ToolBar>
+
+				<ToolBar ToolBarTray.IsLocked="True">
+					<Button Content="{x:Static loc:LocalizedStrings.Str985}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Str1414}" Width="85" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Str646}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Str1416}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
+					<Button Content="Level 1" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Str2250}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
+				</ToolBar>
+
+				<ToolBar ToolBarTray.IsLocked="True">
+					<Button Content="{x:Static loc:LocalizedStrings.Str187}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.SecuritiesCommand}" />
+					<Button Content="{x:Static loc:LocalizedStrings.Str1221}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.AnalyticsCommand}" />
+				</ToolBar>
+
+				<controls1:AutomaticUpdater x:Name="AutomaticUpdater" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10" DockPanel.Dock="Right"
+										DaysBetweenChecks="0" WaitBeforeCheckSecs="60" UpdateType="OnlyCheck" Animate="True" KeepHidden="False" wyUpdateLocation="Hydra.Update.exe" />
+			</DockPanel>
+
+			<StatusBar VerticalAlignment="Bottom" DockPanel.Dock="Bottom">
+				<StatusBarItem>
+					<TextBlock x:Name="Status" VerticalAlignment="Stretch" />
+				</StatusBarItem>
+				
+				<StatusBarItem HorizontalAlignment="Right">
+					<StackPanel Width="800" Orientation="Horizontal" Margin="5,0,0,0">
+						<ex:BmpImage x:Name="LastWarnError" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/warning_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
+						<ex:BmpImage x:Name="LastLogError" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/error_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
+						<Label VerticalContentAlignment="Center" Name="LastLogMessageCtrl" Height="25" ToolTip="{Binding Path=Content, RelativeSource={RelativeSource Self}}">
+							<Label.ContextMenu>
+								<ContextMenu>
+                                    <MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr660}" Command="{x:Static hydra:MainWindow.CopyToBufferCommand}" 
+                                              CommandTarget="{Binding Path=PlacementTarget, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}}"/>
+								</ContextMenu>
+							</Label.ContextMenu>
+						</Label>
+					</StackPanel>
+				</StatusBarItem>
+			</StatusBar>
+
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" MinWidth="40" />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<docking:DockSite x:Name="DockSite" Grid.Column="1" Grid.ColumnSpan="2" AreDocumentWindowsDestroyedOnClose="False" CanDocumentWindowsRaft="True" 
+								  WindowClosing="DockSite_OnWindowClosing" WindowClosed="DockSite_OnWindowClosed" WindowActivated="DockSite_OnWindowActivated">
+					<docking:DockSite.AutoHideBottomContainers>
+						<docking:ToolWindowContainer>
+							<docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str3237}" x:Name="LogToolWindow" >
+								<sx:Monitor Name="MonitorControl" ShowStrategies="False" />
+							</docking:ToolWindow>
+						</docking:ToolWindowContainer>
+					</docking:DockSite.AutoHideBottomContainers>
+					
+					<docking:Workspace>
+						<docking:TabbedMdiHost>
+							<docking:TabbedMdiContainer/>
+						</docking:TabbedMdiHost>
+					</docking:Workspace>
+				</docking:DockSite>
+				
+				<navigation:NavigationBar Grid.Column="0" IsHeaderVisible="True" Title="S#.Data" ContentWidth="200" x:Name="NavigationBar">
+					<navigation:NavigationPane x:Name="SourcesPane" Title="{x:Static loc:LocalizedStrings.XamlStr227}" ImageSourceLarge="/Images/Source32.png" ImageSourceSmall="/Images/Source16.png">
+						<DockPanel LastChildFill="True" Margin="3">
+							<xctk:DropDownButton x:Name="NewSourceButton" Content="{x:Static loc:LocalizedStrings.XamlStr140}" DockPanel.Dock="Top" Margin="0,0,0,3">
+								<xctk:DropDownButton.DropDownContent>
+									<Menu x:Name="SourcesDropDownButtonMenu">
+										<MenuItem x:Name="RussianSourcesCi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
+										<MenuItem x:Name="AmericanSourcesCi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
+										<MenuItem x:Name="ForexSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr812}" />
+										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr258}" />
+										<MenuItem x:Name="OtherSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
+										
+										<Menu.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel Orientation="Vertical"/>
+											</ItemsPanelTemplate>
+										</Menu.ItemsPanel>
+										<!--<Menu.ItemContainerStyle>
+											<Style TargetType="MenuItem">
+												<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
+												<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+											</Style>
+										</Menu.ItemContainerStyle>-->
+										<!--<Menu.ItemTemplate>
+											<DataTemplate>
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="Auto"/>
+														<ColumnDefinition Width="Auto"/>
+													</Grid.ColumnDefinitions>
+
+													<Image Grid.Column="0" Margin="3" Source="{Binding Path=(core:IHydraTask.Icon)}" Width="20" Height="20"/>
+													<TextBlock Grid.Column="1" Margin="5,3,3,3" FontWeight="Bold" Text="{Binding Path=Name}" VerticalAlignment="Center" />
+												</Grid>
+											</DataTemplate>
+										</Menu.ItemTemplate>-->
+									</Menu>
+								</xctk:DropDownButton.DropDownContent>
+							</xctk:DropDownButton>
+
+							<ListView Name="CurrentSources" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedSources}}"
+									 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="CurrentTasks_OnSelectionChanged">
+								<ListView.ItemsPanel>
+									<ItemsPanelTemplate>
+										<views:AnimatedStackPanel>
+											<views:AnimatedStackPanel.ArrangeAnimation>
+												<views:ArrangeAnimation EnterAnimation="Fade,Translate" LeaveAnimation="Fade,Translate" TranslateEnterPoint="FarRight,None" TranslateLeavePoint="FarRight,None" />
+											</views:AnimatedStackPanel.ArrangeAnimation>
+										</views:AnimatedStackPanel>
+									</ItemsPanelTemplate>
+								</ListView.ItemsPanel>
+							</ListView>
+						</DockPanel>
+					</navigation:NavigationPane>
+
+					<navigation:NavigationPane x:Name="ConvertersPane" Title="{x:Static loc:LocalizedStrings.XamlStr166}" ImageSourceLarge="/Images/Tasks32.png" ImageSourceSmall="/Images/Tasks16.png">
+						<DockPanel LastChildFill="True" Margin="3">
+							<xctk:DropDownButton x:Name="NewTaskButton" Content="{x:Static loc:LocalizedStrings.XamlStr136}" DockPanel.Dock="Top" Margin="0,0,0,3">
+								<xctk:DropDownButton.DropDownContent>
+									<Menu Name="TasksMenu">
+										<Menu.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel Orientation="Vertical"/>
+											</ItemsPanelTemplate>
+										</Menu.ItemsPanel>
+
+										<!--<Menu.ItemContainerStyle>
+											<Style TargetType="MenuItem">
+												<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
+												<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+											</Style>
+										</Menu.ItemContainerStyle>-->
+									</Menu>
+								</xctk:DropDownButton.DropDownContent>
+							</xctk:DropDownButton>
+
+							<ListView Name="CurrentConverters" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedConverters}}"
+									 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+								<ListView.ItemsPanel>
+									<ItemsPanelTemplate>
+										<views:AnimatedStackPanel>
+											<views:AnimatedStackPanel.ArrangeAnimation>
+												<views:ArrangeAnimation EnterAnimation="Fade,Translate" LeaveAnimation="Fade,Translate" TranslateEnterPoint="FarRight,None" TranslateLeavePoint="FarRight,None" />
+											</views:AnimatedStackPanel.ArrangeAnimation>
+										</views:AnimatedStackPanel>
+									</ItemsPanelTemplate>
+								</ListView.ItemsPanel>
+							</ListView>
+						</DockPanel>
+					</navigation:NavigationPane>
+				</navigation:NavigationBar>
+
+				<GridSplitter Grid.Column="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndCurrent" Background="Transparent" Width="5" />
+			</Grid>
+		</DockPanel>
+	</xctk:BusyIndicator>
+</Window>

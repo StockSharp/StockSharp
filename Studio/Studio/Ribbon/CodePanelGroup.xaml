@@ -1,0 +1,30 @@
+<ribbon:Group x:Class="StockSharp.Studio.Ribbon.CodePanelGroup"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"              xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+              xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
+              xmlns:local="clr-namespace:StockSharp.Studio.Ribbon"
+              xmlns:code="clr-namespace:StockSharp.Xaml.Code;assembly=StockSharp.Xaml"
+              Label="{x:Static loc:LocalizedStrings.Str57}">
+    
+    <ribbon:Group.CommandBindings>
+        <CommandBinding Command="{x:Static local:CodePanelGroup.EditReferencesCommand}"
+                    Executed="ExecutedEditReferences"
+                    CanExecute="CanExecuteEditReferences" />
+    </ribbon:Group.CommandBindings>
+
+    <ribbon:StackPanel ItemVariantBehavior="AlwaysMedium">
+        <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr419}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr424}" ToolTipService.ShowOnDisabled="True"
+                       Command="{x:Static code:CodePanel.UndoCommand}"
+                       ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/undo_16x16.png" />
+
+        <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr58}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr59}" ToolTipService.ShowOnDisabled="True"
+                       Command="{x:Static code:CodePanel.RedoCommand}"
+                       ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/redo_16x16.png" />
+    </ribbon:StackPanel>
+    
+    <ribbon:Separator/>
+    
+    <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr705}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr705}" ToolTipService.ShowOnDisabled="True" 
+                   Command="{x:Static local:CodePanelGroup.EditReferencesCommand}"
+                   ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/references_32x32.png" />
+</ribbon:Group>

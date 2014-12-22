@@ -1,0 +1,19 @@
+<Window x:Class="StockSharp.LicenseTool.LicenseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+        Title="{x:Static loc:LocalizedStrings.XamlStr741}" Height="240" Width="400"
+		ResizeMode="NoResize" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="24" />
+		</Grid.RowDefinitions>
+
+		<sx:LicensePanel x:Name="LicensePanel" x:FieldModifier="public" />
+		
+		<Button IsDefault="True" ex:XamlHelper.DialogResult="True" Grid.Row="2" Width="100">OK</Button>
+	</Grid>
+</Window>

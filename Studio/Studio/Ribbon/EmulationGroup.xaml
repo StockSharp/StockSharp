@@ -1,0 +1,67 @@
+<ribbon:Group x:Class="StockSharp.Studio.Ribbon.EmulationGroup"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"              xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+              xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
+              xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+              xmlns:ribbon1="clr-namespace:StockSharp.Studio.Ribbon"
+              Label="{x:Static loc:LocalizedStrings.Str3600}" DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <Grid Margin="3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="2">
+            <Label Content="{x:Static loc:LocalizedStrings.XamlStr624}" />
+            <editors:DateTimeEditBox Margin="1" Value="{Binding EmulationService.EmulationSettings.StartTime}" 
+                                     IsReadOnly="{Binding EmulationService.IsInProgress}" />
+
+            <Label Content="{x:Static loc:LocalizedStrings.XamlStr132}" />
+            <editors:DateTimeEditBox Margin="1" Value="{Binding EmulationService.EmulationSettings.StopTime}" 
+                                     IsReadOnly="{Binding EmulationService.IsInProgress}" />
+            
+            <ribbon:StackPanel ItemVariantBehavior="AlwaysSmall">
+                <ribbon1:PropertiesButton SelectedObject="{Binding EmulationService.EmulationSettings}"
+                                          IsReadOnly="{Binding EmulationService.IsInProgress}"/>
+            </ribbon:StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="2">
+            <ProgressBar Value="{Binding EmulationService.Progress}" Minimum="0" Maximum="100" />
+            
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0">
+					<Run Text="{x:Static loc:LocalizedStrings.XamlStr588}"/><Run Text=" "/>
+				</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding EmulationService.Duration, StringFormat={}{0:hh\\:mm\\:ss}}"/>
+
+				<TextBlock Grid.Row="1" Grid.Column="0" >
+					<Run Text="{x:Static loc:LocalizedStrings.Str3586}"/><Run Text=" "/>
+				</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding EmulationService.Remaining, StringFormat={}{0:hh\\:mm\\:ss}}" />
+
+				<TextBlock Grid.Row="0" Grid.Column="2">
+					<Run Text="{x:Static loc:LocalizedStrings.XamlStr739}"/><Run Text=" "/>
+				</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding EmulationService.MarketTime, StringFormat={}{0:dd.MM.yyyy HH:mm:ss}}"/>
+
+				<TextBlock Grid.Row="1" Grid.Column="2">
+					<Run Text="{x:Static loc:LocalizedStrings.XamlStr443}"/><Run Text=": "/>
+				</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding EmulationService.DataErrorCount}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</ribbon:Group>

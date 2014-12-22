@@ -1,0 +1,54 @@
+<panes:DataPane
+				x:Class="StockSharp.Hydra.Panes.TradesPane"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"				xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+				xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+				xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+				xmlns:xaml="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+				xmlns:controls="clr-namespace:StockSharp.Hydra.Controls"
+				xmlns:panes="clr-namespace:StockSharp.Hydra.Panes">
+	<DockPanel>
+		<controls:ExportProgress x:Name="Progress" Height="23" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
+
+		<Grid x:Name="MainGrid">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="200" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="150*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<controls:DrivePanel x:Name="DrivePanel" Grid.ColumnSpan="13" />
+
+			<xctk:DateTimePicker x:Name="FromCtrl" Grid.Column="0" Grid.Row="2" Format="ShortDate" ValueChanged="OnDateValueChanged" />
+			<xctk:DateTimePicker x:Name="ToCtrl" Grid.Column="2" Grid.Row="2" Format="ShortDate" ValueChanged="OnDateValueChanged" />
+
+			<controls:SecurityPickerButton x:Name="SelectSecurityBtn" Grid.Column="4" Grid.Row="2" SecuritySelected="SelectSecurityBtn_SecuritySelected" />
+			<CheckBox x:Name="IsNonSystem" Content="{x:Static loc:LocalizedStrings.XamlStr62}" Grid.Column="6" Grid.Row="2" Height="16" Margin="0,4,0,3" ToolTip="{x:Static loc:LocalizedStrings.XamlStr86}" />
+			<CheckBox x:Name="IsBuildFromOrderLog" Grid.Column="8" Grid.Row="2" ToolTip="{x:Static loc:LocalizedStrings.XamlStr530}" VerticalAlignment="Center"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr191}"/></CheckBox>
+			<Button x:Name="Find" Grid.Column="10" Grid.Row="2" Click="FindClick">
+				<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/find_16x16.png" />
+			</Button>
+			<controls:ExportButton x:Name="ExportBtn" Grid.Column="12" Grid.Row="2" />
+
+			<xaml:ExecutionGrid x:Name="FindedTrades" Grid.Row="4" Grid.ColumnSpan="13" Grid.Column="0" />
+		</Grid>
+	</DockPanel>
+</panes:DataPane>

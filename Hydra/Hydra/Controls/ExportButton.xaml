@@ -1,0 +1,48 @@
+﻿<xctk:DropDownButton
+			x:Class="StockSharp.Hydra.Controls.ExportButton"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+			xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+			mc:Ignorable="d" d:DesignHeight="24" d:DesignWidth="40">
+	
+	<xctk:DropDownButton.Content>
+		<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/images/save_16x16.png" />
+	</xctk:DropDownButton.Content>
+	<xctk:DropDownButton.DropDownContent>
+		<ListBox x:Name="ExportTypeCtrl" SelectionChanged="ExportTypeCtrlSelectionChanged">
+			<ListBoxItem>
+				<StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="../Images/excel.png" VerticalAlignment="Center" />
+					<Label>Excel</Label>
+				</StackPanel>
+			</ListBoxItem>
+			<ListBoxItem>
+				<StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="../Images/xml.png" VerticalAlignment="Center" />
+					<Label>Xml</Label>
+				</StackPanel>
+			</ListBoxItem>
+			<ListBoxItem>
+				<StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="../Images/txt.png" VerticalAlignment="Center" />
+					<Label>Txt</Label>
+				</StackPanel>
+			</ListBoxItem>
+			<ListBoxItem>
+				<StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="../Images/database_inactive.png" Height="16" Width="16" VerticalAlignment="Center" />
+					<Label>Sql</Label>
+				</StackPanel>
+			</ListBoxItem>
+			<ListBoxItem>
+				<StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="../Images/logo.png" Height="16" Width="16" VerticalAlignment="Center" />
+					<Label>Bin</Label>
+				</StackPanel>
+			</ListBoxItem>
+		</ListBox>
+	</xctk:DropDownButton.DropDownContent>
+</xctk:DropDownButton>

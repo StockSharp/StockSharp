@@ -1,0 +1,2783 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Blackwood.Framework</name>
+    </assembly>
+    <members>
+        <member name="T:Blackwood.Framework.BWOrder">
+            <summary>
+            Represents an order in the Blackwood system.
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrderBase">
+            <summary>
+            Abstract base class for BWOrders.  Provides functionality for setting parameters of an order, 
+            updating the order on order event messages.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_lastExecPrice">
+            <summary>
+            The share price of the last execution (not average price).
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_lastExecSize">
+            <summary>
+            The size of the last execution (not cumulative).
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_lastExecVenue">
+            <summary>
+            The venue on which the last execution took place.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_avgPrice">
+            <summary>
+            The average price for all executions so far.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_isStarted">
+            <summary>
+            Whether this order has been sent to the server.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_isAlive">
+            <summary>
+            Whether this order can still change status / receive messages from client portal.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_symbol">
+            <summary>
+            The symbol this order is set.  This cannot be changed after the order is placed.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.OrderStatus">
+            <summary>
+            Replaces Status
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.m_userID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWOrderBase.Session">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrderBase.#ctor(Blackwood.Framework.BWSession,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="session"></param>
+            <param name="symbol"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrderBase.GetSession">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrderBase.UpdateOnExecution(System.Double,System.Int32,System.String)">
+            <summary>
+            NOTE: tracking the avg price, only works for a given order, if it's executions are on one side of 
+            the market. 		 		
+            i.e. not agents that both buy and sell - will not compute the average correctly
+            For sell and short side execution (the qty's must be reported as negatives!)
+            </summary>
+            <param name="execPrice"></param>
+            <param name="execSize"></param>
+            <param name="execVenue"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrderBase.Cancel">
+            <summary>
+            
+            </summary>
+            <returns>True if Cancel is sent, False if Cancel is NOT sent (e.g. When the Order is not yet ACK'd)</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrderBase.CancelReplace(System.Int32,System.Single,Blackwood.CBWMessages.ORDER_TYPE)">
+            <summary>
+            
+            </summary>
+            <param name="nNewSize"></param>
+            <param name="fNewPrice"></param>
+            <param name="bwNewOrderType"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrderBase.CancelReplace(System.Int32,System.Double,Pacmid.Types.OrderType)">
+            <summary>
+            
+            </summary>
+            <param name="nNewSize"></param>
+            <param name="fNewPrice"></param>
+            <param name="bwNewOrderType"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrderBase.Send">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.IsStarted">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.IsAlive">
+            <summary>
+            Is the order active in some fashion (or server or market)
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.Symbol">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.Status">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.UserID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.USizeRemaining">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.USizeRequested">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.UCumulativeSizeExecuted">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.SizeRequested">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.SizeRemaining">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.CumulativeSizeExecuted">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.LastExecutionPrice">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.LastExecutionSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.LastExecutionVenue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrderBase.AveragePrice">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.#ctor(Blackwood.Framework.BWSession,System.String,Blackwood.CBWMessages.ORDER_SIDE,System.UInt32,System.Double,Blackwood.CBWMessages.ORDER_TYPE,System.Int32,Blackwood.CBWMessages.FEED_ID,System.Boolean,System.UInt32)">
+            <summary>
+            Create a new BWOrder object suitable for sending to an order connection.
+            </summary>
+            <param name="session">The BWSession for this order.</param>
+            <param name="symbol">The symbol of the stock this order will buy or sell.</param>
+            <param name="orderSide">The side (buy, sell, etc.) of the order.</param>
+            <param name="absQty">The quantity of shares to buy/sell.</param>
+            <param name="price">The price in dollars for the order.  Set to zero for market orders.</param>
+            <param name="ORDER_TYPE">The type of order (limit, market, etc).  </param>
+            <param name="timeout">The time in which the order is valid.</param>
+            <param name="FEED_ID">The venue on which the order should execute.</param>
+            <param name="bHidden">A field to mark order as hidden.</param>
+            <param name="absShowQty"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.#ctor(Blackwood.Framework.BWSession,System.String,Blackwood.CBWMessages.ORDER_SIDE,System.UInt32,System.Double,System.Double,Blackwood.CBWMessages.ORDER_TYPE,System.Int32,Blackwood.CBWMessages.FEED_ID,System.Boolean,System.UInt32)">
+            <summary>
+            Create a new BWOrder object suitable for sending to an order connection.
+            </summary>
+            <param name="session">The BWSession for this order.</param>
+            <param name="symbol">The symbol of the stock this order will buy or sell.</param>
+            <param name="orderSide">The side (buy, sell, etc.) of the order.</param>
+            <param name="absQty">The quantity of shares to buy/sell.</param>
+            <param name="price">The price in dollars for the order.  Set to zero for market orders.</param>
+            <param name="stopPrice">The price in dollars for the stop order.</param>
+            <param name="ORDER_TYPE">The type of order (limit, market, etc).  </param>
+            <param name="timeout">The time in which the order is valid.</param>
+            <param name="FEED_ID">The venue on which the order should execute.</param>
+            <param name="bHidden">A field to mark order as hidden.</param>
+            <param name="absShowQty"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.#ctor(Blackwood.Framework.BWSession,System.String,Pacmid.Types.OrderSide,System.UInt32,System.Double,Pacmid.Types.OrderType,System.Int32,Pacmid.Types.FeedId,System.Boolean,System.UInt32)">
+            <summary>
+            Create a new BWOrder object suitable for sending to an order connection.
+            </summary>
+            <param name="session">The BWSession for this order.</param>
+            <param name="symbol">The symbol of the stock this order will buy or sell.</param>
+            <param name="orderSide">The side (buy, sell, etc.) of the order.</param>
+            <param name="absQty">The quantity of shares to buy/sell.</param>
+            <param name="price">The price in dollars for the order.  Set to zero for market orders.</param>
+            <param name="orderType">The type of order (limit, market, etc).  </param>
+            <param name="timeout">The time in which the order is valid.</param>
+            <param name="feedID">The venue on which the order should execute.</param>
+            <param name="bHidden">A field to mark order as hidden.</param>
+            <param name="absShowQty"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.#ctor(Blackwood.Framework.BWSession,System.String,Pacmid.Types.OrderSide,System.UInt32,System.Double,System.Double,Pacmid.Types.OrderType,System.Int32,Pacmid.Types.FeedId,System.Boolean,System.UInt32)">
+            <summary>
+            Create a new BWOrder object suitable for sending to an order connection.
+            </summary>
+            <param name="session">The BWSession for this order.</param>
+            <param name="symbol">The symbol of the stock this order will buy or sell.</param>
+            <param name="orderSide">The side (buy, sell, etc.) of the order.</param>
+            <param name="absQty">The quantity of shares to buy/sell.</param>
+            <param name="price">The price in dollars for the order.  Set to zero for market orders.</param>
+            <param name="stopPrice">The price in dollars for the stop order.</param>
+            <param name="orderType">The type of order (limit, market, etc).  </param>
+            <param name="timeout">The time in which the order is valid.</param>
+            <param name="feedID">The venue on which the order should execute.</param>
+            <param name="bHidden">A field to mark order as hidden.</param>
+            <param name="absShowQty"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.Send">
+            <summary>
+            Sends the BWOrder to to the client portal.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.Cancel">
+            <summary>
+            Sends a cancel request to the client portal.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.CancelReplace(System.Int32,System.Single,Blackwood.CBWMessages.ORDER_TYPE)">
+            <summary>
+            Sends a cancel replace request to the client portal.
+            </summary>
+            <param name="nNewSize">New order size</param>
+            <param name="fNewPrice">New order price</param>
+            <param name="bwNewOrderType">New order type</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.CancelReplace(System.Int32,System.Single,System.Single,Blackwood.CBWMessages.ORDER_TYPE)">
+            <summary>
+            Sends a cancel replace request to the client portal.
+            </summary>
+            <param name="nNewSize">New order size</param>
+            <param name="fNewPrice">New order price</param>
+            <param name="fNewStopPrice">New Stop price</param>
+            <param name="bwNewOrderType">New order type</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.CancelReplace(System.Int32,System.Double,Pacmid.Types.OrderType)">
+            <summary>
+            Sends a cancel replace request to the client portal.
+            </summary>
+            <param name="nNewSize">New order size</param>
+            <param name="fNewPrice">New order price</param>
+            <param name="bwNewOrderType">New order type</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.CancelReplace(System.Int32,System.Double,System.Double,Pacmid.Types.OrderType)">
+            <summary>
+            Sends a cancel replace request to the client portal.
+            </summary>
+            <param name="nNewSize">New order size</param>
+            <param name="fNewPrice">New order price</param>
+            <param name="fNewStopPrice">New Stop price</param>
+            <param name="bwNewOrderType">New order type</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.LocateStock">
+            <summary>
+            Sends a locate request to the client portal - response will be a reject message
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.AcceptLocate">
+            <summary>
+            Accept a locate after receiving a reject message
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.SetBoothCode(System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Sets a Booth code for a NYSE order
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.SetTraderDestination(Pacmid.Messages.TraderDestination)">
+            <summary>
+            Set the TraderDestination.  Get destinations from BWSession.GetTraderDestinations
+            </summary>
+            <param name="dest"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWOrder.MarkAsDone">
+            <summary>
+            Changes order status to Done and unsubscribes the order to BWOrderUpdateEvents. Useful for stuck orders.
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.BWOrderUpdateEvent">
+            <summary>
+            The event that users can hook into for updates on the order's status
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.OrderEvent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.ExecutionEvent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.CancelEvent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.RejectEvent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.OrderEvent3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.ExecutionEvent3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.CancelEvent3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWOrder.RejectEvent3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.LimitPrice">
+            <summary>
+            Limit Price
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.StopPrice">
+            <summary>
+            Stop Price
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.Size">
+            <summary>
+            Total Size
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.SizeShow">
+            <summary>
+            Size to Show 
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.TIF">
+            <summary>
+            Time-in-Force
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.Hidden">
+            <summary>
+            Hidden
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.PartDontInit">
+            <summary>
+            Participate Don't Initiate - specifies that the order not be routed to other exchanges
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.SmartID">
+            <summary>
+            Smart ID is unique for most orders, it will be the same as a parent's Order ID for child smart orders (e.g. Hunt)
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderID">
+            <summary>
+            Order ID assigned when order is placed.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.ClientOrderID">
+            <summary>
+            Client Order ID - automatically increments for each new order
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderRef">
+            <summary>
+            Order Reference Number
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.Reserved">
+            <summary>
+            Sets the reserved field on an order message
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderMsgExecutedSize">
+            <summary>
+            Executed Size according to the last order update
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderSide">
+            <summary>
+            Buy or Sell
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderSide2">
+            <summary>
+            Buy or Sell
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.Timeout">
+            <summary>
+            Timeout in seconds, DAY is 99999
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrdType">
+            <summary>
+            Order Type (e.g. Limit or market)
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderType">
+            <summary>
+            Order Type (e.g. Limit or market)
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.FeedID">
+            <summary>
+            Feed ID - replaces Venue
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.FeedId2">
+            <summary>
+            Feed ID - replaces Venue
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.InternalOrder">
+            <summary>
+            Access the internal order message object
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.InternalOrder2">
+            <summary>
+            Access the internal order message object
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderAttributes">
+            <summary>
+            Order Attributes - used for some custom order types
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.CancelID">
+            <summary>
+            The ID of the cancel in the Blackwood system.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.CancelAttributes">
+            <summary>
+            An int representing information about the cancel that can be exposed with a bitmask.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.CancelTime">
+            <summary>
+            The time at which the order was canceled.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.CanceledBySDOTTimeout">
+            <summary>
+            Whether or not the SDOT order was canceled automatically by the server after 4 minutes to prevent becoming billable.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderBySDOTTimeout">
+            <summary>
+            Whether or not the SDOT order was placed automatically by the server after 4 minutes to prevent becoming billable.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.CanceledByExchange">
+            <summary>
+            Whether or not the order was canceled by the exchange.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.RejectReason">
+            <summary>
+            The reason given by the server for the rejection.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.RejectAttributes">
+            <summary>
+            An int representing information about the reject that can be exposed with a bitmask.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.RejectType">
+            <summary>
+            The rejection type.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.ExecutionID">
+            <summary>
+            The ID of the execution within the Blackwood system.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.ExecutionTime">
+            <summary>
+            The time at which the execution occurred.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.LastCancelTime">
+            <summary>
+            The time when the last cancel for this order was placed
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.NumberOfCancelsTry">
+            <summary>
+            Number of tried cancels for this order
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.Latency">
+            <summary>
+            The latency time (in milliseconds) from the time the order was sent to the time the order was acknowledged by the market
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWOrder.OrderTime">
+            <summary>
+            The time the order was sent.
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.BWOrderUpdateHandler">
+            <summary>
+            Order Update Handler delegate
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.OrderHandler">
+            <summary>
+            Order handler
+            </summary>
+            <param name="sender"></param>
+            <param name="Order"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.ExecutionHandler">
+            <summary>
+            Execution handler
+            </summary>
+            <param name="sender"></param>
+            <param name="Execution"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.CancelHandler">
+            <summary>
+            Cancel handler
+            </summary>
+            <param name="sender"></param>
+            <param name="Cancel"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.RejectHandler">
+            <summary>
+            Reject handler
+            </summary>
+            <param name="sender"></param>
+            <param name="Reject"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.OrderHandler3">
+            <summary>
+            Order handler
+            </summary>
+            <param name="sender"></param>
+            <param name="order"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.ExecutionHandler3">
+            <summary>
+            Execution handler
+            </summary>
+            <param name="sender"></param>
+            <param name="execution"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.CancelHandler3">
+            <summary>
+            Cancel handler
+            </summary>
+            <param name="sender"></param>
+            <param name="cancel"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWOrder.RejectHandler3">
+            <summary>
+            Reject handler
+            </summary>
+            <param name="sender"></param>
+            <param name="reject"></param>
+        </member>
+        <member name="T:Blackwood.Framework.OrderCreationException">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.OrderCreationException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession">
+            <summary>
+            BWSession
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWSession.OrderRoutingConnection">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWSession.MarketOpenTime">
+            <summary>
+            9:30:00 AM
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWSession.MarketCloseTime">
+            <summary>
+            4:00:00 PM
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.#ctor">
+            <summary>
+            client session to host all connection and provides data
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.Finalize">
+            <summary>
+            closing the session by closing all connection if open
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.CloseSession">
+            <summary>
+            close conncections 
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.ConnectToOrderRouting(System.String,System.String,System.Net.IPAddress,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Opens a connection to an orders client portal and sends a login message.
+            </summary>
+            <param name="username">Login to use on the client portal.</param>
+            <param name="password">Password for connecting to the client portal.</param>
+            <param name="clientPortalIP">IP address of the client portal.</param>
+            <param name="clientPortalPort">Port of the client portal.</param>
+            <param name="loggingTurnedOn">Whether to record log messages.</param>
+            <param name="bSendExecutions">Whether to send previous execution messages.</param>
+            <param name="bSendAdminData">Whether to send admin access data messages.</param>
+            <param name="bSendTradeData">Whether to send previous cancel/order/position messages.</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.ConnectToMarketData(System.String,System.String,System.Net.IPAddress,System.Int32,System.Boolean)">
+            <summary>
+            Opens a connection to a market data client portal and sends a login message.  
+            Throws ArgumentNullException if a required argument is null.
+            Throws ClientPortalConnectionException if the login was not successful.
+            </summary>
+            <param name="username">Login to use on the client portal.</param>
+            <param name="password">Password for connecting to the client portal.</param>
+            <param name="clientPortalIP">IP address of the client portal.</param>
+            <param name="clientPortalPort">Port of the client portal.</param>
+            <param name="updateStockCache">Whether to update the books in the internal stock cache.</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.ConnectToHistoricData(System.String,System.String,System.Net.IPAddress,System.Int32)">
+            <summary>
+            Opens a connection to a historic data client portal and sends a login message.  
+            Throws ArgumentNullException if a required argument is null.
+            Throws ClientPortalConnectionException if the login was not successful.
+            </summary>
+            <param name="username">Login to use on the client portal.</param>
+            <param name="password">Password for connecting to the client portal.</param>
+            <param name="clientPortalIP">IP address of the client portal.</param>
+            <param name="clientPortalPort">Port of the client portal.</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.ConnectToBlackwood(System.String,System.String,System.Net.IPAddress,System.Int32,System.Net.IPAddress,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Opens connections to both Market Data and Orders client portals.
+            </summary>
+            <param name="username">Login to use on the client portals.</param>
+            <param name="password">Password for connecting to the client portals.</param>
+            <param name="marketDataIP">IP address of the market data client portal.</param>
+            <param name="marketDataPort">Port of the market data client portal.</param>
+            <param name="ordersIP">IP address of the orders client portal.</param>	
+            <param name="ordersPort">Port of the orders client portal.</param>
+            <param name="updateStockCache">Whether to update the books in the internal stock cache.</param>
+            <param name="bSendExecutions">Whether to send previous execution messages.</param>
+            <param name="bSendAdminData">Whether to send admin access data messages.</param>
+            <param name="bSendCancels">Whether to send previous cancel messages.</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.DisconnectFromMarketData">
+            <summary>
+            Disconnect from Market Data
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.DisconnectFromHistoricData">
+            <summary>
+            Disconnect from Historic Data
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.DisconnectFromOrders">
+            <summary>
+            Disconnect from Orders
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.DisconnectFromBlackwood">
+            <summary>
+            Disconnect from Market Data and Orders
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.Reset">
+            <summary>
+            Resets the session to its original state after an orders disconnect
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.MarketDataConnectionClientPortalMessage(Pacmid.Messages.Message)">
+            <summary>
+            Receives all market data updates from client portal and forwards the appropriate ones (all but subscribe) to the stock object.
+            from the stock object, they get sent to the user if subscribed.
+            level2 messages are forwarded to the stockCacheWrapper
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetStock(System.String)">
+            <summary>
+            Returns a BWStock object representing the stock with the specified symbol.
+            Throws an exception if not connected to Market Data.
+            </summary>
+            <param name="symbol">The symbol of the stock.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetCreatedStocks">
+            <summary>
+            Gets a list of all the BWStock objects that have been created during this session.
+            </summary>
+            <returns>An array of BWStocks.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.HistoricDataConnectionClientPortalMessage(Pacmid.Messages.Message)">
+            <summary>
+            Receives all historic data updates from client portal
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestHistoricData(System.String,Pacmid.Messages.DBARTYPE,System.DateTime,System.DateTime,System.UInt32,System.UInt32)">
+            <summary>
+            Request Historic bars for the specified time period
+            </summary>
+            <param name="interval">Used with barType INTRADAY to set the number of minutes</param>
+            <param name="requestID">A Unique ID for this request</param>
+            <param name="barType">Type of bars to return</param>
+            <param name="endTime">End Time - be aware of Windows settings for Time Zone and Daylight Saving Time</param>
+            <param name="startTime">Start Time - be aware of Windows settings for Time Zone and Daylight Saving Time</param>
+            <param name="symbol">Symbol</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestHistoricRefresh(System.String,System.DateTime,System.DateTime,System.UInt32)">
+            <summary>
+            Request a Historic refresh - forces a refresh from the server
+            (equivalent to clicking Refresh on a BW Pro chart window)
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.Subscribe(System.Collections.Generic.List{System.String})">
+            <summary>
+            Subscribe to the market data feed for a list of stocks except for Level 2 messages.
+            </summary>
+            <param name="arrSymbols">List of stocks to subscribe</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.UnSubscribe(System.Collections.Generic.List{System.String})">
+            <summary>
+            Unsubscribe to the market data feed for a list of stocks except for Level 2 messages.
+            </summary>
+            <param name="arrSymbols">List of stocks to subscribe</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SubscribeLevel2(System.Collections.Generic.List{System.String})">
+            <summary>
+            Subscribe to the market data feed for a list of stocks including Level 2 messages.
+            </summary>
+            <param name="arrSymbols">List of stocks to subscribe</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.UnSubscribeLevel2(System.Collections.Generic.List{System.String})">
+            <summary>
+            UnSubscribe to the market data feed for a list of stocks including Level 2 messages.
+            </summary>
+            <param name="arrSymbols">List of stocks to subscribe</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SubscribeHighLow">
+            <summary>
+            Subscribe to High/Low messages
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SubscribeCrossLock">
+            <summary>
+            Subscribe to Cross/Lock messages
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SubscribeMarketSorter">
+            <summary>
+            Subscribe to Market Sorter (Top Gainers/Losers etc)
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.UnSubscribeHighLow">
+            <summary>
+            Unsubscribe High/Low
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SubscribeNews">
+            <summary>
+            Subscribe to News Headlines
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.UnSubscribeNews">
+            <summary>
+            UnSubscribe to News Headlines
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SendSubscribe(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Subscribe to a list of symbols
+            </summary>
+            <param name="bSubLevel2">True to subscribe to Level 2</param>
+            <param name="arrSymbols">List of Symbols</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SendUnSubscribe(System.Collections.Generic.IEnumerable{System.String},System.Boolean)">
+            <summary>
+            Unsubscribe to a list of symbols
+            </summary>
+            <param name="bSubLevel2">True to unsubscribe to Level 2</param>
+            <param name="arrSymbols">List of Symbols</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.createCBWMsgSubscribe(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a subscription message to send to the client portal.
+            </summary>
+            <param name="symbol">The symbol to subscribe to.</param>
+            <param name="useForLevel2">Whether or not to subscribe to Level 2 messages.</param>
+            <param name="bSubscribe">Whether or not to subscribe</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestIndications">
+            <summary>
+            Request pre-market indications from the server
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestImbalances">
+            <summary>
+            Request Imbalances, call this to receive all NYSE imbalance updates (same as RequestNYSEImbalances)
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestNYSEImbalances">
+            <summary>
+            Request NYSE Imbalances, call this ONCE to receive all NYSE imbalance updates
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestNewsStory(System.String)">
+            <summary>
+            Requests a news story
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestNewsHeadline(System.String)">
+            <summary>
+            Requests News Headlines for the specified Symbol
+            </summary>
+            <param name="symbol"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetOpenOrders">
+            <summary>
+            Gets a list of open orders.  Open orders are orders that have been created but not filled,
+            rejected, or canceled.
+            </summary>
+            <returns>An array of BWOrders.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetOpenOrdersByStock(System.String)">
+            <summary>
+            Get all the open orders for a stock
+            </summary>
+            <param name="sSymbol"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetOpenOrdersCountByAction(Pacmid.Types.OrderSide)">
+            <summary>
+            Get open order count by action (e.g. SIDE_BUY, SIDE_SELL, SIDE_SHORT, SIDE_COVER)
+            </summary>
+            <param name="side"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetOpenOrdersCountByAction(Blackwood.CBWMessages.ORDER_SIDE)">
+            <summary>
+            Get open order count by action (e.g. SIDE_BUY, SIDE_SELL, SIDE_SHORT, SIDE_COVER)
+            </summary>
+            <param name="side"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetOpenPositions">
+            <summary>
+            Gets a list of stocks with open positions.
+            </summary>
+            <returns>An array of BWStocks with open positions.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetOpenPositionByStock(System.String)">
+            <summary>
+            Gets open position for a stock
+            </summary>
+            <param name="sSymbol"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetClosedPositions">
+            <summary>
+            Gets a list of stocks that had open positions which are now closed.
+            </summary>
+            <returns>An array of BWStocks with closed positions.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.CancelAllOpenOrders">
+            <summary>
+            Cancel all the open orders
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.CancelAllOpenBuyOrders(System.Boolean)">
+            <summary>
+            Cancell all buy orders
+            </summary>
+            <param name="cancelCoverOrders"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.CancelAllOpenSellOrders(System.Boolean)">
+            <summary>
+            Cancel all sell orders
+            </summary>
+            <param name="cancelShortOrders"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.CancelOpenOrdersByVenue(Blackwood.CBWMessages.FEED_ID)">
+            <summary>
+            Cancel all orders by venue
+            </summary>
+            <param name="venue"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.CancelOpenOrdersByVenue(Pacmid.Types.FeedId)">
+            <summary>
+            Cancel all orders by venue
+            </summary>
+            <param name="venue"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.CancelOpenOrdersByStock(System.String)">
+            <summary>
+            Cancel all open orders for a stock
+            </summary>
+            <param name="sSymbol"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetExecutionHistory">
+            <summary>
+            Gets a list with all the executions for today
+            </summary>
+            <returns>Array of CBWMsgExecution</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetExecutionHistory3">
+            <summary>
+            Gets a list with all the executions for today
+            </summary>
+            <returns>Array of MsgExecution</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetLocateHistory">
+            <summary>
+            Get a list with all the locates for today
+            </summary>
+            <returns>Array of CBWMsgExecution</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetLocateHistory3">
+            <summary>
+            Get a list with all the locates for today
+            </summary>
+            <returns>Array of CBWMsgExecution</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetNYSEBooths">
+            <summary>
+            Returns a list of all booth codes sent from the server.  Key is the code, value is the name.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetTraderDestinations">
+            <summary>
+            Returns a list of all Trader Destinations.  Key is the Feed Name.
+            </summary>
+            <returns>Trader Destinations</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetVenueFromFeedID(Pacmid.Types.FeedId)">
+            <summary>
+            Returns a venue (string) from FeedId based on the account's trader destinations
+            </summary>
+            <returns>Venue String</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SendMessage(System.String,System.String,System.String)">
+            <summary>
+            Send a message to a specific user
+            </summary>
+            <param name="instructions">Message instructions - valid options are "ALL", "BRANCH" or "ACCOUNT"</param>
+            <param name="custCode">customer code - valid options are "ALL", branch code (e.g. 999), or trader account (e.g. DB0001)</param>
+            <param name="text">text string to send to user, max 256 characters</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SendADMINOrder(Blackwood.Framework.BWOrder,System.Int32)">
+            <summary>
+            Allows an ADMIN user to send an order in another account. 
+            </summary>
+            <param name="ord">The Order object</param>
+            <param name="traderID">The Trader ID to send this order as.  This should be retrieved from the method GetAdminTradersID</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SendADMINCancel(System.Int32,System.Int32)">
+            <summary>
+            Allows and ADMIN user to cancel an order in another account
+            </summary>
+            <param name="orderID">The Order ID to cancel</param>
+            <param name="traderID">The Trader ID to send this order as.  This should be retrieved from the method GetAdminTradersID</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.SendPairOrder(Blackwood.Framework.BWOrder,Blackwood.Framework.BWOrder)">
+            <summary>
+            Generates a unique ID for the pair and sends the order, call this after initialization. Only one order
+            can be an odd or mixed lot
+            </summary>
+            <param name="order1">1st Order</param>
+            <param name="order2">2nd Order</param>
+            <returns>Unique Pair ID if send was successful, null on failure</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.AssociateBasketOrders(Blackwood.Framework.BWOrder[])">
+            <summary>
+            Generate a unique ID for the basket, call this after initialization but before order.Send ()
+            </summary>
+            <param name="orders">A list of orders</param>
+            <returns>Unique Basket ID</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.WriteStatusMessage(System.String,System.String,System.Object[])">
+            <summary>
+            Static method for writing to the log.  Pass the name of the class as sender.
+            </summary>
+            <param name="sender"></param>
+            <param name="msg"></param>
+            <param name="format"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminBranches2">
+            <summary>
+            Method that returns an array of strings with the branches the trader is allowed to see as an administrator
+            </summary>
+            <returns>Array of strings with the branches names</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraders2">
+            <summary>
+            Method that returns an array of strings with the traders logins the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of strings with the login names</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTradersID">
+            <summary>
+            Method that returns an array with the traders ID's the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of int</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminData2">
+            <summary>
+            Method that returns an array with the accounts data the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of string with the accounts info</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTradersForBranch(System.String)">
+            <summary>
+            Method that returns an array with the logins that belong to a branch the trader is allowed to see as an administrator
+            </summary>
+            <param name="branch">Branch</param>
+            <returns>Arrray of string with the logins</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminBranchForTrader(System.String)">
+            <summary>
+            Method that returns string with the branch that a trader belongs to
+            </summary>
+            <param name="trader">Trader</param>
+            <returns>String with the branch</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminBranchForTraderID(System.Int32)">
+            <summary>
+            Method that returns string with the branch that a trader belongs to
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <returns>String with the branch</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderForAccount(System.String)">
+            <summary>
+            Method that returns string with the trader that belongs to an account
+            </summary>
+            <param name="account">Account</param>
+            <returns>String with the trader</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderData2(System.String)">
+            <summary>
+            Method that returns trader's data
+            </summary>
+            <param name="trader">Login</param>
+            <returns>Trader Info</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderData3(System.String)">
+            <summary>
+            Method that returns trader's data
+            </summary>
+            <param name="trader">Login</param>
+            <returns>Trader Info</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderData2(System.Int32)">
+            <summary>
+            Method that returns trader's data
+            </summary>
+            <param name="traderID">TraderID</param>
+            <returns>Trader Info</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderData3(System.Int32)">
+            <summary>
+            Method that returns trader's data
+            </summary>
+            <param name="traderID">TraderID</param>
+            <returns>Trader Info</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminAllMsgAccount2">
+            <summary>
+            Method that returns an array with the account messages the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of messages with the accounts</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminAllMsgAccount3">
+            <summary>
+            Method that returns an array with the account messages the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of messages with the accounts</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderMsgAccount2(System.Int32)">
+            <summary>
+            Method that returns a account message for a trader
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <returns>Message with the account</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderMsgAccount3(System.Int32)">
+            <summary>
+            Method that returns a account message for a trader
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <returns>Message with the account</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminAllMsgPosition2">
+            <summary>
+            Method that returns an array with the position messages the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of messages with the positions</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminAllMsgPosition3">
+            <summary>
+            Method that returns an array with the position messages the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of messages with the positions</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderMsgPosition2(System.Int32)">
+            <summary>
+            Method that returns a position message for a trader
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <returns>Message with the position</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderMsgPosition3(System.Int32)">
+            <summary>
+            Method that returns a position message for a trader
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <returns>Message with the position</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminAllMsgRisk2">
+            <summary>
+            Method that returns an array with the risk messages the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of messages with the risk</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminAllMsgRisk3">
+            <summary>
+            Method that returns an array with the risk messages the trader is allowed to see as an administrator
+            </summary>
+            <returns>Arrray of messages with the risk</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderMsgRisk2(System.Int32)">
+            <summary>
+            Method that returns a Risk message for a trader
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <returns>Message with the Risk</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.GetAdminTraderMsgRisk3(System.Int32)">
+            <summary>
+            Method that returns a Risk message for a trader
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <returns>Message with the Risk</returns> 
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.LinkTraderAccount(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Link to a trader account
+            </summary>
+            <param name="traderID">Trader ID</param>
+            <param name="bSendTradeData">Send Trade Data - true / false</param>
+            <param name="bLink">Link - true / false</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.LinkAccounts(System.Collections.Generic.List{System.Int32},System.Boolean)">
+            <summary>
+            Link accounts for a list of traders.
+            </summary>
+            <param name="arrTraderIDs">List of traders id's</param>
+            <param name="bLink">Whether to link</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RequestTraderExecutions(System.Int32)">
+            <summary>
+            Request Trader Executions
+            </summary>
+            <param name="traderID">Trader ID</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.ForceRefresh(System.Int32)">
+            <summary>
+            Force a refresh on the linked account
+            aka Request Trade Data - re-sends Account Snapshot
+            </summary>
+            <param name="traderID"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RiskLinkAccount(System.Int32,Pacmid.Types.SubscribeTradeDataType,System.Boolean)">
+            <summary>
+            Request Risk infomation for a specific account
+            </summary>
+            <param name="traderID">trader ID of account</param>
+            <param name="subMask">bitwise value indicating which message types to receive for specified account</param>
+            <param name="requestHistory">send all activity up until this point in time (type of messages depends on subMask)</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RiskLinkBranch(System.Int32,Pacmid.Types.SubscribeTradeDataType,System.Boolean,System.Boolean)">
+            <summary>
+            Request Risk infomation for a specific branch (or the accounts that compose that branch)
+            </summary>
+            <param name="branchID">ID of branch</param>
+            <param name="subMask">flags indicating which message types to receive for specified branch</param>
+            <param name="requestHistory">send all activity up until this point in time (type of messages depends on subMask)</param>
+            <param name="subChildren">To subscribe to this branch alone (false) or to all the accounts that compose this branch (true)</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWSession.RiskLinkEntity(System.Int32,Pacmid.Types.EntityType,Pacmid.Types.SubscribeTradeDataType,System.Boolean,System.Boolean)">
+            <summary>
+            Request Risk information for a specific entity or its children
+            </summary>
+            <param name="entityID">entity ID</param>
+            <param name="entType">Type of Entity (Firm, Branch, Account, etc.)</param>
+            <param name="subMask">bitwise value indicating which message types to receive for specified entity</param>
+            <param name="requestHistory">send all activity up until this point in time (type of messages depends on subMask)</param>
+            <param name="subChildren">To subscribe to this entity alone (false) or to all the accounts that compose this entity (true)</param>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnInstantMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnRawOrderMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnOrderMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.ADMINOrderMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.ADMINLocateMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnLocateMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnAdminMessage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnNYSEImbalanceMessage2">
+            <summary>
+            Message types can be CBWMsgImbalance or CBWMsgReqImbalance - this is for NYSE AND NASDAQ Imbalances
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnTimeMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnImbalanceMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnIndicationMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnNewsHeadlineMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnNewsStoryMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnPositionMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnAccountMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnCancelMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnExecutionMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnRejectMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnHistMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnHighLowMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnCrossLockMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnMarketSorterMessage3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnMarketDataClientPortalConnectionChange">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnOrdersClientPortalConnectionChange">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnHistoricDataClientPortalConnectionChange">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnMarketDataClientPortalConnectionChange2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnOrdersClientPortalConnectionChange2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWSession.OnHistoricDataClientPortalConnectionChange2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.Version">
+            <summary>
+            Gets the version string of this Blackwood.Framework library.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.IsConnectedToOrderRouting">
+            <summary>
+            True if a connection is open to an order routing client portal.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.IsConnectedToMarketData">
+            <summary>
+            True if a connection is open to a market data client portal.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.IsConnectedToHistoricData">
+            <summary>
+            True if a connection is open to a historic data client portal.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.IsConnectedToBlackwood">
+            <summary>
+            True if a connection is open to a market data client portal and a connection is open to an orders client portal.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.IsSubscribedNews">
+            <summary>
+            True if subscribed to any news feeds
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.IsMarketOpen">
+            <summary>
+            True if it is between 9:30 and 4:00 NY time
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.BuyingPower">
+            <summary>
+            Gets the user's total buying power in dollars.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.OpenEquity">
+            <summary>
+            Gets the user's current open equity in dollars.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.ClosedProfit">
+            <summary>
+            Gets the cumulative PNL of user's closed transactions.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.OpenProfit">
+            <summary>
+            Gets the total PNL of user's open positions.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.TotalSharesTraded">
+            <summary>
+            Gets the total number of shares that the user has traded.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.OpenShares">
+            <summary>
+            Gets the total number of shares that are in open positions.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.BuyingPowerRemaining">
+            <summary>
+            Gets the user's remaining available buying power after subtracting value of open positions.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.NumberOfOpenPositions">
+            <summary>
+            Gets the number of open positions.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.Account">
+            <summary>
+            Gets the user's account.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.Login">
+            <summary>
+            Gets the user's login.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.RiskMaxOrderSize">
+            <summary>
+            Get/Set risk management maximum order size
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.RiskMaxNumberOfOrders">
+            <summary>
+            Get/Set risk management maximum number of open orders
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.RiskMaxPositionSize">
+            <summary>
+            Get/Set risk management maximum position size
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.RiskMaxNumberOfPositions">
+            <summary>
+            Get/Set risk management maximum number of positions
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.RiskMaxGrossLoss">
+            <summary>
+            Get/Set risk management maximum gross loss
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.SuppressDataCollection">
+            <summary>
+            INTERNAL USE
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.LoggingDirectory">
+            <summary>
+            The absolute path for log files created by BWFramework
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWSession.ServerTime">
+            <summary>
+            The latest Time message from the server
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.OrderMessageHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="orderMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.LocateMessageHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="locateMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.RawOrderMessageHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="orderMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.ClientPortalConnectionChangeHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="connected"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.ClientPortalConnectionChangeHandler2">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="connected"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.InstantMessageHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="message"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.NYSEImbalanceMessageHandler2">
+            <summary>
+            This can be CBWMsgImbalance OR CBWMsgReqImbalance, so we use CBWMessage
+            </summary>
+            <param name="sender"> </param>
+            <param name="imbalanceMsg">This can be CBWMsgImbalance OR CBWMsgReqImbalance, so we use CBWMessage</param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.TimeMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="timeMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.ImbalanceMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="imbalanceMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.IndicationMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="indicationMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.PositionMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="positionMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.AccountMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="accountMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.CancelMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="cancelMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.ExecutionMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="executionMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.RejectMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="rejectMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.RiskMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="riskMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.NewsHeadlineMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="newsMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.NewsStoryMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="newsMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.HistoricMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="histMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.HighLowMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="highlowMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.CrossLockMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="crossLockMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.MarketSorterMessageHandler3">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="markterSorterMsg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWSession.DefaultMessageHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="msg"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock">
+            <summary>
+            BWstock
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.#ctor(System.String,Blackwood.Framework.BWSession)">
+            <summary>
+            Creates a BWStock object to represent a security.
+            </summary>
+            <param name="symbol">The stock's trading symbol.</param>
+            <param name="session"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.LocateStock(System.UInt32)">
+            <summary>
+            Uses Blackwood's Locate Stock feature - this is a request
+            </summary>
+            <param name="numShares">Number of shares to locate.</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.LocateQuery(System.UInt32)">
+            <summary>
+            Query for a locate - this will result in a rejection or an offer price (you have 10 seconds to accept)
+            </summary>
+            <param name="numShares">Number of shares to locate.</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.LocateRequest(System.UInt32)">
+            <summary>
+            Request a locate - this will result in a rejection or an execution (automatic locate)
+            </summary>
+            <param name="numShares">Number of shares to locate.</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.ToString">
+            <summary>
+            ToString
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.Subscribe">
+            <summary>
+            Subscribes to the market data feed for this stock except for Level 2 messages.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.SubscribeLevel2">
+            <summary>
+            Subscribes to the market data feed for this stock including Level 2 messages.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.SubscribeOptions(System.Single,System.Int32,System.Int32)">
+            <summary>
+            Subscribe to an option chain
+            </summary>
+            <param name="fStrike">Strike Price</param>
+            <param name="nRangeUp">Range (in $) Up from Strike</param>
+            <param name="nRangeDown">Range (in $) Down from Strike</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.SubscribeNews">
+            <summary>
+            Subscribe to news for this stock
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.Unsubscribe">
+            <summary>
+            Ignore market data messages for this stock.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.UnsubscribeLevel2">
+            <summary>
+            Ignore Level2 market data messages for this stock.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.UnsubscribeOptions">
+            <summary>
+            Ignore market data messages for this stock.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.UnsubscribeNews">
+            <summary>
+            Unsubscribe to news for this stock
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetExchange">
+            <summary>
+            Gets the exchange of which this stock is a member.
+            </summary>
+            <returns>A SECURITY_EXCHANGE value representing the exchange of which this stock is a member.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetCategory">
+            <summary>
+            Gets the security category e.g Hard To Borrow, Available To Borrow, List A.
+            </summary>
+            <returns>A SECURITY_CATEGORY value representing the catagory of this stock.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.IsHardToBorrow">
+            <summary>
+            Whether or not this stock is hard to borrow.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetDayInfo">
+            <summary>
+            Gets information about a stock like daily open, high, low, close, and volume.
+            </summary>
+            <returns>A BWStockInfo object with information about the stock.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetDayInfo3">
+            <summary>
+            Gets information about a stock like daily open, high, low, close, and volume.
+            </summary>
+            <returns>A BWStockInfo object with information about the stock.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetName">
+            <summary>
+            Gets the company's full name.
+            </summary>
+            <returns>The full name of the company.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.Open">
+            <summary>
+            Gets the stock's opening price.
+            </summary>
+            <returns>The stock's opening price.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.Close">
+            <summary>
+            Gets the stock's closing price.
+            </summary>
+            <returns>The stock's closing price.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.High">
+            <summary>
+            Gets the stock's high price.
+            </summary>
+            <returns>The stock's high price.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.Low">
+            <summary>
+            Gets the stock's low price.
+            </summary>
+            <returns>The stock's low price.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLevel1">
+            <summary>
+            Gets the level 1 data from the stock cache.
+            </summary>
+            <returns>StockCache.GetLevel1 returns Level 1</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLevel1Bid">
+            <summary>
+            Gets the current level 1 bid price for this stock.
+            </summary>
+            <returns>The level 1 bid price.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLevel1Ask">
+            <summary>
+            Gets the current level 1 ask price for this stock.
+            </summary>
+            <returns>The level 1 ask price.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLevel1BidSize">
+            <summary>
+            Gets the current level 1 bid size for this stock.
+            </summary>
+            <returns>The level 1 bid size.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLevel1AskSize">
+            <summary>
+            Gets the current level 1 ask size for this stock.
+            </summary>
+            <returns>The level 1 ask size.</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetVolume">
+            <summary>
+            Get Today's Volume
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestBidPrice(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the best bid price based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestAskPrice(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the best ask price based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestBidSize(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the total Size at the best bid price based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestAskSize(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the total Size at the best ask price based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestBidMsg(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the Amalgamated Bid (Top of Book) based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestAskMsg(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the Amalgamated Ask (Top of Book) based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestBidMsg3(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the Amalgamated Bid (Top of Book) based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestAskMsg3(System.Boolean,System.Boolean)">
+            <summary>
+            Returns the Amalgamated Ask (Top of Book) based on Level 2 Data
+            </summary>
+            <param name="useSDOT">true if SDOT and NYOB quotes should be used</param>
+            <param name="useNASDAQ">true if NASDAQ quotes should be used</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetTick">
+            <summary>
+            Get Last Tick (useful for shorting)
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLastTradeMsg">
+            <summary>
+            Gets the last print from the primary exchange
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLastTradeMsg3">
+            <summary>
+            Gets the last print from the primary exchange
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetTrades(Blackwood.CBWMessages.FEED_ID)">
+            <summary>
+            Gets a list with the last 100 prints for a feed
+            </summary>
+            <param name="feed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetTrades(Pacmid.Types.FeedId)">
+            <summary>
+            Gets a list with the last 100 prints for a feed
+            </summary>
+            <param name="feed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBookFromSymbolData(System.Boolean,Pacmid.Types.FeedId)">
+            <summary>
+            Gets the book from the managed symbol data object. 
+            </summary>
+            <param name="feedID"></param>
+            <param name="bid">true for bid, false for ask</param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.IsFeedInMask(Blackwood.CBWMessages.FEED_ID,Blackwood.Framework.BWFeedMask)">
+            <summary>
+            
+            </summary>
+            <param name="feedID"></param>
+            <param name="mask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.IsFeedInMask(Pacmid.Types.FeedId,Blackwood.Framework.BWFeedMask)">
+            <summary>
+            
+            </summary>
+            <param name="feedID"></param>
+            <param name="mask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBook(System.Boolean,Blackwood.CBWMessages.FEED_ID)">
+            <summary>
+            Returns the book for one side for one feed.  
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBook(System.Boolean,Pacmid.Types.FeedId)">
+            <summary>
+            Returns the book for one side for one feed.  
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBookByMask(System.Boolean,Blackwood.Framework.BWFeedMask)">
+            <summary>
+            Returns the books for one side for a combination of feeds.
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="mask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBookByMask3(System.Boolean,Blackwood.Framework.BWFeedMask)">
+            <summary>
+            Returns the books for one side for a combination of feeds.
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="mask"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetFilteredBestLevel2QuoteByFeed(System.Boolean,Pacmid.Types.FeedId,System.Collections.Generic.ICollection{System.String})">
+            <summary>
+            Gets the best quote price and size for a side on a feed.
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestLevel2QuoteByFeed(System.Boolean,Blackwood.CBWMessages.FEED_ID)">
+            <summary>
+            Gets the best quote price and size for a side on a feed.
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestLevel2QuoteByFeed(System.Boolean,Pacmid.Types.FeedId)">
+            <summary>
+            Gets the best quote price and size for a side on a feed.
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestLevel2QuoteByMask(System.Boolean,Blackwood.Framework.BWFeedMask,System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets the best quote price and size for a side for a combination of feeds, filter by market makers.
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="mask"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetBestLevel2QuoteByMask3(System.Boolean,Blackwood.Framework.BWFeedMask,System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets the best quote price and size for a side for a combination of feeds, filter by market makers.
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="mask"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLiquidityToPriceByFeed(System.Boolean,Blackwood.CBWMessages.FEED_ID,System.Double,System.Boolean)">
+            <summary>
+            Gets the number of shares available up to the specified price on a feed
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="price"></param>
+            <param name="includePrice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLiquidityToPriceByFeed(System.Boolean,Pacmid.Types.FeedId,System.Double,System.Boolean)">
+            <summary>
+            Gets the number of shares available up to the specified price on a feed
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="price"></param>
+            <param name="includePrice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetLiquidityToPriceByMask(System.Boolean,Blackwood.Framework.BWFeedMask,System.Double,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets the number of shares available up to the specified price for a combination of feeds, filter by market makers
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="mask"></param>
+            <param name="price"></param>
+            <param name="includePrice"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetPopulationToPrice(System.Boolean,Pacmid.Types.FeedId,System.Double,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Get the number of quotes by side from the best price to a specified price
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="price"></param>
+            <param name="includePrice"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetPopulationToPriceByFeed(System.Boolean,Blackwood.CBWMessages.FEED_ID,System.Double,System.Boolean)">
+            <summary>
+            Get the number of quotes by side from the best price to a specified price for a feed
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="price"></param>
+            <param name="includePrice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetPopulationToPriceByFeed(System.Boolean,Pacmid.Types.FeedId,System.Double,System.Boolean)">
+            <summary>
+            Get the number of quotes by side from the best price to a specified price for a feed
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="price"></param>
+            <param name="includePrice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetPopulationToPriceByMask(System.Boolean,Blackwood.Framework.BWFeedMask,System.Double,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets the number of quotes by side from the best price to a specified price for a combination of feeds, filter by market makers
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="mask"></param>
+            <param name="price"></param>
+            <param name="includePrice"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetQuotesToPriceByFeed(System.Boolean,Blackwood.CBWMessages.FEED_ID,System.Double)">
+            <summary>
+            Get a list of quotes by side from the best price to a specified price for a feed
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="price"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetQuotesToPriceByFeed(System.Boolean,Pacmid.Types.FeedId,System.Double)">
+            <summary>
+            Get a list of quotes by side from the best price to a specified price for a feed
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="feedID"></param>
+            <param name="price"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetQuotesToPriceByMask(System.Boolean,Blackwood.Framework.BWFeedMask,System.Double,System.Collections.Generic.List{System.String})">
+            <summary>
+            Gets a list of quotes by side from the best price to a specified price for a combination of feeds, filter by market makers
+            </summary>
+            <param name="bid">true for bid, false for ask</param>
+            <param name="mask"></param>
+            <param name="price"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetOpenOrdersCountByAction(Blackwood.CBWMessages.ORDER_SIDE)">
+            <summary>
+            Get open order count by action (e.g. SIDE_BUY, SIDE_SELL, SIDE_SHORT, SIDE_COVER)
+            </summary>
+            <param name="side"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetOpenOrdersCountByAction(Pacmid.Types.OrderSide)">
+            <summary>
+            Get open order count by action (buy/sell/short)
+            </summary>
+            <param name="side"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.GetOpenOrdersCount">
+            <summary>
+            Get open order count
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.CancelOpenOrdersByAction(Blackwood.CBWMessages.ORDER_SIDE)">
+            <summary>
+            Cancels open order count by action (e.g. SIDE_BUY, SIDE_SELL, SIDE_SHORT, SIDE_COVER)
+            </summary>
+            <param name="side"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.CancelOpenOrdersByAction(Pacmid.Types.OrderSide)">
+            <summary>
+            Cancels open order count by action (Buy/Sell/Short)
+            </summary>
+            <param name="side"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStock.CancelAllOpenOrders">
+            <summary>
+            Cancels all open orders for this stock
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnSymbolDataUpdate2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnLevel2Update2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnLevel1Update2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnTrade2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnInfo2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnOption2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnBestBidOfferUpdate2">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnGreeksInfoUpdate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnGreeksLevel1Update">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnGreeksTradeUpdate">
+            <summary>
+            NOT USED
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnSymbolDataUpdate3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnLevel2Update3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnLevel1Update3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnTrade3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnInfo3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnOption3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnBestBidOfferUpdate3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnGreeksInfoUpdate3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnGreeksLevel1Update3">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="E:Blackwood.Framework.BWStock.OnGreeksTradeUpdate3">
+            <summary>
+            NOT USED
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.Subscribed">
+            <summary>
+            Whether or not this stock is subscribed to level 1 market data.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.SubscribedLevel2">
+            <summary>
+            Whether or not this stock is subscribed to level 2 market data.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.SubscribedOptions">
+            <summary>
+            Whether or not this stock is subscribed to options data
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.Symbol">
+            <summary>
+            Symbol of this stock.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.OrderBasedAvgPrice">
+            <summary>
+            Average Position price per share based ONLY on Order Updates.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.OrderBasedPosition">
+            <summary>
+            Number of shares in this position.  Positive if long, negative if short.  This is based ONLY on Order Updates.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.ExecutionBasedAvgPrice">
+            <summary>
+            Average Position price per share based ONLY on Execution Updates.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.ExecutionBasedPosition">
+            <summary>
+            Number of shares in this position.  Positive if long, negative if short.  This is based ONLY on Execution Updates.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.Amount">
+            <summary>
+            Amount spent for this position.  Calculated as Price multiplied by TotalShares.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.Price">
+            <summary>
+            Position price per share.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.OpenProfit">
+            <summary>
+            Open PNL of this position.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.Size">
+            <summary>
+            Number of shares in this position.  Positive if long, negative if short.
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.BWStock.ClosedPNL">
+            <summary>
+            Closed PNL of this position.
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.SymbolDataHandler2">
+            <summary>
+            Symbol Data update - this provides the snapshot
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.Level2UpdateHandler2">
+            <summary>
+            Level 2
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.TradeHandler2">
+            <summary>
+            Trades
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.Level1UpdateHandler2">
+            <summary>
+            Level 1
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.InfoUpdateHandler2">
+            <summary>
+            Stock Info - this is mostly the information at the top of a Market Maker window
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.OptionResponseHandler2">
+            <summary>
+            Option response - this is for option chains based on the underlying symbol
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.GreeksInfoUpdateHandler">
+            <summary>
+            Greeks Info message. Contains: historical volatility, beta and open interest
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.GreeksTradeUpdateHandler">
+            <summary>
+            Greeks Trade message, (NOT USED) contains Greeks infomation based on trades or midpoint price
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.GreeksLevel1UpdateHandler">
+            <summary>
+            Greeks Level 1 message - Greeks information for bid and ask
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.SymbolDataHandler3">
+            <summary>
+            Symbol Data update - this provides the snapshot
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.Level2UpdateHandler3">
+            <summary>
+            Level 2
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.TradeHandler3">
+            <summary>
+            Trades
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.Level1UpdateHandler3">
+            <summary>
+            Level 1
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.InfoUpdateHandler3">
+            <summary>
+            Stock Info - this is mostly the information at the top of a Market Maker window
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.OptionResponseHandler3">
+            <summary>
+            Option response - this is for option chains based on the underlying symbol
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.GreeksInfoUpdateHandler3">
+            <summary>
+            Greeks Info message. Contains: historical volatility, beta and open interest
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.GreeksTradeUpdateHandler3">
+            <summary>
+            Greeks Trade message, (NOT USED) contains Greeks infomation based on trades or midpoint price
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStock.GreeksLevel1UpdateHandler3">
+            <summary>
+            Greeks Level 1 message - Greeks information for bid and ask
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.BWStockCache">
+            <summary>
+            Class used for keeping an updated information about the stocks that you subscribed
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.Update(Pacmid.Messages.MsgFeedSymbolBase)">
+            <summary>
+            Update stock cache information
+            </summary>
+            <param name="message">Message received from the server</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.CheckForPendingUpdates(System.String,Pacmid.Messages.MsgSymbolData)">
+            <summary>
+            Update stock cache with pending messages which reached before symbol data(this can happen with multicast)
+            </summary>
+            <param name="symbol">symbol for which there might be pending updates </param>
+            <param name="symbolData"> symboldata to be updated with the pending updates</param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.GetDayInfo(System.String)">
+            <summary>
+            Get stock info, e.g. name, high, low, open, exchange
+            </summary>
+            <param name="symbol">Symbol</param>
+            <returns>BWStockInfo object</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.GetVolume(System.String)">
+            <summary>
+            Get today's stock volume
+            </summary>
+            <param name="symbol">Symbol</param>
+            <returns>Number of shares traded</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.GetExchange(System.String)">
+            <summary>
+            Get the primary exchange for a stock
+            </summary>
+            <param name="symbol">Symbol</param>
+            <returns>Stock exchange</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.GetCategory(System.String)">
+            <summary>
+            Get the category for a stock
+            </summary>
+            <param name="symbol">Symbol</param>
+            <returns>Stock category</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.GetLevel1(System.String)">
+            <summary>
+            Get Level1 information for a stock
+            </summary>
+            <param name="symbol">Symbol</param>
+            <returns>CBWMsgLevel1 object</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.GetLastTrade(System.String)">
+            <summary>
+            Get last trade made on the primary exchange for a stock
+            </summary>
+            <param name="symbol">Symbol</param>
+            <returns>CBWMsgTrade object</returns>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.FlushMarketMaker(Pacmid.Messages.MsgSymbolData,System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="msg"></param>
+            <param name="mm"></param>
+            <param name="feed"></param>
+        </member>
+        <member name="M:Blackwood.Framework.BWStockCache.FlushPriceLevel(Pacmid.Messages.MsgSymbolData,System.Double,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="msg"></param>
+            <param name="price"></param>
+            <param name="feed"></param>
+        </member>
+        <member name="P:Blackwood.Framework.BWStockCache.Item(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="symbol"></param>
+        </member>
+        <member name="T:Blackwood.Framework.BWTIF">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.IOC">
+            Immediate or cancel
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.CO">
+            Closing Offset (NYSE)
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.IOOC">
+            Imbalance Only Opening Cross (NASDAQ)
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.IOCC">
+            Imbalance Only Closing Cross (NASDAQ)
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.OPG">
+            On Market Open
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.FOK">
+            Fill or kill
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.CLO">
+            On Market Close 
+        </member>
+        <member name="F:Blackwood.Framework.BWTIF.DAY">
+            Order expires on the end of trading day
+        </member>
+        <member name="T:Blackwood.Framework.BWQuoteSide">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.BWQuoteSide.BID">
+            
+        </member>
+        <member name="F:Blackwood.Framework.BWQuoteSide.ASK">
+            
+        </member>
+        <member name="T:Blackwood.Framework.BWFeedMask">
+            <summary>
+            Allows access to multiple books at once, use Bitwise OR
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.ClientPortalConnectionBase">
+            <summary>
+            Provides a single ip:port connection to a client portal.
+            Create an instance by passing an IP Address and port to open a socket connection to on the client
+            portal server.
+            Connect by calling ConnectToClientPortal().  Pass a MsgLogin to make a connection specific to one
+            UserID.  
+            Then send messages by calling SendMessage().
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.ClientPortalConnectionBase.MsgFact">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.Finalize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.SendMessage(Pacmid.Messages.Message)">
+            <summary>
+            
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.OnConnected">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.CopyStream(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            
+            </summary>
+            <param name="input"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.OnMessage(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            The responsibility of the base class's implementation of OnMessage is to create a Message of
+            the proper type based on the message's nType and broadcast that in the ClientPortalMessage event.
+            The only message that is processed here in the base class is CS_LOGIN.
+            Other handling of messages (like insertion into the StockCache) is handled in the overridden methods
+            of classes that derive from ClientPortalConnectionBase (MarketDataClientPortalConnection and
+            OrderClientPortalConnection).
+            </summary>
+            <param name="buff"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.OnMessage(Pacmid.Messages.Message)">
+            <summary>
+            
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.OnLogin(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionBase.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:Blackwood.Framework.ClientPortalConnectionBase.UserID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Blackwood.Framework.ClientPortalConnectionBase.Account">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.ClientPortalConnectionException">
+            <summary>
+            Client Portal Connection Exception
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.ClientPortalConnectionException.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Blackwood.Framework.HistoricClientPortalConnection">
+            <summary>
+            An extension of ClientPortalConnectionBase functionality which handles a historic data connection.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.Log.PrintToLog">
+            <summary>
+            Whether or not to print to log file BWOrders_[yr-mo-day].log.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.Log.PrintToOutput">
+            <summary>
+            Whether or not to print to std out (Debug.Writeline)
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.MarketDataClientPortalConnection">
+            <summary>
+            An extension of client portal connection functionality necessary for connecting a market data client portal.
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.MulticastClientPortalConnection">
+            <summary>
+            Provides a single ip:port connection to a client portal.
+            Create an instance by passing an IP Address and port to open a socket connection to on the client
+            portal server.
+            Connect by calling ConnectToClientPortal().  Pass a CBWMsgLogin to make a connection specific to one
+            UserID.  
+            Then send messages by calling SendMessage().
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.MulticastClientPortalConnection.OnCBWMessage(Pacmid.Messages.CS_MESSAGE,System.UInt32,System.Byte[])">
+            <summary>
+            The responsibility of the base class's implementation of OnCBWMessage is to create a CBWMessage of
+            the proper type based on the message's nType and broadcast that in the ClientPortalMessage event.
+            The only message that is processed here in the base class is CS_LOGIN.
+            Other handling of messages (like insertion into the StockCache) is handled in the overridden methods
+            of classes that derive from ClientPortalConnectionBase (MarketDataClientPortalConnection and
+            OrderClientPortalConnection).
+            </summary>
+            <param name="nType"></param>
+            <param name="dwDataSize"></param>
+            <param name="buff"></param>
+        </member>
+        <member name="T:Blackwood.Framework.OrderClientPortalConnection">
+            <summary>
+            An extension of ClientPortalConnectionBase functionality which handles an orders connection.  It requests 
+            all trade data upon login.
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.OrderRouter">
+            <summary>
+            OrderRouter keeps track of orders placed.  It allows Cancels, Rejects, and Fills to be sent to the
+            correct BWOrder object (to then be fired off to the user as events).
+            
+            Initially, orders are kept track of by a clientOrderID assigned here.
+            After an order is sent to the client portal and messages are received, it comes back with a SmartID.
+            The order is found by looking at clientOrderID, then matched to SmartID, and from the on is kept 
+            track of by that SmartID.
+            </summary>
+        </member>
+        <member name="F:Blackwood.Framework.OrderRouter.s_numOrders">
+            <summary>
+            used as an initial value to set MsgOrder.ClientID for internal order tracking
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.UDPMarketDataClientPortalConnection">
+            <summary>
+            Summary description for UDPMarketDataClientPortalConnection.
+            </summary>
+        </member>
+        <member name="T:Blackwood.Framework.UDPMessageDelegate">
+            <summary>
+            Summary description for UDPSocketConnection.
+            </summary>
+        </member>
+        <member name="M:Blackwood.Framework.UDPSocketConnection.OnMessage(System.Byte[],System.Int32,System.UInt32)">
+            <summary>
+            To process the message from multicast group info and group sequence.
+             </summary>
+             <param name="size"></param>
+             <param name="buff"></param>
+             <param name="sequence"></param>
+        </member>
+        <member name="M:Blackwood.Framework.UDPSocketConnection.RequestRecovery(Pacmid.Messages.MsgFeedSymbolBase,System.UInt32,System.UInt32)">
+            <summary>
+            If a sequence received doesnt match with the number we expect ,that means we lost a sequence 
+            and got to send the request to recover the message to the TCP client portal connection
+            by setting first and last seq
+            </summary>
+            <param name="receivedMsg"></param>
+            <param name="seq"></param>
+            <param name="firstseq"></param>
+        </member>
+        <member name="T:Blackwood.Framework.UDPSocketConnection.StateObject">
+            <summary>
+            State object to pass into the socket receive to store seqeunce and from which socket the data is received
+            </summary>
+        </member>
+    </members>
+</doc>

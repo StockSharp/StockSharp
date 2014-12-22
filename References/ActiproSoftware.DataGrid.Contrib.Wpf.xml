@@ -1,0 +1,117 @@
+<?xml version="1.0"?><doc><assembly><name>ActiproSoftware.DataGrid.Contrib.Wpf</name></assembly><members><member name="T:ActiproSoftware.Products.DataGrid.Contrib.DataGridLogo"><summary>
+            Represents the logo for this product.
+            </summary><summary>
+            DataGridLogo
+            </summary></member><member name="M:ActiproSoftware.Products.DataGrid.Contrib.DataGridLogo.InitializeComponent"><summary>
+            InitializeComponent
+            </summary></member><member name="M:ActiproSoftware.Products.DataGrid.Contrib.DataGridLogo.#ctor"><summary>
+            Initializes a new instance of the <c>DataGridLogo</c> class.
+            </summary></member><member name="T:ActiproSoftware.Windows.Themes.DataGridCursors"><summary>
+            Represents a set of cursors for use with the <c>DataGrid</c>.
+            </summary></member><member name="P:ActiproSoftware.Windows.Themes.DataGridCursors.ColumnResizeCursor"><summary>
+            Gets an Excel-style mouse cursor to display when resizing a <see cref="T:Microsoft.Windows.Controls.DataGrid" /> column.
+            </summary><value>An Excel-style mouse cursor to display when resizing a <see cref="T:Microsoft.Windows.Controls.DataGrid" /> column.</value></member><member name="P:ActiproSoftware.Windows.Themes.DataGridCursors.RowResizeCursor"><summary>
+            Gets an Excel-style mouse cursor to display when resizing a <see cref="T:Microsoft.Windows.Controls.DataGrid" /> row.
+            </summary><value>An Excel-style mouse cursor to display when resizing a <see cref="T:Microsoft.Windows.Controls.DataGrid" /> row.</value></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.DataGridCommands"><summary>
+            Contains the commands used for the <see cref="N:ActiproSoftware.Windows.Controls.DataGrid" /> control.
+            </summary></member><member name="P:ActiproSoftware.Windows.Controls.DataGrid.DataGridCommands.ToggleFrozenColumn"><summary>
+            Gets the <see cref="T:System.Windows.Input.RoutedCommand" /> that is used to toggle the frozen state of a <see cref="T:Microsoft.Windows.Controls.DataGridColumn" />.
+            </summary><value>The <see cref="T:System.Windows.Input.RoutedCommand" /> that is used to toggle the frozen state of a <see cref="T:Microsoft.Windows.Controls.DataGridColumn" />.</value><remarks>
+            The related <see cref="T:Microsoft.Windows.Controls.Primitives.DataGridColumnHeader" /> must be located in the command parameter.
+            </remarks></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.DataGridExtensions"><summary>
+            Represents a set of helper extension methods for the <c>DataGrid</c>.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.DataGridExtensions.GetRow(Microsoft.Windows.Controls.DataGrid,System.Int32)"><summary>
+            Gets the <c>DataGridRow</c> at the specified index.
+            </summary><param name="dataGrid">The <c>DataGrid</c>.</param><param name="index">The index of the <c>DataGridRow</c>.</param><returns>The <c>DataGridRow</c> at the specified index.</returns></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.DataGridExtensions.GetRow(Microsoft.Windows.Controls.DataGrid,System.Object)"><summary>
+            Gets the <c>DataGridRow</c> for the specified item.
+            </summary><param name="dataGrid">The <c>DataGrid</c>.</param><param name="item">The item.</param><returns>The <c>DataGridRow</c> for the specified item.</returns></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior"><summary>
+            Provides attached behavior for <see cref="T:Microsoft.Windows.Controls.DataGrid" /> controls to track the focus.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior.GetIsFocusedHeader(Microsoft.Windows.Controls.Primitives.DataGridColumnHeader)"><summary>
+            Gets a value indicating whether a <see cref="T:Microsoft.Windows.Controls.Primitives.DataGridColumnHeader" /> corresponds to the column
+            of the a currently focused <see cref="T:Microsoft.Windows.Controls.DataGridCell" />.
+            </summary><param name="obj">The object from which the property value is read.</param><returns>The object's value.</returns></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior.GetTrackingModes(Microsoft.Windows.Controls.DataGrid)"><summary>
+            Gets the value of the <see cref="F:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior.TrackingModesProperty" /> attached property for a specified <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </summary><param name="obj">The object to which the attached property is retrieved.</param><returns>
+            The focus that should be tracked in a <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior.SetTrackingModes(Microsoft.Windows.Controls.DataGrid,ActiproSoftware.Windows.Controls.DataGrid.FocusTrackingModes)"><summary>
+            Sets the value of the <see cref="F:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior.TrackingModesProperty" /> attached property to a specified <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </summary><param name="obj">The object to which the attached property is written.</param><param name="value">
+            A value indicating the focus that should be tracked in a <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </param></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior.IsFocusedHeaderProperty"><summary>
+            Identifies the <c>IsFocusedHeader</c> attached dependency property.  This field is read-only.
+            </summary><value>The identifier for the <c>IsFocusedHeader</c> attached dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior.TrackingModesProperty"><summary>
+            Identifies the <c>TrackingModes</c> attached dependency property.  This field is read-only.
+            </summary><value>The identifier for the <c>TrackingModes</c> attached dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.FocusTrackingModes"><summary>
+            Specifies the various tracking modes available by the <see cref="T:ActiproSoftware.Windows.Controls.DataGrid.FocusBehavior" />.
+            </summary></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.FocusTrackingModes.None"><summary>
+            Indicates that the focus will not be tracked.
+            </summary></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.FocusTrackingModes.Headers"><summary>
+            Indicates <see cref="T:Microsoft.Windows.Controls.Primitives.DataGridColumnHeader" /> focus will be tracked.
+            </summary></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.FocusTrackingModes.All"><summary>
+            Indicates that all available types will be tracked.
+            </summary></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior"><summary>
+            Provides attached behavior for <see cref="T:Microsoft.Windows.Controls.DataGrid" /> controls to customize the new row template.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.GetDefaultTemplate(Microsoft.Windows.Controls.DataGrid)"><summary>
+            Gets the value of the <see cref="F:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.DefaultTemplateProperty" /> attached property for a specified <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </summary><param name="obj">The object to which the attached property is retrieved.</param><returns>
+            The default <see cref="T:System.Windows.Controls.ControlTemplate" /> to use for rows in a <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.GetTemplate(Microsoft.Windows.Controls.DataGrid)"><summary>
+            Gets the value of the <see cref="F:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.TemplateProperty" /> attached property for a specified <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </summary><param name="obj">The object to which the attached property is retrieved.</param><returns>
+            The <see cref="T:System.Windows.Controls.ControlTemplate" /> to use for the "new" row in a <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.SetTemplate(Microsoft.Windows.Controls.DataGrid,System.Windows.Controls.ControlTemplate)"><summary>
+            Sets the value of the <see cref="F:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.TemplateProperty" /> attached property to a specified <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </summary><param name="obj">The object to which the attached property is written.</param><param name="value">
+            A value indicating the <see cref="T:System.Windows.Controls.ControlTemplate" /> to use for the "new" row in a <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </param></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.DefaultTemplateProperty"><summary>
+            Identifies the read-only <c>DefaultTemplate</c> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <c>DefaultTemplate</c> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.NewRowTemplateBehavior.TemplateProperty"><summary>
+            Identifies the <c>Template</c> attached dependency property.  This field is read-only.
+            </summary><value>The identifier for the <c>Template</c> attached dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior"><summary>
+            Provides attached behavior for <see cref="T:Microsoft.Windows.Controls.DataGrid" /> controls to track the selection.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior.GetIsSelectedHeader(Microsoft.Windows.Controls.Primitives.DataGridColumnHeader)"><summary>
+            Gets a value indicating whether a <see cref="T:Microsoft.Windows.Controls.Primitives.DataGridColumnHeader" /> corresponds to the column
+            of the a currently selected <see cref="T:Microsoft.Windows.Controls.DataGridCell" />.
+            </summary><param name="obj">The object from which the property value is read.</param><returns>The object's value.</returns></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior.GetTrackingModes(Microsoft.Windows.Controls.DataGrid)"><summary>
+            Gets the value of the <see cref="F:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior.TrackingModesProperty" /> attached property for a specified <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </summary><param name="obj">The object to which the attached property is retrieved.</param><returns>
+            The selections that should be tracked in a <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior.SetTrackingModes(Microsoft.Windows.Controls.DataGrid,ActiproSoftware.Windows.Controls.DataGrid.SelectionTrackingModes)"><summary>
+            Sets the value of the <see cref="F:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior.TrackingModesProperty" /> attached property to a specified <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </summary><param name="obj">The object to which the attached property is written.</param><param name="value">
+            A value indicating the selections that should be tracked in a <see cref="T:Microsoft.Windows.Controls.DataGrid" />.
+            </param></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior.IsSelectedHeaderProperty"><summary>
+            Identifies the <c>IsSelectedHeader</c> attached dependency property.  This field is read-only.
+            </summary><value>The identifier for the <c>IsSelectedHeader</c> attached dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior.TrackingModesProperty"><summary>
+            Identifies the <c>TrackingModes</c> attached dependency property.  This field is read-only.
+            </summary><value>The identifier for the <c>TrackingModes</c> attached dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.SelectionTrackingModes"><summary>
+            Specifies the various tracking modes available by the <see cref="T:ActiproSoftware.Windows.Controls.DataGrid.SelectionBehavior" />.
+            </summary></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.SelectionTrackingModes.None"><summary>
+            Indicates that the selection will not be tracked.
+            </summary></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.SelectionTrackingModes.Headers"><summary>
+            Indicates <see cref="T:Microsoft.Windows.Controls.Primitives.DataGridColumnHeader" /> selection will be tracked.
+            </summary></member><member name="F:ActiproSoftware.Windows.Controls.DataGrid.SelectionTrackingModes.All"><summary>
+            Indicates that all available types will be tracked.
+            </summary></member><member name="T:ActiproSoftware.Windows.Controls.DataGrid.ThemedDataGrid"><summary>
+            Represents a <see cref="T:Microsoft.Windows.Controls.DataGrid" /> that uses custom themes and integrates into the Actipro theme manager.
+            </summary></member><member name="T:ActiproSoftware.Windows.Themes.DataGridResourceKeys"><summary>
+            Provides access to the resource keys that identify all reusable styles/resources included in this assembly.
+            </summary></member><member name="P:ActiproSoftware.Windows.Themes.DataGridResourceKeys.DataGridCellStyleKey"><summary>
+            Gets the <see cref="T:System.Windows.ResourceKey" /> for a <see cref="T:System.Windows.Style" /> that may be applied to applied to <see cref="T:Microsoft.Windows.Controls.DataGridCell" /> elements.
+            </summary><value>A resource key.</value></member><member name="P:ActiproSoftware.Windows.Themes.DataGridResourceKeys.DataGridColumnHeaderStyleKey"><summary>
+            Gets the <see cref="T:System.Windows.ResourceKey" /> for a <see cref="T:System.Windows.Style" /> that may be applied to applied to <see cref="T:Microsoft.Windows.Controls.Primitives.DataGridColumnHeader" /> elements.
+            </summary><value>A resource key.</value></member><member name="P:ActiproSoftware.Windows.Themes.DataGridResourceKeys.DataGridRowHeaderStyleKey"><summary>
+            Gets the <see cref="T:System.Windows.ResourceKey" /> for a <see cref="T:System.Windows.Style" /> that may be applied to applied to <see cref="T:Microsoft.Windows.Controls.Primitives.DataGridRowHeader" /> elements.
+            </summary><value>A resource key.</value></member><member name="P:ActiproSoftware.Windows.Themes.DataGridResourceKeys.DataGridRowStyleKey"><summary>
+            Gets the <see cref="T:System.Windows.ResourceKey" /> for a <see cref="T:System.Windows.Style" /> that may be applied to applied to <see cref="T:Microsoft.Windows.Controls.DataGridRow" /> elements.
+            </summary><value>A resource key.</value></member><member name="P:ActiproSoftware.Windows.Themes.DataGridResourceKeys.DataGridStyleKey"><summary>
+            Gets the <see cref="T:System.Windows.ResourceKey" /> for a <see cref="T:System.Windows.Style" /> that may be applied to applied to <see cref="T:Microsoft.Windows.Controls.DataGrid" /> elements.
+            </summary><value>A resource key.</value></member><member name="T:ActiproSoftware.Windows.Themes.DataGridThemeCatalog"><summary>
+            A theme catalog that describes the theme group name implementations and available themed resource dictionaries within this assembly.
+            </summary></member><member name="P:ActiproSoftware.Windows.Themes.DataGridThemeCatalog.DictionaryReferences"><summary>
+            Gets the collection of <see cref="T:ActiproSoftware.Windows.Themes.ThemedResourceDictionaryReference" /> objects for the assembly.
+            </summary><value>
+            The collection of <see cref="T:ActiproSoftware.Windows.Themes.ThemedResourceDictionaryReference" /> objects for the assembly.
+            </value></member><member name="T:ActiproSoftware.Windows.Themes.DataGridThemeCatalogRegistrar"><summary>
+            Represents a class that registers the <see cref="T:ActiproSoftware.Windows.Themes.DataGridThemeCatalog" /> with the theme manager.
+            </summary></member></members></doc>

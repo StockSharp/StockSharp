@@ -1,0 +1,148 @@
+<Window x:Class="SampleHistoryTesting.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		Title="{x:Static loc:LocalizedStrings.XamlStr562}" Height="520" Width="834"
+		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+		xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:charting="http://schemas.stocksharp.com/xaml">
+
+	<Window.Resources>
+		<ex:BoolToVisibilityConverter x:Key="Converter" FalseVisibilityValue="Hidden" />
+	</Window.Resources>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="5"/>
+			<ColumnDefinition Width="250"/>
+		</Grid.ColumnDefinitions>
+
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="85*" />
+				<ColumnDefinition Width="497*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<Grid Grid.ColumnSpan="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="10" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="10" />
+				</Grid.RowDefinitions>
+
+				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr593}" />
+				<TextBox x:Name="HistoryPath" Text="" Grid.Column="1" Grid.Row="0" />
+				<Button x:Name="FindPath" Grid.Column="2" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+
+				<Grid Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="130" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+					</Grid.RowDefinitions>
+
+					<TextBox x:Name="SecId">RIZ2@FORTS</TextBox>
+					<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+						<xctk:DateTimePicker x:Name="From" Width="200" />
+						<xctk:DateTimePicker x:Name="To"  Width="200" />
+					</StackPanel>
+
+					<ProgressBar x:Name="TicksTestingProcess" Grid.Column="1" Grid.Row="2" />
+					<ProgressBar x:Name="TicksAndDepthsTestingProcess" Grid.Column="1" Grid.Row="3" />
+					<ProgressBar x:Name="CandlesTestingProcess" Grid.Column="1" Grid.Row="4" />
+					<ProgressBar x:Name="CandlesAndDepthsTestingProcess" Grid.Column="1" Grid.Row="5" />
+					<ProgressBar x:Name="OrderLogTestingProcess" Grid.Column="1" Grid.Row="6" />
+
+					<CheckBox Content="{x:Static loc:LocalizedStrings.Str91}" Grid.Row="2" Grid.Column="0" Name="TicksCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr757}" Grid.Row="3" Grid.Column="0" Name="TicksAndDepthsCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.Str646}" Grid.Row="4" Grid.Column="0" Name="CandlesCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr635}" Grid.Row="5" Grid.Column="0" Name="CandlesAndDepthsCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr273}" Grid.Row="6" Grid.Column="0" Name="OrderLogCheckBox" Click="CheckBoxClick" />
+
+					<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="7" Grid.Column="0" Click="StartBtnClick" IsEnabled="False"/>
+                    <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Grid.Row="7" Grid.Column="1" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+					<CheckBox x:Name="GenDepthsCheckBox" Content="{x:Static loc:LocalizedStrings.XamlStr97}" Grid.Row="8" Grid.Column="0" Click="CheckBoxClick" />
+					<CheckBox x:Name="ShowDepth" Content="{x:Static loc:LocalizedStrings.XamlStr85}" Grid.Row="9" Grid.Column="0" IsChecked="True" />
+					
+					<TextBox x:Name="MaxDepth" Grid.Row="10" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr291}">1</TextBox>
+					<TextBox x:Name="MaxVolume" Grid.Row="11" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr293}">1</TextBox>
+					
+					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr117}" Grid.Row="12" Grid.Column="0" Name="DebugLogCheckBox" Click="CheckBoxClick" />
+				</Grid>
+			</Grid>
+
+			<Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<TabControl x:Name="TabControl" Width="250" Visibility="Collapsed">
+						<TabItem Header="{x:Static loc:LocalizedStrings.Str91}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksCheckBox, Path=IsChecked}">
+							<sx:StatisticParameterGrid x:Name="TicksParameterGrid" />
+						</TabItem>
+						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr757}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksAndDepthsCheckBox, Path=IsChecked}">
+							<sx:StatisticParameterGrid x:Name="TicksAndDepthsParameterGrid" />
+						</TabItem>
+						<TabItem Header="{x:Static loc:LocalizedStrings.Str646}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesCheckBox, Path=IsChecked}">
+							<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
+						</TabItem>
+						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr635}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesAndDepthsCheckBox, Path=IsChecked}">
+							<sx:StatisticParameterGrid x:Name="CandlesAndDepthsParameterGrid" />
+						</TabItem>
+						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr273}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=OrderLogCheckBox, Path=IsChecked}">
+							<sx:StatisticParameterGrid x:Name="OrderLogParameterGrid" />
+						</TabItem>
+					</TabControl>
+					<Grid Grid.Column="1">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="*"/>
+							<RowDefinition Height="5"/>
+							<RowDefinition Height="100"/>
+						</Grid.RowDefinitions>
+						<TabControl>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str646}">
+								<charting:ChartPanel x:Name="Chart" ShowOverview="False" />
+							</TabItem>
+							<TabItem Header="{x:Static loc:LocalizedStrings.Str2344}">
+								<charting:EquityCurveChart x:Name="Curve" />
+							</TabItem>
+						</TabControl>
+						<GridSplitter Grid.Row="1" ResizeDirection="Rows" HorizontalAlignment="Stretch"/>
+						<charting:EquityCurveChart Grid.Row="2" x:Name="PositionCurve" />
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
+
+		<GridSplitter Grid.Column="1" ResizeDirection="Columns" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+
+		<sx:MarketDepthControl Grid.Column="2" x:Name="MarketDepth" />
+	</Grid>
+</Window>

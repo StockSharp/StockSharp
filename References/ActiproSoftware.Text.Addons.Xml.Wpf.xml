@@ -1,0 +1,611 @@
+<?xml version="1.0"?><doc><assembly><name>ActiproSoftware.Text.Addons.Xml.Wpf</name></assembly><members><member name="T:ActiproSoftware.Products.Text.Addons.Xml.SR"><summary>
+            Provides access to the string resources of this assembly, also allowing for their customization.
+            </summary><remarks>
+            Call the <see cref="M:ActiproSoftware.Products.Text.Addons.Xml.SR.GetString(System.String)" /> method to return a resolved resource string.
+            If a custom string has been set for a specified string resource name, it will be returned.
+            Otherwise, the default string resource value is returned.
+            <para>
+            If any of the resource strings are customized via a call to <see cref="M:ActiproSoftware.Products.Text.Addons.Xml.SR.SetCustomString(System.String,System.String)" />,
+            it is best to do so before any other classes in this assembly are referenced,
+            such as in the application startup.
+            </para></remarks></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.ClearCustomStrings"><summary>
+            Removes all custom strings.
+            </summary></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.ContainsCustomString(System.String)"><summary>
+            Returns whether a custom string is defined for the specified string resource.
+            </summary><param name="name">The name of the resource for which to search.</param><returns><c>true</c> if a custom string is defined for the specified string resource; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.GetCustomString(System.String)"><summary>
+            Returns custom string that is stored for the specified string resource, if any.
+            </summary><param name="name">The name of the resource to get.</param><returns>The custom string that is stored for the specified string resource, if any.</returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.GetString(System.String)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.GetString(ActiproSoftware.Products.Text.Addons.Xml.SRName)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.GetString(System.String,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.GetString(ActiproSoftware.Products.Text.Addons.Xml.SRName,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.RemoveCustomString(System.String)"><summary>
+            Removes any custom string that is defined for the specified string resource.
+            </summary><param name="name">The name of the resource to remove.</param></member><member name="M:ActiproSoftware.Products.Text.Addons.Xml.SR.SetCustomString(System.String,System.String)"><summary>
+            Sets a custom string value for the specified string resource.
+            </summary><param name="name">The name of the resource to set.</param><param name="value">The value of the resource to set.</param></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.SR.ResourceManager"><summary>
+            Gets the <see cref="P:ActiproSoftware.Products.Text.Addons.Xml.SR.ResourceManager" /> that provides the default resources. 
+            </summary><value>The <see cref="P:ActiproSoftware.Products.Text.Addons.Xml.SR.ResourceManager" /> that provides the default resources.</value></member><member name="T:ActiproSoftware.Products.Text.Addons.Xml.Resources"><summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.ResourceManager"><summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.Culture"><summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.ParseErrorExpectingEndTag"><summary>
+              Looks up a localized string similar to Expecting end tag &lt;/{0}&gt;..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.ParseErrorMultipleRootElements"><summary>
+              Looks up a localized string similar to XML document cannot contain multiple root level elements..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.ParseErrorNoRootElement"><summary>
+              Looks up a localized string similar to XML document must contain a root level element..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.ParseErrorNotExpectingEndTag"><summary>
+              Looks up a localized string similar to Did not expect &lt;/{0}&gt;..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.ParseErrorTagNotClosed"><summary>
+              Looks up a localized string similar to Tag was not closed..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalCDataEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to ']]&gt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalCDataStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&lt;![CDATA['.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalCDataTextErrorAlias"><summary>
+              Looks up a localized string similar to CData text.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalCommentEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '--&gt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalCommentStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&lt;!--'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalCommentTextErrorAlias"><summary>
+              Looks up a localized string similar to Comment text.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDeclarationEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&gt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDeclarationStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&lt;!'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDeclarationTextErrorAlias"><summary>
+              Looks up a localized string similar to Declaration text.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDocTypeDeclarationEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&gt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDocTypeDeclarationInternalSubsetEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to ']'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDocTypeDeclarationInternalSubsetStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '['.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDocTypeDeclarationInternalSubsetTextErrorAlias"><summary>
+              Looks up a localized string similar to Declaration text.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalDocTypeDeclarationStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&lt;!'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalEndTagEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&gt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalEndTagStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&lt;/'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalEndTagTextErrorAlias"><summary>
+              Looks up a localized string similar to End tag name.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalPIEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '?&gt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalPIStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&lt;?'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalPITextErrorAlias"><summary>
+              Looks up a localized string similar to Processing instruction text.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagAttributeNameErrorAlias"><summary>
+              Looks up a localized string similar to Attribute name.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagAttributeValueEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to Attribute end value delimiter.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagAttributeValueStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to Attribute start value delimiter.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagAttributeValueTextErrorAlias"><summary>
+              Looks up a localized string similar to Attribute value.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagEndDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&gt;' or '/&gt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagNameErrorAlias"><summary>
+              Looks up a localized string similar to Start tag name.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagStartDelimiterErrorAlias"><summary>
+              Looks up a localized string similar to '&lt;'.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Xml.Resources.TerminalStartTagTextErrorAlias"><summary>
+              Looks up a localized string similar to Start tag text.
+            </summary></member><member name="T:ActiproSoftware.Products.Text.Addons.Xml.SRName"><summary>
+            Specifies the names of string resources for this assembly.
+            </summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.ParseErrorExpectingEndTag"><summary>A parse error string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.ParseErrorMultipleRootElements"><summary>A parse error string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.ParseErrorNoRootElement"><summary>A parse error string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.ParseErrorNotExpectingEndTag"><summary>A parse error string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.ParseErrorTagNotClosed"><summary>A parse error string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalCDataEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalCDataStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalCDataTextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalCommentEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalCommentStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalCommentTextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalEndTagEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalEndTagStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalEndTagTextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDeclarationEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDeclarationStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDeclarationTextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDocTypeDeclarationEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDocTypeDeclarationInternalSubsetEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDocTypeDeclarationInternalSubsetStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDocTypeDeclarationInternalSubsetTextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalDocTypeDeclarationStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalPIEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalPIStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalPITextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagAttributeNameErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagAttributeValueEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagAttributeValueStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagAttributeValueTextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagEndDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagNameErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagStartDelimiterErrorAlias"><summary>A terminal error alias string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Xml.SRName.TerminalStartTagTextErrorAlias"><summary>A terminal error alias string.</summary></member><member name="T:ActiproSoftware.Text.Languages.Xml.XmlValidationMode"><summary>
+            Specifies the validation mode for an <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlValidator" />.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlValidationMode.None"><summary>
+            No validation.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlValidationMode.Schema"><summary>
+            Schema validation, but no DTD support.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlValidationMode.Dtd"><summary>
+            DTD validation, but no schema support.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlValidationMode.SchemaWithDtd"><summary>
+            Schema validation, with ability to examine DTDs for entities.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlExampleTextProvider"><summary>
+            Represents a example text provider for the <c>XML</c> language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.1.542.0 (http://www.actiprosoftware.com).
+            Generated code is based on input created by Actipro Software LLC.
+            Copyright (c) 2001-2012 Actipro Software LLC.  All rights reserved.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlExampleTextProvider.ExampleText"><summary>
+            Gets the example text, a code snippet of the related language.
+            </summary><value>The example text, a code snippet of the related language.</value></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexer"><summary>
+            Represents a lexer for the <c>XML</c> language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.2.550.0 (http://www.actiprosoftware.com).
+            Generated code is based on input created by Actipro Software LLC.
+            Copyright (c) 2001-2012 Actipro Software LLC.  All rights reserved.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexer.#ctor(ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider)"><summary>
+            Initializes a new instance of the <c>XmlLexer</c> class.
+            </summary><param name="classificationTypeProvider">A <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider" /> that provides classification types used by this lexer.</param></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId"><summary>
+            Contains the lexical state IDs for the <c>XML</c> language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.1.543.0 (http://www.actiprosoftware.com).
+            Generated code is based on input created by Actipro Software LLC.
+            Copyright (c) 2001-2012 Actipro Software LLC.  All rights reserved.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.ContainsId(System.Int32)"><summary>
+            Returns whether the specified ID value is valid for this lexical state ID provider.
+            </summary><param name="id">The lexical state ID to examine.</param><returns><c>true</c> if the ID value is valid; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.GetDescription(System.Int32)"><summary>
+            Returns the actual string representation for the specified lexical state ID.
+            </summary><param name="id">The lexical state ID to examine.</param><returns>The actual string representation for the specified lexical state ID.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.GetKey(System.Int32)"><summary>
+            Returns the string-based key for the specified lexical state ID.
+            </summary><param name="id">The lexical state ID to examine.</param><returns>The string-based key for the specified lexical state ID.</returns></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.MinId"><summary>
+            Gets the minimum lexical state ID returned by this provider.
+            </summary><value>The minimum lexical state ID returned by this provider.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.MaxId"><summary>
+            Gets the maximum lexical state ID returned by this provider.
+            </summary><value>The maximum lexical state ID returned by this provider.</value></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.Default"><summary>
+            Gets the <c>Default</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.StartTag"><summary>
+            Gets the <c>StartTag</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.StartTagAttributeDoubleQuoteValue"><summary>
+            Gets the <c>StartTagAttributeDoubleQuoteValue</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.StartTagAttributeSingleQuoteValue"><summary>
+            Gets the <c>StartTagAttributeSingleQuoteValue</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.EndTag"><summary>
+            Gets the <c>EndTag</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.Comment"><summary>
+            Gets the <c>Comment</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.ProcessingInstruction"><summary>
+            Gets the <c>ProcessingInstruction</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.DocTypeDeclaration"><summary>
+            Gets the <c>DocTypeDeclaration</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.DocTypeDeclarationInternalSubset"><summary>
+            Gets the <c>DocTypeDeclarationInternalSubset</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.Declaration"><summary>
+            Gets the <c>Declaration</c> lexical state ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlLexicalStateId.CDataSection"><summary>
+            Gets the <c>CDataSection</c> lexical state ID.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId"><summary>
+            Contains the token IDs for the <c>XML</c> language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.1.543.0 (http://www.actiprosoftware.com).
+            Generated code is based on input created by Actipro Software LLC.
+            Copyright (c) 2001-2012 Actipro Software LLC.  All rights reserved.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.ContainsId(System.Int32)"><summary>
+            Returns whether the specified ID value is valid for this token ID provider.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is valid; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.GetDescription(System.Int32)"><summary>
+            Returns the actual string representation for the specified token ID.
+            </summary><param name="id">The token ID to examine.</param><returns>The actual string representation for the specified token ID.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.GetKey(System.Int32)"><summary>
+            Returns the string-based key for the specified token ID.
+            </summary><param name="id">The token ID to examine.</param><returns>The string-based key for the specified token ID.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlAttributeClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlAttribute</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlAttributeValueClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlAttributeValue</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlCDataSectionClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlCDataSection</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlCommentClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlComment</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlDeclarationClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlDeclaration</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlDelimiterClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlDelimiter</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlEntityClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlEntity</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlNameClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlName</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.IsXmlProcessingInstructionClassificationType(System.Int32)"><summary>
+            Returns whether the specified ID value is part of the <c>XmlProcessingInstruction</c>.
+            </summary><param name="id">The token ID to examine.</param><returns><c>true</c> if the ID value is in the classification type; otherwise, <c>false</c></returns></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.MinId"><summary>
+            Gets the minimum token ID returned by this provider.
+            </summary><value>The minimum token ID returned by this provider.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.MaxId"><summary>
+            Gets the maximum token ID returned by this provider.
+            </summary><value>The maximum token ID returned by this provider.</value></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.Default"><summary>
+            Gets the <c>Default</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.Entity"><summary>
+            Gets the <c>Entity</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.Identifier"><summary>
+            Gets the <c>Identifier</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.Whitespace"><summary>
+            Gets the <c>Whitespace</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagText"><summary>
+            Gets the <c>StartTagText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagStartDelimiter"><summary>
+            Gets the <c>StartTagStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagEndDelimiter"><summary>
+            Gets the <c>StartTagEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagName"><summary>
+            Gets the <c>StartTagName</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagAttributeName"><summary>
+            Gets the <c>StartTagAttributeName</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagNextTagStartDelimiter"><summary>
+            Gets the <c>StartTagNextTagStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagAttributeValueText"><summary>
+            Gets the <c>StartTagAttributeValueText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagAttributeValueStartDelimiter"><summary>
+            Gets the <c>StartTagAttributeValueStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.StartTagAttributeValueEndDelimiter"><summary>
+            Gets the <c>StartTagAttributeValueEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.EndTagText"><summary>
+            Gets the <c>EndTagText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.EndTagStartDelimiter"><summary>
+            Gets the <c>EndTagStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.EndTagEndDelimiter"><summary>
+            Gets the <c>EndTagEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.CommentText"><summary>
+            Gets the <c>CommentText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.CommentStartDelimiter"><summary>
+            Gets the <c>CommentStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.CommentEndDelimiter"><summary>
+            Gets the <c>CommentEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.ProcessingInstructionText"><summary>
+            Gets the <c>ProcessingInstructionText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.ProcessingInstructionStartDelimiter"><summary>
+            Gets the <c>ProcessingInstructionStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.ProcessingInstructionEndDelimiter"><summary>
+            Gets the <c>ProcessingInstructionEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DeclarationText"><summary>
+            Gets the <c>DeclarationText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DocTypeDeclarationStartDelimiter"><summary>
+            Gets the <c>DocTypeDeclarationStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DocTypeDeclarationEndDelimiter"><summary>
+            Gets the <c>DocTypeDeclarationEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DocTypeDeclarationInternalSubsetText"><summary>
+            Gets the <c>DocTypeDeclarationInternalSubsetText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DocTypeDeclarationInternalSubsetStartDelimiter"><summary>
+            Gets the <c>DocTypeDeclarationInternalSubsetStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DocTypeDeclarationInternalSubsetEndDelimiter"><summary>
+            Gets the <c>DocTypeDeclarationInternalSubsetEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DeclarationStartDelimiter"><summary>
+            Gets the <c>DeclarationStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.DeclarationEndDelimiter"><summary>
+            Gets the <c>DeclarationEndDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.CDataSectionText"><summary>
+            Gets the <c>CDataSectionText</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.CDataSectionStartDelimiter"><summary>
+            Gets the <c>CDataSectionStartDelimiter</c> token ID.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenId.CDataSectionEndDelimiter"><summary>
+            Gets the <c>CDataSectionEndDelimiter</c> token ID.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTagger"><summary>
+            Represents a token tagger for the <c>XML</c> language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.1.542.0 (http://www.actiprosoftware.com).
+            Generated code is based on input created by Actipro Software LLC.
+            Copyright (c) 2001-2012 Actipro Software LLC.  All rights reserved.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTagger.#ctor(ActiproSoftware.Text.ICodeDocument,ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider)"><summary>
+            Initializes a new instance of the <c>XmlTokenTagger</c> class.
+            </summary><param name="document">The specific <see cref="T:ActiproSoftware.Text.ICodeDocument" /> for which this token tagger will be used.</param><param name="classificationTypeProvider">A <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider" /> that provides classification types used by this token tagger.</param></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTagger.ClassificationTypeProvider"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider" /> that provides classification types used by this token tagger.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider" /> that provides classification types used by this token tagger.</value></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTaggerProvider"><summary>
+            Represents a provider of <see cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTagger" /> objects for documents that use the <c>XmlTokenTagger</c> language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.1.542.0 (http://www.actiprosoftware.com).
+            Generated code is based on input created by Actipro Software LLC.
+            Copyright (c) 2001-2012 Actipro Software LLC.  All rights reserved.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTaggerProvider.GetTagger``1(ActiproSoftware.Text.ICodeDocument)"><summary>
+            Returns a tagger for the specified <see cref="T:ActiproSoftware.Text.ICodeDocument" />.
+            </summary><typeparam name="T">The type of <see cref="T:ActiproSoftware.Text.Tagging.ITag" /> created by the tagger.</typeparam><param name="document">The <see cref="T:ActiproSoftware.Text.ICodeDocument" /> that requires a tagger.</param><returns>A tagger for the specified <see cref="T:ActiproSoftware.Text.ICodeDocument" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTaggerProvider.#ctor(ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider)"><summary>
+            Initializes a new instance of the <c>XmlTokenTaggerProvider</c> class.
+            </summary><param name="classificationTypeProvider">A <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider" /> that provides classification types.</param></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTaggerProvider.TaggerFactory"><summary>
+            Implements a factory that can creates <see cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTagger" /> objects for a document.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTaggerProvider.TaggerFactory.CreateTagger"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTagger" /> for the <see cref="T:ActiproSoftware.Text.ICodeDocument" />.
+            </summary><returns>An <see cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenTagger" /> for the <see cref="T:ActiproSoftware.Text.ICodeDocument" />.</returns></member><member name="T:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider"><summary>
+            Provides the base requirements of an object that provides <see cref="T:ActiproSoftware.Text.IClassificationType" /> objects for the <c>XML</c> language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.1.542.0 (http://www.actiprosoftware.com).
+            Generated code is based on input created by Actipro Software LLC.
+            Copyright (c) 2001-2012 Actipro Software LLC.  All rights reserved.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlEntity"><summary>
+            Gets the <c>XmlEntity</c> classification type.
+            </summary><value>The <c>XmlEntity</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlDelimiter"><summary>
+            Gets the <c>XmlDelimiter</c> classification type.
+            </summary><value>The <c>XmlDelimiter</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlName"><summary>
+            Gets the <c>XmlName</c> classification type.
+            </summary><value>The <c>XmlName</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlAttribute"><summary>
+            Gets the <c>XmlAttribute</c> classification type.
+            </summary><value>The <c>XmlAttribute</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlAttributeValue"><summary>
+            Gets the <c>XmlAttributeValue</c> classification type.
+            </summary><value>The <c>XmlAttributeValue</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlComment"><summary>
+            Gets the <c>XmlComment</c> classification type.
+            </summary><value>The <c>XmlComment</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlProcessingInstruction"><summary>
+            Gets the <c>XmlProcessingInstruction</c> classification type.
+            </summary><value>The <c>XmlProcessingInstruction</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlDeclaration"><summary>
+            Gets the <c>XmlDeclaration</c> classification type.
+            </summary><value>The <c>XmlDeclaration</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlClassificationTypeProvider.XmlCDataSection"><summary>
+            Gets the <c>XmlCDataSection</c> classification type.
+            </summary><value>The <c>XmlCDataSection</c> classification type.</value></member><member name="T:ActiproSoftware.Text.Languages.Xml.XmlAttributeSpacingMode"><summary>
+            The attribute spacing modes that an <see cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTextFormatter" /> can use.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlAttributeSpacingMode.Preserve"><summary>
+            The attribute spacing is not modified.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlAttributeSpacingMode.NormalizeWhitespace"><summary>
+            Attributes will be separated by a single space.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlAttributeSpacingMode.SeparateLines"><summary>
+            Each attribute will be on a separate line.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTextFormatter"><summary>
+            Provides a <c>XML</c> language text formatter service.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTextFormatter.Format(ActiproSoftware.Text.TextSnapshotRange)"><summary>
+            Formats the specified snapshot range.
+            </summary><param name="snapshotRange">The snapshot range.</param></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTextFormatter.AttributeSpacingMode"><summary>
+            Gets or sets the attribute spacing mode.
+            </summary><value>The attribute spacing mode. The default value is <c>Preserve</c>.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTextFormatter.ElementSpacingMode"><summary>
+            Gets or sets the element spacing mode.
+            </summary><value>The element spacing mode. The default value is <c>Preserve</c>.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTextFormatter.TagWrapLength"><summary>
+            Gets or sets the tag wrap length.
+            </summary><value>The tag wrap length. The default value is <c>0</c> which means disabled.</value></member><member name="T:ActiproSoftware.Text.Languages.Xml.IXmlElementContext"><summary>
+            Provides the base requirements for resolved information about a <c>XML</c> element related to an <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlContext" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.AstNode"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that defines the element, if known.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that defines the element, if known.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.Attributes"><summary>
+            Gets the dictionary of attributes for this element.
+            </summary><value>The dictionary of attributes for this element.</value><remarks>
+            The dictionary keys are the attribute qualified names and the values are <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext" /> objects.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.EndTagSnapshotRange"><summary>
+            Gets the nullable <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> that specifies the range of the end tag, if there is one.
+            </summary><value>The nullable <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> that specifies the range of the end tag, if there is one.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.Name"><summary>
+            Gets the name of the element.
+            </summary><value>The name of the element.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.Namespace"><summary>
+            Gets the namespace that defines the element.
+            </summary><value>The namespace that defines the element.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.NamespacePrefix"><summary>
+            Gets the prefix of the namespace that defines the element.
+            </summary><value>The prefix of the namespace that defines the element.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.QualifiedName"><summary>
+            Gets the <see cref="T:System.Xml.XmlQualifiedName" /> that contains the element's qualified name.
+            </summary><value>The <see cref="T:System.Xml.XmlQualifiedName" /> that contains the element's qualified name.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.SchemaElement"><summary>
+            Gets the resolved <see cref="T:System.Xml.Schema.XmlSchemaElement" /> for this element, if known.
+            </summary><value>The resolved <see cref="T:System.Xml.Schema.XmlSchemaElement" /> for this element, if known.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlElementContext.StartTagNameSnapshotRange"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> that specifies the range of the start tag name.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> that specifies the range of the start tag name.</value></member><member name="T:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext"><summary>
+            Provides the base requirements for resolved information about a <c>XML</c> attribute related to an <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlContext" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext.Element"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlElementContext" /> upon which this attribute is located.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlElementContext" /> upon which this attribute is located.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext.Name"><summary>
+            Gets the name of the attribute.
+            </summary><value>The name of the attribute.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext.NameSnapshotRange"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> that specifies the range of the attribute name.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> that specifies the range of the attribute name.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext.Namespace"><summary>
+            Gets the namespace that defines the attribute.
+            </summary><value>The namespace that defines the attribute.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext.NamespacePrefix"><summary>
+            Gets the prefix of the namespace that defines the attribute.
+            </summary><value>The prefix of the namespace that defines the attribute.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext.QualifiedName"><summary>
+            Gets the <see cref="T:System.Xml.XmlQualifiedName" /> that contains the attribute's qualified name.
+            </summary><value>The <see cref="T:System.Xml.XmlQualifiedName" /> that contains the attribute's qualified name.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext.SchemaAttribute"><summary>
+            Gets the resolved <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> for this attribute, if known.
+            </summary><value>The resolved <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> for this attribute, if known.</value></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlContextFactory"><summary>
+            Creates <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlContext" /> objects for a <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlContextFactory.CreateContext(ActiproSoftware.Text.TextSnapshotOffset)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlContext" /> for the specified <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" />.
+            </summary><param name="snapshotOffset">The <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" /> for which to create a context.</param><returns>The <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlContext" /> that was created.</returns></member><member name="T:ActiproSoftware.Text.Languages.Xml.XmlContextType"><summary>
+            Specifies the type of <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlContext" />.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlContextType.None"><summary>
+            No context.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlContextType.Default"><summary>
+            In default area (between elements or in an element block).
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlContextType.StartTagName"><summary>
+            At the name of a start tag.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlContextType.StartTagDefault"><summary>
+            After the start tag name, and possibly between attributes.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlContextType.StartTagAttributeName"><summary>
+            At the name of an attribute.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlContextType.StartTagAttributeValue"><summary>
+            At the value of an attribute.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlContextType.StartTagOther"><summary>
+            At another part of a start tag.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.Xml.IXmlContext"><summary>
+            Provides the base requirements for information about the <c>XML</c> context of a certain offset within an <see cref="T:ActiproSoftware.Text.ITextSnapshot" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.ElementHierarchy"><summary>
+            Gets a read-only list of <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlElementContext" /> objects that describes the element hierarchy.
+            </summary><value>A read-only list of <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlElementContext" /> objects that describes the element hierarchy.</value><remarks>
+            The element hierarchy is the list of parent elements that contain the current offset.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.InitializationSnapshotRange"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> with which the context was initialized.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.TextSnapshotRange" /> with which the context was initialized.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.NamespaceDeclarations"><summary>
+            Gets the mapping dictionary of namespace to namespace prefixes that are declared at the context.
+            </summary><value>The mapping dictionary of namespace to namespace prefixes that are declared at the context.</value><remarks>
+            The dictionary keys are namespaces and the values are namespace prefixes.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.SchemaResolver"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver" /> to use.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver" /> to use.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.SnapshotOffset"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" /> for which this context was created.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" /> for which this context was created.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.TargetAttribute"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext" /> that contains context information related to the target attribute.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlAttributeContext" /> that contains context information related to the target attribute.</value><remarks>
+            This property is only populated if the context is related to an attribute.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.TargetElement"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlElementContext" /> that contains context information related to the target element.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlElementContext" /> that contains context information related to the target element.</value><remarks>
+            This property is only populated if the context is related to an element or attribute.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlContext.Type"><summary>
+            Gets an <see cref="T:ActiproSoftware.Text.Languages.Xml.XmlContextType" /> that specifies the type of context.
+            </summary><value>An <see cref="T:ActiproSoftware.Text.Languages.Xml.XmlContextType" /> that specifies the type of context.</value></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.IXmlParseData"><summary>
+            Provides the base requirements of an object that stores the results of a <c>XML</c> language parsing operation.
+            </summary><seealso cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParseData" /></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.IXmlParseData.IsWellFormed"><summary>
+            Gets whether the XML is well-formed.
+            </summary><value><c>true</c> if the XML is well-formed; otherwise, <c>false</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParseData"><summary>
+            Stores the results of a <c>XML</c> language parsing operation.
+            </summary></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParseData.IsWellFormed"><summary>
+            Gets or sets whether the XML is well-formed.
+            </summary><value><c>true</c> if the XML is well-formed; otherwise, <c>false</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserBase"><summary>
+            Provides an abstract base class of a parser for the <c>XML</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserBase.CreateParseData(ActiproSoftware.Text.Parsing.IParseRequest,ActiproSoftware.Text.Parsing.LLParser.IParserState)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> for the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" />.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><param name="state">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> to examine.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserBase.Validate(ActiproSoftware.Text.Parsing.IParseRequest,ActiproSoftware.Text.Parsing.LLParser.IParserState)"><summary>
+            Validates XML if no parse errors were found.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><param name="state">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> to examine.</param></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserBase.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar)"><summary>
+            Initializes a new instance of the <c>XmlParserBase</c> class.
+            </summary><param name="grammar">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar" /> instance to use.</param></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserContext"><summary>
+            Stores parser context information for a <c>XML</c> language grammar parser.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserContext.#ctor"><summary>
+            Initializes a new instance of the <c>XmlParserContext</c> class.
+            </summary></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserContext.ElementStack"><summary>
+            Gets the element stack.
+            </summary><value>The element stack.</value></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlParserContext.IsWellFormed"><summary>
+            Gets or sets whether the XML is well-formed.
+            </summary><value><c>true</c> if the XML is well-formed; otherwise, <c>false</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlGrammar"><summary>
+            Represents a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar" /> for the <c>XML</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlGrammar.#ctor"><summary>
+            Initializes a new instance of the <c>XmlGrammar</c> class.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver"><summary>
+            Provides the base requirements for a class that can manage <c>XML</c> schema data.
+            </summary><remarks>
+            Instances of this object can be registered with an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> using the 
+            <see cref="M:ActiproSoftware.Text.Utility.IServiceLocator.RegisterService(System.Object,System.Object)" /> method.
+            Once an instance is registered with the language for the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver" /> interface type, its features can be used by the language.
+            </remarks><seealso cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver" /></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.GetChildSchemaElement(System.Xml.Schema.XmlSchemaElement,System.Xml.XmlQualifiedName)"><summary>
+            Returns the child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.
+            </summary><param name="parentElement">The parent <see cref="T:System.Xml.Schema.XmlSchemaElement" />.</param><param name="name">The <see cref="T:System.Xml.XmlQualifiedName" /> for which to search.</param><returns>The child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.GetChildSchemaElements(System.Xml.Schema.XmlSchemaElement)"><summary>
+            Returns the child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.
+            </summary><param name="parentElement">The parent <see cref="T:System.Xml.Schema.XmlSchemaElement" />.</param><returns>The child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.GetDocumentation(System.Xml.Schema.XmlSchemaAnnotated)"><summary>
+            Returns the XSD documentation for the specified source object.
+            </summary><param name="source">The source <see cref="T:System.Xml.Schema.XmlSchemaAnnotated" /> for which the documentation is being retrieved.</param><returns>The documentation that was retrieved.</returns><remarks>
+            The default implementation of this method appends the inner text of all the <see cref="T:System.Xml.Schema.XmlSchemaDocumentation" /> child nodes together,
+            with whitespace in between.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.GetGlobalSchemaElement(System.Xml.XmlQualifiedName)"><summary>
+            Returns the global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.
+            </summary><param name="name">The <see cref="T:System.Xml.XmlQualifiedName" /> for which to search.</param><returns>The global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.GetGlobalSchemaElements"><summary>
+            Returns the collection of global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.
+            </summary><returns>The collection of global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.GetSchemaAttributes(System.Xml.Schema.XmlSchemaElement)"><summary>
+            Returns the child <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> objects.
+            </summary><param name="parentElement">The parent <see cref="T:System.Xml.Schema.XmlSchemaElement" />.</param><returns>The child <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> objects.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.ResolveSchemaAttribute(System.Xml.Schema.XmlSchemaAttribute)"><summary>
+            Resolves the specified <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> in the event it is a reference to another <see cref="T:System.Xml.Schema.XmlSchemaAttribute" />.
+            </summary><param name="attribute">The <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> to examine.</param><returns>The resolved <see cref="T:System.Xml.Schema.XmlSchemaAttribute" />.</returns></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.DefaultNamespace"><summary>
+            Gets or sets the default XML namespace to use.
+            </summary><value>The default XML namespace to use.</value><remarks>
+            The default namespace is used to mimic an <c>xmlns</c> attribute setting on the root element, if no <c>xmlns</c> attribute is present.
+            It sets an empty-string-keyed value into the <see cref="P:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.DefaultNamespacePrefixMappings" /> dictionary.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.DefaultNamespacePrefixMappings"><summary>
+            Gets the mapping dictionary of namespace prefix to namespaces that are declared by default without the need for <c>xmlns</c> attributes in elements.
+            </summary><value>The mapping dictionary of namespace prefix to namespaces that are declared by default without the need for <c>xmlns</c> attributes in elements.</value><remarks>
+            The dictionary keys are namespace prefixes and the values are namespaces.
+            The namespace declarations in this dictionary are used to mimic <c>xmlns</c> attribute settings on the root element 
+            when no <c>xmlns</c> declaration attributes for the specified namespace prefix keys are present.
+            <para>
+            The <see cref="P:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.DefaultNamespace" /> property is simply a wrapper for setting an empty-string-keyed value in this dictionary.
+            </para></remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver.SchemaSet"><summary>
+            Gets or sets the <see cref="T:System.Xml.Schema.XmlSchemaSet" /> to use.
+            </summary><value>The <see cref="T:System.Xml.Schema.XmlSchemaSet" /> to use.</value><remarks>
+            This property can be set if you already have a <c>XmlSchemaSet</c> loaded that should directly be used.
+            </remarks></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver"><summary>
+            Provides a class that can manage <c>XML</c> schema data.
+            </summary><remarks>
+            Instances of this object can be registered with an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> using the 
+            <see cref="M:ActiproSoftware.Text.Utility.IServiceLocator.RegisterService(System.Object,System.Object)" /> method.
+            Once an instance is registered with the language for the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver" /> interface type, its features can be used by the language.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.AddSchema(System.Xml.Schema.XmlSchema)"><summary>
+            Adds another <see cref="T:System.Xml.Schema.XmlSchema" /> to the existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" />.
+            </summary><param name="schema">The <see cref="T:System.Xml.Schema.XmlSchema" /> to load.</param></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.AddSchemaFromFile(System.String)"><summary>
+            Adds another <see cref="T:System.Xml.Schema.XmlSchema" /> from a file to the existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" />.
+            </summary><param name="path">The path to the XSD schema file to load.</param></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.AddSchemaFromStream(System.IO.Stream)"><summary>
+            Adds another <see cref="T:System.Xml.Schema.XmlSchema" /> from a <see cref="T:System.IO.Stream" /> to the existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" />.
+            </summary><param name="stream">The <see cref="T:System.IO.Stream" /> from which to load.</param></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.AddSchemaFromString(System.String)"><summary>
+            Adds another <see cref="T:System.Xml.Schema.XmlSchema" /> from a string to the existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" />.
+            </summary><param name="schemaData">The XSD schema data.</param></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetChildSchemaElement(System.Xml.Schema.XmlSchemaElement,System.Xml.XmlQualifiedName)"><summary>
+            Returns the child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.
+            </summary><param name="parentElement">The parent <see cref="T:System.Xml.Schema.XmlSchemaElement" />.</param><param name="name">The <see cref="T:System.Xml.XmlQualifiedName" /> for which to search.</param><returns>The child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetChildSchemaElements(System.Xml.Schema.XmlSchemaElement)"><summary>
+            Returns the child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.
+            </summary><param name="parentElement">The parent <see cref="T:System.Xml.Schema.XmlSchemaElement" />.</param><returns>The child <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetDocumentation(System.Xml.Schema.XmlSchemaAnnotated)"><summary>
+            Returns the XSD documentation for the specified source object.
+            </summary><param name="source">The source <see cref="T:System.Xml.Schema.XmlSchemaAnnotated" /> for which the documentation is being retrieved.</param><returns>The documentation that was retrieved.</returns><remarks>
+            The default implementation of this method appends the inner text of all the <see cref="T:System.Xml.Schema.XmlSchemaDocumentation" /> child nodes together,
+            with whitespace in between.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetGlobalSchemaElement(System.Xml.XmlQualifiedName)"><summary>
+            Returns the global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.
+            </summary><param name="name">The <see cref="T:System.Xml.XmlQualifiedName" /> for which to search.</param><returns>The global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> that has the specified qualified name.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetGlobalSchemaElements"><summary>
+            Returns the collection of global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.
+            </summary><returns>The collection of global <see cref="T:System.Xml.Schema.XmlSchemaElement" /> objects.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetSchemaAttributes(System.Xml.Schema.XmlSchemaElement)"><summary>
+            Returns the child <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> objects.
+            </summary><param name="parentElement">The parent <see cref="T:System.Xml.Schema.XmlSchemaElement" />.</param><returns>The child <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> objects.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetSchemaElementContentType(System.Xml.Schema.XmlSchemaElement)"><summary>
+            Returns the <see cref="T:System.Xml.Schema.XmlSchemaContentType" /> for the specified <see cref="T:System.Xml.Schema.XmlSchemaElement" />.
+            </summary><param name="element">The <see cref="T:System.Xml.Schema.XmlSchemaElement" /> to examine.</param><returns>The <see cref="T:System.Xml.Schema.XmlSchemaContentType" /> for the specified <see cref="T:System.Xml.Schema.XmlSchemaElement" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.GetSchemaElementContentFacets(System.Xml.Schema.XmlSchemaElement)"><summary>
+            Returns the <see cref="T:System.Xml.Schema.XmlSchemaFacet" /> objects that are allowed as content of the specified <see cref="T:System.Xml.Schema.XmlSchemaElement" />.
+            </summary><param name="element">The <see cref="T:System.Xml.Schema.XmlSchemaElement" /> to examine.</param><returns>The <see cref="T:System.Xml.Schema.XmlSchemaFacet" /> objects that are allowed as content.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.LoadSchema(System.Xml.Schema.XmlSchema)"><summary>
+            Clears any existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" /> and loads a new single <see cref="T:System.Xml.Schema.XmlSchema" />.
+            </summary><param name="schema">The <see cref="T:System.Xml.Schema.XmlSchema" /> to load.</param><remarks>
+            This method first clears any schemas currently in use and then loads a single specified schema.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.LoadSchemaFromFile(System.String)"><summary>
+            Clears any existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" /> and loads a new single <see cref="T:System.Xml.Schema.XmlSchema" /> from a file.
+            </summary><param name="path">The path to the XSD schema file to load.</param><remarks>
+            This method first clears any schemas currently in use and then loads a single specified schema.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.LoadSchemaFromStream(System.IO.Stream)"><summary>
+            Clears any existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" /> and loads a new single <see cref="T:System.Xml.Schema.XmlSchema" /> from a <see cref="T:System.IO.Stream" />.
+            </summary><param name="stream">The <see cref="T:System.IO.Stream" /> from which to load.</param><remarks>
+            This method first clears any schemas currently in use and then loads a single specified schema.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.LoadSchemaFromString(System.String)"><summary>
+            Clears any existing <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet" /> and loads a new single <see cref="T:System.Xml.Schema.XmlSchema" /> from a string.
+            </summary><param name="schemaData">The XSD schema data.</param></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.ResolveSchemaAttribute(System.Xml.Schema.XmlSchemaAttribute)"><summary>
+            Resolves the specified <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> in the event it is a reference to another <see cref="T:System.Xml.Schema.XmlSchemaAttribute" />.
+            </summary><param name="attribute">The <see cref="T:System.Xml.Schema.XmlSchemaAttribute" /> to examine.</param><returns>The resolved <see cref="T:System.Xml.Schema.XmlSchemaAttribute" />.</returns></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.DefaultNamespace"><summary>
+            Gets or sets the default XML namespace to use.
+            </summary><value>The default XML namespace to use.</value><remarks>
+            The default namespace is used to mimic an <c>xmlns</c> attribute setting on the root element, if no <c>xmlns</c> attribute is present.
+            It sets an empty-string-keyed value into the <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.DefaultNamespacePrefixMappings" /> dictionary.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.DefaultNamespacePrefixMappings"><summary>
+            Gets the mapping dictionary of namespace prefix to namespaces that are declared by default without the need for <c>xmlns</c> attributes in elements.
+            </summary><value>The mapping dictionary of namespace prefix to namespaces that are declared by default without the need for <c>xmlns</c> attributes in elements.</value><remarks>
+            The dictionary keys are namespace prefixes and the values are namespaces.
+            The namespace declarations in this dictionary are used to mimic <c>xmlns</c> attribute settings on the root element 
+            when no <c>xmlns</c> declaration attributes for the specified namespace prefix keys are present.
+            <para>
+            The <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.DefaultNamespace" /> property is simply a wrapper for setting an empty-string-keyed value in this dictionary.
+            </para></remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlSchemaResolver.SchemaSet"><summary>
+            Gets or sets the <see cref="T:System.Xml.Schema.XmlSchemaSet" /> to use.
+            </summary><value>The <see cref="T:System.Xml.Schema.XmlSchemaSet" /> to use.</value><remarks>
+            This property can be set if you already have a <c>XmlSchemaSet</c> loaded that should directly be used.
+            </remarks></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenReader"><summary>
+            Represents an object that can provide tokens to a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> in a forward-only direction for the <c>XML</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenReader.GetNextToken"><summary>
+            Returns the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that will be consumed by the token reader.
+            </summary><returns>The next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that will be consumed by the token reader.</returns></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTokenReader.#ctor(ActiproSoftware.Text.ITextBufferReader,ActiproSoftware.Text.Lexing.IMergableLexer)"><summary>
+            Initializes a new instance of the <c>XmlTokenReader</c> class.
+            </summary><param name="reader">The <see cref="T:ActiproSoftware.Text.ITextBufferReader" /> to use for consuming text.</param><param name="rootLexer">The root <see cref="T:ActiproSoftware.Text.Lexing.IMergableLexer" />.</param></member><member name="T:ActiproSoftware.Text.Languages.Xml.IXmlValidator"><summary>
+            Provides the base requirements for a class that can validate <c>XML</c>.
+            </summary><remarks>
+            Instances of this object can be registered with an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> using the 
+            <see cref="M:ActiproSoftware.Text.Utility.IServiceLocator.RegisterService(System.Object,System.Object)" /> method.
+            Once an instance is registered with the language for the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlValidator" /> interface type, its features can be used by the language.
+            </remarks><seealso cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlValidator" /></member><member name="M:ActiproSoftware.Text.Languages.Xml.IXmlValidator.Validate(ActiproSoftware.Text.Parsing.IParseRequest,ActiproSoftware.Text.Parsing.IAstNode)"><summary>
+            Validates the XML that is being parsed.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><param name="ast">The root <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> of the parse result AST, if known.</param><returns>The collection of validation errors that were found, if any.</returns></member><member name="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlValidator"><summary>
+            Provides a class that can validate <c>XML</c>, using the schemas in an <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlSchemaResolver" /> if available.
+            </summary><remarks>
+            Instances of this object can be registered with an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> using the 
+            <see cref="M:ActiproSoftware.Text.Utility.IServiceLocator.RegisterService(System.Object,System.Object)" /> method.
+            Once an instance is registered with the language for the <see cref="T:ActiproSoftware.Text.Languages.Xml.IXmlValidator" /> interface type, its features can be used by the language.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.Xml.Implementation.XmlValidator.Validate(ActiproSoftware.Text.Parsing.IParseRequest,ActiproSoftware.Text.Parsing.IAstNode)"><summary>
+            Validates the XML that is being parsed.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><param name="ast">The root <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> of the parse result AST, if known.</param><returns>The collection of validation errors that were found, if any.</returns></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlValidator.DtdPath"><summary>
+            Gets or sets the path to the folder where DTDs are located.
+            </summary><value>The path to the folder where DTDs are located.</value><remarks>
+            This property is only used when the <see cref="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlValidator.Mode" /> property is set to <c>Dtd</c> or <c>SchemaWithDtd</c>.
+            If this property is left <see langword="null" />, no explicit base path will be set for DTD loading.
+            If this property is set, it should be the path to the folder that contains the DTDs that may be referenced.
+            </remarks></member><member name="P:ActiproSoftware.Text.Languages.Xml.Implementation.XmlValidator.Mode"><summary>
+            Gets or sets the validation mode used by the validator.
+            </summary><value>
+            The validation mode used by the validator.
+            The default value is <c>Schema</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Languages.Xml.XmlElementSpacingMode"><summary>
+            The element spacing modes that an <see cref="T:ActiproSoftware.Text.Languages.Xml.Implementation.XmlTextFormatter" /> can use.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlElementSpacingMode.Preserve"><summary>
+            The element spacing is not modified.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlElementSpacingMode.NormalizeEmptyLines"><summary>
+            Elements will be separated by an empty line and extra empty lines will be removed.
+            </summary></member><member name="F:ActiproSoftware.Text.Languages.Xml.XmlElementSpacingMode.RemoveEmptyLines"><summary>
+            Elements will be on their own line an empty lines will be removed.
+            </summary></member></members></doc>

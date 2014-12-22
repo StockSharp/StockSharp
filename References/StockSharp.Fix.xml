@@ -1,0 +1,972 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.Fix</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.Fix.FixEncodings">
+      <summary>
+            Кодировки FIX протокола.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixEncodings.Text">
+      <summary>
+            Текстовая кодировка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixEncodings.Binary">
+      <summary>
+            Бинарная кодировка (FAST).
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixExtensions">
+      <summary>
+            Вспомогательный класс для работы с <see cref="T:StockSharp.Fix.FixMessageAdapter" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixExtensions.ToFixOrder``1(StockSharp.Messages.OrderRegisterMessage,StockSharp.Fix.FixSession)">
+      <summary>
+            Конвертировать <see cref="T:StockSharp.Messages.OrderRegisterMessage" /> в <see cref="T:QuickFix.FIX44.NewOrderSingle" />.
+            </summary>
+      <typeparam name="T">Тип FIX сообщения.</typeparam>
+      <param name="regMsg">Сообщение о регистрации заявки.</param>
+      <param name="session">Сессия.</param>
+      <returns>FIX сообщение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixExtensions.ToRegisterMessage``1(``0)">
+      <summary>
+            Конвертировать <see cref="T:QuickFix.FIX44.NewOrderSingle" /> в <see cref="T:StockSharp.Messages.OrderRegisterMessage" />.
+            </summary>
+      <typeparam name="T">Тип FIX сообщения.</typeparam>
+      <param name="fixMsg">FIX сообщение.</param>
+      <returns>Сообщение о регистрации заявки.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixExtensions.ToExecutionReport``1(StockSharp.Messages.ExecutionMessage)">
+      <summary>
+            Конвертировать <see cref="T:StockSharp.Messages.ExecutionMessage" /> в <see cref="T:QuickFix.FIX44.ExecutionReport" />.
+            </summary>
+      <typeparam name="T">Тип FIX сообщения.</typeparam>
+      <param name="order">Сообщение об изменении заявки.</param>
+      <returns>FIX сообщение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixExtensions.ToExecutionMessage``1(``0,StockSharp.Fix.FixSession,System.TimeSpan)">
+      <summary>
+            Конвертировать <see cref="T:QuickFix.FIX44.ExecutionReport" /> в <see cref="T:StockSharp.Messages.ExecutionMessage" />.
+            </summary>
+      <typeparam name="T">Тип FIX сообщения.</typeparam>
+      <param name="fixMsg">FIX сообщение.</param>
+      <param name="session">Сессия.</param>
+      <param name="dateTimeOffset">
+      </param>
+      <returns>Сообщение об изменении заявки.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.FixMessageAdapter">
+      <summary>
+            Адаптер сообщений для FIX.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.ProcessMarketDataMessage(System.String)">
+      <summary>
+            Метод вызывается при обработке полученного сообщения.
+            </summary>
+      <param name="fixMessage">Строка сообщения.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.Fix.FixSessionHolder,StockSharp.Fix.FixSession)">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixMessageAdapter" />.
+            </summary>
+      <param name="type">Тип адаптера.</param>
+      <param name="sessionHolder">Контейнер для сессии.</param>
+      <param name="session">Сессия.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+      <summary>
+            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Отправить сообщение.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.SendMessage(QuickFix.Message)">
+      <summary>
+            Отправить сообщение.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateMessage``1(StockSharp.Fix.FixSession,System.String)">
+      <summary>
+            Создать сообщение по строке.
+            </summary>
+      <typeparam name="T">Тип.</typeparam>
+      <param name="session">Сессия.</param>
+      <param name="message">Строка сообщения.</param>
+      <returns>
+      </returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.ProcessTransactionMessage(System.String)">
+      <summary>
+            Метод вызывается при обработке полученного сообщения.
+            </summary>
+      <param name="fixMessage">Строка сообщения.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Session">
+      <summary>
+            Сессия.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixReader">
+      <summary>
+            Читатель данных, записанных в формате FIX протокола.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.#ctor(System.IO.Stream,StockSharp.Fix.FixEncodings,System.Text.Encoding)">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixReader" />.
+            </summary>
+      <param name="stream">Поток, из которого будет осуществляться чтение.</param>
+      <param name="fixEncoding">Кодировка FIX протокола.</param>
+      <param name="encoding">Кодировка текстовых данных.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadNextTag">
+      <summary>
+            Прочитать следующий тэг.
+            </summary>
+      <returns>Следующий тэг. -1 означает конец данных.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadDateTime(System.String)">
+      <summary>
+            Прочитать <see cref="T:System.DateTime" /> значение.
+            </summary>
+      <param name="format">Формат представленного времени.</param>
+      <returns>
+        <see cref="T:System.DateTime" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadDateTimeNullable(System.String)">
+      <summary>
+            Прочитать опциональное <see cref="T:System.DateTime" /> значение.
+            </summary>
+      <param name="format">Формат представленного времени.</param>
+      <returns>
+        <see cref="T:System.DateTime" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadTimeSpan(System.String)">
+      <summary>
+            Прочитать <see cref="T:System.TimeSpan" /> значение.
+            </summary>
+      <param name="format">Формат представленного времени.</param>
+      <returns>
+        <see cref="T:System.TimeSpan" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadTimeSpanNullable(System.String)">
+      <summary>
+            Прочитать опциональное <see cref="T:System.TimeSpan" /> значение.
+            </summary>
+      <param name="format">Формат представленного времени.</param>
+      <returns>
+        <see cref="T:System.TimeSpan" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadInt32">
+      <summary>
+            Прочитать <see cref="T:System.Int32" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.Int32" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadUInt32">
+      <summary>
+            Прочитать <see cref="T:System.UInt32" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.UInt32" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadInt32Nullable">
+      <summary>
+            Прочитать опциональное <see cref="T:System.Int32" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.Int32" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadUInt32Nullable">
+      <summary>
+            Прочитать опциональное <see cref="T:System.UInt32" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.UInt32" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadInt64">
+      <summary>
+            Прочитать <see cref="T:System.Int64" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.Int64" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadUInt64">
+      <summary>
+            Прочитать <see cref="T:System.UInt64" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.UInt64" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadInt64Nullable">
+      <summary>
+            Прочитать опциональное <see cref="T:System.Int64" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.Int64" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadUInt64Nullable">
+      <summary>
+            Прочитать опциональное <see cref="T:System.UInt64" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.UInt64" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadDecimal">
+      <summary>
+            Прочитать <see cref="T:System.Decimal" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.Decimal" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadDecimalNullable">
+      <summary>
+            Прочитать опциональное <see cref="T:System.Decimal" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.Decimal" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadChar">
+      <summary>
+            Прочитать <see cref="T:System.Char" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.Char" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadString">
+      <summary>
+            Прочитать <see cref="T:System.String" /> значение.
+            </summary>
+      <returns>
+        <see cref="T:System.String" /> значение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadFastPresenceMap(System.Int32)">
+      <summary>
+            Прочитать Presence Map.
+            </summary>
+      <returns>Presence Map.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadByteVector">
+      <summary>
+            Прочитать массив байтов.
+            </summary>
+      <returns>Массив байтов.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixReader.ReadByteVectorNullable">
+      <summary>
+            Прочитать опциональный массив байтов.
+            </summary>
+      <returns>Массив байтов.</returns>
+    </member>
+    <member name="T:StockSharp.Fix.FixClientRoles">
+      <summary>
+            Роли.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixClientRoles.Regular">
+      <summary>
+            Обычное подключение.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixClientRoles.Admin">
+      <summary>
+            Административное подключение.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixServer">
+      <summary>
+            Сервер, работающий через FIX протокол.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.#ctor(System.Func{System.String,System.String,System.Tuple{System.TimeSpan,StockSharp.Fix.FixClientRoles}},StockSharp.Messages.IMessageAdapter,StockSharp.Messages.IMessageAdapter)">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixServer" />.
+            </summary>
+      <param name="authorize">Авторизация клиентов.</param>
+      <param name="transactionAdapter">Транзакционный адаптер.</param>
+      <param name="marketDataAdapter">Адаптер маркет-данных.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.Start">
+      <summary>
+            Запустить сервер.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,System.String,System.Boolean)">
+      <summary>
+            Метод вызывается при обработке полученного сообщения.
+            </summary>
+      <param name="session">Сессия.</param>
+      <param name="client">Имя клиента.</param>
+      <param name="msgStr">Строка сообщения.</param>
+      <param name="isMarketData">Сообщение получено для сессии маркет-данных.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.AddTransactionsMapping(System.String,System.Int64)">
+      <summary>
+            Добавить сопоставление номеров транзакций.
+            </summary>
+      <param name="client">Имя клиента.</param>
+      <param name="clientTransactionId">Клиентский номер транзакции.</param>
+      <returns>Серверный номер транзакции.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.Stop">
+      <summary>
+            Выключить сервер.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.SendMessage(System.Collections.Generic.IEnumerable{System.String},System.Boolean,QuickFix.FIX44.Message)">
+      <summary>
+            Послать новое сообщение клиенту.
+            </summary>
+      <param name="receivers">Адресаты, кому необходимо отправить информацию.</param>
+      <param name="isMarketData">Отправить сообщение через сессию маркет-данных.</param>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.DisposeManaged">
+      <summary>
+            Освободить занятые ресурсы.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.SendOrder(System.Collections.Generic.IEnumerable{System.String},StockSharp.Messages.ExecutionMessage)">
+      <summary>
+            Отправить информацию о заявке.
+            </summary>
+      <param name="receivers">Адресаты, кому необходимо отправить информацию.</param>
+      <param name="order">Заявка.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.SendMyTrade(System.Collections.Generic.IEnumerable{System.String},StockSharp.Messages.ExecutionMessage)">
+      <summary>
+            Отправить информацию о сделке клиента.
+            </summary>
+      <param name="receivers">Адресаты, кому необходимо отправить информацию.</param>
+      <param name="trade">Сделка клиента.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.SendOrderRegisterFail(System.Collections.Generic.IEnumerable{System.String},StockSharp.Messages.ExecutionMessage)">
+      <summary>
+            Отправить информацию об ошибке регистрации заявки.
+            </summary>
+      <param name="receivers">Адресаты, кому необходимо отправить информацию.</param>
+      <param name="fail">Ошибка регистрации.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.SendOrderCancelFail(System.Collections.Generic.IEnumerable{System.String},StockSharp.Messages.ExecutionMessage,System.String)">
+      <summary>
+            Отправить информацию об ошибке снятия заявки.
+            </summary>
+      <param name="receivers">Адресаты, кому необходимо отправить информацию.</param>
+      <param name="fail">Ошибка снятия.</param>
+      <param name="requestId">Идентификатор отмены заявки.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.SendPortfolios(System.Collections.Generic.IEnumerable{System.String},StockSharp.Messages.PortfolioLookupResultMessage,System.Collections.Generic.IEnumerable{StockSharp.Messages.PortfolioMessage},System.Collections.Generic.IEnumerable{StockSharp.Messages.PositionMessage})">
+      <summary>
+            Отправить информацию о портфелях.
+            </summary>
+      <param name="receivers">Адресаты, кому необходимо отправить информацию.</param>
+      <param name="resultMessage">
+      </param>
+      <param name="portfolios">Портфели.</param>
+      <param name="positions">Позиции.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.SendPositions(System.Collections.Generic.IEnumerable{System.String},System.String,System.Nullable{StockSharp.Messages.SecurityId},System.Nullable{StockSharp.Messages.TPlusLimits},StockSharp.Messages.BaseChangeMessage{StockSharp.Messages.PositionChangeTypes})">
+      <summary>
+            Отправить информацию о позициях.
+            </summary>
+      <param name="receivers">Адресаты, кому необходимо отправить информацию.</param>
+      <param name="portfolioName">Название портфеля.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="limitType">Вид лимита.</param>
+      <param name="message">Изменения.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.TransactionAdapter">
+      <summary>
+            Транзакционный адаптер.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.MarketDataAdapter">
+      <summary>
+            Адаптер маркет-данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
+      <summary>
+            Номер, начиная с которого FixServer будет генерировать номера транзакций.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.IncrementalDepthUpdates">
+      <summary>
+            Отправлять изменения по стакану. Если выключено, отправляется стакан целиком.
+            По умолчанию, включено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.Port">
+      <summary>
+            Серверный порт, на котором будет работать FIX сервер. По-умолчанию равен 5001.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixServer.State">
+      <summary>
+            Включен ли сервер.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.StateChanged">
+      <summary>
+            Событие изменения <see cref="P:StockSharp.Fix.FixServer.State" />.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.UserLoggedOut">
+      <summary>
+            Событие отключения клиента.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.UserPasswordChanging">
+      <summary>
+            Событие изменения пароля клиентом.
+            </summary>
+    </member>
+    <member name="E:StockSharp.Fix.FixServer.UserFinding">
+      <summary>
+            Событие поиска клиента по его логину.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixSession">
+      <summary>
+            Сессия.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixSession" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.Init">
+      <summary>
+            Инициализировать сессию.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.ToMessage``1(System.String)">
+      <summary>
+            Создать FIX сообщение по строке.
+            </summary>
+      <typeparam name="T">Тип FIX сообщения.</typeparam>
+      <param name="msgStr">Строка сообщения.</param>
+      <returns>FIX сообщение.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.ToString">
+      <summary>
+            Получить строковое представление.
+            </summary>
+      <returns>Строковое представление.</returns>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Version">
+      <summary>
+            Версия FIX протокола. По-умолчанию равно <see cref="F:StockSharp.Fix.FixVersions.Fix44" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.SenderCompId">
+      <summary>
+            Идентификатор отправителя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.TargetCompId">
+      <summary>
+            Идентификатор получателя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Login">
+      <summary>
+            Логин.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Password">
+      <summary>
+            Пароль.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Address">
+      <summary>
+            Адрес сервера.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.HeartBeat">
+      <summary>
+            Интервал проверки доступности соединения. По-умолчанию равно 1 минуте.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.MarketData">
+      <summary>
+            Тип маркет-данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.ExchangeBoard">
+      <summary>
+            Площадка, на которой торгуются инструменты.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.RequestAllPortfolios">
+      <summary>
+            Запрашивать все портфели при старте.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.RequestAllSecurities">
+      <summary>
+            Запрашивать все инструменты при подключении.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Encoding">
+      <summary>
+            Кодировка, использующая при передаче данных. По-умолчанию значение равно <see cref="P:System.Text.Encoding.UTF8" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.IsResetCounter">
+      <summary>
+            Нужно ли сбрасывать счетчик номеров. По-умолчанию включено.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixMarketData">
+      <summary>
+            Типы маркет-данных.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixMarketData.None">
+      <summary>
+            Отсутствует.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixMarketData.Quote">
+      <summary>
+            Котировки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixMarketData.MarketData">
+      <summary>
+            Полная глубина.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixVersions">
+      <summary>
+            Версии FIX протокола.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix40">
+      <summary>
+            FIX 4.0.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix41">
+      <summary>
+            FIX 4.1.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix42">
+      <summary>
+            FIX 4.2.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix43">
+      <summary>
+            FIX 4.3.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix44">
+      <summary>
+            FIX 4.4.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix44_CFH">
+      <summary>
+            FIX 4.4 (CFH Clearing).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix44_Micex">
+      <summary>
+            FIX 4.4 (Micex).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix50">
+      <summary>
+            FIX 5.0.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix50Sp1">
+      <summary>
+            FIX 5.0 SP1.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix50Sp2">
+      <summary>
+            FIX 5.0 SP2.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixSessionHolder">
+      <summary>
+            Контейнер для сессии.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSessionHolder.CreateTransactionAdapter">
+      <summary>
+            Создать транзакционный адаптер.
+            </summary>
+      <returns>Транзакционный адаптер.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSessionHolder.CreateMarketDataAdapter">
+      <summary>
+            Создать адаптер маркет-данных.
+            </summary>
+      <returns>Адаптер маркет-данных.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSessionHolder.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixSessionHolder" />.
+            </summary>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixSessionHolder.CreateOrderCondition">
+      <summary>
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
+            </summary>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixSessionHolder.ToString">
+      <summary>
+            Получить строковое представление контейнера.
+            </summary>
+      <returns>Строковое представление.</returns>
+    </member>
+    <member name="P:StockSharp.Fix.FixSessionHolder.TransactionSession">
+      <summary>
+            Транзакционная сессия.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSessionHolder.MarketDataSession">
+      <summary>
+            Маркет-дата сессия.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSessionHolder.TransactionCopySession">
+      <summary>
+            Транзакционная сессия (копия, используется в случае ММВБ для получение заявок и сделок, зарегистрированных под подключения).
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSessionHolder.UtcOffset">
+      <summary>
+            Смещение времени относительно UTC для серверного времени данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSessionHolder.IsValid">
+      <summary>
+            Проверить введенные параметры на валидность.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSessionHolder.JoinInProcessors">
+      <summary>
+            Объединять обработчики входящих сообщений для адаптеров.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSessionHolder.IsAdaptersIndependent">
+      <summary>
+            Являются ли подключения адаптеров независимыми друг от друга.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixTrader">
+      <summary>
+            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с биржей или брокерской системой через протокол FIX.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixTrader.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixTrader" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)">
+      <summary>
+            Отменить группу заявок на бирже по фильтру.
+            </summary>
+      <param name="transactionId">Идентификатор транзакции отмены.</param>
+      <param name="isStopOrder">
+        <see langword="true" />, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
+      <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
+      <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
+      <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
+      <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixTrader.ChangePassword(StockSharp.Messages.MessageAdapterTypes,System.String)">
+      <summary>
+            Сменить пароль.
+            </summary>
+      <param name="adapterType">Тип адаптера, в который необходимо отправить сообщение о смене пароля.</param>
+      <param name="newPassword">Новый пароль.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+      <summary>
+            Обработать сообщение, содержащее рыночные данные.
+            </summary>
+      <param name="message">Сообщение, содержащее рыночные данные.</param>
+      <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+      <param name="direction">Направление сообщения.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixTrader.TransactionSession">
+      <summary>
+            Транзакционная сессия.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixTrader.MarketDataSession">
+      <summary>
+            Маркет-дата сессия.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixTrader.TransactionCopySession">
+      <summary>
+            Транзакционная сессия (копия, используется в случае ММВБ для получение заявок и сделок, зарегистрированных под подключения).
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixStopOrderType">
+      <summary>
+            Типы стоп-заявок, специфичных для <see cref="N:StockSharp.Fix" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixStopOrderType.StopLoss">
+      <summary>
+            Стоп-лосс.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixStopOrderType.StopLossTrailing">
+      <summary>
+            Скользящий стоп.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixStopOrderType.TakeProfit">
+      <summary>
+            Тейк.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.FixStopOrderType.TakeProfitTrailing">
+      <summary>
+            Скользящий тейк.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixOrderCondition">
+      <summary>
+            Условия заявок, специфичных для <see cref="N:StockSharp.Fix" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixOrderCondition.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixOrderCondition.Type">
+      <summary>
+            Тип стоп-заявки.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixOrderCondition.StopPrice">
+      <summary>
+            Стоп-цена.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixWriter">
+      <summary>
+            Писатель данных, записывающий в формате FIX протокола.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.#ctor(System.IO.Stream,StockSharp.Fix.FixEncodings)">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixWriter" />.
+            </summary>
+      <param name="stream">Поток, в который будет осуществляться запись.</param>
+      <param name="encoding">Кодировка FIX протокола.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteTag(System.Int32)">
+      <summary>
+            Записать тэг.
+            </summary>
+      <param name="tagId">Тэг.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteInt32(System.Int32)">
+      <summary>
+            Записать <see cref="T:System.Int32" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int32" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteUInt32(System.UInt32)">
+      <summary>
+            Записать <see cref="T:System.UInt32" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.UInt32" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteInt32Nullable(System.Nullable{System.Int32})">
+      <summary>
+            Записать опциональное <see cref="T:System.Int32" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int32" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteUInt32Nullable(System.Nullable{System.UInt32})">
+      <summary>
+            Записать опциональное <see cref="T:System.UInt32" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.UInt32" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteInt64(System.Int64)">
+      <summary>
+            Записать <see cref="T:System.Int64" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int64" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteUInt64(System.UInt64)">
+      <summary>
+            Записать <see cref="T:System.UInt64" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.UInt64" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteInt64Nullable(System.Nullable{System.Int64})">
+      <summary>
+            Записать опциональное <see cref="T:System.Int64" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Int64" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteUInt64Nullable(System.Nullable{System.UInt64})">
+      <summary>
+            Записать опциональное <see cref="T:System.UInt64" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.UInt64" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteDecimal(System.Decimal)">
+      <summary>
+            Записать <see cref="T:System.Decimal" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Decimal" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteDecimalNullable(System.Nullable{System.Decimal})">
+      <summary>
+            Записать опциональное <see cref="T:System.Decimal" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Decimal" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteDateTime(System.DateTime,System.String)">
+      <summary>
+            Записать <see cref="T:System.DateTime" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.DateTime" /> значение.</param>
+      <param name="format">Формат времени.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteDateTimeNullable(System.Nullable{System.DateTime},System.String)">
+      <summary>
+            Записать опциональное <see cref="T:System.DateTime" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.DateTime" /> значение.</param>
+      <param name="format">Формат времени.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteTimeSpan(System.TimeSpan,System.String)">
+      <summary>
+            Записать <see cref="T:System.TimeSpan" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.TimeSpan" /> значение.</param>
+      <param name="format">Формат времени.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteTimeSpanNullable(System.Nullable{System.TimeSpan},System.String)">
+      <summary>
+            Записать опциональное <see cref="T:System.TimeSpan" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.TimeSpan" /> значение.</param>
+      <param name="format">Формат времени.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteString(System.String)">
+      <summary>
+            Записать <see cref="T:System.String" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.String" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteChar(System.Char)">
+      <summary>
+            Записать <see cref="T:System.Char" /> значение.
+            </summary>
+      <param name="value">
+        <see cref="T:System.Char" /> значение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteFastPresenceMap(System.Collections.BitArray)">
+      <summary>
+            Записать Presence Map.
+            </summary>
+      <param name="map">Presence Map.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteByteVector(System.Byte[])">
+      <summary>
+            Записать массив байтов.
+            </summary>
+      <param name="byteAr">Массив байтов.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixWriter.WriteByteVectorNullable(System.Byte[])">
+      <summary>
+            Записать опциональный массив байтов.
+            </summary>
+      <param name="byteAr">Массив байтов.</param>
+    </member>
+  </members>
+</doc>

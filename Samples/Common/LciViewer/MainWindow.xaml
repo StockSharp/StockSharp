@@ -1,0 +1,69 @@
+﻿<Window x:Class="LciViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:ss="http://schemas.stocksharp.com/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="{x:Static loc:LocalizedStrings.XamlStr288}"
+		Height="350" Width="900" Loaded="MainWindow_OnLoaded"
+		WindowState="Maximized">
+	<xctk:BusyIndicator x:Name="BusyIndicator">
+		<Grid Margin="5">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+			<Grid Grid.ColumnSpan="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="40" />
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="60" />
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="80" />
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition Width="30" />
+					<ColumnDefinition Width="70" />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition Width="100" />
+				</Grid.ColumnDefinitions>
+
+				<Label><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr102}"/></Label>
+				<ComboBox Grid.Column="1" x:Name="Year" DisplayMemberPath="Year" SelectionChanged="Year_OnSelectionChanged" />
+
+				<TextBlock Grid.Column="2">
+					<Run Text="{x:Static loc:LocalizedStrings.XamlStr776}"/><Run Text=":"/>
+				</TextBlock>
+				<ComboBox Grid.Column="3" x:Name="Trader" IsEditable="True" SelectionChanged="Trader_OnSelectionChanged" />
+
+				<Label Grid.Column="4">
+					<TextBlock>
+						<Run Text="{x:Static loc:LocalizedStrings.Str211}"/><Run Text=":"/>
+					</TextBlock>
+				</Label>
+				<ComboBox Grid.Column="5" x:Name="Security" IsEditable="True" SelectionChanged="Security_OnSelectionChanged" />
+
+				<xctk:DateTimePicker x:Name="From" Grid.Column="7" />
+				<xctk:DateTimePicker x:Name="To" Grid.Column="8" />
+
+				<Label Grid.Column="10">ТФ:</Label>
+				<ComboBox Grid.Column="11" x:Name="TimeFrame" />
+
+				<Button x:Name="Download" Grid.Column="13" IsEnabled="False" Click="Download_OnClick"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr655}"/></Button>
+			</Grid>
+
+			<ss:ChartPanel x:Name="Chart" Grid.Row="2" Grid.Column="0" IsInteracted="True" />
+
+            <ss:StatisticParameterGrid x:Name="Statistics" Grid.Row="2" Grid.Column="1" />
+		</Grid>
+	</xctk:BusyIndicator>
+</Window>

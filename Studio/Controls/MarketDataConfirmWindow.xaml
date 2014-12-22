@@ -1,0 +1,22 @@
+<Window
+	x:Class="StockSharp.Studio.Controls.MarketDataConfirmWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"	xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+	xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+	Title="{x:Static loc:LocalizedStrings.XamlStr476}" ShowInTaskbar="False"
+	WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+	Height="350" Width="200">
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		
+		<Label><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr325}"/></Label>
+		
+		<StackPanel x:Name="SecTypes" Grid.Row="1" />
+
+		<Button x:Name="OkBtn" Grid.Row="2" IsDefault="True" xaml:XamlHelper.DialogResult="True" Width="100" IsEnabled="False">OK</Button>
+	</Grid>
+</Window>

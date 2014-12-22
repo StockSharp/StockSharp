@@ -1,0 +1,2515 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MoreLinq</name>
+    </assembly>
+    <members>
+        <member name="T:MoreLinq.MoreEnumerable">
+            <summary>
+            Provides a set of static methods for querying objects that 
+            implement <see cref="T:System.Collections.Generic.IEnumerable`1"/>. The actual methods
+            are implemented in files reflecting the method name.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Assert``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Asserts that all elements of a sequence meet a given condition
+            otherwise throws an <see cref="T:System.Exception"/> object.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">Source sequence.</param>
+            <param name="predicate">Function that asserts an element of the <paramref name="source"/> sequence for a condition.</param>
+            <returns>
+            Returns the original sequence.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">The input sequence
+            contains an element that does not meet the condition being 
+            asserted.</exception>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Assert``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.Func{``0,System.Exception})">
+            <summary>
+            Asserts that all elements of a sequence meet a given condition
+            otherwise throws an <see cref="T:System.Exception"/> object.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">Source sequence.</param>
+            <param name="predicate">Function that asserts an element of the input sequence for a condition.</param>
+            <param name="errorSelector">Function that returns the <see cref="T:System.Exception"/> object to throw.</param>
+            <returns>
+            Returns the original sequence.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Fold``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the result of applying a function to a sequence of 
+            1 element.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers 
+            as many items of the source sequence as necessary.
+            </remarks>
+            <typeparam name="T">Type of element in the source sequence</typeparam>
+            <typeparam name="TResult">Type of the result</typeparam>
+            <param name="source">The sequence of items to fold.</param>
+            <param name="folder">Function to apply to the elements in the sequence.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Fold``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``1})">
+            <summary>
+            Returns the result of applying a function to a sequence of 
+            2 elements.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers 
+            as many items of the source sequence as necessary.
+            </remarks>
+            <typeparam name="T">Type of element in the source sequence</typeparam>
+            <typeparam name="TResult">Type of the result</typeparam>
+            <param name="source">The sequence of items to fold.</param>
+            <param name="folder">Function to apply to the elements in the sequence.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Fold``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``0,``1})">
+            <summary>
+            Returns the result of applying a function to a sequence of 
+            3 elements.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers 
+            as many items of the source sequence as necessary.
+            </remarks>
+            <typeparam name="T">Type of element in the source sequence</typeparam>
+            <typeparam name="TResult">Type of the result</typeparam>
+            <param name="source">The sequence of items to fold.</param>
+            <param name="folder">Function to apply to the elements in the sequence.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Fold``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``0,``0,``1})">
+            <summary>
+            Returns the result of applying a function to a sequence of 
+            4 elements.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers 
+            as many items of the source sequence as necessary.
+            </remarks>
+            <typeparam name="T">Type of element in the source sequence</typeparam>
+            <typeparam name="TResult">Type of the result</typeparam>
+            <param name="source">The sequence of items to fold.</param>
+            <param name="folder">Function to apply to the elements in the sequence.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.SkipUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Skips items from the input sequence until the given predicate returns true
+            when applied to the current source item; that item will be the last skipped.
+            </summary>
+            <remarks>
+            <para>
+            SkipUntil differs from Enumerable.SkipWhile in two respects. Firstly, the sense
+            of the predicate is reversed: it is expected that the predicate will return false
+            to start with, and then return true - for example, when trying to find a matching
+            item in a sequence.
+            </para>
+            <para>
+            Secondly, SkipUntil skips the element which causes the predicate to return true. For
+            example, in a sequence <code>{ 1, 2, 3, 4, 5 }</code> and with a predicate of
+            <code>x =&gt; x == 3</code>, the result would be <code>{ 4, 5 }</code>.
+            </para>
+            <para>
+            SkipUntil is as lazy as possible: it will not iterate over the source sequence
+            until it has to, it won't iterate further than it has to, and it won't evaluate
+            the predicate until it has to. (This means that an item may be returned which would
+            actually cause the predicate to throw an exception if it were evaluated, so long as
+            it comes after the first item causing the predicate to return true.)
+            </para>
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="predicate">Predicate used to determine when to stop yielding results from the source.</param>
+            <returns>Items from the source sequence after the predicate first returns true when applied to the item.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Cartesian``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``1,``2})">
+            <summary>
+            Returns the Cartesian product of two sequences by combining each element of the first set with each in the second
+            and applying the user=define projection to the pair.
+            </summary>
+            <typeparam name="TFirst">The type of the elements of <paramref name="first"/></typeparam>
+            <typeparam name="TSecond">The type of the elements of <paramref name="second"/></typeparam>
+            <typeparam name="TResult">The type of the elements of the result sequence</typeparam>
+            <param name="first">The first sequence of elements</param>
+            <param name="second">The second sequence of elements</param>
+            <param name="resultSelector">A projection function that combines elements from both sequences</param>
+            <returns>A sequence representing the Cartesian product of the two source sequences</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ExceptBy``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the set of elements in the first sequence which aren't
+            in the second sequence, according to a given key selector.
+            </summary>
+            <remarks>
+            This is a set operation; if multiple elements in <paramref name="first"/> have
+            equal keys, only the first such element is returned.
+            This operator uses deferred execution and streams the results, although
+            a set of keys from <paramref name="second"/> is immediately selected and retained.
+            </remarks>
+            <typeparam name="TSource">The type of the elements in the input sequences.</typeparam>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="first">The sequence of potentially included elements.</param>
+            <param name="second">The sequence of elements whose keys may prevent elements in
+            <paramref name="first"/> from being returned.</param>
+            <param name="keySelector">The mapping from source element to key.</param>
+            <returns>A sequence of elements from <paramref name="first"/> whose key was not also a key for
+            any element in <paramref name="second"/>.</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ExceptBy``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
+            <summary>
+            Returns the set of elements in the first sequence which aren't
+            in the second sequence, according to a given key selector.
+            </summary>
+            <remarks>
+            This is a set operation; if multiple elements in <paramref name="first"/> have
+            equal keys, only the first such element is returned.
+            This operator uses deferred execution and streams the results, although
+            a set of keys from <paramref name="second"/> is immediately selected and retained.
+            </remarks>
+            <typeparam name="TSource">The type of the elements in the input sequences.</typeparam>
+            <typeparam name="TKey">The type of the key returned by <paramref name="keySelector"/>.</typeparam>
+            <param name="first">The sequence of potentially included elements.</param>
+            <param name="second">The sequence of elements whose keys may prevent elements in
+            <paramref name="first"/> from being returned.</param>
+            <param name="keySelector">The mapping from source element to key.</param>
+            <param name="keyComparer">The equality comparer to use to determine whether or not keys are equal.
+            If null, the default equality comparer for <c>TSource</c> is used.</param>
+            <returns>A sequence of elements from <paramref name="first"/> whose key was not also a key for
+            any element in <paramref name="second"/>.</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Exclude``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32)">
+            <summary>
+            Excludes <paramref name="count"/> elements from a sequence starting at a given index
+            </summary>
+            <typeparam name="T">The type of the elements of the sequence</typeparam>
+            <param name="sequence">The sequence to exclude elements from</param>
+            <param name="startIndex">The zero-based index at which to begin excluding elements</param>
+            <param name="count">The number of elements to exclude</param>
+            <returns>A sequence that excludes the specified portion of elements</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Incremental``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``1})">
+            <summary>
+            Computes an incremental value between every adjacent element in a sequence: {N,N+1}, {N+1,N+2}, ...
+            </summary>
+            <remarks>
+            The projection function is passed the previous and next element (in that order) and may use
+            either or both in computing the result.<br/>
+            If the sequence has less than two items, the result is always an empty sequence.<br/>
+            The number of items in the resulting sequence is always one less than in the source sequence.<br/>
+            </remarks>
+            <typeparam name="TSource">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TResult">The type of the elements in the result sequence</typeparam>
+            <param name="sequence">The sequence of elements to incrementally process</param>
+            <param name="resultSelector">A projection applied to each pair of adjacent elements in the sequence</param>
+            <returns>A sequence of elements resulting from projection every adjacent pair</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Incremental``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Int32,``1})">
+            <summary>
+            Computes an incremental value between every adjacent element in a sequence: {N,N+1}, {N+1,N+2}, ...
+            </summary>
+            <remarks>
+            The projection function is passed the previous element, next element, and the zero-based index of
+            the next element (in that order) and may use any of these values in computing the result.<br/>
+            If the sequence has less than two items, the result is always an empty sequence.<br/>
+            The number of items in the resulting sequence is always one less than in the source sequence.<br/>
+            </remarks>
+            <typeparam name="TSource">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TResult">The type of the elements in the result sequence</typeparam>
+            <param name="sequence">The sequence of elements to incrementally process</param>
+            <param name="resultSelector">A projection applied to each pair of adjacent elements in the sequence</param>
+            <returns>A sequence of elements resulting from projection every adjacent pair</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Interleave``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            Interleaves the elements of two or more sequences into a single sequence, skipping sequences as they are consumed
+            </summary>
+            <remarks>
+            Interleave combines sequences by visiting each in turn, and returning the first element of each, followed
+            by the second, then the third, and so on. So, for example:<br/>
+            <code>
+            {1,1,1}.Interleave( {2,2,2}, {3,3,3} ) => { 1,2,3,1,2,3,1,2,3 }
+            </code>
+            This operator behaves in a deferred and streaming manner.<br/>
+            When sequences are of unequal length, this method will skip those sequences that have been fully consumed
+            and continue interleaving the remaining sequences.<br/>
+            The sequences are interleaved in the order that they appear in the <paramref name="otherSequences"/>
+            collection, with <paramref name="sequence"/> as the first sequence.
+            </remarks>
+            <typeparam name="T">The type of the elements of the source sequences</typeparam>
+            <param name="sequence">The first sequence in the interleave group</param>
+            <param name="otherSequences">The other sequences in the interleave group</param>
+            <returns>A sequence of interleaved elements from all of the source sequences</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Interleave``1(System.Collections.Generic.IEnumerable{``0},MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy,System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            Interleaves the elements of two or more sequences into a single sequence, applying the specified strategy when sequences are of unequal length
+            </summary>
+            <remarks>
+            Interleave combines sequences by visiting each in turn, and returning the first element of each, followed
+            by the second, then the third, and so on. So, for example:<br/>
+            <code>
+            {1,1,1}.Interleave( {2,2,2}, {3,3,3} ) =&gt; { 1,2,3,1,2,3,1,2,3 }
+            </code>
+            This operator behaves in a deferred and streaming manner.<br/>
+            When sequences are of unequal length, this method will use the imbalance strategy specified to
+            decide how to continue interleaving the remaining sequences. See <see cref="T:MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy"/>
+            for more information.<br/>
+            The sequences are interleaved in the order that they appear in the <paramref name="otherSequences"/>
+            collection, with <paramref name="sequence"/> as the first sequence.
+            </remarks>
+            <typeparam name="T">The type of the elements of the source sequences</typeparam>
+            <param name="sequence">The first sequence in the interleave group</param>
+            <param name="imbalanceStrategy">Defines the behavior of the operator when sequences are of unequal length</param>
+            <param name="otherSequences">The other sequences in the interleave group</param>
+            <returns>A sequence of interleaved elements from all of the source sequences</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Lag``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,``0,``1})">
+            <summary>
+            Produces a projection of a sequence by evaluating pairs of elements separated by a negative offset.
+            </summary>
+            <remarks>
+            This operator evaluates in a deferred and streaming manner.<br/>
+            For elements prior to the lag offset, <c>default(T) is used as the lagged value.</c><br/>
+            </remarks>
+            <typeparam name="TSource">The type of the elements of the source sequence</typeparam>
+            <typeparam name="TResult">The type of the elements of the result sequence</typeparam>
+            <param name="source">The sequence over which to evaluate lag</param>
+            <param name="offset">The offset (expressed as a positive number) by which to lag each value of the sequence</param>
+            <param name="resultSelector">A projection function which accepts the current and lagged items (in that order) and returns a result</param>
+            <returns>A sequence produced by projecting each element of the sequence with its lagged pairing</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Lag``2(System.Collections.Generic.IEnumerable{``0},System.Int32,``0,System.Func{``0,``0,``1})">
+            <summary>
+            Produces a projection of a sequence by evaluating pairs of elements separated by a negative offset.
+            </summary>
+            <remarks>
+            This operator evaluates in a deferred and streaming manner.<br/>
+            </remarks>
+            <typeparam name="TSource">The type of the elements of the source sequence</typeparam>
+            <typeparam name="TResult">The type of the elements of the result sequence</typeparam>
+            <param name="source">The sequence over which to evaluate lag</param>
+            <param name="offset">The offset (expressed as a positive number) by which to lag each value of the sequence</param>
+            <param name="defaultLagValue">A default value supplied for the lagged value prior to the lag offset</param>
+            <param name="resultSelector">A projection function which accepts the current and lagged items (in that order) and returns a result</param>
+            <returns>A sequence produced by projecting each element of the sequence with its lagged pairing</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Lead``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,``0,``1})">
+            <summary>
+            Produces a projection of a sequence by evaluating pairs of elements separated by a positive offset.
+            </summary>
+            <remarks>
+            This operator evaluates in a deferred and streaming manner.<br/>
+            For elements of the sequence that are less than <paramref name="offset"/> items from the end,
+            default(T) is used as the lead value.<br/>
+            </remarks>
+            <typeparam name="TSource">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TResult">The type of the elements in the result sequence</typeparam>
+            <param name="source">The sequence over which to evaluate Lead</param>
+            <param name="offset">The offset (expressed as a positive number) by which to lead each element of the sequence</param>
+            <param name="resultSelector">A projection function which accepts the current and subsequent (lead) element (in that order) and produces a result</param>
+            <returns>A sequence produced by projecting each element of the sequence with its lead pairing</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Lead``2(System.Collections.Generic.IEnumerable{``0},System.Int32,``0,System.Func{``0,``0,``1})">
+            <summary>
+            Produces a projection of a sequence by evaluating pairs of elements separated by a positive offset.
+            </summary>
+            <remarks>
+            This operator evaluates in a deferred and streaming manner.<br/>
+            </remarks>
+            <typeparam name="TSource">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TResult">The type of the elements in the result sequence</typeparam>
+            <param name="source">The sequence over which to evaluate Lead</param>
+            <param name="offset">The offset (expressed as a positive number) by which to lead each element of the sequence</param>
+            <param name="defaultLeadValue">A default value supplied for the leading element when none is available</param>
+            <param name="resultSelector">A projection function which accepts the current and subsequent (lead) element (in that order) and produces a result</param>
+            <returns>A sequence produced by projecting each element of the sequence with its lead pairing</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.NestedLoops(System.Action,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Produces a sequence from an action based on the dynamic generation of N nested loops
+            who iteration counts are defined by <paramref name="loopCounts"/>.
+            </summary>
+            <param name="action">Action delegate for which to produce a nested loop sequence</param>
+            <param name="loopCounts">A sequence of loop repetition counts</param>
+            <returns>A sequence of Action representing the expansion of a set of nested loops</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},MoreLinq.OrderByDirection)">
+            <summary>
+            Sorts the elements of a sequence in a particular direction (ascending, descending) according to a key
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TKey">The type of the key used to order elements</typeparam>
+            <param name="sequence">The sequence to order</param>
+            <param name="keySelector">A key selector function</param>
+            <param name="direction">A direction in which to order the elements (ascending, descending)</param>
+            <returns>An ordered copy of the source sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IComparer{``1},MoreLinq.OrderByDirection)">
+            <summary>
+            Sorts the elements of a sequence in a particular direction (ascending, descending) according to a key
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TKey">The type of the key used to order elements</typeparam>
+            <param name="sequence">The sequence to order</param>
+            <param name="keySelector">A key selector function</param>
+            <param name="direction">A direction in which to order the elements (ascending, descending)</param>
+            <param name="comparer">A comparer used to define the semantics of element comparison</param>
+            <returns>An ordered copy of the source sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ThenBy``2(System.Linq.IOrderedEnumerable{``0},System.Func{``0,``1},MoreLinq.OrderByDirection)">
+            <summary>
+            Performs a subsequent ordering of elements in a sequence in a particular direction (ascending, descending) according to a key
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TKey">The type of the key used to order elements</typeparam>
+            <param name="sequence">The sequence to order</param>
+            <param name="keySelector">A key selector function</param>
+            <param name="direction">A direction in which to order the elements (ascending, descending)</param>
+            <returns>An ordered copy of the source sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ThenBy``2(System.Linq.IOrderedEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IComparer{``1},MoreLinq.OrderByDirection)">
+            <summary>
+            Performs a subsequent ordering of elements in a sequence in a particular direction (ascending, descending) according to a key
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TKey">The type of the key used to order elements</typeparam>
+            <param name="sequence">The sequence to order</param>
+            <param name="keySelector">A key selector function</param>
+            <param name="direction">A direction in which to order the elements (ascending, descending)</param>
+            <param name="comparer">A comparer used to define the semantics of element comparison</param>
+            <returns>An ordered copy of the source sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Partition``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Partitions a sequence into equal-sized partitions.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">The source sequence to partition.</param>
+            <param name="size">Size of partitions.</param>
+            <returns>A sequence of equal-sized partitions containing elements of the source collection.</returns>
+            <remarks>
+            the source sequence is exhausted before a complete partition could be filled, the partly filled partition is yielded.
+            This operator uses deferred execution and streams its results (partitions and partition content). 
+            Each partition is fully filled before it's yielded. 
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Partition``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Partitions a sequence into a series of partitions. Their size is defined by <paramref name="partitions"/>.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">The source sequence to partition.</param>
+            <param name="partitions">A sequence of partition sizes, defining how many elements to place in each partition.</param>
+            <returns>A sequence of sized partitions containing elements of the source collection.</returns>
+            <remarks>
+            If the source sequence is exhausted before a complete partition could be filled, the partly filled partition is yielded.
+            This operator uses deferred execution and streams its results (partitions and partition content). 
+            Each partition is fully filled before yielded.
+            </remarks>      
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.PartitionImpl``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{MoreLinq.MoreEnumerable.PartitionInstruction})">
+            <summary>
+            Zips the source and instruction sequence, partitioning the source sequence according to the corresponding instruction.
+            A partition is buffered before it's yielded element by element.
+            If either input sequence is exhausted and a partition has been partly filled, it is yielded too.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Permutations``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Generates a sequence of lists that represent the permutations of the original sequence.
+            </summary>
+            <remarks>
+            A permutation is a unique re-ordering of the elements of the sequence.<br/>
+            This operator returns permutations in a deferred, streaming fashion; however, each
+            permutation is materialized into a new list. There are N! permutations of a sequence,
+            where N => sequence.Count().<br/>
+            Be aware that the original sequence is considered one of the permutations and will be
+            returned as one of the results.
+            </remarks>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="sequence">The original sequence to permute</param>
+            <returns>A sequence of lists representing permutations of the original sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.AssertCount``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Asserts that a source sequence contains a given count of elements.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">Source sequence.</param>
+            <param name="count">Count to assert.</param>
+            <returns>
+            Returns the original sequence as long it is contains the
+            number of elements specified by <paramref name="count"/>.
+            Otherwise it throws <see cref="T:System.Exception"/>.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.AssertCount``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Int32,System.Int32,System.Exception})">
+            <summary>
+            Asserts that a source sequence contains a given count of elements.
+            A parameter specifies the exception to be thrown.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">Source sequence.</param>
+            <param name="count">Count to assert.</param>
+            <param name="errorSelector">Function that returns the <see cref="T:System.Exception"/> object to throw.</param>
+            <returns>
+            Returns the original sequence as long it is contains the
+            number of elements specified by <paramref name="count"/>.
+            Otherwise it throws the <see cref="T:System.Exception"/> object
+            returned by calling <paramref name="errorSelector"/>.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Acquire``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Ensures that a source sequence of <see cref="T:System.IDisposable"/> 
+            objects are all acquired successfully. If the acquisition of any 
+            one <see cref="T:System.IDisposable"/> fails then those successfully 
+            acquired till that point are disposed.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">Source sequence of <see cref="T:System.IDisposable"/> objects.</param>
+            <returns>
+            Returns an array of all the acquired <see cref="T:System.IDisposable"/>
+            object and in source order.
+            </returns>
+            <remarks>
+            This operator executes immediately.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Concat``1(``0,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns a sequence consisting of the head element and the given tail elements.
+            </summary>
+            <typeparam name="T">Type of sequence</typeparam>
+            <param name="head">Head element of the new sequence.</param>
+            <param name="tail">All elements of the tail. Must not be null.</param>
+            <returns>A sequence consisting of the head elements and the given tail elements.</returns>
+            <remarks>This operator uses deferred execution and streams its results.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Concat``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+            Returns a sequence consisting of the head elements and the given tail element.
+            </summary>
+            <typeparam name="T">Type of sequence</typeparam>
+            <param name="head">All elements of the head. Must not be null.</param>
+            <param name="tail">Tail element of the new sequence.</param>
+            <returns>A sequence consisting of the head elements and the given tail element.</returns>
+            <remarks>This operator uses deferred execution and streams its results.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Consume``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Completely consumes the given sequence. This method uses immediate execution,
+            and doesn't store any data during execution.
+            </summary>
+            <typeparam name="T">Element type of the sequence</typeparam>
+            <param name="source">Source to consume</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Batch``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Batches the source sequence into sized buckets.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="size">Size of buckets.</param>
+            <returns>A sequence of equally sized buckets containing elements of the source collection.</returns>
+            <remarks>
+            This operator uses deferred execution and streams its results (buckets and bucket content). 
+            It is also identical to <see cref="M:MoreLinq.MoreEnumerable.Partition``1(System.Collections.Generic.IEnumerable{``0},System.Int32)"/>.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Batch``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Batches the source sequence into sized buckets and applies a projection to each bucket.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <typeparam name="TResult">Type of result returned by <paramref name="resultSelector"/>.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="size">Size of buckets.</param>
+            <param name="resultSelector">The projection to apply to each bucket.</param>
+            <returns>A sequence of projections on equally sized buckets containing elements of the source collection.</returns>
+            <remarks>
+            This operator uses deferred execution and streams its results (buckets and bucket content).
+            It is also identical to <see cref="M:MoreLinq.MoreEnumerable.Partition``1(System.Collections.Generic.IEnumerable{``0},System.Int32)"/>.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderedMerge``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Merges two ordered sequences into one. Where the elements equal
+            in both sequences, the element from the first sequence is 
+            returned in the resulting sequence.
+            </summary>
+            <remarks>
+            This method uses deferred execution. The behavior is undefined 
+            if the sequences are unordered as inputs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderedMerge``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Merges two ordered sequences into one with an additional 
+            parameter specifying how to compare the elements of the 
+            sequences. Where the elements equal in both sequences, the 
+            element from the first sequence is returned in the resulting 
+            sequence.
+            </summary>
+            <remarks>
+            This method uses deferred execution. The behavior is undefined 
+            if the sequences are unordered as inputs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderedMerge``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Merges two ordered sequences into one with an additional 
+            parameter specifying the element key by which the sequences are 
+            ordered. Where the keys equal in both sequences, the 
+            element from the first sequence is returned in the resulting 
+            sequence.
+            </summary>
+            <remarks>
+            This method uses deferred execution. The behavior is undefined 
+            if the sequences are unordered (by key) as inputs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderedMerge``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``0,``2},System.Func{``0,``2},System.Func{``0,``0,``2})">
+            <summary>
+            Merges two ordered sequences into one. Additional parameters
+            specify the element key by which the sequences are ordered, 
+            the result when element is found in first sequence but not in 
+            the second, the result when element is found in second sequence 
+            but not in the first and the result when elements are found in 
+            both sequences.
+            </summary>
+            <remarks>
+            This method uses deferred execution. The behavior is undefined 
+            if the sequences are unordered (by key) as inputs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderedMerge``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``0,``2},System.Func{``0,``2},System.Func{``0,``0,``2},System.Collections.Generic.IComparer{``1})">
+            <summary>
+            Merges two ordered sequences into one. Additional parameters
+            specify the element key by which the sequences are ordered, 
+            the result when element is found in first sequence but not in 
+            the second, the result when element is found in second sequence 
+            but not in the first, the result when elements are found in 
+            both sequences and a method for comparing keys.
+            </summary>
+            <remarks>
+            This method uses deferred execution. The behavior is undefined 
+            if the sequences are unordered (by key) as inputs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderedMerge``4(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``2},System.Func{``1,``2},System.Func{``0,``3},System.Func{``1,``3},System.Func{``0,``1,``3})">
+            <summary>
+            Merges two heterogeneous sequences ordered by a common key type 
+            into a homogeneous one. Additional parameters specify the 
+            element key by which the sequences are ordered, the result when 
+            element is found in first sequence but not in the second and  
+            the result when element is found in second sequence but not in 
+            the first, the result when elements are found in both sequences.
+            </summary>
+            <remarks>
+            This method uses deferred execution. The behavior is undefined 
+            if the sequences are unordered (by key) as inputs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.OrderedMerge``4(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``2},System.Func{``1,``2},System.Func{``0,``3},System.Func{``1,``3},System.Func{``0,``1,``3},System.Collections.Generic.IComparer{``2})">
+            <summary>
+            Merges two heterogeneous sequences ordered by a common key type 
+            into a homogeneous one. Additional parameters specify the 
+            element key by which the sequences are ordered, the result when 
+            element is found in first sequence but not in the second, 
+            the result when element is found in second sequence but not in 
+            the first, the result when elements are found in both sequences 
+            and a method for comparing keys.
+            </summary>
+            <remarks>
+            This method uses deferred execution. The behavior is undefined 
+            if the sequences are unordered (by key) as inputs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Random">
+            <summary>
+            Returns an infinite sequence of random integers using the standard 
+            .NET random number generator.
+            </summary>
+            <returns>An infinite sequence of random integers</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Random(System.Random)">
+            <summary>
+            Returns an infinite sequence of random integers using the supplied
+            random number generator.
+            </summary>
+            <param name="rand">Random generator used to produce random numbers</param>
+            <returns>An infinite sequence of random integers</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="rand"/> is <see langword="null"/>.</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Random(System.Int32)">
+            <summary>
+            Returns an infinite sequence of random integers between 0 and <paramref name="maxValue"/>/>.
+            </summary>
+            <param name="maxValue">exclusive upper bound for the random values returned</param>
+            <returns>An infinite sequence of random integers</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Random(System.Random,System.Int32)">
+            <summary>
+            Returns an infinite sequence of random integers between 0 and <paramref name="maxValue"/>/&gt;
+            using the supplied random number generator.
+            </summary>
+            <param name="rand">Random generator used to produce values</param>
+            <param name="maxValue">Exclusive upper bound for random values returned</param>
+            <returns>An infinite sequence of random integers</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="rand"/> is <see langword="null"/>.</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Random(System.Int32,System.Int32)">
+            <summary>
+            Returns an infinite sequence of random integers between <paramref name="minValue"/> and
+            <paramref name="maxValue"/>.
+            </summary>
+            <param name="minValue">Inclusive lower bound of the values returned</param>
+            <param name="maxValue">Exclusive upper bound of the values returned</param>
+            <returns>An infinite sequence of random integers</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Random(System.Random,System.Int32,System.Int32)">
+            <summary>
+            Returns an infinite sequence of random integers between <paramref name="minValue"/> and
+            <paramref name="maxValue"/> using the supplied random number generator.
+            </summary>
+            <param name="rand">Generator used to produce random numbers</param>
+            <param name="minValue">Inclusive lower bound of the values returned</param>
+            <param name="maxValue">Exclusive upper bound of the values returned</param>
+            <returns>An infinite sequence of random integers</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="rand"/> is <see langword="null"/>.</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RandomDouble">
+            <summary>
+            Returns an infinite sequence of random double values between 0.0 and 1.0
+            </summary>
+            <returns>An infinite sequence of random doubles</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RandomDouble(System.Random)">
+            <summary>
+            Returns an infinite sequence of random double values between 0.0 and 1.0
+            using the supplied random number generator.
+            </summary>
+            <param name="rand">Generator used to produce random numbers</param>
+            <returns>An infinite sequence of random doubles</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="rand"/> is <see langword="null"/>.</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RandomImpl``1(System.Random,System.Func{System.Random,``0})">
+            <summary>
+            This is the underlying implementation that all random operators use to
+            produce a sequence of random values.
+            </summary>
+            <typeparam name="T">The type of value returned (either Int32 or Double)</typeparam>
+            <param name="rand">Random generators used to produce the sequence</param>
+            <param name="nextValue">Generator function that actually produces the next value - specific to T</param>
+            <returns>An infinite sequence of random numbers of type T</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RandomSubset``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Returns a sequence of a specified size of random elements from the original sequence
+            </summary>
+            <typeparam name="T">The type of elements in the sequence</typeparam>
+            <param name="sequence">The sequence from which to return random elements</param>
+            <param name="subsetSize">The size of the random subset to return</param>
+            <returns>A random sequence of elements in random order from the original sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RandomSubset``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Random)">
+            <summary>
+            Returns a sequence of a specified size of random elements from the original sequence
+            </summary>
+            <typeparam name="T">The type of elements in the sequence</typeparam>
+            <param name="sequence">The sequence from which to return random elements</param>
+            <param name="subsetSize">The size of the random subset to return</param>
+            <param name="rand">A random generator used as part of the selection algorithm</param>
+            <returns>A random sequence of elements in random order from the original sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Rank``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Ranks each item in the sequence in descending ordering using a default comparer.
+            </summary>
+            <typeparam name="TSource">Type of item in the sequence</typeparam>
+            <param name="source">The sequence whose items will be ranked</param>
+            <returns>A sequence of position integers representing the ranks of the corresponding items in the sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Rank``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IComparer{``0})">
+            <summary>
+            Rank each item in the sequence using a caller-supplied comparer.
+            </summary>
+            <typeparam name="TSource">The type of the elements in the source sequence</typeparam>
+            <param name="source">The sequence of items to rank</param>
+            <param name="comparer">A object that defines comparison semantics for the elements in the sequence</param>
+            <returns>A sequence of position integers representing the ranks of the corresponding items in the sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RankBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Ranks each item in the sequence in descending ordering by a specified key using a default comparer
+            </summary>
+            <typeparam name="TSource">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TKey">The type of the key used to rank items in the sequence</typeparam>
+            <param name="source">The sequence of items to rank</param>
+            <param name="keySelector">A key selector function which returns the value by which to rank items in the sequence</param>
+            <returns>A sequence of position integers representing the ranks of the corresponding items in the sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RankBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IComparer{``1})">
+            <summary>
+            Ranks each item in a sequence using a specified key and a caller-supplied comparer
+            </summary>
+            <typeparam name="TSource">The type of the elements in the source sequence</typeparam>
+            <typeparam name="TKey">The type of the key used to rank items in the sequence</typeparam>
+            <param name="source">The sequence of items to rank</param>
+            <param name="keySelector">A key selector function which returns the value by which to rank items in the sequence</param>
+            <param name="comparer">An object that defines the comparison semantics for keys used to rank items</param>
+            <returns>A sequence of position integers representing the ranks of the corresponding items in the sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Repeat``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Repeats the specific sequences <paramref name="count"/> times.
+            </summary>
+            <param name="sequence">The sequence to repeat</param>
+            <param name="count">Number of times to repeat the sequence</param>
+            <returns>A sequence produced from the repetition of the original source sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RunLengthEncode``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Run-length encodes a sequence by converting consecutive instances of the same element into
+            a <c>KeyValuePair{T,int}</c> representing the item and its occurrence count.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="sequence">The sequence to run length encode</param>
+            <returns>A sequence of <c>KeyValuePair{T,int}</c> where the key is the element and the value is the occurrence count</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.RunLengthEncode``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Run-length encodes a sequence by converting consecutive instances of the same element into
+            a <c>KeyValuePair{T,int}</c> representing the item and its occurrence count. This overload
+            uses a custom equality comparer to identify equivalent items.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="sequence">The sequence to run length encode</param>
+            <param name="comparer">The comparer used to identify equivalent items</param>
+            <returns>A sequence of <c>KeyValuePair{T,int}</c> where they key is the element and the value is the occurrence count</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Segment``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Divides a sequence into multiple sequences by using a segment detector based on the original sequence
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="sequence">The sequence to segment</param>
+            <param name="newSegmentPredicate">A function, which returns <c>true</c> if the given element begins a new segment, and <c>false</c> otherwise</param>
+            <returns>A sequence of segment, each of which is a portion of the original sequence</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if either <paramref name="sequence"/> or <paramref name="newSegmentPredicate"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Segment``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Int32,System.Boolean})">
+            <summary>
+            Divides a sequence into multiple sequences by using a segment detector based on the original sequence
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="source">The sequence to segment</param>
+            <param name="newSegmentPredicate">A function, which returns <c>true</c> if the given element or index indicate a new segment, and <c>false</c> otherwise</param>
+            <returns>A sequence of segment, each of which is a portion of the original sequence</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if either <paramref name="source"/> or <paramref name="newSegmentPredicate"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Segment``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,System.Int32,System.Boolean})">
+            <summary>
+            Divides a sequence into multiple sequences by using a segment detector based on the original sequence
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="sequence">The sequence to segment</param>
+            <param name="newSegmentPredicate">A function, which returns <c>true</c> if the given current element, previous element or index indicate a new segment, and <c>false</c> otherwise</param>
+            <returns>A sequence of segment, each of which is a portion of the original sequence</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if either <paramref name="sequence"/> or <paramref name="newSegmentPredicate"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Slice``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Int32)">
+            <summary>
+            Extracts <paramref name="count"/> elements from a sequence at a particular zero-based starting index
+            </summary>
+            <remarks>
+            If the starting position or count specified result in slice extending past the end of the sequence,
+            it will return all elements up to that point. There is no guarantee that the resulting sequence will
+            contain the number of elements requested - it may have anywhere from 0 to <paramref name="count"/>.<br/>
+            This method is implemented in an optimized manner for any sequence implementing <c>IList{T}</c>.<br/>
+            The result of Slice() is identical to: <c>sequence.Skip(startIndex).Take(count)</c>
+            </remarks>
+            <typeparam name="T">The type of the elements in the source sequence</typeparam>
+            <param name="sequence">The sequence from which to extract elements</param>
+            <param name="startIndex">The zero-based index at which to begin slicing</param>
+            <param name="count">The number of items to slice out of the index</param>
+            <returns>A new sequence containing any elements sliced out from the source sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Windowed``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Processes a sequence into a series of subsequences representing a windowed subset of the original
+            </summary>
+            <remarks>
+            This operator is guaranteed to return at least one result, even if the source sequence is smaller
+            than the window size.<br/>
+            The number of sequences returned is: <c>Max(0, sequence.Count() - windowSize) + 1</c><br/>
+            Returned subsequences are buffered, but the overall operation is streamed.<br/>
+            </remarks>
+            <typeparam name="TSource">The type of the elements of the source sequence</typeparam>
+            <param name="source">The sequence to evaluate a sliding window over</param>
+            <param name="size">The size (number of elements) in each window</param>
+            <returns>A series of sequences representing each sliding window subsequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.SortedMerge``1(System.Collections.Generic.IEnumerable{``0},MoreLinq.OrderByDirection,System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            Merges two or more sequences that are in a common order (either ascending or descending) into
+            a single sequence that preserves that order.
+            </summary>
+            <remarks>
+            Using SortedMerge on sequences that are not ordered or are not in the same order produces
+            undefined results.<br/>
+            <c>SortedMerge</c> uses performs the merge in a deferred, streaming manner. <br/>
+            
+            Here is an example of a merge, as well as the produced result:
+            <code>
+              var s1 = new[] { 3, 7, 11 };
+              var s2 = new[] { 2, 4, 20 };
+              var s3 = new[] { 17, 19, 25 };
+              var merged = s1.SortedMerge( OrderByDirection.Ascending, s2, s3 );
+              var result = merged.ToArray();
+              // result will be:
+              // { 2, 3, 4, 7, 11, 17, 19, 20, 25 }
+            </code>
+            </remarks>
+            <typeparam name="TSource">The type of the elements of the sequence</typeparam>
+            <param name="source">The primary sequence with which to merge</param>
+            <param name="direction">The ordering that all sequences must already exhibit</param>
+            <param name="otherSequences">A variable argument array of zero or more other sequences to merge with</param>
+            <returns>A merged, order-preserving sequence containing all of the elements of the original sequences</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.SortedMerge``1(System.Collections.Generic.IEnumerable{``0},MoreLinq.OrderByDirection,System.Collections.Generic.IComparer{``0},System.Collections.Generic.IEnumerable{``0}[])">
+            <summary>
+            Merges two or more sequences that are in a common order (either ascending or descending) into
+            a single sequence that preserves that order.
+            </summary>
+            <typeparam name="TSource">The type of the elements in the sequence</typeparam>
+            <param name="source">The primary sequence with which to merge</param>
+            <param name="direction">The ordering that all sequences must already exhibit</param>
+            <param name="comparer">The comparer used to evaluate the relative order between elements</param>
+            <param name="otherSources">A variable argument array of zero or more other sequences to merge with</param>
+            <returns>A merged, order-preserving sequence containing al of the elements of the original sequences</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.SortedMergeImpl``1(System.Func{``0,``0,System.Boolean},System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+            <summary>
+            Private implementation method that performs a merge of multiple, ordered sequences using
+            a precedence function which encodes order-sensitive comparison logic based on the caller's arguments.
+            </summary>
+            <remarks>
+            The algorithm employed in this implementation is not necessarily the most optimal way to merge
+            two sequences. A swap-compare version would probably be somewhat more efficient - but at the
+            expense of considerably more complexity. One possible optimization would be to detect that only
+            a single sequence remains (all other being consumed) and break out of the main while-loop and
+            simply yield the items that are part of the final sequence.
+            
+            The algorithm used here will perform N*(K1+K2+...Kn-1) comparisons, where <c>N => otherSequences.Count()+1.</c>
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Subsets``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns a sequence of <see cref="T:System.Collections.Generic.IList`1"/> representing all of the subsets
+            of any size that are part of the original sequence.
+            </summary>
+            <remarks>
+            This operator produces all of the subsets of a given sequence. Subsets are returned
+            in increasing cardinality, starting with the empty set and terminating with the
+            entire original sequence.<br/>
+            Subsets are produced in a deferred, streaming manner; however, each subset is returned 
+            as a materialized list.<br/>
+            There are 2^N subsets of a given sequence, where N =&gt; sequence.Count(). 
+            </remarks>
+            <param name="sequence">Sequence for which to produce subsets</param>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <returns>A sequence of lists that represent the all subsets of the original sequence</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="sequence"/> is <see langword="null"/></exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Subsets``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Returns a sequence of <see cref="T:System.Collections.Generic.IList`1"/> representing all subsets of the
+            specified size that are part of the original sequence.
+            </summary>
+            <param name="sequence">Sequence for which to produce subsets</param>
+            <param name="subsetSize">The size of the subsets to produce</param>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <returns>A sequence of lists that represents of K-sized subsets of the original sequence</returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if <paramref name="sequence"/> is <see langword="null"/>
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            Thrown if <paramref name="subsetSize"/> is less than zero.
+            </exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.SubsetsImpl``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Underlying implementation for Subsets() overload.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="sequence">Sequence for which to produce subsets</param>
+            <returns>Sequence of lists representing all subsets of a sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Index``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns a sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
+            where the key is the zero-based index of the value in the source 
+            sequence.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <returns>A sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/>.</returns>
+            <remarks>This operator uses deferred execution and streams its 
+            results.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Index``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Returns a sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
+            where the key is the index of the value in the source sequence.
+            An additional parameter specifies the starting index.
+            </summary>
+            <typeparam name="TSource">Type of elements in <paramref name="source"/> sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="startIndex"></param>
+            <returns>A sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/>.</returns>
+            <remarks>This operator uses deferred execution and streams its 
+            results.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.TagFirstLast``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean,System.Boolean,``1})">
+            <summary>
+            Returns a sequence resulting from applying a function to each 
+            element in the source sequence with additional parameters 
+            indicating whether the element is the first and/or last of the 
+            sequence.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+            <typeparam name="TResult">The type of the element of the returned sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="resultSelector">A function that determines how to 
+            project the each element along with its first or last tag.</param>
+            <returns>
+            Returns the resulting sequence.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            var numbers = new[] { 123, 456, 789 };
+            var result = numbers.TagFirstLast((num, fst, lst) => new 
+                         { 
+                             Number = num,
+                             IsFirst = fst, IsLast = lst
+                         });
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 
+            <c>{ Number = 123, IsFirst = True, IsLast = False }</c>, 
+            <c>{ Number = 456, IsFirst = False, IsLast = False }</c> and 
+            <c>{ Number = 789, IsFirst = False, IsLast = True }</c> in turn.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.TakeLast``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Returns a specified number of contiguous elements from the end of 
+            a sequence.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+            <param name="source">The sequence to return the last element of.</param>
+            <param name="count">The number of elements to return.</param>
+            <returns>
+            An <see cref="T:System.Collections.Generic.IEnumerable`1"/> that contains the specified number of 
+            elements from the end of the input sequence.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 12, 34, 56, 78 };
+            IEnumerable&lt;int&gt; result = numbers.TakeLast(2);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 
+            34, 56 and 78 in turn.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.TakeUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Returns items from the input sequence until the given predicate returns true
+            when applied to the current source item; that item will be the last returned.
+            </summary>
+            <remarks>
+            <para>
+            TakeUntil differs from Enumerable.TakeWhile in two respects. Firstly, the sense
+            of the predicate is reversed: it is expected that the predicate will return false
+            to start with, and then return true - for example, when trying to find a matching
+            item in a sequence.
+            </para>
+            <para>
+            Secondly, TakeUntil yields the element which causes the predicate to return true. For
+            example, in a sequence <code>{ 1, 2, 3, 4, 5 }</code> and with a predicate of
+            <code>x =&gt; x == 3</code>, the result would be <code>{ 1, 2, 3 }</code>.
+            </para>
+            <para>
+            TakeUntil is as lazy as possible: it will not iterate over the source sequence
+            until it has to, it won't iterate further than it has to, and it won't evaluate
+            the predicate until it has to. (This means that an item may be returned which would
+            actually cause the predicate to throw an exception if it were evaluated, so long as
+            no more items of data are requested.)
+            </para>
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="predicate">Predicate used to determine when to stop yielding results from the source.</param>
+            <returns>Items from the source sequence, until the predicate returns true when applied to the item.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.BuildOrBindSchema(System.Data.DataTable,System.Reflection.MemberInfo[])">
+            <remarks>
+            The resulting array may contain null entries and those represent
+            columns for which there is no source member supplying a value.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDataTable``2(System.Collections.Generic.IEnumerable{``0},``1,System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
+            <summary>
+            Appends elements in the sequence as rows of a given <see cref="T:System.Data.DataTable"/> 
+            object with a set of lambda expressions specifying which members (property
+            or field) of each element in the sequence will supply the column values.
+            </summary>
+            <typeparam name="T">The type of the elements of <paramref name="source"/>.</typeparam>
+            <typeparam name="TTable">The type of the input and resulting <see cref="T:System.Data.DataTable"/> object.</typeparam>
+            <param name="source">The source.</param>
+            <param name="table">The <see cref="T:System.Data.DataTable"/> type of object where to add rows</param>
+            <param name="expressions">Expressions providing access to element members.</param>
+            <returns>
+            A <see cref="T:System.Data.DataTable"/> or subclass representing the source.
+            </returns>
+            <remarks>This operator uses immediate execution.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDataTable``2(System.Collections.Generic.IEnumerable{``0},``1)">
+            <summary>
+            Appends elements in the sequence as rows of a given <see cref="T:System.Data.DataTable"/> object.
+            </summary>
+            <typeparam name="T">The type of the elements of <paramref name="source"/>.</typeparam>
+            <typeparam name="TTable"></typeparam>
+            <param name="source">The source.</param>
+            <param name="table"></param>
+            <returns>
+            A <see cref="T:System.Data.DataTable"/> or subclass representing the source.
+            </returns>
+            <remarks>This operator uses immediate execution.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDataTable``1(System.Collections.Generic.IEnumerable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
+            <summary>
+            Appends elements in the sequence as rows of a given <see cref="T:System.Data.DataTable"/> 
+            object with a set of lambda expressions specifying which members (property
+            or field) of each element in the sequence will supply the column values.
+            </summary>
+            <typeparam name="T">The type of the elements of <paramref name="source"/>.</typeparam>
+            <param name="source">The source.</param>
+            <param name="expressions">Expressions providing access to element members.</param>
+            <returns>
+            A <see cref="T:System.Data.DataTable"/> representing the source.
+            </returns>
+            <remarks>This operator uses immediate execution.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDataTable``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Converts a sequence to a <see cref="T:System.Data.DataTable"/> object.
+            </summary>
+            <typeparam name="T">The type of the elements of <paramref name="source"/>.</typeparam>
+            <param name="source">The source.</param>
+            <returns>
+            A <see cref="T:System.Data.DataTable"/> representing the source.
+            </returns>
+            <remarks>This operator uses immediate execution.</remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Boolean})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Boolean},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.SByte})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.SByte},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Byte})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Byte},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Char})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Char},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Int16})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Int16},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Int32},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Int64})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Int64},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Single})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Single},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Double})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Double},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Decimal})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.Decimal},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.UInt16})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.UInt16},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.UInt32})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.UInt32},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.UInt64})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString(System.Collections.Generic.IEnumerable{System.UInt64},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToHashSet``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.HashSet`1"/> of the source items using the default equality
+            comparer for the type.
+            </summary>
+            <remarks>
+            This evaluates the input sequence completely.
+            </remarks>
+            <param name="source">Source sequence</param>
+            <returns>A hash set of the items in the sequence, using the default equality comparer.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> is null</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToHashSet``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.HashSet`1"/> of the source items using the specified equality
+            comparer for the type.
+            </summary>
+            <remarks>
+            This evaluates the input sequence completely.
+            </remarks>
+            <param name="source">Source sequence</param>
+            <param name="comparer">Equality comparer to use; a value of null will cause the type's default equality comparer to be used</param>
+            <returns>A hash set of the items in the sequence, using the default equality comparer.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> is null</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Trace``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Traces the elements of a source sequence for diagnostics.
+            </summary>
+            <typeparam name="TSource">Type of element in the source sequence</typeparam>
+            <param name="source">Source sequence whose elements to trace.</param>
+            <returns>
+            Return the source sequence unmodified.
+            </returns>
+            <remarks>
+            This a pass-through operator that uses deferred execution and 
+            streams the results.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Trace``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Traces the elements of a source sequence for diagnostics using
+            custom formatting.
+            </summary>
+            <typeparam name="TSource">Type of element in the source sequence</typeparam>
+            <param name="source">Source sequence whose elements to trace.</param>
+            <param name="format">
+            String to use to format the trace message. If null then the
+            element value becomes the traced message.
+            </param>
+            <returns>
+            Return the source sequence unmodified.
+            </returns>
+            <remarks>
+            This a pass-through operator that uses deferred execution and 
+            streams the results.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Trace``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.String})">
+            <summary>
+            Traces the elements of a source sequence for diagnostics using
+            a custom formatter.
+            </summary>
+            <typeparam name="TSource">Type of element in the source sequence</typeparam>
+            <param name="source">Source sequence whose elements to trace.</param>
+            <param name="formatter">Function used to format each source element into a string.</param>
+            <returns>
+            Return the source sequence unmodified.
+            </returns>
+            <remarks>
+            This a pass-through operator that uses deferred execution and 
+            streams the results.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Pipe``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Executes the given action on each element in the source sequence
+            and yields it.
+            </summary>
+            <remarks>
+            The returned sequence is essentially a duplicate of
+            the original, but with the extra action being executed while the
+            sequence is evaluated. The action is always taken before the element
+            is yielded, so any changes made by the action will be visible in the
+            returned sequence. This operator uses deferred execution and streams it results.
+            </remarks>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="source">The sequence of elements</param>
+            <param name="action">The action to execute on each element</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Immediately executes the given action on each element in the source sequence.
+            </summary>
+            <typeparam name="T">The type of the elements in the sequence</typeparam>
+            <param name="source">The sequence of elements</param>
+            <param name="action">The action to execute on each element</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.DistinctBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns all distinct elements of the given source, where "distinctness"
+            is determined via a projection and the default eqaulity comparer for the projected type.
+            </summary>
+            <remarks>
+            This operator uses deferred execution and streams the results, although
+            a set of already-seen keys is retained. If a key is seen multiple times,
+            only the first element with that key is returned.
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <typeparam name="TKey">Type of the projected element</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="keySelector">Projection for determining "distinctness"</param>
+            <returns>A sequence consisting of distinct elements from the source sequence,
+            comparing them by the specified key projection.</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.DistinctBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
+            <summary>
+            Returns all distinct elements of the given source, where "distinctness"
+            is determined via a projection and the specified comparer for the projected type.
+            </summary>
+            <remarks>
+            This operator uses deferred execution and streams the results, although
+            a set of already-seen keys is retained. If a key is seen multiple times,
+            only the first element with that key is returned.
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <typeparam name="TKey">Type of the projected element</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="keySelector">Projection for determining "distinctness"</param>
+            <param name="comparer">The equality comparer to use to determine whether or not keys are equal.
+            If null, the default equality comparer for <c>TSource</c> is used.</param>
+            <returns>A sequence consisting of distinct elements from the source sequence,
+            comparing them by the specified key projection.</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.GenerateByIndex``1(System.Func{System.Int32,``0})">
+            <summary>
+            Returns a sequence of values based on indexes.
+            </summary>
+            <remarks>
+            The sequence is (practically) infinite
+            - the index ranges from 0 to <c>int.MaxValue</c> inclusive. This function defers
+            execution and streams the results.
+            </remarks>
+            <typeparam name="TResult">Type of result to generate</typeparam>
+            <param name="generator">Generation function to apply to each index</param>
+            <returns>A sequence </returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Generate``1(``0,System.Func{``0,``0})">
+            <summary>
+            Returns a sequence of values consecutively generated by a generator function.
+            </summary>
+            <typeparam name="TResult">Type of elements to generate.</typeparam>
+            <param name="initial">Value of first element in sequence</param>
+            <param name="generator">
+            Generator function which takes the previous series element and uses it to generate the next element.
+            </param>
+            <remarks>
+            This function defers element generation until needed and streams the results.
+            </remarks>
+            <example>
+            <code>
+            IEnumerable&lt;int&gt; result = Sequence.Generate(2, n => n * n).Take(5);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 2, 4, 16, 256, and 65536, in turn.
+            </example>        
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.GroupAdjacent``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Groups the adjacent elements of a sequence according to a 
+            specified key selector function.
+            </summary>
+            <typeparam name="TSource">The type of the elements of 
+            <paramref name="source"/>.</typeparam>
+            <typeparam name="TKey">The type of the key returned by 
+            <paramref name="keySelector"/>.</typeparam>
+            <param name="source">A sequence whose elements to group.</param>
+            <param name="keySelector">A function to extract the key for each 
+            element.</param>
+            <returns>A sequence of groupings where each grouping
+            (<see cref="T:System.Linq.IGrouping`2"/>) contains the key
+            and the adjacent elements in the same order as found in the 
+            source sequence.</returns>
+            <remarks>
+            This method is implemented by using deferred execution and 
+            streams the groupings. The grouping elements, however, are 
+            buffered. Each grouping is therefore yielded as soon as it 
+            is complete and before the next grouping occurs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.GroupAdjacent``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
+            <summary>
+            Groups the adjacent elements of a sequence according to a 
+            specified key selector function and compares the keys by using a 
+            specified comparer.
+            </summary>
+            <typeparam name="TSource">The type of the elements of 
+            <paramref name="source"/>.</typeparam>
+            <typeparam name="TKey">The type of the key returned by 
+            <paramref name="keySelector"/>.</typeparam>
+            <param name="source">A sequence whose elements to group.</param>
+            <param name="keySelector">A function to extract the key for each 
+            element.</param>
+            <param name="comparer">An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> to 
+            compare keys.</param>
+            <returns>A sequence of groupings where each grouping
+            (<see cref="T:System.Linq.IGrouping`2"/>) contains the key
+            and the adjacent elements in the same order as found in the 
+            source sequence.</returns>
+            <remarks>
+            This method is implemented by using deferred execution and 
+            streams the groupings. The grouping elements, however, are 
+            buffered. Each grouping is therefore yielded as soon as it 
+            is complete and before the next grouping occurs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.GroupAdjacent``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``0,``2})">
+            <summary>
+            Groups the adjacent elements of a sequence according to a 
+            specified key selector function and projects the elements for 
+            each group by using a specified function.
+            </summary>
+            <typeparam name="TSource">The type of the elements of 
+            <paramref name="source"/>.</typeparam>
+            <typeparam name="TKey">The type of the key returned by 
+            <paramref name="keySelector"/>.</typeparam>
+            <typeparam name="TElement">The type of the elements in the
+            resulting groupings.</typeparam>
+            <param name="source">A sequence whose elements to group.</param>
+            <param name="keySelector">A function to extract the key for each 
+            element.</param>
+            <param name="elementSelector">A function to map each source 
+            element to an element in the resulting grouping.</param>
+            <returns>A sequence of groupings where each grouping
+            (<see cref="T:System.Linq.IGrouping`2"/>) contains the key
+            and the adjacent elements (of type <typeparamref name="TElement"/>) 
+            in the same order as found in the source sequence.</returns>
+            <remarks>
+            This method is implemented by using deferred execution and 
+            streams the groupings. The grouping elements, however, are 
+            buffered. Each grouping is therefore yielded as soon as it 
+            is complete and before the next grouping occurs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.GroupAdjacent``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Func{``0,``2},System.Collections.Generic.IEqualityComparer{``1})">
+            <summary>
+            Groups the adjacent elements of a sequence according to a 
+            specified key selector function. The keys are compared by using 
+            a comparer and each group's elements are projected by using a 
+            specified function.
+            </summary>
+            <typeparam name="TSource">The type of the elements of 
+            <paramref name="source"/>.</typeparam>
+            <typeparam name="TKey">The type of the key returned by 
+            <paramref name="keySelector"/>.</typeparam>
+            <typeparam name="TElement">The type of the elements in the
+            resulting groupings.</typeparam>
+            <param name="source">A sequence whose elements to group.</param>
+            <param name="keySelector">A function to extract the key for each 
+            element.</param>
+            <param name="elementSelector">A function to map each source 
+            element to an element in the resulting grouping.</param>
+            <param name="comparer">An <see cref="T:System.Collections.Generic.IEqualityComparer`1"/> to 
+            compare keys.</param>
+            <returns>A sequence of groupings where each grouping
+            (<see cref="T:System.Linq.IGrouping`2"/>) contains the key
+            and the adjacent elements (of type <typeparamref name="TElement"/>) 
+            in the same order as found in the source sequence.</returns>
+            <remarks>
+            This method is implemented by using deferred execution and 
+            streams the groupings. The grouping elements, however, are 
+            buffered. Each grouping is therefore yielded as soon as it 
+            is complete and before the next grouping occurs.
+            </remarks>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.TakeEvery``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Returns every N-th element of a source sequence.
+            </summary>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="step">Number of elements to bypass before returning the next element.</param>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 1, 2, 3, 4, 5 };
+            IEnumerable&lt;int&gt; result = numbers.TakeEvery(2);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 1, 3 and 5, in turn.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ZipShortest``4(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Func{``0,``1,``2,``3})">
+            <summary>
+            Returns a projection of tuples, where each tuple contains the N-th element 
+            from each of the argument sequences.
+            </summary>
+            <remarks>
+            If the input sequences are of different lengths, the result sequence 
+            is terminated as soon as the shortest input sequence is exhausted.
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            var numbers = new[] { 1, 2, 3 };
+            var letters = new[] { "A", "B", "C", "D" };
+            var chars   = new[] { 'a', 'b', 'c', 'd', 'e' };
+            var zipped  = numbers.ZipShortest(letters, chars, (n, l, c) => c + n + l);
+            </code>
+            The <c>zipped</c> variable, when iterated over, will yield 
+            "98A", "100B", "102C", in turn.
+            </example>
+            <typeparam name="T1">Type of elements in first sequence</typeparam>
+            <typeparam name="T2">Type of elements in second sequence</typeparam>
+            <typeparam name="T3">Type of elements in third sequence</typeparam>
+            <typeparam name="TResult">Type of elements in result sequence</typeparam>
+            <param name="first">First sequence</param>
+            <param name="second">Second sequence</param>
+            <param name="third">Third sequence</param>
+            <param name="resultSelector">Function to apply to each triplet of elements</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ZipShortest``5(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3},System.Func{``0,``1,``2,``3,``4})">
+            <summary>
+            Returns a projection of tuples, where each tuple contains the N-th element 
+            from each of the argument sequences.
+            </summary>
+            <remarks>
+            If the input sequences are of different lengths, the result sequence 
+            is terminated as soon as the shortest input sequence is exhausted.
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            var numbers = new[] { 1, 2, 3 };
+            var letters = new[] { "A", "B", "C", "D" };
+            var chars   = new[] { 'a', 'b', 'c', 'd', 'e' };
+            var flags   = new[] { true, false };
+            var zipped  = numbers.ZipShortest(letters, chars, flags (n, l, c, f) => n + l + c + f);
+            </code>
+            The <c>zipped</c> variable, when iterated over, will yield 
+            "1AaTrue", "2BbFalse" in turn.
+            </example>
+            <typeparam name="T1">Type of elements in first sequence</typeparam>
+            <typeparam name="T2">Type of elements in second sequence</typeparam>
+            <typeparam name="T3">Type of elements in third sequence</typeparam>
+            <typeparam name="T4">Type of elements in fourth sequence</typeparam>
+            <typeparam name="TResult">Type of elements in result sequence</typeparam>
+            <param name="first">First sequence</param>
+            <param name="second">Second sequence</param>
+            <param name="third">Third sequence</param>
+            <param name="fourth">Fourth sequence</param>
+            <param name="resultSelector">Function to apply to each quadruplet of elements</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ZipShortest``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``1,``2})">
+            <summary>
+            Returns a projection of tuples, where each tuple contains the N-th element 
+            from each of the argument sequences.
+            </summary>
+            <remarks>
+            If the two input sequences are of different lengths, the result sequence 
+            is terminated as soon as the shortest input sequence is exhausted.
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            var numbers = new[] { 1, 2, 3 };
+            var letters = new[] { "A", "B", "C", "D" };
+            var zipped = numbers.ZipShortest(letters, (n, l) => n + l);
+            </code>
+            The <c>zipped</c> variable, when iterated over, will yield "1A", "2B", "3C", in turn.
+            </example>
+            <typeparam name="TFirst">Type of elements in first sequence</typeparam>
+            <typeparam name="TSecond">Type of elements in second sequence</typeparam>
+            <typeparam name="TResult">Type of elements in result sequence</typeparam>
+            <param name="first">First sequence</param>
+            <param name="second">Second sequence</param>
+            <param name="resultSelector">Function to apply to each pair of elements</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.EquiZip``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``1,``2})">
+            <summary>
+            Returns a projection of tuples, where each tuple contains the N-th element 
+            from each of the argument sequences.
+            </summary>
+            <remarks>
+            If the two input sequences are of different lengths then 
+            <see cref="T:System.InvalidOperationException"/> is thrown.
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 1, 2, 3, 4 };
+            string[] letters = { "A", "B", "C", "D" };
+            var zipped = numbers.EquiZip(letters, (n, l) =&gt; n + l);
+            </code>
+            The <c>zipped</c> variable, when iterated over, will yield "1A", "2B", "3C", "4D" in turn.
+            </example>
+            <typeparam name="TFirst">Type of elements in first sequence</typeparam>
+            <typeparam name="TSecond">Type of elements in second sequence</typeparam>
+            <typeparam name="TResult">Type of elements in result sequence</typeparam>
+            <param name="first">First sequence</param>
+            <param name="second">Second sequence</param>
+            <param name="resultSelector">Function to apply to each pair of elements</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.EquiZip``4(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Func{``0,``1,``2,``3})">
+            <summary>
+            Returns a projection of tuples, where each tuple contains the N-th element 
+            from each of the argument sequences.
+            </summary>
+            <remarks>
+            If the three input sequences are of different lengths then 
+            <see cref="T:System.InvalidOperationException"/> is thrown.
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            var numbers = { 1, 2, 3, 4 };
+            var letters = { "A", "B", "C", "D" };
+            var chars    = { 'a', 'b', 'c', 'd' };
+            var zipped = numbers.EquiZip(letters, chars, (n, l, c) =&gt; n + l + c);
+            </code>
+            The <c>zipped</c> variable, when iterated over, will yield "1Aa", "2Bb", "3Cc", "4Dd" in turn.
+            </example>
+            <typeparam name="T1">Type of elements in first sequence</typeparam>
+            <typeparam name="T2">Type of elements in second sequence</typeparam>
+            <typeparam name="T3">Type of elements in third sequence</typeparam>
+            <typeparam name="TResult">Type of elements in result sequence</typeparam>
+            <param name="first">First sequence</param>
+            <param name="second">Second sequence</param>
+            <param name="third">Third sequence</param>
+            <param name="resultSelector">Function to apply to each triplet of elements</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.EquiZip``5(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3},System.Func{``0,``1,``2,``3,``4})">
+            <summary>
+            Returns a projection of tuples, where each tuple contains the N-th element 
+            from each of the argument sequences.
+            </summary>
+            <remarks>
+            If the three input sequences are of different lengths then 
+            <see cref="T:System.InvalidOperationException"/> is thrown.
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            var numbers = { 1, 2, 3, 4 };
+            var letters = { "A", "B", "C", "D" };
+            var chars   = { 'a', 'b', 'c', 'd' };
+            var flags   = { true, false, true, false };
+            var zipped = numbers.EquiZip(letters, chars, flags, (n, l, c, f) =&gt; n + l + c + f);
+            </code>
+            The <c>zipped</c> variable, when iterated over, will yield "1AaTrue", "2BbFalse", "3CcTrue", "4DdFalse" in turn.
+            </example>
+            <typeparam name="T1">Type of elements in first sequence</typeparam>
+            <typeparam name="T2">Type of elements in second sequence</typeparam>
+            <typeparam name="T3">Type of elements in third sequence</typeparam>
+            <typeparam name="T4">Type of elements in fourth sequence</typeparam>
+            <typeparam name="TResult">Type of elements in result sequence</typeparam>
+            <param name="first">First sequence</param>
+            <param name="second">Second sequence</param>
+            <param name="third">Third sequence</param>
+            <param name="fourth">Fourth sequence</param>
+            <param name="resultSelector">Function to apply to each quadruplet of elements</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ZipLongest``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Func{``0,``1,``2})">
+            <summary>
+            Returns a projection of tuples, where each tuple contains the N-th element 
+            from each of the argument sequences.
+            </summary>
+            <remarks>
+            If the two input sequences are of different lengths then the result 
+            sequence will always be as long as the longer of the two input sequences.
+            The default value of the shorter sequence element type is used for padding.
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 1, 2, 3 };
+            string[] letters = { "A", "B", "C", "D" };
+            var zipped = numbers.EquiZip(letters, (n, l) => n + l);
+            </code>
+            The <c>zipped</c> variable, when iterated over, will yield "1A", "2B", "3C", "0D" in turn.
+            </example>
+            <typeparam name="TFirst">Type of elements in first sequence</typeparam>
+            <typeparam name="TSecond">Type of elements in second sequence</typeparam>
+            <typeparam name="TResult">Type of elements in result sequence</typeparam>
+            <param name="first">First sequence</param>
+            <param name="second">Second sequence</param>
+            <param name="resultSelector">Function to apply to each pair of elements</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Scan``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``0})">
+            <summary>
+            Peforms a scan (inclusive prefix sum) on a sequence of elements.
+            </summary>
+            <remarks>
+            An inclusive prefix sum returns an equal-length sequence where the
+            N-th element is the sum of the first N input elements. More
+            generally, the scan allows any commutative binary operation, not
+            just a sum.
+            The exclusive version of Scan is <see cref="M:MoreLinq.MoreEnumerable.PreScan``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``0},``0)"/>.
+            This operator uses deferred execution and streams its result.
+            </remarks>
+            <example>
+            <code>
+            Func&lt;int, int, int&gt; plus = (a, b) =&gt; a + b;
+            int[] values = { 1, 2, 3, 4 };
+            IEnumerable&lt;int&gt; prescan = values.PreScan(plus, 0);
+            IEnumerable&lt;int&gt; scan = values.Scan(plus; a + b);
+            IEnumerable&lt;int&gt; result = values.ZipShortest(prescan, plus);
+            </code>
+            <c>prescan</c> will yield <c>{ 0, 1, 3, 6 }</c>, while <c>scan</c>
+            and <c>result</c> will both yield <c>{ 1, 3, 6, 10 }</c>. This
+            shows the relationship between the inclusive and exclusive prefix sum.
+            </example>
+            <typeparam name="TSource">Type of elements in source sequence</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="transformation">Transformation operation</param>
+            <returns>The scanned sequence</returns>
+            <exception cref="T:System.InvalidOperationException">If <paramref name="source"/> is empty.</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Scan``2(System.Collections.Generic.IEnumerable{``0},``1,System.Func{``1,``0,``1})">
+            <summary>
+            Like <see cref="M:System.Linq.Enumerable.Aggregate``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``0})"/> except returns 
+            the sequence of intermediate results as well as the final one. 
+            An additional parameter specifies a seed.
+            </summary>
+            <remarks>
+            This operator uses deferred execution and streams its result.
+            </remarks>
+            <example>
+            <code>
+            var result = Enumerable.Range(1, 5).Scan(0, (a, b) =&gt; a + b);
+            </code>
+            When iterated, <c>result</c> will yield <c>{ 0, 1, 3, 6, 10, 15 }</c>.
+            </example>
+            <typeparam name="TSource">Type of elements in source sequence</typeparam>
+            <typeparam name="TState">Type of state</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="seed">Initial state to seed</param>
+            <param name="transformation">Transformation operation</param>
+            <returns>The scanned sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+            Splits the source sequence by a separator.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``1(System.Collections.Generic.IEnumerable{``0},``0,System.Int32)">
+            <summary>
+            Splits the source sequence by a separator given a maximum count of splits.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``2(System.Collections.Generic.IEnumerable{``0},``0,System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Splits the source sequence by a separator and then transforms 
+            the splits into results.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``2(System.Collections.Generic.IEnumerable{``0},``0,System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Splits the source sequence by a separator, given a maximum count
+            of splits, and then transforms the splits into results.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``1(System.Collections.Generic.IEnumerable{``0},``0,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Splits the source sequence by a separator and then transforms the 
+            splits into results.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``1(System.Collections.Generic.IEnumerable{``0},``0,System.Collections.Generic.IEqualityComparer{``0},System.Int32)">
+            <summary>
+            Splits the source sequence by a separator, given a maximum count
+            of splits. A parameter specifies how the separator is compared 
+            for equality.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``2(System.Collections.Generic.IEnumerable{``0},``0,System.Collections.Generic.IEqualityComparer{``0},System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Splits the source sequence by a separator and then transforms the 
+            splits into results. A parameter specifies how the separator is 
+            compared for equality.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``2(System.Collections.Generic.IEnumerable{``0},``0,System.Collections.Generic.IEqualityComparer{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Splits the source sequence by a separator, given a maximum count
+            of splits, and then transforms the splits into results. A
+            parameter specifies how the separator is compared for equality.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Splits the source sequence by a separator function.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.Int32)">
+            <summary>
+            Splits the source sequence by a separator function, given a
+            maximum count of splits.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Splits the source sequence by a separator function and then
+            transforms the splits into results.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Split``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Splits the source sequence by a separator function, given a 
+            maximum count of splits, and then transforms the splits into results.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.PreScan``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``0},``0)">
+            <summary>
+            Performs a pre-scan (exclusive prefix sum) on a sequence of elements.
+            </summary>
+            <remarks>
+            An exclusive prefix sum returns an equal-length sequence where the
+            N-th element is the sum of the first N-1 input elements (the first
+            element is a special case, it is set to the identity). More
+            generally, the pre-scan allows any commutative binary operation,
+            not just a sum.
+            The inclusive version of PreScan is <see cref="M:MoreLinq.MoreEnumerable.Scan``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``0})"/>.
+            This operator uses deferred execution and streams its result.
+            </remarks>
+            <example>
+            <code>
+            Func&lt;int, int, int&gt; plus = (a, b) =&gt; a + b;
+            int[] values = { 1, 2, 3, 4 };
+            IEnumerable&lt;int&gt; prescan = values.PreScan(plus, 0);
+            IEnumerable&lt;int&gt; scan = values.Scan(plus; a + b);
+            IEnumerable&lt;int&gt; result = values.ZipShortest(prescan, plus);
+            </code>
+            <c>prescan</c> will yield <c>{ 0, 1, 3, 6 }</c>, while <c>scan</c>
+            and <c>result</c> will both yield <c>{ 1, 3, 6, 10 }</c>. This
+            shows the relationship between the inclusive and exclusive prefix sum.
+            </example>
+            <typeparam name="TSource">Type of elements in source sequence</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="transformation">Transformation operation</param>
+            <param name="identity">Identity element (see remarks)</param>
+            <returns>The scanned sequence</returns>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Pairwise``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``0,``1})">
+            <summary>
+            Returns a sequence resulting from applying a function to each 
+            element in the source sequence and its 
+            predecessor, with the exception of the first element which is 
+            only returned as the predecessor of the second element.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+            <typeparam name="TResult">The type of the element of the returned sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="resultSelector">A transform function to apply to 
+            each pair of sequence.</param>
+            <returns>
+            Returns the resulting sequence.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 123, 456, 789 };
+            IEnumerable&lt;int&gt; result = numbers.Pairwise(5, (a, b) => a + b);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 
+            579 and 1245, in turn.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Pad``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Pads a sequence with default values if it is narrower (shorter 
+            in length) than a given width.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+            <param name="source">The sequence to pad.</param>
+            <param name="width">The width/length below which to pad.</param>
+            <returns>
+            Returns a sequence that is at least as wide/long as the width/length
+            specified by the <paramref name="width"/> parameter.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 123, 456, 789 };
+            IEnumerable&lt;int&gt; result = numbers.Pad(5);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 
+            123, 456, 789 and two zeroes, in turn.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Pad``1(System.Collections.Generic.IEnumerable{``0},System.Int32,``0)">
+            <summary>
+            Pads a sequence with a given filler value if it is narrower (shorter 
+            in length) than a given width.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+            <param name="source">The sequence to pad.</param>
+            <param name="width">The width/length below which to pad.</param>
+            <param name="padding">The value to use for padding.</param>
+            <returns>
+            Returns a sequence that is at least as wide/long as the width/length
+            specified by the <paramref name="width"/> parameter.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 123, 456, 789 };
+            IEnumerable&lt;int&gt; result = numbers.Pad(5, -1);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 
+            123, 456, and 789 followed by two occurrences of -1, in turn.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Pad``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Int32,``0})">
+            <summary>
+            Pads a sequence with a dynamic filler value if it is narrower (shorter 
+            in length) than a given width.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+            <param name="source">The sequence to pad.</param>
+            <param name="width">The width/length below which to pad.</param>
+            <param name="paddingSelector">Function to calculate padding.</param>
+            <returns>
+            Returns a sequence that is at least as wide/long as the width/length
+            specified by the <paramref name="width"/> parameter.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <example>
+            <code>
+            int[] numbers = { 0, 1, 2 };
+            IEnumerable&lt;int&gt; result = numbers.Pad(5, i => -i);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 
+            0, 1, 2, -3 and -4, in turn.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.Prepend``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+            Prepends a single value to a sequence.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+            <param name="source">The sequence to prepend to.</param>
+            <param name="value">The value to prepend.</param>
+            <returns>
+            Returns a sequence where a value is prepended to it.
+            </returns>
+            <remarks>
+            This operator uses deferred execution and streams its results.
+            </remarks>
+            <code>
+            int[] numbers = { 1, 2, 3 };
+            IEnumerable&lt;int&gt; result = numbers.Prepend(0);
+            </code>
+            The <c>result</c> variable, when iterated over, will yield 
+            0, 1, 2 and 3, in turn.
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.MinBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the minimal element of the given sequence, based on
+            the given projection.
+            </summary>
+            <remarks>
+            If more than one element has the minimal projected value, the first
+            one encountered will be returned. This overload uses the default comparer
+            for the projected type. This operator uses immediate execution, but
+            only buffers a single result (the current minimal element).
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <typeparam name="TKey">Type of the projected element</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="selector">Selector to use to pick the results to compare</param>
+            <returns>The minimal element, according to the projection.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null</exception>
+            <exception cref="T:System.InvalidOperationException"><paramref name="source"/> is empty</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.MinBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IComparer{``1})">
+            <summary>
+            Returns the minimal element of the given sequence, based on
+            the given projection and the specified comparer for projected values.
+            </summary>
+            <remarks>
+            If more than one element has the minimal projected value, the first
+            one encountered will be returned. This overload uses the default comparer
+            for the projected type. This operator uses immediate execution, but
+            only buffers a single result (the current minimal element).
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <typeparam name="TKey">Type of the projected element</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="selector">Selector to use to pick the results to compare</param>
+            <param name="comparer">Comparer to use to compare projected values</param>
+            <returns>The minimal element, according to the projection.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/>, <paramref name="selector"/> 
+            or <paramref name="comparer"/> is null</exception>
+            <exception cref="T:System.InvalidOperationException"><paramref name="source"/> is empty</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.MaxBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the maximal element of the given sequence, based on
+            the given projection.
+            </summary>
+            <remarks>
+            If more than one element has the maximal projected value, the first
+            one encountered will be returned. This overload uses the default comparer
+            for the projected type. This operator uses immediate execution, but
+            only buffers a single result (the current maximal element).
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <typeparam name="TKey">Type of the projected element</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="selector">Selector to use to pick the results to compare</param>
+            <returns>The maximal element, according to the projection.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/> or <paramref name="selector"/> is null</exception>
+            <exception cref="T:System.InvalidOperationException"><paramref name="source"/> is empty</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.MaxBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IComparer{``1})">
+            <summary>
+            Returns the maximal element of the given sequence, based on
+            the given projection and the specified comparer for projected values. 
+            </summary>
+            <remarks>
+            If more than one element has the maximal projected value, the first
+            one encountered will be returned. This overload uses the default comparer
+            for the projected type. This operator uses immediate execution, but
+            only buffers a single result (the current maximal element).
+            </remarks>
+            <typeparam name="TSource">Type of the source sequence</typeparam>
+            <typeparam name="TKey">Type of the projected element</typeparam>
+            <param name="source">Source sequence</param>
+            <param name="selector">Selector to use to pick the results to compare</param>
+            <param name="comparer">Comparer to use to compare projected values</param>
+            <returns>The maximal element, according to the projection.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="source"/>, <paramref name="selector"/> 
+            or <paramref name="comparer"/> is null</exception>
+            <exception cref="T:System.InvalidOperationException"><paramref name="source"/> is empty</exception>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.SingleOrFallback``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0})">
+            <summary>
+            Returns the single element in the given sequence, or the result
+            of executing a fallback delegate if the sequence is empty.
+            This method throws an exception if there is more than one element in the sequence.
+            </summary>
+            <remarks>
+            The fallback delegate is not executed if the sequence is non-empty.
+            This operator uses immediate execution and has optimizations for <see cref="T:System.Collections.Generic.IList`1"/> sources.
+            </remarks>
+            <typeparam name="TSource">Element type of sequence</typeparam>
+            <param name="source">The source sequence</param>
+            <param name="fallback">The fallback delegate to execute if the sequence is empty</param>
+            <exception cref="T:System.ArgumentNullException">source or fallback is null</exception>
+            <exception cref="T:System.InvalidOperationException">The sequence has more than one element</exception>
+            <returns>The single element in the sequence, or the result of calling the
+            fallback delegate if the sequence is empty.</returns>
+            <example>
+            <code>
+            var numbers = { 123, 456, 789 };
+            var result = numbers.Where(x =&gt; x == 100).SingleOrFallback(() =&gt; -1);
+            </code>
+            The <c>result</c> variable will contain <c>-1</c>.
+            </example>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Creates a delimited string from a sequence of values. The 
+            delimiter used depends on the current culture of the executing thread.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <typeparam name="TSource">Type of element in the source sequence</typeparam>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.ToDelimitedString``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Creates a delimited string from a sequence of values and
+            a given delimiter.
+            </summary>
+            <remarks>
+            This operator uses immediate execution and effectively buffers the sequence.
+            </remarks>
+            <typeparam name="TSource">Type of element in the source sequence</typeparam>
+            <param name="source">The sequence of items to delimit. Each is converted to a string using the
+            simple ToString() conversion.</param>
+            <param name="delimiter">The delimiter to inject between elements. May be null, in which case
+            the executing thread's current culture's list separator is used.</param>
+        </member>
+        <member name="T:MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy">
+            <summary>
+            Defines the strategies available when Interleave is passed sequences of unequal length
+            </summary>
+        </member>
+        <member name="F:MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy.Pad">
+            <summary>
+            Extends a sequence by padding its tail with default(T)
+            </summary>
+        </member>
+        <member name="F:MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy.Skip">
+            <summary>
+            Removes the sequence from the interleave set, and continues interleaving remaining sequences.
+            </summary>
+        </member>
+        <member name="F:MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy.Stop">
+            <summary>
+            Stops the interleave operation.
+            </summary>
+        </member>
+        <member name="T:MoreLinq.MoreEnumerable.PartitionInstruction">
+            <summary>
+            Indicates what to do with the current element when partitioning a sequence.
+            </summary>
+        </member>
+        <member name="F:MoreLinq.MoreEnumerable.PartitionInstruction.Yield">
+            <summary>
+            Adds the item to the current partition and then yields the partition.
+            A new partition is opened afterwards.
+            </summary>
+        </member>
+        <member name="F:MoreLinq.MoreEnumerable.PartitionInstruction.Fill">
+            <summary>
+            Adds the item to the current partition.
+            </summary>
+        </member>
+        <member name="T:MoreLinq.MoreEnumerable.PermutationEnumerator`1">
+            <summary>
+            The private implementation class that produces permutations of a sequence.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.PermutationEnumerator`1.NextPermutation">
+            <summary>
+            Transposes elements in the cached permutation array to produce the next permutation
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.PermutationEnumerator`1.PermuteValueSet">
+            <summary>
+            Creates a new list containing the values from the original
+            set in their new permuted order.
+            </summary>
+            <remarks>
+            The reason we return a new permuted value set, rather than reuse
+            an existing collection, is that we have no control over what the
+            consumer will do with the results produced. They could very easily
+            generate and store a set of permutations and only then begin to
+            process them. If we reused the same collection, the caller would
+            be surprised to discover that all of the permutations looked the
+            same.
+            </remarks>
+            <returns>List of permuted source sequence values</returns>
+        </member>
+        <member name="T:MoreLinq.MoreEnumerable.DisposableGroup`1">
+            <summary>
+            Class used to assist in ensuring that groups of disposable iterators
+            are disposed - either when Excluded or when the DisposableGroup is disposed.
+            </summary>
+        </member>
+        <member name="T:MoreLinq.MoreEnumerable.SubsetGenerator`1">
+            <summary>
+            This class is responsible for producing the lexographically ordered k-subsets
+            </summary>
+        </member>
+        <member name="M:MoreLinq.MoreEnumerable.SubsetGenerator`1.GetEnumerator">
+            <summary>
+            Returns an enumerator that produces all of the k-sized
+            subsets of the initial value set. The enumerator returns
+            and <see cref="T:System.Collections.Generic.IList`1"/> for each subset.
+            </summary>
+            <returns>an <see cref="T:System.Collections.IEnumerator"/> that enumerates all k-sized subsets</returns>
+        </member>
+        <member name="T:MoreLinq.MoreEnumerable.SubsetGenerator`1.SubsetEnumerator">
+            <summary>
+            SubsetEnumerator uses a snapshot of the original sequence, and an
+            iterative, reductive swap algorithm to produce all subsets of a
+            predetermined size less than or equal to the original set size.
+            </summary>
+        </member>
+        <member name="T:MoreLinq.OrderByDirection">
+            <summary>
+            Enumeration that defines values representing valid ordering directions for a sequence.
+            </summary>
+        </member>
+        <member name="F:MoreLinq.OrderByDirection.Ascending">
+            <summary>
+            Elements are ordered by increasing value
+            </summary>
+        </member>
+        <member name="F:MoreLinq.OrderByDirection.Descending">
+            <summary>
+            Elements are ordered by decreasing value
+            </summary>
+        </member>
+        <member name="T:MoreLinq.SequenceException">
+            <summary>
+            The exception that is thrown for a sequence that fails a condition.
+            </summary>
+        </member>
+        <member name="M:MoreLinq.SequenceException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MoreLinq.SequenceException"/> class. 
+            </summary>
+        </member>
+        <member name="M:MoreLinq.SequenceException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MoreLinq.SequenceException"/> class
+            with a given error message. 
+            </summary>
+            <param name="message">A message that describes the error.</param>
+        </member>
+        <member name="M:MoreLinq.SequenceException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MoreLinq.SequenceException"/> class
+            with a given error message and a reference to the inner exception
+            that is the cause of the exception.
+            </summary>
+            <param name="message">A message that describes the error.</param>
+            <param name="innerException">The exception that is the cause of the current exception.</param>
+        </member>
+        <member name="M:MoreLinq.SequenceException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MoreLinq.SequenceException"/> class
+            with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+    </members>
+</doc>

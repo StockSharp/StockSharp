@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Rithmic</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Rithmic.RithmicMessageAdapter">
+            <summary>
+            Адаптер сообщений для Rithmic.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.Rithmic.RithmicSessionHolder)">
+            <summary>
+            Создать <see cref="T:StockSharp.Rithmic.RithmicMessageAdapter"/>.
+            </summary>
+            <param name="type">Тип адаптера.</param>
+            <param name="sessionHolder">Контейнер для сессии.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.DisposeManaged">
+            <summary>
+            Освободить занятые ресурсы.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+            <summary>
+            Добавить <see cref="T:StockSharp.Messages.Message"/> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter"/>.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
+            Отправить сообщение.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="T:StockSharp.Rithmic.RithmicSessionHolder">
+            <summary>
+            Контейнер для сессии.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicSessionHolder.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Создать <see cref="T:StockSharp.Rithmic.RithmicSessionHolder"/>.
+            </summary>
+            <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicSessionHolder.CreateOrderCondition">
+            <summary>
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+            </summary>
+            <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicSessionHolder.CreateTransactionAdapter">
+            <summary>
+            Создать транзакционный адаптер.
+            </summary>
+            <returns>Транзакционный адаптер.</returns>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicSessionHolder.CreateMarketDataAdapter">
+            <summary>
+            Создать адаптер маркет-данных.
+            </summary>
+            <returns>Адаптер маркет-данных.</returns>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Загрузить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Сохранить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicSessionHolder.ToString">
+            <summary>
+            Получить строковое представление.
+            </summary>
+            <returns>Строковое представление.</returns>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.UserName">
+            <summary>
+            Логин.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.Password">
+            <summary>
+            Пароль.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.CertFile">
+            <summary>
+            Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.TransactionalUserName">
+            <summary>
+            Дополнительное имя пользователя. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.TransactionalPassword">
+            <summary>
+            Дополнительный пароль. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.LogFileName">
+            <summary>
+            Путь к лог файлу.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.Server">
+            <summary>
+            Тип сервера.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.AdminConnectionPoint">
+            <summary>
+            Точка подключения для административных функций (инициализация/деинициализация).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.MarketDataConnectionPoint">
+            <summary>
+            Точка подключения к рыночным данным.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.TransactionConnectionPoint">
+            <summary>
+            Точка подключения к системе исполнения транзакций.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.PositionConnectionPoint">
+            <summary>
+            Точка подключения для получения информации по портфелях и позициях.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.HistoricalConnectionPoint">
+            <summary>
+            Точка подключения для получения исторических данных.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.DomainServerAddress">
+            <summary>
+            Адрес домена.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.DomainName">
+            <summary>
+            Имя домена.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.LicenseServerAddress">
+            <summary>
+            Адрес сервера лицензий.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.LocalBrokerAddress">
+            <summary>
+            Адрес брокера.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.LoggerAddress">
+            <summary>
+            Адрес логгера.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicSessionHolder.TimeFrames">
+            <summary>
+            Доступные тайм-фреймы.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Rithmic.RithmicOrderCondition">
+            <summary>
+            Условия заявок, специфичных для <see cref="N:StockSharp.Rithmic"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicOrderCondition.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Rithmic.RithmicOrderCondition"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicOrderCondition.TriggerPrice">
+            <summary>
+            Цена активации, при достижении которой будет выставлена заявка.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Rithmic.RithmicServers">
+            <summary>
+            Типы серверов.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Rithmic.RithmicServers.Sim">
+            <summary>
+            Тестовый.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Rithmic.RithmicServers.Paper">
+            <summary>
+            На живых данных.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Rithmic.RithmicServers.Real">
+            <summary>
+            Реальное.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Rithmic.RithmicTrader">
+            <summary>
+            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector"/> для взаимодействия с системой Rithmic.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicTrader.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Rithmic.RithmicTrader"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicTrader.ChangePassword(StockSharp.Messages.MessageAdapterTypes,System.String)">
+            <summary>
+            Сменить пароль.
+            </summary>
+            <param name="adapterType">Тип адаптера, в который необходимо отправить сообщение о смене пароля.</param>
+            <param name="newPassword">Новый пароль.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
+            <summary>
+            Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
+            </summary>
+            <param name="series">Серия свечек.</param>
+            <returns>Временные диапазоны.</returns>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>
+            Подписаться на получение свечек.
+            </summary>
+            <param name="series">Серия свечек.</param>
+            <param name="from">Начальная дата, с которой необходимо получать данные.</param>
+            <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+            <summary>
+            Остановить подписку получения свечек, ранее созданную через <see cref="M:StockSharp.Algo.Candles.IExternalCandleSource.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
+            </summary>
+            <param name="series">Серия свечек.</param>
+        </member>
+        <member name="M:StockSharp.Rithmic.RithmicTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+            <summary>
+            Обработать сообщение, содержащее рыночные данные.
+            </summary>
+            <param name="message">Сообщение, содержащее рыночные данные.</param>
+            <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+            <param name="direction">Направление сообщения.</param>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicTrader.UserName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicTrader.Password">
+            <summary>
+            Пароль.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicTrader.CertFile">
+            <summary>
+            Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicTrader.Server">
+            <summary>
+            Тип сервера.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Rithmic.RithmicTrader.LogFileName">
+            <summary>
+            Путь к лог файлу.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Rithmic.RithmicTrader.NewCandles">
+            <summary>
+            Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Rithmic.Xaml.RithmicServerComboBox">
+            <summary>
+            Выпадающий список для выбора <see cref="T:StockSharp.Rithmic.RithmicServers"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.Xaml.RithmicServerComboBox.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Rithmic.Xaml.RithmicServerComboBox"/>.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Rithmic.Xaml.RithmicServerComboBox.SelectedServerProperty">
+            <summary>
+            <see cref="T:System.Windows.DependencyProperty"/> для <see cref="P:StockSharp.Rithmic.Xaml.RithmicServerComboBox.SelectedServer"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Rithmic.Xaml.RithmicServerComboBox.OnSelectionChanged(System.Windows.Controls.SelectionChangedEventArgs)">
+            <summary>
+            Обработчик события смены выбранного элемента.
+            </summary>
+            <param name="e">Параметр события.</param>
+        </member>
+        <member name="P:StockSharp.Rithmic.Xaml.RithmicServerComboBox.SelectedServer">
+            <summary>
+            Выбранный сервер.
+            </summary>
+        </member>
+    </members>
+</doc>

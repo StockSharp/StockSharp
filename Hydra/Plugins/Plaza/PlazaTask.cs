@@ -1,0 +1,256 @@
+namespace StockSharp.Hydra.Plaza
+{
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Linq;
+	using System.Net;
+	using System.Security;
+
+	using Ecng.Common;
+	using Ecng.Xaml;
+
+	using MoreLinq;
+
+	using StockSharp.Hydra.Core;
+	using StockSharp.Messages;
+	using StockSharp.Plaza;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Plaza.Xaml;
+	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+
+	[Category(TaskCategories.Russian)]
+	[TaskDisplayName(_sourceName)]
+	class PlazaTask : ConnectorHydraTask<PlazaTrader>
+	{
+		private const string _sourceName = "Plaza";
+
+		[TaskSettingsDisplayName(_sourceName)]
+		private sealed class PlazaSettings : ConnectorHydraTaskSettings
+		{
+			public PlazaSettings(HydraTaskSettings settings)
+				: base(settings)
+			{
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
+			[DescriptionLoc(LocalizedStrings.Str1445Key, true)]
+			[PropertyOrder(0)]
+			public string Login
+			{
+				get { return (string)ExtensionInfo["Login"]; }
+				set { ExtensionInfo["Login"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
+			[DescriptionLoc(LocalizedStrings.Str1448Key)]
+			[PropertyOrder(1)]
+			public SecureString Password
+			{
+				get { return ExtensionInfo["Password"].To<SecureString>(); }
+				set { ExtensionInfo["Password"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
+			[DescriptionLoc(LocalizedStrings.Str1668Key)]
+			[PropertyOrder(2)]
+			public EndPoint Address
+			{
+				get { return ExtensionInfo["Address"].To<EndPoint>(); }
+				set { ExtensionInfo["Address"] = value.To<string>(); }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str2595Key)]
+			[DescriptionLoc(LocalizedStrings.Str2596Key)]
+			[PropertyOrder(3)]
+			public string AppName
+			{
+				get { return (string)ExtensionInfo["AppName"]; }
+				set { ExtensionInfo["AppName"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayName("CGate")]
+			[DescriptionLoc(LocalizedStrings.Str2798Key)]
+			[PropertyOrder(4)]
+			public bool IsCGate
+			{
+				get { return (bool)ExtensionInfo["IsCGate"]; }
+				set { ExtensionInfo["IsCGate"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str3845Key)]
+			[DescriptionLoc(LocalizedStrings.Str2799Key)]
+			[PropertyOrder(5)]
+			public string CGateKey
+			{
+				get { return (string)ExtensionInfo["CGateKey"]; }
+				set { ExtensionInfo["CGateKey"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str2606Key)]
+			[DescriptionLoc(LocalizedStrings.Str2607Key)]
+			[PropertyOrder(6)]
+			[Editor(typeof(PlazaTableListComboBoxEditor), typeof(PlazaTableListComboBoxEditor))]
+			public IEnumerable<string> Tables
+			{
+				get { return (IEnumerable<string>)ExtensionInfo["Tables"]; }
+				set { ExtensionInfo["Tables"] = value.ToArray(); }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str2617Key)]
+			[DescriptionLoc(LocalizedStrings.Str2800Key)]
+			[PropertyOrder(7)]
+			public bool OnlySystemTrades
+			{
+				get { return (bool)ExtensionInfo["OnlySystemTrades"]; }
+				set { ExtensionInfo["OnlySystemTrades"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str2801Key)]
+			[DescriptionLoc(LocalizedStrings.Str2802Key)]
+			[PropertyOrder(7)]
+			public bool IsFastRepl
+			{
+				get { return (bool)ExtensionInfo["IsFastRepl"]; }
+				set { ExtensionInfo["IsFastRepl"] = value; }
+			}
+		}
+
+		private int _changesCount;
+		private PlazaSettings _settings;
+
+		private readonly Type[] _supportedMarketDataTypes = { typeof(Trade), typeof(MarketDepth), typeof(OrderLogItem), typeof(Level1ChangeMessage) };
+
+		/// <summary>
+		/// Поддерживаемые маркет-данные.
+		/// </summary>
+		public override IEnumerable<Type> SupportedMarketDataTypes
+		{
+			get { return _supportedMarketDataTypes; }
+		}
+
+		/// <summary>
+		/// Загрузить порцию данных и сохранить их в хранилище.
+		/// </summary>
+		protected override TimeSpan OnProcess()
+		{
+			var interval = base.OnProcess();
+
+			if (_changesCount++ > 100)
+				SaveRevisions();
+
+			return interval;
+		}
+
+		/// <summary>
+		/// Остановить загрузку данных.
+		/// </summary>
+		protected override void OnStopped()
+		{
+			SaveRevisions();
+			base.OnStopped();
+		}
+
+		private void SaveRevisions()
+		{
+			_changesCount = 0;
+			Connector.Connector.StreamManager.RevisionManager.SaveRevisions();
+		}
+
+		protected override MarketDataConnector<PlazaTrader> CreateTrader(HydraTaskSettings settings)
+		{
+			_settings = new PlazaSettings(settings);
+
+			if (settings.IsDefault)
+			{
+				using (var connector = new PlazaTrader())
+				{
+					_settings.AppName = "HYD";
+					_settings.Address = connector.Address;
+					_settings.Login = string.Empty;
+					_settings.Password = new SecureString();
+					_settings.IsCGate = false;
+					_settings.CGateKey = PlazaSessionHolder.DemoCGateKey;
+					_settings.OnlySystemTrades = true;
+					_settings.IsFastRepl = false;
+
+					var registry = connector.TableRegistry;
+					_settings.Tables = new[]
+					{
+						registry.CommonFuture,
+						registry.CommonOption,
+						registry.SessionContentsFuture,
+						registry.SessionContentsOption,
+						registry.TradeFuture,
+						registry.TradeOption,
+						registry.Session,
+						registry.Index,
+						registry.Volatility,
+						registry.Aggregation5Future,
+						registry.Aggregation5Option
+					}.Select(t => t.Id);
+				}
+			}
+
+			return new MarketDataConnector<PlazaTrader>(EntityRegistry.Securities, this, CreatePlazaTrader);
+		}
+
+		private PlazaTrader CreatePlazaTrader()
+		{
+			var connector = new PlazaTrader
+			{
+				Address = _settings.Address,
+				Login = _settings.Login,
+				Password = _settings.Password.To<string>(),
+				AppName = _settings.AppName,
+				IsCGate = _settings.IsCGate,
+				CGateKey = _settings.CGateKey,
+				OnlySystemTrades = _settings.OnlySystemTrades,
+			};
+
+			connector.TableRegistry.StreamRegistry.IsFastRepl = _settings.IsFastRepl;
+
+			connector.SyncTables(_settings.Tables);
+
+			// добавляем все возможные колонки во все таблицы
+			connector.Tables.ForEach(t => t.Metadata.AllColumns.ForEach(c => t.Columns.TryAdd(c)));
+
+			// выключение авто-сохранения. ревизии теперь будут сохраняться вручную
+			connector.StreamManager.RevisionManager.Interval = TimeSpan.Zero;
+
+			// включаем отслеживание ревизий для таблиц
+			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.IndexLog); //не прокачивается таблица
+			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.TradeFuture);
+			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.TradeOption);
+			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.AnonymousOrdersLog);
+
+			return connector;
+		}
+
+		public override Uri Icon
+		{
+			get { return "plaza_logo.png".GetResourceUrl(GetType()); }
+		}
+
+		public override string Description
+		{
+			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
+		}
+
+		public override HydraTaskSettings Settings
+		{
+			get { return _settings; }
+		}
+	}
+}

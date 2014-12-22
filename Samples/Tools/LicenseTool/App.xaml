@@ -1,0 +1,6 @@
+﻿<sx:BaseApplication x:Class="StockSharp.LicenseTool.App"
+					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sx="http://schemas.stocksharp.com/xaml"
+					StartupUri="MainWindow.xaml">
+</sx:BaseApplication>

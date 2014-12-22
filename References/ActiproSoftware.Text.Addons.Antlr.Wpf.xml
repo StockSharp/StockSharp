@@ -1,0 +1,76 @@
+<?xml version="1.0"?><doc><assembly><name>ActiproSoftware.Text.Addons.Antlr.Wpf</name></assembly><members><member name="T:ActiproSoftware.Products.Text.Addons.Antlr.Resources"><summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.Resources.ResourceManager"><summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.Resources.Culture"><summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.Resources.ExInvalidCoreLexerConstructor"><summary>
+              Looks up a localized string similar to The Type '{0}' specified for the core ANTLR lexer must have a constructor that takes a single Antlr.Runtime.ICharStream parameter..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.Resources.ExInvalidCoreLexerType"><summary>
+              Looks up a localized string similar to The Type '{0}' specified for the core ANTLR lexer must inherit Antlr.Runtime.Lexer..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.Resources.ExInvalidCoreParserConstructor"><summary>
+              Looks up a localized string similar to The Type '{0}' specified for the core ANTLR parser must have a constructor that takes a single Antlr.Runtime.ITokenStream parameter..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.Resources.ExInvalidCoreParserMethodName"><summary>
+              Looks up a localized string similar to The Type '{0}' specified for the core ANTLR parser does not have a public method '{1}' defined..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.Resources.ExInvalidCoreParserType"><summary>
+              Looks up a localized string similar to The Type '{0}' specified for the core ANTLR parser must inherit Antlr.Runtime.Parser..
+            </summary></member><member name="T:ActiproSoftware.Products.Text.Addons.Antlr.SR"><summary>
+            Provides access to the string resources of this assembly, also allowing for their customization.
+            </summary><remarks>
+            Call the <see cref="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.GetString(System.String)" /> method to return a resolved resource string.
+            If a custom string has been set for a specified string resource name, it will be returned.
+            Otherwise, the default string resource value is returned.
+            <para>
+            If any of the resource strings are customized via a call to <see cref="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.SetCustomString(System.String,System.String)" />,
+            it is best to do so before any other classes in this assembly are referenced,
+            such as in the application startup.
+            </para></remarks></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.ClearCustomStrings"><summary>
+            Removes all custom strings.
+            </summary></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.ContainsCustomString(System.String)"><summary>
+            Returns whether a custom string is defined for the specified string resource.
+            </summary><param name="name">The name of the resource for which to search.</param><returns><c>true</c> if a custom string is defined for the specified string resource; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.GetCustomString(System.String)"><summary>
+            Returns custom string that is stored for the specified string resource, if any.
+            </summary><param name="name">The name of the resource to get.</param><returns>The custom string that is stored for the specified string resource, if any.</returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.GetString(System.String)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.GetString(ActiproSoftware.Products.Text.Addons.Antlr.SRName)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.GetString(System.String,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.GetString(ActiproSoftware.Products.Text.Addons.Antlr.SRName,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.RemoveCustomString(System.String)"><summary>
+            Removes any custom string that is defined for the specified string resource.
+            </summary><param name="name">The name of the resource to remove.</param></member><member name="M:ActiproSoftware.Products.Text.Addons.Antlr.SR.SetCustomString(System.String,System.String)"><summary>
+            Sets a custom string value for the specified string resource.
+            </summary><param name="name">The name of the resource to set.</param><param name="value">The value of the resource to set.</param></member><member name="P:ActiproSoftware.Products.Text.Addons.Antlr.SR.ResourceManager"><summary>
+            Gets the <see cref="P:ActiproSoftware.Products.Text.Addons.Antlr.SR.ResourceManager" /> that provides the default resources. 
+            </summary><value>The <see cref="P:ActiproSoftware.Products.Text.Addons.Antlr.SR.ResourceManager" /> that provides the default resources.</value></member><member name="T:ActiproSoftware.Products.Text.Addons.Antlr.SRName"><summary>
+            Specifies the names of string resources for this assembly.
+            </summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Antlr.SRName.ExInvalidCoreLexerConstructor"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Antlr.SRName.ExInvalidCoreLexerType"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Antlr.SRName.ExInvalidCoreParserConstructor"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Antlr.SRName.ExInvalidCoreParserType"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Antlr.SRName.ExInvalidCoreParserMethodName"><summary>An exception message string.</summary></member><member name="T:ActiproSoftware.Text.Parsing.IAntlrParseData"><summary>
+            Provides the base requirements for a class that contains the results of an ANTLR parsing operation.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.IAntlrParseData.Ast"><summary>
+            Gets the <see cref="T:Antlr.Runtime.Tree.ITree" /> that contains the abstract syntax tree result.
+            </summary><value>The <see cref="T:Antlr.Runtime.Tree.ITree" /> that contains the abstract syntax tree result.</value></member><member name="T:ActiproSoftware.Text.Parsing.Implementation.AntlrParser"><summary>
+            Represents an <see cref="T:ActiproSoftware.Text.Parsing.IParser" /> (syntax/semantic analyzer) implementation that can be used to call an ANTLR parser.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.Implementation.AntlrParser.Parse(ActiproSoftware.Text.Parsing.IParseRequest)"><summary>
+            Performs a parsing operation using the parameters specified in the supplied <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" />
+            and returns the resulting parse data.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><returns>An <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> that is the result of the parsing operation.</returns><remarks>
+            A <see cref="T:ActiproSoftware.Text.Parsing.IParseRequestDispatcher" /> typically calls this method when a queued parse request is ready to be processed.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.Implementation.AntlrParser.#ctor(System.String,System.Type,System.Type,System.String)"><summary>
+            Initializes a new instance of the <c>AntlrParser</c> class.
+            </summary><param name="key">A string that identifies the parser.</param><param name="coreLexerType">The <see cref="T:System.Type" /> of core ANTLR lexer that should be used.  This is the lexer <see cref="T:System.Type" /> generated by ANTLR.</param><param name="coreParserType">The <see cref="T:System.Type" /> of core ANTLR parser that should be used.  This is the parser <see cref="T:System.Type" /> generated by ANTLR.</param><param name="defaultParserMethodName">The default parser method to call.  This is the same as the name of the root rule in your ANTLR grammar.</param></member></members></doc>

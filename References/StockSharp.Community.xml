@@ -1,0 +1,1391 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Community</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Community.AuthenticationClient">
+            <summary>
+            Клиент для доступа к сервису авторизации StockSharp.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.BaseServiceClient`1">
+            <summary>
+            Базовый клиент для доступа к WCFсервисам.
+            </summary>
+            <typeparam name="TService">Тип WCF сервиса.</typeparam>
+        </member>
+        <member name="M:StockSharp.Community.BaseServiceClient`1.#ctor(System.Uri,System.String,System.Boolean)">
+            <summary>
+            Инициализировать <see cref="T:StockSharp.Community.BaseCommunityClient`1"/>.
+            </summary>
+            <param name="address">Адрес сервера.</param>
+            <param name="endpointName">Название точки доступа в конфиг-файле.</param>
+            <param name="hasCallbacks">Имеет ли <typeparamref name="TService"/> события.</param>
+        </member>
+        <member name="M:StockSharp.Community.BaseServiceClient`1.CreateChannel">
+            <summary>
+            Создать WCF канал.
+            </summary>
+            <returns>WCF канал.</returns>
+        </member>
+        <member name="M:StockSharp.Community.BaseServiceClient`1.Connect">
+            <summary>
+            Подключиться. Соединение устанавливается автоматически при обращении к методам <see cref="M:StockSharp.Community.BaseServiceClient`1.Invoke(System.Action{`0})"/> или <see cref="M:StockSharp.Community.BaseServiceClient`1.Invoke``1(System.Func{`0,``0})"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.BaseServiceClient`1.OnConnect">
+            <summary>
+            Подключиться.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.BaseServiceClient`1.Invoke``1(System.Func{`0,``0})">
+            <summary>
+            Вызвать метод сервиса <typeparamref name="TService"/>.
+            </summary>
+            <typeparam name="TResult">Тип результата, возвращающий метод сервиса.</typeparam>
+            <param name="handler">Обработчик, в котором вызывает метод.</param>
+            <returns>Результат, возвращающий метод сервиса.</returns>
+        </member>
+        <member name="M:StockSharp.Community.BaseServiceClient`1.Invoke(System.Action{`0})">
+            <summary>
+            Вызвать метод сервиса <typeparamref name="TService"/>.
+            </summary>
+            <param name="handler">Обработчик, в котором вызывает метод.</param>
+        </member>
+        <member name="M:StockSharp.Community.BaseServiceClient`1.DisposeManaged">
+            <summary>
+            Освободить занятые ресурсы.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.BaseServiceClient`1.Address">
+            <summary>
+            Адрес сервера.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.BaseServiceClient`1.IsConnected">
+            <summary>
+            Было ли установлено подключение.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.AuthenticationClient.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.AuthenticationClient"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.AuthenticationClient.#ctor(System.Uri)">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.AuthenticationClient"/>.
+            </summary>
+            <param name="address">Адрес сервиса.</param>
+        </member>
+        <member name="M:StockSharp.Community.AuthenticationClient.Login">
+            <summary>
+            Произвести вхов в систему.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.AuthenticationClient.Login(System.String,System.String)">
+            <summary>
+            Произвести вхов в систему.
+            </summary>
+            <param name="login">Логин.</param>
+            <param name="password">Пароль.</param>
+        </member>
+        <member name="M:StockSharp.Community.AuthenticationClient.Logout">
+            <summary>
+            Выйти из системы.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.AuthenticationClient.GetId(System.Guid)">
+            <summary>
+            Получить идентификатор пользователя.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Идентификатор пользователя.</returns>
+        </member>
+        <member name="M:StockSharp.Community.AuthenticationClient.DisposeManaged">
+            <summary>
+            Освободить занятые ресурсы.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.AuthenticationClient.Instance">
+            <summary>
+            Общий клиент авторизации для всего приложения.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.AuthenticationClient.Credentials">
+            <summary>
+            Информация о логине и пароле для доступа к StockSharp.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.AuthenticationClient.IsLoggedIn">
+            <summary>
+            Прошел ли успешно авторизацию клиент.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.AuthenticationClient.SessionId">
+            <summary>
+            Идентификатор сессии.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.BaseCommunityClient`1">
+            <summary>
+            Базовый клиент для доступа к сервисам StockSharp.
+            </summary>
+            <typeparam name="TService">Тип WCF сервиса.</typeparam>
+        </member>
+        <member name="M:StockSharp.Community.BaseCommunityClient`1.#ctor(System.Uri,System.String,System.Boolean)">
+            <summary>
+            Инициализировать <see cref="T:StockSharp.Community.BaseCommunityClient`1"/>.
+            </summary>
+            <param name="address">Адрес сервера.</param>
+            <param name="endpointName">Название точки доступа в конфиг-файле.</param>
+            <param name="hasCallbacks">Имеет ли <typeparamref name="TService"/> события.</param>
+        </member>
+        <member name="P:StockSharp.Community.BaseCommunityClient`1.SessionId">
+            <summary>
+            Идентификатор сессии, полученный из <see cref="M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.BaseCommunityClient`1.UserId">
+            <summary>
+            Идентификатор пользователя для <see cref="P:StockSharp.Community.BaseCommunityClient`1.SessionId"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.ChatClient">
+            <summary>
+            Клиент для доступа к <see cref="T:StockSharp.Community.IChatService"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.IChatServiceCallback">
+            <summary>
+            Интерфейс, описывающий обратную связь сервиса <see cref="T:StockSharp.Community.IChatService"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.MessageCreated(StockSharp.Community.ChatMessage)">
+            <summary>
+            Новое сообщение.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.MessageUpdated(StockSharp.Community.ChatMessage)">
+            <summary>
+            Сообщение обновлено.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.MessageDeleted(System.Int64)">
+            <summary>
+            Сообщение удалено.
+            </summary>
+            <param name="messageId">Идентификатор сообщения.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.RoomCreated(StockSharp.Community.ChatRoom)">
+            <summary>
+            Комната создана.
+            </summary>
+            <param name="room">Комната.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.RoomDeleted(System.Int64)">
+            <summary>
+            Комната удалена.
+            </summary>
+            <param name="roomId">Идентификатор комнаты.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.RoomUpdated(StockSharp.Community.ChatRoom)">
+            <summary>
+            Комната обновлена.
+            </summary>
+            <param name="room">Комната.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.LoggedIn(System.Int64)">
+            <summary>
+            Пользователь вошел в чат.
+            </summary>
+            <param name="userId">Идентификатор пользователя.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.LoggedOut(System.Int64)">
+            <summary>
+            Пользователь вышел из чата.
+            </summary>
+            <param name="userId">Идентификатор пользователя.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.JoinSended(System.Int64)">
+            <summary>
+            Новая заявка на участие. Отправляется владельцу комнаты.
+            </summary>
+            <param name="joinId">Идентификатор заявки.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.JoinAccepted(System.Int64)">
+            <summary>
+            Заявка удовлетворена. Отправляется тому пользователю, кто послал сообщение через <see cref="M:StockSharp.Community.IChatService.Join(System.Guid,StockSharp.Community.ChatJoin)"/>.
+            </summary>
+            <param name="joinId">Идентификатор заявки.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.JoinRejected(System.Int64,StockSharp.Community.ChatJoin)">
+            <summary>
+            Заявка отклонена. Отправляется тому пользователю, кто послал сообщение через <see cref="M:StockSharp.Community.IChatService.Join(System.Guid,StockSharp.Community.ChatJoin)"/>.
+            </summary>
+            <param name="originalJoinId">Идентификатор заявки на присоединение.</param>
+            <param name="join">Ответ на заявку.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.AuthorAdded(System.Int64,System.Int64,System.Nullable{System.Int64})">
+            <summary>
+            Добавлен новый пользователь в комнату.
+            </summary>
+            <param name="userId">Идентификатор пользователя.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+            <param name="addedBy">Идентификатор пользователя, добавивший нового автора.
+            Значение равно null, если пользователь добавился самостоятельно в публичную комнату.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatServiceCallback.AuthorDeleted(System.Int64,System.Int64,System.Nullable{System.Int64})">
+            <summary>
+            Пользователь удален из комнаты.
+            </summary>
+            <param name="userId">Идентификатор пользователя.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+            <param name="deletedBy">Идентификатор пользователя, удалившего автора.
+            Значение равно null, если пользователь самостоятельно вышел из комнаты.</param>
+        </member>
+        <member name="F:StockSharp.Community.ChatClient.MaxBodySize">
+            <summary>
+            Максимальный размер сообщений, который можно отправить в чат.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.ChatClient"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.#ctor(System.Uri)">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.ChatClient"/>.
+            </summary>
+            <param name="address">Адрес сервера.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.CreateChannel">
+            <summary>
+            Создать WCF канал.
+            </summary>
+            <returns>WCF канал.</returns>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.Connect">
+            <summary>
+            Подключиться.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.GetAuthors(StockSharp.Community.ChatRoom)">
+            <summary>
+            Получить информацию о пользователях в комнате.
+            </summary>
+            <param name="room">Комната.</param>
+            <returns>Пользователи.</returns>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.SendMessage(StockSharp.Community.ChatRoom,System.String)">
+            <summary>
+            Отправить сообщение в комнату.
+            </summary>
+            <param name="room">Комната.</param>
+            <param name="body">Сообщение.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.SendMessage(StockSharp.Community.ChatMessage)">
+            <summary>
+            Отправить сообщение в комнату.
+            </summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.UpdateMessage(StockSharp.Community.ChatMessage,System.String)">
+            <summary>
+            Обновить сообщение в комнате.
+            </summary>
+            <param name="message">Сообщение.</param>
+            <param name="body">Новое тело сообщения.</param>
+            <returns><see langword="true"/>, если сообщение было обновлено, false, если сообщение устарело и его нельзя менять.</returns>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.Join(StockSharp.Community.ChatJoin)">
+            <summary>
+            Отправить заявку на присоединение.
+            </summary>
+            <param name="join">Заявка.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.Leave(StockSharp.Community.ChatRoom)">
+            <summary>
+            Покинуть комнату.
+            </summary>
+            <param name="room">Комната.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.Accept(StockSharp.Community.ChatJoin)">
+            <summary>
+            Удовлетворить заявку.
+            </summary>
+            <param name="join">Заявка.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.Reject(StockSharp.Community.ChatJoin,StockSharp.Community.ChatJoin)">
+            <summary>
+            Отклонить заявку.
+            </summary>
+            <param name="request">Заявка на присоединение.</param>
+            <param name="response">Ответ на заявку.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.CreateRoom(StockSharp.Community.ChatRoom)">
+            <summary>
+            Создать комнату.
+            </summary>
+            <param name="room">Комната.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.UpdateRoom(StockSharp.Community.ChatRoom)">
+            <summary>
+            Обновить детали комнаты.
+            </summary>
+            <param name="room">Комната.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.DeleteRoom(StockSharp.Community.ChatRoom)">
+            <summary>
+            Удалить комнату.
+            </summary>
+            <param name="room">Комната.</param>
+        </member>
+        <member name="M:StockSharp.Community.ChatClient.GetUser(System.Int64)">
+            <summary>
+            Получить информацию о пользователе.
+            </summary>
+            <param name="userId">Идентификатор пользователя.</param>
+            <returns>Информация о пользователе.</returns>
+        </member>
+        <member name="P:StockSharp.Community.ChatClient.AllRooms">
+            <summary>
+            Все комнаты.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatClient.GrantedRooms">
+            <summary>
+            Комнаты, к которым предоставлен доступ.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatClient.AvaitingJoins">
+            <summary>
+            Заявки на присоединение от других пользователей, которые ожидают удовлетворения или отмены.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatClient.MyJoins">
+            <summary>
+            Собственные заявки на присоединение, которые ожидают удовлетворения или отмены.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.MessageCreated">
+            <summary>
+            Новое сообщение.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.MessageUpdated">
+            <summary>
+            Сообщение обновлено.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.MessageDeleted">
+            <summary>
+            Сообщение удалено.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.RoomCreated">
+            <summary>
+            Комната создана.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.RoomUpdated">
+            <summary>
+            Комната обновлена.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.RoomDeleted">
+            <summary>
+            Комната удалена.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.LoggedIn">
+            <summary>
+            Пользователь вошел в чат.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.LoggedOut">
+            <summary>
+            Пользователь вышел из чата.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.JoinSended">
+            <summary>
+            Новая заявка на участие.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.JoinAccepted">
+            <summary>
+            Заявка удовлетворена.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.JoinRejected">
+            <summary>
+            Заявка отклонена.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.AuthorAdded">
+            <summary>
+            Добавлен новый пользователь в комнату.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Community.ChatClient.AuthorDeleted">
+            <summary>
+            Пользователь удален из комнаты.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.ChatJoin">
+            <summary>
+            Заявка на присоединение к чату.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.ChatMessage">
+            <summary>
+            Сообщение.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatMessage.Id">
+            <summary>
+            Идентификатор.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatMessage.AuthorId">
+            <summary>
+            Идентификатор автора.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatMessage.CreationDate">
+            <summary>
+            Дата создания.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatMessage.Body">
+            <summary>
+            Тело сообщения.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatMessage.RoomId">
+            <summary>
+            Идентификатор комнаты.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.ChatRoom">
+            <summary>
+            Комната.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatRoom.Id">
+            <summary>
+            Идентификатор.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatRoom.Name">
+            <summary>
+            Название.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatRoom.Description">
+            <summary>
+            Описание комнаты.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatRoom.IsEveryOne">
+            <summary>
+            Доступна ли для всех или требуется подтверждение.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatRoom.ParentRoomId">
+            <summary>
+            Идентификатор родительской комнаты.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ChatRoom.CreationDate">
+            <summary>
+            Дата создания.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.DocPageContent">
+            <summary>
+            Контент страницы документации.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.DocPageContent.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.DocPageContent"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.DocPageContent.Title">
+            <summary>
+            Заголовок.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.DocPageContent.Body">
+            <summary>
+            Тело.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.DocPage">
+            <summary>
+            Страница документации.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.DocPage.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.DocPage"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.DocPage.RussianContent">
+            <summary>
+            Контент на русском языке.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.DocPage.EnglishContent">
+            <summary>
+            Контент на английском языке.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.DocPage.Url">
+            <summary>
+            Строка запроса.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.DocPage.HasChild">
+            <summary>
+            Признак наличия дочерних страниц.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.CommunityAuthorization">
+            <summary>
+            Модуль проверки доступа соединения, основанный на <see cref="T:StockSharp.Community.IAuthenticationService"/> авторизации.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.CommunityAuthorization.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.CommunityAuthorization"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.CommunityAuthorization.ValidateCredentials(System.String,System.String)">
+            <summary>
+            Проверить логин и пароль на правильность.
+            </summary>
+            <param name="login">Логин.</param>
+            <param name="password">Пароль.</param>
+            <returns>Идентификатор сессии.</returns>
+        </member>
+        <member name="T:StockSharp.Community.FileClient">
+            <summary>
+            Клиент для доступа к сервису работы с файлами и документами.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.FileClient.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.FileClient"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.FileClient.#ctor(System.Uri)">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.FileClient"/>.
+            </summary>
+            <param name="address">Адрес сервиса.</param>
+        </member>
+        <member name="M:StockSharp.Community.FileClient.Upload(System.String,System.Byte[])">
+            <summary>
+            Выложить на сайт файл.
+            </summary>
+            <param name="fileName">Имя файла.</param>
+            <param name="body">Тело файла.</param>
+            <returns>Ссылка на выложенный файл.</returns>
+        </member>
+        <member name="T:StockSharp.Community.IChatService">
+            <summary>
+            Интерфейс, описывающий сервис чата.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetUser(System.Guid,System.Int64)">
+            <summary>
+            Получить информацию о пользователе по его идентификатору.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="userId">Идентификатор пользователя.</param>
+            <returns>Информация о пользователе.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetUsers(System.Guid,System.Int64[])">
+            <summary>
+            Получить информацию о пользователях по их идентификаторам.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="userIds">Идентификаторы пользователей.</param>
+            <returns>Информация о пользователях.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetJoin(System.Guid,System.Int64)">
+            <summary>
+            Получить информацию о пользователе по его идентификатору.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="joinId">Идентификатор заявки.</param>
+            <returns>Информация о заявке.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetRooms(System.Guid)">
+            <summary>
+            Получить информацию о комнатах.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Информация о комнатах.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetJoinedRooms(System.Guid)">
+            <summary>
+            Получить идентификаторы комнат, к которым предоставлен доступ.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Идентификаторы комнат.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetAuthors(System.Guid,System.Int64)">
+            <summary>
+            Получить идентификаторы пользователей в комнате.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+            <returns>Идентификаторы пользователей.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.Subscribe(System.Guid,System.Int64)">
+            <summary>
+            Подписаться на новые сообщения.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.CreateRoom(System.Guid,StockSharp.Community.ChatRoom)">
+            <summary>
+            Создать комнату.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="room">Комната.</param>
+            <returns>Идентификатор комнаты.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.DeleteRoom(System.Guid,System.Int64)">
+            <summary>
+            Удалить комнату.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.UpdateRoom(System.Guid,StockSharp.Community.ChatRoom)">
+            <summary>
+            Обновить детали комнаты.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="room">Комната.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.SendMessage(System.Guid,System.Int64,System.String)">
+            <summary>
+            Отправить сообщение в комнату.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+            <param name="body">Тело сообщения.</param>
+            <returns>Идентификатор сообщения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.UpdateMessage(System.Guid,System.Int64,System.String)">
+            <summary>
+            Обновить сообщение в комнате.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="messageId">Идентификатор сообщения.</param>
+            <param name="body">Новое тело сообщения.</param>
+            <returns><see langword="true"/>, если сообщение было обновлено, false, если сообщение устарело и его нельзя менять.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.DeleteMessage(System.Guid,System.Int64)">
+            <summary>
+            Удалить сообщение.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="messageId">Идентификатор сообщения.</param>
+            <returns><see langword="true"/>, если сообщение было обновлено, false, если сообщение устарело и его нельзя удалять.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.Join(System.Guid,StockSharp.Community.ChatJoin)">
+            <summary>
+            Отправить заявку на присоединение.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="join">Заявка.</param>
+            <returns>Идентификатор заявки.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.Leave(System.Guid,System.Int64)">
+            <summary>
+            Покинуть комнату.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.Accept(System.Guid,System.Int64)">
+            <summary>
+            Удовлетворить заявку.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="joinId">Идентификатор заявки.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.Reject(System.Guid,System.Int64,StockSharp.Community.ChatJoin)">
+            <summary>
+            Отклонить заявку.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="originalJoinId">Идентификатор заявки на присоединение.</param>
+            <param name="join">Ответ на заявку.</param>
+            <returns>Идентификатор заявки.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.DeleteAuthor(System.Guid,System.Int64,System.Int64)">
+            <summary>
+            Удалить пользователя из комнаты.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="roomId">Идентификатор комнаты.</param>
+            <param name="userId">Идентификатор пользователя.</param>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetAvatingJoins(System.Guid)">
+            <summary>
+            Получить идентификаторы заявок на присоединение от других пользователей, которые ожидают удовлетворения или отмены.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Идентификаторы заявок.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IChatService.GetMyJoins(System.Guid)">
+            <summary>
+            Получить идентификаторы собственных заявок на присоединение, которые ожидают удовлетворения или отмены.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Идентификаторы заявок.</returns>
+        </member>
+        <member name="T:StockSharp.Community.IAuthenticationService">
+            <summary>
+            Интерфейс, описывающий сервис авторизации.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)">
+            <summary>
+            Произвести вхов в систему.
+            </summary>
+            <param name="login">Логин.</param>
+            <param name="password">Пароль.</param>
+            <returns>Идентификатор сессии.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IAuthenticationService.Logout(System.Guid)">
+            <summary>
+            Выйти из системы.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+        </member>
+        <member name="M:StockSharp.Community.IAuthenticationService.GetId(System.Guid)">
+            <summary>
+            Получить идентификатор пользователя.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Идентификатор пользователя.</returns>
+        </member>
+        <member name="T:StockSharp.Community.IDocService">
+            <summary>
+            Интерфейс, описывающий сервис документации.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IDocService.GetChildPages(System.String)">
+            <summary>
+            Получить дочерние страницы.
+            </summary>
+            <param name="parentUrl">Строка запроса родительской страницы.</param>
+            <returns>Дочерние страницы. Если страниц нет, то будет возвращено null.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IDocService.GetContentBody(System.String)">
+            <summary>
+            Получить тело страницы.
+            </summary>
+            <param name="url">Строка запроса страницы.</param>
+            <returns>Тело страницы.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IDocService.Upload(System.Guid,StockSharp.Community.DocPage[])">
+            <summary>
+            Загрузить новую документацию.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="pages">Новые страницы документации.</param>
+        </member>
+        <member name="T:StockSharp.Community.IFileService">
+            <summary>
+            Интерфейс, описывающий сервис работы с файлами и документами.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IFileService.Upload(System.Guid,System.String,System.Byte[])">
+            <summary>
+            Выложить на сайт файл.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="fileName">Имя файла.</param>
+            <param name="body">Тело файла.</param>
+            <returns>Ссылка на выложенный файл.</returns>
+        </member>
+        <member name="T:StockSharp.Community.INotificationService">
+            <summary>
+            Интерфейс к сервису отправки уведомлений на телефон или почту.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.INotificationService.GetSmsCount(System.Guid)">
+            <summary>
+            Получить доступное количество SMS-сообщений.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Доступное количество SMS-сообщений.</returns>
+        </member>
+        <member name="M:StockSharp.Community.INotificationService.GetEmailCount(System.Guid)">
+            <summary>
+            Получить доступное количество email-сообщений.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Доступное количество email-сообщений.</returns>
+        </member>
+        <member name="M:StockSharp.Community.INotificationService.SendSms(System.Guid,System.String)">
+            <summary>
+            Послать SMS-сообщение.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="message">Тело сообщения.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.INotificationService.SendEmail(System.Guid,System.String,System.String)">
+            <summary>
+            Послать email-сообщение.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="caption">Заголовок сообщения.</param>
+            <param name="message">Тело сообщения.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="T:StockSharp.Community.Profile">
+            <summary>
+            Информация о профиле.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.Login">
+            <summary>
+            Логин.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.Password">
+            <summary>
+            Пароль (не заполняется при получении с сервера).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.Email">
+            <summary>
+            Адрес электронной почты.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.Phone">
+            <summary>
+            Номер телефона.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.Homepage">
+            <summary>
+            Сайт.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.Skype">
+            <summary>
+            Skype.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.City">
+            <summary>
+            Город.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.Gender">
+            <summary>
+            Пол.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.Profile.IsSubscription">
+            <summary>
+            Включена ли рассылка.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.IProfileService">
+            <summary>
+            Интерфейс, описывающий сервис регистрации.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.CreateProfile(StockSharp.Community.Profile)">
+            <summary>
+            Начать процедуру регистрации.
+            </summary>
+            <param name="profile">Информация о профиле.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.SendEmail(System.String,System.String)">
+            <summary>
+            Отправить на электронную почту письмо.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.ValidateEmail(System.String,System.String,System.String)">
+            <summary>
+            Подтвердить адрес электронной почты.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+            <param name="emailCode">Email код подтверждения.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.SendSms(System.String,System.String,System.String)">
+            <summary>
+            Отправить SMS.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+            <param name="phone">Номер телефона.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.ValidatePhone(System.String,System.String,System.String)">
+            <summary>
+            Подтвердить телефон.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+            <param name="smsCode">SMS код подтверждения.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.UpdateProfile(System.Guid,StockSharp.Community.Profile)">
+            <summary>
+            Получить данные профиля.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="profile">Информация о профиле.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.GetProfile(System.Guid)">
+            <summary>
+            Обновить данные профиля.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Информация о профиле.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.UpdateAvatar(System.Guid,System.String,System.Byte[])">
+            <summary>
+            Обновить фотографию профиля.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="fileName">Название файла.</param>
+            <param name="body">Содержимое графического файла.</param>
+            <returns>Код результата выполнения.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IProfileService.GetAvatar(System.Guid)">
+            <summary>
+            Получить фотографию профиля.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Содержимое графического файла.</returns>
+        </member>
+        <member name="T:StockSharp.Community.IStrategyService">
+            <summary>
+            Интерфейс, описывающий сервис магазина стратегий.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.CreateStrategy(System.Guid,StockSharp.Community.StrategyData)">
+            <summary>
+            Добавить стратегию в магазин.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="strategy">Данные о стратегии.</param>
+            <returns>Идентификатор стратегии.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.UpdateStrategy(System.Guid,StockSharp.Community.StrategyData)">
+            <summary>
+            Обновить стратегию в магазине.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.DeleteStrategy(System.Guid,System.Int64)">
+            <summary>
+            Удалить стратегию из магазина.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="strategyId">Идентификатор стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.GetStrategies(System.Guid)">
+            <summary>
+            Получить все идентификаторы стратегий.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Идентификаторы стратегий.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.GetSubscribedStrategies(System.Guid)">
+            <summary>
+            Получить идентификаторы стратегий, подписанные через <see cref="M:StockSharp.Community.IStrategyService.Subscribe(System.Guid,System.Int64)"/>.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Идентификаторы стратегий.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.GetLiteInfo(System.Guid,System.Int64[])">
+            <summary>
+            Получить название и описание стратегий.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="strategyIds">Идентификаторы стратегий.</param>
+            <returns>Информация о стратегиях.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.GetFullInfo(System.Guid,System.Int64)">
+            <summary>
+            Получить полное описание стратегии, включая исходный и исполняемый коды.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="strategyId">Идентификатор стратегии.</param>
+            <returns>Информация о стратегии.</returns>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.Subscribe(System.Guid,System.Int64)">
+            <summary>
+            Подписаться на стратегию.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="strategyId">Идентификатор стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyService.UnSubscribe(System.Guid,System.Int64)">
+            <summary>
+            Отписаться от стратегии.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="strategyId">Идентификатор стратегии.</param>
+        </member>
+        <member name="T:StockSharp.Community.IStrategyServiceCallback">
+            <summary>
+            Интерфейс, описывающий обратную связь сервиса <see cref="T:StockSharp.Community.IStrategyService"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyServiceCallback.Created(StockSharp.Community.StrategyData)">
+            <summary>
+            Создана новая стратегия.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyServiceCallback.Deleted(System.Int64)">
+            <summary>
+            Удалена стратегия.
+            </summary>
+            <param name="strategyId">Идентификатор стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyServiceCallback.Updated(StockSharp.Community.StrategyData)">
+            <summary>
+            Обновление стратегии.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyServiceCallback.Subscribed(System.Int64,System.Int64)">
+            <summary>
+            Пользователь подписался на стратегию. Отправляется тому пользователю, кто создал стратегию через <see cref="M:StockSharp.Community.IStrategyService.CreateStrategy(System.Guid,StockSharp.Community.StrategyData)"/>.
+            </summary>
+            <param name="strategyId">Идентификатор стратегии.</param>
+            <param name="userId">Идентификатор пользователя.</param>
+        </member>
+        <member name="M:StockSharp.Community.IStrategyServiceCallback.UnSubscribed(System.Int64,System.Int64)">
+            <summary>
+            Пользователь отписался от стратегии. Отправляется тому пользователю, кто создал стратегию через <see cref="M:StockSharp.Community.IStrategyService.CreateStrategy(System.Guid,StockSharp.Community.StrategyData)"/>.
+            </summary>
+            <param name="strategyId">Идентификатор стратегии.</param>
+            <param name="userId">Идентификатор пользователя.</param>
+        </member>
+        <member name="T:StockSharp.Community.NotificationClient">
+            <summary>
+            Клиент для доступа к сервису уведомлений StockSharp.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.NotificationClient.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.NotificationClient"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.NotificationClient.#ctor(System.Uri)">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.NotificationClient"/>.
+            </summary>
+            <param name="address">Адрес сервиса.</param>
+        </member>
+        <member name="M:StockSharp.Community.NotificationClient.SendSms(System.String)">
+            <summary>
+            Послать SMS-сообщение.
+            </summary>
+            <param name="message">Тело сообщения.</param>
+        </member>
+        <member name="M:StockSharp.Community.NotificationClient.SendEmail(System.String,System.String)">
+            <summary>
+            Послать email-сообщение.
+            </summary>
+            <param name="caption">Заголовок сообщения.</param>
+            <param name="message">Тело сообщения.</param>
+        </member>
+        <member name="P:StockSharp.Community.NotificationClient.SmsCount">
+            <summary>
+            Доступное количество SMS-сообщений.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.NotificationClient.EmailCount">
+            <summary>
+            Доступное количество email-сообщений.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.ProfileClient">
+            <summary>
+            Клиент для доступа к сервису регистрации.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.ProfileClient"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.#ctor(System.Uri)">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.ProfileClient"/>.
+            </summary>
+            <param name="address">Адрес сервиса.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.CreateProfile(StockSharp.Community.Profile)">
+            <summary>
+            Начать процедуру регистрации.
+            </summary>
+            <param name="profile">Информация о профиле.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.SendEmail(System.String,System.String)">
+            <summary>
+            Отправить на электронную почту письмо.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.ValidateEmail(System.String,System.String,System.String)">
+            <summary>
+            Подтвердить адрес электронной почты.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+            <param name="emailCode">Email код подтверждения.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.SendSms(System.String,System.String,System.String)">
+            <summary>
+            Отправить SMS.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+            <param name="phone">Номер телефона.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.ValidatePhone(System.String,System.String,System.String)">
+            <summary>
+            Подтвердить телефон.
+            </summary>
+            <param name="email">Адрес электронной почты.</param>
+            <param name="login">Логин.</param>
+            <param name="smsCode">SMS код подтверждения.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.UpdateProfile(StockSharp.Community.Profile)">
+            <summary>
+            Получить данные профиля.
+            </summary>
+            <param name="profile">Информация о профиле.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.GetProfile">
+            <summary>
+            Обновить данные профиля.
+            </summary>
+            <returns>Информация о профиле.</returns>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.UpdateAvatar(System.String,System.Byte[])">
+            <summary>
+            Обновить фотографию профиля.
+            </summary>
+            <param name="fileName">Название файла.</param>
+            <param name="body">Содержимое графического файла.</param>
+        </member>
+        <member name="M:StockSharp.Community.ProfileClient.GetAvatar">
+            <summary>
+            Получить фотографию профиля.
+            </summary>
+            <returns>Содержимое графического файла.</returns>
+        </member>
+        <member name="T:StockSharp.Community.ServerCredentials">
+            <summary>
+            Класс, хранящих в себе логин и пароль для доступа к сервисам http://stocksharp.com
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.ServerCredentials.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.ServerCredentials"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.ServerCredentials.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Загрузить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.Community.ServerCredentials.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
+            Сохранить настройки.
+            </summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="P:StockSharp.Community.ServerCredentials.Login">
+            <summary>
+            Логин.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ServerCredentials.Password">
+            <summary>
+            Пароль.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.ServerCredentials.AutoLogon">
+            <summary>
+            Входить автоматически.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.StrategyClient">
+            <summary>
+            Клиент для доступа к <see cref="T:StockSharp.Community.IStrategyService"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.StrategyClient"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.#ctor(System.Uri)">
+            <summary>
+            Создать <see cref="T:StockSharp.Community.StrategyClient"/>.
+            </summary>
+            <param name="address">Адрес сервера.</param>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.Connect">
+            <summary>
+            Подключиться.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.CreateStrategy(StockSharp.Community.StrategyData)">
+            <summary>
+            Добавить стратегию в магазин.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.UpdateStrategy(StockSharp.Community.StrategyData)">
+            <summary>
+            Обновить стратегию в магазине.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.DeleteStrategy(StockSharp.Community.StrategyData)">
+            <summary>
+            Удалить стратегию из магазина.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.Download(StockSharp.Community.StrategyData)">
+            <summary>
+            Получить полное описание стратегии, включая исходный и исполняемый коды.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.Subscribe(StockSharp.Community.StrategyData)">
+            <summary>
+            Подписаться на стратегию.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="M:StockSharp.Community.StrategyClient.UnSubscribe(StockSharp.Community.StrategyData)">
+            <summary>
+            Отписаться от стратегии.
+            </summary>
+            <param name="strategy">Данные о стратегии.</param>
+        </member>
+        <member name="P:StockSharp.Community.StrategyClient.SubscribedStrategies">
+            <summary>
+            Стратегий, подписанные через <see cref="M:StockSharp.Community.StrategyClient.Subscribe(StockSharp.Community.StrategyData)"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.StrategyData">
+            <summary>
+            Данные о стратегии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.Id">
+            <summary>
+            Идентификатор.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.CreationDate">
+            <summary>
+            Дата создания.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.Name">
+            <summary>
+            Название.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.Description">
+            <summary>
+            Описание стратегии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.TopicId">
+            <summary>
+            Идентификатор топика на форуме, где идет обсуждение стратегии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.Price">
+            <summary>
+            Цена приобретения.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.SourceCode">
+            <summary>
+            Исходные коды (если стратегия распространяется в исходниках).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.CompiledAssembly">
+            <summary>
+            Скомпилированная сборка (если стратегия распространяется как готовая сборка).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.StrategyData.Author">
+            <summary>
+            Идентификатор автора.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Community.User">
+            <summary>
+            Пользователь.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.User.Id">
+            <summary>
+            Идентификатор.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.User.Name">
+            <summary>
+            Имя.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.User.Description">
+            <summary>
+            Детальное описание.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Community.User.CreationDate">
+            <summary>
+            Дата регистрации.
+            </summary>
+        </member>
+    </members>
+</doc>

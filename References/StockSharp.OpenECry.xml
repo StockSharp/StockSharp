@@ -1,0 +1,341 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.OpenECry</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.OpenECry.OECMessageAdapter">
+      <summary>
+            Адаптер сообщений для OpenECry.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.OpenECry.OECSessionHolder)">
+      <summary>
+            Создать <see cref="T:StockSharp.OpenECry.OECMessageAdapter" />.
+            </summary>
+      <param name="type">Тип адаптера.</param>
+      <param name="sessionHolder">Контейнер для сессии.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECMessageAdapter.DisposeManaged">
+      <summary>
+            Освободить занятые ресурсы.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Отправить сообщение.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECRemoting">
+      <summary>
+            Режимы подключения к терминалу.
+            Описание функциональности http://www.openecry.com/api/OECAPIRemoting.pdf
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECRemoting.None">
+      <summary>
+            Отключен.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECRemoting.Auto">
+      <summary>
+            Попытка активировать в режиме <see cref="F:StockSharp.OpenECry.OECRemoting.Secondary" />, в случае неудачи - режим <see cref="F:StockSharp.OpenECry.OECRemoting.Primary" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECRemoting.Primary">
+      <summary>
+            Если существует другое подключение с теми же Login/Password, оно может быть разорвано.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECRemoting.Secondary">
+      <summary>
+            Попытка активировать в режиме <see cref="F:StockSharp.OpenECry.OECRemoting.Secondary" />, в случае неудачи - режим <see cref="F:StockSharp.OpenECry.OECRemoting.None" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECSessionHolder">
+      <summary>
+            Контейнер для сессии.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECSessionHolder.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Создать <see cref="T:StockSharp.OpenECry.OECSessionHolder" />.
+            </summary>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECSessionHolder.CreateOrderCondition">
+      <summary>
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
+            </summary>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECSessionHolder.CreateTransactionAdapter">
+      <summary>
+            Создать транзакционный адаптер.
+            </summary>
+      <returns>Транзакционный адаптер.</returns>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECSessionHolder.CreateMarketDataAdapter">
+      <summary>
+            Создать адаптер маркет-данных.
+            </summary>
+      <returns>Адаптер маркет-данных.</returns>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.Address">
+      <summary>
+            Адрес API сервера OpenECry. По-умолчанию равен <see cref="F:StockSharp.OpenECry.OECAddresses.Api" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.Login">
+      <summary>
+            Имя пользователя OpenECry.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.Password">
+      <summary>
+            Пароль пользователя OpenECry.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.Uuid">
+      <summary>
+            Уникальный идентификатор программного обеспечения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.RemotingRequired">
+      <summary>
+            Требуемый режим подключения к терминалу. По умолчанию <see cref="F:StockSharp.OpenECry.OECRemoting.Auto" />. 
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.RemotingActual">
+      <summary>
+            Реальный режим <see cref="P:StockSharp.OpenECry.OECSessionHolder.RemotingRequired" />. 
+            Свойство актуально только после подключения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.UseNativeReconnect">
+      <summary>
+            Использовать "родной" механизм восстановления соединения.
+            По умолчанию включено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.EnableOECLogging">
+      <summary>
+            Использовать логирование OpenECry API.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECSessionHolder.TimeFrames">
+      <summary>
+            Доступные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.Xaml.OECAddressComboBox">
+      <summary>
+            Выпадающий список для выбора адреса сервера OpenECry.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.Xaml.OECAddressComboBox.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.OpenECry.Xaml.OECAddressComboBox" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECAddresses">
+      <summary>
+            Адреса серверов системы OpenECry.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECAddresses.DefaultPort">
+      <summary>
+            Порт сервера по умолчанию, равный 9200.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECAddresses.Api">
+      <summary>
+            Основной сервер. Адрес api.openecry.com, порт 9200.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECAddresses.Sim">
+      <summary>
+            Демо сервер. Адрес sim.openecry.com, порт 9200.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECStopType">
+      <summary>
+            Тип условной заявки OEC.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECStopType.StopMarket">
+      <summary>
+            После достижения стоп-цены автоматически выставляется рыночная заявка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECStopType.StopLimit">
+      <summary>
+            После достижения стоп-цены автоматически выставляется лимитная заявка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECStopType.TrailingStopMarket">
+      <summary>
+            Стоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
+            оставаясь на заранее заявленном интервале от рыночной цены. 
+            В случае, если рынок достигает стоп-цены, автоматически выставляется рыночная заявка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.OpenECry.OECStopType.TrailingStopLimit">
+      <summary>
+            Как <see cref="F:StockSharp.OpenECry.OECStopType.TrailingStopMarket" />, но при достижении стоп-цены выставляется лимитная заявка.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECOrderCondition">
+      <summary>
+            Условие заявок, специфичных для <see cref="N:OEC" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECOrderCondition.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.OpenECry.OECOrderCondition" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECOrderCondition.StopType">
+      <summary>
+            Тип стопа.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECOrderCondition.StopPrice">
+      <summary>
+            Стоп-цена.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECOrderCondition.Delta">
+      <summary>
+            Trailing стоп следует за рынком если изменение цены больше чем Delta.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECOrderCondition.IsPercentDelta">
+      <summary>
+        <see langword="true" />, если <see cref="P:StockSharp.OpenECry.OECOrderCondition.Delta" /> выражена в процентах.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECOrderCondition.TriggerType">
+      <summary>
+            Поле срабатывания.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECOrderCondition.ReferencePrice">
+      <summary>
+            Trailing стоп начинает слежение, как только цена достигает ReferencePrice.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECException">
+      <summary>
+            Исключение, генерируемое реализацией <see cref="T:StockSharp.OpenECry.OECTrader" /> в случае возникновения ошибок.
+            </summary>
+    </member>
+    <member name="T:StockSharp.OpenECry.OECTrader">
+      <summary>
+            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" />, предоставляющая подключение к брокеру OEC.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.OpenECry.OECTrader" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.IsConnectionAlive">
+      <summary>
+            Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="M:StockSharp.BusinessEntities.IConnector.Connect" />.
+            </summary>
+      <returns>
+        <see langword="true" />, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.SendMessage(System.String,System.String)">
+      <summary>
+            Отправить сообщение другому пользователю.
+            </summary>
+      <param name="userName">Имя получателя.</param>
+      <param name="text">Текст сообщения.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+      <summary>
+            Подписаться на получение свечек.
+            </summary>
+      <param name="series">Серия свечек.</param>
+      <param name="from">Начальная дата, с которой необходимо получать данные.</param>
+      <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+      <summary>
+            Остановить подписку получения свечек, ранее созданную через <see cref="M:StockSharp.Algo.Candles.IExternalCandleSource.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+      <param name="series">Серия свечек.</param>
+    </member>
+    <member name="M:StockSharp.OpenECry.OECTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+      <summary>
+            Обработать сообщение, содержащее рыночные данные.
+            </summary>
+      <param name="message">Сообщение, содержащее рыночные данные.</param>
+      <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+      <param name="direction">Направление сообщения.</param>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Uuid">
+      <summary>
+            Уникальный идентификатор программного обеспечения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Login">
+      <summary>
+            Имя пользователя OpenECry.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Password">
+      <summary>
+            Пароль пользователя OpenECry.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.RemotingRequired">
+      <summary>
+            Требуемый режим Remoting. По умолчанию - <see cref="F:StockSharp.OpenECry.OECRemoting.Auto" />. 
+            Свойство может быть установлено только до подключения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.RemotingActual">
+      <summary>
+            Реальный режим Remoting. 
+            Свойство актуально только после подключения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.UseNativeReconnect">
+      <summary>
+            Использовать "родной" механизм восстановления соединения.
+            По умолчанию включено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.Address">
+      <summary>
+            Адрес API сервера OpenECry. По-умолчанию равен <see cref="F:StockSharp.OpenECry.OECAddresses.Api" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.OpenECry.OECTrader.EnableOECLogging">
+      <summary>
+            Использовать логирование библиотеки OEC.
+            </summary>
+    </member>
+    <member name="E:StockSharp.OpenECry.OECTrader.NewCandles">
+      <summary>
+            Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.Algo.Candles.IExternalCandleSource.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+    </member>
+  </members>
+</doc>

@@ -1,0 +1,341 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Licensing</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Licensing.ILicenseService">
+            <summary>
+            Интерфейс к сервису лицензий.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.GetTrialLicense(System.String)">
+            <summary>
+            Получить временную лицензию.
+            </summary>
+            <param name="hardwareId">Уникальная информация о компьютере.</param>
+            <returns>Временная лицензия.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.DownloadFullLicense(System.Guid,System.String)">
+            <summary>
+            Получить полную лицензию.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="hardwareId">Уникальная информация о компьютере.</param>
+            <returns>Полная лицензия.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.RenewLicense(System.Guid,System.Int64)">
+            <summary>
+            Обновить лицензию.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="licenseId">Идентификатор лицензии.</param>
+            <returns>Обновленная лицензия.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.GetFeatures(System.Guid)">
+            <summary>
+            Получить список всей доступной функциональности.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Список всей доступной функциональности.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokers(System.Guid)">
+            <summary>
+            Получить список брокеров.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Список брокеров.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.RequestLicense(System.Guid,System.Int64,System.String)">
+            <summary>
+            Запросить у брокера лицензию для номера счета.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="brokerId">Идентификатор брокера.</param>
+            <param name="account">Номер счета.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.ApproveLicense(System.Guid,System.Int64,System.String)">
+            <summary>
+            Утвердить лицензию клиента.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="licenseId">Идентификатор лицензии.</param>
+            <param name="features">Список функциональности, которую необходимо добавить в лицензию.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.RevokeLicense(System.Guid,System.Int64)">
+            <summary>
+            Отменить лицензию клиента.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="licenseId">Идентификатор лицензии.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.GetAwaitingLicenses(System.Guid)">
+            <summary>
+            Получить неутвержденные лицензии клиентов.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <returns>Неутвержденные лицензии клиентов.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.DeleteLicense(System.Guid,System.Int64)">
+            <summary>
+            Удалить лицензию.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="licenseId">Идентификатор лицензии.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.CreateLicense(System.Guid,System.String,System.String,System.String,System.String,System.DateTime)">
+            <summary>
+            Создать лицензию.
+            </summary>
+            <param name="sessionId">Идентификатор сессии.</param>
+            <param name="issuedTo">Имя владельца лицензии.</param>
+            <param name="account">Номер счета.</param>
+            <param name="hardwareId">Уникальная информация о компьютере.</param>
+            <param name="features">Список функциональности, которую необходимо добавить в лицензию.</param>
+            <param name="expirationDate">Дата окончания действия лицензии.</param>
+            <returns>Лицензия.</returns>
+        </member>
+        <member name="T:StockSharp.Licensing.License">
+            <summary>
+            Лицензия.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.FileName">
+            <summary>
+            Имя файла лицензии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.Id">
+            <summary>
+            Номер лицензии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.IssuedTo">
+            <summary>
+            Получатель лицензии (ФИО частного лица или сотрудника компании <see cref="P:StockSharp.Licensing.License.Company"/>).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.Company">
+            <summary>
+            Название компании, для которой выдана лицензия. Значение равно null, если лицензия выдана частному лицу.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.IssuedBy">
+            <summary>
+            Кем выдана лицензия.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.IssuedDate">
+            <summary>
+            Дата выдачи лицензии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.ExpirationDate">
+            <summary>
+            Дата окончания действия лицензии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.HardwareId">
+            <summary>
+            Идентификатор компьютера, к которому привязан лицензия.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.Account">
+            <summary>
+            Номер счета, к которому привязан лицензия.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.Features">
+            <summary>
+            Список доступной функциональности.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.Signature">
+            <summary>
+            Цифровая подпись.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.License.Body">
+            <summary>
+            Тело лицензии.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Licensing.LicenseClient">
+            <summary>
+            Клиент для доступа к сервису лицензирование StockSharp.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Licensing.LicenseClient"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.#ctor(System.Uri)">
+            <summary>
+            Создать <see cref="T:StockSharp.Licensing.LicenseClient"/>.
+            </summary>
+            <param name="address">Адрес сервиса.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.GetAnonymousLicense">
+            <summary>
+            Получить анонимную лицензию.
+            </summary>
+            <returns>Анонимная лицензия.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.GetFullLicense">
+            <summary>
+            Получить полную лицензию.
+            </summary>
+            <returns>Полная лицензия.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.RenewLicense(StockSharp.Licensing.License)">
+            <summary>
+            Обновить лицензию.
+            </summary>
+            <param name="license">Старая лицензия.</param>
+            <returns>Обновленная лицензия.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.RequestLicense(System.Int64,System.String)">
+            <summary>
+            Запросить у брокера лицензию для номера счета.
+            </summary>
+            <param name="brokerId">Идентификатор брокера.</param>
+            <param name="account">Номер счета.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.ApproveLicense(System.Int64,System.String)">
+            <summary>
+            Утвердить лицензию клиента.
+            </summary>
+            <param name="licenseId">Идентификатор лицензии.</param>
+            <param name="features">Список функциональности, которую необходимо добавить в лицензию.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.RevokeLicense(System.Int64)">
+            <summary>
+            Отменить лицензию клиента.
+            </summary>
+            <param name="licenseId">Идентификатор лицензии.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.DeleteLicense(System.Int64)">
+            <summary>
+            Удалить лицензию.
+            </summary>
+            <param name="licenseId">Идентификатор лицензии.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.CreateLicense(System.String,System.String,System.String,System.String,System.DateTime)">
+            <summary>
+            Создать лицензию.
+            </summary>
+            <param name="issuedTo">Имя владельца лицензии.</param>
+            <param name="account">Номер счета.</param>
+            <param name="hardwareId">Уникальная информация о компьютере.</param>
+            <param name="features">Список функциональности, которую необходимо добавить в лицензию.</param>
+            <param name="expirationDate">Дата окончания действия лицензии.</param>
+            <returns>Лицензия.</returns>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.Features">
+            <summary>
+            Вся доступная функциональность.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.Brokers">
+            <summary>
+            Все брокера.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.AwaitingLicenses">
+            <summary>
+            Неутвержденные лицензии клиентов.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Licensing.LicenseFeatureAttribute">
+            <summary>
+            Атрибут, указывающий для типа название функциональности.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseFeatureAttribute.#ctor(System.String)">
+            <summary>
+            Создать <see cref="T:StockSharp.Licensing.LicenseFeatureAttribute"/>.
+            </summary>
+            <param name="featureName">Название функциональности.</param>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseFeatureAttribute.FeatureName">
+            <summary>
+            Название функциональности.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Licensing.LicenseHelper">
+            <summary>
+            Вспомагательный класс для работы с лицензиями.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Licensing.LicenseHelper.SpecialSplitter">
+            <summary>
+            Специальная комбинация '!!!' для разделения номера счетов, если в указании номера счета допускается использования запятой.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Licensing.LicenseHelper.RenewOffset">
+            <summary>
+            Временной отступ до срока окончания действия текущей лицензии, когда можно будет ее продлевать.
+            Равен 2-ум дням.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.CanRenew(StockSharp.Licensing.License)">
+            <summary>
+            Можно ли обновлять лицензию (до окончания времени действия лицензии осталось менее <see cref="F:StockSharp.Licensing.LicenseHelper.RenewOffset"/>).
+            </summary>
+            <param name="license">Лицензия.</param>
+            <returns><see langword="true"/>, если лицензию можно обновлять. Иначе, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.GetEstimatedTime(StockSharp.Licensing.License)">
+            <summary>
+            Получить оставшееся время действия лицензии.
+            </summary>
+            <param name="license">Лицензия.</param>
+            <returns>Оставшееся время действия лицензии. Если лицензия истекла, то будет возвращено значение <see cref="F:System.TimeSpan.Zero"/>.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.Type)">
+            <summary>
+            Проверить лицензию по типу функциональности.
+            </summary>
+            <param name="featureType">Тип функциональности.</param>
+            <returns>Описание ошибки, если лицензия не поддерживает функциональность.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String)">
+            <summary>
+            Проверить лицензию по названию функциональности.
+            </summary>
+            <param name="featureName">Название функциональности.</param>
+            <returns>Описание ошибки, если лицензия не поддерживает функциональность.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.Type,System.String)">
+            <summary>
+            Проверить лицензию по подключению и номеру счета.
+            </summary>
+            <param name="connectorType">Тип подключения, через который идет регистрация заявки.</param>
+            <param name="portfolioName">Номер портфеля, который будет использоваться для проверки.</param>
+            <returns>Описание ошибки, если лицензия не поддерживает функциональность.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.Save(StockSharp.Licensing.License)">
+            <summary>
+            Сохранить лицензию на диске.
+            </summary>
+            <param name="license">Лицензия.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.Remove(StockSharp.Licensing.License)">
+            <summary>
+            Удалить лицензию.
+            </summary>
+            <param name="license">Лицензия.</param>
+        </member>
+        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseChanged">
+            <summary>
+            Событие измения <see cref="P:StockSharp.Licensing.LicenseHelper.Licenses"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseHelper.Licenses">
+            <summary>
+            Текущие лицензии на компьютере.
+            </summary>
+        </member>
+    </members>
+</doc>

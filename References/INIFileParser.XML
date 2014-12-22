@@ -1,0 +1,739 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>/Users/ricky/development/me/ini-parser/build/INIFileParser</name>
+    </assembly>
+    <members>
+        <member name="T:IniParser.ParsingException">
+            <summary>
+            Represents an error ococcurred while parsing data
+            </summary>
+        </member>
+        <member name="M:IniParser.ParsingException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.ParsingException" /> class.
+            </summary>
+        </member>
+        <member name="M:IniParser.ParsingException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.ParsingException" /> class.
+            </summary>
+            <param name="msg">The message describing the exception cause.</param>
+        </member>
+        <member name="M:IniParser.ParsingException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.ParsingException" /> class.
+            </summary>
+            <param name="msg">The message describing the exception cause.</param>
+            <param name="innerException">An inner exception.</param>
+        </member>
+        <member name="M:IniParser.Assert.StringHasNoBlankSpaces(System.String)">
+            <summary>
+            Asserts that a strings has no blank spaces.
+            </summary>
+            <param name="s">The string to be checked.</param>
+            <returns>
+            </returns>
+        </member>
+        <member name="T:IniParser.FileIniDataParser">
+            <summary>
+            Represents an INI data parser for files.
+            </summary>
+        </member>
+        <member name="M:IniParser.FileIniDataParser.LoadFile(System.String)">
+            <summary>
+            Implements loading a file from disk.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+        </member>
+        <member name="M:IniParser.FileIniDataParser.LoadFile(System.String,System.Boolean)">
+            <summary>
+            Implements loading a file from disk.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="relaxedIniRead">True to try reading bad formed INI files</param>
+        </member>
+        <member name="M:IniParser.FileIniDataParser.SaveFile(System.String,IniParser.IniData)">
+            <summary>
+            Implements saving a file from disk.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="parsedData">IniData to be saved as an INI file.</param>
+        </member>
+        <member name="T:IniParser.IniData">
+            <summary>
+            Represents all data from an INI file
+            </summary>
+        </member>
+        <member name="M:IniParser.IniData.#ctor">
+            <summary>
+            Initializes an empty IniData instance.
+            </summary>
+        </member>
+        <member name="M:IniParser.IniData.#ctor(IniParser.SectionDataCollection)">
+            <summary>
+            Initializes a new IniData instance using a previous
+            <see cref="T:IniParser.SectionDataCollection" />.
+            </summary>
+            <param name="sdc">
+                <see cref="T:IniParser.SectionDataCollection" /> object containing the
+            data with the sections of the file</param>
+        </member>
+        <member name="F:IniParser.IniData._sections">
+            <summary>
+            Represents all sections from an INI file
+            </summary>
+        </member>
+        <member name="P:IniParser.IniData.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:IniParser.KeyDataCollection" /> instance
+            with the specified section name.
+            </summary>
+        </member>
+        <member name="P:IniParser.IniData.Sections">
+            <summary>
+            Gets or sets all the <see cref="T:IniParser.SectionData" />
+            for this IniData instance.
+            </summary>
+        </member>
+        <member name="M:IniParser.IniData.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="T:IniParser.KeyData">
+            <summary>
+                <para>Information associated to a key from an INI file.</para>
+                <para>Includes both the value and the comments associated to the key.</para>
+            </summary>
+        </member>
+        <member name="M:IniParser.KeyData.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.KeyData" /> class.
+            </summary>
+        </member>
+        <member name="M:IniParser.KeyData.#ctor(IniParser.KeyData)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.KeyData" /> class
+            from a previous instance of <see cref="T:IniParser.KeyData" />.
+            </summary>
+            <remarks>
+            Data is deeply copied
+            </remarks>
+            <param name="ori">
+            The instance of the <see cref="T:IniParser.KeyData" /> class
+            used to create the new instance.</param>
+        </member>
+        <member name="F:IniParser.KeyData._comments">
+            <summary>
+            List with comment lines associated to this key
+            </summary>
+        </member>
+        <member name="F:IniParser.KeyData._value">
+            <summary>
+            Unique value associated to this key
+            </summary>
+        </member>
+        <member name="F:IniParser.KeyData._keyName">
+            <summary>
+            Name of the current key
+            </summary>
+        </member>
+        <member name="P:IniParser.KeyData.Comments">
+            <summary>
+            Gets or sets the comment list associated to this key.
+            </summary>
+        </member>
+        <member name="P:IniParser.KeyData.Value">
+            <summary>
+            Gets or sets the value associated to this key.
+            </summary>
+        </member>
+        <member name="P:IniParser.KeyData.KeyName">
+            <summary>
+            Gets or sets the name of the key.
+            </summary>
+        </member>
+        <member name="M:IniParser.KeyData.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="T:IniParser.KeyDataCollection">
+            <summary>
+                <para>Represents a collection of Keydata.</para>
+            </summary>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.KeyDataCollection" /> class.
+            </summary>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.#ctor(IniParser.KeyDataCollection)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.KeyDataCollection" /> class
+            from a previous instance of <see cref="T:IniParser.KeyDataCollection" />.
+            </summary>
+            <remarks>
+            Data is deeply copied
+            </remarks>
+            <param name="ori">
+            The instance of the <see cref="T:IniParser.KeyDataCollection" /> class
+            used to create the new instance.</param>
+        </member>
+        <member name="F:IniParser.KeyDataCollection._keyData">
+            <summary>
+            Collection of KeyData for a given section
+            </summary>
+        </member>
+        <member name="P:IniParser.KeyDataCollection.Item(System.String)">
+            <summary>
+            Gets or sets the value of a concrete key.
+            </summary>
+            <remarks>
+            If we try to assign the value of a key which doesn't exists,
+            a new key is added with the name and the value is assigned to it.
+            </remarks>
+            <param name="keyName">Name of the key</param>
+            <returns>
+            The string with key's value or null
+            if the key was not found.
+            </returns>
+        </member>
+        <member name="P:IniParser.KeyDataCollection.Count">
+            <summary>
+            Return the number of keys in the collection
+            </summary>
+            <value>An integer with the number of keys in the collection.</value>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Implementation needed
+            </summary>
+            <returns>A weak-typed IEnumerator.</returns>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.AddKey(System.String)">
+            <summary>
+            Adds a new key with the specified name and empty value and comments
+            </summary>
+            <remarks>
+            A valid key name is a string with NO blank spaces.
+            </remarks>
+            <param name="keyName">New key to be added.</param>
+            <returns>
+                <c>true</c> if a new empty key was added
+            <c>false</c> otherwise.
+            </returns>
+            <exception cref="T:System.ArgumentException">If the key name is not valid.</exception>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.AddKey(System.String,IniParser.KeyData)">
+            <summary>
+            Adds a new key with the specified name and value and comments
+            </summary>
+            <remarks>
+            A valid key name is a string with NO blank spaces.
+            </remarks>
+            <param name="keyName">New key to be added.</param>
+            <param name="keyData">KeyData instance.</param>
+            <returns>
+                <c>true</c> if a new empty key was added
+            <c>false</c> otherwise.
+            </returns>
+            <exception cref="T:System.ArgumentException">If the key name is not valid.</exception>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.AddKey(System.String,System.String)">
+            <summary>
+            Adds a new key with the specified name and value and comments
+            </summary>
+            <remarks>
+            A valid key name is a string with NO blank spaces.
+            </remarks>
+            <param name="keyName">New key to be added.</param>
+            <param name="keyValue">Value associated to the kyy.</param>
+            <returns>
+                <c>true</c> if a new empty key was added
+            <c>false</c> otherwise.
+            </returns>
+            <exception cref="T:System.ArgumentException">If the key name is not valid.</exception>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.GetKeyData(System.String)">
+            <summary>
+            Retrieves the data for a specified key given its name
+            </summary>
+            <param name="keyName">Name of the key to retrieve.</param>
+            <returns>
+            A <see cref="T:IniParser.KeyData" /> instance holding
+            the key information or <c>null</c> if the key wasn't found.
+            </returns>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.SetKeyData(IniParser.KeyData)">
+            <summary>
+            Sets the key data associated to a specified key.
+            </summary>
+            <param name="data">The new <see cref="T:IniParser.KeyData" /> for the key.</param>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.ContainsKey(System.String)">
+            <summary>
+            Gets if a specifyed key name exists in the collection.
+            </summary>
+            <param name="keyName">Key name to search</param>
+            <returns>
+                <c>true</c> if a key with the specified name exists in the collectoin
+            <c>false</c> otherwise</returns>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.RemoveKey(System.String)">
+            <summary>
+            Deletes a previously existing key, including its associated data.
+            </summary>
+            <param name="keyName">The key to be removed.</param>
+            <returns>
+                <c>true</c> if a key with the specified name was removed
+            <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.GetEnumerator">
+            <summary>
+            Allows iteration througt the collection.
+            </summary>
+            <returns>A strong-typed IEnumerator </returns>
+        </member>
+        <member name="M:IniParser.KeyDataCollection.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="T:IniParser.SectionData">
+            <summary>
+                <para>Information associated to a section in a INI File</para>
+                <para>Includes both the value and the comments associated to the key.</para>
+            </summary>
+        </member>
+        <member name="M:IniParser.SectionData.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.SectionData" /> class.
+            </summary>
+        </member>
+        <member name="M:IniParser.SectionData.#ctor(IniParser.SectionData)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.SectionData" /> class
+            from a previous instance of <see cref="T:IniParser.SectionData" />.
+            </summary>
+            <remarks>
+            Data is deeply copied
+            </remarks>
+            <param name="ori">
+            The instance of the <see cref="T:IniParser.SectionData" /> class
+            used to create the new instance.</param>
+        </member>
+        <member name="F:IniParser.SectionData._comments">
+            <summary>
+            Comments associated to this section
+            </summary>
+        </member>
+        <member name="F:IniParser.SectionData._keyDataCollection">
+            <summary>
+            Keys associated to this section
+            </summary>
+        </member>
+        <member name="F:IniParser.SectionData._sectionName">
+            <summary>
+            Name of the u
+            </summary>
+        </member>
+        <member name="P:IniParser.SectionData.SectionName">
+            <summary>
+            Gets or sets the name of the section.
+            </summary>
+            <value>The name of the section.</value>
+        </member>
+        <member name="P:IniParser.SectionData.Comments">
+            <summary>
+            Gets or sets the comment list associated to this section.
+            </summary>
+            <value>A list of strings.</value>
+        </member>
+        <member name="P:IniParser.SectionData.Keys">
+            <summary>
+            Gets or sets the keys associated to this section.
+            </summary>
+            <value>A collection of KeyData objects.</value>
+        </member>
+        <member name="M:IniParser.SectionData.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="T:IniParser.SectionDataCollection">
+            <summary>
+                <para>Represents a collection of SectionData.</para>
+            </summary>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.SectionDataCollection" /> class.
+            </summary>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.#ctor(IniParser.SectionDataCollection)">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.SectionDataCollection" /> class
+            from a previous instance of <see cref="T:IniParser.SectionDataCollection" />.
+            </summary>
+            <remarks>
+            Data is deeply copied
+            </remarks>
+            <param name="ori">
+            The instance of the <see cref="T:IniParser.SectionDataCollection" /> class
+            used to create the new instance.</param>
+        </member>
+        <member name="F:IniParser.SectionDataCollection._sectionData">
+            <summary>
+            Data associated to this section
+            </summary>
+        </member>
+        <member name="P:IniParser.SectionDataCollection.Item(System.String)">
+            <summary>
+            Gets the key data associated to a specified section name.
+            </summary>
+            <value>An instance of as <see cref="T:IniParser.KeyDataCollection" /> class
+            holding the key data from the current parsed INI data, or a <c>null</c>
+            value if the section doesn't exist.</value>
+        </member>
+        <member name="P:IniParser.SectionDataCollection.Count">
+            <summary>
+            Returns the number of SectionData elements in the collection
+            </summary>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.AddSection(System.String)">
+            <summary>
+            Creates a new section with empty data.
+            </summary>
+            <remarks>
+                <para>A valid section name is a string with NO blank spaces.</para>
+                <para>If a section with the same name exists, this operation has no effect.</para>
+            </remarks>
+            <param name="keyName">Name of the section to be created</param>
+            <return>
+                <c>true</c> if the a new section with the specified name was added,
+            <c>false</c> otherwise</return>
+            <exception cref="T:System.ArgumentException">If the section name is not valid.</exception>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.ContainsSection(System.String)">
+            <summary>
+            Gets if a section with a specified name exists in the collection.
+            </summary>
+            <param name="keyName">Name of the section to search</param>
+            <returns>
+                <c>true</c> if a section with the specified name exists in the
+            collection <c>false</c> otherwise
+            </returns>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.GetSectionData(System.String)">
+            <summary>
+            Returns the section data from a specify section given its name.
+            </summary>
+            <param name="sectionName">Name of the section.</param>
+            <returns>
+            An instance of a <see cref="T:IniParser.SectionData" /> class
+            holding the section data for the currently INI data
+            </returns>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.SetSectionData(System.String,IniParser.SectionData)">
+            <summary>
+            Sets the section data for given a section name.
+            </summary>
+            <param name="sectionName">
+            </param>
+            <param name="data">The new <see cref="T:IniParser.SectionData" />instance.</param>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.RemoveSection(System.String)">
+            <summary>
+            </summary>
+            <param name="keyName">
+            </param>
+            <return>
+                <c>true</c> if the section with the specified name was removed,
+            <c>false</c> otherwise</return>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.Clear">
+            <summary>
+            Removes all entries from this collection
+            </summary>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:IniParser.SectionDataCollection.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>
+            A new object that is a copy of this instance.
+            </returns>
+        </member>
+        <member name="T:IniParser.StreamIniDataParser">
+            <summary>
+            Represents an INI data parser for streams.
+            </summary>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:IniParser.StreamIniDataParser" /> class.
+            </summary>
+            <remarks>
+            By default the various delimiters for the data are setted:
+            <para>';' for one-line comments</para><para>'[' ']' for delimiting a section</para><para>'=' for linking key value pairs</para><example>
+            An example of well formed data with the default values:
+            <para>
+            ;section comment<br />
+            [section] ; section comment<br /><br />
+            ; key comment<br />
+            key = value ;key comment<br /><br />
+            ;key2 comment<br />
+            key2 = value<br /></para></example></remarks>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._currentCommentList">
+            <summary>
+            Temp list of comments
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._currentSectionName">
+            <summary>
+            Tmp var with the name of the seccion which is being process
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._currentTmpData">
+            <summary>
+            Temporary data for the parsing
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._commentDelimiter">
+            <summary>
+            Defines the character used as comment delimiter.
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._sectionDelimiters">
+            <summary>
+            Defines the two characters used as section delimiters.
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._keyValueDelimiter">
+            <summary>
+            Defines the character used as a key value pair link
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._commentRegex">
+            <summary>
+            Regular expression for matching a comment string
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._sectionRegex">
+            <summary>
+            Regular expression for matching a section string
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._keyValuePairRegex">
+            <summary>
+            Regular expression for matching a key / value pair string
+            </summary>
+        </member>
+        <member name="F:IniParser.StreamIniDataParser._relaxedIniFormat">
+            <summary>
+            True to allow loading an IniFile with non-unique section or key
+            </summary>
+        </member>
+        <member name="P:IniParser.StreamIniDataParser.CommentDelimiter">
+            <summary>
+            Gets or sets the comment delimiter.
+            </summary>
+            <value>The comment delimiter.</value>
+        </member>
+        <member name="P:IniParser.StreamIniDataParser.SectionDelimiters">
+            <summary>
+            Gets or sets the section delimiters.
+            </summary>
+            <value>The section delimiters.</value>
+        </member>
+        <member name="P:IniParser.StreamIniDataParser.KeyValueDelimiter">
+            <summary>
+            Gets or sets the key value delimiter.
+            </summary>
+            <value>The key value delimiter.</value>
+        </member>
+        <member name="P:IniParser.StreamIniDataParser.CommentRegexString">
+            <summary>
+            Gets or sets the regular expression for matching
+            a comment substring.
+            </summary>
+            <value>A string containing the regular expression.</value>
+        </member>
+        <member name="P:IniParser.StreamIniDataParser.SectionRegexString">
+            <summary>
+            Gets or sets the regular expression for matching
+            a section substring.
+            </summary>
+            <value>A string containing the regular expression.</value>
+        </member>
+        <member name="P:IniParser.StreamIniDataParser.KeyValuePairRegexString">
+            <summary>
+            Gets or sets the regular expression for matching a
+            key/value pair substring.
+            </summary>
+            <value>A string containing the regular expression.</value>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ReadData(System.IO.StreamReader)">
+            <summary>
+                <para>Reads data in INI format from a stream.</para>
+            </summary>
+            <param name="reader">Reader stream.</param>
+            <returns>
+            </returns>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ReadData(System.IO.StreamReader,System.Boolean)">
+            <summary>
+                <para>Reads data in INI format from a stream.</para>
+            </summary>
+            <param name="reader">Reader stream.</param>
+            <param name="relaxedIniFormat">
+            True to allow loading an IniFile with non-unique section or key, in which
+            case the repeating values are discarded
+            </param>
+            <returns>
+            </returns>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.WriteData(System.IO.StreamWriter,IniParser.IniData)">
+            <summary>
+            Writes the ini data to a stream.
+            </summary>
+            <param name="writer">The writer.</param>
+            <param name="iniData">An <see cref="T:IniParser.IniData" /> instance .</param>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.MatchComment(System.String)">
+            <summary>
+            Checks if a given string contains a comment.
+            </summary>
+            <param name="s">The string to be checked.</param>
+            <returns>
+                <c>true</c> if any substring from s is a comment, <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.MatchSection(System.String)">
+            <summary>
+            Checks if a given string represents a section delimiter.
+            </summary>
+            <param name="s">The string to be checked.</param>
+            <returns>
+                <c>true</c> if the string represents a section, <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.MatchKeyValuePair(System.String)">
+            <summary>
+            Checks if a given string represents a key / value pair.
+            </summary>
+            <param name="s">The string to be checked.</param>
+            <returns>
+                <c>true</c> if the string represents a key / value pair, <c>false</c> otherwise.
+            </returns>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ExtractComment(System.String)">
+            <summary>
+            Removes a comment from a string if exist, and returns the string without
+            the comment substring.
+            </summary>
+            <param name="s">The string we want to remove the comments from.</param>
+            <returns>The string s without comments</returns>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ProcessLine(System.String)">
+            <summary>
+            Processes the line.
+            </summary>
+            <param name="currentLine">The current line.</param>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ProcessSection(System.String)">
+            <summary>
+            Proccess a string defining a new section.
+            </summary>
+            <param name="s">The string to be processed</param>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ProcessKeyValuePair(System.String)">
+            <summary>
+            Processes a string containing a key/value pair.
+            </summary>
+            <param name="s">The string to be processed</param>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ExtractKey(System.String)">
+            <summary>
+            Extracts the key portion of a string containing a key/value pair..
+            </summary>
+            <param name="s">The string to be processed, which contains a key/value pair</param>
+            <returns>The name of the extracted key.</returns>
+        </member>
+        <member name="M:IniParser.StreamIniDataParser.ExtractValue(System.String)">
+            <summary>
+            Extracts the value portion of a string containing a key/value pair..
+            </summary>
+            <param name="s">The string to be processed, which contains a key/value pair</param>
+            <returns>The name of the extracted value.</returns>
+        </member>
+        <member name="T:IniParser.StringIniParser">
+            <summary>
+            Represents an INI data parser for strings.
+            </summary>
+        </member>
+        <member name="M:IniParser.StringIniParser.ParseString(System.String)">
+            <summary>
+            Parses a string containing data formatted as an INI file.
+            </summary>
+            <param name="dataStr">The string containing the data.</param>
+            <returns>
+            A new <see cref="T:IniParser.IniData" /> instance with the data parsed from the string.
+            </returns>
+        </member>
+        <member name="M:IniParser.StringIniParser.ParseString(System.String,System.Boolean)">
+            <summary>
+            Parses a string containing data formatted as an INI file.
+            </summary>
+            <param name="dataStr">The string containing the data.</param>
+            <param name="relaxedIniRead">
+            True to try reading an invalid INI file.
+            </param>
+            <returns>
+            A new <see cref="T:IniParser.IniData" /> instance with the data parsed from the string.
+            </returns>
+        </member>
+        <member name="M:IniParser.StringIniParser.WriteString(IniParser.IniData)">
+            <summary>
+            Creates a string from the INI data.
+            </summary>
+            <param name="iniData">An <see cref="T:IniParser.IniData" /> instance.</param>
+            <returns>
+            A formatted string with the contents of the
+            <see cref="T:IniParser.IniData" /> instance object.
+            </returns>
+        </member>
+    </members>
+</doc>

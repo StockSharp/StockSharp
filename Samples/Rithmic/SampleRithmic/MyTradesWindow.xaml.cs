@@ -1,0 +1,10 @@
+﻿namespace SampleRithmic
+{
+	public partial class MyTradesWindow
+	{
+		public MyTradesWindow()
+		{
+			InitializeComponent();
+		}
+	}
+}

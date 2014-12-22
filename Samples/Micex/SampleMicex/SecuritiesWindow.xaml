@@ -1,0 +1,26 @@
+<Window x:Class="SampleMicex.SecuritiesWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+    xmlns:xaml="http://schemas.stocksharp.com/xaml"
+    Title="{x:Static loc:LocalizedStrings.Str187}" Height="415" Width="1140">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<xaml:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
+
+		<Grid Grid.Row="1" HorizontalAlignment="Right">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<Button x:Name="Quotes" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.XamlStr707}" Width="100" IsEnabled="False" Click="QuotesClick" />
+			<Button x:Name="NewOrder" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.XamlStr353}" Width="100" IsEnabled="False" Click="NewOrderClick" />
+		</Grid>
+	</Grid>
+</Window>

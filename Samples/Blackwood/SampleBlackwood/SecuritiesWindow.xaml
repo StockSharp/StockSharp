@@ -1,0 +1,26 @@
+<Window x:Class="SampleBlackwood.SecuritiesWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"	xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+	xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+	Title="{x:Static loc:LocalizedStrings.Str187}" Height="415" Width="1081">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<sx:SecurityPicker x:Name="SecurityPicker" x:FieldModifier="public" SecuritySelected="SecurityPicker_OnSecuritySelected" ShowCommonStatColumns="True" />
+
+		<StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+			<Button x:Name="Find" Content="{x:Static loc:LocalizedStrings.XamlStr326}" Width="100" Click="FindClick" />
+			<Button x:Name="Level1" Content="Level 1" Width="100" IsEnabled="False" Click="Level1Click" />
+			<Button x:Name="Level2" Content="Level 2" Width="100" IsEnabled="False" Click="Level2Click" />
+            <Button x:Name="Depth" Content="{x:Static loc:LocalizedStrings.Str1795}" Width="100" IsEnabled="False" Click="DepthClick" />
+			<Button x:Name="NewOrder" Content="{x:Static loc:LocalizedStrings.XamlStr353}" Width="100" IsEnabled="False" Click="NewOrderClick" />
+			<Button x:Name="NewStopOrder" Content="{x:Static loc:LocalizedStrings.XamlStr354}" Width="120" IsEnabled="False" Click="NewStopOrderClick" />
+			<Button x:Name="Candles" Content="{x:Static loc:LocalizedStrings.Str646}" Width="100" IsEnabled="False" Click="CandlesClick" />
+			<ComboBox x:Name="CandlesPeriods" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
+		</StackPanel>
+	</Grid>
+</Window>

@@ -1,0 +1,629 @@
+<?xml version="1.0"?><doc><assembly><name>ActiproSoftware.Editors.Interop.DataGrid.Wpf</name></assembly><members><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase"><summary>
+            Represents a base class for data-bound columns for use in a <c>DataGrid</c>.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.ApplyBinding(System.Windows.FrameworkElement,System.Windows.DependencyProperty)"><summary>
+            Associates the binding expression, defined by the <c>Binding</c> property, with the specified target property.
+            </summary><param name="targetElement">The target element.</param><param name="targetProperty">The target property.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.ApplyValue(System.Windows.DependencyProperty,System.Windows.FrameworkElement,System.Windows.DependencyProperty)"><summary>
+            Sets the value of the specified target object and property, based on the specified source property.
+            </summary><param name="sourceProperty">The source property.</param><param name="targetElement">The target element.</param><param name="targetProperty">The target property.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.GetProperty(System.String)"><summary>
+            Gets the <c>DependencyProperty</c> associated with the specified name.
+            </summary><param name="propertyName">Name of the property.</param><returns>The <c>DependencyProperty</c> associated with the specified name.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.IsMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)"><summary>
+            Determines whether the left mouse button is down based on the specified <see cref="T:System.Windows.Input.MouseButtonEventArgs" />.
+            </summary><param name="args">The <see cref="T:System.Windows.Input.MouseButtonEventArgs" /> instance containing the event data.</param><returns><c>true</c> if the left mouse button is down based on the specified <see cref="T:System.Windows.Input.MouseButtonEventArgs" />; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.OnNotifyablePropertyValueChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)"><summary>
+            Occurs when a property value changes that requires the column to be notified.
+            </summary><param name="d">The <see cref="T:System.Windows.DependencyObject" /> whose property is changed.</param><param name="e">A <see cref="T:System.Windows.DependencyPropertyChangedEventArgs" /> that contains the event data.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.RefreshCellContent(System.Windows.FrameworkElement,System.String)"><summary>
+            Refreshes the contents of a cell in the column in response to a column property value change.
+            </summary><param name="element">The element returned by the <c>Content</c> property of the cell to refresh.</param><param name="propertyName">The name of the column property that has changed.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.UpdateBindingSource(System.Windows.FrameworkElement,System.Windows.DependencyProperty)"><summary>
+            Updates the source of the <c>BindingExpression</c> associated with the specified element/property.
+            </summary><param name="element">The element.</param><param name="property">The property.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.UpdateBindingTarget(System.Windows.FrameworkElement,System.Windows.DependencyProperty)"><summary>
+            Updates the target of the <c>BindingExpression</c> associated with the specified element/property.
+            </summary><param name="element">The element.</param><param name="property">The property.</param></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontFamily"><summary>
+            Gets or sets the font family.
+            This is a dependency property.
+            </summary><value>
+            The font family.
+            The default value is <c>SystemFonts.MessageFontFamily</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontSize"><summary>
+            Gets or sets the font size.
+            This is a dependency property.
+            </summary><value>
+            The font size.
+            The default value is <c>SystemFonts.MessageFontSize</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontStyle"><summary>
+            Gets or sets the font style.
+            This is a dependency property.
+            </summary><value>
+            The font style.
+            The default value is <c>SystemFonts.MessageFontStyle</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontWeight"><summary>
+            Gets or sets the font weight.
+            This is a dependency property.
+            </summary><value>
+            The font weight.
+            The default value is <c>SystemFonts.MessageFontWeight</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.Foreground"><summary>
+            Gets or sets the foreground brush.
+            This is a dependency property.
+            </summary><value>
+            The font foreground brush.
+            The default value is <c>SystemColors.ControlTextBrush</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontFamilyProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontFamily" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontFamily" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontSizeProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontSize" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontSize" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontStyleProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontStyle" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontStyle" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontWeightProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontWeight" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.FontWeight" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.ForegroundProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.Foreground" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridBoundColumnBase.Foreground" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase"><summary>
+            Represents a base class for data-bound columns for use in a <c>DataGrid</c> that utilizes <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />-derived controls.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.GenerateBaseStyle(System.Type,System.Boolean)"><summary>
+            Generates a <see cref="T:System.Windows.Style" /> that can be used as the basis for the element styles.
+            </summary><param name="targetType">Type of the target.</param><param name="isEditing">if set to <c>true</c> the style will be used for the editing element.</param><returns>A <see cref="T:System.Windows.Style" /> that can be used as the basis for the element styles.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.GenerateEditBox(System.Boolean,Microsoft.Windows.Controls.DataGridCell)"><summary>
+            Generates an instance of a <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />-derived object.
+            </summary><param name="isEditing">if set to <c>true</c> the edit box will be used for editing.</param><param name="cell">The cell.</param><returns>An instance of a <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />-derived object.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.GenerateEditingElement(Microsoft.Windows.Controls.DataGridCell,System.Object)"><summary>
+            Generates the editing element.
+            </summary><param name="cell">The cell.</param><param name="dataItem">The data item.</param><returns>The <c>FrameworkElement</c> to use for editing.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.GenerateElement(Microsoft.Windows.Controls.DataGridCell,System.Object)"><summary>
+            Generates the element.
+            </summary><param name="cell">The cell.</param><param name="dataItem">The data item.</param><returns>
+            The <c>FrameworkElement</c> to use for display.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.GetEditBoxValue(ActiproSoftware.Windows.Controls.Editors.PartEditBox)"><summary>
+            Gets the value associated with the specified <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />.
+            </summary><param name="editBox">The <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" /> whose value should be returned.</param><returns>The value associated with the specified <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.PrepareCellForEdit(System.Windows.FrameworkElement,System.Windows.RoutedEventArgs)"><summary>
+            Prepares the cell for edit.
+            </summary><param name="editingElement">The editing element.</param><param name="editingEventArgs">The <see cref="T:System.Windows.RoutedEventArgs" /> instance containing the event data.</param><returns></returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotHorizontalAlignment"><summary>
+            Gets or sets the horizontal alignment used for the center slot container element of the associated <c>PartEditBox</c>.
+            This is a dependency property.
+            </summary><value>
+            The horizontal alignment used for the center slot container element of the associated <c>PartEditBox</c>.
+            The default value is <c>HorizontalAlignment.Stretch</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotMargin"><summary>
+            Gets or sets the margin used for the center slot container element of the associated <c>PartEditBox</c>.
+            This is a dependency property.
+            </summary><value>
+            The margin used for the center slot container element of the associated <c>PartEditBox</c>.
+            The default value is <c>0</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CheckBoxVisibility"><summary>
+            Gets or sets the <see cref="T:System.Windows.Visibility" /> of the <c>CheckBox</c> presented by the associated <c>PartEditBox</c>.
+            This is a dependency property.
+            </summary><value>
+            The <see cref="T:System.Windows.Visibility" /> of the <c>CheckBox</c> presented by the associated <c>PartEditBox</c>.
+            The default value is <c>Visibility.Collapsed</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.DefaultEditingElementStyle"><summary>
+            Gets the default value for the <c>EditingElementStyleProperty</c> dependency property.
+            </summary><value>The default value for the <c>EditingElementStyleProperty</c> dependency property.</value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.DefaultElementStyle"><summary>
+            Gets the default value for the <c>EditingElementStyleProperty</c> dependency property.
+            </summary><value>The default value for the <c>EditingElementStyleProperty</c> dependency property.</value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.DropDownButtonVisibility"><summary>
+            Gets or sets the <see cref="T:System.Windows.Visibility" /> of the <c>DropDownButton</c> presented by the associated <c>PartEditBox</c>.
+            This is a dependency property.
+            </summary><value>
+            The <see cref="T:System.Windows.Visibility" /> of the <c>DropDownButton</c> presented by the associated <c>PartEditBox</c>.
+            The default value is <c>Visibility.Collapsed</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.IsHintTransitioningEnabled"><summary>
+            Gets or sets a value indicating whether the hint will be animated to/from the regular content.
+            This is a dependency property.
+            </summary><value><c>true</c> if the hint will be animated to/from the regular content; otherwise, <c>false</c>.
+            The default value is <c>true</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.LeftSlotMargin"><summary>
+            Gets or sets the margin used for the left slot container element of the associated <c>PartEditBox</c>.
+            This is a dependency property.
+            </summary><value>
+            The margin used for the left slot container element of the associated <c>PartEditBox</c>.
+            The default value is <c>0</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownHeight"><summary>
+            Gets or sets the maximum height of the drop-down popup.
+            This is a dependency property.
+            </summary><value>
+            The maximum height of the drop-down popup.
+            The default value is <c>SystemParameters.PrimaryScreenHeight / 3.0</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownWidth"><summary>
+            Gets or sets the maximum width of the drop-down popup.
+            This is a dependency property.
+            </summary><value>
+            The maximum width of the drop-down popup.
+            The default value is <c>double.NaN</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownHeight"><summary>
+            Gets or sets the minimum height of the drop-down popup.
+            This is a dependency property.
+            </summary><value>
+            The minimum height of the drop-down popup.
+            The default value is <c>0.0</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownWidth"><summary>
+            Gets or sets the minimum width of the drop-down popup.
+            This is a dependency property.
+            </summary><value>
+            The minimum width of the drop-down popup.
+            The default value is <c>double.NaN</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.RightSlotMargin"><summary>
+            Gets or sets the margin used for the right slot container element of the associated <c>PartEditBox</c>.
+            This is a dependency property.
+            </summary><value>
+            The margin used for the right slot container element of the associated <c>PartEditBox</c>.
+            The default value is <c>0</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinBehavior"><summary>
+            Gets or sets the behavior used when spinning an associated value.
+            This is a dependency property.
+            </summary><value>
+            The behavior used when spinning an associated value.
+            The default value is <c>SpinBehavior.NoWrap</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinnerVisibility"><summary>
+            Gets or sets the <see cref="T:System.Windows.Visibility" /> of the <c>Spinner</c> presented by the associated <c>PartEditBox</c>.
+            This is a dependency property.
+            </summary><value>
+            The <see cref="T:System.Windows.Visibility" /> of the <c>Spinner</c> presented by the associated <c>PartEditBox</c>.
+            The default value is <c>Visibility.Collapsed</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotHorizontalAlignmentProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotHorizontalAlignment" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotHorizontalAlignment" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotMarginProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotMargin" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CenterSlotMargin" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CheckBoxVisibilityProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CheckBoxVisibility" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.CheckBoxVisibility" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.DropDownButtonVisibilityProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.DropDownButtonVisibility" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.DropDownButtonVisibility" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.IsHintTransitioningEnabledProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.IsHintTransitioningEnabled" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.IsHintTransitioningEnabled" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.LeftSlotMarginProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.LeftSlotMargin" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.LeftSlotMargin" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownHeightProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownHeight" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownHeight" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownWidthProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownWidth" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MaxDropDownWidth" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownHeightProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownHeight" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownHeight" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownWidthProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownWidth" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.MinDropDownWidth" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.RightSlotMarginProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.RightSlotMargin" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.RightSlotMargin" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinBehaviorProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinBehavior" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinBehavior" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinnerVisibilityProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinnerVisibility" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridPartEditBoxColumnBase.SpinnerVisibility" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1"><summary>
+            Represents a base class for data-bound columns for use in a <c>DataGrid</c> that utilizes <see cref="T:ActiproSoftware.Windows.Controls.Editors.Primitives.TypeSpecificEditBoxBase`1" />-derived controls.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.CancelCellEdit(System.Windows.FrameworkElement,System.Object)"><summary>
+            Cancels the cell edit.
+            </summary><param name="editingElement">The editing element.</param><param name="uneditedValue">The unedited value.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.CommitCellEdit(System.Windows.FrameworkElement)"><summary>
+            Commits the cell edit.
+            </summary><param name="editingElement">The editing element.</param><returns></returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.GenerateEditBox(System.Boolean,Microsoft.Windows.Controls.DataGridCell)"><summary>
+            Generates an instance of a <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />-derived object.
+            </summary><param name="isEditing">if set to <c>true</c> the edit box will be used for editing.</param><param name="cell">The cell.</param><returns>
+            An instance of a <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />-derived object.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.GetEditBoxType"><summary>
+            Gets the type of the associated <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />-derived control.
+            </summary><returns>The type of the associated <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />-derived control.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.GetEditBoxValue(ActiproSoftware.Windows.Controls.Editors.PartEditBox)"><summary>
+            Gets the value associated with the specified <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />.
+            </summary><param name="editBox">The <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" /> whose value should be returned.</param><returns>The value associated with the specified <see cref="T:ActiproSoftware.Windows.Controls.Editors.PartEditBox" />.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.PartValueCommitTriggers"><summary>
+            Gets or sets the triggers that will force any parts to commit any changes.
+            This is a dependency property.
+            </summary><value>
+            The triggers that will force any parts to commit any changes.
+            The default value is <c>PartValueCommitTriggers.SpinnerChange</c>.
+            </value><remarks>
+            Any pending changes will always be committed when the part loses focus.
+            </remarks></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.PartValueCommitTriggersProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.PartValueCommitTriggers" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridTypeSpecificEditBoxColumnBase`1.PartValueCommitTriggers" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1"><summary>
+            Represents a base class for data-bound columns for use in a <c>DataGrid</c> that utilizes <see cref="T:ActiproSoftware.Windows.Controls.Editors.Primitives.RangeTypeSpecificEditBoxBase`1" />-derived controls.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.Maximum"><summary>
+            Gets or sets the maximum value allowed.
+            This is a dependency property.
+            </summary><value>
+            The maximum value allowed, with <see lanword="null" /> indicating no maximum.
+            The default value is <c>default(T)</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.Minimum"><summary>
+            Gets or sets the minimum value allowed.
+            This is a dependency property.
+            </summary><value>
+            The minimum value allowed, with <see lanword="null" /> indicating no minimum.
+            The default value is <c>default(T)</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.MaximumProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.Maximum" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.Maximum" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.MinimumProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.Minimum" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridRangeTypeSpecificEditBoxColumnBase`1.Minimum" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1"><summary>
+            Represents a base class for data-bound columns for use in a <c>DataGrid</c> that utilizes <see cref="T:ActiproSoftware.Windows.Controls.Editors.Primitives.Int64EditBoxBase`1" />-derived controls.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.Format"><summary>
+            Gets or sets the integer format string.
+            This is a dependency property.
+            </summary><value>
+            The integer format string.
+            The default value is <c>"G"</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.StepValue"><summary>
+            Gets or sets the value used to increment and decrement the associated value.
+            This is a dependency property.
+            </summary><value>
+            The value used to increment and decrement the associated value.
+            The default value is <c>1</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.FormatProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.Format" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.Format" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.StepValueProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.StepValue" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt64EditBoxColumnBase`1.StepValue" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt64Column"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.Int64EditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt64Column.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.Int64EditBox" /> type.</returns></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1"><summary>
+            Represents a base class for data-bound columns for use in a <c>DataGrid</c> that utilizes <see cref="T:ActiproSoftware.Windows.Controls.Editors.Primitives.DoubleEditBoxBase`1" />-derived controls.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.Format"><summary>
+            Gets or sets the double format string.
+            This is a dependency property.
+            </summary><value>
+            The double format string.
+            The default value is <c>"R"</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.StepValue"><summary>
+            Gets or sets the value used to increment and decrement the associated value.
+            This is a dependency property.
+            </summary><value>
+            The value used to increment and decrement the associated value.
+            The default value is <c>double.NaN</c>, which indicates to automatically calculate the value to increment by.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.FormatProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.Format" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.Format" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.StepValueProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.StepValue" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridDoubleEditBoxColumnBase`1.StepValue" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridCornerRadiusColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.CornerRadiusEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridCornerRadiusColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridCornerRadiusColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.CornerRadiusEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridCornerRadiusColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>CornerRadiusEditableParts.All</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridCornerRadiusColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridCornerRadiusColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridCornerRadiusColumn.EditableParts" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridThicknessColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.ThicknessEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridThicknessColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridThicknessColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.ThicknessEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridThicknessColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>ThicknessEditableParts.All</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridThicknessColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridThicknessColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridThicknessColumn.EditableParts" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.EnumEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns></returns><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.EnumEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumListBoxStyle"><summary>
+            Gets or sets the <see cref="T:System.Windows.Style" /> applied to the <see cref="T:ActiproSoftware.Windows.Controls.Editors.EnumListBox" /> used in default drop-down content.
+            This is a dependency property.
+            </summary><value>
+            The <see cref="T:System.Windows.Style" /> applied to the <see cref="T:ActiproSoftware.Windows.Controls.Editors.EnumListBox" /> used in default drop-down content.
+            The default value is <see langword="null" />.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumType"><summary>
+            Gets or sets the enumeration type associated with the value.
+            This is a dependency property.
+            </summary><value>
+            The enumeration type associated with the value.
+            The default value is <see langword="null" />.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.IsEditable"><summary>
+            Gets or sets a value indicating whether the underlying part is editable.
+            This is a dependency property.
+            </summary><value><c>true</c> if the underlying part is editable; otherwise, <c>false</c>.
+            The default value is <c>true</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.UseDescriptionAttributes"><summary>
+            Gets or sets a value indicating whether enumeration values should be displayed using an associated <c>DescriptionAttribute</c>, if any.
+            This is a dependency property.
+            </summary><value><c>true</c> if enumeration values should be displayed using an associated <c>DescriptionAttribute</c>, if any.; otherwise <c>false</c>.
+            The default value is <c>false</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumListBoxStyleProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumListBoxStyle" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumListBoxStyle" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumTypeProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumType" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.EnumType" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.IsEditableProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.IsEditable" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.IsEditable" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.UseDescriptionAttributesProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.UseDescriptionAttributes" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridEnumColumn.UseDescriptionAttributes" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.TimeSpanEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.TimeSpanEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>TimeSpanEditableParts.All</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.Format"><summary>
+            Gets or sets the time span format string.
+            This is a dependency property.
+            </summary><value>
+            The time span format string.
+            The default value is <c>"g"</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.EditableParts" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.FormatProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.Format" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridTimeSpanColumn.Format" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.MaskedTextBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.CancelCellEdit(System.Windows.FrameworkElement,System.Object)"><summary>
+            Cancels the cell edit.
+            </summary><param name="editingElement">The editing element.</param><param name="uneditedValue">The unedited value.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.CommitCellEdit(System.Windows.FrameworkElement)"><summary>
+            Commits the cell edit.
+            </summary><param name="editingElement">The editing element.</param><returns></returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.GenerateBaseStyle(System.Type,System.Boolean)"><summary>
+            Generates a <see cref="T:System.Windows.Style" /> that can be used as the basis for the element styles.
+            </summary><param name="targetType">Type of the target.</param><param name="isEditing">if set to <c>true</c> the style will be used for the editing element.</param><returns>A <see cref="T:System.Windows.Style" /> that can be used as the basis for the element styles.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.GenerateMaskedTextBox(System.Boolean,Microsoft.Windows.Controls.DataGridCell)"><summary>
+            Generates an instance of a <see cref="T:ActiproSoftware.Windows.Controls.Editors.MaskedTextBox" />.
+            </summary><param name="isEditing">if set to <c>true</c> the edit box will be used for editing.</param><param name="cell">The cell.</param><returns>An instance of a <see cref="T:ActiproSoftware.Windows.Controls.Editors.MaskedTextBox" />.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.GenerateEditingElement(Microsoft.Windows.Controls.DataGridCell,System.Object)"><summary>
+            Generates the editing element.
+            </summary><param name="cell">The cell.</param><param name="dataItem">The data item.</param><returns>The <c>FrameworkElement</c> to use for editing.</returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.GenerateElement(Microsoft.Windows.Controls.DataGridCell,System.Object)"><summary>
+            Generates the element.
+            </summary><param name="cell">The cell.</param><param name="dataItem">The data item.</param><returns>
+            The <c>FrameworkElement</c> to use for display.
+            </returns></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.PrepareCellForEdit(System.Windows.FrameworkElement,System.Windows.RoutedEventArgs)"><summary>
+            Prepares the cell for edit.
+            </summary><param name="editingElement">The editing element.</param><param name="editingEventArgs">The <see cref="T:System.Windows.RoutedEventArgs" /> instance containing the event data.</param><returns></returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsMatchRequired"><summary>
+            Gets or sets a value indicating whether a match is required for any changes to be committed.
+            This is a dependency property.
+            </summary><value><c>true</c> if a match is required for any changes to be committed; otherwise <c>false</c>.
+            The default value is <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.DefaultEditingElementStyle"><summary>
+            Gets the default value for the <c>EditingElementStyleProperty</c> dependency property.
+            </summary><value>The default value for the <c>EditingElementStyleProperty</c> dependency property.</value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.DefaultElementStyle"><summary>
+            Gets the default value for the <c>EditingElementStyleProperty</c> dependency property.
+            </summary><value>The default value for the <c>EditingElementStyleProperty</c> dependency property.</value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseAutoCorrected"><summary>
+            Gets or sets a value indicating whether characters entered will have their case auto-corrected to match the defined mask.
+            This is a dependency property.
+            </summary><value><c>true</c> if characters entered will have their case auto-corrected to match the defined mask; otherwise, <c>false</c>.
+            The default value is <c>false</c>.
+            </value><remarks>
+            When this property is set to <c>true</c>, then the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseSensitive" /> property is ignored.
+            </remarks></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseSensitive"><summary>
+            Gets or sets a value indicating whether the mask is case sensitive.
+            This is a dependency property.
+            </summary><value><c>true</c> if the mask is case sensitive; otherwise, <c>false</c>.
+            The default value is <c>false</c>.
+            </value><remarks>
+            When the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseAutoCorrected" /> property is set to <c>true</c>, then this property is ignored.
+            </remarks></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.Mask"><summary>
+            Gets or sets the input mask.
+            This is a dependency property.
+            </summary><value>
+            The input mask.
+            The default value is <see langword="null" />.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseAutoCorrectedProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseAutoCorrected" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseAutoCorrected" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseSensitiveProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseSensitive" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsCaseSensitive" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsMatchRequiredProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsMatchRequired" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.IsMatchRequired" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.MaskProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.Mask" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridMaskedTextColumn.Mask" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridVectorColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.VectorEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridVectorColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridVectorColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.VectorEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridVectorColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>VectorEditableParts.All</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridVectorColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridVectorColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridVectorColumn.EditableParts" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridSizeColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.SizeEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridSizeColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridSizeColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.SizeEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridSizeColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>SizeEditableParts.All</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridSizeColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridSizeColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridSizeColumn.EditableParts" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridPointColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.PointEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridPointColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridPointColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.PointEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridPointColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>PointEditableParts.All</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridPointColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridPointColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridPointColumn.EditableParts" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridRectColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.RectEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridRectColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridRectColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.RectEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridRectColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>RectEditableParts.All</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridRectColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridRectColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridRectColumn.EditableParts" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDoubleColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.DoubleEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDoubleColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.DoubleEditBox" /> type.</returns></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1"><summary>
+            Represents a base class for data-bound columns for use in a <c>DataGrid</c> that utilizes <see cref="T:ActiproSoftware.Windows.Controls.Editors.Primitives.Int32EditBoxBase`1" />-derived controls.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.Format"><summary>
+            Gets or sets the integer format string.
+            This is a dependency property.
+            </summary><value>
+            The integer format string.
+            The default value is <c>"G"</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.StepValue"><summary>
+            Gets or sets the value used to increment and decrement the associated value.
+            This is a dependency property.
+            </summary><value>
+            The value used to increment and decrement the associated value.
+            The default value is <c>1</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.FormatProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.Format" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.Format" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.StepValueProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.StepValue" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.Primitives.DataGridInt32EditBoxColumnBase`1.StepValue" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32RectColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.Int32RectEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32RectColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32RectColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.Int32RectEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32RectColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>RectEditableParts.All</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32RectColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32RectColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32RectColumn.EditableParts" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32Column"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.Int32EditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridInt32Column.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.Int32EditBox" /> type.</returns></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.ColorEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.ColorEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.ColorPreviewVisibility"><summary>
+            Gets or sets the visibility of the associated color preview.
+            This is a dependency property.
+            </summary><value>
+            The visibility of the associated color preview.
+            The default value is <c>Visibility.Visible</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.IsAlphaComponentVisible"><summary>
+            Gets or sets a value indicating whether the alpha component is visible.
+            This is a dependency property.
+            </summary><value><c>true</c> if the alpha component is visible; otherwise <c>false</c>.
+            The default value is <c>true</c>.
+            </value><remarks>
+            This property does not prevent a <see cref="T:ActiproSoftware.Windows.Controls.Editors.Parts.ColorAlphaPart" /> from modifying the alpha component, this only affects
+            the <see cref="T:ActiproSoftware.Windows.Controls.Editors.Parts.ColorPart" /> and the automation text used for <see cref="T:ActiproSoftware.Windows.Controls.Editors.Parts.ColorPartGroup" /> and <see cref="T:ActiproSoftware.Windows.Controls.Editors.ColorEditBox" />.
+            </remarks></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.ColorPreviewVisibilityProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.ColorPreviewVisibility" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.ColorPreviewVisibility" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.IsAlphaComponentVisibleProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.IsAlphaComponentVisible" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridColorColumn.IsAlphaComponentVisible" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.BrushEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.BrushEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.AllowGradientBrushes"><summary>
+            Gets or sets a value indicating whether gradient brushes can be entered by the end user.
+            This is a dependency property.
+            </summary><value><c>true</c> if gradient brushes can be entered by the end user; otherwise <c>false</c>.
+            The default value is <c>true</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.BrushPreviewVisibility"><summary>
+            Gets or sets the visibility of the associated brush preview.
+            This is a dependency property.
+            </summary><value>
+            The visibility of the associated brush preview.
+            The default value is <c>Visibility.Visible</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentEditable"><summary>
+            Gets or sets a value indicating whether the alpha component is editable.
+            This is a dependency property.
+            </summary><value><c>true</c> if the alpha component is editable; otherwise <c>false</c>.
+            The default value is <c>true</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentVisible"><summary>
+            Gets or sets a value indicating whether the alpha component is visible.
+            This is a dependency property.
+            </summary><value><c>true</c> if the alpha component is visible; otherwise <c>false</c>.
+            The default value is <c>true</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.AllowGradientBrushesProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.AllowGradientBrushes" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.AllowGradientBrushes" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.BrushPreviewVisibilityProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.BrushPreviewVisibility" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.BrushPreviewVisibility" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentEditableProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentEditable" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentEditable" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentVisibleProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentVisible" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridBrushColumn.IsAlphaComponentVisible" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.GuidEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns></returns><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.GuidEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.Format"><summary>
+            Gets or sets the GUID format string.
+            This is a dependency property.
+            </summary><value>
+            The GUID format string.
+            The default value is <c>"D"</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.NewGuidButtonVisibility"><summary>
+            Gets or sets the visibility of the associated new Guid <see cref="T:System.Windows.Controls.Button" />.
+            This is a dependency property.
+            </summary><value>
+            The visibility of the associated new Guid <see cref="T:System.Windows.Controls.Button" />.
+            The default value is <c>Visibility.Collapsed</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.FormatProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.Format" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.Format" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.NewGuidButtonVisibilityProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.NewGuidButtonVisibility" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridGuidColumn.NewGuidButtonVisibility" /> dependency property.</value></member><member name="T:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn"><summary>
+            Represents a data-bound column for use in a <c>DataGrid</c> that utilizes the <see cref="T:ActiproSoftware.Windows.Controls.Editors.DateTimeEditBox" />.
+            </summary></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.ApplyStandardValues(System.Windows.FrameworkElement)"><summary>
+            Applies standard values to the specified target element.
+            </summary><param name="targetElement">The target element.</param></member><member name="M:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.GetEditBoxType"><summary>
+            Gets the type of the edit box.
+            </summary><returns>The <see cref="T:ActiproSoftware.Windows.Controls.Editors.DateTimeEditBox" /> type.</returns></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.EditableParts"><summary>
+            Gets or sets the parts that are editable.
+            This is a dependency property.
+            </summary><value>
+            The parts that are editable.
+            The default value is <c>DateTimeEditableParts.DateAndTime</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.Format"><summary>
+            Gets or sets the date/time format string.
+            This is a dependency property.
+            </summary><value>
+            The date/time format string.
+            The default value is <c>"g"</c>.
+            </value></member><member name="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.MonthCalendarStyle"><summary>
+            Gets or sets the <see cref="T:System.Windows.Style" /> applied to the <see cref="T:ActiproSoftware.Windows.Controls.Editors.MonthCalendar" /> used in default drop-down content.
+            This is a dependency property.
+            </summary><value>
+            The <see cref="T:System.Windows.Style" /> applied to the <see cref="T:ActiproSoftware.Windows.Controls.Editors.MonthCalendar" /> used in default drop-down content.
+            The default value is <c>null</c>.
+            </value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.EditablePartsProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.EditableParts" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.EditableParts" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.FormatProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.Format" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.Format" /> dependency property.</value></member><member name="F:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.MonthCalendarStyleProperty"><summary>
+            Identifies the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.MonthCalendarStyle" /> dependency property.  This field is read-only.
+            </summary><value>The identifier for the <see cref="P:ActiproSoftware.Windows.Controls.Editors.Interop.DataGrid.DataGridDateTimeColumn.MonthCalendarStyle" /> dependency property.</value></member></members></doc>

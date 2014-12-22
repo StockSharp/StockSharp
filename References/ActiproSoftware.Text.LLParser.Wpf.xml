@@ -1,0 +1,960 @@
+<?xml version="1.0"?><doc><assembly><name>ActiproSoftware.Text.LLParser.Wpf</name></assembly><members><member name="T:ActiproSoftware.Products.Text.LLParser.Resources"><summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ResourceManager"><summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.Culture"><summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExDuplicateLabel"><summary>
+              Looks up a localized string similar to A duplicate label '{1}' was found in the same NonTerminal '{0}' label scope.  Productions, alternations, and non-optional quantifiers create label scopes.  The offending scope was: {2}.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfAlternationMultipleTerminalReferences"><summary>
+              Looks up a localized string similar to Multiple productions within a NonTerminal '{0}' alternation start with the terminal '{1}' either directly or indirectly.  The second production that contains a reference to the terminal is: {2}.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfAlternationNoProductions"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfAlternation does not contain any EBNF productions..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfAlternationNullProduction"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfAlternation contains a null EBNF production..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfConcatenationLabelNotSupported"><summary>
+              Looks up a localized string similar to A label cannot be set on an EbnfConcatenation..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfConcatenationNoTerms"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfConcatenation does not contain any EBNF terms..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfConcatenationNullTerm"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfConcatenation contains a null EBNF term..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfNonTerminalNoNonTerminal"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfNonTerminal does not have a valid reference to a NonTerminal..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfProductionNoTreeConstructorList"><summary>
+              Looks up a localized string similar to An EbnfProduction's tree constructor in the NonTerminal '{0}' potentially returns a list of nodes, which is not permitted.  Do not use AstChildrenFrom() as the root tree constructor for a production..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfQuantifierInvalidMaximum"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfQuantifier's maximum must be greater than or equal to the minimum..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfQuantifierInvalidMinimum"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfQuantifier's minimum must be greater than or equal to zero..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExEbnfTerminalNoTerminal"><summary>
+              Looks up a localized string similar to A NonTerminal '{0}' EbnfTerminal does not have a valid reference to a Terminal..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExGrammarNodeAlreadyCompiled"><summary>
+              Looks up a localized string similar to The grammar node '{0}' has already been compiled and cannot be compiled in another grammar..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExGrammarNodeCannotSetPropertyWhenCompiled"><summary>
+              Looks up a localized string similar to Property may not be set once the object has been compiled..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExGrammarNodeInvalid"><summary>
+              Looks up a localized string similar to The grammar node '{0}' is invalid..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExGrammarNodeMultipleUse"><summary>
+              Looks up a localized string similar to The grammar node '{0}' cannot be used more than once in the grammar..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExGrammarNodeNoPropertyValue"><summary>
+              Looks up a localized string similar to The {0} does not have a '{1}' property value..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExGrammarNoRootNonTerminal"><summary>
+              Looks up a localized string similar to The Grammar is missing a Root NonTerminal..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExILLParserNoTokenReader"><summary>
+              Looks up a localized string similar to The parser's CreateTokenReader() method did not return an ITokenReader instance..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExKeyedGrammarNodeNoPropertyValue"><summary>
+              Looks up a localized string similar to The {0} '{1}' does not have a '{2}' property value..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExLabelNotFound"><summary>
+              Looks up a localized string similar to An EbnfProduction's tree constructor in the NonTerminal '{0}' referenced a label '{1}' that was not found within its label scope.  Productions, alternations, and non-optional quantifiers create label scopes.  The offending scope was: {2}.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExNonTerminalAllowsLeftRecursion"><summary>
+              Looks up a localized string similar to The NonTerminal '{0}' allows for infinite left recursion.{1}.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExNonTerminalNoRules"><summary>
+              Looks up a localized string similar to The NonTerminal '{0}' does not contain any rules..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExParserInvalidOpCode"><summary>
+              Looks up a localized string similar to Op code '{0}' not implemented..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExPropertyConstructionNodeInvalidExplicitValueType"><summary>
+              Looks up a localized string similar to The value '{3}' cannot be set to the property '{0}.{1}', which has a return type '{2}'..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExPropertyConstructionNodeInvalidPropertyType"><summary>
+              Looks up a localized string similar to The property '{0}.{1}' has a type '{2}' that can't be handled by this property construction node..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExPropertyConstructionNodeNoPublicPropertyGetter"><summary>
+              Looks up a localized string similar to The property '{0}.{1}' doesn't have a public getter.  Use the SetProperty method instead..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExPropertyConstructionNodeNoPublicPropertySetter"><summary>
+              Looks up a localized string similar to The property '{0}.{1}' doesn't have a public setter.  Use the AddToCollectionProperty method instead when attempting to add to a collection..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExPropertyConstructionNodeNotMemberExpression"><summary>
+              Looks up a localized string similar to The type '{0}' is passed a lambda expression that doesn't evaluate to a type member..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ExPropertyConstructionNodeNotProperty"><summary>
+              Looks up a localized string similar to The member '{0}.{1}' is not a property..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ParseErrorCompletedParsingBeforeEof"><summary>
+              Looks up a localized string similar to Parsing completed before reaching document end..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ParseErrorNonTerminalExpected"><summary>
+              Looks up a localized string similar to {0} expected..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.LLParser.Resources.ParseErrorTerminalExpected"><summary>
+              Looks up a localized string similar to {0} expected..
+            </summary></member><member name="T:ActiproSoftware.Products.Text.LLParser.SR"><summary>
+            Provides access to the string resources of this assembly, also allowing for their customization.
+            </summary><remarks>
+            Call the <see cref="M:ActiproSoftware.Products.Text.LLParser.SR.GetString(System.String)" /> method to return a resolved resource string.
+            If a custom string has been set for a specified string resource name, it will be returned.
+            Otherwise, the default string resource value is returned.
+            <para>
+            If any of the resource strings are customized via a call to <see cref="M:ActiproSoftware.Products.Text.LLParser.SR.SetCustomString(System.String,System.String)" />,
+            it is best to do so before any other classes in this assembly are referenced,
+            such as in the application startup.
+            </para></remarks></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.ClearCustomStrings"><summary>
+            Removes all custom strings.
+            </summary></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.ContainsCustomString(System.String)"><summary>
+            Returns whether a custom string is defined for the specified string resource.
+            </summary><param name="name">The name of the resource for which to search.</param><returns><c>true</c> if a custom string is defined for the specified string resource; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.GetCustomString(System.String)"><summary>
+            Returns custom string that is stored for the specified string resource, if any.
+            </summary><param name="name">The name of the resource to get.</param><returns>The custom string that is stored for the specified string resource, if any.</returns></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.GetString(System.String)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.GetString(ActiproSoftware.Products.Text.LLParser.SRName)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.GetString(System.String,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.GetString(ActiproSoftware.Products.Text.LLParser.SRName,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.RemoveCustomString(System.String)"><summary>
+            Removes any custom string that is defined for the specified string resource.
+            </summary><param name="name">The name of the resource to remove.</param></member><member name="M:ActiproSoftware.Products.Text.LLParser.SR.SetCustomString(System.String,System.String)"><summary>
+            Sets a custom string value for the specified string resource.
+            </summary><param name="name">The name of the resource to set.</param><param name="value">The value of the resource to set.</param></member><member name="P:ActiproSoftware.Products.Text.LLParser.SR.ResourceManager"><summary>
+            Gets the <see cref="P:ActiproSoftware.Products.Text.LLParser.SR.ResourceManager" /> that provides the default resources. 
+            </summary><value>The <see cref="P:ActiproSoftware.Products.Text.LLParser.SR.ResourceManager" /> that provides the default resources.</value></member><member name="T:ActiproSoftware.Products.Text.LLParser.SRName"><summary>
+            Specifies the names of string resources for this assembly.
+            </summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExDuplicateLabel"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfAlternationMultipleTerminalReferences"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfAlternationNoProductions"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfAlternationNullProduction"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfConcatenationLabelNotSupported"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfConcatenationNoTerms"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfConcatenationNullTerm"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfNonTerminalNoNonTerminal"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfProductionNoTreeConstructorList"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfQuantifierInvalidMaximum"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfQuantifierInvalidMinimum"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExEbnfTerminalNoTerminal"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExGrammarNodeAlreadyCompiled"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExGrammarNodeCannotSetPropertyWhenCompiled"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExGrammarNodeInvalid"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExGrammarNodeMultipleUse"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExGrammarNodeNoPropertyValue"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExGrammarNoRootNonTerminal"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExKeyedGrammarNodeNoPropertyValue"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExLabelNotFound"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExILLParserNoTokenReader"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExNonTerminalAllowsLeftRecursion"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExNonTerminalNoRules"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExParserInvalidOpCode"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExPropertyConstructionNodeInvalidExplicitValueType"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExPropertyConstructionNodeInvalidPropertyType"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExPropertyConstructionNodeNotMemberExpression"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExPropertyConstructionNodeNoPublicPropertyGetter"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExPropertyConstructionNodeNoPublicPropertySetter"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ExPropertyConstructionNodeNotProperty"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ParseErrorCompletedParsingBeforeEof"><summary>A parse error string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ParseErrorNonTerminalExpected"><summary>A parse error string.</summary></member><member name="F:ActiproSoftware.Products.Text.LLParser.SRName.ParseErrorTerminalExpected"><summary>A parse error string.</summary></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode"><summary>
+            Provides the base requirements for tree construction node, used to output an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> for an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode.CreateNode(ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatchCollection)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that is created for this tree construction node.
+            </summary><param name="matches">The collection of matched <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> objects within the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> scope.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that is created for this tree construction node.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode.ToEbnfString"><summary>
+            Outputs the contents of the production rule in EBNF form.
+            </summary><returns>A string containing the EBNF form of the production rule.</returns></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode.IsCompiled"><summary>
+            Gets whether the grammar and its elements are compiled, via a call to its <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Compile" /> method.
+            </summary><value><c>true</c> if the grammar and its elements are compiled; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode.IsList"><summary>
+            Gets whether this tree construction node returns a placeholder node that contains a list of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> results.
+            </summary><value><c>true</c> if this node creates a list of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> results.
+            </value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.TreeConstructionNodeBase"><summary>
+            Represents an abstract base class a tree construction node, used to output an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> for an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TreeConstructionNodeBase.CreateNode(ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatchCollection)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that is created for this tree construction node.
+            </summary><param name="matches">The collection of matched <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> objects within the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> scope.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that is created for this tree construction node.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TreeConstructionNodeBase.ToEbnfString"><summary>
+            Outputs the contents of the rewrite node in EBNF form.
+            </summary><returns>A string containing the EBNF form of the rewrite node.</returns></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TreeConstructionNodeBase.Children"><summary>
+            Gets the collection of child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.
+            </summary><value>The collection of child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TreeConstructionNodeBase.IsCompiled"><summary>
+            Gets whether the grammar and its elements are compiled, via a call to its <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Compile" /> method.
+            </summary><value><c>true</c> if the grammar and its elements are compiled; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TreeConstructionNodeBase.IsList"><summary>
+            Gets whether this tree construction node returns a placeholder node that contains a list of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> results.
+            </summary><value><c>true</c> if this node creates a list of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> results.
+            </value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1"><summary>
+            Provides the base requirements for tree construction node, used to output a specific type of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> for an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" />.
+            </summary><typeparam name="TAstNode">The type of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />.</typeparam></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1.AddToCollectionProperty``1(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.ICollection{``0}}},ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreePropertyConstructionNode`1" /> that adds values from one or more specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes to a collection property.
+            </summary><typeparam name="TItem">The type of collection item.</typeparam><param name="expression">The lambda expression indicating the collection property to update.</param><param name="children">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> upon which the property was created.</returns><remarks>
+            String, integer, boolean, and AST node (any <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />-based class) property types are supported.
+            <para>
+            Multiple <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes can be passed to this method.
+            In the case of a string collection property type, the string values of the constructed nodes are added as items to the collection property.
+            In the case of an integer collection property type, the numeric values of the constructed nodes are added as items to the collection property.
+            In the case of a boolean collection property type, the boolean values of the constructed nodes are added as items to the collection property.
+            In the case of an AST node collection type, the nodes are added as items to the collection property.
+            </para></remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1.AppendToProperty``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreePropertyConstructionNode`1" /> that appends a value to a property using the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes.
+            </summary><typeparam name="TProperty">The property type.</typeparam><param name="expression">The lambda expression indicating the property to update.</param><param name="children">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> upon which the property was created.</returns><remarks>
+            String, integer, boolean, and flags enumeration property types are supported.
+            <para>
+            Multiple <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes can be passed to this method.
+            In the case of a string property type, the string values of the constructed nodes are concatenated to form the value appended to the property.
+            In the case of an integer property type, the numeric values of the constructed nodes are added together to form the value appended to the property.
+            In the case of a boolean property type, the boolean values of the constructed nodes are or'ed together to form the value appended to the property.
+            In the case of a flags enumeration property type, the constructed node values are matched against enumeration value names, or'ed together, and the result is used as the value appended to the property.
+            </para></remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1.SetCollectionItemProperties``2(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.ICollection{``0}}},System.Linq.Expressions.Expression{System.Func{``0,``1}},ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreePropertyConstructionNode`1" /> that sets a value to a property on each item in a collection property using the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes.
+            </summary><typeparam name="TItem">The type of collection item type.</typeparam><typeparam name="TProperty">The property type.</typeparam><param name="expression1">The lambda expression indicating the collection property to update.</param><param name="expression2">The lambda expression indicating the item property to update.</param><param name="children">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> upon which the property was created.</returns><remarks>
+            String, integer, boolean, enumeration, and AST node (any <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />-based class) property types are supported.
+            <para>
+            Multiple <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes can be passed to this method.
+            In the case of a string property type, the string values of the constructed nodes are concatenated to form the value set to the property.
+            In the case of an integer property type, the numeric values of the constructed nodes are added together to form the value set to the property.
+            In the case of a boolean property type, the boolean values of the constructed nodes are or'ed together to form the value set to the property.
+            In the case of an enumeration property type, the first constructed node value is matched against an enumeration value name and is used as the value set to the property.
+            In the case of a flags enumeration property type, the constructed node values are matched against enumeration value names, or'ed together, and the result is used as the value set to the property.
+            In the case of an AST node type, the first constructed node is the value set to the property.
+            </para></remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1.SetCollectionItemProperties``2(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.ICollection{``0}}},System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Object)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreePropertyConstructionNode`1" /> that sets a single explicit value to a property on each item in a collection property.
+            </summary><typeparam name="TItem">The type of collection item type.</typeparam><typeparam name="TProperty">The property type.</typeparam><param name="expression1">The lambda expression indicating the collection property to update.</param><param name="expression2">The lambda expression indicating the item property to update.</param><param name="explicitValue">The explicit value to set.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> upon which the property was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1.SetProperty``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreePropertyConstructionNode`1" /> that sets a value to a property using the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes.
+            </summary><typeparam name="TProperty">The property type.</typeparam><param name="expression">The lambda expression indicating the property to update.</param><param name="children">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> upon which the property was created.</returns><remarks>
+            String, integer, boolean, enumeration, and AST node (any <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />-based class) property types are supported.
+            <para>
+            Multiple <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> constructed nodes can be passed to this method.
+            In the case of a string property type, the string values of the constructed nodes are concatenated to form the value set to the property.
+            In the case of an integer property type, the numeric values of the constructed nodes are added together to form the value set to the property.
+            In the case of a boolean property type, the boolean values of the constructed nodes are or'ed together to form the value set to the property.
+            In the case of an enumeration property type, the first constructed node value is matched against an enumeration value name and is used as the value set to the property.
+            In the case of a flags enumeration property type, the constructed node values are matched against enumeration value names, or'ed together, and the result is used as the value set to the property.
+            In the case of an AST node type, the first constructed node is the value set to the property.
+            </para></remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1.SetProperty``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Object)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreePropertyConstructionNode`1" /> that sets a single explicit value to a property.
+            </summary><typeparam name="TProperty">The property type.</typeparam><param name="expression">The lambda expression indicating the property to update.</param><param name="explicitValue">The explicit value to set.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> upon which the property was created.</returns></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.ParentTreeConstructionNodeBase"><summary>
+            Represents an abstract <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> base class that can contain child tree construction nodes.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.ParentTreeConstructionNodeBase.#ctor(ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Initializes a new instance of the <c>ParentTreeConstructionNodeBase</c> class.
+            </summary><param name="children">The collection of child nodes.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.ParentTreeConstructionNodeBase.Children"><summary>
+            Gets the collection of child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.
+            </summary><value>The collection of child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode"><summary>
+            Provides the base requirements for a debuggable <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode.EndOffset"><summary>
+            Gets the end offset of this AST node, if known.
+            </summary><value>The end offset of this AST node, if known.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode.StartOffset"><summary>
+            Gets the start offset of this AST node, if known.
+            </summary><value>The start offset of this AST node, if known.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode.TreeString"><summary>
+            Gets the AST node string representation.
+            </summary><value>The AST node string representation.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode.Value"><summary>
+            Gets the AST node value.
+            </summary><value>The AST node value.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNodeMatch"><summary>
+            Provides the base requirements for a debuggable <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNodeMatch.Label"><summary>
+            Gets the optional label applied to the match that can be used for identification during tree construction.
+            </summary><value>The optional label applied to the match that can be used for identification during tree construction.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNodeMatch.Node"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode" /> that was matched.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode" /> that was matched.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableMatchCondition"><summary>
+            Provides the base requirements for a debuggable <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IMatchCondition" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableMatchCondition.CallbackCount"><summary>
+            Gets the number of callbacks.
+            </summary><value>The number of callbacks.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableMatchCondition.FirstSet"><summary>
+            Returns the collection of terminals that provide the first-set for the match condition.
+            </summary><returns>The collection of terminals that provide the first-set for the match condition.</returns></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableEbnfTerm"><summary>
+            Provides the base requirements for a debuggable <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableEbnfTerm.EbnfPositionRange"><summary>
+            Gets or sets the compiled <see cref="T:ActiproSoftware.Text.TextPositionRange" /> of the node within an EBNF representation of the grammar.
+            </summary><value>The compiled <see cref="T:ActiproSoftware.Text.TextPositionRange" /> of the node within an EBNF representation of the grammar.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableEbnfTerm.MatchCondition"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableMatchCondition" /> to use for this term.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableMatchCondition" /> to use for this term.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol"><summary>
+            Provides the base requirements for a debuggable <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol.EbnfPositionRange"><summary>
+            Gets the compiled <see cref="T:ActiproSoftware.Text.TextPositionRange" /> of the symbol within an EBNF representation of the grammar.
+            </summary><value>The compiled <see cref="T:ActiproSoftware.Text.TextPositionRange" /> of the symbol within an EBNF representation of the grammar.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol.ErrorAlias"><summary>
+            Gets the alias to use for this symbol when reporting errors.
+            </summary><value>The alias to use for this symbol when reporting errors.</value><remarks><para>
+            Terminals always report errors and use their <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol.Key" /> if no error alias is specified.
+            Non-terminals will only report errors if an error alias is specified.
+            </para></remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol.Key"><summary>
+            Gets the string that identifies the symbol.
+            </summary><value>The string that identifies the symbol.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableNonTerminal"><summary>
+            Provides the base requirements for a debuggable <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" />.
+            </summary></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableTerminal"><summary>
+            Provides the base requirements for a debuggable <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableTerminal.Id"><summary>
+            Gets the ID that identifies the terminal.
+            </summary><value>The ID that identifies the terminal.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.InfiniteLifetimeObjectBase"><summary>
+            Provides the abstract base class for an object that can be proxied across an <c>AppDomain</c> and always remains active.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.InfiniteLifetimeObjectBase.InitializeLifetimeService"><summary>
+            Initializes lifetime service.
+            </summary><returns>A value indicating infinite lifetime.</returns></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader"><summary>
+            Provides the base requirements for an object that can provide tokens to a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> in a forward-only direction.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Advance"><summary>
+            Advances to the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.AdvanceTo(System.Int32)"><summary>
+            Advances to the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> with the specified ID, such that the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.LookAheadToken" /> property 
+            will be pointing to the matched token, if any.
+            </summary><param name="tokenId">The ID of <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> for which to search.</param><returns><c>true</c> if an <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> was found before the end of document; otherwise, <c>false</c>.
+            </returns><remarks>
+            If this method is successful, the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.LookAheadToken" /> will be the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that was located.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.AdvanceTo(System.Int32[])"><summary>
+            Advances to the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> with one of the specified IDs, such that the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.LookAheadToken" /> property 
+            will be pointing to the matched token, if any.
+            </summary><param name="tokenIds">The array of <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> IDs for which to search.</param><returns><c>true</c> if an <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> was found before the end of document; otherwise, <c>false</c>.
+            </returns><remarks>
+            If this method is successful, the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.LookAheadToken" /> will be the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that was located.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.AreNext(System.Int32[])"><summary>
+            Returns whether the next look-ahead tokens match the specified sequence of token IDs.
+            </summary><param name="tokenIds">The sequence of token IDs for which to search.</param><returns><c>true</c> if the next look-ahead tokens match the specified sequence of token IDs; otherwise, <c>false</c>.
+            </returns><remarks>
+            This method is very useful within can-match callbacks that require two or more token look-aheads.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.GetLookAheadToken(System.Int32)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is the specified number of positions past the current token.
+            </summary><param name="count">The number of positions past the current token to examine.</param><returns>The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is the specified number of positions past the current token.</returns><remarks>
+            A parameter value of <c>1</c> will return the value of the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.LookAheadToken" /> method without actually seeking past the next token.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.GetTokenText(ActiproSoftware.Text.Lexing.IToken)"><summary>
+            Returns an <see cref="T:ActiproSoftware.Text.Lexing.IToken" />'s encapsulated text from the text buffer using <see cref="F:ActiproSoftware.Text.LineTerminator.Newline" /> for line ends.
+            </summary><param name="targetToken">The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> to examine.</param><returns>The <see cref="T:ActiproSoftware.Text.Lexing.IToken" />'s encapsulated text from the text buffer using <see cref="F:ActiproSoftware.Text.LineTerminator.Newline" /> for line ends.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Initialize"><summary>
+            Initializes the token reader, which will be called by a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> before the token reader is used.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.OffsetToPosition(System.Int32)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.TextPosition" /> that represents the specified offset within the text lines.
+            </summary><param name="offset">The offset of a character within the snapshot.</param><returns>The <see cref="T:ActiproSoftware.Text.TextPosition" /> that represents the specified offset within the text lines.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Pop"><summary>
+            Pops the top token reader state from the stack and restores the token reader to that state.
+            </summary><returns><c>true</c> if a pop occurred; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Push"><summary>
+            Pushes the token reader state onto a stack for later restoration, generally to begin a multiple token look-ahead operation.
+            </summary><remarks>
+            Any call to this method must have a corresponding <see cref="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Pop" /> call.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.IsAtEnd"><summary>
+            Gets whether the current <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> is at the end of the text buffer.
+            </summary><value><c>true</c> if the current <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> is at the end of the text buffer; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.LookAheadToken"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is immediately after the current token.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is immediately after the current token.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Offset"><summary>
+            Gets the current offset, which is offset after the last <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Token" /> that was read.
+            </summary><value>The current offset, which is offset after the last <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Token" /> that was read.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.StackLevel"><summary>
+            Gets the current stack level from <see cref="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Push" /> calls without corresponding <see cref="M:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Pop" /> calls.
+            </summary><value>The current stack level.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ITokenReader.Token"><summary>
+            Gets the current <see cref="T:ActiproSoftware.Text.Lexing.IToken" />.
+            </summary><value>The current <see cref="T:ActiproSoftware.Text.Lexing.IToken" />.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.IMatchCondition"><summary>
+            Provides the base requirements for a match condition for an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IMatchCondition.GetFirstSet(ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar)"><summary>
+            Returns the collection of terminals that provide the first-set for the match condition.
+            </summary><returns>The collection of terminals that provide the first-set for the match condition.</returns></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IMatchCondition.CallbackCount"><summary>
+            Gets the number of callbacks.
+            </summary><value>The number of callbacks.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IBreakpoint"><summary>
+            Provides the base requirements for a breakpoint within an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IBreakpoint.Symbol"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol" /> at which to break.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol" /> at which to break.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode"><summary>
+            Specifies the mode that an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger" /> is in.
+            </summary></member><member name="F:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode.Stopped"><summary>
+            The debugger is not running.
+            </summary></member><member name="F:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode.Running"><summary>
+            The debugger is running.
+            </summary></member><member name="F:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode.Paused"><summary>
+            The debugger is paused at a breakpoint.
+            </summary></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState"><summary>
+            Provides the base requirements for an object that contains information about the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger" /> state.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.AddBreakpoint(ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol)"><summary>
+            Adds an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IBreakpoint" /> for an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol" />.
+            </summary><param name="symbol">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol" /> for which a breakpoint should be created.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.RemoveBreakpoint(ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol)"><summary>
+            Removes an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IBreakpoint" /> for an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol" />.
+            </summary><param name="symbol">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableSymbol" /> for which a breakpoint should be removed.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.Breakpoints"><summary>
+            Gets the collection of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IBreakpoint" /> objects.
+            </summary><value>The collection of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IBreakpoint" /> objects.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.Ebnf"><summary>
+            Gets the textual EBNF representation of the grammar.
+            </summary><value>The textual EBNF representation of the grammar.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.IsBreakForCanMatch"><summary>
+            Gets whether the current pause is related to a can-match check for an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" />.
+            </summary><value><c>true</c> if the current pause is related to a can-match check; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.Matches"><summary>
+            Gets the list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNodeMatch" /> objects that indicate the labeled AST node matches for the current scope.
+            </summary><value>The list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNodeMatch" /> objects that indicate the labeled AST node matches for the current scope.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.NonTerminals"><summary>
+            Gets the read-only list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableNonTerminal" /> objects defined in the grammar.
+            </summary><value>The read-only list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableNonTerminal" /> objects defined in the grammar.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.NonTerminalStack"><summary>
+            Gets the stack of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableNonTerminal" /> objects into which the parser has entered.
+            </summary><value>The stack of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableNonTerminal" /> objects into which the parser has entered.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.ParseErrors"><summary>
+            Gets the collection of <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> objects that will be returned in the <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> parsing result.
+            </summary><value>The collection of <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> objects that will be returned in the <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> parsing result.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.RootNode"><summary>
+            Gets the root <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode" /> that has been constructed.
+            </summary><value>The root <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableAstNode" /> that has been constructed.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.Terminals"><summary>
+            Gets the read-only list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableTerminal" /> objects defined in the grammar.
+            </summary><value>The read-only list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableTerminal" /> objects defined in the grammar.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.TermStack"><summary>
+            Gets the stack of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableEbnfTerm" /> objects into which the parser has entered.
+            </summary><value>The stack of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggableEbnfTerm" /> objects into which the parser has entered.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState.TokenReader"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used to read tokens during the parsing operation.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used to read tokens during the parsing operation.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger"><summary>
+            Provides the base requirements for a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar" /> debugger that can control parser execution and 
+            obtain detailed information about parser state.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.Attach(ActiproSoftware.Text.ICodeDocument)"><summary>
+            Attempts to attach the debugger to the specified <see cref="T:ActiproSoftware.Text.ICodeDocument" /> using the <see cref="T:ActiproSoftware.Text.Parsing.IParser" />
+            indicated by its <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" />.
+            </summary><param name="document">The <see cref="T:ActiproSoftware.Text.ICodeDocument" /> to debug.</param><returns><c>true</c> if the debugger was attached; otherwise, <c>false</c>.
+            </returns><remarks>
+            This method will return <c>false</c> if the debugger is already attached to a document,
+            if the document doesn't have an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" />,
+            or if the syntax language's <see cref="T:ActiproSoftware.Text.Parsing.IParser" /> isn't an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" />.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.Detach"><summary>
+            Detaches from the currently-attached document, if any.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.NotifyBreak"><summary>
+            Called by the parser to notify the debugger it has paused execution.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.Pause"><summary>
+            Requests that the debugger pause execution if the it is currently running.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.Start"><summary>
+            Starts debugging on the attached document.
+            </summary><returns><c>true</c> if debugging started; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.StepInto"><summary>
+            Steps into the next debuggable location.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.StepOut"><summary>
+            Steps out of the current debuggable location.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.StepOver"><summary>
+            Steps over the current debuggable location.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.Stop"><summary>
+            Stops debugging on the attached document.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.IsAttached"><summary>
+            Gets whether the debugger is currently attached to an <see cref="T:ActiproSoftware.Text.ICodeDocument" />.
+            </summary><value><c>true</c> if the debugger is currently attached to an <see cref="T:ActiproSoftware.Text.ICodeDocument" />; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.Mode"><summary>
+            Gets the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode" /> of the debugger.
+            </summary><value>The current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode" /> of the debugger.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.State"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState" /> that contains information about the current state of the debugger.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState" /> that contains information about the current state of the debugger.</value></member><member name="E:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.ModeChanged"><summary>
+            Occurs when the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebugger.Mode" /> property changes.
+            </summary><eventdata>
+            The event handler receives an argument of type <c>EventArgs</c> containing data related to this event.
+            </eventdata></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger"><summary>
+            Represents a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar" /> debugger that can control parser execution and obtain detailed information about parser state.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.Attach(ActiproSoftware.Text.ICodeDocument)"><summary>
+            Attempts to attach the debugger to the specified <see cref="T:ActiproSoftware.Text.ICodeDocument" /> using the <see cref="T:ActiproSoftware.Text.Parsing.IParser" />
+            indicated by its <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" />.
+            </summary><param name="document">The <see cref="T:ActiproSoftware.Text.ICodeDocument" /> to debug.</param><returns><c>true</c> if the debugger was attached; otherwise, <c>false</c>.
+            </returns><remarks>
+            This method will return <c>false</c> if the debugger is already attached to a document,
+            if the document doesn't have an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" />,
+            or if the syntax language's <see cref="T:ActiproSoftware.Text.Parsing.IParser" /> isn't an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" />.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.Detach"><summary>
+            Detaches from the currently-attached document, if any.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.OnModeChanged(System.EventArgs)"><summary>
+            Raises the <c>ModeChanged</c> event.
+            </summary><param name="e">An <c>EventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.Pause"><summary>
+            Requests that the debugger pause execution if the it is currently running.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.Start"><summary>
+            Starts debugging on the attached document.
+            </summary><returns><c>true</c> if debugging started; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.StepInto"><summary>
+            Steps into the next debuggable location.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.StepOut"><summary>
+            Steps out of the current debuggable location.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.StepOver"><summary>
+            Steps over the current debuggable location.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.Stop"><summary>
+            Stops debugging on the attached document.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.IsAttached"><summary>
+            Gets whether the debugger is currently attached to an <see cref="T:ActiproSoftware.Text.ICodeDocument" />.
+            </summary><value><c>true</c> if the debugger is currently attached to an <see cref="T:ActiproSoftware.Text.ICodeDocument" />; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.Mode"><summary>
+            Gets the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode" /> of the debugger.
+            </summary><value>The current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.DebuggerMode" /> of the debugger.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.State"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState" /> that contains information about the current state of the debugger.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Debugging.IDebuggerState" /> that contains information about the current state of the debugger.</value></member><member name="E:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.ModeChanged"><summary>
+            Occurs when the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Debugging.Implementation.Debugger.Mode" /> property changes.
+            </summary><eventdata>
+            The event handler receives an argument of type <c>EventArgs</c> containing data related to this event.
+            </eventdata></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser"><summary>
+            Provides the base requirements of an <see cref="T:ActiproSoftware.Text.Parsing.IParser" /> that executes based on a <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ILLParser.Grammar" /> definition.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.ILLParser.CreateTokenReader(ActiproSoftware.Text.ITextBufferReader)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used by the parser to read through tokens.
+            </summary><param name="reader">The <see cref="T:ActiproSoftware.Text.ITextBufferReader" /> that provides access to the text buffer.</param><returns>An <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used by the parser to read through tokens.</returns></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ILLParser.Grammar"><summary>
+            Gets the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ILLParser.Grammar" /> that is used by this parser.
+            </summary><value>The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.ILLParser.Grammar" /> that is used by this parser.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ILLParseData"><summary>
+            Provides the base requirements for an object that stores the results of a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> parsing operation.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ILLParseData.Ast"><summary>
+            Gets the object that contains the abstract syntax tree result.
+            </summary><value>The object that contains the abstract syntax tree result.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ParserCanMatchCallback"><summary>
+            Defines a can-match callback method that can be executed during a parsing operation for a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" />.
+            </summary><param name="state">A <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> that provides information about the parser's current state.</param><returns><c>true</c> if the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> can match with the current state; otherwise, <c>false</c>.
+            </returns></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatchCollection"><summary>
+            Provides the base requirements for a collection of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> objects.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatchCollection.EndOffset"><summary>
+            Gets the end offset of this match collection.
+            </summary><value>The end offset of this match collection.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatchCollection.StartOffset"><summary>
+            Gets the end offset of this match collection.
+            </summary><value>The end offset of this match collection.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ParserErrorResults"><summary>
+            Provides access to the built-in <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> instances, that indicate a result provided by a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ParserErrorCallback" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ParserErrorResults.Continue"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to potentially report errors but continue on.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to potentially report errors but continue on.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ParserErrorResults.Default"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to potentially report errors and return a match failure.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to potentially report errors and return a match failure.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ParserErrorResults.Ignore"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to never report errors and continue on.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to never report errors and continue on.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.ParserErrorResults.NoReport"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to never report errors and return a match failure.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> that indicates to never report errors and return a match failure.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult"><summary>
+            Provides the base requirements for the result provided by a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ParserErrorCallback" />.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult.CanReportError"><summary>
+            Gets whether the error should still be reported when appropriate.
+            </summary><value><c>true</c> if the error should still be reported when appropriate; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult.CanContinue"><summary>
+            Gets whether to continue parsing and put an error token in place of the term that errored.
+            </summary><value><c>true</c> if the parser should continue and put an error token in place of the term that errored; otherwise, <c>false</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder"><summary>
+            Provides the base requirements for an object that constructs an AST (abstract syntax tree).
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder.Matches"><summary>
+            Gets the list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> objects that indicate the labeled <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> matches for the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> scope.
+            </summary><value>The list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> objects that indicate the labeled <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> matches for the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> scope.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder.RootNode"><summary>
+            Gets the root <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that has been constructed.
+            </summary><value>The root <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that has been constructed.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ParserErrorCallback"><summary>
+            Defines an error callback method that can be executed during a parsing operation.
+            </summary><param name="state">A <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> that provides information about the parser's current state.</param><returns>
+            An <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserErrorResult" /> value indicating a result.
+            </returns></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm"><summary>
+            Represents the abstract base class for a term within an EBNF production.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.OnComplete(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called after the term is parsed, regardless of success or failure.
+            </summary><param name="callback">The delegate that will be called after the term is parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.OnError(ActiproSoftware.Text.Parsing.LLParser.ParserErrorCallback)"><summary>
+            Sets the delegate that will be called when an error occurs while parsing the term.
+            </summary><param name="callback">The delegate that will be called when an error occurs while parsing the term.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.OnErrorContinue"><summary>
+            Marks that if an error occurs while parsing the term, the error will be reported but parsing will continue on.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.OnErrorIgnore"><summary>
+            Marks that if an error occurs while parsing the term, no error will be reported and parsing will continue on.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.OnErrorNoReport"><summary>
+            Marks that if an error occurs while parsing the term, no error will be reported and parsing will return a match failure.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.OnInitialize(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called before the term is parsed.
+            </summary><param name="callback">The delegate that will be called before the term is parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.OnSuccess(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called when the term is successfully parsed.
+            </summary><param name="callback">The delegate that will be called when the term is successfully parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.SetLabel(System.String)"><summary>
+            Sets the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.Label" /> for the term.
+            </summary><param name="newLabel">The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.Label" /> for the term.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.ToEbnfString"><summary>
+            Outputs the contents of the term in EBNF form.
+            </summary><returns>A string containing the EBNF form of the term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.ToProduction"><summary>
+            Returns an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> for this term.
+            </summary><returns>An <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> for this term.</returns></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.CompleteCallback"><summary>
+            Gets or sets the delegate that will be called after the term is parsed, regardless of success or failure.
+            </summary><value>The delegate that will be called after the term is parsed.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.ErrorCallback"><summary>
+            Gets or sets the delegate that will be called when an error occurs while parsing the term.
+            </summary><value>The delegate that will be called when an error occurs while parsing the term.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.InitializeCallback"><summary>
+            Gets or sets the delegate that will be called before the term is parsed.
+            </summary><value>The delegate that will be called before the term is parsed.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.IsCompiled"><summary>
+            Gets whether the grammar and its elements are compiled, via a call to its <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Compile" /> method.
+            </summary><value><c>true</c> if the grammar and its elements are compiled; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.Label"><summary>
+            Gets or sets the label to apply to this term that may be used when rewriting.
+            </summary><value>The label to apply to this term that may be used when rewriting.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.MatchCondition"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IMatchCondition" /> to use for this term.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IMatchCondition" /> to use for this term.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.SuccessCallback"><summary>
+            Gets or sets the delegate that will be called when the term is successfully parsed.
+            </summary><value>The delegate that will be called when the term is successfully parsed.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm"><summary>
+            Represents the abstract base class for a term within an EBNF production that can be sequentially matched a specified minimum and maximum times.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.Optional"><summary>
+            Marks the term such that zero or one instances are permitted.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OnComplete(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called after the term is parsed, regardless of success or failure.
+            </summary><param name="callback">The delegate that will be called after the term is parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OnError(ActiproSoftware.Text.Parsing.LLParser.ParserErrorCallback)"><summary>
+            Sets the delegate that will be called when an error occurs while parsing the term.
+            </summary><param name="callback">The delegate that will be called when an error occurs while parsing the term.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OnErrorContinue"><summary>
+            Marks that if an error occurs while parsing the term, the error will be reported but parsing will continue on.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OnErrorIgnore"><summary>
+            Marks that if an error occurs while parsing the term, no error will be reported and parsing will continue on.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OnErrorNoReport"><summary>
+            Marks that if an error occurs while parsing the term, no error will be reported and parsing will return a match failure.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OnInitialize(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called before the term is parsed.
+            </summary><param name="callback">The delegate that will be called before the term is parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OneOrMore"><summary>
+            Marks the term such that one to many instances are permitted.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.OnSuccess(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called when the term is successfully parsed.
+            </summary><param name="callback">The delegate that will be called when the term is successfully parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.Range(System.Int32,System.Nullable{System.Int32})"><summary>
+            Marks the term such that a range of instances are permitted.
+            </summary><param name="min">The minimum number of instances.</param><param name="max">The maximum number of instances.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.SetLabel(System.String)"><summary>
+            Sets the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.Label" /> for the term.
+            </summary><param name="label">The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.Label" /> for the term.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm.ZeroOrMore"><summary>
+            Marks the term such that zero to many instances are permitted.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this term.</returns></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier"><summary>
+            Represents a term within an EBNF production whose child term can be sequentially matched a specified minimum and maximum times.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier.SetLabel(System.String)"><summary>
+            Sets the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.Label" /> for the term.
+            </summary><param name="newLabel">The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm.Label" /> for the term.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm,System.Int32,System.Nullable{System.Int32})"><summary>
+            Initializes a new instance of the <c>EbnfQuantifier</c> class.
+            </summary><param name="child">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm" /> to quantify.</param><param name="minimum">The minimum number of instances that the term may occur.</param><param name="maximum">The maximum number of instances that the term may occur.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier.Child"><summary>
+            Gets or sets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm" /> that is quantified by this term.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifiableTerm" /> that is quantified by this term.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier.Maximum"><summary>
+            Gets or sets the maximum number of instances that the term may occur.
+            </summary><value>The maximum number of instances that the term may occur.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier.Minimum"><summary>
+            Gets or sets the minimum number of instances that the term may occur.
+            </summary><value>The minimum number of instances that the term may occur.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase"><summary>
+            Represents the abstract base class of an object that can provide tokens to a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> in a forward-only direction.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Advance"><summary>
+            Advances to the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.AdvanceTo(System.Int32)"><summary>
+            Advances to the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> with the specified ID, such that the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.LookAheadToken" /> property 
+            will be pointing to the matched token, if any.
+            </summary><param name="tokenId">The ID of <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> for which to search.</param><returns><c>true</c> if an <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> was found before the end of document; otherwise, <c>false</c>.
+            </returns><remarks>
+            If this method is successful, the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.LookAheadToken" /> will be the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that was located.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.AdvanceTo(System.Int32[])"><summary>
+            Advances to the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> with one of the specified IDs, such that the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.LookAheadToken" /> property 
+            will be pointing to the matched token, if any.
+            </summary><param name="tokenIds">The array of <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> IDs for which to search.</param><returns><c>true</c> if an <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> was found before the end of document; otherwise, <c>false</c>.
+            </returns><remarks>
+            If this method is successful, the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.LookAheadToken" /> will be the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that was located.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.AreNext(System.Int32[])"><summary>
+            Returns whether the next look-ahead tokens match the specified sequence of token IDs.
+            </summary><param name="tokenIds">The sequence of token IDs for which to search.</param><returns><c>true</c> if the next look-ahead tokens match the specified sequence of token IDs; otherwise, <c>false</c>.
+            </returns><remarks>
+            This method is very useful within can-match callbacks that require two or more token look-aheads.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.GetLookAheadToken(System.Int32)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is the specified number of positions past the current token.
+            </summary><param name="count">The number of positions past the current token to examine.</param><returns>The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is the specified number of positions past the current token.</returns><remarks>
+            A parameter value of <c>1</c> will return the value of the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.LookAheadToken" /> method without actually seeking past the next token.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.GetNextToken"><summary>
+            Returns the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that will be consumed by the token reader.
+            </summary><returns>The next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that will be consumed by the token reader.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.GetTokenText(ActiproSoftware.Text.Lexing.IToken)"><summary>
+            Returns an <see cref="T:ActiproSoftware.Text.Lexing.IToken" />'s encapsulated text from the text buffer using <see cref="F:ActiproSoftware.Text.LineTerminator.Newline" /> for line ends.
+            </summary><param name="targetToken">The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> to examine.</param><returns>The <see cref="T:ActiproSoftware.Text.Lexing.IToken" />'s encapsulated text from the text buffer using <see cref="F:ActiproSoftware.Text.LineTerminator.Newline" /> for line ends.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Initialize"><summary>
+            Initializes the token reader, which will be called by a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> before the token reader is used.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.OffsetToPosition(System.Int32)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.TextPosition" /> that represents the specified offset within the text lines.
+            </summary><param name="offset">The offset of a character within the snapshot.</param><returns>The <see cref="T:ActiproSoftware.Text.TextPosition" /> that represents the specified offset within the text lines.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Pop"><summary>
+            Pops the top token reader state from the stack and restores the token reader to that state.
+            </summary><returns><c>true</c> if a pop occurred; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Push"><summary>
+            Pushes the token reader state onto a stack for later restoration, generally to begin a multiple token look-ahead operation.
+            </summary><remarks>
+            Any call to this method must have a corresponding <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Pop" /> call.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.#ctor(ActiproSoftware.Text.ITextBufferReader)"><summary>
+            Initializes a new instance of the <c>TokenReaderBase</c> class.
+            </summary><param name="reader">The <see cref="T:ActiproSoftware.Text.ITextBufferReader" /> to use for consuming text.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.IsAtEnd"><summary>
+            Gets whether the current <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> is at the end of the text buffer.
+            </summary><value><c>true</c> if the current <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> is at the end of the text buffer; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.LookAheadToken"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is immediately after the current token.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that is immediately after the current token.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Offset"><summary>
+            Gets the current offset, which is offset after the last <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Token" /> that was read.
+            </summary><value>The current offset, which is offset after the last <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Token" /> that was read.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.StackLevel"><summary>
+            Gets the current stack level from <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Push" /> calls without corresponding <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Pop" /> calls.
+            </summary><value>The current stack level.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.TokenReaderBase.Token"><summary>
+            Gets the current <see cref="T:ActiproSoftware.Text.Lexing.IToken" />.
+            </summary><value>The current <see cref="T:ActiproSoftware.Text.Lexing.IToken" />.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.MergableTokenReader"><summary>
+            Represents an object that can provide tokens to a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> in a forward-only direction for a <see cref="T:ActiproSoftware.Text.Lexing.IMergableLexer" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.MergableTokenReader.GetNextToken"><summary>
+            Returns the next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that will be consumed by the token reader.
+            </summary><returns>The next <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> that will be consumed by the token reader.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.MergableTokenReader.Pop"><summary>
+            Pops the top token reader state from the stack and restores the token reader to that state.
+            </summary><returns><c>true</c> if a pop occurred; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.MergableTokenReader.Push"><summary>
+            Pushes the token reader state onto a stack for later restoration, generally to begin a multiple token look-ahead operation.
+            </summary><remarks>
+            Any call to this method must have a corresponding <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.MergableTokenReader.Pop" /> call.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.MergableTokenReader.#ctor(ActiproSoftware.Text.ITextBufferReader,ActiproSoftware.Text.Lexing.IMergableLexer)"><summary>
+            Initializes a new instance of the <c>MergableTokenReader</c> class.
+            </summary><param name="reader">The <see cref="T:ActiproSoftware.Text.ITextBufferReader" /> to use for consuming text.</param><param name="rootLexer">The root <see cref="T:ActiproSoftware.Text.Lexing.IMergableLexer" />.</param></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction"><summary>
+            Represents an EBNF production, which consists of an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" />-based pattern expression and a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" />-based tree constructor.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.OnComplete(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called after the term is parsed, regardless of success or failure.
+            </summary><param name="callback">The delegate that will be called after the term is parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.OnError(ActiproSoftware.Text.Parsing.LLParser.ParserErrorCallback)"><summary>
+            Sets the delegate that will be called when an error occurs while parsing the term.
+            </summary><param name="callback">The delegate that will be called when an error occurs while parsing the term.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.OnErrorContinue"><summary>
+            Marks that if an error occurs while parsing the term, the error will be reported but parsing will continue on.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.OnErrorIgnore"><summary>
+            Marks that if an error occurs while parsing the term, no error will be reported and parsing will continue on.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.OnErrorNoReport"><summary>
+            Marks that if an error occurs while parsing the term, no error will be reported and parsing will return a match failure.
+            </summary><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.OnInitialize(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called before the term is parsed.
+            </summary><param name="callback">The delegate that will be called before the term is parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.OnSuccess(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Sets the delegate that will be called when the term is successfully parsed.
+            </summary><param name="callback">The delegate that will be called when the term is successfully parsed.</param><returns>The modified term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.ToProduction"><summary>
+            Returns an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> for this term.
+            </summary><returns>An <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> for this term.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm)"><summary>
+            Initializes a new instance of the <c>EbnfProduction</c> class.
+            </summary><param name="patternExpression">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that is the pattern expression.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm,ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode)"><summary>
+            Initializes a new instance of the <c>EbnfProduction</c> class.
+            </summary><param name="patternExpression">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that is the pattern expression.</param><param name="treeConstructor">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that specifies how to rewrite the parse results.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.PatternExpression"><summary>
+            Gets or sets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that is the pattern expression.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that is the pattern expression.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction.TreeConstructor"><summary>
+            Gets or sets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that specifies how to construct the syntax tree results.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that specifies how to construct the syntax tree results.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch"><summary>
+            Provides the base requirements for an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> match made within the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> scope.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch.Label"><summary>
+            Gets or sets the optional label applied to the match that can be used for identification during tree construction.
+            </summary><value>The optional label applied to the match that can be used for identification during tree construction.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch.Node"><summary>
+            Gets or sets the <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that was matched.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that was matched.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.AstNodeMatch"><summary>
+            Represents an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> match made within the current <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> scope.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.AstNodeMatch.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.AstNodeMatch.Label"><summary>
+            Gets or sets the optional label applied to the match that can be used for identification during tree construction.
+            </summary><value>The optional label applied to the match that can be used for identification during tree construction.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.AstNodeMatch.Node"><summary>
+            Gets or sets the <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that was matched.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> that was matched.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParseData"><summary>
+            Stores the results of a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> parsing operation.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParseData.Ast"><summary>
+            Gets or sets the object that contains the abstract syntax tree result.
+            </summary><value>The object that contains the abstract syntax tree result.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParseData.Errors"><summary>
+            Gets or sets the collection of <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> objects that specify parse errors.
+            </summary><value>The collection of <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> objects that specify parse errors.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParseData.Snapshot"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.ITextSnapshot" />, if known, from which the parse errors were created.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.ITextSnapshot" />, if known, from which the parse errors were created.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.ParserCallback"><summary>
+            Defines a callback method that can be executed during a parsing operation.
+            </summary><param name="state">A <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> that provides information about the parser's current state.</param></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.InvalidGrammarException"><summary>
+            An exception that is thrown when a grammar is invalid.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.InvalidGrammarException.#ctor"><summary>
+            Initializes a new instance of the <c>InvalidGrammarException</c> class.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.InvalidGrammarException.#ctor(System.String)"><summary>
+            Initializes a new instance of the <c>InvalidGrammarException</c> class with a specified error message.
+            </summary><param name="message">The error message that explains the reason for the exception.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.InvalidGrammarException.#ctor(System.String,System.Exception)"><summary>
+            Initializes a new instance of the <c>InvalidGrammarException</c> class
+            with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary><param name="message">The error message that explains the reason for the exception.</param><param name="innerException">The exception that is the cause of the current exception.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.InvalidGrammarException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)"><summary>
+            Initializes a new instance of the <c>InvalidGrammarException</c> class with serialized data.
+            </summary><param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.</param><param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.</param></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfAlternation"><summary>
+            Represents an alternation expression within an EBNF production.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfAlternation.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfAlternation.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction[])"><summary>
+            Initializes a new instance of the <c>EbnfAlternation</c> class.
+            </summary><param name="productions">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> objects within the expression.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfAlternation.Productions"><summary>
+            Gets the list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> objects within the alternation.
+            </summary><value>The list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> objects within the alternation.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfConcatenation"><summary>
+            Represents a concatenation expression within an EBNF production.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfConcatenation.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfConcatenation.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm[])"><summary>
+            Initializes a new instance of the <c>EbnfConcatenation</c> class.
+            </summary><param name="terms">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> objects within the expression.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfConcatenation.Label"><summary>
+            Gets or sets the label to apply to this term that may be used when rewriting.
+            </summary><value>The label to apply to this term that may be used when rewriting.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfConcatenation.Terms"><summary>
+            Gets the list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> objects within the expression.
+            </summary><value>The list of <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> objects within the expression.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase"><summary>
+            Represents the base class for an <see cref="T:ActiproSoftware.Text.Parsing.IParser" /> that executes based on a <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.Grammar" /> definition.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.CreateParseData(ActiproSoftware.Text.Parsing.IParseRequest,ActiproSoftware.Text.Parsing.LLParser.IParserState)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> for the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" />, after the parse operation has completed.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><param name="state">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> to examine.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.CreateTokenReader(ActiproSoftware.Text.ITextBufferReader)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used by the parser to read through tokens.
+            </summary><param name="reader">The <see cref="T:ActiproSoftware.Text.ITextBufferReader" /> that provides access to the text buffer.</param><returns>An <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used by the parser to read through tokens.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.InitializeParseData(ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParseData,ActiproSoftware.Text.Parsing.LLParser.IParserState)"><summary>
+            Initializes a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParseData" /> using the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" />.
+            </summary><param name="parseData">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParseData" /> to initialize.</param><param name="state">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> to examine.</param><remarks>
+            This method is called by default from the <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.CreateParseData(ActiproSoftware.Text.Parsing.IParseRequest,ActiproSoftware.Text.Parsing.LLParser.IParserState)" /> method.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.InitializeParserState(ActiproSoftware.Text.Parsing.LLParser.IParserState,ActiproSoftware.Text.Parsing.IParseRequest)"><summary>
+            Initializes the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" />, allowing its <see cref="P:ActiproSoftware.Text.Parsing.LLParser.IParserState.CustomData" /> property to be configured based
+            on data from the <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" />, immediately prior to the parse operation running.
+            </summary><param name="state">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> to initialize.</param><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that initiated the parse operation.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.Parse(ActiproSoftware.Text.Parsing.IParseRequest)"><summary>
+            Performs a parsing operation using the parameters specified in the supplied <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" />
+            and returns the resulting parse data.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><returns>An <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> that is the result of the parsing operation.</returns><remarks>
+            A <see cref="T:ActiproSoftware.Text.Parsing.IParseRequestDispatcher" /> typically calls this method when a queued parse request is ready to be processed.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar)"><summary>
+            Initializes a new instance of the <c>LLParserBase</c> class.
+            </summary><param name="grammar">The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.Grammar" /> to use.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.Grammar"><summary>
+            Gets the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.Grammar" /> that is used by this parser.
+            </summary><value>The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.LLParserBase.Grammar" /> that is used by this parser.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.IParserState"><summary>
+            Provides the base requirements for an object that tracks the current state of a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportError(ActiproSoftware.Text.Parsing.ParseErrorLevel,System.String)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" />, using the look-ahead token for its range.
+            </summary><param name="level">A <see cref="T:ActiproSoftware.Text.Parsing.ParseErrorLevel" /> indicating the error level.</param><param name="description">The description of the error, which is displayed in the user interface.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportError(ActiproSoftware.Text.Parsing.ParseErrorLevel,System.String,ActiproSoftware.Text.Lexing.IToken)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" />, using the specified token for its range.
+            </summary><param name="level">A <see cref="T:ActiproSoftware.Text.Parsing.ParseErrorLevel" /> indicating the error level.</param><param name="description">The description of the error, which is displayed in the user interface.</param><param name="token">The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> to examine for the error range.  If not passed, the look-ahead token is used.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportError(ActiproSoftware.Text.Parsing.IParseError)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" />.
+            </summary><param name="parseError">The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> object that contains details about the error.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportNonTerminalExpectedError(ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> indicating that a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> was expected, but not found.
+            </summary><param name="nonTerminal">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> that was expected.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportNonTerminalExpectedError(ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal,ActiproSoftware.Text.Lexing.IToken)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> indicating that a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> was expected, but not found.
+            </summary><param name="nonTerminal">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> that was expected.</param><param name="token">The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> at which the error should be reported.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportNonTerminalExpectedError(ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal,ActiproSoftware.Text.TextPositionRange)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> indicating that a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> was expected, but not found.
+            </summary><param name="nonTerminal">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> that was expected.</param><param name="positionRange">The <see cref="T:ActiproSoftware.Text.TextPositionRange" /> over which the error should be reported.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportTerminalExpectedError(ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> indicating that a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal" /> was expected, but not found.
+            </summary><param name="terminal">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal" /> that was expected.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportTerminalExpectedError(ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal,ActiproSoftware.Text.Lexing.IToken)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> indicating that a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal" /> was expected, but not found.
+            </summary><param name="terminal">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal" /> that was expected.</param><param name="token">The <see cref="T:ActiproSoftware.Text.Lexing.IToken" /> at which the error should be reported.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.IParserState.ReportTerminalExpectedError(ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal,ActiproSoftware.Text.TextPositionRange)"><summary>
+            Reports an <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> indicating that a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal" /> was expected, but not found.
+            </summary><param name="terminal">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal" /> that was expected.</param><param name="positionRange">The <see cref="T:ActiproSoftware.Text.TextPositionRange" /> over which the error should be reported.</param><returns>
+            The <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> that was reported.
+            </returns></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserState.AstNodeBuilder"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> to use for constructing AST node results.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeBuilder" /> to use for constructing AST node results.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserState.CustomData"><summary>
+            Gets or sets custom data that can be altered during a parsing operation.
+            </summary><value>Custom data that can be altered during a parsing operation.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserState.ParseErrors"><summary>
+            Gets the collection of <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> objects that will be returned in the <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> parsing result.
+            </summary><value>The collection of <see cref="T:ActiproSoftware.Text.Parsing.IParseError" /> objects that will be returned in the <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> parsing result.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserState.Parser"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> for which this state is tracking data.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ILLParser" /> for which this state is tracking data</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserState.Snapshot"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.ITextSnapshot" /> used to initiate the parsing operation, if known.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.ITextSnapshot" /> used to initiate the parsing operation, if known.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.IParserState.TokenReader"><summary>
+            Gets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used to read tokens during the parsing operation.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITokenReader" /> that is used to read tokens during the parsing operation.</value></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar"><summary>
+            Represents a grammar that can be used with a recursive descent parser.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Ast(System.String,ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> with the specified value and optional child nodes.
+            </summary><param name="value">The value to assign to the generated <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />.</param><param name="childNodes">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Ast``1"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> of the specified type.
+            </summary><typeparam name="TAstNode">The type of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />-based class to create.</typeparam><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstChildFrom(System.String)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> from the first child of an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> that has the specified label.
+            </summary><param name="label">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> for which to search.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstChildrenFrom(System.String)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> from the children of an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> that has the specified label.
+            </summary><param name="label">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> for which to search.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstChildrenFrom(System.String,System.Int32)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> from the descendants at the specified nesting level
+            of an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> that has the specified label, useful for gathering desired nodes two or more levels deep.
+            </summary><param name="label">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> for which to search.</param><param name="nestingLevel">The zero-based target nesting level, where <c>0</c> means direct children.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstConditional(System.String,ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> with the specified value and optional child nodes,
+            but only if there is more than one child available.  If one child is available, it is directly returned.
+            </summary><param name="value">The value to assign to the generated <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />.</param><param name="childNodes">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstConditional``1(ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> of the specified type,
+            but only if there is more than one child available.  If one child is available, it is directly returned.
+            </summary><param name="childNodes">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstConditionalFrom(System.String,System.String)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> with the specified value and child nodes
+            from the children of an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> that has the specified label, but only if there is at least one child available.
+            </summary><param name="value">The value to assign to the generated <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />.</param><param name="label">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> for which to search.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstCount(ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> whose value is the count of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> objects generated by contained nodes.
+            </summary><param name="countNodes">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstFrom(System.String)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> from an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> that has the specified label.
+            </summary><param name="label">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> for which to search.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstFrom``1(System.String)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> of the specified type
+            from an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> that has the specified label.
+            </summary><typeparam name="TAstNode">The type of <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />-based class to create.</typeparam><param name="label">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IAstNodeMatch" /> for which to search.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITypedTreeConstructionNode`1" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstValueOf(ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode,ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> with the value of the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" />'s
+            constructed node, and optional child nodes.
+            </summary><param name="valueOfNode">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> whose constructed <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> value will be used.</param><param name="childNodes">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.AstValueOfConditional(ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode,ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode[])"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that generates an <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> with the value of the specified <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" />'s
+            constructed node, and optional child nodes, but only if there is more than one child available.  If one child is available, it is directly returned.
+            </summary><param name="valueOfNode">The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> whose constructed <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> value will be used.</param><param name="childNodes">The optional child <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> objects.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ITreeConstructionNode" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.CanAlwaysMatch(ActiproSoftware.Text.Parsing.LLParser.IParserState)"><summary>
+            Implements a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.ParserCanMatchCallback" /> that always returns <c>true</c>, and is useful for assigning to non-terminals that are called
+            from the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Root" /> non-terminal for a <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar" />.
+            </summary><param name="state">A <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> that provides information about the parser's current state.</param><returns>
+            Always <c>true</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Compile"><summary>
+            Compiles the grammar, which prepares the grammar and its elements for parsing usage.
+            </summary><remarks>
+            Compiling the grammar also means that all elements of the language will be locked and no longer able to be modified.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.ToEbnfString"><summary>
+            Outputs the contents of the grammar in EBNF form.
+            </summary><returns>A string containing the EBNF form of the grammar.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Validate"><summary>
+            Validates that the grammar and its elements are configured correctly and ready to be compiled.
+            </summary><remarks>
+            An exception will be thrown if validation fails.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.#ctor(System.String)"><summary>
+            Initializes a new instance of the <c>Grammar</c> class.
+            </summary><param name="key">A string that identifies the grammar, generally the related language name.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.IsCompiled"><summary>
+            Gets whether the grammar and its elements are compiled, via a call to its <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Compile" /> method.
+            </summary><value><c>true</c> if the grammar and its elements are compiled; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Key"><summary>
+            Gets the string that identifies the grammar, generally the related language name.
+            </summary><value>The string that identifies the grammar, generally the related language name.</value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.NonTerminals"><summary>
+            Gets a dictionary of all non-terminals defined in the grammar, with the key being the non-terminal string key.
+            </summary><value>A dictionary of all non-terminals defined in the grammar, with the key being the non-terminal string key.</value><remarks>
+            This property returns <see langword="null" /> until the grammar has been compiled.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Root"><summary>
+            Gets or sets the root <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> of the grammar, meaning the first non-terminal that is attempted to be matched when parsing begins.
+            </summary><value>The root <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal" /> of the grammar.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Terminals"><summary>
+            Gets a dictionary of all terminals defined in the grammar, with the key being the terminal string key.
+            </summary><value>A dictionary of all terminals defined in the grammar, with the key being the terminal string key.</value><remarks>
+            This property returns <see langword="null" /> until the grammar has been compiled.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol"><summary>
+            Represents the abstract base class for a symbol within an EBNF production. 
+            </summary></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfNonTerminal"><summary>
+            Represents a non-terminal symbol within an EBNF production. 
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfNonTerminal.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfNonTerminal.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal)"><summary>
+            Initializes a new instance of the <c>EbnfNonTerminal</c> class.
+            </summary><param name="nonTerminal">The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfNonTerminal.NonTerminal" /> that is referenced by this term.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfNonTerminal.NonTerminal"><summary>
+            Gets or sets the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfNonTerminal.NonTerminal" /> that is referenced by this term.
+            </summary><value>The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfNonTerminal.NonTerminal" /> that is referenced by this term.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerminal"><summary>
+            Represents a terminal symbol within an EBNF production. 
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerminal.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerminal.#ctor(ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal)"><summary>
+            Initializes a new instance of the <c>EbnfTerminal</c> class.
+            </summary><param name="terminal">The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerminal.Terminal" /> that is referenced by this term.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerminal.Terminal"><summary>
+            Gets or sets the <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerminal.Terminal" /> that is referenced by this term.
+            </summary><value>The <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerminal.Terminal" /> that is referenced by this term.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol"><summary>
+            Represents an abstract base class for a symbol within a grammar.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.CanMatch(ActiproSoftware.Text.Parsing.LLParser.IParserState)"><summary>
+            Returns whether the symbol can start to match using callbacks or the current look-ahead token.
+            </summary><param name="state">An <see cref="T:ActiproSoftware.Text.Parsing.LLParser.IParserState" /> that provides information about the current parser state.</param><returns><c>true</c> if the symbol can start to match; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.Optional"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> such that zero or one instances are permitted.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OneOrMore"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> such that one to many instances are permitted.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OnComplete(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> and sets the delegate that will be called after the term is parsed, regardless of success or failure.
+            </summary><param name="callback">The delegate that will be called after the term is parsed.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OnError(ActiproSoftware.Text.Parsing.LLParser.ParserErrorCallback)"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> and sets the delegate that will be called when an error occurs while parsing the term.
+            </summary><param name="callback">The delegate that will be called when an error occurs while parsing the term.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OnErrorContinue"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> and marks that if an error occurs while parsing the term, the error will be reported but parsing will continue on.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OnErrorIgnore"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> and marks that if an error occurs while parsing the term, no error will be reported and parsing will continue on.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OnErrorNoReport"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> and marks that if an error occurs while parsing the term, no error will be reported and parsing will return a match failure.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OnInitialize(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> and sets the delegate that will be called before the term is parsed.
+            </summary><param name="callback">The delegate that will be called before the term is parsed.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.OnSuccess(ActiproSoftware.Text.Parsing.LLParser.ParserCallback)"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> and sets the delegate that will be called when the term is successfully parsed.
+            </summary><param name="callback">The delegate that will be called when the term is successfully parsed.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfTerm" /> that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.Range(System.Int32,System.Nullable{System.Int32})"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> such that a range of instances are permitted.
+            </summary><param name="min">The minimum number of instances.</param><param name="max">The maximum number of instances.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.ToString"><summary>
+            Returns a <c>String</c> that represents the current <c>Object</c>.
+            </summary><returns>A <c>String</c> that represents the current <c>Object</c>.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.ToTerm"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" />.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.ToTerm(System.String)"><summary>
+            Wraps this symbol with a labeled <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" />.
+            </summary><param name="label">The string label to use.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.ZeroOrMore"><summary>
+            Wraps this symbol with an <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> such that zero to many instances are permitted.
+            </summary><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfQuantifier" /> term that wraps this symbol.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.#ctor(System.String)"><summary>
+            Initializes a new instance of the <c>Symbol</c> class.
+            </summary><param name="key">A string that identifies the symbol.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.CanMatchCallback"><summary>
+            Gets or sets the delegate that will be called when the non-terminal needs to determine at run-time whether it can parse.
+            </summary><value>The delegate that will be called when the non-terminal needs to determine at run-time whether it can parse.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.IsCompiled"><summary>
+            Gets whether the grammar and its elements are compiled, via a call to its <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Grammar.Compile" /> method.
+            </summary><value><c>true</c> if the grammar and its elements are compiled; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.ErrorAlias"><summary>
+            Gets or sets the alias to use for this symbol when reporting errors.
+            </summary><value>The alias to use for this symbol when reporting errors.</value><remarks><para>
+            Terminals always report errors and use their <see cref="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.Key" /> if no error alias is specified.
+            Non-terminals will only report errors if an error alias is specified.
+            </para><para>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </para></remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.Key"><summary>
+            Gets or sets the string that identifies the symbol.
+            </summary><value>The string that identifies the symbol.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.SetLabel(System.String)"><summary>
+            Wraps this symbol with a labeled <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" />.
+            </summary><param name="label">The string label to use.</param><value>
+            The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> that was created.
+            </value><remarks>
+            This indexer is defined as shorthand syntax for calling the <see cref="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Symbol.ToTerm(System.String)" /> method.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal"><summary>
+            Represents a non-terminal symbol within a grammar.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal.ToTerm(System.String)"><summary>
+            Wraps this symbol with a labeled <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" />.
+            </summary><param name="label">The string label to use.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal.#ctor(System.String)"><summary>
+            Initializes a new instance of the <c>NonTerminal</c> class.
+            </summary><param name="key">A string that identifies the symbol.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.NonTerminal.Production"><summary>
+            Gets or sets the <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> for this non-terminal.
+            </summary><value>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfProduction" /> for this non-terminal.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member><member name="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal"><summary>
+            Represents a terminal symbol within a grammar.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal.ToTerm(System.String)"><summary>
+            Wraps this symbol with a labeled <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" />.
+            </summary><param name="label">The string label to use.</param><returns>The <see cref="T:ActiproSoftware.Text.Parsing.LLParser.Implementation.EbnfSymbol" /> that was created.</returns></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal.#ctor(System.Int32)"><summary>
+            Initializes a new instance of the <c>Terminal</c> class.
+            </summary><param name="id">The ID that identifies the terminal.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal.#ctor(System.Nullable{System.Int32},ActiproSoftware.Text.Lexing.ITokenIdProvider)"><summary>
+            Initializes a new instance of the <c>Terminal</c> class.
+            </summary><param name="id">The ID that identifies the terminal.</param><param name="tokenIdProvider">An <see cref="T:ActiproSoftware.Text.Lexing.ITokenIdProvider" /> that can provide a key for the specified token ID.</param></member><member name="M:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal.#ctor(System.Nullable{System.Int32},System.String)"><summary>
+            Initializes a new instance of the <c>Terminal</c> class.
+            </summary><param name="id">The ID that identifies the terminal.</param><param name="key">A string that identifies the symbol.</param></member><member name="P:ActiproSoftware.Text.Parsing.LLParser.Implementation.Terminal.Id"><summary>
+            Gets or sets the ID that identifies the terminal.
+            </summary><value>The ID that identifies the terminal.</value><remarks>
+            Once the grammar has been compiled, the setter of this property will throw an exception if called.
+            </remarks></member></members></doc>

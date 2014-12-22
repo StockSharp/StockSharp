@@ -1,0 +1,16 @@
+﻿<Window x:Class="OptionCalculator.QuotesWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Name="quotesWindow" Title="QuotesWindow" Height="400" Width="280">
+    <Grid>
+        <ListView ItemsSource="{Binding ElementName=quotesWindow, Path=Quotes}">
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Width="70" Header="Продажа" DisplayMemberBinding="{Binding Path=Ask}" />
+					<GridViewColumn Width="100" Header="Цена" DisplayMemberBinding="{Binding Path=Price}" />
+					<GridViewColumn Width="70" Header="Покупка" DisplayMemberBinding="{Binding Path=Bid}" />
+				</GridView>
+			</ListView.View>
+		</ListView>
+    </Grid>
+</Window>

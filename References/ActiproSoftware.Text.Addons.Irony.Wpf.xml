@@ -1,0 +1,74 @@
+<?xml version="1.0"?><doc><assembly><name>ActiproSoftware.Text.Addons.Irony.Wpf</name></assembly><members><member name="T:ActiproSoftware.Products.Text.Addons.Irony.Resources"><summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Irony.Resources.ResourceManager"><summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Irony.Resources.Culture"><summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Irony.Resources.ExNotSupportedByImplementation"><summary>
+              Looks up a localized string similar to This member is not supported by this implementation..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Irony.Resources.ExTextSnapshotRangeDeleted"><summary>
+              Looks up a localized string similar to The specified TextSnapshotRange cannot be deleted..
+            </summary></member><member name="P:ActiproSoftware.Products.Text.Addons.Irony.Resources.ExTextSnapshotRequiresCodeDocument"><summary>
+              Looks up a localized string similar to The specified ITextSnapshot must be for an ICodeDocument..
+            </summary></member><member name="T:ActiproSoftware.Products.Text.Addons.Irony.SR"><summary>
+            Provides access to the string resources of this assembly, also allowing for their customization.
+            </summary><remarks>
+            Call the <see cref="M:ActiproSoftware.Products.Text.Addons.Irony.SR.GetString(System.String)" /> method to return a resolved resource string.
+            If a custom string has been set for a specified string resource name, it will be returned.
+            Otherwise, the default string resource value is returned.
+            <para>
+            If any of the resource strings are customized via a call to <see cref="M:ActiproSoftware.Products.Text.Addons.Irony.SR.SetCustomString(System.String,System.String)" />,
+            it is best to do so before any other classes in this assembly are referenced,
+            such as in the application startup.
+            </para></remarks></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.ClearCustomStrings"><summary>
+            Removes all custom strings.
+            </summary></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.ContainsCustomString(System.String)"><summary>
+            Returns whether a custom string is defined for the specified string resource.
+            </summary><param name="name">The name of the resource for which to search.</param><returns><c>true</c> if a custom string is defined for the specified string resource; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.GetCustomString(System.String)"><summary>
+            Returns custom string that is stored for the specified string resource, if any.
+            </summary><param name="name">The name of the resource to get.</param><returns>The custom string that is stored for the specified string resource, if any.</returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.GetString(System.String)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.GetString(ActiproSoftware.Products.Text.Addons.Irony.SRName)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.GetString(System.String,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.GetString(ActiproSoftware.Products.Text.Addons.Irony.SRName,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.RemoveCustomString(System.String)"><summary>
+            Removes any custom string that is defined for the specified string resource.
+            </summary><param name="name">The name of the resource to remove.</param></member><member name="M:ActiproSoftware.Products.Text.Addons.Irony.SR.SetCustomString(System.String,System.String)"><summary>
+            Sets a custom string value for the specified string resource.
+            </summary><param name="name">The name of the resource to set.</param><param name="value">The value of the resource to set.</param></member><member name="P:ActiproSoftware.Products.Text.Addons.Irony.SR.ResourceManager"><summary>
+            Gets the <see cref="P:ActiproSoftware.Products.Text.Addons.Irony.SR.ResourceManager" /> that provides the default resources. 
+            </summary><value>The <see cref="P:ActiproSoftware.Products.Text.Addons.Irony.SR.ResourceManager" /> that provides the default resources.</value></member><member name="T:ActiproSoftware.Products.Text.Addons.Irony.SRName"><summary>
+            Specifies the names of string resources for this assembly.
+            </summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Irony.SRName.ExNotSupportedByImplementation"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Irony.SRName.ExTextSnapshotRangeDeleted"><summary>An exception message string.</summary></member><member name="F:ActiproSoftware.Products.Text.Addons.Irony.SRName.ExTextSnapshotRequiresCodeDocument"><summary>An exception message string.</summary></member><member name="T:ActiproSoftware.Text.Parsing.IIronyParseData"><summary>
+            Provides the base requirements for a class that contains the results of an Irony parsing operation.
+            </summary></member><member name="P:ActiproSoftware.Text.Parsing.IIronyParseData.ParseTree"><summary>
+            Gets the object that contains the parse tree result.
+            </summary><value>The object that contains the parse tree result.</value></member><member name="T:ActiproSoftware.Text.Parsing.Implementation.IronyParser"><summary>
+            Represents an <see cref="T:ActiproSoftware.Text.Parsing.IParser" /> (syntax/semantic analyzer) implementation that can be used to call an Irony <see cref="P:ActiproSoftware.Text.Parsing.Implementation.IronyParser.Parser" />.
+            </summary></member><member name="M:ActiproSoftware.Text.Parsing.Implementation.IronyParser.Parse(ActiproSoftware.Text.Parsing.IParseRequest)"><summary>
+            Performs a parsing operation using the parameters specified in the supplied <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" />
+            and returns the resulting parse data.
+            </summary><param name="request">The <see cref="T:ActiproSoftware.Text.Parsing.IParseRequest" /> that contains data about the requested parsing operation.</param><returns>An <see cref="T:ActiproSoftware.Text.Parsing.IParseData" /> that is the result of the parsing operation.</returns><remarks>
+            A <see cref="T:ActiproSoftware.Text.Parsing.IParseRequestDispatcher" /> typically calls this method when a queued parse request is ready to be processed.
+            </remarks></member><member name="M:ActiproSoftware.Text.Parsing.Implementation.IronyParser.#ctor(Irony.Parsing.Grammar)"><summary>
+            Initializes a new instance of the <c>IronyParser</c> class.
+            </summary><param name="grammar">The Irony <see cref="T:Irony.Parsing.Grammar" /> to use.</param></member><member name="P:ActiproSoftware.Text.Parsing.Implementation.IronyParser.Parser"><summary>
+            Gets the Irony parser that is used by this class.
+            </summary><value>The Irony parser that is used by this class.</value></member></members></doc>

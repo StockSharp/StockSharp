@@ -1,0 +1,1639 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MaasOne</name>
+    </assembly>
+    <members>
+        <member name="T:MaasOne.Base.ConnectionInfo">
+            <summary>
+            Provides information about a download process.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.ConnectionInfo.State">
+            <summary>
+            Indicates the connection status.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.ConnectionInfo.Exception">
+            <summary>
+            If an exception occurs during download process, the exception object will be stored here. If no exception occurs, this property is null/Nothing.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.ConnectionInfo.SizeInBytes">
+            <summary>
+            The size of downloaded data in bytes.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.ConnectionInfo.Timeout">
+            <summary>
+            The setted timeout for download process in milliseconds.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.ConnectionInfo.StartTime">
+            <summary>
+            The start time of download process, independent to individual preparation of passed parameters for start downloading.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.ConnectionInfo.EndTime">
+            <summary>
+            The end time of the download process, independent to post-processing actions like parsing.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.ConnectionInfo.TimeSpan">
+            <summary>
+            The time span of start and end time.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Base.DownloadCompletedEventArgs`1">
+            <summary>
+            Base event class for completed asynchronous download processes that provides additionally the response of the download. This class must be inherited.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Base.DownloadEventArgs">
+            <summary>
+            Base event class for asynchronous download processes and provides the individual user argument. This class must be inherited.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.DownloadEventArgs.UserArgs">
+            <summary>
+            Gets the user argument that were passed when the download was started.
+            </summary>
+            <value></value>
+            <returns>An object defined by the user</returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.DownloadCompletedEventArgs`1.Response">
+            <summary>
+            Gets the response of the download process.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Base.Response`1">
+            <summary>
+            Base response class for download processes. This class must be inherited.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.Response`1.Connection">
+            <summary>
+            Gets connection information of the download process.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.Response`1.Result">
+            <summary>
+            Gets the received managed data.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.UserArgs">
+            <summary>
+            Gets the user arguments of each download process.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>If you just need a single object, you should use UserArgs(Int32) property, because of higher performance.</remarks>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.UserArgs(System.Int32)">
+            <summary>
+            Gets the user argument of a download process at a specific index position.
+            </summary>
+            <param name="index">The index position of the download</param>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.CancelAsyncAll">
+            <summary>
+            Cancels all running downloads.
+            </summary>
+            <returns>TRUE, if all downloads were canceled. FALSE, if something goes wrong.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.CancelAsync(System.Object)">
+            <summary>
+            Cancels all running downloads containing the passed user argument.
+            </summary>
+            <param name="userArgs">The user argument that the download object contains.</param>
+            <returns>The number of canceled downloads.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.CancelAsyncAt(System.Int32)">
+            <summary>
+            Cancels a running download at specific index position.
+            </summary>
+            <param name="index">The index position of the download process in queue.</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.Contains(System.Object)">
+            <summary>
+            Proves if the download processes contains the passed user argument.
+            </summary>
+            <param name="userArgs">Individual user argument that the download contains.</param>
+            <returns>The number of download processes containing the passed user argument.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.DownloadAsync">
+            <summary>
+            Starts an asynchronous download.
+            </summary>
+        </member>
+        <member name="M:MaasOne.Base.IDownload.DownloadAsync(System.Object)">
+            <summary>
+            Starts an asynchronous download.
+            </summary>
+            <param name="userArgs">Individual user arguments.</param>
+        </member>
+        <member name="P:MaasOne.Base.IDownload.AsyncDownloadsCount">
+            <summary>
+            Gets the number of actually running asynchronous downloads.
+            </summary>
+            <value></value>
+            <returns>The number of active downloads</returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Base.DownloadClient`1">
+            <summary>
+            Provides methods and properties for downloading data and controlling these download processes. This class must be inherited.
+            </summary>
+            <remarks>This class can not be instanced without inheritation</remarks>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.UserArgs">
+            <summary>
+            Gets the user arguments of each download process.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>If you just need a single object, you should use UserArgs(Int32) property, because of higher performance.</remarks>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.UserArgs(System.Int32)">
+            <summary>
+            Gets the user argument of a download process at a specific index position.
+            </summary>
+            <param name="index">The index position of the download</param>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.CancelAsyncAll">
+            <summary>
+            Cancels all running downloads.
+            </summary>
+            <returns>TRUE, if all downloads were canceled. FALSE, if something goes wrong.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.CancelAsync(System.Object)">
+            <summary>
+            Cancels all running downloads containing the passed user argument.
+            </summary>
+            <param name="userArgs">The user argument that the download object contains.</param>
+            <returns>The number of canceled downloads.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.CancelAsyncAt(System.Int32)">
+            <summary>
+            Cancels a running download at specific index position.
+            </summary>
+            <param name="index">The index position of the download process in queue.</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.Contains(System.Object)">
+            <summary>
+            Proves if the download processes contains the passed user argument.
+            </summary>
+            <param name="userArgs">Individual user argument that the download contains.</param>
+            <returns>The number of download processes containing the passed user argument.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.DownloadAsync">
+            <summary>
+            Starts an asynchronous download.
+            </summary>
+        </member>
+        <member name="M:MaasOne.Base.DownloadClient`1.DownloadAsync(System.Object)">
+            <summary>
+            Starts an asynchronous download.
+            </summary>
+            <param name="userArgs">Individual user arguments.</param>
+        </member>
+        <member name="P:MaasOne.Base.DownloadClient`1.Timeout">
+            <summary>
+            Gets or sets the time in miliseconds when the download will cancel if the time reached before it is completed.
+            </summary>
+            <value>Timeout in miliseconds. If value is '-1', the next download wont have a timeout.</value>
+            <returns>The timeout in miliseconds.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.DownloadClient`1.AsyncDownloadsCount">
+            <summary>
+            Gets the number of actually running asynchronous downloads.
+            </summary>
+            <value></value>
+            <returns>The number of active downloads</returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Base.DownloadClient`1.Proxy">
+            <summary>
+            Gets or sets the used proxy setting for download.
+            </summary>
+            <value></value>
+            <returns>The actual setted proxy</returns>
+            <remarks>Default value are proxy settings from Internet Explorer/Windows Internet Settings.</remarks>
+        </member>
+        <member name="T:MaasOne.Base.ConnectionState">
+            <summary>
+            Describes the end state of a connection.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Base.ConnectionState.Success">
+            <summary>
+            Download process completed successfully without timeout, errors or cancelations
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Base.ConnectionState.Canceled">
+            <summary>
+            Download process was canceled by user interaction
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Base.ConnectionState.Timeout">
+            <summary>
+            Download process reached the setted timeout span
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Base.ConnectionState.ErrorOccured">
+            <summary>
+            An Error occured during download process
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.ITextEncodingSettings">
+            <summary>
+            Provides properties for decoding text from streams.
+            </summary>
+        </member>
+        <member name="P:MaasOne.ITextEncodingSettings.TextEncoding">
+            <summary>
+            The used text encoding.
+            </summary>
+        </member>
+        <member name="T:MaasOne.IQuerySettings">
+            <summary>
+            Provides properties for a webservice query.
+            </summary>
+        </member>
+        <member name="P:MaasOne.IQuerySettings.Query">
+            <summary>
+            The query text.
+            </summary>
+        </member>
+        <member name="T:MaasOne.IResultIndexSettings">
+            <summary>
+            Provides properties to set the start index and count number for a query in results queue.
+            </summary>
+        </member>
+        <member name="P:MaasOne.IResultIndexSettings.Index">
+            <summary>
+            The results queue start index.
+            </summary>
+        </member>
+        <member name="P:MaasOne.IResultIndexSettings.Count">
+            <summary>
+            The total number of results.
+            </summary>
+        </member>
+        <member name="T:MaasOne.Country">
+            <summary>
+            Provides the Yahoo! supported countries.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.AR">
+            <summary>
+            Argentina
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.AT">
+            <summary>
+            Austria
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.AU">
+            <summary>
+            Australia
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.BE">
+            <summary>
+            Belgium
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.BR">
+            <summary>
+            Brazil
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.CA">
+            <summary>
+            Canada
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.CH">
+            <summary>
+            Switzerland
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.CL">
+            <summary>
+            Chile
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.CN">
+            <summary>
+            China
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.CO">
+            <summary>
+            Columbia
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.CT">
+            <summary>
+            Catalan
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.CZ">
+            <summary>
+            Czech Republic
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.DE">
+            <summary>
+            Germany
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.DK">
+            <summary>
+            Denmark
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.ES">
+            <summary>
+            Spain
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.FI">
+            <summary>
+            Finland
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.FR">
+            <summary>
+            France
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.HK">
+            <summary>
+            Hong Kong
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.HU">
+            <summary>
+            Hungary
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.ID">
+            <summary>
+            Indonesia
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.IE">
+            <summary>
+            Ireland
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.IL">
+            <summary>
+            Israel
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.IN">
+            <summary>
+            India
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.IT">
+            <summary>
+            Italy
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.JP">
+            <summary>
+            Japan
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.KR">
+            <summary>
+            Korea
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.MX">
+            <summary>
+            Mexico
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.MY">
+            <summary>
+            Malaysia
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.NL">
+            <summary>
+            Netherlands
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.NO">
+            <summary>
+            Norway
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.NZ">
+            <summary>
+            New Zealand
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.PE">
+            <summary>
+            Peru
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.PH">
+            <summary>
+            Philippines
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.PT">
+            <summary>
+            Portugal
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.RO">
+            <summary>
+            Romania
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.RU">
+            <summary>
+            Russia
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.SE">
+            <summary>
+            Sweden
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.SG">
+            <summary>
+            Singapore
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.TH">
+            <summary>
+            Thailand
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.TR">
+            <summary>
+            Turkey
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.TW">
+            <summary>
+            Taiwan
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.UK">
+            <summary>
+            United Kingdom
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.US">
+            <summary>
+            United States of America
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.VE">
+            <summary>
+            Venezuela
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Country.VN">
+            <summary>
+            Vietnam
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Language">
+            <summary>
+            Provides the Yahoo! supported languages.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.ar">
+            <summary>
+            Arabic
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.bg">
+            <summary>
+            Bulgarian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.ca">
+            <summary>
+            Catalan
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.cs">
+            <summary>
+            Czech
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.da">
+            <summary>
+            Danish
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.de">
+            <summary>
+            German
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.el">
+            <summary>
+            Greek
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.en">
+            <summary>
+            English
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.es">
+            <summary>
+            Spanish
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.et">
+            <summary>
+            Estonian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.fa">
+            <summary>
+            Persian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.fi">
+            <summary>
+            Finnish
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.fr">
+            <summary>
+            French
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.he">
+            <summary>
+            Hebrew
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.hr">
+            <summary>
+            Croatian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.hu">
+            <summary>
+            Hungarian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.id">
+            <summary>
+            Indonesian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.in">
+            <summary>
+            Indian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.is">
+            <summary>
+            Icelandic
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.it">
+            <summary>
+            Italian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.ja">
+            <summary>
+            Japanese
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.ko">
+            <summary>
+            Korean
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.lt">
+            <summary>
+            Lithuanian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.lv">
+            <summary>
+            Latvian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.ms">
+            <summary>
+            Malaysian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.nl">
+            <summary>
+            Dutch
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.no">
+            <summary>
+            Norwegian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.pl">
+            <summary>
+            Polish
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.pt">
+            <summary>
+            Portuguese
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.ro">
+            <summary>
+            Romanian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.ru">
+            <summary>
+            Russian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.sk">
+            <summary>
+            Slovak
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.sl">
+            <summary>
+            Slovenian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.sr">
+            <summary>
+            Serbian
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.sv">
+            <summary>
+            Swedish
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.szh">
+            <summary>
+            Chinese_Simplified
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.th">
+            <summary>
+            Thai
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.tl">
+            <summary>
+            Filipino
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.tr">
+            <summary>
+            Turkish
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.tzh">
+            <summary>
+            Chinese_Traditional
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MaasOne.Language.vi">
+            <summary>
+            Vietnamese
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.ISettableID">
+            <summary>
+            Interface for Yahoo! ID. Inherits from IID and provides a settable ID.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.IID">
+            <summary>
+            Interface for Yahoo! ID. Can be used for downloading informations from Yahoo! Finance.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.IID.ID">
+            <summary>
+            The valid Yahoo! ID.
+            </summary>
+            <value></value>
+            <returns>The full ID built by the implementing class.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Finance.ISettableID.SetID(System.String)">
+            <summary>
+            Provides the possibility to set the ID from outside of the class.
+            </summary>
+            <param name="id">A valid Yahoo! ID</param>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesDataChain.ID">
+            <summary>
+            The ID of the historic quotes owning stock, index, etc.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.HistQuotesData">
+            <summary>
+            Stores informations about one historic trading period (day, week or month).
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.TradingDate">
+            <summary>
+            The startdate of the period.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.Open">
+            <summary>
+            The first value in trading period.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.High">
+            <summary>
+            The highest value in trading period.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.Low">
+            <summary>
+            The lowest value in trading period.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.Close">
+            <summary>
+            The last value in trading period.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.CloseAdjusted">
+            <summary>
+            The last value in trading period in relation to share splits.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.Volume">
+            <summary>
+            The traded volume.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.HistQuotesData.PreviousClose">
+            <summary>
+            The close value of the previous HistQuoteData in chain.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.IDSearchBaseData.ID">
+            <summary>
+            The ID of the stock, index, etc.
+            </summary>
+            <value></value>
+            <returns></returns>
+        </member>
+        <member name="T:MaasOne.Finance.Indicators.BB">
+            <summary>
+            Bollinger Bands Indicator
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.Indicators.StD">
+            <summary>
+            Standard Deviation Indicator
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Finance.Indicators.StD.Calculate(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.DateTime,System.Double}})">
+            <summary>
+            Calculates values of Standard Deviation for historic quote values.
+            </summary>
+            <param name="values">An unsorted IEnumerable of HistQuoteData.</param>
+            <returns>The sorted dictionaries. 1) StD values; 2) MA values; 3) Quote values.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.Indicators.EMA">
+            <summary>
+            Exponential Moving Average Indicator. Inherits from Moving Average(MA).
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.Indicators.MA">
+            <summary>
+            Moving Average Indicator
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Finance.Indicators.MA.Calculate(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.DateTime,System.Double}})">
+            <summary>
+            Calculate values of Moving Average for historic quote values.
+            </summary>
+            <param name="values">An unsorted IEnumerable of HistQuoteData.</param>
+            <returns>The sorted dictionaries. 1) MA values; 2) Quote values.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Finance.Indicators.EMA.Calculate(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.DateTime,System.Double}})">
+            <summary>
+            Calculates values of Exponential Moving Average for historic quote values.
+            </summary>
+            <param name="values">An unsorted IEnumerable of HistQuoteData.</param>
+            <returns>The sorted dictionaries. 1) EMA values; 2) MA values; 3) Quote values.</returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.Indicators.Env">
+            <summary>
+            Envelopes Indicator
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Finance.Indicators.WPR.Calculate(System.Collections.Generic.IEnumerable{MaasOne.Finance.HistQuotesData})">
+            <summary>
+            Calculate values of Williams Percent Range for historic quote values.
+            </summary>
+            <param name="values">An unsorted IEnumerable of HistQuoteData.</param>
+            <returns>The sorted dictionaries. 1) WPR values; 2) Quote values (Close)</returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.Finance.ISIN">
+            <summary>
+            Class for managing an International Securities Identification Number.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Finance.ISIN.#ctor(System.String)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="isinWithOrWithoutCheckDigit">A valid ISIN with or without check digit</param>
+            <remarks>If check digit exists, it will be ignored, but in this case the string must be a digit to be a valid ISIN. The check digit will be calculated seperatly.</remarks>
+        </member>
+        <member name="M:MaasOne.Finance.ISIN.ToString">
+            <summary>
+            Returns the complete ISIN value.
+            </summary>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.Finance.ISIN.IsValidFormatted(System.String)">
+            <summary>
+            Checks a string for valid ISIN format
+            </summary>
+            <param name="isin">An ISIN with or without check digit</param>
+            <returns>True if ISIN is valid formatted</returns>
+            <remarks>If check digit exists, it will be ignored, but in this case the string must be a digit to be a valid ISIN. The check digit will be calculated seperatly.</remarks>
+        </member>
+        <member name="P:MaasOne.Finance.ISIN.Value">
+            <summary>
+            The complete ISIN
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.ISIN.CountryCode">
+            <summary>
+            The country specific part of the ISIN
+            </summary>
+            <value></value>
+            <returns>The first two letters if the ISIN is valid</returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.ISIN.CoreCode">
+            <summary>
+            The core part of the ISIN
+            </summary>
+            <value></value>
+            <returns>The ISIN without CountryCode and CheckDigit</returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.ISIN.CheckDigit">
+            <summary>
+            The calculated check digit of the ISIN
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>Every "get" call a calculation</remarks>
+        </member>
+        <member name="M:MaasOne.Finance.QuotesBaseData.SetID(System.String)">
+            <summary>
+            Sets a new ID value. Implementation from ISettableID.
+            </summary>
+            <param name="id">A valid Yahoo! ID</param>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.ID">
+            <summary>
+            The ID of the QuoteBaseData
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.LastTradePriceOnly">
+            <summary>
+            The price value of the QuoteBaseData
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.Change">
+            <summary>
+            The change of the price in relation to close value of the previous day
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.Volume">
+            <summary>
+            The trade volume of the day
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.PreviewClose">
+            <summary>
+            The calculated close price of the last trading day
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>[LastTradePriceOnly] - [Change]</remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.ChangeInPercent">
+            <summary>
+            The calculated price change in percent
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>[Change] / [PreviewClose]</remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.LastTradeDate">
+            <summary>
+            The date value of the data
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Finance.QuotesBaseData.LastTradeTime">
+            <summary>
+            The time value of the data
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.Feed">
+            <summary>
+            Provides RSS feed data.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Category">
+            <summary>
+            Specify one or more categories that the channel belongs to.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Cloud">
+            <summary>
+            Allows processes to register with a cloud to be notified of updates to the channel, implementing a lightweight publish-subscribe protocol for RSS feeds. 
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Copyright">
+            <summary>
+            Copyright notice for content in the channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Description">
+            <summary>
+            	Phrase or sentence describing the channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Documentation">
+            <summary>
+            A URL that points to the documentation (http://www.rssboard.org/rss-specification) for the format used in the RSS file. It's probably a pointer to this page. It's for people who might stumble across an RSS file on a Web server 25 years from now and wonder what it is.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Generator">
+            <summary>
+            A string indicating the program used to generate the channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Image">
+            <summary>
+            Specifies a GIF, JPEG or PNG image that can be displayed with the channel. 
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Items">
+            <summary>
+            A channel may contain any number of items. An item may represent a "story" -- much like a story in a newspaper or magazine; if so its description is a synopsis of the story, and the link points to the full story.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Language">
+            <summary>
+            The language the channel is written in. This allows aggregators to group all Italian language sites, for example, on a single page.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.LastBuildDate">
+            <summary>
+            The last time the content of the channel changed.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Link">
+            <summary>
+            The URL to the HTML website corresponding to the channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.ManagingEditor">
+            <summary>
+            Email address for person responsible for editorial content.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.PublishDate">
+            <summary>
+            The publication date for the content in the channel. For example, the New York Times publishes on a daily basis, the publication date flips once every 24 hours. That's when the pubDate of the channel changes.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Rating">
+            <summary>
+            The PICS (http://www.w3.org/PICS/) rating for the channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Skiphours">
+            <summary>
+            A hint for aggregators telling them which hours they can skip. This element contains up to 24 hour sub-elements whose value is a number between 0 and 23, representing a time in GMT, when aggregators, if they support the feature, may not read the channel on hours listed in the SkipHours element. The hour beginning at midnight is hour zero.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Skipdays">
+            <summary>
+            A hint for aggregators telling them which days they can skip. This element contains up to seven day sub-elements whose value is Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday. Aggregators may not read the channel during days listed in the SkipDays element.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.TextInput">
+            <summary>
+            Specifies a text input box that can be displayed with the channel. The purpose of the TextInput element is something of a mystery. You can use it to specify a search engine box. Or to allow a reader to provide feedback. Most aggregators ignore it.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Title">
+            <summary>
+            The name of the channel. It's how people refer to your service. If you have an HTML website that contains the same information as your RSS file, the title of your channel should be the same as the title of your website.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Ttl">
+            <summary>
+            ttl stands for time to live. It's a number of minutes that indicates how long a channel can be cached before refreshing from the source.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Feed.Webmaster">
+            <summary>
+            Email address for person responsible for technical issues relating to channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.FeedItem">
+            <summary>
+            Stores data of a rss feed item.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Title">
+            <summary>
+            The title of the item.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Link">
+            <summary>
+            The URL of the item.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Description">
+            <summary>
+            The item synopsis.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Author">
+            <summary>
+            Email address of the author of the item.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Category">
+            <summary>
+            Includes the item in one or more categories.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Comments">
+            <summary>
+            URL of a page for comments relating to the item.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Enclosure">
+            <summary>
+            Describes a media object that is attached to the item.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.GUID">
+            <summary>
+            A string that uniquely identifies the item.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.PublishDate">
+            <summary>
+            Indicates when the item was published.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.FeedItem.Source">
+            <summary>
+            The RSS channel that the item came from.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.GUID">
+            <summary>
+            Provides information about a globally unique identifier. 
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.GUID.ID">
+            <summary>
+            It's a string that uniquely identifies the item. When present, an aggregator may choose to use this string to determine if an item is new.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>There are no rules for the syntax of a guid. Aggregators must view them as a string. It's up to the source of the feed to establish the uniqueness of the string.</remarks>
+        </member>
+        <member name="P:MaasOne.RSS.GUID.IsPermaLink">
+            <summary>
+             If the GUID element has an attribute named isPermaLink with a value of true, the reader may assume that it is a permalink to the item, that is, a url that can be opened in a Web browser, that points to the full item described by the FeedItem element.
+            </summary>
+            <value>If its value is FALSE, the guid may not be assumed to be a url, or a url to anything in particular.</value>
+            <returns></returns>
+            <remarks>IsPermaLink is optional, its default value is TRUE.</remarks>
+        </member>
+        <member name="T:MaasOne.RSS.Enclosure">
+            <summary>
+            Enclosure describes a media object that is attached to the item. 
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Enclosure.Url">
+            <summary>
+            The location of the object.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Enclosure.Type">
+            <summary>
+            The MIME type of the object.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Enclosure.Length">
+            <summary>
+            The size in Bytes of the object.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.Source">
+            <summary>
+            Provides information about the RSS channel where the item comes from.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Source.Title">
+            <summary>
+            The title of the RSS channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Source.Url">
+            <summary>
+            The url of the RSS channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.Category">
+            <summary>
+            Provides information about catigorization of the item.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Category.Name">
+            <summary>
+            The name of the category.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.Image">
+            <summary>
+            Provides RSS feed image data.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Image.URL">
+            <summary>
+            Gets or sets the URL of a GIF, JPEG or PNG image that represents the channel.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Image.Link">
+            <summary>
+            Gets or sets the URL of the site, when the channel is rendered, the image is a link to the site.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>In practice the image TITLE and LINK should have the same value as the channel's TITLE and LINK.</remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Image.Description">
+            <summary>
+            Gets or sets the text that is included in the TITLE attribute of the link formed around the image in the HTML rendering.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Image.Width">
+            <summary>
+            Gets or sets the width of the image in pixels.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>Maximum value is 144, default value is 88.</remarks>
+        </member>
+        <member name="P:MaasOne.RSS.Image.Height">
+            <summary>
+            Gets or sets the height of the image in pixels.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks>Maximum value is 400, default value is 31.</remarks>
+        </member>
+        <member name="T:MaasOne.RSS.Cloud">
+            <summary>
+            It's purpose is to allow processes to register with a cloud to be notified of updates to the channel, implementing a lightweight publish-subscribe protocol for RSS feeds.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.TextInputBox">
+            <summary>
+            Represents a text input box for doing something.
+            </summary>
+            <remarks>The purpose of the TextInputBox element is something of a mystery. You can use it to specify a search engine box. Or to allow a reader to provide feedback. Most aggregators ignore it.</remarks>
+        </member>
+        <member name="P:MaasOne.RSS.TextInputBox.Title">
+            <summary>
+            The label of the Submit button in the text input area.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.TextInputBox.Description">
+            <summary>
+            Explains the text input area.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.TextInputBox.Name">
+            <summary>
+            The name of the text object in the text input area.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.RSS.TextInputBox.Link">
+            <summary>
+            The URL of the CGI script that processes text input requests.
+            </summary>
+            <value></value>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:MaasOne.RSS.FeedDownload">
+            <summary>
+            Class for downloading RSS feeds
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MaasOne.RSS.FeedDownload.#ctor">
+            <summary>
+            Default constructor
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MaasOne.Search.SearchBaseData.Title">
+            <summary>
+            Returns the Title string for this WebRequest.
+            </summary>
+            <remarks>
+            The Title field contains the text specified in the HTML TITLE tag of the page.
+            </remarks>
+        </member>
+        <member name="P:MaasOne.Search.SearchBaseData.Description">
+            <summary>
+            Returns the description text of the result.
+            </summary>
+            <remarks>
+            This string contains a portion of the text from the body of the HTML page that contains the specified search terms.
+            </remarks>
+        </member>
+        <member name="P:MaasOne.Search.SearchBaseData.Url">
+            <summary>
+            Returns the full URL for the result as a string.
+            </summary>
+            <remarks>
+            The Url field contains the full URL to the page. This may contain extended information, such as instrumentation, and may be different than the DisplayUrl that you will want to display to the user. Typically, the Title is used to display the text of a hyperlink and the Url is used to specify the link target. 
+            This string contains the URL to the Web page.
+            </remarks>
+        </member>
+    </members>
+</doc>

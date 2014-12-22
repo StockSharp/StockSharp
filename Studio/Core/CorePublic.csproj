@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{23B15AE0-2021-43DA-808F-3BF331462976}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Studio.Core</RootNamespace>
+    <AssemblyName>StockSharp.Studio.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\References\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\..\References\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\..\References\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\..\References\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Configuration">
+      <HintPath>..\..\References\Ecng.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Data">
+      <HintPath>..\..\References\Ecng.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\..\References\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization.FieldFactories">
+      <HintPath>..\..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\..\References\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\References\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Commands\AddLogListenerCommand.cs" />
+    <Compile Include="Commands\BindCommand.cs" />
+    <Compile Include="Commands\ChartAutoRangeCommand.cs" />
+    <Compile Include="Commands\ChartDrawCommand.cs" />
+    <Compile Include="Commands\CloseWindowCommand.cs" />
+    <Compile Include="Commands\ControlChangedCommand.cs" />
+    <Compile Include="Commands\ControlOpenedCommand.cs" />
+    <Compile Include="Commands\DebugDiagramStrategyCommand.cs" />
+    <Compile Include="Commands\EditReferencesCommand.cs" />
+    <Compile Include="Commands\IStudioCommandScope.cs" />
+    <Compile Include="Commands\LoadLayoutCommand.cs" />
+    <Compile Include="Commands\NewSecuritiesCommand.cs" />
+    <Compile Include="Commands\OpenContinuousSecurityPanelCommand.cs" />
+    <Compile Include="Commands\OpenIndexSecurityPanelCommand.cs" />
+    <Compile Include="Commands\OpenMarketDataSettingsCommand.cs" />
+    <Compile Include="Commands\OpenMarketDepthCommand.cs" />
+    <Compile Include="Commands\PositionEditCommand.cs" />
+    <Compile Include="Commands\RefreshSecurities.cs" />
+    <Compile Include="Commands\RemoveLicenseCommand.cs" />
+    <Compile Include="Commands\RenewLicenseCommand.cs" />
+    <Compile Include="Commands\RequestBindSource.cs" />
+    <Compile Include="Commands\RequestLicenseCommand.cs" />
+    <Compile Include="Commands\ResetStrategyCommand.cs" />
+    <Compile Include="Commands\StrategyCommand.cs" />
+    <Compile Include="IPersistableService.cs" />
+    <Compile Include="IStudioControl.cs" />
+    <Compile Include="MarketDataSettings.cs" />
+    <Compile Include="MarketDataSettingsCache.cs" />
+    <Compile Include="StrategyAttributes.cs" />
+    <Compile Include="StrategyContainer.cs" />
+    <Compile Include="StrategyHelper.cs" />
+    <Compile Include="Commands\AddStrategyCommand.cs" />
+    <Compile Include="Commands\AddStrategyInfoCommand.cs" />
+    <Compile Include="Commands\CancelAllOrdersCommand.cs" />
+    <Compile Include="Commands\CancelOrderCommand.cs" />
+    <Compile Include="Commands\ChartAddAreaCommand.cs" />
+    <Compile Include="Commands\ChartAddElementCommand.cs" />
+    <Compile Include="Commands\ChartClearAreasCommand.cs" />
+    <Compile Include="Commands\ChartRemoveAreaCommand.cs" />
+    <Compile Include="Commands\ChartRemoveElementCommand.cs" />
+    <Compile Include="Commands\ChartResetElementsCommand.cs" />
+    <Compile Include="Commands\ClearMarketDepthCommand.cs" />
+    <Compile Include="Commands\CloneStrategyCommand.cs" />
+    <Compile Include="Commands\ClosePositionCommand.cs" />
+    <Compile Include="Commands\CompileStrategyInfoCommand.cs" />
+    <Compile Include="Commands\CreateSecurityCommand.cs" />
+    <Compile Include="Commands\EditSecurityCommand.cs" />
+    <Compile Include="Commands\InitializeStrategyCommand.cs" />
+    <Compile Include="Commands\LicenseChangedCommand.cs" />
+    <Compile Include="Commands\LoggedInCommand.cs" />
+    <Compile Include="Commands\LoggedOutCommand.cs" />
+    <Compile Include="Commands\LogInCommand.cs" />
+    <Compile Include="Commands\LookupSecuritiesCommand.cs" />
+    <Compile Include="Commands\LookupSecuritiesResultCommand.cs" />
+    <Compile Include="Commands\NewNewsCommand.cs" />
+    <Compile Include="Commands\NewTradesCommand.cs" />
+    <Compile Include="Commands\OpenWindowCommand.cs" />
+    <Compile Include="Commands\OpenStrategyCommand.cs" />
+    <Compile Include="Commands\OpenStrategyInfoCommand.cs" />
+    <Compile Include="Commands\OrderFailCommand.cs" />
+    <Compile Include="Commands\PnLChangedCommand.cs" />
+    <Compile Include="Commands\PortfolioCommand.cs" />
+    <Compile Include="Commands\PositionCommand.cs" />
+    <Compile Include="Commands\RegisterOrderCommand.cs" />
+    <Compile Include="Commands\RemoveStrategyCommand.cs" />
+    <Compile Include="Commands\RemoveStrategyInfoCommand.cs" />
+    <Compile Include="Commands\RequestMarketDataCommand.cs" />
+    <Compile Include="Commands\RequestPortfoliosCommand.cs" />
+    <Compile Include="Commands\RequestPositionsCommand.cs" />
+    <Compile Include="Commands\RequestTradesCommand.cs" />
+    <Compile Include="Commands\ReRegisterOrderCommand.cs" />
+    <Compile Include="Commands\RevertPositionCommand.cs" />
+    <Compile Include="Commands\SelectCommand.cs" />
+    <Compile Include="Commands\NewMyTradesCommand.cs" />
+    <Compile Include="Commands\OrderCommand.cs" />
+    <Compile Include="Commands\ResetedCommand.cs" />
+    <Compile Include="Commands\UpdateMarketDepthCommand.cs" />
+    <Compile Include="IStrategyContainer.cs" />
+    <Compile Include="Commands\IStudioCommandService.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="SessionBaseList.cs" />
+    <Compile Include="SessionList.cs" />
+    <Compile Include="SessionStrategy.cs" />
+    <Compile Include="SessionStrategyList.cs" />
+    <Compile Include="Commands\IStudioCommand.cs" />
+    <Compile Include="IAlgoService.cs" />
+    <Compile Include="IStrategyService.cs" />
+    <Compile Include="IStudioEntityRegistry.cs" />
+    <Compile Include="IStudioConnector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StrategyInfo.cs" />
+    <Compile Include="StudioStorageRegistry.cs" />
+    <Compile Include="VirtualPortfolio.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\References\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo.Strategies">
+      <HintPath>..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo">
+      <HintPath>..\..\References\StockSharp.Algo.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BusinessEntities">
+      <HintPath>..\..\References\StockSharp.BusinessEntities.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Community">
+      <HintPath>..\..\References\StockSharp.Community.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Licensing">
+      <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Localization">
+      <HintPath>..\..\References\StockSharp.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Logging">
+      <HintPath>..\..\References\StockSharp.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Messages">
+      <HintPath>..\..\References\StockSharp.Messages.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram">
+      <HintPath>..\..\References\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\..\References\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

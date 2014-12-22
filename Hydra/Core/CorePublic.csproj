@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{95CA16E0-0A47-43A3-AAB7-7E0803E817CA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Hydra.Core</RootNamespace>
+    <AssemblyName>StockSharp.Hydra.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Hydra.Core.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Hydra.Core.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\References\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Data">
+      <HintPath>..\..\References\Ecng.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Data.Providers">
+      <HintPath>..\..\References\Ecng.Data.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop">
+      <HintPath>..\..\References\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Reflection">
+      <HintPath>..\..\References\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\..\References\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\..\References\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\References\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf">
+      <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\..\References\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\..\References\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\..\References\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Configuration">
+      <HintPath>..\..\References\Ecng.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization.FieldFactories">
+      <HintPath>..\..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AuxiliaryAttribute.cs" />
+    <Compile Include="BaseHydraTask.cs" />
+    <Compile Include="DatabaseConnectionCache.cs" />
+    <Compile Include="DatabaseConnectionComboBox.cs" />
+    <Compile Include="DatabaseConnectionEditor.cs" />
+    <Compile Include="DriveCache.cs" />
+    <Compile Include="DriveComboBox.xaml.cs">
+      <DependentUpon>DriveComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExportTypes.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="HydraEntityRegistry.cs" />
+    <Compile Include="HydraSettings.cs" />
+    <Compile Include="HydraSettingsRegistry.cs" />
+    <Compile Include="HydraTaskSecurityList.cs" />
+    <Compile Include="IHydraTask.cs" />
+    <Compile Include="HydraTaskSettings.cs" />
+    <Compile Include="HydraTaskSettingsList.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MarketDataConnector.cs" />
+    <Compile Include="ConnectorHydraTask.cs" />
+    <Compile Include="HydraTaskSecurity.cs" />
+    <Compile Include="Attributes.cs" />
+    <Compile Include="TaskCategories.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\References\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo">
+      <HintPath>..\..\References\StockSharp.Algo.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BusinessEntities">
+      <HintPath>..\..\References\StockSharp.BusinessEntities.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Community">
+      <HintPath>..\..\References\StockSharp.Community.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Localization">
+      <HintPath>..\..\References\StockSharp.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Logging">
+      <HintPath>..\..\References\StockSharp.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Messages">
+      <HintPath>..\..\References\StockSharp.Messages.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\..\References\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="DriveComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

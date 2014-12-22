@@ -1,0 +1,73 @@
+<Window x:Class="SampleTransaq.NewAlgoOrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+        mc:Ignorable="d" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="NewAlgoOrderWindow" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
+    <Grid>
+        <StackPanel Margin="5">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="130" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock HorizontalAlignment="Right">
+					<Run Text="{x:Static loc:LocalizedStrings.Str2412}"/><Run Text=":"/>
+				</TextBlock>
+                <sx:PortfolioComboBox x:Name="Portfolio" Grid.Row="0" Grid.Column="1" />
+                
+                <TextBlock Grid.Row="1" Grid.Column="0">
+					<Run Text="{x:Static loc:LocalizedStrings.Str123}"/><Run Text=":"/>
+				</TextBlock>
+                <TextBox x:Name="OrderPrice" Text="0" TextAlignment="Right" Grid.Column="1" Grid.Row="1" />
+                
+                <Label Content="{x:Static loc:LocalizedStrings.XamlStr383}" HorizontalContentAlignment="Right" Grid.Row="2" Grid.Column="0" />
+                <TextBox x:Name="OrderVolume" Text="0" TextAlignment="Right" Grid.Column="1" Grid.Row="2" />
+
+                <RadioButton x:Name="IsBuy" Content="{x:Static loc:LocalizedStrings.Str403}" GroupName="Direction" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" />
+                <RadioButton x:Name="IsSell" Content="{x:Static loc:LocalizedStrings.Str404}" GroupName="Direction" Grid.Column="1" Grid.Row="3" Margin="0,3,0,3"/>
+            </Grid>
+
+            <GroupBox Header="{x:Static loc:LocalizedStrings.Str3556}">
+                <StackPanel>
+                    <xctk:DateTimePicker x:Name="ValidAfterDate" Height="23" />
+                    <CheckBox Name="ValidAfterImmediately" Content="{x:Static loc:LocalizedStrings.Str3566}" Height="16" />
+                </StackPanel>
+            </GroupBox>
+            
+            <GroupBox Header="{x:Static loc:LocalizedStrings.Str3518}">
+                <StackPanel>
+                    <xctk:DateTimePicker x:Name="ValidBefore" Height="23" />
+                    <CheckBox Name="ValidBeforeTillCancelled" Content="{x:Static loc:LocalizedStrings.XamlStr480}" Height="16" />
+                </StackPanel>
+            </GroupBox>            
+            
+            <GroupBox Header="{x:Static loc:LocalizedStrings.Str3086}">
+                <StackPanel>
+                    <RadioButton Content="None" Height="16" Name="NoneOption" GroupName="Trigger" IsChecked="True" Checked="Trigger_OnChecked" />
+					<RadioButton Content="Bid" Height="16" Name="BidOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr285}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="BidOrLast" Height="16" Name="BidOrLastOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr284}" Checked="Trigger_OnChecked" />
+                    <RadioButton Content="Ask" Height="16" Name="Ask" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr287}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="AskOrLast" Height="16" Name="AskOrLastOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr286}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="Time" Height="16" Name="TimeOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr70}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="CovDown" Height="16" Name="CovDownOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr369}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="CovUp" Height="16" Name="CovUpOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr368}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="LastUp" Height="16" Name="LastUpOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr641}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="LastDown" Height="16" Name="LastDownOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr642}" Checked="Trigger_OnChecked" />
+                </StackPanel>
+            </GroupBox>
+
+            <Button Content="{x:Static loc:LocalizedStrings.XamlStr427}" Name="Send" Click="SendClick" Width="100" Height="23" />
+        </StackPanel>
+    </Grid>
+</Window>

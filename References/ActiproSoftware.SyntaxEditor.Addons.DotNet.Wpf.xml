@@ -1,0 +1,386 @@
+<?xml version="1.0"?><doc><assembly><name>ActiproSoftware.SyntaxEditor.Addons.DotNet.Wpf</name></assembly><members><member name="T:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.AssemblyInfo"><summary>
+            Provides a class for retrieving information about the <c>ActiproSoftware.SyntaxEditor</c> assembly.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.AssemblyInfo.Instance"><summary>
+            Gets the instance of the <see cref="T:ActiproSoftware.Products.AssemblyInfo" /> class for this assembly.
+            </summary><value>The instance of the <see cref="T:ActiproSoftware.Products.AssemblyInfo" /> class for this assembly.</value></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.AssemblyInfo.LicenseType"><summary>
+            Gets the type of license that is available for the assembly.
+            </summary><value>A <see cref="T:ActiproSoftware.Products.AssemblyLicenseType" /> specifying the type of license that is available for the assembly.</value></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.AssemblyInfo.Platform"><summary>
+            Gets the target platform for the assembly.
+            </summary><value>A <see cref="T:ActiproSoftware.Products.AssemblyPlatform" /> specifying the target platform for the assembly.</value></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.AssemblyInfo.ProductCode"><summary>
+            Gets the product code of the assembly.
+            </summary><value>A three-letter product code of the assembly.</value></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.AssemblyInfo.ProductId"><summary>
+            Gets the product ID of the assembly.
+            </summary><value>The product ID of the assembly.</value></member><member name="T:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources"><summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.ResourceManager"><summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.Culture"><summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentCSharpAnonymousType"><summary>
+              Looks up a localized string similar to &lt;anonymous type&gt;.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentCSharpExtensionPrefix"><summary>
+              Looks up a localized string similar to (extension).
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentCSharpIn"><summary>
+              Looks up a localized string similar to in.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentCSharpLocalVariablePrefix"><summary>
+              Looks up a localized string similar to (local variable).
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentCSharpParameterPrefix"><summary>
+              Looks up a localized string similar to (parameter).
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentCSharpRangeVariablePrefix"><summary>
+              Looks up a localized string similar to (range variable).
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentVBAnonymousType"><summary>
+              Looks up a localized string similar to &lt;Anonymous Type&gt;.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentVBExtensionPrefix"><summary>
+              Looks up a localized string similar to (Extension).
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentVBIn"><summary>
+              Looks up a localized string similar to in.
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentVBLocalVariablePrefix"><summary>
+              Looks up a localized string similar to (Local Variable).
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentVBParameterPrefix"><summary>
+              Looks up a localized string similar to (Parameter).
+            </summary></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.Resources.IntelliPromptPopupContentVBRangeVariablePrefix"><summary>
+              Looks up a localized string similar to (Range Variable).
+            </summary></member><member name="T:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR"><summary>
+            Provides access to the string resources of this assembly, also allowing for their customization.
+            </summary><remarks>
+            Call the <see cref="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.GetString(System.String)" /> method to return a resolved resource string.
+            If a custom string has been set for a specified string resource name, it will be returned.
+            Otherwise, the default string resource value is returned.
+            <para>
+            If any of the resource strings are customized via a call to <see cref="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.SetCustomString(System.String,System.String)" />,
+            it is best to do so before any other classes in this assembly are referenced,
+            such as in the application startup.
+            </para></remarks></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.ClearCustomStrings"><summary>
+            Removes all custom strings.
+            </summary></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.ContainsCustomString(System.String)"><summary>
+            Returns whether a custom string is defined for the specified string resource.
+            </summary><param name="name">The name of the resource for which to search.</param><returns><c>true</c> if a custom string is defined for the specified string resource; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.GetCustomString(System.String)"><summary>
+            Returns custom string that is stored for the specified string resource, if any.
+            </summary><param name="name">The name of the resource to get.</param><returns>The custom string that is stored for the specified string resource, if any.</returns></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.GetString(System.String)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.GetString(ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName)"><summary>
+            Returns the resolved value of the specified string resource.
+            </summary><param name="name">The name of the resource to get.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.GetString(System.String,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.GetString(ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName,System.Object[])"><summary>
+            Returns the resolved value of the specified string resource, by calling <c>String.Format</c> using supplied arguments.
+            </summary><param name="name">The name of the resource to get.</param><param name="args">The arguments to pass to <c>String.Format</c>.</param><returns>
+            The value of the resource localized for the caller's current culture settings. 
+            If a best match is not possible, <see langword="null" /> is returned.
+            </returns></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.RemoveCustomString(System.String)"><summary>
+            Removes any custom string that is defined for the specified string resource.
+            </summary><param name="name">The name of the resource to remove.</param></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.SetCustomString(System.String,System.String)"><summary>
+            Sets a custom string value for the specified string resource.
+            </summary><param name="name">The name of the resource to set.</param><param name="value">The value of the resource to set.</param></member><member name="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.ResourceManager"><summary>
+            Gets the <see cref="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.ResourceManager" /> that provides the default resources. 
+            </summary><value>The <see cref="P:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SR.ResourceManager" /> that provides the default resources.</value></member><member name="T:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName"><summary>
+            Specifies the names of string resources for this assembly.
+            </summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentCSharpAnonymousType"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentCSharpExtensionPrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentCSharpIn"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentCSharpLocalVariablePrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentCSharpParameterPrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentCSharpRangeVariablePrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentVBAnonymousType"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentVBExtensionPrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentVBIn"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentVBLocalVariablePrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentVBParameterPrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="F:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.SRName.IntelliPromptPopupContentVBRangeVariablePrefix"><summary>An IntelliPrompt popup content string.</summary></member><member name="T:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.DotNetLanguagesAddonLicenseToken"><summary>
+            Represents the license token class for this assembly that needs to be referenced in Visual Studio licenses.licx files.
+            </summary></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.DotNetLanguagesAddonLicenseToken.#ctor"><summary>
+            Initializes a new instance of the <c>DotNetLanguagesAddonLicenseToken</c> class.
+            </summary></member><member name="M:ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.DotNetLanguagesAddonLicenseToken.#ctor(System.Object)"><summary>
+            Initializes a new instance of the <c>DotNetLanguagesAddonLicenseToken</c> class.
+            </summary><param name="owner">The owner of the token (the object being licensed).</param></member><member name="T:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetParameterInfoProviderBase"><summary>
+            Provides an abstract base class for providing IntelliPrompt parameter info popups for .NET languages.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetParameterInfoProviderBase.CreateContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns>An <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetParameterInfoProviderBase.OnSessionOpening(ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IParameterInfoSession)"><summary>
+            Allows an inheritor to modify, filter and sort automatically-generated items before the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IParameterInfoSession" /> 
+            is opened and displayed to the end user.  The session may also be cancelled.
+            </summary><param name="session">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IParameterInfoSession" /> about to be opened.</param><returns><c>true</c> if the session is allowed to open; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetParameterInfoProviderBase.OnViewSelectionChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorViewSelectionEventArgs)"><summary>
+            Occurs when the selection is changed in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> that received the event.</param><param name="e">The <c>EditorViewSelectionEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetParameterInfoProviderBase.UpdateCurrentParameter(ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IParameterInfoSession,ActiproSoftware.Text.Languages.DotNet.IDotNetContext)"><summary>
+            Updates the current parameter in the session's signatures, based on information in the specified <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" />.
+            </summary><param name="session">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IParameterInfoSession" /> to update.</param><param name="context">The <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> to examine.</param><returns><c>true</c> if an update was made; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetParameterInfoProviderBase.#ctor(System.String)"><summary>
+            Initializes a new instance of the <c>DotNetParameterInfoProviderBase</c> class.
+            </summary><param name="key">The string-based key that identifies the provider.</param></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpParameterInfoProvider"><summary>
+            Provides IntelliPrompt parameter info data for the <c>C#</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpParameterInfoProvider.CreateContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns>An <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpParameterInfoProvider.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpParameterInfoProvider.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpParameterInfoProvider.RequestSession(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Requests that an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IParameterInfoSession" /> be opened for the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> that will host the session.</param><returns><c>true</c> if a session was opened; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpParameterInfoProvider.#ctor"><summary>
+            Initializes a new instance of the <c>CSharpParameterInfoProvider</c> class.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter"><summary>
+            Provides the base requirements for a class that can auto-complete .NET language documentation comments when appropriate.
+            </summary><remarks>
+            Instances of this object can be registered with an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> using the 
+            <see cref="M:ActiproSoftware.Text.Utility.IServiceLocator.RegisterService(System.Object,System.Object)" /> method.
+            Once an instance is registered with the language for the <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> interface type, its features can be used by the language.
+            </remarks><seealso cref="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpDocumentationCommentAutoCompleter" /><seealso cref="T:ActiproSoftware.Text.Languages.VB.Implementation.VBDocumentationCommentAutoCompleter" /></member><member name="P:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter.IsEndTagCompletionEnabled"><summary>
+            Gets whether documentation comment end tag completion is enabled.
+            </summary><value><c>true</c> if documentation comment end tag completion is enabled; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter.IsNewLineGenerationEnabled"><summary>
+            Gets whether documentation comment delimiter auto-generation is enabled when pressing <c>Enter</c> while in a documentation comment.
+            </summary><value><c>true</c> if documentation comment delimiter auto-generation is enabled when pressing <c>Enter</c> while in a documentation comment; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter.IsStubGenerationEnabled"><summary>
+            Gets whether stub documentation comment auto-generation is enabled when starting to type new documentation comments.
+            </summary><value><c>true</c> if stub documentation comment auto-generation is enabled when starting to type new documentation comments; otherwise, <c>false</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Languages.DotNet.Implementation.DocumentationCommentAutoCompleterBase"><summary>
+            Provides an abstract base class for performing auto-complete of .NET language documentation comments when appropriate.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DocumentationCommentAutoCompleterBase.InsertStubDocumentationComment(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,ActiproSoftware.Text.TextSnapshotOffset,System.String)"><summary>
+            Attempts to insert a stub documentation comment at the caret's location.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><param name="targetSnapshotOffset">A <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" /> indicating the offset at which the target type/member is located.</param><param name="delimiter">The documentation comment delimiter.</param></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DocumentationCommentAutoCompleterBase.TranslateToParseDataSnapshot(ActiproSoftware.Text.Languages.DotNet.IDotNetParseData,ActiproSoftware.Text.TextSnapshotOffset)"><summary>
+            Translates the specified snapshot offset to the parse data's <see cref="P:ActiproSoftware.Text.Parsing.IParseErrorProvider.Snapshot" />, if possible, prior to containing AST node lookup.
+            </summary><param name="parseData">The <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetParseData" /> to examine.</param><param name="snapshotOffset">The <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" /> to translate.</param><returns>The translated offset.</returns></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DocumentationCommentAutoCompleterBase.IsEndTagCompletionEnabled"><summary>
+            Gets or sets whether documentation comment end tag completion is enabled.
+            </summary><value><c>true</c> if documentation comment end tag completion is enabled; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DocumentationCommentAutoCompleterBase.IsNewLineGenerationEnabled"><summary>
+            Gets or sets whether documentation comment delimiter auto-generation is enabled when pressing <c>Enter</c> while in a documentation comment.
+            </summary><value><c>true</c> if documentation comment delimiter auto-generation is enabled when pressing <c>Enter</c> while in a documentation comment; otherwise, <c>false</c>.
+            </value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DocumentationCommentAutoCompleterBase.IsStubGenerationEnabled"><summary>
+            Gets or sets whether stub documentation comment auto-generation is enabled when starting to type new documentation comments.
+            </summary><value><c>true</c> if stub documentation comment auto-generation is enabled when starting to type new documentation comments; otherwise, <c>false</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpDocumentationCommentAutoCompleter"><summary>
+            Provides a class that can auto-complete <c>C#</c> language documentation comments when appropriate.
+            </summary><remarks>
+            Instances of this object can be registered with an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> using the 
+            <see cref="M:ActiproSoftware.Text.Utility.IServiceLocator.RegisterService(System.Object,System.Object)" /> method.
+            Once an instance is registered with the language for the <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> interface type, its features can be used by the language.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpDocumentationCommentAutoCompleter.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpDocumentationCommentAutoCompleter.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpOutliningSource"><summary>
+            Represents a <c>C#</c> language range-based outlining source.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpOutliningSource.AddNodesFromParseData(ActiproSoftware.Text.Languages.DotNet.IDotNetParseData)"><summary>
+            Adds nodes recursively based on AST information in the specified parse data.
+            </summary><param name="parseData">The <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetParseData" /> containing AST data.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpOutliningSource.AddNodesRecursive(ActiproSoftware.Text.ITextBufferReader,ActiproSoftware.Text.Parsing.IAstNode)"><summary>
+            Recursively adds outlining nodes for a given <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />.
+            </summary><param name="reader">The optional <see cref="T:ActiproSoftware.Text.ITextBufferReader" /> to use for examining text.</param><param name="astNode">The <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> to examine.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpOutliningSource.#ctor(ActiproSoftware.Text.ITextSnapshot)"><summary>
+            Initializes a new instance of the <c>CSharpOutliningSource</c> class.
+            </summary><param name="snapshot">The <see cref="T:ActiproSoftware.Text.ITextSnapshot" /> to use for this outlining source.</param></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpSyntaxLanguage"><summary>
+            Represents a <c>C#</c> syntax language definition.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpSyntaxLanguage.ShowAboutWindow"><summary>
+            Displays the About window for the component.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpSyntaxLanguage.#ctor"><summary>
+            Initializes a new instance of the <c>CSharpSyntaxLanguage</c> class.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpOutliner"><summary>
+            Provides a <c>C#</c> language outliner service.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpOutliner.GetOutliningSource(ActiproSoftware.Text.ITextSnapshot)"><summary>
+            Returns an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.IOutliningSource" /> for the specified <see cref="T:ActiproSoftware.Text.ITextSnapshot" />.
+            </summary><param name="snapshot">The <see cref="T:ActiproSoftware.Text.ITextSnapshot" /> for which to return an outlining source.</param><returns>An <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.IOutliningSource" /> for the specified <see cref="T:ActiproSoftware.Text.ITextSnapshot" />.</returns></member><member name="P:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpOutliner.UpdateTrigger"><summary>
+            Gets an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.AutomaticOutliningUpdateTrigger" /> indicating whether automatic outlining should update
+            in the main thread following a text change, or rather be driven via parse data results.
+            </summary><value>An <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.AutomaticOutliningUpdateTrigger" /> indicating the trigger by which automatic outlining should update.</value></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpQuickInfoProvider"><summary>
+            Provides IntelliPrompt quick info data for the <c>C#</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpQuickInfoProvider.GetContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Int32)"><summary>
+            Returns an object describing the quick info context for the specified text offset, if any.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> in which the offset is located.</param><param name="offset">The text offset to examine.</param><returns>
+            An object describing the quick info context for the specified text offset, if any.
+            A <see langword="null" /> value indicates that no context is available.
+            </returns><remarks>
+            This method is called in response to keyboard events.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpQuickInfoProvider.RequestSession(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Object)"><summary>
+            Requests that an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IQuickInfoSession" /> be opened for the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> that will host the session.</param><param name="context">A context object returned by <see cref="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpQuickInfoProvider.GetContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Int32)" />.</param><returns><c>true</c> if a session was opened; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpQuickInfoProvider.#ctor"><summary>
+            Initializes a new instance of the <c>CSharpQuickInfoProvider</c> class.
+            </summary></member><member name="P:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpQuickInfoProvider.ContextTypes"><summary>
+            Gets the context <c>Type</c> objects that are supported by this provider, which are the list of custom types
+            that are possibly returned by the <see cref="M:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.Implementation.QuickInfoProviderBase.GetContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IHitTestResult)" /> methods.
+            </summary><value>The context <c>Type</c> objects that are supported by this provider.</value></member><member name="T:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetCompletionProviderBase"><summary>
+            Provides an abstract base class for providing IntelliPrompt completion data for .NET languages.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetCompletionProviderBase.CreateContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns>An <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetCompletionProviderBase.OnSessionOpening(ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.ICompletionSession)"><summary>
+            Allows an inheritor to modify, filter and sort automatically-generated items before the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.ICompletionSession" /> 
+            is opened and displayed to the end user.  The session may also be cancelled.
+            </summary><param name="session">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.ICompletionSession" /> about to be opened.</param><returns><c>true</c> if the session is allowed to open; otherwise, <c>false</c>.
+            </returns><remarks>
+            The default implementation of this method sorts the items in the session.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetCompletionProviderBase.ShouldShowForTypedWordStart(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Returns whether the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> supports automatic completion list display at its current caret location.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns><c>true</c> if automatic completion list display is supported; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetCompletionProviderBase.#ctor(System.String)"><summary>
+            Initializes a new instance of the <c>DotNetCompletionProviderBase</c> class.
+            </summary><param name="key">The string-based key that identifies the provider.</param></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetCompletionProviderBase.CanShowOnTypedWordStart"><summary>
+            Gets or sets whether a completion list can auto-show when typing a new word.
+            </summary><value><c>true</c> if a completion list can auto-show when typing a new word; otherwise, <c>false</c>.
+            </value></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpCompletionProvider"><summary>
+            Provides IntelliPrompt completion data for the <c>C#</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpCompletionProvider.CreateContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns>An <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpCompletionProvider.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpCompletionProvider.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpCompletionProvider.RequestSession(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Boolean)"><summary>
+            Requests that an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.ICompletionSession" /> be opened for the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> that will host the session.</param><param name="canCommitWithoutPopup">Whether the session can immediately commit if a single match is made when the session is opened, commonly known as "complete word" functionality.</param><returns><c>true</c> if a session was opened; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpCompletionProvider.ShouldShowForTypedWordStart(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Returns whether the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> supports automatic completion list display at its current caret location.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns><c>true</c> if automatic completion list display is supported; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpCompletionProvider.#ctor"><summary>
+            Initializes a new instance of the <c>CSharpCompletionProvider</c> class.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpIndentProvider"><summary>
+            Provides a <c>C#</c> language indent provider service.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpIndentProvider.GetIndentAmount(ActiproSoftware.Text.TextSnapshotOffset,System.Int32)"><summary>
+            Returns the ideal amount of indent, always in columns, for the line containing the snapshot offset.
+            </summary><param name="snapshotOffset">The <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" /> whose line should be examined.</param><param name="defaultAmount">The default indent amount, which is the amount used in <c>Block</c> mode.</param><returns>The ideal amount of indent, always in columns, for the line containing the snapshot offset.</returns><remarks>
+            This method is called when the <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IndentMode" /> is <c>Smart</c>.
+            The containing <see cref="T:ActiproSoftware.Text.ITextDocument" /> is accessible via the snapshot range's <see cref="T:ActiproSoftware.Text.ITextSnapshot" />.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpIndentProvider.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpIndentProvider.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="P:ActiproSoftware.Text.Languages.CSharp.Implementation.CSharpIndentProvider.Mode"><summary>
+            Gets the <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IndentMode" /> that specifies the mode by which to indent text.
+            </summary><value>The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IndentMode" /> that specifies the mode by which to indent text.</value></member><member name="T:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider"><summary>
+            Represents a provider of <see cref="T:ActiproSoftware.Text.IClassificationType" /> objects for a .NET language.
+            </summary><remarks>
+            This type was generated by the Actipro Language Designer tool v11.1.540.0 (http://www.actiprosoftware.com).
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.RegisterAll"><summary>
+            Registers all classification types and highlighting styles with the <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.IHighlightingStyleRegistry" /> used by this class.
+            </summary><returns>The collection of <see cref="T:ActiproSoftware.Text.IClassificationType" /> objects that were registered.</returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.#ctor"><summary>
+            Initializes a new instance of the <c>DotNetClassificationTypeProvider</c> class.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.#ctor(ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.IHighlightingStyleRegistry)"><summary>
+            Initializes a new instance of the <c>DotNetClassificationTypeProvider</c> class.
+            </summary><param name="targetRegistry">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.IHighlightingStyleRegistry" /> to use when registering classification types and highlighting styles.</param></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.Comment"><summary>
+            Gets the <c>Comment</c> classification type.
+            </summary><value>The <c>Comment</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.CSharpVerbatimString"><summary>
+            Gets the <c>CSharpVerbatimString</c> classification type.
+            </summary><value>The <c>CSharpVerbatimString</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.Identifier"><summary>
+            Gets the <c>Identifier</c> classification type.
+            </summary><value>The <c>Identifier</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.Keyword"><summary>
+            Gets the <c>Keyword</c> classification type.
+            </summary><value>The <c>Keyword</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.Number"><summary>
+            Gets the <c>Number</c> classification type.
+            </summary><value>The <c>Number</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.Operator"><summary>
+            Gets the <c>Operator</c> classification type.
+            </summary><value>The <c>Operator</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.PreprocessorKeyword"><summary>
+            Gets the <c>PreprocessorKeyword</c> classification type.
+            </summary><value>The <c>PreprocessorKeyword</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.String"><summary>
+            Gets the <c>String</c> classification type.
+            </summary><value>The <c>String</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.VBXmlLiteral"><summary>
+            Gets the <c>VBXmlLiteral</c> classification type.
+            </summary><value>The <c>VBXmlLiteral</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.XmlDocumentationComment"><summary>
+            Gets the <c>XmlDocumentationComment</c> classification type.
+            </summary><value>The <c>XmlDocumentationComment</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.XmlDocumentationTag"><summary>
+            Gets the <c>XmlDocumentationTag</c> classification type.
+            </summary><value>The <c>XmlDocumentationTag</c> classification type.</value></member><member name="P:ActiproSoftware.Text.Languages.DotNet.Implementation.DotNetClassificationTypeProvider.Registry"><summary>
+            Gets the <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.IHighlightingStyleRegistry" /> to use when registering classification types and highlighting styles.
+            </summary><value>The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.IHighlightingStyleRegistry" /> to use when registering classification types and highlighting styles.</value></member><member name="T:ActiproSoftware.Text.Languages.DotNet.DotNetSyntaxLanguageExtensions"><summary>
+            Contains extension methods that make it easier to work with .NET <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> objects.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.DotNet.DotNetSyntaxLanguageExtensions.GetDocumentationCommentAutoCompleter(ActiproSoftware.Text.ISyntaxLanguage)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> that can validate <c>XML</c>.
+            </summary><param name="language">The <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> to update.</param><returns>The <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> instance.</returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.DotNetSyntaxLanguageExtensions.RegisterDocumentationCommentAutoCompleter(ActiproSoftware.Text.ISyntaxLanguage,ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter)"><summary>
+            Registers the <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> that can validate <c>XML</c>.
+            </summary><param name="language">The <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> to update.</param><param name="value">The <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> instance.</param></member><member name="M:ActiproSoftware.Text.Languages.DotNet.DotNetSyntaxLanguageExtensions.UnregisterDocumentationCommentAutoCompleter(ActiproSoftware.Text.ISyntaxLanguage)"><summary>
+            Unregisters the <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> that can validate <c>XML</c>.
+            </summary><param name="language">The <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> to update.</param></member><member name="M:ActiproSoftware.Text.Languages.DotNet.DotNetSyntaxLanguageExtensions.GetProjectAssembly(ActiproSoftware.Text.ISyntaxLanguage)"><summary>
+            Returns the <see cref="T:ActiproSoftware.Text.Languages.DotNet.Reflection.IProjectAssembly" /> that can validate <c>XML</c>.
+            </summary><param name="language">The <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> to update.</param><returns>The <see cref="T:ActiproSoftware.Text.Languages.DotNet.Reflection.IProjectAssembly" /> instance.</returns></member><member name="M:ActiproSoftware.Text.Languages.DotNet.DotNetSyntaxLanguageExtensions.RegisterProjectAssembly(ActiproSoftware.Text.ISyntaxLanguage,ActiproSoftware.Text.Languages.DotNet.Reflection.IProjectAssembly)"><summary>
+            Registers the <see cref="T:ActiproSoftware.Text.Languages.DotNet.Reflection.IProjectAssembly" /> that can validate <c>XML</c>.
+            </summary><param name="language">The <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> to update.</param><param name="value">The <see cref="T:ActiproSoftware.Text.Languages.DotNet.Reflection.IProjectAssembly" /> instance.</param></member><member name="M:ActiproSoftware.Text.Languages.DotNet.DotNetSyntaxLanguageExtensions.UnregisterProjectAssembly(ActiproSoftware.Text.ISyntaxLanguage)"><summary>
+            Unregisters the <see cref="T:ActiproSoftware.Text.Languages.DotNet.Reflection.IProjectAssembly" /> that can validate <c>XML</c>.
+            </summary><param name="language">The <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> to update.</param></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBIndentProvider"><summary>
+            Provides a <c>Visual Basic</c> language indent provider service.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBIndentProvider.GetIndentAmount(ActiproSoftware.Text.TextSnapshotOffset,System.Int32)"><summary>
+            Returns the ideal amount of indent, always in columns, for the line containing the snapshot offset.
+            </summary><param name="snapshotOffset">The <see cref="T:ActiproSoftware.Text.TextSnapshotOffset" /> whose line should be examined.</param><param name="defaultAmount">The default indent amount, which is the amount used in <c>Block</c> mode.</param><returns>The ideal amount of indent, always in columns, for the line containing the snapshot offset.</returns><remarks>
+            This method is called when the <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IndentMode" /> is <c>Smart</c>.
+            The containing <see cref="T:ActiproSoftware.Text.ITextDocument" /> is accessible via the snapshot range's <see cref="T:ActiproSoftware.Text.ITextSnapshot" />.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBIndentProvider.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBIndentProvider.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="P:ActiproSoftware.Text.Languages.VB.Implementation.VBIndentProvider.Mode"><summary>
+            Gets the <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IndentMode" /> that specifies the mode by which to indent text.
+            </summary><value>The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IndentMode" /> that specifies the mode by which to indent text.</value></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBParameterInfoProvider"><summary>
+            Provides IntelliPrompt parameter info data for the <c>Visual Basic</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBParameterInfoProvider.CreateContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns>An <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBParameterInfoProvider.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBParameterInfoProvider.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBParameterInfoProvider.RequestSession(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Requests that an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IParameterInfoSession" /> be opened for the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> that will host the session.</param><returns><c>true</c> if a session was opened; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBParameterInfoProvider.#ctor"><summary>
+            Initializes a new instance of the <c>VBParameterInfoProvider</c> class.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBDocumentationCommentAutoCompleter"><summary>
+            Provides a class that can auto-complete <c>Visual Basic</c> language documentation comments when appropriate.
+            </summary><remarks>
+            Instances of this object can be registered with an <see cref="T:ActiproSoftware.Text.ISyntaxLanguage" /> using the 
+            <see cref="M:ActiproSoftware.Text.Utility.IServiceLocator.RegisterService(System.Object,System.Object)" /> method.
+            Once an instance is registered with the language for the <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDocumentationCommentAutoCompleter" /> interface type, its features can be used by the language.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBDocumentationCommentAutoCompleter.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBDocumentationCommentAutoCompleter.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBCompletionProvider"><summary>
+            Provides IntelliPrompt completion data for the <c>Visual Basic</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBCompletionProvider.CreateContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Creates an <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns>An <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetContext" /> for the caret's offset in the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.</returns></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBCompletionProvider.OnDocumentTextChanged(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangedEventArgs)"><summary>
+            Occurs after a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> is changed.</param><param name="e">The <c>EditorSnapshotChangedEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBCompletionProvider.OnDocumentTextChanging(ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor,ActiproSoftware.Windows.Controls.SyntaxEditor.EditorSnapshotChangingEventArgs)"><summary>
+            Occurs before a text change occurs to an <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that uses this language.
+            </summary><param name="editor">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.SyntaxEditor" /> whose <see cref="T:ActiproSoftware.Text.IEditorDocument" /> that is changing.</param><param name="e">The <c>EditorSnapshotChangingEventArgs</c> that contains the event data.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBCompletionProvider.RequestSession(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Boolean)"><summary>
+            Requests that an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.ICompletionSession" /> be opened for the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> that will host the session.</param><param name="canCommitWithoutPopup">Whether the session can immediately commit if a single match is made when the session is opened, commonly known as "complete word" functionality.</param><returns><c>true</c> if a session was opened; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBCompletionProvider.ShouldShowForTypedWordStart(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView)"><summary>
+            Returns whether the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> supports automatic completion list display at its current caret location.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> to examine.</param><returns><c>true</c> if automatic completion list display is supported; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBCompletionProvider.#ctor"><summary>
+            Initializes a new instance of the <c>VBCompletionProvider</c> class.
+            </summary></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBQuickInfoProvider"><summary>
+            Provides IntelliPrompt quick info data for the <c>Visual Basic</c> language.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBQuickInfoProvider.GetContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Int32)"><summary>
+            Returns an object describing the quick info context for the specified text offset, if any.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> in which the offset is located.</param><param name="offset">The text offset to examine.</param><returns>
+            An object describing the quick info context for the specified text offset, if any.
+            A <see langword="null" /> value indicates that no context is available.
+            </returns><remarks>
+            This method is called in response to keyboard events.
+            </remarks></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBQuickInfoProvider.RequestSession(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Object)"><summary>
+            Requests that an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.IQuickInfoSession" /> be opened for the specified <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" />.
+            </summary><param name="view">The <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView" /> that will host the session.</param><param name="context">A context object returned by <see cref="M:ActiproSoftware.Text.Languages.VB.Implementation.VBQuickInfoProvider.GetContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IEditorView,System.Int32)" />.</param><returns><c>true</c> if a session was opened; otherwise, <c>false</c>.
+            </returns></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBQuickInfoProvider.#ctor"><summary>
+            Initializes a new instance of the <c>VBQuickInfoProvider</c> class.
+            </summary></member><member name="P:ActiproSoftware.Text.Languages.VB.Implementation.VBQuickInfoProvider.ContextTypes"><summary>
+            Gets the context <c>Type</c> objects that are supported by this provider, which are the list of custom types
+            that are possibly returned by the <see cref="M:ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.Implementation.QuickInfoProviderBase.GetContext(ActiproSoftware.Windows.Controls.SyntaxEditor.IHitTestResult)" /> methods.
+            </summary><value>The context <c>Type</c> objects that are supported by this provider.</value></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBOutliner"><summary>
+            Provides a <c>Visual Basic</c> language outliner service.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBOutliner.GetOutliningSource(ActiproSoftware.Text.ITextSnapshot)"><summary>
+            Returns an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.IOutliningSource" /> for the specified <see cref="T:ActiproSoftware.Text.ITextSnapshot" />.
+            </summary><param name="snapshot">The <see cref="T:ActiproSoftware.Text.ITextSnapshot" /> for which to return an outlining source.</param><returns>An <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.IOutliningSource" /> for the specified <see cref="T:ActiproSoftware.Text.ITextSnapshot" />.</returns></member><member name="P:ActiproSoftware.Text.Languages.VB.Implementation.VBOutliner.UpdateTrigger"><summary>
+            Gets an <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.AutomaticOutliningUpdateTrigger" /> indicating whether automatic outlining should update
+            in the main thread following a text change, or rather be driven via parse data results.
+            </summary><value>An <see cref="T:ActiproSoftware.Windows.Controls.SyntaxEditor.Outlining.AutomaticOutliningUpdateTrigger" /> indicating the trigger by which automatic outlining should update.</value></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBOutliningSource"><summary>
+            Represents a <c>Visual Basic</c> language range-based outlining source.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBOutliningSource.AddNodesFromParseData(ActiproSoftware.Text.Languages.DotNet.IDotNetParseData)"><summary>
+            Adds nodes recursively based on AST information in the specified parse data.
+            </summary><param name="parseData">The <see cref="T:ActiproSoftware.Text.Languages.DotNet.IDotNetParseData" /> containing AST data.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBOutliningSource.AddNodesRecursive(ActiproSoftware.Text.ITextBufferReader,ActiproSoftware.Text.Parsing.IAstNode)"><summary>
+            Recursively adds outlining nodes for a given <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" />.
+            </summary><param name="reader">The optional <see cref="T:ActiproSoftware.Text.ITextBufferReader" /> to use for examining text.</param><param name="astNode">The <see cref="T:ActiproSoftware.Text.Parsing.IAstNode" /> to examine.</param></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBOutliningSource.#ctor(ActiproSoftware.Text.ITextSnapshot)"><summary>
+            Initializes a new instance of the <c>VBOutliningSource</c> class.
+            </summary><param name="snapshot">The <see cref="T:ActiproSoftware.Text.ITextSnapshot" /> to use for this outlining source.</param></member><member name="T:ActiproSoftware.Text.Languages.VB.Implementation.VBSyntaxLanguage"><summary>
+            Represents a <c>Visual Basic</c> syntax language definition.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBSyntaxLanguage.ShowAboutWindow"><summary>
+            Displays the About window for the component.
+            </summary></member><member name="M:ActiproSoftware.Text.Languages.VB.Implementation.VBSyntaxLanguage.#ctor"><summary>
+            Initializes a new instance of the <c>VBSyntaxLanguage</c> class.
+            </summary></member></members></doc>

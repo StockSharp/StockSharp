@@ -1,0 +1,54 @@
+<controls:BaseStudioControl x:Class="StockSharp.Studio.Controls.CompositeSecurityPanel"
+                            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"                            xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                            xmlns:controls="clr-namespace:StockSharp.Studio.Controls"
+                            xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
+                            xmlns:xaml="http://schemas.stocksharp.com/xaml"
+                            mc:Ignorable="d"
+                            d:DesignHeight="300" d:DesignWidth="300">
+
+    <controls:BaseStudioControl.CommandBindings>
+        <CommandBinding Command="{x:Static controls:CompositeSecurityPanel.SaveSecurityCommand}"
+                    Executed="ExecutedSaveSecurityCommand"
+                    CanExecute="CanExecuteSaveSecurityCommand"/>
+
+        <CommandBinding Command="{x:Static controls:CompositeSecurityPanel.DrawSecurityCommand}"
+                    Executed="ExecutedDrawSecurityCommand"
+                    CanExecute="CanExecuteDrawSecurityCommand"/>
+    </controls:BaseStudioControl.CommandBindings>
+
+    <docking:DockSite x:Name="DockSite">
+        <docking:SplitContainer Orientation="Vertical">
+            <docking:SplitContainer  docking:DockSite.ControlSize="60, 50">
+                <docking:ToolWindowContainer docking:DockSite.ControlSize="120, 50">
+                    <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str695}" x:Name="IndexSecurityWindow" CanClose="False">
+                        <Border x:Name="InputBorder" BorderThickness="2" BorderBrush="{x:Null}">
+                            <Border.ToolTip>
+                                <ToolTip>
+                                    <TextBlock Text="" />
+                                </ToolTip>
+                            </Border.ToolTip>
+                        </Border>
+                    </docking:ToolWindow>
+                </docking:ToolWindowContainer>
+
+                <docking:ToolWindowContainer docking:DockSite.ControlSize="120, 50">
+                    <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str187}" x:Name="SecuritiesWindow" CanClose="False">
+                        <xaml:SecurityPicker x:Name="SecurityPicker" SelectionMode="Single" ShowCommonStatColumns="False" 
+                                             SecurityDoubleClick="SecurityPicker_OnSecurityDoubleClick" MouseDown="SecurityPicker_OnMouseDown"/>
+                    </docking:ToolWindow>
+                </docking:ToolWindowContainer>
+            </docking:SplitContainer>
+
+            <docking:SplitContainer docking:DockSite.ControlSize="60, 200">
+                <docking:ToolWindowContainer>
+                    <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str3200}" x:Name="ChartWindow" CanClose="False">
+                        <xaml:ChartPanel x:Name="ChartPanel" />
+                    </docking:ToolWindow>
+                </docking:ToolWindowContainer>
+            </docking:SplitContainer>
+        </docking:SplitContainer>
+    </docking:DockSite>
+</controls:BaseStudioControl>

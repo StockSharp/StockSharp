@@ -1,0 +1,1274 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.Algo.History</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.Algo.History.BaseHistorySource">
+      <summary>
+            Базовый источник маркет-данных.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.BaseHistorySource.#ctor">
+      <summary>
+            Инициализировать <see cref="T:StockSharp.Algo.History.BaseHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.BaseHistorySource.GetSecurityCode(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Получить код инструмента по его идентификатору.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <returns>Код инструмента.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.BaseHistorySource.GetSecurityBoard(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Получить площадку инструмента по его идентификатору.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <returns>Площадка инструмента.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.BaseHistorySource.SecurityIdGenerator">
+      <summary>
+            Генератор идентификаторов инструментов.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.BaseDumpableHistorySource">
+      <summary>
+            Базовый источник маркет-данных, который сохраняет скаченные данные во временную директорию.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.#ctor">
+      <summary>
+            Инициализировать <see cref="T:StockSharp.Algo.History.BaseDumpableHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.Process(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object,System.Func{System.String})">
+      <summary>
+            Загрузить или скачать текстовый файл.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <param name="download">Загрузчик.</param>
+      <returns>Текстовый файл.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.BaseDumpableHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.BaseDumpableHistorySource.CanDump">
+      <summary>
+            Можно ли сохранять файлы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.BaseDumpableHistorySource.DumpFolder">
+      <summary>
+            Путь к директории, куда будут сохранятся скаченные файлы.
+            </summary>
+      <remarks>
+            Если значение равно пустой строке, то данные не сохраняются локально.
+            </remarks>
+    </member>
+    <member name="T:StockSharp.Algo.History.FinVizHistorySource">
+      <summary>
+            Источник исторических маркет-данных от FinViz.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.ISecurityDownloader">
+      <summary>
+            Интерфейс загрузчика информации об инструментах.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.ISecurityDownloader.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.FinVizHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.FinVizHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.FinVizHistorySource.LoadChanges(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Security})">
+      <summary>
+            Загрузить изменения маркет-данных.
+            </summary>
+      <param name="securities">Инструменты.</param>
+      <returns>Изменения маркет-данных.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.FinVizHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="T:StockSharp.Algo.History.Forex.DukasCopySource">
+      <summary>
+            Источник для скачивания исторических данных с DukasCopy.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Forex.DukasCopySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
+      <summary>
+            Скачать исторические тиковые данные за весь день.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="date">Время, указывающее с точностью до дня.</param>
+      <returns>Исторические тиковые данные.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.LoadTickMessages(StockSharp.BusinessEntities.Security,System.DateTime)">
+      <summary>
+            Скачать исторические тиковые данные за весь день.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="date">Время, указывающее с точностью до дня.</param>
+      <returns>Исторические тиковые данные.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.LoadCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,StockSharp.Messages.Sides)">
+      <summary>
+            Скачать исторические тайм-фрейм свечи.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Forex.DukasCopySource.TimeFrames" />.</param>
+      <param name="date">Дата.</param>
+      <param name="side">Тип котировки (бид или оффер).</param>
+      <returns>Исторические тайм-фрейм свечи.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Forex.DukasCopySource.TimeFrames">
+      <summary>
+            Доступные тайм-фреймы исторических данных.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Forex.GainCapitalSource">
+      <summary>
+            Источник для скачивания исторических данных с Gain Capital.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Forex.GainCapitalSource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
+      <summary>
+            Скачать исторические котировки.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="date">Дата.</param>
+      <returns>Исторические котировки.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.GainCapitalSource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime)">
+      <summary>
+            Скачать исторические котировки.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="date">Дата.</param>
+      <returns>Исторические котировки.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Forex.MBTradingSource">
+      <summary>
+            Источник для скачивания исторических данных с MBTrading.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Forex.MBTradingSource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+      <summary>
+            Загрузить исторические тиковые данные.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Скачивать с даты.</param>
+      <param name="to">Скачивать до даты.</param>
+      <returns>Исторические тиковые данные.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.MBTradingSource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime)">
+      <summary>
+            Загрузить исторические тиковые данные.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="from">Скачивать с даты.</param>
+      <param name="to">Скачивать до даты.</param>
+      <returns>Исторические тиковые данные.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.Login">
+      <summary>
+            Логин.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.Password">
+      <summary>
+            Пароль.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.Pin">
+      <summary>
+            Пин.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Forex.MBTradingSource.MaxAttempt">
+      <summary>
+            Максимальное количество попыток залогиниться на сайте. По-умолчанию равно 10.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Forex.TrueFXSource">
+      <summary>
+            Источник для скачивания исторических данных с TrueFX.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Forex.TrueFXSource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.LoadTicks(StockSharp.BusinessEntities.Security,System.DateTime)">
+      <summary>
+            Загрузить исторические тиковые данные.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="date">Дата.</param>
+      <returns>Исторические тиковые данные.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.TrueFXSource.LoadTickMessages(StockSharp.Messages.SecurityId,System.DateTime)">
+      <summary>
+            Загрузить исторические тиковые данные.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="date">Дата.</param>
+      <returns>Исторические тиковые данные.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.GoogleHistorySource">
+      <summary>
+            Источник маркет-данных от Google Finance.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.GoogleHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.GoogleHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.GoogleHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
+      <summary>
+            Скачать свечи с сайта.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.GoogleHistorySource.TimeFrames" />.</param>
+      <param name="beginDate">Дата начала.</param>
+      <param name="endDate">Дата окончания.</param>
+      <returns>Свечи.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.GoogleHistorySource.TimeFrames">
+      <summary>
+            Тайм-фреймы, которые можно передать в <see cref="M:StockSharp.Algo.History.GoogleHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.IRemoteStorage">
+      <summary>
+            Интерфейс, описывающий внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, <see cref="N:System.ServiceModel" />).
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.LookupSecurityIds(System.Guid,StockSharp.BusinessEntities.Security)">
+      <summary>
+            Найти идентификаторы инструментов, соответствующие фильтру <paramref name="criteria" />.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.
+            Если значение равно null, то идет поиск всех имеющихся инструментов.</param>
+      <returns>Найденные идентификаторы инструментов.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])">
+      <summary>
+            Получить инструменты.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityIds">Идентификаторы инструментов.</param>
+      <returns>Инструменты.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetDates(System.Guid,System.String,System.String,System.String,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Получить все даты, для которых записаны маркет-данные.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="format">Тип формата.</param>
+      <returns>Диапазон доступных дат.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetCandleTypes(System.Guid,System.String,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Получить все типы и параметры свечек, для которых записаны маркет-данные.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="format">Тип формата.</param>
+      <returns>Все типы и параметры свечек.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.Save(System.Guid,System.String,System.String,System.String,System.DateTime,StockSharp.Algo.Storages.StorageFormats,System.Byte[])">
+      <summary>
+            Сохранить маркет-данные в формате хранилища StockSharp.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="date">Дата, для которой необходимо сохранить маркет-данные.</param>
+      <param name="format">Тип формата.</param>
+      <param name="data">Маркет-данные в формате хранилища StockSharp.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.Delete(System.Guid,System.String,System.String,System.String,System.DateTime,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Удалить маркет-данные из хранилища за указанную дату.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="date">Дата, для которой необходимо удалить маркет-данные.</param>
+      <param name="format">Тип формата.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.LoadStream(System.Guid,System.String,System.String,System.String,System.DateTime,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Загрузить маркет-данные в формате хранилища StockSharp.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="date">Дата, для которой необходимо загрузить маркет-данные.</param>
+      <param name="format">Тип формата.</param>
+      <returns>Маркет-данные в формате хранилища StockSharp. Если данных не существует, то будет возвращено <see cref="F:System.IO.Stream.Null" />.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.IRemoteStorageAuthorization">
+      <summary>
+            Интерфейс, описывающий модуль проверки доступа соединения с <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
+      <summary>
+            Получить набор разрешений для запроса.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="date">Дата.</param>
+      <returns>Допустимые разрешения.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization">
+      <summary>
+            Модуль проверки доступа соединения с <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />, предоставляющий доступ всем соединениям.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.AnonymousRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
+      <summary>
+            Получить набор разрешений для запроса.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="date">Дата.</param>
+      <returns>Допустимые разрешения.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization">
+      <summary>
+            Модуль проверки доступа соединения с <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />, основанный на Windows авторизации.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.WindowsRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
+      <summary>
+            Получить набор разрешений для запроса.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="date">Дата.</param>
+      <returns>Допустимые разрешения.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization">
+      <summary>
+            Модуль проверки доступа соединения с <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />, основанный на <see cref="T:StockSharp.Community.IAuthenticationService" /> авторизации.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.CommunityRemoteStorageAuthorization.GetPermissions(System.Guid,System.String,System.String,System.Object,System.DateTime)">
+      <summary>
+            Получить набор разрешений для запроса.
+            </summary>
+      <param name="sessionId">Идентификатор сессии.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="date">Дата.</param>
+      <returns>Допустимые разрешения.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.RemoteStoragePermissions">
+      <summary>
+            Доступные разрешения работы с данными, которые получает клиент.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Save">
+      <summary>
+            Сохранение данных.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Load">
+      <summary>
+            Загрузка данных.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStoragePermissions.Delete">
+      <summary>
+            Удаление данных.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.RemoteStorage">
+      <summary>
+            Внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, <see cref="N:System.ServiceModel" />).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Hydra.RemoteStorage.DefaultMaxSecurityCount">
+      <summary>
+            Максимальное количество инструментов, которое можно запрашивать с сервера через метод <see cref="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])" />.
+            Равно 200.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.#ctor(StockSharp.Algo.Storages.IStorageRegistry,StockSharp.Algo.Storages.IEntityRegistry)">
+      <summary>
+            Инициализировать <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />.
+            </summary>
+      <param name="storageRegistry">Хранилище маркет-данных.</param>
+      <param name="entityRegistry">Хранилище торговых сущностей.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.AddDataType(System.Type)">
+      <summary>
+            Добавить тип данных, который сможет передавать <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorage" />.
+            </summary>
+      <param name="dataType">Тип данных.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorage.GetDrives">
+      <summary>
+            Получить список доступных хранилищ маркет-данных.
+            </summary>
+      <returns>Хранилища маркет-данных.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.StorageRegistry">
+      <summary>
+            Хранилище маркет-данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.EntityRegistry">
+      <summary>
+            Хранилище торговых сущностей.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.Authorization">
+      <summary>
+            Модуль проверки доступа.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorage.MaxSecurityCount">
+      <summary>
+            Максимальное количество инструментов, которое можно запрашивать с сервера через метод <see cref="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])" />.
+            По-умолчанию равно <see cref="F:StockSharp.Algo.History.Hydra.RemoteStorage.DefaultMaxSecurityCount" />.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Hydra.RemoteStorageClient">
+      <summary>
+            Клиент для доступа к серверу истории <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.#ctor(System.Uri,System.Boolean)">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
+            </summary>
+      <param name="address">Адрес сервера.</param>
+      <param name="streaming">Передача данных через WCF Streaming.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.CreateChannel">
+      <summary>
+            Создать WCF канал.
+            </summary>
+      <returns>WCF канал.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetRemoteStorage(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Получить обертку для доступа к удаленным маркет-данным.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="format">Тип формата.</param>
+      <returns>Обертка для доступа к удаленным маркет-данным.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.GetCandleTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Получить для инструмента доступные типы свечек с параметрами.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="format">Тип формата.</param>
+      <returns>Доступные типы свечек с параметрами.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.Invoke``1(System.Func{StockSharp.Algo.History.Hydra.IRemoteStorage,``0})">
+      <summary>
+            Вызвать метод сервиса <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" />.
+            </summary>
+      <typeparam name="TResult">Тип результата, возвращающий метод сервиса.</typeparam>
+      <param name="handler">Обработчик, в котором вызывает метод.</param>
+      <returns>Результат, возвращающий метод сервиса.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Hydra.RemoteStorageClient.DisposeManaged">
+      <summary>
+            Освободить занятые ресурсы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.Credentials">
+      <summary>
+            Информация о логине и пароле для доступа к удаленному хранилищу.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.SessionId">
+      <summary>
+            Идентификатор сессии, полученный из <see cref="M:StockSharp.Community.IAuthenticationService.Login(System.String,System.String)" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Hydra.RemoteStorageClient.SecurityBatchSize">
+      <summary>
+            Размер блока запроса новых инструментов. По-умолчанию он не превышает 1000 элементов.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Forex.OandaHistorySource">
+      <summary>
+            Источник исторических маркет-данных от Oanda.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Forex.OandaHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.LoadRates(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+      <summary>
+            Получить исторический курс валютной пары.
+            </summary>
+      <param name="security">Валютная пара.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <returns>Исторический курс.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Forex.OandaHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.AlorHistorySource">
+      <summary>
+            Источник для скачивания исторических сделок с Alor.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.#ctor(System.String)">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Russian.AlorHistorySource" />.
+            </summary>
+      <param name="address">Адрес сервера истории. По-умолчанию равен http://history.alor.ru .</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.AlorHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime,System.Int32)">
+      <summary>
+            Загрузить свечи.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить свечи.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.AlorHistorySource.TimeFrames" />.</param>
+      <param name="from">Дата начала данных.</param>
+      <param name="to">Дата конца данных.</param>
+      <param name="count">Максимальное количество свеч, которое нужно получить (не менее 1 и не более 10000).</param>
+      <returns>Загруженные свечи.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.AlorHistorySource.Address">
+      <summary>
+            Адрес сервера истории.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.AlorHistorySource.TimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.Finam.FinamHistorySource">
+      <summary>
+            Источник для скачивания исторических сделок с Finam.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.MarketIdField">
+      <summary>
+            Ключ, по которому в <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> будет присутствовать Finam-идентификатор рынка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.SecurityIdField">
+      <summary>
+            Ключ, по которому в <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> будет присутствовать Finam-идентификатор инструмента.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Russian.Finam.FinamHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.DownloadSecurityInfo">
+      <summary>
+            Загрузить информацию об инструментах.
+            </summary>
+      <returns>Информация об инструментах.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+      <summary>
+            Получить исторические сделки.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить все сделки.</param>
+      <param name="from">Дата начала данных.</param>
+      <param name="to">Дата конца данных.</param>
+      <returns>Исторические сделки.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
+      <summary>
+            Загрузить свечи.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить свечи.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.TimeFrames" />.</param>
+      <param name="from">Дата начала данных.</param>
+      <param name="to">Дата конца данных.</param>
+      <returns>Загруженные свечи.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.TimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo">
+      <summary>
+            Информация об инструменте, загруженная через <see cref="T:StockSharp.Algo.History.Russian.Finam.FinamHistorySource" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo.FinamSecurityId">
+      <summary>
+            Идентификатор инструмента на сайте Finam.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo.FinamMarketId">
+      <summary>
+            Идентификатор рынка на сайте Finam.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo.Code">
+      <summary>
+            Код инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo.Name">
+      <summary>
+            Имя инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Finam.FinamSecurityInfo.Decimals">
+      <summary>
+            Количество знаков после запятой.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.MfdHistorySource">
+      <summary>
+            Источник для скачивания исторических сделок с Mdf.ru .
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Russian.MfdHistorySource.MarketIdField">
+      <summary>
+            Ключ, по которому в <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> будет присутствовать Mfd-идентификатор рынка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Russian.MfdHistorySource.SecurityIdField">
+      <summary>
+            Ключ, по которому в <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> будет присутствовать Mfd-идентификатор инструмента.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Russian.MfdHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+      <summary>
+            Загрузить тиковые сделки.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить сделки.</param>
+      <param name="from">Дата начала данных.</param>
+      <param name="to">Дата конца данных.</param>
+      <returns>Загруженные сделки.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
+      <summary>
+            Загрузить свечи.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить свечи.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.MfdHistorySource.TimeFrames" />.</param>
+      <param name="from">Дата начала данных.</param>
+      <param name="to">Дата конца данных.</param>
+      <returns>Загруженные свечи.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.MfdHistorySource.TimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.MicexDownloader">
+      <summary>
+            Вспомогательный класс, заполняющий поля <see cref="P:StockSharp.BusinessEntities.Security.PriceStep" /> и <see cref="P:StockSharp.BusinessEntities.Security.VolumeStep" />
+            на основе информации с сайта http://www.micex.ru .
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.MicexDownloader.UpdateInfo(StockSharp.BusinessEntities.Security,System.Boolean)">
+      <summary>
+            Обновить информацию по инструменту.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="isDownload">Скачивать ли информацию с сайта, если она не была найдена локально.</param>
+      <returns>
+        <see langword="true" />, если инструмент был успешно обновлен. Иначе, <see langword="false" />.</returns>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.Rts.Competition">
+      <summary>
+            Класс для получения данных к итогам конкурса ЛЧИ.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.Competition.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Russian.Rts.Competition" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.Competition.Get(System.DateTime)">
+      <summary>
+            Получить итоги за определенный год.
+            </summary>
+      <param name="year">Год конкурса.</param>
+      <returns>Итоги.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.Competition.AllYears">
+      <summary>
+            Все года, когда проводился конкурс.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear">
+      <summary>
+            Итог конкурса ЛЧИ за определенный год.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear.GetTrades(StockSharp.Algo.Storages.ISecurityStorage,System.String,System.DateTime)">
+      <summary>
+            Получить сделки участника за определенную дату.
+            </summary>
+      <param name="securityStorage">Хранилище информации об инструментах.</param>
+      <param name="member">Участник.</param>
+      <param name="date">Дата соревнования.</param>
+      <returns>Сделки участника.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear.Year">
+      <summary>
+            Год проведения ЛЧИ.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear.Members">
+      <summary>
+            Участники соревнования.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.Competition.CompetitionYear.Days">
+      <summary>
+            Даты, для которых есть информация о сделках.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.Rts.FortsDailyData">
+      <summary>
+            Класс для доступа с историческим дневным данный рынка FORTS.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityYesterdayEndOfDay(StockSharp.Messages.SecurityId,System.String)">
+      <summary>
+            Возвращает вчерашние данные на конец дня (EOD, End-Of-Day) по выбранному инструменту.
+            </summary>
+      <remarks>
+            Дата определяется на основе системного времени.
+            </remarks>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="securityName">Название инструмента.</param>
+      <returns>Вчерашние данные.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSharp.Messages.SecurityId,System.String,System.DateTime,System.DateTime)">
+      <summary>
+            Возвращает список данных на конец дня (EOD, End-Of-Day) по выбранному инструменту за выбранный период.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="securityName">Название инструмента.</param>
+      <param name="fromDate">Дата начала периода.</param>
+      <param name="toDate">Дата конца периода.</param>
+      <returns>Исторические данные.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetRate(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+      <summary>
+            Получить индикативный курс валютной пары.
+            </summary>
+      <param name="security">Валютная пара.</param>
+      <param name="fromDate">Дата начала периода.</param>
+      <param name="toDate">Дата окончания периода.</param>
+      <returns>Индикативный курс доллара США к российскому рублю.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.FortsDailyData.UsdRateMinAvailableTime">
+      <summary>
+            Минимальная дата, для которой есть индикативный курс доллара США к российскому рублю. Равен 2 ноября 2009 года.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.Rts.RtsHistorySource">
+      <summary>
+            Источник для скачивания исторических сделок с RTS.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Russian.Rts.RtsHistorySource" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.RtsMinAvaliableTime">
+      <summary>
+            Минимальная дата RTS, для которой есть исторические данные.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UxMinAvaliableTime">
+      <summary>
+            Минимальная дата UX, для которой есть исторические данные.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.LoadTrades(StockSharp.Algo.Storages.ISecurityStorage,System.DateTime)">
+      <summary>
+            Загрузить исторические сделки.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="date">Дата торговой сессии, для которой необходимо получить сделки.</param>
+      <returns>Исторические сделки.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TimeZone">
+      <summary>
+            Временная зона маркет-данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.Host">
+      <summary>
+            Адрес ftp RTS сервера.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.UserName">
+      <summary>
+            Логин к ftp.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.Password">
+      <summary>
+            Пароль к ftp.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.ExchangeBoard">
+      <summary>
+            Информация о площадке.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.DbfDirectory">
+      <summary>
+            Путь к папке с историческими данными в формате DBF.
+            </summary>
+      <remarks>
+            Если значение равно пустой строке, то данные в формате DBF не обрабатываются.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.TxtDirectory">
+      <summary>
+            Путь к папке с историческими данными в формате CSV и Excel.
+            </summary>
+      <remarks>
+            Если значение равно пустой строке, то данные в формате CSV и Excel не обрабатываются.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.DumpFolder">
+      <summary>
+            Путь к директории, куда будут сохранятся скаченные файлы.
+            </summary>
+      <remarks>
+            Если значение равно пустой строке, то данные сохраняются в текущую директорию.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.SaveRtsStdTrades">
+      <summary>
+            Сохранять сделки для инструментов РТС Стандарт. По-умолчанию выключено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.SaveRtsStdCombinedOnly">
+      <summary>
+            Склеивать сделки для инструментов РТС Стандарт (сделки для T+N не разбиваются по папкам). По-умолчанию выключено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.IsSystemOnly">
+      <summary>
+            Сохранять только системные сделки. По-умолчанию включено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.LoadEveningSession">
+      <summary>
+            Скачивать данные вечерней сессии.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.Russian.UxHistorySource">
+      <summary>
+            Источник для скачивания исторических данных с сайта украинской биржи.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.Russian.UxHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
+      <summary>
+            Загрузить тиковые сделки.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить сделки.</param>
+      <param name="from">Дата начала данных.</param>
+      <param name="to">Дата конца данных.</param>
+      <returns>Загруженные сделки.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
+      <summary>
+            Загрузить свечи.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить свечи.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.UxHistorySource.TimeFrames" />.</param>
+      <param name="from">Дата начала данных.</param>
+      <param name="to">Дата конца данных.</param>
+      <returns>Загруженные свечи.</returns>
+    </member>
+    <member name="P:StockSharp.Algo.History.Russian.UxHistorySource.TimeFrames">
+      <summary>
+            Возможные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.Storages.RemoteMarketDataDrive">
+      <summary>
+            Удаленное хранилище маркет-данных, работающее через <see cref="T:StockSharp.Algo.History.Hydra.RemoteStorageClient" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.Storages.RemoteMarketDataDrive" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.#ctor(StockSharp.Algo.History.Hydra.RemoteStorageClient)">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.Storages.RemoteMarketDataDrive" />.
+            </summary>
+      <param name="client">Клиент для доступа к серверу истории <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" />.</param>
+    </member>
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetCandleTypes(StockSharp.Messages.SecurityId,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Получить для инструмента доступные типы свечек с параметрами.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="format">Тип формата.</param>
+      <returns>Доступные типы свечек с параметрами.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.GetStorageDrive(StockSharp.Messages.SecurityId,System.Type,System.Object,StockSharp.Algo.Storages.StorageFormats)">
+      <summary>
+            Создать хранилище для <see cref="T:StockSharp.Algo.Storages.IMarketDataStorage" />.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="format">Тип формата.</param>
+      <returns>Хранилище для <see cref="T:StockSharp.Algo.Storages.IMarketDataStorage" />.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Algo.Storages.RemoteMarketDataDrive.DisposeManaged">
+      <summary>
+            Освободить занятые ресурсы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Storages.RemoteMarketDataDrive.Client">
+      <summary>
+            Клиент для доступа к серверу истории <see cref="T:StockSharp.Algo.History.Hydra.IRemoteStorage" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.Storages.RemoteMarketDataDrive.Path">
+      <summary>
+            Путь к данными.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Algo.History.YahooHistorySource">
+      <summary>
+            Источник маркет-данных от Yahoo Finance.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.YahooHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})">
+      <summary>
+            Получить level1 маркет-данные.
+            </summary>
+      <param name="securityIds">Идентификаторы инструментов.</param>
+      <param name="fields">Поля маркет-данных. Если было передано <see langword="null" />, то будет использоваться значение <see cref="P:StockSharp.Algo.History.YahooHistorySource.Fields" />.</param>
+      <returns>Level1 маркет-данные.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
+      <summary>
+            Скачать свечи с сайта.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.YahooHistorySource.TimeFrames" />.</param>
+      <param name="beginDate">Дата начала.</param>
+      <param name="endDate">Дата окончания.</param>
+      <returns>Свечи.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.YahooHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="P:StockSharp.Algo.History.YahooHistorySource.Fields">
+      <summary>
+            Доступные поля маркет-данных, которые можно передать в <see cref="M:StockSharp.Algo.History.YahooHistorySource.GetLevel1(System.Collections.Generic.IEnumerable{StockSharp.Messages.SecurityId},System.Collections.Generic.IEnumerable{StockSharp.Messages.Level1Fields})" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.YahooHistorySource.TimeFrames">
+      <summary>
+            Тайм-фреймы, которые можно передать в <see cref="M:StockSharp.Algo.History.YahooHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)" />.
+            </summary>
+    </member>
+  </members>
+</doc>
