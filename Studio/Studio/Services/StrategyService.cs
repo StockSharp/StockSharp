@@ -185,7 +185,7 @@ namespace StockSharp.Studio.Services
 							return;
 						}
 
-						_historyMessageAdapter.SessionHolder.StopDate = DateTime.MaxValue;
+						_historyMessageAdapter.SessionHolder.StopDate = DateTimeOffset.MaxValue;
 						_historyMessageAdapter.SessionHolder.MarketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
 
 						var messages = new List<Message>();
