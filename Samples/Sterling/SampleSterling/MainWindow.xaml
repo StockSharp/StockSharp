@@ -1,0 +1,62 @@
+<Window x:Class="SampleSterling.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:xaml="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+        xmlns:properties="clr-namespace:SampleSterling.Properties"
+        xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="{x:Static loc:LocalizedStrings.XamlStr558}" Height="351" Width="850">
+
+    <Window.Resources>
+        <converters:InverseBooleanConverter x:Key="Invbool"/>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Margin="3" Orientation="Vertical" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr281}" VerticalAlignment="Center"/>
+					<TextBlock Text=" " VerticalAlignment="Center"/>
+					<TextBox Text="{Binding Source={x:Static properties:Settings.Default}, Path=Username, Mode=TwoWay}" Margin="0,0,20,0" Width="130"
+                             IsEnabled="{Binding IsConnected, Converter={StaticResource Invbool}}"/>
+                    <TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr449}" VerticalAlignment="Center"/>
+					<PasswordBox x:Name="PwdBox" Width="130" IsEnabled="{Binding IsConnected, Converter={StaticResource Invbool}}"/>
+                </StackPanel>
+
+                <Button x:Name="ConnectBtn" Background="LightPink"
+                        Content="{x:Static loc:LocalizedStrings.Str2962}" Click="ConnectClick" Margin="40,10"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">
+                <Grid IsEnabled="{Binding IsConnected}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+                    </Grid.Resources>
+
+					<Button Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Str187}" Click="ShowSecuritiesClick" IsEnabled="False"/>
+					<Button Grid.Column="1" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr359}" Click="ShowNewsClick" IsEnabled="False"/>
+					<Button Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Str1672}" Click="ShowPortfoliosClick" IsEnabled="False"/>
+					<Button Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.XamlStr311}" Click="ShowMyTradesClick" IsEnabled="False"/>
+					<Button Grid.Column="1" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.XamlStr184}" Click="ShowOrdersClick" IsEnabled="False"/>
+                    <Button Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Str226}" Click="ShowStopOrdersClick" IsEnabled="False"/>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <xaml:LogControl DockPanel.Dock="Top" AutoResize="True" AutoScroll="True" x:Name="LogControl" TimeFormat="HH:mm:ss.fff"/>
+    </DockPanel>
+</Window>

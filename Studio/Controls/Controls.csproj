@@ -1,0 +1,518 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6D205F4B-6B2A-4082-B717-F6BAAA4E0F3A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Studio.Controls</RootNamespace>
+    <AssemblyName>StockSharp.Studio.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Abt.Controls.SciChart.Wpf">
+      <HintPath>..\..\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ActiproSoftware.Editors.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Antlr3.Runtime, Version=3.3.0.7239, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Configuration">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Data">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Reflection">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc, Version=1.3.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\NCalc.dll</HintPath>
+    </Reference>
+    <Reference Include="Northwoods.GoWPF, Version=2.1.1.4, Culture=neutral, PublicKeyToken=616e2dc80068a33d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Northwoods.GoWPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="BaseStudioControl.cs" />
+    <Compile Include="BuySellPanel.xaml.cs">
+      <DependentUpon>BuySellPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CandleChartPanel.xaml.cs">
+      <DependentUpon>CandleChartPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChatPanel.xaml.cs">
+      <DependentUpon>ChatPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChatRoomCreateWindow.xaml.cs">
+      <DependentUpon>ChatRoomCreateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CompositeSecurityPanel.xaml.cs">
+      <DependentUpon>CompositeSecurityPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\ChatConverters.cs" />
+    <Compile Include="Converters\IsInteractedToBoolConverter.cs" />
+    <Compile Include="Converters\ProcessStatesToImageConverter.cs" />
+    <Compile Include="Converters\StrategyInfoStatesToImageConverter.cs" />
+    <Compile Include="DiagramDebuggerPanel.xaml.cs">
+      <DependentUpon>DiagramDebuggerPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DiagramPanel.xaml.cs">
+      <DependentUpon>DiagramPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeEditorPanel.xaml.cs">
+      <DependentUpon>ExchangeEditorPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level2Panel.xaml.cs">
+      <DependentUpon>Level2Panel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogControlPanel.cs" />
+    <Compile Include="LogManagerPanel.cs" />
+    <Compile Include="MarketDataConfirmWindow.xaml.cs">
+      <DependentUpon>MarketDataConfirmWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MarketDataSettingsComboBox.cs" />
+    <Compile Include="NewsPanel.xaml.cs">
+      <DependentUpon>NewsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\OpenCompositionCommand.cs" />
+    <Compile Include="OptionDeskButton.xaml.cs">
+      <DependentUpon>OptionDeskButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionPositionChartPanel.xaml.cs">
+      <DependentUpon>OptionPositionChartPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderConditionalPanel.xaml.cs">
+      <DependentUpon>OrderConditionalPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PositionChartPanel.xaml.cs">
+      <DependentUpon>PositionChartPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PositionEditWindow.xaml.cs">
+      <DependentUpon>PositionEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PositionsPanel.xaml.cs">
+      <DependentUpon>PositionsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SciChartPanel.xaml.cs">
+      <DependentUpon>SciChartPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecuritiesWindowEx.xaml.cs">
+      <DependentUpon>SecuritiesWindowEx.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SessionsPanel.xaml.cs">
+      <DependentUpon>SessionsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StatisticsPanel.xaml.cs">
+      <DependentUpon>StatisticsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EquityCurveChartPanel.xaml.cs">
+      <DependentUpon>EquityCurveChartPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MarketDataPanel.xaml.cs">
+      <DependentUpon>MarketDataPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionDeskPanel.xaml.cs">
+      <DependentUpon>OptionDeskPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrdersPanel.xaml.cs">
+      <DependentUpon>OrdersPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\StatisticsStorageConverter.cs" />
+    <Compile Include="PortfoliosPanel.xaml.cs">
+      <DependentUpon>PortfoliosPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PropertiesPanel.xaml.cs">
+      <DependentUpon>PropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MyTradesTable.xaml.cs">
+      <DependentUpon>MyTradesTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ScalpingMarketDepthControl.xaml.cs">
+      <DependentUpon>ScalpingMarketDepthControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecuritiesPanel.xaml.cs">
+      <DependentUpon>SecuritiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StrategySecuritiesPanel.xaml.cs">
+      <DependentUpon>StrategySecuritiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TradesPanel.xaml.cs">
+      <DependentUpon>TradesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UniversalGridPanel.xaml.cs">
+      <DependentUpon>UniversalGridPanel.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="BuySellPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CandleChartPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChatPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChatRoomCreateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CompositeSecurityPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DiagramDebuggerPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DiagramPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExchangeEditorPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Level2Panel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MarketDataConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OptionDeskButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OptionPositionChartPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrderConditionalPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PositionChartPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PositionEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PositionsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SciChartPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SecuritiesWindowEx.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SessionsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StatisticsPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EquityCurveChartPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MarketDataPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OptionDeskPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrdersPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MyTradesTable.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PortfoliosPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PropertiesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScalpingMarketDepthControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SecuritiesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StrategySecuritiesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TradesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UniversalGridPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\zoom_in.png" />
+    <Resource Include="Images\zoom_out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\settings-icon_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\history-testing-icon_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\log_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Alerts\Alerts.csproj">
+      <Project>{96725e45-f785-4612-9743-bfb40a9e725d}</Project>
+      <Name>Alerts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo.Strategies\Algo.Strategies.csproj">
+      <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>
+      <Name>Algo.Strategies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo\Algo.csproj">
+      <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\BusinessEntities\BusinessEntities.csproj">
+      <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Community\Community.csproj">
+      <Project>{e8e18f8f-97bd-41ae-8888-f54f2411d575}</Project>
+      <Name>Community</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Logging\Logging.csproj">
+      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Messages\Messages.csproj">
+      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml.Charting\Xaml.Charting.csproj">
+      <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
+      <Name>Xaml.Charting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml.Diagram\Xaml.Diagram.csproj">
+      <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
+      <Name>Xaml.Diagram</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml\Xaml.csproj">
+      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{23B15AE0-2021-43DA-808F-3BF331462976}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\equity_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\log_error_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Continue_16x16.png" />
+    <Resource Include="Images\BreakpointOff_16x16.png" />
+    <Resource Include="Images\BreakpointOn_16x16.png" />
+    <Resource Include="Images\StepIn_16x16.png" />
+    <Resource Include="Images\Stepout_16x16.png" />
+    <Resource Include="Images\StepOver_16x16.png" />
+    <Resource Include="Images\ToOutput_16x16.png" />
+    <Resource Include="Images\combine_16x16.png" />
+    <Resource Include="Images\deal_24x24.png" />
+    <Resource Include="Images\marketdepth_24x24.png" />
+    <Resource Include="Images\chart_24x24.png" />
+    <Resource Include="Images\position_24x24.png" />
+    <Resource Include="Images\bug_24x24.png" />
+    <Resource Include="Images\strategy-edit-icon_24x24.png" />
+    <Resource Include="Images\news_16x16.png" />
+    <Resource Include="Images\storage_16x16.png" />
+    <Resource Include="Images\Letter-S-grey-icon-16.png" />
+    <Resource Include="Images\Letter-T-blue-icon-16.png" />
+    <Resource Include="Images\chat_new_message_24x24.png" />
+    <Resource Include="Images\envelope_16x16.png" />
+    <Resource Include="Images\subscribe_16x16.png" />
+    <Resource Include="Images\unsubscribe_16x16.png" />
+    <Resource Include="Images\chat_24x24.png" />
+    <Resource Include="Images\filter_16x16.png" />
+    <Resource Include="Images\configuration-add-icon_24x24.png" />
+    <Resource Include="Images\configuration-bind-icon_24x24.png" />
+    <Resource Include="Images\configuration-copy-icon_24x24.png" />
+    <Resource Include="Images\configuration-delete-icon_24x24.png" />
+    <Resource Include="Images\configuration-step-icon_24x24.png" />
+    <Resource Include="Images\strategy-add-icon_24x24.png" />
+    <Resource Include="Images\strategy-delete-icon_24x24.png" />
+    <Resource Include="Images\history-add-icon_24x24.png" />
+    <Resource Include="Images\history-delete-icon_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\news_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\level2_16x16.png" />
+    <Resource Include="Images\order_16x16.png" />
+    <Resource Include="Images\statistics_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\exchange_32x32.png" />
+    <Resource Include="Images\portfolio_32x32.png" />
+    <Resource Include="Images\index_32x32.png" />
+    <Resource Include="Images\storage_32x32.png" />
+    <Resource Include="Images\terminal_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\security_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\statistics_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\continuous_32x32.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
