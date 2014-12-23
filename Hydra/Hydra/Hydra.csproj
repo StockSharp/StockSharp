@@ -62,7 +62,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Abt.Controls.SciChart.Wpf, Version=3.1.0.5022, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,16 +96,16 @@
     </Reference>
     <Reference Include="Ecng.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MoreLinq">
-      <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -121,40 +121,40 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Configuration">
-      <HintPath>..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data.Providers">
-      <HintPath>..\..\References\Ecng\Ecng.Data.Providers.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Data.Providers.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop">
-      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net">
-      <HintPath>..\..\References\Ecng\Ecng.Net.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\..\References\Ecng\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Security">
-      <HintPath>..\..\References\Ecng\Ecng.Security.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Security.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

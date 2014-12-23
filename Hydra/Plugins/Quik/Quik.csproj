@@ -39,7 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -48,25 +48,25 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop">
-      <HintPath>..\..\..\References\Ecng\Ecng.Interop.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -125,8 +125,8 @@
 copy StockSharp.Quik.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.dll
 copy StockSharp.Fix.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Fix.dll
 copy QuickFix.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\QuickFix.dll
-copy ..\..\..\..\..\Connectors\QuikLua\bin\$(ConfigurationName)\StockSharp.QuikLua.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.QuikLua.dll
-copy ..\..\..\..\..\Connectors\QuikLua\bin\$(ConfigurationName)\StockSharp.Quik.lua ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.lua</PostBuildEvent>
+copy "..\..\..\..\..\..\StockSharp (GitLab)\Connectors\QuikLua\bin\$(ConfigurationName)\StockSharp.QuikLua.dll" ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.QuikLua.dll
+copy "..\..\..\..\..\..\StockSharp (GitLab)\Connectors\QuikLua\bin\$(ConfigurationName)\StockSharp.Quik.lua" ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.lua</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

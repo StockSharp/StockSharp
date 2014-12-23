@@ -39,11 +39,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq, Version=1.0.16127.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -54,22 +54,22 @@
     <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -121,8 +121,8 @@
     <PostBuildEvent>call ..\..\..\plugins.bat $(ProjectName) $(ConfigurationName)
 
 copy StockSharp.Plaza.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Plaza.dll
-copy ..\..\..\..\..\References\Plaza\Interop.P2ClientGateMTA32.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\Interop.P2ClientGateMTA32.dll
-copy ..\..\..\..\..\References\Plaza\Interop.P2ClientGateMTA64.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\Interop.P2ClientGateMTA64.dll</PostBuildEvent>
+copy "..\..\..\..\..\..\StockSharp (GitLab)\References\Plaza\Interop.P2ClientGateMTA32.dll" ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\Interop.P2ClientGateMTA32.dll
+copy "..\..\..\..\..\..\StockSharp (GitLab)\References\Plaza\Interop.P2ClientGateMTA64.dll" ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\Interop.P2ClientGateMTA64.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
