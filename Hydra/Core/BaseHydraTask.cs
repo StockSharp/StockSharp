@@ -452,7 +452,10 @@ namespace StockSharp.Hydra.Core
 		{
 			SafeSave(security, trades, t => t.Time, new[]
 			{
-				CreateErrorCheck<Trade>(t => t.Price <= 0, LocalizedStrings.Str2199),
+				// execution ticks (like option execution) may be a zero cost
+				// ticks for spreads may be a zero cost or less than zero
+				//CreateErrorCheck<Trade>(t => t.Price <= 0, LocalizedStrings.Str2199),
+
 				CreateErrorCheck<Trade>(t => t.Price % t.Security.PriceStep != 0, LocalizedStrings.Str2200)
 			});
 		}
@@ -479,8 +482,10 @@ namespace StockSharp.Hydra.Core
 		{
 			SafeSave(security, depths, d => d.LastChangeTime, new[]
 			{
-				CreateErrorCheck<MarketDepth>(d => (d.BestPair != null && d.BestPair.IsFull && d.BestBid.Price > d.BestAsk.Price), LocalizedStrings.Str2201),
-				CreateErrorCheck<MarketDepth>(d => d.Any(q => q.Price <= 0), LocalizedStrings.Str2202)
+				CreateErrorCheck<MarketDepth>(d => (d.BestPair != null && d.BestPair.IsFull && d.BestBid.Price > d.BestAsk.Price), LocalizedStrings.Str2201)
+				
+				// quotes for spreads may be a zero cost or less than zero
+				//CreateErrorCheck<MarketDepth>(d => d.Any(q => q.Price <= 0), LocalizedStrings.Str2202)
 			});
 		}
 
