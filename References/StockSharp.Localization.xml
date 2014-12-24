@@ -14242,12 +14242,12 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3000Key">
             <summary>
-            Enter login:
+            Enter login
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3001Key">
             <summary>
-            Enter password:
+            Enter password
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3002Key">
@@ -21258,6 +21258,21 @@
         <member name="F:StockSharp.Localization.LocalizedStrings.AnonymousTradesLogKey">
             <summary>
             Anonymous trades log.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.RememberPasswordKey">
+            <summary>
+            Remember password
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.StrategyLoadingErrorKey">
+            <summary>
+            An error happened while loading strategy. The password is probably incorrect.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.StrategyLoadingCancelledKey">
+            <summary>
+            Strategy loading was cancelled.
             </summary>
         </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
@@ -35434,12 +35449,12 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3000">
             <summary>
-            Enter login:
+            Enter login
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3001">
             <summary>
-            Enter password:
+            Enter password
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3002">
@@ -42450,6 +42465,21 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.AnonymousTradesLog">
             <summary>
             Anonymous trades log.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.RememberPassword">
+            <summary>
+            Remember password
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.StrategyLoadingError">
+            <summary>
+            An error happened while loading strategy. The password is probably incorrect.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.StrategyLoadingCancelled">
+            <summary>
+            Strategy loading was cancelled.
             </summary>
         </member>
     </members>
