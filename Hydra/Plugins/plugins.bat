@@ -1,12 +1,15 @@
+set tmp=%1
+set proj=%tmp:Public=%
+
 md ..\..\..\..\Hydra\bin\%2\Plugins
 
-copy StockSharp.Hydra.%1.dll ..\..\..\..\Hydra\bin\%2\Plugins\StockSharp.Hydra.%1.dll
+copy StockSharp.Hydra.%proj%.dll ..\..\..\..\Hydra\bin\%2\Plugins\StockSharp.Hydra.%proj%.dll
 
 if %2 == Debug goto :debug
 
 goto :exit
 
 :debug
-copy StockSharp.Hydra.%1.pdb ..\..\..\..\Hydra\bin\%2\Plugins\StockSharp.Hydra.%1.pdb
+copy StockSharp.Hydra.%proj%.pdb ..\..\..\..\Hydra\bin\%2\Plugins\StockSharp.Hydra.%proj%.pdb
 
 :exit
