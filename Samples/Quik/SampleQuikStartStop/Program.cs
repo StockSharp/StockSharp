@@ -11,10 +11,10 @@ namespace SampleQuikStartStop
 			Console.Write(LocalizedStrings.Str2999);
 			var path = Console.ReadLine();
 
-			Console.Write(LocalizedStrings.Str3000);
+			Console.Write(LocalizedStrings.Str3000 + ": ");
 			var login = Console.ReadLine();
 
-			Console.Write(LocalizedStrings.Str3001);
+			Console.Write(LocalizedStrings.Str3001 + ": ");
 			var password = Console.ReadLine();
 
 			try

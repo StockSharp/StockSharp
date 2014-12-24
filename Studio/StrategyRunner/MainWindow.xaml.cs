@@ -286,18 +286,21 @@
 		{
 			var dlg = new VistaOpenFileDialog
 			{
-				Filter = "Стратегии (.xml)|*.xml",
+				Filter = "{0} (.xml)|*.xml".Put(LocalizedStrings.Str1355),
 				CheckFileExists = true,
 				RestoreDirectory = true
 			};
 
-			if (dlg.ShowDialog(Application.Current.GetActiveOrMainWindow()) != true)
+			if (dlg.ShowDialog(this) != true)
+				return;
+
+			UnloadStrategy();
+			
+			if (!LoadStrategy(dlg.FileName))
 				return;
 
 			_settings.SetValue("StrategyFile", dlg.FileName);
 
-			UnloadStrategy();
-			LoadStrategy(dlg.FileName);
 		}
 
 		private void CanExecuteOpenStrategy(object sender, CanExecuteRoutedEventArgs e)
@@ -307,7 +310,7 @@
 
 		#region Strategy
 
-		private void LoadStrategy(string strategyFile)
+		private bool LoadStrategy(string strategyFile)
 		{
 			var composition = LoadComposition(strategyFile);
 
@@ -315,12 +318,12 @@
 			{
 				new MessageBoxBuilder()
 					.Error()
-					.Text("Загрузка стратегии была отменена.")
+					.Text(LocalizedStrings.StrategyLoadingCancelled)
 					.Owner(this)
 					.Button(MessageBoxButton.OK)
 					.Show();
 
-				return;
+				return false;
 			}
 
 			_strategy = new DiagramStrategyEx
@@ -350,6 +353,8 @@
 
 			PropertyGrid.SelectedObject = _strategy;
 			StatisticParameterGrid.StatisticManager = _strategy.StatisticManager;
+
+			return true;
 		}
 
 		private ExportDiagramElement LoadComposition(string strategyFile)
@@ -396,7 +401,7 @@
 
 					new MessageBoxBuilder()
 						.Error()
-						.Text("Ошибка загрузки стратегии. Возможно указан неверный пароль.")
+						.Text(LocalizedStrings.StrategyLoadingError)
 						.Owner(this)
 						.Button(MessageBoxButton.OK)
 						.Show();
