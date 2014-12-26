@@ -257,17 +257,20 @@ namespace StockSharp.Hydra.Panes
 				}
 			}
 
-			private TimeSpan _timeZone;
+			private TimeZoneInfo _timeZone = TimeZoneInfo.Utc;
 
 			[CategoryLoc(LocalizedStrings.Str1559Key)]
 			[DisplayNameLoc(LocalizedStrings.Str67Key)]
 			[DescriptionLoc(LocalizedStrings.Str67Key, true)]
-			[Editor(typeof(DriveComboBoxEditor), typeof(DriveComboBoxEditor))]
-			public TimeSpan TimeZone
+			[Editor(typeof(TimeZoneEditor), typeof(TimeZoneEditor))]
+			public TimeZoneInfo TimeZone
 			{
 				get { return _timeZone; }
 				set
 				{
+					if (value == null)
+						throw new ArgumentNullException("value");
+
 					_timeZone = value;
 					NotifyChanged("TimeZone");
 				}
@@ -306,7 +309,15 @@ namespace StockSharp.Hydra.Panes
 				if (storage.ContainsKey("Drive"))
 					Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>("Drive"));
 
-				TimeZone = storage.GetValue("TimeZone", TimeZone);
+				try
+				{
+					TimeZone = TimeZoneInfo.FindSystemTimeZoneById(storage.GetValue<string>("TimeZone"));
+				}
+				catch
+				{
+					// TODO remove in next versions
+				}
+
 				CandleSettings = storage.GetValue("CandleSettings", CandleSettings);
 			}
 
@@ -322,7 +333,7 @@ namespace StockSharp.Hydra.Panes
 				if (Drive != null)
 					storage.SetValue("Drive", Drive.Path);
 
-				storage.SetValue("TimeZone", TimeZone);
+				storage.SetValue("TimeZone", TimeZone.Id);
 				storage.SetValue("CandleSettings", CandleSettings);
 			}
 		}
@@ -601,7 +612,7 @@ namespace StockSharp.Hydra.Panes
 
 		string IPane.Title
 		{
-			get { return LocalizedStrings.Str2864 + _title; }
+			get { return LocalizedStrings.Str2864 + " " + _title; }
 		}
 
 		Uri IPane.Icon

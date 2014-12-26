@@ -4,7 +4,7 @@
         xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-        Title="{x:Static loc:LocalizedStrings.XamlStr29}" Height="300" Width="300" ShowInTaskbar="False">
+        Title="{x:Static loc:LocalizedStrings.XamlStr29}" Height="300" Width="400" ShowInTaskbar="False">
 	<Window.Resources>
 		<Style TargetType="{x:Type xaml:BmpImage}" x:Key="BmpStyle">
 			<Style.Triggers>
@@ -27,7 +27,7 @@
 					CanUserResizeRows="False" CanUserDeleteRows="False" SelectionUnit="FullRow" GridLinesVisibility="All"
 					SelectionChanged="ValuesGrid_SelectionChanged" RowHeight="24">
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.XamlStr187}" Width="100">
+				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.XamlStr187}" Width="150">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<TextBox Text="{Binding Path=ValueFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -35,7 +35,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 
-				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.XamlStr186}" Width="150">
+				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.XamlStr186}" Width="200">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<xaml:EnumComboBox SelectedValue="{Binding ValueStockSharp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" EnumType="{Binding Path=EnumType, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
