@@ -298,7 +298,7 @@
 
 			if (SelectedYear.Year.Year == DateTime.Today.Year)
 			{
-				From.Value = DateTime.Today.Subtract(TimeSpan.FromDays(7));
+				From.Value = DateTime.Today.Min(From.Maximum.Value).Subtract(TimeSpan.FromDays(7));
 			}
 
 			Trader.ItemsSource = SelectedYear.Members;
