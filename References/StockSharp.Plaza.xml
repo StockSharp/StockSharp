@@ -502,6 +502,32 @@
             Признак обособленности раздела.
             </summary>
     </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMarketMakingAgreementColumns">
+      <summary>
+            Колонки таблицы с номерами и типами договоров на оказание маркет-мейкерских услуг
+            FORTS_MM_REPL - таблица mm_agreement_filter.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingAgreementColumns.AgreementId">
+      <summary>
+            Идентификатор договора.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingAgreementColumns.Agreement">
+      <summary>
+            Номер договора.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingAgreementColumns.ClientCode">
+      <summary>
+            Код клиента.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingAgreementColumns.IsFutures">
+      <summary>
+            Тип обязательства.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMarketMakingDerivativeColumns">
       <summary>
             Колонки таблицы, содержащей информация об обязательствах ММ.
@@ -639,6 +665,27 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingOptionColumns.CStrikeOffset">
       <summary>
             Смещение от центрального страйка.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMarketMakingRuleColumns">
+      <summary>
+            Колонки таблицы с инструментами для пересчета центрального страйка
+            FORTS_MM_REPL - таблица cs_mm_rule.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingRuleColumns.IsinId">
+      <summary>
+            Уникальный числовой идентификатор инструмента.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingRuleColumns.SessionId">
+      <summary>
+            Идентификатор торговой сессии.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMarketMakingRuleColumns.ClientCode">
+      <summary>
+            Код клиента.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxBcMessagesColumns">
@@ -3433,6 +3480,16 @@
             Колонки таблицы с информацией об обязательства ММ по опционам.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.MarketMakingRules">
+      <summary>
+            Колонки таблицы с инструментами для пересчета центрального страйка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.MarketMakingAgreement">
+      <summary>
+            Колонки таблицы с номерами и типами договоров на оказание маркет-мейкерских услуг.
+            </summary>
+    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.SysEventsTradeFuture">
       <summary>
             Колонки таблицы с событиями.
@@ -4623,6 +4680,16 @@
             Обязательства ММ по опционам.
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.MarketMakingRules">
+      <summary>
+            Инструменты для пересчета центрального страйка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.MarketMakingAgreement">
+      <summary>
+            Номера и типы договоров на оказание маркет-мейкерских услуг.
+            </summary>
+    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.AnonymousOrdersLog">
       <summary>
             Журнал заявок. Анонимный order_log.
@@ -5076,6 +5143,101 @@
             Признак расчета рисков по клиентскому разделу по данной заявке.
             </summary>
     </member>
+    <member name="P:StockSharp.Plaza.Transaction.Code">
+      <summary>
+            Код клиентского счета или '%%%' - по всем.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.CodeVcb">
+      <summary>
+            Код базового актива или '%' - по всем.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.Mode">
+      <summary>
+            Режим работы команды.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.CoeffGo">
+      <summary>
+            Коэффициент клиентского ГО по БА.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.LimitSpot">
+      <summary>
+            Лимит открытых позиций БФ на продажу по спотам БА.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.LimitMoney">
+      <summary>
+            Лимит денежных средств.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.LimitPledge">
+      <summary>
+            Лимит залоговых средств.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.LimitSpotBuy">
+      <summary>
+            Лимит денежных средств.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.IsAutoUpdateSpotLimit">
+      <summary>
+            Признак автоматической коррекции Спотовых лимитов (продажа и покупка) при закачке после клиринга.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.State">
+      <summary>
+            Ограничение.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.StateMask">
+      <summary>
+            Маска для параметра <see cref="P:StockSharp.Plaza.Transaction.State" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.IsAutoUpdateLimit">
+      <summary>
+            Признак автоматической коррекции лимита на величину дохода при закачке после клиринга.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.NoFutDiscount">
+      <summary>
+            Флаг запрета использования скидки по фьючерсам.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.CoeffLiquidity">
+      <summary>
+            Коэффициент ликвидности по фьючерсам.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.IsinId">
+      <summary>
+            Числовой идентификатор базового инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.CodeFrom">
+      <summary>
+            Код донора.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.CodeTo">
+      <summary>
+            Код реципиента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.AmountMoney">
+      <summary>
+            Размер денежных средств для перевода.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.Transaction.AmountPledge">
+      <summary>
+            Размер залоговых средств для перевода.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.TransactionFactory">
       <summary>
             Фабрика транзакций.
@@ -5086,66 +5248,88 @@
             Создать транзакцию на регистрацию заявки.
             </summary>
       <param name="message">Сообщение.</param>
-      <returns>Транзакция регистрации заявки.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateCancel(StockSharp.Messages.OrderCancelMessage)">
       <summary>
             Создать транзакцию на снятие заявки.
             </summary>
       <param name="message">Сообщение.</param>
-      <returns>Транзакция снятия заявки.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateCancelGroup(StockSharp.Messages.OrderGroupCancelMessage)">
       <summary>
             Создать транзакцию на групповое снятие заявок.
             </summary>
       <param name="message">Сообщение.</param>
-      <returns>Транзакция группового снятия заявок.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateReRegister(StockSharp.Messages.OrderReplaceMessage)">
       <summary>
             Создать транзакцию на перерегистрацию заявок.
             </summary>
       <param name="message">Сообщение.</param>
-      <returns>Транзакция на перерегистрацию заявок.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateReRegisterPair(StockSharp.Messages.OrderPairReplaceMessage)">
       <summary>
             Создать транзакцию на перерегистрацию пары заявок.
             </summary>
       <param name="message">Сообщение.</param>
-      <returns>Транзакция на перерегистрацию пары заявок.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateChangeMoneyLimit">
       <summary>
             Создать транзакцию на изменение денежных лимитов по клиентскому счету.
             </summary>
-      <returns>Транзакция на изменение денежных лимитов по клиентскому счету.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateSetMoneyLimit">
       <summary>
             Создать транзакцию на изменение клиентских ограничений.
             </summary>
-      <returns>Транзакция на изменение клиентских ограничений.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateChangeExpiration">
       <summary>
             Создать транзакцию на экспирацию опциона.
             </summary>
-      <returns>Транзакция на экспирацию опциона.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateChangeBaseAssetLimit">
       <summary>
             Создать транзакцию на изменение клиентских параметров по базовому активу.
             </summary>
-      <returns>Транзакция на изменение клиентских параметров по базовому активу.</returns>
+      <returns>Транзакция.</returns>
     </member>
     <member name="M:StockSharp.Plaza.TransactionFactory.CreateChangeLimit(StockSharp.Messages.SecurityTypes)">
       <summary>
             Создать транзакцию на смену лимитов.
             </summary>
       <param name="securityType">Тип инструмента.</param>
-      <returns>Транзакция на смену лимитов.</returns>
+      <returns>Транзакция.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.TransactionFactory.CreateTransferPosition(StockSharp.Messages.SecurityTypes)">
+      <summary>
+            Создать транзакцию переноса позиции между БФ.
+            </summary>
+      <param name="securityType">Тип инструмента.</param>
+      <returns>Транзакция.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.TransactionFactory.CreateCentralStrike">
+      <summary>
+            Создать транзакцию изменения центрального страйка.
+            </summary>
+      <returns>Транзакция.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.TransactionFactory.CreateTransaction(System.String,System.Nullable{System.Int64},StockSharp.Messages.Message)">
+      <summary>
+            Создать транзакцию.
+            </summary>
+      <param name="messageName">Название транзакции.</param>
+      <param name="transactionId">Номер транзакции. Может отсутствовать.</param>
+      <param name="message">Сообщение. Может отсутствовать.</param>
+      <returns>Транзакция.</returns>
     </member>
     <member name="P:StockSharp.Plaza.TransactionFactory.BrokerCode">
       <summary>

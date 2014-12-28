@@ -80,22 +80,22 @@
             Localized strings.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str1Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CannotCreateConsoleWindowKey">
             <summary>
             Cannot create a console window.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str2Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnknownLevelLogKey">
             <summary>
             Unknown level of logs.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.NameFileNotContainFileNameKey">
             <summary>
             Name of file {0} does not contain a file name.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str4Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.RollerFileIndexMustGreatZeroKey">
             <summary>
             Roller file index must be greater than zero.
             </summary>
@@ -13632,7 +13632,7 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str2862Key">
             <summary>
-            market depths'
+            market depths
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str2863Key">
@@ -21275,6 +21275,16 @@
             Strategy loading was cancelled.
             </summary>
         </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.CentralStrikeSecuritiesKey">
+            <summary>
+            Central strike securities
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.MarketMakerAgreementsKey">
+            <summary>
+            Market-maker agreements
+            </summary>
+        </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
             <summary>
             Get localized string.
@@ -21282,27 +21292,32 @@
             <param name="resourceId">Resource unique key.</param>
             <returns>Localized string.</returns>
         </member>
+        <member name="E:StockSharp.Localization.LocalizedStrings.Missing">
+            <summary>
+            Error handler to track missed translations or resource keys.
+            </summary>
+        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.ActiveLanguage">
             <summary>
             Current language.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str1">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CannotCreateConsoleWindow">
             <summary>
             Cannot create a console window.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str2">
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnknownLevelLog">
             <summary>
             Unknown level of logs.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.NameFileNotContainFileName">
             <summary>
             Name of file {0} does not contain a file name.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str4">
+        <member name="P:StockSharp.Localization.LocalizedStrings.RollerFileIndexMustGreatZero">
             <summary>
             Roller file index must be greater than zero.
             </summary>
@@ -34839,7 +34854,7 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str2862">
             <summary>
-            market depths'
+            market depths
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str2863">
@@ -42480,6 +42495,16 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.StrategyLoadingCancelled">
             <summary>
             Strategy loading was cancelled.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.CentralStrikeSecurities">
+            <summary>
+            Central strike securities
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.MarketMakerAgreements">
+            <summary>
+            Market-maker agreements
             </summary>
         </member>
     </members>
