@@ -86,7 +86,6 @@ namespace StockSharp.Hydra.Oanda
 				return new[]
 				{
 					typeof(Candle),
-					typeof(Trade),
 					typeof(Level1ChangeMessage)
 				}; 
 			}

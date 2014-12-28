@@ -287,6 +287,26 @@ namespace StockSharp.Hydra.HydraServer
 						stream.Position = 0;
 						info.Read(stream);
 
+						// TODO Remove after few releases
+						if (dataType == typeof(Trade))
+						{
+							dataType = typeof(ExecutionMessage);
+							arg = ExecutionTypes.Tick;
+						}
+						else if (dataType == typeof(OrderLogItem))
+						{
+							dataType = typeof(ExecutionMessage);
+							arg = ExecutionTypes.OrderLog;
+						}
+						else if (dataType == typeof(MarketDepth))
+						{
+							dataType = typeof(QuoteChangeMessage);
+						}
+						else if (dataType.IsSubclassOf(typeof(Candle)))
+						{
+							dataType = dataType.ToCandleMessageType();
+						}
+
 						RaiseDataLoaded(security.Security, dataType, arg, date, info.Count);
 					}
 				}

@@ -373,18 +373,18 @@ namespace StockSharp.Hydra.Core
 			get { return Enumerable.Empty<CandleSeries>(); }
 		}
 
-		private void SafeSave<T>(Security security, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors)
+		private void SafeSave<T>(Security security, Type messageType, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors)
 		{
-			SafeSave(security, values, getTime, getErrors, (s, d, f) => (IMarketDataStorage<T>)StorageRegistry.GetStorage(s, typeof(T), null, d, f));
+			SafeSave(security, messageType, arg, values, getTime, getErrors, (s, d, f) => (IMarketDataStorage<T>)StorageRegistry.GetStorage(s, typeof(T), null, d, f));
 		}
 
-		private void SafeSave<T>(Security security, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> errorChecks, Func<Security, IMarketDataDrive, StorageFormats, IMarketDataStorage<T>> getStorage, object arg = null)
+		private void SafeSave<T>(Security security, Type messageType, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors, Func<Security, IMarketDataDrive, StorageFormats, IMarketDataStorage<T>> getStorage)
 		{
 			if (Settings.MaxErrorCount == 0)
 			{
 				var valuesWithResult = values.Select(v =>
 				{
-					foreach (var check in errorChecks)
+					foreach (var check in getErrors)
 					{
 						var msg = check(v);
 
@@ -402,7 +402,7 @@ namespace StockSharp.Hydra.Core
 					if (!pair.Key.IsEmpty())
 					{
 						this.AddWarningLog(LocalizedStrings.Str2198Params,
-							security.Id, pair.Value.Length, typeof(T).Name, pair.Key);
+							security.Id, pair.Value.Length, messageType.Name, pair.Key);
 					}
 				}
 
@@ -425,7 +425,7 @@ namespace StockSharp.Hydra.Core
 			}
 
 			var count = values.Count();
-			RaiseDataLoaded(security, typeof(T), arg, getTime(values.Last()), count);
+			RaiseDataLoaded(security, messageType, arg, getTime(values.Last()), count);
 		}
 
 		private static Func<T, string> CreateErrorCheck<T>(Func<T, bool> check, string message)
@@ -450,7 +450,7 @@ namespace StockSharp.Hydra.Core
 		/// <param name="trades">Сделки.</param>
 		protected void SaveTrades(Security security, IEnumerable<Trade> trades)
 		{
-			SafeSave(security, trades, t => t.Time, new[]
+			SafeSave(security, typeof(ExecutionMessage), ExecutionTypes.Tick, trades, t => t.Time, new[]
 			{
 				// execution ticks (like option execution) may be a zero cost
 				// ticks for spreads may be a zero cost or less than zero
@@ -480,7 +480,7 @@ namespace StockSharp.Hydra.Core
 		/// <param name="depths">Стаканы.</param>
 		protected void SaveDepths(Security security, IEnumerable<MarketDepth> depths)
 		{
-			SafeSave(security, depths, d => d.LastChangeTime, new[]
+			SafeSave(security, typeof(QuoteChangeMessage), null, depths, d => d.LastChangeTime, new[]
 			{
 				CreateErrorCheck<MarketDepth>(d => (d.BestPair != null && d.BestPair.IsFull && d.BestBid.Price > d.BestAsk.Price), LocalizedStrings.Str2201)
 				
@@ -509,7 +509,8 @@ namespace StockSharp.Hydra.Core
 		/// <param name="items">Лог заявок.</param>
 		protected void SaveOrderLog(Security security, IEnumerable<OrderLogItem> items)
 		{
-			SafeSave(security, items, i => i.Order.Time, Enumerable.Empty<Func<OrderLogItem, string>>());
+			SafeSave(security, typeof(ExecutionMessage), ExecutionTypes.OrderLog, items,
+				i => i.Order.Time, Enumerable.Empty<Func<OrderLogItem, string>>());
 		}
 
 		/// <summary>
@@ -532,7 +533,7 @@ namespace StockSharp.Hydra.Core
 		/// <param name="messages">Изменения.</param>
 		protected void SaveLevel1Changes(Security security, IEnumerable<Level1ChangeMessage> messages)
 		{
-			SafeSave(security, messages, c => c.ServerTime, new[]
+			SafeSave(security, typeof(Level1ChangeMessage), null, messages, c => c.ServerTime, new[]
 			{
 				CreateErrorCheck<Level1ChangeMessage>(m => m.Changes.IsEmpty(), LocalizedStrings.Str920)
 			});
@@ -564,15 +565,14 @@ namespace StockSharp.Hydra.Core
 		{
 			candles
 				.GroupBy(c => Tuple.Create(c.GetType(), c.Arg))
-				.ForEach(g => SafeSave(security, g, c => c.OpenTime, new[]
+				.ForEach(g => SafeSave(security, g.Key.Item1.ToCandleMessageType(), g.Key.Item2, g, c => c.OpenTime, new[]
 				{
 					CreateErrorCheck<TCandle>(c => c.OpenPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2203),
 					CreateErrorCheck<TCandle>(c => c.HighPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2204),
 					CreateErrorCheck<TCandle>(c => c.LowPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2205),
 					CreateErrorCheck<TCandle>(c => c.ClosePrice % c.Security.PriceStep != 0, LocalizedStrings.Str2206)
 				},
-				(s, d, c) => (IMarketDataStorage<TCandle>)StorageRegistry.GetCandleStorage(g.Key.Item1, security, g.Key.Item2, d, c),
-				g.Key.Item2));
+				(s, d, c) => (IMarketDataStorage<TCandle>)StorageRegistry.GetCandleStorage(g.Key.Item1, security, g.Key.Item2, d, c)));
 		}
 
 		/// <summary>
@@ -599,27 +599,6 @@ namespace StockSharp.Hydra.Core
 		/// <param name="count">Количество последних данных.</param>
 		protected void RaiseDataLoaded(Security security, Type dataType, object arg, DateTimeOffset time, int count)
 		{
-			if (dataType == typeof(Trade))
-			{
-				dataType = typeof(ExecutionMessage);
-				arg = ExecutionTypes.Tick;
-			}
-			else if (dataType == typeof(OrderLogItem))
-			{
-				dataType = typeof(ExecutionMessage);
-				arg = ExecutionTypes.OrderLog;
-			}
-			else if (dataType == typeof(MarketDepth))
-			{
-				dataType = typeof(QuoteChangeMessage);
-			}
-			else if (dataType.IsSubclassOf(typeof(Candle)))
-			{
-				dataType = dataType.ToCandleMessageType();
-			}
-			//else
-			//	throw new ArgumentOutOfRangeException("dataType", dataType, "Неизвестный тип маркет-данных.");
-
 			if (security == null)
 				this.AddInfoLog(LocalizedStrings.Str2207Params, count, dataType.Name);
 			else
