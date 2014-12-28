@@ -11,6 +11,7 @@ namespace StockSharp.Hydra.Core
 	using MoreLinq;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Logging;
@@ -49,6 +50,7 @@ namespace StockSharp.Hydra.Core
 		private readonly MarketDataBuffer<MarketDepth> _depthsBuffer = new MarketDataBuffer<MarketDepth>();
 		private readonly MarketDataBuffer<OrderLogItem> _orderLogBuffer = new MarketDataBuffer<OrderLogItem>();
 		private readonly MarketDataBuffer<Level1ChangeMessage> _level1Buffer = new MarketDataBuffer<Level1ChangeMessage>();
+		private readonly MarketDataBuffer<Candle> _candleBuffer = new MarketDataBuffer<Candle>();
 		private readonly SynchronizedSet<News> _newsBuffer = new SynchronizedSet<News>(); 
 
 		private readonly ISecurityProvider _securityProvider;
@@ -138,6 +140,10 @@ namespace StockSharp.Hydra.Core
 			_connector.NewSecurities += OnNewSecurities;
 			_connector.NewNews += OnNewNews;
 			_connector.NewsChanged += OnNewsChanged;
+
+			var source = _connector as IExternalCandleSource;
+			if (source != null)
+				source.NewCandles += OnNewCandles;
 		}
 
 		/// <summary>
@@ -145,6 +151,10 @@ namespace StockSharp.Hydra.Core
 		/// </summary>
 		protected virtual void UnInitializeConnector()
 		{
+			var source = _connector as IExternalCandleSource;
+			if (source != null)
+				source.NewCandles -= OnNewCandles;
+
 			_connector.ProcessDataError -= OnError;
 			_connector.Connected -= OnConnected;
 			_connector.ConnectionError -= OnConnectionError;
@@ -210,7 +220,17 @@ namespace StockSharp.Hydra.Core
 		public IDictionary<Security, IEnumerable<Level1ChangeMessage>> GetLevel1Messages()
 		{
 			ThrowIfError();
-			return _level1Buffer.Get().ToDictionary(p => p.Key, p => p.Value);
+			return _level1Buffer.Get();
+		}
+
+		/// <summary>
+		/// Получить накопленные свечи.
+		/// </summary>
+		/// <returns>Накопленные свечи.</returns>
+		public IDictionary<Security, IEnumerable<Candle>> GetCandles()
+		{
+			ThrowIfError();
+			return _candleBuffer.Get();
 		}
 
 		/// <summary>
@@ -315,6 +335,11 @@ namespace StockSharp.Hydra.Core
 			msg.Changes.AddRange(changes);
 
 			AddLevel1Change(security, msg);
+		}
+
+		private void OnNewCandles(CandleSeries series, IEnumerable<Candle> candles)
+		{
+			_candleBuffer.Add(series.Security, candles);
 		}
 
 		/// <summary>

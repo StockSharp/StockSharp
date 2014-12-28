@@ -215,6 +215,7 @@
 			SaveValues(Connector.GetMarketDepths, SaveDepths);
 			SaveValues(Connector.GetOrderLog, SaveOrderLog);
 			SaveValues(Connector.GetLevel1Messages, SaveLevel1Changes);
+			SaveValues(Connector.GetCandles, SaveCandles);
 
 			SaveNews(Connector.GetNews());
 		}
