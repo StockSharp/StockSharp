@@ -2960,11 +2960,6 @@
             Offset value is incorrect.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str639ParamsKey">
-            <summary>
-            Candle {0} parameter is wrong.
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str640Key">
             <summary>
             Time-frame must be above zero.
@@ -21285,6 +21280,11 @@
             Market-maker agreements
             </summary>
         </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.EmptyCandleArgKey">
+            <summary>
+            Empty candle arg
+            </summary>
+        </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
             <summary>
             Get localized string.
@@ -24180,11 +24180,6 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.Str638">
             <summary>
             Offset value is incorrect.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str639Params">
-            <summary>
-            Candle {0} parameter is wrong.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str640">
@@ -42505,6 +42500,11 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.MarketMakerAgreements">
             <summary>
             Market-maker agreements
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.EmptyCandleArg">
+            <summary>
+            Empty candle arg
             </summary>
         </member>
     </members>
