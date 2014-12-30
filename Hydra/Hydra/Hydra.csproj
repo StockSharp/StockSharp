@@ -64,35 +64,35 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Abt.Controls.SciChart.Wpf, Version=3.1.0.5022, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
+    <Reference Include="Abt.Controls.SciChart.Wpf">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Editors.Wpf">
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Views.Wpf">
-      <HintPath>..\..\References\Actipro\ActiproSoftware.Views.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Views.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="AutomaticUpdaterWPF">
-      <HintPath>..\..\References\AutomaticUpdaterWPF.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\AutomaticUpdaterWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -151,7 +151,7 @@
       <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>

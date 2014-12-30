@@ -43,7 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
+      <HintPath>..\..\..\StockSharp (GitLab)\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Collections.dll</HintPath>
