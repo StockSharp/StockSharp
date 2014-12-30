@@ -8,6 +8,9 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 What's New
 ----------
 
+###v4.2.50:
+* (minor) Error loading candles from storage
+
 ###v4.2.49:
 * (minor) PriceStep fixes for Oanda
 * (minor) Filling empty Arg for Candles from CandleSeries
