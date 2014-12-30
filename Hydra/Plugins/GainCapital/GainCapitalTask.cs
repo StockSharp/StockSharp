@@ -136,7 +136,7 @@ namespace StockSharp.Hydra.GainCapital
 
 				if ((allSecurity ?? security).MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
 				{
-					var storage = StorageRegistry.GetMarketDepthStorage(security.Security, _settings.Drive, _settings.StorageFormat);
+					var storage = StorageRegistry.GetLevel1MessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 					var emptyDates = allDates.Except(storage.Dates).ToArray();
 
 					if (emptyDates.IsEmpty())
