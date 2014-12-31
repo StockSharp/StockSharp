@@ -154,14 +154,14 @@ namespace StockSharp.Hydra.TrueFX
 
 							try
 							{
-								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate.ToShortDateString(), security.Security.Id);
+								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate, security.Security.Id);
 								var ticks = source.LoadTickMessages(secId, emptyDate);
 								SaveLevel1Changes(security, ticks);
 							}
 							catch (Exception ex)
 							{
 								HandleError(new InvalidOperationException(LocalizedStrings.Str2295Params
-									.Put(emptyDate.ToShortDateString(), security.Security.Id), ex));
+									.Put(emptyDate, security.Security.Id), ex));
 							}
 						}
 					}

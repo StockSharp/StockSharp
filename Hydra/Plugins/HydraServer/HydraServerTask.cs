@@ -199,7 +199,7 @@ namespace StockSharp.Hydra.HydraServer
 				if (allSecurity != null)
 					supportedDataTypes = SupportedMarketDataTypes.Intersect(allSecurity.MarketDataTypes).ToArray();
 
-				this.AddInfoLog(LocalizedStrings.Str2306Params.Put(_settings.StartFrom.ToShortDateString()));
+				this.AddInfoLog(LocalizedStrings.Str2306Params.Put(_settings.StartFrom));
 
 				var hasSecurities = false;
 

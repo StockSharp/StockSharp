@@ -112,7 +112,7 @@ namespace StockSharp.Hydra.RtsCompetition
 
 			if (Competition.AllYears.Any(y => y.Year == _settings.StartFrom.Year) && (_settings.StartFrom + offset) < DateTime.Today)
 			{
-				this.AddInfoLog(LocalizedStrings.Str2306Params, _settings.StartFrom.ToShortDateString());
+				this.AddInfoLog(LocalizedStrings.Str2306Params, _settings.StartFrom);
 
 				foreach (var year in Competition.AllYears.Where(d => d.Year >= _settings.StartFrom.Year).ToArray())
 				{
@@ -155,7 +155,7 @@ namespace StockSharp.Hydra.RtsCompetition
 			}
 			else
 			{
-				this.AddInfoLog(LocalizedStrings.Str2828Params, _settings.StartFrom.ToShortDateString());
+				this.AddInfoLog(LocalizedStrings.Str2828Params, _settings.StartFrom);
 			}
 
 			return base.OnProcess();

@@ -140,7 +140,7 @@ namespace StockSharp.Hydra.Ux
 				if (_settings.IgnoreWeekends && !ExchangeBoard.Ux.WorkingTime.IsTradeDate(date, true))
 					continue;
 
-				this.AddInfoLog(LocalizedStrings.Str2823Params, date.ToShortDateString());
+				this.AddInfoLog(LocalizedStrings.Str2823Params, date);
 
 				var trades = source.LoadTrades(EntityRegistry.Securities, date);
 

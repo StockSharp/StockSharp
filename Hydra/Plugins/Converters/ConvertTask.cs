@@ -194,7 +194,7 @@ namespace StockSharp.Hydra.Converters
 		{
 			var hasSecurities = false;
 
-			this.AddInfoLog(LocalizedStrings.Str2306Params.Put(_settings.StartFrom.ToShortDateString()));
+			this.AddInfoLog(LocalizedStrings.Str2306Params.Put(_settings.StartFrom));
 
 			foreach (var security in GetWorkingSecurities())
 			{

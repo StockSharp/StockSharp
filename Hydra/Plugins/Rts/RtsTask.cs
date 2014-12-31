@@ -204,7 +204,7 @@ namespace StockSharp.Hydra.Rts
 				if (_settings.IgnoreWeekends && !ExchangeBoard.Forts.WorkingTime.IsTradeDate(date, true))
 					continue;
 
-				this.AddInfoLog(LocalizedStrings.Str2823Params, date.ToShortDateString());
+				this.AddInfoLog(LocalizedStrings.Str2823Params, date);
 
 				var trades = source.LoadTrades(EntityRegistry.Securities, date);
 
@@ -235,7 +235,7 @@ namespace StockSharp.Hydra.Rts
 					if (_settings.IgnoreWeekends && !usdRur.Board.WorkingTime.IsTradeDate(date, true))
 						continue;
 
-					this.AddInfoLog(LocalizedStrings.Str2294Params, date.ToShortDateString(), usdRur.Id);
+					this.AddInfoLog(LocalizedStrings.Str2294Params, date, usdRur.Id);
 
 					var rate = FortsDailyData.GetRate(usdRur, date, date.Add(TimeSpan.FromDays(1)));
 

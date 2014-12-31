@@ -287,7 +287,7 @@ namespace StockSharp.Hydra.IQFeed
 						if (_settings.IgnoreWeekends && !security.IsTradeDate(date))
 							continue;
 
-						this.AddInfoLog(LocalizedStrings.Str2294Params, date.ToShortDateString(), security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2294Params, date, security.Security.Id);
 
 						bool isSuccess;
 						var trades = Connector.Connector.GetHitoricalLevel1(security.Security.ToSecurityId(), _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
@@ -320,7 +320,7 @@ namespace StockSharp.Hydra.IQFeed
 						if (_settings.IgnoreWeekends && !security.IsTradeDate(date))
 							continue;
 
-						this.AddInfoLog(LocalizedStrings.Str2298Params, series, date.ToShortDateString(), security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str2298Params, series, date, security.Security.Id);
 
 						bool isSuccess;
 						var candles = Connector.Connector.GetHitoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);

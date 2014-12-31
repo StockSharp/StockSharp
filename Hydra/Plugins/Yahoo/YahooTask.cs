@@ -190,14 +190,14 @@ namespace StockSharp.Hydra.Yahoo
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate.ToShortDateString(), security.Security.Id);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
 							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, emptyDate, emptyDate + TimeSpan.FromDays(1).Max((TimeSpan)series.Arg));
 							SaveCandles(security, candles);
 						}
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, emptyDate.ToShortDateString(), security.Security.Id), ex));
+								.Put(series.Arg, emptyDate, security.Security.Id), ex));
 						}
 					}
 				}

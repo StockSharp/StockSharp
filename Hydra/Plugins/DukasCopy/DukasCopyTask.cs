@@ -182,14 +182,14 @@ namespace StockSharp.Hydra.DukasCopy
 
 							try
 							{
-								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate.ToShortDateString(), security.Security.Id);
+								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate, security.Security.Id);
 								var ticks = source.LoadTickMessages(security.Security, emptyDate);
 								SaveLevel1Changes(security, ticks);
 							}
 							catch (Exception ex)
 							{
 								HandleError(new InvalidOperationException(LocalizedStrings.Str2295Params
-									.Put(emptyDate.ToShortDateString(), security.Security.Id), ex));
+									.Put(emptyDate, security.Security.Id), ex));
 							}
 						}
 					}
@@ -227,14 +227,14 @@ namespace StockSharp.Hydra.DukasCopy
 
 						try
 						{
-							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate.ToShortDateString(), security.Security.Id);
+							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
 							var candles = source.LoadCandles(security.Security, (TimeSpan)series.Arg, emptyDate, _settings.Side);
 							SaveCandles(security, candles);
 						}
 						catch (Exception ex)
 						{
 							HandleError(new InvalidOperationException(LocalizedStrings.Str2299Params
-								.Put(series.Arg, emptyDate.ToShortDateString(), security.Security.Id), ex));
+								.Put(series.Arg, emptyDate, security.Security.Id), ex));
 						}
 					}
 				}

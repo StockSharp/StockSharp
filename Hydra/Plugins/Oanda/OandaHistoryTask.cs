@@ -130,14 +130,14 @@ namespace StockSharp.Hydra.Oanda
 
 					try
 					{
-						this.AddInfoLog(LocalizedStrings.Str3838Params, emptyDate.ToShortDateString(), security.Security.Id);
+						this.AddInfoLog(LocalizedStrings.Str3838Params, emptyDate, security.Security.Id);
 						var rates = source.LoadRates(security.Security, emptyDate, emptyDate);
 						SaveLevel1Changes(security, rates);
 					}
 					catch (Exception ex)
 					{
 						HandleError(new InvalidOperationException(LocalizedStrings.Str3839Params
-							.Put(emptyDate.ToShortDateString(), security.Security.Id), ex));
+							.Put(emptyDate, security.Security.Id), ex));
 					}
 				}
 			}
