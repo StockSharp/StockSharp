@@ -68,6 +68,17 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
+		/// Уровень логирования для источника.
+		/// </summary>
+		public override LogLevels LogLevel
+		{
+			get
+			{
+				return Settings == null ? base.LogLevel : Settings.LogLevel;
+			}
+		}
+
+		/// <summary>
 		/// Краткая инструкция по настройке и работе.
 		/// </summary>
 		public abstract string Description { get; }

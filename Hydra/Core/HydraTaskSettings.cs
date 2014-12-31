@@ -322,6 +322,28 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
+		/// Уровень логирования.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[DisplayNameLoc(LocalizedStrings.Str5Key)]
+		[DescriptionLoc(LocalizedStrings.Str10Key)]
+		[Ignore]
+		[PropertyOrder(10)]
+		public LogLevels LogLevel
+		{
+			get
+			{
+				var str = ExtensionInfo.TryGetValue("LogLevel");
+				return str == null ? LogLevels.Inherit : str.To<LogLevels>();
+			}
+			set
+			{
+				ExtensionInfo["LogLevel"] = value.To<string>();
+				NotifyPropertyChanged("LogLevel");
+			}
+		}
+
+		/// <summary>
 		/// Расширенная информация, храняющая в себе дополнительные настройки задачи.
 		/// </summary>
 		[Browsable(false)]
@@ -433,28 +455,6 @@ namespace StockSharp.Hydra.Core
 					ExtensionInfo.Add("ReConnectionSettings", _reConnectionSettings.Save());
 
 				return _reConnectionSettings;
-			}
-		}
-
-		/// <summary>
-		/// Уровень логирования.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
-		[DisplayNameLoc(LocalizedStrings.Str5Key)]
-		[DescriptionLoc(LocalizedStrings.Str10Key)]
-		[Ignore]
-		[PropertyOrder(0)]
-		public LogLevels LogLevel
-		{
-			get
-			{
-				var str = ExtensionInfo.TryGetValue("LogLevel");
-				return str == null ? LogLevels.Inherit : str.To<LogLevels>();
-			}
-			set
-			{
-				ExtensionInfo["LogLevel"] = value.To<string>();
-				NotifyPropertyChanged("LogLevel");
 			}
 		}
 

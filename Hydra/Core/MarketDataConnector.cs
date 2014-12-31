@@ -439,7 +439,7 @@ namespace StockSharp.Hydra.Core
 				{
 					settings.Load(connectorSettings.ReConnectionSettings.Save());
 
-					t.LogLevel = connectorSettings.LogLevel;
+					t.LogLevel = _task.LogLevel;
 				}
 
 				_task.InitTrader(t);
