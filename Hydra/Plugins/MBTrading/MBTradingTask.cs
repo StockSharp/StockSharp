@@ -199,7 +199,11 @@ namespace StockSharp.Hydra.MBTrading
 							{
 								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate, security.Security.Id);
 								var ticks = source.LoadTickMessages(secId, emptyDate, emptyDate);
-								SaveLevel1Changes(security, ticks);
+
+								if (ticks.Any())
+									SaveLevel1Changes(security, ticks);
+								else
+									this.AddDebugLog(LocalizedStrings.NoData);
 
 								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Level1ChangeMessage), null));
 							}
@@ -211,6 +215,8 @@ namespace StockSharp.Hydra.MBTrading
 						}
 					}
 				}
+				else
+					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Level1ChangeMessage).Name);
 
 				if (!CanProcess())
 					break;

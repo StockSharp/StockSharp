@@ -271,12 +271,20 @@ namespace StockSharp.Hydra.HydraServer
 						return false;
 
 					if (_settings.IgnoreWeekends && !security.IsTradeDate(date))
+					{
+						this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 						continue;
+					}
+
+					this.AddDebugLog(LocalizedStrings.StartDownloding, dataType, arg, date, security.Security.Id);
 
 					using (var stream = remoteStorage.LoadStream(date))
 					{
 						if (stream == Stream.Null)
+						{
+							this.AddDebugLog(LocalizedStrings.NoData);
 							continue;
+						}
 
 						this.AddInfoLog(LocalizedStrings.Str2309Params.Put(date));
 

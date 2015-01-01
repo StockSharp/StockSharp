@@ -18,10 +18,9 @@ namespace StockSharp.Hydra.DukasCopy
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	[Category(TaskCategories.Forex)]
 	[TaskDisplayName(_sourceName)]
@@ -184,7 +183,11 @@ namespace StockSharp.Hydra.DukasCopy
 							{
 								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate, security.Security.Id);
 								var ticks = source.LoadTickMessages(security.Security, emptyDate);
-								SaveLevel1Changes(security, ticks);
+
+								if (ticks.Any())
+									SaveLevel1Changes(security, ticks);
+								else
+									this.AddDebugLog(LocalizedStrings.NoData);
 							}
 							catch (Exception ex)
 							{
@@ -194,6 +197,9 @@ namespace StockSharp.Hydra.DukasCopy
 						}
 					}
 				}
+				else
+					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Level1ChangeMessage).Name);
+
 				#endregion
 
 				if (!CanProcess())
@@ -229,7 +235,11 @@ namespace StockSharp.Hydra.DukasCopy
 						{
 							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
 							var candles = source.LoadCandles(security.Security, (TimeSpan)series.Arg, emptyDate, _settings.Side);
-							SaveCandles(security, candles);
+							
+							if (candles.Any())
+								SaveCandles(security, candles);
+							else
+								this.AddDebugLog(LocalizedStrings.NoData);
 						}
 						catch (Exception ex)
 						{

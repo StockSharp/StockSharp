@@ -54,7 +54,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 			}
 
 			[Category(_category)]
-			[DisplayNameLoc(LocalizedStrings.Str5Key)]
+			[DisplayNameLoc(LocalizedStrings.Str9Key)]
 			[DescriptionLoc(LocalizedStrings.Str2521Key)]
 			[PropertyOrder(2)]
 			public ServerLogLevels ServerLogLevel

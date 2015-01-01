@@ -204,13 +204,20 @@ namespace StockSharp.Hydra.Finam
 								break;
 
 							if (_settings.IgnoreWeekends && !security.IsTradeDate(emptyDate))
+							{
+								this.AddDebugLog(LocalizedStrings.WeekEndDate, emptyDate);
 								continue;
+							}
 
 							try
 							{
 								this.AddInfoLog(LocalizedStrings.Str2294Params, emptyDate, security.Security.Id);
 								var trades = source.GetTrades(security.Security, emptyDate, emptyDate);
-								SaveTrades(security, trades);
+								
+								if (trades.Any())
+									SaveTrades(security, trades);
+								else
+									this.AddDebugLog(LocalizedStrings.NoData);
 
 								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Trade), null));
 							}
@@ -222,6 +229,9 @@ namespace StockSharp.Hydra.Finam
 						}
 					}
 				}
+				else
+					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Trade).Name);
+
 				#endregion
 
 				if (!CanProcess())
@@ -254,13 +264,20 @@ namespace StockSharp.Hydra.Finam
 							break;
 
 						if (_settings.IgnoreWeekends && !security.IsTradeDate(emptyDate))
+						{
+							this.AddDebugLog(LocalizedStrings.WeekEndDate, emptyDate);
 							continue;
+						}
 
 						try
 						{
 							this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
 							var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, emptyDate, emptyDate);
-							SaveCandles(security, candles);
+							
+							if (candles.Any())
+								SaveCandles(security, candles);
+							else
+								this.AddDebugLog(LocalizedStrings.NoData);
 
 							File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
 						}

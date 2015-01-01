@@ -273,9 +273,7 @@ namespace StockSharp.Hydra.IQFeed
 				if (!CanProcess())
 					break;
 
-				if (security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage))
-					// TODO Remove one month later
-					|| security.MarketDataTypesSet.Contains(typeof(Trade)))
+				if (security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
 				{
 					var tradeStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 
@@ -285,7 +283,10 @@ namespace StockSharp.Hydra.IQFeed
 							break;
 
 						if (_settings.IgnoreWeekends && !security.IsTradeDate(date))
+						{
+							this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 							continue;
+						}
 
 						this.AddInfoLog(LocalizedStrings.Str2294Params, date, security.Security.Id);
 
@@ -293,11 +294,18 @@ namespace StockSharp.Hydra.IQFeed
 						var trades = Connector.Connector.GetHitoricalLevel1(security.Security.ToSecurityId(), _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
-							SaveLevel1Changes(security, trades);
+						{
+							if (trades.Any())
+								SaveLevel1Changes(security, trades);
+							else
+								this.AddDebugLog(LocalizedStrings.NoData);
+						}
 						else
 							this.AddErrorLog(LocalizedStrings.Str2550);
 					}
 				}
+				else
+					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Level1ChangeMessage).Name);
 
 				foreach (var series in security.CandleSeries)
 				{
@@ -318,7 +326,10 @@ namespace StockSharp.Hydra.IQFeed
 							break;
 
 						if (_settings.IgnoreWeekends && !security.IsTradeDate(date))
+						{
+							this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 							continue;
+						}
 
 						this.AddInfoLog(LocalizedStrings.Str2298Params, series, date, security.Security.Id);
 
@@ -326,7 +337,12 @@ namespace StockSharp.Hydra.IQFeed
 						var candles = Connector.Connector.GetHitoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
-							SaveCandles(security, candles);
+						{
+							if (candles.Any())
+								SaveCandles(security, candles);
+							else
+								this.AddDebugLog(LocalizedStrings.NoData);
+						}
 						else
 							this.AddErrorLog(LocalizedStrings.Str2550);
 					}

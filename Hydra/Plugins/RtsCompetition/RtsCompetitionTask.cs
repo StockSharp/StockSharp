@@ -129,7 +129,10 @@ namespace StockSharp.Hydra.RtsCompetition
 							break;
 
 						if (_settings.IgnoreWeekends && !ExchangeBoard.Forts.WorkingTime.IsTradeDate(date, true))
+						{
+							this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 							continue;
+						}
 
 						var canUpdateFrom = true;
 
@@ -141,8 +144,15 @@ namespace StockSharp.Hydra.RtsCompetition
 								break;
 							}
 
-							foreach (var group in yearCompetition.GetTrades(EntityRegistry.Securities, member, date).GroupBy(i => i.Order.Security))
-								SaveOrderLog(group.Key, group.OrderBy(i => i.Order.Time));
+							var trades = yearCompetition.GetTrades(EntityRegistry.Securities, member, date);
+
+							if (trades.Any())
+							{
+								foreach (var group in trades.GroupBy(i => i.Order.Security))
+									SaveOrderLog(group.Key, group.OrderBy(i => i.Order.Time));	
+							}
+							else
+								this.AddDebugLog(LocalizedStrings.NoData);
 						}
 
 						if (canUpdateFrom)

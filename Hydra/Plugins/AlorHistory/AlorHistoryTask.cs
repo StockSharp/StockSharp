@@ -173,13 +173,20 @@ namespace StockSharp.Hydra.AlorHistory
 								break;
 
 							if (_settings.IgnoreWeekends && !security.IsTradeDate(emptyDate))
+							{
+								this.AddDebugLog(LocalizedStrings.WeekEndDate, emptyDate);
 								continue;
+							}
 
 							try
 							{
 								this.AddInfoLog(LocalizedStrings.Str2298Params, series.Arg, emptyDate, security.Security.Id);
 								var candles = source.GetCandles(security.Security, (TimeSpan)series.Arg, emptyDate, emptyDate);
-								SaveCandles(security, candles);
+								
+								if (candles.Any())
+									SaveCandles(security, candles);
+								else
+									this.AddDebugLog(LocalizedStrings.NoData);
 
 								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
 							}

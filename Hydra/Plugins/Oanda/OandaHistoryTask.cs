@@ -118,7 +118,10 @@ namespace StockSharp.Hydra.Oanda
 					break;
 
 				if (!security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
+				{
+					this.AddDebugLog(LocalizedStrings.MarketDataNotEnabled, security.Security.Id, typeof(Level1ChangeMessage).Name);
 					break;
+				}
 
 				var storage = StorageRegistry.GetLevel1MessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 				var emptyDates = allDates.Except(storage.Dates).ToArray();
@@ -132,7 +135,11 @@ namespace StockSharp.Hydra.Oanda
 					{
 						this.AddInfoLog(LocalizedStrings.Str3838Params, emptyDate, security.Security.Id);
 						var rates = source.LoadRates(security.Security, emptyDate, emptyDate);
-						SaveLevel1Changes(security, rates);
+
+						if (rates.Any())
+							SaveLevel1Changes(security, rates);
+						else
+							this.AddDebugLog(LocalizedStrings.NoData);
 					}
 					catch (Exception ex)
 					{

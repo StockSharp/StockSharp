@@ -325,8 +325,8 @@ namespace StockSharp.Hydra.Core
 		/// Уровень логирования.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str167Key)]
-		[DisplayNameLoc(LocalizedStrings.Str5Key)]
-		[DescriptionLoc(LocalizedStrings.Str10Key)]
+		[DisplayNameLoc(LocalizedStrings.Str9Key)]
+		[DescriptionLoc(LocalizedStrings.Str9Key, true)]
 		[Ignore]
 		[PropertyOrder(10)]
 		public LogLevels LogLevel

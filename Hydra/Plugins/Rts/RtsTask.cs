@@ -202,21 +202,31 @@ namespace StockSharp.Hydra.Rts
 					break;
 
 				if (_settings.IgnoreWeekends && !ExchangeBoard.Forts.WorkingTime.IsTradeDate(date, true))
+				{
+					this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 					continue;
+				}
 
 				this.AddInfoLog(LocalizedStrings.Str2823Params, date);
 
 				var trades = source.LoadTrades(EntityRegistry.Securities, date);
 
-				if (allSecurity == null)
-					trades = trades.Where(p => secMap.Contains(p.Key)).ToDictionary();
-
-				foreach (var pair in trades)
+				if (trades.Count == 0)
 				{
-					SaveSecurity(pair.Key);
-					SaveTrades(pair.Key, pair.Value);
+					this.AddDebugLog(LocalizedStrings.NoData);
 				}
+				else
+				{
+					if (allSecurity == null)
+						trades = trades.Where(p => secMap.Contains(p.Key)).ToDictionary();
 
+					foreach (var pair in trades)
+					{
+						SaveSecurity(pair.Key);
+						SaveTrades(pair.Key, pair.Value);
+					}
+				}
+				
 				_settings.StartFrom = date.AddDays(1);
 				SaveSettings();
 			}
@@ -233,18 +243,28 @@ namespace StockSharp.Hydra.Rts
 						break;
 
 					if (_settings.IgnoreWeekends && !usdRur.Board.WorkingTime.IsTradeDate(date, true))
+					{
+						this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 						continue;
+					}
 
 					this.AddInfoLog(LocalizedStrings.Str2294Params, date, usdRur.Id);
 
 					var rate = FortsDailyData.GetRate(usdRur, date, date.Add(TimeSpan.FromDays(1)));
 
-					SaveTrades(usdRur, rate.Select(p => new Trade
+					if (rate.Count == 0)
 					{
-						Security = usdRur,
-						Price = p.Value,
-						Time = p.Key,
-					}).OrderBy(t => t.Time));
+						this.AddDebugLog(LocalizedStrings.NoData);
+					}
+					else
+					{
+						SaveTrades(usdRur, rate.Select(p => new Trade
+						{
+							Security = usdRur,
+							Price = p.Value,
+							Time = p.Key,
+						}).OrderBy(t => t.Time));	
+					}
 
 					_settings.UsdRurStartFrom = date.AddDays(1);
 					SaveSettings();

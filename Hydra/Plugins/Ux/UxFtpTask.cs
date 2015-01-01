@@ -138,19 +138,29 @@ namespace StockSharp.Hydra.Ux
 					break;
 
 				if (_settings.IgnoreWeekends && !ExchangeBoard.Ux.WorkingTime.IsTradeDate(date, true))
+				{
+					this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 					continue;
+				}
 
 				this.AddInfoLog(LocalizedStrings.Str2823Params, date);
 
 				var trades = source.LoadTrades(EntityRegistry.Securities, date);
 
-				if (allSecurity == null)
-					trades = trades.Where(p => secMap.Contains(p.Key)).ToDictionary();
-
-				foreach (var pair in trades)
+				if (trades.Count == 0)
 				{
-					SaveSecurity(pair.Key);
-					SaveTrades(pair.Key, pair.Value);
+					this.AddDebugLog(LocalizedStrings.NoData);
+				}
+				else
+				{
+					if (allSecurity == null)
+						trades = trades.Where(p => secMap.Contains(p.Key)).ToDictionary();
+
+					foreach (var pair in trades)
+					{
+						SaveSecurity(pair.Key);
+						SaveTrades(pair.Key, pair.Value);
+					}
 				}
 
 				_settings.StartFrom = date.AddDays(1);
