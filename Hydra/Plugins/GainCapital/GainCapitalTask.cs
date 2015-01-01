@@ -3,6 +3,7 @@ namespace StockSharp.Hydra.GainCapital
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -33,6 +34,7 @@ namespace StockSharp.Hydra.GainCapital
 			public GainCapitalSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[TaskCategory(_sourceName)]
@@ -54,6 +56,16 @@ namespace StockSharp.Hydra.GainCapital
 				get { return ExtensionInfo["DayOffset"].To<int>(); }
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
+			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
+			[PropertyOrder(3)]
+			public TempFiles UseTemporaryFiles
+			{
+				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+			}
 		}
 
 		private GainCapitalSettings _settings;
@@ -67,6 +79,7 @@ namespace StockSharp.Hydra.GainCapital
 				_settings.DayOffset = 1;
 				_settings.StartFrom = new DateTime(2000, 1, 1);
 				_settings.Interval = TimeSpan.FromDays(1);
+				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 			}
 		}
 
@@ -99,7 +112,10 @@ namespace StockSharp.Hydra.GainCapital
 
 		protected override TimeSpan OnProcess()
 		{
-			var source = new GainCapitalSource { DumpFolder = GetTempPath() };
+			var source = new GainCapitalSource();
+
+			if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+				source.DumpFolder = GetTempPath();
 
 			var allSecurity = this.GetAllSecurity();
 
@@ -161,6 +177,9 @@ namespace StockSharp.Hydra.GainCapital
 									SaveLevel1Changes(security, ticks);
 								else
 									this.AddDebugLog(LocalizedStrings.NoData);
+
+								if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Level1ChangeMessage), null));
 							}
 							catch (Exception ex)
 							{

@@ -3,6 +3,7 @@ namespace StockSharp.Hydra.DukasCopy
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -34,6 +35,7 @@ namespace StockSharp.Hydra.DukasCopy
 			public DukasCopySettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[TaskCategory(_sourceName)]
@@ -65,6 +67,16 @@ namespace StockSharp.Hydra.DukasCopy
 				get { return ExtensionInfo["DayOffset"].To<int>(); }
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
+			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
+			[PropertyOrder(3)]
+			public TempFiles UseTemporaryFiles
+			{
+				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+			}
 		}
 
 		private DukasCopySettings _settings;
@@ -88,6 +100,7 @@ namespace StockSharp.Hydra.DukasCopy
 				_settings.StartFrom = new DateTime(2006, 1, 1);
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.Side = Sides.Buy;
+				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 			}
 		}
 
@@ -136,6 +149,9 @@ namespace StockSharp.Hydra.DukasCopy
 					).ToArray();
 
 			var source = new DukasCopySource();
+
+			if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+				source.DumpFolder = GetTempPath();
 
 			if (selectedSecurities.IsEmpty())
 			{
@@ -188,6 +204,9 @@ namespace StockSharp.Hydra.DukasCopy
 									SaveLevel1Changes(security, ticks);
 								else
 									this.AddDebugLog(LocalizedStrings.NoData);
+
+								if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Level1ChangeMessage), null));
 							}
 							catch (Exception ex)
 							{
@@ -240,6 +259,9 @@ namespace StockSharp.Hydra.DukasCopy
 								SaveCandles(security, candles);
 							else
 								this.AddDebugLog(LocalizedStrings.NoData);
+
+							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
 						}
 						catch (Exception ex)
 						{

@@ -30,7 +30,7 @@ namespace StockSharp.Hydra.AlorHistory
 			public AlorHistorySettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
+				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[TaskCategory(_sourceName)]
@@ -62,6 +62,16 @@ namespace StockSharp.Hydra.AlorHistory
 				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
+			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
+			[PropertyOrder(3)]
+			public TempFiles UseTemporaryFiles
+			{
+				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+			}
 		}
 
 		private AlorHistorySettings _settings;
@@ -85,6 +95,7 @@ namespace StockSharp.Hydra.AlorHistory
 				_settings.StartFrom = new DateTime(2001, 1, 1);
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.IgnoreWeekends = true;
+				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 			}
 		}
 
@@ -132,7 +143,10 @@ namespace StockSharp.Hydra.AlorHistory
 				return TimeSpan.MaxValue;
 			}
 
-			var source = new AlorHistorySource { DumpFolder = GetTempPath() };
+			var source = new AlorHistorySource();
+
+			if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+				source.DumpFolder = GetTempPath();
 
 			var startDate = _settings.StartFrom;
 			var endDate = DateTime.Today - TimeSpan.FromDays(_settings.Offset);
@@ -188,7 +202,8 @@ namespace StockSharp.Hydra.AlorHistory
 								else
 									this.AddDebugLog(LocalizedStrings.NoData);
 
-								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
+								if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
 							}
 							catch (Exception ex)
 							{

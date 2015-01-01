@@ -128,6 +128,7 @@
     <Compile Include="HydraTaskSecurity.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="TaskCategories.cs" />
+    <Compile Include="TempFiles.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo.History\Algo.History.csproj">

@@ -33,7 +33,7 @@ namespace StockSharp.Hydra.Finam
 			public FinamSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
+				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[TaskCategory(_sourceName)]
@@ -65,6 +65,16 @@ namespace StockSharp.Hydra.Finam
 				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
+			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
+			[PropertyOrder(3)]
+			public TempFiles UseTemporaryFiles
+			{
+				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+			}
 		}
 
 		private FinamSettings _settings;
@@ -89,6 +99,7 @@ namespace StockSharp.Hydra.Finam
 				_settings.StartFrom = new DateTime(2001, 1, 1);
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.IgnoreWeekends = true;
+				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 			}
 
 			_finamSecurityStorage = new FinamSecurityStorage(EntityRegistry);
@@ -138,7 +149,10 @@ namespace StockSharp.Hydra.Finam
 
 		protected override TimeSpan OnProcess()
 		{
-			var source = new FinamHistorySource { DumpFolder = GetTempPath() };
+			var source = new FinamHistorySource();
+
+			if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+				source.DumpFolder = GetTempPath();
 
 			var allSecurity = this.GetAllSecurity();
 
@@ -219,7 +233,8 @@ namespace StockSharp.Hydra.Finam
 								else
 									this.AddDebugLog(LocalizedStrings.NoData);
 
-								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Trade), null));
+								if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Trade), null));
 							}
 							catch (Exception ex)
 							{
@@ -279,7 +294,8 @@ namespace StockSharp.Hydra.Finam
 							else
 								this.AddDebugLog(LocalizedStrings.NoData);
 
-							File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
+							if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(TimeFrameCandle), series.Arg));
 						}
 						catch (Exception ex)
 						{

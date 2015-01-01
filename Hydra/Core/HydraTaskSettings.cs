@@ -22,11 +22,11 @@ namespace StockSharp.Hydra.Core
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.PropertyGrid;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid;
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 	using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Настройки задачи <see cref="IHydraTask"/>.

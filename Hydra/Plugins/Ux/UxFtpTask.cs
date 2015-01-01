@@ -3,6 +3,7 @@ namespace StockSharp.Hydra.Ux
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -30,7 +31,7 @@ namespace StockSharp.Hydra.Ux
 			public UxFtpSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
+				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[TaskCategory(_sourceName)]
@@ -72,6 +73,16 @@ namespace StockSharp.Hydra.Ux
 				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
+			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
+			[PropertyOrder(4)]
+			public TempFiles UseTemporaryFiles
+			{
+				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+			}
 		}
 
 		private UxFtpSettings _settings;
@@ -88,6 +99,7 @@ namespace StockSharp.Hydra.Ux
 			_settings.IsSystemOnly = true;
 			_settings.Interval = TimeSpan.FromDays(1);
 			_settings.IgnoreWeekends = true;
+			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 		}
 
 		public override Uri Icon
@@ -115,9 +127,11 @@ namespace StockSharp.Hydra.Ux
 			var source = new RtsHistorySource
 			{
 				ExchangeBoard = ExchangeBoard.Ux,
-				DumpFolder = GetTempPath(),
 				IsSystemOnly = _settings.IsSystemOnly,
 			};
+
+			if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+				source.DumpFolder = GetTempPath();
 
 			// если фильтр по инструментам выключен (выбран инструмент все инструменты)
 			var allSecurity = this.GetAllSecurity();
@@ -162,6 +176,9 @@ namespace StockSharp.Hydra.Ux
 						SaveTrades(pair.Key, pair.Value);
 					}
 				}
+
+				if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+					Directory.Delete(source.GetDumpFile(null, date, date, typeof(Trade), null), true);
 
 				_settings.StartFrom = date.AddDays(1);
 				SaveSettings();

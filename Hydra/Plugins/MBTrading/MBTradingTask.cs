@@ -35,12 +35,23 @@ namespace StockSharp.Hydra.MBTrading
 			public MBTradingSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
+			[DescriptionLoc(LocalizedStrings.Str2283Key)]
+			[PropertyOrder(0)]
+			public DateTime StartFrom
+			{
+				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
+				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
 			[TaskCategory(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
 			[DescriptionLoc(LocalizedStrings.Str1445Key, true)]
-			[PropertyOrder(0)]
+			[PropertyOrder(1)]
 			public string Login
 			{
 				get { return (string)ExtensionInfo["Login"]; }
@@ -50,7 +61,7 @@ namespace StockSharp.Hydra.MBTrading
 			[TaskCategory(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
 			[DescriptionLoc(LocalizedStrings.Str1448Key)]
-			[PropertyOrder(1)]
+			[PropertyOrder(2)]
 			public SecureString Password
 			{
 				get { return ExtensionInfo["Password"].To<SecureString>(); }
@@ -60,7 +71,7 @@ namespace StockSharp.Hydra.MBTrading
 			[TaskCategory(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3790Key)]
 			[DescriptionLoc(LocalizedStrings.Str3791Key)]
-			[PropertyOrder(1)]
+			[PropertyOrder(3)]
 			public SecureString Pin
 			{
 				get { return ExtensionInfo["Pin"].To<SecureString>(); }
@@ -70,6 +81,7 @@ namespace StockSharp.Hydra.MBTrading
 			[TaskCategory(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
+			[PropertyOrder(4)]
 			public int DayOffset
 			{
 				get { return ExtensionInfo["DayOffset"].To<int>(); }
@@ -77,12 +89,13 @@ namespace StockSharp.Hydra.MBTrading
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
-			[DescriptionLoc(LocalizedStrings.Str2283Key)]
-			public DateTime StartFrom
+			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
+			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
+			[PropertyOrder(5)]
+			public TempFiles UseTemporaryFiles
 			{
-				get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-				set { ExtensionInfo["StartFrom"] = value.Ticks; }
+				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
 			}
 		}
 
@@ -100,6 +113,7 @@ namespace StockSharp.Hydra.MBTrading
 				_settings.Login = string.Empty;
 				_settings.Password = new SecureString();
 				_settings.Pin = new SecureString();
+				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 			}
 		}
 
@@ -151,6 +165,9 @@ namespace StockSharp.Hydra.MBTrading
 					).ToArray();
 
 			var source = CreateSource();
+
+			if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+				source.DumpFolder = GetTempPath();
 
 			if (selectedSecurities.IsEmpty())
 			{
@@ -205,7 +222,8 @@ namespace StockSharp.Hydra.MBTrading
 								else
 									this.AddDebugLog(LocalizedStrings.NoData);
 
-								File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Level1ChangeMessage), null));
+								if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+									File.Delete(source.GetDumpFile(security.Security, emptyDate, emptyDate, typeof(Level1ChangeMessage), null));
 							}
 							catch (Exception ex)
 							{

@@ -3,6 +3,7 @@ namespace StockSharp.Hydra.Rts
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -34,8 +35,7 @@ namespace StockSharp.Hydra.Rts
 			public RtsSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("UsdRurStartFrom", FortsDailyData.UsdRateMinAvailableTime);
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
+				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
 			[TaskCategory(_sourceName)]
@@ -86,6 +86,16 @@ namespace StockSharp.Hydra.Rts
 			{
 				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
+			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
+			[PropertyOrder(6)]
+			public TempFiles UseTemporaryFiles
+			{
+				get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+				set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
 			}
 
 			[Category(_usdRur)]
@@ -148,6 +158,7 @@ namespace StockSharp.Hydra.Rts
 				_settings.SaveRtsStdCombinedOnly = false;
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.IgnoreWeekends = true;
+				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 			}
 		}
 
@@ -175,12 +186,14 @@ namespace StockSharp.Hydra.Rts
 		{
 			var source = new RtsHistorySource
 			{
-				DumpFolder = GetTempPath(),
 				IsSystemOnly = _settings.IsSystemOnly,
 				LoadEveningSession = _settings.LoadEveningSession,
 				SaveRtsStdTrades = _settings.SaveRtsStdTrades,
 				SaveRtsStdCombinedOnly = _settings.SaveRtsStdCombinedOnly
 			};
+
+			if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+				source.DumpFolder = GetTempPath();
 
 			// если фильтр по инструментам выключен (выбран инструмент все инструменты)
 			var allSecurity = this.GetAllSecurity();
@@ -226,6 +239,9 @@ namespace StockSharp.Hydra.Rts
 						SaveTrades(pair.Key, pair.Value);
 					}
 				}
+
+				if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+					Directory.Delete(source.GetDumpFile(null, date, date, typeof(Trade), null), true);
 				
 				_settings.StartFrom = date.AddDays(1);
 				SaveSettings();
