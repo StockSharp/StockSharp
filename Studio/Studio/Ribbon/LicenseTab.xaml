@@ -1,9 +1,10 @@
 <ribbon:Tab x:Class="StockSharp.Studio.Ribbon.LicenseTab"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"            xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
             xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
             xmlns:local="clr-namespace:StockSharp.Studio.Ribbon"
-            Label="{x:Static loc:LocalizedStrings.XamlStr269}">
+            Label="{x:Static loc:LocalizedStrings.License}">
     
     <ribbon:Tab.CommandBindings>
         <CommandBinding Command="{x:Static local:LicenseTab.RenewLicenseCommand}"
@@ -31,7 +32,9 @@
     <ribbon:Group Label="{x:Static loc:LocalizedStrings.Str13}">
         <ribbon:StackPanel ItemVariantBehavior="AlwaysMedium" Margin="2,2,3,0">
             <StackPanel Orientation="Vertical">
-                <Label Margin="-2,0,0,0" Content="{x:Static loc:LocalizedStrings.XamlStr271}"/>
+				<TextBlock Margin="-2,0,0,0">
+					<Run Text="{x:Static loc:LocalizedStrings.License}"/><Run Text=":"/>
+				</TextBlock>
                 <ribbon:ComboBox x:Name="LicensesCtrl" Margin="0,-1,0,0" Width="150" DisplayMemberPath="Name" />
             </StackPanel>
 

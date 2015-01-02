@@ -1,6 +1,7 @@
 <ribbon:RibbonWindow x:Class="StockSharp.Studio.MainWindow"
 			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 			xmlns:local="clr-namespace:StockSharp.Studio"
        		xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
        		xmlns:wyDay="clr-namespace:wyDay.Controls;assembly=AutomaticUpdaterWPF"
@@ -87,7 +88,7 @@
                     <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr700}" Command="{x:Static local:MainWindow.DocumentationCommand}"/>
                     <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr367}" Command="{x:Static local:MainWindow.AboutCommand}"/>
                     <ribbon:Separator />
-                    <ribbon:Button Label="{x:Static loc:LocalizedStrings.Str3059}" Command="{x:Static local:MainWindow.ExitCommand}" />
+					<ribbon:Button Label="{x:Static loc:LocalizedStrings.Exit}" Command="{x:Static local:MainWindow.ExitCommand}" />
                 </ribbon:ApplicationMenu>
             </ribbon:Ribbon.ApplicationMenu>
 
@@ -154,7 +155,7 @@
 						ImageSourceLarge="/Images/documentation_32x32.png" />
 
                     <ribbon:Button
-						Label="{x:Static loc:LocalizedStrings.XamlStr261}"
+						Label="{x:Static loc:LocalizedStrings.Edu}"
 						ToolTip="{x:Static loc:LocalizedStrings.XamlStr175}" ToolTipService.ShowOnDisabled="True"
 						Command="{x:Static local:MainWindow.EduCommand}"
 						ImageSourceLarge="/Images/edu_32x32.png" />

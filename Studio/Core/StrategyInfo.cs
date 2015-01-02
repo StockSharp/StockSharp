@@ -58,7 +58,7 @@ namespace StockSharp.Studio.Core
 
 		private string _name;
 
-		[DisplayNameLoc(LocalizedStrings.Str6Key)]
+		[DisplayNameLoc(LocalizedStrings.NameKey)]
 		[DescriptionLoc(LocalizedStrings.Str1359Key)]
 		[CategoryLoc(LocalizedStrings.Str1559Key)]
 		public string Name

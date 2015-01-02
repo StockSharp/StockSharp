@@ -13,7 +13,7 @@
 			<!--<MenuItem Header="Настройки" Click="SettingsClick" />-->
 			<MenuItem Header="{x:Static loc:LocalizedStrings.Str3237}" Click="LogsClick" />
 			<Separator />
-			<MenuItem Header="{x:Static loc:LocalizedStrings.Str3059}" Click="MenuExitClick" />
+			<MenuItem Header="{x:Static loc:LocalizedStrings.Exit}" Click="MenuExitClick" />
 		</ContextMenu>
 	</UserControl.Resources>
 	<Grid>

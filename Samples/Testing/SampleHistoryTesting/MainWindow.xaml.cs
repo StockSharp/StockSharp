@@ -338,7 +338,7 @@ namespace SampleHistoryTesting
 				statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
 				var pnlCurve = Curve.CreateCurve("P&L " + emulationInfo.StrategyName, emulationInfo.CurveColor, EquityCurveChartStyles.Area);
-				var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.Str3022 + emulationInfo.StrategyName, Colors.Black);
+				var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal + emulationInfo.StrategyName, Colors.Black);
 				var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, EquityCurveChartStyles.DashedLine);
 				var posItems = PositionCurve.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
 				strategy.PnLChanged += () =>
@@ -401,7 +401,7 @@ namespace SampleHistoryTesting
 								MessageBox.Show(LocalizedStrings.Str3024 + (DateTime.Now - _startEmulationTime));
 							}
 							else
-								MessageBox.Show(LocalizedStrings.Str3025);
+								MessageBox.Show(LocalizedStrings.cancelled);
 						});
 					}
 					else if (connector.State == EmulationStates.Started)

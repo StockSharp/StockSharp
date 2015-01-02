@@ -1,10 +1,11 @@
 <Window x:Class="StockSharp.LicenseTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		Loaded="WindowLoaded"
-        Title="{x:Static loc:LocalizedStrings.XamlStr270}" Height="170" Width="550" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="{x:Static loc:LocalizedStrings.LicenseStockSharp}" Height="170" Width="550" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
 	<Window.CommandBindings>
 		<CommandBinding Command="ApplicationCommands.Copy" CanExecute="CanExecuteCopyId" Executed="ExecutedCopyId" />
@@ -36,7 +37,7 @@
 				<ex:HyperlinkEx NavigateUri="http://stocksharp.com/register/"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr362}"/></ex:HyperlinkEx>
 			</TextBlock>
 
-			<Label Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr279}"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr281}"/></Label>
+			<Label Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.StockSharpLogin}"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr281}"/></Label>
 			<TextBox x:Name="LoginCtrl" Grid.Row="0" Grid.Column="2" TextChanged="LoginCtrlTextChanged" />
 
 			<Label Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Right"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr449}"/></Label>

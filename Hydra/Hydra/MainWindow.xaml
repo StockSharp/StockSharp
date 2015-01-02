@@ -377,7 +377,7 @@
 						<MenuItem x:Name="RussianSourcesMi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
 						<MenuItem x:Name="AmericanSourcesMi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
 						<MenuItem x:Name="ForexSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr812}" />
-						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr258}" />
+						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.Str398}" />
 						<MenuItem x:Name="OtherSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
 
 						<!--<MenuItem.ItemContainerStyle>
@@ -403,7 +403,7 @@
 					</MenuItem>
 					
 					<Separator/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str3059}" Command="Close"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Exit}" Command="Close"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr200}">
@@ -556,7 +556,7 @@
 										<MenuItem x:Name="RussianSourcesCi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
 										<MenuItem x:Name="AmericanSourcesCi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
 										<MenuItem x:Name="ForexSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr812}" />
-										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr258}" />
+										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.Str398}" />
 										<MenuItem x:Name="OtherSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
 										
 										<Menu.ItemsPanel>

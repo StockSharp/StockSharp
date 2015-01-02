@@ -100,12 +100,12 @@
             Roller file index must be greater than zero.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str5Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LoggingKey">
             <summary>
             Logging
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str6Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.NameKey">
             <summary>
             Name
             </summary>
@@ -1850,22 +1850,22 @@
             Minimum volume step.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str367Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LotVolumeKey">
             <summary>
             Lot volume.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str368Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PriceStepKey">
             <summary>
             Price step
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str369Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MinPriceStepKey">
             <summary>
             Minimum price step.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str370Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ExpiryDateKey">
             <summary>
             Expiry date
             </summary>
@@ -1875,7 +1875,7 @@
             Security expiry date (for derivatives - expiry, for bonds — redemption).
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str372Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PaymentDateKey">
             <summary>
             Payment date
             </summary>
@@ -1885,42 +1885,42 @@
             Payment date for security (for derivatives and bonds).
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str374Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnderlyingAssetKey">
             <summary>
             Underlying asset
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str375Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnderlyingAssetCodeKey">
             <summary>
             Underlying asset code, on which the current security is based.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str376Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.StrikeKey">
             <summary>
             Strike
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str377Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionStrikePriceKey">
             <summary>
             Option strike price.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str378Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionsContractKey">
             <summary>
             Options contract
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str379Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionContractTypeKey">
             <summary>
             Option contract type.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str380Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BinaryOptionKey">
             <summary>
             Binary option
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str381Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TypeBinaryOptionKey">
             <summary>
             Type of binary option
             </summary>
@@ -1930,62 +1930,62 @@
             Trading security currency.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str383Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ClassKey">
             <summary>
             Class
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str384Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SecurityClassKey">
             <summary>
             Security class.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str385Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TradingKey">
             <summary>
             Trading
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str386Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TradingSuspendedKey">
             <summary>
             Trading suspended
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str387Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ShareKey">
             <summary>
             Share
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str388Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.FutureContractKey">
             <summary>
             Future contract
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str389Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IndexKey">
             <summary>
             Index
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str390Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BondKey">
             <summary>
             Bond
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str391Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WarrantKey">
             <summary>
             Warrant
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str392Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ForwardKey">
             <summary>
             Forward
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str393Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SwapKey">
             <summary>
             Swop
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str394Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ProductKey">
             <summary>
             Product
             </summary>
@@ -1995,19 +1995,19 @@
             news
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str396Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WeatherKey">
             <summary>
             Weather
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str397Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ShareFundKey">
             <summary>
             Share (Open-end fund)
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str398Key">
             <summary>
-            Crypto-currency
+            Cryptocurrency
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str399Key">
@@ -14220,42 +14220,42 @@
             Enter path to Quik directory:
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3000Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.EnterLoginKey">
             <summary>
             Enter login
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3001Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.EnterPasswordKey">
             <summary>
             Enter password
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3002Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.QuikStartingKey">
             <summary>
             Quik starting...
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3003Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.QuikLaunchedKey">
             <summary>
             Quik launched.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3004Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.QuikFoundKey">
             <summary>
             Quik found.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3005Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.AuthorizationSuccessfulKey">
             <summary>
             Authorization successful.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3006Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PressEnterKey">
             <summary>
             Press Enter to switch on Quik...
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3007Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.QuikDisconnectedKey">
             <summary>
             Quik is disconnected from trading.
             </summary>
@@ -14270,24 +14270,14 @@
             Portfolio not selected.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3010Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LongKey">
             <summary>
             Long
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3011Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ShortKey">
             <summary>
             Short
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3012Key">
-            <summary>
-            Enter account number through which an order will be placed:
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3013Key">
-            <summary>
-            Waiting for Lukoil security data to update...
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3014Key">
@@ -14330,7 +14320,7 @@
             On orders log
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3022Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PnLUnrealKey">
             <summary>
             P&amp;L (unrealized)
             </summary>
@@ -14340,7 +14330,7 @@
             Completed in
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3025Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.cancelledKey">
             <summary>
             cancelled
             </summary>
@@ -14350,12 +14340,12 @@
             Long {0} Short {1}
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3027Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ObtainingLicenseKey">
             <summary>
             Obtaining license...
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3029Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.InvalidProcessKey">
             <summary>
             Invalid process.
             </summary>
@@ -14370,7 +14360,7 @@
             Table {0}. {1}
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3032Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WarningKey">
             <summary>
             Warning
             </summary>
@@ -14380,7 +14370,7 @@
             Alert! At {0} '{1}'.{2}
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3034Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SelectKey">
             <summary>
             Select
             </summary>
@@ -14390,29 +14380,24 @@
             RI open interest exceeded a value of 100 000 contracts.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3036Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.NotAuthorizedKey">
             <summary>
             Not authorized
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3037Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SomeRuleNoSourceKey">
             <summary>
-            Some rules have no data source setting.
+            Some rules have no data source.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3038ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ForRuleNotSetValueKey">
             <summary>
             For rule {0} value is not set.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3039Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CompositeElementKey">
             <summary>
             Composite element
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3040Key">
-            <summary>
-            Composite element.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3041Key">
@@ -14500,12 +14485,17 @@
             Current values of diagram element parameters
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3058Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.InputKey">
             <summary>
-            Entry
+            Input
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3059Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OutputKey">
+            <summary>
+            Output
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.ExitKey">
             <summary>
             Exit
             </summary>
@@ -14515,52 +14505,52 @@
             Element for diagram element is already specified.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3061ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ElementNotLoadedKey">
             <summary>
             Element {0} not loaded.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3062Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SocketNoValueKey">
             <summary>
             Socket does not contain value.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3063Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.AnyDataKey">
             <summary>
             Any data
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3064Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IndicatorValueKey">
             <summary>
             Indicator value
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3065Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OwnTradeKey">
             <summary>
             Own trade
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3066Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.FlagKey">
             <summary>
             Flag
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3067Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.NumericValueKey">
             <summary>
             Numeric value
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3068Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ComparisonKey">
             <summary>
             Comparison
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3069Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DiagramNotSetKey">
             <summary>
             Strategy diagram is not set.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3070Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DiagramContainsErrorsKey">
             <summary>
             Strategy diagram contains errors.
             </summary>
@@ -14570,24 +14560,24 @@
             Candles source element.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3073Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SeriesKey">
             <summary>
             Series
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3074Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandlesSeriesKey">
             <summary>
             Candles series.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3075Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OnlyFormedKey">
             <summary>
-            Just formed
+            Only formed
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3076Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ProcessOnlyFormedKey">
             <summary>
-            Only process formed candles.
+            Process only formed candles.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3077Key">
@@ -14595,22 +14585,22 @@
             Perform profile volume calculation.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3078Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ChartPanelKey">
             <summary>
             Chart panel
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3079Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ChartPanelElementKey">
             <summary>
             Chart panel element (candles display area, indicators, orders and trades).
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3080Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PanelKey">
             <summary>
             Panel
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3081Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PanelNameKey">
             <summary>
             Panel name
             </summary>
@@ -14620,7 +14610,7 @@
             For sender {0} there is no registered element.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3084Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WorkingTimeKey">
             <summary>
             Working time
             </summary>
@@ -14630,57 +14620,57 @@
             Working time verification element for a specified security.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3086Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TriggerKey">
             <summary>
             Trigger
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3087Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TwoValuesComparisonElementKey">
             <summary>
             Two values comparison element.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3090Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SignalKey">
             <summary>
             Signal
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3091Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LeftKey">
             <summary>
             Left
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3092Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LeftOperandKey">
             <summary>
             Left operand.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3093Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OperatorKey">
             <summary>
             Operator
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3094Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.EqualityOperatorKey">
             <summary>
             Equality operator.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3095Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.RightKey">
             <summary>
             Right
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3096Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.RightOperandKey">
             <summary>
             Right operand.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3097Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IndexerKey">
             <summary>
             Indexer
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3098Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CollectionOrDictElemKey">
             <summary>
             Collection or dictionary element.
             </summary>
@@ -14690,17 +14680,17 @@
             Value
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3100Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IndexValueKey">
             <summary>
             Index value.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3101Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IndicatorElemKey">
             <summary>
             Indicator element.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3102Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IndicatorTypeKey">
             <summary>
             Indicator type.
             </summary>
@@ -14715,7 +14705,7 @@
             Indicator does not work with data type '{0}'.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str3107Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LogicalConditionKey">
             <summary>
             Logical condition
             </summary>
@@ -19010,11 +19000,6 @@
             Basket portfolio
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr258Key">
-            <summary>
-            Crypto currency
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr259Key">
             <summary>
             Buy
@@ -19025,34 +19010,29 @@
             Buy by market
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr261Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.EduKey">
             <summary>
             Edu
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr262Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.Level1Key">
             <summary>
             Level 1
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr266Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TPlusLimitKey">
             <summary>
             T+ limit
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr269Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LicenseKey">
             <summary>
             License
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr270Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LicenseStockSharpKey">
             <summary>
             License StockSharp
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr271Key">
-            <summary>
-            License:
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr272Key">
@@ -19060,27 +19040,22 @@
             Log
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr273Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OrderLogKey">
             <summary>
             Order log
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr275Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LogsHasErrorsKey">
             <summary>
-            Order log...
+            Logs (has errors)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr277Key">
-            <summary>
-            Logs (has error)
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr279Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.StockSharpLoginKey">
             <summary>
             StockSharp login
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr280Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CredentialsStockSharpComKey">
             <summary>
             Credentials to StockSharp.com
             </summary>
@@ -19100,7 +19075,7 @@
             Best sell price or a trade by specified price or lower.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr288Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LciViewerKey">
             <summary>
             Lci Viewer
             </summary>
@@ -21342,12 +21317,12 @@
             Roller file index must be greater than zero.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str5">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Logging">
             <summary>
             Logging
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str6">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Name">
             <summary>
             Name
             </summary>
@@ -23092,22 +23067,22 @@
             Minimum volume step.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str367">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LotVolume">
             <summary>
             Lot volume.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str368">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PriceStep">
             <summary>
             Price step
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str369">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MinPriceStep">
             <summary>
             Minimum price step.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str370">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ExpiryDate">
             <summary>
             Expiry date
             </summary>
@@ -23117,7 +23092,7 @@
             Security expiry date (for derivatives - expiry, for bonds — redemption).
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str372">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PaymentDate">
             <summary>
             Payment date
             </summary>
@@ -23127,42 +23102,42 @@
             Payment date for security (for derivatives and bonds).
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str374">
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnderlyingAsset">
             <summary>
             Underlying asset
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str375">
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnderlyingAssetCode">
             <summary>
             Underlying asset code, on which the current security is based.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str376">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Strike">
             <summary>
             Strike
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str377">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionStrikePrice">
             <summary>
             Option strike price.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str378">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionsContract">
             <summary>
             Options contract
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str379">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionContractType">
             <summary>
             Option contract type.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str380">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BinaryOption">
             <summary>
             Binary option
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str381">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TypeBinaryOption">
             <summary>
             Type of binary option
             </summary>
@@ -23172,62 +23147,62 @@
             Trading security currency.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str383">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Class">
             <summary>
             Class
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str384">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SecurityClass">
             <summary>
             Security class.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str385">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Trading">
             <summary>
             Trading
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str386">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TradingSuspended">
             <summary>
             Trading suspended
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str387">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Share">
             <summary>
             Share
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str388">
+        <member name="P:StockSharp.Localization.LocalizedStrings.FutureContract">
             <summary>
             Future contract
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str389">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Index">
             <summary>
             Index
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str390">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Bond">
             <summary>
             Bond
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str391">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Warrant">
             <summary>
             Warrant
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str392">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Forward">
             <summary>
             Forward
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str393">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Swap">
             <summary>
             Swop
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str394">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Product">
             <summary>
             Product
             </summary>
@@ -23237,19 +23212,19 @@
             news
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str396">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Weather">
             <summary>
             Weather
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str397">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ShareFund">
             <summary>
             Share (Open-end fund)
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str398">
             <summary>
-            Crypto-currency
+            Cryptocurrency
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str399">
@@ -35462,42 +35437,42 @@
             Enter path to Quik directory:
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3000">
+        <member name="P:StockSharp.Localization.LocalizedStrings.EnterLogin">
             <summary>
             Enter login
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3001">
+        <member name="P:StockSharp.Localization.LocalizedStrings.EnterPassword">
             <summary>
             Enter password
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3002">
+        <member name="P:StockSharp.Localization.LocalizedStrings.QuikStarting">
             <summary>
             Quik starting...
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3003">
+        <member name="P:StockSharp.Localization.LocalizedStrings.QuikLaunched">
             <summary>
             Quik launched.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3004">
+        <member name="P:StockSharp.Localization.LocalizedStrings.QuikFound">
             <summary>
             Quik found.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3005">
+        <member name="P:StockSharp.Localization.LocalizedStrings.AuthorizationSuccessful">
             <summary>
             Authorization successful.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3006">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PressEnter">
             <summary>
             Press Enter to switch on Quik...
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3007">
+        <member name="P:StockSharp.Localization.LocalizedStrings.QuikDisconnected">
             <summary>
             Quik is disconnected from trading.
             </summary>
@@ -35512,24 +35487,14 @@
             Portfolio not selected.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3010">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Long">
             <summary>
             Long
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3011">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Short">
             <summary>
             Short
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3012">
-            <summary>
-            Enter account number through which an order will be placed:
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3013">
-            <summary>
-            Waiting for Lukoil security data to update...
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3014">
@@ -35572,7 +35537,7 @@
             On orders log
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3022">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PnLUnreal">
             <summary>
             P&amp;L (unrealized)
             </summary>
@@ -35582,7 +35547,7 @@
             Completed in
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3025">
+        <member name="P:StockSharp.Localization.LocalizedStrings.cancelled">
             <summary>
             cancelled
             </summary>
@@ -35592,12 +35557,12 @@
             Long {0} Short {1}
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3027">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ObtainingLicense">
             <summary>
             Obtaining license...
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3029">
+        <member name="P:StockSharp.Localization.LocalizedStrings.InvalidProcess">
             <summary>
             Invalid process.
             </summary>
@@ -35612,7 +35577,7 @@
             Table {0}. {1}
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3032">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Warning">
             <summary>
             Warning
             </summary>
@@ -35622,7 +35587,7 @@
             Alert! At {0} '{1}'.{2}
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3034">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Select">
             <summary>
             Select
             </summary>
@@ -35632,29 +35597,24 @@
             RI open interest exceeded a value of 100 000 contracts.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3036">
+        <member name="P:StockSharp.Localization.LocalizedStrings.NotAuthorized">
             <summary>
             Not authorized
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3037">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SomeRuleNoSource">
             <summary>
-            Some rules have no data source setting.
+            Some rules have no data source.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3038Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ForRuleNotSetValue">
             <summary>
             For rule {0} value is not set.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3039">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CompositeElement">
             <summary>
             Composite element
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3040">
-            <summary>
-            Composite element.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3041">
@@ -35742,12 +35702,17 @@
             Current values of diagram element parameters
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3058">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Input">
             <summary>
-            Entry
+            Input
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3059">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Output">
+            <summary>
+            Output
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.Exit">
             <summary>
             Exit
             </summary>
@@ -35757,52 +35722,52 @@
             Element for diagram element is already specified.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3061Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ElementNotLoaded">
             <summary>
             Element {0} not loaded.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3062">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SocketNoValue">
             <summary>
             Socket does not contain value.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3063">
+        <member name="P:StockSharp.Localization.LocalizedStrings.AnyData">
             <summary>
             Any data
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3064">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IndicatorValue">
             <summary>
             Indicator value
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3065">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OwnTrade">
             <summary>
             Own trade
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3066">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Flag">
             <summary>
             Flag
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3067">
+        <member name="P:StockSharp.Localization.LocalizedStrings.NumericValue">
             <summary>
             Numeric value
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3068">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Comparison">
             <summary>
             Comparison
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3069">
+        <member name="P:StockSharp.Localization.LocalizedStrings.DiagramNotSet">
             <summary>
             Strategy diagram is not set.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3070">
+        <member name="P:StockSharp.Localization.LocalizedStrings.DiagramContainsErrors">
             <summary>
             Strategy diagram contains errors.
             </summary>
@@ -35812,24 +35777,24 @@
             Candles source element.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3073">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Series">
             <summary>
             Series
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3074">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandlesSeries">
             <summary>
             Candles series.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3075">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OnlyFormed">
             <summary>
-            Just formed
+            Only formed
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3076">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ProcessOnlyFormed">
             <summary>
-            Only process formed candles.
+            Process only formed candles.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3077">
@@ -35837,22 +35802,22 @@
             Perform profile volume calculation.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3078">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ChartPanel">
             <summary>
             Chart panel
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3079">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ChartPanelElement">
             <summary>
             Chart panel element (candles display area, indicators, orders and trades).
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3080">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Panel">
             <summary>
             Panel
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3081">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PanelName">
             <summary>
             Panel name
             </summary>
@@ -35862,7 +35827,7 @@
             For sender {0} there is no registered element.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3084">
+        <member name="P:StockSharp.Localization.LocalizedStrings.WorkingTime">
             <summary>
             Working time
             </summary>
@@ -35872,57 +35837,57 @@
             Working time verification element for a specified security.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3086">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Trigger">
             <summary>
             Trigger
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3087">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TwoValuesComparisonElement">
             <summary>
             Two values comparison element.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3090">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Signal">
             <summary>
             Signal
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3091">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Left">
             <summary>
             Left
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3092">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LeftOperand">
             <summary>
             Left operand.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3093">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Operator">
             <summary>
             Operator
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3094">
+        <member name="P:StockSharp.Localization.LocalizedStrings.EqualityOperator">
             <summary>
             Equality operator.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3095">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Right">
             <summary>
             Right
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3096">
+        <member name="P:StockSharp.Localization.LocalizedStrings.RightOperand">
             <summary>
             Right operand.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3097">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Indexer">
             <summary>
             Indexer
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3098">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CollectionOrDictElem">
             <summary>
             Collection or dictionary element.
             </summary>
@@ -35932,17 +35897,17 @@
             Value
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3100">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IndexValue">
             <summary>
             Index value.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3101">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IndicatorElem">
             <summary>
             Indicator element.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3102">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IndicatorType">
             <summary>
             Indicator type.
             </summary>
@@ -35957,7 +35922,7 @@
             Indicator does not work with data type '{0}'.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str3107">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LogicalCondition">
             <summary>
             Logical condition
             </summary>
@@ -40252,11 +40217,6 @@
             Basket portfolio
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr258">
-            <summary>
-            Crypto currency
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr259">
             <summary>
             Buy
@@ -40267,34 +40227,29 @@
             Buy by market
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr261">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Edu">
             <summary>
             Edu
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr262">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Level1">
             <summary>
             Level 1
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr266">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TPlusLimit">
             <summary>
             T+ limit
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr269">
+        <member name="P:StockSharp.Localization.LocalizedStrings.License">
             <summary>
             License
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr270">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LicenseStockSharp">
             <summary>
             License StockSharp
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr271">
-            <summary>
-            License:
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr272">
@@ -40302,27 +40257,22 @@
             Log
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr273">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OrderLog">
             <summary>
             Order log
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr275">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LogsHasErrors">
             <summary>
-            Order log...
+            Logs (has errors)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr277">
-            <summary>
-            Logs (has error)
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr279">
+        <member name="P:StockSharp.Localization.LocalizedStrings.StockSharpLogin">
             <summary>
             StockSharp login
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr280">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CredentialsStockSharpCom">
             <summary>
             Credentials to StockSharp.com
             </summary>
@@ -40342,7 +40292,7 @@
             Best sell price or a trade by specified price or lower.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr288">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LciViewer">
             <summary>
             Lci Viewer
             </summary>

@@ -317,7 +317,7 @@ namespace StockSharp.Studio.Controls
 			_mainArea = ChartPanel.Areas.FirstOrDefault();
 
 			if (_mainArea == null)
-				_bufferedChart.AddArea(_mainArea = new ChartArea { Title = LocalizedStrings.Str3080 + " 1" });
+				_bufferedChart.AddArea(_mainArea = new ChartArea { Title = LocalizedStrings.Panel + " 1" });
 
 			_candleElement = _mainArea.Elements.OfType<ChartCandleElement>().FirstOrDefault();
 
@@ -892,7 +892,7 @@ namespace StockSharp.Studio.Controls
 		{
 			InputBorder.Child = _editor;
 
-			IndexSecurityWindow.Title = LocalizedStrings.Str389;
+			IndexSecurityWindow.Title = LocalizedStrings.Index;
 
 			_editor.TextChanged += (s, a) => Validate();
 			_editor.Drop += InputTextBox_OnDrop;

@@ -81,7 +81,7 @@ namespace StockSharp.Quik.Verifier
 			var terminal = SelectedTerminal;
 
 			if (terminal.SystemProcess.MainModule == null)
-				throw new InvalidOperationException(LocalizedStrings.Str3029);
+				throw new InvalidOperationException(LocalizedStrings.InvalidProcess);
 
 			OkResult.SetVisibility(false);
 
@@ -137,7 +137,7 @@ namespace StockSharp.Quik.Verifier
 
 			foreach (SettingsError error in Results.SelectedItems)
 			{
-				text.AppendFormat("{0}.	{1}", error.IsCritical ? LocalizedStrings.Str152 : LocalizedStrings.Str3032, error.Message);
+				text.AppendFormat("{0}.	{1}", error.IsCritical ? LocalizedStrings.Str152 : LocalizedStrings.Warning, error.Message);
 				text.AppendLine();
 			}
 

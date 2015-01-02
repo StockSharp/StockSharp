@@ -51,7 +51,7 @@ namespace StockSharp.Studio.Strategies
 		private readonly StrategyParam<int> _longSmaPeriod;
 
 		[CategoryLoc(LocalizedStrings.Str3293Key)]
-		[DisplayNameLoc(LocalizedStrings.Str3010Key)]
+		[DisplayNameLoc(LocalizedStrings.LongKey)]
 		[DescriptionLoc(LocalizedStrings.Str3295Key)]
 		public int LongSmaPeriod
 		{
@@ -62,7 +62,7 @@ namespace StockSharp.Studio.Strategies
 		private readonly StrategyParam<int> _shortSmaPeriod;
 
 		[CategoryLoc(LocalizedStrings.Str3293Key)]
-		[DisplayNameLoc(LocalizedStrings.Str3011Key)]
+		[DisplayNameLoc(LocalizedStrings.ShortKey)]
 		[DescriptionLoc(LocalizedStrings.Str3296Key)]
 		public int ShortSmaPeriod
 		{

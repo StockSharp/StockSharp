@@ -394,8 +394,8 @@ namespace StockSharp.Hydra.Panes
 					_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Str211, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Str209, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
 
-					_fields.Add(new FieldMapping(_settings, "Name", LocalizedStrings.Str6, string.Empty, typeof(string), (i, v) => i.Name = v));
-					_fields.Add(new FieldMapping(_settings, "PriceStep", LocalizedStrings.Str368, string.Empty, typeof(decimal), (i, v) => i.PriceStep = v));
+					_fields.Add(new FieldMapping(_settings, "Name", LocalizedStrings.NameKey, string.Empty, typeof(string), (i, v) => i.Name = v));
+					_fields.Add(new FieldMapping(_settings, "PriceStep", LocalizedStrings.PriceStep, string.Empty, typeof(decimal), (i, v) => i.PriceStep = v));
 					_fields.Add(new FieldMapping(_settings, "VolumeStep", LocalizedStrings.Str365, string.Empty, typeof(decimal), (i, v) => i.VolumeStep = v));
 					_fields.Add(new FieldMapping(_settings, "SecurityType", LocalizedStrings.Str359, string.Empty, typeof(SecurityTypes), (i, v) => i.SecurityType = v));
 				}

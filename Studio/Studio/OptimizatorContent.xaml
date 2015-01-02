@@ -36,7 +36,7 @@
 
                         <grids:UniversalGrid x:Name="ParametersGrid">
                             <grids:UniversalGrid.Columns>
-                                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str6}" Binding="{Binding Name}" SortMemberPath="Name"/>
+								<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.NameKey}" Binding="{Binding Name}" SortMemberPath="Name"/>
                                 <!--<DataGridTextColumn Header="Тип" Binding="{Binding Type.Name}" SortMemberPath="Type.Name"/>-->
                                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr61}" Binding="{Binding IsEnabled, Converter={StaticResource BoolToStringConverter}}" SortMemberPath="IsEnabled"/>
                                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str343}" Binding="{Binding From}" SortMemberPath="From"/>

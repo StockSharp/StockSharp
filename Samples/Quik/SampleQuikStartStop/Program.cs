@@ -11,10 +11,10 @@ namespace SampleQuikStartStop
 			Console.Write(LocalizedStrings.Str2999);
 			var path = Console.ReadLine();
 
-			Console.Write(LocalizedStrings.Str3000 + ": ");
+			Console.Write(LocalizedStrings.EnterLogin + ": ");
 			var login = Console.ReadLine();
 
-			Console.Write(LocalizedStrings.Str3001 + ": ");
+			Console.Write(LocalizedStrings.EnterPassword + ": ");
 			var password = Console.ReadLine();
 
 			try
@@ -23,25 +23,25 @@ namespace SampleQuikStartStop
 
 				if (!terminal.IsLaunched)
 				{
-					Console.WriteLine(LocalizedStrings.Str3002);
+					Console.WriteLine(LocalizedStrings.QuikStarting);
 
 					terminal.Launch();
-					Console.WriteLine(LocalizedStrings.Str3003);
+					Console.WriteLine(LocalizedStrings.QuikLaunched);
 				}
 				else
-					Console.WriteLine(LocalizedStrings.Str3004);
+					Console.WriteLine(LocalizedStrings.QuikFound);
 
 				if (!terminal.IsConnected)
 				{
 					terminal.Login(login, password);
-					Console.WriteLine(LocalizedStrings.Str3005);
+					Console.WriteLine(LocalizedStrings.AuthorizationSuccessful);
 				}
 
-				Console.WriteLine(LocalizedStrings.Str3006);
+				Console.WriteLine(LocalizedStrings.PressEnter);
 				Console.ReadLine();
 
 				terminal.Logout();
-				Console.WriteLine(LocalizedStrings.Str3007);
+				Console.WriteLine(LocalizedStrings.QuikDisconnected);
 
 				terminal.Exit();
 				Console.WriteLine(LocalizedStrings.Str3008);

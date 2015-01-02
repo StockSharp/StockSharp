@@ -1,6 +1,7 @@
 <UserControl x:Class="StockSharp.Hydra.Panes.TaskPane"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"			 xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -251,7 +252,7 @@
 				<DataGridTextColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr517}" Visibility="Collapsed" Binding="{Binding Path=TaskSecurity.CandleInfo.LastTime}" SortMemberPath="TaskSecurity.CandleInfo.LastTime" ElementStyle="{StaticResource TextCenterStyle}" />
 
 				<DataGridTextColumn Width="50" Header="{x:Static loc:LocalizedStrings.Str330}" Binding="{Binding Path=TaskSecurity.Security.VolumeStep}" SortMemberPath="TaskSecurity.Security.VolumeStep" ElementStyle="{StaticResource TextRightStyle}" />
-				<DataGridTextColumn Width="60" Header="{x:Static loc:LocalizedStrings.Str368}" Binding="{Binding Path=TaskSecurity.Security.PriceStep}" SortMemberPath="TaskSecurity.Security.PriceStep" ElementStyle="{StaticResource TextRightStyle}" />
+				<DataGridTextColumn Width="60" Header="{x:Static loc:LocalizedStrings.PriceStep}" Binding="{Binding Path=TaskSecurity.Security.PriceStep}" SortMemberPath="TaskSecurity.Security.PriceStep" ElementStyle="{StaticResource TextRightStyle}" />
 			</ug:UniversalGrid.Columns>
 		</ug:UniversalGrid>
 

@@ -1,6 +1,7 @@
 <Window x:Class="StockSharp.Hydra.Windows.SecurityEditWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
         Title="{x:Static loc:LocalizedStrings.Str2922}" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
 
@@ -46,7 +47,7 @@
 			<TextBox x:Name="SecName" Height="23" Width="188" Grid.Column="1" Grid.Row="2" />
 
 			<TextBlock Height="23" Grid.Row="6" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.Str368}"/><Run Text=":"/>
+				<Run Text="{x:Static loc:LocalizedStrings.PriceStep}"/><Run Text=":"/>
 			</TextBlock>
 			<TextBox x:Name="PriceStep" TextAlignment="Right" Width="188" Height="23" Grid.Column="1" Grid.Row="6" />
 

@@ -174,7 +174,7 @@ namespace SampleRandomEmulation
 							MessageBox.Show(LocalizedStrings.Str3024 + (DateTime.Now - _startEmulationTime));
 						}
 						else
-							MessageBox.Show(LocalizedStrings.Str3025);
+							MessageBox.Show(LocalizedStrings.cancelled);
 					});
 				}
 				else if (_connector.State == EmulationStates.Started)

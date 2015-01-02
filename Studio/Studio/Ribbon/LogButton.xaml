@@ -1,6 +1,7 @@
 <ribbon:SplitButton x:Class="StockSharp.Studio.Ribbon.LogButton"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
              xmlns:local="clr-namespace:StockSharp.Studio.Ribbon"
              xmlns:studio="clr-namespace:StockSharp.Studio"
@@ -21,7 +22,7 @@
     <ribbon:SplitButton.ToolTip>
         <Binding Path="HasErrors" >
             <Binding.Converter>
-                <studio:BoolToStringConverter TrueValue="{x:Static loc:LocalizedStrings.XamlStr277}" FalseValue="{x:Static loc:LocalizedStrings.Str3237}"/>
+                <studio:BoolToStringConverter TrueValue="{x:Static loc:LocalizedStrings.LogsHasErrors}" FalseValue="{x:Static loc:LocalizedStrings.Str3237}"/>
             </Binding.Converter>
         </Binding>
     </ribbon:SplitButton.ToolTip>

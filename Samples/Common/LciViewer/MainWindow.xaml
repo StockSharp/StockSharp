@@ -4,7 +4,7 @@
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:ss="http://schemas.stocksharp.com/xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="{x:Static loc:LocalizedStrings.XamlStr288}"
+        Title="{x:Static loc:LocalizedStrings.LciViewer}"
 		Height="350" Width="900" Loaded="MainWindow_OnLoaded"
 		WindowState="Maximized">
 	<xctk:BusyIndicator x:Name="BusyIndicator">

@@ -61,7 +61,7 @@ namespace StockSharp.LicenseTool
 		{
 			var worker = new BackgroundWorker();
 
-			BusyIndicator.BusyContent = LocalizedStrings.Str3027;
+			BusyIndicator.BusyContent = LocalizedStrings.ObtainingLicense;
 
 			AuthenticationClient.Instance.Credentials.Login = LoginCtrl.Text;
 			AuthenticationClient.Instance.Credentials.Password = PasswordCtrl.Password.To<SecureString>();

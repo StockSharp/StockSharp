@@ -138,18 +138,18 @@ namespace StockSharp.Studio.Controls
 
 			var series = _strategy.Security.TimeFrame(TimeSpan.FromMinutes(5));
 
-			var area = new ChartArea { Title = LocalizedStrings.Str3080 + " 1" };
+			var area = new ChartArea { Title = LocalizedStrings.Panel + " 1" };
 			ChartPanel.AddArea(area);
 			ChartPanel.AddElement(area, new ChartCandleElement(), series);
 			ChartPanel.AddElement(area, new ChartIndicatorElement(), series, new SimpleMovingAverage { Length = 50 });
 			ChartPanel.AddElement(area, new ChartOrderElement(), _strategy.Security);
 			ChartPanel.AddElement(area, new ChartTradeElement(), _strategy.Security);
 
-			var adxArea = new ChartArea { Title = LocalizedStrings.Str3080 + " 2" };
+			var adxArea = new ChartArea { Title = LocalizedStrings.Panel + " 2" };
 			ChartPanel.AddArea(adxArea);
 			ChartPanel.AddElement(adxArea, new ChartIndicatorElement { IndicatorPainter = new AverageDirectionalIndexPainter() }, series, new AverageDirectionalIndex());
 
-			var volumeArea = new ChartArea { Title = LocalizedStrings.Str3080 + " 3" };
+			var volumeArea = new ChartArea { Title = LocalizedStrings.Panel + " 3" };
 			ChartPanel.AddArea(volumeArea);
 			ChartPanel.AddElement(volumeArea, new ChartIndicatorElement { IndicatorPainter = new VolumePainter() }, series, new VolumeIndicator());
 		}

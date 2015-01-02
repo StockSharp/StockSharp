@@ -1,6 +1,7 @@
 <Window x:Class="SampleTransaq.NewAlgoOrderWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
         mc:Ignorable="d" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -52,12 +53,12 @@
                 </StackPanel>
             </GroupBox>            
             
-            <GroupBox Header="{x:Static loc:LocalizedStrings.Str3086}">
+            <GroupBox Header="{x:Static loc:LocalizedStrings.Trigger}">
                 <StackPanel>
                     <RadioButton Content="None" Height="16" Name="NoneOption" GroupName="Trigger" IsChecked="True" Checked="Trigger_OnChecked" />
-					<RadioButton Content="Bid" Height="16" Name="BidOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr285}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="Bid" Height="16" Name="BidOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.Str313}" Checked="Trigger_OnChecked" />
 					<RadioButton Content="BidOrLast" Height="16" Name="BidOrLastOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr284}" Checked="Trigger_OnChecked" />
-                    <RadioButton Content="Ask" Height="16" Name="Ask" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr287}" Checked="Trigger_OnChecked" />
+					<RadioButton Content="Ask" Height="16" Name="Ask" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.Str315}" Checked="Trigger_OnChecked" />
 					<RadioButton Content="AskOrLast" Height="16" Name="AskOrLastOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr286}" Checked="Trigger_OnChecked" />
 					<RadioButton Content="Time" Height="16" Name="TimeOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr70}" Checked="Trigger_OnChecked" />
 					<RadioButton Content="CovDown" Height="16" Name="CovDownOption" GroupName="Trigger" ToolTip="{x:Static loc:LocalizedStrings.XamlStr369}" Checked="Trigger_OnChecked" />

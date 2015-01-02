@@ -5,6 +5,7 @@ namespace SampleSmartConsole
 	using System.Threading;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -24,13 +25,13 @@ namespace SampleSmartConsole
 				// для теста выбираем бумагу Лукойл
 				const string secCode = "LKOH";
 
-				Console.Write(LocalizedStrings.Str3000);
+				Console.Write(LocalizedStrings.EnterLogin);
 				var login = Console.ReadLine();
 
-				Console.Write(LocalizedStrings.Str3001);
+				Console.Write(LocalizedStrings.EnterPassword);
 				var password = Console.ReadLine();
 
-				Console.Write(LocalizedStrings.Str3012);
+				Console.Write("Enter account number through which an order will be placed:".Translate());
 				var account = Console.ReadLine();
 
 				using (var waitHandle = new AutoResetEvent(false))
@@ -116,7 +117,7 @@ namespace SampleSmartConsole
 								waitHandle.Set();
 						};
 
-						Console.WriteLine(LocalizedStrings.Str3013);
+						Console.WriteLine("Waiting for Lukoil security data to update...".Translate());
 
 						// запускаем обновление по инструменту
 						trader.RegisterSecurity(_lkoh);

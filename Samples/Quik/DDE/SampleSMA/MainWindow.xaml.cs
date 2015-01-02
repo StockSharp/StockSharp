@@ -239,7 +239,7 @@ namespace SampleSMA
 				_longMa = _strategy.LongSma;
 				_longMaElem = new ChartIndicatorElement
 				{
-					Title = LocalizedStrings.Str3010,
+					Title = LocalizedStrings.Long,
 					Color = Colors.OrangeRed
 				};
 				_area.Elements.Add(_longMaElem);
@@ -247,7 +247,7 @@ namespace SampleSMA
 				_shortMa = _strategy.ShortSma;
 				_shortMaElem = new ChartIndicatorElement
 				{
-					Title = LocalizedStrings.Str3011,
+					Title = LocalizedStrings.Short,
 					Color = Colors.RoyalBlue
 				};
 				_area.Elements.Add(_shortMaElem);
