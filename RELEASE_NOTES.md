@@ -9,22 +9,24 @@ What's New
 ----------
 
 ###v4.2.50:
-* (minor) Error loading candles from storage
+* (bug) Error loading candles from storage
+* (bug) FortsDailyData.GetRate fix
 
 ###v4.2.49:
-* (minor) PriceStep fixes for Oanda
-* (minor) Filling empty Arg for Candles from CandleSeries
-* (minor) Tick origin side added for FIX (QuikLua)
+* (bug) PriceStep fixes for Oanda
+* (bug) Filling empty Arg for Candles from CandleSeries
+* (feature) Tick origin side added for FIX (QuikLua) http://stocksharp.com/forum/yaf_postst5476_S--API.aspx
+* (feature) TimeZoneComboBox
 
 ###v4.2.48:
-* (minor) Plaza supports MM and limit transactions
-* (minor) Localization fixes for Xaml
+* (feature) Plaza supports MM and limit transactions
+* (bug) Localization fixes for Xaml
 
 ###v4.2.47:
-* (minor) Localization fixes
+* (bug) Localization fixes
 
 ###v4.2.46:
-* (minor) Filling Security.Status for QuikLua
-* (minor) Building market depth from OL fixes
-* (minor) Zero or negative prices for spreads in Storage
-* (minor) ExpirationDate added to OrderWindow
+* (feature) Filling Security.Status for QuikLua http://stocksharp.com/forum/yaf_postsm34270_Novyi-konniektor-k-Quik.aspx#post34270
+* (bug) Building market depth from OL fixes
+* (feature) Zero or negative prices for spreads in Storage
+* (feature) ExpirationDate added to OrderWindow
