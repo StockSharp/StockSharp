@@ -120,6 +120,7 @@
     <Compile Include="HydraTaskSecurity.cs" />
     <Compile Include="Attributes.cs" />
     <Compile Include="TaskCategories.cs" />
+    <Compile Include="TempFiles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="StockSharp.Algo.History">
