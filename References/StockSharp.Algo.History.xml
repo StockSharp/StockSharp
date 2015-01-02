@@ -164,6 +164,17 @@
       <param name="side">Тип котировки (бид или оффер).</param>
       <returns>Исторические тайм-фрейм свечи.</returns>
     </member>
+    <member name="M:StockSharp.Algo.History.Forex.DukasCopySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
     <member name="P:StockSharp.Algo.History.Forex.DukasCopySource.TimeFrames">
       <summary>
             Доступные тайм-фреймы исторических данных.
@@ -1078,14 +1089,6 @@
             </summary>
       <remarks>
             Если значение равно пустой строке, то данные в формате CSV и Excel не обрабатываются.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.DumpFolder">
-      <summary>
-            Путь к директории, куда будут сохранятся скаченные файлы.
-            </summary>
-      <remarks>
-            Если значение равно пустой строке, то данные сохраняются в текущую директорию.
             </remarks>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.Rts.RtsHistorySource.SaveRtsStdTrades">

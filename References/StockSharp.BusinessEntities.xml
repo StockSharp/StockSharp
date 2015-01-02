@@ -3088,6 +3088,16 @@
             Системная информация об ошибке, содержащее причину отказа в регистрации или отмене.
             </summary>
         </member>
+        <member name="P:StockSharp.BusinessEntities.OrderFail.ServerTime">
+            <summary>
+            Серверное время.
+            </summary>
+        </member>
+        <member name="P:StockSharp.BusinessEntities.OrderFail.LocalTime">
+            <summary>
+            Метка локального времени, когда ошибка была получена.
+            </summary>
+        </member>
         <member name="P:StockSharp.BusinessEntities.OrderFail.ExtensionInfo">
             <summary>
             Расширенная информация по заявке с ошибкой.

@@ -8,6 +8,13 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 What's New
 ----------
 
+###v4.2.51:
+* (bug) Oanda. Security lookup and market data subscription fixes
+* (bug) Localization fixes
+* (feature) OrderFail. ServerTime and LocalTime fields
+* (bug) TrueFX and GainCapital historical sources fixes
+* (bug) Unit. Fix serialization
+
 ###v4.2.50:
 * (bug) Error loading candles from storage
 * (bug) FortsDailyData.GetRate fix

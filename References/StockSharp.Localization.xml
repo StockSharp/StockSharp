@@ -125,11 +125,6 @@
             Logging level
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str10Key">
-            <summary>
-            Logging level.
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str11Key">
             <summary>
             Inherited
@@ -137,7 +132,7 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str12Key">
             <summary>
-            Debugging
+            Debug
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str13Key">
@@ -6083,16 +6078,6 @@
         <member name="F:StockSharp.Localization.LocalizedStrings.Str1272ParamsKey">
             <summary>
             Order {0} {1} in {2}.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str1273Key">
-            <summary>
-            filled
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str1274Key">
-            <summary>
-            cancelled
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str1275ParamsKey">
@@ -19110,19 +19095,9 @@
             Best buy price or a trade by specified price or higher.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr285Key">
-            <summary>
-            Best bid price.
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr286Key">
             <summary>
             Best sell price or a trade by specified price or lower.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr287Key">
-            <summary>
-            Best ask price.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr288Key">
@@ -21285,6 +21260,51 @@
             Empty candle arg
             </summary>
         </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.WeekEndDateKey">
+            <summary>
+            Date {0:yyyyMMdd} is weekend.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.NoDataKey">
+            <summary>
+            No market-data.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.StartDownlodingKey">
+            <summary>
+            Start downloading {0}({1}) for {2:yyyyMMdd} date and {3} security.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.MarketDataNotEnabledKey">
+            <summary>
+            Market data {1} is not enabled for security {0}.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.TemporaryFilesKey">
+            <summary>
+            Temporary files
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.UseKey">
+            <summary>
+            Use
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.NotUseKey">
+            <summary>
+            Not use
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.UseAndDeleteKey">
+            <summary>
+            Use and delete
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.SecondsKey">
+            <summary>
+            {0:0} sec(-s)
+            </summary>
+        </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
             <summary>
             Get localized string.
@@ -21347,11 +21367,6 @@
             Logging level
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str10">
-            <summary>
-            Logging level.
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str11">
             <summary>
             Inherited
@@ -21359,7 +21374,7 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str12">
             <summary>
-            Debugging
+            Debug
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str13">
@@ -27305,16 +27320,6 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.Str1272Params">
             <summary>
             Order {0} {1} in {2}.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str1273">
-            <summary>
-            filled
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str1274">
-            <summary>
-            cancelled
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str1275Params">
@@ -40332,19 +40337,9 @@
             Best buy price or a trade by specified price or higher.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr285">
-            <summary>
-            Best bid price.
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr286">
             <summary>
             Best sell price or a trade by specified price or lower.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr287">
-            <summary>
-            Best ask price.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr288">
@@ -42505,6 +42500,51 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.EmptyCandleArg">
             <summary>
             Empty candle arg
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.WeekEndDate">
+            <summary>
+            Date {0:yyyyMMdd} is weekend.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.NoData">
+            <summary>
+            No market-data.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.StartDownloding">
+            <summary>
+            Start downloading {0}({1}) for {2:yyyyMMdd} date and {3} security.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.MarketDataNotEnabled">
+            <summary>
+            Market data {1} is not enabled for security {0}.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.TemporaryFiles">
+            <summary>
+            Temporary files
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.Use">
+            <summary>
+            Use
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.NotUse">
+            <summary>
+            Not use
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.UseAndDelete">
+            <summary>
+            Use and delete
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.Seconds">
+            <summary>
+            {0:0} sec(-s)
             </summary>
         </member>
     </members>
