@@ -55,7 +55,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <controls:MarketDataSettingsComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" ToolTip="{x:Static loc:LocalizedStrings.XamlStr818}" SelectedSettings="{Binding MarketDataSettings, Mode=TwoWay}"/>
+        <controls:MarketDataSettingsComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" ToolTip="{x:Static loc:LocalizedStrings.MarketDataStorage}" SelectedSettings="{Binding MarketDataSettings, Mode=TwoWay}"/>
 
         <Label Content="{x:Static loc:LocalizedStrings.XamlStr625}" Grid.Row="1" Grid.Column="0" />
         <editors:DateTimeEditBox Grid.Row="1" Grid.Column="1" Value="{Binding DateFrom, Mode=TwoWay}" />
@@ -81,7 +81,7 @@
                  Text="{Binding SecurityCode, Mode=TwoWay}" />
 
 		<TextBlock Grid.Row="1" Grid.Column="0">
-			<Run Text="{x:Static loc:LocalizedStrings.Str209}"/><Run Text=":"/>
+			<Run Text="{x:Static loc:LocalizedStrings.Board}"/><Run Text=":"/>
 		</TextBlock>
         <xaml:ExchangeBoardComboBox Grid.Row="1" Grid.Column="1" 
                                     IsEnabled="{Binding CanEdit}"

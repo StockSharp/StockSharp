@@ -68,8 +68,8 @@ namespace StockSharp.Hydra.Panes
 			/// <summary>
 			/// Инструмент.
 			/// </summary>
-			[DisplayNameLoc(LocalizedStrings.Str211Key)]
-			[DescriptionLoc(LocalizedStrings.Str211Key, true)]
+			[DisplayNameLoc(LocalizedStrings.SecurityKey)]
+			[DescriptionLoc(LocalizedStrings.SecurityKey, true)]
 			[CategoryLoc(LocalizedStrings.Str167Key)]
 			[PropertyOrder(0)]
 			public Security Security

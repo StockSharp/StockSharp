@@ -1042,7 +1042,7 @@ namespace StockSharp.Studio.Controls
 		{
 			InputBorder.Child = CreateControl();
 
-			IndexSecurityWindow.Title = LocalizedStrings.Str695;
+			IndexSecurityWindow.Title = LocalizedStrings.ContinuousSecurity;
 			_editor.Changed += SecurityChanged;
 			_editor.Drop += EditorOnDrop;
 

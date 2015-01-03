@@ -56,7 +56,9 @@
 			</TextBlock>
 			<TextBox x:Name="VolumeStep" TextAlignment="Right" Width="188" Height="23" Grid.Column="1" Grid.Row="8" />
 
-			<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr771}" Height="23" Grid.Row="10" Grid.Column="0" />
+			<TextBlock Height="23" Grid.Row="10" Grid.Column="0">
+				<Run Text="{x:Static loc:LocalizedStrings.Board}"/>:
+			</TextBlock>
 			<sx:ExchangeBoardComboBox x:Name="ExchangeCtrl" Width="188" Height="23" Grid.Column="1" Grid.Row="10" IsEnabled="False" />
 
 			<TextBlock Height="23" Grid.Row="12" Grid.Column="0">

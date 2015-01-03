@@ -28,11 +28,13 @@
                 <sx:PortfolioComboBox x:Name="Portfolio" Grid.Row="0" Grid.Column="1" />
                 
                 <TextBlock Grid.Row="1" Grid.Column="0">
-					<Run Text="{x:Static loc:LocalizedStrings.Str123}"/><Run Text=":"/>
+					<Run Text="{x:Static loc:LocalizedStrings.Price}"/><Run Text=":"/>
 				</TextBlock>
                 <TextBox x:Name="OrderPrice" Text="0" TextAlignment="Right" Grid.Column="1" Grid.Row="1" />
-                
-                <Label Content="{x:Static loc:LocalizedStrings.XamlStr383}" HorizontalContentAlignment="Right" Grid.Row="2" Grid.Column="0" />
+
+				<TextBlock HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0">
+					<Run Text="{x:Static loc:LocalizedStrings.Volume}" /><Run Text=":"/>
+				</TextBlock>
                 <TextBox x:Name="OrderVolume" Text="0" TextAlignment="Right" Grid.Column="1" Grid.Row="2" />
 
                 <RadioButton x:Name="IsBuy" Content="{x:Static loc:LocalizedStrings.Str403}" GroupName="Direction" IsChecked="True" Grid.Row="3" Grid.Column="0" Margin="0,3,0,3" />

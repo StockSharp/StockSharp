@@ -1,6 +1,7 @@
 <Window x:Class="StockSharp.Studio.Controls.PositionEditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="http://schemas.stocksharp.com/xaml"
         Title="{x:Static loc:LocalizedStrings.Str3247}" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Height="450" Width="320">
     
@@ -19,6 +20,6 @@
         <sx:PropertyGridEx Grid.ColumnSpan="3" Margin="3" x:Name="PropertyGrid"/>
 
         <Button Grid.Row="2" Grid.Column="1" Margin="3" Content="{x:Static loc:LocalizedStrings.XamlStr385}" IsDefault="True" Click="OkButton_Click"/>
-        <Button Grid.Row="2" Grid.Column="2" Margin="3" Content="{x:Static loc:LocalizedStrings.Str111}" IsCancel="True"/>
+        <Button Grid.Row="2" Grid.Column="2" Margin="3" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True"/>
     </Grid>
 </Window>

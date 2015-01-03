@@ -1,6 +1,7 @@
 <ribbon:Tab x:Class="StockSharp.Studio.Ribbon.TerminalTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
              xmlns:themes="http://schemas.actiprosoftware.com/winfx/xaml/themes"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
@@ -75,9 +76,9 @@
         </ribbon:Group.Resources>
 
         <ribbon:StackPanel ItemVariantBehavior="AlwaysMedium">
-            <xaml:PortfolioEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Str99}" SelectedPortfolio="{Binding Path=SelectedStrategy.Portfolio, Mode=TwoWay}"/>
-            <xaml:SecurityEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Str211}" SelectedSecurity="{Binding Path=SelectedStrategy.Security, Mode=TwoWay}"/>
-            <controls:MarketDataSettingsComboBox Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.XamlStr818}" SelectedSettings="{Binding Path=SelectedStrategy.MarketDataSettings}"/>
+            <xaml:PortfolioEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Portfolio}" SelectedPortfolio="{Binding Path=SelectedStrategy.Portfolio, Mode=TwoWay}"/>
+            <xaml:SecurityEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Security}" SelectedSecurity="{Binding Path=SelectedStrategy.Security, Mode=TwoWay}"/>
+            <controls:MarketDataSettingsComboBox Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.MarketDataStorage}" SelectedSettings="{Binding Path=SelectedStrategy.MarketDataSettings}"/>
         </ribbon:StackPanel>
 
         <ribbon:StackPanel ItemVariantBehavior="AlwaysSmall">

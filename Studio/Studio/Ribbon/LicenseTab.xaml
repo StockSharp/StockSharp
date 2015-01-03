@@ -29,7 +29,7 @@
         <local:FeatureIsCheckedConverter x:Key="FeatureIsCheckedConverter"/>
     </ribbon:Tab.Resources>
     
-    <ribbon:Group Label="{x:Static loc:LocalizedStrings.Str13}">
+    <ribbon:Group Label="{x:Static loc:LocalizedStrings.Info}">
         <ribbon:StackPanel ItemVariantBehavior="AlwaysMedium" Margin="2,2,3,0">
             <StackPanel Orientation="Vertical">
 				<TextBlock Margin="-2,0,0,0">
@@ -88,7 +88,7 @@
             </ribbon:RibbonGallery.PopupContent>
         </ribbon:RibbonGallery>
 
-        <ribbon:RibbonGallery Label="{x:Static loc:LocalizedStrings.XamlStr816}" x:Name="FeaturesCtrl"
+        <ribbon:RibbonGallery Label="{x:Static loc:LocalizedStrings.Features}" x:Name="FeaturesCtrl"
                               IsSelectionHighlightVisible="False" LargeVariantColumnCount="3" MediumVariantColumnCount="3" VariantBehavior="NoAutoSize">
             <ribbon:RibbonGallery.ItemTemplate>
                 <DataTemplate>

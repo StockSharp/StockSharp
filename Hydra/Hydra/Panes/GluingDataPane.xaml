@@ -1,7 +1,8 @@
 <UserControl 
 			x:Class="StockSharp.Hydra.Panes.GluingDataPane"
 			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 			xmlns:xaml="http://schemas.stocksharp.com/xaml"
 			xmlns:controls="clr-namespace:StockSharp.Hydra.Controls"
 			xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
@@ -58,9 +59,9 @@
 			        Grid.Column="0" Click="CreateContinuousSecurity_OnClick" />
 
 			<ComboBox x:Name="DataTypeComboBox" Grid.Row="0" Grid.Column="2" SelectionChanged="DataTypeComboBox_SelectionChanged">
-				<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Str91}"/></ComboBoxItem>
+				<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Ticks}"/></ComboBoxItem>
 				<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Str1414}"/></ComboBoxItem>
-				<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Str646}"/></ComboBoxItem>
+				<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Candles}"/></ComboBoxItem>
 				<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Str1416}"/></ComboBoxItem>
 				<ComboBoxItem>Level 1</ComboBoxItem>
 			</ComboBox>

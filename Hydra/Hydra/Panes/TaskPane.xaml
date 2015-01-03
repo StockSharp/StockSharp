@@ -212,7 +212,7 @@
 				</DataGridTemplateColumn>
 
 				<DataGridTextColumn Width="150" Header="ID" Binding="{Binding Path=TaskSecurity.Security.Id}" SortMemberPath="TaskSecurity.Security.Id" ElementStyle="{StaticResource TextCenterStyle}" />
-				<DataGridTextColumn Width="100" Header="{x:Static loc:LocalizedStrings.Str209}" Binding="{Binding Path=TaskSecurity.Security.Board}" Visibility="Collapsed" SortMemberPath="TaskSecurity.Security.Board" ElementStyle="{StaticResource TextCenterStyle}" />
+				<DataGridTextColumn Width="100" Header="{x:Static loc:LocalizedStrings.Board}" Binding="{Binding Path=TaskSecurity.Security.Board}" Visibility="Collapsed" SortMemberPath="TaskSecurity.Security.Board" ElementStyle="{StaticResource TextCenterStyle}" />
 
 				<DataGridTemplateColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr109}" SortMemberPath="IsInvalid">
 					<DataGridTemplateColumn.CellTemplate>
@@ -230,7 +230,7 @@
 								<TextBlock Grid.Column="1" Text="D" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1414}" Visibility="{Binding Path=IsDepthEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="2" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1416}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="3" Text="L1" Margin="1" ToolTip="Level 1" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="4" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str646}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="4" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 							</Grid>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -239,7 +239,7 @@
 					</DataGridTemplateColumn.CellStyle>
 				</DataGridTemplateColumn>
 
-				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str592}" Binding="{Binding Path=TaskSecurity.TradeInfo.Count}" SortMemberPath="TaskSecurity.TradeInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
+				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Trades}" Binding="{Binding Path=TaskSecurity.TradeInfo.Count}" SortMemberPath="TaskSecurity.TradeInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr708}" Binding="{Binding Path=TaskSecurity.DepthInfo.Count}" SortMemberPath="TaskSecurity.DepthInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr388}" Binding="{Binding Path=TaskSecurity.OrderLogInfo.Count}" SortMemberPath="TaskSecurity.OrderLogInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="Level 1" Binding="{Binding Path=TaskSecurity.Level1Info.Count}" SortMemberPath="TaskSecurity.Level1Info.Count" ElementStyle="{StaticResource TextRightStyle}" />
@@ -257,7 +257,7 @@
 		</ug:UniversalGrid>
 
 		<StackPanel x:Name="ControlPanel" Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="17" Grid.Column="0">
-			<xctk:WatermarkTextBox x:Name="NameLike" Height="24" Width="100" Margin="0,0,5,0" TextChanged="NameLikeTextChanged" ToolTip="{x:Static loc:LocalizedStrings.XamlStr477}" Watermark="{x:Static loc:LocalizedStrings.Str211}"/>
+			<xctk:WatermarkTextBox x:Name="NameLike" Height="24" Width="100" Margin="0,0,5,0" TextChanged="NameLikeTextChanged" ToolTip="{x:Static loc:LocalizedStrings.XamlStr477}" Watermark="{x:Static loc:LocalizedStrings.Security}"/>
 
 			<Button Name="AddAllSecurity" Content="All@" Height="23" Width="100" Margin="0,0,5,0" Focusable="False" Click="AddAllSecurity_OnClick" IsEnabled="False" />
 
@@ -277,7 +277,7 @@
 				<StackPanel x:Name="MarketDataPanel" Orientation="Horizontal" FlowDirection="LeftToRight" IsEnabled="False">
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Str985}" Height="23" x:Name="Trades" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Str1414}" Height="23" x:Name="Depths" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
-					<Button Content="{x:Static loc:LocalizedStrings.Str646}" Height="23" x:Name="Candles" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="Candles_OnClick" MouseEnter="Candles_OnMouseEnter" Style="{StaticResource CandleStyle}" />
+					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Height="23" x:Name="Candles" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="Candles_OnClick" MouseEnter="Candles_OnMouseEnter" Style="{StaticResource CandleStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Str1416}" Height="23" x:Name="OrderLog" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="Level 1" Height="23" x:Name="Level1Changes" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 				</StackPanel>

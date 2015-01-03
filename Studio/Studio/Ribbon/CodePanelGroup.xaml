@@ -1,10 +1,11 @@
 <ribbon:Group x:Class="StockSharp.Studio.Ribbon.CodePanelGroup"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"              xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
               xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
               xmlns:local="clr-namespace:StockSharp.Studio.Ribbon"
               xmlns:code="clr-namespace:StockSharp.Xaml.Code;assembly=StockSharp.Xaml"
-              Label="{x:Static loc:LocalizedStrings.Str57}">
+              Label="{x:Static loc:LocalizedStrings.Code}">
     
     <ribbon:Group.CommandBindings>
         <CommandBinding Command="{x:Static local:CodePanelGroup.EditReferencesCommand}"

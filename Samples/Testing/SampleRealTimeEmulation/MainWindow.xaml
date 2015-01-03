@@ -1,6 +1,7 @@
 <Window x:Class="SampleRealTimeEmulation.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
 		xmlns:ss="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
 		xmlns:charting="http://schemas.stocksharp.com/xaml"
@@ -51,7 +52,7 @@
 
 				<Label Grid.Column="0" Grid.Row="4">
 					<TextBlock>
-						<Run Text="{x:Static loc:LocalizedStrings.Str211}"/><Run Text=":"/>
+						<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
 					</TextBlock>
 				</Label>
 				<sx:SecurityEditor x:Name="SecurityEditor" Grid.Column="1" Grid.Row="4" SecuritySelected="SecurityEditor_OnSecuritySelected" />

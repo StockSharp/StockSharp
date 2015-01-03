@@ -75,7 +75,7 @@ namespace StockSharp.Studio
 
 	    public string Title
 		{
-            get { return LocalizedStrings.Str57; }
+            get { return LocalizedStrings.Code; }
 		}
 
 		Uri IStudioControl.Icon

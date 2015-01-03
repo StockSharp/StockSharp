@@ -1,6 +1,7 @@
 <controls:BaseStudioControl x:Class="StockSharp.Studio.Controls.TradesPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
@@ -28,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <ToolBar ToolBarTray.IsLocked="True">
-            <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr811}" ToolTipService.ShowOnDisabled="True" Click="Filter_OnClick">
+            <Button ToolTip="{x:Static loc:LocalizedStrings.Filter}" ToolTipService.ShowOnDisabled="True" Click="Filter_OnClick">
                 <ex:BmpImage Source="Images/filter_16x16.png" Style="{StaticResource BmpStyle}" />
             </Button>
 

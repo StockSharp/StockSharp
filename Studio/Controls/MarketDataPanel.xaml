@@ -1,6 +1,7 @@
 <local:BaseStudioControl x:Class="StockSharp.Studio.Controls.MarketDataPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
@@ -22,7 +23,7 @@
 						<TextBlock Text="{x:Static loc:LocalizedStrings.Str2834}"/>
 						<ProgressBar Height="15"/>
 					</StackPanel>
-					<Button Content="{x:Static loc:LocalizedStrings.Str111}" HorizontalAlignment="Center" />
+					<Button Content="{x:Static loc:LocalizedStrings.Cancel}" HorizontalAlignment="Center" />
 				</StackPanel>
 			</DataTemplate>
 		</xctk:BusyIndicator.BusyContentTemplate>
@@ -92,7 +93,7 @@
 						</Grid.RowDefinitions>
 
 						<StackPanel Orientation="Horizontal">
-							<Label Content="{x:Static loc:LocalizedStrings.XamlStr815}" />
+							<Label Content="{x:Static loc:LocalizedStrings.StorageFormat}" />
 							<sx:StorageFormatComboBox x:Name="FormatCtrl" VerticalAlignment="Center" SelectionChanged="FormatCtrl_OnSelectionChanged" />
 						</StackPanel>
 						

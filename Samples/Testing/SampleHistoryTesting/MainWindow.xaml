@@ -79,9 +79,9 @@
 					<ProgressBar x:Name="CandlesAndDepthsTestingProcess" Grid.Column="1" Grid.Row="5" />
 					<ProgressBar x:Name="OrderLogTestingProcess" Grid.Column="1" Grid.Row="6" />
 
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Str91}" Grid.Row="2" Grid.Column="0" Name="TicksCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.Ticks}" Grid.Row="2" Grid.Column="0" Name="TicksCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr757}" Grid.Row="3" Grid.Column="0" Name="TicksAndDepthsCheckBox" Click="CheckBoxClick" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Str646}" Grid.Row="4" Grid.Column="0" Name="CandlesCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.Candles}" Grid.Row="4" Grid.Column="0" Name="CandlesCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr635}" Grid.Row="5" Grid.Column="0" Name="CandlesAndDepthsCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Grid.Row="6" Grid.Column="0" Name="OrderLogCheckBox" Click="CheckBoxClick" />
 
@@ -105,13 +105,13 @@
 					</Grid.ColumnDefinitions>
 
 					<TabControl x:Name="TabControl" Width="250" Visibility="Collapsed">
-						<TabItem Header="{x:Static loc:LocalizedStrings.Str91}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksCheckBox, Path=IsChecked}">
+						<TabItem Header="{x:Static loc:LocalizedStrings.Ticks}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksCheckBox, Path=IsChecked}">
 							<sx:StatisticParameterGrid x:Name="TicksParameterGrid" />
 						</TabItem>
 						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr757}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksAndDepthsCheckBox, Path=IsChecked}">
 							<sx:StatisticParameterGrid x:Name="TicksAndDepthsParameterGrid" />
 						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.Str646}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesCheckBox, Path=IsChecked}">
+						<TabItem Header="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesCheckBox, Path=IsChecked}">
 							<sx:StatisticParameterGrid x:Name="CandlesParameterGrid" />
 						</TabItem>
 						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr635}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesAndDepthsCheckBox, Path=IsChecked}">
@@ -128,7 +128,7 @@
 							<RowDefinition Height="100"/>
 						</Grid.RowDefinitions>
 						<TabControl>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str646}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
 								<charting:ChartPanel x:Name="Chart" ShowOverview="False" />
 							</TabItem>
 							<TabItem Header="{x:Static loc:LocalizedStrings.Str2344}">

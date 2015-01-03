@@ -76,7 +76,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["Offset"] = value; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str646Key)]
+			[CategoryLoc(LocalizedStrings.CandlesKey)]
 			[DisplayNameLoc(LocalizedStrings.Str225Key)]
 			[DescriptionLoc(LocalizedStrings.Str3761Key)]
 			[PropertyOrder(3)]

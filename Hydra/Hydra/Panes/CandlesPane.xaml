@@ -45,7 +45,7 @@
 
 				<ComboBox x:Name="BuildFrom" Margin="5,0,0,0" Width="103">
 					<ComboBoxItem IsSelected="True"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr346}"/></ComboBoxItem>
-					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr758}"/></ComboBoxItem>
+					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Ticks}"/></ComboBoxItem>
 					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr759}"/></ComboBoxItem>
 					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr708}"/></ComboBoxItem>
 					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr709}"/></ComboBoxItem>

@@ -1,6 +1,7 @@
 <Window x:Class="StockSharp.Hydra.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:hydra="clr-namespace:StockSharp.Hydra"
 		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml" 
 		xmlns:core="clr-namespace:StockSharp.Hydra.Core;assembly=StockSharp.Hydra.Core" 
@@ -366,7 +367,7 @@
 	<xctk:BusyIndicator Name="BusyIndicator">
 		<DockPanel LastChildFill="True">
 			<Menu DockPanel.Dock="Top">
-				<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr804}">
+				<MenuItem Header="{x:Static loc:LocalizedStrings.File}">
 					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr140}" Name="SourcesMenu">
 						<MenuItem.ItemsPanel>
 							<ItemsPanelTemplate>
@@ -376,7 +377,7 @@
 
 						<MenuItem x:Name="RussianSourcesMi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
 						<MenuItem x:Name="AmericanSourcesMi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
-						<MenuItem x:Name="ForexSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr812}" />
+						<MenuItem x:Name="ForexSourcesMi" Header="{x:Static loc:LocalizedStrings.Forex}" />
 						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.Str398}" />
 						<MenuItem x:Name="OtherSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
 
@@ -410,7 +411,7 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str187}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Security"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Trade"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Depth"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str646}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Candle"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Candle"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2250}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="News"/>
@@ -419,7 +420,7 @@
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Str981}">
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str646}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2250}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
@@ -448,7 +449,13 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1470}" Name="MnuCheckForUpdates"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr610}" Name="MnuTargetPlatform" Command="{x:Static hydra:MainWindow.TargetPlatformCommand}"/>
 					<Separator/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr367}" Command="{x:Static hydra:MainWindow.AboutCommand}"/>
+					<MenuItem Command="{x:Static hydra:MainWindow.AboutCommand}">
+						<MenuItem.Header>
+							<TextBlock>
+								<Run Text="{x:Static loc:LocalizedStrings.About}" />...
+							</TextBlock>
+						</MenuItem.Header>
+					</MenuItem>
 				</MenuItem>
 			</Menu>
 
@@ -487,7 +494,7 @@
 				<ToolBar ToolBarTray.IsLocked="True">
 					<Button Content="{x:Static loc:LocalizedStrings.Str985}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str1414}" Width="85" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
-					<Button Content="{x:Static loc:LocalizedStrings.Str646}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str1416}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<Button Content="Level 1" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str2250}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
@@ -555,7 +562,7 @@
 									<Menu x:Name="SourcesDropDownButtonMenu">
 										<MenuItem x:Name="RussianSourcesCi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
 										<MenuItem x:Name="AmericanSourcesCi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
-										<MenuItem x:Name="ForexSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr812}" />
+										<MenuItem x:Name="ForexSourcesCi" Header="{x:Static loc:LocalizedStrings.Forex}" />
 										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.Str398}" />
 										<MenuItem x:Name="OtherSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
 										

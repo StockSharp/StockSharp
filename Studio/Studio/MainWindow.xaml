@@ -86,7 +86,7 @@
                     <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr130}" Command="{x:Static local:MainWindow.DataDirectoryCommand}" />
                     <ribbon:Separator />
                     <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr700}" Command="{x:Static local:MainWindow.DocumentationCommand}"/>
-                    <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr367}" Command="{x:Static local:MainWindow.AboutCommand}"/>
+                    <ribbon:Button Label="{x:Static loc:LocalizedStrings.About}" Command="{x:Static local:MainWindow.AboutCommand}"/>
                     <ribbon:Separator />
 					<ribbon:Button Label="{x:Static loc:LocalizedStrings.Exit}" Command="{x:Static local:MainWindow.ExitCommand}" />
                 </ribbon:ApplicationMenu>
@@ -126,7 +126,7 @@
 						<ribbon:PopupButton Label="{x:Static loc:LocalizedStrings.XamlStr668}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr675}" ToolTipService.ShowOnDisabled="True"
                                         ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png">
 							<ribbon:Menu>
-								<ribbon:Button Label="{x:Static loc:LocalizedStrings.Str99}" 
+								<ribbon:Button Label="{x:Static loc:LocalizedStrings.Portfolio}" 
                                            Command="{x:Static local:MainWindow.NewPortfolioCommand}" 
                                            CommandParameter="{x:Type businessEntities:Portfolio}" />
 								<ribbon:Button Label="{x:Static loc:LocalizedStrings.Str862}" 

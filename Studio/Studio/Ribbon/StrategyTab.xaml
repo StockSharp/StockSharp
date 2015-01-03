@@ -1,6 +1,7 @@
 <ribbon:Tab x:Class="StockSharp.Studio.Ribbon.StrategyTab"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"            xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
             xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
             xmlns:local="clr-namespace:StockSharp.Studio.Ribbon"
             xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
@@ -153,11 +154,11 @@
 
         <ribbon:StackPanel ItemVariantBehavior="AlwaysMedium"
                                        IsEnabled="{Binding SelectedStrategy.ProcessState, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Stopped}">
-            <xaml:PortfolioEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Str99}"
+            <xaml:PortfolioEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Portfolio}"
                                   SelectedPortfolio="{Binding Path=SelectedStrategy.Portfolio, Mode=TwoWay}"/>
-            <xaml:SecurityEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Str211}"
+            <xaml:SecurityEditor Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.Security}"
                                  SelectedSecurity="{Binding Path=SelectedStrategy.Security, Mode=TwoWay}"/>
-            <controls:MarketDataSettingsComboBox Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.XamlStr818}"
+            <controls:MarketDataSettingsComboBox Width="120" Margin="0,1,0,1" ToolTip="{x:Static loc:LocalizedStrings.MarketDataStorage}"
                                                  SelectedSettings="{Binding Path=SelectedStrategy.MarketDataSettings, Mode=TwoWay}"/>
         </ribbon:StackPanel>
 

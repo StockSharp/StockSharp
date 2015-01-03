@@ -33,7 +33,7 @@ namespace StockSharp.Studio.Controls
 
 		public event Action<Security, Security> SecurityChanged;
 
-		[DisplayNameLoc(LocalizedStrings.Str211Key)]
+		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str3192Key)]
 		[PropertyOrder(10)]
 		public Security Security
@@ -52,7 +52,7 @@ namespace StockSharp.Studio.Controls
 			}
 		}
 
-		[DisplayNameLoc(LocalizedStrings.Str99Key)]
+		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
 		[DescriptionLoc(LocalizedStrings.Str1997Key)]
 		[PropertyOrder(15)]
 		public Portfolio Portfolio
@@ -120,7 +120,7 @@ namespace StockSharp.Studio.Controls
 			}
 		}
 
-		[DisplayNameLoc(LocalizedStrings.Str61Key)]
+		[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
 		[DescriptionLoc(LocalizedStrings.Str3199Key)]
 		[PropertyOrder(50)]
 		public bool ShowMarketOrderPanel

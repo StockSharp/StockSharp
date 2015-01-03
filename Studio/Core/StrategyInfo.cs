@@ -86,7 +86,7 @@ namespace StockSharp.Studio.Core
 			}
 		}
 
-		[DisplayNameLoc(LocalizedStrings.Str97Key)]
+		[DisplayNameLoc(LocalizedStrings.StateKey)]
 		[DescriptionLoc(LocalizedStrings.Str3186Key)]
 		[CategoryLoc(LocalizedStrings.Str1559Key)]
 		public StrategyInfoStates State

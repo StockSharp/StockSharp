@@ -125,7 +125,7 @@
             Logging level
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str11Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.InheritedKey">
             <summary>
             Inherited
             </summary>
@@ -135,22 +135,22 @@
             Debug
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str13Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.InfoKey">
             <summary>
-            Information
+            Info
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str14Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WarningsKey">
             <summary>
             Warnings
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str15Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ErrorsKey">
             <summary>
             Errors
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str16Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OffKey">
             <summary>
             Off
             </summary>
@@ -160,34 +160,34 @@
             Method should be implemented in the inherited class.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str18Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MessageLogKey">
             <summary>
             Message log
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str19Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IntervalMustBePositiveKey">
             <summary>
             Interval must be positive.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str20ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ObjectWasAlreadyAddedKey">
             <summary>
             Object {0} was added earlier.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str21ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ObjectWasAlreadyDeletedKey">
             <summary>
             Object {0} was deleted earlier.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str22Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SomeObjectWasDeletedKey">
             <summary>
             Some objects were already deleted earlier.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str23Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WrongLoginOrPasswordKey">
             <summary>
-            Wrong login and password.
+            Wrong login or password.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str24Key">
@@ -195,127 +195,117 @@
             Temporary block is on due to unsuccessful authorization tries.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str25Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.UserBlockedKey">
             <summary>
             User account blocked.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str26Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SessionExpiredKey">
             <summary>
-            Session is out of date or was not created.
+            Session was expired or not created.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str27Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.AccountNotFoundKey">
             <summary>
             Information about the user account not found.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str28ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnknownServerErrorCodeKey">
             <summary>
             Unknown server '{0}' error code.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str29Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnknownServerErrorKey">
             <summary>
             Unknown server error.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str30Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MessageNoTextKey">
             <summary>
             Message contains no text.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str31Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MessageTextMaxKey">
             <summary>
             Message text esceeded maximum allowed length.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str32ParamsKey">
-            <summary>
-            User {0} not found or wrong password was entered.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str33Key">
-            <summary>
-            Internal server error.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str34Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SmsNotEnoughKey">
             <summary>
             SMS is not enough.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str35Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.EmailNotEnoughKey">
             <summary>
-            Just email is not enough.
+            Email is not enough.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str36Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PhoneNotSpecifiedKey">
             <summary>
             Phone number not specified.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str37Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.EmailIncorrectKey">
             <summary>
             Specified Email has incorrect format.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str38Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LoginIncorrectKey">
             <summary>
             Specified login has incorrect format.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str39Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PhoneIncorrectKey">
             <summary>
             Specified phone number has incorrect format.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str40Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PasswordNotCriteriaKey">
             <summary>
             Specified password does not meet security criteria.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str41Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.EmailAlreadyUseKey">
             <summary>
             Specified Email address is already in use.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str42Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PhoneAlreadyUseKey">
             <summary>
             Specified phone number is already in use.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str43Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LoginAlreadyUseKey">
             <summary>
             Specified login is already in use.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str44Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IncorrectVerificationCodeKey">
             <summary>
             Incorrect verification code.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str45Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IncorrectSmsCodeKey">
             <summary>
             Incorrect SMS code.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str46Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CannotGetLicenseKey">
             <summary>
             Cannot get a license.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str47Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LicenseRevokedKey">
             <summary>
             License revoked.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str48Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SmsActivationFailedKey">
             <summary>
             SMS activation failed. Read more at http://stocksharp.com/profile/ .
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str49Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MaxLicensePerMinKey">
             <summary>
             Maximum number of license generations per minute exceeded.
             </summary>
@@ -325,27 +315,27 @@
             for '{0}' portfolio '{1}'
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str51ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LicenseWrongKey">
             <summary>
             License N{0} is wrong.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str52ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LicenseWrongHIDKey">
             <summary>
             License N{0} contains a wrong computer ID '{1}' instead of '{2}'.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str53ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LicenseExpiredKey">
             <summary>
             License N{0} has expired {1}. Visit http://stocksharp.com/ to obtain a new license.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str54ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LicenseNotSupportKey">
             <summary>
             License N{0} does not support '{1}'.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str55Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.StockExchangeKey">
             <summary>
             Stock exchange
             </summary>
@@ -355,17 +345,17 @@
             Code of the stock exchange, to which the board belongs.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str57Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CodeKey">
             <summary>
             Code
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str58Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BoardCodeKey">
             <summary>
             Board code.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str59Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ReregisteringKey">
             <summary>
             Reregistering
             </summary>
@@ -375,19 +365,14 @@
             Is order reregistration as a single transaction supported.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str61Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MarketOrdersKey">
             <summary>
             Market orders
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str62Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MarketOrdersSupportedKey">
             <summary>
             Are market type orders supported.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str63Key">
-            <summary>
-            Expiry
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str64Key">
@@ -395,17 +380,12 @@
             Securities expiry times.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str65Key">
-            <summary>
-            Work times
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str66Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WorkingHoursKey">
             <summary>
             Board working hours
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str67Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TimeZoneKey">
             <summary>
             Time zone
             </summary>
@@ -415,34 +395,29 @@
             Information about the time zone where the stock exchange is situated.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str69Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SecurityIdKey">
             <summary>
             Security ID
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str70Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandleOpenTimeKey">
             <summary>
-            Security ID.
+            Time of candle open
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str71Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandleHighTimeKey">
             <summary>
-            Candle beginning time
+            Time of candle high
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str73Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandleLowTimeKey">
             <summary>
-            Time of candle maximum
+            Time of candle low
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str75Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandleCloseTimeKey">
             <summary>
-            Time of candle minimum
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str77Key">
-            <summary>
-            Candle ending time
+            Time of candle close
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str79Key">
@@ -475,7 +450,7 @@
             Minimum price of a candle.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str85Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ClosingPriceKey">
             <summary>
             Closing price
             </summary>
@@ -485,117 +460,112 @@
             Candle closing price.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str87Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.VolumeKey">
             <summary>
             Volume
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str88Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TotalCandleVolumeKey">
             <summary>
             Total candle volume.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str89Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OIKey">
             <summary>
             OI
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str90Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OpenInterestKey">
             <summary>
             Open interest.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str91Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TicksKey">
             <summary>
             Ticks
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str92Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TickCountKey">
             <summary>
             Number of ticks.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str93Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TickUpKey">
             <summary>
             Ticks (up)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str94Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TickUpCountKey">
             <summary>
-            Number of ascending ticks.
+            Number of uptrending ticks.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str95Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TickDownKey">
             <summary>
             Ticks (down)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str96Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TickDownCountKey">
             <summary>
-            Number of descending ticks.
+            Number of downtrending ticks.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str97Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.StateKey">
             <summary>
             State
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str98Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandleStateKey">
             <summary>
             Candle state.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str99Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PortfolioKey">
             <summary>
             Portfolio
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str100Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PortfolioNameKey">
             <summary>
             Portfolio name.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str101Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DepoKey">
             <summary>
             Depositary
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str102Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DepoNameKey">
             <summary>
-            Depositary name гwhere the security is physically held.
+            Depositary name where the security is physically held.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str103Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ServerTimeKey">
             <summary>
             Server time
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str104Key">
-            <summary>
-            Server time.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str105Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TransactionKey">
             <summary>
             Transaction
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str106Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TransactionIdKey">
             <summary>
-            Transaction number.
+            Transaction ID.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str107Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OriginalTrasactionKey">
             <summary>
-            Initial transaction
+            Original transaction
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str108Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OriginalTrasactionIdKey">
             <summary>
-            Number of initial transaction, for which this message is the answer.
+            ID of original transaction, for which this message is the answer.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str109Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DataTypeKey">
             <summary>
             Data type
             </summary>
@@ -605,27 +575,27 @@
             Data type, information about which is contained in the message.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str111Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CancelKey">
             <summary>
             Cancel
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str112Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IsActionOrderCancellationKey">
             <summary>
             Is the action an order cancellation.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str113Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OrderIdKey">
             <summary>
             Order ID
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str115Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OrderIdStringKey">
             <summary>
             Order ID (string)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str116Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OrderIdStringDescKey">
             <summary>
             Order ID (as string, if electronic board does not use numeric order ID representation).
             </summary>
@@ -640,42 +610,42 @@
             Electronic board order ID.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str119Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DerivedKey">
             <summary>
-            Derivative
+            Derived
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str120Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DerivedOrderIdKey">
             <summary>
             Derived order ID (e.g., conditional order generated a real stock exchange order).
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str121Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DerivedStringKey">
             <summary>
             Derived (string)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str122Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.DerivedStringDescKey">
             <summary>
             Derived order ID (string value).
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str123Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PriceKey">
             <summary>
             Price
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str124Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OrderPriceKey">
             <summary>
             Order price.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str125Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OrderVolumeKey">
             <summary>
             Number of contracts in an order.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str126Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.VisibleVolumeKey">
             <summary>
             Visible volume
             </summary>
@@ -1070,32 +1040,27 @@
             Local time label when a message was received/created.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str205Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ExtendedInfoKey">
             <summary>
             Extended information
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str207Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IdKey">
             <summary>
-            Number
+            ID
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str208Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.NewsIdKey">
             <summary>
-            News number.
+            News ID.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str209Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BoardKey">
             <summary>
             Board
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str210Key">
-            <summary>
-            Electronic board code.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str211Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SecurityKey">
             <summary>
             Security
             </summary>
@@ -1587,22 +1552,22 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str313Key">
             <summary>
-            Best buy price
+            Best bid price
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str314Key">
             <summary>
-            Best buy volume
+            Best bid volume
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str315Key">
             <summary>
-            Best sell price
+            Best ask price
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str316Key">
             <summary>
-            Best sell volume
+            Best ask volume
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str317Key">
@@ -1638,11 +1603,6 @@
         <member name="F:StockSharp.Localization.LocalizedStrings.Str323Key">
             <summary>
             Number of trades
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str324Key">
-            <summary>
-            Average price
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str325Key">
@@ -2632,22 +2592,22 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str565Key">
             <summary>
-            Best buy
+            Best bid
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str566Key">
             <summary>
-            Best buy in market depth.
+            Best bid in market depth.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str567Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BestAskKey">
             <summary>
-            Best sell
+            Best ask
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str568Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BestAskDescKey">
             <summary>
-            Best sell in market depth.
+            Best ask in market depth.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str569Key">
@@ -2655,97 +2615,97 @@
             Current state of security.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str570Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PriceMinKey">
             <summary>
             Price (min)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str571Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PriceMinLimitKey">
             <summary>
             Lower price limit.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str572Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PriceMaxKey">
             <summary>
             Price (max)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str573Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PriceMaxLimitKey">
             <summary>
             Upper price limit.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str575Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MarginBuyKey">
             <summary>
             Initial margin to buy.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str577Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MarginSellKey">
             <summary>
             Initial margin to sell.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str580Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TheoreticalPriceKey">
             <summary>
             Theoretical price.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str581Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionDeltaKey">
             <summary>
             Option delta.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str582Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionGammaKey">
             <summary>
             Option gamma.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str583Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionVegaKey">
             <summary>
             Option vega.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str584Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionThetaKey">
             <summary>
-            Option contract theta.
+            Option theta.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str585Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OptionRhoKey">
             <summary>
-            Option contract rho.
+            Option rho.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str586Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BidsVolumeKey">
             <summary>
             Total volume in all buy orders.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str587Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BidsKey">
             <summary>
-            Bids'
+            Bids
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str588Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BidsCountKey">
             <summary>
             Number of buy orders.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str589Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.AsksVolumeKey">
             <summary>
             Total volume in all sell orders.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str590Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.AsksKey">
             <summary>
             Asks
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str591Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.AsksCountKey">
             <summary>
             Number of sell orders.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str592Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TradesKey">
             <summary>
             Trades
             </summary>
@@ -2760,19 +2720,14 @@
             Maximum ask during the session.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str597Key">
-            <summary>
-            Average price.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str598Key">
-            <summary>
-            Settlement price.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str599Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.AveragePriceKey">
             <summary>
             Average price
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.SettlementPriceKey">
+            <summary>
+            Settlement price.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str600Key">
@@ -2785,7 +2740,7 @@
             Volume per session.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str602Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IdentifiersKey">
             <summary>
             Identifiers
             </summary>
@@ -2795,7 +2750,7 @@
             Security IDs in other systems
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str604Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TickTradeKey">
             <summary>
             Tick trade.
             </summary>
@@ -2810,7 +2765,7 @@
             Trade received local time.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str607Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TradeVolumeKey">
             <summary>
             Number of contracts in a trade.
             </summary>
@@ -2820,59 +2775,19 @@
             Order direction (buy or sell), which led to the trade.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str609Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SystemTradeKey">
             <summary>
             System trade
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str610Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.IsSystemTradeKey">
             <summary>
             Is a system trade
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str612Key">
-            <summary>
-            Cannot cast percentage value to absolute value.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str613Key">
-            <summary>
-            Limited value can not participate in mathematical operations.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str615ParamsKey">
-            <summary>
-            Percentage can not be compared to non percentages {0} and {1}.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str616ParamsKey">
-            <summary>
-            Unknown unit of measurement '{0}'.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str617Key">
-            <summary>
-            Percentage can only be converted to percentage.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str618ParamsKey">
-            <summary>
-            Unit of measurement can not be '{0}' because security information has not been sent.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str619Key">
-            <summary>
-            Price step cost is equal to zero.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str620ParamsKey">
             <summary>
             Value has unknown type {0}.
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str622Key">
-            <summary>
-            Security has a price step equal to zero.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str623ParamsKey">
@@ -2920,7 +2835,7 @@
             Adapter {0} does not support security {1} for {2}: {3}
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str632Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.SubscriptionProcessCancelledKey">
             <summary>
             Subscription process cancelled by user.
             </summary>
@@ -2950,7 +2865,7 @@
             Method should be overriden for the factory.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str638Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OffsetValueIncorrectKey">
             <summary>
             Offset value is incorrect.
             </summary>
@@ -2960,24 +2875,24 @@
             Time-frame must be above zero.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str641Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TickCountMustBePositiveKey">
             <summary>
             Number of ticks should be positive.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str642Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.VolumeMustBeGreaterThanZeroKey">
             <summary>
             Volume must be greater than zero.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str643Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.PriceRangeMustBeGreaterThanZeroKey">
             <summary>
             Price range must be greater than zero.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str644Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandleManagerIsNotSetKey">
             <summary>
-            Candles manager is not installed.
+            Candles manager is not set.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str645Key">
@@ -2985,7 +2900,7 @@
             Price change should be greater than zero.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str646Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandlesKey">
             <summary>
             Candles
             </summary>
@@ -3010,14 +2925,14 @@
             Series {0} was not stopped.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str651Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CandlesElemKey">
             <summary>
             Candles (elements)
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str652Key">
             <summary>
-            Data storage time cannot be negative.
+            Data keep time cannot be negative.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str653ParamsKey">
@@ -3045,7 +2960,7 @@
             Cannot calculate security basket value.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str659Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.CommissionValueKey">
             <summary>
             Commission value.
             </summary>
@@ -3135,24 +3050,19 @@
             Security type commission
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str677Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BoardCommissionKey">
             <summary>
             Board commission
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str678Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TurnoverKey">
             <summary>
             Turnover
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str679Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TurnoverCommissionKey">
             <summary>
             Turnover commission
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str680Key">
-            <summary>
-            Turnover.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str681ParamsKey">
@@ -3180,7 +3090,7 @@
             Connection in state {0} received an unexpected message of type '{1}'.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str686ParamsKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ConnectionNotSupportSecurityKey">
             <summary>
             Connection does not support security {0}.
             </summary>
@@ -3225,7 +3135,7 @@
             Cannot stop export, because export is in state {0}.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str695Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ContinuousSecurityKey">
             <summary>
             Continuous security
             </summary>
@@ -19067,12 +18977,12 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr284Key">
             <summary>
-            Best buy price or a trade by specified price or higher.
+            Best bid price or a trade by specified price or higher.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr286Key">
             <summary>
-            Best sell price or a trade by specified price or lower.
+            Best ask price or a trade by specified price or lower.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.LciViewerKey">
@@ -19305,11 +19215,6 @@
             Do not build
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr349Key">
-            <summary>
-            Continuous futures
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr352Key">
             <summary>
             New algo-order...
@@ -19365,11 +19270,6 @@
             Id (board)
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr367Key">
-            <summary>
-            About...
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr368Key">
             <summary>
             Margin is higher than specified.
@@ -19385,17 +19285,17 @@
             Overview:
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr372Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OverviewAreaKey">
             <summary>
             Overview area
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr373Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ObfucateKey">
             <summary>
             Obfucate:
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr375Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.JoinKey">
             <summary>
             Join
             </summary>
@@ -19405,19 +19305,9 @@
             Merge selected elements into a composite element
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr378Key">
-            <summary>
-            Volume (visible)
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr382Key">
             <summary>
             Last trade volume
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr383Key">
-            <summary>
-            Volume:
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr385Key">
@@ -19425,7 +19315,7 @@
             OK
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr386Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.WindowKey">
             <summary>
             Window
             </summary>
@@ -20745,11 +20635,6 @@
             Memory statistics
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr718Key">
-            <summary>
-            Price
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr722Key">
             <summary>
             Stop orders...
@@ -20770,7 +20655,7 @@
             Build chart of the initial securities
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr729Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LineKey">
             <summary>
             Line
             </summary>
@@ -20865,19 +20750,9 @@
             Ticks and depths
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr758Key">
-            <summary>
-            Ticks
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr759Key">
             <summary>
             Ticks (OL)
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr760Key">
-            <summary>
-            Ticks:
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr762Key">
@@ -20895,19 +20770,14 @@
             Strategy type:
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr769Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BorderWidthKey">
             <summary>
             Border width
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr770Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.OnlyPublicKey">
             <summary>
             Only public
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr771Key">
-            <summary>
-            Market board:
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr774Key">
@@ -21025,12 +20895,12 @@
             Conditional orders...
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr804Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.FileKey">
             <summary>
             File
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr805Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.FileAssemblyKey">
             <summary>
             File (assembly)
             </summary>
@@ -21055,12 +20925,12 @@
             Exact expiration filter for options
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr811Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.FilterKey">
             <summary>
             Filter
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr812Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.ForexKey">
             <summary>
             Forex
             </summary>
@@ -21070,37 +20940,37 @@
             Text value format. Used only for dates and times.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr815Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.StorageFormatKey">
             <summary>
             Storage format:
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr816Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.FeaturesKey">
             <summary>
             Features
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr818Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MarketDataStorageKey">
             <summary>
             Market data storage
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr820Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.LineColorKey">
             <summary>
             Line color
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr821Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BorderColorKey">
             <summary>
             Border color
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr822Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.FontColorKey">
             <summary>
             Font color
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr823Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.BackgroundColorKey">
             <summary>
             Background color
             </summary>
@@ -21125,14 +20995,9 @@
             Last trade price
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr834Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TradePriceKey">
             <summary>
             Trade price
-            </summary>
-        </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr836Key">
-            <summary>
-            Time zone:
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr843Key">
@@ -21280,6 +21145,11 @@
             {0:0} sec(-s)
             </summary>
         </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.AboutKey">
+            <summary>
+            About
+            </summary>
+        </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
             <summary>
             Get localized string.
@@ -21342,7 +21212,7 @@
             Logging level
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str11">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Inherited">
             <summary>
             Inherited
             </summary>
@@ -21352,22 +21222,22 @@
             Debug
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str13">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Info">
             <summary>
-            Information
+            Info
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str14">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Warnings">
             <summary>
             Warnings
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str15">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Errors">
             <summary>
             Errors
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str16">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Off">
             <summary>
             Off
             </summary>
@@ -21377,34 +21247,34 @@
             Method should be implemented in the inherited class.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str18">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MessageLog">
             <summary>
             Message log
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str19">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IntervalMustBePositive">
             <summary>
             Interval must be positive.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str20Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ObjectWasAlreadyAdded">
             <summary>
             Object {0} was added earlier.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str21Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ObjectWasAlreadyDeleted">
             <summary>
             Object {0} was deleted earlier.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str22">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SomeObjectWasDeleted">
             <summary>
             Some objects were already deleted earlier.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str23">
+        <member name="P:StockSharp.Localization.LocalizedStrings.WrongLoginOrPassword">
             <summary>
-            Wrong login and password.
+            Wrong login or password.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str24">
@@ -21412,127 +21282,117 @@
             Temporary block is on due to unsuccessful authorization tries.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str25">
+        <member name="P:StockSharp.Localization.LocalizedStrings.UserBlocked">
             <summary>
             User account blocked.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str26">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SessionExpired">
             <summary>
-            Session is out of date or was not created.
+            Session was expired or not created.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str27">
+        <member name="P:StockSharp.Localization.LocalizedStrings.AccountNotFound">
             <summary>
             Information about the user account not found.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str28Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnknownServerErrorCode">
             <summary>
             Unknown server '{0}' error code.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str29">
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnknownServerError">
             <summary>
             Unknown server error.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str30">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MessageNoText">
             <summary>
             Message contains no text.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str31">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MessageTextMax">
             <summary>
             Message text esceeded maximum allowed length.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str32Params">
-            <summary>
-            User {0} not found or wrong password was entered.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str33">
-            <summary>
-            Internal server error.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str34">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SmsNotEnough">
             <summary>
             SMS is not enough.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str35">
+        <member name="P:StockSharp.Localization.LocalizedStrings.EmailNotEnough">
             <summary>
-            Just email is not enough.
+            Email is not enough.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str36">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PhoneNotSpecified">
             <summary>
             Phone number not specified.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str37">
+        <member name="P:StockSharp.Localization.LocalizedStrings.EmailIncorrect">
             <summary>
             Specified Email has incorrect format.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str38">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LoginIncorrect">
             <summary>
             Specified login has incorrect format.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str39">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PhoneIncorrect">
             <summary>
             Specified phone number has incorrect format.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str40">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PasswordNotCriteria">
             <summary>
             Specified password does not meet security criteria.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str41">
+        <member name="P:StockSharp.Localization.LocalizedStrings.EmailAlreadyUse">
             <summary>
             Specified Email address is already in use.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str42">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PhoneAlreadyUse">
             <summary>
             Specified phone number is already in use.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str43">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LoginAlreadyUse">
             <summary>
             Specified login is already in use.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str44">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IncorrectVerificationCode">
             <summary>
             Incorrect verification code.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str45">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IncorrectSmsCode">
             <summary>
             Incorrect SMS code.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str46">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CannotGetLicense">
             <summary>
             Cannot get a license.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str47">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LicenseRevoked">
             <summary>
             License revoked.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str48">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SmsActivationFailed">
             <summary>
             SMS activation failed. Read more at http://stocksharp.com/profile/ .
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str49">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MaxLicensePerMin">
             <summary>
             Maximum number of license generations per minute exceeded.
             </summary>
@@ -21542,27 +21402,27 @@
             for '{0}' portfolio '{1}'
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str51Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LicenseWrong">
             <summary>
             License N{0} is wrong.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str52Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LicenseWrongHID">
             <summary>
             License N{0} contains a wrong computer ID '{1}' instead of '{2}'.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str53Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LicenseExpired">
             <summary>
             License N{0} has expired {1}. Visit http://stocksharp.com/ to obtain a new license.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str54Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LicenseNotSupport">
             <summary>
             License N{0} does not support '{1}'.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str55">
+        <member name="P:StockSharp.Localization.LocalizedStrings.StockExchange">
             <summary>
             Stock exchange
             </summary>
@@ -21572,17 +21432,17 @@
             Code of the stock exchange, to which the board belongs.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str57">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Code">
             <summary>
             Code
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str58">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BoardCode">
             <summary>
             Board code.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str59">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Reregistering">
             <summary>
             Reregistering
             </summary>
@@ -21592,19 +21452,14 @@
             Is order reregistration as a single transaction supported.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str61">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MarketOrders">
             <summary>
             Market orders
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str62">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MarketOrdersSupported">
             <summary>
             Are market type orders supported.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str63">
-            <summary>
-            Expiry
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str64">
@@ -21612,17 +21467,12 @@
             Securities expiry times.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str65">
-            <summary>
-            Work times
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str66">
+        <member name="P:StockSharp.Localization.LocalizedStrings.WorkingHours">
             <summary>
             Board working hours
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str67">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TimeZone">
             <summary>
             Time zone
             </summary>
@@ -21632,34 +21482,29 @@
             Information about the time zone where the stock exchange is situated.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str69">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SecurityId">
             <summary>
             Security ID
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str70">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandleOpenTime">
             <summary>
-            Security ID.
+            Time of candle open
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str71">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandleHighTime">
             <summary>
-            Candle beginning time
+            Time of candle high
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str73">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandleLowTime">
             <summary>
-            Time of candle maximum
+            Time of candle low
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str75">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandleCloseTime">
             <summary>
-            Time of candle minimum
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str77">
-            <summary>
-            Candle ending time
+            Time of candle close
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str79">
@@ -21692,7 +21537,7 @@
             Minimum price of a candle.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str85">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ClosingPrice">
             <summary>
             Closing price
             </summary>
@@ -21702,117 +21547,112 @@
             Candle closing price.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str87">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Volume">
             <summary>
             Volume
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str88">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TotalCandleVolume">
             <summary>
             Total candle volume.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str89">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OI">
             <summary>
             OI
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str90">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OpenInterest">
             <summary>
             Open interest.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str91">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Ticks">
             <summary>
             Ticks
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str92">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TickCount">
             <summary>
             Number of ticks.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str93">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TickUp">
             <summary>
             Ticks (up)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str94">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TickUpCount">
             <summary>
-            Number of ascending ticks.
+            Number of uptrending ticks.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str95">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TickDown">
             <summary>
             Ticks (down)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str96">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TickDownCount">
             <summary>
-            Number of descending ticks.
+            Number of downtrending ticks.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str97">
+        <member name="P:StockSharp.Localization.LocalizedStrings.State">
             <summary>
             State
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str98">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandleState">
             <summary>
             Candle state.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str99">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Portfolio">
             <summary>
             Portfolio
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str100">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PortfolioName">
             <summary>
             Portfolio name.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str101">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Depo">
             <summary>
             Depositary
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str102">
+        <member name="P:StockSharp.Localization.LocalizedStrings.DepoName">
             <summary>
-            Depositary name гwhere the security is physically held.
+            Depositary name where the security is physically held.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str103">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ServerTime">
             <summary>
             Server time
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str104">
-            <summary>
-            Server time.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str105">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Transaction">
             <summary>
             Transaction
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str106">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TransactionId">
             <summary>
-            Transaction number.
+            Transaction ID.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str107">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OriginalTrasaction">
             <summary>
-            Initial transaction
+            Original transaction
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str108">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OriginalTrasactionId">
             <summary>
-            Number of initial transaction, for which this message is the answer.
+            ID of original transaction, for which this message is the answer.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str109">
+        <member name="P:StockSharp.Localization.LocalizedStrings.DataType">
             <summary>
             Data type
             </summary>
@@ -21822,27 +21662,27 @@
             Data type, information about which is contained in the message.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str111">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Cancel">
             <summary>
             Cancel
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str112">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IsActionOrderCancellation">
             <summary>
             Is the action an order cancellation.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str113">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OrderId">
             <summary>
             Order ID
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str115">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OrderIdString">
             <summary>
             Order ID (string)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str116">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OrderIdStringDesc">
             <summary>
             Order ID (as string, if electronic board does not use numeric order ID representation).
             </summary>
@@ -21857,42 +21697,42 @@
             Electronic board order ID.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str119">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Derived">
             <summary>
-            Derivative
+            Derived
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str120">
+        <member name="P:StockSharp.Localization.LocalizedStrings.DerivedOrderId">
             <summary>
             Derived order ID (e.g., conditional order generated a real stock exchange order).
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str121">
+        <member name="P:StockSharp.Localization.LocalizedStrings.DerivedString">
             <summary>
             Derived (string)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str122">
+        <member name="P:StockSharp.Localization.LocalizedStrings.DerivedStringDesc">
             <summary>
             Derived order ID (string value).
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str123">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Price">
             <summary>
             Price
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str124">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OrderPrice">
             <summary>
             Order price.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str125">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OrderVolume">
             <summary>
             Number of contracts in an order.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str126">
+        <member name="P:StockSharp.Localization.LocalizedStrings.VisibleVolume">
             <summary>
             Visible volume
             </summary>
@@ -22287,32 +22127,27 @@
             Local time label when a message was received/created.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str205">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ExtendedInfo">
             <summary>
             Extended information
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str207">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Id">
             <summary>
-            Number
+            ID
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str208">
+        <member name="P:StockSharp.Localization.LocalizedStrings.NewsId">
             <summary>
-            News number.
+            News ID.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str209">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Board">
             <summary>
             Board
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str210">
-            <summary>
-            Electronic board code.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str211">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Security">
             <summary>
             Security
             </summary>
@@ -22804,22 +22639,22 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str313">
             <summary>
-            Best buy price
+            Best bid price
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str314">
             <summary>
-            Best buy volume
+            Best bid volume
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str315">
             <summary>
-            Best sell price
+            Best ask price
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str316">
             <summary>
-            Best sell volume
+            Best ask volume
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str317">
@@ -22855,11 +22690,6 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.Str323">
             <summary>
             Number of trades
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str324">
-            <summary>
-            Average price
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str325">
@@ -23849,22 +23679,22 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str565">
             <summary>
-            Best buy
+            Best bid
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str566">
             <summary>
-            Best buy in market depth.
+            Best bid in market depth.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str567">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BestAsk">
             <summary>
-            Best sell
+            Best ask
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str568">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BestAskDesc">
             <summary>
-            Best sell in market depth.
+            Best ask in market depth.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str569">
@@ -23872,97 +23702,97 @@
             Current state of security.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str570">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PriceMin">
             <summary>
             Price (min)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str571">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PriceMinLimit">
             <summary>
             Lower price limit.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str572">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PriceMax">
             <summary>
             Price (max)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str573">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PriceMaxLimit">
             <summary>
             Upper price limit.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str575">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MarginBuy">
             <summary>
             Initial margin to buy.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str577">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MarginSell">
             <summary>
             Initial margin to sell.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str580">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TheoreticalPrice">
             <summary>
             Theoretical price.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str581">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionDelta">
             <summary>
             Option delta.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str582">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionGamma">
             <summary>
             Option gamma.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str583">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionVega">
             <summary>
             Option vega.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str584">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionTheta">
             <summary>
-            Option contract theta.
+            Option theta.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str585">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OptionRho">
             <summary>
-            Option contract rho.
+            Option rho.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str586">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BidsVolume">
             <summary>
             Total volume in all buy orders.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str587">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Bids">
             <summary>
-            Bids'
+            Bids
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str588">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BidsCount">
             <summary>
             Number of buy orders.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str589">
+        <member name="P:StockSharp.Localization.LocalizedStrings.AsksVolume">
             <summary>
             Total volume in all sell orders.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str590">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Asks">
             <summary>
             Asks
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str591">
+        <member name="P:StockSharp.Localization.LocalizedStrings.AsksCount">
             <summary>
             Number of sell orders.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str592">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Trades">
             <summary>
             Trades
             </summary>
@@ -23977,19 +23807,14 @@
             Maximum ask during the session.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str597">
-            <summary>
-            Average price.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str598">
-            <summary>
-            Settlement price.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str599">
+        <member name="P:StockSharp.Localization.LocalizedStrings.AveragePrice">
             <summary>
             Average price
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.SettlementPrice">
+            <summary>
+            Settlement price.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str600">
@@ -24002,7 +23827,7 @@
             Volume per session.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str602">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Identifiers">
             <summary>
             Identifiers
             </summary>
@@ -24012,7 +23837,7 @@
             Security IDs in other systems
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str604">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TickTrade">
             <summary>
             Tick trade.
             </summary>
@@ -24027,7 +23852,7 @@
             Trade received local time.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str607">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TradeVolume">
             <summary>
             Number of contracts in a trade.
             </summary>
@@ -24037,59 +23862,19 @@
             Order direction (buy or sell), which led to the trade.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str609">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SystemTrade">
             <summary>
             System trade
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str610">
+        <member name="P:StockSharp.Localization.LocalizedStrings.IsSystemTrade">
             <summary>
             Is a system trade
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str612">
-            <summary>
-            Cannot cast percentage value to absolute value.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str613">
-            <summary>
-            Limited value can not participate in mathematical operations.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str615Params">
-            <summary>
-            Percentage can not be compared to non percentages {0} and {1}.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str616Params">
-            <summary>
-            Unknown unit of measurement '{0}'.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str617">
-            <summary>
-            Percentage can only be converted to percentage.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str618Params">
-            <summary>
-            Unit of measurement can not be '{0}' because security information has not been sent.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str619">
-            <summary>
-            Price step cost is equal to zero.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str620Params">
             <summary>
             Value has unknown type {0}.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str622">
-            <summary>
-            Security has a price step equal to zero.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str623Params">
@@ -24137,7 +23922,7 @@
             Adapter {0} does not support security {1} for {2}: {3}
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str632">
+        <member name="P:StockSharp.Localization.LocalizedStrings.SubscriptionProcessCancelled">
             <summary>
             Subscription process cancelled by user.
             </summary>
@@ -24167,7 +23952,7 @@
             Method should be overriden for the factory.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str638">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OffsetValueIncorrect">
             <summary>
             Offset value is incorrect.
             </summary>
@@ -24177,24 +23962,24 @@
             Time-frame must be above zero.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str641">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TickCountMustBePositive">
             <summary>
             Number of ticks should be positive.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str642">
+        <member name="P:StockSharp.Localization.LocalizedStrings.VolumeMustBeGreaterThanZero">
             <summary>
             Volume must be greater than zero.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str643">
+        <member name="P:StockSharp.Localization.LocalizedStrings.PriceRangeMustBeGreaterThanZero">
             <summary>
             Price range must be greater than zero.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str644">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandleManagerIsNotSet">
             <summary>
-            Candles manager is not installed.
+            Candles manager is not set.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str645">
@@ -24202,7 +23987,7 @@
             Price change should be greater than zero.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str646">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Candles">
             <summary>
             Candles
             </summary>
@@ -24227,14 +24012,14 @@
             Series {0} was not stopped.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str651">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CandlesElem">
             <summary>
             Candles (elements)
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str652">
             <summary>
-            Data storage time cannot be negative.
+            Data keep time cannot be negative.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str653Params">
@@ -24262,7 +24047,7 @@
             Cannot calculate security basket value.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str659">
+        <member name="P:StockSharp.Localization.LocalizedStrings.CommissionValue">
             <summary>
             Commission value.
             </summary>
@@ -24352,24 +24137,19 @@
             Security type commission
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str677">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BoardCommission">
             <summary>
             Board commission
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str678">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Turnover">
             <summary>
             Turnover
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str679">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TurnoverCommission">
             <summary>
             Turnover commission
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str680">
-            <summary>
-            Turnover.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str681Params">
@@ -24397,7 +24177,7 @@
             Connection in state {0} received an unexpected message of type '{1}'.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str686Params">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ConnectionNotSupportSecurity">
             <summary>
             Connection does not support security {0}.
             </summary>
@@ -24442,7 +24222,7 @@
             Cannot stop export, because export is in state {0}.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str695">
+        <member name="P:StockSharp.Localization.LocalizedStrings.ContinuousSecurity">
             <summary>
             Continuous security
             </summary>
@@ -40284,12 +40064,12 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr284">
             <summary>
-            Best buy price or a trade by specified price or higher.
+            Best bid price or a trade by specified price or higher.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr286">
             <summary>
-            Best sell price or a trade by specified price or lower.
+            Best ask price or a trade by specified price or lower.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.LciViewer">
@@ -40522,11 +40302,6 @@
             Do not build
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr349">
-            <summary>
-            Continuous futures
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr352">
             <summary>
             New algo-order...
@@ -40582,11 +40357,6 @@
             Id (board)
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr367">
-            <summary>
-            About...
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr368">
             <summary>
             Margin is higher than specified.
@@ -40602,17 +40372,17 @@
             Overview:
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr372">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OverviewArea">
             <summary>
             Overview area
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr373">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Obfucate">
             <summary>
             Obfucate:
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr375">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Join">
             <summary>
             Join
             </summary>
@@ -40622,19 +40392,9 @@
             Merge selected elements into a composite element
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr378">
-            <summary>
-            Volume (visible)
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr382">
             <summary>
             Last trade volume
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr383">
-            <summary>
-            Volume:
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr385">
@@ -40642,7 +40402,7 @@
             OK
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr386">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Window">
             <summary>
             Window
             </summary>
@@ -41962,11 +41722,6 @@
             Memory statistics
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr718">
-            <summary>
-            Price
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr722">
             <summary>
             Stop orders...
@@ -41987,7 +41742,7 @@
             Build chart of the initial securities
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr729">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Line">
             <summary>
             Line
             </summary>
@@ -42082,19 +41837,9 @@
             Ticks and depths
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr758">
-            <summary>
-            Ticks
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr759">
             <summary>
             Ticks (OL)
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr760">
-            <summary>
-            Ticks:
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr762">
@@ -42112,19 +41857,14 @@
             Strategy type:
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr769">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BorderWidth">
             <summary>
             Border width
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr770">
+        <member name="P:StockSharp.Localization.LocalizedStrings.OnlyPublic">
             <summary>
             Only public
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr771">
-            <summary>
-            Market board:
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr774">
@@ -42242,12 +41982,12 @@
             Conditional orders...
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr804">
+        <member name="P:StockSharp.Localization.LocalizedStrings.File">
             <summary>
             File
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr805">
+        <member name="P:StockSharp.Localization.LocalizedStrings.FileAssembly">
             <summary>
             File (assembly)
             </summary>
@@ -42272,12 +42012,12 @@
             Exact expiration filter for options
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr811">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Filter">
             <summary>
             Filter
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr812">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Forex">
             <summary>
             Forex
             </summary>
@@ -42287,37 +42027,37 @@
             Text value format. Used only for dates and times.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr815">
+        <member name="P:StockSharp.Localization.LocalizedStrings.StorageFormat">
             <summary>
             Storage format:
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr816">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Features">
             <summary>
             Features
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr818">
+        <member name="P:StockSharp.Localization.LocalizedStrings.MarketDataStorage">
             <summary>
             Market data storage
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr820">
+        <member name="P:StockSharp.Localization.LocalizedStrings.LineColor">
             <summary>
             Line color
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr821">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BorderColor">
             <summary>
             Border color
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr822">
+        <member name="P:StockSharp.Localization.LocalizedStrings.FontColor">
             <summary>
             Font color
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr823">
+        <member name="P:StockSharp.Localization.LocalizedStrings.BackgroundColor">
             <summary>
             Background color
             </summary>
@@ -42342,14 +42082,9 @@
             Last trade price
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr834">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TradePrice">
             <summary>
             Trade price
-            </summary>
-        </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr836">
-            <summary>
-            Time zone:
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr843">
@@ -42495,6 +42230,11 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.Seconds">
             <summary>
             {0:0} sec(-s)
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.About">
+            <summary>
+            About
             </summary>
         </member>
     </members>

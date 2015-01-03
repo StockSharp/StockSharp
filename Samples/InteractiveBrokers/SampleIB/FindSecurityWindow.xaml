@@ -1,6 +1,7 @@
 <Window x:Class="SampleIB.FindSecurityWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         Title="{x:Static loc:LocalizedStrings.XamlStr324}" Height="190" Width="300">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -29,7 +30,7 @@
 		<ComboBox x:Name="SecType" Grid.Row="2" Grid.Column="1" SelectionChanged="SecType_SelectionChanged" />
 
 		<TextBlock Grid.Row="4" Grid.Column="0">
-			<TextBlock Text="{x:Static loc:LocalizedStrings.Str55}"/><Run Text=":"/>
+			<TextBlock Text="{x:Static loc:LocalizedStrings.StockExchange}"/><Run Text=":"/>
 		</TextBlock>
 		<TextBox x:Name="BoardName" Grid.Row="4" Grid.Column="1" TextChanged="BoardName_TextChanged" />
 

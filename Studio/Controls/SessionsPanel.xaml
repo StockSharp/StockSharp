@@ -1,6 +1,7 @@
 <UserControl x:Class="StockSharp.Studio.Controls.SessionsPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:grids="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
@@ -20,7 +21,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <Expander Header="{x:Static loc:LocalizedStrings.XamlStr811}">
+        <Expander Header="{x:Static loc:LocalizedStrings.Filter}">
             <Grid Margin="0,2,0,3">
                 <Grid.RowDefinitions>
                     <RowDefinition />

@@ -1,6 +1,7 @@
 <UserControl x:Class="StockSharp.Studio.Controls.BuySellPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:editors="clr-namespace:ActiproSoftware.Windows.Controls.Editors;assembly=ActiproSoftware.Editors.Wpf"
              xmlns:local="clr-namespace:StockSharp.Studio.Controls"
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
@@ -114,7 +115,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="{x:Static loc:LocalizedStrings.Str61}" Grid.Row="2" Grid.Column="0"
+        <GroupBox Header="{x:Static loc:LocalizedStrings.MarketOrders}" Grid.Row="2" Grid.Column="0"
                       Visibility="{Binding ElementName=SettingsPropertyGrid, Path=SelectedObject.ShowMarketOrderPanel, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>

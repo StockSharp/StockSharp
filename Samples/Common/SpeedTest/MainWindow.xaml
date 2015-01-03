@@ -1,6 +1,7 @@
 <Window x:Class="SpeedTest.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:smartCom="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
         DataContext="{Binding RelativeSource={RelativeSource Self}}" 
         Title="{x:Static loc:LocalizedStrings.XamlStr164}" Height="215" Width="743">
@@ -23,8 +24,8 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="90" Header="{x:Static loc:LocalizedStrings.XamlStr776}" DisplayMemberBinding="{Binding TraderName}" />
-                    <GridViewColumn Width="90" Header="{x:Static loc:LocalizedStrings.Str97}" DisplayMemberBinding="{Binding ProcessState}" />
-                    <GridViewColumn Width="90" Header="{x:Static loc:LocalizedStrings.Str211}" DisplayMemberBinding="{Binding Security.Code}" />
+                    <GridViewColumn Width="90" Header="{x:Static loc:LocalizedStrings.State}" DisplayMemberBinding="{Binding ProcessState}" />
+                    <GridViewColumn Width="90" Header="{x:Static loc:LocalizedStrings.Security}" DisplayMemberBinding="{Binding Security.Code}" />
                     <GridViewColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr430}" DisplayMemberBinding="{Binding NumberOfOrders}"/>
                     <GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr306}" DisplayMemberBinding="{Binding MinLatency}"/>
                     <GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr702}" DisplayMemberBinding="{Binding AverageTime}"/>
