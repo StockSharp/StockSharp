@@ -35,5 +35,10 @@ namespace StockSharp.Studio.Services
 				.Select(security => _securities.SafeAdd(security.Id, id => security))
 				.ToArray();
 		}
+
+		object ISecurityProvider.GetNativeId(Security security)
+		{
+			return null;
+		}
 	}
 }

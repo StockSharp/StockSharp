@@ -375,6 +375,11 @@ namespace StockSharp.Studio.Database
 				return Database.ReadAll<Security>(_readAllByUnderlyingSecurityId, new SerializationItemCollection(fields));
 			}
 
+			object ISecurityProvider.GetNativeId(Security security)
+			{
+				return null;
+			}
+
 			IEnumerable<string> ISecurityStorage.GetSecurityIds()
 			{
 				var str = _readSecurityIds.ExecuteScalar<string>(new SerializationItemCollection());

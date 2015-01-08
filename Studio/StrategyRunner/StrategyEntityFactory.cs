@@ -64,6 +64,11 @@
 			return new[] { CreateSecurity(criteria.Id) };
 		}
 
+		object ISecurityProvider.GetNativeId(Security security)
+		{
+			return null;
+		}
+
 		public Portfolio LookupPortfolio(string name)
 		{
 			if (name == null)

@@ -46,6 +46,11 @@
 				return security == null ? Enumerable.Empty<Security>() : new[] { security };
 			}
 
+			object ISecurityProvider.GetNativeId(Security security)
+			{
+				throw new NotSupportedException();
+			}
+
 			void ISecurityStorage.Save(Security security)
 			{
 				_securitiesByCode[security.Code] = security;

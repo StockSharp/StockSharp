@@ -4956,11 +4956,6 @@
             Транзакция, создающая Plaza сообщения для общения с сервером РТС.
             </summary>
     </member>
-    <member name="P:StockSharp.Plaza.Transaction.AdditionalFields">
-      <summary>
-            Дополнительные поля транзакции.
-            </summary>
-    </member>
     <member name="P:StockSharp.Plaza.Transaction.Message">
       <summary>
             Сообщение, ассоциированное с данной транзакцией.
@@ -4974,11 +4969,6 @@
     <member name="P:StockSharp.Plaza.Transaction.Id">
       <summary>
             Уникальный идентификатор транзакции.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.Transaction.OriginTransaction">
-      <summary>
-            Исходная транзакция.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.Transaction.ErrorInfo">
