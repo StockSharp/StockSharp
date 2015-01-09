@@ -443,6 +443,28 @@ namespace StockSharp.Hydra.Panes
 							_fields.Add(new FieldMapping(_settings, "OI", LocalizedStrings.Str150, string.Empty, typeof(decimal), (i, v) => i.OpenInterest = v));
 							break;
 						}
+						case ExecutionTypes.Order:
+						{
+							_title = LocalizedStrings.OwnTransactions;
+
+							_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Str219, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
+							_fields.Add(new FieldMapping(_settings, "Portfolio", LocalizedStrings.Portfolio, string.Empty, typeof(string), (i, v) => i.PortfolioName = v) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "TransactionId", LocalizedStrings.TransactionId, string.Empty, typeof(long), (i, v) => i.TransactionId = v));
+							_fields.Add(new FieldMapping(_settings, "Id", LocalizedStrings.Id, string.Empty, typeof(long), (i, v) => i.OrderId = v));
+							_fields.Add(new FieldMapping(_settings, "Price", LocalizedStrings.Price, string.Empty, typeof(decimal), (i, v) => i.Price = v) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Volume", LocalizedStrings.Volume, string.Empty, typeof(decimal), (i, v) => i.Volume = v) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Balance", LocalizedStrings.Str1325, string.Empty, typeof(decimal), (i, v) => i.Balance = v) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Side", LocalizedStrings.Str329, string.Empty, typeof(Sides), (i, v) => i.Side = v));
+							_fields.Add(new FieldMapping(_settings, "OrderType", LocalizedStrings.Str132, string.Empty, typeof(OrderTypes), (i, v) => i.OrderType = v) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "OrderState", LocalizedStrings.Str134, string.Empty, typeof(OrderStates?), (i, v) => i.OrderState = v) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "TradeId", LocalizedStrings.Str723, string.Empty, typeof(long), (i, v) => i.TradeId = v) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "TradePrice", LocalizedStrings.Str724, string.Empty, typeof(decimal), (i, v) => i.TradePrice = v) { IsRequired = true });
+
+							break;
+						}
 						default:
 							throw new ArgumentOutOfRangeException();
 					}

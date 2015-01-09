@@ -888,6 +888,11 @@ namespace StockSharp.Hydra
 					dataType = typeof(NewsMessage);
 					break;
 
+				case "execution":
+					dataType = typeof(ExecutionMessage);
+					execType = ExecutionTypes.Order;
+					break;
+
 				default:
 					throw new ArgumentOutOfRangeException("e", param, LocalizedStrings.Str1655);
 			}

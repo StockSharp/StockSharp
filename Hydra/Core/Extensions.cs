@@ -144,6 +144,9 @@
 					case ExecutionTypes.OrderLog:
 						fileName = "orderLog";
 						break;
+					case ExecutionTypes.Order:
+						fileName = "executions";
+						break;
 					default:
 						throw new ArgumentOutOfRangeException("arg");
 				}

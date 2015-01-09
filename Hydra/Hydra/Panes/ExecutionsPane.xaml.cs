@@ -22,6 +22,11 @@
 			Init(ExportBtn, MainGrid, GetExecutions);
 		}
 
+		protected override object Arg
+		{
+			get { return ExecutionTypes.Order; }
+		}
+
 		protected override Type DataType
 		{
 			get { return typeof(ExecutionMessage); }

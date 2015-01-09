@@ -415,6 +415,7 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2250}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="News"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Execution"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Str981}">
@@ -424,6 +425,7 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2250}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Str187}">

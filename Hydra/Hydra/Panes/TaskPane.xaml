@@ -231,7 +231,7 @@
 								<TextBlock Grid.Column="2" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1416}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="3" Text="L1" Margin="1" ToolTip="Level 1" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="4" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                <TextBlock Grid.Column="4" Text="E" Margin="1" ToolTip="Executions" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <TextBlock Grid.Column="4" Text="E" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OwnTransactions}" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 							</Grid>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -245,7 +245,7 @@
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr388}" Binding="{Binding Path=TaskSecurity.OrderLogInfo.Count}" SortMemberPath="TaskSecurity.OrderLogInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="Level 1" Binding="{Binding Path=TaskSecurity.Level1Info.Count}" SortMemberPath="TaskSecurity.Level1Info.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr631}" Binding="{Binding Path=TaskSecurity.CandleInfo.Count}" SortMemberPath="TaskSecurity.CandleInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
-                <DataGridTextColumn Width="70" Header="Executions" Binding="{Binding Path=TaskSecurity.ExecutionInfo.Count}" SortMemberPath="TaskSecurity.ExecutionInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
+                <DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Binding="{Binding Path=TaskSecurity.ExecutionInfo.Count}" SortMemberPath="TaskSecurity.ExecutionInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 
 				<DataGridTextColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr518}" Visibility="Collapsed" Binding="{Binding Path=TaskSecurity.TradeInfo.LastTime}" SortMemberPath="TaskSecurity.TradeInfo.LastTime" ElementStyle="{StaticResource TextCenterStyle}" />
 				<DataGridTextColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr525}" Visibility="Collapsed" Binding="{Binding Path=TaskSecurity.DepthInfo.LastTime}" SortMemberPath="TaskSecurity.DepthInfo.LastTime" ElementStyle="{StaticResource TextCenterStyle}" />
@@ -282,7 +282,7 @@
 					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Height="23" x:Name="Candles" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="Candles_OnClick" MouseEnter="Candles_OnMouseEnter" Style="{StaticResource CandleStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Str1416}" Height="23" x:Name="OrderLog" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="Level 1" Height="23" x:Name="Level1Changes" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
-                    <CheckBox Content="Execution" Height="23" x:Name="Executions" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+                    <CheckBox Content="{x:Static loc:LocalizedStrings.OwnTransactions}" Height="23" x:Name="Executions" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 				</StackPanel>
 
 				<Popup Name="TimeFramesPopup" StaysOpen="False" PopupAnimation="Scroll" AllowsTransparency="True" PlacementTarget="{Binding ElementName=Candles}">
