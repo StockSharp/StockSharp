@@ -4,14 +4,17 @@ namespace SampleOEC
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
 
+	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+	using StockSharp.OpenECry;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
 
@@ -23,6 +26,9 @@ namespace SampleOEC
 		public SecuritiesWindow()
 		{
 			InitializeComponent();
+
+			CandlesPeriods.ItemsSource = OpenECrySessionHolder.TimeFrames;
+			CandlesPeriods.SelectedIndex = 0;
 		}
 
 		protected override void OnClosed(EventArgs e)
@@ -55,6 +61,7 @@ namespace SampleOEC
 		{
 			Depth.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled =
 			Quotes.IsEnabled = security != null;
+			TryEnableCandles();
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -144,6 +151,24 @@ namespace SampleOEC
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
 			new FindSecurityWindow().ShowModal(this);
+		}
+
+		private void CandlesClick(object sender, RoutedEventArgs e)
+		{
+			var tf = (TimeSpan)CandlesPeriods.SelectedItem;
+			var series = new CandleSeries(typeof(TimeFrameCandle), SecurityPicker.SelectedSecurity, tf);
+
+			new ChartWindow(series, tf.Ticks == 1 ? DateTime.Today : DateTime.Now.Subtract(TimeSpan.FromTicks(tf.Ticks * 100)), DateTime.Now).Show();
+		}
+
+		private void CandlesPeriods_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			TryEnableCandles();
+		}
+
+		private void TryEnableCandles()
+		{
+			Candles.IsEnabled = CandlesPeriods.SelectedItem != null && SecurityPicker.SelectedSecurity != null;
 		}
 	}
 }

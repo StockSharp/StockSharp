@@ -18,12 +18,12 @@
 
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal">
             <Label Content="{x:Static loc:LocalizedStrings.XamlStr281}" HorizontalAlignment="Right" />
-            <TextBox x:Name="Login" Text="" Width="97" />
+			<TextBox x:Name="Login" Text="" Width="97" />
 
             <Label Content="{x:Static loc:LocalizedStrings.XamlStr449}" HorizontalAlignment="Right" />
-            <PasswordBox x:Name="Password" Password="" Width="95" />
+			<PasswordBox x:Name="Password" Password="" Width="95" />
             <Label Content="{x:Static loc:LocalizedStrings.XamlStr22}" />
-			<oec:OECAddressComboBox Name="Address" Width="141" />
+			<oec:OpenECryAddressComboBox Name="Address" Width="141" />
         </StackPanel>
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Str2962}" Click="ConnectClick" />
@@ -31,7 +31,6 @@
 		<Button x:Name="ShowPortfolios" Grid.Column="2" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr510}" Click="ShowPortfoliosClick" />
 		<Button x:Name="ShowStopOrders" Grid.Column="3" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr722}" Click="ShowStopOrdersClick" />
 		
-		<Button x:Name="Export" Background="LightPink" Grid.Column="0" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Str981}" Click="ExportClick" />
 		<Button x:Name="ShowTrades" Grid.Column="1" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr644}" Click="ShowTradesClick" />
 		<Button x:Name="ShowMyTrades" Grid.Column="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr312}" Click="ShowMyTradesClick" />
         <Button x:Name="ShowOrders" Grid.Column="3" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr184}" Click="ShowOrdersClick" />

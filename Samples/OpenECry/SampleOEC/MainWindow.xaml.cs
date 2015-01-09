@@ -108,6 +108,8 @@ namespace SampleOEC
 
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
+
+						Trader.StartExport();
 					};
 
 					// подписываемся на событие разрыва соединения
@@ -191,7 +193,6 @@ namespace SampleOEC
 		{
 			_isConnected = isConnected;
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Str2961 : LocalizedStrings.Str2962;
-			Export.IsEnabled = isConnected;
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)
@@ -233,11 +234,6 @@ namespace SampleOEC
 				window.Hide();
 			else
 				window.Show();
-		}
-
-		private void ExportClick(object sender, RoutedEventArgs e)
-		{
-			Trader.StartExport();
 		}
 	}
 }

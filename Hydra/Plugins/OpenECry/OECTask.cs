@@ -83,7 +83,7 @@ namespace StockSharp.Hydra.OpenECry
 
 		public OECTask()
 		{
-			_supportedCandleSeries = OECSessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = OpenECrySessionHolder.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
@@ -120,7 +120,7 @@ namespace StockSharp.Hydra.OpenECry
 
 			if (settings.IsDefault)
 			{
-				_settings.Address = OECAddresses.Api;
+				_settings.Address = OpenECryAddresses.Api;
 				_settings.Uuid = string.Empty;
 				_settings.Login = string.Empty;
 				_settings.Password = new SecureString();

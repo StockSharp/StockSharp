@@ -17,6 +17,6 @@
 		<Label Grid.Row="0"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr238}"/></Label>
 		<TextBox x:Name="SecCode" Grid.Row="0" Grid.Column="1" TextChanged="SecCode_TextChanged" />
 
-		<Button x:Name="Ok" IsDefault="True" Grid.Row="8" Grid.ColumnSpan="2" Width="100" Click="Ok_Click" IsEnabled="False">OK</Button>
+		<Button x:Name="Ok" IsDefault="True" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Width="100" Click="Ok_Click" IsEnabled="False">OK</Button>
 	</Grid>
 </Window>
