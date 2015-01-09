@@ -9,6 +9,7 @@ namespace StockSharp.Hydra.OpenECry
 
 	using Ecng.Common;
 	using Ecng.Xaml;
+	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
@@ -62,6 +63,16 @@ namespace StockSharp.Hydra.OpenECry
 				set { ExtensionInfo["Password"] = value; }
 			}
 
+			[TaskCategory(_sourceName)]
+			[DisplayName("UUID")]
+			[DescriptionLoc(LocalizedStrings.Str2565Key)]
+			[PropertyOrder(3)]
+			public string Uuid
+			{
+				get { return (string)ExtensionInfo.TryGetValue("Uuid"); }
+				set { ExtensionInfo["Uuid"] = value; }
+			}
+
 			[Browsable(true)]
 			public override bool IsDownloadNews
 			{
@@ -110,6 +121,7 @@ namespace StockSharp.Hydra.OpenECry
 			if (settings.IsDefault)
 			{
 				_settings.Address = OECAddresses.Api;
+				_settings.Uuid = string.Empty;
 				_settings.Login = string.Empty;
 				_settings.Password = new SecureString();
 				_settings.IsDownloadNews = true;
@@ -118,6 +130,7 @@ namespace StockSharp.Hydra.OpenECry
 
 			return new MarketDataConnector<OECTrader>(EntityRegistry.Securities, this, () => new OECTrader
 			{
+				Uuid = _settings.Uuid,
 				Login = _settings.Login,
 				Password = _settings.Password.To<string>(),
 				Address = _settings.Address

@@ -5,6 +5,7 @@
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.Algo.History.Russian.Finam;
 	using StockSharp.Algo.Storages;
@@ -43,6 +44,12 @@
 
 			var security = _cacheByFinamId.TryGetValue(finamId.Value);
 			return security == null ? Enumerable.Empty<Security>() : new[] { security };
+		}
+
+		object ISecurityProvider.GetNativeId(Security security)
+		{
+			var finamId = _cacheByFinamId.SyncGet(d => d.FirstOrDefault(p => p.Value == security).Key);
+			return finamId.IsDefault() ? null : (object)finamId;
 		}
 
 		void ISecurityStorage.Save(Security security)

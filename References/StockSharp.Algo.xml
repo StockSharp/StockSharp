@@ -3112,6 +3112,13 @@
       <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
       <returns>Найденные инструменты.</returns>
     </member>
+    <member name="M:StockSharp.Algo.Connector.GetNativeId(StockSharp.BusinessEntities.Security)">
+      <summary>
+            Получить внутренний идентификатор торговой системы.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <returns>Внутренний идентификатор торговой системы.</returns>
+    </member>
     <member name="M:StockSharp.Algo.Connector.GetSessionState(StockSharp.BusinessEntities.ExchangeBoard)">
       <summary>
             Получить состояние сессии для заданной площадки.

@@ -373,6 +373,11 @@ namespace StockSharp.Studio
 			{
 				return _entityRegistry.Securities.Lookup(criteria);
 			}
+
+			object ISecurityProvider.GetNativeId(Security security)
+			{
+				return null;
+			}
 		}
 
 		private readonly CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>> _exports = new CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>>();
@@ -756,6 +761,11 @@ namespace StockSharp.Studio
 			return criteria.Id.IsEmpty()
 				? Enumerable.Empty<Security>()
 				: new[] { _entityRegistry.Securities.ReadById(criteria.Id) };
+		}
+
+		object ISecurityProvider.GetNativeId(Security security)
+		{
+			return null;
 		}
 	}
 }

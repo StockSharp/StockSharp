@@ -1795,6 +1795,13 @@
             <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
             <returns>Найденные инструменты.</returns>
         </member>
+        <member name="M:StockSharp.BusinessEntities.ISecurityProvider.GetNativeId(StockSharp.BusinessEntities.Security)">
+            <summary>
+            Получить внутренний идентификатор торговой системы.
+            </summary>
+            <param name="security">Инструмент.</param>
+            <returns>Внутренний идентификатор торговой системы.</returns>
+        </member>
         <member name="M:StockSharp.BusinessEntities.FilterableSecurityProvider.#ctor(StockSharp.BusinessEntities.ISecurityList,System.Func{StockSharp.BusinessEntities.Security,System.Boolean})">
             <summary>
             Создать <see cref="T:StockSharp.BusinessEntities.FilterableSecurityProvider"/>.

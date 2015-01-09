@@ -45,6 +45,11 @@
 			return security == null ? Enumerable.Empty<Security>() : new[] { security };
 		}
 
+		object ISecurityProvider.GetNativeId(Security security)
+		{
+			return _cacheByMfdId.SyncGet(d => d.FirstOrDefault(p => p.Value == security).Key);
+		}
+
 		void ISecurityStorage.Save(Security security)
 		{
 			_entityRegistry.Securities.Save(security);

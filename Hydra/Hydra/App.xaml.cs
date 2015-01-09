@@ -1,7 +1,11 @@
 namespace StockSharp.Hydra
 {
 	using System.Collections.Generic;
+
+	using Ecng.Localization;
+
 	using StockSharp.Localization;
+	using StockSharp.Xaml;
 
 	public partial class App
 	{
@@ -11,26 +15,27 @@ namespace StockSharp.Hydra
 			CheckTargetPlatform = true;
 		}
 
-		private readonly string[] _features = { "Finam", "Rts", LocalizedStrings.Str2825, "UX", "S#.Data" };
-
-		protected override IEnumerable<string> ExtendedFeaturesX64
+		private readonly TargetPlatformFeature[] _extendedFeatures =
 		{
-			get
-			{
-				// в Гидре Квик работает и под 64 бита, так как используется только DDE.
-				//return _features.Concat("Quik");
+			new TargetPlatformFeature("Alor", Languages.Russian),
+			new TargetPlatformFeature("Finam", Languages.Russian),
+			new TargetPlatformFeature("MFD", Languages.Russian),
+			new TargetPlatformFeature("RTS", Languages.Russian),
+			new TargetPlatformFeature(LocalizedStrings.Str2825Key, Languages.Russian),
+			new TargetPlatformFeature("UX", Languages.Russian),
+			new TargetPlatformFeature("DukasCopy"),
+			new TargetPlatformFeature("GainCapital"),
+			new TargetPlatformFeature("MBTrading"),
+			new TargetPlatformFeature("TrueFX"),
+			new TargetPlatformFeature("Yahoo"),
+			new TargetPlatformFeature("Google"),
+			new TargetPlatformFeature("FinViz"),
+			new TargetPlatformFeature("S#.Data server")
+		};
 
-				// LUA работает под оба режима, поэтому Quik фича вынесена в базовый класс
-				return _features;
-			}
-		}
-
-		protected override IEnumerable<string> ExtendedFeaturesX86
+		protected override IEnumerable<TargetPlatformFeature> ExtendedFeatures
 		{
-			get
-			{
-				return _features;
-			}
+			get { return _extendedFeatures; }
 		}
 	}
 }
