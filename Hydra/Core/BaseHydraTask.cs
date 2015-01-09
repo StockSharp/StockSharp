@@ -386,7 +386,7 @@ namespace StockSharp.Hydra.Core
 
 		private void SafeSave<T>(Security security, Type messageType, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors)
 		{
-			SafeSave(security, messageType, arg, values, getTime, getErrors, (s, d, f) => (IMarketDataStorage<T>)StorageRegistry.GetStorage(s, typeof(T), null, d, f));
+			SafeSave(security, messageType, arg, values, getTime, getErrors, (s, d, f) => (IMarketDataStorage<T>)StorageRegistry.GetStorage(s, typeof(T), arg, d, f));
 		}
 
 		private void SafeSave<T>(Security security, Type messageType, object arg, IEnumerable<T> values, Func<T, DateTimeOffset> getTime, IEnumerable<Func<T, string>> getErrors, Func<Security, IMarketDataDrive, StorageFormats, IMarketDataStorage<T>> getStorage)
@@ -598,6 +598,16 @@ namespace StockSharp.Hydra.Core
 
 			if (count > 0)
 				RaiseDataLoaded(null, typeof(NewsMessage), null, news.Last().ServerTime, count);
+		}
+
+		/// <summary>
+		/// Сохранить исполнения в хранилище.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <param name="executions">Исполнения.</param>
+		protected void SaveExecutions(Security security, IEnumerable<ExecutionMessage> executions)
+		{
+			SafeSave(security, typeof(ExecutionMessage), ExecutionTypes.Order, executions, t => t.ServerTime, Enumerable.Empty<Func<ExecutionMessage, string>>());
 		}
 
 		/// <summary>

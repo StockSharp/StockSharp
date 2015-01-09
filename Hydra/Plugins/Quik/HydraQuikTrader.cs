@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Hydra.Quik
 {
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using StockSharp.Quik;
 
@@ -33,7 +34,12 @@
 		{
 			get
 			{
-				return IsDownloadSecurityChangesHistory ? new[] { SecuritiesTable, SecuritiesChangeTable, TradesTable } : new[] { SecuritiesTable, TradesTable };
+				IEnumerable<DdeTable> tables = new[] { SecuritiesTable, TradesTable, OrdersTable, StopOrdersTable, MyTradesTable };
+
+				if (IsDownloadSecurityChangesHistory)
+					tables = tables.Concat(new[] { SecuritiesChangeTable });
+
+				return tables;
 			}
 		}
 	}

@@ -153,6 +153,7 @@ namespace StockSharp.Hydra.Panes
 
 				NotifyChanged("Is{0}Enabled".Put(dataType.Name
 					.Replace("ChangeMessage", string.Empty)
+					.Replace("Message", string.Empty)
 					.Replace("Market", string.Empty)
 					.Replace("Item", string.Empty)));
 
@@ -184,6 +185,11 @@ namespace StockSharp.Hydra.Panes
 				get { return GetIsEnabled(typeof(Candle)); }
 			}
 
+			public bool IsExecutionEnabled
+			{
+				get { return GetIsEnabled(typeof(ExecutionMessage)); }
+			}
+
 			public bool IsInvalid
 			{
 				get
@@ -193,7 +199,8 @@ namespace StockSharp.Hydra.Panes
 						!IsDepthEnabled &&
 						!IsLevel1Enabled &&
 						!IsOrderLogEnabled &&
-						!IsCandleEnabled;
+						!IsCandleEnabled &&
+						!IsExecutionEnabled;
 				}
 			}
 		}
@@ -221,6 +228,7 @@ namespace StockSharp.Hydra.Panes
 			AddDataType<MarketDepth>(Depths);
 			AddDataType<Level1ChangeMessage>(Level1Changes);
 			AddDataType<OrderLogItem>(OrderLog);
+			AddDataType<ExecutionMessage>(Executions);
 		}
 
 		private void AddDataType<T>(CheckBox checkBox)

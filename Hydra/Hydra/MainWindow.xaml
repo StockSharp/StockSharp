@@ -498,6 +498,7 @@
 					<Button Content="{x:Static loc:LocalizedStrings.Str1416}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<Button Content="Level 1" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str2250}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
+                    <Button Content="Executions" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
 				</ToolBar>
 
 				<ToolBar ToolBarTray.IsLocked="True">

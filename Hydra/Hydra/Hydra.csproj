@@ -180,6 +180,9 @@
     <Compile Include="Panes\ExchangeBoardPane.xaml.cs">
       <DependentUpon>ExchangeBoardPane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Panes\ExecutionsPane.xaml.cs">
+      <DependentUpon>ExecutionsPane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Panes\NewsPane.xaml.cs">
       <DependentUpon>NewsPane.xaml</DependentUpon>
     </Compile>
@@ -272,6 +275,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Panes\ExchangeBoardPane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Panes\ExecutionsPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

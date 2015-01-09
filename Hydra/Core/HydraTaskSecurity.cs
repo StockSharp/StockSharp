@@ -218,5 +218,25 @@
 				_candleInfo = value;
 			}
 		}
+
+		private TypeInfo _executionInfo = new TypeInfo();
+
+		/// <summary>
+		/// Информация о логе заявок.
+		/// </summary>
+		[InnerSchema]
+		[NameOverride("Count", "ExecutionCount")]
+		[NameOverride("LastTime", "ExecutionLastTime")]
+		public TypeInfo ExecutionInfo
+		{
+			get { return _executionInfo; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				_executionInfo = value;
+			}
+		}
 	}
 }

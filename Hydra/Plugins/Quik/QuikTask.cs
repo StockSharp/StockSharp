@@ -362,7 +362,8 @@ namespace StockSharp.Hydra.Quik
 				IsDownloadSecurityChangesHistory = _settings.IsDownloadSecurityChangesHistory,
 			};
 
-			connector.TransactionAdapter = new HydraQuikTransactionAdapter((MessageSessionHolder)connector.TransactionAdapter.SessionHolder);
+			if (_settings.IsDde)
+				connector.TransactionAdapter = new HydraQuikTransactionAdapter((MessageSessionHolder)connector.TransactionAdapter.SessionHolder);
 
 			//Добавление выбранных колонок в экспорт
 			if (!_settings.IsDownloadSecurityChangesHistory)

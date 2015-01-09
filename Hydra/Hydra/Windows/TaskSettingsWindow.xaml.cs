@@ -28,6 +28,7 @@ namespace StockSharp.Hydra.Windows
 			{ typeof(OrderLogItem), LocalizedStrings.Str2936 },
 			{ typeof(Level1ChangeMessage), "level 1" },
 			{ typeof(Candle), LocalizedStrings.Str2937 },
+			{ typeof(ExecutionMessage), "executions" },
 		};
 
 		public TaskSettingsWindow()
