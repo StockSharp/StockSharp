@@ -4,19 +4,14 @@
 	using System.Windows.Controls;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	public partial class FindSecurityWindow
 	{
 		public FindSecurityWindow()
 		{
 			InitializeComponent();
-
-			SecType.SetDataSource<SecurityTypes>();
-			SecType.SetSelectedValue<SecurityTypes>(SecurityTypes.Stock);
 
 			SecCode.Text = "AAPL";
 		}
@@ -25,7 +20,7 @@
 		{
 			var criteria = new Security
 			{
-				Type = (SecurityTypes)SecType.SelectedValue,
+				Type = SecType.SelectedType,
 				Code = SecCode.Text,
 			};
 

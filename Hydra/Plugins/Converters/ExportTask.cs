@@ -36,7 +36,7 @@ namespace StockSharp.Hydra.Converters
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3754Key)]
-			[DisplayNameLoc(LocalizedStrings.Str359Key)]
+			[DisplayNameLoc(LocalizedStrings.TypeKey)]
 			[DescriptionLoc(LocalizedStrings.Str3756Key)]
 			[PropertyOrder(0)]
 			public ExportTypes ExportType

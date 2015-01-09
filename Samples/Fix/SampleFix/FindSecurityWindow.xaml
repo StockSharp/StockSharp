@@ -1,6 +1,7 @@
 <Window x:Class="SampleFix.FindSecurityWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="http://schemas.stocksharp.com/xaml"
         Title="{x:Static loc:LocalizedStrings.XamlStr324}" Height="130" Width="300">
     <Grid>
@@ -17,11 +18,11 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<Label Grid.Row="0" Grid.Column="0"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr238}"/></Label>
+		<TextBlock Grid.Row="0"><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
 		<TextBox x:Name="SecCode" Grid.Row="0" Grid.Column="1" TextChanged="SecCode_TextChanged" />
 
 		<TextBlock Grid.Row="2" Grid.Column="0">
-			<Run Text="{x:Static loc:LocalizedStrings.Str359}"/><Run Text=":"/>
+			<Run Text="{x:Static loc:LocalizedStrings.Type}"/><Run Text=":"/>
 		</TextBlock>
 		<xaml:SecurityTypeComboBox x:Name="SecType" Grid.Row="2" Grid.Column="1" />
 

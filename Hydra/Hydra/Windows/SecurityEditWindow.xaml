@@ -40,7 +40,7 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
-			<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr238}" Height="23" />
+			<TextBlock Height="23"><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
 			<TextBox x:Name="Code" Grid.Row="0" Grid.Column="1" Width="188" Height="23" IsReadOnly="True" />
 
 			<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr318}" Height="23" Grid.Row="2" Grid.Column="0" />
@@ -62,7 +62,7 @@
 			<sx:ExchangeBoardComboBox x:Name="ExchangeCtrl" Width="188" Height="23" Grid.Column="1" Grid.Row="10" IsEnabled="False" />
 
 			<TextBlock Height="23" Grid.Row="12" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.Str359}"/><Run Text=":"/>
+				<Run Text="{x:Static loc:LocalizedStrings.Type}"/><Run Text=":"/>
 			</TextBlock>
 			<sx:SecurityTypeComboBox x:Name="TypeCtrl" Width="188" Height="23" Grid.Column="1" Grid.Row="12" />
 

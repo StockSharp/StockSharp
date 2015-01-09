@@ -60,7 +60,7 @@
                 <DataGridTextColumn Header="№" Binding="{Binding Session.RowId}"/>
                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr340}" Binding="{Binding Session.StartTime}"/>
                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr387}" Binding="{Binding Session.EndTime}"/>
-                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str359}" Binding="{Binding Session.Type, Converter={StaticResource enumConverter}}"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Session.Type, Converter={StaticResource enumConverter}}"/>
 
                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1320}" Binding="{Binding StrategyInfo.Name}"/>
                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str2344}" Binding="{Binding Statistics, Converter={StaticResource storageConverter}, ConverterParameter='NetProfit'}"/>

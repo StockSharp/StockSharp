@@ -13,7 +13,7 @@
 		{
 			InitializeComponent();
 
-			SecCode.Text = "USD";
+			SecCode.Text = "ES";
 		}
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
@@ -21,6 +21,7 @@
 			var criteria = new Security
 			{
 				Code = SecCode.Text,
+				Type = SecType.SelectedType,
 			};
 
 			MainWindow.Instance.Trader.LookupSecurities(criteria);

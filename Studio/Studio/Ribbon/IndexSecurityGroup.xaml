@@ -75,7 +75,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Label Content="{x:Static loc:LocalizedStrings.XamlStr238}" Grid.Row="0" Grid.Column="0" />
+        <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
         <TextBox Grid.Row="0" Grid.Column="1" VerticalContentAlignment="Center"
                  IsEnabled="{Binding CanEdit}"
                  Text="{Binding SecurityCode, Mode=TwoWay}" />

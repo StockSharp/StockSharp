@@ -99,7 +99,7 @@ namespace StockSharp.Studio.Core
 			}
 		}
 
-		[DisplayNameLoc(LocalizedStrings.Str359Key)]
+		[DisplayNameLoc(LocalizedStrings.TypeKey)]
 		[DescriptionLoc(LocalizedStrings.Str3187Key)]
 		[CategoryLoc(LocalizedStrings.Str1559Key)]
 		[ReadOnly(true)]

@@ -17,11 +17,11 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<Label Grid.Row="0" Grid.Column="0"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr238}"/></Label>
+		<TextBlock Grid.Row="0"><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
 		<TextBox x:Name="SecCode" Grid.Row="0" Grid.Column="1" TextChanged="SecCode_TextChanged" />
 
 		<TextBlock Grid.Row="2" Grid.Column="0">
-			<Run Text="{x:Static loc:LocalizedStrings.Str359}"/><Run Text=":"/>
+			<Run Text="{x:Static loc:LocalizedStrings.Type}"/><Run Text=":"/>
 		</TextBlock>
 		<xaml:SecurityTypeComboBox x:Name="SecType" Grid.Row="2" Grid.Column="1" />
 
