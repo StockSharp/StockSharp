@@ -222,7 +222,7 @@
 		private TypeInfo _executionInfo = new TypeInfo();
 
 		/// <summary>
-		/// Информация о логе заявок.
+		/// Информация о логе собственных транзакций.
 		/// </summary>
 		[InnerSchema]
 		[NameOverride("Count", "ExecutionCount")]

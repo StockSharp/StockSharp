@@ -29,7 +29,7 @@
 
 		public override string Title
 		{
-			get { return "Executions " + SelectedSecurity; }
+			get { return LocalizedStrings.OwnTransactions + " " + SelectedSecurity; }
 		}
 
 		public override Security SelectedSecurity
@@ -92,14 +92,14 @@
 		{
 			base.Load(storage);
 
-			FindedExecutions.Load(storage.GetValue<SettingsStorage>("FindedTrades"));
+			FindedExecutions.Load(storage.GetValue<SettingsStorage>("FindedExecutions"));
 		}
 
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
 
-			storage.SetValue("FindedTrades", FindedExecutions.Save());
+			storage.SetValue("FindedExecutions", FindedExecutions.Save());
 		}
 	}
 }
