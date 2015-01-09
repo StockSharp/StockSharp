@@ -55,7 +55,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="QuickFix">
-      <HintPath>..\..\..\References\QuickFix.dll</HintPath>
+      <HintPath>..\..\..\..\StockSharp (GitLab)\References\QuickFix.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
