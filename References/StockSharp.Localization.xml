@@ -21150,6 +21150,11 @@
             About
             </summary>
         </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.OwnTransactionsKey">
+            <summary>
+            Own transactions
+            </summary>
+        </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
             <summary>
             Get localized string.
@@ -42235,6 +42240,11 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.About">
             <summary>
             About
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.OwnTransactions">
+            <summary>
+            Own transactions
             </summary>
         </member>
     </members>

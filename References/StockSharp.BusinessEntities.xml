@@ -95,6 +95,12 @@
             Инициализировать <see cref="T:StockSharp.BusinessEntities.BasePosition"/>.
             </summary>
         </member>
+        <member name="M:StockSharp.BusinessEntities.BasePosition.CopyTo(StockSharp.BusinessEntities.BasePosition)">
+            <summary>
+            Скопировать поля текущей позиции в <paramref name="destination"/>.
+            </summary>
+            <param name="destination">Позиция, в которую необходимо скопировать поля.</param>
+        </member>
         <member name="P:StockSharp.BusinessEntities.BasePosition.BeginValue">
             <summary>
             Размер позиции на начало торговой сессии.
