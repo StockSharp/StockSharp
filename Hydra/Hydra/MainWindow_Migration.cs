@@ -166,6 +166,19 @@ namespace StockSharp.Hydra
 				UpdateDatabaseWalMode();
 
 				_entityRegistry.Version = new Version(2, 12);
+			}
+
+			if (_entityRegistry.Version.Compare(new Version(2, 12)) == 0)
+			{
+				var queryFrom = Query
+					.Execute(@"
+							alter table [HydraTaskSecurity] add column ExecutionCount integer;
+							alter table [HydraTaskSecurity] add column ExecutionLastTime time;");
+
+				var cmdFrom = database.GetCommand(queryFrom, null, new FieldList(), new FieldList(), false);
+				cmdFrom.ExecuteNonQuery(new SerializationItemCollection());
+
+				_entityRegistry.Version = new Version(2, 13);
 				return;
 			}
 
