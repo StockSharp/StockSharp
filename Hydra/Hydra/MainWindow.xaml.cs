@@ -130,6 +130,7 @@ namespace StockSharp.Hydra
 		public long LoadedLevel1 { get; private set; }
 		public long LoadedCandles { get; private set; }
 		public long LoadedNews { get; private set; }
+		public long LoadedExecutions { get; private set; }
 
 		private Mutex _mutex;
 
@@ -680,7 +681,7 @@ namespace StockSharp.Hydra
 
 		private void OnUpdateUi(object sender, EventArgs e)
 		{
-			Status.Text = "T={0}     D={1}     OL={2}     L1={3}     C={4}     N={5}".Put(LoadedTrades, LoadedDepths, LoadedOrderLog, LoadedLevel1, LoadedCandles, LoadedNews);
+			Status.Text = "T={0}     D={1}     OL={2}     L1={3}     C={4}     N={5}     E={6}".Put(LoadedTrades, LoadedDepths, LoadedOrderLog, LoadedLevel1, LoadedCandles, LoadedNews, LoadedExecutions);
 		}
 
 		private void LockUnlock()
@@ -835,6 +836,10 @@ namespace StockSharp.Hydra
 							pane = new TaskPane { Task = task };
 					}
 
+					break;
+
+				case "execution":
+					pane = new ExecutionsPane { SelectedSecurity = SelectedSecurity };
 					break;
 			}
 

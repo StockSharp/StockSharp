@@ -86,7 +86,7 @@ namespace StockSharp.Hydra.Panes
 					.Text(LocalizedStrings.Str2875)
 					.Info()
 					.Owner(this)
-						.Show();
+					.Show();
 
 				return;
 			}

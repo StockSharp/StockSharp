@@ -51,6 +51,7 @@ namespace StockSharp.Hydra.Core
 		private readonly MarketDataBuffer<OrderLogItem> _orderLogBuffer = new MarketDataBuffer<OrderLogItem>();
 		private readonly MarketDataBuffer<Level1ChangeMessage> _level1Buffer = new MarketDataBuffer<Level1ChangeMessage>();
 		private readonly MarketDataBuffer<Candle> _candleBuffer = new MarketDataBuffer<Candle>();
+		private readonly MarketDataBuffer<ExecutionMessage> _executionBuffer = new MarketDataBuffer<ExecutionMessage>();
 		private readonly SynchronizedSet<News> _newsBuffer = new SynchronizedSet<News>(); 
 
 		private readonly ISecurityProvider _securityProvider;
@@ -141,6 +142,16 @@ namespace StockSharp.Hydra.Core
 			_connector.NewNews += OnNewNews;
 			_connector.NewsChanged += OnNewsChanged;
 
+			_connector.NewOrders += OnOrdersChanged;
+			_connector.OrdersChanged += OnOrdersChanged;
+			_connector.OrdersRegisterFailed += OnOrdersFailed;
+			_connector.OrdersCancelFailed += OnOrdersFailed;
+			_connector.NewStopOrders += OnOrdersChanged;
+			_connector.StopOrdersChanged += OnOrdersChanged;
+			_connector.StopOrdersRegisterFailed += OnOrdersFailed;
+			_connector.StopOrdersCancelFailed += OnOrdersFailed;
+			_connector.NewMyTrades += OnNewMyTrades; 
+
 			var source = _connector as IExternalCandleSource;
 			if (source != null)
 				source.NewCandles += OnNewCandles;
@@ -167,6 +178,16 @@ namespace StockSharp.Hydra.Core
 			_connector.NewSecurities -= OnNewSecurities;
 			_connector.NewNews -= OnNewNews;
 			_connector.NewsChanged -= OnNewsChanged;
+
+			_connector.NewOrders -= OnOrdersChanged;
+			_connector.OrdersChanged -= OnOrdersChanged;
+			_connector.OrdersRegisterFailed -= OnOrdersFailed;
+			_connector.OrdersCancelFailed -= OnOrdersFailed;
+			_connector.NewStopOrders -= OnOrdersChanged;
+			_connector.StopOrdersChanged -= OnOrdersChanged;
+			_connector.StopOrdersRegisterFailed -= OnOrdersFailed;
+			_connector.StopOrdersCancelFailed -= OnOrdersFailed;
+			_connector.NewMyTrades -= OnNewMyTrades; 
 
 			_connector.Dispose();
 
@@ -241,6 +262,16 @@ namespace StockSharp.Hydra.Core
 		{
 			ThrowIfError();
 			return _newsBuffer.SyncGet(c => c.CopyAndClear());
+		}
+
+		/// <summary>
+		/// Получить накопленные заявки и сделки по инструменту.
+		/// </summary>
+		/// <returns>Накопленные заявки и сделки по инструменту.</returns>
+		public IDictionary<Security, IEnumerable<ExecutionMessage>> GetExecutionMessages()
+		{
+			ThrowIfError();
+			return _executionBuffer.Get();
 		}
 
 		private void ThrowIfError()
@@ -340,6 +371,30 @@ namespace StockSharp.Hydra.Core
 		private void OnNewCandles(CandleSeries series, IEnumerable<Candle> candles)
 		{
 			_candleBuffer.Add(series.Security, candles);
+		}
+
+		private void OnOrdersChanged(IEnumerable<Order> orders)
+		{
+			foreach (var order in orders)
+			{
+				_executionBuffer.Add(order.Security, order.ToMessage());
+			}
+		}
+
+		private void OnOrdersFailed(IEnumerable<OrderFail> fails)
+		{
+			foreach (var fail in fails)
+			{
+				_executionBuffer.Add(fail.Order.Security, fail.ToMessage());
+			}
+		}
+
+		private void OnNewMyTrades(IEnumerable<MyTrade> trades)
+		{
+			foreach (var trade in trades)
+			{
+				_executionBuffer.Add(trade.Order.Security, trade.ToMessage());
+			}
 		}
 
 		/// <summary>

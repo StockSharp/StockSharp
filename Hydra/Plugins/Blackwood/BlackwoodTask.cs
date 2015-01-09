@@ -108,7 +108,7 @@ namespace StockSharp.Hydra.Blackwood
 			get { return _settings; }
 		}
 
-		private readonly Type[] _supportedMarketDataTypes = { /*typeof(MarketDepth),*/ typeof(Candle), typeof(Trade), typeof(Level1ChangeMessage) };
+		private readonly Type[] _supportedMarketDataTypes = { /*typeof(MarketDepth),*/ typeof(Candle), typeof(Trade), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{

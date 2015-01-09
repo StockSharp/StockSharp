@@ -201,10 +201,17 @@ namespace StockSharp.Hydra
 							LoadedOrderLog += count;
 							break;
 						}
+						case ExecutionTypes.Order:
+						{
+							info = taskSecurity == null ? null : taskSecurity.ExecutionInfo;
+							allInfo = allSecurity == null ? null : allSecurity.ExecutionInfo;
+
+							LoadedExecutions += count;
+							break;
+						}
 						default:
 							throw new ArgumentOutOfRangeException("arg");
 					}
-					
 				}
 				else if (dataType == typeof(QuoteChangeMessage))
 				{

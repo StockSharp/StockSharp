@@ -101,7 +101,7 @@ namespace StockSharp.Hydra.LMAX
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{
-			get { return new[] { typeof(Candle), typeof(MarketDepth), typeof(Level1ChangeMessage) }; }
+			get { return new[] { typeof(Candle), typeof(MarketDepth), typeof(Level1ChangeMessage), typeof(ExecutionMessage) }; }
 		}
 
 		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;
