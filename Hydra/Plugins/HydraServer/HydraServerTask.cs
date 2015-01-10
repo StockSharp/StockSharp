@@ -39,8 +39,8 @@ namespace StockSharp.Hydra.HydraServer
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
-			[DescriptionLoc(LocalizedStrings.Str1668Key)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
+			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(0)]
 			public Uri Address
 			{
@@ -59,7 +59,7 @@ namespace StockSharp.Hydra.HydraServer
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.Str2303Key)]
 			[PropertyOrder(2)]
 			public SecureString Password

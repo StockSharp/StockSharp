@@ -18,7 +18,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
 
-	[DisplayNameLoc(LocalizedStrings.Str1795Key)]
+	[DisplayNameLoc(LocalizedStrings.MarketDepthKey)]
 	[DescriptionLoc(LocalizedStrings.Str3272Key)]
 	[Icon("images/marketdepth_24x24.png")]
 	public partial class ScalpingMarketDepthControl
@@ -309,7 +309,7 @@ namespace StockSharp.Studio.Controls
 				Title = _strategy.Security.Id;
 			}
 			else
-				Title = LocalizedStrings.Str1795;
+				Title = LocalizedStrings.MarketDepth;
 		}
 
 		private bool OnQuotesCanDrag(DataGridCell cell)

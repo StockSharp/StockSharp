@@ -21,7 +21,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
 
-	[DisplayNameLoc(LocalizedStrings.Str187Key)]
+	[DisplayNameLoc(LocalizedStrings.SecuritiesKey)]
 	[DescriptionLoc(LocalizedStrings.Str3274Key)]
 	[Icon("images/security_32x32.png")]
 	public partial class SecuritiesPanel

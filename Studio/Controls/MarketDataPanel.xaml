@@ -58,7 +58,7 @@
 				<local:MarketDataSettingsComboBox Grid.Column="1" Margin="1" SelectedSettings="{Binding SelectedSettings}" />
 			</Grid>
 
-			<GroupBox Grid.Row="1" Margin="5" Header="{x:Static loc:LocalizedStrings.XamlStr448}">
+			<GroupBox Grid.Row="1" Margin="5" Header="{x:Static loc:LocalizedStrings.StorageParameters}">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="*" MaxHeight="160" />

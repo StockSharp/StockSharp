@@ -24,7 +24,7 @@
             <RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-        <Label Content="{x:Static loc:LocalizedStrings.XamlStr318}" Grid.Column="0" Grid.Row="0" />
+		<TextBlock Grid.Column="0" Grid.Row="0"><Run Text="{x:Static loc:LocalizedStrings.Name}" />:</TextBlock>
         <TextBox x:Name="StrategyNameCtrl" Grid.Column="1" Grid.Row="0" />
 
         <TabControl x:Name="TabControl" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0">

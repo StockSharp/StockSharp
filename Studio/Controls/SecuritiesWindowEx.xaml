@@ -5,7 +5,7 @@
         xmlns:sx="http://schemas.stocksharp.com/xaml"
         xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		xmlns:local="clr-namespace:StockSharp.Studio.Controls"
-        Height="400" Width="750" Title="{x:Static loc:LocalizedStrings.Str187}"
+        Height="400" Width="750" Title="{x:Static loc:LocalizedStrings.Securities}"
         WindowStartupLocation="CenterScreen" ShowInTaskbar="False"
 		Loaded="SecuritiesWindowEx_OnLoaded">
 
@@ -58,7 +58,7 @@
 
 		<sx:SecurityLookupPanel x:Name="LookupPanel" Lookup="LookupPanel_OnLookup" Grid.ColumnSpan="5" Margin="0,0,0,5"/>
         
-        <sx:SecurityPicker x:Name="SecuritiesAll" Title="{x:Static loc:LocalizedStrings.XamlStr51}" Grid.Row="1" Grid.RowSpan="5" Grid.Column="0" />
+        <sx:SecurityPicker x:Name="SecuritiesAll" Title="{x:Static loc:LocalizedStrings.InStorage}" Grid.Row="1" Grid.RowSpan="5" Grid.Column="0" />
 		<sx:SecurityPicker x:Name="SecuritiesSelected" Title="{x:Static loc:LocalizedStrings.XamlStr23}" Grid.Row="1" Grid.Column="4" Grid.RowSpan="5" />
 
         <Button Content="" Grid.Row="2" Grid.Column="2" FontFamily="Wingdings" FontSize="15" Command="{x:Static local:SecuritiesWindowEx.SelectSecurityCommand}"/>

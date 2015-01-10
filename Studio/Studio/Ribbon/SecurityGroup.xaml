@@ -1,13 +1,14 @@
 <ribbon:Group x:Class="StockSharp.Studio.Ribbon.SecurityGroup"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
              xmlns:controls="clr-namespace:StockSharp.Studio.Controls;assembly=StockSharp.Studio.Controls"
              xmlns:businessEntities="clr-namespace:StockSharp.BusinessEntities;assembly=StockSharp.BusinessEntities"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              xmlns:local="clr-namespace:StockSharp.Studio.Ribbon"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             Label="{x:Static loc:LocalizedStrings.Str187}">
+             Label="{x:Static loc:LocalizedStrings.Securities}">
     
     <ribbon:Group.CommandBindings>
         <CommandBinding Command="{x:Static local:SecurityGroup.FindCommand}"
@@ -39,7 +40,7 @@
 
     <ribbon:StackPanel ItemVariantBehavior="AlwaysSmall">
 
-        <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr476}" ToolTip="{x:Static loc:LocalizedStrings.Str3657}" ToolTipService.ShowOnDisabled="True"
+        <ribbon:Button Label="{x:Static loc:LocalizedStrings.Find}" ToolTip="{x:Static loc:LocalizedStrings.Str3657}" ToolTipService.ShowOnDisabled="True"
                        Command="{x:Static local:SecurityGroup.FindCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/find_16x16.png" />
         

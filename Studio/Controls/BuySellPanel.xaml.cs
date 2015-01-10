@@ -94,7 +94,7 @@ namespace StockSharp.Studio.Controls
 			}
 		}
 
-		[DisplayNameLoc(LocalizedStrings.Str2323Key)]
+		[DisplayNameLoc(LocalizedStrings.CancelAllKey)]
 		[DescriptionLoc(LocalizedStrings.Str3196Key)]
 		[PropertyOrder(30)]
 		public bool ShowCancelAll

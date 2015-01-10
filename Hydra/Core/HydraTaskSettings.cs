@@ -95,7 +95,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Включена ли задача.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2229Key)]
 		[DescriptionLoc(LocalizedStrings.Str2230Key)]
 		[PropertyOrder(0)]
@@ -114,7 +114,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Время начала работы.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2231Key)]
 		[DescriptionLoc(LocalizedStrings.Str2232Key)]
 		[TimeSpan]
@@ -129,7 +129,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Время окончания работы.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2233Key)]
 		[DescriptionLoc(LocalizedStrings.Str2234Key)]
 		[TimeSpan]
@@ -144,7 +144,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Интервал работы.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2235Key)]
 		[DescriptionLoc(LocalizedStrings.Str2235Key, true)]
 		[TimeSpan]
@@ -159,7 +159,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Директория с данными, куда будут сохраняться конечные файлы в формате StockSharp.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2237Key)]
 		[DescriptionLoc(LocalizedStrings.Str2238Key)]
 		[Ignore]
@@ -174,7 +174,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Формат данных.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2239Key)]
 		[DescriptionLoc(LocalizedStrings.Str2240Key)]
 		[PropertyOrder(5)]
@@ -192,7 +192,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Задача, которая должна быть выполнена перед запуском текущей.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2241Key)]
 		[DescriptionLoc(LocalizedStrings.Str2242Key)]
 		[PropertyOrder(10)]
@@ -236,7 +236,7 @@ namespace StockSharp.Hydra.Core
 		/// Максимальное количество ошибок, после которого задача будет остановлена.
 		/// По-умолчанию равно 0, что означает игнорирование количества ошибок.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2244Key)]
 		[DescriptionLoc(LocalizedStrings.Str2245Key)]
 		[Ignore]
@@ -261,7 +261,7 @@ namespace StockSharp.Hydra.Core
 		/// </summary>
 		[Ignore]
 		[Browsable(false)]
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2246Key)]
 		[DescriptionLoc(LocalizedStrings.Str2247Key)]
 		[Editor(typeof(Level1FieldsComboBoxEditor), typeof(Level1FieldsComboBoxEditor))]
@@ -306,7 +306,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Заголовок задачи.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str215Key)]
 		[DescriptionLoc(LocalizedStrings.Str2248Key)]
 		[Ignore]
@@ -324,7 +324,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Уровень логирования.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str9Key)]
 		[DescriptionLoc(LocalizedStrings.Str9Key, true)]
 		[Ignore]
@@ -461,8 +461,8 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Скачивать новости.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
-		[DisplayNameLoc(LocalizedStrings.Str2250Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[DisplayNameLoc(LocalizedStrings.NewsKey)]
 		[DescriptionLoc(LocalizedStrings.Str2251Key)]
 		[Ignore]
 		[PropertyOrder(10)]

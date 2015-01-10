@@ -15,7 +15,7 @@
 		<KeyBinding Modifiers="Control" Key="C" Command="ApplicationCommands.Copy"/>
 	</Window.InputBindings>
 
-	<xctk:BusyIndicator x:Name="BusyIndicator" IsBusy="True" BusyContent="{x:Static loc:LocalizedStrings.XamlStr498}">
+	<xctk:BusyIndicator x:Name="BusyIndicator" IsBusy="True" BusyContent="{x:Static loc:LocalizedStrings.RetrievingHardwareId}">
 		<Grid Margin="5,5,5,5">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="80" />
@@ -34,31 +34,35 @@
 			</Grid.RowDefinitions>
 
 			<TextBlock Grid.Row="0">
-				<ex:HyperlinkEx NavigateUri="http://stocksharp.com/register/"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr362}"/></ex:HyperlinkEx>
+				<ex:HyperlinkEx NavigateUri="http://stocksharp.com/register/"><TextBlock Text="{x:Static loc:LocalizedStrings.IsRegistered}"/></ex:HyperlinkEx>
 			</TextBlock>
 
-			<Label Grid.Row="0" Grid.Column="1" HorizontalContentAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.StockSharpLogin}"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr281}"/></Label>
+			<TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.StockSharpLogin}">
+				<Run Text="{x:Static loc:LocalizedStrings.Login}" />:
+			</TextBlock>
 			<TextBox x:Name="LoginCtrl" Grid.Row="0" Grid.Column="2" TextChanged="LoginCtrlTextChanged" />
 
-			<Label Grid.Row="2" Grid.Column="1" HorizontalContentAlignment="Right"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr449}"/></Label>
+			<TextBlock Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right">
+				<Run Text="{x:Static loc:LocalizedStrings.Password}" />:
+			</TextBlock>
 			<PasswordBox x:Name="PasswordCtrl" Grid.Row="2" Grid.Column="2" PasswordChanged="PasswordCtrlPasswordChanged" />
 			
 			<StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-				<Label HorizontalContentAlignment="Right" Width="100"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr7}"/></Label>
+				<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Width="100"><Run Text="{x:Static loc:LocalizedStrings.HddId}"/>:</TextBlock>
 				<TextBox x:Name="HardwareIdCtrl" IsReadOnly="True" Width="285" Height="24" />
-				<Button Command="ApplicationCommands.Copy" ToolTip="{x:Static loc:LocalizedStrings.XamlStr256}" Margin="5,0,0,0">
+				<Button Command="ApplicationCommands.Copy" ToolTip="{x:Static loc:LocalizedStrings.Copy}" Margin="5,0,0,0">
 					<ex:BmpImage Source="Actions-clipboard-icon.png"/>
 				</Button>
 			</StackPanel>
 
-			<Button x:Name="DoCtrl" IsEnabled="False" Grid.Row="6" Grid.Column="2" Width="150" Click="DoCtrlClick"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr502}"/></Button>
+			<Button x:Name="DoCtrl" IsEnabled="False" Grid.Row="6" Grid.Column="2" Width="150" Click="DoCtrlClick"><TextBlock Text="{x:Static loc:LocalizedStrings.GetLicense}"/></Button>
 
 			<TextBlock Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0">
 				<Hyperlink x:Name="LicenseView" Click="LicenseViewClick"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr741}"/></Hyperlink>
 			</TextBlock>
 
             <TextBlock Grid.Row="6" Grid.Column="2">
-				<Hyperlink Click="ProxySettingsClick"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr336}"/></Hyperlink>
+				<Hyperlink Click="ProxySettingsClick"><TextBlock Text="{x:Static loc:LocalizedStrings.NetworkSettings}"/></Hyperlink>
             </TextBlock>
         </Grid>
 	</xctk:BusyIndicator>

@@ -36,10 +36,10 @@
             <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
         
-        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr318}"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Name}"/>
         <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Name}"/>
 
-        <Label Grid.Row="2" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr393}"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.Description}"/>
         <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Text="{Binding Description}"/>
 
         <Label Grid.Row="4" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr407}"/>

@@ -43,11 +43,13 @@
 			<TextBlock Height="23"><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
 			<TextBox x:Name="Code" Grid.Row="0" Grid.Column="1" Width="188" Height="23" IsReadOnly="True" />
 
-			<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr318}" Height="23" Grid.Row="2" Grid.Column="0" />
+			<TextBlock Height="23" Grid.Row="2" Grid.Column="0">
+				<Run Text="{x:Static loc:LocalizedStrings.Name}" />:
+			</TextBlock>
 			<TextBox x:Name="SecName" Height="23" Width="188" Grid.Column="1" Grid.Row="2" />
 
 			<TextBlock Height="23" Grid.Row="6" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.PriceStep}"/><Run Text=":"/>
+				<Run Text="{x:Static loc:LocalizedStrings.PriceStep}"/>:
 			</TextBlock>
 			<TextBox x:Name="PriceStep" TextAlignment="Right" Width="188" Height="23" Grid.Column="1" Grid.Row="6" />
 

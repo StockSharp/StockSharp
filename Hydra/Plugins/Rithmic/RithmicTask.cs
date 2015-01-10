@@ -35,8 +35,8 @@ namespace StockSharp.Hydra.Rithmic
 			/// Логин.
 			/// </summary>
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
-			[DescriptionLoc(LocalizedStrings.Str1445Key, true)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
+			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
 			public string UserName
 			{
@@ -48,8 +48,8 @@ namespace StockSharp.Hydra.Rithmic
 			/// Пароль.
 			/// </summary>
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
-			[DescriptionLoc(LocalizedStrings.Str1448Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
+			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
 			public SecureString Password
 			{

@@ -25,7 +25,7 @@
 		<StackPanel Orientation="Horizontal" IsEnabled="{Binding ElementName=IsPlaza, Path=IsChecked}">
 			<TextBox x:Name="Address" Width="100">127.0.0.1:4001</TextBox>
 
-			<CheckBox x:Name="IsAutorization" VerticalAlignment="Center"><TextBlock Text="{x:Static loc:LocalizedStrings.Str1443}"/></CheckBox>
+			<CheckBox x:Name="IsAutorization" VerticalAlignment="Center"><TextBlock Text="{x:Static loc:LocalizedStrings.Authorization}"/></CheckBox>
 			<TextBox x:Name="Login" Width="100" IsEnabled="{Binding ElementName=IsAutorization, Path=IsChecked}" />
 			<PasswordBox x:Name="Password" Width="100" IsEnabled="{Binding ElementName=IsAutorization, Path=IsChecked}" />
 			<CheckBox x:Name="IsCGate" VerticalAlignment="Center">CGate</CheckBox>
@@ -35,7 +35,7 @@
 			<Label Content="{x:Static loc:LocalizedStrings.XamlStr592}" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
 			<TextBox x:Name="Path" Width="300" Text="" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
 			<Button x:Name="FindPath" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
-            <CheckBox x:Name="IsDde" Content="{x:Static loc:LocalizedStrings.XamlStr711}" />
+            <CheckBox x:Name="IsDde" Content="{x:Static loc:LocalizedStrings.ObsoleteDDE}" />
 		</StackPanel>
 
 		<StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="3">

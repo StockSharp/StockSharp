@@ -1,6 +1,7 @@
 <controls:BaseStudioControl x:Class="StockSharp.Studio.Controls.SecuritiesPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:sx="http://schemas.stocksharp.com/xaml"
@@ -27,7 +28,7 @@
         <docking:SplitContainer>
 
             <docking:ToolWindowContainer docking:DockSite.ControlSize="240, 150">
-                <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str187}" x:Name="SecuritiesWindow">
+                <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Securities}" x:Name="SecuritiesWindow">
                     <sx:SecurityPicker x:Name="SecurityPicker" SelectionMode="Single" SecuritySelected="SecurityPicker_SecuritySelected" />
                 </docking:ToolWindow>
             </docking:ToolWindowContainer>

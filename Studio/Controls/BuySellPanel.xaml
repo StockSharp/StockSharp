@@ -127,7 +127,7 @@
 
                 <Button x:Name="BuyAtMarket" Click="BuyAtMarket_Click" Margin="1" Grid.Row="2" Grid.Column="0" ToolTip="{x:Static loc:LocalizedStrings.XamlStr260}" Content="{x:Static loc:LocalizedStrings.XamlStr259}" Background="LightBlue"/>
                 <Button x:Name="ClosePosition" Click="ClosePosition_Click" Margin="1" Grid.Row="2" Grid.Column="1" ToolTip="{x:Static loc:LocalizedStrings.XamlStr173}" Content="{x:Static loc:LocalizedStrings.Str1472}" />
-                <Button x:Name="RevertPosition" Click="RevertPosition_Click" Margin="1" Grid.Row="2" Grid.Column="2" ToolTip="{x:Static loc:LocalizedStrings.XamlStr451}" Content="{x:Static loc:LocalizedStrings.XamlStr450}" />
+                <Button x:Name="RevertPosition" Click="RevertPosition_Click" Margin="1" Grid.Row="2" Grid.Column="2" ToolTip="{x:Static loc:LocalizedStrings.RevertPosition}" Content="{x:Static loc:LocalizedStrings.Revert}" />
                 <Button x:Name="SellAtMarket" Click="SellAtMarket_Click" Margin="1" Grid.Row="2" Grid.Column="3" ToolTip="{x:Static loc:LocalizedStrings.XamlStr582}" Content="{x:Static loc:LocalizedStrings.XamlStr581}" Background="LightPink"/>
             </Grid>
         </GroupBox>

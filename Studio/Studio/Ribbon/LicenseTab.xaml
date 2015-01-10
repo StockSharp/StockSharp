@@ -44,7 +44,7 @@
         </ribbon:StackPanel>
 
         <ribbon:StackPanel ItemVariantBehavior="AlwaysMedium" Margin="2,2,3,0" Width="130">
-            <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr483}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr484}"
+            <ribbon:Button Label="{x:Static loc:LocalizedStrings.OpenFile}" ToolTip="{x:Static loc:LocalizedStrings.OpenLicense}"
                            Command="{x:Static local:LicenseTab.OpenLicenseCommand}"
                            ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/open_16x16.png" />
 
@@ -116,7 +116,7 @@
         </ribbon:RibbonGallery>
     </ribbon:Group>
 
-    <ribbon:Group Label="{x:Static loc:LocalizedStrings.XamlStr44}">
+    <ribbon:Group Label="{x:Static loc:LocalizedStrings.BrokerLicense}">
         <Grid Margin="0,2,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -129,12 +129,12 @@
             </Grid.ColumnDefinitions>
 
 			<TextBlock Grid.Row="0" Grid.Column="0">
-				<TextBlock Text="{x:Static loc:LocalizedStrings.Str2410}" /><Run Text=":"/>
+				<TextBlock Text="{x:Static loc:LocalizedStrings.Broker}" /><Run Text=":"/>
 			</TextBlock>
             <ComboBox Grid.Row="0" Grid.Column="1" x:Name="BrokerId" VerticalContentAlignment="Center" />
 
             <TextBlock Grid.Row="1" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.Str2412}"/><Run Text=":"/>
+				<Run Text="{x:Static loc:LocalizedStrings.Account}"/><Run Text=":"/>
 			</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1" x:Name="AccountName" VerticalContentAlignment="Center" />
         </Grid>

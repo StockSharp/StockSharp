@@ -191,8 +191,8 @@ namespace SampleAlfa
 		{
 			_isConnected = isConnected;
 
-			ConnectBtn.Content = isConnected ? LocalizedStrings.Str2961 : LocalizedStrings.Str2962;
-			ConnectionStatus.Content = isConnected ? LocalizedStrings.Str2963 : LocalizedStrings.Str2964;
+			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
+			ConnectionStatus.Content = isConnected ? LocalizedStrings.Connected : LocalizedStrings.Disconnected;
 			ConnectionStatus.Background = new SolidColorBrush(isConnected ? Colors.LightGreen : Colors.LightPink);
 		}
 

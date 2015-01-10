@@ -6,7 +6,7 @@
 		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 		xmlns:windows="clr-namespace:StockSharp.Hydra.Windows"
-		Height="400" Width="780" Title="{x:Static loc:LocalizedStrings.Str187}"
+		Height="400" Width="780" Title="{x:Static loc:LocalizedStrings.Securities}"
 		WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
 
 	<Window.CommandBindings>

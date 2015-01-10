@@ -18,8 +18,8 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Studio.Core;
 	using StockSharp.Localization;
 
-	[DisplayNameLoc(LocalizedStrings.Str3257Key)]
-	[DescriptionLoc(LocalizedStrings.Str3258Key)]
+	[DisplayNameLoc(LocalizedStrings.SessionsKey)]
+	[DescriptionLoc(LocalizedStrings.SessionsKey, true)]
 	public partial class SessionsPanel : IStudioControl
 	{
 		private readonly ICollectionView _view;
@@ -93,7 +93,7 @@ namespace StockSharp.Studio.Controls
 
 		string IStudioControl.Title
 		{
-			get { return LocalizedStrings.Str3257; }
+			get { return LocalizedStrings.Sessions; }
 		}
 
 		Uri IStudioControl.Icon

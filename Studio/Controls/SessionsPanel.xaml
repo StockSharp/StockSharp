@@ -41,7 +41,7 @@
                 <Label Grid.Row="0" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr454}"/>
                 <editors:DateTimeEditBox Grid.Row="0" Grid.Column="1" x:Name="From" CheckBoxVisibility="Visible" ValueChanged="OnValueChanged"/>
 
-                <Label Grid.Row="0" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.XamlStr459}"/>
+                <Label Grid.Row="0" Grid.Column="2" Content="{x:Static loc:LocalizedStrings.till}"/>
                 <editors:DateTimeEditBox Grid.Row="0" Grid.Column="3" x:Name="To" CheckBoxVisibility="Visible" ValueChanged="OnValueChanged"/>
 
                 <Label Grid.Row="2" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr846}"/>
@@ -58,12 +58,12 @@
         <grids:UniversalGrid x:Name="Sessions" Grid.Row="1">
             <grids:UniversalGrid.Columns>
                 <DataGridTextColumn Header="№" Binding="{Binding Session.RowId}"/>
-                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr340}" Binding="{Binding Session.StartTime}"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.StartTime}" Binding="{Binding Session.StartTime}"/>
                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr387}" Binding="{Binding Session.EndTime}"/>
                 <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Session.Type, Converter={StaticResource enumConverter}}"/>
 
-                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1320}" Binding="{Binding StrategyInfo.Name}"/>
-                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str2344}" Binding="{Binding Statistics, Converter={StaticResource storageConverter}, ConverterParameter='NetProfit'}"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Strategy}" Binding="{Binding StrategyInfo.Name}"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Equity}" Binding="{Binding Statistics, Converter={StaticResource storageConverter}, ConverterParameter='NetProfit'}"/>
             </grids:UniversalGrid.Columns>
         </grids:UniversalGrid>
     </Grid>

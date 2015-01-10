@@ -17,7 +17,7 @@ namespace StockSharp.Studio.Controls
 	/// <summary>
 	/// Визуальный контрол-таблица, отображающая заявки (коллекцию объектов класса <see cref="Order"/>).
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str949Key)]
+	[DisplayNameLoc(LocalizedStrings.OrdersKey)]
 	[DescriptionLoc(LocalizedStrings.Str3268Key)]
 	[Icon("images/order_16x16.png")]
 	public partial class OrdersPanel

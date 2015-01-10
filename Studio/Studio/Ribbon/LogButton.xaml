@@ -51,7 +51,7 @@
     
     <ribbon:Menu>
         <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr106}" Command="{x:Static local:LogButton.OpenMonitorCommand}" />
-        <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr129}" Command="{x:Static local:LogButton.OpenLogDirectoryCommand}" />
-		<ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr715}" Command="{x:Static local:LogButton.MemoryStatisticsCommand}" IsChecked="{Binding IsMemoryStatEnabled}" />
+        <ribbon:Button Label="{x:Static loc:LocalizedStrings.LogDirectory}" Command="{x:Static local:LogButton.OpenLogDirectoryCommand}" />
+		<ribbon:Button Label="{x:Static loc:LocalizedStrings.MemoryStatistics}" Command="{x:Static local:LogButton.MemoryStatisticsCommand}" IsChecked="{Binding IsMemoryStatEnabled}" />
 	</ribbon:Menu>
 </ribbon:SplitButton>

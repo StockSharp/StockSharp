@@ -101,13 +101,13 @@ namespace SampleDdeCustomTable
 							ExportDde.IsEnabled = true;
 
 							_isConnected = true;
-							ConnectBtn.Content = LocalizedStrings.Str2961;
+							ConnectBtn.Content = LocalizedStrings.Disconnect;
 						});
 
 						Trader.Disconnected += () => this.GuiAsync(() =>
 						{
 							_isConnected = false;
-							ConnectBtn.Content = LocalizedStrings.Str2962;
+							ConnectBtn.Content = LocalizedStrings.Connect;
 						});
 					}
 					

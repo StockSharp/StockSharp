@@ -111,7 +111,7 @@ namespace StockSharp.Hydra.AlorHistory
 
 		public override string Description
 		{
-			get { return LocalizedStrings.Str2288Params.Put(LocalizedStrings.Str3806); }
+			get { return LocalizedStrings.Str2288Params.Put(LocalizedStrings.AlorHistory); }
 		}
 
 		public override TaskTypes Type

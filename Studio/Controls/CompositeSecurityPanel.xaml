@@ -36,7 +36,7 @@
                 </docking:ToolWindowContainer>
 
                 <docking:ToolWindowContainer docking:DockSite.ControlSize="120, 50">
-                    <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str187}" x:Name="SecuritiesWindow" CanClose="False">
+                    <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Securities}" x:Name="SecuritiesWindow" CanClose="False">
                         <xaml:SecurityPicker x:Name="SecurityPicker" SelectionMode="Single" ShowCommonStatColumns="False" 
                                              SecurityDoubleClick="SecurityPicker_OnSecurityDoubleClick" MouseDown="SecurityPicker_OnMouseDown"/>
                     </docking:ToolWindow>

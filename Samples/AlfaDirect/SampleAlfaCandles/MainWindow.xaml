@@ -24,24 +24,25 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<Button x:Name="ConnectBtn" Grid.Column="1" Width="100" Content="{x:Static loc:LocalizedStrings.Str2962}" Click="ConnectClick" />
+		<Button x:Name="ConnectBtn" Grid.Column="1" Width="100" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		
 		<Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">
 			<TextBlock>
 				<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
 			</TextBlock>
 		</Label>
-		<ComboBox x:Name="Security" DisplayMemberPath="Name" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" SelectionChanged="SecuritySelectionChanged"  Margin="5"/>
+		<ComboBox x:Name="Security" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="2" SelectionChanged="SecuritySelectionChanged"  Margin="5"/>
 
-		<Label Content="{x:Static loc:LocalizedStrings.XamlStr224}" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+		<TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right">
+			<Run Text="{x:Static loc:LocalizedStrings.History}" />:
+		</TextBlock>
 		<ComboBox x:Name="HistoryInterval" Grid.Column="1" Grid.Row="4" Margin="5"/>
 
 		<Label Content="{x:Static loc:LocalizedStrings.XamlStr341}" Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-		<xctk:DateTimePicker x:Name="From" Grid.Column="2" Grid.Row="5" Margin="5" />
+		<xctk:DateTimePicker x:Name="From" Grid.Column="1" Grid.Row="5" Margin="5" />
 
 		<Label Content="{x:Static loc:LocalizedStrings.XamlStr254}" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-		<xctk:DateTimePicker x:Name="To" Grid.Column="2" Grid.Row="6" Margin="5"/>
-
+		<xctk:DateTimePicker x:Name="To" Grid.Column="1" Grid.Row="6" Margin="5"/>
 		
 		<Button x:Name="ShowChart" Grid.Column="1" Width="100" Grid.Row="8" Content="{x:Static loc:LocalizedStrings.Str3200}" IsEnabled="False" Click="ShowChartClick" />
 	</Grid>

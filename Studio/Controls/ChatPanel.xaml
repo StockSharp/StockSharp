@@ -1,7 +1,8 @@
 <controls:BaseStudioControl
 			x:Class="StockSharp.Studio.Controls.ChatPanel"
 			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			xmlns:grids="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
@@ -82,7 +83,8 @@
                                         </Style>
                                     </ToggleButton.Style>
                                 </ToggleButton>
-                                <Border x:Name="Bd" HorizontalAlignment="Stretch" BorderThickness="{TemplateBinding Border.BorderThickness}" BorderBrush="{TemplateBinding Border.BorderBrush}" Padding="{TemplateBinding Control.Padding}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True" Grid.Column="1">
+                                <Border x:Name="Bd" HorizontalAlignment="Stretch" BorderThickness="{TemplateBinding Border.BorderThickness}" BorderBrush="{TemplateBinding Border.BorderBrush}" Padding="{TemplateBinding Control.Padding}" Background="{TemplateBinding Panel.Background}" SnapsToDevicePixels="True"
+                                        Grid.Row="0" Grid.Column="1">
                                     <ContentPresenter x:Name="PART_Header" Content="{TemplateBinding HeaderedContentControl.Header}" ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}" ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}" ContentTemplateSelector="{TemplateBinding HeaderedItemsControl.HeaderTemplateSelector}" ContentSource="Header" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                                 </Border>
                                 <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.Row="1" />
@@ -232,7 +234,7 @@
 
             <Separator/>
 
-            <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr471}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:ChatPanel.JoinRoomCommand}">
+            <Button ToolTip="{x:Static loc:LocalizedStrings.Subscribe}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:ChatPanel.JoinRoomCommand}">
                 <ex:BmpImage Source="Images/subscribe_16x16.png" Style="{StaticResource BmpStyle}"/>
             </Button>
             <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr426}" ToolTipService.ShowOnDisabled="True" Command="{x:Static controls:ChatPanel.LeaveRoomCommand}">
@@ -262,8 +264,8 @@
 
         <grids:UniversalGrid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" Margin="3" x:Name="Users">
             <grids:UniversalGrid.Columns>
-                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr201}" Binding="{Binding Path=Name}" SortMemberPath="Name"/>
-                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str268}" Binding="{Binding Path=Description}" SortMemberPath="Description"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Name}" Binding="{Binding Path=Name}" SortMemberPath="Name"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Description}" Binding="{Binding Path=Description}" SortMemberPath="Description"/>
             </grids:UniversalGrid.Columns>
         </grids:UniversalGrid>
 

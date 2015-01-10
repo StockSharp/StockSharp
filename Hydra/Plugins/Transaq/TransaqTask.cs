@@ -32,7 +32,7 @@ namespace StockSharp.Hydra.Transaq
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.Str3679Key)]
 			[PropertyOrder(0)]
 			public string Login
@@ -42,7 +42,7 @@ namespace StockSharp.Hydra.Transaq
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.Str3680Key)]
 			[PropertyOrder(1)]
 			public SecureString Password
@@ -52,7 +52,7 @@ namespace StockSharp.Hydra.Transaq
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.Str3681Key)]
 			[PropertyOrder(2)]
 			public EndPoint Address
@@ -83,7 +83,7 @@ namespace StockSharp.Hydra.Transaq
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
-			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.Str3686Key)]
 			[PropertyOrder(5)]
 			public string ProxyLogin
@@ -93,7 +93,7 @@ namespace StockSharp.Hydra.Transaq
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.Str3687Key)]
 			[PropertyOrder(6)]
 			public SecureString ProxyPassword
@@ -103,7 +103,7 @@ namespace StockSharp.Hydra.Transaq
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3539Key)]
-			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.Str3688Key)]
 			[PropertyOrder(7)]
 			public EndPoint ProxyAddress

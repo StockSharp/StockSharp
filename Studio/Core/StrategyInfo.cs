@@ -40,7 +40,7 @@ namespace StockSharp.Studio.Core
 		Terminal,
 	}
 
-	[DisplayNameLoc(LocalizedStrings.Str1320Key)]
+	[DisplayNameLoc(LocalizedStrings.StrategyKey)]
 	[DescriptionLoc(LocalizedStrings.Str3184Key)]
 	public class StrategyInfo : NotifiableObject
 	{
@@ -73,7 +73,7 @@ namespace StockSharp.Studio.Core
 
 		private string _description;
 
-		[DisplayNameLoc(LocalizedStrings.Str268Key)]
+		[DisplayNameLoc(LocalizedStrings.DescriptionKey)]
 		[DescriptionLoc(LocalizedStrings.Str3185Key)]
 		[CategoryLoc(LocalizedStrings.Str1559Key)]
 		public string Description

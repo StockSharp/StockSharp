@@ -49,8 +49,8 @@ namespace StockSharp.Hydra.MBTrading
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
-			[DescriptionLoc(LocalizedStrings.Str1445Key, true)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
+			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
 			public string Login
 			{
@@ -59,8 +59,8 @@ namespace StockSharp.Hydra.MBTrading
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
-			[DescriptionLoc(LocalizedStrings.Str1448Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
+			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
 			public SecureString Password
 			{
@@ -69,8 +69,8 @@ namespace StockSharp.Hydra.MBTrading
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str3790Key)]
-			[DescriptionLoc(LocalizedStrings.Str3791Key)]
+			[DisplayNameLoc(LocalizedStrings.PinKey)]
+			[DescriptionLoc(LocalizedStrings.PinKey, true)]
 			[PropertyOrder(3)]
 			public SecureString Pin
 			{

@@ -1,6 +1,7 @@
 <controls:BaseStudioControl x:Class="StockSharp.Studio.Controls.PositionsPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
@@ -24,7 +25,7 @@
                     <Setter.Value>
                         <ContextMenu>
                             <MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr173}" Command="{x:Static controls:PositionsPanel.ClosePositionCommand}" />
-                            <MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr451}" Command="{x:Static controls:PositionsPanel.RevertPositionCommand}"  />
+                            <MenuItem Header="{x:Static loc:LocalizedStrings.RevertPosition}" Command="{x:Static controls:PositionsPanel.RevertPositionCommand}"  />
                         </ContextMenu>
                     </Setter.Value>
                 </Setter>

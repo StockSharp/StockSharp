@@ -12,7 +12,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
 
-	[DisplayNameLoc(LocalizedStrings.Str1672Key)]
+	[DisplayNameLoc(LocalizedStrings.PortfoliosKey)]
 	[DescriptionLoc(LocalizedStrings.Str3269Key)]
 	[Icon("images/portfolio_32x32.png")]
 	public partial class PortfoliosPanel

@@ -32,7 +32,7 @@ namespace StockSharp.Hydra.Panes
 
 		string IPane.Title
 		{
-			get { return LocalizedStrings.Str2250; }
+			get { return LocalizedStrings.News; }
 		}
 
 		Uri IPane.Icon

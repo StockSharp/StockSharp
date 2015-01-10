@@ -109,7 +109,7 @@ namespace SpeedTest
 				QuikCheckBox.IsEnabled = SmartComCheckBox.IsEnabled = true;
 				Strategies.Clear();
 				Connection.Background = new SolidColorBrush(Colors.LightCoral);
-				ConnectButton.Header = LocalizedStrings.Str2962;
+				ConnectButton.Header = LocalizedStrings.Connect;
 				_connector.StopExport();
 				_connector.Disconnect();
 				_connector = null;

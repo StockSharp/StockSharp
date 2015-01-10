@@ -43,7 +43,7 @@ namespace SampleRss
 
 			if (address == null)
 			{
-				MessageBox.Show(this, LocalizedStrings.Str3804);
+				MessageBox.Show(this, LocalizedStrings.AddrNotSpecified);
 				return;
 			}
 
@@ -72,7 +72,7 @@ namespace SampleRss
 
 		private void ChangeConnectStatus(bool isConnected)
 		{
-			this.GuiAsync(() => ConnectBtn.Content = isConnected ? LocalizedStrings.Str2961 : LocalizedStrings.Str2962);
+			this.GuiAsync(() => ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect);
 		}
 	}
 }

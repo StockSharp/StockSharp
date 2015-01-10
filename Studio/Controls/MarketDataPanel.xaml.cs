@@ -22,7 +22,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Localization;
 
 	[DisplayNameLoc(LocalizedStrings.Str1405Key)]
-	[DescriptionLoc(LocalizedStrings.Str3262Key)]
+	[DescriptionLoc(LocalizedStrings.StorageSettingsKey)]
 	[Icon("Images/storage_32x32.png")]
 	[Guid("8B702CF0-2D2E-4A6E-8C2E-63CEF1B75D84")]
 	public partial class MarketDataPanel

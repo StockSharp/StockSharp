@@ -39,16 +39,16 @@
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
 
-				<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr281}" />
+				<TextBlock Grid.Column="0" Grid.Row="0"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
 				<TextBox x:Name="Login" Text="" Grid.Column="1" Grid.Row="0" />
 
-				<Label Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.XamlStr449}" />
+				<TextBlock Grid.Column="0" Grid.Row="1"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
 				<PasswordBox x:Name="Password" Password="" Grid.Column="1" Grid.Row="1" />
 
 				<Label Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.XamlStr651}" />
 				<ss:SmartComAddressComboBox x:Name="Address" Grid.Column="1" Grid.Row="2" Width="200" />
 
-				<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.Str2962}" Click="ConnectClick" />
+				<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 
 				<Label Grid.Column="0" Grid.Row="4">
 					<TextBlock>

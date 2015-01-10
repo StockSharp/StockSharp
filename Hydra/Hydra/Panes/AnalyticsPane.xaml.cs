@@ -70,7 +70,7 @@ namespace StockSharp.Hydra.Panes
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 			[DescriptionLoc(LocalizedStrings.SecurityKey, true)]
-			[CategoryLoc(LocalizedStrings.Str167Key)]
+			[CategoryLoc(LocalizedStrings.GeneralKey)]
 			[PropertyOrder(0)]
 			public Security Security
 			{
@@ -87,7 +87,7 @@ namespace StockSharp.Hydra.Panes
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str343Key)]
 			[DescriptionLoc(LocalizedStrings.Str1222Key)]
-			[CategoryLoc(LocalizedStrings.Str167Key)]
+			[CategoryLoc(LocalizedStrings.GeneralKey)]
 			[PropertyOrder(1)]
 			public DateTime From
 			{
@@ -104,7 +104,7 @@ namespace StockSharp.Hydra.Panes
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str345Key)]
 			[DescriptionLoc(LocalizedStrings.Str418Key, true)]
-			[CategoryLoc(LocalizedStrings.Str167Key)]
+			[CategoryLoc(LocalizedStrings.GeneralKey)]
 			[PropertyOrder(2)]
 			public DateTime To
 			{
@@ -121,7 +121,7 @@ namespace StockSharp.Hydra.Panes
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 			[DescriptionLoc(LocalizedStrings.Str2838Key)]
-			[CategoryLoc(LocalizedStrings.Str167Key)]
+			[CategoryLoc(LocalizedStrings.GeneralKey)]
 			[Editor(typeof(DriveComboBoxEditor), typeof(DriveComboBoxEditor))]
 			[PropertyOrder(3)]
 			public IMarketDataDrive Drive
@@ -139,7 +139,7 @@ namespace StockSharp.Hydra.Panes
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2239Key)]
 			[DescriptionLoc(LocalizedStrings.Str2240Key)]
-			[CategoryLoc(LocalizedStrings.Str167Key)]
+			[CategoryLoc(LocalizedStrings.GeneralKey)]
 			[PropertyOrder(4)]
 			public StorageFormats StorageFormat
 			{

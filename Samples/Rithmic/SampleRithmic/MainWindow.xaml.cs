@@ -179,7 +179,7 @@ namespace SampleRithmic
 		private void OnConnectionChanged(bool isConnected)
 		{
 			IsConnected = isConnected;
-			ConnectBtn.Content = isConnected ? LocalizedStrings.Str2961 : LocalizedStrings.Str2962;
+			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
 		}
 
 		private void OrdersFailed(IEnumerable<OrderFail> fails)

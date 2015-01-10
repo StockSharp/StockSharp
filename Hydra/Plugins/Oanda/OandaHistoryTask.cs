@@ -80,7 +80,7 @@ namespace StockSharp.Hydra.Oanda
 
 		public override string Description
 		{
-			get { return LocalizedStrings.Str3807Params.Put(LocalizedStrings.Str3837); }
+			get { return LocalizedStrings.Str3807Params.Put(LocalizedStrings.OandaHistory); }
 		}
 
 		public override TaskTypes Type

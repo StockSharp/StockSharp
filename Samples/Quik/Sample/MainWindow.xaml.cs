@@ -178,14 +178,14 @@ namespace Sample
 				Trader.Connect();
 
 				_isConnected = true;
-				ConnectBtn.Content = LocalizedStrings.Str2961;
+				ConnectBtn.Content = LocalizedStrings.Disconnect;
 			}
 			else
 			{
 				Trader.Disconnect();
 
 				_isConnected = false;
-				ConnectBtn.Content = LocalizedStrings.Str2962;
+				ConnectBtn.Content = LocalizedStrings.Connect;
 			}
 		}
 

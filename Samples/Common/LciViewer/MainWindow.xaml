@@ -37,7 +37,7 @@
 					<ColumnDefinition Width="100" />
 				</Grid.ColumnDefinitions>
 
-				<Label><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr102}"/></Label>
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Year}"/>:</TextBlock>
 				<ComboBox Grid.Column="1" x:Name="Year" DisplayMemberPath="Year" SelectionChanged="Year_OnSelectionChanged" />
 
 				<TextBlock Grid.Column="2">

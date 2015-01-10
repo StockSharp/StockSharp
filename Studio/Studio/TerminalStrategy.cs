@@ -455,7 +455,7 @@ namespace StockSharp.Studio
 			var indicator = _indicators.TryGetValue(element);
 
 			if (indicator == null)
-				throw new InvalidOperationException(LocalizedStrings.Str3848.Put(element));
+				throw new InvalidOperationException(LocalizedStrings.IndicatorNotFound.Put(element));
 
 			return indicator.Process(candle);
 		}

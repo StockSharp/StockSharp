@@ -59,10 +59,10 @@
         <ribbon:Ribbon Grid.Row="0" x:Name="Ribbon" QuickAccessToolBarLocation="Above" IsTitleBarAreaVisible="True" IsApplicationButtonVisible="False"
                        IsQuickAccessToolBarCustomizeButtonVisible="False" IsMinimized="True" IsCustomizeQuickAccessToolBarMenuItemVisible="False">
             <ribbon:Ribbon.QuickAccessToolBarItems>
-                <ribbon:Button x:Name="ConnectBtn" Label="{x:Static loc:LocalizedStrings.Str2962}" ToolTip="{x:Static loc:LocalizedStrings.Str2962}" ToolTipService.ShowOnDisabled="True"
+                <ribbon:Button x:Name="ConnectBtn" Label="{x:Static loc:LocalizedStrings.Connect}" ToolTip="{x:Static loc:LocalizedStrings.Connect}" ToolTipService.ShowOnDisabled="True"
                                Command="{x:Static local:MainWindow.ConnectCommand}"/>
 
-                <ribbon:Button x:Name="ConnectionSettingsButton" Label="{x:Static loc:LocalizedStrings.XamlStr328}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr331}" ToolTipService.ShowOnDisabled="True"
+				<ribbon:Button x:Name="ConnectionSettingsButton" Label="{x:Static loc:LocalizedStrings.Settings}" ToolTip="{x:Static loc:LocalizedStrings.ConnectionSettings}" ToolTipService.ShowOnDisabled="True"
                                Command="{x:Static local:MainWindow.ConnectionSettingsCommand}"/>
                 
                 <ribbon:Separator/>
@@ -129,7 +129,7 @@
 
                     <docking:SplitContainer Orientation="Horizontal" docking:DockSite.ControlSize="300, 100">
                         <docking:ToolWindowContainer>
-                            <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str949}" Name="ToolWindowOrderGrid" CanClose="False">
+                            <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Orders}" Name="ToolWindowOrderGrid" CanClose="False">
                                 <xaml:OrderGrid x:Name="OrderGrid" />
                             </docking:ToolWindow>
                             <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str985}" Name="ToolWindowMyTradeGrid" CanClose="False">

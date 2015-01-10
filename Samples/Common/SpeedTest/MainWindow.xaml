@@ -17,7 +17,7 @@
 					<CheckBox Content="Plaza" Name="PlazaCheckBox" IsChecked="False"></CheckBox>
                 </MenuItem>
             </MenuItem> 
-            <MenuItem Header="{x:Static loc:LocalizedStrings.Str2962}" Name="ConnectButton" Click="QuikConnectionMouseDoubleClick"/>
+            <MenuItem Header="{x:Static loc:LocalizedStrings.Connect}" Name="ConnectButton" Click="QuikConnectionMouseDoubleClick"/>
             <MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr141}" Click="NewOrderTestClick"/> 
         </Menu>
         <ListView Height="103"  ItemsSource="{Binding Strategies}" Margin="0,20,3,52" Name="TestStrategies" SelectionChanged="TestStrategiesSelectionChanged">
@@ -27,8 +27,8 @@
                     <GridViewColumn Width="90" Header="{x:Static loc:LocalizedStrings.State}" DisplayMemberBinding="{Binding ProcessState}" />
                     <GridViewColumn Width="90" Header="{x:Static loc:LocalizedStrings.Security}" DisplayMemberBinding="{Binding Security.Code}" />
                     <GridViewColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr430}" DisplayMemberBinding="{Binding NumberOfOrders}"/>
-                    <GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr306}" DisplayMemberBinding="{Binding MinLatency}"/>
-                    <GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr702}" DisplayMemberBinding="{Binding AverageTime}"/>
+                    <GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Minimum}" DisplayMemberBinding="{Binding MinLatency}"/>
+                    <GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.AverageTime}" DisplayMemberBinding="{Binding AverageTime}"/>
                     <GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr292}" DisplayMemberBinding="{Binding MaxLatency}"/>
                 </GridView>
             </ListView.View>

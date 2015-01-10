@@ -23,10 +23,10 @@
 		</Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal">
-            <Label Content="{x:Static loc:LocalizedStrings.XamlStr281}" HorizontalAlignment="Right" />
+			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
 			<TextBox x:Name="Login" Text="" Width="70" />
 
-            <Label Content="{x:Static loc:LocalizedStrings.XamlStr449}" HorizontalAlignment="Right" />
+			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
 			<PasswordBox x:Name="Password" Password="" Width="100" />
 
             <Label Content="{x:Static loc:LocalizedStrings.XamlStr651}" HorizontalAlignment="Right" />
@@ -35,7 +35,7 @@
 			<Label Content="SmartCOM 3:" HorizontalAlignment="Right" />
 			<CheckBox x:Name="IsSmartCom3" Margin="5" IsChecked="True" />
 
-			<Button x:Name="ConnectBtn" Width="100" Content="{x:Static loc:LocalizedStrings.Str2962}" Click="ConnectClick" />
+			<Button x:Name="ConnectBtn" Width="100" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		</StackPanel>
 
 		<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">
@@ -59,7 +59,7 @@
 			<TextBox x:Name="VolumeCtrl" Grid.Column="1" Grid.Row="0" Visibility="Collapsed" Text="0" TextAlignment="Right"  />
 		</Grid>
 		
-		<RadioButton x:Name="IsHistory" Content="{x:Static loc:LocalizedStrings.Str3329}" Grid.Column="0" Grid.Row="3" FlowDirection="RightToLeft" VerticalAlignment="Center" Click="OnChartTypeChanged" />
+		<RadioButton x:Name="IsHistory" Content="{x:Static loc:LocalizedStrings.History}" Grid.Column="0" Grid.Row="3" FlowDirection="RightToLeft" VerticalAlignment="Center" Click="OnChartTypeChanged" />
 		<Grid x:Name="HistorySettings" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="3" IsEnabled="False">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="100" />

@@ -34,7 +34,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 			}
 
 			[Category(_category)]
-			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.Str2532Key)]
 			[PropertyOrder(0)]
 			public EndPoint Address

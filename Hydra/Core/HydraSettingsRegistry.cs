@@ -62,7 +62,7 @@ namespace StockSharp.Hydra.Core
 		/// Авторизация для получения доступа к S#.Data сервер.
 		/// </summary>
 		[Category(_serverCategory)]
-		[DisplayNameLoc(LocalizedStrings.Str1443Key)]
+		[DisplayNameLoc(LocalizedStrings.AuthorizationKey)]
 		[DescriptionLoc(LocalizedStrings.Str2216Key)]
 		[PropertyOrder(1)]
 		public AuthorizationModes Authorization { get; set; }
@@ -70,7 +70,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Автостарт скачивания котировок при запуске.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2217Key)]
 		[DescriptionLoc(LocalizedStrings.Str2218Key)]
 		[PropertyOrder(0)]
@@ -79,7 +79,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Сворачивать в трей.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2219Key)]
 		[DescriptionLoc(LocalizedStrings.Str2220Key)]
 		[PropertyOrder(1)]
@@ -88,7 +88,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Остановка работы по времени.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2221Key)]
 		[DescriptionLoc(LocalizedStrings.Str2222Key)]
 		[PropertyOrder(2)]
@@ -99,7 +99,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Время для Авто-стоп.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2223Key)]
 		[DescriptionLoc(LocalizedStrings.Str2223Key, true)]
 		[PropertyOrder(3)]
@@ -121,7 +121,7 @@ namespace StockSharp.Hydra.Core
 		/// Количество ошибок, после которых будет отправлено письмо на почту с сообщение об ошибке.
 		/// Значение 0 означает выключенный режим.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2225Key)]
 		[DescriptionLoc(LocalizedStrings.Str2226Key)]
 		[PropertyOrder(4)]
@@ -140,7 +140,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Адрес почты, куда будет отправлено письмо с сообщением о превышении максимально допустимого количества ошибок.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2227Key)]
 		[DescriptionLoc(LocalizedStrings.Str2228Key)]
 		[PropertyOrder(5)]

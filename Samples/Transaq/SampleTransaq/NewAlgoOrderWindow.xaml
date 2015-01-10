@@ -23,7 +23,7 @@
                 </Grid.ColumnDefinitions>
                 
                 <TextBlock HorizontalAlignment="Right">
-					<Run Text="{x:Static loc:LocalizedStrings.Str2412}"/><Run Text=":"/>
+					<Run Text="{x:Static loc:LocalizedStrings.Account}"/><Run Text=":"/>
 				</TextBlock>
                 <sx:PortfolioComboBox x:Name="Portfolio" Grid.Row="0" Grid.Column="1" />
                 

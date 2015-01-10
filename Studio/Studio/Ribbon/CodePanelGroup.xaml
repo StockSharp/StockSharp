@@ -18,14 +18,14 @@
                        Command="{x:Static code:CodePanel.UndoCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/undo_16x16.png" />
 
-        <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr58}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr59}" ToolTipService.ShowOnDisabled="True"
+        <ribbon:Button Label="{x:Static loc:LocalizedStrings.Undo}" ToolTip="{x:Static loc:LocalizedStrings.UndoChanges}" ToolTipService.ShowOnDisabled="True"
                        Command="{x:Static code:CodePanel.RedoCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/redo_16x16.png" />
     </ribbon:StackPanel>
     
     <ribbon:Separator/>
     
-    <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr705}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr705}" ToolTipService.ShowOnDisabled="True" 
+    <ribbon:Button Label="{x:Static loc:LocalizedStrings.References}" ToolTip="{x:Static loc:LocalizedStrings.References}" ToolTipService.ShowOnDisabled="True" 
                    Command="{x:Static local:CodePanelGroup.EditReferencesCommand}"
                    ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/references_32x32.png" />
 </ribbon:Group>

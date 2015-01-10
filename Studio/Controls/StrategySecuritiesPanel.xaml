@@ -40,7 +40,7 @@
                     Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
 				<Button.ToolTip>
 					<ToolTip>
-						<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr139}" />
+						<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr138}"/>...</TextBlock>
 					</ToolTip>
 				</Button.ToolTip>
 				<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png" Style="{StaticResource BmpStyle}" />

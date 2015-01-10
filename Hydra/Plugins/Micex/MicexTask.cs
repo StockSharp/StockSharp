@@ -29,8 +29,8 @@ namespace StockSharp.Hydra.Micex
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
-			[DescriptionLoc(LocalizedStrings.Str1668Key)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
+			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(0)]
 			public EndPoint Address
 			{
@@ -39,8 +39,8 @@ namespace StockSharp.Hydra.Micex
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
-			[DescriptionLoc(LocalizedStrings.Str1445Key, true)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
+			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
 			public string Login
 			{
@@ -49,8 +49,8 @@ namespace StockSharp.Hydra.Micex
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
-			[DescriptionLoc(LocalizedStrings.Str1448Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
+			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
 			public SecureString Password
 			{

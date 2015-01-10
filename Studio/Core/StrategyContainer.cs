@@ -198,7 +198,7 @@ namespace StockSharp.Studio.Core
 			}
 		}
 
-		[CategoryLoc(LocalizedStrings.Str167Key)]
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str3172Key)]
 		[DescriptionLoc(LocalizedStrings.Str3173Key)]
 		[PropertyOrder(0)]

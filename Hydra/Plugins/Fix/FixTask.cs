@@ -29,7 +29,7 @@ namespace StockSharp.Hydra.Fix
 			private FixSession _marketDataSession;
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1540Key)]
+			[DisplayNameLoc(LocalizedStrings.SessionKey)]
 			[DescriptionLoc(LocalizedStrings.Str3746Key)]
 			[PropertyOrder(0)]
 			public FixSession MarketDataSession

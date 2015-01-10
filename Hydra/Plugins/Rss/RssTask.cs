@@ -30,7 +30,7 @@ namespace StockSharp.Hydra.Rss
 			{
 			}
 
-			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.Str3505Key)]
 			[TaskCategory(_sourceName)]
 			[Editor(typeof(RssAddressEditor), typeof(RssAddressEditor))]
@@ -77,7 +77,7 @@ namespace StockSharp.Hydra.Rss
 
 		public override string Description
 		{
-			get { return LocalizedStrings.Str3805; }
+			get { return LocalizedStrings.RssSource; }
 		}
 
 		public override Uri Icon

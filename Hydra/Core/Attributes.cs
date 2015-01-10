@@ -19,8 +19,8 @@ namespace StockSharp.Hydra.Core
 
 		private static readonly Dictionary<string, string> _sourceNames = new Dictionary<string, string>
 		{
-			{ _sourceAlor,         LocalizedStrings.Str3806 },
-			{ _sourceOandaHist,    LocalizedStrings.Str3837 },
+			{ _sourceAlor,         LocalizedStrings.AlorHistory },
+			{ _sourceOandaHist,    LocalizedStrings.OandaHistory },
 			{ _sourceCompetition,  LocalizedStrings.Str2825 },
 			{ _sourceUxWeb,        LocalizedStrings.Str2830 },
 		};
@@ -50,7 +50,7 @@ namespace StockSharp.Hydra.Core
 		/// <param name="sourceName">Default name of the task.</param>
 		/// <param name="isKey"></param>
 		public TaskSettingsDisplayNameAttribute(string sourceName, bool isKey = false)
-			: base(isKey ? LocalizedStrings.GetString(sourceName) : LocalizedStrings.Str3844.Put(TaskDisplayNameAttribute.GetSourceName(sourceName))) { }
+			: base(isKey ? LocalizedStrings.GetString(sourceName) : LocalizedStrings.TaskSettings.Put(TaskDisplayNameAttribute.GetSourceName(sourceName))) { }
 	}
 
 	/// <summary>

@@ -1,6 +1,7 @@
 <Window x:Class="StockSharp.Quik.Verifier.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		Title="{x:Static loc:LocalizedStrings.XamlStr574}" Width="500" Height="400">
     
@@ -38,7 +39,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Label Content="{x:Static loc:LocalizedStrings.XamlStr712}" Grid.Column="0" HorizontalAlignment="Right" />
+            <Label Content="{x:Static loc:LocalizedStrings.ObsoleteConnection}" Grid.Column="0" HorizontalAlignment="Right" />
             <CheckBox x:Name="IsDde" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
 
 			<Label Content="{x:Static loc:LocalizedStrings.XamlStr573}" Grid.Column="3" HorizontalAlignment="Right"
@@ -56,7 +57,7 @@
 			</ListView.CommandBindings>
 			<ListView.View>
 				<GridView>
-					<GridViewColumn Width="500" Header="{x:Static loc:LocalizedStrings.Str202}">
+					<GridViewColumn Width="500" Header="{x:Static loc:LocalizedStrings.Messages}">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
                                 <TextBlock x:Name="ErrorCtrl" Text="{Binding Path=Message}" />

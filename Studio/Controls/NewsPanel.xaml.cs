@@ -11,7 +11,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
 
-	[DisplayNameLoc(LocalizedStrings.Str2250Key)]
+	[DisplayNameLoc(LocalizedStrings.NewsKey)]
 	[DescriptionLoc(LocalizedStrings.Str3238Key)]
 	[Icon("images/news_24x24.png")]
 	public partial class NewsPanel

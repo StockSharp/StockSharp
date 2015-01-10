@@ -50,8 +50,8 @@
         <ribbon:Button Label="{x:Static loc:LocalizedStrings.Join}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr376}" ToolTipService.ShowOnDisabled="True"
                        Command="{x:Static local:CompositionDiagramElementGroup.CombineToCompositionCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Studio.Controls;component/Images/combine_16x16.png" />
-        
-        <ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr462}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr463}" ToolTipService.ShowOnDisabled="True"
+
+		<ribbon:Button Label="{x:Static loc:LocalizedStrings.XamlStr462}" ToolTip="{x:Static loc:LocalizedStrings.ShareImage}" ToolTipService.ShowOnDisabled="True"
                        Command="{x:Static local:CompositionDiagramElementGroup.ShareCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml.Charting;component/Images/share_16x16.png" />
 
@@ -73,10 +73,10 @@
             <ColumnDefinition Width="120"/>
         </Grid.ColumnDefinitions>
 
-        <Label Content="{x:Static loc:LocalizedStrings.XamlStr318}" Grid.Row="0" Grid.Column="0" />
+		<TextBlock Grid.Row="0" Grid.Column="0"><Run Text="{x:Static loc:LocalizedStrings.Name}" />:</TextBlock>
         <TextBox Grid.Row="0" Grid.Column="1" x:Name="CompositionName" VerticalContentAlignment="Center" />
 
-        <Label Content="{x:Static loc:LocalizedStrings.XamlStr107}" Grid.Row="1" Grid.Column="0" />
+		<TextBlock Grid.Row="1" Grid.Column="0"><Run Text="{x:Static loc:LocalizedStrings.Group}"/><Run Text=":"/></TextBlock>
         <TextBox Grid.Row="1" Grid.Column="1" x:Name="CompositionCategory" VerticalContentAlignment="Center" />
 
         <!--<ribbon:Button Grid.Row="2" Grid.Column="1" Label="Сохранить" 

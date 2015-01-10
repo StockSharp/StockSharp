@@ -352,7 +352,7 @@ namespace StockSharp.Studio
 			cmdSvc.Register<LoggedInCommand>(this, true, cmd =>
 			{
 				StockSharpConnectBtn.Background = Brushes.Salmon;
-				StockSharpConnectBtn.Label = LocalizedStrings.Str2961;
+				StockSharpConnectBtn.Label = LocalizedStrings.Disconnect;
 
 				UpdateLicenseToolbar();
 
@@ -375,7 +375,7 @@ namespace StockSharp.Studio
 			cmdSvc.Register<LoggedOutCommand>(this, true, cmd =>
 			{
 				StockSharpConnectBtn.Background = notConnectedBrush;
-				StockSharpConnectBtn.Label = LocalizedStrings.Str2962;
+				StockSharpConnectBtn.Label = LocalizedStrings.Connect;
 			});
 
 			cmdSvc.Register<LogInCommand>(this, true, cmd =>
@@ -1377,14 +1377,14 @@ namespace StockSharp.Studio
 
 					case ConnectionStates.Connected:
 						ConnectBtn.IsEnabled = true;
-						ConnectBtn.ToolTip = ConnectBtn.Label = LocalizedStrings.Str2961;
+						ConnectBtn.ToolTip = ConnectBtn.Label = LocalizedStrings.Disconnect;
 						ConnectBtn.ImageSourceLarge = new BitmapImage(new Uri("pack://application:,,,/Studio;component/Images/disconnect.png"));
 						break;
 
 					case ConnectionStates.Disconnected:
 					case ConnectionStates.Failed:
 						ConnectBtn.IsEnabled = true;
-						ConnectBtn.ToolTip = ConnectBtn.Label = LocalizedStrings.Str2962;
+						ConnectBtn.ToolTip = ConnectBtn.Label = LocalizedStrings.Connect;
 						ConnectBtn.ImageSourceLarge = new BitmapImage(new Uri("pack://application:,,,/Studio;component/Images/connect.png"));
 						break;
 				}

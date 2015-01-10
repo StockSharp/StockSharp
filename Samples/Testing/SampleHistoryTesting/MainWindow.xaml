@@ -131,7 +131,7 @@
 							<TabItem Header="{x:Static loc:LocalizedStrings.Candles}">
 								<charting:ChartPanel x:Name="Chart" ShowOverview="False" />
 							</TabItem>
-							<TabItem Header="{x:Static loc:LocalizedStrings.Str2344}">
+							<TabItem Header="{x:Static loc:LocalizedStrings.Equity}">
 								<charting:EquityCurveChart x:Name="Curve" />
 							</TabItem>
 						</TabControl>

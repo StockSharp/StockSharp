@@ -23,7 +23,7 @@
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Str219}" DisplayMemberBinding="{Binding Path=DateTime.Time}" />
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr408}" DisplayMemberBinding="{Binding Path=OpenPrice}" />
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Str814}" DisplayMemberBinding="{Binding Path=HighPrice}" />
-					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr304}" DisplayMemberBinding="{Binding Path=LowPrice}" />
+					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Min}" DisplayMemberBinding="{Binding Path=LowPrice}" />
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr171}" DisplayMemberBinding="{Binding Path=ClosePrice}" />
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Volume}" DisplayMemberBinding="{Binding Path=Volume}" />
 				</GridView>

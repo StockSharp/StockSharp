@@ -37,7 +37,7 @@
 
                 <docking:SplitContainer Orientation="Horizontal" docking:DockSite.ControlSize="300, 100">
                     <docking:ToolWindowContainer>
-                        <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str949}" CanClose="False">
+                        <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Orders}" CanClose="False">
                             <xaml:OrderGrid x:Name="OrderGrid" />
                         </docking:ToolWindow>
                         <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.Str985}" CanClose="False">

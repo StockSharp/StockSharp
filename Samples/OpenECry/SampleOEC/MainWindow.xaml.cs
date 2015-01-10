@@ -192,7 +192,7 @@ namespace SampleOEC
 		private void ChangeConnectStatus(bool isConnected)
 		{
 			_isConnected = isConnected;
-			ConnectBtn.Content = isConnected ? LocalizedStrings.Str2961 : LocalizedStrings.Str2962;
+			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)

@@ -33,8 +33,8 @@ namespace StockSharp.Hydra.LMAX
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
-			[DescriptionLoc(LocalizedStrings.Str1445Key, true)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
+			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
 			public string Login
 			{
@@ -43,8 +43,8 @@ namespace StockSharp.Hydra.LMAX
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
-			[DescriptionLoc(LocalizedStrings.Str1448Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
+			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
@@ -53,7 +53,7 @@ namespace StockSharp.Hydra.LMAX
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1879Key)]
+			[DisplayNameLoc(LocalizedStrings.DemoKey)]
 			[DescriptionLoc(LocalizedStrings.Str3388Key)]
 			[PropertyOrder(2)]
 			public bool IsDemo

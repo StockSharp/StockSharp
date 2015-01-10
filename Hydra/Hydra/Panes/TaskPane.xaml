@@ -240,9 +240,9 @@
 					</DataGridTemplateColumn.CellStyle>
 				</DataGridTemplateColumn>
 
-				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Trades}" Binding="{Binding Path=TaskSecurity.TradeInfo.Count}" SortMemberPath="TaskSecurity.TradeInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
-				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr708}" Binding="{Binding Path=TaskSecurity.DepthInfo.Count}" SortMemberPath="TaskSecurity.DepthInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
-				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr388}" Binding="{Binding Path=TaskSecurity.OrderLogInfo.Count}" SortMemberPath="TaskSecurity.OrderLogInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
+				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.TradesOf}" Binding="{Binding Path=TaskSecurity.TradeInfo.Count}" SortMemberPath="TaskSecurity.TradeInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
+				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.DepthsOf}" Binding="{Binding Path=TaskSecurity.DepthInfo.Count}" SortMemberPath="TaskSecurity.DepthInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
+				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.OrderLogOf}" Binding="{Binding Path=TaskSecurity.OrderLogInfo.Count}" SortMemberPath="TaskSecurity.OrderLogInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="Level 1" Binding="{Binding Path=TaskSecurity.Level1Info.Count}" SortMemberPath="TaskSecurity.Level1Info.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr631}" Binding="{Binding Path=TaskSecurity.CandleInfo.Count}" SortMemberPath="TaskSecurity.CandleInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
                 <DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Binding="{Binding Path=TaskSecurity.ExecutionInfo.Count}" SortMemberPath="TaskSecurity.ExecutionInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />

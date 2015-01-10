@@ -36,8 +36,8 @@ namespace StockSharp.Hydra.Plaza
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1445Key)]
-			[DescriptionLoc(LocalizedStrings.Str1445Key, true)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
+			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
 			public string Login
 			{
@@ -46,8 +46,8 @@ namespace StockSharp.Hydra.Plaza
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1447Key)]
-			[DescriptionLoc(LocalizedStrings.Str1448Key)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
+			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
 			public SecureString Password
 			{
@@ -56,8 +56,8 @@ namespace StockSharp.Hydra.Plaza
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str1439Key)]
-			[DescriptionLoc(LocalizedStrings.Str1668Key)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
+			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(2)]
 			public EndPoint Address
 			{
@@ -86,7 +86,7 @@ namespace StockSharp.Hydra.Plaza
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str3845Key)]
+			[DisplayNameLoc(LocalizedStrings.CGateIdKey)]
 			[DescriptionLoc(LocalizedStrings.Str2799Key)]
 			[PropertyOrder(5)]
 			public string CGateKey

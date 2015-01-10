@@ -1,6 +1,7 @@
 <Window x:Class="SampleRss.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:rss="clr-namespace:StockSharp.Rss.Xaml;assembly=StockSharp.Rss"
         xmlns:sx="http://schemas.stocksharp.com/xaml"
         Title="{x:Static loc:LocalizedStrings.XamlStr557}" Height="350" Width="525">
@@ -16,7 +17,7 @@
 				<ColumnDefinition Width="100" />
 			</Grid.ColumnDefinitions>
 			<rss:RssAddressComboBox x:Name="AddressComboBox" Width="Auto" />
-			<Button x:Name="ConnectBtn" Grid.Column="1" Background="LightPink" Content="{x:Static loc:LocalizedStrings.Str2962}" Click="ConnectClick" />
+			<Button x:Name="ConnectBtn" Grid.Column="1" Background="LightPink" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		</Grid>
 		
 		<sx:NewsPanel x:Name="NewsPanel" Grid.Row="1" />
