@@ -178,7 +178,12 @@ namespace StockSharp.Hydra.Ux
 				}
 
 				if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
-					Directory.Delete(source.GetDumpFile(null, date, date, typeof(Trade), null), true);
+				{
+					var dir = source.GetDumpFile(null, date, date, typeof(Trade), null);
+
+					if (Directory.Exists(dir))
+						Directory.Delete(dir, true);
+				}
 
 				_settings.StartFrom = date.AddDays(1);
 				SaveSettings();
