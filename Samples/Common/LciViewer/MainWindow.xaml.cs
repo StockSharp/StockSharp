@@ -239,10 +239,15 @@
 
 			var ns = typeof(IIndicator).Namespace;
 
+			var rendererTypes = typeof(Chart).Assembly
+				.GetTypes()
+				.Where(t => !t.IsAbstract && typeof(BaseChartIndicatorPainter).IsAssignableFrom(t))
+				.ToDictionary(t => t.Name);
+
 			var indicators = typeof(IIndicator).Assembly
 				.GetTypes()
 				.Where(t => t.Namespace == ns && !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t))
-				.Select(t => new IndicatorType(t, null));
+				.Select(t => new IndicatorType(t, rendererTypes.TryGetValue(t.Name + "Painter")));
 
 			Chart.IndicatorTypes.AddRange(indicators);
 
