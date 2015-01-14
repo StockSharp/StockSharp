@@ -7,6 +7,12 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.56:
+* (bug) AlfaDirect. Fix cadle subscrition. Fix http://stocksharp.com/forum/yaf_postst5483_primier-SampleAlfaCandles.aspx
+* (bug) OpenECry fixes
+* (bug) Localization fixes
+* (bug) Chart. Fix indicator adding
+
 ###v4.2.55:
 * (feature) Export executions
 * (bug) Localization fixes

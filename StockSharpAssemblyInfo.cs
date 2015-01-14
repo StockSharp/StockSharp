@@ -40,5 +40,10 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("4.2.55.0")]
-[assembly: AssemblyFileVersion("4.2.55.0")]
+[assembly: AssemblyVersion(VersionHolder.Version)]
+[assembly: AssemblyFileVersion(VersionHolder.Version)]
+
+class VersionHolder
+{
+	public const string Version = "4.2.56.0";
+}

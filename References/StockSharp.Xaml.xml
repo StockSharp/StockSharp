@@ -4257,11 +4257,10 @@
             <see cref="T:System.Windows.DependencyProperty"/> для <see cref="P:StockSharp.Xaml.TargetPlatformWindow.AutoStart"/>.
             </summary>
         </member>
-        <member name="M:StockSharp.Xaml.TargetPlatformWindow.#ctor(System.Boolean)">
+        <member name="M:StockSharp.Xaml.TargetPlatformWindow.#ctor">
             <summary>
             Создать <see cref="T:StockSharp.Xaml.TargetPlatformWindow"/>.
             </summary>
-            <param name="settingsMode">Режим.</param>
         </member>
         <member name="M:StockSharp.Xaml.TargetPlatformWindow.InitializeComponent">
             <summary>
@@ -4285,7 +4284,7 @@
         </member>
         <member name="P:StockSharp.Xaml.TargetPlatformWindow.Features">
             <summary>
-            Доступная функциональность для каждой платформы.
+            Доступная функциональность для всех платформ.
             </summary>
         </member>
         <member name="P:StockSharp.Xaml.TargetPlatformWindow.SelectedPlatform">
