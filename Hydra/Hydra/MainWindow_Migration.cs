@@ -127,21 +127,22 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 9)) == 0)
 			{
-				var queryFrom = Query
+				var query = Query
 					.Execute(@"
 					update HydraTaskSettings
 					set
 						[ExtensionInfo] = replace([ExtensionInfo], '<From>01/01/0001 00:00:00</From>', '<From>01/01/0001 00:00:00 +00:00</From>')");
 
-				var cmdFrom = database.GetCommand(queryFrom, null, new FieldList(), new FieldList(), false);
-				cmdFrom.ExecuteNonQuery(new SerializationItemCollection());
+				database
+					.GetCommand(query, null, new FieldList(), new FieldList(), false)
+					.ExecuteNonQuery(new SerializationItemCollection());
 
 				_entityRegistry.Version = new Version(2, 10);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 10)) == 0)
 			{
-				var queryFrom = Query
+				var query = Query
 					.Execute(@"
 					alter table [Security] RENAME TO tmp;
 					create table [Security] (
@@ -155,8 +156,9 @@ namespace StockSharp.Hydra
 					insert into [Security] select * from tmp;
 					drop table tmp;");
 
-				var cmdFrom = database.GetCommand(queryFrom, null, new FieldList(), new FieldList(), false);
-				cmdFrom.ExecuteNonQuery(new SerializationItemCollection());
+				database
+					.GetCommand(query, null, new FieldList(), new FieldList(), false)
+					.ExecuteNonQuery(new SerializationItemCollection());
 
 				_entityRegistry.Version = new Version(2, 11);
 			}
@@ -170,15 +172,33 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 12)) == 0)
 			{
-				var queryFrom = Query
+				var query = Query
 					.Execute(@"
 							alter table [HydraTaskSecurity] add column ExecutionCount integer;
 							alter table [HydraTaskSecurity] add column ExecutionLastTime time;");
 
-				var cmdFrom = database.GetCommand(queryFrom, null, new FieldList(), new FieldList(), false);
-				cmdFrom.ExecuteNonQuery(new SerializationItemCollection());
+				database
+					.GetCommand(query, null, new FieldList(), new FieldList(), false)
+					.ExecuteNonQuery(new SerializationItemCollection());
 
 				_entityRegistry.Version = new Version(2, 13);
+			}
+
+			if (_entityRegistry.Version.Compare(new Version(2, 13)) == 0)
+			{
+				database
+					.GetCommand(Query
+					.Execute("update [HydraTaskSecurity] set ExecutionCount = 0 where ExecutionCount is null"),
+						null, new FieldList(), new FieldList(), false)
+					.ExecuteNonQuery(new SerializationItemCollection());
+
+				database
+					.GetCommand(Query
+					.Execute("update [HydraTaskSecurity] set CandleCount = 0 where CandleCount is null"),
+						null, new FieldList(), new FieldList(), false)
+					.ExecuteNonQuery(new SerializationItemCollection());
+
+				_entityRegistry.Version = new Version(2, 14);
 				return;
 			}
 
