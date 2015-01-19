@@ -93,16 +93,6 @@ namespace StockSharp.Studio
 
 		private sealed class StudioHistorySessionHolder : HistorySessionHolder
 		{
-			public override bool IsMarketDataEnabled
-			{
-				get { return false; }
-			}
-
-			public override bool IsTransactionEnabled
-			{
-				get { return true; }
-			}
-
 			public override IMessageAdapter CreateMarketDataAdapter()
 			{
 				return null;
@@ -116,6 +106,8 @@ namespace StockSharp.Studio
 			public StudioHistorySessionHolder(IdGenerator transactionIdGenerator)
 				: base(transactionIdGenerator)
 			{
+				IsTransactionEnabled = true;
+				IsMarketDataEnabled = false;
 			}
 		}
 
