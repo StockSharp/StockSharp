@@ -12,6 +12,7 @@ namespace StockSharp.Hydra
 	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Windows.Controls;
+	using System.Windows.Data;
 	using System.Windows.Input;
 	using System.Windows.Media.Imaging;
 	using System.Windows.Threading;
@@ -259,6 +260,13 @@ namespace StockSharp.Hydra
 				}
 
 				Tasks.AddRange(res.Result);
+
+				var collectionView = (AutoRefreshCollectionViewSource)FindResource("SortedSources");
+				if (collectionView != null)
+				{
+					var view = (ListCollectionView)collectionView.View;
+					view.CustomSort = new LanguageSorter();
+				}
 
 				HydraEntityRegistry = _entityRegistry;
 

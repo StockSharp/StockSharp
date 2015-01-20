@@ -8,6 +8,7 @@ namespace StockSharp.Hydra.Ux
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
@@ -16,11 +17,13 @@ namespace StockSharp.Hydra.Ux
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class UxFtpTask : BaseHydraTask
 	{
 		private const string _sourceName = "UX (FTP)";

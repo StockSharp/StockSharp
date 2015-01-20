@@ -8,10 +8,12 @@ namespace StockSharp.Hydra.SmartCom
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
+	using StockSharp.Messages;
 	using StockSharp.SmartCom;
 	using StockSharp.SmartCom.Native;
 	using StockSharp.SmartCom.Xaml;
@@ -21,6 +23,7 @@ namespace StockSharp.Hydra.SmartCom
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class SmartComTask : ConnectorHydraTask<SmartTrader>
 	{
 		private const string _sourceName = "SmartCOM";

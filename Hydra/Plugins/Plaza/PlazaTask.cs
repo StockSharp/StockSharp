@@ -8,6 +8,7 @@ namespace StockSharp.Hydra.Plaza
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -23,6 +24,7 @@ namespace StockSharp.Hydra.Plaza
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class PlazaTask : ConnectorHydraTask<PlazaTrader>
 	{
 		private const string _sourceName = "Plaza";

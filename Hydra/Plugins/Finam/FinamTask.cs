@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Finam
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 	using Ecng.Collections;
 
@@ -18,11 +19,13 @@ namespace StockSharp.Hydra.Finam
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class FinamTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "Finam";

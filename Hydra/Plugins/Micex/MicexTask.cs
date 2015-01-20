@@ -6,9 +6,11 @@ namespace StockSharp.Hydra.Micex
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
+	using StockSharp.Messages;
 	using StockSharp.Micex;
 	using StockSharp.Localization;
 
@@ -16,6 +18,7 @@ namespace StockSharp.Hydra.Micex
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class MicexTask : ConnectorHydraTask<MicexTrader>
 	{
 		private const string _sourceName = "Micex";

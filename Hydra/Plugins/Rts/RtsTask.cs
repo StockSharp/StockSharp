@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Rts
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 	using Ecng.Collections;
 
@@ -22,6 +23,7 @@ namespace StockSharp.Hydra.Rts
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class RtsTask : BaseHydraTask
 	{
 		private const string _sourceName = "RTS";

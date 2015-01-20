@@ -6,6 +6,7 @@ namespace StockSharp.Hydra.Quik
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -21,6 +22,7 @@ namespace StockSharp.Hydra.Quik
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class QuikTask : ConnectorHydraTask<QuikTrader>
 	{
 		private const string _sourceName = "Quik";

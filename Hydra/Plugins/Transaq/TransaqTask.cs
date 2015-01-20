@@ -7,10 +7,12 @@ namespace StockSharp.Hydra.Transaq
 	using System.Net;
 	using System.Security;
 
+	using Ecng.Localization;
 	using Ecng.Xaml;
 	using Ecng.Common;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Messages;
 	using StockSharp.Transaq;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
@@ -19,6 +21,7 @@ namespace StockSharp.Hydra.Transaq
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class TransaqTask : ConnectorHydraTask<TransaqTrader>
 	{
 		private const string _sourceName = "Transaq";

@@ -6,6 +6,7 @@ namespace StockSharp.Hydra.Ux
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Xaml;
 	using Ecng.Collections;
 
@@ -18,11 +19,13 @@ namespace StockSharp.Hydra.Ux
 	using StockSharp.Logging;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
 	[TaskDisplayName(_sourceName)]
+	[TargetPlatform(Languages.Russian)]
 	class UxWebTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "UX (сайт)";

@@ -1,11 +1,13 @@
 namespace StockSharp.Hydra
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
+	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows;
 	using System.Windows.Controls;
@@ -14,6 +16,7 @@ namespace StockSharp.Hydra
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Localization;
 	using Ecng.Reflection;
 	using Ecng.Xaml;
 
@@ -30,6 +33,42 @@ namespace StockSharp.Hydra
 
 	partial class MainWindow
 	{
+		sealed class LanguageSorter : IComparer
+		{
+			private readonly Languages _language;
+
+			public LanguageSorter()
+			{
+				_language = Thread.CurrentThread.CurrentCulture.Name == "en-US" ? Languages.English : Languages.Russian;
+			}
+
+			public int Compare(object x, object y)
+			{
+				var xTask = (IHydraTask)x;
+				var yTask = (IHydraTask)y;
+
+				if (xTask.Settings.IsEnabled != yTask.Settings.IsEnabled)
+					return yTask.Settings.IsEnabled.CompareTo(xTask.Settings.IsEnabled);
+				
+				var xLang = GetLanguage(xTask);
+				var yLang = GetLanguage(yTask);
+
+				var xKey = xLang == _language ? -1 : (int)xLang;
+				var yKey = yLang == _language ? -1 : (int)yLang;
+
+				if (xKey == yKey)
+					return string.Compare(xTask.ToString(), yTask.ToString(), StringComparison.Ordinal);
+
+				return xKey.CompareTo(yKey);
+			}
+
+			private static Languages GetLanguage(IHydraTask task)
+			{
+				var targetPlatform = task.GetType().GetAttribute<TargetPlatformAttribute>();
+				return targetPlatform != null ? targetPlatform.PreferLanguage : Languages.English;
+			}
+		}
+
 		public static RoutedCommand NewTaskCommand = new RoutedCommand();
 
 		public static RoutedCommand TaskEnabledChangedCommand = new RoutedCommand();
