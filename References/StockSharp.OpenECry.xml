@@ -21,6 +21,12 @@
             Освободить занятые ресурсы.
             </summary>
     </member>
+    <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+      <summary>
+            Добавить <see cref="T:StockSharp.Messages.Message" /> в исходящую очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
     <member name="M:StockSharp.OpenECry.OpenECryMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Отправить сообщение.
@@ -36,11 +42,6 @@
     <member name="F:StockSharp.OpenECry.OpenECryRemoting.None">
       <summary>
             Отключен.
-            </summary>
-    </member>
-    <member name="F:StockSharp.OpenECry.OpenECryRemoting.Auto">
-      <summary>
-            Попытка активировать в режиме <see cref="F:StockSharp.OpenECry.OpenECryRemoting.Secondary" />, в случае неудачи - режим <see cref="F:StockSharp.OpenECry.OpenECryRemoting.Primary" />.
             </summary>
     </member>
     <member name="F:StockSharp.OpenECry.OpenECryRemoting.Primary">
@@ -114,15 +115,9 @@
             Уникальный идентификатор программного обеспечения.
             </summary>
     </member>
-    <member name="P:StockSharp.OpenECry.OpenECrySessionHolder.RemotingRequired">
+    <member name="P:StockSharp.OpenECry.OpenECrySessionHolder.Remoting">
       <summary>
-            Требуемый режим подключения к терминалу. По умолчанию <see cref="F:StockSharp.OpenECry.OpenECryRemoting.Auto" />. 
-            </summary>
-    </member>
-    <member name="P:StockSharp.OpenECry.OpenECrySessionHolder.RemotingActual">
-      <summary>
-            Реальный режим <see cref="P:StockSharp.OpenECry.OpenECrySessionHolder.RemotingRequired" />. 
-            Свойство актуально только после подключения.
+            Требуемый режим подключения к терминалу. По умолчанию <see cref="F:StockSharp.OpenECry.OpenECryRemoting.None" />.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OpenECrySessionHolder.UseNativeReconnect">
@@ -306,14 +301,7 @@
     </member>
     <member name="P:StockSharp.OpenECry.OECTrader.RemotingRequired">
       <summary>
-            Требуемый режим Remoting. По умолчанию - <see cref="F:StockSharp.OpenECry.OpenECryRemoting.Auto" />. 
-            Свойство может быть установлено только до подключения.
-            </summary>
-    </member>
-    <member name="P:StockSharp.OpenECry.OECTrader.RemotingActual">
-      <summary>
-            Реальный режим Remoting. 
-            Свойство актуально только после подключения.
+            Требуемый режим подключения к терминалу. По умолчанию <see cref="F:StockSharp.OpenECry.OpenECryRemoting.None" />.
             </summary>
     </member>
     <member name="P:StockSharp.OpenECry.OECTrader.UseNativeReconnect">

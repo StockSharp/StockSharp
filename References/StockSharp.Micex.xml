@@ -234,6 +234,11 @@
             По-умолчанию равно <see cref="F:StockSharp.Micex.MicexCommentFields.BrokerRef" />.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexSessionHolder.OrderBookDepth">
+      <summary>
+            Запрашиваемое количество лучших котировок на покупку/продажу по инструменту. Для получения всех котировок значение не указывается.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.MicexSessionHolder.IsValid">
       <summary>
             Проверить введенные параметры на валидность.
@@ -753,6 +758,11 @@
     <member name="F:StockSharp.Micex.Native.OrderStatuses.D">
       <summary>
             Снята торговой системой при отключении пользователя.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.OrderStatuses.S">
+      <summary>
+            Внутренняя ошибка.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.OwnClis">
@@ -1570,6 +1580,41 @@
             Позиции по валютам.
             </summary>
     </member>
+    <member name="T:StockSharp.Micex.Native.CodModes">
+      <summary>
+            COD-подписка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.CodModes.N">
+      <summary>
+            Нет подписки на работу в COD-режиме..
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.CodModes.A">
+      <summary>
+            Подписка на работу в постоянно включенном COD-режиме..
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.CodModes.O">
+      <summary>
+            Подписка на работу в COD-режиме по требованию..
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.OnOffs">
+      <summary>
+            Логический тип.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.OnOffs.N">
+      <summary>
+            Выключено.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.Native.OnOffs.Y">
+      <summary>
+            Включено.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.Tables.Assets">
       <summary>
             Активы.
@@ -1678,6 +1723,16 @@
     <member name="P:StockSharp.Micex.Native.Tables.Assets.Prevrc">
       <summary>
             Центральный курс предыдущего дня.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Assets.Collateral">
+      <summary>
+            Прием в обеспечение.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Assets.Cbrate">
+      <summary>
+            Ставка ЦБ, %.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Bank">
@@ -1981,6 +2036,31 @@
     <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Firmid">
       <summary>
             Идентификатор фирмы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Indicator1">
+      <summary>
+            Ставка РЕПО ЦБ, %.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Indicator2">
+      <summary>
+            Ставка RUРЕПО, %.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Indicator3">
+      <summary>
+            Ставка MOSPRIME, %.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Minshareissues">
+      <summary>
+            Мин.кол-во выпусков.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Completeshareissues">
+      <summary>
+            Кол-во выпусков выполн.обяз.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.ExtMmstats.Currentallowedbuyprice">
@@ -2815,6 +2895,42 @@
             Название транзакции.
             </summary>
     </member>
+    <member name="T:StockSharp.Micex.Native.Transactions.CodmodeSwitch">
+      <summary>
+            Включить/Отключить COD-mode.
+            </summary>
+      <remarks>
+            Включить или выключить режим контроля активности пользователя (Cancel on Disconnect mode).
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Transactions.CodmodeSwitch.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Transactions.CodmodeSwitch" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.CodmodeSwitch.Name">
+      <summary>
+            Название транзакции.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Micex.Native.Transactions.UserHeartbeat">
+      <summary>
+            HEARTBEAT.
+            </summary>
+      <remarks>
+            Пользовательский HEARTBEAT. Посылать не чаще чем раз в 1 секунду.
+            </remarks>
+    </member>
+    <member name="M:StockSharp.Micex.Native.Transactions.UserHeartbeat.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Micex.Native.Transactions.UserHeartbeat" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Transactions.UserHeartbeat.Name">
+      <summary>
+            Название транзакции.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Schema.EnumDesc">
       <summary>
             Перечислимый тип.
@@ -3050,6 +3166,11 @@
     <member name="F:StockSharp.Micex.MicexInterfaces.Currency22">
       <summary>
             Брокерский валютный интерфейс IFC_Broker22.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Micex.MicexInterfaces.Currency24">
+      <summary>
+            Брокерский валютный интерфейс IFC_Broker24.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Schema.InterfaceDesc">
@@ -3453,6 +3574,12 @@
       <summary>
             Поле, в которое нужно записывать пользовательский комментарий транзакции.
             По-умолчанию равно <see cref="F:StockSharp.Micex.MicexCommentFields.BrokerRef" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexTrader.OrderBookDepth">
+      <summary>
+            Запрашиваемое количество лучших котировок на покупку/продажу по инструменту.
+            Для получения всех котировок значение не указывается.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.MicexPtrReader">
@@ -3880,7 +4007,7 @@
       <param name="tableHandle">Идентификатор таблицы.</param>
       <param name="handler">Обработчик, куда будут переданы данные после пакетной обработки.</param>
     </member>
-    <member name="M:StockSharp.Micex.Native.MicexClient.OpenExtOrderbookTable(System.String,System.String,System.Int32)">
+    <member name="M:StockSharp.Micex.Native.MicexClient.OpenExtOrderbookTable(System.String,System.String,System.Nullable{System.Int32})">
       <summary>
             Открыть таблицу 'Котировки по инструменту'.
             </summary>
@@ -5378,6 +5505,21 @@
     <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Tradingclosed">
       <summary>
             Торги закончены.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Clientcode">
+      <summary>
+            Код клиента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Clearingfirmid">
+      <summary>
+            Идентификатор фирмы - Участника Клиринга.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Bankacc.Clearingbankaccid">
+      <summary>
+            Идентификатор клирингового расчетного счета в НКЦ.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Bankuse">
@@ -8925,7 +9067,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Dividendvalue">
       <summary>
-            Величина дивидендов, выраженная в руб.
+            Величина дивидендов, выраженная в валюте расчетов.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Dividenddate">
@@ -8941,6 +9083,11 @@
     <member name="P:StockSharp.Micex.Native.Tables.Securities.Baseprice">
       <summary>
             Базовый курс при торговле СВОП инструментами.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Securities.Settledate1">
+      <summary>
+            Дата расчетов первой части сделки СВОП.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.Settlecodes">
@@ -9288,6 +9435,16 @@
             Базовый курс может быть указан во внебиржевых заявках по инструментам СВОП.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trades.Clearingfirmid">
+      <summary>
+            Идентификатор фирмы - Участника Клиринга.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Trades.Clearingbankaccid">
+      <summary>
+            Идентификатор клирингового расчетного счета в НКЦ.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.Tables.Tradetime">
       <summary>
             Расписание торгов.
@@ -9503,6 +9660,16 @@
     <member name="P:StockSharp.Micex.Native.Tables.Users.Loggedon">
       <summary>
             Индикатор информирующий, что пользователь зарегистрировался в Торговой системе.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Codmodesubscr">
+      <summary>
+            Тип подписки на COD-режим. COD-режим - Cancel on Disconnect - режим снятия заявок при потере соединения с ТС или при отключении от ТС. Доступные режимы: "Не используется", "Всегда" и "По требованию".
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.Tables.Users.Codmode">
+      <summary>
+            Индикатор работы в COD-режиме (Сancel on Disconnect).
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.Tables.UserTrdacc">

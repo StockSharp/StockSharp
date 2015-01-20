@@ -2617,6 +2617,16 @@
             Уровень логирования.
             </summary>
         </member>
+        <member name="P:StockSharp.Xaml.ConnectorInfo.PreferLanguage">
+            <summary>
+            Целевая аудитория.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Xaml.ConnectorInfo.Platform">
+            <summary>
+            Платформа.
+            </summary>
+        </member>
         <member name="T:StockSharp.Xaml.SessionHoldersWindow">
             <summary>
             Окно создания новых подключений <see cref="T:StockSharp.Messages.IMessageSessionHolder"/>.

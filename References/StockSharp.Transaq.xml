@@ -310,7 +310,7 @@
     </member>
     <member name="P:StockSharp.Transaq.Proxy.Type">
       <summary>
-            Тип протокола, котороый использует прокси.
+            Тип протокола, который использует прокси.
             </summary>
     </member>
     <member name="P:StockSharp.Transaq.Proxy.Address">

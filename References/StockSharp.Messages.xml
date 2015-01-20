@@ -1972,6 +1972,28 @@
             Обработчик исходящих сообщений.
             </summary>
         </member>
+        <member name="T:StockSharp.Messages.TargetPlatformAttribute">
+            <summary>
+            Функциональность.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Messages.TargetPlatformAttribute.#ctor(Ecng.Localization.Languages,Ecng.Interop.Platforms)">
+            <summary>
+            Создать <see cref="T:StockSharp.Messages.TargetPlatformAttribute"/>.
+            </summary>
+            <param name="preferLanguage">Целевая аудитория.</param>
+            <param name="platform">Платформа.</param>
+        </member>
+        <member name="P:StockSharp.Messages.TargetPlatformAttribute.PreferLanguage">
+            <summary>
+            Целевая аудитория.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Messages.TargetPlatformAttribute.Platform">
+            <summary>
+            Платформа.
+            </summary>
+        </member>
         <member name="T:StockSharp.Messages.IMessageSessionHolder">
             <summary>
             Интерфейс, описывающий контейнер для сессии.
@@ -2967,7 +2989,7 @@
             <summary>
             Скопировать данные сообщения в <paramref name="destination"/>.
             </summary>
-            <param name="destination">Объект, в котороый копируется информация.</param>
+            <param name="destination">Объект, в который копируется информация.</param>
         </member>
         <member name="M:StockSharp.Messages.SecurityMessage.ToString">
             <summary>
@@ -5170,7 +5192,7 @@
             <param name="value">Значение.</param>
             <param name="type">Единица измерения.</param>
         </member>
-        <member name="M:StockSharp.Messages.Unit.#ctor(System.Decimal,StockSharp.Messages.UnitTypes,System.Func{System.Nullable{System.Decimal}})">
+        <member name="M:StockSharp.Messages.Unit.#ctor(System.Decimal,StockSharp.Messages.UnitTypes,System.Func{StockSharp.Messages.UnitTypes,System.Nullable{System.Decimal}})">
             <summary>
             Создать величину типа <see cref="F:StockSharp.Messages.UnitTypes.Point"/> или <see cref="F:StockSharp.Messages.UnitTypes.Step"/>.
             </summary>
@@ -5300,6 +5322,21 @@
             </summary>
             <returns>Строковое представление.</returns>
         </member>
+        <member name="M:StockSharp.Messages.Unit.Convert(StockSharp.Messages.UnitTypes)">
+            <summary>
+            Перевести величину в другой тип измерения.
+            </summary>
+            <param name="destinationType">Тип измерения, в который необходимо перевести.</param>
+            <returns>Сконвертированная величина.</returns>
+        </member>
+        <member name="M:StockSharp.Messages.Unit.Convert(StockSharp.Messages.UnitTypes,System.Func{StockSharp.Messages.UnitTypes,System.Nullable{System.Decimal}})">
+            <summary>
+            Перевести величину в другой тип измерения.
+            </summary>
+            <param name="destinationType">Тип измерения, в который необходимо перевести.</param>
+            <param name="getTypeValue">Обработчик, возвращающие значение, ассоциированное с <see cref="P:StockSharp.Messages.Unit.Type"/> (шаг цены или объема).</param>
+            <returns>Сконвертированная величина.</returns>
+        </member>
         <member name="M:StockSharp.Messages.Unit.op_GreaterThan(StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
             <summary>
             Проверить, является ли первая величина больше второй.
@@ -5387,23 +5424,6 @@
             <param name="str">Строковое представление <see cref="T:StockSharp.Messages.Unit"/>.</param>
             <param name="getTypeValue">Обработчик, возвращающие значение, ассоциированное с <see cref="T:System.Type"/> (шаг цены или объема).</param>
             <returns>Объект <see cref="T:StockSharp.Messages.Unit"/>.</returns>
-        </member>
-        <member name="M:StockSharp.Messages.UnitHelper.Convert(StockSharp.Messages.Unit,StockSharp.Messages.UnitTypes)">
-            <summary>
-            Перевести величину в другой тип измерения.
-            </summary>
-            <param name="unit">Исходная величина.</param>
-            <param name="destinationType">Тип измерения, в который необходимо перевести.</param>
-            <returns>Сконвертированная величина.</returns>
-        </member>
-        <member name="M:StockSharp.Messages.UnitHelper.Convert(StockSharp.Messages.Unit,StockSharp.Messages.UnitTypes,System.Func{System.Nullable{System.Decimal}})">
-            <summary>
-            Перевести величину в другой тип измерения.
-            </summary>
-            <param name="unit">Исходная величина.</param>
-            <param name="destinationType">Тип измерения, в который необходимо перевести.</param>
-            <param name="getTypeValue">Обработчик, возвращающие значение, ассоциированное с <see cref="T:System.Type"/> (шаг цены или объема).</param>
-            <returns>Сконвертированная величина.</returns>
         </member>
         <member name="T:StockSharp.Messages.WorkingTime">
             <summary>

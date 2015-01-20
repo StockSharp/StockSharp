@@ -69,10 +69,11 @@
             Например, количество собственных контрактов в стакане, сумму лучшей покупки-продажи.
             </remarks>
         </member>
-        <member name="M:StockSharp.BusinessEntities.AggregatedQuote.#ctor">
+        <member name="M:StockSharp.BusinessEntities.AggregatedQuote.#ctor(System.Boolean)">
             <summary>
             Создать <see cref="T:StockSharp.BusinessEntities.AggregatedQuote"/>.
             </summary>
+            <param name="checkInnerPrice">Проверять ли цену внутренней котировки.</param>
         </member>
         <member name="M:StockSharp.BusinessEntities.AggregatedQuote.Clone">
             <summary>

@@ -3695,11 +3695,6 @@
             Multiplication factor.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str808Key">
-            <summary>
-            Multiple
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str809Key">
             <summary>
             Parabolic SAR trend indicator implementation.
@@ -3725,7 +3720,7 @@
             Acceleration factor step.
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str814Key">
+        <member name="F:StockSharp.Localization.LocalizedStrings.MaxKey">
             <summary>
             Max
             </summary>
@@ -8195,11 +8190,6 @@
             Stop-limit
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.Str1734Key">
-            <summary>
-            Take-profit
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str1735Key">
             <summary>
             Take-profit + stop-limit
@@ -10845,9 +10835,9 @@
             With offset
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.MovingStopLimitKey">
+        <member name="F:StockSharp.Localization.LocalizedStrings.TrailingStopLimitKey">
             <summary>
-            Moving stop-limit
+            Trailing stop-limit
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.VolatilityKey">
@@ -16112,12 +16102,12 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3446Key">
             <summary>
-            Moving stop-loss
+            Trailing stop-loss
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3447Key">
             <summary>
-            Offset of a moving stop-loss.
+            Offset of a trailing stop-loss.
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3448Key">
@@ -18790,11 +18780,6 @@
             Lci Viewer
             </summary>
         </member>
-        <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr290Key">
-            <summary>
-            Max:
-            </summary>
-        </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.XamlStr291Key">
             <summary>
             Max depth order book generation
@@ -20868,6 +20853,46 @@
         <member name="F:StockSharp.Localization.LocalizedStrings.SelectAppModeKey">
             <summary>
             Select application launch mode (available features are marked)
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnknownUnitMeasurementKey">
+            <summary>
+            Unknown unit of measurement '{0}'.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.PercentagesCannotCompareKey">
+            <summary>
+            Percentages '{0}' can not be compared to non percentages '{1}'.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.PercentagesConvertKey">
+            <summary>
+            Percentage can only be converted to percentage.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.LimitedValueNotMathKey">
+            <summary>
+            Limited value can not participate in mathematical operations.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnitHandlerNotSetKey">
+            <summary>
+            Typed value handler has not been set.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.InProgressKey">
+            <summary>
+            In progress. Please wait...
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.UnknownFieldKey">
+            <summary>
+            Unknown field with number {0}.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.InterfaceNotSupportTransactionKey">
+            <summary>
+            Interface '{{0}}' does not support transaction '{0}'.
             </summary>
         </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
@@ -24502,11 +24527,6 @@
             Multiplication factor.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str808">
-            <summary>
-            Multiple
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str809">
             <summary>
             Parabolic SAR trend indicator implementation.
@@ -24532,7 +24552,7 @@
             Acceleration factor step.
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str814">
+        <member name="P:StockSharp.Localization.LocalizedStrings.Max">
             <summary>
             Max
             </summary>
@@ -29002,11 +29022,6 @@
             Stop-limit
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.Str1734">
-            <summary>
-            Take-profit
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str1735">
             <summary>
             Take-profit + stop-limit
@@ -31652,9 +31667,9 @@
             With offset
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.MovingStopLimit">
+        <member name="P:StockSharp.Localization.LocalizedStrings.TrailingStopLimit">
             <summary>
-            Moving stop-limit
+            Trailing stop-limit
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Volatility">
@@ -36919,12 +36934,12 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3446">
             <summary>
-            Moving stop-loss
+            Trailing stop-loss
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3447">
             <summary>
-            Offset of a moving stop-loss.
+            Offset of a trailing stop-loss.
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3448">
@@ -39597,11 +39612,6 @@
             Lci Viewer
             </summary>
         </member>
-        <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr290">
-            <summary>
-            Max:
-            </summary>
-        </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.XamlStr291">
             <summary>
             Max depth order book generation
@@ -41675,6 +41685,46 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.SelectAppMode">
             <summary>
             Select application launch mode (available features are marked)
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnknownUnitMeasurement">
+            <summary>
+            Unknown unit of measurement '{0}'.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.PercentagesCannotCompare">
+            <summary>
+            Percentages '{0}' can not be compared to non percentages '{1}'.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.PercentagesConvert">
+            <summary>
+            Percentage can only be converted to percentage.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.LimitedValueNotMath">
+            <summary>
+            Limited value can not participate in mathematical operations.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnitHandlerNotSet">
+            <summary>
+            Typed value handler has not been set.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.InProgress">
+            <summary>
+            In progress. Please wait...
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.UnknownField">
+            <summary>
+            Unknown field with number {0}.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.InterfaceNotSupportTransaction">
+            <summary>
+            Interface '{{0}}' does not support transaction '{0}'.
             </summary>
         </member>
     </members>
