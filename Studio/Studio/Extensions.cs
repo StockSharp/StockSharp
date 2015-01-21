@@ -627,7 +627,7 @@ namespace StockSharp.Studio
 
 		public static void AddStockSharpFixConnection(this StudioConnector connector, string serverAddress = "localhost:5001")
 		{
-			if (connector.SessionHolder.InnerSessions.Count > 1)
+			if (connector.BasketSessionHolder.InnerSessions.Count > 1)
 				return;
 
 			var client = ConfigManager.GetService<AuthenticationClient>();
@@ -664,7 +664,7 @@ namespace StockSharp.Studio
 				IsTransactionEnabled = true,
 			};
 
-			connector.SessionHolder.InnerSessions.Add(fixSessionholder, 0);
+			connector.BasketSessionHolder.InnerSessions.Add(fixSessionholder, 0);
 		}
 
 		public static bool IsEmulation(this StrategyContainer container)

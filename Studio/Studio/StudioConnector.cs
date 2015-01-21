@@ -374,21 +374,22 @@ namespace StockSharp.Studio
 
 		private readonly CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>> _exports = new CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>>();
 
+		private readonly BasketSessionHolder _sessionHolder;
 		private readonly StudioMarketDataAdapter _marketDataAdapter;
 		private readonly BasketMessageAdapter _transactionAdapter;
 
 		private bool _newsRegistered;
 
-		public BasketSessionHolder SessionHolder { get; private set; }
+		public BasketSessionHolder BasketSessionHolder { get { return _sessionHolder; } }
 
 		public StudioConnector()
 		{
 			EntityFactory = new StudioEntityFactory(this);
 
-			SessionHolder = new BasketSessionHolder(TransactionIdGenerator);
+			SessionHolder = _sessionHolder = new BasketSessionHolder(TransactionIdGenerator);
 
-			MarketDataAdapter = _marketDataAdapter = new StudioMarketDataAdapter(SessionHolder);
-			TransactionAdapter = _transactionAdapter = new BasketMessageAdapter(MessageAdapterTypes.Transaction, SessionHolder);
+			MarketDataAdapter = _marketDataAdapter = new StudioMarketDataAdapter(_sessionHolder);
+			TransactionAdapter = _transactionAdapter = new BasketMessageAdapter(MessageAdapterTypes.Transaction, _sessionHolder);
 
 			ApplyMessageProcessor(MessageDirections.In, true, false);
 			ApplyMessageProcessor(MessageDirections.In, false, true);
@@ -422,13 +423,13 @@ namespace StockSharp.Studio
 
 		private void CreateEmulationSessionHolder()
 		{
-			var emulationSessionHolder = SessionHolder.InnerSessions.OfType<StudioHistorySessionHolder>().FirstOrDefault();
+			var emulationSessionHolder = _sessionHolder.InnerSessions.OfType<StudioHistorySessionHolder>().FirstOrDefault();
 
 			if (emulationSessionHolder == null)
-				SessionHolder.InnerSessions.Add(emulationSessionHolder = new StudioHistorySessionHolder(TransactionIdGenerator), 1);
+				_sessionHolder.InnerSessions.Add(emulationSessionHolder = new StudioHistorySessionHolder(TransactionIdGenerator), 1);
 
-			if (!SessionHolder.Portfolios.ContainsKey("Simulator"))
-				SessionHolder.Portfolios.Add("Simulator", emulationSessionHolder);
+			if (!_sessionHolder.Portfolios.ContainsKey("Simulator"))
+				_sessionHolder.Portfolios.Add("Simulator", emulationSessionHolder);
 		}
 
 		private IEnumerable<Portfolio> GetEmulationPortfolios()
@@ -442,7 +443,7 @@ namespace StockSharp.Studio
 
 			foreach (var portfolio in portfolios)
 			{
-				var sessionHolder = SessionHolder.Portfolios.TryGetValue(portfolio.Name);
+				var sessionHolder = _sessionHolder.Portfolios.TryGetValue(portfolio.Name);
 
 				if (sessionHolder != emu.SessionHolder)
 					continue;

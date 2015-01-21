@@ -1103,7 +1103,7 @@ namespace StockSharp.Studio
 				var sessionSettings = _persistableService.GetStudioSession();
 
 				if (sessionSettings != null)
-					_algoService.Connector.SessionHolder.Load(sessionSettings);
+					_algoService.Connector.BasketSessionHolder.Load(sessionSettings);
 				else
 					_algoService.Connector.AddStockSharpFixConnection(AppConfig.Instance.FixServerAddresss);
 			}
@@ -1148,7 +1148,7 @@ namespace StockSharp.Studio
 
 			try
 			{
-				var innerSessions = connector.SessionHolder.InnerSessions;
+				var innerSessions = connector.BasketSessionHolder.InnerSessions;
 
 				if (innerSessions.IsEmpty())
 				{
@@ -1417,13 +1417,13 @@ namespace StockSharp.Studio
 			wnd.CheckConnectionState += () => _algoService.Connector.ConnectionState;
 			wnd.AutoConnect = _persistableService.GetAutoConnect();
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.SessionHolder = _algoService.Connector.SessionHolder;
+			wnd.SessionHolder = _algoService.Connector.BasketSessionHolder;
 
 			var retVal = wnd.ShowModal(this);
 
 			if (retVal)
 			{
-				_persistableService.SetStudioSession(_algoService.Connector.SessionHolder.Save());
+				_persistableService.SetStudioSession(_algoService.Connector.BasketSessionHolder.Save());
 				_persistableService.SetAutoConnect(wnd.AutoConnect);
 			}
 
@@ -1469,7 +1469,7 @@ namespace StockSharp.Studio
 
 		private void ExecutedPortfolioSettings(object sender, ExecutedRoutedEventArgs e)
 		{
-			var sessionHolder = _algoService.Connector.SessionHolder;
+			var sessionHolder = _algoService.Connector.BasketSessionHolder;
 
 			new PortfolioSessionHoldersWindow { SessionHolder = sessionHolder }.ShowModal(this);
 
