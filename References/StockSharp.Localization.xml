@@ -16887,7 +16887,7 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3610Key">
             <summary>
-            Classical arbitrage.
+            Classical arbitrage
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3611Key">
@@ -20893,6 +20893,16 @@
         <member name="F:StockSharp.Localization.LocalizedStrings.InterfaceNotSupportTransactionKey">
             <summary>
             Interface '{{0}}' does not support transaction '{0}'.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.AllDepthsKey">
+            <summary>
+            All depths
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.RequestAllDepthsKey">
+            <summary>
+            Request depths for all securities.
             </summary>
         </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
@@ -37719,7 +37729,7 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3610">
             <summary>
-            Classical arbitrage.
+            Classical arbitrage
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3611">
@@ -41725,6 +41735,16 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.InterfaceNotSupportTransaction">
             <summary>
             Interface '{{0}}' does not support transaction '{0}'.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.AllDepths">
+            <summary>
+            All depths
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.RequestAllDepths">
+            <summary>
+            Request depths for all securities.
             </summary>
         </member>
     </members>

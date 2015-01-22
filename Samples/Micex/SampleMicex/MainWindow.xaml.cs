@@ -3,6 +3,7 @@ namespace SampleMicex
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Net;
 	using System.Windows;
 
@@ -117,7 +118,20 @@ namespace SampleMicex
 						Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-						Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+						var ticksSubscribed = false;
+
+						Trader.NewSecurities += securities =>
+						{
+							// запускаем экспорт всех тиков
+							if (!ticksSubscribed)
+							{
+								Trader.RegisterTrades(securities.First());
+								ticksSubscribed = true;
+							}
+
+							_securitiesWindow.SecurityPicker.Securities.AddRange(securities);
+						};
+
 						Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
 						Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 						Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);

@@ -239,6 +239,11 @@
             Запрашиваемое количество лучших котировок на покупку/продажу по инструменту. Для получения всех котировок значение не указывается.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexSessionHolder.RequestAllDepths">
+      <summary>
+            Запрашиваемое стаканы по всем инструментам.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.MicexSessionHolder.IsValid">
       <summary>
             Проверить введенные параметры на валидность.
@@ -3580,6 +3585,11 @@
       <summary>
             Запрашиваемое количество лучших котировок на покупку/продажу по инструменту.
             Для получения всех котировок значение не указывается.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexTrader.RequestAllDepths">
+      <summary>
+            Запрашиваемое стаканы по всем инструментам.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.MicexPtrReader">
