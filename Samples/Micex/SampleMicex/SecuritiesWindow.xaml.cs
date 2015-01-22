@@ -5,9 +5,8 @@ namespace SampleMicex
 	using System.Windows;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Xaml;
-
-	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
@@ -47,8 +46,8 @@ namespace SampleMicex
 					}
 				});
 
-				trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
-				trader.RegisteredTrades.ForEach(trader.UnRegisterTrades);
+				//trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
+				//trader.RegisteredTrades.ForEach(trader.UnRegisterTrades);
 			}
 
 			base.OnClosed(e);
@@ -81,7 +80,14 @@ namespace SampleMicex
 				trader.RegisterMarketDepth(security);
 
 				// создаем окно со стаканом
-				var wnd = new QuotesWindow { Title = security.Id + LocalizedStrings.Str2957 };
+				var wnd = new QuotesWindow
+				{
+					Title = security.Id + LocalizedStrings.Str2957,
+					DepthCtrl =
+					{
+						MaxDepth = MainWindow.Instance.Depth.Text.To<int>()
+					}
+				};
 				wnd.MakeHideable();
 				return wnd;
 			});

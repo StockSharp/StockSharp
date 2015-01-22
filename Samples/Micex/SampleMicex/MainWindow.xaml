@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-        xmlns:micex="clr-namespace:StockSharp.Micex.Xaml;assembly=StockSharp.Micex"
-        Title="{x:Static loc:LocalizedStrings.XamlStr550}"
+    xmlns:micex="clr-namespace:StockSharp.Micex.Xaml;assembly=StockSharp.Micex"
+    Title="{x:Static loc:LocalizedStrings.XamlStr550}"
 	Height="124" Width="640" WindowStartupLocation="CenterScreen">
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -29,17 +29,21 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
 			<Button x:Name="ConnectBtn" Grid.Column="0" Background="LightPink" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" TabIndex="3" />
 
 			<TextBox x:Name="Address" Grid.Column="2">localhost:15005</TextBox>
 			<TextBox x:Name="Server" Grid.Column="3">EQ_TEST</TextBox>
-			<micex:MicexInterfaceComboBox x:Name="Interface" Grid.Column="4" SelectedValue="IFCBroker_22" />
+			<micex:MicexInterfaceComboBox x:Name="Interface" Grid.Column="4" SelectedValue="IFCBroker_24" />
 			<TextBox x:Name="Login" Grid.Column="5" Text="" Width="100" />
 			<TextBlock Text="Compression:" Grid.Column="6"/>
-			<TextBox x:Name="Compression" Grid.Column="7"  Text="0" Width="30"/>
-			<PasswordBox x:Name="Password" Grid.Column="8" Width="120" />
+			<TextBox x:Name="Compression" Grid.Column="7"  Text="0" Width="12"/>
+			<PasswordBox x:Name="Password" Grid.Column="8" Width="100" />
+			<TextBlock Text="Depth:" Grid.Column="9"/>
+			<TextBox x:Name="Depth" Grid.Column="10" Text="10" Width="20"/>
 		</Grid>
 
 		<Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />

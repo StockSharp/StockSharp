@@ -76,6 +76,7 @@ namespace SampleMicex
 					Trader.Login = Login.Text;
 					Trader.CompressionLevel = (CompressionLevels)Compression.Text.To<int>();
 					Trader.Interface = Interface.Text;
+					Trader.OrderBookDepth = Depth.Text.To<int>();
 
 					if (!Password.Password.IsEmpty())
 						Trader.Password = Password.Password;

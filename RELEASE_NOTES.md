@@ -10,7 +10,9 @@ What's New
 ###v4.2.57:
 * (feature) QuikLua. Removed atomic reregister for micex
 * (feature) Micex. Added IFC_Broker24 interface
+* (feature) Micex. OrderBookDepth
 * (bug) Unit fixes. Fix http://stocksharp.com/forum/yaf_postst5489_Izmieniena-loghika-raboty-s-Unit-v-novykh-viersiiakh.aspx
+* (bug) OpenECry. Remoting fix
 
 ###v4.2.56:
 * (bug) AlfaDirect. Fix cadle subscrition. Fix http://stocksharp.com/forum/yaf_postst5483_primier-SampleAlfaCandles.aspx
