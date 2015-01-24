@@ -734,7 +734,7 @@ namespace StockSharp.Hydra.Panes
 						dynamic instance = DataType == typeof(QuoteChangeMessage)
 							? new TimeQuoteChange()
 							: (DataType == typeof(CandleMessage)
-								? _settings.CandleSettings.CandleType
+								? _settings.CandleSettings.CandleType.ToCandleMessageType()
 								: DataType
 							).CreateInstance<object>();
 
@@ -894,7 +894,7 @@ namespace StockSharp.Hydra.Panes
 						}
 
 						registry
-							.GetCandleMessageStorage(_settings.CandleSettings.CandleType.ToCandleMessageType(), security, timeFrame, drive, _settings.Format)
+							.GetCandleMessageStorage(dataType, security, timeFrame, drive, _settings.Format)
 							.Save(candles.OrderBy(c => c.OpenTime));
 					}
 					else if (dataType == typeof(TimeQuoteChange))
