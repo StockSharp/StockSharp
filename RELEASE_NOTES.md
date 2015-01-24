@@ -17,9 +17,10 @@ What's New
 * (feature) Micex. OrderBookDepth
 * (bug) Unit fixes. Fix http://stocksharp.com/forum/yaf_postst5489_Izmieniena-loghika-raboty-s-Unit-v-novykh-viersiiakh.aspx
 * (bug) OpenECry. Remoting fix
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/7
 
 ###v4.2.56:
-* (bug) AlfaDirect. Fix cadle subscrition. Fix http://stocksharp.com/forum/yaf_postst5483_primier-SampleAlfaCandles.aspx
+* (bug) AlfaDirect. Fix cadle subscription. Fix http://stocksharp.com/forum/yaf_postst5483_primier-SampleAlfaCandles.aspx
 * (bug) OpenECry fixes
 * (bug) Localization fixes
 * (bug) Chart. Fix indicator adding
