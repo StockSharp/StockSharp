@@ -23,8 +23,6 @@ namespace StockSharp.Studio.Ribbon
 		public License License { get; set; }
 
 		public Tuple<string, string>[] Infos { get; set; }
-
-		public string[] Features { get; set; }
 	}
 
 	public partial class LicenseTab
@@ -72,8 +70,7 @@ namespace StockSharp.Studio.Ribbon
 								new Tuple<string, string>(LocalizedStrings.Str3587, l.Id.To<string>()),
 								new Tuple<string, string>(LocalizedStrings.Str3588, l.IssuedDate.ToString("dd.MM.yyyy")),
 								new Tuple<string, string>(LocalizedStrings.Str3518 + ":", l.ExpirationDate.ToString("dd.MM.yyyy"))
-							},
-							Features = l.Features
+							}
 						};
 						return item;
 					})
@@ -130,7 +127,7 @@ namespace StockSharp.Studio.Ribbon
 
 		private void CanExecuteRenewLicenseCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = SelectedLicenseInfo != null;
+			e.CanExecute = SelectedLicenseInfo != null && !SelectedLicenseInfo.License.IsTrial();
 		}
 
 		private void ExecutedOpenLicenseCommand(object sender, ExecutedRoutedEventArgs e)
@@ -188,7 +185,7 @@ namespace StockSharp.Studio.Ribbon
 			var feature = (string)values[0];
 			var license = (LicenseInfo)values[1];
 
-			return license.Features.Contains(feature) ? Visibility.Visible : Visibility.Hidden;
+			return license.License.Features.Contains(feature) ? Visibility.Visible : Visibility.Hidden;
 		}
 
 		object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
