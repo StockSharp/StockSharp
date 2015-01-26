@@ -55,7 +55,7 @@
                        Command="{x:Static local:CompositionDiagramElementGroup.ShareCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml.Charting;component/Images/share_16x16.png" />
 
-        <ribbon:Button Label="Экспорт" ToolTip="Экспортировать схему в контейнер" ToolTipService.ShowOnDisabled="True"
+		<ribbon:Button Label="{x:Static loc:LocalizedStrings.Export}" ToolTip="{x:Static loc:LocalizedStrings.ExportSchema}" ToolTipService.ShowOnDisabled="True"
                        Command="{x:Static local:CompositionDiagramElementGroup.ExportCommand}"
                        ImageSourceLarge="pack://application:,,,/StockSharp.Xaml;component/Images/save_16x16.png"  />
     </ribbon:StackPanel>

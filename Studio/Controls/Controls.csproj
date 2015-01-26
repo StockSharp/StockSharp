@@ -130,16 +130,9 @@
     <Compile Include="CandleChartPanel.xaml.cs">
       <DependentUpon>CandleChartPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChatPanel.xaml.cs">
-      <DependentUpon>ChatPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ChatRoomCreateWindow.xaml.cs">
-      <DependentUpon>ChatRoomCreateWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CompositeSecurityPanel.xaml.cs">
       <DependentUpon>CompositeSecurityPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\ChatConverters.cs" />
     <Compile Include="Converters\IsInteractedToBoolConverter.cs" />
     <Compile Include="Converters\ProcessStatesToImageConverter.cs" />
     <Compile Include="Converters\StrategyInfoStatesToImageConverter.cs" />
@@ -245,14 +238,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CandleChartPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ChatPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ChatRoomCreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
