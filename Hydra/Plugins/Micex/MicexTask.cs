@@ -32,6 +32,7 @@ namespace StockSharp.Hydra.Micex
 			{
 				ExtensionInfo.TryAdd("OrderBookDepth", null);
 				ExtensionInfo.TryAdd("RequestAllDepths", true);
+				ExtensionInfo.TryAdd("MicexLogLevel", null);
 			}
 
 			[TaskCategory(_sourceName)]
@@ -103,6 +104,16 @@ namespace StockSharp.Hydra.Micex
 				get { return (bool)ExtensionInfo["RequestAllDepths"]; }
 				set { ExtensionInfo["RequestAllDepths"] = value; }
 			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.LoggingKey)]
+			[DescriptionLoc(LocalizedStrings.Str3422Key)]
+			[PropertyOrder(7)]
+			public string MicexLogLevel
+			{
+				get { return (string)ExtensionInfo["MicexLogLevel"]; }
+				set { ExtensionInfo["MicexLogLevel"] = value; }
+			}
 		}
 
 		private MicexSettings _settings;
@@ -135,6 +146,7 @@ namespace StockSharp.Hydra.Micex
 				_settings.Server = string.Empty;
 				_settings.OrderBookDepth = null;
 				_settings.RequestAllDepths = true;
+				_settings.MicexLogLevel = null;
 			}
 
 			return new MarketDataConnector<MicexTrader>(EntityRegistry.Securities, this, () => new MicexTrader
@@ -145,7 +157,8 @@ namespace StockSharp.Hydra.Micex
 				Server = _settings.Server,
 				Addresses = new[] { _settings.Address },
 				OrderBookDepth = _settings.OrderBookDepth,
-				RequestAllDepths = _settings.RequestAllDepths
+				RequestAllDepths = _settings.RequestAllDepths,
+				MicexLogLevel = _settings.MicexLogLevel
 			});
 		}
 	}
