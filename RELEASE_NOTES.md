@@ -7,6 +7,12 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.59:
+* (feature) Fusion/Blackwood. 3.1.8
+* (bug) Micex. OrderBookDepth fix
+* (bug) Micex. RequestAllDepths fix
+* (bug) OpenECry. Order processing fix
+
 ###v4.2.58:
 * (feature) Micex. RequestAllDepths
 * (bug) Micex. Tick subscribe fix

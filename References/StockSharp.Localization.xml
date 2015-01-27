@@ -11907,7 +11907,7 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str2556ParamsKey">
             <summary>
-            OnRegisterOrder: Order did not pass verification for the following fields: {0}
+            Order did not pass verification for the following fields: {0}
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str2557ParamsKey">
@@ -15992,7 +15992,7 @@
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3422Key">
             <summary>
-            Loggin level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,2".
+            Loggin level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,0".
             </summary>
         </member>
         <member name="F:StockSharp.Localization.LocalizedStrings.Str3423Key">
@@ -20903,6 +20903,11 @@
         <member name="F:StockSharp.Localization.LocalizedStrings.RequestAllDepthsKey">
             <summary>
             Request depths for all securities.
+            </summary>
+        </member>
+        <member name="F:StockSharp.Localization.LocalizedStrings.ExportSchemaKey">
+            <summary>
+            Export schema to container
             </summary>
         </member>
         <member name="M:StockSharp.Localization.LocalizedStrings.GetString(System.String)">
@@ -32749,7 +32754,7 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str2556Params">
             <summary>
-            OnRegisterOrder: Order did not pass verification for the following fields: {0}
+            Order did not pass verification for the following fields: {0}
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str2557Params">
@@ -36834,7 +36839,7 @@
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3422">
             <summary>
-            Loggin level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,2".
+            Loggin level in N,M format. Maximum logging level is equal to "5,2". Minimum (disabled) is "0,0".
             </summary>
         </member>
         <member name="P:StockSharp.Localization.LocalizedStrings.Str3423">
@@ -41745,6 +41750,11 @@
         <member name="P:StockSharp.Localization.LocalizedStrings.RequestAllDepths">
             <summary>
             Request depths for all securities.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Localization.LocalizedStrings.ExportSchema">
+            <summary>
+            Export schema to container
             </summary>
         </member>
     </members>

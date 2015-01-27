@@ -32,19 +32,30 @@
             <param name="licenseId">Идентификатор лицензии.</param>
             <returns>Обновленная лицензия.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetFeatures(System.Guid)">
+        <member name="M:StockSharp.Licensing.ILicenseService.GetFeatures">
             <summary>
             Получить список всей доступной функциональности.
             </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
             <returns>Список всей доступной функциональности.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokers(System.Guid)">
+        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokers">
             <summary>
             Получить список брокеров.
             </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
             <returns>Список брокеров.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokerCriterias">
+            <summary>
+            Получить список критериев поиска брокерской компании.
+            </summary>
+            <returns>Список критериев поиска брокерской компании.</returns>
+        </member>
+        <member name="M:StockSharp.Licensing.ILicenseService.FindBrokers(System.Int64[])">
+            <summary>
+            Найти брокерские компании.
+            </summary>
+            <param name="criteria">Критерий поиска.</param>
+            <returns>Идентификаторы найденных брокерских компаний.</returns>
         </member>
         <member name="M:StockSharp.Licensing.ILicenseService.RequestLicense(System.Guid,System.Int64,System.String)">
             <summary>
@@ -232,6 +243,13 @@
             <param name="expirationDate">Дата окончания действия лицензии.</param>
             <returns>Лицензия.</returns>
         </member>
+        <member name="M:StockSharp.Licensing.LicenseClient.FindBrokers(System.Int64[])">
+            <summary>
+            Найти брокерские компании.
+            </summary>
+            <param name="criteria">Критерий поиска.</param>
+            <returns>Идентификаторы найденных брокерских компаний.</returns>
+        </member>
         <member name="P:StockSharp.Licensing.LicenseClient.Features">
             <summary>
             Вся доступная функциональность.
@@ -240,6 +258,11 @@
         <member name="P:StockSharp.Licensing.LicenseClient.Brokers">
             <summary>
             Все брокера.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseClient.BrokerCriterias">
+            <summary>
+            Критерии поиска брокерской компании.
             </summary>
         </member>
         <member name="P:StockSharp.Licensing.LicenseClient.AwaitingLicenses">
@@ -326,6 +349,13 @@
             Удалить лицензию.
             </summary>
             <param name="license">Лицензия.</param>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseHelper.IsTrial(StockSharp.Licensing.License)">
+            <summary>
+            Является ли лицензия триальной.
+            </summary>
+            <param name="license">Лицензия.</param>
+            <returns><see langword="true"/>, если лицензия триальная, иначе, <see langword="false"/>.</returns>
         </member>
         <member name="E:StockSharp.Licensing.LicenseHelper.LicenseChanged">
             <summary>

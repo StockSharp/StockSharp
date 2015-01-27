@@ -152,361 +152,6 @@
             Идентификатор пользователя для <see cref="P:StockSharp.Community.BaseCommunityClient`1.SessionId"/>.
             </summary>
         </member>
-        <member name="T:StockSharp.Community.ChatClient">
-            <summary>
-            Клиент для доступа к <see cref="T:StockSharp.Community.IChatService"/>.
-            </summary>
-        </member>
-        <member name="T:StockSharp.Community.IChatServiceCallback">
-            <summary>
-            Интерфейс, описывающий обратную связь сервиса <see cref="T:StockSharp.Community.IChatService"/>.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.MessageCreated(StockSharp.Community.ChatMessage)">
-            <summary>
-            Новое сообщение.
-            </summary>
-            <param name="message">Сообщение.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.MessageUpdated(StockSharp.Community.ChatMessage)">
-            <summary>
-            Сообщение обновлено.
-            </summary>
-            <param name="message">Сообщение.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.MessageDeleted(System.Int64)">
-            <summary>
-            Сообщение удалено.
-            </summary>
-            <param name="messageId">Идентификатор сообщения.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.RoomCreated(StockSharp.Community.ChatRoom)">
-            <summary>
-            Комната создана.
-            </summary>
-            <param name="room">Комната.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.RoomDeleted(System.Int64)">
-            <summary>
-            Комната удалена.
-            </summary>
-            <param name="roomId">Идентификатор комнаты.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.RoomUpdated(StockSharp.Community.ChatRoom)">
-            <summary>
-            Комната обновлена.
-            </summary>
-            <param name="room">Комната.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.LoggedIn(System.Int64)">
-            <summary>
-            Пользователь вошел в чат.
-            </summary>
-            <param name="userId">Идентификатор пользователя.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.LoggedOut(System.Int64)">
-            <summary>
-            Пользователь вышел из чата.
-            </summary>
-            <param name="userId">Идентификатор пользователя.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.JoinSended(System.Int64)">
-            <summary>
-            Новая заявка на участие. Отправляется владельцу комнаты.
-            </summary>
-            <param name="joinId">Идентификатор заявки.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.JoinAccepted(System.Int64)">
-            <summary>
-            Заявка удовлетворена. Отправляется тому пользователю, кто послал сообщение через <see cref="M:StockSharp.Community.IChatService.Join(System.Guid,StockSharp.Community.ChatJoin)"/>.
-            </summary>
-            <param name="joinId">Идентификатор заявки.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.JoinRejected(System.Int64,StockSharp.Community.ChatJoin)">
-            <summary>
-            Заявка отклонена. Отправляется тому пользователю, кто послал сообщение через <see cref="M:StockSharp.Community.IChatService.Join(System.Guid,StockSharp.Community.ChatJoin)"/>.
-            </summary>
-            <param name="originalJoinId">Идентификатор заявки на присоединение.</param>
-            <param name="join">Ответ на заявку.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.AuthorAdded(System.Int64,System.Int64,System.Nullable{System.Int64})">
-            <summary>
-            Добавлен новый пользователь в комнату.
-            </summary>
-            <param name="userId">Идентификатор пользователя.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-            <param name="addedBy">Идентификатор пользователя, добавивший нового автора.
-            Значение равно null, если пользователь добавился самостоятельно в публичную комнату.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatServiceCallback.AuthorDeleted(System.Int64,System.Int64,System.Nullable{System.Int64})">
-            <summary>
-            Пользователь удален из комнаты.
-            </summary>
-            <param name="userId">Идентификатор пользователя.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-            <param name="deletedBy">Идентификатор пользователя, удалившего автора.
-            Значение равно null, если пользователь самостоятельно вышел из комнаты.</param>
-        </member>
-        <member name="F:StockSharp.Community.ChatClient.MaxBodySize">
-            <summary>
-            Максимальный размер сообщений, который можно отправить в чат.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.#ctor">
-            <summary>
-            Создать <see cref="T:StockSharp.Community.ChatClient"/>.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.#ctor(System.Uri)">
-            <summary>
-            Создать <see cref="T:StockSharp.Community.ChatClient"/>.
-            </summary>
-            <param name="address">Адрес сервера.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.CreateChannel">
-            <summary>
-            Создать WCF канал.
-            </summary>
-            <returns>WCF канал.</returns>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.Connect">
-            <summary>
-            Подключиться.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.GetAuthors(StockSharp.Community.ChatRoom)">
-            <summary>
-            Получить информацию о пользователях в комнате.
-            </summary>
-            <param name="room">Комната.</param>
-            <returns>Пользователи.</returns>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.SendMessage(StockSharp.Community.ChatRoom,System.String)">
-            <summary>
-            Отправить сообщение в комнату.
-            </summary>
-            <param name="room">Комната.</param>
-            <param name="body">Сообщение.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.SendMessage(StockSharp.Community.ChatMessage)">
-            <summary>
-            Отправить сообщение в комнату.
-            </summary>
-            <param name="message">Сообщение.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.UpdateMessage(StockSharp.Community.ChatMessage,System.String)">
-            <summary>
-            Обновить сообщение в комнате.
-            </summary>
-            <param name="message">Сообщение.</param>
-            <param name="body">Новое тело сообщения.</param>
-            <returns><see langword="true"/>, если сообщение было обновлено, false, если сообщение устарело и его нельзя менять.</returns>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.Join(StockSharp.Community.ChatJoin)">
-            <summary>
-            Отправить заявку на присоединение.
-            </summary>
-            <param name="join">Заявка.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.Leave(StockSharp.Community.ChatRoom)">
-            <summary>
-            Покинуть комнату.
-            </summary>
-            <param name="room">Комната.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.Accept(StockSharp.Community.ChatJoin)">
-            <summary>
-            Удовлетворить заявку.
-            </summary>
-            <param name="join">Заявка.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.Reject(StockSharp.Community.ChatJoin,StockSharp.Community.ChatJoin)">
-            <summary>
-            Отклонить заявку.
-            </summary>
-            <param name="request">Заявка на присоединение.</param>
-            <param name="response">Ответ на заявку.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.CreateRoom(StockSharp.Community.ChatRoom)">
-            <summary>
-            Создать комнату.
-            </summary>
-            <param name="room">Комната.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.UpdateRoom(StockSharp.Community.ChatRoom)">
-            <summary>
-            Обновить детали комнаты.
-            </summary>
-            <param name="room">Комната.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.DeleteRoom(StockSharp.Community.ChatRoom)">
-            <summary>
-            Удалить комнату.
-            </summary>
-            <param name="room">Комната.</param>
-        </member>
-        <member name="M:StockSharp.Community.ChatClient.GetUser(System.Int64)">
-            <summary>
-            Получить информацию о пользователе.
-            </summary>
-            <param name="userId">Идентификатор пользователя.</param>
-            <returns>Информация о пользователе.</returns>
-        </member>
-        <member name="P:StockSharp.Community.ChatClient.AllRooms">
-            <summary>
-            Все комнаты.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatClient.GrantedRooms">
-            <summary>
-            Комнаты, к которым предоставлен доступ.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatClient.AvaitingJoins">
-            <summary>
-            Заявки на присоединение от других пользователей, которые ожидают удовлетворения или отмены.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatClient.MyJoins">
-            <summary>
-            Собственные заявки на присоединение, которые ожидают удовлетворения или отмены.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.MessageCreated">
-            <summary>
-            Новое сообщение.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.MessageUpdated">
-            <summary>
-            Сообщение обновлено.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.MessageDeleted">
-            <summary>
-            Сообщение удалено.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.RoomCreated">
-            <summary>
-            Комната создана.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.RoomUpdated">
-            <summary>
-            Комната обновлена.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.RoomDeleted">
-            <summary>
-            Комната удалена.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.LoggedIn">
-            <summary>
-            Пользователь вошел в чат.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.LoggedOut">
-            <summary>
-            Пользователь вышел из чата.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.JoinSended">
-            <summary>
-            Новая заявка на участие.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.JoinAccepted">
-            <summary>
-            Заявка удовлетворена.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.JoinRejected">
-            <summary>
-            Заявка отклонена.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.AuthorAdded">
-            <summary>
-            Добавлен новый пользователь в комнату.
-            </summary>
-        </member>
-        <member name="E:StockSharp.Community.ChatClient.AuthorDeleted">
-            <summary>
-            Пользователь удален из комнаты.
-            </summary>
-        </member>
-        <member name="T:StockSharp.Community.ChatJoin">
-            <summary>
-            Заявка на присоединение к чату.
-            </summary>
-        </member>
-        <member name="T:StockSharp.Community.ChatMessage">
-            <summary>
-            Сообщение.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatMessage.Id">
-            <summary>
-            Идентификатор.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatMessage.AuthorId">
-            <summary>
-            Идентификатор автора.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatMessage.CreationDate">
-            <summary>
-            Дата создания.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatMessage.Body">
-            <summary>
-            Тело сообщения.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatMessage.RoomId">
-            <summary>
-            Идентификатор комнаты.
-            </summary>
-        </member>
-        <member name="T:StockSharp.Community.ChatRoom">
-            <summary>
-            Комната.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatRoom.Id">
-            <summary>
-            Идентификатор.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatRoom.Name">
-            <summary>
-            Название.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatRoom.Description">
-            <summary>
-            Описание комнаты.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatRoom.IsEveryOne">
-            <summary>
-            Доступна ли для всех или требуется подтверждение.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatRoom.ParentRoomId">
-            <summary>
-            Идентификатор родительской комнаты.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Community.ChatRoom.CreationDate">
-            <summary>
-            Дата создания.
-            </summary>
-        </member>
         <member name="T:StockSharp.Community.DocPageContent">
             <summary>
             Контент страницы документации.
@@ -598,165 +243,6 @@
             <param name="fileName">Имя файла.</param>
             <param name="body">Тело файла.</param>
             <returns>Ссылка на выложенный файл.</returns>
-        </member>
-        <member name="T:StockSharp.Community.IChatService">
-            <summary>
-            Интерфейс, описывающий сервис чата.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetUser(System.Guid,System.Int64)">
-            <summary>
-            Получить информацию о пользователе по его идентификатору.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="userId">Идентификатор пользователя.</param>
-            <returns>Информация о пользователе.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetUsers(System.Guid,System.Int64[])">
-            <summary>
-            Получить информацию о пользователях по их идентификаторам.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="userIds">Идентификаторы пользователей.</param>
-            <returns>Информация о пользователях.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetJoin(System.Guid,System.Int64)">
-            <summary>
-            Получить информацию о пользователе по его идентификатору.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="joinId">Идентификатор заявки.</param>
-            <returns>Информация о заявке.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetRooms(System.Guid)">
-            <summary>
-            Получить информацию о комнатах.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <returns>Информация о комнатах.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetJoinedRooms(System.Guid)">
-            <summary>
-            Получить идентификаторы комнат, к которым предоставлен доступ.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <returns>Идентификаторы комнат.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetAuthors(System.Guid,System.Int64)">
-            <summary>
-            Получить идентификаторы пользователей в комнате.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-            <returns>Идентификаторы пользователей.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.Subscribe(System.Guid,System.Int64)">
-            <summary>
-            Подписаться на новые сообщения.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.CreateRoom(System.Guid,StockSharp.Community.ChatRoom)">
-            <summary>
-            Создать комнату.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="room">Комната.</param>
-            <returns>Идентификатор комнаты.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.DeleteRoom(System.Guid,System.Int64)">
-            <summary>
-            Удалить комнату.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.UpdateRoom(System.Guid,StockSharp.Community.ChatRoom)">
-            <summary>
-            Обновить детали комнаты.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="room">Комната.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.SendMessage(System.Guid,System.Int64,System.String)">
-            <summary>
-            Отправить сообщение в комнату.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-            <param name="body">Тело сообщения.</param>
-            <returns>Идентификатор сообщения.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.UpdateMessage(System.Guid,System.Int64,System.String)">
-            <summary>
-            Обновить сообщение в комнате.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="messageId">Идентификатор сообщения.</param>
-            <param name="body">Новое тело сообщения.</param>
-            <returns><see langword="true"/>, если сообщение было обновлено, false, если сообщение устарело и его нельзя менять.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.DeleteMessage(System.Guid,System.Int64)">
-            <summary>
-            Удалить сообщение.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="messageId">Идентификатор сообщения.</param>
-            <returns><see langword="true"/>, если сообщение было обновлено, false, если сообщение устарело и его нельзя удалять.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.Join(System.Guid,StockSharp.Community.ChatJoin)">
-            <summary>
-            Отправить заявку на присоединение.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="join">Заявка.</param>
-            <returns>Идентификатор заявки.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.Leave(System.Guid,System.Int64)">
-            <summary>
-            Покинуть комнату.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.Accept(System.Guid,System.Int64)">
-            <summary>
-            Удовлетворить заявку.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="joinId">Идентификатор заявки.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.Reject(System.Guid,System.Int64,StockSharp.Community.ChatJoin)">
-            <summary>
-            Отклонить заявку.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="originalJoinId">Идентификатор заявки на присоединение.</param>
-            <param name="join">Ответ на заявку.</param>
-            <returns>Идентификатор заявки.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.DeleteAuthor(System.Guid,System.Int64,System.Int64)">
-            <summary>
-            Удалить пользователя из комнаты.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <param name="roomId">Идентификатор комнаты.</param>
-            <param name="userId">Идентификатор пользователя.</param>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetAvatingJoins(System.Guid)">
-            <summary>
-            Получить идентификаторы заявок на присоединение от других пользователей, которые ожидают удовлетворения или отмены.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <returns>Идентификаторы заявок.</returns>
-        </member>
-        <member name="M:StockSharp.Community.IChatService.GetMyJoins(System.Guid)">
-            <summary>
-            Получить идентификаторы собственных заявок на присоединение, которые ожидают удовлетворения или отмены.
-            </summary>
-            <param name="sessionId">Идентификатор сессии.</param>
-            <returns>Идентификаторы заявок.</returns>
         </member>
         <member name="T:StockSharp.Community.IAuthenticationService">
             <summary>
@@ -860,6 +346,13 @@
             <param name="message">Тело сообщения.</param>
             <returns>Код результата выполнения.</returns>
         </member>
+        <member name="M:StockSharp.Community.INotificationService.GetNews(System.Int64)">
+            <summary>
+            Получить последние новости.
+            </summary>
+            <param name="fromNewsId">Идентификатор, с которого необходимо получить новости.</param>
+            <returns>Последние новости.</returns>
+        </member>
         <member name="T:StockSharp.Community.Profile">
             <summary>
             Информация о профиле.
@@ -959,7 +452,7 @@
         </member>
         <member name="M:StockSharp.Community.IProfileService.UpdateProfile(System.Guid,StockSharp.Community.Profile)">
             <summary>
-            Получить данные профиля.
+            Обновить данные профиля.
             </summary>
             <param name="sessionId">Идентификатор сессии.</param>
             <param name="profile">Информация о профиле.</param>
@@ -967,7 +460,7 @@
         </member>
         <member name="M:StockSharp.Community.IProfileService.GetProfile(System.Guid)">
             <summary>
-            Обновить данные профиля.
+            Получить данные профиля.
             </summary>
             <param name="sessionId">Идентификатор сессии.</param>
             <returns>Информация о профиле.</returns>
@@ -1125,6 +618,13 @@
             <param name="caption">Заголовок сообщения.</param>
             <param name="message">Тело сообщения.</param>
         </member>
+        <member name="M:StockSharp.Community.NotificationClient.GetNews(System.Int64)">
+            <summary>
+            Получить последние новости.
+            </summary>
+            <param name="fromNewsId">Идентификатор, с которого необходимо получить новости.</param>
+            <returns>Последние новости.</returns>
+        </member>
         <member name="P:StockSharp.Community.NotificationClient.SmsCount">
             <summary>
             Доступное количество SMS-сообщений.
@@ -1190,13 +690,13 @@
         </member>
         <member name="M:StockSharp.Community.ProfileClient.UpdateProfile(StockSharp.Community.Profile)">
             <summary>
-            Получить данные профиля.
+            Обновить данные профиля.
             </summary>
             <param name="profile">Информация о профиле.</param>
         </member>
         <member name="M:StockSharp.Community.ProfileClient.GetProfile">
             <summary>
-            Обновить данные профиля.
+            Получить данные профиля.
             </summary>
             <returns>Информация о профиле.</returns>
         </member>
