@@ -49,17 +49,11 @@
             </summary>
       <param name="message">Текст сообщения.</param>
     </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetTransactions">
+    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetNextRequest">
       <summary>
-            Получить строки транзакций.
+            Получить пользовательский запрос.
             </summary>
-      <returns>Строки транзакций.</returns>
-    </member>
-    <member name="M:StockSharp.Quik.Lua.LuaFixServer.GetLookupRequests">
-      <summary>
-            Получить описание запросов данных.
-            </summary>
-      <returns>Описание запросов данных.</returns>
+      <returns>Пользовательский запрос.</returns>
     </member>
     <member name="P:StockSharp.Quik.Lua.LuaFixServer.Instance">
       <summary>
@@ -254,6 +248,41 @@
     <member name="P:StockSharp.Quik.QuikSessionHolder.IsAdaptersIndependent">
       <summary>
             Являются ли подключения адаптеров независимыми друг от друга.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Quik.Lua.LuaRequest">
+      <summary>
+            Пользовательский запрос.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Quik.Lua.LuaRequest.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Quik.Lua.LuaRequest" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.MessageType">
+      <summary>
+            Тип сообщения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.TransactionId">
+      <summary>
+            Номер транзакции.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.Value">
+      <summary>
+            Значение запроса.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.SecurityId">
+      <summary>
+            Идентификатор инструмента.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Quik.Lua.LuaRequest.OrderType">
+      <summary>
+            Тип заявки.
             </summary>
     </member>
     <member name="T:StockSharp.Quik.Native.Codes">

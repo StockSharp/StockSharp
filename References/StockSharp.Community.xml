@@ -346,11 +346,12 @@
             <param name="message">Тело сообщения.</param>
             <returns>Код результата выполнения.</returns>
         </member>
-        <member name="M:StockSharp.Community.INotificationService.GetNews(System.Int64)">
+        <member name="M:StockSharp.Community.INotificationService.GetNews(System.Guid,System.Int64)">
             <summary>
             Получить последние новости.
             </summary>
-            <param name="fromNewsId">Идентификатор, с которого необходимо получить новости.</param>
+            <param name="sessionId">Идентификатор сессии. Может быть пустым, если запрос идет анонимно.</param>
+            <param name="fromId">Идентификатор, с которого необходимо получить новости.</param>
             <returns>Последние новости.</returns>
         </member>
         <member name="T:StockSharp.Community.Profile">
@@ -622,7 +623,7 @@
             <summary>
             Получить последние новости.
             </summary>
-            <param name="fromNewsId">Идентификатор, с которого необходимо получить новости.</param>
+            <param name="fromId">Идентификатор, с которого необходимо получить новости.</param>
             <returns>Последние новости.</returns>
         </member>
         <member name="P:StockSharp.Community.NotificationClient.SmsCount">

@@ -4,6 +4,46 @@
         <name>StockSharp.Licensing</name>
     </assembly>
     <members>
+        <member name="T:StockSharp.Licensing.Broker">
+            <summary>
+            Информация о брокере.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Broker.Id">
+            <summary>
+            Идентификатор.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Broker.Name">
+            <summary>
+            Название.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Broker.Criteria">
+            <summary>
+            Критерии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Broker.OpenAccountLink">
+            <summary>
+            Ссылка на открытие счета.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Broker.Feedbacks">
+            <summary>
+            Количество отзывов.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Broker.FeedbackLinkId">
+            <summary>
+            Ссылка на отзывы.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Broker.ImageLinkId">
+            <summary>
+            Идентификатор картинки.
+            </summary>
+        </member>
         <member name="T:StockSharp.Licensing.ILicenseService">
             <summary>
             Интерфейс к сервису лицензий.
@@ -32,30 +72,26 @@
             <param name="licenseId">Идентификатор лицензии.</param>
             <returns>Обновленная лицензия.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetFeatures">
+        <member name="M:StockSharp.Licensing.ILicenseService.GetFeatures(System.Guid)">
             <summary>
             Получить список всей доступной функциональности.
             </summary>
+            <param name="sessionId">Идентификатор сессии. Может быть пустым, если запрос идет анонимно.</param>
             <returns>Список всей доступной функциональности.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokers">
+        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokers(System.Guid)">
             <summary>
             Получить список брокеров.
             </summary>
+            <param name="sessionId">Идентификатор сессии. Может быть пустым, если запрос идет анонимно.</param>
             <returns>Список брокеров.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokerCriterias">
+        <member name="M:StockSharp.Licensing.ILicenseService.GetBrokerCriterias(System.Guid)">
             <summary>
             Получить список критериев поиска брокерской компании.
             </summary>
+            <param name="sessionId">Идентификатор сессии. Может быть пустым, если запрос идет анонимно.</param>
             <returns>Список критериев поиска брокерской компании.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.ILicenseService.FindBrokers(System.Int64[])">
-            <summary>
-            Найти брокерские компании.
-            </summary>
-            <param name="criteria">Критерий поиска.</param>
-            <returns>Идентификаторы найденных брокерских компаний.</returns>
         </member>
         <member name="M:StockSharp.Licensing.ILicenseService.RequestLicense(System.Guid,System.Int64,System.String)">
             <summary>
@@ -242,13 +278,6 @@
             <param name="features">Список функциональности, которую необходимо добавить в лицензию.</param>
             <param name="expirationDate">Дата окончания действия лицензии.</param>
             <returns>Лицензия.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseClient.FindBrokers(System.Int64[])">
-            <summary>
-            Найти брокерские компании.
-            </summary>
-            <param name="criteria">Критерий поиска.</param>
-            <returns>Идентификаторы найденных брокерских компаний.</returns>
         </member>
         <member name="P:StockSharp.Licensing.LicenseClient.Features">
             <summary>

@@ -7,6 +7,13 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.60:
+* (bug) Fusion/Blackwood. Fix http://stocksharp.com/forum/yaf_postst5498_Probliema-na-rieal-nom-schietie.aspx
+* (feature) Quik. Process request performance boost
+* (feature) OrderWindow. Disable ByMarket checkbox
+* (feature) Plaza. Anonym deals turned on by default
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/11
+
 ###v4.2.59:
 * (feature) Fusion/Blackwood. 3.1.8
 * (bug) Micex. OrderBookDepth fix
