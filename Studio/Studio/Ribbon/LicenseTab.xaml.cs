@@ -37,24 +37,22 @@ namespace StockSharp.Studio.Ribbon
 			get { return (LicenseInfo)LicensesCtrl.SelectedItem; }
 		}
 
-		private IEnumerable<License> _licenses;
+		private IEnumerable<License> _licenses = Enumerable.Empty<License>();
 
 		/// <summary>
 		/// Лицензии.
 		/// </summary>
 		public IEnumerable<License> Licenses
 		{
-			get { return (IEnumerable<License>)LicensesCtrl.ItemsSource; }
+			get { return ((IEnumerable<LicenseInfo>)LicensesCtrl.ItemsSource).Select(i => i.License); }
 			set
 			{
-				_licenses = value;
+				if (value == null)
+					throw new ArgumentNullException("value");
 
-				if (_licenses == null)
-					return;
+				_licenses = value.ToArray();
 
-				var licenses = _licenses.ToArray();
-
-				var items = licenses
+				var items = _licenses
 					.Select(l =>
 					{
 						var estimatedDays = (int)l.GetEstimatedTime().TotalDays;
@@ -79,33 +77,44 @@ namespace StockSharp.Studio.Ribbon
 				LicensesCtrl.ItemsSource = items;
 				LicensesCtrl.SelectedItem = items.FirstOrDefault();
 
-				Foreground = licenses.IsExpired()
+				Foreground = _licenses.IsExpired()
 					? new SolidColorBrush(Colors.Red)
 					: new SolidColorBrush(Colors.Black);
 			}
 		}
 
-		private IEnumerable<Tuple<long, string>> _brokers;
+		private IEnumerable<Broker> _brokers = Enumerable.Empty<Broker>();
 
-		public IEnumerable<Tuple<long, string>> Brokers
+		public IEnumerable<Broker> Brokers
 		{
 			get { return _brokers; }
 			set
 			{
-				_brokers = value;
+				if (value == null)
+					throw new ArgumentNullException("value");
 
-				BrokerId.ItemsSource = _brokers;
-				BrokerId.SelectedIndex = -1;
+				_brokers = value.ToArray();
+
+				BrokersComboBox.ItemsSource = _brokers;
+				BrokersComboBox.SelectedItem = _brokers.FirstOrDefault();
 			}
 		}
 
-		private IEnumerable<string> _features;
+		private Broker SelectedBroker
+		{
+			get { return (Broker)BrokersComboBox.SelectedItem; }
+		}
+
+		private IEnumerable<string> _features = Enumerable.Empty<string>();
 
 		public IEnumerable<string> Features
 		{
 			get { return _features; }
 			set
 			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
 				_features = value;
 
 				FeaturesCtrl.ItemsSource = _features;
@@ -115,9 +124,6 @@ namespace StockSharp.Studio.Ribbon
 		public LicenseTab()
 		{
 			InitializeComponent();
-
-			BrokerId.DisplayMemberPath = "Item2";
-			BrokerId.SelectedValuePath = "Item1";
 		}
 
 		private void ExecutedRenewLicenseCommand(object sender, ExecutedRoutedEventArgs e)
@@ -152,12 +158,12 @@ namespace StockSharp.Studio.Ribbon
 
 		private void ExecutedRequestLicenseCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			new RequestLicenseCommand((long)BrokerId.SelectedValue, AccountName.Text).Process(this);
+			new RequestLicenseCommand(SelectedBroker.Id, AccountName.Text).Process(this);
 		}
 
 		private void CanExecuteRequestLicenseCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = BrokerId != null && BrokerId.SelectedValue != null && AccountName != null && !AccountName.Text.IsEmpty();
+			e.CanExecute = BrokersComboBox != null && SelectedBroker != null && AccountName != null && !AccountName.Text.IsEmpty();
 		}
 	}
 

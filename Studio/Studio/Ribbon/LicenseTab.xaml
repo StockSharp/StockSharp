@@ -131,7 +131,7 @@
 			<TextBlock Grid.Row="0" Grid.Column="0">
 				<TextBlock Text="{x:Static loc:LocalizedStrings.Broker}" /><Run Text=":"/>
 			</TextBlock>
-            <ComboBox Grid.Row="0" Grid.Column="1" x:Name="BrokerId" VerticalContentAlignment="Center" />
+            <ComboBox Grid.Row="0" Grid.Column="1" x:Name="BrokersComboBox" DisplayMemberPath="Name" VerticalContentAlignment="Center" />
 
             <TextBlock Grid.Row="1" Grid.Column="0">
 				<Run Text="{x:Static loc:LocalizedStrings.Account}"/><Run Text=":"/>
