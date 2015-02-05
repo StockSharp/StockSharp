@@ -7,6 +7,13 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.61:
+* (bug) Quik. Fix https://github.com/stocksharp/stocksharp/issues/13
+* (bug) Fusion/Blackwood. Fix http://stocksharp.com/forum/yaf_postst5511_4-2-60---Exception-pri-otpravkie-ordiera.aspx
+* (bug) LogManager.Application. Replacing fix
+* (bug) Plaza. Level1 ServerTime fill
+* (bug) YahooHistorySource. Time fix
+
 ###v4.2.60:
 * (bug) Fusion/Blackwood. Fix http://stocksharp.com/forum/yaf_postst5498_Probliema-na-rieal-nom-schietie.aspx
 * (feature) Quik. Process request performance boost
