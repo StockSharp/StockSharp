@@ -930,9 +930,8 @@ Str1011;Fractional volume is not supported.;Дробный объем не по�
 Str1012Params;Wrong number of trade order {0}.;Неправильный номер сделки заявки {0}.
 Str1013;orders;заявки
 Str1014;To value can not be less than From value.;Значение to не может быть меньше значения from.
-Str1015Params;Type of candles {0} is not supported.;Тип свечек {0} не поддерживается.
 Str1016Params;Wrong parameter of candle {0}. Candle parameter is equal {1}, storage accepts {2}.;Неправильный параметр свечи {0}. Параметр свечи равен {1}, хранилище принимает {2}.
-Str1017Params;Wrong type of candle {0}.;Неправильный тип свечи {0}.
+WrongCandleType;Wrong type of candle.;Неправильный тип свечи.
 Str1018;Unknown type of market-data;Неизвестный тип маркет-данных.
 Str1019Params;Wrong type of data of trade {0}.;Неправильный тип данных сделки {0}.
 Str1020;Wrong trade number.;Неправильный номер сделки.
@@ -991,7 +990,6 @@ Str1073;Finished candles;Законченные свечи
 Str1075Params;{0}% of current candle is completed.;Завершение текущей свечи на {0}%.
 Str1076Params;{0}% of current candles is completed.;Завершение текущих свечек на {0}%.
 Str1077;Percentage change must be positive.;Процент изменения должен быть положительным.
-Str1078Params;Unsupported candles type {0}.;Неподдерживаемый тип свечек {0}.
 Str1080;New trades;Новые сделки
 Str1081;New orders;Новые заявки
 Str1082;Activation.;Активация.

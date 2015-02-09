@@ -1934,7 +1934,7 @@ namespace StockSharp.Algo
 				return newCandle => newCandle.TotalVolume >= volume;
 			}
 			else
-				throw new ArgumentOutOfRangeException("series", LocalizedStrings.Str1078Params.Put(series.CandleType));
+				throw new ArgumentOutOfRangeException("series", series.CandleType, LocalizedStrings.WrongCandleType);
 		}
 
 		#endregion

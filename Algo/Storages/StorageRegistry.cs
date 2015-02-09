@@ -827,7 +827,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException("candleMessageType");
 
 			if (!candleMessageType.IsSubclassOf(typeof(CandleMessage)))
-				throw new ArgumentException(LocalizedStrings.Str1017Params.Put(candleMessageType), "candleMessageType");
+				throw new ArgumentOutOfRangeException("candleMessageType", candleMessageType, LocalizedStrings.WrongCandleType);
 
 			if (security == null)
 				throw new ArgumentNullException("security");

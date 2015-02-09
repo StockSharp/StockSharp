@@ -386,7 +386,7 @@ namespace StockSharp.Algo.Storages
 				return str.To<PnFArg>();
 			}
 			else
-				throw new NotSupportedException(LocalizedStrings.Str1015Params.Put(type));
+				throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.WrongCandleType);
 		}
 	}
 }

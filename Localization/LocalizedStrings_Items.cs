@@ -12058,19 +12058,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Type of candles {0} is not supported.
-		/// </summary>
-		public const string Str1015ParamsKey = "Str1015Params";
-
-		/// <summary>
-		/// Type of candles {0} is not supported.
-		/// </summary>
-		public static string Str1015Params
-		{
-			get { return GetString(Str1015ParamsKey); }
-		}
-
-		/// <summary>
 		/// Wrong parameter of candle {0}. Candle parameter is equal {1}, storage accepts {2}.
 		/// </summary>
 		public const string Str1016ParamsKey = "Str1016Params";
@@ -12084,16 +12071,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Wrong type of candle {0}.
+		/// Wrong type of candle.
 		/// </summary>
-		public const string Str1017ParamsKey = "Str1017Params";
+		public const string WrongCandleTypeKey = "WrongCandleType";
 
 		/// <summary>
-		/// Wrong type of candle {0}.
+		/// Wrong type of candle.
 		/// </summary>
-		public static string Str1017Params
+		public static string WrongCandleType
 		{
-			get { return GetString(Str1017ParamsKey); }
+			get { return GetString(WrongCandleTypeKey); }
 		}
 
 		/// <summary>
@@ -12848,19 +12835,6 @@ namespace StockSharp.Localization
 		public static string Str1077
 		{
 			get { return GetString(Str1077Key); }
-		}
-
-		/// <summary>
-		/// Unsupported candles type {0}.
-		/// </summary>
-		public const string Str1078ParamsKey = "Str1078Params";
-
-		/// <summary>
-		/// Unsupported candles type {0}.
-		/// </summary>
-		public static string Str1078Params
-		{
-			get { return GetString(Str1078ParamsKey); }
 		}
 
 		/// <summary>
