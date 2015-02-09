@@ -1176,20 +1176,20 @@ namespace StockSharp.Studio
 						return;
 				}
 
-				if (mdSessions.Count() > 1)
-				{
-					var msg = "Multi".ValidateLicense();
-					if (msg != null)
-					{
-						new MessageBoxBuilder()
-						   .Owner(this)
-						   .Text(msg)
-						   .Error()
-						   .Show();
+				//if (mdSessions.Count() > 1)
+				//{
+				//	var msg = "Multi".ValidateLicense();
+				//	if (msg != null)
+				//	{
+				//		new MessageBoxBuilder()
+				//		   .Owner(this)
+				//		   .Text(msg)
+				//		   .Error()
+				//		   .Show();
 						
-						return;
-					}
-				}
+				//		return;
+				//	}
+				//}
 
 				ConnectBtn.IsEnabled = false;
 

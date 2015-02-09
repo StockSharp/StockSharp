@@ -1,0 +1,112 @@
+<ug:UniversalGrid 
+					x:Class="StockSharp.Xaml.SecurityGrid"
+					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+					xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+					xmlns:ecngXaml="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml">
+	<ug:UniversalGrid.Resources>
+		<ecngXaml:FormattingConverter x:Key="ValueConverter" />
+		<ecngXaml:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter" />
+	</ug:UniversalGrid.Resources>
+    <ug:UniversalGrid.RowStyle>
+        <Style TargetType="{x:Type DataGridRow}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLastTradeUp}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Name="S1">
+                            <Storyboard Storyboard.TargetProperty="(DataGridRow.Background).(SolidColorBrush.Color)" >
+                                <ColorAnimation BeginTime="00:00:00"  Duration="00:00:0.1" To="Green" FillBehavior="HoldEnd" />
+                                <ColorAnimation BeginTime="00:00:0.1" Duration="00:00:02" To="White" FillBehavior="HoldEnd" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <StopStoryboard  BeginStoryboardName="S1"/>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsLastTradeDown}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard Name="S2">
+                            <Storyboard Storyboard.TargetProperty="(DataGridRow.Background).(SolidColorBrush.Color)">
+                                <ColorAnimation BeginTime="00:00:00" Duration="00:00:0.1" To="Red" FillBehavior="HoldEnd" />
+                                <ColorAnimation BeginTime="00:00:0.1" Duration="00:00:02" To="White"  FillBehavior="HoldEnd" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <StopStoryboard  BeginStoryboardName="S2"/>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ug:UniversalGrid.RowStyle>
+    <ug:UniversalGrid.Columns>
+		<DataGridTextColumn Visibility="Collapsed" Width="130" Header="{x:Static loc:LocalizedStrings.Str361}" Binding="{Binding Path=Id}" SortMemberPath="Id" />
+		<DataGridTextColumn Visibility="Collapsed" Width="200" Header="{x:Static loc:LocalizedStrings.NameKey}" Binding="{Binding Path=Name}" SortMemberPath="Name" />
+		<DataGridTextColumn Visibility="Collapsed" Width="120" Header="{x:Static loc:LocalizedStrings.XamlStr317}" Binding="{Binding Path=ShortName}" SortMemberPath="ShortName" />
+		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.Code}" Binding="{Binding Path=Code}" SortMemberPath="Code" />
+		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.Board}" Binding="{Binding Path=Board}" SortMemberPath="Board" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.PriceStep}" Binding="{Binding Path=PriceStep}" SortMemberPath="PriceStep" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str290}" Binding="{Binding Path=StepPrice}" SortMemberPath="StepPrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str365}" Binding="{Binding Path=VolumeStep}" SortMemberPath="VolumeStep" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str330}" Binding="{Binding Path=Multiplier}" SortMemberPath="Multiplier" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str547}" Binding="{Binding Path=Decimals}" SortMemberPath="Decimals" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.State}" Binding="{Binding Path=State, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="State" />
+		<DataGridTextColumn Width="50" Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Path=Type, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Type" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.UnderlyingAsset}" Binding="{Binding Path=UnderlyingSecurityId}" SortMemberPath="UnderlyingSecurityId" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str250}" Binding="{Binding Path=Currency, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Currency" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr833}" Binding="{Binding Path=LastTrade.Price}" SortMemberPath="LastTrade.Price" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr382}" Binding="{Binding Path=LastTrade.Volume}" SortMemberPath="LastTrade.Volume" />
+		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr73}" Binding="{Binding Path=LastTrade.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:T\}'}" SortMemberPath="LastTrade.Time.TimeOfDay" />
+		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr113}" Binding="{Binding Path=LastTrade.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="LastTrade.Time.Date" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str79}" Binding="{Binding Path=OpenPrice}" SortMemberPath="OpenPrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr830}" Binding="{Binding Path=HighPrice}" SortMemberPath="HighPrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr831}" Binding="{Binding Path=LowPrice}" SortMemberPath="LowPrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.ClosingPrice}" Binding="{Binding Path=ClosePrice}" SortMemberPath="ClosePrice" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.PriceMin}" Binding="{Binding Path=MinPrice}" SortMemberPath="MinPrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.PriceMax}" Binding="{Binding Path=MaxPrice}" SortMemberPath="MaxPrice" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr494}" Binding="{Binding Path=BestBid.Price}" SortMemberPath="BestBid.Price" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr493}" Binding="{Binding Path=BestBid.Volume}" SortMemberPath="BestBid.Volume" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr580}" Binding="{Binding Path=BestAsk.Price}" SortMemberPath="BestAsk.Price" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr579}" Binding="{Binding Path=BestAsk.Volume}" SortMemberPath="BestAsk.Volume" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str304}" Binding="{Binding Path=MarginBuy}" SortMemberPath="MarginBuy" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str305}" Binding="{Binding Path=MarginSell}" SortMemberPath="MarginSell" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.ExpiryDate}" Binding="{Binding Path=ExpiryDate, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="ExpiryDate" />
+		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr527}" Binding="{Binding Path=SettlementDate, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="SettlementDate" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Strike}" Binding="{Binding Path=Strike}" SortMemberPath="Strike" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr763}" Binding="{Binding Path=OptionType, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="OptionType" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str552}" Binding="{Binding Path=BinaryOptionType}" SortMemberPath="BinaryOptionType" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr743}" Binding="{Binding Path=TheorPrice}" SortMemberPath="TheorPrice" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IV" Binding="{Binding Path=ImpliedVolatility}" SortMemberPath="ImpliedVolatility" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="HV" Binding="{Binding Path=HistoricalVolatility}" SortMemberPath="HistoricalVolatility" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str300}" Binding="{Binding Path=Delta}" SortMemberPath="Delta" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str301}" Binding="{Binding Path=Gamma}" SortMemberPath="Gamma" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str302}" Binding="{Binding Path=Vega}" SortMemberPath="Vega" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str303}" Binding="{Binding Path=Theta}" SortMemberPath="Theta" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.OI}" Binding="{Binding Path=OpenInterest}" SortMemberPath="OpenInterest" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr491}" Binding="{Binding Path=BidsVolume}" SortMemberPath="BidsVolume" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr490}" Binding="{Binding Path=AsksVolume}" SortMemberPath="AsksVolume" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr577}" Binding="{Binding Path=BidsCount}" SortMemberPath="BidsCount" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr576}" Binding="{Binding Path=AsksCount}" SortMemberPath="AsksCount" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="SEDOL" Binding="{Binding Path=ExternalId.Sedol}" SortMemberPath="ExternalId.Sedol" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="CUSIP" Binding="{Binding Path=ExternalId.Cusip}" SortMemberPath="ExternalId.Cusip" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="ISIN" Binding="{Binding Path=ExternalId.Isin}" SortMemberPath="ExternalId.Isin" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="RIC" Binding="{Binding Path=ExternalId.Ric}" SortMemberPath="ExternalId.Ric" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="BLOOM" Binding="{Binding Path=ExternalId.Bloomberg}" SortMemberPath="ExternalId.Bloomberg" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IQFeed" Binding="{Binding Path=ExternalId.IQFeed}" SortMemberPath="ExternalId.IQFeed" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IB" Binding="{Binding Path=ExternalId.InteractiveBrokers}" SortMemberPath="ExternalId.InteractiveBrokers" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="Plaza" Binding="{Binding Path=ExternalId.Plaza}" SortMemberPath="ExternalId.Plaza" />
+	</ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

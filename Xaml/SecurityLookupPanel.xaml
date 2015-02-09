@@ -1,0 +1,63 @@
+<UserControl x:Class="StockSharp.Xaml.SecurityLookupPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:propertyGrid="clr-namespace:StockSharp.Xaml.PropertyGrid"
+             xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+			 xmlns:sx="clr-namespace:StockSharp.Xaml">
+	
+	<UserControl.Resources>
+		<Style TargetType="{x:Type ex:BmpImage}" x:Key="BmpStyle">
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
+					<Setter Property="Opacity" Value="0.3"></Setter>
+				</DataTrigger>
+			</Style.Triggers>
+		</Style>
+	</UserControl.Resources>
+
+	<UserControl.CommandBindings>
+		<CommandBinding Command="{x:Static sx:SecurityLookupPanel.SearchSecurityCommand}" 
+						Executed="ExecutedSearchSecurity" CanExecute="CanExecuteSearchSecurity" />
+	</UserControl.CommandBindings>
+	
+	<GroupBox x:Name="LookupGroup" Header="{x:Static loc:LocalizedStrings.XamlStr479}">
+		<Grid Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="150" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+
+			<TextBox x:Name="SecurityCodeLike" PreviewKeyUp="SecurityCodeLike_OnPreviewKeyUp" 
+							 Text="{Binding ElementName=SecurityFilterEditor, Path=SelectedObject.Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+			<xctk:DropDownButton Grid.Column="2">
+				<xctk:DropDownButton.Content>
+					<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr152}"/>...</TextBlock>
+				</xctk:DropDownButton.Content>
+				<xctk:DropDownButton.DropDownContent>
+					<propertyGrid:PropertyGridEx x:Name="SecurityFilterEditor" AutoGenerateProperties="False" ShowAdvancedOptions="False" ShowTitle="False" Width="350" MaxHeight="300">
+						<propertyGrid:PropertyGridEx.PropertyDefinitions>
+							<xctk:PropertyDefinition TargetProperties="Name,ShortName,Code,Class,ExchangeBoard,ExternalId,Type,OptionType,ExpiryDate,Currency,Strike" />
+						</propertyGrid:PropertyGridEx.PropertyDefinitions>
+					</propertyGrid:PropertyGridEx>
+				</xctk:DropDownButton.DropDownContent>
+			</xctk:DropDownButton>
+
+			<Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr441}" Grid.Column="4" Click="ClearFilter" Focusable="False">
+				<ex:BmpImage Source="/StockSharp.Xaml;Component/Images/eraser_16x16.png"/>
+			</Button>
+
+			<Button ToolTip="{x:Static loc:LocalizedStrings.Find}" Grid.Column="6" HorizontalAlignment="Center" VerticalAlignment="Center"
+					Command="{x:Static sx:SecurityLookupPanel.SearchSecurityCommand}">
+				<ex:BmpImage Source="/StockSharp.Xaml;Component/Images/find_16x16.png" Style="{StaticResource BmpStyle}" />
+			</Button>
+		</Grid>
+	</GroupBox>
+</UserControl>

@@ -1,0 +1,25 @@
+<ug:UniversalGrid
+			x:Class="StockSharp.Xaml.MarketDepthControl"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+			mc:Ignorable="d" SelectionUnit="Cell"
+			d:DesignHeight="300" d:DesignWidth="300">
+	<ug:UniversalGrid.Resources>
+		<Style x:Key="NumberCellStyle" TargetType="{x:Type TextBlock}">
+			<Setter Property="TextAlignment" Value="Right" />
+			<Setter Property="Margin" Value="-1"/>
+		</Style>
+	</ug:UniversalGrid.Resources>
+
+	<ug:UniversalGrid.Columns>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr37}" Width="41" ElementStyle="{StaticResource NumberCellStyle}" Binding="{Binding OwnBuy}" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Bid}" Width="41" ElementStyle="{StaticResource NumberCellStyle}" Binding="{Binding Buy}" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Width="60" ElementStyle="{StaticResource NumberCellStyle}" Binding="{Binding Price}" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Ask}" Width="41" ElementStyle="{StaticResource NumberCellStyle}" Binding="{Binding Sell}" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr437}" Width="41" ElementStyle="{StaticResource NumberCellStyle}" Binding="{Binding OwnSell}" />
+	</ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

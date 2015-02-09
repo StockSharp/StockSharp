@@ -45,5 +45,5 @@ using System.Resources;
 
 class VersionHolder
 {
-	public const string Version = "4.2.61.0";
+	public const string Version = "4.2.62.0";
 }

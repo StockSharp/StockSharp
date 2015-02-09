@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="StockSharp.Alerts.AlertSettingsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+			 xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+			 xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+			 mc:Ignorable="d" d:DesignHeight="25" d:DesignWidth="500">
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+			<ColumnDefinition Width="5"/>
+			<ColumnDefinition Width="100"/>
+			<ColumnDefinition Width="5"/>
+			<ColumnDefinition/>
+
+		</Grid.ColumnDefinitions>
+
+		<ComboBox x:Name="PropertyCtrl" Grid.Column="0" SelectionChanged="PropertyCtrl_OnSelectionChanged" DisplayMemberPath="Item1" />
+
+		<ComboBox x:Name="OperatorCtrl" Grid.Column="2" SelectionChanged="OperatorCtrl_OnSelectionChanged" IsEnabled="False" />
+
+		<Grid x:Name="ValuePanel" Grid.Column="4">
+			<TextBox x:Name="TextValue" Visibility="Collapsed" TextChanged="TextValue_OnTextChanged" />
+			<xctk:DecimalUpDown x:Name="DecimalValue" Visibility="Collapsed" ValueChanged="DecimalValue_OnValueChanged" />
+			<!--<sx:PortfolioComboBox x:Name="PortfolioValue" Visibility="Collapsed" SelectionChanged="PortfolioValue_OnSelectionChanged" />
+			<sx:SecurityEditor x:Name="SecurityValue" Visibility="Collapsed" SecuritySelected="SecurityValue_OnSecuritySelected" />-->
+			<editors:TimeSpanEditBox x:Name="TimeValue" Visibility="Collapsed" Format="d hh:mm:ss" CenterSlotHorizontalAlignment="Right" ValueChanged="TimeValue_OnValueChanged" />
+			<editors:DateTimeEditBox x:Name="DateValue" Visibility="Collapsed" CenterSlotHorizontalAlignment="Right" ValueChanged="DateValue_OnValueChanged" />
+			<ex:EnumComboBox x:Name="EnumValue" Visibility="Collapsed" SelectionChanged="EnumValue_OnSelectionChanged" />
+		</Grid>
+	</Grid>
+</UserControl>

@@ -1,0 +1,85 @@
+<UserControl
+		x:Class="StockSharp.Xaml.ExchangeEditor"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+		xmlns:xaml="clr-namespace:StockSharp.Xaml"
+		xmlns:system="clr-namespace:System;assembly=mscorlib"
+		xmlns:common="clr-namespace:Ecng.Common;assembly=Ecng.Common"
+		mc:Ignorable="d">
+
+	<UserControl.Resources>
+		<converters:BoolToVisibilityConverter x:Key="BoolToVis"/>
+		<converters:CountryIdToFlagImageSourceConverter x:Key="IdToFlag"/>
+		<converters:CountryIdToNameConverter x:Key="IdToName"/>
+		<ObjectDataProvider x:Key="CountryCodes" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+			<ObjectDataProvider.MethodParameters>
+				<x:Type TypeName="common:CountryCodes"/>
+			</ObjectDataProvider.MethodParameters>
+		</ObjectDataProvider>
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" MinWidth="180" MaxWidth="250"/>
+			<ColumnDefinition Width="5"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Column="0" Grid.Row="0" Margin="3,0"><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
+		<Grid Grid.Column="0" Grid.Row="1" VerticalAlignment="Stretch" Margin="3,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<ComboBox KeyDown="AutoCompleteSelector_OnKeyDown" SelectionChanged="ExchangeSelector_OnSelectionChanged" DropDownClosed="ExchangeSelector_OnSelectionChanged"
+								x:Name="CbExchangeName" Loaded="CodeBox_Loaded" SelectedValuePath="Name"
+								DisplayMemberPath="Name" IsTextSearchEnabled="True" IsEditable="True"
+								VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+								ItemsSource="{Binding Exchanges, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType=xaml:ExchangeEditor}}" Margin="1,0"/>
+			<Button Grid.Column="1" Visibility="{Binding IsNew, Converter={StaticResource BoolToVis}}"
+							ToolTip="{x:Static loc:LocalizedStrings.XamlStr314}" Margin="3,0,0,0"
+							Command="{Binding CommandAddNewExchange}" Content="{x:Static loc:LocalizedStrings.Str3229}" VerticalAlignment="Stretch"/>
+		</Grid>
+
+		<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr619}" Grid.Column="2" Grid.Row="0" Margin="3,0"/>
+		<TextBox Text="{Binding ExchangeRusName}" Grid.Column="2" Grid.Row="1" VerticalAlignment="Stretch" Margin="3,0"/>
+
+		<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr27}" Grid.Column="3" Grid.Row="0" Margin="3,0"/>
+		<TextBox Text="{Binding ExchangeEngName}" Grid.Column="3" Grid.Row="1" VerticalAlignment="Stretch" Margin="3,0"/>
+
+		<ComboBox ItemsSource="{Binding Source={StaticResource CountryCodes}}"
+							SelectedItem="{Binding CountryCode}" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2" Margin="3"
+							ToolTip="{x:Static loc:LocalizedStrings.XamlStr724}">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<Image Source="{Binding Converter={StaticResource IdToFlag}}" Stretch="None" VerticalAlignment="Center"/>
+						<TextBlock Text="{Binding Converter={StaticResource IdToName}}" VerticalAlignment="Center" Margin="5,0"/>
+					</StackPanel>
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+
+		<StackPanel Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" Margin="3,3,0,3">
+			<TextBlock VerticalAlignment="Center">
+				<Run Text="{x:Static loc:LocalizedStrings.TimeZone}"/>:
+			</TextBlock>
+			<ComboBox ItemsSource="{Binding TimeZones, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType=xaml:ExchangeEditor}}" 
+								SelectedItem="{Binding ExchangeTimeZone}" HorizontalAlignment="Stretch"/>
+		</StackPanel>
+
+		<TextBlock Margin="20,0,0,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" FontWeight="Bold" Foreground="Red"
+				   Text="{Binding SaveErrorMessage, Mode=OneWay}"/>
+
+	</Grid>
+</UserControl>

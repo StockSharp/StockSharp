@@ -1,0 +1,38 @@
+<ug:UniversalGrid
+			x:Class="StockSharp.Xaml.StatisticParameterGrid"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+			xmlns:xaml="clr-namespace:StockSharp.Xaml"
+			mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="350">
+
+    <ug:UniversalGrid.Resources>
+        <xaml:CellValueConverter x:Key="CellValueConverter"/>  
+    </ug:UniversalGrid.Resources>
+    
+	<ug:UniversalGrid.Columns>
+		<DataGridTemplateColumn Width="200" Header="{x:Static loc:LocalizedStrings.NameKey}" SortMemberPath="DisplayName">
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+			<DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+					<TextBlock Text="{Binding Path=DisplayName}" ToolTip="{Binding Path=Description}" TextAlignment="Right"/>
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+		<DataGridTemplateColumn Width="130" Header="{x:Static loc:LocalizedStrings.Str3099}" SortMemberPath="Value">
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+			<DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=Value, Converter={StaticResource CellValueConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left"/>
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+		<DataGridTextColumn x:Name="CategoryColumn" Header="{x:Static loc:LocalizedStrings.XamlStr233}" Binding="{Binding Path=Category}" SortMemberPath="Category" />
+    </ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

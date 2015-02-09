@@ -1,0 +1,24 @@
+<ex:UniversalGrid
+			x:Class="StockSharp.Xaml.MarketDataGrid"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:ex="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+			xmlns:local="clr-namespace:StockSharp.Xaml"
+			Language="ru-Ru" BorderThickness="0">
+	<ex:UniversalGrid.Resources>
+		<local:MonthToNameConverter x:Key="MonthToNameConverter" />
+        <local:BoolToCheckMarkConverter x:Key="BoolToCheckMarkConverter"/>
+	</ex:UniversalGrid.Resources>
+	
+	<ex:UniversalGrid.Columns>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Year}" Binding="{Binding Path=Year, Mode=OneWay}" SortMemberPath="Year"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Month}" Binding="{Binding Path=Month, Converter={StaticResource MonthToNameConverter}, Mode=OneWay}" SortMemberPath="Month"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr123}" Binding="{Binding Path=Day, Mode=OneWay}" SortMemberPath="Day"/>
+
+        <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str985}" Binding="{Binding Path=IsTick, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsTick"/>
+        <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1414}" Binding="{Binding Path=IsDepth, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsDepth"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1416}" Binding="{Binding Path=IsOrderLog, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsOrderLog"/>
+		<DataGridTextColumn Header="Level1" Binding="{Binding Path=IsLevel1, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsLevel1"/>
+	</ex:UniversalGrid.Columns>
+</ex:UniversalGrid>

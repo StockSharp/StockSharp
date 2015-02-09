@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="StockSharp.Xaml.NewsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xaml="clr-namespace:StockSharp.Xaml"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="2*"/>
+			<RowDefinition Height="3"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<xaml:NewsGrid x:Name="NewsGrid" SelectionChanged="NewsGrid_OnSelectionChanged" x:FieldModifier="public" />
+		<GridSplitter Background="LightGray" Grid.Row="1" Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsTabStop="False"/>
+		<WebBrowser Grid.Row="2" x:Name="NewsBrowser"/>
+	</Grid>
+</UserControl>

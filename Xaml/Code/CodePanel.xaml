@@ -1,0 +1,119 @@
+<UserControl
+				x:Class="StockSharp.Xaml.Code.CodePanel"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+				xmlns:shared="clr-namespace:ActiproSoftware.Windows.Controls;assembly=ActiproSoftware.Shared.Wpf"
+				xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+				xmlns:syntaxeditor="http://schemas.actiprosoftware.com/winfx/xaml/syntaxeditor"
+				xmlns:docking="clr-namespace:ActiproSoftware.Windows.Controls.Docking;assembly=ActiproSoftware.Docking.Wpf"
+				xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+				xmlns:themes="clr-namespace:ActiproSoftware.Windows.Themes;assembly=ActiproSoftware.Shared.Wpf"
+				xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+				xmlns:code="clr-namespace:StockSharp.Xaml.Code"
+				x:Name="Ctrl">
+	
+	<UserControl.CommandBindings>
+		<CommandBinding Command="{x:Static code:CodePanel.CompileCommand}"
+                    Executed="ExecutedCompileCommand"
+                    CanExecute="CanExecuteCompileCommand" />
+
+		<CommandBinding Command="{x:Static code:CodePanel.SaveCommand}"
+                    Executed="ExecutedSaveCommand"
+                    CanExecute="CanExecuteSaveCodeCommand" />
+
+		<CommandBinding Command="{x:Static code:CodePanel.ReferencesCommand}"
+                    Executed="ExecutedReferencesCommand"
+                    CanExecute="CanExecuteReferencesCommand" />
+
+		<CommandBinding Command="{x:Static code:CodePanel.UndoCommand}"
+                    Executed="ExecutedUndoCommand"
+                    CanExecute="CanExecuteUndoCommand" />
+
+		<CommandBinding Command="{x:Static code:CodePanel.RedoCommand}"
+                    Executed="ExecutedRedoCommand"
+                    CanExecute="CanExecuteRedoCommand" />
+    </UserControl.CommandBindings>
+    
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
+	
+	<DockPanel>
+		<shared:PixelSnapper DockPanel.Dock="Top" Visibility="{Binding ElementName=Ctrl, Path=ShowToolBar, Converter={StaticResource BoolToVisibilityConverter}}">
+			<ToolBar>
+                <Button ToolTip="{x:Static loc:LocalizedStrings.Str1519}" ToolTipService.ShowOnDisabled="True" 
+                        Command="{x:Static code:CodePanel.SaveCommand}" CommandTarget="{Binding ElementName=Ctrl, Mode=OneWay}">
+					<xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/save_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+				</Button>
+                <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr658}" ToolTipService.ShowOnDisabled="True" 
+                        Command="{x:Static code:CodePanel.CompileCommand}" CommandTarget="{Binding ElementName=Ctrl, Mode=OneWay}">
+					<xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/compile_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+				</Button>
+                
+                <Separator/>
+                
+                <Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr424}" ToolTipService.ShowOnDisabled="True" 
+                        Command="{x:Static code:CodePanel.UndoCommand}" CommandTarget="{Binding ElementName=Ctrl, Mode=OneWay}">
+                    <xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/undo_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                </Button>
+                <Button ToolTip="{x:Static loc:LocalizedStrings.UndoChanges}" ToolTipService.ShowOnDisabled="True" 
+                        Command="{x:Static code:CodePanel.RedoCommand}" CommandTarget="{Binding ElementName=Ctrl, Mode=OneWay}">
+                    <xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/redo_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+                </Button>
+                
+                <Separator/>
+                
+                <Button ToolTip="{x:Static loc:LocalizedStrings.References}" ToolTipService.ShowOnDisabled="True" 
+                        Command="{x:Static code:CodePanel.ReferencesCommand}" CommandTarget="{Binding ElementName=Ctrl, Mode=OneWay}">
+					<xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/references_16x16.png" Style="{StaticResource ToolbarImageStyle}"/>
+				</Button>
+
+				<!--<Label x:Name="CompilationOk" Content="Компиляция выполнена!" Visibility="Collapsed"/>-->
+			</ToolBar>
+		</shared:PixelSnapper>
+
+		<docking:DockSite x:Name="DockSite">
+            <docking:SplitContainer Orientation="Vertical">
+
+                <docking:Workspace Name="ToolWorkSpaceEditor"
+                                       Background="{DynamicResource {x:Static themes:AssetResourceKeys.ControlBackgroundNormalBrushKey}}">
+                    <syntaxeditor:SyntaxEditor x:Name="CodeEditor" IsLineNumberMarginVisible="True" DocumentTextChanged="CodeEditor_OnDocumentTextChanged"/>
+                </docking:Workspace>
+
+                <docking:ToolWindowContainer docking:DockSite.ControlSize="100,150">
+                    <docking:ToolWindow Title="{x:Static loc:LocalizedStrings.XamlStr699}" CanClose="False" Name="ToolWindowCompileErrorList">
+                        <ug:UniversalGrid x:Name="ErrorsGrid" BorderThickness="0" MouseDoubleClick="ErrorsGrid_OnMouseDoubleClick" SelectionMode="Extended">
+                            <ug:UniversalGrid.Columns>
+                                <DataGridTemplateColumn Width="20" SortMemberPath="Type">
+                                    <DataGridTemplateColumn.CellStyle>
+                                        <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+                                    </DataGridTemplateColumn.CellStyle>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <xaml:BmpImage x:Name="TypeImg" />
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding Path=Type}" Value="Info">
+                                                    <Setter TargetName="TypeImg" Property="Source" Value="pack://application:,,,/StockSharp.Xaml;component/Images/info_16x16.png" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=Type}" Value="Warning">
+                                                    <Setter TargetName="TypeImg" Property="Source" Value="pack://application:,,,/StockSharp.Xaml;component/Images/warning_16x16.png" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Path=Type}" Value="Error">
+                                                    <Setter TargetName="TypeImg" Property="Source" Value="pack://application:,,,/StockSharp.Xaml;component/Images/error_16x16.png" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Line}" Width="60" Binding="{Binding Path=Line}" SortMemberPath="Line" />
+                                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str862}" Width="60" Binding="{Binding Path=Column}" SortMemberPath="Column" />
+                                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Description}" Width="650" Binding="{Binding Path=Message}" SortMemberPath="Message" />
+                            </ug:UniversalGrid.Columns>
+                        </ug:UniversalGrid>
+                    </docking:ToolWindow>
+                </docking:ToolWindowContainer>
+            </docking:SplitContainer>
+        </docking:DockSite>
+	</DockPanel>
+</UserControl>

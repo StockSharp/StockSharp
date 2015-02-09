@@ -25,7 +25,6 @@ namespace StockSharp.Hydra
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Windows;
 	using StockSharp.Hydra.Panes;
-	using StockSharp.Licensing;
 	using StockSharp.Logging;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -428,23 +427,23 @@ namespace StockSharp.Hydra
 			if (task == null)
 				return;
 
-			if (Tasks.Any(t => t.GetType() == task.GetType()))
-			{
-				var msg = "Multi".ValidateLicense();
+			//if (Tasks.Any(t => t.GetType() == task.GetType()))
+			//{
+			//	var msg = "Multi".ValidateLicense();
 
-				if (msg != null)
-				{
-					_logManager.Application.AddErrorLog(msg);
+			//	if (msg != null)
+			//	{
+			//		_logManager.Application.AddErrorLog(msg);
 
-					new MessageBoxBuilder()
-						.Text(LocalizedStrings.Str2903Params.Put(task.GetDisplayName()))
-						.Warning()
-						.Owner(this)
-						.Show();
+			//		new MessageBoxBuilder()
+			//			.Text(LocalizedStrings.Str2903Params.Put(task.GetDisplayName()))
+			//			.Warning()
+			//			.Owner(this)
+			//			.Show();
 
-					return;	
-				}
-			}
+			//		return;	
+			//	}
+			//}
 
 			BusyIndicator.BusyContent = LocalizedStrings.Str2904Params.Put(task.GetDisplayName());
 			BusyIndicator.IsBusy = true;

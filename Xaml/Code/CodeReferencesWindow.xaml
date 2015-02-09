@@ -1,0 +1,50 @@
+<Window x:Class="StockSharp.Xaml.Code.CodeReferencesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+        Title="{x:Static loc:LocalizedStrings.XamlStr151}" Height="350" Width="600" ResizeMode="CanResize" 
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+    
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <ToolBar Grid.Row="0">
+            <Button Click="OnAddReferenceButtonClick">
+                <StackPanel Orientation="Horizontal">
+					<xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png"/>
+                    <TextBlock Margin="2,0,7,0" Text="{x:Static loc:LocalizedStrings.Str3229}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <Button Click="OnRemoveReferenceButtonClick">
+                <StackPanel Orientation="Horizontal">
+					<xaml:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png"/>
+                    <TextBlock Margin="2,0,7,0" Text="{x:Static loc:LocalizedStrings.Str2060}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+        </ToolBar>
+
+		<ug:UniversalGrid Grid.Row="1" x:Name="ReferencesListView" BorderThickness="0">
+			<ug:UniversalGrid.Columns>
+				<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.NameKey}" Width="100" Binding="{Binding Path=Name}" SortMemberPath="Name" />
+				<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str2804}" Width="*" Binding="{Binding Path=Location}" SortMemberPath="Location" />
+            </ug:UniversalGrid.Columns>
+        </ug:UniversalGrid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Content="OK" Width="80" Margin="3" IsDefault="True" xaml:XamlHelper.DialogResult="True" />
+            <Button Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Cancel}" Width="80" Margin="3" IsCancel="True" xaml:XamlHelper.DialogResult="False" />
+        </Grid>
+    </Grid>
+</Window>

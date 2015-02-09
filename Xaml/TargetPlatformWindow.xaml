@@ -1,0 +1,175 @@
+<Window x:Class="StockSharp.Xaml.TargetPlatformWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+        xmlns:xaml1="clr-namespace:StockSharp.Xaml"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Height="400" Width="560" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+		<converters:NullImageConverter x:Key="NullImageConverter" />
+		<xaml1:PlatformToColorConverter x:Key="PlatformToColorConverter" />
+
+		<Style x:Key="PlatformSwitchStyle" TargetType="{x:Type CheckBox}">
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+			<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type CheckBox}">
+						<ControlTemplate.Resources>
+							<Storyboard x:Key="OnChecking">
+								<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="slider" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+									<SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="80" />
+								</DoubleAnimationUsingKeyFrames>
+							</Storyboard>
+							<Storyboard x:Key="OnUnchecking">
+								<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="slider" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+									<SplineDoubleKeyFrame KeyTime="00:00:00.1000000" Value="0" />
+								</DoubleAnimationUsingKeyFrames>
+							</Storyboard>
+						</ControlTemplate.Resources>
+						<DockPanel x:Name="dockPanel">
+							<ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" ContentTemplate="{TemplateBinding ContentTemplate}" RecognizesAccessKey="True" VerticalAlignment="Center" />
+							<Grid>
+								<Border x:Name="BackgroundBorder" HorizontalAlignment="Left" BorderBrush="#FF939393" BorderThickness="1" CornerRadius="3" Height="20" Width="160">
+									<Border.Background>
+										<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+											<GradientStop Color="#FFB5B5B5" Offset="0" />
+											<GradientStop Color="#FFDEDEDE" Offset="0.1" />
+											<GradientStop Color="#FFEEEEEE" Offset="0.5" />
+											<GradientStop Color="#FFFAFAFA" Offset="0.5" />
+											<GradientStop Color="#FFFEFEFE" Offset="1" />
+										</LinearGradientBrush>
+									</Border.Background>
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition />
+											<ColumnDefinition />
+										</Grid.ColumnDefinitions>
+										<TextBlock x:Name="Off" Foreground="#FF7A7A7A" FontWeight="Bold" Text="x32" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										<TextBlock x:Name="On" Foreground="#FF7A7A7A" FontWeight="Bold" Text="x64" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+									</Grid>
+								</Border>
+								<Border BorderBrush="#FF939393" HorizontalAlignment="Left" x:Name="slider" Width="80" Height="20" BorderThickness="1" CornerRadius="3" RenderTransformOrigin="0.5,0.5" Margin="0">
+									<Border.RenderTransform>
+										<TransformGroup>
+											<ScaleTransform ScaleX="1" ScaleY="1" />
+											<SkewTransform AngleX="0" AngleY="0" />
+											<RotateTransform Angle="0" />
+											<TranslateTransform X="0" Y="0" />
+										</TransformGroup>
+									</Border.RenderTransform>
+									<Border.Background>
+										<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+											<GradientStop Color="#FFF0F0F0" Offset="0" />
+											<GradientStop Color="#FFCDCDCD" Offset="0.1" />
+											<GradientStop Color="#FFFBFBFB" Offset="1" />
+										</LinearGradientBrush>
+									</Border.Background>
+								</Border>
+							</Grid>
+						</DockPanel>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsChecked" Value="True">
+								<Trigger.ExitActions>
+									<BeginStoryboard Storyboard="{StaticResource OnUnchecking}" x:Name="OnUnchecking_BeginStoryboard" />
+								</Trigger.ExitActions>
+								<Trigger.EnterActions>
+									<BeginStoryboard Storyboard="{StaticResource OnChecking}" x:Name="OnChecking_BeginStoryboard" />
+								</Trigger.EnterActions>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+    
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <xaml:BmpImage Source="{Binding Path=AppIcon, Converter={StaticResource NullImageConverter}}" Height="128" Width="128"/>
+
+		<Grid Grid.Row="0" Grid.Column="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition Width="130" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+
+			<TextBlock Text="{Binding AppName}" FontFamily="Calibri" FontWeight="Bold" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+
+			<StackPanel x:Name="LangPanel" Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Background" Value="Transparent"/>
+						<Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </StackPanel.Resources>
+				<ToggleButton x:Name="RussianLang" IsChecked="True" Click="OnLangClick">
+					<xaml:BmpImage Source="Images/russian_48x48.png" ToolTip="Переключиться на Русский язык" />
+				</ToggleButton>
+				<ToggleButton x:Name="EnglishLang" Margin="5,0,0,0" Click="OnLangClick">
+					<xaml:BmpImage Source="Images/english_48x48.png" ToolTip="Switch to English language" />
+				</ToggleButton>
+			</StackPanel>
+
+			<TextBlock x:Name="HintLabel" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" TextAlignment="Center" FontWeight="Bold" VerticalAlignment="Center" Text="{x:Static loc:LocalizedStrings.XamlStr178}" />
+		</Grid>
+
+		<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Row="0" Grid.Column="0" x:Name="SelectPlatformLabel" VerticalAlignment="Center" Text="{x:Static loc:LocalizedStrings.SelectAppMode}" />
+			
+			<CheckBox Grid.Row="0" Grid.Column="1" x:Name="PlatformCheckBox"
+				  Style="{StaticResource PlatformSwitchStyle}" Margin="3"
+				  Checked="PlatformCheckBox_OnChecked" Unchecked="PlatformCheckBox_OnChecked" />
+		</Grid>
+		
+
+		<ItemsControl Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Features}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<UniformGrid Columns="4"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Margin="2" Orientation="Horizontal">
+						<TextBlock Margin="0,0,1,0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="&#x2713;">
+							<TextBlock.Foreground>
+								<MultiBinding Converter="{StaticResource PlatformToColorConverter}">
+									<Binding />
+									<Binding ElementName="PlatformCheckBox" Path="IsChecked"/>
+								</MultiBinding>
+							</TextBlock.Foreground>
+						</TextBlock>
+						<TextBlock Text="{Binding}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+					</StackPanel>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+
+		<CheckBox Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="3" x:Name="AutoCheckBox" VerticalAlignment="Center"
+				  IsChecked="{Binding AutoStart}" Content="{x:Static loc:LocalizedStrings.XamlStr176}"/>
+
+		<Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Margin="3" Name="OkButton" Content="OK" MinWidth="100" Click="OkButton_OnClick"/>
+    </Grid>
+</Window>

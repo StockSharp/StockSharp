@@ -1,0 +1,87 @@
+<Window x:Class="StockSharp.Xaml.BasketPortfolioWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Xaml="clr-namespace:StockSharp.Xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        Title="{x:Static loc:LocalizedStrings.XamlStr257}" Height="249" Width="321" WindowStartupLocation="CenterOwner" 
+        ResizeMode="CanMinimize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static Xaml:BasketPortfolioWindow.OkCommand}"
+                    Executed="ExecutedOk"
+                    CanExecute="CanExecuteOk" />
+
+        <CommandBinding Command="{x:Static Xaml:BasketPortfolioWindow.AddCommand}"
+                    Executed="ExecutedAdd"
+                    CanExecute="CanExecuteAdd" />
+
+        <CommandBinding Command="{x:Static Xaml:BasketPortfolioWindow.RemoveCommand}"
+                    Executed="ExecutedRemove"
+                    CanExecute="CanExecuteRemove" />
+
+    </Window.CommandBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+			<TextBox x:Name="BasketPortfolioName" Grid.Row="0" Text="{Binding Path=Portfolio.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0" x:Name="ComboBoxAllPortfolios" Margin="3" SelectedIndex="0" 
+                          ItemsSource="{Binding Path=AllPortfolios}" 
+                          DisplayMemberPath="Name"/>
+                <Button Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Str3229}" Margin="3" Command="{x:Static Xaml:BasketPortfolioWindow.AddCommand}"/>
+            </Grid>
+            <Separator Grid.Row="2"/>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="120" />
+                </Grid.ColumnDefinitions>
+
+                <ListBox Grid.Column="0" x:Name="ListBoxPortfolios" Margin="3" 
+                         ItemsSource="{Binding Path=InnerPortfolios}"
+                         DisplayMemberPath="Name" />
+
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Str2060}" Margin="3" Command="{x:Static Xaml:BasketPortfolioWindow.RemoveCommand}" />
+                </Grid>
+            </Grid>
+            <Separator Grid.Row="4"/>
+        </Grid>
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1" Content="OK" IsDefault="True" Width="120" Margin="3" Command="{x:Static Xaml:BasketPortfolioWindow.OkCommand}" TabIndex="3" />
+            <Button Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True" Width="120" Margin="3" TabIndex="4" />
+        </Grid>
+    </Grid>
+</Window>

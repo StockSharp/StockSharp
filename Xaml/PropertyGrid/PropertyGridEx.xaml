@@ -1,0 +1,127 @@
+﻿<xctk:PropertyGrid
+		x:Class="StockSharp.Xaml.PropertyGrid.PropertyGridEx"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+		xmlns:be="clr-namespace:StockSharp.BusinessEntities;assembly=StockSharp.BusinessEntities"
+		xmlns:sys="clr-namespace:System;assembly=mscorlib"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:security="clr-namespace:System.Security;assembly=mscorlib"
+		xmlns:net="clr-namespace:System.Net;assembly=System"
+		xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+		xmlns:text="clr-namespace:System.Text;assembly=mscorlib"
+		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml" 
+		xmlns:local="clr-namespace:StockSharp.Xaml"
+		xmlns:candles="clr-namespace:StockSharp.Algo.Candles;assembly=StockSharp.Algo"
+		xmlns:propertyGrid="clr-namespace:StockSharp.Xaml.PropertyGrid"
+		xmlns:messages="clr-namespace:StockSharp.Messages;assembly=StockSharp.Messages"
+		mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="300"
+		ShowSearchBox="False" ShowSortOptions="False">
+    
+	<xctk:PropertyGrid.EditorDefinitions>
+        <xctk:EditorTemplateDefinition TargetProperties="{x:Type messages:Unit}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:UnitEditor Value="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type be:Security}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:SecurityEditor SelectedSecurity="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type be:Portfolio}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:PortfolioEditor SelectedPortfolio="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type be:ExchangeBoard}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:ExchangeBoardComboBox SelectedBoard="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:TimeSpan}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<editors:TimeSpanEditBox x:Name="TimeSpanBox" Format="d hh:mm:ss" CenterSlotHorizontalAlignment="Right" Value="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:DateTime}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<editors:DateTimeEditBox x:Name="DateTimeBox" CenterSlotHorizontalAlignment="Right" Value="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:DateTimeOffset}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+                    <propertyGrid:DateTimeOffsetEditor x:Name="DateTimeOffsetBox" CenterSlotHorizontalAlignment="Right" Offset="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type net:EndPoint}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:EndPointEditor EndPoint="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type security:SecureString}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<ex:SecretPicker Secret="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="ExtensionInfo">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:ExtensionInfoPicker SelectedExtensionInfo="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type text:Encoding}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<ex:EncodingComboBox SelectedEncoding="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
+        <xctk:EditorTemplateDefinition TargetProperties="{x:Type candles:CandleSeries}">
+            <xctk:EditorTemplateDefinition.EditingTemplate>
+                <DataTemplate>
+					<propertyGrid:CandleSettingsEditor Settings="{Binding Value, Mode=TwoWay}" />
+                </DataTemplate>
+            </xctk:EditorTemplateDefinition.EditingTemplate>
+        </xctk:EditorTemplateDefinition>
+
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type sys:Enum}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<propertyGrid:EnumComboBoxEx SelectedEnumItem="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+	</xctk:PropertyGrid.EditorDefinitions>
+</xctk:PropertyGrid>

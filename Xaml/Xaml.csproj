@@ -1,0 +1,808 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Xaml</RootNamespace>
+    <AssemblyName>StockSharp.Xaml</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Xaml.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Xaml.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Editors.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.SyntaxEditor.Addons.DotNet.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.SyntaxEditor.Addons.DotNet.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.SyntaxEditor.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.SyntaxEditor.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Text.Addons.DotNet.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.Text.Addons.DotNet.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Text.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Actipro\ActiproSoftware.Text.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="AutomaticUpdaterWPF">
+      <HintPath>..\References\AutomaticUpdaterWPF.dll</HintPath>
+    </Reference>
+    <Reference Include="ClrPatch, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\ClrPatch.dll</HintPath>
+    </Reference>
+    <Reference Include="Disk.SDK">
+      <HintPath>..\References\Disk.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Disk.SDK.Provider">
+      <HintPath>..\References\Disk.SDK.Provider.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc">
+      <HintPath>..\References\NCalc.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf">
+      <HintPath>..\References\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AutoCompletePopUp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="BasketPortfolioWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ChangePasswordWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Code\CodePanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Code\CodeReferencesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CommissionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CommissionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EndPointListEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExchangeBoardEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExecutionGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PropertyGrid\DateTimeOffsetEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProxySettingsEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProxyEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SecurityJumpsEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ContinuousSecurityWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CredentialsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EndPointEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ExchangeEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ExtensionInfoPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ExtensionInfoWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IndexEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IndexSecurityWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Level1Grid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OptionDesk.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrderLogGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PortfolioSessionHoldersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PropertyGrid\CandleSettingsEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PropertyGrid\PropertyGridEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="RiskPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RiskWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SecurityCreateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SecurityGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SecurityLookupPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SessionHoldersPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SessionHoldersWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SessionHolderWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StrategiesStatisticsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TargetPlatformWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="LicensePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MarketDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MarketDepthControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewsGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrderConditionalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PortfolioEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PortfolioGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SecurityEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SecurityIdTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StatisticParameterGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LogWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Monitor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OrderGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PortfolioPickerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SecurityPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SecurityPickerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MonitorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StorageSettingsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyTradeGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TradeGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UnitEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="YandexLoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AutoCompletePopUp.xaml.cs">
+      <DependentUpon>AutoCompletePopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BaseApplication.cs" />
+    <Compile Include="BasketPortfolioWindow.xaml.cs">
+      <DependentUpon>BasketPortfolioWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ChangePasswordWindow.xaml.cs">
+      <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Code\CodePanel.xaml.cs">
+      <DependentUpon>CodePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Code\CodeReference.cs" />
+    <Compile Include="Code\CodeReferencesWindow.xaml.cs">
+      <DependentUpon>CodeReferencesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Code\CodeExtensions.cs" />
+    <Compile Include="CommissionPanel.xaml.cs">
+      <DependentUpon>CommissionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CommissionWindow.xaml.cs">
+      <DependentUpon>CommissionWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EndPointListEditor.xaml.cs">
+      <DependentUpon>EndPointListEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeBoardEditor.xaml.cs">
+      <DependentUpon>ExchangeBoardEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExecutionGrid.xaml.cs">
+      <DependentUpon>ExecutionGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MultiIdConverter.cs" />
+    <Compile Include="OrderConditionalGrid.cs" />
+    <Compile Include="PropertyGrid\DateTimeOffsetEditor.xaml.cs">
+      <DependentUpon>DateTimeOffsetEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProxySettings.cs" />
+    <Compile Include="ProxySettingsEditor.xaml.cs">
+      <DependentUpon>ProxySettingsEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProxyEditorWindow.xaml.cs">
+      <DependentUpon>ProxyEditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityJumpsEditor.xaml.cs">
+      <DependentUpon>SecurityJumpsEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContinuousSecurityWindow.xaml.cs">
+      <DependentUpon>ContinuousSecurityWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CredentialsWindow.xaml.cs">
+      <DependentUpon>CredentialsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EndPointEditor.xaml.cs">
+      <DependentUpon>EndPointEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeEditor.xaml.cs">
+      <DependentUpon>ExchangeEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions.cs" />
+    <Compile Include="ExchangeBoardComboBox.cs" />
+    <Compile Include="ExtensionInfoPicker.xaml.cs">
+      <DependentUpon>ExtensionInfoPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExtensionInfoWindow.xaml.cs">
+      <DependentUpon>ExtensionInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IndexEditor.xaml.cs">
+      <DependentUpon>IndexEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IndexSecurityWindow.xaml.cs">
+      <DependentUpon>IndexSecurityWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level1Grid.xaml.cs">
+      <DependentUpon>Level1Grid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogMessageCollection.cs" />
+    <Compile Include="NewsPanel.xaml.cs">
+      <DependentUpon>NewsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionDesk.xaml.cs">
+      <DependentUpon>OptionDesk.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionDeskRow.cs" />
+    <Compile Include="OrderLogGrid.xaml.cs">
+      <DependentUpon>OrderLogGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ISecurityWindow.cs" />
+    <Compile Include="LicensePanel.xaml.cs">
+      <DependentUpon>LicensePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MarketDataGrid.xaml.cs">
+      <DependentUpon>MarketDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MarketDepthColumns.cs" />
+    <Compile Include="MarketDepthControl.xaml.cs">
+      <DependentUpon>MarketDepthControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MarketDepthQuote.cs" />
+    <Compile Include="MonthToNameConverter.cs" />
+    <Compile Include="NewsGrid.xaml.cs">
+      <DependentUpon>NewsGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderConditionalWindow.xaml.cs">
+      <DependentUpon>OrderConditionalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderWindow.xaml.cs">
+      <DependentUpon>OrderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PortfolioSessionHoldersWindow.xaml.cs">
+      <DependentUpon>PortfolioSessionHoldersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyGrid\CandleSettingsEditor.xaml.cs">
+      <DependentUpon>CandleSettingsEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyGrid\INotifyPropertiesChanged.cs" />
+    <Compile Include="PropertyGrid\Level1FieldsComboBoxEditor.cs" />
+    <Compile Include="PropertyGrid\PropertyGridEx.xaml.cs">
+      <DependentUpon>PropertyGridEx.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyGrid\ReadOnlyTypeDescriptionProvider.cs" />
+    <Compile Include="PropertyGrid\SecurityTypesComboBoxEditor.cs" />
+    <Compile Include="PortfolioEditor.xaml.cs">
+      <DependentUpon>PortfolioEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PortfolioGrid.xaml.cs">
+      <DependentUpon>PortfolioGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level1FieldsComboBox.cs" />
+    <Compile Include="RiskPanel.xaml.cs">
+      <DependentUpon>RiskPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RiskWindow.xaml.cs">
+      <DependentUpon>RiskWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityCreateWindow.xaml.cs">
+      <DependentUpon>SecurityCreateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityEditor.xaml.cs">
+      <DependentUpon>SecurityEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityGrid.xaml.cs">
+      <DependentUpon>SecurityGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityIdTextBox.xaml.cs">
+      <DependentUpon>SecurityIdTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityLookupPanel.xaml.cs">
+      <DependentUpon>SecurityLookupPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StorageFormatComboBox.cs" />
+    <Compile Include="SecurityTypeComboBox.cs" />
+    <Compile Include="SecurityTypesComboBox.cs" />
+    <Compile Include="SessionHoldersPanel.xaml.cs">
+      <DependentUpon>SessionHoldersPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SessionHoldersWindow.xaml.cs">
+      <DependentUpon>SessionHoldersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SessionHolderWindow.xaml.cs">
+      <DependentUpon>SessionHolderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StatisticParameterGrid.xaml.cs">
+      <DependentUpon>StatisticParameterGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GuiObjectHelper.cs" />
+    <Compile Include="GuiLogListener.cs" />
+    <Compile Include="GuiConnector.cs" />
+    <Compile Include="LogControl.xaml.cs">
+      <DependentUpon>LogControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogWindow.xaml.cs">
+      <DependentUpon>LogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Monitor.xaml.cs">
+      <DependentUpon>Monitor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderGrid.xaml.cs">
+      <DependentUpon>OrderGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PortfolioComboBox.cs" />
+    <Compile Include="PortfolioPickerWindow.xaml.cs">
+      <DependentUpon>PortfolioPickerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="QuoteConverter.cs" />
+    <Compile Include="SecurityPicker.xaml.cs">
+      <DependentUpon>SecurityPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SecurityPickerWindow.xaml.cs">
+      <DependentUpon>SecurityPickerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MonitorWindow.xaml.cs">
+      <DependentUpon>MonitorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogSourceTree.cs" />
+    <Compile Include="LogSourceNode.cs" />
+    <Compile Include="StorageSettingsPanel.xaml.cs">
+      <DependentUpon>StorageSettingsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyTradeGrid.xaml.cs">
+      <DependentUpon>MyTradeGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StrategiesStatisticsPanel.xaml.cs">
+      <DependentUpon>StrategiesStatisticsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TargetPlatformFeature.cs" />
+    <Compile Include="TargetPlatformWindow.xaml.cs">
+      <DependentUpon>TargetPlatformWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TradeGrid.xaml.cs">
+      <DependentUpon>TradeGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UnitEditor.xaml.cs">
+      <DependentUpon>UnitEditor.xaml</DependentUpon>
+    </Compile>
+    <AppDesigner Include="Properties\" />
+    <Compile Include="YandexLoginWindow.xaml.cs">
+      <DependentUpon>YandexLoginWindow.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Licensing\Licensing.csproj">
+      <Project>{baffe041-f00c-4af5-8871-1c4578953352}</Project>
+      <Name>Licensing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Community\Community.csproj">
+      <Project>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</Project>
+      <Name>Community</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MonitorRoot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Process.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add_16x16.png" />
+    <Resource Include="Images\remove_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\connection-settings-icon_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\disabled.png" />
+    <Resource Include="Images\enabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\error_16x16.png" />
+    <Resource Include="Images\info_16x16.png" />
+    <Resource Include="Images\warning_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\pause_16x16.png" />
+    <Resource Include="Images\start_16x16.png" />
+    <Resource Include="Images\stop_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\debug.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\find_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\eraser_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\compile_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\references_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\open_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\english_48x48.png" />
+    <Resource Include="Images\russian_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Launcher.x86.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\edit_16x16.png" />
+    <Resource Include="Images\edit_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\candles_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save_24x24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\indicators_16x16.png" />
+    <Resource Include="Images\scroller_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redo_16x16.png" />
+    <Resource Include="Images\undo_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\references_32x32.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

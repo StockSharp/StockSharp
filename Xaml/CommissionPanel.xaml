@@ -1,0 +1,41 @@
+<UserControl x:Class="StockSharp.Xaml.CommissionPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+             xmlns:grids="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+             xmlns:pg="clr-namespace:StockSharp.Xaml.PropertyGrid">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="Auto" MinWidth="250" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<grids:UniversalGrid x:Name="RuleGrid" SelectionMode="Extended" SelectionChanged="RuleGrid_OnSelectionChanged">
+			<grids:UniversalGrid.Columns>
+				<DataGridTextColumn Width="100" Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Path=Name}" SortMemberPath="Name" />
+				<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str159}" Binding="{Binding Path=Rule.Value}" SortMemberPath="Rule.Value" />
+				<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr762}" Binding="{Binding Path=Rule.Title}" SortMemberPath="Rule.Title" />
+			</grids:UniversalGrid.Columns>
+		</grids:UniversalGrid>
+
+		<pg:PropertyGridEx x:Name="Settings" Grid.Row="0" Grid.Column="2" />
+
+		<StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+			<ComboBox x:Name="TypeCtrl" DisplayMemberPath="Value" MinWidth="150" SelectionChanged="TypeCtrl_OnSelectionChanged" />
+
+			<Button x:Name="AddRule" Margin="5,0,0,0" Focusable="False" ToolTip="{x:Static loc:LocalizedStrings.XamlStr145}" Width="22" HorizontalAlignment="Left" Click="AddRule_OnClick" IsEnabled="False">
+				<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/images/add_16x16.png" />
+			</Button>
+			<Button x:Name="RemoveRule" Width="22" Margin="5,0,0,0" Focusable="False" ToolTip="{x:Static loc:LocalizedStrings.XamlStr796}" Click="RemoveRule_OnClick" IsEnabled="False">
+				<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png" />
+			</Button>
+		</StackPanel>
+	</Grid>
+</UserControl>

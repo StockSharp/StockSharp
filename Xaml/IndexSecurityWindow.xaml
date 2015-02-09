@@ -1,0 +1,23 @@
+<Window		x:Class="StockSharp.Xaml.IndexSecurityWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"            xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       		xmlns:sx="clr-namespace:StockSharp.Xaml"
+       		mc:Ignorable="d" Title="{x:Static loc:LocalizedStrings.XamlStr605}" Width="700" Height="400"
+			WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+    <Grid Margin="5">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="24" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<sx:SecurityIdTextBox x:Name="SecurityId" TextChanged="SecurityId_TextChanged" />
+		<sx:IndexEditor x:Name="IndexEditor" Grid.Row="2" TextChanged="IndexEditor_TextChanged" />
+		<!--<TextBox x:Name="IndexEditor" Grid.Row="2" TextWrapping="Wrap" TextChanged="IndexEditor_TextChanged" />-->
+		<Button x:Name="OK" Grid.Row="4" IsEnabled="False" Width="80" Click="OK_Click">OK</Button>
+	</Grid>
+</Window>

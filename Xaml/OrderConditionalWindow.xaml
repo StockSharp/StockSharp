@@ -1,0 +1,62 @@
+<Window x:Class="StockSharp.Xaml.OrderConditionalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:sx="clr-namespace:StockSharp.Xaml"
+        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:pg="clr-namespace:StockSharp.Xaml.PropertyGrid"
+        Title="{x:Static loc:LocalizedStrings.XamlStr604}"
+		WindowStartupLocation="CenterOwner"
+		Height="300" Width="300" ShowInTaskbar="False">
+	
+	<Grid Margin="5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="110" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="28" />
+			<RowDefinition Height="24" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="24" />
+            <RowDefinition Height="24" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="30" />
+		</Grid.RowDefinitions>
+
+		<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
+			<TextBlock>
+				<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
+			</TextBlock>
+		</Label>
+		<sx:SecurityEditor x:Name="SecurityCtrl" Grid.Column="1" Grid.Row="0" SecuritySelected="SecurityCtrl_OnSecuritySelected" />
+
+		<TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">
+			<Run Text="{x:Static loc:LocalizedStrings.Account}"/><Run Text=":"/>
+		</TextBlock>
+		<sx:PortfolioComboBox x:Name="PortfolioCtrl" Grid.Column="1" Grid.Row="1" SelectionChanged="PortfolioCtrl_OnSelectionChanged" />
+
+		<GroupBox Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0">
+			<StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+				<RadioButton x:Name="IsBuyCtrl" Content="{x:Static loc:LocalizedStrings.Str403}" GroupName="Direction" IsChecked="True" />
+				<RadioButton x:Name="IsSellCtrl" Content="{x:Static loc:LocalizedStrings.Str404}" GroupName="Direction" Margin="15,0,0,0" />
+			</StackPanel>
+		</GroupBox>
+
+		<TextBlock Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right">
+			<Run Text="{x:Static loc:LocalizedStrings.Price}"/><Run Text=":"/>
+		</TextBlock>
+		<xctk:DecimalUpDown x:Name="PriceCtrl" Grid.Column="1" Grid.Row="3" TextAlignment="Right" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right">
+					<Run Text="{x:Static loc:LocalizedStrings.Volume}" /><Run Text=":" />
+		</TextBlock>
+		<xctk:DecimalUpDown x:Name="VolumeCtrl" Grid.Column="1" Grid.Row="4" TextAlignment="Right" ValueChanged="VolumeCtrl_OnValueChanged" />
+
+        <pg:PropertyGridEx x:Name="Condition" Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" Margin="0,3,0,0" ShowAdvancedOptions="False" ShowSearchBox="False" ShowSortOptions="False"
+                           ShowSummary="False" SelectedObjectChanged="Condition_OnSelectedObjectChanged" />
+
+		<Button x:Name="Send" Content="{x:Static loc:LocalizedStrings.XamlStr427}" ex:XamlHelper.DialogResult="True" IsEnabled="False" IsDefault="True" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Width="100" Height="22" />
+	</Grid>
+</Window>

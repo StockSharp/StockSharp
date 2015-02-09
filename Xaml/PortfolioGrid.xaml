@@ -1,0 +1,36 @@
+<ug:UniversalGrid 
+			x:Class="StockSharp.Xaml.PortfolioGrid"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+			xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+			mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="500">
+	<ug:UniversalGrid.Resources>
+		<converters:FormattingConverter x:Key="ValueConverter" />
+	</ug:UniversalGrid.Resources>
+	<ug:UniversalGrid.Columns>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Portfolio}" Width="70" Binding="{Binding Path=PortfolioName}" SortMemberPath="PortfolioName"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="70" Binding="{Binding Path=Name}" SortMemberPath="Name"/>
+        <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr342}" Width="120" Binding="{Binding Path=Position.BeginValue}" SortMemberPath="Position.BeginValue"/>
+        <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr740}" Width="120" Binding="{Binding Path=Position.CurrentValue}" SortMemberPath="Position.CurrentValue"/>
+        <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str255}" Width="50" Binding="{Binding Path=Position.BlockedValue}" SortMemberPath="Position.BlockedValue"/>
+
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Description}" Visibility="Collapsed" Width="200" Binding="{Binding Path=Position.Description}" SortMemberPath="Position.Description"/>
+		
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr125}" Visibility="Collapsed" Width="50" Binding="{Binding Path=DepoName}" SortMemberPath="DepoName"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.TPlusLimit}" Visibility="Collapsed" Width="50" Binding="{Binding Path=LimitType}" SortMemberPath="LimitType"/>
+
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr249}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.Commission}" SortMemberPath="Position.Commission"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr54}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.VariationMargin}" SortMemberPath="Position.VariationMargin"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr536}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.RealizedPnL}" SortMemberPath="Position.RealizedPnL"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr535}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.UnrealizedPnL}" SortMemberPath="Position.UnrealizedPnL"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str257}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.AveragePrice}" SortMemberPath="Position.AveragePrice"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.CurrentPrice}" SortMemberPath="Position.CurrentPrice"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Position.LastChangeTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Position.LastChangeTime"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Position.LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:T\}'}" SortMemberPath="Position.LocalTime"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.State}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Portfolio.State}" SortMemberPath="Portfolio.State"/>
+	</ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

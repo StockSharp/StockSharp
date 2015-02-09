@@ -1226,13 +1226,12 @@
             Адаптер сообщений для InteractiveBrokers.
             </summary>
     </member>
-    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.InteractiveBrokers.InteractiveBrokersSessionHolder,System.Boolean)">
+    <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.InteractiveBrokers.InteractiveBrokersSessionHolder)">
       <summary>
             Создать <see cref="T:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter" />.
             </summary>
       <param name="type">Тип адаптера.</param>
       <param name="sessionHolder">Контейнер для сессии.</param>
-      <param name="checkLicense">Проверять наличие лицензии.</param>
     </member>
     <member name="M:StockSharp.InteractiveBrokers.InteractiveBrokersMessageAdapter.DisposeManaged">
       <summary>

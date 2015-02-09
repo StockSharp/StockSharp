@@ -1,0 +1,90 @@
+<ug:UniversalGrid
+					x:Class="StockSharp.Xaml.Level1Grid"
+					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+					xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+					xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml">
+	
+	<ug:UniversalGrid.Resources>
+		<converters:DictionaryConverter x:Key="DictConverter"/>
+	</ug:UniversalGrid.Resources>
+	
+	<ug:UniversalGrid.Columns>
+		<DataGridTextColumn Width="80" Header="{x:Static loc:LocalizedStrings.Code}" Binding="{Binding Path=SecurityId.SecurityCode}" SortMemberPath="SecurityId.SecurityCode" Visibility="Collapsed" />
+		<DataGridTextColumn Width="80" Header="{x:Static loc:LocalizedStrings.Board}" Binding="{Binding Path=SecurityId.BoardCode}" SortMemberPath="SecurityId.BoardCode" Visibility="Collapsed" />
+
+		<DataGridTextColumn Width="120" Header="{x:Static loc:LocalizedStrings.Str219}" Binding="{Binding Path=ServerTime}" SortMemberPath="ServerTime" />
+		<DataGridTextColumn Width="120" Header="{x:Static loc:LocalizedStrings.Str514}" Binding="{Binding Path=LocalTime}" SortMemberPath="LocalTime" Visibility="Collapsed" />
+		
+		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.XamlStr519}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LastTradeTime}" SortMemberPath="LastTradeTime" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr521}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LastTradeId}" SortMemberPath="LastTradeId" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr524}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LastTradePrice}" SortMemberPath="LastTradePrice" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr522}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LastTradeVolume}" SortMemberPath="LastTradeVolume" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr523}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LastTradeUpDown}" SortMemberPath="LastTradeUpDown" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr520}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LastTradeOrigin}" SortMemberPath="LastTradeOrigin" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr38}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BestBidPrice}" SortMemberPath="BestBidPrice" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr36}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BestBidVolume}" SortMemberPath="BestBidVolume" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr35}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BestBidTime}" SortMemberPath="BestBidTime" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr438}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BestAskPrice}" SortMemberPath="BestAskPrice" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr436}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BestAskVolume}" SortMemberPath="BestAskVolume" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr435}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BestAskTime}" SortMemberPath="BestAskTime" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr589}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=StepPrice}" SortMemberPath="StepPrice" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.OI}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=OpenInterest}" SortMemberPath="OpenInterest" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr743}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=TheorPrice}" SortMemberPath="TheorPrice" />
+		<DataGridTextColumn Width="70" Header="IV" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ImpliedVolatility}" SortMemberPath="ImpliedVolatility" />
+		<DataGridTextColumn Width="70" Header="HV" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=HistoricalVolatility}" SortMemberPath="HistoricalVolatility" />
+		<DataGridTextColumn Width="70" Header="O" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=OpenPrice}" SortMemberPath="OpenPrice" />
+		<DataGridTextColumn Width="70" Header="H" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=HighPrice}" SortMemberPath="HighPrice" />
+		<DataGridTextColumn Width="70" Header="L" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LowPrice}" SortMemberPath="LowPrice" />
+		<DataGridTextColumn Width="70" Header="C" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ClosePrice}" SortMemberPath="ClosePrice" />
+		<DataGridTextColumn Width="70" Header="V" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Volume}" SortMemberPath="Volume" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str318}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=AccruedCouponIncome}" SortMemberPath="AccruedCouponIncome" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr244}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=AsksCount}" SortMemberPath="AsksCount" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr239}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BidsCount}" SortMemberPath="BidsCount" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str297}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=AsksVolume}" SortMemberPath="AsksVolume" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str295}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=BidsVolume}" SortMemberPath="BidsVolume" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str3154}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Change}" SortMemberPath="Change" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="VVAP" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=VWAP}" SortMemberPath="VWAP" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str300}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Delta}" SortMemberPath="Delta" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str301}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Gamma}" SortMemberPath="Gamma" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str302}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Vega}" SortMemberPath="Vega" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str303}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Theta}" SortMemberPath="Theta" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str317}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Rho}" SortMemberPath="Rho" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr600}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=SettlementPrice}" SortMemberPath="SettlementPrice" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr245}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=TradesCount}" SortMemberPath="TradesCount" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.AveragePrice}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=AveragePrice}" SortMemberPath="AveragePrice" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str321}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Yield}" SortMemberPath="Yield" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr320}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=HighBidPrice}" SortMemberPath="HighBidPrice" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr323}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LowAskPrice}" SortMemberPath="LowAskPrice" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str288}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=MinPrice}" SortMemberPath="MinPrice" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str563}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=MaxPrice}" SortMemberPath="MaxPrice" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="P/E" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=PriceEarnings}" SortMemberPath="PriceEarnings" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="Forward P/E" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ForwardPriceEarnings}" SortMemberPath="ForwardPriceEarnings" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="PEG" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=PriceEarningsGrowth}" SortMemberPath="PriceEarningsGrowth" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="P/S" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=PriceSales}" SortMemberPath="PriceSales" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="P/B" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=PriceBook}" SortMemberPath="PriceBook" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="P/CF" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=PriceCash}" SortMemberPath="PriceCash" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="P/FCF" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=PriceFreeCash}" SortMemberPath="PriceFreeCash" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="Payout" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Payout}" SortMemberPath="Payout" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str331}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=SharesOutstanding}" SortMemberPath="SharesOutstanding" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="Shares Float" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=SharesFloat}" SortMemberPath="SharesFloat" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="Float Short" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=FloatShort}" SortMemberPath="FloatShort" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="Short" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ShortRatio}" SortMemberPath="ShortRatio" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="ROA" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ReturnOnAssets}" SortMemberPath="ReturnOnAssets" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="ROE" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ReturnOnEquity}" SortMemberPath="ReturnOnEquity" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="ROI" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ReturnOnInvestment}" SortMemberPath="ReturnOnInvestment" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str332}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=CurrentRatio}" SortMemberPath="CurrentRatio" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str333}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=QuickRatio}" SortMemberPath="QuickRatio" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str334}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LongTermDebtEquity}" SortMemberPath="LongTermDebtEquity" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str335}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=TotalDebtEquity}" SortMemberPath="TotalDebtEquity" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str336}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=GrossMargin}" SortMemberPath="GrossMargin" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str337}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=OperatingMargin}" SortMemberPath="OperatingMargin" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str338}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=ProfitMargin}" SortMemberPath="ProfitMargin" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str339}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=Beta}" SortMemberPath="Beta" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="ATR" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=AverageTrueRange}" SortMemberPath="AverageTrueRange" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str340}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=HistoricalVolatilityWeek}" SortMemberPath="HistoricalVolatilityWeek" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str341}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=HistoricalVolatilityMonth}" SortMemberPath="HistoricalVolatilityMonth" Visibility="Collapsed" />
+		<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Str342}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=IsSystem}" SortMemberPath="IsSystem" Visibility="Collapsed" />
+	</ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

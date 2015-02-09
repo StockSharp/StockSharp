@@ -1,0 +1,110 @@
+<UserControl
+		x:Class="StockSharp.Xaml.Monitor"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+		mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="600"
+		xmlns:local="clr-namespace:StockSharp.Xaml"
+		xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase">
+	<UserControl.Resources>
+		<!--<local:SourceStateConverter x:Key="SourceStateConverter" />-->
+
+		<!-- a data template for bound ShopCategory instances -->
+		<DataTemplate x:Key="StrategyNodeTemplate" DataType="{x:Type local:LogSourceNode}">
+			<StackPanel x:Name="GroupPanel" Orientation="Horizontal" Margin="0,2,0,2">
+				<Image x:Name="Folder" Source="/StockSharp.Xaml;component/Images/open_16x16.png" />
+				<TextBlock x:Name="CategoryName" Margin="2,0,0,0" Text="{Binding Path=Name}" />
+			</StackPanel>
+
+			<DataTemplate.Triggers>
+				<DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+					<Setter Property="FontWeight" TargetName="CategoryName" Value="Bold" />
+					<Setter Property="Effect">
+						<Setter.Value>
+							<DropShadowEffect ShadowDepth="2" BlurRadius="10" RenderingBias="Quality" />
+						</Setter.Value>
+					</Setter>
+				</DataTrigger>
+
+				<!-- custom icons for the root nodes -->
+				<!--<DataTrigger Binding="{Binding Path=Source, Converter={StaticResource SourceStateConverter}}" Value="-1">
+					<Setter Property="Source" TargetName="Folder" Value="/StockSharp.Xaml;component/Images/Process.png" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Source, Converter={StaticResource SourceStateConverter}}" Value="0">
+					<Setter Property="Source" TargetName="Folder" Value="/StockSharp.Xaml;component/Images/Process.png" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Source, Converter={StaticResource SourceStateConverter}}" Value="1">
+					<Setter Property="Source" TargetName="Folder" Value="/StockSharp.Xaml;component/Images/StrategyStopping.png" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Source, Converter={StaticResource SourceStateConverter}}" Value="2">
+					<Setter Property="Source" TargetName="Folder" Value="/StockSharp.Xaml;component/Images/StrategyStopped.png" />
+				</DataTrigger>-->
+				<DataTrigger Binding="{Binding Path=Name}" Value="{x:Static loc:LocalizedStrings.Str1355}">
+					<Setter Property="Source" TargetName="Folder" Value="/StockSharp.Xaml;component/Images/open_16x16.png" />
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Name}" Value="{x:Static loc:LocalizedStrings.Str1559}">
+					<Setter Property="Source" TargetName="Folder" Value="/StockSharp.Xaml;component/Images/MonitorRoot.png" />
+				</DataTrigger>
+			</DataTemplate.Triggers>
+		</DataTemplate>
+
+
+		<!-- this is the style that is applied to the tree -->
+		<Style x:Key="SimpleFolders" TargetType="{x:Type TreeViewItem}">
+			<Style.Resources>
+				<!-- override default brushes that show bad background colors -->
+				<Brush x:Key="{x:Static SystemColors.HighlightBrushKey}">Transparent</Brush>
+				<Brush x:Key="{x:Static SystemColors.ControlBrushKey}">Transparent</Brush>
+				<Brush x:Key="{x:Static SystemColors.ControlTextColorKey}">Black</Brush>
+			</Style.Resources>
+			<Setter Property="HeaderTemplate" Value="{StaticResource StrategyNodeTemplate}" />
+			<!--<Style.Triggers>
+            </Style.Triggers>-->
+		</Style>
+
+		<!-- 
+    A default style for treeview controls. This one will automatically
+    be applied as the custom tree's 'TreeStyle' property is not set.
+  -->
+		<Style x:Key="SimpleTreeStyle" TargetType="{x:Type TreeView}">
+			<Setter Property="Background">
+				<Setter.Value>
+					<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+						<GradientStop Color="#FFF" Offset="0.0" />
+						<GradientStop Color="#AAA" Offset="1.0" />
+					</LinearGradientBrush>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="BorderThickness" Value="4" />
+			<Setter Property="BorderBrush" Value="#FFA6AAAB" />
+		</Style>
+
+		<!-- sorts categories by names in ascending order -->
+		<cm:SortDescriptionCollection x:Key="AscendingNames">
+			<cm:SortDescription PropertyName="Name" Direction="Ascending" />
+		</cm:SortDescriptionCollection>
+
+		<!-- default text style -->
+		<Style TargetType="TextBlock">
+			<Setter Property="TextWrapping" Value="Wrap" />
+		</Style>
+	</UserControl.Resources>
+	
+	<Grid x:Name="RootGrid">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto" MinWidth="175" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+
+		<local:LogSourceTree x:Name="SourcesTree"
+                          TreeNodeStyle="{StaticResource SimpleFolders}"
+                          TreeStyle="{StaticResource SimpleTreeStyle}"
+                          NodeSortDescriptions="{StaticResource AscendingNames}"
+                          SelectedItemChanged="OnSelectedItemChanged" />
+
+		<GridSplitter Grid.Column="0" HorizontalAlignment="Right" Width="2" />
+
+        <local:LogControl x:Name="LogCtrl" Grid.Column="1" />
+	</Grid>
+</UserControl>
