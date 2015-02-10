@@ -224,14 +224,15 @@
 									<ColumnDefinition />
 									<ColumnDefinition />
 									<ColumnDefinition />
+									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
 								
 								<TextBlock Grid.Column="0" Text="T" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str985}" Visibility="{Binding Path=IsTradeEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="1" Text="D" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1414}" Visibility="{Binding Path=IsDepthEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="2" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1416}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="3" Text="L1" Margin="1" ToolTip="Level 1" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="4" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                <TextBlock Grid.Column="4" Text="E" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OwnTransactions}" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="2" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="3" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1416}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="4" Text="L1" Margin="1" ToolTip="Level 1" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <TextBlock Grid.Column="5" Text="E" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OwnTransactions}" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 							</Grid>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
