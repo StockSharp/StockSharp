@@ -43,8 +43,29 @@ namespace StockSharp.OpenECry
 
 		public static decimal Cast(this OEC.API.Contract contract, double value)
 		{
+			var d = value.SafeCast();
+
+			if (d == 0)
+				return 0;
+
 			var priceStep = (decimal)contract.TickSize;
 			return MathHelper.Round((decimal)value, priceStep, priceStep.GetCachedDecimals());
+		}
+
+		public static decimal SafeCast(this double value)
+		{
+			if (value.IsNaN())
+				return 0;
+
+			return (decimal)value;
+		}
+
+		public static decimal SafeCast(this float value)
+		{
+			if (value.IsNaN())
+				return 0;
+
+			return (decimal)value;
 		}
 
 		public static CurrencyTypes ToCurrency(this string str)
