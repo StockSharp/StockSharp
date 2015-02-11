@@ -10,7 +10,6 @@ namespace StockSharp.Hydra.Oanda
 	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Oanda;
 	using StockSharp.Messages;

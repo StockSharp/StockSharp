@@ -27,50 +27,12 @@ namespace StockSharp.OpenECry
 		{
 			foreach (var account in SessionHolder.Session.Accounts)
 			{
-				SendOutMessage(new PortfolioMessage
-				{
-					OriginalTransactionId = message.TransactionId,
-					PortfolioName = account.Name,
-					Currency = account.BaseCurrency.Name.ToCurrency(),
-				});
-
-				SendOutMessage(new PortfolioChangeMessage
-				{
-					PortfolioName = account.Name
-				}
-				.TryAdd(PositionChangeTypes.BeginValue, (decimal)account.TotalBalance.InitialMargin)
-				.TryAdd(PositionChangeTypes.CurrentPrice, (decimal)account.TotalBalance.Cash)
-				.TryAdd(PositionChangeTypes.UnrealizedPnL, (decimal)account.TotalBalance.HypoPnL)
-				.TryAdd(PositionChangeTypes.RealizedPnL, (decimal)account.TotalBalance.RealizedPnL));
+				ProcessAccount(account, null);
 
 				foreach (var list in account.DetailedPositions)
 				{
 					foreach (var position in list)
-					{
-						var secId = new SecurityId
-						{
-							SecurityCode = position.Contract.Symbol,
-							BoardCode = position.Contract.Exchange.Name,
-						};
-
-						SendOutMessage(new PositionMessage
-						{
-							PortfolioName = account.Name,
-							SecurityId = secId,
-						});
-
-						SendOutMessage(new PositionChangeMessage
-						{
-							PortfolioName = account.Name,
-							SecurityId = secId,
-						}
-						.TryAdd(PositionChangeTypes.BeginValue, (decimal)position.InitialMargin)
-						.TryAdd(PositionChangeTypes.UnrealizedPnL, (decimal)position.HypoPnL)
-						.TryAdd(PositionChangeTypes.RealizedPnL, (decimal)position.SettlePnL)
-						.TryAdd(PositionChangeTypes.Commission, (decimal)(position.OpenCommissions + position.RealizedCommissions))
-						.TryAdd(PositionChangeTypes.CurrentPrice, (decimal)position.MarketPrice)
-						.TryAdd(PositionChangeTypes.AveragePrice, (decimal)position.Net.Price));
-					}
+						ProcessPosition(position);
 				}
 			}
 
@@ -104,11 +66,11 @@ namespace StockSharp.OpenECry
 							case OpenECryStopType.StopLimit:
 								draft.Type = OrderType.StopLimit;
 								draft.Price2 = draft.Price;
-								draft.Price = cond.StopPrice.To<double>();
+								draft.Price = (double)cond.StopPrice;
 								break;
 							case OpenECryStopType.StopMarket:
 								draft.Type = OrderType.Stop;
-								draft.Price = cond.StopPrice.To<double>();
+								draft.Price = (double)cond.StopPrice;
 								draft.Price2 = 0;
 								break;
 							default:
@@ -127,11 +89,11 @@ namespace StockSharp.OpenECry
 							case OpenECryStopType.TrailingStopLimit:
 								draft.Type = OrderType.TrailingStopLimit;
 								draft.Price2 = draft.Price;
-								draft.Price = cond.StopPrice.To<double>();
+								draft.Price = (double)cond.StopPrice;
 								break;
 							case OpenECryStopType.TrailingStopMarket:
 								draft.Type = OrderType.TrailingStopLoss;
-								draft.Price = cond.StopPrice.To<double>();
+								draft.Price = (double)cond.StopPrice;
 								draft.Price2 = 0;
 								break;
 							default:
@@ -139,9 +101,9 @@ namespace StockSharp.OpenECry
 						}
 
 						if (cond.AssetType == OpenECryOrderCondition.AssetTypeEnum.Equity)
-							draft.SetEquityTSData(cond.Delta.To<double>(), cond.IsPercentDelta, cond.TriggerType.ToOec());
+							draft.SetEquityTSData((double)cond.Delta, cond.IsPercentDelta, cond.TriggerType.ToOec());
 						else
-							draft.SetTSData(cond.ReferencePrice.To<double>(), cond.Delta.To<double>());
+							draft.SetTSData((double)cond.ReferencePrice, (double)cond.Delta);
 
 						break;
 					default:
@@ -228,13 +190,14 @@ namespace StockSharp.OpenECry
 						BoardCode = position.Contract.Exchange.Name,
 					}
 				)
-			.Add(PositionChangeTypes.BeginValue, (decimal)position.Prev.Volume)
-			.Add(PositionChangeTypes.CurrentValue, (decimal)position.ContractSize)
-			.Add(PositionChangeTypes.CurrentPrice, (decimal)position.CurrencyCostBasis)
-			.Add(PositionChangeTypes.RealizedPnL, (decimal)position.CurrencyNetGain)
-			.Add(PositionChangeTypes.UnrealizedPnL, (decimal)position.CurrencyOTE)
-			.Add(PositionChangeTypes.Commission, (decimal)position.RealizedCommissions)
-			.Add(PositionChangeTypes.VariationMargin, (decimal)position.InitialMargin));
+			.TryAdd(PositionChangeTypes.BeginValue, (decimal)position.Prev.Volume)
+			.TryAdd(PositionChangeTypes.CurrentValue, position.ContractSize.SafeCast())
+			.TryAdd(PositionChangeTypes.CurrentPrice, position.CurrencyCostBasis.SafeCast())
+			.TryAdd(PositionChangeTypes.RealizedPnL, position.CurrencyNetGain.SafeCast())
+			.TryAdd(PositionChangeTypes.UnrealizedPnL, position.CurrencyOTE.SafeCast())
+			.TryAdd(PositionChangeTypes.Commission, position.OpenCommissions.SafeCast() + position.RealizedCommissions.SafeCast())
+			.TryAdd(PositionChangeTypes.VariationMargin, position.InitialMargin.SafeCast())
+			.TryAdd(PositionChangeTypes.AveragePrice, position.Net.Price.SafeCast()));
 		}
 
 		private void SessionOnAllocationBlocksChanged(AllocationBlockList allocations)
@@ -254,17 +217,18 @@ namespace StockSharp.OpenECry
 
 			var balance = currency == null ? account.TotalBalance : account.Balances[currency];
 
-			var commission = (decimal)account.AvgPositions
+			var commission = account.AvgPositions
 				.Where(pos => balance == account.TotalBalance || pos.Contract.Currency.ID == balance.Currency.ID)
-				.Sum(pos => pos.RealizedCommissions + pos.OpenCommissions);
+				.Sum(pos => pos.RealizedCommissions.SafeCast() + pos.OpenCommissions.SafeCast());
 
-			SendOutMessage(
-				SessionHolder.CreatePortfolioChangeMessage(account.Name)
-					.Add(PositionChangeTypes.BeginValue, (decimal)balance.Cash)
-					.Add(PositionChangeTypes.RealizedPnL, (decimal)balance.RealizedPnL)
-					.Add(PositionChangeTypes.UnrealizedPnL, (decimal)balance.OpenPnL)
-					.Add(PositionChangeTypes.CurrentValue, (decimal)balance.NetLiquidatingValue)
-					.Add(PositionChangeTypes.Commission, commission));
+			var msg = SessionHolder.CreatePortfolioChangeMessage(account.Name)
+				.TryAdd(PositionChangeTypes.BeginValue, balance.Cash.SafeCast())
+				.TryAdd(PositionChangeTypes.RealizedPnL, balance.RealizedPnL.SafeCast())
+				.TryAdd(PositionChangeTypes.UnrealizedPnL, balance.OpenPnL.SafeCast())
+				.TryAdd(PositionChangeTypes.CurrentValue, balance.NetLiquidatingValue.SafeCast())
+				.TryAdd(PositionChangeTypes.Commission, commission);
+
+			SendOutMessage(msg);
 		}
 
 		private void SessionOnAccountRiskLimitChanged(OEC.API.Account account)
@@ -332,7 +296,7 @@ namespace StockSharp.OpenECry
 					BoardCode = order.Route == null ? order.Contract.Exchange.Name : order.Route.Name,
 				},
 				Comment = order.Comments,
-				Price = (decimal)order.Price,
+				Price = order.Contract.Cast(order.Price),
 			};
 
 			var currVersion = order.Versions.Current;
@@ -360,12 +324,12 @@ namespace StockSharp.OpenECry
 				{
 					case OrderType.StopLimit:
 						condition.StopType = OpenECryStopType.StopLimit;
-						condition.StopPrice = order.Price.To<decimal>();
-						execMsg.Price = order.Price2.To<decimal>();
+						condition.StopPrice = order.Contract.Cast(order.Price);
+						execMsg.Price = order.Contract.Cast(order.Price2);
 						break;
 					case OrderType.Stop:
 						condition.StopType = OpenECryStopType.StopMarket;
-						condition.StopPrice = order.Price.To<decimal>();
+						condition.StopPrice = order.Contract.Cast(order.Price);
 						//execMsg.Price = 0;
 						break;
 					case OrderType.TrailingStopLoss:
@@ -377,10 +341,10 @@ namespace StockSharp.OpenECry
 						if (eqtsData != null)
 						{
 							condition.StopType = stopType;
-							condition.Delta = eqtsData.Amount.To<decimal>();
+							condition.Delta = eqtsData.Amount.SafeCast();
 							condition.IsPercentDelta = eqtsData.IsPercentAmount;
 							condition.TriggerType = eqtsData.TriggerType.ToStockSharp();
-							condition.StopPrice = order.Price.To<decimal>();
+							condition.StopPrice = order.Contract.Cast(order.Price);
 						}
 						else
 						{
@@ -389,9 +353,9 @@ namespace StockSharp.OpenECry
 							if (tsData != null)
 							{
 								condition.StopType = stopType;
-								condition.Delta = tsData.Delta.To<decimal>();
-								condition.ReferencePrice = tsData.ReferencePrice.To<decimal>();
-								condition.StopPrice = order.Price.To<decimal>();
+								condition.Delta = tsData.Delta.SafeCast();
+								condition.ReferencePrice = tsData.ReferencePrice.SafeCast();
+								condition.StopPrice = order.Contract.Cast(order.Price);
 							}
 						}
 
@@ -486,17 +450,19 @@ namespace StockSharp.OpenECry
 			if (!fill.Active)
 				return;
 
+			var commission = fill.Commission.SafeCast();
+
 			SendOutMessage(new ExecutionMessage
 			{
 				ExecutionType = ExecutionTypes.Trade,
 				OriginalTransactionId = _orderTransactions.TryGetValue2(order) ?? 0,
 				OrderId = order.ID,
 				TradeId = fill.ID,
-				TradePrice = fill.Price.To<decimal>(),
+				TradePrice = order.Contract.Cast(fill.Price),
 				ServerTime = fill.Timestamp.ApplyTimeZone(TimeHelper.Est),
 				Volume = fill.Quantity,
 				SystemComment = fill.Comments,
-				Commission = (decimal?)fill.Commission,
+				Commission = commission == 0 ? (decimal?)null : commission,
 			});
 		}
 
