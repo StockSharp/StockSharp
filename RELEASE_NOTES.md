@@ -7,6 +7,10 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.63:
+* (bug) OpenECry. Fix double <-> decimal casting.
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/16
+
 ###v4.2.62:
 * (bug) Micex. Format price fix
 * (feature) Source codes for Messages, BE, Algo, Xaml, Localization, Logging, Community and few connectors (SmartCOM, AlfaDirect, Transaq, BTCE, OpenECry, LMAX, MatLab, CQG, Sterling, RSS, Alor)
