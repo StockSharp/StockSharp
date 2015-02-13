@@ -104,7 +104,7 @@
       <HintPath>..\..\References\NCalc.dll</HintPath>
     </Reference>
     <Reference Include="Northwoods.GoWPF">
-      <HintPath>..\..\References\Northwoods.GoWPF.dll</HintPath>
+      <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
