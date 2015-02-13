@@ -1,0 +1,6 @@
+ActiproSoftware.Products.Editors.EditorsLicenseToken, ActiproSoftware.Editors.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9
+ActiproSoftware.Products.Docking.DockingLicenseToken, ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9
+ActiproSoftware.Products.Navigation.NavigationLicenseToken, ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9
+
+ActiproSoftware.Products.SyntaxEditor.SyntaxEditorLicenseToken, ActiproSoftware.SyntaxEditor.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9
+ActiproSoftware.Products.SyntaxEditor.Addons.DotNet.DotNetLanguagesAddonLicenseToken, ActiproSoftware.SyntaxEditor.Addons.DotNet.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9
