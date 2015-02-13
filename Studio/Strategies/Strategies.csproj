@@ -43,7 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
+      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>

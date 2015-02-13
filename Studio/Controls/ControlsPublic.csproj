@@ -56,7 +56,7 @@
       <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
+      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf">
       <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
