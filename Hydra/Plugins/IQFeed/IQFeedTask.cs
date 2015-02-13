@@ -291,7 +291,7 @@ namespace StockSharp.Hydra.IQFeed
 						this.AddInfoLog(LocalizedStrings.Str2294Params, date, security.Security.Id);
 
 						bool isSuccess;
-						var trades = Connector.Connector.GetHitoricalLevel1(security.Security.ToSecurityId(), _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
+						var trades = Connector.Connector.GetHistoricalLevel1(security.Security.ToSecurityId(), _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{
@@ -334,7 +334,7 @@ namespace StockSharp.Hydra.IQFeed
 						this.AddInfoLog(LocalizedStrings.Str2298Params, series, date, security.Security.Id);
 
 						bool isSuccess;
-						var candles = Connector.Connector.GetHitoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
+						var candles = Connector.Connector.GetHistoricalCandles(security.Security, series.CandleType, series.Arg, date, date.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{

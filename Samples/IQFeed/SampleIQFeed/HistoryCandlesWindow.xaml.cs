@@ -56,7 +56,7 @@ namespace SampleIQFeed
 			}
 
 			bool isSuccess;
-			var candles = MainWindow.Instance.Trader.GetHitoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
+			var candles = MainWindow.Instance.Trader.GetHistoricalCandles(_security, typeof(TimeFrameCandle), (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.Value, (DateTime)DateToPicker.Value, out isSuccess);
 
 			Chart.Reset(new[] { _candlesElem });
 

@@ -505,7 +505,7 @@
       <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
       <returns>Исторические сделки.</returns>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHitoricalLevel1(StockSharp.Messages.SecurityId,System.Int64,System.Boolean@)">
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.Int64,System.Boolean@)">
       <summary>
             Получить исторических тиков.
             </summary>
@@ -514,7 +514,7 @@
       <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
       <returns>Исторические сделки.</returns>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHitoricalLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Boolean@)">
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Boolean@)">
       <summary>
             Получить исторических тиков.
             </summary>
@@ -524,7 +524,7 @@
       <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
       <returns>Исторические сделки.</returns>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHitoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)">
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)">
       <summary>
             Получить исторические свечи.
             </summary>
@@ -535,7 +535,7 @@
       <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
       <returns>Исторические свечи.</returns>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHitoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTime,System.DateTime,System.Boolean@)">
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTime,System.DateTime,System.Boolean@)">
       <summary>
             Получить исторические свечи.
             </summary>
