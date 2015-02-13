@@ -59,6 +59,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Abt.Controls.SciChart.Wpf">
+      <HintPath>..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -123,6 +126,7 @@
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="SmartFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Ecng\SmartFormat.dll</HintPath>
@@ -135,8 +139,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
@@ -374,6 +380,9 @@
     <Compile Include="Storages\StorageFormats.cs" />
     <Compile Include="Storages\StorageHelper.cs" />
     <Compile Include="Storages\StorageRegistry.cs" />
+    <Compile Include="Strategies\Analytics\BaseAnalyticsStrategy.cs" />
+    <Compile Include="Strategies\Analytics\DailyHighestVolumeStrategy.cs" />
+    <Compile Include="Strategies\Analytics\PriceVolumeDistributionStrategy.cs" />
     <Compile Include="Strategies\BasketStrategy.cs" />
     <Compile Include="Strategies\IStrategyChildStrategyList.cs" />
     <Compile Include="Strategies\Reporting\CsvStrategyReport.cs" />

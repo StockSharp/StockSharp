@@ -42,6 +42,12 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Fix">
+      <HintPath>..\..\..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Plaza">
+      <HintPath>..\..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -128,17 +134,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Fix">
-      <HintPath>..\..\..\References\StockSharp.Fix.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Plaza">
-      <HintPath>..\..\..\References\StockSharp.Plaza.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quik">
-      <HintPath>..\..\..\References\StockSharp.Quik.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>
@@ -146,6 +141,10 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Connectors\Quik\QuikPublic.csproj">
+      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
+      <Name>QuikPublic</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Connectors\SmartCom\SmartCom.csproj">
       <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>

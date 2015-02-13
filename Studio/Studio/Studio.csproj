@@ -455,7 +455,7 @@
       <Project>{de2dc640-fa5b-46f2-92e7-e5a53232185f}</Project>
       <Name>Fix</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
+    <ProjectReference Include="..\..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
       <Project>{f17d780e-6f82-40fd-84e1-c4eb09853bbd}</Project>
       <Name>InteractiveBrokers</Name>
     </ProjectReference>
@@ -495,7 +495,7 @@
       <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
       <Name>SmartCom</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj">
+    <ProjectReference Include="..\..\Connectors\Quik\Quik.csproj">
       <Project>{1b798a4e-2271-46f9-9c2d-4e563114e268}</Project>
       <Name>Quik</Name>
     </ProjectReference>

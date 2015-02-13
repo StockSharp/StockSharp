@@ -57,10 +57,19 @@
     <ApplicationIcon>..\stocksharp_data.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Abt.Controls.SciChart.Wpf">
+      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -77,9 +86,6 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf">
       <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
@@ -414,17 +420,8 @@
     <Resource Include="Images\progressbar.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.History">
-      <HintPath>..\..\References\StockSharp.Algo.History.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Algo.Strategies">
-      <HintPath>..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Licensing">
       <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -269,7 +269,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "Messages\Messag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessEntities", "BusinessEntities\BusinessEntities.csproj", "{DCE69DB8-53CA-4B7F-9368-02F175A31074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xaml", "Xaml\XamlPublic.csproj", "{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlPublic", "Xaml\XamlPublic.csproj", "{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alerts", "Alerts\Alerts.csproj", "{96725E45-F785-4612-9743-BFB40A9E725D}"
 EndProject
@@ -304,6 +304,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSterling", "Samples\Sterling\SampleSterling\SampleSterling.csproj", "{A6B6041F-B174-43C9-89B2-53545C1303F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCQG", "Samples\CQG\SampleCQG\SampleCQG.csproj", "{0E498B61-BE10-480A-94A4-E25B77E3FE82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveBrokers", "Connectors\InteractiveBrokers\InteractiveBrokers.csproj", "{F17D780E-6F82-40FD-84E1-C4EB09853BBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quik", "Connectors\Quik\QuikPublic.csproj", "{1B798A4E-2271-46F9-9C2D-4E563114E268}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -729,6 +733,14 @@ Global
 		{0E498B61-BE10-480A-94A4-E25B77E3FE82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E498B61-BE10-480A-94A4-E25B77E3FE82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E498B61-BE10-480A-94A4-E25B77E3FE82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -858,6 +870,8 @@ Global
 		{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6} = {42B35529-B842-4F17-9277-0618B074AA91}
 		{A6B6041F-B174-43C9-89B2-53545C1303F5} = {F6F21E78-593D-4870-9564-D7CFCB5FD5D8}
 		{0E498B61-BE10-480A-94A4-E25B77E3FE82} = {AA215EA3-1D80-4C64-99CE-DAF73795AB3A}
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{1B798A4E-2271-46F9-9C2D-4E563114E268} = {42B35529-B842-4F17-9277-0618B074AA91}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi
