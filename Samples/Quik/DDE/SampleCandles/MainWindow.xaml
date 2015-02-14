@@ -5,37 +5,39 @@
 	xmlns:EcngTradingXaml="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Title="{x:Static loc:LocalizedStrings.XamlStr568}" Height="300" Width="500">
     <Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="Auto" />
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-		<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr592}" />
-		<TextBox x:Name="Path" Text="" Grid.Column="1" Grid.Row="0" />
-		<Button x:Name="FindPath" Grid.Column="2" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+        <Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr592}" />
+        <TextBox x:Name="Path" Text="" Grid.Column="1" Grid.Row="0" />
+        <Button x:Name="FindPath" Grid.Column="2" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
 
-		<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-		<Button x:Name="ExportDde" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr850}" Click="ExportDdeClick" />
-		
-		<ComboBox x:Name="CandleType" Grid.Column="0" Grid.Row="3" SelectionChanged="CandleTypesSelectionChanged">
-		</ComboBox>
-		<ComboBox x:Name="Security" DisplayMemberPath="Code" Grid.Column="1" Grid.Row="3" SelectionChanged="SecuritySelectionChanged"  />
-		
-		<xctk:TimePicker x:Name="TimeFrame" Grid.Column="0" Grid.Row="4" IsEnabled="False" />
-		<EcngTradingXaml:UnitEditor x:Name="PriceRange" Grid.Column="1" Grid.Row="4" Width="100" IsEnabled="False" />
-		
-		<TextBox x:Name="VolumeCtrl" Grid.Column="0" Grid.Row="5" IsEnabled="False" Text="0" TextAlignment="Right"  />
-		
-		<Button x:Name="ShowChart" Grid.Column="1" Width="100" Grid.Row="5" Content="{x:Static loc:LocalizedStrings.Str3200}" IsEnabled="False" Click="ShowChartClick" />
-	</Grid>
+        <CheckBox x:Name="isDDE" Content="{x:Static loc:LocalizedStrings.ObsoleteDDE}" IsChecked="True" Grid.Row="1" VerticalAlignment="Center"/>
+
+        <Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
+        <Button x:Name="ExportDde" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Export}" Click="ExportDdeClick" />
+
+        <ComboBox x:Name="CandleType" Grid.Column="0" Grid.Row="3" SelectionChanged="CandleTypesSelectionChanged">
+        </ComboBox>
+        <ComboBox x:Name="Security" DisplayMemberPath="Code" Grid.Column="1" Grid.Row="3" SelectionChanged="SecuritySelectionChanged"  />
+
+        <xctk:TimePicker x:Name="TimeFrame" Grid.Column="0" Grid.Row="4" IsEnabled="False" />
+        <EcngTradingXaml:UnitEditor x:Name="PriceRange" Grid.Column="1" Grid.Row="4" Width="100" IsEnabled="False" />
+
+        <TextBox x:Name="VolumeCtrl" Grid.Column="0" Grid.Row="5" IsEnabled="False" Text="0" TextAlignment="Right"  />
+
+        <Button x:Name="ShowChart" Grid.Column="1" Width="100" Grid.Row="5" Content="{x:Static loc:LocalizedStrings.Str3200}" IsEnabled="False" Click="ShowChartClick" />
+    </Grid>
 </Window>
