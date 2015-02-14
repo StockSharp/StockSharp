@@ -1,0 +1,42 @@
+<UserControl x:Class="StockSharp.Xaml.ProxySettingsEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:xaml="clr-namespace:StockSharp.Xaml"
+             xmlns:xaml1="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+             x:Name="Ctrl">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static loc:LocalizedStrings.XamlStr218}"/>
+        <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding ElementName=Ctrl, Path=ProxySettings.UseProxy}"/>
+
+		<TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Address}"/>:</TextBlock>
+        <xaml:EndPointEditor Grid.Row="1" Grid.Column="1" EndPoint="{Binding ElementName=Ctrl, Path=ProxySettings.Address}"/>
+
+		<TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static loc:LocalizedStrings.XamlStr217}"/>
+		<CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding ElementName=Ctrl, Path=ProxySettings.ByPassOnLocal}"/>
+
+		<TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Authorization}"/>:</TextBlock>
+        <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding ElementName=Ctrl, Path=ProxySettings.UseCredentials}"/>
+
+		<TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Login}"/>:</TextBlock>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ElementName=Ctrl, Path=ProxySettings.Login}" 
+                 IsEnabled="{Binding ElementName=Ctrl, Path=ProxySettings.UseCredentials}"/>
+
+		<TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Password}"/>:</TextBlock>
+        <xaml1:SecretPicker Grid.Row="5" Grid.Column="1" Secret="{Binding ElementName=Ctrl, Path=ProxySettings.Password}" 
+                            IsEnabled="{Binding ElementName=Ctrl, Path=ProxySettings.UseCredentials}"/>
+    </Grid>
+</UserControl>

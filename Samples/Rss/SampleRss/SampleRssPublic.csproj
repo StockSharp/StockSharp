@@ -49,22 +49,22 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -116,35 +116,39 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo">
-      <HintPath>..\..\..\References\StockSharp.Algo.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BusinessEntities">
-      <HintPath>..\..\..\References\StockSharp.BusinessEntities.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Rss">
-      <HintPath>..\..\..\References\StockSharp.Rss.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Localization">
-      <HintPath>..\..\..\References\StockSharp.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Logging">
-      <HintPath>..\..\..\References\StockSharp.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Messages">
-      <HintPath>..\..\..\References\StockSharp.Messages.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml">
-      <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj">
+      <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Connectors\Rss\Rss.csproj">
+      <Project>{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}</Project>
+      <Name>Rss</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Logging\Logging.csproj">
+      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj">
+      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Xaml\Xaml.csproj">
+      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

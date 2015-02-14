@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.SmartCom</RootNamespace>
+    <AssemblyName>StockSharp.SmartCom</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.SmartCom.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.SmartCom.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.SmartCOM3_32">
+      <HintPath>..\..\References\SmartCOM\Interop.SmartCOM3_32.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.SmartCOM3_64">
+      <HintPath>..\..\References\SmartCOM\Interop.SmartCOM3_64.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.StClientLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\SmartCOM\Interop.StClientLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="SmartComMessageAdapter_MarketData.cs" />
+    <Compile Include="SmartComMessageAdapter.cs" />
+    <Compile Include="SmartComSessionHolder.cs" />
+    <Compile Include="SmartComMessageAdapter_Transaction.cs" />
+    <Compile Include="Native\ISmartComWrapper.cs" />
+    <Compile Include="Native\SmartCom3Wrapper32.cs" />
+    <Compile Include="Native\SmartCom3Wrapper64.cs" />
+    <Compile Include="Native\SmartComWrapper.cs" />
+    <Compile Include="Xaml\SmartComAddressComboBox.cs" />
+    <Compile Include="Native\SmartComHelper.cs" />
+    <Compile Include="SmartComExtensionInfoHelper.cs" />
+    <Compile Include="SmartComAddresses.cs" />
+    <Compile Include="Native\SmartCom2Wrapper.cs" />
+    <Compile Include="SmartComHistoryDirections.cs" />
+    <Compile Include="SmartComOrderCondition.cs" />
+    <Compile Include="SmartComTimeFrames.cs" />
+    <Compile Include="SmartTrader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xaml\SmartComEndPointEditor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Xaml\Xaml.csproj">
+      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

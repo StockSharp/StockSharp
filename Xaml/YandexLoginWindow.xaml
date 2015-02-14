@@ -1,0 +1,14 @@
+<Window x:Class="StockSharp.Xaml.YandexLoginWindow" x:ClassModifier="internal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="{x:Static loc:LocalizedStrings.ShareFile}" Height="480" Width="640" 
+        WindowStartupLocation="CenterScreen" Topmost="True" ShowInTaskbar="False"
+        Loaded="YandexLoginWindow_OnLoaded">
+
+    <xctk:BusyIndicator x:Name="BusyIndicator" IsBusy="True" DisplayAfter="0">
+        <Grid>
+            <WebBrowser Name="Browser" />
+        </Grid>
+    </xctk:BusyIndicator>
+</Window>

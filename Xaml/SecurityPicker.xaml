@@ -1,0 +1,37 @@
+<UserControl x:Class="StockSharp.Xaml.SecurityPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xaml="clr-namespace:StockSharp.Xaml"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+			 mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="350">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition MinWidth="50" />
+				<ColumnDefinition MinWidth="50" MaxWidth="150" />
+			</Grid.ColumnDefinitions>
+
+			<Label x:Name="TitleCtrl" Grid.Column="0" FontWeight="Bold" />
+
+			<TextBox x:Name="SecurityFilterCtrl" Grid.Column="1" TextChanged="SecurityFilterCtrl_OnTextChanged" Margin="0,0,0,3" TabIndex="0" />
+			<xaml:SecurityTypeComboBox x:Name="SecurityTypeCtrl" Grid.Column="2" SelectionChanged="SecurityTypes_OnSelectionChanged" Margin="5,0,0,3" TabIndex="1" />
+		</Grid>
+
+		<DockPanel Grid.Column="0" Grid.Row="1">
+			<StatusBar DockPanel.Dock="Bottom">
+				<StatusBarItem>
+					<TextBlock Name="Counter" Text="{x:Static loc:LocalizedStrings.XamlStr431}" />
+				</StatusBarItem>
+			</StatusBar>
+			<xaml:SecurityGrid x:Name="SecuritiesCtrl" SelectionChanged="SecuritiesCtrl_OnSelectionChanged" PropertyChanged="SecuritiesCtrl_OnPropertyChanged" TabIndex="2" MouseDoubleClick="HandleDoubleClick" />
+		</DockPanel>
+	</Grid>
+</UserControl>

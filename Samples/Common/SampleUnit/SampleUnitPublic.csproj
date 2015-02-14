@@ -42,13 +42,13 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\References\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\References\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -59,20 +59,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.BusinessEntities">
-      <HintPath>..\..\..\References\StockSharp.BusinessEntities.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Messages">
-      <HintPath>..\..\..\References\StockSharp.Messages.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\References\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -61,92 +61,92 @@
   <ItemGroup>
     <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Editors.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Ribbon.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Ribbon.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Ribbon.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Views.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Views.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Views.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="AutomaticUpdaterWPF, Version=2.6.18.4, Culture=neutral, PublicKeyToken=41f970429d9c8a0e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\AutomaticUpdaterWPF.dll</HintPath>
+      <HintPath>..\..\References\AutomaticUpdaterWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Configuration">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Configuration.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Data.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data.Providers">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Data.Providers.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Data.Providers.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Interop.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Net.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Security">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Security.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Security.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Transactions">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Transactions.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Transactions.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="Northwoods.GoWPF">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Northwoods.GoWPF.dll</HintPath>
+      <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ookii.Dialogs.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="QuickFix, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\QuickFix.dll</HintPath>
+      <HintPath>..\..\Connectors\Fix\QuickFix.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -159,7 +159,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -407,7 +407,7 @@
     <Resource Include="StockSharp.db" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Alerts\Alerts.csproj">
+    <ProjectReference Include="..\..\Alerts\Alerts.csproj">
       <Project>{96725E45-F785-4612-9743-BFB40A9E725D}</Project>
       <Name>Alerts</Name>
     </ProjectReference>
@@ -419,19 +419,19 @@
       <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>
       <Name>Algo.Strategies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo\Algo.csproj">
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\BusinessEntities\BusinessEntities.csproj">
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Community\Community.csproj">
+    <ProjectReference Include="..\..\Community\Community.csproj">
       <Project>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</Project>
       <Name>Community</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\AlfaDirect\AlfaDirect.csproj">
+    <ProjectReference Include="..\..\Connectors\AlfaDirect\AlfaDirect.csproj">
       <Project>{aaa445e0-aa85-4b49-ad45-edd1b4839137}</Project>
       <Name>AlfaDirect</Name>
     </ProjectReference>
@@ -443,7 +443,7 @@
       <Project>{c0d530dd-1e5a-4be4-9ac6-ff11e5fc9b26}</Project>
       <Name>Blackwood</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Btce\Btce.csproj">
+    <ProjectReference Include="..\..\Connectors\Btce\Btce.csproj">
       <Project>{af225452-1cf1-48a2-b381-c02bebe643d7}</Project>
       <Name>Btce</Name>
     </ProjectReference>
@@ -455,7 +455,7 @@
       <Project>{de2dc640-fa5b-46f2-92e7-e5a53232185f}</Project>
       <Name>Fix</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
+    <ProjectReference Include="..\..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj">
       <Project>{f17d780e-6f82-40fd-84e1-c4eb09853bbd}</Project>
       <Name>InteractiveBrokers</Name>
     </ProjectReference>
@@ -463,7 +463,7 @@
       <Project>{f3068408-9764-432e-8fb4-596b308edb4f}</Project>
       <Name>IQFeed</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\LMAX\LMAX.csproj">
+    <ProjectReference Include="..\..\Connectors\LMAX\LMAX.csproj">
       <Project>{4b37342e-9a01-499b-9e32-2e9948a6d0c4}</Project>
       <Name>LMAX</Name>
     </ProjectReference>
@@ -475,7 +475,7 @@
       <Project>{9188d051-7faa-4cf7-9d93-6d59e2faedd0}</Project>
       <Name>Oanda</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\OpenECry\OpenECry.csproj">
+    <ProjectReference Include="..\..\Connectors\OpenECry\OpenECry.csproj">
       <Project>{17eae926-c9a9-40c7-8d54-3545077b4ab7}</Project>
       <Name>OpenECry</Name>
     </ProjectReference>
@@ -487,19 +487,19 @@
       <Project>{ffbc7740-0d2b-49ba-8f95-59e4fc915d06}</Project>
       <Name>Rithmic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Rss\Rss.csproj">
+    <ProjectReference Include="..\..\Connectors\Rss\Rss.csproj">
       <Project>{fbc5be61-e6d9-47df-9515-900184ddeba0}</Project>
       <Name>Rss</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\SmartCom\SmartCom.csproj">
+    <ProjectReference Include="..\..\Connectors\SmartCom\SmartCom.csproj">
       <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
       <Name>SmartCom</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj">
+    <ProjectReference Include="..\..\Connectors\Quik\Quik.csproj">
       <Project>{1b798a4e-2271-46f9-9c2d-4e563114e268}</Project>
       <Name>Quik</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Transaq\Transaq.csproj">
+    <ProjectReference Include="..\..\Connectors\Transaq\Transaq.csproj">
       <Project>{a00e5a4b-cb24-474a-8f2b-06a2e370c4f6}</Project>
       <Name>Transaq</Name>
     </ProjectReference>
@@ -507,15 +507,15 @@
       <Project>{baffe041-f00c-4af5-8871-1c4578953352}</Project>
       <Name>Licensing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Localization\Localization.csproj">
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Logging\Logging.csproj">
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
       <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Messages\Messages.csproj">
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
@@ -527,7 +527,7 @@
       <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
       <Name>Xaml.Diagram</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml\Xaml.csproj">
+    <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>

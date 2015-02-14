@@ -1,0 +1,19 @@
+<ToggleButton 
+		x:Class="StockSharp.Alerts.AlertButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+		Click="AlertButton_OnClick" IsChecked="False"
+		ToolTip="{x:Static loc:LocalizedStrings.XamlStr780}" ToolTipService.ShowOnDisabled="True">
+	<ex:BmpImage Source="Resources/alert_16x16.png">
+		<ex:BmpImage.Style>
+			<Style TargetType="{x:Type ex:BmpImage}">
+				<Style.Triggers>
+					<DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
+						<Setter Property="Opacity" Value="0.3"></Setter>
+					</DataTrigger>
+				</Style.Triggers>
+			</Style>
+		</ex:BmpImage.Style>
+	</ex:BmpImage>
+</ToggleButton>

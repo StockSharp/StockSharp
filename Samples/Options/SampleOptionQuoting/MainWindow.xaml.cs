@@ -166,7 +166,7 @@ namespace SampleOptionQuoting
 
 			PosChart.Positions.Clear();
 			PosChart.AssetPosition = null;
-			PosChart.Refresh(1, 1, default(DateTime), default(DateTime));
+			PosChart.Refresh(1, 1, default(DateTimeOffset), default(DateTimeOffset));
 
 			// создаем подключение
 			Connector = new QuikTrader(Path.Text)

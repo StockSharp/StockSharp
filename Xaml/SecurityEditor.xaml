@@ -1,0 +1,73 @@
+<UserControl x:Class="StockSharp.Xaml.SecurityEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:xaml="clr-namespace:StockSharp.Xaml"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="300" x:Name="Ctrl">
+    
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static xaml:SecurityEditor.ClearCommand}" Executed="ClearCommand_OnExecuted"/>
+    </UserControl.CommandBindings>
+    
+    <UserControl.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="2,0,0,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid SnapsToDevicePixels="True">
+
+                            <xctk:ButtonChrome x:Name="ToggleButtonChrome"
+                                               CornerRadius="0,2.75,2.75,0"
+                                               RenderEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                               RenderMouseOver="{TemplateBinding IsMouseOver}">
+                                <Grid x:Name="arrowGlyph" IsHitTestVisible="False" Margin="5">
+                                    <Path Width="7" Height="4" Data="M 0,1 C0,1 0,0 0,0 0,0 3,0 3,0 3,0 3,1 3,1 3,1 4,1 4,1 4,1 4,0 4,0 4,0 7,0 7,0 7,0 7,1 7,1 7,1 6,1 6,1 6,1 6,2 6,2 6,2 5,2 5,2 5,2 5,3 5,3 5,3 4,3 4,3 4,3 4,4 4,4 4,4 3,4 3,4 3,4 3,3 3,3 3,3 2,3 2,3 2,3 2,2 2,2 2,2 1,2 1,2 1,2 1,1 1,1 1,1 0,1 0,1 z" Fill="#FF000000" />
+                                </Grid>
+                            </xctk:ButtonChrome>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid MinHeight="22">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <ComboBox x:Name="SecurityTextBox" IsEditable="True"
+                  BorderBrush="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" BorderThickness="0"
+                  SelectedItem="{Binding ElementName=Ctrl, Path=SelectedSecurity, Mode=TwoWay}">
+            <ComboBox.Resources>
+                <system:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">0</system:Double>
+            </ComboBox.Resources>
+            <ComboBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Cut}" Command="Cut"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Copy}" Command="Copy"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Paste}" Command="Paste"/>
+                    <Separator/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr440}" Command="{x:Static xaml:SecurityEditor.ClearCommand}"/>
+                </ContextMenu>
+            </ComboBox.ContextMenu>
+        </ComboBox>
+
+        <Button Grid.Column="1"
+           IsTabStop="True"
+           MinHeight="22"
+           SnapsToDevicePixels="True"
+           Style="{StaticResource ButtonStyle}"
+           Click="Button_Click" />
+    </Grid>
+</UserControl>

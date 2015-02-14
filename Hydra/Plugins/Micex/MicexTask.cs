@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Micex
 
 	using Ecng.Common;
 	using Ecng.Localization;
+	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
@@ -29,6 +30,9 @@ namespace StockSharp.Hydra.Micex
 			public MicexSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("OrderBookDepth", null);
+				ExtensionInfo.TryAdd("RequestAllDepths", true);
+				ExtensionInfo.TryAdd("MicexLogLevel", null);
 			}
 
 			[TaskCategory(_sourceName)]
@@ -80,6 +84,36 @@ namespace StockSharp.Hydra.Micex
 				get { return (string)ExtensionInfo["Server"]; }
 				set { ExtensionInfo["Server"] = value; }
 			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str1197Key)]
+			[DescriptionLoc(LocalizedStrings.Str1197Key, true)]
+			[PropertyOrder(5)]
+			public int? OrderBookDepth
+			{
+				get { return (int?)ExtensionInfo["OrderBookDepth"]; }
+				set { ExtensionInfo["OrderBookDepth"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.AllDepthsKey)]
+			[DescriptionLoc(LocalizedStrings.RequestAllDepthsKey)]
+			[PropertyOrder(6)]
+			public bool RequestAllDepths
+			{
+				get { return (bool)ExtensionInfo["RequestAllDepths"]; }
+				set { ExtensionInfo["RequestAllDepths"] = value; }
+			}
+
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.LoggingKey)]
+			[DescriptionLoc(LocalizedStrings.Str3422Key)]
+			[PropertyOrder(7)]
+			public string MicexLogLevel
+			{
+				get { return (string)ExtensionInfo["MicexLogLevel"]; }
+				set { ExtensionInfo["MicexLogLevel"] = value; }
+			}
 		}
 
 		private MicexSettings _settings;
@@ -110,6 +144,9 @@ namespace StockSharp.Hydra.Micex
 				_settings.Password = new SecureString();
 				_settings.Interface = MicexInterfaces.Stock22;
 				_settings.Server = string.Empty;
+				_settings.OrderBookDepth = null;
+				_settings.RequestAllDepths = true;
+				_settings.MicexLogLevel = null;
 			}
 
 			return new MarketDataConnector<MicexTrader>(EntityRegistry.Securities, this, () => new MicexTrader
@@ -119,6 +156,9 @@ namespace StockSharp.Hydra.Micex
 				Interface = _settings.Interface,
 				Server = _settings.Server,
 				Addresses = new[] { _settings.Address },
+				OrderBookDepth = _settings.OrderBookDepth,
+				RequestAllDepths = _settings.RequestAllDepths,
+				MicexLogLevel = _settings.MicexLogLevel
 			});
 		}
 	}

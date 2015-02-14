@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hydra", "Hydra", "{D17343AD-2FD2-4CC4-B840-B071DE0AAD5B}"
 EndProject
@@ -9,31 +9,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{D4F0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{551390E7-41EB-4451-AF9B-49C64439F664}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Hydra\Core\CorePublic.csproj", "{95CA16E0-0A47-43A3-AAB7-7E0803E817CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePublic", "Hydra\Core\CorePublic.csproj", "{95CA16E0-0A47-43A3-AAB7-7E0803E817CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlfaDirect", "Hydra\Plugins\AlfaDirect\AlfaDirectPublic.csproj", "{A31C6362-1F60-4B18-891E-AEE83DB06436}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlfaDirectPublic", "Hydra\Plugins\AlfaDirect\AlfaDirectPublic.csproj", "{A31C6362-1F60-4B18-891E-AEE83DB06436}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Finam", "Hydra\Plugins\Finam\FinamPublic.csproj", "{218090FF-7AEE-4404-A330-700B9A506022}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinamPublic", "Hydra\Plugins\Finam\FinamPublic.csproj", "{218090FF-7AEE-4404-A330-700B9A506022}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydraServer", "Hydra\Plugins\HydraServer\HydraServerPublic.csproj", "{C9C7170D-ED48-4A4D-A03A-58AF2D5280A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydraServerPublic", "Hydra\Plugins\HydraServer\HydraServerPublic.csproj", "{C9C7170D-ED48-4A4D-A03A-58AF2D5280A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveBrokers", "Hydra\Plugins\InteractiveBrokers\InteractiveBrokersPublic.csproj", "{9E700968-F34F-44FC-B4A3-0C8FEE6C2F53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveBrokersPublic", "Hydra\Plugins\InteractiveBrokers\InteractiveBrokersPublic.csproj", "{9E700968-F34F-44FC-B4A3-0C8FEE6C2F53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQFeed", "Hydra\Plugins\IQFeed\IQFeedPublic.csproj", "{C2C1D35F-0789-4A82-B7C2-8C3573CD8388}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQFeedPublic", "Hydra\Plugins\IQFeed\IQFeedPublic.csproj", "{C2C1D35F-0789-4A82-B7C2-8C3573CD8388}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenECry", "Hydra\Plugins\OpenECry\OpenECryPublic.csproj", "{1C9FFDE4-1992-4BBB-BE64-12923B80ADF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenECryPublic", "Hydra\Plugins\OpenECry\OpenECryPublic.csproj", "{1C9FFDE4-1992-4BBB-BE64-12923B80ADF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plaza", "Hydra\Plugins\Plaza\PlazaPublic.csproj", "{56FD27B0-8B8D-4C22-B628-F45AD067FCCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlazaPublic", "Hydra\Plugins\Plaza\PlazaPublic.csproj", "{56FD27B0-8B8D-4C22-B628-F45AD067FCCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quik", "Hydra\Plugins\Quik\QuikPublic.csproj", "{43E6C2DF-3948-40A8-AC93-6E3D92944597}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuikPublic", "Hydra\Plugins\Quik\QuikPublic.csproj", "{43E6C2DF-3948-40A8-AC93-6E3D92944597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rts", "Hydra\Plugins\Rts\RtsPublic.csproj", "{4DC33878-FF98-42DE-B8C1-4E2DEEC5246A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtsPublic", "Hydra\Plugins\Rts\RtsPublic.csproj", "{4DC33878-FF98-42DE-B8C1-4E2DEEC5246A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtsCompetition", "Hydra\Plugins\RtsCompetition\RtsCompetitionPublic.csproj", "{32F976B4-100B-42F1-9797-B559BC58BC3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RtsCompetitionPublic", "Hydra\Plugins\RtsCompetition\RtsCompetitionPublic.csproj", "{32F976B4-100B-42F1-9797-B559BC58BC3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCom", "Hydra\Plugins\SmartCom\SmartComPublic.csproj", "{A94E532F-CDED-40B3-9C5D-7F8C11ABCA11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartComPublic", "Hydra\Plugins\SmartCom\SmartComPublic.csproj", "{A94E532F-CDED-40B3-9C5D-7F8C11ABCA11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ux", "Hydra\Plugins\Ux\UxPublic.csproj", "{62D41406-5B5C-46FB-86C7-163958893684}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UxPublic", "Hydra\Plugins\Ux\UxPublic.csproj", "{62D41406-5B5C-46FB-86C7-163958893684}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AlfaDirect", "AlfaDirect", "{6CF9AF12-1547-4A9C-AF76-7DCB9F2E2FF6}"
 EndProject
@@ -61,7 +61,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{1C2A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{1362D8FD-C05F-4B49-B1EF-CA8785B3F927}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hydra", "Hydra\Hydra\HydraPublic.csproj", "{B04ADAC6-C0A3-43AF-8AD2-21383BC68DBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydraPublic", "Hydra\Hydra\HydraPublic.csproj", "{B04ADAC6-C0A3-43AF-8AD2-21383BC68DBD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{62D41406-5B5C-46FB-86C7-163958893684} = {62D41406-5B5C-46FB-86C7-163958893684}
 		{C9C7170D-ED48-4A4D-A03A-58AF2D5280A7} = {C9C7170D-ED48-4A4D-A03A-58AF2D5280A7}
@@ -83,170 +83,166 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hydra", "Hydra\Hydra\HydraP
 		{218090FF-7AEE-4404-A330-700B9A506022} = {218090FF-7AEE-4404-A330-700B9A506022}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAlfaCandles", "Samples\AlfaDirect\SampleAlfaCandles\SampleAlfaCandlesPublic.csproj", "{E1CB5DDF-E250-4F99-A64E-1794D02CE340}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAlfaCandlesPublic", "Samples\AlfaDirect\SampleAlfaCandles\SampleAlfaCandlesPublic.csproj", "{E1CB5DDF-E250-4F99-A64E-1794D02CE340}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAlfa", "Samples\AlfaDirect\SampleAlfa\SampleAlfaPublic.csproj", "{98006C86-9EAC-4598-BF1F-F28C7CB0E4CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAlfaPublic", "Samples\AlfaDirect\SampleAlfa\SampleAlfaPublic.csproj", "{98006C86-9EAC-4598-BF1F-F28C7CB0E4CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCurrency", "Samples\Common\SampleCurrency\SampleCurrencyPublic.csproj", "{76EB6796-F693-4EA8-BFC6-5CD7478EE85A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCurrencyPublic", "Samples\Common\SampleCurrency\SampleCurrencyPublic.csproj", "{76EB6796-F693-4EA8-BFC6-5CD7478EE85A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikSmart", "Samples\Common\SampleQuikSmart\SampleQuikSmartPublic.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikSmartPublic", "Samples\Common\SampleQuikSmart\SampleQuikSmartPublic.csproj", "{DDEE1CE2-7283-4394-8FCF-514E8581F10F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleStorage", "Samples\Common\SampleStorage\SampleStoragePublic.csproj", "{9E39C9C9-C05C-4D79-ADAA-22C287E02F78}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleStoragePublic", "Samples\Common\SampleStorage\SampleStoragePublic.csproj", "{9E39C9C9-C05C-4D79-ADAA-22C287E02F78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSync", "Samples\Common\SampleSync\SampleSyncPublic.csproj", "{AA9C2310-A57A-4792-BC16-CF64770E99FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSyncPublic", "Samples\Common\SampleSync\SampleSyncPublic.csproj", "{AA9C2310-A57A-4792-BC16-CF64770E99FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleUnit", "Samples\Common\SampleUnit\SampleUnitPublic.csproj", "{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleUnitPublic", "Samples\Common\SampleUnit\SampleUnitPublic.csproj", "{D51477D2-F3E1-46ED-8B2B-C66E0881CA8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeedTest", "Samples\Common\SpeedTest\SpeedTestPublic.csproj", "{5C7EDB92-7B70-43F4-9851-3E0A42968283}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeedTestPublic", "Samples\Common\SpeedTest\SpeedTestPublic.csproj", "{5C7EDB92-7B70-43F4-9851-3E0A42968283}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleIB", "Samples\InteractiveBrokers\SampleIB\SampleIBPublic.csproj", "{62591944-C21D-4615-9642-7E8641DE366B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleIBPublic", "Samples\InteractiveBrokers\SampleIB\SampleIBPublic.csproj", "{62591944-C21D-4615-9642-7E8641DE366B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOEC", "Samples\OpenECry\SampleOEC\SampleOECPublic.csproj", "{68404BEA-1A32-484C-A126-3BB13C053D28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOECPublic", "Samples\OpenECry\SampleOEC\SampleOECPublic.csproj", "{68404BEA-1A32-484C-A126-3BB13C053D28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionCalculator", "Samples\Options\OptionCalculator\OptionCalculatorPublic.csproj", "{66AC554D-27ED-45B8-8553-016A65012535}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptionCalculatorPublic", "Samples\Options\OptionCalculator\OptionCalculatorPublic.csproj", "{66AC554D-27ED-45B8-8553-016A65012535}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOptionQuoting", "Samples\Options\SampleOptionQuoting\SampleOptionQuotingPublic.csproj", "{3A39B4AA-55BC-4E74-8F2D-27CDD67B7E13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOptionQuotingPublic", "Samples\Options\SampleOptionQuoting\SampleOptionQuotingPublic.csproj", "{3A39B4AA-55BC-4E74-8F2D-27CDD67B7E13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePlaza", "Samples\Plaza\SamplePlaza\SamplePlazaPublic.csproj", "{627B4D03-2DDB-49C1-B294-8DE7791F5708}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePlazaPublic", "Samples\Plaza\SamplePlaza\SamplePlazaPublic.csproj", "{627B4D03-2DDB-49C1-B294-8DE7791F5708}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Samples\Quik\Sample\SamplePublic.csproj", "{3F5FBB7C-49CD-4802-8752-A94244C133BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SamplePublic", "Samples\Quik\Sample\SamplePublic.csproj", "{3F5FBB7C-49CD-4802-8752-A94244C133BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAsyncTransactions", "Samples\Quik\DDE\SampleAsyncTransactions\SampleAsyncTransactionsPublic.csproj", "{A2A93F71-27CA-4BD6-AE1E-2B3C669E112C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleAsyncTransactionsPublic", "Samples\Quik\DDE\SampleAsyncTransactions\SampleAsyncTransactionsPublic.csproj", "{A2A93F71-27CA-4BD6-AE1E-2B3C669E112C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCandles", "Samples\Quik\DDE\SampleCandles\SampleCandlesPublic.csproj", "{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCandlesPublic", "Samples\Quik\DDE\SampleCandles\SampleCandlesPublic.csproj", "{335F0A92-14A7-4C16-88C6-E4D6CBA39B80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConsole", "Samples\Quik\DDE\SampleConsole\SampleConsolePublic.csproj", "{278E91E5-BF89-4401-A652-D909EAD48FD6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleConsolePublic", "Samples\Quik\DDE\SampleConsole\SampleConsolePublic.csproj", "{278E91E5-BF89-4401-A652-D909EAD48FD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDdeCustomTable", "Samples\Quik\DDE\SampleDdeCustomTable\SampleDdeCustomTablePublic.csproj", "{DE5E0495-97B0-4A35-A1C7-42921285A691}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDdeCustomTablePublic", "Samples\Quik\DDE\SampleDdeCustomTable\SampleDdeCustomTablePublic.csproj", "{DE5E0495-97B0-4A35-A1C7-42921285A691}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDdeExtendedInfo", "Samples\Quik\DDE\SampleDdeExtendedInfo\SampleDdeExtendedInfoPublic.csproj", "{22361218-C574-43E8-BAD5-4CE7D2063859}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDdeExtendedInfoPublic", "Samples\Quik\DDE\SampleDdeExtendedInfo\SampleDdeExtendedInfoPublic.csproj", "{22361218-C574-43E8-BAD5-4CE7D2063859}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleFewQuiks", "Samples\Quik\SampleFewQuiks\SampleFewQuiksPublic.csproj", "{2D8BE5D4-062A-4456-97DB-58E9A723F4F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleFewQuiksPublic", "Samples\Quik\SampleFewQuiks\SampleFewQuiksPublic.csproj", "{2D8BE5D4-062A-4456-97DB-58E9A723F4F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikStartStop", "Samples\Quik\SampleQuikStartStop\SampleQuikStartStopPublic.csproj", "{8391C257-484F-4CF4-AA1E-708361F68DC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleQuikStartStopPublic", "Samples\Quik\SampleQuikStartStop\SampleQuikStartStopPublic.csproj", "{8391C257-484F-4CF4-AA1E-708361F68DC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSMA", "Samples\Quik\DDE\SampleSMA\SampleSMAPublic.csproj", "{3073ED94-F863-43D7-B817-70C34136C91A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSMAPublic", "Samples\Quik\DDE\SampleSMA\SampleSMAPublic.csproj", "{3073ED94-F863-43D7-B817-70C34136C91A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmart", "Samples\SmartCom\SampleSmart\SampleSmartPublic.csproj", "{FAEED435-2407-479E-AE58-DFDA2E2C57F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmartPublic", "Samples\SmartCom\SampleSmart\SampleSmartPublic.csproj", "{FAEED435-2407-479E-AE58-DFDA2E2C57F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmartCandles", "Samples\SmartCom\SampleSmartCandles\SampleSmartCandlesPublic.csproj", "{177D2BDF-7728-4F2C-BDAE-9CAAFE65A5C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmartCandlesPublic", "Samples\SmartCom\SampleSmartCandles\SampleSmartCandlesPublic.csproj", "{177D2BDF-7728-4F2C-BDAE-9CAAFE65A5C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmartConsole", "Samples\SmartCom\SampleSmartConsole\SampleSmartConsolePublic.csproj", "{616EF7FC-053C-49F8-8057-CEFB4A984D88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmartConsolePublic", "Samples\SmartCom\SampleSmartConsole\SampleSmartConsolePublic.csproj", "{616EF7FC-053C-49F8-8057-CEFB4A984D88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmartSMA", "Samples\SmartCom\SampleSmartSMA\SampleSmartSMAPublic.csproj", "{948356B6-3DE2-438D-B7FD-2B91BA418085}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSmartSMAPublic", "Samples\SmartCom\SampleSmartSMA\SampleSmartSMAPublic.csproj", "{948356B6-3DE2-438D-B7FD-2B91BA418085}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHistoryTesting", "Samples\Testing\SampleHistoryTesting\SampleHistoryTestingPublic.csproj", "{20A454D0-A030-4266-80C0-D7CB07CE6876}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHistoryTestingPublic", "Samples\Testing\SampleHistoryTesting\SampleHistoryTestingPublic.csproj", "{20A454D0-A030-4266-80C0-D7CB07CE6876}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHistoryTestingParallel", "Samples\Testing\SampleHistoryTestingParallel\SampleHistoryTestingParallelPublic.csproj", "{6D7AC972-0EE2-44A8-B259-6C2046202670}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleHistoryTestingParallelPublic", "Samples\Testing\SampleHistoryTestingParallel\SampleHistoryTestingParallelPublic.csproj", "{6D7AC972-0EE2-44A8-B259-6C2046202670}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseTool", "Samples\Tools\LicenseTool\LicenseToolPublic.csproj", "{D691B01F-9606-4A61-BB9C-DA38B5C542A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseToolPublic", "Samples\Tools\LicenseTool\LicenseToolPublic.csproj", "{D691B01F-9606-4A61-BB9C-DA38B5C542A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verifier", "Samples\Tools\Verifier\VerifierPublic.csproj", "{20A01ED4-F07C-4C9F-8230-3F861EC37B30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerifierPublic", "Samples\Tools\Verifier\VerifierPublic.csproj", "{20A01ED4-F07C-4C9F-8230-3F861EC37B30}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Studio", "Studio", "{92502F5D-0362-44EC-96FA-4BDFDE248588}"
 	ProjectSection(SolutionItems) = preProject
 		Studio\stocksharp_studio.ico = Studio\stocksharp_studio.ico
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "Studio\Controls\ControlsPublic.csproj", "{6D205F4B-6B2A-4082-B717-F6BAAA4E0F3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlsPublic", "Studio\Controls\ControlsPublic.csproj", "{6D205F4B-6B2A-4082-B717-F6BAAA4E0F3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Studio\Core\CorePublic.csproj", "{23B15AE0-2021-43DA-808F-3BF331462976}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePublic", "Studio\Core\CorePublic.csproj", "{23B15AE0-2021-43DA-808F-3BF331462976}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strategies", "Studio\Strategies\StrategiesPublic.csproj", "{A6C44AC0-90DD-46A7-B1ED-FC0C6495A4AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategiesPublic", "Studio\Strategies\StrategiesPublic.csproj", "{A6C44AC0-90DD-46A7-B1ED-FC0C6495A4AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studio", "Studio\Studio\StudioPublic.csproj", "{386AEA47-C1A0-4A0D-AF84-85604305B18A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioPublic", "Studio\Studio\StudioPublic.csproj", "{386AEA47-C1A0-4A0D-AF84-85604305B18A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transaq", "Transaq", "{A055972F-754C-497D-8664-8E30FB00AEEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTransaq", "Samples\Transaq\SampleTransaq\SampleTransaqPublic.csproj", "{87609880-AF98-4655-A51D-F5FB09735CC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleTransaqPublic", "Samples\Transaq\SampleTransaq\SampleTransaqPublic.csproj", "{87609880-AF98-4655-A51D-F5FB09735CC2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Micex", "Micex", "{9219F6E2-E488-4EBB-87F8-82FB490B559A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMicex", "Samples\Micex\SampleMicex\SampleMicexPublic.csproj", "{3690C28A-5B82-4F3F-81F4-38DC1329941E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMicexPublic", "Samples\Micex\SampleMicex\SampleMicexPublic.csproj", "{3690C28A-5B82-4F3F-81F4-38DC1329941E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaq", "Hydra\Plugins\Transaq\TransaqPublic.csproj", "{BCDEBC53-9B20-43DF-98BD-135F81783E09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransaqPublic", "Hydra\Plugins\Transaq\TransaqPublic.csproj", "{BCDEBC53-9B20-43DF-98BD-135F81783E09}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ETrade", "ETrade", "{0BEE0073-2B96-4D82-BE73-6CA3D03B9762}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleETrade", "Samples\ETrade\SampleETrade\SampleETradePublic.csproj", "{3D79D939-9FBD-4ADC-B16E-AC02279D2746}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleETradePublic", "Samples\ETrade\SampleETrade\SampleETradePublic.csproj", "{3D79D939-9FBD-4ADC-B16E-AC02279D2746}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Micex", "Hydra\Plugins\Micex\MicexPublic.csproj", "{1189496D-2ABB-48C7-9344-032DA3F89CB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicexPublic", "Hydra\Plugins\Micex\MicexPublic.csproj", "{1189496D-2ABB-48C7-9344-032DA3F89CB2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blackwood", "Blackwood", "{16B235D3-ED32-4A5D-87DB-ED726EC8D401}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBlackwood", "Samples\Blackwood\SampleBlackwood\SampleBlackwoodPublic.csproj", "{72B624CF-48A4-4C01-B390-A81277BE1857}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBlackwoodPublic", "Samples\Blackwood\SampleBlackwood\SampleBlackwoodPublic.csproj", "{72B624CF-48A4-4C01-B390-A81277BE1857}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blackwood", "Hydra\Plugins\Blackwood\BlackwoodPublic.csproj", "{E6F5B1B8-2B3E-4C91-AD45-76C46BA0A1A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackwoodPublic", "Hydra\Plugins\Blackwood\BlackwoodPublic.csproj", "{E6F5B1B8-2B3E-4C91-AD45-76C46BA0A1A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMAX", "Hydra\Plugins\LMAX\LMAXPublic.csproj", "{3C256ABC-B93F-48FC-BC76-669560598932}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMAXPublic", "Hydra\Plugins\LMAX\LMAXPublic.csproj", "{3C256ABC-B93F-48FC-BC76-669560598932}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LMAX", "LMAX", "{7528E43A-6F34-439B-833A-9429BEF9D0CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLMAX", "Samples\LMAX\SampleLMAX\SampleLMAXPublic.csproj", "{A1F4DB07-FC68-41EB-B77A-74A328B5A671}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLMAXPublic", "Samples\LMAX\SampleLMAX\SampleLMAXPublic.csproj", "{A1F4DB07-FC68-41EB-B77A-74A328B5A671}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Fix", "Fix", "{EB68641A-3BA4-4AA5-A2FA-FD12DB29EA9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleFix", "Samples\Fix\SampleFix\SampleFixPublic.csproj", "{7659048B-277C-4061-A95F-4A312C075E93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleFixPublic", "Samples\Fix\SampleFix\SampleFixPublic.csproj", "{7659048B-277C-4061-A95F-4A312C075E93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fix", "Hydra\Plugins\Fix\FixPublic.csproj", "{BE102C84-6D89-4618-B1E9-6A635AF594F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixPublic", "Hydra\Plugins\Fix\FixPublic.csproj", "{BE102C84-6D89-4618-B1E9-6A635AF594F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IQFeed", "IQFeed", "{CB646558-7406-4E93-AD24-FC37C753AD3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleIQFeed", "Samples\IQFeed\SampleIQFeed\SampleIQFeedPublic.csproj", "{D760581F-EF26-46C5-8589-42F9DD99EFF8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleIQFeedPublic", "Samples\IQFeed\SampleIQFeed\SampleIQFeedPublic.csproj", "{D760581F-EF26-46C5-8589-42F9DD99EFF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rithmic", "Rithmic", "{FD9199AC-7A02-4D62-B1AD-3910E5714F69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRithmic", "Samples\Rithmic\SampleRithmic\SampleRithmicPublic.csproj", "{97BFC2F1-4A43-43E5-A4E3-023867837235}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRithmicPublic", "Samples\Rithmic\SampleRithmic\SampleRithmicPublic.csproj", "{97BFC2F1-4A43-43E5-A4E3-023867837235}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converters", "Hydra\Plugins\Converters\ConvertersPublic.csproj", "{99610F38-695A-4616-9C5C-28449C27E938}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertersPublic", "Hydra\Plugins\Converters\ConvertersPublic.csproj", "{99610F38-695A-4616-9C5C-28449C27E938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DukasCopy", "Hydra\Plugins\DukasCopy\DukasCopyPublic.csproj", "{83DB4333-8D0D-41BA-9ABD-068A91EAFF97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DukasCopyPublic", "Hydra\Plugins\DukasCopy\DukasCopyPublic.csproj", "{83DB4333-8D0D-41BA-9ABD-068A91EAFF97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GainCapital", "Hydra\Plugins\GainCapital\GainCapitalPublic.csproj", "{E773DE94-25E6-47CD-B471-95907540002D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GainCapitalPublic", "Hydra\Plugins\GainCapital\GainCapitalPublic.csproj", "{E773DE94-25E6-47CD-B471-95907540002D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBTrading", "Hydra\Plugins\MBTrading\MBTradingPublic.csproj", "{741C7256-B6C7-46B8-AF3A-91E94A55926F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBTradingPublic", "Hydra\Plugins\MBTrading\MBTradingPublic.csproj", "{741C7256-B6C7-46B8-AF3A-91E94A55926F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueFX", "Hydra\Plugins\TrueFX\TrueFXPublic.csproj", "{56C36802-1EE8-4D18-85EF-FA41F69207D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrueFXPublic", "Hydra\Plugins\TrueFX\TrueFXPublic.csproj", "{56C36802-1EE8-4D18-85EF-FA41F69207D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Google", "Hydra\Plugins\Google\GooglePublic.csproj", "{66EB7F49-4235-4BC4-A881-9E685078979B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GooglePublic", "Hydra\Plugins\Google\GooglePublic.csproj", "{66EB7F49-4235-4BC4-A881-9E685078979B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yahoo", "Hydra\Plugins\Yahoo\YahooPublic.csproj", "{77B90975-F24F-4E0A-B2F1-BE6A541C1BEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YahooPublic", "Hydra\Plugins\Yahoo\YahooPublic.csproj", "{77B90975-F24F-4E0A-B2F1-BE6A541C1BEC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CQG", "CQG", "{AA215EA3-1D80-4C64-99CE-DAF73795AB3A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sterling", "Sterling", "{F6F21E78-593D-4870-9564-D7CFCB5FD5D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCQG", "Samples\CQG\SampleCQG\SampleCQGPublic.csproj", "{9BD6083A-0333-4180-8B29-CE14C68CDB73}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSterling", "Samples\Sterling\SampleSterling\SampleSterlingPublic.csproj", "{2BC83A0F-F6BF-43EC-944D-A740A32041A2}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BTCE", "BTCE", "{BB8B70AD-6AE4-4D68-8E20-49E9275B37B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBtce", "Samples\Btce\SampleBtce\SampleBtcePublic.csproj", "{2D981CE5-8C93-4281-B07A-3FAF14105A18}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBtcePublic", "Samples\Btce\SampleBtce\SampleBtcePublic.csproj", "{2D981CE5-8C93-4281-B07A-3FAF14105A18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Btce", "Hydra\Plugins\BTCE\BtcePublic.csproj", "{0EB41086-368A-4FFF-942E-B175B1869BF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtcePublic", "Hydra\Plugins\BTCE\BtcePublic.csproj", "{0EB41086-368A-4FFF-942E-B175B1869BF0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rss", "Rss", "{57C17659-BC4C-4A28-86F4-936C0F832836}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRss", "Samples\Rss\SampleRss\SampleRssPublic.csproj", "{89458757-EAE0-4E61-96C4-DC9DB9160D63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRssPublic", "Samples\Rss\SampleRss\SampleRssPublic.csproj", "{89458757-EAE0-4E61-96C4-DC9DB9160D63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rss", "Hydra\Plugins\Rss\RssPublic.csproj", "{326B2205-EE58-4FEE-9014-ECF8B8553A7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssPublic", "Hydra\Plugins\Rss\RssPublic.csproj", "{326B2205-EE58-4FEE-9014-ECF8B8553A7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rithmic", "Hydra\Plugins\Rithmic\RithmicPublic.csproj", "{B334A1C0-A2FF-4586-B7CB-DD8B1374C79B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RithmicPublic", "Hydra\Plugins\Rithmic\RithmicPublic.csproj", "{B334A1C0-A2FF-4586-B7CB-DD8B1374C79B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlorHistory", "Hydra\Plugins\AlorHistory\AlorHistoryPublic.csproj", "{E018485D-E263-4B5C-99D7-E60B9B011B4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlorHistoryPublic", "Hydra\Plugins\AlorHistory\AlorHistoryPublic.csproj", "{E018485D-E263-4B5C-99D7-E60B9B011B4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mfd", "Hydra\Plugins\Mfd\MfdPublic.csproj", "{172814A7-A3AE-4E68-A973-8B752033F150}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MfdPublic", "Hydra\Plugins\Mfd\MfdPublic.csproj", "{172814A7-A3AE-4E68-A973-8B752033F150}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BitStamp", "BitStamp", "{33C3FA3D-AFB6-465E-89A1-CC418D9E3590}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBitStamp", "Samples\BitStamp\SampleBitStamp\SampleBitStampPublic.csproj", "{BE7F44E9-D1BD-4B4F-974F-ABA9D9674209}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBitStampPublic", "Samples\BitStamp\SampleBitStamp\SampleBitStampPublic.csproj", "{BE7F44E9-D1BD-4B4F-974F-ABA9D9674209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStamp", "Hydra\Plugins\BitStamp\BitStampPublic.csproj", "{BE5E06FF-0C17-463E-A35F-003E1C7431DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitStampPublic", "Hydra\Plugins\BitStamp\BitStampPublic.csproj", "{BE5E06FF-0C17-463E-A35F-003E1C7431DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRealTimeEmulation", "Samples\Testing\SampleRealTimeEmulation\SampleRealTimeEmulationPublic.csproj", "{2AFA8980-ACE8-4C5C-9D7C-7DE0D9C276F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRealTimeEmulationPublic", "Samples\Testing\SampleRealTimeEmulation\SampleRealTimeEmulationPublic.csproj", "{2AFA8980-ACE8-4C5C-9D7C-7DE0D9C276F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRandomEmulation", "Samples\Testing\SampleRandomEmulation\SampleRandomEmulationPublic.csproj", "{26551F8F-2C4C-402A-95B0-55CFC9FEE0C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRandomEmulationPublic", "Samples\Testing\SampleRandomEmulation\SampleRandomEmulationPublic.csproj", "{26551F8F-2C4C-402A-95B0-55CFC9FEE0C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DDE", "DDE", "{B6780AD0-C3D2-4F60-9A00-2A285263C425}"
 	ProjectSection(SolutionItems) = preProject
@@ -255,15 +251,63 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DDE", "DDE", "{B6780AD0-C3D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Oanda", "Oanda", "{6FD09E9B-76F8-4A15-B906-288CE2B70F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOanda", "Samples\Oanda\SampleOanda\SampleOandaPublic.csproj", "{1E0A526F-CF17-40A3-B6AF-15EB88511579}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleOandaPublic", "Samples\Oanda\SampleOanda\SampleOandaPublic.csproj", "{1E0A526F-CF17-40A3-B6AF-15EB88511579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oanda", "Hydra\Plugins\Oanda\OandaPublic.csproj", "{8A703CC5-F75E-48A8-9C5E-E12CFA96A4EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OandaPublic", "Hydra\Plugins\Oanda\OandaPublic.csproj", "{8A703CC5-F75E-48A8-9C5E-E12CFA96A4EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinViz", "Hydra\Plugins\FinViz\FinVizPublic.csproj", "{A2DC316C-9EA6-4552-8BC4-524DE65D64E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinVizPublic", "Hydra\Plugins\FinViz\FinVizPublic.csproj", "{A2DC316C-9EA6-4552-8BC4-524DE65D64E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LciViewer", "Samples\Common\LciViewer\LciViewerPublic.csproj", "{B8F4A4C2-FEC9-4CE4-9A65-040FBC635AAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LciViewerPublic", "Samples\Common\LciViewer\LciViewerPublic.csproj", "{B8F4A4C2-FEC9-4CE4-9A65-040FBC635AAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyRunner", "Studio\StrategyRunner\StrategyRunnerPublic.csproj", "{1410FCB2-F096-4BD8-BE41-5E27FB99D85B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyRunnerPublic", "Studio\StrategyRunner\StrategyRunnerPublic.csproj", "{1410FCB2-F096-4BD8-BE41-5E27FB99D85B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization", "Localization\Localization.csproj", "{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{C4476ADD-A3D5-41BB-9D43-55D865863B78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "Messages\Messages.csproj", "{B47F9C23-A4BD-46A9-BF27-54CB3D653503}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessEntities", "BusinessEntities\BusinessEntities.csproj", "{DCE69DB8-53CA-4B7F-9368-02F175A31074}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlPublic", "Xaml\XamlPublic.csproj", "{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alerts", "Alerts\Alerts.csproj", "{96725E45-F785-4612-9743-BFB40A9E725D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Community", "Community\Community.csproj", "{E8E18F8F-97BD-41AE-8888-F54F2411D575}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{42B35529-B842-4F17-9277-0618B074AA91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlfaDirect", "Connectors\AlfaDirect\AlfaDirect.csproj", "{AAA445E0-AA85-4B49-AD45-EDD1B4839137}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alor", "Connectors\Alor\Alor.csproj", "{0DD15A5D-EED7-45BA-AE50-CCDAC9600C6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Btce", "Connectors\Btce\Btce.csproj", "{AF225452-1CF1-48A2-B381-C02BEBE643D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQG", "Connectors\CQG\CQG.csproj", "{34984B57-9200-47B9-AC78-0D93FDFA437A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMAX", "Connectors\LMAX\LMAX.csproj", "{4B37342E-9A01-499B-9E32-2E9948A6D0C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatLab", "Connectors\MatLab\MatLab.csproj", "{6F916AF8-D9B3-44B1-9AD5-79AB5B140E6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenECry", "Connectors\OpenECry\OpenECry.csproj", "{17EAE926-C9A9-40C7-8D54-3545077B4AB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rss", "Connectors\Rss\Rss.csproj", "{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartCom", "Connectors\SmartCom\SmartCom.csproj", "{3EBEC334-3476-4F65-81C4-BC9D217550C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sterling", "Connectors\Sterling\Sterling.csproj", "{9ADD140B-1C43-4077-B32E-0EBA81648C4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaq", "Connectors\Transaq\Transaq.csproj", "{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo", "Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSterling", "Samples\Sterling\SampleSterling\SampleSterling.csproj", "{A6B6041F-B174-43C9-89B2-53545C1303F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCQG", "Samples\CQG\SampleCQG\SampleCQG.csproj", "{0E498B61-BE10-480A-94A4-E25B77E3FE82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveBrokers", "Connectors\InteractiveBrokers\InteractiveBrokers.csproj", "{F17D780E-6F82-40FD-84E1-C4EB09853BBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quik", "Connectors\Quik\QuikPublic.csproj", "{1B798A4E-2271-46F9-9C2D-4E563114E268}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -543,14 +587,6 @@ Global
 		{77B90975-F24F-4E0A-B2F1-BE6A541C1BEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77B90975-F24F-4E0A-B2F1-BE6A541C1BEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77B90975-F24F-4E0A-B2F1-BE6A541C1BEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BD6083A-0333-4180-8B29-CE14C68CDB73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BD6083A-0333-4180-8B29-CE14C68CDB73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BD6083A-0333-4180-8B29-CE14C68CDB73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BD6083A-0333-4180-8B29-CE14C68CDB73}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2BC83A0F-F6BF-43EC-944D-A740A32041A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2BC83A0F-F6BF-43EC-944D-A740A32041A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2BC83A0F-F6BF-43EC-944D-A740A32041A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2BC83A0F-F6BF-43EC-944D-A740A32041A2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D981CE5-8C93-4281-B07A-3FAF14105A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D981CE5-8C93-4281-B07A-3FAF14105A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D981CE5-8C93-4281-B07A-3FAF14105A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -615,6 +651,96 @@ Global
 		{1410FCB2-F096-4BD8-BE41-5E27FB99D85B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1410FCB2-F096-4BD8-BE41-5E27FB99D85B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1410FCB2-F096-4BD8-BE41-5E27FB99D85B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4476ADD-A3D5-41BB-9D43-55D865863B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4476ADD-A3D5-41BB-9D43-55D865863B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4476ADD-A3D5-41BB-9D43-55D865863B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4476ADD-A3D5-41BB-9D43-55D865863B78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B47F9C23-A4BD-46A9-BF27-54CB3D653503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B47F9C23-A4BD-46A9-BF27-54CB3D653503}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B47F9C23-A4BD-46A9-BF27-54CB3D653503}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B47F9C23-A4BD-46A9-BF27-54CB3D653503}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCE69DB8-53CA-4B7F-9368-02F175A31074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96725E45-F785-4612-9743-BFB40A9E725D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96725E45-F785-4612-9743-BFB40A9E725D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96725E45-F785-4612-9743-BFB40A9E725D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96725E45-F785-4612-9743-BFB40A9E725D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8E18F8F-97BD-41AE-8888-F54F2411D575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8E18F8F-97BD-41AE-8888-F54F2411D575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8E18F8F-97BD-41AE-8888-F54F2411D575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8E18F8F-97BD-41AE-8888-F54F2411D575}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAA445E0-AA85-4B49-AD45-EDD1B4839137}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAA445E0-AA85-4B49-AD45-EDD1B4839137}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAA445E0-AA85-4B49-AD45-EDD1B4839137}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAA445E0-AA85-4B49-AD45-EDD1B4839137}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DD15A5D-EED7-45BA-AE50-CCDAC9600C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DD15A5D-EED7-45BA-AE50-CCDAC9600C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF225452-1CF1-48A2-B381-C02BEBE643D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF225452-1CF1-48A2-B381-C02BEBE643D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF225452-1CF1-48A2-B381-C02BEBE643D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF225452-1CF1-48A2-B381-C02BEBE643D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34984B57-9200-47B9-AC78-0D93FDFA437A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34984B57-9200-47B9-AC78-0D93FDFA437A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34984B57-9200-47B9-AC78-0D93FDFA437A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34984B57-9200-47B9-AC78-0D93FDFA437A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B37342E-9A01-499B-9E32-2E9948A6D0C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B37342E-9A01-499B-9E32-2E9948A6D0C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B37342E-9A01-499B-9E32-2E9948A6D0C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B37342E-9A01-499B-9E32-2E9948A6D0C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F916AF8-D9B3-44B1-9AD5-79AB5B140E6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F916AF8-D9B3-44B1-9AD5-79AB5B140E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F916AF8-D9B3-44B1-9AD5-79AB5B140E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F916AF8-D9B3-44B1-9AD5-79AB5B140E6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17EAE926-C9A9-40C7-8D54-3545077B4AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17EAE926-C9A9-40C7-8D54-3545077B4AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17EAE926-C9A9-40C7-8D54-3545077B4AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17EAE926-C9A9-40C7-8D54-3545077B4AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC5BE61-E6D9-47DF-9515-900184DDEBA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EBEC334-3476-4F65-81C4-BC9D217550C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EBEC334-3476-4F65-81C4-BC9D217550C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EBEC334-3476-4F65-81C4-BC9D217550C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EBEC334-3476-4F65-81C4-BC9D217550C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ADD140B-1C43-4077-B32E-0EBA81648C4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ADD140B-1C43-4077-B32E-0EBA81648C4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ADD140B-1C43-4077-B32E-0EBA81648C4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ADD140B-1C43-4077-B32E-0EBA81648C4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B6041F-B174-43C9-89B2-53545C1303F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B6041F-B174-43C9-89B2-53545C1303F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B6041F-B174-43C9-89B2-53545C1303F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B6041F-B174-43C9-89B2-53545C1303F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E498B61-BE10-480A-94A4-E25B77E3FE82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E498B61-BE10-480A-94A4-E25B77E3FE82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E498B61-BE10-480A-94A4-E25B77E3FE82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E498B61-BE10-480A-94A4-E25B77E3FE82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -710,8 +836,6 @@ Global
 		{77B90975-F24F-4E0A-B2F1-BE6A541C1BEC} = {551390E7-41EB-4451-AF9B-49C64439F664}
 		{AA215EA3-1D80-4C64-99CE-DAF73795AB3A} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
 		{F6F21E78-593D-4870-9564-D7CFCB5FD5D8} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
-		{9BD6083A-0333-4180-8B29-CE14C68CDB73} = {AA215EA3-1D80-4C64-99CE-DAF73795AB3A}
-		{2BC83A0F-F6BF-43EC-944D-A740A32041A2} = {F6F21E78-593D-4870-9564-D7CFCB5FD5D8}
 		{BB8B70AD-6AE4-4D68-8E20-49E9275B37B9} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
 		{2D981CE5-8C93-4281-B07A-3FAF14105A18} = {BB8B70AD-6AE4-4D68-8E20-49E9275B37B9}
 		{0EB41086-368A-4FFF-942E-B175B1869BF0} = {551390E7-41EB-4451-AF9B-49C64439F664}
@@ -733,6 +857,21 @@ Global
 		{A2DC316C-9EA6-4552-8BC4-524DE65D64E8} = {551390E7-41EB-4451-AF9B-49C64439F664}
 		{B8F4A4C2-FEC9-4CE4-9A65-040FBC635AAD} = {1B4765C2-0B77-4D68-9860-25F7FCA17D94}
 		{1410FCB2-F096-4BD8-BE41-5E27FB99D85B} = {92502F5D-0362-44EC-96FA-4BDFDE248588}
+		{AAA445E0-AA85-4B49-AD45-EDD1B4839137} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{0DD15A5D-EED7-45BA-AE50-CCDAC9600C6C} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{AF225452-1CF1-48A2-B381-C02BEBE643D7} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{34984B57-9200-47B9-AC78-0D93FDFA437A} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{4B37342E-9A01-499B-9E32-2E9948A6D0C4} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{6F916AF8-D9B3-44B1-9AD5-79AB5B140E6E} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{17EAE926-C9A9-40C7-8D54-3545077B4AB7} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{FBC5BE61-E6D9-47DF-9515-900184DDEBA0} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{3EBEC334-3476-4F65-81C4-BC9D217550C1} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{9ADD140B-1C43-4077-B32E-0EBA81648C4D} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{A6B6041F-B174-43C9-89B2-53545C1303F5} = {F6F21E78-593D-4870-9564-D7CFCB5FD5D8}
+		{0E498B61-BE10-480A-94A4-E25B77E3FE82} = {AA215EA3-1D80-4C64-99CE-DAF73795AB3A}
+		{F17D780E-6F82-40FD-84E1-C4EB09853BBD} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{1B798A4E-2271-46F9-9C2D-4E563114E268} = {42B35529-B842-4F17-9277-0618B074AA91}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi

@@ -7,13 +7,52 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.64:
+* (feature) Source codes for Quik and InteractiveBrokers
+
+###v4.2.63:
+* (bug) OpenECry. Fix double <-> decimal casting.
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/16
+
+###v4.2.62:
+* (bug) Micex. Format price fix
+* (feature) Source codes for Messages, BE, Algo, Xaml, Localization, Logging, Community and few connectors (SmartCOM, AlfaDirect, Transaq, BTCE, OpenECry, LMAX, MatLab, CQG, Sterling, RSS, Alor)
+
+###v4.2.61:
+* (bug) Quik. Fix https://github.com/stocksharp/stocksharp/issues/13
+* (bug) Fusion/Blackwood. Fix http://stocksharp.com/forum/yaf_postst5511_4-2-60---Exception-pri-otpravkie-ordiera.aspx
+* (bug) LogManager.Application. Replacing fix
+* (bug) Plaza. Level1 ServerTime fill
+* (bug) YahooHistorySource. Time fix
+
+###v4.2.60:
+* (bug) Fusion/Blackwood. Fix http://stocksharp.com/forum/yaf_postst5498_Probliema-na-rieal-nom-schietie.aspx
+* (feature) Quik. Process request performance boost
+* (feature) OrderWindow. Disable ByMarket checkbox
+* (feature) Plaza. Anonym deals turned on by default
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/11
+
+###v4.2.59:
+* (feature) Fusion/Blackwood. 3.1.8
+* (bug) Micex. OrderBookDepth fix
+* (bug) Micex. RequestAllDepths fix
+* (bug) OpenECry. Order processing fix
+
+###v4.2.58:
+* (feature) Micex. RequestAllDepths
+* (bug) Micex. Tick subscribe fix
+
 ###v4.2.57:
 * (feature) QuikLua. Removed atomic reregister for micex
 * (feature) Micex. Added IFC_Broker24 interface
+* (feature) Micex. OrderBookDepth
 * (bug) Unit fixes. Fix http://stocksharp.com/forum/yaf_postst5489_Izmieniena-loghika-raboty-s-Unit-v-novykh-viersiiakh.aspx
+* (bug) OpenECry. Remoting fix
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/7
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/3
 
 ###v4.2.56:
-* (bug) AlfaDirect. Fix cadle subscrition. Fix http://stocksharp.com/forum/yaf_postst5483_primier-SampleAlfaCandles.aspx
+* (bug) AlfaDirect. Fix cadle subscription. Fix http://stocksharp.com/forum/yaf_postst5483_primier-SampleAlfaCandles.aspx
 * (bug) OpenECry fixes
 * (bug) Localization fixes
 * (bug) Chart. Fix indicator adding

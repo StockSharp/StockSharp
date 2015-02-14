@@ -39,72 +39,72 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
+      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Editors.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ActiproSoftware.Navigation.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Shared.Wpf, Version=11.2.552.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.3.0.7239, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\..\References\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Configuration">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Configuration.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Data.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="NCalc, Version=1.3.8.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\NCalc.dll</HintPath>
+      <HintPath>..\..\References\NCalc.dll</HintPath>
     </Reference>
     <Reference Include="Northwoods.GoWPF, Version=2.1.1.4, Culture=neutral, PublicKeyToken=616e2dc80068a33d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Northwoods.GoWPF.dll</HintPath>
+      <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ookii.Dialogs.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -116,7 +116,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\StockSharp (GitLab)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -130,16 +130,9 @@
     <Compile Include="CandleChartPanel.xaml.cs">
       <DependentUpon>CandleChartPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChatPanel.xaml.cs">
-      <DependentUpon>ChatPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ChatRoomCreateWindow.xaml.cs">
-      <DependentUpon>ChatRoomCreateWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CompositeSecurityPanel.xaml.cs">
       <DependentUpon>CompositeSecurityPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\ChatConverters.cs" />
     <Compile Include="Converters\IsInteractedToBoolConverter.cs" />
     <Compile Include="Converters\ProcessStatesToImageConverter.cs" />
     <Compile Include="Converters\StrategyInfoStatesToImageConverter.cs" />
@@ -245,14 +238,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CandleChartPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ChatPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ChatRoomCreateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -393,7 +378,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Alerts\Alerts.csproj">
+    <ProjectReference Include="..\..\Alerts\Alerts.csproj">
       <Project>{96725e45-f785-4612-9743-bfb40a9e725d}</Project>
       <Name>Alerts</Name>
     </ProjectReference>
@@ -401,27 +386,27 @@
       <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>
       <Name>Algo.Strategies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo\Algo.csproj">
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\BusinessEntities\BusinessEntities.csproj">
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Community\Community.csproj">
+    <ProjectReference Include="..\..\Community\Community.csproj">
       <Project>{e8e18f8f-97bd-41ae-8888-f54f2411d575}</Project>
       <Name>Community</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Localization\Localization.csproj">
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Logging\Logging.csproj">
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
       <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Messages\Messages.csproj">
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
@@ -433,7 +418,7 @@
       <Project>{e5d21a65-1b77-4b4b-87c7-8ac7eee4f085}</Project>
       <Name>Xaml.Diagram</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml\Xaml.csproj">
+    <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>

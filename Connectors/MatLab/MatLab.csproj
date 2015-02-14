@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6F916AF8-D9B3-44B1-9AD5-79AB5B140E6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.MatLab</RootNamespace>
+    <AssemblyName>StockSharp.MatLab</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.MatLab.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.MatLab.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="EventArgs.cs" />
+    <Compile Include="MatLabConnector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
+      <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

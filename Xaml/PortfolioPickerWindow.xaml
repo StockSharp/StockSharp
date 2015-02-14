@@ -1,0 +1,36 @@
+<Window x:Class="StockSharp.Xaml.PortfolioPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+        Title="{x:Static loc:LocalizedStrings.XamlStr81}" Height="300" Width="400"
+        WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+    
+    <Grid Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+		<ug:UniversalGrid x:Name="PortfoliosCtrl" SelectionChanged="PortfoliosCtrl_OnSelectionChanged" MouseDoubleClick="HandleDoubleClick">
+            <ug:UniversalGrid.Columns>
+				<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.NameKey}" Width="70" Binding="{Binding Path=Name}" SortMemberPath="Name"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr342}" Width="120" Binding="{Binding Path=BeginValue}" SortMemberPath="BeginValue"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr740}" Width="120" Binding="{Binding Path=CurrentValue}" SortMemberPath="CurrentValue"/>
+                <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str255}" Width="50" Binding="{Binding Path=BlockedValue}" SortMemberPath="BlockedValue"/>
+            </ug:UniversalGrid.Columns>
+        </ug:UniversalGrid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="OkBtn" Grid.Column="1" Content="OK" IsDefault="True" Width="80" Margin="3,3,0,0" IsEnabled="False" TabIndex="3" ex:XamlHelper.DialogResult="True" />
+            <Button Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True" Width="80" Margin="3,3,0,0" TabIndex="4" />
+        </Grid>
+    </Grid>
+</Window>

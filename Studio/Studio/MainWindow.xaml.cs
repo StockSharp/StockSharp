@@ -665,11 +665,11 @@ namespace StockSharp.Studio
 			CustomItemToolBar.Items.Add(item);
 		}
 
-		private void InitializeChat()
-		{
-			var chatClient = new ChatClient();
-			ConfigManager.RegisterService(chatClient);
-		}
+		//private void InitializeChat()
+		//{
+		//	var chatClient = new ChatClient();
+		//	ConfigManager.RegisterService(chatClient);
+		//}
 
 		private void AddToolControl(Type type)
 		{
@@ -970,7 +970,7 @@ namespace StockSharp.Studio
 			ConfigManager.RegisterService<IAlgoService>(_algoService);
 
 			InitializeAutomaticUpdater();
-			InitializeChat();
+			//InitializeChat();
 
 			RegisterCommandHandlers();
 
@@ -1176,20 +1176,20 @@ namespace StockSharp.Studio
 						return;
 				}
 
-				if (mdSessions.Count() > 1)
-				{
-					var msg = "Multi".ValidateLicense();
-					if (msg != null)
-					{
-						new MessageBoxBuilder()
-						   .Owner(this)
-						   .Text(msg)
-						   .Error()
-						   .Show();
+				//if (mdSessions.Count() > 1)
+				//{
+				//	var msg = "Multi".ValidateLicense();
+				//	if (msg != null)
+				//	{
+				//		new MessageBoxBuilder()
+				//		   .Owner(this)
+				//		   .Text(msg)
+				//		   .Error()
+				//		   .Show();
 						
-						return;
-					}
-				}
+				//		return;
+				//	}
+				//}
 
 				ConnectBtn.IsEnabled = false;
 
@@ -1256,7 +1256,7 @@ namespace StockSharp.Studio
 			// если что-то еще не "сбросилось" в БД
 			_entityRegistry.DelayAction.WaitFlush();
 
-			ConfigManager.GetService<ChatClient>().Dispose();
+			//ConfigManager.GetService<ChatClient>().Dispose();
 			ConfigManager.GetService<AuthenticationClient>().Dispose();
 
 			var connector = _algoService.Connector;

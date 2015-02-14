@@ -1,0 +1,335 @@
+﻿<Window x:Class="CsLocTool.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:syntaxeditor="http://schemas.actiprosoftware.com/winfx/xaml/syntaxeditor"
+		DataContext="{Binding RelativeSource={RelativeSource Self}}"
+		Title="Localization helper" Height="900" Width="1250">
+
+	<xctk:BusyIndicator x:Name="_busyIndicator">
+		<DockPanel LastChildFill="True">
+			<Menu DockPanel.Dock="Top">
+				<MenuItem Header="_File">
+					<MenuItem Header="_Load workspace..." Click="LoadWorkspace_Click"/>
+					<MenuItem Header="_Exit"/>
+				</MenuItem>
+			</Menu>
+
+			<Grid DockPanel.Dock="Top">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="3*"/>
+					<RowDefinition Height="2*"/>
+					<RowDefinition Height="3*"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="500"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Margin="3" Header="Literals">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+
+						<GroupBox Header="Filter">
+							<Grid Margin="3">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<CheckBox Content="Only strings with russian symbols" x:Name="_checkOnlyRussianLiterals" 
+										  Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs"/>
+
+								<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,3">
+									<CheckBox Content="Non-atributes" x:Name="_checkSelectNonAttributesLiterals" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs" VerticalAlignment="Center"/>
+									<CheckBox Content="Supported atributes" Margin="15,0,0,0" x:Name="_checkSelectSupportedAttributesLiterals" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs"/>
+									<CheckBox Content="Unsupported atributes" Margin="15,0,0,0" x:Name="_checkSelectUnsupportedAttributesLiterals" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs"/>
+								</StackPanel>
+
+								<StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,3">
+									<CheckBox Content="Non-case" x:Name="_checkSelectNonCase" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs" VerticalAlignment="Center"/>
+									<CheckBox Content="Case" x:Name="_checkSelectCase" Margin="30,0,0,0" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs" VerticalAlignment="Center"/>
+								</StackPanel>
+
+								<StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,3">
+									<CheckBox Content="Non-const" x:Name="_checkSelectNonConst" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs" VerticalAlignment="Center"/>
+									<CheckBox Content="Const" x:Name="_checkSelectConst" Margin="25,0,0,0" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs" VerticalAlignment="Center"/>
+								</StackPanel>
+
+								<StackPanel Orientation="Horizontal" Grid.Row="4">
+									<CheckBox Content="Supported files" x:Name="_checkSelectSupportedFiles" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs" VerticalAlignment="Center"/>
+									<CheckBox Content="Unsupported files" Margin="20,0,0,0" x:Name="_checkSelectUnsupportedFiles" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs" VerticalAlignment="Center"/>
+									<Button Content="  Files filter  " Margin="30,0,0,0" HorizontalAlignment="Right" Click="FilesFilterButton_Click"/>
+								</StackPanel>
+
+								<Grid Grid.Row="5" Margin="0,7,0,0">
+									<Grid.RowDefinitions>
+										<RowDefinition/>
+										<RowDefinition/>
+										<RowDefinition/>
+									</Grid.RowDefinitions>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="File: " VerticalAlignment="Center"/>
+										<CheckBox x:Name="_checkFileSearchInvert" ToolTip="Invert" VerticalAlignment="Center" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs"/>
+										<TextBox x:Name="_tbFileSearch" TextChanged="ApplyLiteralsFilterSelectArgs" Width="80" Margin="0,0,20,0"/>
+										<TextBlock Text="Line: " VerticalAlignment="Center"/>
+										<CheckBox x:Name="_checkLineSearchInvert" ToolTip="Invert" VerticalAlignment="Center" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs"/>
+										<TextBox x:Name="_tbLiteralsSearchLine" TextChanged="ApplyLiteralsFilterSelectArgs" Width="80" Margin="0,0,20,0"/>
+										<TextBlock Text="Substr: " VerticalAlignment="Center"/>
+										<CheckBox x:Name="_checkLiteralsSearchInvert" ToolTip="Invert" VerticalAlignment="Center" Checked="ApplyLiteralsFilterSelectArgs" Unchecked="ApplyLiteralsFilterSelectArgs"/>
+										<TextBox x:Name="_tbLiteralsSearch" TextChanged="ApplyLiteralsFilterSelectArgs" Width="100"/>
+									</StackPanel>
+								</Grid>
+							</Grid>
+						</GroupBox>
+					
+						<GroupBox Grid.Row="1" Header="Sort">
+							<StackPanel Orientation="Horizontal" Margin="5,0">
+								<RadioButton Content="Alphabetically" GroupName="radioSortLiterals" x:Name="_radioSortLiteralsAlpha" Checked="ApplyLiteralsFilterSelectArgs"/>
+								<RadioButton Margin="30,0,0,0" Content="Same order as in code" GroupName="radioSortLiterals" x:Name="_radioSortLiteralsOrder" Checked="ApplyLiteralsFilterSelectArgs"/>
+							</StackPanel>
+						</GroupBox>
+
+						<Grid Grid.Row="2">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="*"/>
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							
+							<GroupBox Grid.Row="1" Grid.Column="0">
+								<GroupBox.Header>
+									<TextBlock>
+										<Run Text="All ("/><Run Text="{Binding NumAllFiltered}"/><Run Text=")"/>
+									</TextBlock>
+								</GroupBox.Header>
+								<Grid>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="*"/>
+									</Grid.RowDefinitions>
+
+									<Button HorizontalAlignment="Right" Content="Move selected >>> " Margin="0" Click="Choose_Click"/>
+									
+									<ListBox Grid.Row="1" ItemsSource="{Binding FilteredLiterals}" DisplayMemberPath="OriginalText" x:Name="_listLiterals"
+										 GotKeyboardFocus="_listLiterals_OnGotKeyboardFocus"
+										 SelectionChanged="_listLiterals_OnSelectionChanged" SelectionMode="Extended" KeyDown="_listLiterals_OnKeyDown"/>
+								</Grid>
+							</GroupBox>
+							<GroupBox Grid.Column="1" Grid.Row="1">
+								<GroupBox.Header>
+									<TextBlock>
+										<Run Text="Chosen ("/><Run Text="{Binding NumChosenFiltered}"/><Run Text=")"/>
+									</TextBlock>
+								</GroupBox.Header>
+								<Grid>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="*"/>
+									</Grid.RowDefinitions>
+
+									<Button HorizontalAlignment="Left" Content="&lt;&lt;&lt; Move selected" Margin="0" Click="Unchoose_Click"/>
+
+									<ListBox Grid.Row="1" ItemsSource="{Binding FilteredChosenLiterals}" DisplayMemberPath="OriginalText" x:Name="_listChosenLiterals"
+										 GotKeyboardFocus="_listChosenLiterals_OnGotKeyboardFocus"
+										 SelectionChanged="_listChosenLiterals_OnSelectionChanged" SelectionMode="Extended" KeyDown="_listChosenLiterals_OnKeyDown"/>
+								</Grid>
+							</GroupBox>
+						</Grid>
+					</Grid>
+				</GroupBox>
+
+				<GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" IsTabStop="False" Width="2" 
+							  HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="LightGray"/>
+
+				<GroupBox Grid.Row="0" Grid.Column="2" Margin="3">
+					<GroupBox.Header>
+						<TextBlock>
+							<Run Text="Project: "/><Run Text="{Binding LiteralInEditor.ProjectName, Mode=OneWay}" FontWeight="Bold"/>
+							<Run Text="   File: "/><Run Text="{Binding LiteralInEditor.FilePath, Mode=OneWay}" FontWeight="Bold"/>
+						</TextBlock>
+					</GroupBox.Header>
+
+					<syntaxeditor:SyntaxEditor x:Name="_syntaxEditor" IsLineNumberMarginVisible="True" CanSplitHorizontally="False" CanSplitVertically="False"/>
+
+				</GroupBox>
+
+				<TabControl Grid.Row="1" Grid.Column="2" TabStripPlacement="Bottom" BorderThickness="1">
+					<TabItem Header="Localize">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="350"/>
+								<ColumnDefinition Width="Auto"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+
+							<StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,0">
+								<Button Content=">>>" FontWeight="Black" Width="50" ToolTip="Use selected resource for selected strings" Margin="0,5"
+										Click="MoveStringToResource_Click"/>
+								<Button Content="&lt;&lt;&lt;" FontWeight="Black" Width="50" ToolTip="Don't use selected resource for selected strings" Margin="0,5"
+										Click="MoveResourceToString_Click"/>
+							</StackPanel>
+
+							<ListBox Grid.Column="1" ItemsSource="{Binding ElementName=_dataGridResources, Path=SelectedItem.Literals}" DisplayMemberPath="OriginalText" x:Name="_listLiteralsForCurrentResource"
+									 GotKeyboardFocus="_listLiteralsForCurrentResource_OnGotKeyboardFocus"
+									 SelectionChanged="_listLiteralsForCurrentResource_OnSelectionChanged" SelectionMode="Extended"
+									 KeyDown="_listLiteralsForCurrentResource_OnKeyDown"
+									 ToolTip="Merge all literals from this list to single resource (only one value will be used)"/>
+							
+							<GridSplitter Grid.Column="2" Grid.Row="0" IsTabStop="False" Width="2" 
+										HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+							
+							<StackPanel Grid.Column="3" Orientation="Vertical" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,5">
+								<Button Content="Add new resource" Width="150" Click="AddNewResource_Click" Margin="5" HorizontalAlignment="Stretch"/>
+								<Button Content="Copy string to resource" Click="CopyStringToResource_Click" Margin="5" HorizontalAlignment="Stretch"
+										ToolTip="Copy selected string to currently selected resource"/>
+								<Button Content="Save all strings" Click="SaveAllStrings_Click" Margin="5" HorizontalAlignment="Stretch"
+										ToolTip="save"/>
+                                <Button Content="Generate resources" Click="GenerateResources_Click" Margin="5" HorizontalAlignment="Stretch"
+										ToolTip="generate resources from chosen literals"/>
+                                <Button Content="Save XAML resources" Click="SaveXamlResources_Click" Margin="5" HorizontalAlignment="Stretch"/>
+							</StackPanel>
+						</Grid>
+					</TabItem>
+					<TabItem Header="Save changes">
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="3*"/>
+								<ColumnDefinition Width="4*"/>
+								<ColumnDefinition Width="3*"/>
+							</Grid.ColumnDefinitions>
+
+							<GroupBox Header="Save CSV">
+								<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+									<TextBlock TextWrapping="Wrap">
+										<Run Text="Resources will be saved to file"/><LineBreak/>
+										<Run Text="{Binding CsvFilePath}" FontWeight="Bold"/>
+									</TextBlock>
+									<Button Content="Save CSV" HorizontalAlignment="Center" Width="120" Click="SaveCsv_Click"/>
+								</StackPanel>
+							</GroupBox>
+
+							<GroupBox Grid.Column="1" Header="Save CS file with static properties (LocalizedStrings.cs)">
+								<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical">
+									<Grid Margin="2,5">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto"/>
+											<ColumnDefinition Width="*"/>
+											<ColumnDefinition Width="Auto"/>
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="Auto"/>
+											<RowDefinition Height="Auto"/>
+										</Grid.RowDefinitions>
+										
+										<TextBlock Text="Path to .cs file: " VerticalAlignment="Center"/>
+										<TextBox Grid.Column="1" Grid.Row="0" IsReadOnly="True" Text="{Binding CsFilePath}"/>
+										<Button Grid.Column="2" Grid.Row="0" Content=" . . . " Margin="5,0" Click="SelectCs_Click"/>
+										
+										<TextBlock Text="Namespace: " Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+										<TextBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" x:Name="_tbNamespace"
+												 Text="{Binding CsFileNamespace}" Margin="0,3"/>
+									</Grid>
+
+									<Button Content="Save CS properties" HorizontalAlignment="Center" Width="120" Click="SaveCs_Click"/>
+								</StackPanel>
+							</GroupBox>
+
+							<GroupBox Grid.Column="2" Header="Update source code">
+								<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+									<TextBlock TextWrapping="Wrap" Text="Source code will be updated to replace string literals, which were moved to resources, with corresponding properties."/>
+									<Button Content="Update source code" HorizontalAlignment="Center" Width="130" Click="UpdateSource_Click" Margin="0,5,0,10"/>
+                                    <TextBlock TextWrapping="Wrap" Text="Xaml files will be updated."/>
+                                    <Button Content="Update XAML files" HorizontalAlignment="Center" Width="130" Click="UpdateXaml_Click" Margin="0,5"/>
+                                </StackPanel>
+							</GroupBox>
+
+						</Grid>
+					</TabItem>
+				</TabControl>
+			
+				<GroupBox Grid.Row="2" Grid.Column="2" Margin="3">
+					<GroupBox.Header>
+						<StackPanel Orientation="Horizontal" Margin="3">
+							<TextBlock Text="Resources " VerticalAlignment="Center"/>
+							<TextBox x:Name="_tbResourcesSearch" Width="150" TextChanged="ApplyResourcesFilterSelectArgs" ToolTip="filter by substring"/>
+							
+							<CheckBox VerticalAlignment="Center" Margin="30,0,0,0" Content="New/modified only" x:Name="_checkNewModifiedOnlyResources" 
+									  Checked="ApplyResourcesFilterSelectArgs" Unchecked="ApplyResourcesFilterSelectArgs"/>
+						</StackPanel>
+					</GroupBox.Header>
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*"/>
+						</Grid.RowDefinitions>
+						
+						<DataGrid Grid.Row="1" ItemsSource="{Binding FilteredResources}" IsReadOnly="False"
+									CanUserAddRows="False" CanUserReorderColumns="False" CanUserResizeRows="True" CanUserDeleteRows="False"
+									CanUserSortColumns="True" x:Name="_dataGridResources" BorderBrush="DarkGray"
+									ClipboardCopyMode="None" HeadersVisibility="Column" RowHeaderWidth="0" SelectionMode="Single" AutoGenerateColumns="False">
+
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="Property name" Width="2*" SortMemberPath="ConstantName" IsReadOnly="True" Binding="{Binding ConstantName}">
+									<DataGridTextColumn.ElementStyle>
+										<Style TargetType="TextBlock">
+											<Setter Property="VerticalAlignment" Value="center" />
+										</Style>
+									</DataGridTextColumn.ElementStyle>
+								</DataGridTextColumn>
+								<DataGridTextColumn Header="English string" Width="5*" SortMemberPath="EngString" IsReadOnly="False" Binding="{Binding EngString}">
+									<DataGridTextColumn.ElementStyle>
+										<Style TargetType="TextBlock">
+											<Setter Property="VerticalAlignment" Value="center" />
+<!--											<Setter Property="TextWrapping" Value="Wrap" />-->
+										</Style>
+									</DataGridTextColumn.ElementStyle>
+									<DataGridTextColumn.EditingElementStyle>
+										<Style TargetType="TextBox">
+<!--											<Setter Property="TextWrapping" Value="Wrap" />-->
+											<Setter Property="AcceptsReturn" Value="True" />
+											<Setter Property="AcceptsTab" Value="True" />
+										</Style>
+									</DataGridTextColumn.EditingElementStyle>
+								</DataGridTextColumn>
+								<DataGridTextColumn Header="Russian string" Width="5*" SortMemberPath="RusString" IsReadOnly="False" Binding="{Binding RusString}">
+									<DataGridTextColumn.ElementStyle>
+										<Style TargetType="TextBlock">
+											<Setter Property="VerticalAlignment" Value="center" />
+<!--											<Setter Property="TextWrapping" Value="Wrap" />-->
+										</Style>
+									</DataGridTextColumn.ElementStyle>
+									<DataGridTextColumn.EditingElementStyle>
+										<Style TargetType="TextBox">
+<!--											<Setter Property="TextWrapping" Value="Wrap" />-->
+											<Setter Property="AcceptsReturn" Value="True" />
+											<Setter Property="AcceptsTab" Value="True" />
+										</Style>
+									</DataGridTextColumn.EditingElementStyle>
+								</DataGridTextColumn>
+							</DataGrid.Columns>
+						</DataGrid>
+					</Grid>
+				</GroupBox>
+			</Grid>
+		</DockPanel>
+	</xctk:BusyIndicator>
+
+</Window>

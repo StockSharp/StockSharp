@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Algo</RootNamespace>
+    <AssemblyName>StockSharp.Algo</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Algo.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Algo.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Abt.Controls.SciChart.Wpf">
+      <HintPath>..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Data">
+      <HintPath>..\References\Ecng\Ecng.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization.FieldFactories, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>..\References\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq">
+      <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="NCalc">
+      <HintPath>..\References\NCalc.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SmartFormat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\SmartFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AdaptersHolder.cs" />
+    <Compile Include="BasketSessionHolder.cs" />
+    <Compile Include="BasketMessageAdapter.cs" />
+    <Compile Include="BasketPortfolio.cs" />
+    <Compile Include="BasketPosition.cs" />
+    <Compile Include="Candles\BaseCandleSource.cs" />
+    <Compile Include="Candles\CandleSourceEnumerator.cs" />
+    <Compile Include="Candles\Compression\BaseCandleBuilderSource.cs" />
+    <Compile Include="Candles\Compression\CandleBuilder.cs" />
+    <Compile Include="Candles\CandleManagerContainer.cs" />
+    <Compile Include="Candles\CandleHelper.cs" />
+    <Compile Include="Candles\Candle.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilder.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderSourceValue.cs" />
+    <Compile Include="Candles\Compression\RealTimeCandleBuilderSource.cs" />
+    <Compile Include="Candles\ICandleManagerContainer.cs" />
+    <Compile Include="Candles\ICandleManager.cs" />
+    <Compile Include="Candles\ICandleManagerSource.cs" />
+    <Compile Include="Candles\ICandleManagerSourceList.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderContainer.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderSource.cs" />
+    <Compile Include="Candles\Compression\ICandleBuilderSourceList.cs" />
+    <Compile Include="Candles\Compression\StorageCandleBuilderSource.cs" />
+    <Compile Include="Candles\Compression\CandleBuilderContainer.cs" />
+    <Compile Include="Candles\Compression\ConvertableCandleBuilderSource.cs" />
+    <Compile Include="Candles\ICandleSource.cs" />
+    <Compile Include="Candles\IExternalCandleSource.cs" />
+    <Compile Include="Candles\IndexSecurityCandleManagerSource.cs" />
+    <Compile Include="Candles\IndexSeriesBuilder.cs" />
+    <Compile Include="Candles\IStorageCandleSource.cs" />
+    <Compile Include="Candles\StorageCandleSource.cs" />
+    <Compile Include="Candles\VolumePriceStatistics\PriceLevel.cs" />
+    <Compile Include="Candles\VolumePriceStatistics\ValueArea.cs" />
+    <Compile Include="Candles\VolumePriceStatistics\VolumePriceStatisticHelper.cs" />
+    <Compile Include="Candles\VolumePriceStatistics\VolumeProfile.cs" />
+    <Compile Include="Commissions\CommissionManager.cs" />
+    <Compile Include="Commissions\CommissionRule.cs" />
+    <Compile Include="Commissions\ICommissionManager.cs" />
+    <Compile Include="Commissions\ICommissionRule.cs" />
+    <Compile Include="Connector_ProcessMessage.cs" />
+    <Compile Include="Connector_Raise.cs" />
+    <Compile Include="Connector_Subscription.cs" />
+    <Compile Include="ContinuousSecurity.cs" />
+    <Compile Include="Derivatives\BasketBlackScholes.cs" />
+    <Compile Include="Derivatives\BasketStrike.cs" />
+    <Compile Include="Derivatives\Black.cs" />
+    <Compile Include="Derivatives\BlackScholes.cs" />
+    <Compile Include="Derivatives\DerivativesHelper.cs" />
+    <Compile Include="Derivatives\IBlackScholes.cs" />
+    <Compile Include="Derivatives\Synthetic.cs" />
+    <Compile Include="EntityCache.cs" />
+    <Compile Include="Export\BaseExporter.cs" />
+    <Compile Include="Export\BinExporter.cs" />
+    <Compile Include="Export\DatabaseExporter.cs" />
+    <Compile Include="Export\Database\CandlesTable.cs" />
+    <Compile Include="Export\Database\DbProviders\BaseDbProvider.cs" />
+    <Compile Include="Export\Database\DbProviders\MSSQLDbProvider.cs" />
+    <Compile Include="Export\Database\DbProviders\SQLiteDbProvider.cs" />
+    <Compile Include="Export\Database\ExecutionTable.cs" />
+    <Compile Include="Export\Database\Level1Table.cs" />
+    <Compile Include="Export\Database\MarketDepthQuoteTable.cs" />
+    <Compile Include="Export\Database\NewsTable.cs" />
+    <Compile Include="Export\Database\OrderLogTable.cs" />
+    <Compile Include="Export\Database\SecuritiesTable.cs" />
+    <Compile Include="Export\Database\Table.cs" />
+    <Compile Include="Export\Database\TradeTable.cs" />
+    <Compile Include="Export\ExcelExporter.cs" />
+    <Compile Include="Export\TextExporter.cs" />
+    <Compile Include="Export\XmlExporter.cs" />
+    <Compile Include="ExpressionHelper.cs" />
+    <Compile Include="ExpressionIndexSecurity.cs" />
+    <Compile Include="Indicators\StochasticOscillator.cs" />
+    <Compile Include="Indicators\VolumeProfileIndicator.cs" />
+    <Compile Include="Indicators\ChaikinVolatility.cs" />
+    <Compile Include="Indicators\Highest.cs" />
+    <Compile Include="Indicators\LinearReg.cs" />
+    <Compile Include="Indicators\LinearRegression.cs" />
+    <Compile Include="Indicators\LinearRegSlope.cs" />
+    <Compile Include="Indicators\Lowest.cs" />
+    <Compile Include="Indicators\MeanDeviation.cs" />
+    <Compile Include="Indicators\MedianPrice.cs" />
+    <Compile Include="Indicators\QStick.cs" />
+    <Compile Include="Indicators\RSquared.cs" />
+    <Compile Include="Indicators\Level1Indicator.cs" />
+    <Compile Include="Indicators\StandardError.cs" />
+    <Compile Include="Indicators\Sum.cs" />
+    <Compile Include="Indicators\Trix.cs" />
+    <Compile Include="Indicators\VerticalHorizontalFilter.cs" />
+    <Compile Include="Indicators\Vidya.cs" />
+    <Compile Include="Indicators\VolumeIndicator.cs" />
+    <Compile Include="Indicators\AverageDirectionalIndex.cs" />
+    <Compile Include="Indicators\AverageTrueRange.cs" />
+    <Compile Include="Indicators\ChandeMomentumOscillator.cs" />
+    <Compile Include="Indicators\CommodityChannelIndex.cs" />
+    <Compile Include="Indicators\DetrendedPriceOscillator.cs" />
+    <Compile Include="Indicators\DiMinus.cs" />
+    <Compile Include="Indicators\DiPart.cs" />
+    <Compile Include="Indicators\DiPlus.cs" />
+    <Compile Include="Indicators\DirectionalIndex.cs" />
+    <Compile Include="Indicators\Ichimoku.cs" />
+    <Compile Include="Indicators\IchimokuChinkouLine.cs" />
+    <Compile Include="Indicators\IchimokuLine.cs" />
+    <Compile Include="Indicators\IchimokuSenkouALine.cs" />
+    <Compile Include="Indicators\IchimokuSenkouBLine.cs" />
+    <Compile Include="Indicators\Momentum.cs" />
+    <Compile Include="Indicators\RateOfChange.cs" />
+    <Compile Include="Indicators\RelativeStrengthIndex.cs" />
+    <Compile Include="Indicators\RelativeVigorIndex.cs" />
+    <Compile Include="Indicators\RelativeVigorIndexAverage.cs" />
+    <Compile Include="Indicators\RelativeVigorIndexSignal.cs" />
+    <Compile Include="Indicators\StochasticK.cs" />
+    <Compile Include="Indicators\TrueRange.cs" />
+    <Compile Include="Indicators\UltimateOscillator.cs" />
+    <Compile Include="Indicators\BollingerBand.cs" />
+    <Compile Include="Indicators\BollingerBands.cs" />
+    <Compile Include="Indicators\DoubleExponentialMovingAverage.cs" />
+    <Compile Include="Indicators\Envelope.cs" />
+    <Compile Include="Indicators\ExponentialMovingAverage.cs" />
+    <Compile Include="Indicators\HullMovingAverage.cs" />
+    <Compile Include="Indicators\JurikMovingAverage.cs" />
+    <Compile Include="Indicators\KaufmannAdaptiveMovingAverage.cs" />
+    <Compile Include="Indicators\MovingAverageConvergenceDivergence.cs" />
+    <Compile Include="Indicators\MovingAverageConvergenceDivergenceHistogram.cs" />
+    <Compile Include="Indicators\MovingAverageConvergenceDivergenceSignal.cs" />
+    <Compile Include="Indicators\NickRypockTrailingReverse.cs" />
+    <Compile Include="Indicators\OptimalTracking.cs" />
+    <Compile Include="Indicators\ParabolicSar.cs" />
+    <Compile Include="Indicators\Peak.cs" />
+    <Compile Include="Indicators\PeakBar.cs" />
+    <Compile Include="Indicators\RangeActionVerificationIndex.cs" />
+    <Compile Include="Indicators\SimpleMovingAverage.cs" />
+    <Compile Include="Indicators\SmoothedMovingAverage.cs" />
+    <Compile Include="Indicators\StandardDeviation.cs" />
+    <Compile Include="Indicators\TripleExponentialMovingAverage.cs" />
+    <Compile Include="Indicators\Trough.cs" />
+    <Compile Include="Indicators\TroughBar.cs" />
+    <Compile Include="Indicators\VolumeWeightedMovingAverage.cs" />
+    <Compile Include="Indicators\WeightedMovingAverage.cs" />
+    <Compile Include="Indicators\WilderMovingAverage.cs" />
+    <Compile Include="Indicators\ZigZag.cs" />
+    <Compile Include="Indicators\ZigZagEquis.cs" />
+    <Compile Include="Indicators\Acceleration.cs" />
+    <Compile Include="Indicators\Alligator.cs" />
+    <Compile Include="Indicators\AlligatorLine.cs" />
+    <Compile Include="Indicators\AwesomeOscillator.cs" />
+    <Compile Include="Indicators\FractalPart.cs" />
+    <Compile Include="Indicators\Fractals.cs" />
+    <Compile Include="Indicators\GatorHistogram.cs" />
+    <Compile Include="Indicators\GatorOscillator.cs" />
+    <Compile Include="Indicators\MarketFacilitationIndex.cs" />
+    <Compile Include="Indicators\WilliamsR.cs" />
+    <Compile Include="ManagedMessageAdapter.cs" />
+    <Compile Include="PnL\PortfolioPnLManager.cs" />
+    <Compile Include="Risk\IRiskManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Risk\IRiskRule.cs" />
+    <Compile Include="Risk\RiskActions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Risk\RiskManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Risk\RiskRule.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AuthorizationModes.cs" />
+    <Compile Include="Storages\AllSecurityMarketDataStorage.cs" />
+    <Compile Include="Storages\BinaryMarketDataSerializer.cs" />
+    <Compile Include="Storages\CacheableMarketDataDrive.cs" />
+    <Compile Include="Storages\CsvMarketDataSerializer.cs" />
+    <Compile Include="Storages\DataStorageReader.cs" />
+    <Compile Include="Storages\ExchangeInfoProvider.cs" />
+    <Compile Include="Storages\ExchangeList.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="IMarketRuleContainer.cs" />
+    <Compile Include="IMarketRuleList.cs" />
+    <Compile Include="IndexSecurity.cs" />
+    <Compile Include="Indicators\BaseComplexIndicator.cs" />
+    <Compile Include="Indicators\BaseIndicator.cs" />
+    <Compile Include="Indicators\ComplexIndicatorValue.cs" />
+    <Compile Include="Indicators\IComplexIndicator.cs" />
+    <Compile Include="Indicators\IIndicator.cs" />
+    <Compile Include="Indicators\IIndicatorContainer.cs" />
+    <Compile Include="Indicators\IIndicatorValue.cs" />
+    <Compile Include="Indicators\IndicatorContainer.cs" />
+    <Compile Include="Indicators\IndicatorHelper.cs" />
+    <Compile Include="Indicators\LengthIndicator.cs" />
+    <Compile Include="Indicators\ShiftedIndicatorValue.cs" />
+    <Compile Include="Storages\IMarketDataMetaInfo.cs" />
+    <Compile Include="Storages\IStorageSecurityList.cs" />
+    <Compile Include="Storages\ISecurityStorage.cs" />
+    <Compile Include="Storages\Level1Serializer.cs" />
+    <Compile Include="Storages\NewsList.cs" />
+    <Compile Include="Storages\ExecutionSerializer.cs" />
+    <Compile Include="Storages\QuoteSerializer.cs" />
+    <Compile Include="OrderLogHelper.cs" />
+    <Compile Include="OrderLogMarketDepthBuilder.cs" />
+    <Compile Include="MarketTimer.cs" />
+    <Compile Include="PnL\PnLInfo.cs" />
+    <Compile Include="PnL\PnLQueue.cs" />
+    <Compile Include="Statistics\IOrderStatisticParameter.cs" />
+    <Compile Include="Statistics\IPnLStatisticParameter.cs" />
+    <Compile Include="Statistics\IPositionStatisticParameter.cs" />
+    <Compile Include="Statistics\IStatisticParameter.cs" />
+    <Compile Include="IEntityFactory.cs" />
+    <Compile Include="Latency\ILatencyManager.cs" />
+    <Compile Include="MarketPriceTypes.cs" />
+    <Compile Include="ReConnectionSettings.cs" />
+    <Compile Include="Statistics\ITradeStatisticParameter.cs" />
+    <Compile Include="Statistics\StatisticManager.cs" />
+    <Compile Include="SecurityIdGenerator.cs" />
+    <Compile Include="Slippage\ISlippageManager.cs" />
+    <Compile Include="Storages\ContinuousSecurityMarketDataStorage.cs" />
+    <Compile Include="Storages\CandleSerializer.cs" />
+    <Compile Include="Storages\EntityRegistry.cs" />
+    <Compile Include="Storages\ExchangeBoardList.cs" />
+    <Compile Include="Storages\IEntityRegistry.cs" />
+    <Compile Include="Storages\IMarketDataSerializer.cs" />
+    <Compile Include="Storages\IMarketDataStorage.cs" />
+    <Compile Include="Storages\IMarketDataDrive.cs" />
+    <Compile Include="Storages\IndexSecurityMarketDataStorage.cs" />
+    <Compile Include="Storages\LocalMarketDataDrive.cs" />
+    <Compile Include="Storages\MarketDataBuffer.cs" />
+    <Compile Include="Storages\MarketDataStorageHelper.cs" />
+    <Compile Include="Storages\OrderLogSerializer.cs" />
+    <Compile Include="Storages\StorageFormats.cs" />
+    <Compile Include="Storages\StorageHelper.cs" />
+    <Compile Include="Storages\StorageRegistry.cs" />
+    <Compile Include="Strategies\Analytics\BaseAnalyticsStrategy.cs" />
+    <Compile Include="Strategies\Analytics\DailyHighestVolumeStrategy.cs" />
+    <Compile Include="Strategies\Analytics\PriceVolumeDistributionStrategy.cs" />
+    <Compile Include="Strategies\BasketStrategy.cs" />
+    <Compile Include="Strategies\IStrategyChildStrategyList.cs" />
+    <Compile Include="Strategies\Reporting\CsvStrategyReport.cs" />
+    <Compile Include="Strategies\Reporting\ExcelStrategyReport.cs" />
+    <Compile Include="Strategies\Reporting\StrategyReport.cs" />
+    <Compile Include="Strategies\Reporting\XmlStrategyReport.cs" />
+    <Compile Include="Strategies\Strategy.cs" />
+    <Compile Include="Strategies\StrategyHelper.cs" />
+    <Compile Include="Strategies\StrategyNameGenerator.cs" />
+    <Compile Include="Strategies\StrategyParam.cs" />
+    <Compile Include="Strategies\Testing\BatchEmulation.cs" />
+    <Compile Include="Strategies\Testing\EmulationMarketModes.cs" />
+    <Compile Include="Strategies\Testing\EmulationSettings.cs" />
+    <Compile Include="Strategies\TimeFrameStrategy.cs" />
+    <Compile Include="Testing\CommissionRuleMessage.cs" />
+    <Compile Include="TimeQuoteChange.cs" />
+    <Compile Include="Storages\TradeList.cs" />
+    <Compile Include="Storages\TradeSerializer.cs" />
+    <Compile Include="Storages\IStorageRegistry.cs" />
+    <Compile Include="Storages\IStorageEntityList.cs" />
+    <Compile Include="Storages\MarketDataStorage.cs" />
+    <Compile Include="MarketRuleHelper.cs" />
+    <Compile Include="IMarketRule.cs" />
+    <Compile Include="Connector.cs" />
+    <Compile Include="Candles\CandleManager.cs" />
+    <Compile Include="Candles\CandleSeries.cs" />
+    <Compile Include="Latency\LatencyManager.cs" />
+    <Compile Include="PnL\PnLManager.cs" />
+    <Compile Include="Positions\PositionManager.cs" />
+    <Compile Include="IDailyInfoSoap.cs" />
+    <Compile Include="PnL\IPnLManager.cs" />
+    <Compile Include="Positions\IPositionManager.cs" />
+    <Compile Include="BasketConnector.cs" />
+    <Compile Include="Slippage\SlippageManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProcessStates.cs" />
+    <Compile Include="Storages\BaseStorageEntityList.cs" />
+    <Compile Include="Storages\OrderFailList.cs" />
+    <Compile Include="Testing\BaseEmulationConnector.cs" />
+    <Compile Include="Storages\BasketMarketDataStorage.cs" />
+    <Compile Include="Testing\ClearingMessage.cs" />
+    <Compile Include="Testing\HistoryMessageAdapter.cs" />
+    <Compile Include="Testing\EmulationMessageAdapter.cs" />
+    <Compile Include="Testing\ExtendedMessageTypes.cs" />
+    <Compile Include="Testing\EmulationStateMessage.cs" />
+    <Compile Include="Testing\HistoryEmulationConnector.cs" />
+    <Compile Include="MessageConverterHelper.cs" />
+    <Compile Include="Testing\GeneratorMessage.cs" />
+    <Compile Include="Testing\HistorySessionHolder.cs" />
+    <Compile Include="Testing\IEmulationConnector.cs" />
+    <Compile Include="Testing\LastMessage.cs" />
+    <Compile Include="Testing\MarketDataGenerator.cs" />
+    <Compile Include="Testing\MarketDepthGenerator.cs" />
+    <Compile Include="Storages\MyTradeList.cs" />
+    <Compile Include="Storages\OrderList.cs" />
+    <Compile Include="Storages\PortfolioList.cs" />
+    <Compile Include="Storages\PositionList.cs" />
+    <Compile Include="Storages\SecurityList.cs" />
+    <Compile Include="Testing\ExecutionLogConverter.cs" />
+    <Compile Include="Testing\MarketEmulator.cs" />
+    <Compile Include="Testing\MarketEmulatorSettings.cs" />
+    <Compile Include="Testing\OrderLogGenerator.cs" />
+    <Compile Include="Testing\IMarketEmulator.cs" />
+    <Compile Include="Testing\RealTimeEmulationTrader.cs" />
+    <Compile Include="Testing\ResetMessage.cs" />
+    <Compile Include="Testing\TradeGenerator.cs" />
+    <Compile Include="TraderHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Messages.csproj">
+      <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

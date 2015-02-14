@@ -63,7 +63,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -72,13 +72,13 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -154,19 +154,19 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Algo\Algo.csproj">
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\BusinessEntities\BusinessEntities.csproj">
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Localization\Localization.csproj">
+    <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
       <Name>Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Messages\Messages.csproj">
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj">
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>

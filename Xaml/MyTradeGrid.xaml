@@ -1,0 +1,42 @@
+<ug:UniversalGrid 
+			x:Class="StockSharp.Xaml.MyTradeGrid"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+			xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml">
+	<ug:UniversalGrid.Resources>
+		<converters:FormattingConverter x:Key="ValueConverter" />
+		<converters:EnumDisplayNameConverter x:Key="EnumConverter" />
+
+		<DataTemplate x:Key="DirectionColumnTemplate">
+			<TextBlock x:Name="DirectionCtrl" Text="{Binding Path=Order.Direction, Converter={StaticResource EnumConverter}}" TextAlignment="Center" />
+			<DataTemplate.Triggers>
+				<DataTrigger Binding="{Binding Path=Order.Direction}" Value="Sell">
+					<Setter TargetName="DirectionCtrl" Property="Foreground" Value="Red"/>
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Order.Direction}" Value="Buy">
+					<Setter TargetName="DirectionCtrl" Property="Foreground" Value="Blue"/>
+				</DataTrigger>
+			</DataTemplate.Triggers>
+		</DataTemplate>
+	</ug:UniversalGrid.Resources>
+
+	<ug:UniversalGrid.Columns>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="70" Binding="{Binding Path=Trade.Security.Id}" SortMemberPath="Trade.Security.Id"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Id}" Width="70" Binding="{Binding Path=Trade.Id}" SortMemberPath="Trade.Id"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Width="120" Binding="{Binding Path=Trade.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Trade.Time"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Trade.LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Trade.LocalTime"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Trade.Volume}" SortMemberPath="Trade.Volume"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Width="60" Binding="{Binding Path=Trade.Price}" SortMemberPath="Trade.Price"/>
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Type}" Width="60" CellTemplate="{StaticResource DirectionColumnTemplate}" SortMemberPath="Order.Direction">
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str504}" Width="60" Binding="{Binding Path=Order.Id}" SortMemberPath="Order.Id"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str161}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Latency}" SortMemberPath="Latency"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str159}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Commission}" SortMemberPath="Commission"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Portfolio}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Order.Portfolio.Name}" SortMemberPath="Order.Portfolio.Name"/>
+	</ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

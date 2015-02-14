@@ -1,0 +1,208 @@
+<Window x:Class="StockSharp.Xaml.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:sx="clr-namespace:StockSharp.Xaml"
+        xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+        xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+        ResizeMode="NoResize" Title="{x:Static loc:LocalizedStrings.Str1566}"
+		WindowStartupLocation="CenterOwner"
+		Height="420" Width="350" ShowInTaskbar="False">
+
+	<Window.Resources>
+		<converters:InverseBooleanConverter x:Key="Invbool"/>
+	</Window.Resources>
+	
+	<Grid Margin="5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="110" />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="28" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="30" />
+		</Grid.RowDefinitions>
+		
+		<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">
+			<TextBlock>
+				<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
+			</TextBlock>
+		</Label>
+		<sx:SecurityEditor x:Name="SecurityCtrl" Grid.Column="1" Grid.Row="0" SecuritySelected="SecurityCtrl_OnSecuritySelected" />
+
+		<TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">
+			<Run Text="{x:Static loc:LocalizedStrings.Account}"/><Run Text=":"/>
+		</TextBlock>
+		<sx:PortfolioComboBox x:Name="PortfolioCtrl" Grid.Column="1" Grid.Row="2" SelectionChanged="PortfolioCtrl_OnSelectionChanged" />
+
+		<GroupBox Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0">
+			<StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+				<RadioButton x:Name="IsBuyCtrl" Content="{x:Static loc:LocalizedStrings.Str403}" GroupName="Direction" IsChecked="True" />
+				<RadioButton x:Name="IsSellCtrl" Content="{x:Static loc:LocalizedStrings.Str404}" GroupName="Direction" Margin="15,0,0,0" />
+			</StackPanel>
+		</GroupBox>
+
+		<TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">
+			<Run Text="{x:Static loc:LocalizedStrings.Str241}"/><Run Text=":"/>
+		</TextBlock>
+		<CheckBox x:Name="IsMarketCtrl" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Click="IsMarketCtrl_OnClick" />
+
+		<Grid Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="40" />
+				<ColumnDefinition Width="70" />
+				<ColumnDefinition Width="50" />
+				<ColumnDefinition Width="70" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Column="0" IsEnabled="False" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Max}"/>:</TextBlock>
+			<Label Grid.Column="1" HorizontalContentAlignment="Right">
+				<Hyperlink x:Name="MaxPrice" IsEnabled="False" Click="MaxPrice_OnClick">
+                    <TextBlock Text="{Binding Path=MaxPrice}" />
+				</Hyperlink>
+			</Label>
+
+			<TextBlock Grid.Column="2" IsEnabled="False" VerticalAlignment="Center"><TextBlock Text="{x:Static loc:LocalizedStrings.Ask}"/>:</TextBlock>
+			<Label Grid.Column="3" HorizontalContentAlignment="Right">
+				<Hyperlink x:Name="BestAskPrice" IsEnabled="False" Click="BestAskPrice_OnClick">
+                    <TextBlock Text="{Binding Path=BestAskPrice}" />
+				</Hyperlink>
+			</Label>
+		</Grid>
+
+		<TextBlock Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.Price}"/><Run Text=":"/>
+		</TextBlock>
+		
+		<Grid Grid.Column="1" Grid.Row="6">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="55" />
+				<ColumnDefinition Width="70" />
+			</Grid.ColumnDefinitions>
+
+			<xctk:DecimalUpDown x:Name="PriceCtrl" Grid.Column="0" Minimum="0" ValueChanged="PriceCtrl_OnValueChanged" IsEnabled="{Binding IsChecked, ElementName=IsMarketCtrl, Converter={StaticResource Invbool}}"/>
+
+			<Label Grid.Column="1" IsEnabled="False"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr526}"/></Label>
+			<Label Grid.Column="2" HorizontalContentAlignment="Right">
+				<Hyperlink x:Name="LastTradePrice" IsEnabled="False" Click="LastTradePrice_OnClick">
+                    <TextBlock Text="{Binding Path=LastTradePrice}" />
+				</Hyperlink>
+			</Label>
+		</Grid>
+
+		<Grid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="40" />
+				<ColumnDefinition Width="70" />
+				<ColumnDefinition Width="50" />
+				<ColumnDefinition Width="70" />
+			</Grid.ColumnDefinitions>
+
+			<TextBlock Grid.Column="0" IsEnabled="False" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Min}"/>:</TextBlock>
+			<Label Grid.Column="1" HorizontalContentAlignment="Right">
+				<Hyperlink x:Name="MinPrice" IsEnabled="False" Click="MinPrice_OnClick">
+                    <TextBlock Text="{Binding Path=MinPrice}" />
+				</Hyperlink>
+			</Label>
+
+			<TextBlock Grid.Column="2" IsEnabled="False" VerticalAlignment="Center"><Run Text="{x:Static loc:LocalizedStrings.Bid}" />:</TextBlock>
+			<Label Grid.Column="3" HorizontalContentAlignment="Right">
+				<Hyperlink x:Name="BestBidPrice" IsEnabled="False" Click="BestBidPrice_OnClick">
+                    <TextBlock Text="{Binding Path=BestBidPrice}" />
+				</Hyperlink>
+			</Label>
+		</Grid>
+
+		<TextBlock Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.Volume}" /><Run Text=":" />
+		</TextBlock>
+		<Grid Grid.Column="1" Grid.Row="8">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			
+			<xctk:DecimalUpDown x:Name="VolumeCtrl" Minimum="0" Grid.Column="0" Height="25" TextAlignment="Right" ValueChanged="VolumeCtrl_OnValueChanged" Value="{Binding ElementName=VisibleVolumeCtrl, Path=Value, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
+			
+			<Grid Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+
+				<Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
+					<Hyperlink Click="Vol1_OnClick">1</Hyperlink>
+				</Label>
+				<Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center">
+					<Hyperlink Click="Vol10_OnClick">10</Hyperlink>
+				</Label>
+				<Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center">
+					<Hyperlink Click="Vol20_OnClick">20</Hyperlink>
+				</Label>
+				<Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">
+					<Hyperlink Click="Vol50_OnClick">50</Hyperlink>
+				</Label>
+				<Label Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center">
+					<Hyperlink Click="Vol100_OnClick">100</Hyperlink>
+				</Label>
+				<Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center">
+					<Hyperlink Click="Vol200_OnClick">200</Hyperlink>
+				</Label>
+			</Grid>
+		</Grid>
+
+		<TextBlock Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right">
+			<Run Text="{x:Static loc:LocalizedStrings.VisibleVolume}"/><Run Text=":"/>
+		</TextBlock>
+		<xctk:DecimalUpDown x:Name="VisibleVolumeCtrl" Minimum="0" Grid.Column="1" Grid.Row="9" />
+
+		<Label Grid.Column="0" Grid.Row="11" Content="{x:Static loc:LocalizedStrings.XamlStr731}" HorizontalAlignment="Right" />
+		<Grid Grid.Column="1" Grid.Row="11">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<xctk:DecimalUpDown x:Name="AmountCtrl" Minimum="0" Increment="0.01" ValueChanged="AmountCtrl_OnValueChanged" />
+			<Button x:Name="ToVolume" Grid.Column="2" Click="ToVolume_OnClick" IsEnabled="False">
+				<TextBlock>
+					<Run Text="-> "/><Run Text="{x:Static loc:LocalizedStrings.Volume}"/>
+				</TextBlock>
+			</Button>
+		</Grid>
+
+		<Label Grid.Column="0" Grid.Row="13" Content="{x:Static loc:LocalizedStrings.XamlStr72}" HorizontalAlignment="Right" />
+		<ComboBox Grid.Column="1" Grid.Row="13" x:Name="TimeInForceCtrl" SelectionChanged="TimeInForceCtrl_OnSelectionChanged" />
+
+		<TextBlock Grid.Column="0" Grid.Row="15" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.XamlStr114}" /><Run Text=":"/>
+		</TextBlock>
+		<editors:DateTimeEditBox Grid.Column="1" Grid.Row="15" x:Name="ExpiryDate" CenterSlotHorizontalAlignment="Right" IsEnabled="False" ValueChanged="ExpiryDate_OnValueChanged" />
+
+		<Button x:Name="Send" Content="{x:Static loc:LocalizedStrings.XamlStr427}" ex:XamlHelper.DialogResult="True" IsEnabled="False" IsDefault="True" Grid.Column="0" Grid.Row="17" Grid.ColumnSpan="2" Width="100" Height="22" />
+	</Grid>
+</Window>

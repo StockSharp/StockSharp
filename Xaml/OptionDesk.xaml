@@ -1,0 +1,191 @@
+<ug:UniversalGrid
+				x:Class="StockSharp.Xaml.OptionDesk"
+				xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+				xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+				xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+				xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+				xmlns:xaml="clr-namespace:StockSharp.Xaml">
+
+	<ug:UniversalGrid.Resources>
+		<converters:FormattingConverter x:Key="ValueConverter" />
+        <xaml:NullableDecimalValueConverter x:Key="NullableDecimalValueConverter" />
+
+		<Style x:Key="NumberCellStyle" TargetType="{x:Type TextBlock}">
+			<Setter Property="TextAlignment" Value="Right" />
+			<Setter Property="Margin" Value="-1"/>
+		</Style>
+		<Style x:Key="CodeCellStyle" TargetType="{x:Type TextBlock}">
+			<Setter Property="TextAlignment" Value="Center" />
+			<Setter Property="Margin" Value="-1"/>
+		</Style>
+
+		<Style x:Key="VolatilityProgressStyle" TargetType="{x:Type ProgressBar}">
+			<Setter Property="Margin" Value="-1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ProgressBar}">
+						<Grid MinHeight="20" MinWidth="240">
+							<Rectangle Name="PART_Track" Fill="Gainsboro" Stroke="LightGray" StrokeThickness="1" />
+							<Rectangle Name="PART_Indicator" Fill="DarkGray" Stroke="DarkGray" StrokeThickness="1" HorizontalAlignment="Left" />
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="CallProgressStyle" TargetType="{x:Type ProgressBar}">
+			<Setter Property="Margin" Value="-1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ProgressBar}">
+						<Grid MinHeight="20" MinWidth="240">
+							<Rectangle Name="PART_Track" Fill="#FFBEE0BD" Stroke="#FFBEE0BD" StrokeThickness="1" />
+							<Rectangle Name="PART_Indicator" Fill="DarkSeaGreen" Stroke="DarkSeaGreen" StrokeThickness="1" HorizontalAlignment="Left" />
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="PutProgressStyle" TargetType="{x:Type ProgressBar}">
+			<Setter Property="Margin" Value="-1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ProgressBar}">
+						<Grid MinHeight="20" MinWidth="240">
+							<Rectangle Name="PART_Track" Fill="#FFFFBEBD" Stroke="LightGray" StrokeThickness="1" />
+							<Rectangle Name="PART_Indicator" Fill="LightCoral" Stroke="LightCoral" StrokeThickness="1" HorizontalAlignment="Left" />
+						</Grid>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</ug:UniversalGrid.Resources>
+	
+	<ug:UniversalGrid.Columns>
+		<DataGridTextColumn x:Name="CallRho" Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str317}" Width="45" Binding="{Binding Path=Call.Rho}" SortMemberPath="Call.Rho" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallTheta" Header="{x:Static loc:LocalizedStrings.Str303}" Width="45" Binding="{Binding Path=Call.Theta}" SortMemberPath="Call.Theta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallVega" Header="{x:Static loc:LocalizedStrings.Str302}" Width="45" Binding="{Binding Path=Call.Vega}" SortMemberPath="Call.Vega" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallGamma" Header="{x:Static loc:LocalizedStrings.Str301}" Width="45" Binding="{Binding Path=Call.Gamma}" SortMemberPath="Call.Gamma" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallDelta" Header="{x:Static loc:LocalizedStrings.Str300}" Width="45" Binding="{Binding Path=Call.Delta}" SortMemberPath="Call.Delta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallBid" Header="{x:Static loc:LocalizedStrings.Bid}" Width="70" Binding="{Binding Path=Call.BestBidPrice}" SortMemberPath="Call.BestBidPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallAsk" Header="{x:Static loc:LocalizedStrings.Ask}" Width="70" Binding="{Binding Path=Call.BestAskPrice}" SortMemberPath="Call.BestAskPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallTheorPrice" Header="{x:Static loc:LocalizedStrings.XamlStr743}" Width="70" Binding="{Binding Path=Call.TheorPrice}" SortMemberPath="Call.TheorPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTemplateColumn x:Name="CallVolume" Header="{x:Static loc:LocalizedStrings.Volume}" Width="70" SortMemberPath="Call.Volume">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Grid>
+						<ProgressBar Value="{Binding Path=Call.Volume, Mode=OneWay}" Maximum="{Binding Path=Call.MaxVolume, Mode=OneWay}" Style="{StaticResource CallProgressStyle}" />
+						<TextBlock Text="{Binding Path=Call.Volume, Mode=OneWay}" TextAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTemplateColumn x:Name="CallOpenInterest" Header="{x:Static loc:LocalizedStrings.OI}" Width="70" SortMemberPath="Call.OpenInterest">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Grid>
+						<ProgressBar Value="{Binding Path=Call.OpenInterest, Mode=OneWay}" Maximum="{Binding Path=Call.MaxOpenInterest, Mode=OneWay}" Style="{StaticResource CallProgressStyle}" />
+						<TextBlock Text="{Binding Path=Call.OpenInterest, Mode=OneWay}" TextAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTextColumn x:Name="CallSecCode" Header="{x:Static loc:LocalizedStrings.Code}" Width="100" Visibility="Collapsed" Binding="{Binding Path=Call.Option.Code}" SortMemberPath="Call.Option.Code" ElementStyle="{StaticResource CodeCellStyle}"/>
+
+		<DataGridTextColumn x:Name="Strike" Header="{x:Static loc:LocalizedStrings.Strike}" Width="80" Binding="{Binding Path=Strike, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:0 ###\}'}" SortMemberPath="Strike">
+			<DataGridTextColumn.ElementStyle>
+				<Style TargetType="{x:Type TextBlock}">
+					<Setter Property="TextAlignment" Value="Center"/>
+					<Setter Property="Margin" Value="-1"/>
+				</Style>
+			</DataGridTextColumn.ElementStyle>
+		</DataGridTextColumn>
+
+		<DataGridTemplateColumn x:Name="ImpliedVolatility" Header="IV" Width="90" SortMemberPath="ImpliedVolatility">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Grid>
+                        <ProgressBar Value="{Binding Path=ImpliedVolatility, Mode=OneWay, Converter={StaticResource NullableDecimalValueConverter}}" Maximum="{Binding Path=MaxImpliedVolatility, Mode=OneWay}" Style="{StaticResource VolatilityProgressStyle}" />
+						<TextBlock Text="{Binding Path=ImpliedVolatility, Mode=OneWay}" TextAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+
+		<DataGridTemplateColumn x:Name="HistoricalVolatility" Visibility="Collapsed" Header="HV" Width="90" SortMemberPath="HistoricalVolatility">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Grid>
+                        <ProgressBar Value="{Binding Path=HistoricalVolatility, Mode=OneWay, Converter={StaticResource NullableDecimalValueConverter}}" Maximum="{Binding Path=MaxHistoricalVolatility, Mode=OneWay}" Style="{StaticResource VolatilityProgressStyle}" />
+						<TextBlock Text="{Binding Path=HistoricalVolatility, Mode=OneWay}" TextAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+
+		<DataGridTemplateColumn x:Name="PnL" Header="P&amp;L" Width="90" SortMemberPath="PnL">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Grid>
+						<ProgressBar Value="{Binding Path=PnL, Mode=OneWay}" Maximum="{Binding Path=MaxPnL, Mode=OneWay}" Style="{StaticResource VolatilityProgressStyle}" />
+						<TextBlock Text="{Binding Path=PnL, Mode=OneWay}" TextAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+
+		<DataGridTextColumn x:Name="PutSecCode" Header="{x:Static loc:LocalizedStrings.Code}" Width="100" Visibility="Collapsed" Binding="{Binding Path=Put.Option.Code}" SortMemberPath="Put.Option.Code" ElementStyle="{StaticResource CodeCellStyle}"/>
+		<!--<DataGridTextColumn x:Name="PutOpenInterest" Header="{x:Static loc:LocalizedStrings.OI}" Width="70" Binding="{Binding Path=Put.Option.OpenInterest}" SortMemberPath="Put.Option.OpenInterest" ElementStyle="{StaticResource NumberCellStyle}"/>-->
+		<DataGridTemplateColumn x:Name="PutOpenInterest" Header="{x:Static loc:LocalizedStrings.OI}" Width="70" SortMemberPath="Put.OpenInterest">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Grid>
+						<ProgressBar Value="{Binding Path=Put.OpenInterest, Mode=OneWay}" Maximum="{Binding Path=Put.MaxOpenInterest, Mode=OneWay}" Style="{StaticResource PutProgressStyle}" />
+						<TextBlock Text="{Binding Path=Put.OpenInterest, Mode=OneWay}" TextAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTemplateColumn x:Name="PutVolume" Header="{x:Static loc:LocalizedStrings.Volume}" Width="70" SortMemberPath="Put.Volume">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<Grid>
+						<ProgressBar Value="{Binding Path=Put.Volume, Mode=OneWay}" Maximum="{Binding Path=Put.MaxVolume, Mode=OneWay}" Style="{StaticResource PutProgressStyle}" />
+						<TextBlock Text="{Binding Path=Put.Volume, Mode=OneWay}" TextAlignment="Right" />
+					</Grid>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTextColumn x:Name="PutTheorPrice" Header="{x:Static loc:LocalizedStrings.XamlStr743}" Width="70" Binding="{Binding Path=Put.TheorPrice}" SortMemberPath="Put.TheorPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutBid" Header="{x:Static loc:LocalizedStrings.Bid}" Width="70" Binding="{Binding Path=Put.BestBidPrice}" SortMemberPath="Put.BestBidPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutAsk" Header="{x:Static loc:LocalizedStrings.Ask}" Width="70" Binding="{Binding Path=Put.BestAskPrice}" SortMemberPath="Put.BestAskPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutDelta" Header="{x:Static loc:LocalizedStrings.Str300}" Width="45" Binding="{Binding Path=Put.Delta}" SortMemberPath="Put.Delta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutGamma" Header="{x:Static loc:LocalizedStrings.Str301}" Width="45" Binding="{Binding Path=Put.Gamma}" SortMemberPath="Put.Gamma" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutVega" Header="{x:Static loc:LocalizedStrings.Str302}" Width="45" Binding="{Binding Path=Put.Vega}" SortMemberPath="Put.Vega" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutTheta" Header="{x:Static loc:LocalizedStrings.Str303}" Width="45" Binding="{Binding Path=Put.Theta}" SortMemberPath="Put.Theta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutRho" Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str317}" Width="45" Binding="{Binding Path=Put.Rho}" SortMemberPath="Put.Rho" ElementStyle="{StaticResource NumberCellStyle}"/>
+	</ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

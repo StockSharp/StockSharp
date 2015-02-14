@@ -1,0 +1,75 @@
+<xctk:DropDownButton
+			x:Class="StockSharp.Xaml.PropertyGrid.CandleSettingsEditor"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+			xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+			xmlns:local="clr-namespace:StockSharp.Xaml"
+			Loaded="CandleSettingsEditor_OnLoaded"
+			mc:Ignorable="d" d:DesignWidth="200" Margin="0" HorizontalContentAlignment="Left">
+
+    <xctk:DropDownButton.DropDownContent>
+        <StackPanel Width="220">
+            <ComboBox x:Name="CandleType" DisplayMemberPath="Value" BorderThickness="0" SelectionChanged="CandleType_SelectionChanged" Margin="0,0,0,1" />
+
+            <Grid x:Name="TimeFramePanel" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+				<TextBlock Grid.Row="0" Grid.Column="0">
+					<Run Text="{x:Static loc:LocalizedStrings.Str1242}"/><Run Text=":"/>
+				</TextBlock>
+                <editors:TimeSpanEditBox x:Name="TimeFrame" Grid.Row="0" Grid.Column="1" Format="d hh:mm:ss" CenterSlotHorizontalAlignment="Right" ValueChanged="TimeFrameValueChanged" />
+            </Grid>
+            <Grid x:Name="UnitValuePanel" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{x:Static loc:LocalizedStrings.XamlStr197}" Grid.Row="0" Grid.Column="0"/>
+                <local:UnitEditor x:Name="UnitValue" Grid.Row="0" Grid.Column="1" BorderThickness="0" ValueChanged="UnitValueChanged"/>
+            </Grid>
+            <Grid x:Name="DecimalValuePanel" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0">
+					<Run Text="{x:Static loc:LocalizedStrings.Volume}" /><Run Text=":" />
+				</TextBlock>
+                <xctk:DecimalUpDown x:Name="DecimalValue" Grid.Row="0" Grid.Column="1" Value="1" ValueChanged="ValueChanged" />
+            </Grid>
+            <Grid x:Name="IntValuePanel" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{x:Static loc:LocalizedStrings.Ticks}" Grid.Row="0" Grid.Column="0"/>
+                <xctk:IntegerUpDown x:Name="IntValue" Grid.Row="0" Grid.Column="1" Value="1" ValueChanged="ValueChanged" />
+            </Grid>
+            <Grid x:Name="PnfValuePanel" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{x:Static loc:LocalizedStrings.XamlStr197}" Grid.Row="0" Grid.Column="0"/>
+				<local:UnitEditor x:Name="PnfBoxSize" Grid.Row="0" Grid.Column="1" BorderThickness="0" ValueChanged="UnitValueChanged"/>
+
+                <Label Content="{x:Static loc:LocalizedStrings.XamlStr57}" Grid.Row="1" Grid.Column="0"/>
+                <xctk:IntegerUpDown x:Name="PnfReversalAmount" Grid.Row="1" Grid.Column="1" Value="1" ValueChanged="ValueChanged"/>
+            </Grid>
+        </StackPanel>
+    </xctk:DropDownButton.DropDownContent>
+</xctk:DropDownButton>

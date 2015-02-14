@@ -1,0 +1,156 @@
+<UserControl x:Class="StockSharp.Xaml.LogControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
+			 xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+             xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml" 
+             xmlns:local="clr-namespace:StockSharp.Xaml"
+             mc:Ignorable="d" d:DesignWidth="595"
+			 DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    
+    <UserControl.Resources>
+		<converters:DateTimeOffsetConverter x:Key="ValueConverter" />
+
+		<Style TargetType="{x:Type ex:BmpImage}" x:Key="toolbarImageStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=1}, Path=IsEnabled}" Value="False">
+                    <Setter Property="Opacity" Value="0.3"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ToolBar Grid.Row="0" ToolBarTray.IsLocked="True" Margin="-1,0,0,0">
+            <ToggleButton Margin="0,0,2,0" 
+                          IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:LogControl}}, Path=ShowError}">
+                <StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="Images\error_16x16.png" Style="{StaticResource toolbarImageStyle}" />
+					<TextBlock Text="{Binding Path=Messages.ErrorCount, Mode=OneWay}" VerticalAlignment="Center"/>
+                    <TextBlock Margin="3,1,1,1" Text="{x:Static loc:LocalizedStrings.XamlStr443}"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton Margin="0,0,2,0"  
+                          IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:LogControl}}, Path=ShowWarning}">
+                <StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="Images\warning_16x16.png" Style="{StaticResource toolbarImageStyle}" />
+					<TextBlock Text="{Binding Path=Messages.WarningCount, Mode=OneWay}" VerticalAlignment="Center"/>
+					<TextBlock Margin="3,1,1,1" Text="{x:Static loc:LocalizedStrings.XamlStr534}"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton Margin="0,0,2,0"  
+                          IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:LogControl}}, Path=ShowInfo}">
+                <StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="Images\info_16x16.png" Style="{StaticResource toolbarImageStyle}" />
+					<TextBlock Text="{Binding Path=Messages.InfoCount, Mode=OneWay}" VerticalAlignment="Center"/>
+					<TextBlock Margin="3,1,1,1" Text="{x:Static loc:LocalizedStrings.XamlStr685}"/>
+                </StackPanel>
+            </ToggleButton>
+            <ToggleButton Margin="0,0,2,0"  
+                          IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:LogControl}}, Path=ShowDebug}">
+				<StackPanel Orientation="Horizontal">
+					<ex:BmpImage Source="Images\debug.png" Style="{StaticResource toolbarImageStyle}" />
+					<TextBlock Text="{Binding Path=Messages.DebugCount, Mode=OneWay}" VerticalAlignment="Center"/>
+					<TextBlock Margin="3,1,1,1" Text="{x:Static loc:LocalizedStrings.Str12}"/>
+				</StackPanel>
+			</ToggleButton>
+
+			<Separator Margin="2,0,2,0"/>
+
+            <ToggleButton Margin="0,0,2,0" Content="{x:Static loc:LocalizedStrings.XamlStr17}" 
+                          IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:LogControl}}, Path=AutoScroll}" />
+            <ToggleButton Margin="0,0,2,0" Content="{x:Static loc:LocalizedStrings.XamlStr13}" 
+                          IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:LogControl}}, Path=AutoResize}"/>
+        </ToolBar>
+        
+		<ug:UniversalGrid x:Name="MessageGrid" Grid.Row="1" VirtualizingStackPanel.IsVirtualizing="True"
+						  VirtualizingStackPanel.VirtualizationMode="Recycling" HorizontalAlignment="Stretch">
+            <!--<ListView.CommandBindings>
+                <CommandBinding Command="Copy" CanExecute="CopyCanExecute" Executed="CopyExecuted"/>
+            </ListView.CommandBindings>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr17}" x:Name="AutoScrollMenuItem" Click="AutoScrollMenuItem_Click"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr13}" x:Name="AutoResizeMenuItem" Click="AutoResizeMenuItem_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>-->
+			<ug:UniversalGrid.Columns>
+				<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Name}" Binding="{Binding Path=Source.Name}" SortMemberPath="Source.Name" />
+
+				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str219}" SortMemberPath="Time">
+					<DataGridTemplateColumn.CellStyle>
+						<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+					</DataGridTemplateColumn.CellStyle>
+					<DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <!--<TextBlock.Text>
+                                    <Binding Path="Time" />
+                                </TextBlock.Text>-->
+								<TextBlock.Text>
+									<MultiBinding Converter="{StaticResource ValueConverter}">
+									<MultiBinding.Bindings>
+										<Binding Path="Time" />
+										<Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:LogControl}}" Path="TimeFormat" />
+									</MultiBinding.Bindings>
+								</MultiBinding>  
+								</TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Type}" SortMemberPath="Level">
+					<DataGridTemplateColumn.CellStyle>
+						<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+					</DataGridTemplateColumn.CellStyle>
+					<DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+							<TextBlock x:Name="TypeCtrl" TextAlignment="Center" />
+                            <DataTemplate.Triggers>
+								<DataTrigger Binding="{Binding Path=Level}" Value="Warning">
+									<Setter TargetName="TypeCtrl" Property="Foreground" Value="DarkBlue"/>
+									<Setter TargetName="TypeCtrl" Property="Text" Value="W"/>
+                                </DataTrigger>
+								<DataTrigger Binding="{Binding Path=Level}" Value="Error">
+									<Setter TargetName="TypeCtrl" Property="Foreground" Value="Red"/>
+									<Setter TargetName="TypeCtrl" Property="Text" Value="E"/>
+                                </DataTrigger>
+								<DataTrigger Binding="{Binding Path=Level}" Value="Debug">
+									<Setter TargetName="TypeCtrl" Property="Foreground" Value="DarkGray"/>
+									<Setter TargetName="TypeCtrl" Property="Text" Value="D"/>
+								</DataTrigger>
+							</DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+				
+                <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str3166}" SortMemberPath="Message">
+					<DataGridTemplateColumn.CellStyle>
+						<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+					</DataGridTemplateColumn.CellStyle>
+					<DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock x:Name="MessageCtrl" Text="{Binding Path=Message}" />
+                            <DataTemplate.Triggers>
+								<DataTrigger Binding="{Binding Path=Level}" Value="Error">
+                                    <Setter TargetName="MessageCtrl" Property="Foreground" Value="Red"/>
+                                </DataTrigger>
+								<DataTrigger Binding="{Binding Path=Level}" Value="Debug">
+									<Setter TargetName="MessageCtrl" Property="Foreground" Value="Black"/>
+								</DataTrigger>
+							</DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </ug:UniversalGrid.Columns>
+        </ug:UniversalGrid>
+    </Grid>
+</UserControl>

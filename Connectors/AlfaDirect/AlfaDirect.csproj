@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AAA445E0-AA85-4B49-AD45-EDD1B4839137}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.AlfaDirect</RootNamespace>
+    <AssemblyName>StockSharp.AlfaDirect</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.AlfaDirect.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.AlfaDirect.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\StockSharp.AlfaDirect.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop">
+      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.ADLite, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\References\AlfaDirect\Interop.ADLite.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq, Version=1.0.16127.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AlfaDirectMessageAdapter.cs" />
+    <Compile Include="AlfaDirectMessageAdapter_MarketData.cs" />
+    <Compile Include="AlfaDirectMessageAdapter_Transaction.cs" />
+    <Compile Include="AlfaDirectSessionHolder.cs" />
+    <Compile Include="AlfaException.cs" />
+    <Compile Include="AlfaOrderCondition.cs" />
+    <Compile Include="Native\AlfaTable.cs" />
+    <Compile Include="AlfaTimeFrames.cs" />
+    <Compile Include="AlfaTrader.cs" />
+    <Compile Include="Native\AlfaUtils.cs" />
+    <Compile Include="Native\AlfaWrapper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
+      <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
+      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Xaml\Xaml.csproj">
+      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

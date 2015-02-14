@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Messages</RootNamespace>
+    <AssemblyName>StockSharp.Messages</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Messages.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Messages.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Reflection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization.FieldFactories, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="MoreLinq, Version=1.0.16127.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="BaseConnectionMessage.cs" />
+    <Compile Include="BoardMessage.cs" />
+    <Compile Include="CandleMessage.cs" />
+    <Compile Include="ChangePasswordMessage.cs" />
+    <Compile Include="ClearMessageQueueMessage.cs" />
+    <Compile Include="ConnectMessage.cs" />
+    <Compile Include="Currency.cs" />
+    <Compile Include="CurrencyTypes.cs" />
+    <Compile Include="DisconnectMessage.cs" />
+    <Compile Include="ExecutionMessage.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="IExtendableEntity.cs" />
+    <Compile Include="IMessageAdapter.cs" />
+    <Compile Include="IMessageSessionHolder.cs" />
+    <Compile Include="IMessageChannel.cs" />
+    <Compile Include="IMessageProcessor.cs" />
+    <Compile Include="MainCategoryAttribute.cs" />
+    <Compile Include="BaseChangeMessage.cs" />
+    <Compile Include="ErrorMessage.cs" />
+    <Compile Include="MessageAdapter.cs" />
+    <Compile Include="MessageAdapterReConnectionSettings.cs" />
+    <Compile Include="MessageSessionHolder.cs" />
+    <Compile Include="MessageDirections.cs" />
+    <Compile Include="MessageProcessor.cs" />
+    <Compile Include="MessageProcessorPool.cs" />
+    <Compile Include="MessageTypes.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="NewsMessage.cs" />
+    <Compile Include="OptionTypes.cs" />
+    <Compile Include="OrderCancelMessage.cs" />
+    <Compile Include="OrderCondition.cs" />
+    <Compile Include="OrderGroupCancelMessage.cs" />
+    <Compile Include="OrderMessage.cs" />
+    <Compile Include="OrderPairReplaceMessage.cs" />
+    <Compile Include="OrderRegisterMessage.cs" />
+    <Compile Include="OrderReplaceMessage.cs" />
+    <Compile Include="OrderStates.cs" />
+    <Compile Include="OrderStatus.cs" />
+    <Compile Include="OrderStatusMessage.cs" />
+    <Compile Include="OrderTypes.cs" />
+    <Compile Include="PortfolioChangeMessage.cs" />
+    <Compile Include="PortfolioLookupMessage.cs" />
+    <Compile Include="PortfolioLookupResultMessage.cs" />
+    <Compile Include="PortfolioMessage.cs" />
+    <Compile Include="PositionChangeMessage.cs" />
+    <Compile Include="PositionMessage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuoteChange.cs" />
+    <Compile Include="QuoteChangeMessage.cs" />
+    <Compile Include="Level1ChangeMessage.cs" />
+    <Compile Include="MarketDataMessage.cs" />
+    <Compile Include="RepoOrderInfo.cs" />
+    <Compile Include="RpsOrderInfo.cs" />
+    <Compile Include="SecurityId.cs" />
+    <Compile Include="SecurityLookupMessage.cs" />
+    <Compile Include="SecurityLookupResultMessage.cs" />
+    <Compile Include="SecurityMessage.cs" />
+    <Compile Include="SecurityStates.cs" />
+    <Compile Include="SecurityTypes.cs" />
+    <Compile Include="SessionMessage.cs" />
+    <Compile Include="Sides.cs" />
+    <Compile Include="TimeInForce.cs" />
+    <Compile Include="TimeMessage.cs" />
+    <Compile Include="TPlusLimits.cs" />
+    <Compile Include="Unit.cs" />
+    <Compile Include="WorkingTime.cs" />
+    <Compile Include="WorkingTimePeriod.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,7 +1,7 @@
 StockSharp Studio
 ======
 
-S#.Studio is a free graphical environment for trading on any exchanges (american, europian and asian stock markets, forex, bincoins and options). Support algorithmic strategies (C# or visual designer). More info http://stocksharp.com/products/studio/
+S#.Studio is a free graphical environment for trading on any exchanges (american, europian and asian stock markets, forex, bitcoins and options). Support algorithmic strategies (C# or visual designer). More info http://stocksharp.com/products/studio/
 
 ![Studio1](http://stocksharp.com/file.ashx?t=forum&size=400x200&fid=2099)
 ![Studio2](http://stocksharp.com/file.ashx?t=forum&size=400x200&fid=2091)

@@ -1,0 +1,625 @@
+<?xml version="1.0"?>
+<doc>
+  <assembly>
+    <name>StockSharp.IQFeed</name>
+  </assembly>
+  <members>
+    <member name="T:StockSharp.IQFeed.IQFeedSessionHolder">
+      <summary>
+            Контейнер для сессии.
+            </summary>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.CreateTransactionAdapter">
+      <summary>
+            Создать транзакционный адаптер.
+            </summary>
+      <returns>Транзакционный адаптер.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.CreateMarketDataAdapter">
+      <summary>
+            Создать адаптер маркет-данных.
+            </summary>
+      <returns>Адаптер маркет-данных.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Создать <see cref="T:StockSharp.IQFeed.IQFeedSessionHolder" />.
+            </summary>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.ToString">
+      <summary>
+            Получить строковое представление контейнера.
+            </summary>
+      <returns>Строковое представление.</returns>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level1Address">
+      <summary>
+            Адрес для получения данных по Level1.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level2Address">
+      <summary>
+            Адрес для получения данных по Level2.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.LookupAddress">
+      <summary>
+            Адрес для получения исторических данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.AdminAddress">
+      <summary>
+            Адрес для получения служебных данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.DerivativeAddress">
+      <summary>
+            Адрес для получения производных данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level1Columns">
+      <summary>
+            Все <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />, которые необходимо транслировать.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.SecurityTypesFilter">
+      <summary>
+            Типы инструментов, по которым необходимо получить данные.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.IsDownloadSecurityFromSite">
+      <summary>
+            Загружать ли инструменты из архива с сайта IQFeed. По-умолчанию выключено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.SecuritiesFile">
+      <summary>
+            Путь к файлу со списком инструментов IQFeed, скаченный с сайта.
+            Если путь задан, то повторное скачивание с сайта не происходит, и парсится только локальная копия.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.IsValid">
+      <summary>
+            Проверить введенные параметры на валидность.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level1ColumnRegistry">
+      <summary>
+            Список всех доступных <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.TimeFrames">
+      <summary>
+            Доступные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="T:StockSharp.IQFeed.IQFeedAddresses">
+      <summary>
+            Адреса IQ Connect.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedAddresses.DefaultAdminAddress">
+      <summary>
+            Адрес по-умолчанию для получения служебных данных.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedAddresses.DefaultLookupAddress">
+      <summary>
+            Адрес по-умолчанию для получения исторических данных.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedAddresses.DefaultLevel2Address">
+      <summary>
+            Адрес по-умолчанию для получения данных по Level2.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedAddresses.DefaultLevel1Address">
+      <summary>
+            Адрес по-умолчанию для получения данных по Level1.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedAddresses.DefaultDerivativeAddress">
+      <summary>
+            Адрес по-умолчанию для получения производных данных.
+            </summary>
+    </member>
+    <member name="T:StockSharp.IQFeed.IQFeedLevel1Column">
+      <summary>
+            Колонка, описывающая поток данных Level1.
+            </summary>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedLevel1Column.ToString">
+      <summary>
+            Получить строковое представление.
+            </summary>
+      <returns>
+            Строковое представление.
+            </returns>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1Column.Name">
+      <summary>
+            Название колонки.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1Column.Type">
+      <summary>
+            Тип данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1Column.Format">
+      <summary>
+            Формат данных (в случае, если <see cref="P:StockSharp.IQFeed.IQFeedLevel1Column.Type" /> равен <see cref="T:System.DateTime" /> или <see cref="T:System.TimeSpan" />).
+            </summary>
+    </member>
+    <member name="T:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry">
+      <summary>
+            Список всех доступных <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Symbol">
+      <summary>
+            Код инструмента.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExchangeId">
+      <summary>
+            Код площадки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.LastTradePrice">
+      <summary>
+            Цена последней сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.TotalVolume">
+      <summary>
+            Общий объем за сессию.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.High">
+      <summary>
+            Наивысшая цена за сессию.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Low">
+      <summary>
+            Наименьшая цена за сессию.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.BidPrice">
+      <summary>
+            Цена бида.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.AskPrice">
+      <summary>
+            Цена офера.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.BidVolume">
+      <summary>
+            Объем бида.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.AskVolume">
+      <summary>
+            Объем офера.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.OpenInterest">
+      <summary>
+            Открытый интерес.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Open">
+      <summary>
+            Цена открытия.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Close">
+      <summary>
+            Цена закрытия.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Settle">
+      <summary>
+            Расчетное значение.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Delay">
+      <summary>
+            Время задержки данных в минутах (если используется не риал-тайм данные).
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ShortSaleRestrictedCode">
+      <summary>
+            Флаг, означающий допустимость коротких продаж.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.NetAssetValueMutualFonds">
+      <summary>
+            Значение чистой доходности для пифов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.AverageDaysMaturity">
+      <summary>
+            Среднее время до поставки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.SevenDayYield">
+      <summary>
+            Доходность за 7 дней.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.NetAssetValueFx">
+      <summary>
+            Значение чистой доходности для FX.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MarketOpen">
+      <summary>
+            Признак открытия рынка.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.FractionDisplayCode">
+      <summary>
+            Формат дробной цены.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.DecimalPrecision">
+      <summary>
+            Точность после запятой.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.PrevDayVolume">
+      <summary>
+            Объем за предыдущую торговую сессию.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.OpenRange1">
+      <summary>
+            Диапазон открытия.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.CloseRange1">
+      <summary>
+            Диапазон закрытия.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.OpenRange2">
+      <summary>
+            Диапазон открытия.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.CloseRange2">
+      <summary>
+            Диапазон закрытия.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.TradeCount">
+      <summary>
+            Количество сделок за сессию.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.VWAP">
+      <summary>
+            VWAP.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.LastTradeId">
+      <summary>
+            Идентификатор последней сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.FinancialStatusIndicator">
+      <summary>
+            Код индикатора.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.SettlementDate">
+      <summary>
+            Дата поставки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.BidMarket">
+      <summary>
+            Идентификатор рынка бида.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.AskMarket">
+      <summary>
+            Идентификатор рынка офера.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.AvailableRegions">
+      <summary>
+            Доступные регионы.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.LastTradeVolume">
+      <summary>
+            Объем последней сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.LastTradeTime">
+      <summary>
+            Время последней сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.LastTradeMarket">
+      <summary>
+            Идентификатор рынка последней сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradePrice">
+      <summary>
+            Наиболее частая цена сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeVolume">
+      <summary>
+            Наиболее частый объем сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeTime">
+      <summary>
+            Наиболее частое время сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeConditions">
+      <summary>
+            Наиболее частое условие сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeMarket">
+      <summary>
+            Идентификатор рынка наиболее частой сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradePrice">
+      <summary>
+            Цена последней расширенной сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradeVolume">
+      <summary>
+            Объем последней расширенной сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradeTime">
+      <summary>
+            Время последней расширенной сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.ExtendedTradeMarket">
+      <summary>
+            Идентификатор рынка последней расширенной сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MessageContents">
+      <summary>
+            Коды контента.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.AskTime">
+      <summary>
+            Время офера.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.BidTime">
+      <summary>
+            Время бида.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.LastDate">
+      <summary>
+            Время последней кратной сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.LastExtendedTradeDate">
+      <summary>
+            Дата последней расширенной сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.MostRecentTradeDate">
+      <summary>
+            Наиболее частая дата сделки.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedLevel1ColumnRegistry.Item(System.String)">
+      <summary>
+            Получить колонку по имени <see cref="P:StockSharp.IQFeed.IQFeedLevel1Column.Name" />.
+            </summary>
+      <param name="name">Имя колонка.</param>
+      <returns>Найденная колонка. Если колонка не существует, то будет возвращено null.</returns>
+    </member>
+    <member name="T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter">
+      <summary>
+            Маркет-дата адаптер сообщений для IQFeed.
+            </summary>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.#ctor(StockSharp.IQFeed.IQFeedSessionHolder)">
+      <summary>
+            Создать <see cref="T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter" />.
+            </summary>
+      <param name="sessionHolder">Контейнер для сессии.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.StartMarketTimer">
+      <summary>
+            Запустить таймер генерации с интервалом <see cref="P:StockSharp.Messages.IMessageSessionHolder.MarketTimeChangedInterval" /> сообщений <see cref="T:StockSharp.Messages.TimeMessage" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+      <summary>
+            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Отправить сообщение.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+    </member>
+    <member name="T:StockSharp.IQFeed.IQFeedTrader">
+      <summary>
+            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с DTN IQFeed для скачивания исторических и реал-тайм маркет-данных (level 1, level 2).
+            </summary>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.IQFeed.IQFeedTrader" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.RequestNews(System.DateTime)">
+      <summary>
+            Запросить новости для заданной даты.
+            </summary>
+      <param name="date">Дата.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean@)">
+      <summary>
+            Получить исторические сделки.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить все сделки.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
+      <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
+      <returns>Исторические сделки.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.Int64,System.Boolean@)">
+      <summary>
+            Получить исторических тиков.
+            </summary>
+      <param name="securityId">Идентификатор инструмента, для которого необходимо получить все сделки.</param>
+      <param name="count">Максимальное количество тиков.</param>
+      <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
+      <returns>Исторические сделки.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalLevel1(StockSharp.Messages.SecurityId,System.DateTime,System.DateTime,System.Boolean@)">
+      <summary>
+            Получить исторических тиков.
+            </summary>
+      <param name="securityId">Идентификатор инструмента, для которого необходимо получить все сделки.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
+      <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
+      <returns>Исторические сделки.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)">
+      <summary>
+            Получить исторические свечи.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить свечи.</param>
+      <param name="candleType">Тип свечи.</param>
+      <param name="arg">Параметр свечки (например, тайм-фрейм).</param>
+      <param name="count">Максимальное количество тиков.</param>
+      <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
+      <returns>Исторические свечи.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.DateTime,System.DateTime,System.Boolean@)">
+      <summary>
+            Получить исторические свечи.
+            </summary>
+      <param name="security">Инструмент, для которого необходимо получить свечи.</param>
+      <param name="candleType">Тип свечи.</param>
+      <param name="arg">Параметр свечки (например, тайм-фрейм).</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
+      <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
+      <returns>Исторические свечи.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.GetSupportedRanges(StockSharp.Algo.Candles.CandleSeries)">
+      <summary>
+            Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
+            </summary>
+      <param name="series">Серия свечек.</param>
+      <returns>Временные диапазоны.</returns>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
+      <summary>
+            Подписаться на получение свечек.
+            </summary>
+      <param name="series">Серия свечек.</param>
+      <param name="from">Начальная дата, с которой необходимо получать данные.</param>
+      <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
+      <summary>
+            Остановить подписку получения свечек, ранее созданную через <see cref="M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+      <param name="series">Серия свечек.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+      <summary>
+            Обработать сообщение, содержащее рыночные данные.
+            </summary>
+      <param name="message">Сообщение, содержащее рыночные данные.</param>
+      <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+      <param name="direction">Направление сообщения.</param>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.Level1ColumnRegistry">
+      <summary>
+            Список всех доступных <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.Level1Address">
+      <summary>
+            Адрес для получения данных по Level1.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.Level2Address">
+      <summary>
+            Адрес для получения данных по Level2.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.LookupAddress">
+      <summary>
+            Адрес для получения исторических данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.AdminAddress">
+      <summary>
+            Адрес для получения служебных данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.IsDownloadSecurityFromSite">
+      <summary>
+            Загружать ли инструменты из архива с сайта IQFeed. По-умолчанию выключено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.SecurityTypesFilter">
+      <summary>
+            Типы инструментов, которые будут скачены с сайта при включенной опции <see cref="P:StockSharp.IQFeed.IQFeedTrader.IsDownloadSecurityFromSite" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedTrader.Level1Columns">
+      <summary>
+            Все <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />, которые необходимо транслировать.
+            </summary>
+    </member>
+    <member name="E:StockSharp.IQFeed.IQFeedTrader.NewCandles">
+      <summary>
+            Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.IQFeed.IQFeedTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            </summary>
+    </member>
+  </members>
+</doc>

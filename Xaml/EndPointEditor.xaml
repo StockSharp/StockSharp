@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="StockSharp.Xaml.EndPointEditor"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+			 xmlns:xaml="clr-namespace:StockSharp.Xaml"
+			 xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+			 DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+	<Control.Resources>
+		<Style TargetType="{x:Type editors:MaskedTextBox}">
+			<Setter Property="Validation.ErrorTemplate">
+				<Setter.Value>
+					<ControlTemplate>
+						<DockPanel LastChildFill="True">
+							<Border BorderBrush="Red" BorderThickness="1">
+								<AdornedElementPlaceholder />
+							</Border>
+						</DockPanel>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Style.Triggers>
+				<Trigger Property="Validation.HasError" Value="true">
+					<Setter Property="ToolTip"
+							Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+		<xaml:EndPointConverter x:Key="EndPointToString"/>
+	</Control.Resources>
+	
+	<Grid>
+		<editors:MaskedTextBox x:Name="Address">
+			<editors:MaskedTextBox.Text >
+				<Binding Path="EndPoint"
+						 RelativeSource="{RelativeSource AncestorType={x:Type xaml:EndPointEditor}}"
+						 Mode="TwoWay"
+						 NotifyOnValidationError="True"
+						 UpdateSourceTrigger="PropertyChanged" 
+						 Converter="{StaticResource EndPointToString}">
+					<Binding.ValidationRules>
+						<xaml:EndPointValidationRule/>
+					</Binding.ValidationRules>
+				</Binding>
+			</editors:MaskedTextBox.Text>
+		</editors:MaskedTextBox>
+	</Grid>
+</UserControl>

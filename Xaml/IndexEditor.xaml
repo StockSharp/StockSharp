@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="StockSharp.Xaml.IndexEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Grid, AncestorLevel=1}, Path=ActualWidth}"
+             d:DesignHeight="300"
+             d:DesignWidth="600"
+             LostFocus="UserControl_LostFocus"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="TextBoxControlTemplateNormal" TargetType="{x:Type RichTextBox}">
+            <Grid>
+                <Border Width="Auto"
+                        HorizontalAlignment="Stretch"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1,1,1,1">
+                    <ScrollViewer Name="PART_ContentHost" Background="{TemplateBinding Background}" />
+                </Border>
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Resources>
+    <Grid x:Name="ieGrid">
+        <Canvas Name="LayoutRoot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <RichTextBox Name="txInput"
+						 
+                         Width="{Binding Path=ActualWidth, ElementName=ieGrid, Mode=OneWay}"
+						 Height="{Binding Path=ActualHeight, ElementName=ieGrid, Mode=OneWay}"
+						 
+                         AcceptsTab="False"
+                         FontFamily="Segoe UI"
+                         FontSize="14"
+
+						 HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center"
+						 VerticalScrollBarVisibility="Auto"
+						 VerticalAlignment="Stretch"
+                         AcceptsReturn="True"
+
+                         IsDocumentEnabled="True"
+                         IsUndoEnabled="False"
+                         PreviewKeyDown="txInput_PreviewKeyDown"
+                         Template="{DynamicResource TextBoxControlTemplateNormal}"
+                         TextChanged="txInput_TextChanged"
+			/>
+        </Canvas>
+    </Grid>
+</UserControl>

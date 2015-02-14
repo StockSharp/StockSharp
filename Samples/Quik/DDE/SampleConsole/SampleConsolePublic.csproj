@@ -13,7 +13,8 @@
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>..\..\..\..\References\stocksharp.ico</ApplicationIcon>
-    <FileUpgradeFlags></FileUpgradeFlags>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <PublishUrl>publish\</PublishUrl>
@@ -60,19 +61,19 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\..\References\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\..\References\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\..\References\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\..\References\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\..\References\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -100,32 +101,38 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo">
-      <HintPath>..\..\..\..\References\StockSharp.Algo.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BusinessEntities">
-      <HintPath>..\..\..\..\References\StockSharp.BusinessEntities.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quik">
-      <HintPath>..\..\..\..\References\StockSharp.Quik.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Localization">
-      <HintPath>..\..\..\..\References\StockSharp.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Logging">
-      <HintPath>..\..\..\..\References\StockSharp.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Messages">
-      <HintPath>..\..\..\..\References\StockSharp.Messages.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="..\..\..\..\References\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Algo\Algo.csproj">
+      <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Connectors\Quik\Quik.csproj">
+      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
+      <Name>Quik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Logging\Logging.csproj">
+      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

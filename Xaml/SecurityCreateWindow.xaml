@@ -1,0 +1,21 @@
+<Window x:Class="StockSharp.Xaml.SecurityCreateWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:pg="clr-namespace:StockSharp.Xaml.PropertyGrid"
+        xmlns:xaml="clr-namespace:StockSharp.Xaml"
+        Title="{x:Static loc:LocalizedStrings.XamlStr667}" Height="600" Width="400"
+		WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
+	<Grid Margin="5">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="24" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<xaml:SecurityIdTextBox x:Name="SecurityId" TextChanged="SecurityId_TextChanged" />
+		<pg:PropertyGridEx x:Name="PropertyGrid" Grid.Row="2" />
+		<Button x:Name="Ok" Grid.Row="4" IsEnabled="False" IsDefault="True" Width="80" Click="Ok_Click">OK</Button>
+	</Grid>
+</Window>

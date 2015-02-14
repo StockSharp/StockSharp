@@ -47,7 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\..\StockSharp (GitLab)\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,11 +65,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj">
+    <ProjectReference Include="..\..\..\Connectors\Quik\Quik.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>Quik</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Localization\Localization.csproj">
+    <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>

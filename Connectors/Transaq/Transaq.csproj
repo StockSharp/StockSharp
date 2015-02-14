@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A00E5A4B-CB24-474A-8F2B-06A2E370C4F6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>StockSharp.Transaq</RootNamespace>
+    <AssemblyName>StockSharp.Transaq</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\StockSharp.Transaq.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\StockSharp.Transaq.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\References\Ecng\Ecng.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization.FieldFactories, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ApiLogLevels.cs" />
+    <Compile Include="InitMessage.cs" />
+    <Compile Include="Native\Responses\MaxBuySellTPlusResponse.cs" />
+    <Compile Include="Native\Responses\PortfolioMctResponse.cs" />
+    <Compile Include="TransaqMessageAdapter_MarketData.cs" />
+    <Compile Include="TransaqMessageAdapter.cs" />
+    <Compile Include="TransaqOrderCondition.cs" />
+    <Compile Include="TransaqSessionHolder.cs" />
+    <Compile Include="TransaqMessageAdapter_Transaction.cs" />
+    <Compile Include="Native\Commands\CancelNegDealMessage.cs" />
+    <Compile Include="Native\Commands\CancelReportMessage.cs" />
+    <Compile Include="Native\Commands\NewMRepoOrderMessage.cs" />
+    <Compile Include="Native\Commands\NewRepoOrderMessage.cs" />
+    <Compile Include="Native\Commands\NewRpsOrderMessage.cs" />
+    <Compile Include="Native\Commands\RequestMaxBuySellTPlusMessage.cs" />
+    <Compile Include="Native\Commands\RequestPortfolioTPlusMessage.cs" />
+    <Compile Include="Native\Extensions.cs" />
+    <Compile Include="Proxy.cs" />
+    <Compile Include="Native\Commands\CancelOrderMessage.cs" />
+    <Compile Include="Native\Commands\CancelStopOrderMessage.cs" />
+    <Compile Include="Native\Commands\ChangePassMessage.cs" />
+    <Compile Include="Native\Commands\DisconnectMessage.cs" />
+    <Compile Include="Native\Commands\MoveOrderMessage.cs" />
+    <Compile Include="Native\Commands\NewCondOrderMessage.cs" />
+    <Compile Include="Native\Commands\NewOrderMessage.cs" />
+    <Compile Include="Native\Commands\NewStopOrderMessage.cs" />
+    <Compile Include="Native\Commands\RequestClientLimitsMessage.cs" />
+    <Compile Include="Native\Commands\RequestConnectorVersionMessage.cs" />
+    <Compile Include="Native\Commands\RequestFortsPositionsMessage.cs" />
+    <Compile Include="Native\Commands\RequestLeverageControlMessage.cs" />
+    <Compile Include="Native\Commands\RequestMarketsMessage.cs" />
+    <Compile Include="Native\Commands\RequestNewsBodyMessage.cs" />
+    <Compile Include="Native\Commands\RequestOldNewsMessage.cs" />
+    <Compile Include="Native\Commands\RequestSecuritiesInfoMessage.cs" />
+    <Compile Include="Native\Commands\RequestSecuritiesMessage.cs" />
+    <Compile Include="Native\Commands\RequestServerIdMessage.cs" />
+    <Compile Include="Native\Commands\RequestServTimeDifferenceMessage.cs" />
+    <Compile Include="Native\Commands\ServerStatusMessage.cs" />
+    <Compile Include="Native\Commands\SubscribeMessage.cs" />
+    <Compile Include="Native\Commands\SubscribeTicksMessage.cs" />
+    <Compile Include="TransaqAlgoOrderCondition.cs" />
+    <Compile Include="Native\Commands\UnsubscribeMessage.cs" />
+    <Compile Include="Native\Responses\AllTradesResponse.cs" />
+    <Compile Include="Native\Responses\BoardsResponse.cs" />
+    <Compile Include="Native\Responses\CandleKindsResponse.cs" />
+    <Compile Include="Native\Responses\CandlesResponse.cs" />
+    <Compile Include="Native\Responses\ClientLimitsResponse.cs" />
+    <Compile Include="Native\Responses\ClientResponse.cs" />
+    <Compile Include="Native\Responses\ConnectorVersionResponse.cs" />
+    <Compile Include="Native\Responses\CurrentServerResponse.cs" />
+    <Compile Include="Native\Responses\LeverageControlResponse.cs" />
+    <Compile Include="Native\Responses\MarketOrdResponse.cs" />
+    <Compile Include="Native\Responses\MarketsResponse.cs" />
+    <Compile Include="Native\Responses\MessagesResponse.cs" />
+    <Compile Include="Native\Responses\NewsBodyResponse.cs" />
+    <Compile Include="Native\Responses\NewsHeaderResponse.cs" />
+    <Compile Include="Native\Responses\OrdersResponse.cs" />
+    <Compile Include="Native\Responses\OvernightResponse.cs" />
+    <Compile Include="Native\Responses\PitsResponse.cs" />
+    <Compile Include="Native\Responses\PortfolioTPlusResponse.cs" />
+    <Compile Include="Native\Responses\PositionsResponse.cs" />
+    <Compile Include="Native\Responses\QuotationsResponse.cs" />
+    <Compile Include="Native\Responses\QuotesResponse.cs" />
+    <Compile Include="Native\Responses\SecInfoResponse.cs" />
+    <Compile Include="Native\Responses\SecuritiesResponse.cs" />
+    <Compile Include="Native\Responses\TicksResponse.cs" />
+    <Compile Include="Native\Responses\TradesResponse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Native\Api.cs" />
+    <Compile Include="Native\ApiException.cs" />
+    <Compile Include="Native\ApiClient.cs" />
+    <Compile Include="Native\BaseCommandMessage.cs" />
+    <Compile Include="Native\BaseResponse.cs" />
+    <Compile Include="Native\Commands\ConnectMessage.cs" />
+    <Compile Include="Native\Commands\RequestHistoryDataMessage.cs" />
+    <Compile Include="Native\Responses\ServerStatusResponse.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TransaqAddresses.cs" />
+    <Compile Include="TransaqTrader.cs" />
+    <Compile Include="Native\TransaqHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Native\XmlSerializeHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\txmlconnector.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\txmlconnector64.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Xaml\Xaml.csproj">
+      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\txcn.dll" />
+    <None Include="Resources\txcn64.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

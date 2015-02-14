@@ -38,6 +38,12 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -48,28 +54,28 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Interop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -121,35 +127,35 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.History">
-      <HintPath>..\..\..\References\StockSharp.Algo.History.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Algo">
-      <HintPath>..\..\..\References\StockSharp.Algo.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BusinessEntities">
-      <HintPath>..\..\..\References\StockSharp.BusinessEntities.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Localization">
-      <HintPath>..\..\..\References\StockSharp.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Logging">
-      <HintPath>..\..\..\References\StockSharp.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Messages">
-      <HintPath>..\..\..\References\StockSharp.Messages.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml">
-      <HintPath>..\..\..\References\StockSharp.Xaml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">
       <Link>stocksharp.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Localization\Localization.csproj">
+      <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Logging\Logging.csproj">
+      <Project>{c4476add-a3d5-41bb-9d43-55d865863b78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Xaml\Xaml.csproj">
+      <Project>{64e4d6f0-36b6-4904-9ba7-fffbe5ff71d8}</Project>
+      <Name>Xaml</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

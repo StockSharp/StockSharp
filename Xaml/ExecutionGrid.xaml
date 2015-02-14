@@ -1,0 +1,113 @@
+<ug:UniversalGrid
+			x:Class="StockSharp.Xaml.ExecutionGrid"
+			xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+			xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+			xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+			xmlns:xaml="clr-namespace:StockSharp.Xaml">
+	<ug:UniversalGrid.Resources>
+		<ex:FormattingConverter x:Key="ValueConverter" />
+		<ex:EnumDisplayNameConverter x:Key="EnumDisplayNameConverter" />
+		<xaml:MultiIdConverter x:Key="MultiIdConverter" />
+
+		<DataTemplate x:Key="SideTemplate">
+			<TextBlock x:Name="SideCtrl" Text="{Binding Path=Side, Converter={StaticResource EnumDisplayNameConverter}}" TextAlignment="Center" />
+			<DataTemplate.Triggers>
+				<DataTrigger Binding="{Binding Path=Side}" Value="Sell">
+					<Setter TargetName="SideCtrl" Property="Foreground" Value="Red"/>
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=Side}" Value="Buy">
+					<Setter TargetName="SideCtrl" Property="Foreground" Value="Blue"/>
+				</DataTrigger>
+			</DataTemplate.Triggers>
+		</DataTemplate>
+		<DataTemplate x:Key="OriginSideTemplate">
+			<TextBlock x:Name="OriginSideCtrl" Text="{Binding Path=OriginSide, Converter={StaticResource EnumDisplayNameConverter}}" TextAlignment="Center" />
+			<DataTemplate.Triggers>
+				<DataTrigger Binding="{Binding Path=OriginSide}" Value="Sell">
+					<Setter TargetName="OriginSideCtrl" Property="Foreground" Value="Red"/>
+				</DataTrigger>
+				<DataTrigger Binding="{Binding Path=OriginSide}" Value="Buy">
+					<Setter TargetName="OriginSideCtrl" Property="Foreground" Value="Blue"/>
+				</DataTrigger>
+			</DataTemplate.Triggers>
+		</DataTemplate>
+		<DataTemplate x:Key="StateTemplate">
+			<TextBlock x:Name="TypeCtrl" Text="{Binding Path=OrderState, Converter={StaticResource EnumDisplayNameConverter}}" TextAlignment="Center" />
+		</DataTemplate>
+	</ug:UniversalGrid.Resources>
+	<ug:UniversalGrid.Columns>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Type}" Width="40" Binding="{Binding Path=ExecutionType, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="ExecutionType" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="70" Binding="{Binding Path=SecurityId.SecurityCode}" SortMemberPath="SecurityId.SecurityCode"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Board}" Width="70" Binding="{Binding Path=SecurityId.BoardCode}" SortMemberPath="SecurityId.BoardCode"/>
+		<DataGridTextColumn x:Name="PortfolioColumn" Header="{x:Static loc:LocalizedStrings.Portfolio}" Width="120" Binding="{Binding Path=PortfolioName}" SortMemberPath="PortfolioName"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Depo}" Width="80" Binding="{Binding Path=DepoName}" SortMemberPath="DepoName"/>
+		<DataGridTextColumn x:Name="TransactionColumn" Header="{x:Static loc:LocalizedStrings.Transaction}" Width="100" Binding="{Binding Path=TransactionId}" SortMemberPath="TransactionId"/>
+		<DataGridTemplateColumn x:Name="OrderIdColumn" Header="{x:Static loc:LocalizedStrings.Id}" Width="70" SortMemberPath="OrderId">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<TextBlock>
+						<TextBlock.Text>
+							<MultiBinding Converter="{StaticResource MultiIdConverter}">
+								<Binding Path="OrderId"/>
+								<Binding Path="OrderStringId"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.XamlStr365}" Width="100" Binding="{Binding Path=BoardId}" SortMemberPath="BoardId"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str165}" Width="100" Binding="{Binding Path=UserOrderId}" SortMemberPath="UserOrderId"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Width="120" Binding="{Binding Path=ServerTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="ServerTime"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="120" Binding="{Binding Path=LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="LocalTime"/>
+		<DataGridTextColumn x:Name="OrderPriceColumn" Header="{x:Static loc:LocalizedStrings.Price}" Width="60" Binding="{Binding Path=Price}" SortMemberPath="Price"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Volume}" SortMemberPath="Volume"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.VisibleVolume}" Width="50" Binding="{Binding Path=VisibleVolume}" SortMemberPath="VisibleVolume"/>
+		<DataGridTextColumn x:Name="BalanceColumn" Header="{x:Static loc:LocalizedStrings.Str1325}" Width="50" Binding="{Binding Path=Balance}" SortMemberPath="Balance"/>
+		<DataGridTemplateColumn x:Name="OrderSideColumn" Header="{x:Static loc:LocalizedStrings.Str128}" Width="60" CellTemplate="{StaticResource SideTemplate}" SortMemberPath="Side">
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTextColumn x:Name="OrderTypeColumn" Header="{x:Static loc:LocalizedStrings.Str132}" Width="40" Binding="{Binding Path=OrderType, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="OrderType" />
+		<DataGridTemplateColumn x:Name="OrderStateColumn" Header="{x:Static loc:LocalizedStrings.Str1324}" Width="60" CellTemplate="{StaticResource StateTemplate}" SortMemberPath="OrderState">
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTemplateColumn x:Name="OriginSideColumn" Header="{x:Static loc:LocalizedStrings.Str329}" Width="60" CellTemplate="{StaticResource OriginSideTemplate}" SortMemberPath="OriginSide">
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTemplateColumn x:Name="TradeIdColumn" Header="{x:Static loc:LocalizedStrings.Str506}" Width="70" SortMemberPath="TradeId">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<TextBlock>
+						<TextBlock.Text>
+							<MultiBinding Converter="{StaticResource MultiIdConverter}">
+								<Binding Path="TradeId"/>
+								<Binding Path="TradeStringId"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
+		<DataGridTextColumn x:Name="TradePriceColumn" Header="{x:Static loc:LocalizedStrings.TradePrice}" Width="60" Binding="{Binding Path=TradePrice}" SortMemberPath="TradePrice"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.OI}" Width="60" Binding="{Binding Path=OpenInterest}" SortMemberPath="OpenInterest"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str342}" Width="60" Binding="{Binding Path=IsSystem}" SortMemberPath="IsSystem"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.XamlStr67}" Width="60" Binding="{Binding Path=IsUpTick}" SortMemberPath="IsUpTick"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str161}" Width="60" Binding="{Binding Path=Latency}" SortMemberPath="Latency"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str159}" Width="60" Binding="{Binding Path=Commission}" SortMemberPath="Commission"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str135}" Width="120" Binding="{Binding Path=Comment}" SortMemberPath="Comment"/>
+	</ug:UniversalGrid.Columns>
+</ug:UniversalGrid>

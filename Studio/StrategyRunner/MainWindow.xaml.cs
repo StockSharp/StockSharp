@@ -27,7 +27,6 @@
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
-	using StockSharp.Plaza;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Xaml.Diagram;
@@ -148,15 +147,6 @@
 
 			if (connectionSettings != null)
 				_connector.BasketSessionHolder.Load(connectionSettings);
-			else
-			{
-				_connector.BasketSessionHolder.InnerSessions.Add(new PlazaSessionHolder(_connector.TransactionIdGenerator)
-				{
-					AppName = "DST",
-					IsTransactionEnabled = true,
-					IsMarketDataEnabled = true,
-				}, 0);
-			}
 		}
 
 		private void SaveSettings()

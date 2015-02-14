@@ -11,7 +11,6 @@ namespace StockSharp.Hydra.Quik
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
-	using StockSharp.Licensing;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Quik;
@@ -325,7 +324,6 @@ namespace StockSharp.Hydra.Quik
 			return new QuikMarketDataConnector(EntityRegistry.Securities, this, CreateHydraQuikTrader, _settings);
 		}
 
-		[LicenseFeature("Quik")]
 		private sealed class HydraQuikTransactionAdapter : MessageAdapter<MessageSessionHolder>
 		{
 			public HydraQuikTransactionAdapter(MessageSessionHolder sessionHolder)

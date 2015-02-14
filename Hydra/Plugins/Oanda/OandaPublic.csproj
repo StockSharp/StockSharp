@@ -35,30 +35,36 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Oanda">
+      <HintPath>..\..\..\Connectors\Oanda\StockSharp.Oanda.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\References\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\..\References\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\References\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\References\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\References\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\..\References\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -70,35 +76,32 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.History">
-      <HintPath>..\..\..\References\StockSharp.Algo.History.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Algo">
-      <HintPath>..\..\..\References\StockSharp.Algo.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BusinessEntities">
-      <HintPath>..\..\..\References\StockSharp.BusinessEntities.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Oanda">
-      <HintPath>..\..\..\References\StockSharp.Oanda.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Localization">
-      <HintPath>..\..\..\References\StockSharp.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Logging">
-      <HintPath>..\..\..\References\StockSharp.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Messages">
-      <HintPath>..\..\..\References\StockSharp.Messages.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="oanda_logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\CorePublic.csproj">
       <Project>{95ca16e0-0a47-43a3-aab7-7e0803e817ca}</Project>
-      <Name>Core</Name>
+      <Name>CorePublic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

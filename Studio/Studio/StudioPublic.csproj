@@ -58,6 +58,27 @@
     <AssemblyName>Studio</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq">
+      <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickFix">
+      <HintPath>..\..\Connectors\Fix\QuickFix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo.Strategies">
+      <HintPath>..\..\Algo.Strategies\StockSharp.Algo.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Fix">
+      <HintPath>..\..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram">
+      <HintPath>..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -69,85 +90,79 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\References\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf">
-      <HintPath>..\..\References\ActiproSoftware.Docking.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Editors.Wpf">
-      <HintPath>..\..\References\ActiproSoftware.Editors.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Editors.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Navigation.Wpf">
-      <HintPath>..\..\References\ActiproSoftware.Navigation.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Navigation.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Ribbon.Wpf">
-      <HintPath>..\..\References\ActiproSoftware.Ribbon.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Ribbon.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Shared.Wpf">
-      <HintPath>..\..\References\ActiproSoftware.Shared.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Shared.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Views.Wpf">
-      <HintPath>..\..\References\ActiproSoftware.Views.Wpf.dll</HintPath>
+      <HintPath>..\..\References\Actipro\ActiproSoftware.Views.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="AutomaticUpdaterWPF">
       <HintPath>..\..\References\AutomaticUpdaterWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
-      <HintPath>..\..\References\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\References\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\References\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Configuration">
-      <HintPath>..\..\References\Ecng.Configuration.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data">
-      <HintPath>..\..\References\Ecng.Data.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Data.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Data.Providers">
-      <HintPath>..\..\References\Ecng.Data.Providers.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Data.Providers.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop">
-      <HintPath>..\..\References\Ecng.Interop.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net">
-      <HintPath>..\..\References\Ecng.Net.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Reflection">
-      <HintPath>..\..\References\Ecng.Reflection.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Reflection.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Security">
-      <HintPath>..\..\References\Ecng.Security.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Security.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\References\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization.FieldFactories">
-      <HintPath>..\..\References\Ecng.Serialization.FieldFactories.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.FieldFactories.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Transactions">
-      <HintPath>..\..\References\Ecng.Transactions.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Transactions.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml">
-      <HintPath>..\..\References\Ecng.Xaml.dll</HintPath>
-    </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\References\MoreLinq.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Northwoods.GoWPF">
-      <HintPath>..\..\References\Northwoods.GoWPF.dll</HintPath>
+      <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="QuickFix">
-      <HintPath>..\..\References\QuickFix.dll</HintPath>
-    </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\References\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -395,98 +410,8 @@
     <Resource Include="StockSharp.db" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Alerts">
-      <HintPath>..\..\References\StockSharp.Alerts.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Algo.History">
-      <HintPath>..\..\References\StockSharp.Algo.History.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Algo.Strategies">
-      <HintPath>..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Algo">
-      <HintPath>..\..\References\StockSharp.Algo.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BusinessEntities">
-      <HintPath>..\..\References\StockSharp.BusinessEntities.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Community">
-      <HintPath>..\..\References\StockSharp.Community.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.AlfaDirect">
-      <HintPath>..\..\References\StockSharp.AlfaDirect.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.BitStamp">
-      <HintPath>..\..\References\StockSharp.BitStamp.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Blackwood">
-      <HintPath>..\..\References\StockSharp.Blackwood.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Btce">
-      <HintPath>..\..\References\StockSharp.Btce.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.ETrade">
-      <HintPath>..\..\References\StockSharp.ETrade.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Fix">
-      <HintPath>..\..\References\StockSharp.Fix.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.InteractiveBrokers">
-      <HintPath>..\..\References\StockSharp.InteractiveBrokers.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.IQFeed">
-      <HintPath>..\..\References\StockSharp.IQFeed.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.LMAX">
-      <HintPath>..\..\References\StockSharp.LMAX.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Micex">
-      <HintPath>..\..\References\StockSharp.Micex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Oanda">
-      <HintPath>..\..\References\StockSharp.Oanda.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.OpenECry">
-      <HintPath>..\..\References\StockSharp.OpenECry.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Plaza">
-      <HintPath>..\..\References\StockSharp.Plaza.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Rithmic">
-      <HintPath>..\..\References\StockSharp.Rithmic.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Rss">
-      <HintPath>..\..\References\StockSharp.Rss.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.SmartCom">
-      <HintPath>..\..\References\StockSharp.SmartCom.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quik">
-      <HintPath>..\..\References\StockSharp.Quik.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Transaq">
-      <HintPath>..\..\References\StockSharp.Transaq.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Licensing">
       <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Localization">
-      <HintPath>..\..\References\StockSharp.Localization.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Logging">
-      <HintPath>..\..\References\StockSharp.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Messages">
-      <HintPath>..\..\References\StockSharp.Messages.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\..\References\StockSharp.Xaml.Diagram.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml">
-      <HintPath>..\..\References\StockSharp.Xaml.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -579,13 +504,45 @@
     <None Include="Compositions\MultiplicationDiagramElement.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Alerts\Alerts.csproj">
+      <Project>{96725E45-F785-4612-9743-BFB40A9E725D}</Project>
+      <Name>Alerts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
+      <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
+      <Name>Algo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
+      <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
+      <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Community\Community.csproj">
+      <Project>{E8E18F8F-97BD-41AE-8888-F54F2411D575}</Project>
+      <Name>Community</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
+      <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
+      <Name>Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
+      <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Xaml\XamlPublic.csproj">
+      <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
+      <Name>XamlPublic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Controls\ControlsPublic.csproj">
       <Project>{6d205f4b-6b2a-4082-b717-f6baaa4e0f3a}</Project>
-      <Name>Controls</Name>
+      <Name>ControlsPublic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core\CorePublic.csproj">
       <Project>{23b15ae0-2021-43da-808f-3bf331462976}</Project>
-      <Name>Core</Name>
+      <Name>CorePublic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

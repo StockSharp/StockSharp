@@ -1,0 +1,223 @@
+<UserControl
+		x:Class="StockSharp.Xaml.ExchangeBoardEditor"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+		xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+		xmlns:xaml="clr-namespace:StockSharp.Xaml"
+		xmlns:system="clr-namespace:System;assembly=mscorlib"
+		mc:Ignorable="d">
+
+	<UserControl.Resources>
+		<converters:BoolToVisibilityConverter x:Key="BoolToVisHide" FalseVisibilityValue="Hidden"/>
+		<xaml:SelectedPeriodBoolConverter x:Key="NullToBool"/>
+	</UserControl.Resources>
+
+	<ScrollViewer VerticalScrollBarVisibility="Auto">
+		<Grid Margin="3">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<GroupBox Grid.Row="0" Header="{x:Static loc:LocalizedStrings.BoardInfo}" Padding="2,5">
+				<StackPanel>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="2*" MinWidth="120"/>
+							<ColumnDefinition Width="2*"/>
+							<ColumnDefinition Width="3*"/>
+						</Grid.ColumnDefinitions>
+						<StackPanel Margin="5,0">
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
+							<ComboBox KeyDown="AutoCompleteSelector_OnKeyDown" SelectionChanged="BoardSelector_OnSelectionChanged" DropDownClosed="BoardSelector_OnSelectionChanged"
+								  x:Name="CbBoardCode" Loaded="CodeBox_Loaded"
+								  SelectedValuePath="Code"
+								  DisplayMemberPath="Code" IsTextSearchEnabled="True" IsEditable="True" 
+								  ItemsSource="{Binding Boards, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType=xaml:ExchangeBoardEditor}}"/>
+						</StackPanel>
+						<StackPanel Grid.Column="1" Margin="5,0">
+							<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr848}" />
+							<editors:DateTimeEditBox Value="{Binding ExpiryTime}" SpinnerVisibility="Visible"
+												 Height="{Binding ActualHeight, ElementName=CbBoardCode}"
+												 Format="HH:mm" Hint="" IsNullAllowed="False" InitialValue="{x:Static system:DateTime.MinValue}"/>
+						</StackPanel>
+						<StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10,0,0,0">
+							<CheckBox IsChecked="{Binding IsSupportAtomicReRegister}">
+								<TextBlock TextWrapping="Wrap" Text="{x:Static loc:LocalizedStrings.XamlStr196}"/>
+							</CheckBox>
+							<CheckBox IsChecked="{Binding IsSupportMarketOrders}">
+								<TextBlock TextWrapping="Wrap" Text="{x:Static loc:LocalizedStrings.XamlStr623}"/>
+							</CheckBox>
+						</StackPanel>
+					</Grid>
+
+					<GroupBox Header="{x:Static loc:LocalizedStrings.ExchangeInfo}" Margin="0,5">
+						<xaml:ExchangeEditor HorizontalAlignment="Stretch" x:Name="_exchangeEditor" SelectedExchangeChanged="ExchangeEditor_OnSelectedExchangeChanged"/>
+					</GroupBox>
+
+					<GroupBox Header="{x:Static loc:LocalizedStrings.XamlStr596}" Padding="3">
+						<GroupBox.Resources>
+							<Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+								<Setter Property="Height" Value="18"/>
+								<Setter Property="Padding" Value="0,-1,0,0"/>
+							</Style>
+						</GroupBox.Resources>
+						<StackPanel Orientation="Horizontal">
+							<StackPanel>
+								<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr453}"/>
+								<ListBox ToolTip="{x:Static loc:LocalizedStrings.XamlStr115}"
+									 HorizontalContentAlignment="Stretch" Margin="0,0,0,3"
+									 Width="140" Height="140" ItemsSource="{Binding Periods}" SelectedItem="{Binding SelectedPeriod}">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Margin="5,0" HorizontalAlignment="Right">
+											<Run Text="{x:Static loc:LocalizedStrings.XamlStr132}"/><Run Text=" "/><Run Text="{Binding Till, Mode=OneWay, StringFormat='d MMMM yyyy'}"/>
+											</TextBlock>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+								<editors:DateTimeEditBox Value="{Binding NewPeriodTill}" Hint="{x:Static loc:LocalizedStrings.XamlStr111}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr112}"
+													 Height="{Binding ActualHeight, ElementName=CbBoardCode}"
+													 HorizontalAlignment="Stretch" Format="d MMMM yyyy" IsNullAllowed="False" InitialValue="{x:Static system:DateTime.Today}" EditableParts="Date"/>
+								<Grid Margin="0,5,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<Button Command="{Binding CommandAddPeriod}" Content="{x:Static loc:LocalizedStrings.Str3229}" Margin="2,0"/>
+									<Button Command="{Binding CommandDelPeriod}" Content="{x:Static loc:LocalizedStrings.Str2060}" Grid.Column="1" Margin="2,0"/>
+								</Grid>
+							</StackPanel>
+
+							<Grid Width="5"/>
+
+							<StackPanel IsEnabled="{Binding SelectedPeriod, Converter={StaticResource NullToBool}}">
+								<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr598}"/>
+								<ListBox ToolTip="{x:Static loc:LocalizedStrings.XamlStr597}" Width="150" Height="140"
+									 HorizontalContentAlignment="Stretch" Margin="0,0,0,3"
+									 ItemsSource="{Binding SelectedPeriod.WorkTimes}" SelectedItem="{Binding SelectedPeriod.SelectedWorkTime}">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock HorizontalAlignment="Center">
+											<Run Text="{Binding Min, Mode=OneWay, StringFormat='hh\\:mm'}"/><Run Text="  —  "/><Run Text="{Binding Max, Mode=OneWay, StringFormat='hh\\:mm'}"/>
+											</TextBlock>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<editors:DateTimeEditBox Hint="{x:Static loc:LocalizedStrings.XamlStr403}" Format="HH:mm" SpinnerVisibility="Visible" CheckBoxVisibility="Collapsed" 
+														 Height="{Binding ActualHeight, ElementName=CbBoardCode}"
+														 Value="{Binding NewTimeFrom}" HorizontalAlignment="Stretch" IsNullAllowed="False" InitialValue="{x:Static system:DateTime.MinValue}"/>
+
+									<editors:DateTimeEditBox Grid.Column="1" Hint="{x:Static loc:LocalizedStrings.XamlStr132}" Format="HH:mm" SpinnerVisibility="Visible" CheckBoxVisibility="Collapsed"
+														 Height="{Binding ActualHeight, ElementName=CbBoardCode}"
+														 Value="{Binding NewTimeTill}" HorizontalAlignment="Stretch" IsNullAllowed="False" InitialValue="{x:Static system:DateTime.MinValue}"/>
+								</Grid>
+
+								<Grid Margin="0,5,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<Button Command="{Binding CommandAddTimes}" Content="{x:Static loc:LocalizedStrings.Str3229}" Margin="2,0"/>
+									<Button Command="{Binding CommandDelTimes}" Content="{x:Static loc:LocalizedStrings.Str2060}" Grid.Column="1" Margin="2,0"/>
+								</Grid>
+							</StackPanel>
+
+							<Grid Width="15"/>
+
+							<StackPanel>
+								<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr697}"/>
+								<ListBox ToolTip="{x:Static loc:LocalizedStrings.XamlStr730}" HorizontalContentAlignment="Stretch" Margin="0,0,0,3" VirtualizingStackPanel.IsVirtualizing="False"
+									 Width="165" Height="140" ItemsSource="{Binding SpecialWorkingDays}" SelectionMode="Extended">
+									<ListBox.ItemContainerStyle>
+										<Style TargetType="{x:Type ListBoxItem}">
+											<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+										</Style>
+									</ListBox.ItemContainerStyle>
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding DateTime, StringFormat='d MMMM yyyy'}" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+								<editors:DateTimeEditBox Value="{Binding NewSpecialWorkingDay}" Hint="{x:Static loc:LocalizedStrings.XamlStr111}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr595}"
+													 Height="{Binding ActualHeight, ElementName=CbBoardCode}"
+													 HorizontalAlignment="Stretch" Format="d MMMM yyyy" IsNullAllowed="False" EditableParts="Date" InitialValue="{x:Static system:DateTime.Today}"/>
+								<Grid Margin="0,5,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<Button Command="{Binding CommandAddSpecialWorkingDay}" Content="{x:Static loc:LocalizedStrings.Str3229}" Margin="2,0"/>
+									<Button Command="{Binding CommandDelSpecialWorkingDay}" Content="{x:Static loc:LocalizedStrings.Str2060}" Grid.Column="1" Margin="2,0"/>
+								</Grid>
+							</StackPanel>
+
+							<Grid Width="5"/>
+
+							<StackPanel>
+								<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr696}"/>
+								<ListBox HorizontalContentAlignment="Stretch" Margin="0,0,0,3" SelectionMode="Extended" VirtualizingStackPanel.IsVirtualizing="False"
+								Width="165" Height="140" ItemsSource="{Binding SpecialHolidays}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr533}">
+									<ListBox.ItemContainerStyle>
+										<Style TargetType="{x:Type ListBoxItem}">
+											<Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+										</Style>
+									</ListBox.ItemContainerStyle>
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding DateTime, StringFormat='d MMMM yyyy'}" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+								<editors:DateTimeEditBox Value="{Binding NewSpecialHoliday}" Hint="{x:Static loc:LocalizedStrings.XamlStr111}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr124}"
+													 Height="{Binding ActualHeight, ElementName=CbBoardCode}"
+													 HorizontalAlignment="Stretch" Format="d MMMM yyyy" IsNullAllowed="False" EditableParts="Date" InitialValue="{x:Static system:DateTime.Today}"/>
+								<Grid Margin="0,5,0,0">
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*"/>
+										<ColumnDefinition Width="*"/>
+									</Grid.ColumnDefinitions>
+
+									<Button Command="{Binding CommandAddSpecialHoliday}" Content="{x:Static loc:LocalizedStrings.Str3229}" Margin="2,0"/>
+									<Button Command="{Binding CommandDelSpecialHoliday}" Content="{x:Static loc:LocalizedStrings.Str2060}" Grid.Column="1" Margin="2,0"/>
+								</Grid>
+							</StackPanel>
+						</StackPanel>
+					</GroupBox>
+				</StackPanel>
+			</GroupBox>
+
+			<TextBlock Margin="20,0,0,0" Grid.Row="1" FontWeight="Bold" Foreground="Red"
+				   Text="{Binding SaveErrorMessage, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType=xaml:ExchangeBoardEditor}}"/>
+
+			<Grid Grid.Row="2" HorizontalAlignment="Stretch">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Button Click="ButtonClear_Click" Content="{x:Static loc:LocalizedStrings.XamlStr442}" Width="150"
+					HorizontalAlignment="Left" Margin="5,5" FontWeight="SemiBold"/>
+
+				<Button Command="{Binding CommandAddNewBoard}" Content="{x:Static loc:LocalizedStrings.XamlStr693}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr315}"
+					Grid.Column="1" Width="180" Visibility="{Binding IsNewBoard, Converter={StaticResource BoolToVisHide}}"
+					HorizontalAlignment="Right" Margin="0,5,5,5" FontWeight="SemiBold"/>
+			</Grid>
+		</Grid>
+	</ScrollViewer>
+</UserControl>
