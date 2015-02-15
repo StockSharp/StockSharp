@@ -1,14 +1,8 @@
+﻿using System;
+using StockSharp.Messages;
+
 namespace StockSharp.Sterling
 {
-	using System;
-
-	using Ecng.Common;
-
-	using SterlingLib;
-
-	using StockSharp.Messages;
-	using StockSharp.Localization;
-
 	/// <summary>
 	/// Адаптер сообщений для Sterling.
 	/// </summary>
@@ -45,20 +39,30 @@ namespace StockSharp.Sterling
 			{
 				case MessageAdapterTypes.Transaction:
 				{
-					SessionHolder.Session.OnSTIOrderConfirmMsg += SessionOnStiOrderConfirmMsg;
-					SessionHolder.Session.OnSTIOrderRejectMsg += SessionOnStiOrderRejectMsg;
-					SessionHolder.Session.OnSTIOrderUpdateMsg += SessionOnStiOrderUpdateMsg;
-					SessionHolder.Session.OnSTITradeUpdateMsg += SessionOnStiTradeUpdateMsg;
+					SessionHolder.Session.OnStiOrderConfirm += SessionOnStiOrderConfirm;
+					SessionHolder.Session.OnStiOrderReject += SessionOnStiOrderReject;
+					SessionHolder.Session.OnStiOrderUpdate += SessionOnStiOrderUpdate;
+					SessionHolder.Session.OnStiTradeUpdate += SessionOnStiTradeUpdate;
+					SessionHolder.Session.OnStiAcctUpdate += SessionOnStiAcctUpdate;
+					SessionHolder.Session.OnStiPositionUpdate += SessionOnStiPositionUpdate;
 					break;
 				}
 				case MessageAdapterTypes.MarketData:
 				{
-					
+					SessionHolder.Session.OnStiQuoteUpdate += SessionOnStiQuoteUpdate;
+					SessionHolder.Session.OnStiQuoteSnap += SessionOnStiQuoteSnap;
+					SessionHolder.Session.OnStiQuoteRqst += SessionOnStiQuoteRqst;
+					SessionHolder.Session.OnStil2Update += SessionOnStil2Update;
+					SessionHolder.Session.OnStil2Reply += SessionOnStil2Reply;
+					SessionHolder.Session.OnStiGreeksUpdate += SessionOnStiGreeksUpdate;
+					SessionHolder.Session.OnStiNewsUpdate += SessionOnStiNewsUpdate;
 					break;
 				}
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+
+			SessionHolder.Session.OnStiShutdown += SessionOnOnStiShutdown;
 		}
 
 		private void OnSessionUnInitialize()
@@ -67,20 +71,38 @@ namespace StockSharp.Sterling
 			{
 				case MessageAdapterTypes.Transaction:
 				{
-					SessionHolder.Session.OnSTIOrderConfirmMsg -= SessionOnStiOrderConfirmMsg;
-					SessionHolder.Session.OnSTIOrderRejectMsg -= SessionOnStiOrderRejectMsg;
-					SessionHolder.Session.OnSTIOrderUpdateMsg -= SessionOnStiOrderUpdateMsg;
-					SessionHolder.Session.OnSTITradeUpdateMsg -= SessionOnStiTradeUpdateMsg;
+					SessionHolder.Session.OnStiOrderConfirm -= SessionOnStiOrderConfirm;
+					SessionHolder.Session.OnStiOrderReject -= SessionOnStiOrderReject;
+					SessionHolder.Session.OnStiOrderUpdate -= SessionOnStiOrderUpdate;
+					SessionHolder.Session.OnStiTradeUpdate -= SessionOnStiTradeUpdate;
+					SessionHolder.Session.OnStiAcctUpdate -= SessionOnStiAcctUpdate;
+					SessionHolder.Session.OnStiPositionUpdate -= SessionOnStiPositionUpdate;
 					break;
 				}
 				case MessageAdapterTypes.MarketData:
 				{
-					
+					SessionHolder.Session.OnStiQuoteUpdate -= SessionOnStiQuoteUpdate;
+					SessionHolder.Session.OnStiQuoteSnap -= SessionOnStiQuoteSnap;
+					SessionHolder.Session.OnStiQuoteRqst -= SessionOnStiQuoteRqst;
+					SessionHolder.Session.OnStil2Update -= SessionOnStil2Update;
+					SessionHolder.Session.OnStil2Reply -= SessionOnStil2Reply;
+					SessionHolder.Session.OnStiGreeksUpdate -= SessionOnStiGreeksUpdate;
+					SessionHolder.Session.OnStiNewsUpdate -= SessionOnStiNewsUpdate;
 					break;
 				}
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+
+			SessionHolder.Session.OnStiShutdown -= SessionOnOnStiShutdown;
+		}
+
+		private void SessionOnOnStiShutdown()
+		{
+			SendOutMessage(new ErrorMessage
+			{
+				Error = new Exception("Sterling is shutdown.")
+			});
 		}
 
 		/// <summary>
@@ -96,7 +118,7 @@ namespace StockSharp.Sterling
 					if (SessionHolder.Session == null)
 					{
 						_isSessionOwner = true;
-						SessionHolder.Session = new STIEventsClass();
+						SessionHolder.Session = new SterlingSessionHolder.SterlingSession();
 						SendOutMessage(new ConnectMessage());
 					}
 					else
@@ -115,109 +137,74 @@ namespace StockSharp.Sterling
 						SendOutMessage(new DisconnectMessage());
 					}
 					else
+					{
 						SendOutMessage(new DisconnectMessage());
+					}
 
 					break;
 				}
 
 				case MessageTypes.MarketData:
 				{
-					var mdMsg = (MarketDataMessage)message;
-
-					switch (mdMsg.DataType)
-					{
-						case MarketDataTypes.Level1:
-						{
-							
-							break;
-						}
-						case MarketDataTypes.MarketDepth:
-							break;
-						case MarketDataTypes.Trades:
-							break;
-						case MarketDataTypes.OrderLog:
-							break;
-						case MarketDataTypes.CandleTimeFrame:
-							break;
-						default:
-							throw new ArgumentOutOfRangeException("message", mdMsg.DataType, LocalizedStrings.Str1618);
-					}
-
-					SendOutMessage(new MarketDataMessage
-					{
-						OriginalTransactionId = mdMsg.TransactionId,
-					});
-
+					ProcessMarketData((MarketDataMessage) message);
 					break;
 				}
 
 				case MessageTypes.OrderRegister:
 				{
-					var regMsg = (OrderRegisterMessage)message;
-					var condition = (SterlingOrderCondition)regMsg.Condition;
-
-					STIOrder order = new STIOrderClass();
-					order.Account = regMsg.PortfolioName;
-					order.Quantity = (int)regMsg.Volume;
-					order.Display = (int)regMsg.VisibleVolume;
-					order.ClOrderID = regMsg.TransactionId.To<string>();
-					order.LmtPrice = (double)regMsg.Price;
-					order.Symbol = regMsg.SecurityId.SecurityCode;
-					order.Destination = regMsg.SecurityId.BoardCode;
-					order.Tif = regMsg.TimeInForce.ToSterlingTif(regMsg.TillDate);
-					order.PriceType = regMsg.OrderType.ToSterlingPriceType(condition);
-					order.User = regMsg.Comment;
-
-					if (regMsg.TillDate != DateTimeOffset.MaxValue)
-						order.EndTime = regMsg.TillDate.ToString("yyyyMMdd");
-
-					if (regMsg.Currency != null)
-						order.Currency = regMsg.Currency.ToString();
-
-					if (regMsg.OrderType == OrderTypes.Conditional)
-					{
-						//order.Discretion = condition.Discretion;
-						//order.ExecInst = condition.ExecutionInstruction;
-						//order.ExecBroker = condition.ExecutionBroker;
-						//order.ExecPriceLmt = condition.ExecutionPriceLimit;
-						//order.PegDiff = condition.PegDiff;
-						//order.TrailAmt = condition.TrailingVolume;
-						//order.TrailInc = condition.TrailingIncrement;
-						//order.StpPrice = (double)(condition.StopPrice ?? 0);
-						//order.MinQuantity = condition.MinVolume;
-						//order.AvgPriceLmt = condition.AveragePriceLimit;
-						//order.Duration = condition.Duration;
-
-						//order.LocateBroker = condition.LocateBroker;
-						//order.LocateQty = condition.LocateVolume;
-						//order.LocateTime = condition.LocateTime;
-
-						//order.OpenClose = condition.Options.IsOpen;
-						//order.Maturity = condition.Options.Maturity;
-						//order.PutCall = condition.Options.Type;
-						//order.Underlying = condition.Options.UnderlyingCode;
-						//order.CoverUncover = condition.Options.IsCover;
-						//order.Instrument = condition.Options.UnderlyingType;
-						//order.StrikePrice = condition.Options.StrikePrice;
-					}
-
-					order.SubmitOrder();
+					ProcessOrderRegisterMessage((OrderRegisterMessage) message);
 					break;
 				}
 
 				case MessageTypes.OrderCancel:
 				{
-					var cancelMsg = (OrderCancelMessage)message;
-					//new STIOrderMaintClass().
-
+					ProcessOrderCancelMessage((OrderCancelMessage) message);
 					break;
 				}
 
 				case MessageTypes.OrderReplace:
 				{
-					var replaceMsg = (OrderReplaceMessage)message;
-					
+					ProcessOrderReplaceMessage((OrderReplaceMessage) message);
+					break;
+				}
 
+				case MessageTypes.PortfolioLookup:
+				{
+					var portfolios = SessionHolder.Session.GetPortfolios();
+
+					foreach (var portfolio in portfolios)
+					{
+						SendOutMessage(new PortfolioMessage
+						{
+							PortfolioName = portfolio.bstrAcct,
+							State = PortfolioStates.Active // ???
+						});
+					}
+
+					break;
+				}
+
+				case MessageTypes.Security:
+				{
+					ProcessSecurityMessage((SecurityMessage) message);
+					break;
+				}
+
+				case MessageTypes.Execution:
+				{
+					ProcessExecutionMessage((ExecutionMessage) message);
+					break;
+				}
+
+				case MessageTypes.Position:
+				{
+					ProcessPositionMessage((PositionMessage) message);
+					break;
+				}
+
+				case MessageTypes.PositionChange:
+				{
+					ProcessPositionChangeMessage((PositionChangeMessage) message);
 					break;
 				}
 			}
