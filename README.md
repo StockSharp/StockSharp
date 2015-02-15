@@ -22,6 +22,11 @@ S#.API is a free C# library for programmers who use Visual Studio. S#.API lets y
 
 Free support on [the forum](http://stocksharp.com/forum/). Commercial support in our [education courses](http://edu.stocksharp.com).
 
+## Development stage
+
+Current stage of all components - [RELEASE_STAGES.md](../master/RELEASE_STAGES.md).
+Release notes - [RELEASE_NOTES.md](../master/RELEASE_NOTES.md).
+
 ## License
 
-StockSharp codes is licensed under the LGPL 3.0 license.
+StockSharp codes is licensed under the [LGPL 3.0 license](../master/LICENSE).
