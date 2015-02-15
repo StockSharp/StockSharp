@@ -80,7 +80,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+    <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ConsoleLogListener.cs" />

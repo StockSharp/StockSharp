@@ -38,33 +38,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ecng.Localization">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Localization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Collections.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Common">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Common.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.ComponentModel">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.ComponentModel.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Interop">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Interop.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Interop.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Net.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Serialization">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Serialization.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Ecng.Xaml.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\MoreLinq.dll</HintPath>
+      <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -76,14 +76,14 @@
     <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\References\Ecng\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="xNet">
-      <HintPath>..\..\..\StockSharp (GitHub)\References\xNet.dll</HintPath>
+      <HintPath>..\..\References\xNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\StockSharp (GitHub)\StockSharpAssemblyInfo.cs">
+    <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Native\AccountSummaryTag.cs" />
@@ -117,27 +117,27 @@
     <Compile Include="Web\Downloader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\StockSharp %28GitHub%29\Algo\Algo.csproj">
+    <ProjectReference Include="..\..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitHub%29\BusinessEntities\BusinessEntities.csproj">
+    <ProjectReference Include="..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitHub%29\Localization\Localization.csproj">
+    <ProjectReference Include="..\..\Localization\Localization.csproj">
       <Project>{A98A81CE-75A1-4FAB-9C02-E6EEF4B51F4F}</Project>
       <Name>Localization</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitHub%29\Logging\Logging.csproj">
+    <ProjectReference Include="..\..\Logging\Logging.csproj">
       <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitHub%29\Messages\Messages.csproj">
+    <ProjectReference Include="..\..\Messages\Messages.csproj">
       <Project>{b47f9c23-a4bd-46a9-bf27-54cb3d653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitHub%29\Xaml\Xaml.csproj">
+    <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>
