@@ -1,5 +1,4 @@
 # StockSharp
-======
 
 ## S#.Studio
 
