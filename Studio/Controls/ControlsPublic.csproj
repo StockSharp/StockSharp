@@ -36,6 +36,15 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="StockSharp.Algo.Strategies">
+      <HintPath>..\..\Algo.Strategies\StockSharp.Algo.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram">
+      <HintPath>..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -47,7 +56,7 @@
       <HintPath>..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Abt.Controls.SciChart.Wpf">
-      <HintPath>..\..\References\Abt.Controls.SciChart.Wpf.dll</HintPath>
+      <HintPath>..\..\Xaml.Charting\Abt.Controls.SciChart.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="ActiproSoftware.Docking.Wpf">
       <HintPath>..\..\References\Actipro\ActiproSoftware.Docking.Wpf.dll</HintPath>
@@ -95,7 +104,7 @@
       <HintPath>..\..\References\NCalc.dll</HintPath>
     </Reference>
     <Reference Include="Northwoods.GoWPF">
-      <HintPath>..\..\References\Northwoods.GoWPF.dll</HintPath>
+      <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf">
       <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
@@ -361,17 +370,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="StockSharp.Algo.Strategies">
-      <HintPath>..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\..\References\StockSharp.Xaml.Diagram.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\equity_24x24.png" />

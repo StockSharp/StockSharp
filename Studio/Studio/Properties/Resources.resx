@@ -149,10 +149,10 @@
     <value>..\Layouts\EmulationStrategyContent.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="DailyHighestVolumeAnalytics" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\..\Analytics\DailyHighestVolumeStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\..\..\Algo\Strategies\Analytics\DailyHighestVolumeStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="PriceVolumeDistributionAnalytics" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\..\Analytics\PriceVolumeDistributionStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\..\..\Algo\Strategies\Analytics\PriceVolumeDistributionStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="DefaultAnalyticsContent" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Layouts\DefaultAnalyticsContent.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

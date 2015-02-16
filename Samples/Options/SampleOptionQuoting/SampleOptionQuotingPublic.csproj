@@ -41,6 +41,15 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Algo.Strategies">
+      <HintPath>..\..\..\Algo.Strategies\StockSharp.Algo.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Plaza">
+      <HintPath>..\..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -132,20 +141,6 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.Strategies">
-      <HintPath>..\..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Plaza">
-      <HintPath>..\..\..\References\StockSharp.Plaza.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quik">
-      <HintPath>..\..\..\References\StockSharp.Quik.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>
       <Name>Algo</Name>
@@ -153,6 +148,10 @@
     <ProjectReference Include="..\..\..\BusinessEntities\BusinessEntities.csproj">
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Connectors\Quik\Quik.csproj">
+      <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
+      <Name>Quik</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Localization\Localization.csproj">
       <Project>{a98a81ce-75a1-4fab-9c02-e6eef4b51f4f}</Project>

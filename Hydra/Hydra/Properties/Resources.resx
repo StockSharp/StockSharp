@@ -119,10 +119,10 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="DailyHighestVolumeStrategy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\..\Analytics\DailyHighestVolumeStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+    <value>..\..\..\Algo\Strategies\Analytics\DailyHighestVolumeStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="PriceVolumeDistributionStrategy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\..\..\Analytics\PriceVolumeDistributionStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+    <value>..\..\..\Algo\Strategies\Analytics\PriceVolumeDistributionStrategy.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="StockSharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\StockSharp.db;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

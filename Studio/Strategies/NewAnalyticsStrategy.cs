@@ -25,7 +25,7 @@
 	public class NewAnalyticsStrategy : BaseAnalyticsStrategy
 	{
 		/// <summary>
-		/// Создать <see cref="DailyHighestVolumeStrategy"/>.
+		/// Создать <see cref="NewAnalyticsStrategy"/>.
 		/// </summary>
 		public NewAnalyticsStrategy()
 		{

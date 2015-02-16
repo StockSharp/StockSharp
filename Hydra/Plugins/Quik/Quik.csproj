@@ -90,7 +90,7 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj">
+    <ProjectReference Include="..\..\..\Connectors\Quik\Quik.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>Quik</Name>
     </ProjectReference>
@@ -121,8 +121,8 @@
 copy StockSharp.Quik.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.dll
 copy StockSharp.Fix.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Fix.dll
 copy QuickFix.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\QuickFix.dll
-copy "..\..\..\..\..\..\StockSharp (GitLab)\Connectors\QuikLua\bin\$(ConfigurationName)\StockSharp.QuikLua.dll" ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.QuikLua.dll
-copy "..\..\..\..\..\..\StockSharp (GitLab)\Connectors\QuikLua\bin\$(ConfigurationName)\StockSharp.Quik.lua" ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.lua</PostBuildEvent>
+copy ..\..\..\..\..\Connectors\Quik\Lua\StockSharp.QuikLua.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.QuikLua.dll
+copy ..\..\..\..\..\Connectors\Quik\Lua\StockSharp.Quik.lua ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.lua</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

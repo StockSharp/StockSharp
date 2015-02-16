@@ -63,6 +63,15 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="QuickFix">
+      <HintPath>..\..\..\Connectors\Fix\QuickFix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Fix">
+      <HintPath>..\..\..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -77,9 +86,6 @@
     </Reference>
     <Reference Include="Ecng.Common">
       <HintPath>..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickFix">
-      <HintPath>..\..\..\References\QuickFix.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
@@ -235,14 +241,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="StockSharp.Fix">
-      <HintPath>..\..\..\References\StockSharp.Fix.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\..\References\stocksharp.ico">

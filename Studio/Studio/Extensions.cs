@@ -34,10 +34,8 @@ namespace StockSharp.Studio
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Code;
 	using StockSharp.Xaml.Diagram;
-
-	using License = StockSharp.Licensing.License;
-
 	using StockSharp.Localization;
+	using License = StockSharp.Licensing.License;
 
 	internal static class Extensions
 	{

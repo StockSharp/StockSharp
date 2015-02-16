@@ -36,6 +36,18 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo.Strategies">
+      <HintPath>..\..\Algo.Strategies\StockSharp.Algo.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram">
+      <HintPath>..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -177,20 +189,8 @@
     <Compile Include="VirtualPortfolio.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.History">
-      <HintPath>..\..\References\StockSharp.Algo.History.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Algo.Strategies">
-      <HintPath>..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Licensing">
       <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\..\References\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

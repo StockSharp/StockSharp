@@ -146,7 +146,7 @@
       <Project>{7EABA894-FC98-4F5E-A212-C40550260886}</Project>
       <Name>Plaza</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Quik\Quik.csproj">
+    <ProjectReference Include="..\..\..\Connectors\Quik\Quik.csproj">
       <Project>{1B798A4E-2271-46F9-9C2D-4E563114E268}</Project>
       <Name>Quik</Name>
     </ProjectReference>

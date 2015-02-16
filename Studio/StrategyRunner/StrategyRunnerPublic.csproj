@@ -47,6 +47,15 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Algo.Strategies">
+      <HintPath>..\..\Algo.Strategies\StockSharp.Algo.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Charting">
+      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml.Diagram">
+      <HintPath>..\..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -180,26 +189,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="StockSharp.Algo.Strategies">
-      <HintPath>..\..\References\StockSharp.Algo.Strategies.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Fix">
-      <HintPath>..\..\References\StockSharp.Fix.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Plaza">
-      <HintPath>..\..\References\StockSharp.Plaza.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Quik">
-      <HintPath>..\..\References\StockSharp.Quik.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Licensing">
       <HintPath>..\..\References\StockSharp.Licensing.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting">
-      <HintPath>..\..\References\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Diagram">
-      <HintPath>..\..\References\StockSharp.Xaml.Diagram.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

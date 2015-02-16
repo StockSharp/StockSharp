@@ -43,6 +43,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="StockSharp.Algo.History">
+      <HintPath>..\..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -84,11 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ux_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="StockSharp.Algo.History">
-      <HintPath>..\..\..\References\StockSharp.Algo.History.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">

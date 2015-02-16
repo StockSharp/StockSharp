@@ -15,6 +15,7 @@ namespace SampleSterling
 	using StockSharp.Logging;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class MainWindow
 	{
@@ -98,7 +99,7 @@ namespace SampleSterling
 					Trader.Connected += () =>
 					{
 						this.GuiAsync(() => OnConnectionChanged(true));
-
+						AddSecurities();
 						Trader.StartExport();
 					};
 
@@ -214,5 +215,53 @@ namespace SampleSterling
 		{
 			ShowOrHide(_newsWindow);
 		}
+
+		private void AddSecurities()
+		{
+			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			{
+				SecurityId = new SecurityId
+				{
+					SecurityCode = "AAPL",
+					BoardCode = "BATS",
+				},
+				Name = "AAPL",
+				SecurityType = SecurityTypes.Stock,
+			});
+
+			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			{
+				SecurityId = new SecurityId
+				{
+					SecurityCode = "AAPL",
+					BoardCode = "All",
+				},
+				Name = "AAPL",
+				SecurityType = SecurityTypes.Stock,
+			});
+
+			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			{
+				SecurityId = new SecurityId
+				{
+					SecurityCode = "IBM",
+					BoardCode = "BATS",
+				},
+				Name = "IBM",
+				SecurityType = SecurityTypes.Stock,
+			});
+
+			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			{
+				SecurityId = new SecurityId
+				{
+					SecurityCode = "IBM",
+					BoardCode = "All",
+				},
+				Name = "IBM",
+				SecurityType = SecurityTypes.Stock,
+			});
+		}
+
 	}
 }

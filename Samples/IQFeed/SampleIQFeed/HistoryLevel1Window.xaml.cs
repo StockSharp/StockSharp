@@ -36,7 +36,7 @@ namespace SampleIQFeed
 
 			var date = ((DateTime)DatePicker.Value).Date;
 			bool isSuccess;
-			L1Grid.Messages.AddRange(MainWindow.Instance.Trader.GetHitoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess));
+			L1Grid.Messages.AddRange(MainWindow.Instance.Trader.GetHistoricalLevel1(_security.ToSecurityId(), date, date.AddDays(1), out isSuccess));
 		}
 	}
 }

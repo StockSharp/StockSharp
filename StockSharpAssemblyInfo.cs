@@ -5,15 +5,17 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Resources;
 
+using StockSharp.Localization;
+
 #endregion
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyCompany("StockSharp")]
-[assembly: AssemblyProduct("StockSharp")]
-[assembly: AssemblyCopyright("Copyright @ StockSharp 2015")]
-[assembly: AssemblyTrademark("StockSharp")]
+[assembly: AssemblyCompany(ProjectDescriptions.Company)]
+[assembly: AssemblyProduct(ProjectDescriptions.Product)]
+[assembly: AssemblyCopyright(ProjectDescriptions.Copyright)]
+[assembly: AssemblyTrademark(ProjectDescriptions.Trademark)]
 [assembly: AssemblyCulture("")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
@@ -40,10 +42,5 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion(VersionHolder.Version)]
-[assembly: AssemblyFileVersion(VersionHolder.Version)]
-
-class VersionHolder
-{
-	public const string Version = "4.2.62.0";
-}
+[assembly: AssemblyVersion(ProjectDescriptions.Version)]
+[assembly: AssemblyFileVersion(ProjectDescriptions.Version)]

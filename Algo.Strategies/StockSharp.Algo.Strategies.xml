@@ -1,0 +1,959 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StockSharp.Algo.Strategies</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy">
+            <summary>
+            Стратегия автоматической защиты позиции.
+            </summary>
+            <remarks>
+            Новые сделки в стратегию поступают через <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})"/>.
+            Они автоматически защищаются с помощью <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy"/>.
+            Дополнительно, <see cref="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy"/> переворачивает стопы в случае переворота позиции.
+            </remarks>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.OnStarted">
+            <summary>
+            Метод вызывается тогда, когда вызвался метод <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/>, и состояние <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Started"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Protect(System.Decimal)">
+            <summary>
+            Защитить позицию, которая была обновлена через <see cref="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Item(StockSharp.BusinessEntities.Security)"/>.
+            </summary>
+            <param name="position">Позиция.</param>
+            <returns>Защитная стратегия. Если будет возвращено null, значит защита позиции игнорируется.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Protect(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.MyTrade,System.Decimal})">
+            <summary>
+            Защитить сделки.
+            </summary>
+            <param name="trades">Сделки. По ключу указана защищаемая сделка, по значению указан объем, который необходимо защитить.</param>
+            <returns>Защитные стратегии.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Sort(System.Collections.Generic.IEnumerable{System.Linq.IGrouping{System.Tuple{StockSharp.Messages.Sides,System.Decimal},StockSharp.Algo.Strategies.Protective.IProtectiveStrategy}})">
+            <summary>
+            Отсортировать защитные стратегии для указания наиболее худшей и лучшей по рыночным ценам
+            (при частичной закрытие позиции в первую очередь снимаются наиболее худшие).
+            </summary>
+            <param name="strategies">Защитные стратегии в неотсортированном порядке.</param>
+            <returns>Защитные стратегии в отсортированном порядке.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.GetProtectiveTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade},System.Decimal)">
+            <summary>
+            Получить из всех сделок те, которые необходимо защитить.
+            </summary>
+            <param name="trades">Новые сделки.</param>
+            <param name="maxVolume">Максимальный объем, который необъодимо защитить.</param>
+            <returns>Сделки, которые необходимо защитить.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})">
+            <summary>
+            Обработать сделки для коррекции объема защитных стратегий.
+            </summary>
+            <param name="trades">Сделки.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.TakeProfitLevel">
+            <summary>
+            Защитный уровень для тейк-профита. По-умолчанию уровень равен 0, что означает отключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossLevel">
+            <summary>
+            Защитный уровень для стоп-лосса. По-умолчанию уровень равен 0, что означает отключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossActivationOffset">
+            <summary>
+            Защитный сдвиг от расcчитанной цены стопа <see cref="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ActivationPrice"/>, который позволяет активировать защиту до достижения рынком данной цены.
+            По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.IsTrailingStopLoss">
+            <summary>
+            Использовать ли механизм скольжения для <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>. По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.IsTrailingTakeProfit">
+            <summary>
+            Использовать ли механизм скольжения для <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>. По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossTimeOut">
+            <summary>
+            Ограничение по времени для <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            Если защита не сработает к этому времени, то позиция будет закрыта по рынку.
+            По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.TakeProfitTimeOut">
+            <summary>
+            Ограничение по времени для <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>.
+            Если защита не сработает к этому времени, то позиция будет закрыта по рынку.
+            По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Item(StockSharp.BusinessEntities.Security)">
+            <summary>
+            Получить или установить первоначальную позицию для инструмента.
+            </summary>
+            <param name="security">Инструмент.</param>
+            <returns>Позиция.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.MyTradesStrategy">
+            <summary>
+            Стратегия, новые сделки которой автоматически транслируются в <see cref="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy">
+            <summary>
+            Котирование по лучшей цене. Для данного котирования указывается отступ от лучшей цены <see cref="P:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.BestPriceOffset"/>,
+            на который может уйти котируемая заявка.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.QuotingStrategy">
+            <summary>
+            Базовая стратегия на котирование.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Инициализировать <see cref="T:StockSharp.Algo.Strategies.Quoting.QuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.#ctor(StockSharp.BusinessEntities.Order)">
+            <summary>
+            Инициализировать <see cref="T:StockSharp.Algo.Strategies.Quoting.QuotingStrategy"/>.
+            </summary>
+            <param name="order">Заявка, которую необходимо котировать.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.NeedFinish">
+            <summary>
+            Можно ли остановить котирование.
+            </summary>
+            <remarks>
+            По умолчанию, котирование останавливается тогда, когда все контракты реализованы и <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.LeftVolume"/> равно 0.
+            </remarks>
+            <returns>True, можно, иначе, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetOrderPrice(Ecng.ComponentModel.Range{System.Decimal})">
+            <summary>
+            Получить цену для выставляемой заявки.
+            </summary>
+            <param name="acceptablePriceRange">Приемлемый диапазон цены.</param>
+            <returns>Цена, по которой будет выставлена заявка. Если возвращается 0, то заявка выставляться не будет.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.NeedQuoting(System.Decimal,System.Decimal,Ecng.ComponentModel.Range{System.Decimal},System.Decimal)">
+            <summary>
+            Нужно ли котировать заявку.
+            </summary>
+            <param name="currentPrice">Текущая цена.</param>
+            <param name="currentVolume">Текущий объем.</param>
+            <param name="acceptablePriceRange">Приемлемый диапазон цены.</param>
+            <param name="newVolume">Новый объем.</param>
+            <returns>Цена, по которой будет выставлена заявка. Если значение равно <see langword="null"/>, то котировать не требуется.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetAcceptablePriceRange">
+            <summary>
+            Получить приемлемый диапазон цены, попадая в который текущая заявка не будет перерегистрирована.
+            </summary>
+            <returns>Приемлемый диапазон цены. Если невозможно вычислить диапазон на данный момент, то будет возвращено <see langword="null"/>.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetNewVolume">
+            <summary>
+            Получить новый объем для заявки.
+            </summary>
+            <returns>Новый объем для заявки.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetFilteredQuotes(StockSharp.Messages.Sides)">
+            <summary>
+            Получить отфильтрованный с помощью <see cref="M:StockSharp.BusinessEntities.IConnector.GetFilteredMarketDepth(StockSharp.BusinessEntities.Security)"/> стакан.
+            </summary>
+            <param name="side">Сторона стакана (биды или оффера).</param>
+            <returns>Отфильтрованный стакан.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.GetNotificationRules">
+            <summary>
+            Получить список правил, на которые будет реагировать котирование.
+            </summary>
+            <returns>Список правил.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.SuspendNotificationRules(System.Action)">
+            <summary>
+            Приостановить правила нотификации стратегии котирования и выполнить указанное действие.
+            </summary>
+            <param name="action">Действие.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.OnStopped">
+            <summary>
+            Метод вызывается тогда, когда состояние процесса <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Stopped"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.OnStarted">
+            <summary>
+            Метод вызывается тогда, когда вызвался метод <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/>, и состояние <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Started"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.ProcessTimeOut">
+            <summary>
+            Обработчик события наступления <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.OnStopping">
+            <summary>
+            Метод вызывается тогда, когда состояние процесса <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Stopping"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.NeedStop(StockSharp.BusinessEntities.OrderFail)">
+            <summary>
+            Нужно ли остановить котирование из-за ошибки регистрации новой заявки.
+            </summary>
+            <param name="fail">Описание ошибки.</param>
+            <returns><see langword="true"/>, если нужно остановить котирование. Иначе, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.RegisterQuotingOrder(StockSharp.BusinessEntities.Order)">
+            <summary>
+            Зарегистрировать котируемую заявку.
+            </summary>
+            <param name="order">Котируемая заявка.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.ProcessQuoting">
+            <summary>
+            Инициировать котирование.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.IsSupportAtomicReRegister">
+            <summary>
+            Поддерживается ли перерегистрация заявок через метод <see cref="M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
+            в виде одной транзакции. По-умолчанию включено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.UseLastTradePrice">
+            <summary>
+            Использовать цену последней сделки, если информация в стакане отсутствует.
+            По-умолчанию включено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.QuotingDirection">
+            <summary>
+            Направление котирования.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.QuotingVolume">
+            <summary>
+            Объем, который необходимо скотировать.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.Order">
+            <summary>
+            Заявка, с которой работает в данный момент котировщик.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.MaxReRegisterCount">
+            <summary>
+            Максимальное количество изменений заявки, при превышении которого алгоритм будет остановлен.
+            </summary>
+            <remarks>
+            Значение по умолчанию равно <see cref="F:System.Int32.MaxValue"/>.
+            </remarks>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.CurrentReRegisterCount">
+            <summary>
+            Текущее количество изменений заявки.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.MaxRegisterFailCount">
+            <summary>
+            Максимальное количество ошибок регистрации заявки, при превышении которого алгоритм будет остановлен.
+            </summary>
+            <remarks>
+            Значение по умолчанию равно 100.
+            </remarks>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.CurrentRegisterFailCount">
+            <summary>
+            Текущее количество ошибок регистрации заявки.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.LeftVolume">
+            <summary>
+            Объем, который осталось реализовать до завершения котирования.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut">
+            <summary>
+            Ограничение по времени, в течении которого должно отработать котирование.
+            Если весь объем <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.QuotingVolume"/> не будет реализован к этому времени, то стратегия остановит свою работу.
+            </summary>
+            <remarks>
+            По-умолчанию ограничение выключено, и равно <see cref="F:System.TimeSpan.Zero"/>.
+            </remarks>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.IsTimeOut">
+            <summary>
+            Наступил ли <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.RegisterInterval">
+            <summary>
+            Интервал частоты ререгистрации заявки, при превышении которого новая заявка выставляться не будет.
+            </summary>
+            <remarks>
+            По-умолчанию интервал выключен, и равен <see cref="F:System.TimeSpan.Zero"/>.
+            </remarks>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.BestPrice">
+            <summary>
+            Получить лучшую цену. Если невозможно вычислить лучшую цену на данный момент, то будет возвращено <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy"/>.
+            </summary>
+            <param name="order">Заявка, которую необходимо котировать.</param>
+            <param name="bestPriceOffset">Отступ от лучшей цены, на который может уйти котируемая заявка.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.GetAcceptablePriceRange">
+            <summary>
+            Получить приемлемый диапазон цены, попадая в который текущая заявка не будет перерегистрирована.
+            </summary>
+            <returns>Приемлемый диапазон цены. Если невозможно вычислить диапазон на данный момент, то будет возвращено <see langword="null"/>.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.BestByPriceQuotingStrategy.BestPriceOffset">
+            <summary>
+            Отступ от лучшей цены, на который может уйти котируемая заявка.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy">
+            <summary>
+            Котирование по принципу "Лучшая по объему". Для данного котирования указывается дельта объема <see cref="P:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.VolumeExchange"/>,
+            который может стоять перед котируемой заявкой.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy"/>.
+            </summary>
+            <param name="order">Заявка, которую необходимо котировать.</param>
+            <param name="volumeExchange">Дельта объема, который может стоять перед котируемой заявкой.</param>
+            <returns>Стратегия.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.NeedQuoting(System.Decimal,System.Decimal,Ecng.ComponentModel.Range{System.Decimal},System.Decimal)">
+            <summary>
+            Нужно ли котировать заявку.
+            </summary>
+            <param name="currentPrice">Текущая цена.</param>
+            <param name="currentVolume">Текущий объем.</param>
+            <param name="acceptablePriceRange">Приемлемый диапазон цены.</param>
+            <param name="newVolume">Новый объем.</param>
+            <returns>Цена, по которой будет выставлена заявка. Если значение равно <see langword="null"/>, то котировать не требуется.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.BestByVolumeQuotingStrategy.VolumeExchange">
+            <summary>
+            Дельта объема, который может стоять перед котируемой заявкой.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy">
+            <summary>
+            Стратегия дельта хеджирования опционов.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy">
+            <summary>
+            Базовая стратегия хеджирования.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.#ctor">
+            <summary>
+            Инициализировать <see cref="T:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.GetNotificationRules">
+            <summary>
+            Получить список правил, на которые будет реагировать рехеджирование.
+            </summary>
+            <returns>Список правил.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.OnStarted">
+            <summary>
+            Метод вызывается тогда, когда вызвался метод <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/>, и состояние <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Started"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.GetReHedgeOrders">
+            <summary>
+            Получить список заявок, рехеджирующих опционную позицию.
+            </summary>
+            <returns>Заявки рехеджирования.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.AddReHedgeQuoting(StockSharp.Algo.Strategies.Strategy,StockSharp.BusinessEntities.Order)">
+            <summary>
+            Добавить стратегию рехеджирования.
+            </summary>
+            <param name="parentStrategy">Родительская стратегия (по страйку или по базовому активу).</param>
+            <param name="order">Заявка рехеджирования.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.AddReHedgeOrder(StockSharp.Algo.Strategies.Strategy,StockSharp.BusinessEntities.Order)">
+            <summary>
+            Добавить заявку рехеджирования.
+            </summary>
+            <param name="parentStrategy">Родительская стратегия (по страйку или по базовому активу).</param>
+            <param name="order">Заявка рехеджирования.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.ReHedge(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})">
+            <summary>
+            Запустить рехеджирование.
+            </summary>
+            <param name="orders">Заявки рехеджирования.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.IsSuspended">
+            <summary>
+            Приостановлено ли рехеджирование.
+            </summary>
+            <returns><see langword="true"/>, если приостановлено, иначе, <see langword="false"/>.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.CreateQuoting(StockSharp.BusinessEntities.Order)">
+            <summary>
+            Создать стратегию котирования для изменения позиции.
+            </summary>
+            <param name="order">Заявка, которую необходимо котировать.</param>
+            <returns>Стратегия котирования.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.BlackScholes">
+            <summary>
+            Портфельная модель расчета значений "греков" по формуле Блэка-Шоулза.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.UseQuoting">
+            <summary>
+            Котировать ли выставленную заявку по рыночной цене. По-умолчанию режим выключен.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.PriceOffset">
+            <summary>
+            Отступ цены для выставляемой заявки. Определяет размер отступа от лучшей котировки (для покупки прибавляется к цене, для продажи - вычитается).
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.GetReHedgeOrders">
+            <summary>
+            Получить список заявок, рехеджирующих опционную позицию.
+            </summary>
+            <returns>Заявки рехеджирования.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.PositionOffset">
+            <summary>
+            Сдвиг в позиции по базовому активу, позволяющая не хеджировать часть опционной позиции.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Extensions">
+            <summary>
+            Вспомогательный класс для работы со стратегиями.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.OpenPositionByQuoting(StockSharp.Algo.Strategies.Strategy,System.Decimal)">
+            <summary>
+            Открыть позицию через котирование.
+            </summary>
+            <param name="strategy">Стратегия.</param>
+            <param name="finishPosition">Значение позиции, которое необходимо достичь. Отрицательное значение означает короткую позицию.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.ClosePositionByQuoting(StockSharp.Algo.Strategies.Strategy)">
+            <summary>
+            Закрыть открытую позицию через котирование.
+            </summary>
+            <param name="strategy">Стратегия.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order},StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
+            <summary>
+            Создать действие, защищающее заявку стратегиями <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> и <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="rule">Правило, ассоциированное с заявкой.</param>
+            <param name="takePriceDelta">Дельта от цены защищаемой сделки, по которой должна быть выставлена защитная заявка тейк-профит.</param>
+            <param name="stopPriceDelta">Дельта от цены защищаемой сделки, по которой должна быть выставлена защитная заявка стоп-лосс.</param>
+            <returns>Правило.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
+            <summary>
+            Создать действие, защищающее сделки стратегиями <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> и <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="rule">Правило на появление новых сделок.</param>
+            <param name="takePriceDelta">Дельта от цены защищаемой сделки, по которой должна быть выставлена защитная заявка тейк-профит.</param>
+            <param name="stopPriceDelta">Дельта от цены защищаемой сделки, по которой должна быть выставлена защитная заявка стоп-лосс.</param>
+            <returns>Правило.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.TakeProfitStrategy},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.StopLossStrategy})">
+            <summary>
+            Создать действие, защищающее сделки стратегиями <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> и <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="rule">Правило на появление новых сделок.</param>
+            <param name="takeProfit">Функция, создающая по сделке стратегию <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>.</param>
+            <param name="stopLoss">Функция, создающая по сделке стратегию <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.</param>
+            <returns>Правило.</returns>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy">
+            <summary>
+            Интерейс защитной стратегии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectiveVolume">
+            <summary>
+            Защищаемый объем.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectivePrice">
+            <summary>
+            Цена защищаемой позиции.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectiveSide">
+            <summary>
+            Направление защищаемой позиции.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy.ProtectiveVolumeChanged">
+            <summary>
+            Событие об изменении защищаемого объема.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy">
+            <summary>
+            Котирование по цене последней сделки.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy"/>.
+            </summary>
+            <param name="order">Заявка, которую необходимо котировать.</param>
+            <param name="bestPriceOffset">Отступ от лучшей цены, на которую может уйти котируемая заявка.</param>
+            <returns>Стратегия.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LastTradeQuotingStrategy.BestPrice">
+            <summary>
+            Получить лучшую цену. Если невозможно вычислить лучшую цену на данный момент, то будет возвращено <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy">
+            <summary>
+            Котирование по заданному уровню в стакане.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.GetAcceptablePriceRange">
+            <summary>
+            Получить приемлемый диапазон цены, попадая в который текущая заявка не будет перерегистрирована.
+            </summary>
+            <returns>Приемлемый диапазон цены. Если невозможно вычислить диапазон на данный момент, то будет возвращено <see langword="null"/>.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.GetOrderPrice(Ecng.ComponentModel.Range{System.Decimal})">
+            <summary>
+            Получить цену для выставляемой заявки.
+            </summary>
+            <param name="acceptablePriceRange">Приемлемый диапазон цены.</param>
+            <returns>Цена, по которой будет выставлена заявка. Если возвращается 0, то заявка выставляться не будет.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.Level">
+            <summary>
+            Уровень в стакане. Определяет количество котировок вглубь стакана от лучшей. По-умолчанию равно 0, что означает котирование по лучшей котировке.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LevelQuotingStrategy.OwnLevel">
+            <summary>
+            Создавать свой собственный ценовой уровень в стакане, если котировки с необходимой ценой еще нет. По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy">
+            <summary>
+            Стратерия, реализующая алгоритм котирования объема по лимитированной цене.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+            <param name="limitPrice">Лимитированная цена для котируемых заявок.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.LimitPrice">
+            <summary>
+            Лимитированная цена для котируемых заявок.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.LimitQuotingStrategy.BestPrice">
+            <summary>
+            Получить лучшую цену. Если невозможно вычислить лучшую цену на данный момент, то будет возвращено <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy">
+            <summary>
+            Котирование по рыночной цене.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.#ctor(StockSharp.BusinessEntities.Order,StockSharp.Messages.Unit,StockSharp.Messages.Unit)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy"/>.
+            </summary>
+            <param name="order">Заявка, которую необходимо котировать.</param>
+            <param name="bestPriceOffset">Отступ от лучшей цены, на которую может уйти котируемая заявка.</param>
+            <param name="priceOffset">Отступ цены для выставляемой заявки. Определяет размер отступа от лучшей котировки (для покупки прибавляется к цене, для продажи - вычитается).</param>
+            <returns>Стратегия.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceType">
+            <summary>
+            Тип рыночной цены. По умолчанию равен <see cref="F:StockSharp.Algo.MarketPriceTypes.Following"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceOffset">
+            <summary>
+            Отступ цены для выставляемой заявки. Определяет размер отступа от лучшей котировки (для покупки прибавляется к цене, для продажи - вычитается).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.BestPrice">
+            <summary>
+            Получить лучшую цену. Если невозможно вычислить лучшую цену на данный момент, то будет возвращено <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy">
+            <summary>
+            Базовая стратегия защиты позиции.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)">
+            <summary>
+            Инициализировать <see cref="T:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy"/>.
+            </summary>
+            <param name="protectiveSide">Направление защищаемой позиции.</param>
+            <param name="protectivePrice">Цена защищаемой позиции.</param>
+            <param name="protectiveVolume">Объем защищаемой позиции.</param>
+            <param name="protectiveLevel">
+            Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
+            то задается конкретная цена. Иначе, указывается величина сдвига от <paramref name="protectivePrice"/>.
+            </param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.GetNotificationRules">
+            <summary>
+            Получить список правил, на которые будет реагировать котирование.
+            </summary>
+            <returns>Список правил.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStarted">
+            <summary>
+            Метод вызывается тогда, когда вызвался метод <see cref="M:StockSharp.Algo.Strategies.Strategy.Start"/>, и состояние <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Started"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStopping">
+            <summary>
+            Метод вызывается тогда, когда состояние процесса <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Stopping"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProcessTimeOut">
+            <summary>
+            Обработчик события наступления <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.NeedQuoting(System.Decimal,System.Decimal,Ecng.ComponentModel.Range{System.Decimal},System.Decimal)">
+            <summary>
+            Нужно ли котировать заявку.
+            </summary>
+            <param name="currentPrice">Текущая цена.</param>
+            <param name="currentVolume">Текущий объем.</param>
+            <param name="acceptablePriceRange">Приемлемый диапазон цены.</param>
+            <param name="newVolume">Новый объем.</param>
+            <returns>Цена, по которой будет выставлена заявка. Если значение равно <see langword="null"/>, то котировать не требуется.</returns>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProcessQuoting">
+            <summary>
+            Инициировать котирование.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.CreateQuoting">
+            <summary>
+            Создать стратегию котирования для защитной заявки (гарантированно исполнить ее).
+            </summary>
+            <returns>Стратегия котирования.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectivePrice">
+            <summary>
+            Цена защищаемой позиции.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveSide">
+            <summary>
+            Направление защищаемой позиции.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveVolume">
+            <summary>
+            Защищаемый объем.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveVolumeChanged">
+            <summary>
+            Событие об изменении защищаемого объема.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProtectiveLevel">
+            <summary>
+            Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
+            то задается конкретная цена. Иначе, указывается величина сдвига от защищаемой сделки <see cref="T:StockSharp.BusinessEntities.Trade"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.IsTrailing">
+            <summary>
+            Использовать ли механизм скольжения.
+            Для <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> при увеличении прибыли автоматически увеличивается уровень взятия прибыли.
+            Для <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/> при увеличении прибыли автоматически увеличивается уровень защиты убытка.
+            По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ActivationPrice">
+            <summary>
+            Абсолютное значение цены, при достижении которой автивизируется защитная стратегия. Если цена равна <see langword="null"/>, то активация не требуется.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.IsActivated">
+            <summary>
+            Активирована ли защитная стратегия.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.Activated">
+            <summary>
+            Событие активации защитной стратегии.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.UseQuoting">
+            <summary>
+            Котировать ли выставленную заявку по рыночной цене. По-умолчанию режим выключен.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.UseMarketOrders">
+            <summary>
+            Использоваить ли <see cref="F:StockSharp.Messages.OrderTypes.Market"/> при защите. По-умолчанию используются заявки <see cref="F:StockSharp.Messages.OrderTypes.Limit"/>.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.BestPriceOffset">
+            <summary>
+            Отступ от лучшей цены, на которую может уйти котируемая заявка.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.PriceOffset">
+            <summary>
+            Отступ цены для выставляемой заявки. Определяет размер отступа от лучшей котировки (для покупки прибавляется к цене, для продажи - вычитается).
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.QuotingVolume">
+            <summary>
+            Объем, который необходимо скотировать.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ClosePositionPrice">
+            <summary>
+            Рыночная цена закрытия позиции. Если нет информации о текущей цене, то будет возвращено <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy">
+            <summary>
+            Стратегия защиты убытка.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.BusinessEntities.MyTrade,StockSharp.Messages.Unit)">
+            <summary>
+            Создать стратегию <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="trade">Защищаемая позиция.</param>
+            <param name="protectiveLevel">
+            Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
+            то задается конкретная цена. Иначе, указывается величина сдвига от защищаемой сделки <paramref name="trade"/>.
+            </param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)">
+            <summary>
+            Создать стратегию <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+            <param name="protectiveSide">Направление защищаемой позиции.</param>
+            <param name="protectivePrice">Цена защищаемой позиции.</param>
+            <param name="protectiveVolume">Объем защищаемой позиции.</param>
+            <param name="protectiveLevel">
+            Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
+            то задается конкретная цена. Иначе, указывается величина сдвига от <paramref name="protectivePrice"/>.
+            </param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationOffset">
+            <summary>
+            Защитный сдвиг от расcчитанной цены стопа <see cref="P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationPrice"/>, который позволяет активировать защиту до достижения рынком данной цены.
+            По-умолчанию выключено.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationPrice">
+            <summary>
+            Абсолютное значение цены, при достижении которой автивизируется защитная стратегия. Если цена равна <see langword="null"/>, то активация не требуется.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy">
+            <summary>
+            Стратегия, защищающая сделки одновременно стратегиями <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> и <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.#ctor(StockSharp.Algo.Strategies.Protective.TakeProfitStrategy,StockSharp.Algo.Strategies.Protective.StopLossStrategy)">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy"/>
+            </summary>
+            <param name="takeProfit">Стратегия защиты прибыли.</param>
+            <param name="stopLoss">Стратегия защиты убытка.</param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectiveVolume">
+            <summary>
+            Защищаемый объем.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectivePrice">
+            <summary>
+            Цена защищаемой позиции.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectiveSide">
+            <summary>
+            Направление защищаемой позиции.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.ProtectiveVolumeChanged">
+            <summary>
+            Событие об изменении защищаемого объема.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy">
+            <summary>
+            Стратегия защиты прибыли.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.BusinessEntities.MyTrade,StockSharp.Messages.Unit)">
+            <summary>
+            Создать стратегию <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>.
+            </summary>
+            <param name="trade">Защищаемая позиция.</param>
+            <param name="protectiveLevel">
+            Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
+            то задается конкретная цена. Иначе, указывается величина сдвига от защищаемой сделки <paramref name="trade"/>.
+            </param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)">
+            <summary>
+            Создать стратегию <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/>.
+            </summary>
+            <param name="protectiveSide">Направление защищаемой позиции.</param>
+            <param name="protectivePrice">Цена защищаемой позиции.</param>
+            <param name="protectiveVolume">Объем защищаемой позиции.</param>
+            <param name="protectiveLevel">
+            Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
+            то задается конкретная цена. Иначе, указывается величина сдвига от <paramref name="protectivePrice"/>.
+            </param>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.ActivationPrice">
+            <summary>
+            Абсолютное значение цены, при достижении которой автивизируется защитная стратегия. Если цена равна <see langword="null"/>, то активация не требуется.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy">
+            <summary>
+            Котирование опционов по теоретической цене.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{StockSharp.Messages.Unit})">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+            <param name="theorPriceOffset">Отклонение от теоретической цены.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.GetAcceptablePriceRange">
+            <summary>
+            Получить приемлемый диапазон цены, попадая в который текущая заявка не будет перерегистрирована.
+            </summary>
+            <returns>Приемлемый диапазон цены. Если невозможно вычислить диапазон на данный момент, то будет возвращено null.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.TheorPriceOffset">
+            <summary>
+            Отклонение от теоретической цены.
+            </summary>
+        </member>
+        <member name="T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy">
+            <summary>
+            Котирование опционов по волатильности.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{System.Decimal})">
+            <summary>
+            Создать <see cref="T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy"/>.
+            </summary>
+            <param name="quotingDirection">Направление котирования.</param>
+            <param name="quotingVolume">Объем, который необходимо скотировать.</param>
+            <param name="ivRange">Границы волатильности.</param>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.GetAcceptablePriceRange">
+            <summary>
+            Получить приемлемый диапазон цены, попадая в который текущая заявка не будет перерегистрирована.
+            </summary>
+            <returns>Приемлемый диапазон цены. Если невозможно вычислить диапазон на данный момент, то будет возвращено null.</returns>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.IVRange">
+            <summary>
+            Границы волатильности.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy.Security">
+            <summary>
+            Инструмент.
+            </summary>
+        </member>
+    </members>
+</doc>
