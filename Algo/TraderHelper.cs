@@ -3238,6 +3238,7 @@ namespace StockSharp.Algo
 			switch (name)
 			{
 				case "SUR":
+				case "RUR":
 					return CurrencyTypes.RUB;
 				default:
 					return name.To<CurrencyTypes>();
