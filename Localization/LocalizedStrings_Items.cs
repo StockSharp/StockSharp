@@ -27606,12 +27606,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Synchronizing with Finam.
+		/// Synchronizing with {0}.
 		/// </summary>
 		public const string Str2290Key = "Str2290";
 
 		/// <summary>
-		/// Synchronizing with Finam.
+		/// Synchronizing with {0}.
 		/// </summary>
 		public static string Str2290
 		{
@@ -27619,12 +27619,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Security {0} does not contain information about Finam ID and it will be removed from the downloads list.
+		/// Security {0} does not contain {1} identifier and it will be removed from the downloads list.
 		/// </summary>
 		public const string Str2291ParamsKey = "Str2291Params";
 
 		/// <summary>
-		/// Security {0} does not contain information about Finam ID and it will be removed from the downloads list.
+		/// Security {0} does not contain {1} identifier and it will be removed from the downloads list.
 		/// </summary>
 		public static string Str2291Params
 		{
@@ -46102,32 +46102,6 @@ namespace StockSharp.Localization
 		public static string Str3807Params
 		{
 			get { return GetString(Str3807ParamsKey); }
-		}
-
-		/// <summary>
-		/// Synchronizing with MFD.
-		/// </summary>
-		public const string Str3808Key = "Str3808";
-
-		/// <summary>
-		/// Synchronizing with MFD.
-		/// </summary>
-		public static string Str3808
-		{
-			get { return GetString(Str3808Key); }
-		}
-
-		/// <summary>
-		/// Security {0} does not contain information about MFD ID and it will be removed from the downloads list.
-		/// </summary>
-		public const string Str3809ParamsKey = "Str3809Params";
-
-		/// <summary>
-		/// Security {0} does not contain information about MFD ID and it will be removed from the downloads list.
-		/// </summary>
-		public static string Str3809Params
-		{
-			get { return GetString(Str3809ParamsKey); }
 		}
 
 		/// <summary>

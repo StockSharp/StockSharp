@@ -168,7 +168,7 @@ namespace StockSharp.Hydra.Finam
 			{
 				this.AddWarningLog(selectedSecurities.IsEmpty()
 					? LocalizedStrings.Str2289
-					: LocalizedStrings.Str2290);
+					: LocalizedStrings.Str2290.Put("Finam"));
 
 				source.Refresh(_finamSecurityStorage, new Security(), SaveSecurity, () => !CanProcess(false));
 
@@ -178,7 +178,7 @@ namespace StockSharp.Hydra.Finam
 						var retVal = IsFinam(s);
 
 						if (!retVal)
-							this.AddWarningLog(LocalizedStrings.Str2291Params, s.Security.Id);
+							this.AddWarningLog(LocalizedStrings.Str2291Params, s.Security.Id, "Finam");
 
 						return retVal;
 					}).ToArray();
