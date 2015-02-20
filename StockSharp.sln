@@ -307,7 +307,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCQG", "Samples\CQG\Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveBrokers", "Connectors\InteractiveBrokers\InteractiveBrokers.csproj", "{F17D780E-6F82-40FD-84E1-C4EB09853BBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quik", "Connectors\Quik\QuikPublic.csproj", "{1B798A4E-2271-46F9-9C2D-4E563114E268}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuikPublic", "Connectors\Quik\QuikPublic.csproj", "{1B798A4E-2271-46F9-9C2D-4E563114E268}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuandlPublic", "Hydra\Plugins\Quandl\QuandlPublic.csproj", "{28E907AE-AECD-40A8-A679-3699A9E67974}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -741,6 +743,10 @@ Global
 		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B798A4E-2271-46F9-9C2D-4E563114E268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28E907AE-AECD-40A8-A679-3699A9E67974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28E907AE-AECD-40A8-A679-3699A9E67974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28E907AE-AECD-40A8-A679-3699A9E67974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28E907AE-AECD-40A8-A679-3699A9E67974}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -872,6 +878,7 @@ Global
 		{0E498B61-BE10-480A-94A4-E25B77E3FE82} = {AA215EA3-1D80-4C64-99CE-DAF73795AB3A}
 		{F17D780E-6F82-40FD-84E1-C4EB09853BBD} = {42B35529-B842-4F17-9277-0618B074AA91}
 		{1B798A4E-2271-46F9-9C2D-4E563114E268} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{28E907AE-AECD-40A8-A679-3699A9E67974} = {551390E7-41EB-4451-AF9B-49C64439F664}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi
