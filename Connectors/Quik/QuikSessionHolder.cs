@@ -398,6 +398,8 @@ namespace StockSharp.Quik
 
 			SecurityClassInfo.Add("QJSIM", new RefPair<SecurityTypes, string>(SecurityTypes.Stock, ExchangeBoard.MicexJunior.Code));
 
+			SecurityClassInfo.Add("RTSIDX", new RefPair<SecurityTypes, string>(SecurityTypes.Index, ExchangeBoard.Forts.Code));
+
 			UtcOffset = TimeHelper.Moscow.BaseUtcOffset;
 
 			IsTransactionEnabled = true;
