@@ -1963,12 +1963,10 @@ Str2095;Wrong type of security. Must be either futures or options contract.;Не
 Str2096;Wrong type of security. Must be an index, stock, futures or options contract.;Неправильный тип инструмента. Должен быть индекс, акция, фьючерс или опцион.
 Str2097;Wrong security board.;Неправильная площадка инструмента.
 Str2098Params;File '{0}' was not successfully parsed and was deleted. Wrong line of file '{1}'.;Файл '{0}' не был успешно распарсен и был удален. Неправильная строка файла '{1}'.
-Str2099Params;Security {0} does not contain information about Finam ID.;Инструмент {0} не содержит информацию об идентификаторе Финам.
-Str2100Params;Security {0} contains an incorrect Finam ID {1}.;Инструмент {0} содержит некорректный идентификатор Финама {1}.
+Str2099Params;Security {0} does not contain {1} identifier.;Инструмент {0} не содержит идентификатор {1}.
+Str2100Params;Security {0} contains an incorrect {1} identifier {2}.;Инструмент {0} содержит некорректный идентификатор {1} {2}.
 Str2101;TimeFrame must be 0, 1, 5, 10, 15, 30, 60 mins or 1 day.;TimeFrame должен быть 0, 1, 5, 10, 15, 30, 60 мин или 1 день.
 Str2102;Wrong time-frame.;Неправильный тайм-фрейм.
-Str2103Params;Security {0} does not contain information about Mfd ID.;Инструмент {0} не содержит информацию об идентификаторе Mfd.
-Str2104Params;Security {0} contains an incorrect Mfd ID {1}.;Инструмент {0} содержит некорректный идентификатор Mfd {1}.
 Str2105;Unknown day of a competition.;Неизвестный день конкурса.
 Str2106Params;Unknown participant {0}.;Неизвестный участник {0}.
 Str2107Params;File {0} does not contain header.;Файл {0} не содержит заголовка.
@@ -2127,7 +2125,7 @@ Str2287;Ignore weekends and holidays (do not download data).;Игнориров�
 Str2288Params;Source is designed to get history data from website {0}.;Источник предназначен для получения исторических данных с сайта {0}.
 Str2289;No securities selected. Downloading all that are available.;Нет выбранных инструментов. Закачиваем все доступные.
 Str2290;Synchronizing with {0}.;Производим синхронизацию с {0}.
-Str2291Params;Security {0} does not contain {1} identifier and it will be removed from the downloads list.;Инструмент {0} не содержит информацию об идентификаторе {1} и он будет удален из списка скачиваемых.
+Str2291Params;Security {0} does not contain {1} identifier and it will be removed from the downloads list.;Инструмент {0} не содержит идентификатор {1} и он будет удален из списка скачиваемых.
 Str2292;No securities.;Нет инструментов.
 Str2293Params;No unsaved days to load trades for {0}.;Нет несохраненных дней для загрузки сделок по {0}.
 Str2294Params;Start downloading trades for {0:d} date and {1} security.;Старт загрузки сделок за {0:d} для {1}.

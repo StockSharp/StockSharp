@@ -25487,12 +25487,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Security {0} does not contain information about Finam ID.
+		/// Security {0} does not contain {1} identifier.
 		/// </summary>
 		public const string Str2099ParamsKey = "Str2099Params";
 
 		/// <summary>
-		/// Security {0} does not contain information about Finam ID.
+		/// Security {0} does not contain {1} identifier.
 		/// </summary>
 		public static string Str2099Params
 		{
@@ -25500,12 +25500,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Security {0} contains an incorrect Finam ID {1}.
+		/// Security {0} contains an incorrect {1} identifier {2}.
 		/// </summary>
 		public const string Str2100ParamsKey = "Str2100Params";
 
 		/// <summary>
-		/// Security {0} contains an incorrect Finam ID {1}.
+		/// Security {0} contains an incorrect {1} identifier {2}.
 		/// </summary>
 		public static string Str2100Params
 		{
@@ -25536,32 +25536,6 @@ namespace StockSharp.Localization
 		public static string Str2102
 		{
 			get { return GetString(Str2102Key); }
-		}
-
-		/// <summary>
-		/// Security {0} does not contain information about Mfd ID.
-		/// </summary>
-		public const string Str2103ParamsKey = "Str2103Params";
-
-		/// <summary>
-		/// Security {0} does not contain information about Mfd ID.
-		/// </summary>
-		public static string Str2103Params
-		{
-			get { return GetString(Str2103ParamsKey); }
-		}
-
-		/// <summary>
-		/// Security {0} contains an incorrect Mfd ID {1}.
-		/// </summary>
-		public const string Str2104ParamsKey = "Str2104Params";
-
-		/// <summary>
-		/// Security {0} contains an incorrect Mfd ID {1}.
-		/// </summary>
-		public static string Str2104Params
-		{
-			get { return GetString(Str2104ParamsKey); }
 		}
 
 		/// <summary>
