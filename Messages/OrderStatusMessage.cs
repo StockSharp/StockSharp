@@ -21,6 +21,21 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
+		/// Идентификатор запрашиваемой заявки.
+		/// </summary>
+		public long? OrderId { get; set; }
+
+		/// <summary>
+		/// Идентификатор запрашиваемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
+		/// </summary>
+		public string OrderStringId { get; set; }
+
+		/// <summary>
+		/// Номер транзакции запрашиваемой заявки.
+		/// </summary>
+		public long? OrderTransactionId { get; set; }
+
+		/// <summary>
 		/// Создать <see cref="OrderStatusMessage"/>.
 		/// </summary>
 		public OrderStatusMessage()
@@ -38,6 +53,9 @@ namespace StockSharp.Messages
 			{
 				LocalTime = LocalTime,
 				TransactionId = TransactionId,
+				OrderId = OrderId,
+				OrderStringId = OrderStringId,
+				OrderTransactionId = OrderTransactionId
 			};
 		}
 

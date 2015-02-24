@@ -435,6 +435,8 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
+				SessionHolder.AddErrorLog(ex);
+
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
