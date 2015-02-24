@@ -1353,7 +1353,7 @@ namespace StockSharp.Algo.Testing
 						reqMoney = price;
 					else
 					{
-						var secEmu = _parent._securityEmulators.TryGetValue(securityId);
+						var secEmu = _parent.GetEmulator(securityId);
 						reqMoney = secEmu.GetBestPrice(side) ?? 0;
 					}
 				}
@@ -1482,10 +1482,7 @@ namespace StockSharp.Algo.Testing
 					var emu = _securityEmulators.TryGetValue(clearingMsg.SecurityId);
 					
 					if (emu != null)
-					{
 						_securityEmulators.Remove(clearingMsg.SecurityId);
-						emu.Parent = this;
-					}
 
 					break;
 				}
