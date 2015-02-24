@@ -230,7 +230,7 @@ namespace StockSharp.Hydra
 
 				var tasks = InitializeTasks();
 
-				GuiDispatcher.GlobalDispatcher.AddSyncAction(() => BusyIndicator.BusyContent = LocalizedStrings.Str2942);
+				GuiDispatcher.GlobalDispatcher.AddSyncAction(() => BusyIndicator.BusyContent = LocalizedStrings.Str2942.Put(LocalizedStrings.Str2854));
 				ConfigManager.RegisterService(new FilterableSecurityProvider(_entityRegistry.Securities, s => s.IsAllSecurity()));
 
 				return tasks;

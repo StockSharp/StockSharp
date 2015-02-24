@@ -2723,7 +2723,7 @@ Str2925;Price step is not filled.;Не заполнен шаг цены.
 Str2926;Board not selected.;Не выбрана площадка.
 Str2927Params;Security {0} already exists in the database.;Инструмент {0} уже существует в базе данных.
 Str2928;Process must be stopped. Would you like to do it now?;Необходимо остановить операцию. Сделать это сейчас?
-Str2929Params;Fi le{0} has wrong format.;Файл {0} имеет неправильный формат.
+Str2929Params;File {0} has wrong format.;Файл {0} имеет неправильный формат.
 Str2930Params;New security added {0}.;Добавлен новый инструмент {0}.
 Str2931Params;Dates cache for security {0} in directory '{1}' was reset.;Кэш дат для инструмента {0} в директории '{1}' сброшен.
 Str2932;Start;Запустить
@@ -2735,7 +2735,7 @@ Str2937;candles;свечи
 Str2938;One of the fields in incorrectly set.;Одно из полей задано неверно.
 Str2940Params;Errors count esceeded {0}.;Количество ошибок превысило {0}.
 Str2941;Loading...;Загрузка...
-Str2942;Securities loading;Загрузка инструментов
+Str2942;'{0}' loading;Загрузка '{0}'
 Str2943;S#.Data — database error.;S#.Data - ошибка базы данных.
 Str2944;S#.Data is working. Stop data download?;S#.Data в процессе работы. Остановить скачивание данных?
 Str2945;S#.Data is already launched.;S#.Data уже запущена.
@@ -3492,10 +3492,6 @@ Str3737Params;Creating new user {0}.;Создание нового пользо�
 Str3738;Password was not changed because of incorrect data.;Пароль не был изменен из-за некорректных данных.
 Str3739;Password was successfully changed.;Пароль был успешно изменен.
 Str3740Params;New security {0}.;Новый инструмент {0}.
-Str3741;Positions loading;Загрузка позиций
-Str3742;Orders loading;Загрузка заявок
-Str3743;Trades loading;Загрузка сделок
-Str3744;News loading;Загрузка новостей
 Str3745Params;Account {0} blocked because of margin call.;Счет {0} заблокирован из-за маржин кола.
 Str3746;Market data session.;Сессия маркет-данных.
 Str3747; candles history; история свечек

@@ -35484,12 +35484,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Securities loading
+		/// '{0}' loading
 		/// </summary>
 		public const string Str2942Key = "Str2942";
 
 		/// <summary>
-		/// Securities loading
+		/// '{0}' loading
 		/// </summary>
 		public static string Str2942
 		{
@@ -45296,58 +45296,6 @@ namespace StockSharp.Localization
 		public static string Str3740Params
 		{
 			get { return GetString(Str3740ParamsKey); }
-		}
-
-		/// <summary>
-		/// Positions loading
-		/// </summary>
-		public const string Str3741Key = "Str3741";
-
-		/// <summary>
-		/// Positions loading
-		/// </summary>
-		public static string Str3741
-		{
-			get { return GetString(Str3741Key); }
-		}
-
-		/// <summary>
-		/// Trades loading
-		/// </summary>
-		public const string Str3742Key = "Str3742";
-
-		/// <summary>
-		/// Trades loading
-		/// </summary>
-		public static string Str3742
-		{
-			get { return GetString(Str3742Key); }
-		}
-
-		/// <summary>
-		/// Transactions loading
-		/// </summary>
-		public const string Str3743Key = "Str3743";
-
-		/// <summary>
-		/// Transactions loading
-		/// </summary>
-		public static string Str3743
-		{
-			get { return GetString(Str3743Key); }
-		}
-
-		/// <summary>
-		/// News loading
-		/// </summary>
-		public const string Str3744Key = "Str3744";
-
-		/// <summary>
-		/// News loading
-		/// </summary>
-		public static string Str3744
-		{
-			get { return GetString(Str3744Key); }
 		}
 
 		/// <summary>
