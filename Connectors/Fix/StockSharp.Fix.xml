@@ -41,12 +41,14 @@
       <param name="fixMsg">FIX сообщение.</param>
       <returns>Сообщение о регистрации заявки.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixExtensions.ToExecutionReport``1(StockSharp.Messages.ExecutionMessage)">
+    <member name="M:StockSharp.Fix.FixExtensions.ToExecutionReport``1(StockSharp.Messages.ExecutionMessage,System.Nullable{System.Int64},System.Int64)">
       <summary>
             Конвертировать <see cref="T:StockSharp.Messages.ExecutionMessage" /> в <see cref="T:QuickFix.FIX44.ExecutionReport" />.
             </summary>
       <typeparam name="T">Тип FIX сообщения.</typeparam>
       <param name="order">Сообщение об изменении заявки.</param>
+      <param name="requestId">Номер запроса.</param>
+      <param name="originalRequestId">Номер первоначального запроса.</param>
       <returns>FIX сообщение.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixExtensions.ToExecutionMessage``1(``0,StockSharp.Fix.FixSession,System.TimeSpan)">
@@ -318,13 +320,36 @@
       <param name="msgStr">Строка сообщения.</param>
       <param name="isMarketData">Сообщение получено для сессии маркет-данных.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixServer.AddTransactionsMapping(System.String,System.Int64)">
+    <member name="M:StockSharp.Fix.FixServer.GetRequestId(System.Int64)">
       <summary>
-            Добавить сопоставление номеров транзакций.
+            Получить идентификатор запроса.
+            </summary>
+      <param name="transactionId">Идентификатор транзакции.</param>
+      <returns>Идентификатор запроса.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.AddTransactionId(System.String,System.Int64,System.Int64)">
+      <summary>
+            Добавить ассоциацию идентификатора запроса и транзакции.
             </summary>
       <param name="client">Имя клиента.</param>
-      <param name="clientTransactionId">Клиентский номер транзакции.</param>
-      <returns>Серверный номер транзакции.</returns>
+      <param name="requestId">Идентификатор запроса.</param>
+      <param name="transactionId">Идентификатор транзакции.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.CreateTransactionId(System.String,System.Int64)">
+      <summary>
+            Сгенерировать идентификатор транзакции.
+            </summary>
+      <param name="client">Имя клиента.</param>
+      <param name="requestId">Идентификатор запроса.</param>
+      <returns>Идентификатор транзакции.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.OnCreateTransactionId(System.String,System.Int64)">
+      <summary>
+            Сгенерировать идентификатор транзакции.
+            </summary>
+      <param name="client">Имя клиента.</param>
+      <param name="requestId">Идентификатор запроса.</param>
+      <returns>Идентификатор транзакции.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixServer.Stop">
       <summary>
@@ -355,6 +380,14 @@
             Сохранить настройки.
             </summary>
       <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.HasReceivers(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)">
+      <summary>
+            Есть ли подписчики.
+            </summary>
+      <param name="dataType">Тип маркет-данных.</param>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <returns>Есть ли подписчики.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixServer.SendOrder(System.Collections.Generic.IEnumerable{System.String},StockSharp.Messages.ExecutionMessage)">
       <summary>
@@ -417,7 +450,7 @@
     </member>
     <member name="P:StockSharp.Fix.FixServer.InitialTransactionId">
       <summary>
-            Номер, начиная с которого FixServer будет генерировать номера транзакций.
+            Номер, начиная с которого <see cref="T:StockSharp.Fix.FixServer" /> будет генерировать номера транзакций.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixServer.IncrementalDepthUpdates">
