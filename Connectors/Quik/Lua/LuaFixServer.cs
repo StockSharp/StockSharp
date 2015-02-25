@@ -533,6 +533,7 @@ namespace StockSharp.Quik.Lua
 		private readonly LuaMarketDataAdapter _marketDataAdapter;
 		private readonly LuaTransactionAdapter _transactionAdapter;
 		private readonly LuaSession _sessionHolder;
+		private readonly SynchronizedDictionary<SecurityId, Level1ChangeMessage> _prevLevel1 = new CachedSynchronizedDictionary<SecurityId, Level1ChangeMessage>();
 
 		private sealed class QuikNativeApp : BaseLogReceiver
 		{
@@ -661,6 +662,7 @@ namespace StockSharp.Quik.Lua
 		{
 			_sessionHolder.Requests.Close();
 			_fixServer.Stop();
+			_prevLevel1.Clear();
 		}
 
 		/// <summary>
@@ -719,6 +721,35 @@ namespace StockSharp.Quik.Lua
 				case MessageTypes.PositionChange:
 					_transactionAdapter.SendOutMessage(message);
 					return;
+
+				case MessageTypes.Level1Change:
+				{
+					var l1Msg = (Level1ChangeMessage)message;
+					var prevLevel1 = _prevLevel1.TryGetValue(l1Msg.SecurityId);
+
+					if (prevLevel1 == null)
+					{
+						_prevLevel1.Add(l1Msg.SecurityId, (Level1ChangeMessage)l1Msg.Clone());
+					}
+					else
+					{
+						l1Msg.Changes.RemoveWhere(p =>
+						{
+							var prevValue = prevLevel1.Changes.TryGetValue(p.Key);
+
+							if (prevValue != null && prevValue.Equals(p.Value))
+								return true;
+
+							prevLevel1.Changes[p.Key] = p.Value;
+							return false;
+						});
+
+						if (l1Msg.Changes.Count == 0)
+							return;
+					}
+
+					break;
+				}
 
 				case MessageTypes.Execution:
 				{
