@@ -356,9 +356,16 @@ namespace StockSharp.Algo
 
 			bool isNew;
 
-			var orderInfo = GetOrderInfo(security, message.OrderType, message.OriginalTransactionId, message.OrderId, message.OrderStringId, transactionId =>
+			var transactionId = message.TransactionId;
+
+			// ExecMsg.TransactionId is not null when orders info requested by OrderStatMsg
+			// (in that case ExecMsg.OriginalTransactionId == OrderStatMsg.TransactionId)
+			if (transactionId == 0)
+				transactionId = message.OriginalTransactionId;
+
+			var orderInfo = GetOrderInfo(security, message.OrderType, transactionId, message.OrderId, message.OrderStringId, trId =>
 			{
-				var o = EntityFactory.CreateOrder(security, message.OrderType, transactionId);
+				var o = EntityFactory.CreateOrder(security, message.OrderType, trId);
 
 				o.Time = message.ServerTime;
 				o.Price = message.Price;

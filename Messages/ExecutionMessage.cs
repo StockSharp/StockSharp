@@ -112,15 +112,6 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public bool IsCancelled { get; set; }
 
-		///// <summary>
-		///// Действие, произошедшее с заявкой.
-		///// </summary>
-		//[DataMember]
-		//[DisplayName("Действие")]
-		//[Description("Действие, произошедшее с заявкой.")]
-		//[MainCategory]
-		//public ExecutionActions Action { get; set; }
-
 		/// <summary>
 		/// Идентификатор заявки.
 		/// </summary>
