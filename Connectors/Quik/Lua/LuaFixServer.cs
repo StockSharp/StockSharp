@@ -675,6 +675,21 @@ namespace StockSharp.Quik.Lua
 		}
 
 		/// <summary>
+		/// Нужно ли обрабатывать маркет-данные.
+		/// </summary>
+		/// <param name="dataType">Тип маркет-данных.</param>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <returns>Нужно ли обрабатывать маркет-данные.</returns>
+		public bool NeedProcess(MarketDataTypes dataType, SecurityId securityId)
+		{
+			return _fixServer.HasReceivers(dataType, new SecurityId
+			{
+				SecurityCode = securityId.SecurityCode,
+				BoardCode = _sessionHolder.GetBoardCode(securityId.BoardCode)
+			});
+		}
+
+		/// <summary>
 		/// Добавить ассоциацию идентификатора запроса и транзакции.
 		/// </summary>
 		/// <param name="transactionId">Идентификатор транзакции.</param>
@@ -693,8 +708,7 @@ namespace StockSharp.Quik.Lua
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			if (!(message is QuoteChangeMessage))
-				LogReceiver.AddDebugLog("Out. {0}", message);
+			LogReceiver.AddDebugLog("Out. {0}", message);
 
 			switch (message.Type)
 			{
