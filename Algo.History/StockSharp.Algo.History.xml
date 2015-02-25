@@ -698,6 +698,66 @@
       <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
       <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
     </member>
+    <member name="T:StockSharp.Algo.History.QuandlHistorySource">
+      <summary>
+            Источник маркет-данных от Quandl.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.QuandlHistorySource.SourceCodeField">
+      <summary>
+            Ключ, по которому в <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> будет присутствовать Quandl-идентификатор источника.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Algo.History.QuandlHistorySource.SecurityCodeField">
+      <summary>
+            Ключ, по которому в <see cref="P:StockSharp.BusinessEntities.Security.ExtensionInfo" /> будет присутствовать Quandl-идентификатор инструмента.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Algo.History.QuandlHistorySource" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetDumpFile(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Type,System.Object)">
+      <summary>
+            Получить полный путь к скаченному файлу.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="from">Дата начала.</param>
+      <param name="to">Дата окончания.</param>
+      <param name="dataType">Тип данных.</param>
+      <param name="arg">Аргумент.</param>
+      <returns>Полный путь к скаченному файлу.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
+      <summary>
+            Скачать свечи с сайта.
+            </summary>
+      <param name="security">Инструмент.</param>
+      <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.QuandlHistorySource.TimeFrames" />.</param>
+      <param name="beginDate">Дата начала.</param>
+      <param name="endDate">Дата окончания.</param>
+      <returns>Свечи.</returns>
+    </member>
+    <member name="M:StockSharp.Algo.History.QuandlHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
+      <summary>
+            Закачать новые инструменты.
+            </summary>
+      <param name="storage">Хранилище информации об инструментах.</param>
+      <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+      <param name="newSecurity">Обработчик, через который будет передан новый инструмент.</param>
+      <param name="isCancelled">Обработчик, возвращающий признак отмены поиска.</param>
+    </member>
+    <member name="P:StockSharp.Algo.History.QuandlHistorySource.TimeFrames">
+      <summary>
+            Тайм-фреймы, которые можно передать в <see cref="M:StockSharp.Algo.History.QuandlHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Algo.History.QuandlHistorySource.AuthToken">
+      <summary>
+            Идентификатор зарегистрированного пользователя.
+            </summary>
+    </member>
     <member name="T:StockSharp.Algo.History.Russian.AlorHistorySource">
       <summary>
             Источник для скачивания исторических сделок с Alor.

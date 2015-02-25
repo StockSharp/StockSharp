@@ -168,7 +168,7 @@ namespace StockSharp.Hydra.Mfd
 			{
 				this.AddWarningLog(selectedSecurities.IsEmpty()
 					? LocalizedStrings.Str2289
-					: LocalizedStrings.Str3808);
+					: LocalizedStrings.Str2290.Put("MFD"));
 
 				source.Refresh(_mfdSecurityStorage, new Security(), SaveSecurity, () => !CanProcess(false));
 
@@ -178,7 +178,7 @@ namespace StockSharp.Hydra.Mfd
 						var retVal = IsMfd(s);
 
 						if (!retVal)
-							this.AddWarningLog(LocalizedStrings.Str3809Params, s.Security.Id);
+							this.AddWarningLog(LocalizedStrings.Str2291Params, s.Security.Id, "MFD");
 
 						return retVal;
 					}).ToArray();

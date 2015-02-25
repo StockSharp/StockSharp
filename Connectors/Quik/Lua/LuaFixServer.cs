@@ -26,7 +26,7 @@ namespace StockSharp.Quik.Lua
 	/// <summary>
 	/// FIX сервер, запускающийся LUA.
 	/// </summary>
-	public class LuaFixServer
+	public class LuaFixServer : Disposable
 	{
 		[DisplayName("Quik")]
 		private sealed class LuaSession : QuikSessionHolder
@@ -262,12 +262,12 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.OrderGroupCancel:
 						var orderMsg = (OrderMessage)message;
 						SessionHolder.AddDebugLog("In. {0}", orderMsg);
-						RegisterTransaction(orderMsg);
+						ProcessOrderMessage(orderMsg);
 						break;
 				}
 			}
 
-			private void RegisterTransaction(OrderMessage message)
+			private void ProcessOrderMessage(OrderMessage message)
 			{
 				var transactionId = message.OriginalTransactionId;
 
@@ -279,25 +279,25 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.OrderRegister:
 						var regMsg = (OrderRegisterMessage)message;
 						_transactionsByLocalId.Add(transactionId, regMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateRegisterTransaction(regMsg, _depoNames.TryGetValue(regMsg.PortfolioName)), transactionId, regMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateRegisterTransaction(regMsg, _depoNames.TryGetValue(regMsg.PortfolioName)), message.Type, transactionId, regMsg.OrderType);
 						break;
 
 					case MessageTypes.OrderReplace:
 						var replMsg = (OrderReplaceMessage)message;
 						_transactionsByLocalId.Add(transactionId, replMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateMoveTransaction(replMsg), transactionId, replMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateMoveTransaction(replMsg), message.Type, transactionId, replMsg.OrderType);
 						break;
 
 					case MessageTypes.OrderCancel:
 						var cancelMsg = (OrderCancelMessage)message;
 						_transactionsByLocalId.Add(transactionId, cancelMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateCancelTransaction(cancelMsg), transactionId, cancelMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateCancelTransaction(cancelMsg), message.Type, transactionId, cancelMsg.OrderType);
 						break;
 
 					case MessageTypes.OrderGroupCancel:
 						var cancelGroupMsg = (OrderGroupCancelMessage)message;
 						_transactionsByLocalId.Add(transactionId, cancelGroupMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateCancelFuturesTransaction(cancelGroupMsg), transactionId, cancelGroupMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateCancelFuturesTransaction(cancelGroupMsg), message.Type, transactionId, cancelGroupMsg.OrderType);
 						break;
 
 					default:
@@ -305,14 +305,14 @@ namespace StockSharp.Quik.Lua
 				}
 			}
 
-			private void RegisterTransaction(Transaction transaction, long transactionId, OrderTypes type, bool addTransaction = true)
+			private void RegisterTransaction(Transaction transaction, MessageTypes messageType, long transactionId, OrderTypes type, bool addTransaction = true)
 			{
 				if (addTransaction)
 					_transactions.Add(transactionId, transaction);
 
 				SessionHolder.Requests.Enqueue(new LuaRequest
 				{
-					MessageType = MessageTypes.OrderRegister,
+					MessageType = messageType,
 					TransactionId = transactionId,
 					OrderType = type,
 					Value = transaction.SetTransactionId(transactionId).ToLuaString()
@@ -561,24 +561,12 @@ namespace StockSharp.Quik.Lua
 			}
 		}
 
-		private static readonly LuaFixServer _luaServer = new LuaFixServer();
-
-		/// <summary>
-		/// Объект <see cref="LuaFixServer"/>.
-		/// </summary>
-		public static LuaFixServer Instance
-		{
-			get { return _luaServer; }
-		}
-
 		private readonly LogManager _logManager = new LogManager();
 
 		private readonly FixServerEx _fixServer;
 		private readonly LuaMarketDataAdapter _marketDataAdapter;
 		private readonly LuaTransactionAdapter _transactionAdapter;
 		private readonly LuaSession _sessionHolder;
-		private string _login;
-		private SecureString _password;
 
 		private sealed class QuikNativeApp : BaseLogReceiver
 		{
@@ -589,7 +577,10 @@ namespace StockSharp.Quik.Lua
 			}
 		}
 
-		private LuaFixServer()
+		/// <summary>
+		/// Создать <see cref="LuaFixServer"/>.
+		/// </summary>
+		public LuaFixServer()
 		{
 			_sessionHolder = new LuaSession(new MillisecondIncrementalIdGenerator())
 			{
@@ -610,11 +601,11 @@ namespace StockSharp.Quik.Lua
 				OutMessageProcessor = outProcessor
 			};
 
-			_fixServer = new FixServerEx((login, password) =>
+			_fixServer = new FixServerEx((l, p) =>
 			{
-				if (_login.IsEmpty() || (login.CompareIgnoreCase(_login) && password.CompareIgnoreCase(_password.To<string>())))
+				if (Login.IsEmpty() || (l.CompareIgnoreCase(Login) && p == Password))
 					return Tuple.Create(TimeSpan.FromMilliseconds(100), FixClientRoles.Admin);
-				
+
 				return null;
 			}, _transactionAdapter, _marketDataAdapter);
 
@@ -622,40 +613,79 @@ namespace StockSharp.Quik.Lua
 
 			_logManager.Sources.Add(_sessionHolder);
 			_logManager.Sources.Add(_fixServer);
+
+			LogFile = "StockSharp.QuikLua.log";
+
+			var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var logFileName = Path.Combine(path, LogFile);
+
+			_logManager.Listeners.Add(new FileLogListener(logFileName));
+		}
+
+		/// <summary>
+		/// Серверный порт, на котором будет работать FIX сервер.
+		/// </summary>
+		public int Port
+		{
+			get { return _fixServer.Port; }
+			set { _fixServer.Port = value; }
+		}
+
+		/// <summary>
+		/// Логин.
+		/// </summary>
+		public string Login { get; set; }
+
+		private SecureString _password;
+
+		/// <summary>
+		/// Пароль.
+		/// </summary>
+		public string Password
+		{
+			get { return _password.To<string>(); }
+			set { _password = value.To<SecureString>(); }
+		}
+
+		/// <summary>
+		/// Отправлять изменения по стакану. Если выключено, отправляется стакан целиком.
+		/// </summary>
+		public bool IncrementalDepthUpdates
+		{
+			get { return _fixServer.IncrementalDepthUpdates; }
+			set { _fixServer.IncrementalDepthUpdates = value; }
+		}
+
+		// TODO
+		/// <summary>
+		/// Название текстового файла, в который будут писаться логи.
+		/// </summary>
+		public string LogFile { get; set; }
+
+		/// <summary>
+		/// Уровень логирования для Lua.
+		/// </summary>
+		public LogLevels LogLevel
+		{
+			get { return _logManager.Application.LogLevel; }
+			set { _logManager.Application.LogLevel = value; }
+		}
+
+		/// <summary>
+		/// Получатель логов.
+		/// </summary>
+		public ILogReceiver LogReceiver
+		{
+			get { return _logManager.Application; }
 		}
 
 		/// <summary>
 		/// Запустить сервер.
 		/// </summary>
-		/// <param name="port">Серверный порт, на котором будет работать FIX сервер.</param>
-		/// <param name="login">Логин.</param>
-		/// <param name="password">Пароль.</param>
-		/// <param name="logLevel">Уровень логирования для Lua.</param>
-		/// <param name="logFile">Название текстового файла (без расширения), в который будут писаться логи.</param>
-		/// <param name="incrementalDepthUpdates">Отправлять изменения по стакану. Если выключено, отправляется стакан целиком.</param>
-		public void Start(int port, string login, string password, LogLevels logLevel, string logFile, bool incrementalDepthUpdates)
+		public void Start()
 		{
-			if (!login.IsEmpty())
-			{
-				if (password.IsEmpty())
-					throw new ArgumentNullException("password");
-			}
-
-			var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var logFileName = Path.Combine(path, logFile + ".log");
-
-			_logManager.Listeners.Add(new FileLogListener(logFileName));
-
-			_login = login;
-			_password = password.To<SecureString>();
-
 			_sessionHolder.Requests.Open();
-
-			_fixServer.Port = port;
-			_fixServer.IncrementalDepthUpdates = incrementalDepthUpdates;
 			_fixServer.Start();
-
-			_logManager.Application.LogLevel = logLevel;
 		}
 
 		/// <summary>
@@ -664,11 +694,18 @@ namespace StockSharp.Quik.Lua
 		public void Stop()
 		{
 			_sessionHolder.Requests.Close();
-
 			_fixServer.Stop();
+		}
 
+		/// <summary>
+		/// Освободить занятые ресурсы.
+		/// </summary>
+		protected override void DisposeManaged()
+		{
 			_logManager.Listeners.ForEach(l => l.DoDispose());
 			_logManager.Listeners.Clear();
+
+			base.DisposeManaged();
 		}
 
 		/// <summary>
@@ -709,32 +746,32 @@ namespace StockSharp.Quik.Lua
 			_marketDataAdapter.SendOutMessage(message);
 		}
 
-		/// <summary>
-		/// Вывести в лог ошибку.
-		/// </summary>
-		/// <param name="message">Текст ошибки.</param>
-		public void AddErrorLog(string message)
-		{
-			_logManager.Application.AddErrorLog(message);
-		}
+		///// <summary>
+		///// Вывести в лог ошибку.
+		///// </summary>
+		///// <param name="message">Текст ошибки.</param>
+		//public void AddErrorLog(string message)
+		//{
+		//	_logManager.Application.AddErrorLog(message);
+		//}
 
-		/// <summary>
-		/// Вывести в лог сообщение.
-		/// </summary>
-		/// <param name="message">Текст сообщения.</param>
-		public void AddInfoLog(string message)
-		{
-			_logManager.Application.AddInfoLog(message);
-		}
+		///// <summary>
+		///// Вывести в лог сообщение.
+		///// </summary>
+		///// <param name="message">Текст сообщения.</param>
+		//public void AddInfoLog(string message)
+		//{
+		//	_logManager.Application.AddInfoLog(message);
+		//}
 
-		/// <summary>
-		/// Вывести в лог сообщение.
-		/// </summary>
-		/// <param name="message">Текст сообщения.</param>
-		public void AddDebugLog(string message)
-		{
-			_logManager.Application.AddDebugLog(message);
-		}
+		///// <summary>
+		///// Вывести в лог сообщение.
+		///// </summary>
+		///// <param name="message">Текст сообщения.</param>
+		//public void AddDebugLog(string message)
+		//{
+		//	_logManager.Application.AddDebugLog(message);
+		//}
 
 		/// <summary>
 		/// Получить пользовательский запрос.

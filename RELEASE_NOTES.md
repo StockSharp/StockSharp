@@ -7,6 +7,12 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.65:
+* (feature) QuandlHistorySource
+* (feature) Quoting refactoring
+* (bug) Fix Quik LUA. Fix http://stocksharp.com/forum/yaf_postst5525_Oshibka-Lua-podkliuchieniia-pri-rabotie-s-aktsiiami.aspx
+* (bug) Fix Quik LUA. Fix exception handling
+
 ###v4.2.64:
 * (feature) Source codes for Quik and InteractiveBrokers
 
