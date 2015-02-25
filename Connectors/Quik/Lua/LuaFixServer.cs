@@ -42,19 +42,17 @@ namespace StockSharp.Quik.Lua
 
 			public void ReplaceSecurityId(SecurityId securityId, Action<SecurityId> setSecurityId)
 			{
-				if (securityId.BoardCode.IsEmpty())
-					return;
+				if (setSecurityId == null)
+					throw new ArgumentNullException("setSecurityId");
 
-				var info = this.GetSecurityClassInfo(securityId.BoardCode);
-
-				if (info == null)
-					return;
-
-				setSecurityId(new SecurityId { SecurityCode = securityId.SecurityCode, BoardCode = info.Item2 });
+				ReplaceBoardCode(securityId.BoardCode, boardCode => setSecurityId(new SecurityId { SecurityCode = securityId.SecurityCode, BoardCode = boardCode }));
 			}
 
-			public void ReplaceBoardCode(string classCode, Action<string> setboardCode)
+			public void ReplaceBoardCode(string classCode, Action<string> setBoardCode)
 			{
+				if (setBoardCode == null)
+					throw new ArgumentNullException("setBoardCode");
+
 				if (classCode.IsEmpty())
 					return;
 
@@ -63,7 +61,20 @@ namespace StockSharp.Quik.Lua
 				if (info == null)
 					return;
 
-				setboardCode(info.Item2);
+				setBoardCode(info.Item2);
+			}
+
+			public string GetBoardCode(string classCode)
+			{
+				if (classCode.IsEmpty())
+					return classCode;
+
+				var info = this.GetSecurityClassInfo(classCode);
+
+				if (info == null)
+					return classCode;
+
+				return info.Item2;
 			}
 		}
 
@@ -81,6 +92,8 @@ namespace StockSharp.Quik.Lua
 
 			protected override void OnSendInMessage(Message message)
 			{
+				SessionHolder.AddDebugLog("In. {0}", message);
+
 				switch (message.Type)
 				{
 					case MessageTypes.SecurityLookup:
@@ -95,7 +108,6 @@ namespace StockSharp.Quik.Lua
 								: null
 						};
 
-						SessionHolder.AddDebugLog("In. {0}", secMsg);
 						SessionHolder.Requests.Enqueue(new LuaRequest
 						{
 							MessageType = MessageTypes.SecurityLookup,
@@ -109,7 +121,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.MarketData:
 					{
 						var mdMsg = (MarketDataMessage)message;
-						SessionHolder.AddDebugLog("In. {0}", mdMsg);
 						ProcessMarketDataMessage(mdMsg);
 						break;
 					}
@@ -127,8 +138,6 @@ namespace StockSharp.Quik.Lua
 						var classCode = secMsg.SecurityId.BoardCode;
 						var classInfo = SessionHolder.GetSecurityClassInfo(classCode);
 
-						SessionHolder.AddDebugLog("Out. {0},Type={1}. ClassInfo={2}", secMsg, secMsg.SecurityType, classInfo);
-
 						// из квика не транслируется поле тип инструмента, если тип инструмента не найден по классу, то берем по умолчанию.
 						secMsg.SecurityType = secMsg.Multiplier == 0 ? SecurityTypes.Index : (classInfo.Item1 ?? SecurityTypes.Stock);
 
@@ -139,7 +148,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.Level1Change:
 					{
 						var l1Msg = (Level1ChangeMessage)message;
-						SessionHolder.AddDebugLog("Out. {0}", l1Msg);
 						SessionHolder.ReplaceSecurityId(l1Msg.SecurityId, id => l1Msg.SecurityId = id);
 						break;
 					}
@@ -147,7 +155,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.QuoteChange:
 					{
 						var quoteMsg = (QuoteChangeMessage)message;
-						SessionHolder.AddDebugLog("Out. {0}", quoteMsg);
 						SessionHolder.ReplaceSecurityId(quoteMsg.SecurityId, id => quoteMsg.SecurityId = id);
 						quoteMsg.ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow);
 						break;
@@ -156,7 +163,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.Execution:
 					{
 						var execMsg = (ExecutionMessage)message;
-						SessionHolder.AddDebugLog("Out. {0},OPrice={1},Volume={2}", execMsg, execMsg.Price, execMsg.Volume);
 						SessionHolder.ReplaceSecurityId(execMsg.SecurityId, id => execMsg.SecurityId = id);
 						break;
 					}
@@ -167,45 +173,18 @@ namespace StockSharp.Quik.Lua
 
 			private void ProcessMarketDataMessage(MarketDataMessage message)
 			{
-				if (message.IsSubscribe)
+				SessionHolder.Requests.Enqueue(new LuaRequest
 				{
-					var securityId = new SecurityId
+					MessageType = message.Type,
+					DataType = message.DataType,
+					SecurityId = new SecurityId
 					{
 						SecurityCode = message.SecurityId.SecurityCode,
 						BoardCode = SessionHolder.GetSecurityClass(message.SecurityId)
-					};
-
-					switch (message.DataType)
-					{
-						case MarketDataTypes.Level1:
-							SessionHolder.Requests.Enqueue(new LuaRequest
-							{
-								MessageType = MessageTypes.Level1Change,
-								SecurityId = securityId
-							});
-							break;
-
-						case MarketDataTypes.Trades:
-							SessionHolder.Requests.Enqueue(new LuaRequest
-							{
-								MessageType = MessageTypes.Execution,
-								SecurityId = securityId
-							});
-							break;
-
-						case MarketDataTypes.MarketDepth:
-							SessionHolder.Requests.Enqueue(new LuaRequest
-							{
-								MessageType = MessageTypes.QuoteChange,
-								SecurityId = securityId,
-								TransactionId = message.IsSubscribe ? 1 : 0
-							});
-							break;
-
-						default:
-							throw new ArgumentOutOfRangeException("message", message.DataType, LocalizedStrings.Str1618);
-					}
-				}
+					},
+					IsSubscribe = message.IsSubscribe,
+					TransactionId = message.TransactionId
+				});
 
 				var result = (MarketDataMessage)message.Clone();
 				result.OriginalTransactionId = message.TransactionId;
@@ -215,7 +194,7 @@ namespace StockSharp.Quik.Lua
 
 		private sealed class LuaTransactionAdapter : MessageAdapter<LuaSession>
 		{
-			private readonly Dictionary<long, long> _transactionsByLocalId = new Dictionary<long, long>();
+			//private readonly Dictionary<long, long> _transactionsByLocalId = new Dictionary<long, long>();
 			private readonly Dictionary<long, long> _transactionsByOrderId = new Dictionary<long, long>();
 
 			private readonly Dictionary<long, List<ExecutionMessage>> _tradesByOrderId = new Dictionary<long, List<ExecutionMessage>>();
@@ -234,11 +213,12 @@ namespace StockSharp.Quik.Lua
 
 			protected override void OnSendInMessage(Message message)
 			{
+				SessionHolder.AddDebugLog("In. {0}", message);
+
 				switch (message.Type)
 				{
 					case MessageTypes.PortfolioLookup:
 						var pfMsg = (PortfolioLookupMessage)message;
-						SessionHolder.AddDebugLog("In. {0}", pfMsg);
 						SessionHolder.Requests.Enqueue(new LuaRequest
 						{
 							MessageType = MessageTypes.PortfolioLookup,
@@ -248,7 +228,6 @@ namespace StockSharp.Quik.Lua
 
 					case MessageTypes.OrderStatus:
 						var statusMsg = (OrderStatusMessage)message;
-						SessionHolder.AddDebugLog("In. {0}", statusMsg);
 						SessionHolder.Requests.Enqueue(new LuaRequest
 						{
 							MessageType = MessageTypes.OrderStatus,
@@ -261,7 +240,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.OrderCancel:
 					case MessageTypes.OrderGroupCancel:
 						var orderMsg = (OrderMessage)message;
-						SessionHolder.AddDebugLog("In. {0}", orderMsg);
 						ProcessOrderMessage(orderMsg);
 						break;
 				}
@@ -269,35 +247,26 @@ namespace StockSharp.Quik.Lua
 
 			private void ProcessOrderMessage(OrderMessage message)
 			{
-				var transactionId = message.OriginalTransactionId;
-
-				if (transactionId <= 0 || transactionId > uint.MaxValue)
-					throw new InvalidOperationException(LocalizedStrings.Str1700Params.Put(transactionId));
-
 				switch (message.Type)
 				{
 					case MessageTypes.OrderRegister:
 						var regMsg = (OrderRegisterMessage)message;
-						_transactionsByLocalId.Add(transactionId, regMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateRegisterTransaction(regMsg, _depoNames.TryGetValue(regMsg.PortfolioName)), message.Type, transactionId, regMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateRegisterTransaction(regMsg, _depoNames.TryGetValue(regMsg.PortfolioName)), message.Type, regMsg.TransactionId, regMsg.OrderType);
 						break;
 
 					case MessageTypes.OrderReplace:
 						var replMsg = (OrderReplaceMessage)message;
-						_transactionsByLocalId.Add(transactionId, replMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateMoveTransaction(replMsg), message.Type, transactionId, replMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateMoveTransaction(replMsg), message.Type, replMsg.TransactionId, replMsg.OrderType);
 						break;
 
 					case MessageTypes.OrderCancel:
 						var cancelMsg = (OrderCancelMessage)message;
-						_transactionsByLocalId.Add(transactionId, cancelMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateCancelTransaction(cancelMsg), message.Type, transactionId, cancelMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateCancelTransaction(cancelMsg), message.Type, cancelMsg.TransactionId, cancelMsg.OrderType);
 						break;
 
 					case MessageTypes.OrderGroupCancel:
 						var cancelGroupMsg = (OrderGroupCancelMessage)message;
-						_transactionsByLocalId.Add(transactionId, cancelGroupMsg.TransactionId);
-						RegisterTransaction(SessionHolder.CreateCancelFuturesTransaction(cancelGroupMsg), message.Type, transactionId, cancelGroupMsg.OrderType);
+						RegisterTransaction(SessionHolder.CreateCancelFuturesTransaction(cancelGroupMsg), message.Type, cancelGroupMsg.TransactionId, cancelGroupMsg.OrderType);
 						break;
 
 					default:
@@ -305,10 +274,12 @@ namespace StockSharp.Quik.Lua
 				}
 			}
 
-			private void RegisterTransaction(Transaction transaction, MessageTypes messageType, long transactionId, OrderTypes type, bool addTransaction = true)
+			private void RegisterTransaction(Transaction transaction, MessageTypes messageType, long transactionId, OrderTypes type)
 			{
-				if (addTransaction)
-					_transactions.Add(transactionId, transaction);
+				if (transactionId <= 0 || transactionId > uint.MaxValue)
+					throw new InvalidOperationException(LocalizedStrings.Str1700Params.Put(transactionId));
+
+				_transactions.Add(transactionId, transaction);
 
 				SessionHolder.Requests.Enqueue(new LuaRequest
 				{
@@ -326,7 +297,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.Portfolio:
 					{
 						var pfMsg = (PortfolioMessage)message;
-						SessionHolder.AddDebugLog("Out. {0}", pfMsg);
 						SessionHolder.ReplaceBoardCode(pfMsg.BoardCode, board => pfMsg.BoardCode = board);
 						break;
 					}
@@ -335,7 +305,6 @@ namespace StockSharp.Quik.Lua
 					{
 						var pfMsg = (PortfolioChangeMessage)message;
 
-						SessionHolder.AddDebugLog("Out. {0}", pfMsg);
 						SessionHolder.ReplaceBoardCode(pfMsg.BoardCode, board => pfMsg.BoardCode = board);
 
 						var depoName = (string)pfMsg.Changes.TryGetValue(PositionChangeTypes.DepoName);
@@ -348,7 +317,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.Position:
 					{
 						var pfMsg = (PositionMessage)message;
-						SessionHolder.AddDebugLog("Out. {0}", pfMsg);
 						SessionHolder.ReplaceSecurityId(pfMsg.SecurityId, id => pfMsg.SecurityId = id);
 						break;
 					}
@@ -356,7 +324,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.PositionChange:
 					{
 						var pfMsg = (PositionChangeMessage)message;
-						SessionHolder.AddDebugLog("Out. {0}", pfMsg);
 						SessionHolder.ReplaceSecurityId(pfMsg.SecurityId, id => pfMsg.SecurityId = id);
 						break;
 					}
@@ -364,8 +331,6 @@ namespace StockSharp.Quik.Lua
 					case MessageTypes.Execution:
 					{
 						var execMsg = (ExecutionMessage)message;
-
-						SessionHolder.AddDebugLog("Out. {0},Price={1},Volume={2}", execMsg, execMsg.Price, execMsg.Volume);
 
 						switch (execMsg.ExecutionType)
 						{
@@ -413,10 +378,6 @@ namespace StockSharp.Quik.Lua
 
 						var transaction = _transactions.TryGetValue(execMsg.OriginalTransactionId);
 
-						var transactionId = _transactionsByLocalId.TryGetValue2(execMsg.OriginalTransactionId);
-						if (transactionId != null)
-							execMsg.OriginalTransactionId = transactionId.Value;
-
 						if (transaction != null && execMsg.Error != null)
 						{
 							switch (transaction.TransactionType)
@@ -462,6 +423,11 @@ namespace StockSharp.Quik.Lua
 			{
 			}
 
+			protected override long OnCreateTransactionId(string client, long requestId)
+			{
+				return requestId;
+			}
+
 			protected override void OnProcess(FixSession session, string client, string msgStr, bool isMarketData)
 			{
 				var msgType = QuickFix.Message.GetMsgType(msgStr);
@@ -474,8 +440,8 @@ namespace StockSharp.Quik.Lua
 
 						var fixMsg = session.ToMessage<NewStopOrderSingle>(msgStr);
 						var regMsg = fixMsg.ToRegisterMessage();
-						
-						regMsg.TransactionId = AddTransactionsMapping(client, regMsg.OriginalTransactionId);
+
+						regMsg.TransactionId = CreateTransactionId(client, regMsg.TransactionId);
 
 						var condition = new QuikOrderCondition
 						{
@@ -515,7 +481,7 @@ namespace StockSharp.Quik.Lua
 			{
 				if (order.OrderType == OrderTypes.Conditional)
 				{
-					var fixMsg = order.ToExecutionReport<StopOrderExecutionReport>();
+					var fixMsg = order.ToExecutionReport<StopOrderExecutionReport>(order.TransactionId == 0 ? (long?)null : GetRequestId(order.TransactionId), GetRequestId(order.OriginalTransactionId));
 
 					var condition = (QuikOrderCondition)order.Condition;
 
@@ -709,6 +675,16 @@ namespace StockSharp.Quik.Lua
 		}
 
 		/// <summary>
+		/// Добавить ассоциацию идентификатора запроса и транзакции.
+		/// </summary>
+		/// <param name="transactionId">Идентификатор транзакции.</param>
+		public void AddTransactionId(long transactionId)
+		{
+			LogReceiver.AddInfoLog("Added trans id {0} mapping.", transactionId);
+			_fixServer.AddTransactionId(Login, transactionId, transactionId);
+		}
+
+		/// <summary>
 		/// Обработать сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -716,6 +692,9 @@ namespace StockSharp.Quik.Lua
 		{
 			if (message == null)
 				throw new ArgumentNullException("message");
+
+			if (!(message is QuoteChangeMessage))
+				LogReceiver.AddDebugLog("Out. {0}", message);
 
 			switch (message.Type)
 			{
@@ -745,33 +724,6 @@ namespace StockSharp.Quik.Lua
 
 			_marketDataAdapter.SendOutMessage(message);
 		}
-
-		///// <summary>
-		///// Вывести в лог ошибку.
-		///// </summary>
-		///// <param name="message">Текст ошибки.</param>
-		//public void AddErrorLog(string message)
-		//{
-		//	_logManager.Application.AddErrorLog(message);
-		//}
-
-		///// <summary>
-		///// Вывести в лог сообщение.
-		///// </summary>
-		///// <param name="message">Текст сообщения.</param>
-		//public void AddInfoLog(string message)
-		//{
-		//	_logManager.Application.AddInfoLog(message);
-		//}
-
-		///// <summary>
-		///// Вывести в лог сообщение.
-		///// </summary>
-		///// <param name="message">Текст сообщения.</param>
-		//public void AddDebugLog(string message)
-		//{
-		//	_logManager.Application.AddDebugLog(message);
-		//}
 
 		/// <summary>
 		/// Получить пользовательский запрос.
