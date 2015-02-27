@@ -7,6 +7,9 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.67:
+* (feature) Ecng update.
+
 ###v4.2.66:
 * (feature) Quik lua. Support ALL@ALL security for market data subscription.
 * (feature) Quik lua. Level1 subscription check optimization.
