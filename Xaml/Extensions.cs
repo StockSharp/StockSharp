@@ -9,6 +9,7 @@ namespace StockSharp.Xaml
 	using ActiproSoftware.Windows.Controls.Navigation.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Localization;
 
 	using wyDay.Controls;
 
@@ -27,6 +28,9 @@ namespace StockSharp.Xaml
 		{
 			if (automaticUpdater == null)
 				throw new ArgumentNullException("automaticUpdater");
+
+			if (LocalizedStrings.ActiveLanguage == Languages.English)
+				return;
 
 			automaticUpdater.Translation.AlreadyUpToDate = LocalizedStrings.Str1466;
 			automaticUpdater.Translation.CancelCheckingMenu = LocalizedStrings.Str1467;
@@ -62,6 +66,9 @@ namespace StockSharp.Xaml
 
 		internal static void TranslateActiproDocking()
 		{
+			if (LocalizedStrings.ActiveLanguage == Languages.English)
+				return;
+
 			ActiproSoftware.Products.Docking.SR.SetCustomString(ActiproSoftware.Products.Docking.SRName.UICommandActivateNextDocumentText.ToString(), LocalizedStrings.Str1493);
 			ActiproSoftware.Products.Docking.SR.SetCustomString(ActiproSoftware.Products.Docking.SRName.UICommandActivatePreviousDocumentText.ToString(), LocalizedStrings.Str1494);
 			ActiproSoftware.Products.Docking.SR.SetCustomString(ActiproSoftware.Products.Docking.SRName.UICommandActivatePrimaryDocumentText.ToString(), LocalizedStrings.Str1495);
@@ -98,6 +105,9 @@ namespace StockSharp.Xaml
 
 		internal static void TranslateActiproNavigation()
 		{
+			if (LocalizedStrings.ActiveLanguage == Languages.English)
+				return;
+
 			//Navigation.SR.SetCustomString(Navigation.SRName.ExZoomContentControlMouseButtonMustBePressed.ToString(), "");
 			//Navigation.SR.SetCustomString(Navigation.SRName.ExZoomDecoratorFactorOutOfRange.ToString(), "");
 			ActiproSoftware.Products.Navigation.SR.SetCustomString(ActiproSoftware.Products.Navigation.SRName.UINavigationBarCustomizeButtonToolTip.ToString(), LocalizedStrings.Str1512);
