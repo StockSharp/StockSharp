@@ -35,18 +35,18 @@
 				_values = values;
 			}
 
-			public void EvaluateSelector(object current, Selector selector, ref bool handled, ref object result, FormatDetails formatDetails)
+			bool ISource.TryEvaluateSelector(ISelectorInfo selectorInfo)
 			{
 				if (_values == null)
-					return;
+					return false;
 
-				var value = _values.TryGetValue(selector.Text);
+				var value = _values.TryGetValue(selectorInfo.Selector.Text);
 
 				if (value == null)
-					return;
+					return false;
 
-				result = value;
-				handled = true;
+				selectorInfo.Result = value;
+				return true;
 			}
 		}
 

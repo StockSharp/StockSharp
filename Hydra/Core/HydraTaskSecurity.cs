@@ -95,7 +95,7 @@
 			}
 		}
 
-		private CandleSeries[] _candleSeries = ArrayHelper<CandleSeries>.EmptyArray;
+		private CandleSeries[] _candleSeries = ArrayHelper.Empty<CandleSeries>();
 
 		/// <summary>
 		/// Серии свечек, которые необходимо скачивать для данного инструмента.

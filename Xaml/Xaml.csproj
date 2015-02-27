@@ -149,9 +149,6 @@
     <Reference Include="NCalc">
       <HintPath>..\References\NCalc.dll</HintPath>
     </Reference>
-    <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>..\References\Ookii.Dialogs.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />

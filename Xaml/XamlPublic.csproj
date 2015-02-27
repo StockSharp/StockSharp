@@ -149,9 +149,6 @@
     <Reference Include="NCalc">
       <HintPath>..\References\NCalc.dll</HintPath>
     </Reference>
-    <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>..\References\Ookii.Dialogs.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Licensing">
       <HintPath>..\References\StockSharp.Licensing.dll</HintPath>
     </Reference>

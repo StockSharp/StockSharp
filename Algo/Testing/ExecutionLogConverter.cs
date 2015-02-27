@@ -316,8 +316,8 @@ namespace StockSharp.Algo.Testing
 				return;
 
 			retVal.AddRange(ProcessQuoteChange(message.LocalTime,
-				bid != null ? new[] { bid } : ArrayHelper<QuoteChange>.EmptyArray,
-				ask != null ? new[] { ask } : ArrayHelper<QuoteChange>.EmptyArray));
+				bid != null ? new[] { bid } : ArrayHelper.Empty<QuoteChange>(),
+				ask != null ? new[] { ask } : ArrayHelper.Empty<QuoteChange>()));
 		}
 
 		private void ProcessLevel1Trade(Level1ChangeMessage message, decimal lastTradePrice, decimal lastTradeVolume, List<ExecutionMessage> retVal)

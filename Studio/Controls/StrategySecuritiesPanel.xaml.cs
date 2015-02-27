@@ -180,7 +180,7 @@ namespace StockSharp.Studio.Controls
 			_securityIds.SyncDo(list =>
 			{
 				list.Clear();
-				list.AddRange(storage.GetValue("Securities", ArrayHelper<string>.EmptyArray));
+				list.AddRange(storage.GetValue("Securities", ArrayHelper.Empty<string>()));
 			});
 		}
 

@@ -242,7 +242,7 @@
 		private EmulationStates _prev = EmulationStates.Stopped;
 
 		private IEnumerator<IEnumerable<Strategy>> _batches;
-		private Strategy[] _batch = ArrayHelper<Strategy>.EmptyArray;
+		private Strategy[] _batch = ArrayHelper.Empty<Strategy>();
 		private bool _cancelEmulation;
 		private TimeSpan _progressStep;
 		private DateTime _nextTime;
@@ -592,7 +592,7 @@
 				strategy.Portfolio = tuple.Item1;
 			}
 
-			_batch = ArrayHelper<Strategy>.EmptyArray;
+			_batch = ArrayHelper.Empty<Strategy>();
 			_strategyInfo.Clear();
 
 			EmulationConnector.Disconnect();

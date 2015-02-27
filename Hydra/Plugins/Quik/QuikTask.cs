@@ -11,7 +11,6 @@ namespace StockSharp.Hydra.Quik
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Quik;
 	using StockSharp.Quik.Xaml;
@@ -228,7 +227,7 @@ namespace StockSharp.Hydra.Quik
 
 			PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
 			{
-				return GetFilteredProperties(ArrayHelper<Attribute>.EmptyArray);
+				return GetFilteredProperties(ArrayHelper.Empty<Attribute>());
 			}
 
 			public object GetEditor(Type editorBaseType)
@@ -384,18 +383,18 @@ namespace StockSharp.Hydra.Quik
 			return connector;
 		}
 
-		/// <summary>
-		/// Выполнить задачу.
-		/// </summary>
-		/// <returns>Минимальный интервал, после окончания которого необходимо снова выполнить задачу.</returns>
-		protected override TimeSpan OnProcess()
-		{
-			// если фильтр по инструментам выключен (выбран инструмент все инструменты)
-			if (Connector.Connector.IsDde || this.GetAllSecurity() == null)
-				return base.OnProcess();
+		///// <summary>
+		///// Выполнить задачу.
+		///// </summary>
+		///// <returns>Минимальный интервал, после окончания которого необходимо снова выполнить задачу.</returns>
+		//protected override TimeSpan OnProcess()
+		//{
+		//	// если фильтр по инструментам выключен (выбран инструмент все инструменты)
+		//	if (Connector.Connector.IsDde || this.GetAllSecurity() == null)
+		//		return base.OnProcess();
 
-			this.AddWarningLog(LocalizedStrings.Str2812);
-			return TimeSpan.MaxValue;
-		}
+		//	this.AddWarningLog(LocalizedStrings.Str2812);
+		//	return TimeSpan.MaxValue;
+		//}
 	}
 }

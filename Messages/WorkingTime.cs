@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 		{
 		}
 
-		private WorkingTimePeriod[] _periods = ArrayHelper<WorkingTimePeriod>.EmptyArray;
+		private WorkingTimePeriod[] _periods = ArrayHelper.Empty<WorkingTimePeriod>();
 
 		/// <summary>
 		/// Периоды действия расписания.
@@ -51,7 +51,7 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private DateTime[] _specialWorkingDays = ArrayHelper<DateTime>.EmptyArray;
+		private DateTime[] _specialWorkingDays = ArrayHelper.Empty<DateTime>();
 
 		/// <summary>
 		/// Рабочие дни, выпадающие на субботу и воскресенье.
@@ -66,7 +66,7 @@ namespace StockSharp.Messages
 			set { _specialWorkingDays = CheckDates(value); }
 		}
 
-		private DateTime[] _specialHolidays = ArrayHelper<DateTime>.EmptyArray;
+		private DateTime[] _specialHolidays = ArrayHelper.Empty<DateTime>();
 
 		/// <summary>
 		/// Выходные дни, выпадающие на будни.

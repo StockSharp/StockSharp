@@ -7,7 +7,7 @@ namespace StockSharp.Algo.Export
 	using System.Linq;
 
 	using SmartFormat;
-	using SmartFormat.Core;
+	using SmartFormat.Core.Formatting;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;

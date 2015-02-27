@@ -141,9 +141,6 @@
     <Reference Include="Northwoods.GoWPF">
       <HintPath>..\..\Xaml.Diagram\Northwoods.GoWPF.dll</HintPath>
     </Reference>
-    <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="QuickFix, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Connectors\Fix\QuickFix.dll</HintPath>

@@ -73,9 +73,6 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="Ookii.Dialogs.Wpf">
-      <HintPath>..\..\References\Ookii.Dialogs.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>

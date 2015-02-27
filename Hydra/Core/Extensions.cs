@@ -81,7 +81,7 @@
 			{
 				Security = s,
 				Settings = task.Settings,
-				MarketDataTypes = allSec == null ? ArrayHelper<Type>.EmptyArray : allSec.MarketDataTypes,
+				MarketDataTypes = allSec == null ? ArrayHelper.Empty<Type>() : allSec.MarketDataTypes,
 			});
 		}
 

@@ -156,7 +156,7 @@
 
 		public string[] GetLocalDbData(IEnumerable<int> papers)
 		{
-			return !papers.Any() ? ArrayHelper<string>.EmptyArray : GetLocalDbData("paper_no in ({0})".Put(string.Join(",", papers)));
+			return !papers.Any() ? ArrayHelper.Empty<string>() : GetLocalDbData("paper_no in ({0})".Put(string.Join(",", papers)));
 		}
 
 		public string[] GetLocalDbData(string where = null)
@@ -168,7 +168,7 @@
 			var res = _ad.GetLocalDBData(Name, _strFields, where);
 			Log("GetLocalDbData {0}: {1}", where, res);
 			// сразу после старта терминала АД может вернуть null (баг в терминале)
-			return res == null ? ArrayHelper<string>.EmptyArray : res.ToRows();
+			return res == null ? ArrayHelper.Empty<string>() : res.ToRows();
 		}
 
 		private void ThrowInError(tagStateCodes code, string message = null)

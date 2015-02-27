@@ -872,7 +872,7 @@ namespace StockSharp.Algo
 			var list = quotes.OrderBy(q => q.Price).ToList();
 
 			if (list.Count < 2)
-				return ArrayHelper<Quote>.EmptyArray;
+				return ArrayHelper.Empty<Quote>();
 
 			var firstQuote = list[0];
 
