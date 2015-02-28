@@ -28,10 +28,11 @@ namespace StockSharp.Community
 		/// Загрузить описание новой версии.
 		/// </summary>
 		/// <param name="product">Тип продукта.</param>
+		/// <param name="version">Номер новой версии.</param>
 		/// <param name="description">Описание новой версии.</param>
-		public void PostNewVersion(Products product, string description)
+		public void PostNewVersion(Products product, string version, string description)
 		{
-			Invoke(f => f.PostNewVersion(SessionId, product, description));
+			Invoke(f => f.PostNewVersion(SessionId, product, version, description));
 		}
 	}
 }

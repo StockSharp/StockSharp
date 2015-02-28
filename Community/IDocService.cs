@@ -75,9 +75,10 @@
 		/// Загрузить описание новой версии.
 		/// </summary>
 		/// <param name="sessionId">Идентификатор сессии.</param>
+		/// <param name="version">Номер новой версии.</param>
 		/// <param name="product">Тип продукта.</param>
 		/// <param name="description">Описание новой версии.</param>
 		[OperationContract]
-		void PostNewVersion(Guid sessionId, Products product, string description);
+		void PostNewVersion(Guid sessionId, Products product, string version, string description);
 	}
 }
