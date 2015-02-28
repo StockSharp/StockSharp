@@ -79,6 +79,7 @@
     <Compile Include="AuthenticationClient.cs" />
     <Compile Include="BaseCommunityClient.cs" />
     <Compile Include="BaseServiceClient.cs" />
+    <Compile Include="DocClient.cs" />
     <Compile Include="DocPage.cs" />
     <Compile Include="CommunityAuthorization.cs" />
     <Compile Include="ErrorCodes.cs" />
