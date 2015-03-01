@@ -28,7 +28,8 @@ namespace SampleCandles
 		private QuikTrader _trader;
 		private bool _isDdeStarted;
 		private CandleManager _candleManager;
-		private LogManager logManager;
+		private readonly LogManager _logManager;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -41,12 +42,12 @@ namespace SampleCandles
 			Path.Text = QuikTerminal.GetDefaultPath();
 
 			//Добавим логирование
-			logManager = new LogManager
+			_logManager = new LogManager
 			{
 				Application = { LogLevel = LogLevels.Debug }
 			};
 
-			logManager.Listeners.Add(new FileLogListener
+			_logManager.Listeners.Add(new FileLogListener
 			{
 				LogDirectory = @"Logs\",
 				SeparateByDates = SeparateByDateModes.SubDirectories,
@@ -111,7 +112,7 @@ namespace SampleCandles
 					}
 					: new QuikTrader(Path.Text) { IsDde = true };
 
-				logManager.Sources.Add(_trader);
+				_logManager.Sources.Add(_trader);
 				// подписываемся на событие об успешном восстановлении соединения
 				_trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
@@ -164,17 +165,21 @@ namespace SampleCandles
 
 		private void StartDde()
 		{
-			if (_trader.IsDde == true)
+			if (_trader.IsDde)
 				_trader.StartExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
-			else _trader.StartExport();
+			else
+				_trader.StartExport();
+
 			_isDdeStarted = true;
 		}
 
 		private void StopDde()
 		{
-			if (_trader.IsDde == true)
+			if (_trader.IsDde)
 				_trader.StopExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
-			else _trader.StopExport();
+			else
+				_trader.StopExport();
+
 			_isDdeStarted = false;
 		}
 
