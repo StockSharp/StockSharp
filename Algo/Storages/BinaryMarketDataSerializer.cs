@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages
+п»їnamespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections;
@@ -52,7 +52,7 @@ namespace StockSharp.Algo.Storages
 		public TimeSpan LocalOffset { get; private set; }
 		public TimeSpan ServerOffset { get; set; }
 
-		// сериализация и десериализация их полей сделана в дочерних классах
+		// СЃРµСЂРёР°Р»РёР·Р°С†РёСЏ Рё РґРµСЃРµСЂРёР°Р»РёР·Р°С†РёСЏ РёС… РїРѕР»РµР№ СЃРґРµР»Р°РЅР° РІ РґРѕС‡РµСЂРЅРёС… РєР»Р°СЃСЃР°С…
 		public decimal FirstPrice { get; set; }
 		public decimal LastPrice { get; set; }
 		public decimal FirstNonSystemPrice { get; set; }
@@ -77,7 +77,7 @@ namespace StockSharp.Algo.Storages
 			stream.Write(PriceStep);
 
 			if (Version < MarketDataVersions.Version40)
-				stream.Write(0m); // ранее был StepPrice
+				stream.Write(0m); // СЂР°РЅРµРµ Р±С‹Р» StepPrice
 
 			stream.Write(FirstTime);
 			stream.Write(LastTime);
@@ -87,8 +87,8 @@ namespace StockSharp.Algo.Storages
 
 			stream.Write(LocalOffset);
 
-			// размер под дополнительную информацию.
-			// пока этой информации нет.
+			// СЂР°Р·РјРµСЂ РїРѕРґ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ.
+			// РїРѕРєР° СЌС‚РѕР№ РёРЅС„РѕСЂРјР°С†РёРё РЅРµС‚.
 			stream.Write((short)0);
 		}
 
@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Storages
 			PriceStep = stream.Read<decimal>();
 
 			if (Version < MarketDataVersions.Version40)
-				stream.Read<decimal>(); // ранее был StepPrice
+				stream.Read<decimal>(); // СЂР°РЅРµРµ Р±С‹Р» StepPrice
 
 			FirstTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
 			LastTime = stream.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
@@ -109,10 +109,10 @@ namespace StockSharp.Algo.Storages
 
 			LocalOffset = stream.Read<TimeSpan>();
 
-			// пропускаем блок данных, выделенных под дополнительную информацию
+			// РїСЂРѕРїСѓСЃРєР°РµРј Р±Р»РѕРє РґР°РЅРЅС‹С…, РІС‹РґРµР»РµРЅРЅС‹С… РїРѕРґ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ
 			var extInfoSize = stream.Read<short>();
 
-			// здесь можно будет читать доп информацию из потока
+			// Р·РґРµСЃСЊ РјРѕР¶РЅРѕ Р±СѓРґРµС‚ С‡РёС‚Р°С‚СЊ РґРѕРї РёРЅС„РѕСЂРјР°С†РёСЋ РёР· РїРѕС‚РѕРєР°
 
 			stream.Position += extInfoSize;
 		}
@@ -241,7 +241,7 @@ namespace StockSharp.Algo.Storages
 
 			public override bool MoveNext()
 			{
-				if (Index < 0) // enumerator стоит перед первой записью
+				if (Index < 0) // enumerator СЃС‚РѕРёС‚ РїРµСЂРµРґ РїРµСЂРІРѕР№ Р·Р°РїРёСЃСЊСЋ
 				{
 					MetaInfo = _originalMetaInfo.Clone();
 					Index = 0;
@@ -317,17 +317,18 @@ namespace StockSharp.Algo.Storages
 
 		public byte[] Serialize(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
-			var writer = new BitArrayWriter(DataSize * data.Count() * 2);
+			var stream = new MemoryStream { Capacity = DataSize * data.Count() * 2 };
 
-			OnSave(writer, data, (TMetaInfo)metaInfo);
+			using (var writer = new BitArrayWriter(stream))
+				OnSave(writer, data, (TMetaInfo)metaInfo);
 
-			return writer.GetBytes();
+			return stream.To<byte[]>();
 		}
 
 		public IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
-			// TODO сделать BitArrayReader работающим с потоком
-			var data = stream.ReadBuffer();
+			var data = new MemoryStream();
+			stream.CopyTo(data);
 			stream.Dispose();
 
 			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), (TMetaInfo)metaInfo))
@@ -336,12 +337,11 @@ namespace StockSharp.Algo.Storages
 
 		public IEnumerableEx<TData> Deserialize(IDataStorageReader<TData> reader)
 		{
-			var stream = reader.Stream;
-			var metaInfo = reader.MetaInfo;
-			var data = stream.ReadBuffer();
+			var data = new MemoryStream();
+			reader.Stream.CopyTo(data);
 
-			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), (TMetaInfo)metaInfo))
-				.ToEx(metaInfo.Count);
+			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), (TMetaInfo)reader.MetaInfo))
+				.ToEx(reader.MetaInfo.Count);
 		}
 
 		protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);
