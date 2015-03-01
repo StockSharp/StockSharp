@@ -18,6 +18,9 @@ namespace SampleCandles
 	using StockSharp.Quik;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
+	using System.Net;
+	using System.Security;
 
 	partial class MainWindow
 	{
@@ -25,7 +28,7 @@ namespace SampleCandles
 		private QuikTrader _trader;
 		private bool _isDdeStarted;
 		private CandleManager _candleManager;
-
+		private LogManager logManager;
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -36,6 +39,19 @@ namespace SampleCandles
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
 			Path.Text = QuikTerminal.GetDefaultPath();
+
+			//Добавим логирование
+			logManager = new LogManager
+			{
+				Application = { LogLevel = LogLevels.Debug }
+			};
+
+			logManager.Listeners.Add(new FileLogListener
+			{
+				LogDirectory = @"Logs\",
+				SeparateByDates = SeparateByDateModes.SubDirectories,
+				Append = false,
+			});
 		}
 
 		private void FindPathClick(object sender, RoutedEventArgs e)
@@ -53,11 +69,62 @@ namespace SampleCandles
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
 		{
-			if (Path.Text.IsEmpty())
-				MessageBox.Show(this, LocalizedStrings.Str2983);
+			var isLua = IsLua.IsChecked == true;
+
+			if (isLua)
+			{
+				if (Address.Text.IsEmpty())
+				{
+					MessageBox.Show(this, LocalizedStrings.Str2977);
+					return;
+				}
+
+				if (Login.Text.IsEmpty())
+				{
+					MessageBox.Show(this, LocalizedStrings.Str2978);
+					return;
+				}
+
+				if (Password.Password.IsEmpty())
+				{
+					MessageBox.Show(this, LocalizedStrings.Str2979);
+					return;
+				}
+			}
 			else
 			{
-				_trader = new QuikTrader(Path.Text) { IsDde = true };
+				if (Path.Text.IsEmpty())
+				{
+					MessageBox.Show(this, LocalizedStrings.Str2983);
+					return;
+				}
+			}
+			if (_trader == null)
+			{
+				// создаем подключение
+				_trader = isLua
+					? new QuikTrader
+					{
+						LuaFixServerAddress = Address.Text.To<EndPoint>(),
+						LuaLogin = Login.Text,
+						LuaPassword = Password.Password.To<SecureString>()
+					}
+					: new QuikTrader(Path.Text) { IsDde = true };
+
+				logManager.Sources.Add(_trader);
+				// подписываемся на событие об успешном восстановлении соединения
+				_trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+
+				// подписываемся на событие разрыва соединения
+				_trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
+
+				// подписываемся на ошибку обработки данных (транзакций и маркет)
+				_trader.ProcessDataError += error =>
+					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+
+				// подписываемся на ошибку подписки маркет-данных
+				_trader.MarketDataSubscriptionFailed += (security, type, error) =>
+					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 				
 				_trader.Connected += () => this.GuiAsync(() => ExportDde.IsEnabled = true);
 				_trader.NewSecurities += securities => this.GuiAsync(() => Security.ItemsSource = _trader.Securities);
@@ -97,13 +164,17 @@ namespace SampleCandles
 
 		private void StartDde()
 		{
-			_trader.StartExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
+			if (_trader.IsDde == true)
+				_trader.StartExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
+			else _trader.StartExport();
 			_isDdeStarted = true;
 		}
 
 		private void StopDde()
 		{
-			_trader.StopExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
+			if (_trader.IsDde == true)
+				_trader.StopExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
+			else _trader.StopExport();
 			_isDdeStarted = false;
 		}
 

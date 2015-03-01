@@ -20,12 +20,44 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<Label Grid.Column="0" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.XamlStr592}" />
-		<TextBox x:Name="Path" Text="" Grid.Column="1" Grid.Row="0" />
-		<Button x:Name="FindPath" Grid.Column="2" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+		<Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="30" />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+			<RadioButton x:Name="IsLua" Content="{x:Static loc:LocalizedStrings.XamlStr355}" IsChecked="True" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+			<StackPanel Grid.Column="1" Grid.Row="1">
+				<StackPanel  Orientation="Horizontal" IsEnabled="{Binding ElementName=IsLua, Path=IsChecked}">
+					<Label  Content="{x:Static loc:LocalizedStrings.XamlStr21}" />
+					<TextBox x:Name="Address" Text="127.0.0.1:5001" VerticalContentAlignment="Center"/>
+					<TextBlock HorizontalAlignment="Right">
+						<Run Text="{x:Static loc:LocalizedStrings.Login}" />:
+					</TextBlock>
+					<TextBox x:Name="Login" Text="quik" Width="70" VerticalContentAlignment="Center" />
+					<TextBlock HorizontalAlignment="Right">
+						<Run Text="{x:Static loc:LocalizedStrings.Password}" />:
+					</TextBlock>
+					<PasswordBox x:Name="Password" Width="70" Password="quik" VerticalContentAlignment="Center"/>
+				</StackPanel>
+			</StackPanel>
+
+			<RadioButton x:Name="IsDde" Content="{x:Static loc:LocalizedStrings.ObsoleteDDE}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"/>
+			<StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}">
+				<Label Content="{x:Static loc:LocalizedStrings.XamlStr592}" />
+				<TextBox x:Name="Path" Text="" Width="350"/>
+				<Button x:Name="FindPath" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
+			</StackPanel>
+		</Grid>
 
 		<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-		<Button x:Name="ExportDde" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr850}" Click="ExportDdeClick" />
+		<Button x:Name="ExportDde" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Export}" Click="ExportDdeClick" />
 		
 		<ComboBox x:Name="CandleType" Grid.Column="0" Grid.Row="3" SelectionChanged="CandleTypesSelectionChanged">
 		</ComboBox>
