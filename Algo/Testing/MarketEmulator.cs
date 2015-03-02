@@ -1365,6 +1365,7 @@ namespace StockSharp.Algo.Testing
 		private IncrementalIdGenerator _orderIdGenerator = new IncrementalIdGenerator();
 		private IncrementalIdGenerator _tradeIdGenerator = new IncrementalIdGenerator();
 		private readonly Dictionary<SecurityId, SecurityMarketEmulator> _securityEmulators = new Dictionary<SecurityId, SecurityMarketEmulator>();
+		private readonly Dictionary<string, List<SecurityMarketEmulator>> _securityEmulatorsByBoard = new Dictionary<string, List<SecurityMarketEmulator>>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<string, PortfolioEmulator> _portfolios = new Dictionary<string, PortfolioEmulator>();
 		private readonly Dictionary<string, BoardMessage> _boardDefinitions = new Dictionary<string, BoardMessage>(StringComparer.InvariantCultureIgnoreCase);
 		private readonly Dictionary<SecurityId, Dictionary<Level1Fields, object>> _secStates = new Dictionary<SecurityId, Dictionary<Level1Fields, object>>();
@@ -1459,6 +1460,7 @@ namespace StockSharp.Algo.Testing
 				case ExtendedMessageTypes.Reset:
 				{
 					_securityEmulators.Clear();
+					_securityEmulatorsByBoard.Clear();
 
 					_orderIdGenerator.Current = _settings.InitialOrderId;
 					_tradeIdGenerator.Current = _settings.InitialTradeId;
@@ -1480,9 +1482,19 @@ namespace StockSharp.Algo.Testing
 				{
 					var clearingMsg = (ClearingMessage)message;
 					var emu = _securityEmulators.TryGetValue(clearingMsg.SecurityId);
-					
+
 					if (emu != null)
+					{
 						_securityEmulators.Remove(clearingMsg.SecurityId);
+
+						var emulators = _securityEmulatorsByBoard.TryGetValue(clearingMsg.SecurityId.BoardCode);
+
+						if (emulators != null)
+						{
+							if (emulators.Remove(emu) && emulators.Count == 0)
+								_securityEmulatorsByBoard.Remove(clearingMsg.SecurityId.BoardCode);
+						}
+					}
 
 					break;
 				}
@@ -1506,11 +1518,14 @@ namespace StockSharp.Algo.Testing
 					var boardMsg = (BoardMessage)message;
 					_boardDefinitions[boardMsg.Code] = (BoardMessage)boardMsg.Clone();
 
-					foreach (var securityEmulator in _securityEmulators)
+					var emulators = _securityEmulatorsByBoard.TryGetValue(boardMsg.Code);
+
+					if (emulators != null)
 					{
-						if (securityEmulator.Key.BoardCode.CompareIgnoreCase(boardMsg.Code))
-							securityEmulator.Value.Process(boardMsg);
+						foreach (var securityEmulator in emulators)
+							securityEmulator.Process(boardMsg);
 					}
+					
 
 					break;
 				}
@@ -1601,7 +1616,13 @@ namespace StockSharp.Algo.Testing
 		private SecurityMarketEmulator GetEmulator(SecurityId securityId)
 		{
 			return _securityEmulators.SafeAdd(securityId, key =>
-				new SecurityMarketEmulator(this, securityId) { Parent = this });
+			{
+				var emulator = new SecurityMarketEmulator(this, securityId) { Parent = this };
+
+				_securityEmulatorsByBoard.SafeAdd(securityId.BoardCode).Add(emulator);
+
+				return emulator;
+			});
 		}
 
 		private IEnumerable<Message> BufferResult(IEnumerable<Message> result, DateTime time)
