@@ -1439,6 +1439,36 @@ namespace StockSharp.Algo
 			_entityCache.Clear();
 			_prevTime = default(DateTimeOffset);
 
+			_exchangeBoards.Clear();
+			_securities.Clear();
+
+			_securityLookups.Clear();
+			_portfolioLookups.Clear();
+
+			_positions.Clear();
+			_filteredMarketDepths.Clear();
+
+			_lookupQueue.Clear();
+			_lookupResult.Clear();
+
+			_marketDepths.Clear();
+
+			_nativeIdSecurities.Clear();
+
+			_nonOrderedByIdMyTrades.Clear();
+			_nonOrderedByStringIdMyTrades.Clear();
+			_nonOrderedByTransactionIdMyTrades.Clear();
+
+			_orderCancelFails.Clear();
+			_orderRegisterFails.Clear();
+
+			_prevExportState = _exportState = ConnectionStates.Disconnected;
+			_prevConnectionState = _connectionState = ConnectionStates.Disconnected;
+
+			_suspendedSecurityMessages.Clear();
+
+			_subscriptionManager.ClearCache();
+
 			_securityValues.Clear();
 			_sessionStates.Clear();
 			_filteredMarketDepths.Clear();

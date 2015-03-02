@@ -32,6 +32,15 @@ namespace StockSharp.Algo
 				public TimeSpan Elapsed { get; set; }
 			}
 
+			public void ClearCache()
+			{
+				_unsubscribeActions.Clear();
+				_subscribers.Clear();
+				_continuousSecurities.Clear();
+				_lookupMessages.Clear();
+				_registeredFilteredMarketDepths.Clear();
+			}
+
 			private readonly SynchronizedDictionary<Security, SynchronizedSet<MarketDataTypes>> _unsubscribeActions = new SynchronizedDictionary<Security, SynchronizedSet<MarketDataTypes>>();
 			private readonly SynchronizedDictionary<MarketDataTypes, CachedSynchronizedDictionary<Security, int>> _subscribers = new SynchronizedDictionary<MarketDataTypes, CachedSynchronizedDictionary<Security, int>>();
 			private readonly SynchronizedLinkedList<ContinuousInfo> _continuousSecurities = new SynchronizedLinkedList<ContinuousInfo>();
