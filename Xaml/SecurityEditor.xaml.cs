@@ -100,9 +100,7 @@
 		private static void OnSelectedSecurityPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
 		{
 			var editor = (SecurityEditor)source;
-
-			editor._selectedSecurity = (Security)e.NewValue;
-			editor.UpdatedControls();
+			editor.UpdatedControls((Security)e.NewValue);
 		}
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -119,9 +117,10 @@
             }
         }
 
-		private void UpdatedControls()
+		private void UpdatedControls(Security selectedSecurity)
 		{
-            //ButtonSecurity.Content = security == null ? string.Empty : security.Id;
+			_selectedSecurity = selectedSecurity;
+			SecurityTextBox.Text = selectedSecurity == null ? string.Empty : selectedSecurity.Id;
 			SecuritySelected.SafeInvoke();
 		}
 
@@ -133,8 +132,9 @@
 		private FilterableSecurityProvider GetSecurityProvider()
 		{
 			return SecurityProvider
-			       ?? ConfigManager.TryGetService<FilterableSecurityProvider>()
-				   ?? (ConfigManager.IsServiceRegistered<IConnector>()
+					?? ConfigManager.TryGetService<ISecurityProvider>() as FilterableSecurityProvider
+					?? ConfigManager.TryGetService<FilterableSecurityProvider>()
+					?? (ConfigManager.IsServiceRegistered<IConnector>()
 						? new FilterableSecurityProvider(ConfigManager.TryGetService<IConnector>())
 						: null);
 		}
