@@ -11,16 +11,16 @@ namespace StockSharp.Xaml
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Синхронизованное подключение. Оборачивает объект <see cref="IConnector"/> обычного подключения для того, чтобы все события приходили в GUI потоке.
+	/// РЎРёРЅС…СЂРѕРЅРёР·РѕРІР°РЅРЅРѕРµ РїРѕРґРєР»СЋС‡РµРЅРёРµ. РћР±РѕСЂР°С‡РёРІР°РµС‚ РѕР±СЉРµРєС‚ <see cref="IConnector"/> РѕР±С‹С‡РЅРѕРіРѕ РїРѕРґРєР»СЋС‡РµРЅРёСЏ РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РІСЃРµ СЃРѕР±С‹С‚РёСЏ РїСЂРёС…РѕРґРёР»Рё РІ GUI РїРѕС‚РѕРєРµ.
 	/// </summary>
-	/// <typeparam name="TUnderlyingConnector">Тип подключения, которое необходимо синхронизовать.</typeparam>
+	/// <typeparam name="TUnderlyingConnector">РўРёРї РїРѕРґРєР»СЋС‡РµРЅРёСЏ, РєРѕС‚РѕСЂРѕРµ РЅРµРѕР±С…РѕРґРёРјРѕ СЃРёРЅС…СЂРѕРЅРёР·РѕРІР°С‚СЊ.</typeparam>
 	public class GuiConnector<TUnderlyingConnector> : BaseLogReceiver, IConnector
 		where TUnderlyingConnector : IConnector
 	{
 		/// <summary>
-		/// Создать синхронизованное подключение.
+		/// РЎРѕР·РґР°С‚СЊ СЃРёРЅС…СЂРѕРЅРёР·РѕРІР°РЅРЅРѕРµ РїРѕРґРєР»СЋС‡РµРЅРёРµ.
 		/// </summary>
-		/// <param name="connector">Подключение, которое необходимо обернуть в <see cref="GuiConnector{T}"/>.</param>
+		/// <param name="connector">РџРѕРґРєР»СЋС‡РµРЅРёРµ, РєРѕС‚РѕСЂРѕРµ РЅРµРѕР±С…РѕРґРёРјРѕ РѕР±РµСЂРЅСѓС‚СЊ РІ <see cref="GuiConnector{T}"/>.</param>
 		public GuiConnector(TUnderlyingConnector connector)
 		{
 			Connector = connector;
@@ -29,7 +29,7 @@ namespace StockSharp.Xaml
 		private TUnderlyingConnector _connector;
 
 		/// <summary>
-		/// Несинхронизованный объект подключения.
+		/// РќРµСЃРёРЅС…СЂРѕРЅРёР·РѕРІР°РЅРЅС‹Р№ РѕР±СЉРµРєС‚ РїРѕРґРєР»СЋС‡РµРЅРёСЏ.
 		/// </summary>
 		public TUnderlyingConnector Connector
 		{
@@ -84,7 +84,7 @@ namespace StockSharp.Xaml
 		#region NewPortfolios
 
 		/// <summary>
-		/// Событие появления новых портфелей.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… РїРѕСЂС‚С„РµР»РµР№.
 		/// </summary>
 		public event Action<IEnumerable<Portfolio>> NewPortfolios;
 
@@ -98,7 +98,7 @@ namespace StockSharp.Xaml
 		#region PortfoliosChanged
 
 		/// <summary>
-		/// Событие изменения параметров портфелей.
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ РїРѕСЂС‚С„РµР»РµР№.
 		/// </summary>
 		public event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
@@ -112,7 +112,7 @@ namespace StockSharp.Xaml
 		#region NewPositions
 
 		/// <summary>
-		/// Событие появления новых позиций.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… РїРѕР·РёС†РёР№.
 		/// </summary>
 		public event Action<IEnumerable<Position>> NewPositions;
 
@@ -126,7 +126,7 @@ namespace StockSharp.Xaml
 		#region PositionsChanged
 
 		/// <summary>
-		/// Событие изменения параметров позиций.
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ РїРѕР·РёС†РёР№.
 		/// </summary>
 		public event Action<IEnumerable<Position>> PositionsChanged;
 
@@ -140,7 +140,7 @@ namespace StockSharp.Xaml
 		#region NewSecurities
 
 		/// <summary>
-		/// Событие появления новых инструментов.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ.
 		/// </summary>
 		public event Action<IEnumerable<Security>> NewSecurities;
 
@@ -154,7 +154,7 @@ namespace StockSharp.Xaml
 		#region SecuritiesChanged
 
 		/// <summary>
-		/// Событие изменения параметров инструментов.
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ РїР°СЂР°РјРµС‚СЂРѕРІ РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ.
 		/// </summary>
 		public event Action<IEnumerable<Security>> SecuritiesChanged;
 
@@ -168,7 +168,7 @@ namespace StockSharp.Xaml
 		#region NewTrades
 
 		/// <summary>
-		/// Событие появления всех новых сделок.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РІСЃРµС… РЅРѕРІС‹С… СЃРґРµР»РѕРє.
 		/// </summary>
 		public event Action<IEnumerable<Trade>> NewTrades;
 
@@ -182,7 +182,7 @@ namespace StockSharp.Xaml
 		#region NewMyTrades
 
 		/// <summary>
-		/// Событие появления собственных новых сделок.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ СЃРѕР±СЃС‚РІРµРЅРЅС‹С… РЅРѕРІС‹С… СЃРґРµР»РѕРє.
 		/// </summary>
 		public event Action<IEnumerable<MyTrade>> NewMyTrades;
 
@@ -196,7 +196,7 @@ namespace StockSharp.Xaml
 		#region NewOrders
 
 		/// <summary>
-		/// Событие появления новых заявок.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<Order>> NewOrders;
 
@@ -210,7 +210,7 @@ namespace StockSharp.Xaml
 		#region OrdersChanged
 
 		/// <summary>
-		/// Событие изменения состояния заявок (снята, удовлетворена).
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ Р·Р°СЏРІРѕРє (СЃРЅСЏС‚Р°, СѓРґРѕРІР»РµС‚РІРѕСЂРµРЅР°).
 		/// </summary>
 		public event Action<IEnumerable<Order>> OrdersChanged;
 
@@ -224,7 +224,7 @@ namespace StockSharp.Xaml
 		#region OrdersRegisterFailed
 
 		/// <summary>
-		/// Событие об ошибках, связанных с регистрацией заявок.
+		/// РЎРѕР±С‹С‚РёРµ РѕР± РѕС€РёР±РєР°С…, СЃРІСЏР·Р°РЅРЅС‹С… СЃ СЂРµРіРёСЃС‚СЂР°С†РёРµР№ Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<OrderFail>> OrdersRegisterFailed;
 
@@ -238,7 +238,7 @@ namespace StockSharp.Xaml
 		#region OrdersCancelFailed
 
 		/// <summary>
-		/// Событие об ошибках, связанных со снятием заявок.
+		/// РЎРѕР±С‹С‚РёРµ РѕР± РѕС€РёР±РєР°С…, СЃРІСЏР·Р°РЅРЅС‹С… СЃРѕ СЃРЅСЏС‚РёРµРј Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
 
@@ -252,7 +252,7 @@ namespace StockSharp.Xaml
 		#region NewStopOrders
 
 		/// <summary>
-		/// Событие появления новых стоп-заявок.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… СЃС‚РѕРї-Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<Order>> NewStopOrders;
 
@@ -266,7 +266,7 @@ namespace StockSharp.Xaml
 		#region StopOrdersChanged
 
 		/// <summary>
-		/// Событие появления новых стоп-заявок.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… СЃС‚РѕРї-Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<Order>> StopOrdersChanged;
 
@@ -280,7 +280,7 @@ namespace StockSharp.Xaml
 		#region StopOrdersRegisterFailed
 
 		/// <summary>
-		/// Событие об ошибках, связанных с регистрацией стоп-заявок.
+		/// РЎРѕР±С‹С‚РёРµ РѕР± РѕС€РёР±РєР°С…, СЃРІСЏР·Р°РЅРЅС‹С… СЃ СЂРµРіРёСЃС‚СЂР°С†РёРµР№ СЃС‚РѕРї-Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
 
@@ -294,7 +294,7 @@ namespace StockSharp.Xaml
 		#region StopOrdersCancelFailed
 
 		/// <summary>
-		/// Событие об ошибках, связанных со снятием стоп-заявок.
+		/// РЎРѕР±С‹С‚РёРµ РѕР± РѕС€РёР±РєР°С…, СЃРІСЏР·Р°РЅРЅС‹С… СЃРѕ СЃРЅСЏС‚РёРµРј СЃС‚РѕРї-Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
 
@@ -308,7 +308,7 @@ namespace StockSharp.Xaml
 		#region NewMarketDepths
 
 		/// <summary>
-		/// Событие появления новых стаканов с котировками.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… СЃС‚Р°РєР°РЅРѕРІ СЃ РєРѕС‚РёСЂРѕРІРєР°РјРё.
 		/// </summary>
 		public event Action<IEnumerable<MarketDepth>> NewMarketDepths;
 
@@ -322,7 +322,7 @@ namespace StockSharp.Xaml
 		#region MarketDepthsChanged
 
 		/// <summary>
-		/// Событие изменения стаканов с котировками.
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ СЃС‚Р°РєР°РЅРѕРІ СЃ РєРѕС‚РёСЂРѕРІРєР°РјРё.
 		/// </summary>
 		public event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
 
@@ -336,7 +336,7 @@ namespace StockSharp.Xaml
 		#region NewOrderLogItems
 
 		/// <summary>
-		/// Событие появления новых записей в логе заявок.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІС‹С… Р·Р°РїРёСЃРµР№ РІ Р»РѕРіРµ Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
 
@@ -350,7 +350,7 @@ namespace StockSharp.Xaml
 		#region NewNews
 
 		/// <summary>
-		/// Событие появления новости.
+		/// РЎРѕР±С‹С‚РёРµ РїРѕСЏРІР»РµРЅРёСЏ РЅРѕРІРѕСЃС‚Рё.
 		/// </summary>
 		public event Action<News> NewNews;
 
@@ -364,7 +364,7 @@ namespace StockSharp.Xaml
 		#region NewsChanged
 
 		/// <summary>
-		/// Событие изменения новости (например, при скачивании текста <see cref="StockSharp.BusinessEntities.News.Story"/>).
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ РЅРѕРІРѕСЃС‚Рё (РЅР°РїСЂРёРјРµСЂ, РїСЂРё СЃРєР°С‡РёРІР°РЅРёРё С‚РµРєСЃС‚Р° <see cref="StockSharp.BusinessEntities.News.Story"/>).
 		/// </summary>
 		public event Action<News> NewsChanged;
 
@@ -378,7 +378,7 @@ namespace StockSharp.Xaml
 		#region NewMessage
 
 		/// <summary>
-		/// Событие обработки нового сообщения <see cref="Message"/>.
+		/// РЎРѕР±С‹С‚РёРµ РѕР±СЂР°Р±РѕС‚РєРё РЅРѕРІРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ <see cref="Message"/>.
 		/// </summary>
 		public event Action<Message, MessageDirections> NewMessage;
 
@@ -392,7 +392,7 @@ namespace StockSharp.Xaml
 		#region Connected
 
 		/// <summary>
-		/// Событие успешного подключения.
+		/// РЎРѕР±С‹С‚РёРµ СѓСЃРїРµС€РЅРѕРіРѕ РїРѕРґРєР»СЋС‡РµРЅРёСЏ.
 		/// </summary>
 		public event Action Connected;
 
@@ -406,7 +406,7 @@ namespace StockSharp.Xaml
 		#region Disconnected
 
 		/// <summary>
-		/// Событие успешного отключения.
+		/// РЎРѕР±С‹С‚РёРµ СѓСЃРїРµС€РЅРѕРіРѕ РѕС‚РєР»СЋС‡РµРЅРёСЏ.
 		/// </summary>
 		public event Action Disconnected;
 
@@ -420,7 +420,7 @@ namespace StockSharp.Xaml
 		#region ConnectionError
 
 		/// <summary>
-		/// Событие ошибки подключения (например, соединения было разорвано).
+		/// РЎРѕР±С‹С‚РёРµ РѕС€РёР±РєРё РїРѕРґРєР»СЋС‡РµРЅРёСЏ (РЅР°РїСЂРёРјРµСЂ, СЃРѕРµРґРёРЅРµРЅРёСЏ Р±С‹Р»Рѕ СЂР°Р·РѕСЂРІР°РЅРѕ).
 		/// </summary>
 		public event Action<Exception> ConnectionError;
 
@@ -434,7 +434,7 @@ namespace StockSharp.Xaml
 		#region NewDataExported
 
 		/// <summary>
-		/// Событие, сигнализирующее о новых экспортируемых данных.
+		/// РЎРѕР±С‹С‚РёРµ, СЃРёРіРЅР°Р»РёР·РёСЂСѓСЋС‰РµРµ Рѕ РЅРѕРІС‹С… СЌРєСЃРїРѕСЂС‚РёСЂСѓРµРјС‹С… РґР°РЅРЅС‹С….
 		/// </summary>
 		public event Action NewDataExported;
 
@@ -448,7 +448,7 @@ namespace StockSharp.Xaml
 		#region ProcessDataError
 
 		/// <summary>
-		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
+		/// РЎРѕР±С‹С‚РёРµ, СЃРёРіРЅР°Р»РёР·РёСЂСѓСЋС‰РµРµ РѕР± РѕС€РёР±РєРµ РїСЂРё РїРѕР»СѓС‡РµРЅРёРё РёР»Рё РѕР±СЂР°Р±РѕС‚РєРµ РЅРѕРІС‹С… РґР°РЅРЅС‹С… СЃ СЃРµСЂРІРµСЂР°.
 		/// </summary>
 		public event Action<Exception> ProcessDataError;
 
@@ -462,8 +462,8 @@ namespace StockSharp.Xaml
 		#region MarketTimeChanged
 
 		/// <summary>
-		/// Событие, сигнализирующее об изменении текущего времени на биржевых площадках <see cref="IConnector.ExchangeBoards"/>.
-		/// Передается разница во времени, прошедшее с последнего вызова события. Первый раз событие передает значение <see cref="TimeSpan.Zero"/>.
+		/// РЎРѕР±С‹С‚РёРµ, СЃРёРіРЅР°Р»РёР·РёСЂСѓСЋС‰РµРµ РѕР± РёР·РјРµРЅРµРЅРёРё С‚РµРєСѓС‰РµРіРѕ РІСЂРµРјРµРЅРё РЅР° Р±РёСЂР¶РµРІС‹С… РїР»РѕС‰Р°РґРєР°С… <see cref="IConnector.ExchangeBoards"/>.
+		/// РџРµСЂРµРґР°РµС‚СЃСЏ СЂР°Р·РЅРёС†Р° РІРѕ РІСЂРµРјРµРЅРё, РїСЂРѕС€РµРґС€РµРµ СЃ РїРѕСЃР»РµРґРЅРµРіРѕ РІС‹Р·РѕРІР° СЃРѕР±С‹С‚РёСЏ. РџРµСЂРІС‹Р№ СЂР°Р· СЃРѕР±С‹С‚РёРµ РїРµСЂРµРґР°РµС‚ Р·РЅР°С‡РµРЅРёРµ <see cref="TimeSpan.Zero"/>.
 		/// </summary>
 		public event Action<TimeSpan> MarketTimeChanged;
 
@@ -477,7 +477,7 @@ namespace StockSharp.Xaml
 		#region LookupSecuritiesResult
 
 		/// <summary>
-		/// Событие, передающее результат поиска, запущенного через метод <see cref="LookupSecurities(StockSharp.BusinessEntities.Security)"/>.
+		/// РЎРѕР±С‹С‚РёРµ, РїРµСЂРµРґР°СЋС‰РµРµ СЂРµР·СѓР»СЊС‚Р°С‚ РїРѕРёСЃРєР°, Р·Р°РїСѓС‰РµРЅРЅРѕРіРѕ С‡РµСЂРµР· РјРµС‚РѕРґ <see cref="LookupSecurities(StockSharp.BusinessEntities.Security)"/>.
 		/// </summary>
 		public event Action<IEnumerable<Security>> LookupSecuritiesResult;
 
@@ -491,7 +491,7 @@ namespace StockSharp.Xaml
 		#region LookupPortfoliosResult
 
 		/// <summary>
-		/// Событие, передающее результат поиска, запущенного через метод <see cref="LookupPortfolios"/>.
+		/// РЎРѕР±С‹С‚РёРµ, РїРµСЂРµРґР°СЋС‰РµРµ СЂРµР·СѓР»СЊС‚Р°С‚ РїРѕРёСЃРєР°, Р·Р°РїСѓС‰РµРЅРЅРѕРіРѕ С‡РµСЂРµР· РјРµС‚РѕРґ <see cref="LookupPortfolios"/>.
 		/// </summary>
 		public event Action<IEnumerable<Portfolio>> LookupPortfoliosResult;
 
@@ -505,7 +505,7 @@ namespace StockSharp.Xaml
 		#region MarketDataSubscriptionSucceeded
 
 		/// <summary>
-		/// Событие успешной регистрации инструмента для получения маркет-данных.
+		/// РЎРѕР±С‹С‚РёРµ СѓСЃРїРµС€РЅРѕР№ СЂРµРіРёСЃС‚СЂР°С†РёРё РёРЅСЃС‚СЂСѓРјРµРЅС‚Р° РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РјР°СЂРєРµС‚-РґР°РЅРЅС‹С….
 		/// </summary>
 		public event Action<Security, MarketDataTypes> MarketDataSubscriptionSucceeded;
 
@@ -519,7 +519,7 @@ namespace StockSharp.Xaml
 		#region MarketDataSubscriptionFailed
 
 		/// <summary>
-		/// Событие ошибки регистрации инструмента для получения маркет-данных.
+		/// РЎРѕР±С‹С‚РёРµ РѕС€РёР±РєРё СЂРµРіРёСЃС‚СЂР°С†РёРё РёРЅСЃС‚СЂСѓРјРµРЅС‚Р° РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РјР°СЂРєРµС‚-РґР°РЅРЅС‹С….
 		/// </summary>
 		public event Action<Security, MarketDataTypes, Exception> MarketDataSubscriptionFailed;
 
@@ -533,7 +533,7 @@ namespace StockSharp.Xaml
 		#region ExportStarted
 
 		/// <summary>
-		/// Событие успешного запуска экспорта.
+		/// РЎРѕР±С‹С‚РёРµ СѓСЃРїРµС€РЅРѕРіРѕ Р·Р°РїСѓСЃРєР° СЌРєСЃРїРѕСЂС‚Р°.
 		/// </summary>
 		public event Action ExportStarted;
 
@@ -547,7 +547,7 @@ namespace StockSharp.Xaml
 		#region ExportStopped
 
 		/// <summary>
-		/// Событие успешной остановки экспорта.
+		/// РЎРѕР±С‹С‚РёРµ СѓСЃРїРµС€РЅРѕР№ РѕСЃС‚Р°РЅРѕРІРєРё СЌРєСЃРїРѕСЂС‚Р°.
 		/// </summary>
 		public event Action ExportStopped;
 
@@ -561,7 +561,7 @@ namespace StockSharp.Xaml
 		#region ExportError
 
 		/// <summary>
-		/// Событие ошибки экспорта (например, соединения было разорвано).
+		/// РЎРѕР±С‹С‚РёРµ РѕС€РёР±РєРё СЌРєСЃРїРѕСЂС‚Р° (РЅР°РїСЂРёРјРµСЂ, СЃРѕРµРґРёРЅРµРЅРёСЏ Р±С‹Р»Рѕ СЂР°Р·РѕСЂРІР°РЅРѕ).
 		/// </summary>
 		public event Action<Exception> ExportError;
 
@@ -575,7 +575,7 @@ namespace StockSharp.Xaml
 		#region SessionStateChanged
 
 		/// <summary>
-		/// Событие изменения состояния сессии для биржевой площадки.
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ СЃРµСЃСЃРёРё РґР»СЏ Р±РёСЂР¶РµРІРѕР№ РїР»РѕС‰Р°РґРєРё.
 		/// </summary>
 		public event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
@@ -592,17 +592,17 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить состояние сессии для заданной площадки.
+		/// РџРѕР»СѓС‡РёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ СЃРµСЃСЃРёРё РґР»СЏ Р·Р°РґР°РЅРЅРѕР№ РїР»РѕС‰Р°РґРєРё.
 		/// </summary>
-		/// <param name="board">Биржевая площадка электронных торгов.</param>
-		/// <returns>Состояние сессии. Если информация о состоянии сессии отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="board">Р‘РёСЂР¶РµРІР°СЏ РїР»РѕС‰Р°РґРєР° СЌР»РµРєС‚СЂРѕРЅРЅС‹С… С‚РѕСЂРіРѕРІ.</param>
+		/// <returns>РЎРѕСЃС‚РѕСЏРЅРёРµ СЃРµСЃСЃРёРё. Р•СЃР»Рё РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЃРѕСЃС‚РѕСЏРЅРёРё СЃРµСЃСЃРёРё РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚, С‚Рѕ Р±СѓРґРµС‚ РІРѕР·РІСЂР°С‰РµРЅРѕ <see langword="null"/>.</returns>
 		public SessionStates? GetSessionState(ExchangeBoard board)
 		{
 			return Connector.GetSessionState(board);
 		}
 
 		/// <summary>
-		/// Список всех биржевых площадок, для которых загружены инструменты <see cref="IConnector.Securities"/>.
+		/// РЎРїРёСЃРѕРє РІСЃРµС… Р±РёСЂР¶РµРІС‹С… РїР»РѕС‰Р°РґРѕРє, РґР»СЏ РєРѕС‚РѕСЂС‹С… Р·Р°РіСЂСѓР¶РµРЅС‹ РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹ <see cref="IConnector.Securities"/>.
 		/// </summary>
 		public IEnumerable<ExchangeBoard> ExchangeBoards
 		{
@@ -610,8 +610,8 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список всех загруженных инструментов.
-		/// Вызывать необходимо после того, как пришло событие <see cref="IConnector.NewSecurities" />. Иначе будет возвращено постое множество.
+		/// РЎРїРёСЃРѕРє РІСЃРµС… Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ.
+		/// Р’С‹Р·С‹РІР°С‚СЊ РЅРµРѕР±С…РѕРґРёРјРѕ РїРѕСЃР»Рµ С‚РѕРіРѕ, РєР°Рє РїСЂРёС€Р»Рѕ СЃРѕР±С‹С‚РёРµ <see cref="IConnector.NewSecurities" />. РРЅР°С‡Рµ Р±СѓРґРµС‚ РІРѕР·РІСЂР°С‰РµРЅРѕ РїРѕСЃС‚РѕРµ РјРЅРѕР¶РµСЃС‚РІРѕ.
 		/// </summary>
 		public IEnumerable<Security> Securities
 		{
@@ -619,7 +619,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все заявки.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ Р·Р°СЏРІРєРё.
 		/// </summary>
 		public IEnumerable<Order> Orders
 		{
@@ -627,7 +627,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все стоп-заявки.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ СЃС‚РѕРї-Р·Р°СЏРІРєРё.
 		/// </summary>
 		public IEnumerable<Order> StopOrders
 		{
@@ -635,7 +635,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все ошибки при регистрации заявок.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ РѕС€РёР±РєРё РїСЂРё СЂРµРіРёСЃС‚СЂР°С†РёРё Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public IEnumerable<OrderFail> OrderRegisterFails
 		{
@@ -643,7 +643,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все ошибки при снятии заявок.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ РѕС€РёР±РєРё РїСЂРё СЃРЅСЏС‚РёРё Р·Р°СЏРІРѕРє.
 		/// </summary>
 		public IEnumerable<OrderFail> OrderCancelFails
 		{
@@ -651,7 +651,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все сделки.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ СЃРґРµР»РєРё.
 		/// </summary>
 		public IEnumerable<Trade> Trades
 		{
@@ -659,7 +659,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все собственные сделки.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ СЃРѕР±СЃС‚РІРµРЅРЅС‹Рµ СЃРґРµР»РєРё.
 		/// </summary>
 		public IEnumerable<MyTrade> MyTrades
 		{
@@ -667,7 +667,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все портфели.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ РїРѕСЂС‚С„РµР»Рё.
 		/// </summary>
 		public IEnumerable<Portfolio> Portfolios
 		{
@@ -675,7 +675,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить все позиции.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ РїРѕР·РёС†РёРё.
 		/// </summary>
 		public IEnumerable<Position> Positions
 		{
@@ -683,7 +683,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Все новости.
+		/// Р’СЃРµ РЅРѕРІРѕСЃС‚Рё.
 		/// </summary>
 		public IEnumerable<News> News
 		{
@@ -691,7 +691,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Состояние соединения.
+		/// РЎРѕСЃС‚РѕСЏРЅРёРµ СЃРѕРµРґРёРЅРµРЅРёСЏ.
 		/// </summary>
 		public ConnectionStates ConnectionState
 		{
@@ -699,7 +699,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Состояние экспорта.
+		/// РЎРѕСЃС‚РѕСЏРЅРёРµ СЌРєСЃРїРѕСЂС‚Р°.
 		/// </summary>
 		public ConnectionStates ExportState
 		{
@@ -707,8 +707,8 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
-		/// в виде одной транзакции.
+		/// РџРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ Р»Рё РїРµСЂРµСЂРµРіРёСЃС‚СЂР°С†РёСЏ Р·Р°СЏРІРѕРє С‡РµСЂРµР· РјРµС‚РѕРґ <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
+		/// РІ РІРёРґРµ РѕРґРЅРѕР№ С‚СЂР°РЅР·Р°РєС†РёРё.
 		/// </summary>
 		public bool IsSupportAtomicReRegister
 		{
@@ -716,7 +716,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterSecurity"/>.
+		/// РЎРїРёСЃРѕРє РІСЃРµС… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ, Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… С‡РµСЂРµР· <see cref="IConnector.RegisterSecurity"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredSecurities
 		{
@@ -724,7 +724,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterMarketDepth"/>.
+		/// РЎРїРёСЃРѕРє РІСЃРµС… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ, Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… С‡РµСЂРµР· <see cref="IConnector.RegisterMarketDepth"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredMarketDepths
 		{
@@ -732,7 +732,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterTrades"/>.
+		/// РЎРїРёСЃРѕРє РІСЃРµС… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ, Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… С‡РµСЂРµР· <see cref="IConnector.RegisterTrades"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredTrades
 		{
@@ -740,7 +740,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="IConnector.RegisterOrderLog"/>.
+		/// РЎРїРёСЃРѕРє РІСЃРµС… РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ, Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… С‡РµСЂРµР· <see cref="IConnector.RegisterOrderLog"/>.
 		/// </summary>
 		public IEnumerable<Security> RegisteredOrderLogs
 		{
@@ -748,7 +748,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список всех портфелей, зарегистрированных через <see cref="IConnector.RegisterPortfolio"/>.
+		/// РЎРїРёСЃРѕРє РІСЃРµС… РїРѕСЂС‚С„РµР»РµР№, Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… С‡РµСЂРµР· <see cref="IConnector.RegisterPortfolio"/>.
 		/// </summary>
 		public IEnumerable<Portfolio> RegisteredPortfolios
 		{
@@ -756,7 +756,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Подключиться к торговой системе.
+		/// РџРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјРµ.
 		/// </summary>
 		public void Connect()
 		{
@@ -764,7 +764,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Отключиться от торговой системы.
+		/// РћС‚РєР»СЋС‡РёС‚СЊСЃСЏ РѕС‚ С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјС‹.
 		/// </summary>
 		public void Disconnect()
 		{
@@ -772,165 +772,165 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные инструменты будут переданы через событие <see cref="LookupSecuritiesResult"/>.
+		/// РќР°Р№С‚Рё РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ С„РёР»СЊС‚СЂСѓ <paramref name="criteria"/>.
+		/// РќР°Р№РґРµРЅРЅС‹Рµ РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹ Р±СѓРґСѓС‚ РїРµСЂРµРґР°РЅС‹ С‡РµСЂРµР· СЃРѕР±С‹С‚РёРµ <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕР»СЏ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґСѓС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РІ РєР°С‡РµСЃС‚РІРµ С„РёР»СЊС‚СЂР°.</param>
 		public void LookupSecurities(Security criteria)
 		{
 			Connector.LookupSecurities(criteria);
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные инструменты будут переданы через событие <see cref="IConnector.LookupSecuritiesResult"/>.
+		/// РќР°Р№С‚Рё РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ С„РёР»СЊС‚СЂСѓ <paramref name="criteria"/>.
+		/// РќР°Р№РґРµРЅРЅС‹Рµ РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹ Р±СѓРґСѓС‚ РїРµСЂРµРґР°РЅС‹ С‡РµСЂРµР· СЃРѕР±С‹С‚РёРµ <see cref="IConnector.LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">РљСЂРёС‚РµСЂРёР№, РїРѕР»СЏ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґСѓС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РІ РєР°С‡РµСЃС‚РІРµ С„РёР»СЊС‚СЂР°.</param>
 		public void LookupSecurities(SecurityLookupMessage criteria)
 		{
 			Connector.LookupSecurities(criteria);
 		}
 
 		/// <summary>
-		/// Найти портфели, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные портфели будут переданы через событие <see cref="LookupPortfoliosResult"/>.
+		/// РќР°Р№С‚Рё РїРѕСЂС‚С„РµР»Рё, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ С„РёР»СЊС‚СЂСѓ <paramref name="criteria"/>.
+		/// РќР°Р№РґРµРЅРЅС‹Рµ РїРѕСЂС‚С„РµР»Рё Р±СѓРґСѓС‚ РїРµСЂРµРґР°РЅС‹ С‡РµСЂРµР· СЃРѕР±С‹С‚РёРµ <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
-		/// <param name="criteria">Портфель, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">РџРѕСЂС‚С„РµР»СЊ, РїРѕР»СЏ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґСѓС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РІ РєР°С‡РµСЃС‚РІРµ С„РёР»СЊС‚СЂР°.</param>
 		public void LookupPortfolios(Portfolio criteria)
 		{
 			Connector.LookupPortfolios(criteria);
 		}
 
 		/// <summary>
-		/// Получить позицию по портфелю и инструменту.
+		/// РџРѕР»СѓС‡РёС‚СЊ РїРѕР·РёС†РёСЋ РїРѕ РїРѕСЂС‚С„РµР»СЋ Рё РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому нужно найти позицию.</param>
-		/// <param name="security">Инструмент, по которому нужно найти позицию.</param>
-		/// <param name="depoName">Название депозитария, где находится физически ценная бумага.
-		/// По-умолчанию передается пустая строка, что означает суммарную позицию по всем депозитариям.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="portfolio">РџРѕСЂС‚С„РµР»СЊ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅСѓР¶РЅРѕ РЅР°Р№С‚Рё РїРѕР·РёС†РёСЋ.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅСѓР¶РЅРѕ РЅР°Р№С‚Рё РїРѕР·РёС†РёСЋ.</param>
+		/// <param name="depoName">РќР°Р·РІР°РЅРёРµ РґРµРїРѕР·РёС‚Р°СЂРёСЏ, РіРґРµ РЅР°С…РѕРґРёС‚СЃСЏ С„РёР·РёС‡РµСЃРєРё С†РµРЅРЅР°СЏ Р±СѓРјР°РіР°.
+		/// РџРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ РїРµСЂРµРґР°РµС‚СЃСЏ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР°, С‡С‚Рѕ РѕР·РЅР°С‡Р°РµС‚ СЃСѓРјРјР°СЂРЅСѓСЋ РїРѕР·РёС†РёСЋ РїРѕ РІСЃРµРј РґРµРїРѕР·РёС‚Р°СЂРёСЏРј.</param>
+		/// <returns>РџРѕР·РёС†РёСЏ.</returns>
 		public Position GetPosition(Portfolio portfolio, Security security, string depoName = "")
 		{
 			return Connector.GetPosition(portfolio, security, depoName);
 		}
 
 		/// <summary>
-		/// Получить стакан котировок.
+		/// РџРѕР»СѓС‡РёС‚СЊ СЃС‚Р°РєР°РЅ РєРѕС‚РёСЂРѕРІРѕРє.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому нужно получить стакан.</param>
-		/// <returns>Стакан котировок.</returns>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅСѓР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ СЃС‚Р°РєР°РЅ.</param>
+		/// <returns>РЎС‚Р°РєР°РЅ РєРѕС‚РёСЂРѕРІРѕРє.</returns>
 		public MarketDepth GetMarketDepth(Security security)
 		{
 			return Connector.GetMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Получить отфильтрованный стакан котировок.
+		/// РџРѕР»СѓС‡РёС‚СЊ РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹Р№ СЃС‚Р°РєР°РЅ РєРѕС‚РёСЂРѕРІРѕРє.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому нужно получить стакан.</param>
-		/// <returns>Отфильтрованный стакан котировок.</returns>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅСѓР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ СЃС‚Р°РєР°РЅ.</param>
+		/// <returns>РћС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹Р№ СЃС‚Р°РєР°РЅ РєРѕС‚РёСЂРѕРІРѕРє.</returns>
 		public MarketDepth GetFilteredMarketDepth(Security security)
 		{
 			return Connector.GetFilteredMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Подписаться на получение рыночных данных по инструменту.
+		/// РџРѕРґРїРёСЃР°С‚СЊСЃСЏ РЅР° РїРѕР»СѓС‡РµРЅРёРµ СЂС‹РЅРѕС‡РЅС‹С… РґР°РЅРЅС‹С… РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ.</param>
+		/// <param name="type">РўРёРї СЂС‹РЅРѕС‡РЅС‹С… РґР°РЅРЅС‹С….</param>
 		public void SubscribeMarketData(Security security, MarketDataTypes type)
 		{
 			Connector.SubscribeMarketData(security, type);
 		}
 
 		/// <summary>
-		/// Отписаться от получения рыночных данных по инструменту.
+		/// РћС‚РїРёСЃР°С‚СЊСЃСЏ РѕС‚ РїРѕР»СѓС‡РµРЅРёСЏ СЂС‹РЅРѕС‡РЅС‹С… РґР°РЅРЅС‹С… РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ.</param>
+		/// <param name="type">РўРёРї СЂС‹РЅРѕС‡РЅС‹С… РґР°РЅРЅС‹С….</param>
 		public void UnSubscribeMarketData(Security security, MarketDataTypes type)
 		{
 			Connector.UnSubscribeMarketData(security, type);
 		}
 
 		/// <summary>
-		/// Начать получать котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через событие <see cref="MarketDepthsChanged"/>.
+		/// РќР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РєРѕС‚РёСЂРѕРІРєРё (СЃС‚Р°РєР°РЅ) РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
+		/// Р—РЅР°С‡РµРЅРёРµ РєРѕС‚РёСЂРѕРІРѕРє РјРѕР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ С‡РµСЂРµР· СЃРѕР±С‹С‚РёРµ <see cref="MarketDepthsChanged"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РєРѕС‚РёСЂРѕРІРєРё.</param>
 		public void RegisterMarketDepth(Security security)
 		{
 			Connector.RegisterMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Остановить получение котировок по инструменту.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РєРѕС‚РёСЂРѕРІРѕРє РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РєРѕС‚РёСЂРѕРІРѕРє.</param>
 		public void UnRegisterMarketDepth(Security security)
 		{
 			Connector.UnRegisterMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Начать получать отфильтрованные котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через метод <see cref="IConnector.GetFilteredMarketDepth"/>.
+		/// РќР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹Рµ РєРѕС‚РёСЂРѕРІРєРё (СЃС‚Р°РєР°РЅ) РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
+		/// Р—РЅР°С‡РµРЅРёРµ РєРѕС‚РёСЂРѕРІРѕРє РјРѕР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ С‡РµСЂРµР· РјРµС‚РѕРґ <see cref="IConnector.GetFilteredMarketDepth"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РєРѕС‚РёСЂРѕРІРєРё.</param>
 		public void RegisterFilteredMarketDepth(Security security)
 		{
 			Connector.RegisterFilteredMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Остановить получение отфильтрованных котировок по инструменту.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РѕС‚С„РёР»СЊС‚СЂРѕРІР°РЅРЅС‹С… РєРѕС‚РёСЂРѕРІРѕРє РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РєРѕС‚РёСЂРѕРІРѕРє.</param>
 		public void UnRegisterFilteredMarketDepth(Security security)
 		{
 			Connector.RegisterFilteredMarketDepth(security);
 		}
 
 		/// <summary>
-		/// Начать получать сделки (тиковые данные) по инструменту. Новые сделки будут приходить через
-		/// событие <see cref="IConnector.NewTrades"/>.
+		/// РќР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ СЃРґРµР»РєРё (С‚РёРєРѕРІС‹Рµ РґР°РЅРЅС‹Рµ) РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ. РќРѕРІС‹Рµ СЃРґРµР»РєРё Р±СѓРґСѓС‚ РїСЂРёС…РѕРґРёС‚СЊ С‡РµСЂРµР·
+		/// СЃРѕР±С‹С‚РёРµ <see cref="IConnector.NewTrades"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать сделки.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ СЃРґРµР»РєРё.</param>
 		public void RegisterTrades(Security security)
 		{
 			Connector.RegisterTrades(security);
 		}
 
 		/// <summary>
-		/// Остановить получение сделок (тиковые данные) по инструменту.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ СЃРґРµР»РѕРє (С‚РёРєРѕРІС‹Рµ РґР°РЅРЅС‹Рµ) РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение сделок.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ СЃРґРµР»РѕРє.</param>
 		public void UnRegisterTrades(Security security)
 		{
 			Connector.UnRegisterTrades(security);
 		}
 
 		/// <summary>
-		/// Начать получать новую информацию по портфелю.
+		/// РќР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ РїРѕ РїРѕСЂС‚С„РµР»СЋ.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="portfolio">РџРѕСЂС‚С„РµР»СЊ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ.</param>
 		public void RegisterPortfolio(Portfolio portfolio)
 		{
 			Connector.RegisterPortfolio(portfolio);
 		}
 
 		/// <summary>
-		/// Остановить получение новой информации по портфелю.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІРѕР№ РёРЅС„РѕСЂРјР°С†РёРё РїРѕ РїРѕСЂС‚С„РµР»СЋ.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо остановить получение новой информации.</param>
+		/// <param name="portfolio">РџРѕСЂС‚С„РµР»СЊ, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІРѕР№ РёРЅС„РѕСЂРјР°С†РёРё.</param>
 		public void UnRegisterPortfolio(Portfolio portfolio)
 		{
 			Connector.UnRegisterPortfolio(portfolio);
 		}
 
 		/// <summary>
-		/// Начать получать новости.
+		/// РќР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РЅРѕРІРѕСЃС‚Рё.
 		/// </summary>
 		public void RegisterNews()
 		{
@@ -938,7 +938,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Остановить получение новостей.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІРѕСЃС‚РµР№.
 		/// </summary>
 		public void UnRegisterNews()
 		{
@@ -946,105 +946,105 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Запросить текст новости <see cref="BusinessEntities.News.Story"/>. После получения текста будет вызвано событие <see cref="IConnector.NewsChanged"/>.
+		/// Р—Р°РїСЂРѕСЃРёС‚СЊ С‚РµРєСЃС‚ РЅРѕРІРѕСЃС‚Рё <see cref="BusinessEntities.News.Story"/>. РџРѕСЃР»Рµ РїРѕР»СѓС‡РµРЅРёСЏ С‚РµРєСЃС‚Р° Р±СѓРґРµС‚ РІС‹Р·РІР°РЅРѕ СЃРѕР±С‹С‚РёРµ <see cref="IConnector.NewsChanged"/>.
 		/// </summary>
-		/// <param name="news">Новость.</param>
+		/// <param name="news">РќРѕРІРѕСЃС‚СЊ.</param>
 		public void RequestNewsStory(News news)
 		{
 			Connector.RequestNewsStory(news);
 		}
 
 		/// <summary>
-		/// Начать получать лог заявок для инструмента.
+		/// РќР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ Р»РѕРі Р·Р°СЏРІРѕРє РґР»СЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать лог заявок.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ Р»РѕРі Р·Р°СЏРІРѕРє.</param>
 		public void RegisterOrderLog(Security security)
 		{
 			Connector.RegisterOrderLog(security);
 		}
 
 		/// <summary>
-		/// Остановить получение лога заявок для инструмента.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ Р»РѕРіР° Р·Р°СЏРІРѕРє РґР»СЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение лога заявок.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ Р»РѕРіР° Р·Р°СЏРІРѕРє.</param>
 		public void UnRegisterOrderLog(Security security)
 		{
 			Connector.UnRegisterOrderLog(security);
 		}
 
 		/// <summary>
-		/// Начать получать новую информацию (например, <see cref="Security.LastTrade"/> или <see cref="Security.BestBid"/>) по инструменту.
+		/// РќР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ (РЅР°РїСЂРёРјРµСЂ, <see cref="Security.LastTrade"/> РёР»Рё <see cref="Security.BestBid"/>) РїРѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚Сѓ.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°С‡Р°С‚СЊ РїРѕР»СѓС‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ.</param>
 		public void RegisterSecurity(Security security)
 		{
 			Connector.RegisterSecurity(security);
 		}
 
 		/// <summary>
-		/// Остановить получение новой информации.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІРѕР№ РёРЅС„РѕСЂРјР°С†РёРё.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение новой информации.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РЅРµРѕР±С…РѕРґРёРјРѕ РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІРѕР№ РёРЅС„РѕСЂРјР°С†РёРё.</param>
 		public void UnRegisterSecurity(Security security)
 		{
 			Connector.UnRegisterSecurity(security);
 		}
 
 		/// <summary>
-		/// Зарегистрировать заявку на бирже.
+		/// Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ Р·Р°СЏРІРєСѓ РЅР° Р±РёСЂР¶Рµ.
 		/// </summary>
-		/// <param name="order">Заявка, содержащая информацию для регистрации.</param>
+		/// <param name="order">Р—Р°СЏРІРєР°, СЃРѕРґРµСЂР¶Р°С‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЋ РґР»СЏ СЂРµРіРёСЃС‚СЂР°С†РёРё.</param>
 		public void RegisterOrder(Order order)
 		{
 			Connector.RegisterOrder(order);
 		}
 
 		/// <summary>
-		/// Перерегистрировать заявку на бирже.
+		/// РџРµСЂРµСЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ Р·Р°СЏРІРєСѓ РЅР° Р±РёСЂР¶Рµ.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять.</param>
-		/// <param name="newOrder">Новая заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder">Р—Р°СЏРІРєР°, РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ СЃРЅСЏС‚СЊ.</param>
+		/// <param name="newOrder">РќРѕРІР°СЏ Р·Р°СЏРІРєР°, РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ.</param>
 		public void ReRegisterOrder(Order oldOrder, Order newOrder)
 		{
 			Connector.ReRegisterOrder(oldOrder, newOrder);
 		}
 
 		/// <summary>
-		/// Перерегистрировать заявку на бирже.
+		/// РџРµСЂРµСЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ Р·Р°СЏРІРєСѓ РЅР° Р±РёСЂР¶Рµ.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять и на основе нее зарегистрировать новую.</param>
-		/// <param name="price">Цена новой заявки.</param>
-		/// <param name="volume">Объем новой заявки.</param>
-		/// <returns>Новая заявка.</returns>
+		/// <param name="oldOrder">Р—Р°СЏРІРєР°, РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ СЃРЅСЏС‚СЊ Рё РЅР° РѕСЃРЅРѕРІРµ РЅРµРµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РЅРѕРІСѓСЋ.</param>
+		/// <param name="price">Р¦РµРЅР° РЅРѕРІРѕР№ Р·Р°СЏРІРєРё.</param>
+		/// <param name="volume">РћР±СЉРµРј РЅРѕРІРѕР№ Р·Р°СЏРІРєРё.</param>
+		/// <returns>РќРѕРІР°СЏ Р·Р°СЏРІРєР°.</returns>
 		public Order ReRegisterOrder(Order oldOrder, decimal price, decimal volume)
 		{
 			return Connector.ReRegisterOrder(oldOrder, price, volume);
 		}
 
 		/// <summary>
-		/// Отменить заявку на бирже.
+		/// РћС‚РјРµРЅРёС‚СЊ Р·Р°СЏРІРєСѓ РЅР° Р±РёСЂР¶Рµ.
 		/// </summary>
-		/// <param name="order">Заявка, которую нужно отменять.</param>
+		/// <param name="order">Р—Р°СЏРІРєР°, РєРѕС‚РѕСЂСѓСЋ РЅСѓР¶РЅРѕ РѕС‚РјРµРЅСЏС‚СЊ.</param>
 		public void CancelOrder(Order order)
 		{
 			Connector.CancelOrder(order);
 		}
 
 		/// <summary>
-		/// Отменить группу заявок на бирже по фильтру.
+		/// РћС‚РјРµРЅРёС‚СЊ РіСЂСѓРїРїСѓ Р·Р°СЏРІРѕРє РЅР° Р±РёСЂР¶Рµ РїРѕ С„РёР»СЊС‚СЂСѓ.
 		/// </summary>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true"/>, РµСЃР»Рё РЅСѓР¶РЅРѕ РѕС‚РјРµРЅРёС‚СЊ С‚РѕР»СЊРєРѕ СЃС‚РѕРї-Р·Р°СЏРІРєРё, false - РµСЃР»Рё С‚РѕР»СЊРєРѕ РѕР±С‹С‡РЅС‹Р№ Рё null - РµСЃР»Рё РѕР±Р° С‚РёРїР°.</param>
+		/// <param name="portfolio">РџРѕСЂС‚С„РµР»СЊ. Р•СЃР»Рё Р·РЅР°С‡РµРЅРёРµ СЂР°РІРЅРѕ null, С‚Рѕ РїРѕСЂС‚С„РµР»СЊ РЅРµ РїРѕРїР°РґР°РµС‚ РІ С„РёР»СЊС‚СЂ СЃРЅСЏС‚РёСЏ Р·Р°СЏРІРѕРє.</param>
+		/// <param name="direction">РќР°РїСЂР°РІР»РµРЅРёРµ Р·Р°СЏРІРєРё. Р•СЃР»Рё Р·РЅР°С‡РµРЅРёРµ СЂР°РІРЅРѕ null, С‚Рѕ РЅР°РїСЂР°РІР»РµРЅРёРµ РЅРµ РїРѕРїР°РґР°РµС‚ РІ С„РёР»СЊС‚СЂ СЃРЅСЏС‚РёСЏ Р·Р°СЏРІРѕРє.</param>
+		/// <param name="board">РўРѕСЂРіРѕРІР°СЏ РїР»РѕС‰Р°РґРєР°. Р•СЃР»Рё Р·РЅР°С‡РµРЅРёРµ СЂР°РІРЅРѕ null, С‚Рѕ РїР»РѕС‰Р°РґРєР° РЅРµ РїРѕРїР°РґР°РµС‚ РІ С„РёР»СЊС‚СЂ СЃРЅСЏС‚РёСЏ Р·Р°СЏРІРѕРє.</param>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚. Р•СЃР»Рё Р·РЅР°С‡РµРЅРёРµ СЂР°РІРЅРѕ null, С‚Рѕ РёРЅСЃС‚СЂСѓРјРµРЅС‚ РЅРµ РїРѕРїР°РґР°РµС‚ РІ С„РёР»СЊС‚СЂ СЃРЅСЏС‚РёСЏ Р·Р°СЏРІРѕРє.</param>
 		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			Connector.CancelOrders(isStopOrder, portfolio, direction, board, security);
 		}
 
 		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
+		/// Р—Р°РїСѓСЃС‚РёС‚СЊ СЌРєСЃРїРѕСЂС‚ РґР°РЅРЅС‹С… РёР· С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјС‹ РІ РїСЂРѕРіСЂР°РјРјСѓ (РїРѕР»СѓС‡РµРЅРёРµ РїРѕСЂС‚С„РµР»РµР№, РёРЅСЃС‚СЂСѓРјРµРЅС‚РѕРІ, Р·Р°СЏРІРѕРє Рё С‚.Рґ.).
 		/// </summary>
 		public void StartExport()
 		{
@@ -1052,7 +1052,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="IConnector.StartExport"/>.
+		/// РћСЃС‚Р°РЅРѕРІРёС‚СЊ СЌРєСЃРїРѕСЂС‚ РґР°РЅРЅС‹С… РёР· С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјС‹ РІ РїСЂРѕРіСЂР°РјРјСѓ, Р·Р°РїСѓС‰РµРЅРЅС‹Р№ С‡РµСЂРµР· <see cref="IConnector.StartExport"/>.
 		/// </summary>
 		public void StopExport()
 		{
@@ -1060,7 +1060,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие изменения инструмента.
+		/// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°.
 		/// </summary>
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
 
@@ -1070,48 +1070,48 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить значение маркет-данных для инструмента.
+		/// РџРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ РјР°СЂРєРµС‚-РґР°РЅРЅС‹С… РґР»СЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="field">Поле маркет-данных.</param>
-		/// <returns>Значение поля. Если данных нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚.</param>
+		/// <param name="field">РџРѕР»Рµ РјР°СЂРєРµС‚-РґР°РЅРЅС‹С….</param>
+		/// <returns>Р—РЅР°С‡РµРЅРёРµ РїРѕР»СЏ. Р•СЃР»Рё РґР°РЅРЅС‹С… РЅРµС‚, С‚Рѕ Р±СѓРґРµС‚ РІРѕР·РІСЂР°С‰РµРЅРѕ <see langword="null"/>.</returns>
 		public object GetSecurityValue(Security security, Level1Fields field)
 		{
 			return Connector.GetSecurityValue(security, field);
 		}
 
 		/// <summary>
-		/// Получить набор доступных полей <see cref="Level1Fields"/>, для которых есть маркет-данные для инструмента.
+		/// РџРѕР»СѓС‡РёС‚СЊ РЅР°Р±РѕСЂ РґРѕСЃС‚СѓРїРЅС‹С… РїРѕР»РµР№ <see cref="Level1Fields"/>, РґР»СЏ РєРѕС‚РѕСЂС‹С… РµСЃС‚СЊ РјР°СЂРєРµС‚-РґР°РЅРЅС‹Рµ РґР»СЏ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Набор доступных полей.</returns>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚.</param>
+		/// <returns>РќР°Р±РѕСЂ РґРѕСЃС‚СѓРїРЅС‹С… РїРѕР»РµР№.</returns>
 		public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 		{
 			return Connector.GetLevel1Fields(security);
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		/// РќР°Р№С‚Рё РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹, СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ С„РёР»СЊС‚СЂСѓ <paramref name="criteria"/>.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="criteria">РРЅСЃС‚СЂСѓРјРµРЅС‚, РїРѕР»СЏ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґСѓС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РІ РєР°С‡РµСЃС‚РІРµ С„РёР»СЊС‚СЂР°.</param>
+		/// <returns>РќР°Р№РґРµРЅРЅС‹Рµ РёРЅСЃС‚СЂСѓРјРµРЅС‚С‹.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			return Connector.Lookup(criteria);
 		}
 
 		/// <summary>
-		/// Получить внутренний идентификатор торговой системы.
+		/// РџРѕР»СѓС‡РёС‚СЊ РІРЅСѓС‚СЂРµРЅРЅРёР№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјС‹.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Внутренний идентификатор торговой системы.</returns>
+		/// <param name="security">РРЅСЃС‚СЂСѓРјРµРЅС‚.</param>
+		/// <returns>Р’РЅСѓС‚СЂРµРЅРЅРёР№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјС‹.</returns>
 		public object GetNativeId(Security security)
 		{
 			return Connector.GetNativeId(security);
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// РћСЃРІРѕР±РѕРґРёС‚СЊ Р·Р°РЅСЏС‚С‹Рµ СЂРµСЃСѓСЂСЃС‹.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

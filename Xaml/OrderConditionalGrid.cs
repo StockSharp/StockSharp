@@ -17,7 +17,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Таблица, отображающая условные заявки (<see cref="Order"/>).
+	/// РўР°Р±Р»РёС†Р°, РѕС‚РѕР±СЂР°Р¶Р°СЋС‰Р°СЏ СѓСЃР»РѕРІРЅС‹Рµ Р·Р°СЏРІРєРё (<see cref="Order"/>).
 	/// </summary>
 	public class OrderConditionalGrid : OrderGrid
 	{
@@ -28,7 +28,7 @@ namespace StockSharp.Xaml
 		private readonly IList<DataGridColumn> _serializableColumns;
 
 		/// <summary>
-		/// Сохраняемые колонки.
+		/// РЎРѕС…СЂР°РЅСЏРµРјС‹Рµ РєРѕР»РѕРЅРєРё.
 		/// </summary>
 		protected override IList<DataGridColumn> SerializableColumns
 		{
@@ -36,7 +36,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Создать <see cref="OrderConditionalGrid"/>.
+		/// РЎРѕР·РґР°С‚СЊ <see cref="OrderConditionalGrid"/>.
 		/// </summary>
 		public OrderConditionalGrid()
 		{
@@ -44,9 +44,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Метод вызывается при добавлении новой заявки.
+		/// РњРµС‚РѕРґ РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё РЅРѕРІРѕР№ Р·Р°СЏРІРєРё.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Р—Р°СЏРІРєР°.</param>
 		protected override void OnOrderAdded(Order order)
 		{
 			if (order.Type != OrderTypes.Conditional)
@@ -101,9 +101,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// РЎРѕС…СЂР°РЅРёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">РҐСЂР°РЅРёР»РёС‰Рµ РЅР°СЃС‚СЂРѕРµРє.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -112,9 +112,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Р—Р°РіСЂСѓР·РёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">РҐСЂР°РЅРёР»РёС‰Рµ РЅР°СЃС‚СЂРѕРµРє.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			_conditionTypes.Clear();
