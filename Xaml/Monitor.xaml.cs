@@ -53,7 +53,7 @@ namespace StockSharp.Xaml
 			_logInfo.Add(SourcesTree.CoreRootNode.Key, new NodeInfo(SourcesTree.CoreRootNode));
 			_logInfo.Add(SourcesTree.StrategyRootNode.Key, new NodeInfo(SourcesTree.StrategyRootNode));
 
-			SourcesTree.SelectedItem = SourcesTree.StrategyRootNode;
+			SourcesTree.SelectedItem = SourcesTree.CoreRootNode;
 		}
 
 		/// <summary>
@@ -71,10 +71,10 @@ namespace StockSharp.Xaml
 			var tree = monitor.SourcesTree;
 
 			if (monitor._showStrategies)
-				((IList<LogSourceNode>)tree.Items).Add(tree.StrategyRootNode);
+				tree.CoreRootNode.ChildNodes.Add(tree.StrategyRootNode);
 			else
 			{
-				((IList<LogSourceNode>)tree.Items).Remove(tree.StrategyRootNode);
+				tree.CoreRootNode.ChildNodes.Remove(tree.StrategyRootNode);
 				tree.SelectedItem = tree.CoreRootNode;
 			}
 		}

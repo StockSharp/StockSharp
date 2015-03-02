@@ -22,9 +22,11 @@ namespace StockSharp.Xaml
 			base.ObserveChildItems = true;
 
 			_coreRootNode = new LogSourceNode(Guid.NewGuid(), LocalizedStrings.Str1559, null);
-			_strategyRootNode = new LogSourceNode(Guid.NewGuid(), LocalizedStrings.Str1355, null);
+			_strategyRootNode = new LogSourceNode(Guid.NewGuid(), LocalizedStrings.Str1355, _coreRootNode);
 
-			base.Items = new ObservableCollection<LogSourceNode> { _coreRootNode, _strategyRootNode };
+			base.Items = new ObservableCollection<LogSourceNode> { _coreRootNode };
+
+			_coreRootNode.ChildNodes.Add(_strategyRootNode);
 		}
 
 		private readonly LogSourceNode _strategyRootNode;
