@@ -1526,7 +1526,6 @@ namespace StockSharp.Algo.Testing
 							securityEmulator.Process(boardMsg);
 					}
 					
-
 					break;
 				}
 
@@ -1620,6 +1619,11 @@ namespace StockSharp.Algo.Testing
 				var emulator = new SecurityMarketEmulator(this, securityId) { Parent = this };
 
 				_securityEmulatorsByBoard.SafeAdd(securityId.BoardCode).Add(emulator);
+
+				var board = _boardDefinitions.TryGetValue(securityId.BoardCode);
+
+				if (board != null)
+					emulator.Process(board);
 
 				return emulator;
 			});
