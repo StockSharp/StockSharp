@@ -770,10 +770,10 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _minPrice;
+		private decimal _minPrice = 0.01m;
 
 		/// <summary>
-		/// Нижний лимит цены. По-умолчанию равно 0.
+		/// Нижний лимит цены. По-умолчанию равно 0.01.
 		/// </summary>
 		//[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceMinKey)]
