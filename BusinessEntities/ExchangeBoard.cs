@@ -18,7 +18,6 @@ namespace StockSharp.BusinessEntities
 	using MoreLinq;
 
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	/// <summary>

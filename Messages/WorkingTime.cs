@@ -81,8 +81,13 @@ namespace StockSharp.Messages
 			set { _specialHolidays = CheckDates(value); }
 		}
 
-		private static DateTime[] CheckDates(DateTime[] dates)
+		private bool _checkDates = true;
+
+		private DateTime[] CheckDates(DateTime[] dates)
 		{
+			if (!_checkDates)
+				return dates;
+
 			if (dates == null)
 				throw new ArgumentNullException("dates");
 
@@ -100,12 +105,17 @@ namespace StockSharp.Messages
 		/// <returns>Копия объекта.</returns>
 		public override WorkingTime Clone()
 		{
-			return new WorkingTime
+			var clone = new WorkingTime
 			{
+				_checkDates = false,
 				Periods = Periods.Select(t => t.Clone()).ToArray(),
 				SpecialWorkingDays = SpecialWorkingDays.ToArray(),
 				SpecialHolidays = SpecialHolidays.ToArray()
 			};
+
+			clone._checkDates = true;
+
+			return clone;
 		}
 
 		/// <summary>
