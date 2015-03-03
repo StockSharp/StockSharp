@@ -11564,12 +11564,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Opposite
+		/// Following
 		/// </summary>
 		public const string Str976Key = "Str976";
 
 		/// <summary>
-		/// Opposite
+		/// Following
 		/// </summary>
 		public static string Str976
 		{

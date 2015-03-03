@@ -892,7 +892,7 @@ Str972;Positions;Позиции
 Str973;Max short position;Max короткая позиция
 Str974;Maximum short position size.;Максимальный размер короткой позиции.
 Str975;Opposite;Встречная
-Str976;Opposite;Попутная
+Str976;Following;Попутная
 Str977;Connection settings;Настройки подключения
 Str978;Mechanism for tracking connections with the trading system settings.;Настройки механизма отслеживания подключения с торговом системой.
 Settings;Settings;Настройки
