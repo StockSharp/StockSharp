@@ -885,6 +885,9 @@ namespace StockSharp.Algo.Testing
 
 			private void ProcessCandleTrades(Message message, ICollection<Message> result)
 			{
+				if (_candleInfo.Count == 0)
+					return;
+
 				foreach (var pair in _candleInfo.ToArray())
 				{
 					if (pair.Key < message.LocalTime)
@@ -903,6 +906,9 @@ namespace StockSharp.Algo.Testing
 
 			private void ProcessExpirableOrders(Message message, ICollection<Message> result)
 			{
+				if (_expirableOrders.Count == 0)
+					return;
+
 				var diff = message.LocalTime - _prevTime;
 
 				foreach (var pair in _expirableOrders.ToArray())
@@ -1046,6 +1052,9 @@ namespace StockSharp.Algo.Testing
 
 			private void ProcessPendingExecutions(Message message, ICollection<Message> result)
 			{
+				if (_pendingExecutions.Count == 0)
+					return;
+
 				var diff = message.LocalTime - _prevTime;
 
 				foreach (var pair in _pendingExecutions.ToArray())
