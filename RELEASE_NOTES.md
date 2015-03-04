@@ -7,6 +7,18 @@ StockSharp is a trading and algorithmic trading platform (stock markets, forex, 
 
 What's New
 ----------
+###v4.2.68:
+* (fix) Quik lua. Turned off license check.
+* (fix) Protective strategies. Fix price calc with big offset value.
+* (fix) Fix http://stocksharp.com/forum/yaf_postsm34658_Kotirovaniie.aspx#post34658
+* (feature) Security.MinPrice = 0.01 by default.
+* (feature) (MarketEmu.ProcessTime performance improve.
+* (feature) WorkingTime.Clone performance improve.
+* (fix) MarketEmu. Board update fix.
+* (feature) Monitor. StrategyRoot is sub node CoreRoot.
+* (fix) Connector.ClearCache fix
+* (fix) SecurityEditor. Update text fix.
+
 ###v4.2.67:
 * (feature) Ecng update.
 

@@ -8,7 +8,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Gets company information.
 		/// </summary>
-		public const string Company = "StockSharp";
+		public const string Company = "StockSharp LLC";
 
 		/// <summary>
 		/// Gets product information.
@@ -28,6 +28,6 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Gets version information.
 		/// </summary>
-		public const string Version = "4.2.67.0";
+		public const string Version = "4.2.68.0";
 	}
 }
