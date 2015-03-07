@@ -24,8 +24,8 @@ Free support on [the forum](http://stocksharp.com/forum/). Commercial support in
 
 ## Development stage
 
-Current stage of all components - [RELEASE_STAGES.md](../master/RELEASE_STAGES.md).
-Release notes - [RELEASE_NOTES.md](../master/RELEASE_NOTES.md).
+Current stage of all components - [RELEASE_STAGES.md](../master/_ReleaseNotes/RELEASE_STAGES.md).
+Release notes - [RELEASE_NOTES.md](../master/_ReleaseNotes/RELEASE_NOTES.md).
 
 ## License
 
