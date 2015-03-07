@@ -54,10 +54,10 @@ namespace StockSharp.LicenseTool
 
 		private void EnableButton()
 		{
-			DoCtrl.IsEnabled = !HardwareIdCtrl.Text.IsEmpty() && !LoginCtrl.Text.IsEmpty() && !PasswordCtrl.Password.IsEmpty();
+			Generate.IsEnabled = !HardwareIdCtrl.Text.IsEmpty() && !LoginCtrl.Text.IsEmpty() && !PasswordCtrl.Password.IsEmpty();
 		}
 
-		private void DoCtrlClick(object sender, RoutedEventArgs e)
+		private void Generate_OnClick(object sender, RoutedEventArgs e)
 		{
 			var worker = new BackgroundWorker();
 

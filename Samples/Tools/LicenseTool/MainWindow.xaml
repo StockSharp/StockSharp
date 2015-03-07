@@ -5,7 +5,8 @@
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		Loaded="WindowLoaded"
-        Title="{x:Static loc:LocalizedStrings.LicenseStockSharp}" Height="170" Width="550" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="{x:Static loc:LocalizedStrings.LicenseStockSharp}"
+		Height="160" Width="550" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
 	<Window.CommandBindings>
 		<CommandBinding Command="ApplicationCommands.Copy" CanExecute="CanExecuteCopyId" Executed="ExecutedCopyId" />
@@ -18,8 +19,8 @@
 	<xctk:BusyIndicator x:Name="BusyIndicator" IsBusy="True" BusyContent="{x:Static loc:LocalizedStrings.RetrievingHardwareId}">
 		<Grid Margin="5,5,5,5">
 			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="85" />
 				<ColumnDefinition Width="80" />
-				<ColumnDefinition Width="60" />
 				<ColumnDefinition Width="*" />
 			</Grid.ColumnDefinitions>
 
@@ -46,24 +47,37 @@
 				<Run Text="{x:Static loc:LocalizedStrings.Password}" />:
 			</TextBlock>
 			<PasswordBox x:Name="PasswordCtrl" Grid.Row="2" Grid.Column="2" PasswordChanged="PasswordCtrlPasswordChanged" />
-			
-			<StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-				<TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Width="100"><Run Text="{x:Static loc:LocalizedStrings.HddId}"/>:</TextBlock>
+
+			<TextBlock Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+				<Run Text="{x:Static loc:LocalizedStrings.HddId}"/>:
+			</TextBlock>
+
+			<StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
 				<TextBox x:Name="HardwareIdCtrl" IsReadOnly="True" Width="285" Height="24" />
-				<Button Command="ApplicationCommands.Copy" ToolTip="{x:Static loc:LocalizedStrings.Copy}" Margin="5,0,0,0">
+				<Button Command="ApplicationCommands.Copy" ToolTip="{x:Static loc:LocalizedStrings.XamlStr660}" Margin="5,0,0,0">
 					<ex:BmpImage Source="Actions-clipboard-icon.png"/>
 				</Button>
 			</StackPanel>
 
-			<Button x:Name="DoCtrl" IsEnabled="False" Grid.Row="6" Grid.Column="2" Width="150" Click="DoCtrlClick"><TextBlock Text="{x:Static loc:LocalizedStrings.GetLicense}"/></Button>
+			<Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" MinWidth="120" />
+					<ColumnDefinition Width="Auto" MinWidth="100" />
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
 
-			<TextBlock Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0">
-				<Hyperlink x:Name="LicenseView" Click="LicenseViewClick"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr741}"/></Hyperlink>
-			</TextBlock>
+				<TextBlock Grid.Column="0">
+					<Hyperlink x:Name="LicenseView" Click="LicenseViewClick"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr741}"/></Hyperlink>
+				</TextBlock>
 
-            <TextBlock Grid.Row="6" Grid.Column="2">
-				<Hyperlink Click="ProxySettingsClick"><TextBlock Text="{x:Static loc:LocalizedStrings.NetworkSettings}"/></Hyperlink>
-            </TextBlock>
-        </Grid>
+				<TextBlock Grid.Column="1">
+					<Hyperlink Click="ProxySettingsClick"><TextBlock Text="{x:Static loc:LocalizedStrings.NetworkSettings}"/></Hyperlink>
+				</TextBlock>
+
+				<Button x:Name="Generate" IsEnabled="False" IsDefault="True" Grid.Column="2" Width="150" Click="Generate_OnClick">
+					<TextBlock Text="{x:Static loc:LocalizedStrings.GenerateLicense}"/>
+				</Button>
+			</Grid>
+		</Grid>
 	</xctk:BusyIndicator>
 </Window>

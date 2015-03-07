@@ -3881,7 +3881,7 @@ SubscribeNews;Subscribe news;Получать новости
 RetrievingHardwareId;Retrieving hardware id...;Получение id компьютера...
 XamlStr500;Get for a date;Получить для даты
 GetVerificationCode;Get verification code;Получить код верификации
-GetLicense;Get a license;Получить лицензию
+GenerateLicense;Generate license;Получить лицензию
 XamlStr503;Get full list of securities from IQFeed website;Получить полный список инструментов с сайта IQFeed
 Users;Users;Пользователи
 XamlStr509;Portfolios and connections;Портфели и подключения
