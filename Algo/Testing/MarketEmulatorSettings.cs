@@ -6,13 +6,11 @@ namespace StockSharp.Algo.Testing
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-
+	using StockSharp.Localization;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Настройки эмулятора биржи.

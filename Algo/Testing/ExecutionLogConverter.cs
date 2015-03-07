@@ -16,6 +16,7 @@ namespace StockSharp.Algo.Testing
 	class ExecutionLogConverter
 	{
 		private readonly Random _volumeRandom = new Random(TimeHelper.Now.Millisecond);
+		private readonly Random _priceRandom = new Random(TimeHelper.Now.Millisecond);
 		private readonly SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> _bids;
 		private readonly SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> _asks;
 		private decimal _currSpreadPrice;
@@ -194,9 +195,39 @@ namespace StockSharp.Algo.Testing
 
 				retVal.Add(CreateMessage(message.LocalTime, originSide, message.TradePrice, message.Volume + (_securityDefinition.VolumeStep * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
 
-				var oppositePrice = message.TradePrice + _settings.SpreadSize * _securityDefinition.PriceStep * (originSide == Sides.Buy ? 1 : -1);
-				if ((originSide == Sides.Buy && bestAsk.Key > oppositePrice) || (originSide == Sides.Sell && bestBid.Key < oppositePrice))
-					retVal.Add(CreateMessage(message.LocalTime, originSide.Invert(), oppositePrice, message.Volume));
+				var spreadStep = _settings.SpreadSize * _securityDefinition.PriceStep;
+
+				// try to fill depth gaps
+
+				var newBestPrice = message.TradePrice + spreadStep;
+
+				while (true)
+				{
+					var diff = bestAsk.Key - newBestPrice;
+
+					if (diff > 0)
+					{
+						retVal.Add(CreateMessage(message.LocalTime, Sides.Sell, newBestPrice, 0));
+						newBestPrice += spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
+					}
+					else
+						break;
+				}
+
+				newBestPrice = message.TradePrice - spreadStep;
+
+				while (true)
+				{
+					var diff = newBestPrice - bestBid.Key;
+
+					if (diff > 0)
+					{
+						retVal.Add(CreateMessage(message.LocalTime, Sides.Buy, newBestPrice, 0));
+						newBestPrice -= spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
+					}
+					else
+						break;
+				}
 
 				retVal.Add(CreateMessage(message.LocalTime, originSide.Invert(), message.TradePrice, message.Volume, tif: TimeInForce.MatchOrCancel));
 
