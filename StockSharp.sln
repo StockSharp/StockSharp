@@ -299,9 +299,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transaq", "Connectors\Trans
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo", "Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSterling", "Samples\Sterling\SampleSterling\SampleSterling.csproj", "{A6B6041F-B174-43C9-89B2-53545C1303F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSterlingPublic", "Samples\Sterling\SampleSterling\SampleSterlingPublic.csproj", "{A6B6041F-B174-43C9-89B2-53545C1303F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCQG", "Samples\CQG\SampleCQG\SampleCQG.csproj", "{0E498B61-BE10-480A-94A4-E25B77E3FE82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleCQGPublic", "Samples\CQG\SampleCQG\SampleCQGPublic.csproj", "{0E498B61-BE10-480A-94A4-E25B77E3FE82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractiveBrokers", "Connectors\InteractiveBrokers\InteractiveBrokers.csproj", "{F17D780E-6F82-40FD-84E1-C4EB09853BBD}"
 EndProject
