@@ -505,9 +505,9 @@
       <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
       <Name>Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Xaml\XamlPublic.csproj">
+    <ProjectReference Include="..\..\Xaml\Xaml.csproj">
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
-      <Name>XamlPublic</Name>
+      <Name>Xaml</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core\CorePublic.csproj">
       <Project>{95ca16e0-0a47-43a3-aab7-7e0803e817ca}</Project>
