@@ -109,7 +109,7 @@
     <PostBuildEvent>call ..\..\..\plugins.bat $(ProjectName) $(ConfigurationName)
 
 copy StockSharp.Oanda.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Oanda.dll
-copy RestSharp.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\RestSharp.dll</PostBuildEvent>
+copy ..\..\..\..\..\References\RestSharp.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\RestSharp.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
