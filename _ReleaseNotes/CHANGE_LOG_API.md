@@ -1,23 +1,16 @@
-StockSharp Release Notes
+StockSharp API Change log
 ========================
-
-Welcome to StockSharp
----------------------
-StockSharp is a trading and algorithmic trading platform (stock markets, forex, bincoins and options).
-
-What's New
-----------
 ###v4.2.68:
-* (fix) Quik lua. Turned off license check.
-* (fix) Protective strategies. Fix price calc with big offset value.
-* (fix) Fix http://stocksharp.com/forum/yaf_postsm34658_Kotirovaniie.aspx#post34658
+* (bug) Quik lua. Turned off license check.
+* (bug) Protective strategies. Fix price calc with big offset value.
+* (bug) Fix http://stocksharp.com/forum/yaf_postsm34658_Kotirovaniie.aspx#post34658
 * (feature) Security.MinPrice = 0.01 by default.
 * (feature) (MarketEmu.ProcessTime performance improve.
 * (feature) WorkingTime.Clone performance improve.
-* (fix) MarketEmu. Board update fix.
+* (bug) MarketEmu. Board update fix.
 * (feature) Monitor. StrategyRoot is sub node CoreRoot.
-* (fix) Connector.ClearCache fix
-* (fix) SecurityEditor. Update text fix.
+* (bug) Connector.ClearCache fix
+* (bug) SecurityEditor. Update text fix.
 
 ###v4.2.67:
 * (feature) Ecng update.
@@ -131,3 +124,6 @@ What's New
 * (bug) Building market depth from OL fixes
 * (feature) Zero or negative prices for spreads in Storage
 * (feature) ExpirationDate added to OrderWindow
+
+###v4.2.0-4.2.43
+Available on [forum](http://stocksharp.com/forum/yaf_postst4219_S--API-4-2.aspx)
