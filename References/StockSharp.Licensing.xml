@@ -396,5 +396,28 @@
             Текущие лицензии на компьютере.
             </summary>
         </member>
+        <member name="T:StockSharp.Licensing.Xaml.LicensePanel">
+            <summary>
+            Графический компонент для представления информации о <see cref="T:StockSharp.Licensing.License"/>.
+            </summary>
+            <summary>
+            LicensePanel
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.Xaml.LicensePanel.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Licensing.Xaml.LicensePanel"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.Xaml.LicensePanel.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.Xaml.LicensePanel.Licenses">
+            <summary>
+            Лицензии.
+            </summary>
+        </member>
     </members>
 </doc>

@@ -325,10 +325,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="LicensePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MarketDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -524,9 +520,6 @@
       <DependentUpon>OrderLogGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="ISecurityWindow.cs" />
-    <Compile Include="LicensePanel.xaml.cs">
-      <DependentUpon>LicensePanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MarketDataGrid.xaml.cs">
       <DependentUpon>MarketDataGrid.xaml</DependentUpon>
     </Compile>

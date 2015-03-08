@@ -1,5 +1,10 @@
 StockSharp API Change log
 ========================
+###v4.2.69:
+* (feature) LicensePanel. Xaml -> Licensing
+* (feature) MarketEmu. Depth fill improve.
+* (bug) LicenseTool fixes.
+
 ###v4.2.68:
 * (bug) Quik lua. Turned off license check.
 * (bug) Protective strategies. Fix price calc with big offset value.
