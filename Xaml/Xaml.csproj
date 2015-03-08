@@ -658,10 +658,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\StockSharp %28GitLab%29\Licensing\Licensing.csproj">
-      <Project>{baffe041-f00c-4af5-8871-1c4578953352}</Project>
-      <Name>Licensing</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
       <Name>Algo</Name>
