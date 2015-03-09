@@ -3929,12 +3929,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Profitability
+		/// Yield
 		/// </summary>
 		public const string Str321Key = "Str321";
 
 		/// <summary>
-		/// Profitability
+		/// Yield
 		/// </summary>
 		public static string Str321
 		{

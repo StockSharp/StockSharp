@@ -66,6 +66,7 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr830}" Binding="{Binding Path=HighPrice}" SortMemberPath="HighPrice" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr831}" Binding="{Binding Path=LowPrice}" SortMemberPath="LowPrice" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.ClosingPrice}" Binding="{Binding Path=ClosePrice}" SortMemberPath="ClosePrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Volume}" Binding="{Binding Path=Volume}" SortMemberPath="Volume" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.PriceMin}" Binding="{Binding Path=MinPrice}" SortMemberPath="MinPrice" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.PriceMax}" Binding="{Binding Path=MaxPrice}" SortMemberPath="MaxPrice" />
@@ -99,6 +100,15 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr490}" Binding="{Binding Path=AsksVolume}" SortMemberPath="AsksVolume" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr577}" Binding="{Binding Path=BidsCount}" SortMemberPath="BidsCount" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr576}" Binding="{Binding Path=AsksCount}" SortMemberPath="AsksCount" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.TradesOf}" Binding="{Binding Path=TradesCount}" SortMemberPath="TradesCount" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str319}" Binding="{Binding Path=HighBidPrice}" SortMemberPath="HighBidPrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str320}" Binding="{Binding Path=LowAskPrice}" SortMemberPath="LowAskPrice" />
+
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str321}" Binding="{Binding Path=Yield}" SortMemberPath="Yield" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="VWAP" Binding="{Binding Path=VWAP}" SortMemberPath="VWAP" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str312}" Binding="{Binding Path=SettlementPrice}" SortMemberPath="SettlementPrice" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.AveragePrice}" Binding="{Binding Path=AveragePrice}" SortMemberPath="AveragePrice" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="SEDOL" Binding="{Binding Path=ExternalId.Sedol}" SortMemberPath="ExternalId.Sedol" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="CUSIP" Binding="{Binding Path=ExternalId.Cusip}" SortMemberPath="ExternalId.Cusip" />

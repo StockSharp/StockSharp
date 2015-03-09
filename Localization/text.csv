@@ -300,7 +300,7 @@ Str317;Rho;Ро
 Str318;Accrued Coupon Interest;НКД
 Str319;Bid (max);Бид (макс)
 Str320;Ask (min);Оффер (мин)
-Str321;Profitability;Доходность
+Str321;Yield;Доходность
 Str322;Time of last trade;Время последней сделки
 Str323;Number of trades;Количество сделок
 Str325;Last trade ID;Идентификатор последней сделки
