@@ -6,6 +6,7 @@ namespace StockSharp.Quik.Lua
 	using System.IO;
 	using System.Reflection;
 	using System.Security;
+	using SystemProcess = System.Diagnostics.Process;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -20,8 +21,6 @@ namespace StockSharp.Quik.Lua
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-
-	using SystemProcess = System.Diagnostics.Process;
 
 	/// <summary>
 	/// FIX сервер, запускающийся LUA.
@@ -571,7 +570,10 @@ namespace StockSharp.Quik.Lua
 			_fixServer = new FixServerEx((l, p) =>
 			{
 				if (Login.IsEmpty() || (l.CompareIgnoreCase(Login) && p == Password))
+				{
+					_prevLevel1.Clear();
 					return Tuple.Create(TimeSpan.FromMilliseconds(100), FixClientRoles.Admin);
+				}
 
 				return null;
 			}, _transactionAdapter, _marketDataAdapter);
