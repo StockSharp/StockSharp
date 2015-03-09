@@ -30,7 +30,7 @@
 		{
 			InitializeComponent();
 
-			SecurityProvider = ConfigManager.TryGetService<FilterableSecurityProvider>();
+			SecurityProvider = GetSecurityProvider();
 
 			if (SecurityProvider == null)
 			{
