@@ -564,7 +564,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _openPrice;
+		private decimal? _openPrice;
 
 		/// <summary>
 		/// Первая цена сделки за сессию.
@@ -578,7 +578,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(11)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal OpenPrice
+		public decimal? OpenPrice
 		{
 			get { return _openPrice; }
 			set
@@ -591,7 +591,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _closePrice;
+		private decimal? _closePrice;
 
 		/// <summary>
 		/// Последняя цена сделки за предыдущую сессию.
@@ -605,7 +605,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(14)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal ClosePrice
+		public decimal? ClosePrice
 		{
 			get { return _closePrice; }
 			set
@@ -618,7 +618,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _lowPrice;
+		private decimal? _lowPrice;
 
 		/// <summary>
 		/// Наименьшая цена сделки за сессию.
@@ -632,7 +632,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(13)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal LowPrice
+		public decimal? LowPrice
 		{
 			get { return _lowPrice; }
 			set
@@ -645,7 +645,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _highPrice;
+		private decimal? _highPrice;
 
 		/// <summary>
 		/// Наивысшая цена сделки за сессию.
@@ -659,7 +659,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(12)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal HighPrice
+		public decimal? HighPrice
 		{
 			get { return _highPrice; }
 			set
@@ -822,7 +822,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _marginBuy;
+		private decimal? _marginBuy;
 
 		/// <summary>
 		/// Гарантийное обеспечение на покупку.
@@ -835,7 +835,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal MarginBuy
+		public decimal? MarginBuy
 		{
 			get { return _marginBuy; }
 			set
@@ -848,7 +848,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _marginSell;
+		private decimal? _marginSell;
 
 		/// <summary>
 		/// Гарантийное обеспечение на продажу.
@@ -861,7 +861,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal MarginSell
+		public decimal? MarginSell
 		{
 			get { return _marginSell; }
 			set
@@ -1179,7 +1179,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _bidsVolume;
+		private decimal? _bidsVolume;
 
 		/// <summary>
 		/// Суммарный объем во всех заявках на покупку.
@@ -1193,7 +1193,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(6)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal BidsVolume
+		public decimal? BidsVolume
 		{
 			get { return _bidsVolume; }
 			set
@@ -1203,7 +1203,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private int _bidsCount;
+		private int? _bidsCount;
 
 		/// <summary>
 		/// Количество заявок на покупку.
@@ -1217,7 +1217,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(8)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public int BidsCount
+		public int? BidsCount
 		{
 			get { return _bidsCount; }
 			set
@@ -1227,7 +1227,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _asksVolume;
+		private decimal? _asksVolume;
 
 		/// <summary>
 		/// Суммарный объем во всех заявках на продажу.
@@ -1241,7 +1241,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(7)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal AsksVolume
+		public decimal? AsksVolume
 		{
 			get { return _asksVolume; }
 			set
@@ -1251,7 +1251,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private int _asksCount;
+		private int? _asksCount;
 
 		/// <summary>
 		/// Количество заявок на продажу.
@@ -1265,7 +1265,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(9)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public int AsksCount
+		public int? AsksCount
 		{
 			get { return _asksCount; }
 			set
@@ -1275,7 +1275,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private int _tradesCount;
+		private int? _tradesCount;
 
 		/// <summary>
 		/// Количество сделок.
@@ -1289,7 +1289,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(10)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public int TradesCount
+		public int? TradesCount
 		{
 			get { return _tradesCount; }
 			set
@@ -1299,7 +1299,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _highBidPrice;
+		private decimal? _highBidPrice;
 
 		/// <summary>
 		/// Максимальный бид за сессию.
@@ -1313,7 +1313,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(4)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal HighBidPrice
+		public decimal? HighBidPrice
 		{
 			get { return _highBidPrice; }
 			set
@@ -1323,7 +1323,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _lowAskPrice;
+		private decimal? _lowAskPrice;
 
 		/// <summary>
 		/// Минимальный оффер за сессию.
@@ -1337,7 +1337,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(5)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal LowAskPrice
+		public decimal? LowAskPrice
 		{
 			get { return _lowAskPrice; }
 			set
@@ -1347,7 +1347,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _yield;
+		private decimal? _yield;
 
 		/// <summary>
 		/// Доходность.
@@ -1360,7 +1360,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal Yield
+		public decimal? Yield
 		{
 			get { return _yield; }
 			set
@@ -1370,7 +1370,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _vwap;
+		private decimal? _vwap;
 
 		/// <summary>
 		/// Средневзвешенная цена.
@@ -1383,7 +1383,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal VWAP
+		public decimal? VWAP
 		{
 			get { return _vwap; }
 			set
@@ -1393,7 +1393,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _settlementPrice;
+		private decimal? _settlementPrice;
 
 		/// <summary>
 		/// Рассчетная цена.
@@ -1406,7 +1406,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal SettlementPrice
+		public decimal? SettlementPrice
 		{
 			get { return _settlementPrice; }
 			set
@@ -1416,7 +1416,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _averagePrice;
+		private decimal? _averagePrice;
 
 		/// <summary>
 		/// Средняя цена за сессию.
@@ -1429,7 +1429,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal AveragePrice
+		public decimal? AveragePrice
 		{
 			get { return _averagePrice; }
 			set
@@ -1439,7 +1439,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _volume;
+		private decimal? _volume;
 
 		/// <summary>
 		/// Объем за сессию.
@@ -1452,7 +1452,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal Volume
+		public decimal? Volume
 		{
 			get { return _volume; }
 			set
