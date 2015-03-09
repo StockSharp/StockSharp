@@ -2,7 +2,7 @@ StockSharp Data (Hydra) Change log
 ========================
 ###v4.2.70
 * (feature) Sterling plugin.
-* (feture) Micex. OrderBookDepth and MicexLogLevel.
+* (feature) Micex. OrderBookDepth and MicexLogLevel.
 * (feature) OpenECry. Uuid
 * (feature) Support execution storage.
 * (bug) Fix display second timeframes.
