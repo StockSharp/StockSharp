@@ -1,5 +1,11 @@
 StockSharp API Change log
 ========================
+###v4.2.70:
+* (feature) SecurityGrid. Add columns.
+* (feature) Security. O H L C V fields marked as nullable.
+* (bug) FIX connector. Level1 small fix.
+* (bug) Quik lua. Level1 value type fix.
+
 ###v4.2.69:
 * (feature) LicensePanel. Xaml -> Licensing
 * (feature) MarketEmu. Depth fill improve.
