@@ -717,7 +717,7 @@ namespace StockSharp.Algo.Strategies
 					{
 						case ProcessStates.Started:
 						{
-							StartedTime = CurrentTime.LocalDateTime;
+							StartedTime = CurrentTime;
 							LogProcessState(value);
 							OnStarted();
 							break;
@@ -731,7 +731,7 @@ namespace StockSharp.Algo.Strategies
 						case ProcessStates.Stopped:
 						{
 							TotalWorkingTime += CurrentTime - StartedTime;
-							StartedTime = default(DateTime);
+							StartedTime = default(DateTimeOffset);
 							LogProcessState(value);
 							OnStopped();
 							break;
@@ -941,7 +941,7 @@ namespace StockSharp.Algo.Strategies
 			get { return _childStrategies; }
 		}
 
-		private DateTime _startedTime;
+		private DateTimeOffset _startedTime;
 
 		/// <summary>
 		/// Время запуска стратегии.
@@ -951,7 +951,7 @@ namespace StockSharp.Algo.Strategies
 		[DisplayNameLoc(LocalizedStrings.Str1378Key)]
 		[DescriptionLoc(LocalizedStrings.Str1379Key)]
 		[ReadOnly(true)]
-		public DateTime StartedTime
+		public DateTimeOffset StartedTime
 		{
 			get { return _startedTime; }
 			private set
@@ -973,7 +973,7 @@ namespace StockSharp.Algo.Strategies
 			{
 				var retVal = _totalWorkingTime;
 
-				if (StartedTime != default(DateTime) && Connector != null)
+				if (StartedTime != default(DateTimeOffset) && Connector != null)
 					retVal += CurrentTime - StartedTime;
 
 				return retVal;
