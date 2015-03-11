@@ -143,6 +143,7 @@
 					{
 						var stream = new MemoryStream();
 						LayoutSerializer.SaveToStream(stream, MainWindow.DockSite);
+						stream.Position = 0;
 						stream.Save(_layoutFile);
 					}
 				});

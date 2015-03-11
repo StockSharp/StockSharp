@@ -238,9 +238,12 @@ namespace StockSharp.Algo.Storages
 
 					foreach (var date in dates)
 						stream.Write(date);
-					
+
 					lock (_cacheSync)
+					{
+						stream.Position = 0;
 						stream.Save(GetDatesCachePath());
+					}
 				}
 				catch (UnauthorizedAccessException)
 				{
