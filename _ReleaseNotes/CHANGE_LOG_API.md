@@ -1,10 +1,16 @@
 StockSharp API Change log
 ========================
+###v4.2.71:
+* (feature) Strategy.StartedTime is DTO
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5556_S--Api.aspx
+* (bug) Fix RtsHistorySource
+
 ###v4.2.70:
 * (feature) SecurityGrid. Add columns.
 * (feature) Security. O H L C V fields marked as nullable.
 * (bug) FIX connector. Level1 small fix.
 * (bug) Quik lua. Level1 value type fix.
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/31
 
 ###v4.2.69:
 * (feature) LicensePanel. Xaml -> Licensing
