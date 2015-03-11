@@ -116,7 +116,7 @@
   <PropertyGroup>
     <PostBuildEvent>call ..\..\..\plugins.bat $(ProjectName) $(ConfigurationName)
 
-copy StockSharp.SmartCom.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Sterling.dll
+copy StockSharp.Sterling.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Sterling.dll
 copy Interop.SterlingLib.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\Interop.SterlingLib.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

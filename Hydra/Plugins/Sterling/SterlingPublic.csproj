@@ -85,10 +85,6 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Connectors\SmartCom\SmartCom.csproj">
-      <Project>{3EBEC334-3476-4F65-81C4-BC9D217550C1}</Project>
-      <Name>SmartCom</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Connectors\Sterling\Sterling.csproj">
       <Project>{9ADD140B-1C43-4077-B32E-0EBA81648C4D}</Project>
       <Name>Sterling</Name>

@@ -1,5 +1,10 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.2.71:
+* (bug) Fix Sterling plugin
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5556_S--Api.aspx
+* (bug) Fix Rts plugin
+
 ###v4.2.70
 * (feature) Sterling plugin.
 * (feature) Micex. OrderBookDepth and MicexLogLevel.
