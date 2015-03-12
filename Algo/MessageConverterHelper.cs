@@ -152,7 +152,7 @@ namespace StockSharp.Algo
 				PortfolioName = trade.Order.Portfolio.Name,
 				ExecutionType = ExecutionTypes.Trade,
 				ServerTime = trade.Trade.Time,
-				OriginSide = trade.Trade.OrderDirection == null ? (Sides?)null : trade.Trade.OrderDirection.Value,
+				OriginSide = trade.Trade.OrderDirection,
 			};
 		}
 
@@ -243,7 +243,7 @@ namespace StockSharp.Algo
 				IsSystem = trade.IsSystem,
 				TradeStatus = trade.Status,
 				OpenInterest = trade.OpenInterest,
-				OriginSide = trade.OrderDirection == null ? (Sides?)null : trade.OrderDirection.Value,
+				OriginSide = trade.OrderDirection,
 				ExecutionType = ExecutionTypes.Tick
 			};
 		}
@@ -477,6 +477,7 @@ namespace StockSharp.Algo
 				Name = security.Name,
 				ShortName = security.ShortName,
 				PriceStep = security.PriceStep,
+				Decimals = security.Decimals,
 				VolumeStep = security.VolumeStep,
 				Multiplier = security.Multiplier,
 				Currency = security.Currency,
@@ -501,16 +502,14 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			return new Security
+			var security = new Security
 			{
 				Id = message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode,
 				Code = message.SecurityId.SecurityCode,
 				Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode),
 				Type = message.SecurityType ?? message.SecurityId.SecurityType,
-				PriceStep = message.PriceStep,
-				VolumeStep = message.VolumeStep,
+				
 				OptionType = message.OptionType,
-				Strike = message.Strike,
 				Name = message.Name,
 				ShortName = message.ShortName,
 				Class = message.Class,
@@ -519,9 +518,25 @@ namespace StockSharp.Algo
 				ExpiryDate = message.ExpiryDate,
 				SettlementDate = message.SettlementDate,
 				UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode,
-				Multiplier = message.Multiplier,
 				Currency = message.Currency
 			};
+
+			if (message.PriceStep != null)
+				security.PriceStep = message.PriceStep.Value;
+
+			if (message.Decimals != null)
+				security.Decimals = message.Decimals.Value;
+
+			if (message.VolumeStep != null)
+				security.VolumeStep = message.VolumeStep.Value;
+
+			if (message.Strike != null)
+				security.Strike = message.Strike.Value;
+
+			if (message.Multiplier != null)
+				security.Multiplier = message.Multiplier.Value;
+
+			return security;
 		}
 
 		/// <summary>
@@ -916,7 +931,7 @@ namespace StockSharp.Algo
 			trade.Time = message.ServerTime;
 			trade.LocalTime = message.LocalTime;
 			trade.OpenInterest = message.OpenInterest;
-			trade.OrderDirection = message.OriginSide == null ? (Sides?)null : message.OriginSide.Value;
+			trade.OrderDirection = message.OriginSide;
 			trade.IsUpTick = message.IsUpTick;
 
 			return trade;

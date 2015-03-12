@@ -138,10 +138,12 @@
 				ExecutionType = ExecutionTypes.Tick
 			};
 
-			_lastTradePrice += RandomGen.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * SecurityDefinition.PriceStep;
+			var priceStep = SecurityDefinition.PriceStep ?? 0.01m;
+
+			_lastTradePrice += RandomGen.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * priceStep;
 
 			if (_lastTradePrice <= 0)
-				_lastTradePrice = SecurityDefinition.PriceStep;
+				_lastTradePrice = priceStep;
 
 			trade.TradePrice = _lastTradePrice;
 

@@ -151,10 +151,12 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Случайная котировка.</returns>
 		protected QuoteChange CreateQuote(decimal startPrice, Sides side)
 		{
-			var price = startPrice + (side == Sides.Sell ? 1 : -1) * Steps.Next() * SecurityDefinition.PriceStep;
+			var priceStep = SecurityDefinition.PriceStep ?? 0.01m;
+
+			var price = startPrice + (side == Sides.Sell ? 1 : -1) * Steps.Next() * priceStep;
 
 			if (price <= 0)
-				price = SecurityDefinition.PriceStep;
+				price = priceStep;
 
 			return new QuoteChange(side, price, Volumes.Next());
 		}

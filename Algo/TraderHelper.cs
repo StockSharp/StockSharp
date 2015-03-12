@@ -1985,29 +1985,17 @@ namespace StockSharp.Algo
 				                   ? string.Empty
 				                   : connector.SecurityIdGenerator.GenerateId(criteria.SecurityId.SecurityCode, criteria.SecurityId.BoardCode);
 
-			return new Security
+			var security = new Security
 			{
 				Id = stocksharpId,
 				Name = criteria.Name,
 				Code = criteria.SecurityId.SecurityCode,
 				Type = criteria.SecurityType,
 				ExpiryDate = criteria.ExpiryDate,
-				ExternalId = new SecurityExternalId
-				{
-					Bloomberg = criteria.SecurityId.Bloomberg,
-					Cusip = criteria.SecurityId.Cusip,
-					IQFeed = criteria.SecurityId.IQFeed,
-					Isin = criteria.SecurityId.Isin,
-					Ric = criteria.SecurityId.Ric,
-					Sedol = criteria.SecurityId.Sedol,
-				},
+				ExternalId = criteria.SecurityId.ToExternalId(),
 				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(criteria.SecurityId.BoardCode),
 				ShortName = criteria.ShortName,
-				VolumeStep = criteria.VolumeStep,
-				Multiplier = criteria.Multiplier,
-				PriceStep = criteria.PriceStep,
 				OptionType = criteria.OptionType,
-				Strike = criteria.Strike,
 				BinaryOptionType = criteria.BinaryOptionType,
 				Currency = criteria.Currency,
 				SettlementDate = criteria.SettlementDate,
@@ -2015,6 +2003,23 @@ namespace StockSharp.Algo
 					? null
 					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
 			};
+
+			if (criteria.PriceStep != null)
+				security.PriceStep = criteria.PriceStep.Value;
+
+			if (criteria.Decimals != null)
+				security.Decimals = criteria.Decimals.Value;
+
+			if (criteria.VolumeStep != null)
+				security.VolumeStep = criteria.VolumeStep.Value;
+
+			if (criteria.Strike != null)
+				security.Strike = criteria.Strike.Value;
+
+			if (criteria.Multiplier != null)
+				security.Multiplier = criteria.Multiplier.Value;
+
+			return security;
 		}
 
 		/// <summary>
@@ -2875,6 +2880,9 @@ namespace StockSharp.Algo
 							break;
 						case Level1Fields.PriceStep:
 							security.PriceStep = (decimal)value;
+							break;
+						case Level1Fields.Decimals:
+							security.Decimals = (int)value;
 							break;
 						case Level1Fields.VolumeStep:
 							security.VolumeStep = (decimal)value;

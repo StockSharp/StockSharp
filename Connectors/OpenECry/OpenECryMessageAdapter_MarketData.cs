@@ -253,6 +253,7 @@ namespace StockSharp.OpenECry
 				Strike = contract.Strike.SafeCast(),
 				ExpiryDate = contract.HasExpiration ? (contract.ExpirationDate + contract.ExpirationTime.TimeOfDay).ApplyTimeZone(TimeHelper.Est) : (DateTimeOffset?)null,
 				PriceStep = contract.TickSize.SafeCast(),
+				Decimals = contract.PriceFormat > 0 ? contract.PriceFormat : (int?)null,
 				OptionType = contract.IsOption ? (contract.Put ? OptionTypes.Put : OptionTypes.Call) : (OptionTypes?)null,
 				SecurityType = contract.GetSecurityType(),
 				OriginalTransactionId = originalTransactionId,

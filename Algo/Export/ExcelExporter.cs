@@ -392,11 +392,11 @@ namespace StockSharp.Algo.Export
 					.SetCell(3, 0, LocalizedStrings.Str365).SetStyle(4, typeof(decimal))
 					.SetCell(4, 0, LocalizedStrings.Str330).SetStyle(5, typeof(decimal))
 					.SetCell(5, 0, LocalizedStrings.Type).SetStyle(5, typeof(string))
-					//.SetCell(6, 0, "Точность").SetStyle(6, typeof(decimal))
-					.SetCell(6, 0, LocalizedStrings.Str551).SetStyle(5, typeof(string))
-					.SetCell(7, 0, LocalizedStrings.Strike).SetStyle(6, typeof(decimal))
-					.SetCell(8, 0, LocalizedStrings.UnderlyingAsset).SetStyle(6, typeof(string))
-					.SetCell(9, 0, LocalizedStrings.ExpiryDate).SetStyle(6, "yyyy-MM-dd");
+					.SetCell(6, 0, LocalizedStrings.Str547Key).SetStyle(6, typeof(decimal))
+					.SetCell(7, 0, LocalizedStrings.Str551).SetStyle(7, typeof(string))
+					.SetCell(8, 0, LocalizedStrings.Strike).SetStyle(8, typeof(decimal))
+					.SetCell(9, 0, LocalizedStrings.UnderlyingAsset).SetStyle(9, typeof(string))
+					.SetCell(10, 0, LocalizedStrings.ExpiryDate).SetStyle(10, "yyyy-MM-dd");
 
 				var index = 1;
 
@@ -410,11 +410,11 @@ namespace StockSharp.Algo.Export
 						.SetCell(3, index, security.VolumeStep)
 						.SetCell(4, index, security.Multiplier)
 						.SetCell(5, index, security.SecurityType == null ? string.Empty : security.SecurityType.Value.GetDisplayName())
-						//.SetCell(6, index, security.Decimals)
-						.SetCell(6, index, security.OptionType == null ? string.Empty : security.OptionType.Value.GetDisplayName())
-						.SetCell(7, index, security.Strike)
-						.SetCell(8, index, security.UnderlyingSecurityCode)
-						.SetCell(9, index, security.ExpiryDate);
+						.SetCell(6, index, security.Decimals)
+						.SetCell(7, index, security.OptionType == null ? string.Empty : security.OptionType.Value.GetDisplayName())
+						.SetCell(8, index, security.Strike)
+						.SetCell(9, index, security.UnderlyingSecurityCode)
+						.SetCell(10, index, security.ExpiryDate);
 
 					index++;
 

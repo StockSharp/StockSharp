@@ -49,10 +49,10 @@ namespace StockSharp.Algo.Export.Database
 				DbType = typeof(decimal),
 				ValueRestriction = new DecimalRestriction { Scale = security.Multiplier.GetCachedDecimals() }
 			};
-			//yield return new ColumnDescription("Decimals")
-			//{
-			//	DbType = typeof(int),
-			//};
+			yield return new ColumnDescription("Decimals")
+			{
+				DbType = typeof(int),
+			};
 			yield return new ColumnDescription("SecurityType")
 			{
 				DbType = typeof(string),
@@ -89,10 +89,10 @@ namespace StockSharp.Algo.Export.Database
 				//{ "StepPrice", value.StepPrice },
 				{ "VolumeStep", value.VolumeStep },
 				{ "Multiplier", value.Multiplier },
-				//{ "Decimals", value.Decimals },
+				{ "Decimals", value.Decimals },
 				{ "SecurityType", value.SecurityType.ToString() },
 				{ "OptionType", value.OptionType.ToString() },
-				{ "Strike", value.Strike == 0 ? (decimal?)null : value.Strike },
+				{ "Strike", value.Strike },
 				{ "UnderlyingSecurityCode", value.UnderlyingSecurityCode },
 				{ "ExpiryDate", value.ExpiryDate },
 			};

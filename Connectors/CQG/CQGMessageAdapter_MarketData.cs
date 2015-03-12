@@ -42,6 +42,8 @@ namespace StockSharp.CQG
 				Strike = cqgInstrument.Strike,
 				UnderlyingSecurityCode = cqgInstrument.UnderlyingInstrumentName,
 				OptionType = optionType,
+				PriceStep = (decimal)cqgInstrument.TickSize,
+				Decimals = cqgInstrument.Scale
 			});
 
 			SendLevel1Message(cqgInstrument);

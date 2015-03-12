@@ -285,7 +285,7 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Security:
 					{
 						_securityDefinition = (SecurityMessage)message.Clone();
-						_volumeDecimals = _securityDefinition.VolumeStep.GetCachedDecimals();
+						_volumeDecimals = GetVolumeStep().GetCachedDecimals();
 						_execLogConverter.UpdateSecurityDefinition(_securityDefinition);
 						break;
 					}
@@ -314,7 +314,7 @@ namespace StockSharp.Algo.Testing
 
 						if (_securityDefinition != null && _parent._settings.UseCandlesTimeFrame != null)
 						{
-							var trades = candleMsg.ToTrades(_securityDefinition.VolumeStep, _volumeDecimals).ToArray();
+							var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
 							Process(trades[0], result);
 							info.Item2.AddRange(trades.Skip(1));	
 						}
@@ -416,9 +416,9 @@ namespace StockSharp.Algo.Testing
 				_lastStripDate = execution.LocalTime.Date;
 
 				var priceOffset = _parent.Settings.PriceLimitOffset;
-				var priceStep = _securityDefinition == null || _securityDefinition.PriceStep == 0
+				var priceStep = _securityDefinition == null || _securityDefinition.PriceStep == null
 					? 0.01m
-					: _securityDefinition.PriceStep;
+					: _securityDefinition.PriceStep.Value;
 
 				var level1Msg =
 					new Level1ChangeMessage
@@ -449,13 +449,18 @@ namespace StockSharp.Algo.Testing
 							break;
 						case Level1Fields.VolumeStep:
 							_securityDefinition.VolumeStep = (decimal)change.Value;
-							_volumeDecimals = _securityDefinition.VolumeStep.GetCachedDecimals();
+							_volumeDecimals = GetVolumeStep().GetCachedDecimals();
 							break;
 						case Level1Fields.Multiplier:
 							_securityDefinition.Multiplier = (decimal)change.Value;
 							break;
 					}
 				}
+			}
+
+			private decimal GetVolumeStep()
+			{
+				return _securityDefinition.VolumeStep ?? 1;
 			}
 
 			private static decimal ShrinkPrice(decimal price, decimal priceStep)

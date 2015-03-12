@@ -440,6 +440,7 @@ namespace StockSharp.Transaq
 					SecurityId = securityId,
 					Multiplier = security.LotSize,
 					PriceStep = security.MinStep,
+					Decimals = security.Decimals,
 					ShortName = security.ShortName,
 					SecurityType = security.Type.FromTransaq(),
 				});

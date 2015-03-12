@@ -632,10 +632,10 @@ namespace StockSharp.Quik
 				l1Msg.Add(Level1Fields.State, func.GetSecurityState());
 
 				if (columns.Contains(DdeSecurityColumns.StepPrice))
-					l1Msg.TryAdd(Level1Fields.StepPrice, func.GetNullable(DdeSecurityColumns.StepPrice, sec.PriceStep));
+					l1Msg.TryAdd(Level1Fields.StepPrice, func.GetNullable(DdeSecurityColumns.StepPrice, sec.PriceStep ?? 0.01m));
 
 				if (columns.Contains(DdeSecurityColumns.MinPrice))
-					l1Msg.TryAdd(Level1Fields.MinPrice, func.GetNullable(DdeSecurityColumns.MinPrice, sec.PriceStep));
+					l1Msg.TryAdd(Level1Fields.MinPrice, func.GetNullable(DdeSecurityColumns.MinPrice, sec.PriceStep ?? 0.01m));
 
 				if (columns.Contains(DdeSecurityColumns.MaxPrice))
 					l1Msg.TryAdd(Level1Fields.MaxPrice, func.GetNullable<decimal>(DdeSecurityColumns.MaxPrice, int.MaxValue));

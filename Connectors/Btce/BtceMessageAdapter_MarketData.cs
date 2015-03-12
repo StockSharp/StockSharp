@@ -43,7 +43,7 @@ namespace StockSharp.Btce
 				SendOutMessage(new SecurityMessage
 				{
 					SecurityId = secId,
-					PriceStep = info.DecimalDigits.GetPriceStep(),
+					Decimals = info.DecimalDigits,
 					VolumeStep = (decimal)info.MinVolume,
 					SecurityType = SecurityTypes.CryptoCurrency,
 					OriginalTransactionId = lookupMsg.TransactionId,

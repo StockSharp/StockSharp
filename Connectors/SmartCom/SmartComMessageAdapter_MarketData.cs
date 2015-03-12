@@ -205,6 +205,7 @@ namespace StockSharp.SmartCom
 			var secMsg = new SecurityMessage
 			{
 				PriceStep = priceStep,
+				Decimals = decimals,
 				Multiplier = lotSize,
 				Name = name,
 				ShortName = name,
@@ -241,10 +242,10 @@ namespace StockSharp.SmartCom
 				if (ExchangeBoard.GetOrCreateBoard(info.Item2).IsMicex
 					&&
 					/* проверяем, что не началась ли трансляция правильных дробных шагов */
-					secMsg.PriceStep == (int)secMsg.PriceStep)
+					secMsg.PriceStep != null && secMsg.PriceStep == (int)secMsg.PriceStep)
 				{
 					// http://stocksharp.com/forum/yaf_postsm21245_Sokhranieniie-stakanov-po-GAZP-EQNE.aspx#post21245
-					secMsg.PriceStep = 1m / 10m.Pow(secMsg.PriceStep);
+					secMsg.PriceStep = 1m / 10m.Pow(secMsg.PriceStep.Value);
 				}
 			}
 

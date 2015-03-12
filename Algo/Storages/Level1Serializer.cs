@@ -354,7 +354,7 @@ namespace StockSharp.Algo.Storages
 
 	class Level1Serializer : BinaryMarketDataSerializer<Level1ChangeMessage, Level1MetaInfo>
 	{
-		private static readonly SynchronizedPairSet<Level1Fields, int> _map = new SynchronizedPairSet<Level1Fields, int>
+		private static readonly SynchronizedPairSet<Level1Fields, int> _oldMap = new SynchronizedPairSet<Level1Fields, int>
 		{
 			{ Level1Fields.OpenPrice,				1 },
 			{ Level1Fields.HighPrice,				1 << 1 },
@@ -396,7 +396,7 @@ namespace StockSharp.Algo.Storages
 			{
 				int fieldCode;
 
-				if (!_map.TryGetValue(field, out fieldCode))
+				if (!_oldMap.TryGetValue(field, out fieldCode))
 					throw new ArgumentException(LocalizedStrings.Str917Params.Put(field));
 
 				return fieldCode;
@@ -411,7 +411,7 @@ namespace StockSharp.Algo.Storages
 			{
 				Level1Fields field;
 
-				if (!_map.TryGetKey(fieldCode, out field))
+				if (!_oldMap.TryGetKey(fieldCode, out field))
 					throw new ArgumentException(LocalizedStrings.Str918Params.Put(fieldCode));
 
 				return field;
@@ -535,6 +535,11 @@ namespace StockSharp.Algo.Storages
 						case Level1Fields.VolumeStep:
 						{
 							//нет необходимости хранить шаги цены и объема, т.к. они есть в metaInfo
+							break;
+						}
+						case Level1Fields.Decimals:
+						{
+							writer.WriteInt((int)change.Value);
 							break;
 						}
 						case Level1Fields.Multiplier:
@@ -917,6 +922,11 @@ namespace StockSharp.Algo.Storages
 						l1Msg.Add(field, metaInfo.PriceStep);
 						break;
 					}
+					case Level1Fields.Decimals:
+					{
+						l1Msg.Add(field, reader.ReadInt());
+						break;
+					}
 					case Level1Fields.VolumeStep:
 					{
 						l1Msg.Add(field, metaInfo.VolumeStep);
@@ -965,7 +975,7 @@ namespace StockSharp.Algo.Storages
 					}
 					case Level1Fields.State:
 					{
-						l1Msg.Add(field, reader.ReadInt());
+						l1Msg.Add(field, (SecurityStates)reader.ReadInt());
 						break;
 					}
 					case Level1Fields.BestBidPrice:

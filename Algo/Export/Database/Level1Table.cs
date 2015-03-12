@@ -24,6 +24,7 @@
 				case Level1Fields.BestBid:
 				case Level1Fields.BestAsk:
 					return null;
+				case Level1Fields.Decimals:
 				case Level1Fields.BidsCount:
 				case Level1Fields.AsksCount:
 				case Level1Fields.TradesCount:

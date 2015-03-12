@@ -486,7 +486,13 @@ namespace StockSharp.Messages
 		/// Системная информация.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str342Key)]
-		IsSystem
+		IsSystem,
+
+		/// <summary>
+		/// Количество знаков в цене после запятой.
+		/// </summary>
+		[EnumDisplayNameLoc(LocalizedStrings.Str547Key)]
+		Decimals
 	}
 
 	/// <summary>

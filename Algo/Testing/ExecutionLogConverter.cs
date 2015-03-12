@@ -193,9 +193,9 @@ namespace StockSharp.Algo.Testing
 
 				var originSide = GetOrderSide(message);
 
-				retVal.Add(CreateMessage(message.LocalTime, originSide, message.TradePrice, message.Volume + (_securityDefinition.VolumeStep * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
+				retVal.Add(CreateMessage(message.LocalTime, originSide, message.TradePrice, message.Volume + (_securityDefinition.VolumeStep ?? 1 * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
 
-				var spreadStep = _settings.SpreadSize * _securityDefinition.PriceStep;
+				var spreadStep = _settings.SpreadSize * GetPriceStep();
 
 				// try to fill depth gaps
 
@@ -259,7 +259,7 @@ namespace StockSharp.Algo.Testing
 				// если стакан был полностью пустой, то формируем сразу уровень с противоположной стороны
 				if (!hasOpposite)
 				{
-					var oppositePrice = message.TradePrice + _settings.SpreadSize * _securityDefinition.PriceStep * (originSide == Sides.Buy ? 1 : -1);
+					var oppositePrice = message.TradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
 
 					if (oppositePrice > 0)
 						retVal.Add(CreateMessage(message.LocalTime, originSide.Invert(), oppositePrice, message.Volume));
@@ -433,7 +433,7 @@ namespace StockSharp.Algo.Testing
 			if (HasDepth(message.LocalTime))
 				return;
 
-			var oppositePrice = message.TradePrice + _settings.SpreadSize * _securityDefinition.PriceStep * (originSide == Sides.Buy ? 1 : -1);
+			var oppositePrice = message.TradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
 
 			var bestQuote = quotes.FirstOrDefault();
 
@@ -647,12 +647,17 @@ namespace StockSharp.Algo.Testing
 			while (leftVolume > 0 && lastPrice != 0)
 			{
 				lastVolume *= 2;
-				lastPrice += _securityDefinition.PriceStep * (side == Sides.Buy ? -1 : 1);
+				lastPrice += GetPriceStep() * (side == Sides.Buy ? -1 : 1);
 
 				leftVolume -= lastVolume;
 
 				yield return CreateMessage(time, side, lastPrice, lastVolume);
 			}
+		}
+
+		private decimal GetPriceStep()
+		{
+			return _securityDefinition.PriceStep ?? 0.01m;
 		}
 
 		public void UpdateSecurityDefinition(SecurityMessage securityDefinition)

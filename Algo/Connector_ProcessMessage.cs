@@ -775,14 +775,22 @@ namespace StockSharp.Algo
 				if (message.ExpiryDate != null)
 					s.ExpiryDate = message.ExpiryDate;
 
-				if (message.VolumeStep != 0)
-					s.VolumeStep = message.VolumeStep;
+				if (message.VolumeStep != null)
+					s.VolumeStep = message.VolumeStep.Value;
 
-				if (message.Multiplier != 0)
-					s.Multiplier = message.Multiplier;
+				if (message.Multiplier != null)
+					s.Multiplier = message.Multiplier.Value;
 
-				if (message.PriceStep != 0)
-					s.PriceStep = message.PriceStep;
+				if (message.PriceStep != null)
+					s.PriceStep = message.PriceStep.Value;
+
+				if (message.Decimals != null)
+				{
+					s.Decimals = message.Decimals.Value;
+
+					if (message.PriceStep == null)
+						s.PriceStep = s.Decimals.GetPriceStep();
+				}
 
 				if (!message.Name.IsEmpty())
 					s.Name = message.Name;
@@ -793,8 +801,8 @@ namespace StockSharp.Algo
 				if (message.OptionType != null)
 					s.OptionType = message.OptionType;
 
-				if (message.Strike != 0)
-					s.Strike = message.Strike;
+				if (message.Strike != null)
+					s.Strike = message.Strike.Value;
 
 				if (!message.BinaryOptionType.IsEmpty())
 					s.BinaryOptionType = message.BinaryOptionType;

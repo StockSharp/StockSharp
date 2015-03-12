@@ -157,10 +157,12 @@
 
 			if (isNew)
 			{
-				_lastOrderPrice += RandomGen.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * SecurityDefinition.PriceStep;
+				var priceStep = SecurityDefinition.PriceStep ?? 0.01m;
+
+				_lastOrderPrice += RandomGen.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * priceStep;
 
 				if (_lastOrderPrice <= 0)
-					_lastOrderPrice = SecurityDefinition.PriceStep;
+					_lastOrderPrice = priceStep;
 
 				item = new ExecutionMessage
 				{

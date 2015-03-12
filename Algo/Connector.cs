@@ -690,6 +690,7 @@ namespace StockSharp.Algo
 				VolumeStep = criteria.VolumeStep,
 				Multiplier = criteria.Multiplier,
 				PriceStep = criteria.PriceStep,
+				Decimals = criteria.Decimals,
 				Currency = criteria.Currency,
 				SettlementDate = criteria.SettlementDate,
 				OptionType = criteria.OptionType,

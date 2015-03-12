@@ -622,7 +622,7 @@
 					Board = node.GetElementValue("board"),
 					Market = node.GetElementValue("market"),
 					ShortName = node.GetElementValue("shortname"),
-					Decimals = node.GetElementValue("decimals"),
+					Decimals = node.GetElementValue<int>("decimals"),
 					MinStep = node.GetElementValue("minstep").To<decimal>(),
 					LotSize = node.GetElementValue<int>("lotsize"),
 					PointCost = node.GetElementValue("point_cost").To<decimal>()
@@ -1226,7 +1226,7 @@
 						SecCode = node.GetAttributeValue("seccode"),
 						Board = node.GetAttributeValue("board"),
 						Market = node.GetElementValue("market"),
-						Decimals = node.GetElementValue("decimals"),
+						Decimals = node.GetElementValue<int>("decimals"),
 						MinStep = node.GetElementValue("minstep").To<decimal>(),
 						LotSize = node.GetElementValue<int>("lotsize"),
 						PointCost = node.GetElementValue("point_cost").To<decimal>()

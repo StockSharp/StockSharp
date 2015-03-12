@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str365Key)]
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
-		public decimal VolumeStep { get; set; }
+		public decimal? VolumeStep { get; set; }
 
 		/// <summary>
 		/// Коэфициент объема между лотом и активом.
@@ -57,7 +57,16 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str330Key)]
 		[DescriptionLoc(LocalizedStrings.LotVolumeKey)]
 		[MainCategory]
-		public decimal Multiplier { get; set; }
+		public decimal? Multiplier { get; set; }
+
+		/// <summary>
+		/// Количество знаков в цене после запятой.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.Str547Key)]
+		[DescriptionLoc(LocalizedStrings.Str548Key)]
+		[MainCategory]
+		public int? Decimals { get; set; }
 
 		/// <summary>
 		/// Минимальный шаг цены.
@@ -66,7 +75,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
 		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
 		[MainCategory]
-		public decimal PriceStep { get; set; }
+		public decimal? PriceStep { get; set; }
 
 		/// <summary>
 		/// Тип инструмента.
@@ -109,7 +118,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
 		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
-		public decimal Strike { get; set; }
+		public decimal? Strike { get; set; }
 
 		/// <summary>
 		/// Тип опциона.
@@ -196,6 +205,7 @@ namespace StockSharp.Messages
 			destination.OriginalTransactionId = OriginalTransactionId;
 			destination.OptionType = OptionType;
 			destination.PriceStep = PriceStep;
+			destination.Decimals = Decimals;
 			destination.SecurityType = SecurityType;
 			destination.SettlementDate = SettlementDate;
 			destination.Strike = Strike;

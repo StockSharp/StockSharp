@@ -243,11 +243,20 @@ namespace StockSharp.Algo.Export
 
 				writer.WriteAttribute("code", security.SecurityId.SecurityCode);
 				writer.WriteAttribute("board", security.SecurityId.BoardCode);
-				writer.WriteAttribute("priceStep", security.PriceStep);
+
+				if (security.PriceStep != null)
+					writer.WriteAttribute("priceStep", security.PriceStep.Value);
+
 				//writer.WriteAttribute("stepPrice", security.StepPrice);
-				writer.WriteAttribute("volumeStep", security.VolumeStep);
-				writer.WriteAttribute("multiplier", security.Multiplier);
-				//writer.WriteAttribute("decimals", security.Decimals);
+
+				if (security.VolumeStep != null)
+					writer.WriteAttribute("volumeStep", security.VolumeStep.Value);
+
+				if (security.Multiplier != null)
+					writer.WriteAttribute("multiplier", security.Multiplier.Value);
+
+				if (security.Decimals != null)
+					writer.WriteAttribute("decimals", security.Decimals.Value);
 
 				if (security.Currency != null)
 					writer.WriteAttribute("currency", security.Currency.Value);
@@ -258,8 +267,8 @@ namespace StockSharp.Algo.Export
 				if (security.OptionType != null)
 					writer.WriteAttribute("optionType", security.OptionType.Value);
 
-				if (security.Strike != 0)
-					writer.WriteAttribute("strike", security.Strike);
+				if (security.Strike != null)
+					writer.WriteAttribute("strike", security.Strike.Value);
 
 				if (!security.BinaryOptionType.IsEmpty())
 					writer.WriteAttribute("binaryOptionType", security.BinaryOptionType);
