@@ -743,7 +743,7 @@ namespace StockSharp.BusinessEntities
 			get { return new MarketDepthPair(this, BestBid, BestAsk); }
 		}
 
-		private SecurityStates _state;
+		private SecurityStates? _state;
 
 		/// <summary>
 		/// Текущее состояние инструмента.
@@ -757,7 +757,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public SecurityStates State
+		public SecurityStates? State
 		{
 			get { return _state; }
 			set
