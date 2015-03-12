@@ -21,8 +21,8 @@ namespace StockSharp.Hydra.Panes
 
 	public partial class ChartPane : IPane
 	{
-		private readonly Dictionary<ChartIndicatorElement, IIndicator> _indicators = new Dictionary<ChartIndicatorElement, IIndicator>();
-		private readonly HashSet<IChartElement> _elements = new HashSet<IChartElement>();
+		private readonly SynchronizedDictionary<ChartIndicatorElement, IIndicator> _indicators = new SynchronizedDictionary<ChartIndicatorElement, IIndicator>();
+		private readonly SynchronizedSet<IChartElement> _elements = new SynchronizedSet<IChartElement>();
 		private readonly SyncObject _syncObject = new SyncObject();
 		private readonly ResettableTimer _drawTimer;
 
@@ -57,6 +57,7 @@ namespace StockSharp.Hydra.Panes
 		private void OnChartPanelSubscribeIndicatorElement(ChartIndicatorElement element, CandleSeries candleSeries, IIndicator indicator)
 		{
 			_elements.Add(element);
+			_indicators.Add(element, indicator);
 			_drawTimer.Reset();
 		}
 
@@ -69,17 +70,64 @@ namespace StockSharp.Hydra.Panes
 
 				_isStopped = false;
 
-				var elements = _elements.CopyAndClear();
+				var elements = _elements.SyncGet(c => c.CopyAndClear());
 
 				var candleElement = elements.OfType<ChartCandleElement>().FirstOrDefault();
 
 				if (candleElement == null)
 				{
-					foreach (var indicatorElement in elements.OfType<ChartIndicatorElement>())
-						ProcessIndicator(indicatorElement, _candles);
+					foreach (var e in elements.OfType<ChartIndicatorElement>())
+					{
+						var element = e;
+
+						var allValues = _candles
+							.Take(_candlesCount)
+							.Select(candle => new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>
+							{
+								{ element, CreateIndicatorValue(element, candle) }
+							}))
+							.ToList();
+
+						GuiDispatcher.GlobalDispatcher.AddAction(() =>
+						{
+							ChartPanel.Reset(new[] { element });
+							ChartPanel.Draw(allValues);
+						});
+					}
 				}
 				else
-					ProcessCandleElement(_candles);
+				{
+					foreach (var batch in _candles.Batch(50))
+					{
+						if (_isStopped || _isDisposed)
+							break;
+
+						var values = new List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>>();
+
+						foreach (var c in batch)
+						{
+							var candle = c;
+
+							var pair = new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>());
+
+							_candlesCount++;
+
+							//// ограничиваем кол-во передаваемых свечек, чтобы не фризился интерфейс
+							//if (_candlesCount % 100 == 0)
+							//	System.Threading.Thread.Sleep(200);
+
+							foreach (var el in ChartPanel.Elements)
+							{
+								el.DoIf<IChartElement, ChartCandleElement>(e => pair.Second.Add(e, candle));
+								el.DoIf<IChartElement, ChartIndicatorElement>(e => pair.Second.Add(e, CreateIndicatorValue(e, candle)));
+							}
+
+							values.Add(pair);
+						}
+
+						ChartPanel.Draw(values);
+					}
+				}
 
 				GuiDispatcher.GlobalDispatcher.AddAction(() => CancelButton.Visibility = Visibility.Collapsed);
 			}
@@ -87,57 +135,6 @@ namespace StockSharp.Hydra.Panes
 			{
 				ex.LogError();
 			}
-		}
-
-		private void ProcessCandleElement(IEnumerable<Candle> candles)
-		{
-			foreach (var batch in candles.Batch(50))
-			{
-				if (_isStopped || _isDisposed)
-					break;
-
-				var values = new List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>>();
-
-				foreach (var c in batch)
-				{
-					var candle = c;
-
-					var pair = new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>());
-
-					_candlesCount++;
-
-					// ограничиваем кол-во передаваемых свечек, чтобы не фризился интерфейс
-					if (_candlesCount % 100 == 0)
-						System.Threading.Thread.Sleep(200);
-
-					foreach (var el in ChartPanel.Elements)
-					{
-						el.DoIf<IChartElement, ChartCandleElement>(e => pair.Second.Add(e, candle));
-						el.DoIf<IChartElement, ChartIndicatorElement>(e => pair.Second.Add(e, CreateIndicatorValue(e, candle)));
-					}
-
-					values.Add(pair);
-				}
-
-				ChartPanel.Draw(values);
-			}
-		}
-
-		private void ProcessIndicator(ChartIndicatorElement element, IEnumerable<Candle> candles)
-		{
-			var allValues = candles
-				.Take(_candlesCount)
-				.Select(candle => new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>
-				{
-					{ element, CreateIndicatorValue(element, candle) }
-				}))
-				.ToList();
-
-			GuiDispatcher.GlobalDispatcher.AddAction(() =>
-			{
-				ChartPanel.Reset(new[] { element });
-				ChartPanel.Draw(allValues);
-			});
 		}
 
 		private IIndicatorValue CreateIndicatorValue(ChartIndicatorElement element, Candle candle)
@@ -177,7 +174,6 @@ namespace StockSharp.Hydra.Panes
 				IndicatorPainter = new VolumePainter(),
 			};
 			var indicator = new VolumeIndicator();
-			_indicators.Add(_volumeElem, indicator);
 			ChartPanel.AddElement(volumeArea, _volumeElem, series, indicator);
 
 			CancelButton.Visibility = Visibility.Visible;
