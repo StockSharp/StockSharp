@@ -770,12 +770,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Securities expiry times.
+		/// Securities expiration times.
 		/// </summary>
 		public const string Str64Key = "Str64";
 
 		/// <summary>
-		/// Securities expiry times.
+		/// Securities expiration times.
 		/// </summary>
 		public static string Str64
 		{
@@ -1667,12 +1667,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order expiry time
+		/// Order expiration time
 		/// </summary>
 		public const string Str141Key = "Str141";
 
 		/// <summary>
-		/// Order expiry time
+		/// Order expiration time
 		/// </summary>
 		public static string Str141
 		{
@@ -4527,12 +4527,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Expiry date
+		/// Expiration date
 		/// </summary>
 		public const string ExpiryDateKey = "ExpiryDate";
 
 		/// <summary>
-		/// Expiry date
+		/// Expiration date
 		/// </summary>
 		public static string ExpiryDate
 		{
@@ -4540,12 +4540,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Security expiry date (for derivatives - expiry, for bonds — redemption).
+		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		public const string Str371Key = "Str371";
 
 		/// <summary>
-		/// Security expiry date (for derivatives - expiry, for bonds — redemption).
+		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		public static string Str371
 		{
@@ -7972,12 +7972,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Security {0} does not have information about expiry time.
+		/// Security {0} does not have information about expiration time.
 		/// </summary>
 		public const string Str698ParamsKey = "Str698Params";
 
 		/// <summary>
-		/// Security {0} does not have information about expiry time.
+		/// Security {0} does not have information about expiration time.
 		/// </summary>
 		public static string Str698Params
 		{
@@ -7985,12 +7985,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// For security {0} expiry time after shift {1} exceeded the actual expiration time {2}.
+		/// For security {0} expiration time after shift {1} exceeded the actual expiration time {2}.
 		/// </summary>
 		public const string Str699ParamsKey = "Str699Params";
 
 		/// <summary>
-		/// For security {0} expiry time after shift {1} exceeded the actual expiration time {2}.
+		/// For security {0} expiration time after shift {1} exceeded the actual expiration time {2}.
 		/// </summary>
 		public static string Str699Params
 		{
@@ -8115,12 +8115,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Security {0} does not have information about expiry date.
+		/// Security {0} does not have information about expiration date.
 		/// </summary>
 		public const string Str709ParamsKey = "Str709Params";
 
 		/// <summary>
-		/// Security {0} does not have information about expiry date.
+		/// Security {0} does not have information about expiration date.
 		/// </summary>
 		public static string Str709Params
 		{
@@ -8128,12 +8128,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Expiry time for {0} has passed. Current date {1}.
+		/// Expiration time for {0} has passed. Current date {1}.
 		/// </summary>
 		public const string Str710ParamsKey = "Str710Params";
 
 		/// <summary>
-		/// Expiry time for {0} has passed. Current date {1}.
+		/// Expiration time for {0} has passed. Current date {1}.
 		/// </summary>
 		public static string Str710Params
 		{
@@ -10585,12 +10585,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Option expiry date {0} absent.
+		/// Option {0} does not have information about expiration date.
 		/// </summary>
 		public const string Str901ParamsKey = "Str901Params";
 
 		/// <summary>
-		/// Option expiry date {0} absent.
+		/// Option {0} does not have information about expiration date.
 		/// </summary>
 		public static string Str901Params
 		{
@@ -35103,12 +35103,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Data absent
+		/// No data
 		/// </summary>
 		public const string Str2913Key = "Str2913";
 
 		/// <summary>
-		/// Data absent
+		/// No data
 		/// </summary>
 		public static string Str2913
 		{
@@ -38964,12 +38964,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Security {0} code does not contrain expiry date information.
+		/// Security {0} code does not contrain expiration date information.
 		/// </summary>
 		public const string Str3228ParamsKey = "Str3228Params";
 
 		/// <summary>
-		/// Security {0} code does not contrain expiry date information.
+		/// Security {0} code does not contrain expiration date information.
 		/// </summary>
 		public static string Str3228Params
 		{
@@ -40511,12 +40511,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Exact date specification for orders expiry is not supported in ETrade.
+		/// Exact date specification for orders expiration is not supported in ETrade.
 		/// </summary>
 		public const string Str3354Key = "Str3354";
 
 		/// <summary>
-		/// Exact date specification for orders expiry is not supported in ETrade.
+		/// Exact date specification for orders expiration is not supported in ETrade.
 		/// </summary>
 		public static string Str3354
 		{

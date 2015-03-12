@@ -57,7 +57,7 @@ Reregistering;Reregistering;Перерегистрация
 Str60;Is order reregistration as a single transaction supported.;Поддерживается ли перерегистрация заявок в виде одной транзакции.
 MarketOrders;Market orders;Рыночные заявки
 MarketOrdersSupported;Are market type orders supported.;Поддерживается ли рыночный тип заявок.
-Str64;Securities expiry times.;Время экспирации инструментов.
+Str64;Securities expiration times.;Время экспирации инструментов.
 WorkingHours;Board working hours;Время работы площадки.
 TimeZone;Time zone;Часовой пояс
 Str68;Information about the time zone where the stock exchange is situated.;Информация о временной зоне, где находится биржа.
@@ -126,7 +126,7 @@ Str137;Message for order;Сообщение к заявке
 Str138;Message for order (created by the trading system when registered, changed or cancelled).;Сообщение к заявке (создается торговой системой при регистрации, изменении или снятии).
 Str139;System order;Системная заявка
 Str140;Is a system trade.;Является ли заявка системной.
-Str141;Order expiry time;Время экспирации заявки
+Str141;Order expiration time;Время экспирации заявки
 Str142;Order expiration time.;Время истечения срока действия заявки.
 Str143;Execution condition;Условие исполнения
 Str144;Limit order execution condition.;Условие исполнения лимитированной заявки.
@@ -346,8 +346,8 @@ Str366;Minimum volume step.;Минимальный шаг объема.
 LotVolume;Lot volume.;Объем лота.
 PriceStep;Price step;Шаг цены
 MinPriceStep;Minimum price step.;Минимальный шаг цены.
-ExpiryDate;Expiry date;Дата экспирация
-Str371;Security expiry date (for derivatives - expiry, for bonds — redemption).;Дата экспирация инструмента (для деривативов - экспирация, для облигаций - погашение).
+ExpiryDate;Expiration date;Дата экспирация
+Str371;Security expiration date (for derivatives - expiration, for bonds — redemption).;Дата экспирация инструмента (для деривативов - экспирация, для облигаций - погашение).
 PaymentDate;Payment date;Дата выплат
 Str373;Payment date for security (for derivatives and bonds).;Дата выплат по инструмента (для деривативов и облигаций).
 UnderlyingAsset;Underlying asset;Базовый актив
@@ -616,8 +616,8 @@ Str694Params;Cannot stop export, because export is in state {0}.;Невозмо�
 ContinuousSecurity;Continuous security;Непрерывный инструмент
 Str696;Continuous security (generally, a futures contract), containing expirable securities.;Непрерывный инструмент (как правило, фьючерс), содержащий в себе инструменты, подверженные экспирации.
 Str697Params;Security {0} is not an internal security.;Инструмент {0} не является внутренним инструментом.
-Str698Params;Security {0} does not have information about expiry time.;Инструмент {0} не имеет информацию о времени экспирации.
-Str699Params;For security {0} expiry time after shift {1} exceeded the actual expiration time {2}.;Для инструмента {0} значение экспирации после сдвига {1} превысило реальное время экспирации {2}.
+Str698Params;Security {0} does not have information about expiration time.;Инструмент {0} не имеет информацию о времени экспирации.
+Str699Params;For security {0} expiration time after shift {1} exceeded the actual expiration time {2}.;Для инструмента {0} значение экспирации после сдвига {1} превысило реальное время экспирации {2}.
 Str700;Portfolio model does not contain options.;Портфельная модель не содержит опционы.
 Str701Params;Asset {0} dividents not paid.;Дивиденды на актив {0} не начисляются.
 Str702;Number of digits after coma is incorrect.;Количество знаков после запятой не верно.
@@ -627,8 +627,8 @@ Str705Params;Underlying asset was not found for derivative {0}.;Для дери�
 Str706Params;Opposite option contract for {0} not found.;Противоположный опцион для {0} не найден.
 Str707Params;Options contract for {0} not found.;Опцион для {0} не найден.
 Str708;Insufficient information to determine the strike step.;Недостаточно информации для определения шага страйка.
-Str709Params;Security {0} does not have information about expiry date.;Инструмент {0} не имеет информацию о дате экспирации.
-Str710Params;Expiry time for {0} has passed. Current date {1}.;Время экспирации для {0} прошло. Текущая дата {1}.
+Str709Params;Security {0} does not have information about expiration date.;Инструмент {0} не имеет информацию о дате экспирации.
+Str710Params;Expiration time for {0} has passed. Current date {1}.;Время экспирации для {0} прошло. Текущая дата {1}.
 Str711;Standard deviation has an unacceptable value.;Стандартное отклонение имеет недопустимое значение.
 Str712;Security does not have information about the expiration date.;Инструмент не имеет информации о дате истечения.
 Str714Params;Message has state {OrderState} and information about error '{Error.Message}'.;Сообщение имеет состояние {OrderState} и имеет информацию об ошибке '{Error.Message}'.
@@ -817,7 +817,7 @@ Str897Params;Order already has a transaction number '{0}'. Possibly, it was alre
 Str898Params;Order already has state '{0}'. Possibly, it was already registered.;Заявка уже имеет состояние '{0}'. Возможно, она уже была зарегистрирована.
 Str899;Order has neither identifier nor trasaction number. Possibly, it was not registered.;Заявка не имеет ни идентификатор ни номер транзакции. Возможно, она не была зарегистрирована.
 Str900Params;Wrong type {0} of security.;Неправильный тип {0} инструмента.
-Str901Params;Option expiry date {0} absent.;Дата экспирации опциона {0} отсутствует.
+Str901Params;Option {0} does not have information about expiration date.;Дата экспирации опциона {0} отсутствует.
 Str902Params;Information about the underlying security {0} is missing.;Информация о базовом инструменте {0} отсутствует.
 Str903Params;Security {0} is missing information about the stock exchange board.;У инструмента {0} отсутствует информация о биржевой площадке.
 Str904Params;Order {0} does not have information about connection.;Заявка {0} не имеет информации о подключении.
@@ -2705,7 +2705,7 @@ Str2908;Order log (OL) ;Лог заявок (ОЛ)
 Str2910Params;Unknown type of export '{0}'.;Неизвестный тип экспорта '{0}'.
 Str2911;Too much data to display;Данных слишком много для отображения
 Str2912Params;Uploaded {0} of {1};Выгружено {0} из {1}
-Str2913;Data absent;Данные отсутствуют
+Str2913;No data;Данные отсутствуют
 Str2914;Unknown error during stream task processing.;Неизвестная ошибка в процессе выполнения потоковой задачи.
 Str2915;S#.Data — error.;S#.Data - ошибка.
 Str2916;Open data folder;Открыть папку с данными
@@ -3005,7 +3005,7 @@ Str3224Params;Security {0} is already in the database. Replace?;Инструме
 Str3225;Panel for building and viewing data for a composite security.;Панель для построения и просмотра данных по составному инструменту.
 Str3226;Continuous securities;Непрерывные инструменты
 Str3227;Panel for building and viewing data for a continuous security.;Панель для построения и просмотра данных по непрерывному инструменту.
-Str3228Params;Security {0} code does not contrain expiry date information.;Код инструмента {0} не содержит инфомации о дате экспирации.
+Str3228Params;Security {0} code does not contrain expiration date.;Код инструмента {0} не содержит инфомации о дате экспирации.
 Str3229;Add;Добавить
 Str3230;Debugger;Отладчик
 Str3231;Panel for debugging strategies on the basis of the designer.;Панель для отладки стратегий на базе дизайнера.
@@ -3124,7 +3124,7 @@ Str3350;Authorization failed.;Авторизация не выполнена.
 Str3351;Authorization is invalid.;Авторизация недействительна.
 Str3352Params;{0}: error fulfilling request (status={1}).;{0}: ошибка выполнения запроса (status={1}).
 Str3353Params;{0}: Server returned an unexpected code '{1}'.;{0}: Сервер вернул неожиданный код '{1}'.
-Str3354;Exact date specification for orders expiry is not supported in ETrade.;Указание конкретной даты экспирации заявок не поддерживается в ETrade.
+Str3354;Exact date specification for orders expiration is not supported in ETrade.;Указание конкретной даты экспирации заявок не поддерживается в ETrade.
 Str3355Params;Error in stream '{0}': {1};Ошибка в потоке '{0}': {1}
 Str3356;No connection to ETrade.;Отсутствует подключение к ETrade.
 Str3357;Empty security name in request.;Пустое имя инструмента в запросе.
