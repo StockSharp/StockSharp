@@ -92,7 +92,7 @@ Depo;Depositary;Депозитарий
 DepoName;Depositary name where the security is physically held.;Название депозитария, где физически находится ценная бумага.
 ServerTime;Server time;Серверное время
 Transaction;Transaction;Транзакция
-TransactionId;Transaction ID.;Номер транзакции.
+TransactionId;Transaction ID;Номер транзакции
 OriginalTrasaction;Original transaction;Первоначальная транзакция
 OriginalTrasactionId;ID of original transaction, for which this message is the answer.;Номер первоначальной транзакции, для которой данное сообщение является ответом.
 DataType;Data type;Тип данных
@@ -212,7 +212,6 @@ Str226;Stop-orders;Стоп-заявки
 Str227;Cancel stop-orders or normal.;Снимать стоп-заявки или обычные.
 Str228;Direction, for which orders have to be cancelled.;Направление, для которого необходимо снять заявки.
 Str229;Portfolio name, for which an order must be placed/cancelled.;Название портфеля, по которому необходимо выставить/снять заявку.
-Str230;Transaction number;Номер транзакции
 Str231;Lifetime;Время жизни
 Str232;Limit order lifetime.;Время жизни лимитной заявки.
 Str233;REPO\REPO-M information;Информация РЕПО\РЕПО-М

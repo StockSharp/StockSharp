@@ -233,7 +233,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(80)]
-		[DisplayNameLoc(LocalizedStrings.Str230Key)]
+		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
 		[DescriptionLoc(LocalizedStrings.Str1194Key)]
 		public long InitialTransactionId
 		{

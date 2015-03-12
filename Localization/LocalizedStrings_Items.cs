@@ -1225,12 +1225,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Transaction ID.
+		/// Transaction ID
 		/// </summary>
 		public const string TransactionIdKey = "TransactionId";
 
 		/// <summary>
-		/// Transaction ID.
+		/// Transaction ID
 		/// </summary>
 		public static string TransactionId
 		{
@@ -2782,19 +2782,6 @@ namespace StockSharp.Localization
 		public static string Str229
 		{
 			get { return GetString(Str229Key); }
-		}
-
-		/// <summary>
-		/// Transaction number
-		/// </summary>
-		public const string Str230Key = "Str230";
-
-		/// <summary>
-		/// Transaction number
-		/// </summary>
-		public static string Str230
-		{
-			get { return GetString(Str230Key); }
 		}
 
 		/// <summary>

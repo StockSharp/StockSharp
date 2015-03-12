@@ -168,8 +168,8 @@ namespace StockSharp.BusinessEntities
 		/// Номер транзакции. Автоматически устанавливается при вызове метода <see cref="IConnector.RegisterOrder" />.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str230Key)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey)]
+		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
+		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
 		[MainCategory]
 		[Identity]
 		public long TransactionId { get; set; }

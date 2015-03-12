@@ -81,7 +81,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey)]
+		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
 		[MainCategory]
 		public long TransactionId { get; set; }
 

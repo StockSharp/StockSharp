@@ -80,8 +80,8 @@ namespace StockSharp.Messages
 		/// Номер транзакции подписки или отписки на изменения портфеля.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str230Key)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey)]
+		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
+		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
 		[MainCategory]
 		public long TransactionId { get; set; }
 

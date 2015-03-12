@@ -16,8 +16,8 @@ namespace StockSharp.Messages
 		/// Номер транзакции.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str230Key)]
-		[DescriptionLoc(LocalizedStrings.TransactionIdKey)]
+		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
+		[DescriptionLoc(LocalizedStrings.TransactionIdKey, true)]
 		[MainCategory]
 		public long TransactionId { get; set; }
 
