@@ -77,7 +77,7 @@
 
 			var secMap = task.Settings.Securities.ToDictionary(s => s.Security, s => s);
 
-			return securities.Select(s => secMap.TryGetValue(s) ?? new HydraTaskSecurity
+			return securities.Where(s => s != allSec.Security).Select(s => secMap.TryGetValue(s) ?? new HydraTaskSecurity
 			{
 				Security = s,
 				Settings = task.Settings,

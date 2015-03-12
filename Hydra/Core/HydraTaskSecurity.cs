@@ -238,5 +238,15 @@
 				_executionInfo = value;
 			}
 		}
+
+		/// <summary>
+		/// Получить строковое представление.
+		/// </summary>
+		/// <returns>Строковое представление.</returns>
+		public override string ToString()
+		{
+			var s = Security;
+			return s == null ? string.Empty : s.ToString();
+		}
 	}
 }
