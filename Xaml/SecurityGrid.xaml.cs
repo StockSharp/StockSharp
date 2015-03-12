@@ -79,6 +79,9 @@ namespace StockSharp.Xaml
 				Currency = security.Currency;
 				ExpiryDate = security.ExpiryDate;
 				Multiplier = security.Multiplier;
+				PriceStep = security.PriceStep;
+				VolumeStep = security.VolumeStep;
+				Decimals = security.Decimals;
 				Strike = security.Strike;
 				BinaryOptionType = security.BinaryOptionType;
 			}
