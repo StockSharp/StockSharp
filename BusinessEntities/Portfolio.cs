@@ -58,7 +58,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str542Key)]
-		[DescriptionLoc(LocalizedStrings.Str543Key)]
+		[DescriptionLoc(LocalizedStrings.Str261Key, true)]
 		[MainCategory]
 		public decimal Leverage
 		{

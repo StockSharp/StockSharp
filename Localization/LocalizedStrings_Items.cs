@@ -3162,12 +3162,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Margin shoulder
+		/// Margin leverage
 		/// </summary>
 		public const string Str261Key = "Str261";
 
 		/// <summary>
-		/// Margin shoulder
+		/// Margin leverage
 		/// </summary>
 		public static string Str261
 		{
@@ -6217,29 +6217,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Shoulder
+		/// Leverage
 		/// </summary>
 		public const string Str542Key = "Str542";
 
 		/// <summary>
-		/// Shoulder
+		/// Leverage
 		/// </summary>
 		public static string Str542
 		{
 			get { return GetString(Str542Key); }
-		}
-
-		/// <summary>
-		/// Margin shoulder.
-		/// </summary>
-		public const string Str543Key = "Str543";
-
-		/// <summary>
-		/// Margin shoulder.
-		/// </summary>
-		public static string Str543
-		{
-			get { return GetString(Str543Key); }
 		}
 
 		/// <summary>
@@ -6282,12 +6269,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Accuracy
+		/// Decimals
 		/// </summary>
 		public const string Str547Key = "Str547";
 
 		/// <summary>
-		/// Accuracy
+		/// Decimals
 		/// </summary>
 		public static string Str547
 		{
@@ -6334,12 +6321,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Option contract type
+		/// Option type
 		/// </summary>
 		public const string Str551Key = "Str551";
 
 		/// <summary>
-		/// Option contract type
+		/// Option type
 		/// </summary>
 		public static string Str551
 		{

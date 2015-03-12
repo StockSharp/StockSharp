@@ -241,7 +241,7 @@ Str257;Average price;Средневзвешанная цена
 Str258;Unrealized profit;Нереализованная прибыль
 Str259;Realized profit;Реализованная прибыль
 Str260;Variation margin;Вариационная маржа
-Str261;Margin shoulder;Плечо маржи
+Str261;Margin leverage;Плечо маржи
 Str262;Total commission;Общий размер комиссий
 Str263;Current value (in lots);Текущее значение (в лотах)
 Str264;Depositary name;Название депозитария
@@ -476,16 +476,15 @@ Str538;Registration;Регистрация
 Str539;Combination;Сведение
 Str540Params; per trade {0}; на сделку {0}
 Str541;Portfolio, describing the trading account and the size of its generated commission.;Портфель, описывающий торговый счет и размер сгенерированной комиссии по нему.
-Str542;Shoulder;Плечо
-Str543;Margin shoulder.;Плечо маржи.
+Str542;Leverage;Плечо
 Str544;Stock exchange board, for which the current portfolio is active.;Биржевая площадка, для которой действует данный портфель.
 Str545;Anonymous account;Анонимный счет
 Str546;Security (shares, futures, options etc.).;Инструмент (акция, фьючерс, опцион и т.д.).
-Str547;Accuracy;Точность
+Str547;Decimals;Точность
 Str548;Number of digits in price after coma.;Количество знаков в цене после запятой.
 Str549;Stock exchange board where the security is traded.;Биржевая площадка, на которой торгуется инструмент.
 Str550;Underlying asset on which the current security is built.;Базовый актив, на основе которого построен данный инструмент.
-Str551;Option contract type;Тип опциона
+Str551;Option type;Тип опциона
 Str552;Binary;Бинарный
 Str553;External ID;Внешний идентификатор
 Str554;Security ID in other systems.;Идентификатор инструмента в других системах.
