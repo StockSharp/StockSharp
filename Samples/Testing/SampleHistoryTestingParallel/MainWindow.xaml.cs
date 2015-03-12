@@ -33,7 +33,7 @@ namespace SampleHistoryTestingParallel
 		{
 			InitializeComponent();
 
-			HistoryPath.Text = Path.GetFullPath(@"..\..\..\HistoryData\");
+			HistoryPath.Text = @"..\..\..\HistoryData\".ToFullPath();
 		}
 
 		private void FindPathClick(object sender, RoutedEventArgs e)

@@ -30,7 +30,7 @@
 
 			int IEqualityComparer<string>.GetHashCode(string path)
 			{
-				return Path.GetFullPath(path).TrimEnd('\\').ToLowerInvariant().GetHashCode();
+				return path.ToFullPath().TrimEnd('\\').ToLowerInvariant().GetHashCode();
 			}
 		}
 

@@ -56,7 +56,7 @@ namespace SampleHistoryTesting
 
 			_bufferedChart = new BufferedChart(Chart);
 
-			HistoryPath.Text = Path.GetFullPath(@"..\..\..\HistoryData\");
+			HistoryPath.Text = @"..\..\..\HistoryData\".ToFullPath();
 
 			From.Value = new DateTime(2012, 10, 1);
 			To.Value = new DateTime(2012, 10, 25);
