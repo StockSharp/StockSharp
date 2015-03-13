@@ -28,6 +28,6 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Gets version information.
 		/// </summary>
-		public const string Version = "4.2.71.0";
+		public const string Version = "4.2.72.0";
 	}
 }

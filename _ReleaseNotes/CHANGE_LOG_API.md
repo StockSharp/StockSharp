@@ -1,5 +1,14 @@
 StockSharp API Change log
 ========================
+###v4.2.72:
+* (feature) SecurityMessage.Decimals
+* (feature) Security.State nullable
+* (feature) IOHelper.ToFullPath
+* (bug) FIX connector. Reconnection fix. Lost connection control fix.
+* (bug) Fix https://github.com/stocksharp/stocksharp/issues/33
+* (bug) Micex. Decimals fix
+* (bug) SecurityGrid. Fix PriceStep, Decimals and VolumeStep columns.
+
 ###v4.2.71:
 * (feature) Strategy.StartedTime is DTO
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5556_S--Api.aspx
