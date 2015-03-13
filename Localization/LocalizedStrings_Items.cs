@@ -4722,29 +4722,29 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Trading
+		/// Active
 		/// </summary>
-		public const string TradingKey = "Trading";
+		public const string SecurityActiveKey = "SecurityActive";
 
 		/// <summary>
-		/// Trading
+		/// Active
 		/// </summary>
-		public static string Trading
+		public static string SecurityActive
 		{
-			get { return GetString(TradingKey); }
+			get { return GetString(SecurityActiveKey); }
 		}
 
 		/// <summary>
-		/// Trading suspended
+		/// Suspended
 		/// </summary>
-		public const string TradingSuspendedKey = "TradingSuspended";
+		public const string SecuritySuspendedKey = "SecuritySuspended";
 
 		/// <summary>
-		/// Trading suspended
+		/// Suspended
 		/// </summary>
-		public static string TradingSuspended
+		public static string SecuritySuspended
 		{
-			get { return GetString(TradingSuspendedKey); }
+			get { return GetString(SecuritySuspendedKey); }
 		}
 
 		/// <summary>

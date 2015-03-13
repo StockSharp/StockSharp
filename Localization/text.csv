@@ -361,8 +361,8 @@ TypeBinaryOption;Type of binary option;Тип бинарного опциона.
 Str382;Trading security currency.;Валюта торгового инструмента.
 Class;Class;Класс
 SecurityClass;Security class.;Класс инструмента.
-Trading;Trading;Торгуется
-TradingSuspended;Trading suspended;Торги приостановлены
+SecurityActive;Active;Активен
+SecuritySuspended;Suspended;Приостановлен
 Stock;Stock;Акция
 FutureContract;Future contract;Фьючерс
 Index;Index;Индекс

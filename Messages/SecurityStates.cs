@@ -16,14 +16,14 @@ namespace StockSharp.Messages
 		/// Торгуется.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.TradingKey)]
+		[EnumDisplayNameLoc(LocalizedStrings.SecurityActiveKey)]
 		Trading,
 
 		/// <summary>
 		/// Торги приостановлены.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.TradingSuspendedKey)]
+		[EnumDisplayNameLoc(LocalizedStrings.SecuritySuspendedKey)]
 		Stoped,
 	}
 }

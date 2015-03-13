@@ -7,7 +7,6 @@ namespace StockSharp.Quik
 	using Ecng.Collections;
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
