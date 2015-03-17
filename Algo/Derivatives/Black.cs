@@ -126,7 +126,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <returns>Параметр d1.</returns>
 		protected override double D1(decimal deviation, decimal assetPrice, double timeToExp)
 		{
-			return DerivativesHelper.D1(assetPrice, Option.Strike, 0, 0, deviation, timeToExp);
+			return DerivativesHelper.D1(assetPrice, GetStrike(), 0, 0, deviation, timeToExp);
 		}
 	}
 }

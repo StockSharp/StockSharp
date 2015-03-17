@@ -1996,6 +1996,7 @@ namespace StockSharp.Algo
 				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(criteria.SecurityId.BoardCode),
 				ShortName = criteria.ShortName,
 				OptionType = criteria.OptionType,
+				Strike = criteria.Strike,
 				BinaryOptionType = criteria.BinaryOptionType,
 				Currency = criteria.Currency,
 				SettlementDate = criteria.SettlementDate,
@@ -2012,9 +2013,6 @@ namespace StockSharp.Algo
 
 			if (criteria.VolumeStep != null)
 				security.VolumeStep = criteria.VolumeStep.Value;
-
-			if (criteria.Strike != null)
-				security.Strike = criteria.Strike.Value;
 
 			if (criteria.Multiplier != null)
 				security.Multiplier = criteria.Multiplier.Value;
@@ -2083,7 +2081,7 @@ namespace StockSharp.Algo
 				if (!underSecId.IsEmpty() && s.UnderlyingSecurityId != underSecId)
 					return false;
 
-				if (criteria.Strike != 0 && s.Strike != criteria.Strike)
+				if (criteria.Strike != null && s.Strike != criteria.Strike)
 					return false;
 
 				if (criteria.OptionType != null && s.OptionType != criteria.OptionType)

@@ -308,7 +308,7 @@ namespace StockSharp.Xaml
 					maxPutOI = maxPutOI.Max(oi ?? 0m);
 				}
 
-				maxPnL = maxPnL.Max(row.PnL);
+				maxPnL = maxPnL.Max(row.PnL ?? 0);
 			}
 
 			rows.ForEach(row =>

@@ -338,7 +338,7 @@ namespace StockSharp.Algo.Derivatives
 				throw new InvalidOperationException(LocalizedStrings.Str708);
 
 			var orderedStrikes = group.OrderBy(s => s.Strike).Take(2).ToArray();
-			return orderedStrikes[1].Strike - orderedStrikes[0].Strike;
+			return (decimal)(orderedStrikes[1].Strike - orderedStrikes[0].Strike);
 		}
 
 		/// <summary>

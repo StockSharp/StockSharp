@@ -385,7 +385,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _strike;
+		private decimal? _strike;
 
 		/// <summary>
 		/// Страйк цена опциона.
@@ -395,7 +395,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
 		[DerivativesCategory]
 		[PropertyOrder(1)]
-		public decimal Strike
+		public decimal? Strike
 		{
 			get { return _strike; }
 			set

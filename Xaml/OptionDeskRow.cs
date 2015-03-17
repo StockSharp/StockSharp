@@ -45,22 +45,22 @@ namespace StockSharp.Xaml
 			/// <summary>
 			/// Цена лучшей покупки.
 			/// </summary>
-			public decimal BestBidPrice { get; set; }
+			public decimal? BestBidPrice { get; set; }
 
 			/// <summary>
 			/// Цена лучшей покупки.
 			/// </summary>
-			public decimal BestAskPrice { get; set; }
+			public decimal? BestAskPrice { get; set; }
 
 			/// <summary>
 			/// Объем за сессию.
 			/// </summary>
-			public decimal Volume { get; set; }
+			public decimal? Volume { get; set; }
 
 			/// <summary>
 			/// Теоретическая цена.
 			/// </summary>
-			public decimal TheorPrice { get; set; }
+			public decimal? TheorPrice { get; set; }
 
 			/// <summary>
 			/// Reserved.
@@ -81,42 +81,42 @@ namespace StockSharp.Xaml
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str300Key)]
 			[DescriptionLoc(LocalizedStrings.OptionDeltaKey)]
-			public decimal Delta { get; set; }
+			public decimal? Delta { get; set; }
 
 			/// <summary>
 			/// Гамма опциона.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str301Key)]
 			[DescriptionLoc(LocalizedStrings.OptionGammaKey)]
-			public decimal Gamma { get; set; }
+			public decimal? Gamma { get; set; }
 
 			/// <summary>
 			/// Тета опциона.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str303Key)]
 			[DescriptionLoc(LocalizedStrings.OptionThetaKey)]
-			public decimal Theta { get; set; }
+			public decimal? Theta { get; set; }
 
 			/// <summary>
 			/// Вега опциона.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str302Key)]
 			[DescriptionLoc(LocalizedStrings.OptionVegaKey)]
-			public decimal Vega { get; set; }
+			public decimal? Vega { get; set; }
 
 			/// <summary>
 			/// Ро опциона.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str317Key)]
 			[DescriptionLoc(LocalizedStrings.OptionRhoKey)]
-			public decimal Rho { get; set; }
+			public decimal? Rho { get; set; }
 
 			/// <summary>
 			/// Открытый интерес.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.OIKey)]
 			[DescriptionLoc(LocalizedStrings.OpenInterestKey)]
-			public decimal OpenInterest { get; set; }
+			public decimal? OpenInterest { get; set; }
 
 			/// <summary>
 			/// Прибыльность опциона.
@@ -124,7 +124,7 @@ namespace StockSharp.Xaml
 			[DisplayNameLoc(LocalizedStrings.Str1527Key)]
 			[DescriptionLoc(LocalizedStrings.Str1528Key)]
 			[CategoryLoc(LocalizedStrings.Str1529Key)]
-			public decimal PnL { get; set; }
+			public decimal? PnL { get; set; }
 
 			/// <summary>
 			/// Reserved.
@@ -176,7 +176,7 @@ namespace StockSharp.Xaml
 		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
 		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
 		[CategoryLoc(LocalizedStrings.Str1529Key)]
-		public decimal Strike { get; private set; }
+		public decimal? Strike { get; private set; }
 
 		/// <summary>
 		/// Волатильность (подразумеваемая) опциона.
@@ -222,17 +222,22 @@ namespace StockSharp.Xaml
 		[DisplayNameLoc(LocalizedStrings.Str1527Key)]
 		[DescriptionLoc(LocalizedStrings.Str1528Key)]
 		[CategoryLoc(LocalizedStrings.Str1529Key)]
-		public decimal PnL
+		public decimal? PnL
 		{
 			get
 			{
-				var pnl = 0m;
+				decimal? pnl = null;
 
 				if (Call != null)
-					pnl = Call.PnL * Call.OpenInterest.Max(Call.Option.VolumeStep);
+					pnl = Call.PnL * (Call.OpenInterest ?? 0).Max(Call.Option.VolumeStep);
 
 				if (Put != null)
-					pnl = pnl.Max(Put.PnL * Put.OpenInterest.Max(Put.Option.VolumeStep));
+				{
+					var putPnL = Put.PnL * (Put.OpenInterest ?? 0).Max(Put.Option.VolumeStep);
+
+					if (pnl < putPnL)
+						pnl = putPnL;
+				}
 
 				return pnl;
 			}

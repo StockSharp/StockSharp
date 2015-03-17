@@ -171,7 +171,7 @@ namespace StockSharp.Algo.Derivatives
 			assetPrice = GetAssetPrice(assetPrice);
 
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Premium(OptionType, Option.Strike, assetPrice.Value, RiskFree, Dividend, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
+			return TryRound(DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice.Value, RiskFree, Dividend, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
 		}
 
 		/// <summary>
@@ -228,7 +228,7 @@ namespace StockSharp.Algo.Derivatives
 			deviation = deviation ?? DefaultDeviation;
 			assetPrice = GetAssetPrice(assetPrice);
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Theta(OptionType, Option.Strike, assetPrice.Value, RiskFree, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
+			return TryRound(DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
 		}
 
 		/// <summary>
@@ -243,7 +243,7 @@ namespace StockSharp.Algo.Derivatives
 			deviation = deviation ?? DefaultDeviation;
 			assetPrice = GetAssetPrice(assetPrice);
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Rho(OptionType, Option.Strike, assetPrice.Value, RiskFree, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
+			return TryRound(DerivativesHelper.Rho(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
 		}
 
 		/// <summary>
@@ -267,7 +267,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <returns>Параметр d1.</returns>
 		protected virtual double D1(decimal deviation, decimal assetPrice, double timeToExp)
 		{
-			return DerivativesHelper.D1(assetPrice, Option.Strike, RiskFree, Dividend, deviation, timeToExp);
+			return DerivativesHelper.D1(assetPrice, GetStrike(), RiskFree, Dividend, deviation, timeToExp);
 		}
 		
 		/// <summary>
@@ -278,6 +278,11 @@ namespace StockSharp.Algo.Derivatives
 		public virtual MarketDepth ImpliedVolatility(DateTimeOffset currentTime)
 		{
 			return DataProvider.GetMarketDepth(Option).ImpliedVolatility(this, currentTime);
+		}
+
+		internal decimal GetStrike()
+		{
+			return Option.Strike.Value;
 		}
 	}
 }

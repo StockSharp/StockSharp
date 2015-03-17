@@ -508,7 +508,7 @@ namespace StockSharp.Algo
 				Code = message.SecurityId.SecurityCode,
 				Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode),
 				Type = message.SecurityType ?? message.SecurityId.SecurityType,
-				
+				Strike = message.Strike,
 				OptionType = message.OptionType,
 				Name = message.Name,
 				ShortName = message.ShortName,
@@ -529,9 +529,6 @@ namespace StockSharp.Algo
 
 			if (message.VolumeStep != null)
 				security.VolumeStep = message.VolumeStep.Value;
-
-			if (message.Strike != null)
-				security.Strike = message.Strike.Value;
 
 			if (message.Multiplier != null)
 				security.Multiplier = message.Multiplier.Value;
