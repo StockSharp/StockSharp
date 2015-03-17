@@ -1414,7 +1414,7 @@ namespace StockSharp.Quik
 				else if (table == SessionHolder.OrdersTable)
 					columnsCtrlId = 11806;
 				else if (table == SessionHolder.StopOrdersTable)
-					columnsCtrlId = 31257;
+					columnsCtrlId = 17852;
 				else if (table == SessionHolder.TradesTable)
 					columnsCtrlId = 30303;
 				else if (table == SessionHolder.MyTradesTable)
