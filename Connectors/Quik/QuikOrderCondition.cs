@@ -4,6 +4,7 @@ namespace StockSharp.Quik
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Collections;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
@@ -154,23 +155,6 @@ namespace StockSharp.Quik
 		/// </summary>
 		public QuikOrderCondition()
 		{
-			Type = default(QuikOrderConditionTypes);
-			LinkedOrderCancel = false;
-			LinkedOrderPrice = null;
-			Offset = null;
-			Spread = null;
-			StopPriceCondition = default(QuikStopPriceConditions);
-			StopPrice = null;
-			StopLimitPrice = null;
-			ActiveTime = null;
-			IsMarketStopLimit = null;
-			IsMarketTakeProfit = null;
-			ConditionOrderPartiallyMatched = null;
-			ConditionOrderUseMatchedBalance = null;
-			Result = null;
-			OtherSecurityId = null;
-			ConditionOrderId = null;
-			ConditionOrderSide = Sides.Buy;
 		}
 
 		/// <summary>
@@ -180,9 +164,9 @@ namespace StockSharp.Quik
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1737Key)]
 		[DescriptionLoc(LocalizedStrings.Str1691Key)]
-		public QuikOrderConditionTypes Type
+		public QuikOrderConditionTypes? Type
 		{
-			get { return (QuikOrderConditionTypes)Parameters["Type"]; }
+			get { return (QuikOrderConditionTypes?)Parameters.TryGetValue("Type"); }
 			set { Parameters["Type"] = value; }
 		}
 
@@ -198,7 +182,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1739Key)]
 		public QuikOrderConditionResults? Result
 		{
-			get { return (QuikOrderConditionResults?)Parameters["Result"]; }
+			get { return (QuikOrderConditionResults?)Parameters.TryGetValue("Result"); }
 			set { Parameters["Result"] = value; }
 		}
 
@@ -211,7 +195,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1740Key)]
 		public SecurityId? OtherSecurityId
 		{
-			get { return (SecurityId?)Parameters["OtherSecurityId"]; }
+			get { return (SecurityId?)Parameters.TryGetValue("OtherSecurityId"); }
 			set { Parameters["OtherSecurityId"] = value; }
 		}
 
@@ -222,9 +206,9 @@ namespace StockSharp.Quik
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1741Key)]
 		[DescriptionLoc(LocalizedStrings.Str1742Key)]
-		public QuikStopPriceConditions StopPriceCondition
+		public QuikStopPriceConditions? StopPriceCondition
 		{
-			get { return (QuikStopPriceConditions)Parameters["StopPriceCondition"]; }
+			get { return (QuikStopPriceConditions?)Parameters.TryGetValue("StopPriceCondition"); }
 			set { Parameters["StopPriceCondition"] = value; }
 		}
 
@@ -239,7 +223,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1744Key)]
 		public decimal? StopPrice
 		{
-			get { return (decimal?)Parameters["StopPrice"]; }
+			get { return (decimal?)Parameters.TryGetValue("StopPrice"); }
 			set { Parameters["StopPrice"] = value; }
 		}
 
@@ -253,7 +237,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1746Key)]
 		public decimal? StopLimitPrice
 		{
-			get { return (decimal?)Parameters["StopLimitPrice"]; }
+			get { return (decimal?)Parameters.TryGetValue("StopLimitPrice"); }
 			set { Parameters["StopLimitPrice"] = value; }
 		}
 
@@ -267,7 +251,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1748Key)]
 		public bool? IsMarketStopLimit
 		{
-			get { return (bool?)Parameters["IsMarketStopLimit"]; }
+			get { return (bool?)Parameters.TryGetValue("IsMarketStopLimit"); }
 			set { Parameters["IsMarketStopLimit"] = value; }
 		}
 
@@ -281,7 +265,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1750Key)]
 		public Range<DateTimeOffset> ActiveTime
 		{
-			get { return (Range<DateTimeOffset>)Parameters["ActiveTime"]; }
+			get { return (Range<DateTimeOffset>)Parameters.TryGetValue("ActiveTime"); }
 			set { Parameters["ActiveTime"] = value; }
 		}
 
@@ -293,7 +277,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1751Key, true)]
 		public long? ConditionOrderId
 		{
-			get { return (long?)Parameters["ConditionOrderId"]; }
+			get { return (long?)Parameters.TryGetValue("ConditionOrderId"); }
 			set { Parameters["ConditionOrderId"] = value; }
 		}
 
@@ -303,9 +287,9 @@ namespace StockSharp.Quik
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1753Key)]
 		[DescriptionLoc(LocalizedStrings.Str1754Key)]
-		public Sides ConditionOrderSide
+		public Sides? ConditionOrderSide
 		{
-			get { return (Sides)Parameters["ConditionOrderSide"]; }
+			get { return (Sides?)Parameters.TryGetValue("ConditionOrderSide"); }
 			set { Parameters["ConditionOrderSide"] = value; }
 		}
 
@@ -320,7 +304,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1756Key)]
 		public bool? ConditionOrderPartiallyMatched
 		{
-			get { return (bool?)Parameters["ConditionOrderPartiallyMatched"]; }
+			get { return (bool?)Parameters.TryGetValue("ConditionOrderPartiallyMatched"); }
 			set { Parameters["ConditionOrderPartiallyMatched"] = value; }
 		}
 
@@ -335,7 +319,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1758Key)]
 		public bool? ConditionOrderUseMatchedBalance
 		{
-			get { return (bool?)Parameters["ConditionOrderUseMatchedBalance"]; }
+			get { return (bool?)Parameters.TryGetValue("ConditionOrderUseMatchedBalance"); }
 			set { Parameters["ConditionOrderUseMatchedBalance"] = value; }
 		}
 
@@ -349,7 +333,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1760Key)]
 		public decimal? LinkedOrderPrice
 		{
-			get { return (decimal?)Parameters["LinkedOrderPrice"]; }
+			get { return (decimal?)Parameters.TryGetValue("LinkedOrderPrice"); }
 			set { Parameters["LinkedOrderPrice"] = value; }
 		}
 
@@ -360,9 +344,9 @@ namespace StockSharp.Quik
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1761Key)]
 		[DescriptionLoc(LocalizedStrings.Str1762Key)]
-		public bool LinkedOrderCancel
+		public bool? LinkedOrderCancel
 		{
-			get { return (bool)Parameters["LinkedOrderCancel"]; }
+			get { return (bool?)Parameters.TryGetValue("LinkedOrderCancel"); }
 			set { Parameters["LinkedOrderCancel"] = value; }
 		}
 
@@ -375,7 +359,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1764Key)]
 		public Unit Offset
 		{
-			get { return (Unit)Parameters["Offset"]; }
+			get { return (Unit)Parameters.TryGetValue("Offset"); }
 			set { Parameters["Offset"] = value; }
 		}
 
@@ -388,7 +372,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1766Key)]
 		public Unit Spread
 		{
-			get { return (Unit)Parameters["Spread"]; }
+			get { return (Unit)Parameters.TryGetValue("Spread"); }
 			set { Parameters["Spread"] = value; }
 		}
 
@@ -402,7 +386,7 @@ namespace StockSharp.Quik
 		[DescriptionLoc(LocalizedStrings.Str1768Key)]
 		public bool? IsMarketTakeProfit
 		{
-			get { return (bool?)Parameters["IsMarketTakeProfit"]; }
+			get { return (bool?)Parameters.TryGetValue("IsMarketTakeProfit"); }
 			set { Parameters["IsMarketTakeProfit"] = value; }
 		}
 

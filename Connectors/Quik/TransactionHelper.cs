@@ -122,8 +122,8 @@ namespace StockSharp.Quik
 				{
 					var condition = (QuikOrderCondition)message.Condition;
 
-					if (condition.ConditionOrderId != null)
-						message.Side = condition.ConditionOrderSide.Invert();
+					if (condition.ConditionOrderId != null && condition.ConditionOrderSide != null)
+						message.Side = condition.ConditionOrderSide.Value.Invert();
 
 					transaction
 						.SetSide(message.Side)
@@ -142,7 +142,7 @@ namespace StockSharp.Quik
 							stopOrderKind = TransactionStopOrderKinds.WithLinkedLimitOrder;
 							transaction
 								.SetLinkedOrderPrice(condition.LinkedOrderPrice ?? 0)
-								.SetLinkedOrderCancel(condition.LinkedOrderCancel);
+								.SetLinkedOrderCancel(condition.LinkedOrderCancel ?? false);
 
 							stopPriceCondition = message.Side == Sides.Buy ? ">=" : "<=";
 							break;
