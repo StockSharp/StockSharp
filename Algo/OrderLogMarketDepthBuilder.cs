@@ -105,7 +105,7 @@ namespace StockSharp.Algo
 
 				_lastUpdateTime = item.ServerTime.LocalDateTime;
 
-				if (!item.IsSystem || item.TradePrice != null || item.Price == 0 /* нулевая цена может появится при поставке опционов */)
+				if (item.IsSystem == false || item.TradePrice != null || item.Price == 0 /* нулевая цена может появится при поставке опционов */)
 					return changed;
 
 				if (item.IsOrderLogRegistered())

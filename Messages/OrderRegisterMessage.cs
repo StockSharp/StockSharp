@@ -58,15 +58,6 @@ namespace StockSharp.Messages
 		public Sides Side { get; set; }
 
 		/// <summary>
-		/// Является ли заявка системной.
-		/// </summary>
-		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str139Key)]
-		[DescriptionLoc(LocalizedStrings.Str140Key)]
-		[MainCategory]
-		public bool IsSystem { get; set; }
-
-		/// <summary>
 		/// Комментарий к выставляемой заявке.
 		/// </summary>
 		[DataMember]
@@ -154,7 +145,6 @@ namespace StockSharp.Messages
 				Comment = Comment,
 				Condition = Condition,
 				TillDate = TillDate,
-				IsSystem = IsSystem,
 				OrderType = OrderType,
 				PortfolioName = PortfolioName,
 				Price = Price,

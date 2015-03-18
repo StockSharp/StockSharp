@@ -1194,21 +1194,23 @@ namespace StockSharp.Algo
 			lock (values.SyncRoot)
 			{
 				values[(int)Level1Fields.LastTradeTime] = message.ServerTime;
-				values[(int)Level1Fields.LastTradePrice] = message.TradePrice;
 
-				if (!message.IsSystem)
-					values[(int)Level1Fields.IsSystem] = message.IsSystem;
+				if (message.TradePrice != null)
+					values[(int)Level1Fields.LastTradePrice] = message.TradePrice.Value;
+
+				if (message.IsSystem != null)
+					values[(int)Level1Fields.IsSystem] = message.IsSystem.Value;
 
 				if (message.TradeId != null)
 				{
-					values[(int)Level1Fields.LastTradeId] = message.TradeId;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId));
+					values[(int)Level1Fields.LastTradeId] = message.TradeId.Value;
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId.Value));
 				}
 
 				if (message.Volume != null)
 				{
-					values[(int)Level1Fields.Volume] = message.Volume;
-					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.Volume));
+					values[(int)Level1Fields.Volume] = message.Volume.Value;
+					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.Volume.Value));
 				}
 			}
 

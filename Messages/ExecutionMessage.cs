@@ -244,8 +244,6 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public string SystemComment { get; set; }
 
-		private bool _isSystem = true;
-
 		/// <summary>
 		/// Является ли заявка системной.
 		/// </summary>
@@ -253,11 +251,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str139Key)]
 		[DescriptionLoc(LocalizedStrings.Str140Key)]
 		[MainCategory]
-		public bool IsSystem
-		{
-			get { return _isSystem; }
-			set { _isSystem = value; }
-		}
+		public bool? IsSystem { get; set; }
 
 		/// <summary>
 		/// Время экспирации заявки.

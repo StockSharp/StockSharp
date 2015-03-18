@@ -293,7 +293,16 @@ namespace StockSharp.Algo.Storages
 					writer.WriteNullableInt(msg.TradeStatus);
 				
 				writer.WriteInt((int)msg.TimeInForce);
-				writer.Write(msg.IsSystem);
+
+				if (metaInfo.Version < MarketDataVersions.Version52)
+					writer.Write(msg.IsSystem ?? true);
+				else
+				{
+					writer.Write(msg.IsSystem != null);
+
+					if (msg.IsSystem != null)
+						writer.Write(msg.IsSystem.Value);
+				}
 
 				writer.WriteLong(msg.ExpiryDate.Ticks);
 
@@ -379,7 +388,9 @@ namespace StockSharp.Algo.Storages
 				: reader.ReadNullableInt<int>();
 
 			var timeInForce = reader.ReadInt().To<TimeInForce>();
-			var isSystem = reader.Read();
+			var isSystem = metaInfo.Version < MarketDataVersions.Version52
+						? reader.Read()
+						: (reader.Read() ? reader.Read() : (bool?)null);
 
 			var expDate = reader.ReadLong();
 

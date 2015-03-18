@@ -41,7 +41,6 @@
 				Comment = Comment,
 				Condition = Condition,
 				TillDate = TillDate,
-				IsSystem = IsSystem,
 				OrderType = OrderType,
 				PortfolioName = PortfolioName,
 				Price = Price,

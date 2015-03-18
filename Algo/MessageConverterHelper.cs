@@ -313,7 +313,7 @@ namespace StockSharp.Algo
 				TillDate = order.ExpiryDate,
 				RepoInfo = order.RepoInfo,
 				RpsInfo = order.RpsInfo,
-				IsSystem = order.IsSystem,
+				//IsSystem = order.IsSystem,
 				UserOrderId = order.UserOrderId
 			};
 
@@ -381,7 +381,7 @@ namespace StockSharp.Algo
 				TillDate = newOrder.ExpiryDate,
 				RepoInfo = newOrder.RepoInfo,
 				RpsInfo = newOrder.RpsInfo,
-				IsSystem = newOrder.IsSystem,
+				//IsSystem = newOrder.IsSystem,
 
 				OldOrderId = oldOrder.Id,
 				OldOrderStringId = oldOrder.StringId,

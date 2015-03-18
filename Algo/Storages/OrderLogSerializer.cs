@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Storages
 		public OrderLogSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version48;
+			Version = MarketDataVersions.Version49;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> items, OrderLogMetaInfo metaInfo)
@@ -262,7 +262,16 @@ namespace StockSharp.Algo.Storages
 					continue;
 
 				writer.WriteInt((int)item.TimeInForce);
-				writer.Write(item.IsSystem);
+
+				if (metaInfo.Version >= MarketDataVersions.Version49)
+				{
+					writer.Write(item.IsSystem != null);
+
+					if (item.IsSystem != null)
+						writer.Write(item.IsSystem.Value);
+				}
+				else
+					writer.Write(item.IsSystem ?? true);
 
 				if (metaInfo.Version < MarketDataVersions.Version34)
 					continue;
@@ -367,7 +376,9 @@ namespace StockSharp.Algo.Storages
 				if (metaInfo.Version >= MarketDataVersions.Version33)
 				{
 					execMsg.TimeInForce = (TimeInForce)reader.ReadInt();
-					execMsg.IsSystem = reader.Read();
+					execMsg.IsSystem = metaInfo.Version < MarketDataVersions.Version49
+						? reader.Read()
+						: (reader.Read() ? reader.Read() : (bool?)null);
 
 					if (metaInfo.Version >= MarketDataVersions.Version34)
 					{

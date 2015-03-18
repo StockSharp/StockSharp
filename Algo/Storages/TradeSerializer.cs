@@ -151,9 +151,17 @@ namespace StockSharp.Algo.Storages
 				if (metaInfo.Version < MarketDataVersions.Version42)
 					continue;
 
-				writer.Write(msg.IsSystem);
+				if (metaInfo.Version >= MarketDataVersions.Version51)
+				{
+					writer.Write(msg.IsSystem != null);
 
-				if (!msg.IsSystem)
+					if (msg.IsSystem != null)
+						writer.Write(msg.IsSystem.Value);
+				}
+				else
+					writer.Write(msg.IsSystem ?? true);
+
+				if (msg.IsSystem == false)
 				{
 					if (metaInfo.Version >= MarketDataVersions.Version51)
 						writer.WriteNullableInt(msg.TradeStatus);
@@ -241,9 +249,11 @@ namespace StockSharp.Algo.Storages
 			if (metaInfo.Version < MarketDataVersions.Version42)
 				return msg;
 
-			msg.IsSystem = reader.Read();
+			msg.IsSystem = metaInfo.Version < MarketDataVersions.Version51
+						? reader.Read()
+						: (reader.Read() ? reader.Read() : (bool?)null);
 
-			if (!msg.IsSystem)
+			if (msg.IsSystem == false)
 			{
 				msg.TradeStatus = metaInfo.Version < MarketDataVersions.Version51
 					? reader.ReadInt()

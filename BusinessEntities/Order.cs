@@ -366,7 +366,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private bool _isSystem = true;
+		private bool? _isSystem;
 
 		/// <summary>
 		/// Является ли заявка системной.
@@ -375,7 +375,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str139Key)]
 		[DescriptionLoc(LocalizedStrings.Str140Key)]
 		[MainCategory]
-		public bool IsSystem
+		[Nullable]
+		public bool? IsSystem
 		{
 			get { return _isSystem; }
 			set

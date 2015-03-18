@@ -60,7 +60,7 @@ namespace StockSharp.Hydra.Panes
 					.Load(From, To + TimeHelper.LessOneDay);
 
 				if (IsNonSystem.IsChecked == false)
-					orderLog = orderLog.Where(i => i.IsSystem).ToEx(orderLog.Count);
+					orderLog = orderLog.Where(i => i.IsSystem != false).ToEx(orderLog.Count);
 
 				return orderLog.ToTicks();
 			}
@@ -71,7 +71,7 @@ namespace StockSharp.Hydra.Panes
 					.Load(From, To + TimeHelper.LessOneDay);
 
 				if (IsNonSystem.IsChecked == false)
-					trades = trades.Where(t => t.IsSystem).ToEx(trades.Count);
+					trades = trades.Where(t => t.IsSystem != false).ToEx(trades.Count);
 
 				return trades;
 			}

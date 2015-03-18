@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Candles.Compression
 			if (typeof(TSourceValue) == typeof(Trade))
 			{
 				DefaultConverter = ((Func<Trade, ICandleBuilderSourceValue>)(t => new TradeCandleBuilderSourceValue(t))).To<Func<TSourceValue, ICandleBuilderSourceValue>>();
-				DefaultFilter = ((Func<Trade, bool>)(t => t.IsSystem)).To<Func<TSourceValue, bool>>();
+				DefaultFilter = ((Func<Trade, bool>)(t => t.IsSystem != false)).To<Func<TSourceValue, bool>>();
 			}
 			else if (typeof(TSourceValue) == typeof(MarketDepth))
 			{
