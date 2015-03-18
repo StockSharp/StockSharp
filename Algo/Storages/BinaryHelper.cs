@@ -1,16 +1,20 @@
 namespace StockSharp.Algo.Storages
 {
 	using System;
+	using System.Collections;
+	using System.Text;
 
 	using Ecng.Collections;
 	using Ecng.Common;
+
+	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	using StockSharp.Localization;
 
-	static class MarketDataStorageHelper
+	static class BinaryHelper
 	{
 		public static decimal WriteDecimal(this BitArrayWriter writer, decimal value, decimal prevValue)
 		{
@@ -340,12 +344,15 @@ namespace StockSharp.Algo.Storages
 
 		public static void WriteString(this BitArrayWriter writer, string value)
 		{
-			throw new NotImplementedException();
+			var bits = Encoding.UTF8.GetBytes(value).To<BitArray>().To<bool[]>();
+			writer.WriteInt(bits.Length);
+			bits.ForEach(writer.Write);
 		}
 
 		public static string ReadString(this BitArrayReader reader)
 		{
-			throw new NotImplementedException();
+			var len = reader.ReadInt();
+			return Encoding.UTF8.GetString(reader.ReadArray(len).To<BitArray>().To<byte[]>());
 		}
 
 		public static TimeSpan GetTimeZone<TMetaInfo>(this BinaryMetaInfo<TMetaInfo> metaInfo, bool isUtc, SecurityId securityId)

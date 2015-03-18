@@ -371,7 +371,7 @@
     <Compile Include="Storages\IndexSecurityMarketDataStorage.cs" />
     <Compile Include="Storages\LocalMarketDataDrive.cs" />
     <Compile Include="Storages\MarketDataBuffer.cs" />
-    <Compile Include="Storages\MarketDataStorageHelper.cs" />
+    <Compile Include="Storages\BinaryHelper.cs" />
     <Compile Include="Storages\OrderLogSerializer.cs" />
     <Compile Include="Storages\StorageFormats.cs" />
     <Compile Include="Storages\StorageHelper.cs" />
