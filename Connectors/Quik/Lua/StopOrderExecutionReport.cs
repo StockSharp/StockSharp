@@ -9,10 +9,8 @@ namespace StockSharp.Quik.Lua
 	{
 		public StopOrderExecutionReport()
 		{
-			Header.SetField(new MsgType(MsgType));
+			Header.SetField(new MsgType(QuikFixMessages.StopOrderExecutionReport));
 		}
-
-		public new const string MsgType = "StockSharp8";
 
 		#region Type
 

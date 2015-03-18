@@ -1,5 +1,13 @@
 StockSharp API Change log
 ========================
+###v4.2.73:
+* (feature) FIX connector. Client side no longer use QuickFix
+* (bug) LuaFixServer. Level1 thread safety.
+* (bug) EntityCache. Fix ExecMsg.OridinTransId == OrderStatusMsg.TransactionId
+* (feature) ExecutionMessage. OrderId, Balance, Volume, VisibleVolume, TradeId, TradePrice, TradeStatus is nullable.
+* (feature) Security.Strike is nullable
+* (feature) QuikOrderCondition. Nullable fields.
+
 ###v4.2.72:
 * (feature) SecurityMessage.Decimals
 * (feature) Security.State nullable

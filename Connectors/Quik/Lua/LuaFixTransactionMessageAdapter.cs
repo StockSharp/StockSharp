@@ -2,13 +2,13 @@
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
-	using QuickFix.Fields;
-
 	using StockSharp.Fix;
+	using StockSharp.Fix.Native;
 	using StockSharp.Messages;
 
 	[DisplayName("LuaFixTransactionMessageAdapter")]
@@ -24,110 +24,243 @@
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Отправить данные по условию заявки.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		protected override void OnSendInMessage(Message message)
+		/// <param name="writer">Писатель FIX данных.</param>
+		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
+		protected override void SendFixOrderCondition(FixWriter writer, OrderRegisterMessage regMsg)
 		{
-			switch (message.Type)
-			{
-				case MessageTypes.OrderRegister:
-				{
-					var regMsg = (OrderRegisterMessage)message;
-
-					if (regMsg.OrderType != OrderTypes.Conditional)
-						break;
-
-					ProcessOrderRegister(regMsg);
-					return;
-				}
-			}
-
-			base.OnSendInMessage(message);
-		}
-
-		private void ProcessOrderRegister(OrderRegisterMessage regMsg)
-		{
-			var fixMsg = regMsg.ToFixOrder<NewStopOrderSingle>(Session);
-
 			var condition = (QuikOrderCondition)regMsg.Condition;
 
-			fixMsg.Type = new NewStopOrderSingle.TypeField((int)condition.Type);
-			fixMsg.StopPriceCondition = new NewStopOrderSingle.StopPriceConditionField((int)condition.StopPriceCondition);
-			fixMsg.ConditionOrderSide = new NewStopOrderSingle.ConditionOrderSideField((int)condition.ConditionOrderSide);
-			fixMsg.LinkedOrderCancel = new NewStopOrderSingle.LinkedOrderCancelField(condition.LinkedOrderCancel);
+			if (condition.Type != null)
+			{
+				writer.Write((FixTags)QuikFixTags.Type);
+				writer.Write((int)condition.Type.Value);	
+			}
+
+			if (condition.StopPriceCondition != null)
+			{
+				writer.Write((FixTags)QuikFixTags.StopPriceCondition);
+				writer.Write((int)condition.StopPriceCondition.Value);	
+			}
+
+			if (condition.ConditionOrderSide != null)
+			{
+				writer.Write((FixTags)QuikFixTags.ConditionOrderSide);
+				writer.Write((int)condition.ConditionOrderSide.Value);
+			}
+
+			if (condition.LinkedOrderCancel != null)
+			{
+				writer.Write((FixTags)QuikFixTags.LinkedOrderCancel);
+				writer.Write(condition.LinkedOrderCancel.Value);
+			}
 
 			if (condition.Result != null)
-				fixMsg.Result = new NewStopOrderSingle.ResultField((int)condition.Result);
+			{
+				writer.Write((FixTags)QuikFixTags.Result);
+				writer.Write((int)condition.Result.Value);
+			}
+
 			if (condition.OtherSecurityId != null)
-				fixMsg.OtherSecurityCode = new NewStopOrderSingle.OtherSecurityCodeField(condition.OtherSecurityId.Value.SecurityCode);
+			{
+				writer.Write((FixTags)QuikFixTags.OtherSecurityCode);
+				writer.Write(condition.OtherSecurityId.Value.SecurityCode);
+			}
+
 			if (condition.StopPrice != null)
-				fixMsg.StopPx = new StopPx(condition.StopPrice.Value);
+			{
+				writer.Write((FixTags)QuikFixTags.StopPrice);
+				writer.Write(condition.StopPrice.Value);
+			}
+
 			if (condition.StopLimitPrice != null)
-				fixMsg.StopLimitPrice = new NewStopOrderSingle.StopLimitPriceField(condition.StopLimitPrice.Value);
+			{
+				writer.Write((FixTags)QuikFixTags.StopLimitPrice);
+				writer.Write(condition.StopLimitPrice.Value);
+			}
+
 			if (condition.IsMarketStopLimit != null)
-				fixMsg.IsMarketStopLimit = new NewStopOrderSingle.IsMarketStopLimitField(condition.IsMarketStopLimit.Value);
+			{
+				writer.Write((FixTags)QuikFixTags.IsMarketStopLimit);
+				writer.Write(condition.IsMarketStopLimit.Value);
+			}
+
 			if (condition.ActiveTime != null)
 			{
-				fixMsg.ActiveTimeFrom = new NewStopOrderSingle.ActiveTimeFromField(condition.ActiveTime.Min.UtcDateTime);
-				fixMsg.ActiveTimeTo = new NewStopOrderSingle.ActiveTimeToField(condition.ActiveTime.Min.UtcDateTime);
-			}
-			if (condition.ConditionOrderId != null)
-				fixMsg.ConditionOrderId = new NewStopOrderSingle.ConditionOrderIdField((int)condition.ConditionOrderId);
-			if (condition.ConditionOrderPartiallyMatched != null)
-				fixMsg.ConditionOrderPartiallyMatched = new NewStopOrderSingle.ConditionOrderPartiallyMatchedField(condition.ConditionOrderPartiallyMatched.Value);
-			if (condition.ConditionOrderUseMatchedBalance != null)
-				fixMsg.ConditionOrderUseMatchedBalance = new NewStopOrderSingle.ConditionOrderUseMatchedBalanceField(condition.ConditionOrderUseMatchedBalance.Value);
-			if (condition.LinkedOrderPrice != null)
-				fixMsg.LinkedOrderPrice = new NewStopOrderSingle.LinkedOrderPriceField(condition.LinkedOrderPrice.Value);
-			if (condition.Offset != null)
-				fixMsg.Offset = new NewStopOrderSingle.OffsetField(condition.Offset.ToString());
-			if (condition.Spread != null)
-				fixMsg.StopSpread = new NewStopOrderSingle.SpreadField(condition.Spread.ToString());
-			if (condition.IsMarketTakeProfit != null)
-				fixMsg.IsMarketTakeProfit = new NewStopOrderSingle.IsMarketTakeProfitField(condition.IsMarketTakeProfit.Value);
+				writer.Write((FixTags)QuikFixTags.ActiveTimeFrom);
+				writer.Write(condition.ActiveTime.Min.UtcDateTime);
 
-			SendMessage(fixMsg);
+				writer.Write((FixTags)QuikFixTags.ActiveTimeTo);
+				writer.Write(condition.ActiveTime.Max.UtcDateTime);
+			}
+
+			if (condition.ConditionOrderId != null)
+			{
+				writer.Write((FixTags)QuikFixTags.ConditionOrderId);
+				writer.Write(condition.ConditionOrderId.Value);
+			}
+
+			if (condition.ConditionOrderPartiallyMatched != null)
+			{
+				writer.Write((FixTags)QuikFixTags.ConditionOrderPartiallyMatched);
+				writer.Write(condition.ConditionOrderPartiallyMatched.Value);
+			}
+
+			if (condition.ConditionOrderUseMatchedBalance != null)
+			{
+				writer.Write((FixTags)QuikFixTags.ConditionOrderUseMatchedBalance);
+				writer.Write(condition.ConditionOrderUseMatchedBalance.Value);
+			}
+
+			if (condition.LinkedOrderPrice != null)
+			{
+				writer.Write((FixTags)QuikFixTags.LinkedOrderPrice);
+				writer.Write(condition.LinkedOrderPrice.Value);
+			}
+
+			if (condition.Offset != null)
+			{
+				writer.Write((FixTags)QuikFixTags.Offset);
+				writer.Write(condition.Offset.ToString());
+			}
+
+			if (condition.Spread != null)
+			{
+				writer.Write((FixTags)QuikFixTags.StopSpread);
+				writer.Write(condition.Spread.ToString());
+			}
+
+			if (condition.IsMarketTakeProfit != null)
+			{
+				writer.Write((FixTags)QuikFixTags.IsMarketTakeProfit);
+				writer.Write(condition.IsMarketTakeProfit.Value);
+			}
 		}
 
 		/// <summary>
 		/// Метод вызывается при обработке полученного сообщения.
 		/// </summary>
-		/// <param name="fixMessage">Строка сообщения.</param>
-		protected override bool ProcessTransactionMessage(string fixMessage)
+		/// <param name="msgType">Тип FIX сообщения.</param>
+		/// <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
+		/// <returns>Успешно ли обработаны данные.</returns>
+		protected override bool? ProcessTransactionMessage(string msgType, FixReader reader)
 		{
-			var msgType = QuickFix.Message.GetMsgType(fixMessage);
-
 			switch (msgType)
 			{
-				case StopOrderExecutionReport.MsgType:
+				case QuikFixMessages.StopOrderExecutionReport:
 				{
-					var fixMsg = CreateMessage<StopOrderExecutionReport>(Session, fixMessage);
-					var exec = fixMsg.ToExecutionMessage(Session, SessionHolder.UtcOffset);
+					int? type = null;
+					int? stopPriceCondition = null;
+					int? conditionOrderSide = null;
+					bool? linkedOrderCancel = null;
+					int? result = null;
+					string otherSecurityCode = null;
+					decimal? stopPrice = null;
+					decimal? stopLimitPrice = null;
+					bool? isMarketStopLimit = null;
+					DateTimeOffset? activeTimeFrom = null;
+					DateTimeOffset? activeTimeTo = null;
+					long? conditionOrderId = null;
+					bool? conditionOrderPartiallyMatched = null;
+					bool? conditionOrderUseMatchedBalance = null;
+					decimal? linkedOrderPrice = null;
+					string offset = null;
+					string stopSpread = null;
+					bool? isMarketTakeProfit = null;
+
+					var executions = reader.ReadExecutionMessage(Session, SessionHolder.UtcOffset, tag =>
+					{
+						switch ((QuikFixTags)tag)
+						{
+							case QuikFixTags.Type:
+								type = reader.ReadInt();
+								return true;
+							case QuikFixTags.StopPriceCondition:
+								stopPriceCondition = reader.ReadInt();
+								return true;
+							case QuikFixTags.ConditionOrderSide:
+								conditionOrderSide = reader.ReadInt();
+								return true;
+							case QuikFixTags.LinkedOrderCancel:
+								linkedOrderCancel = reader.ReadBool();
+								return true;
+							case QuikFixTags.Result:
+								result = reader.ReadInt();
+								return true;
+							case QuikFixTags.OtherSecurityCode:
+								otherSecurityCode = reader.ReadString();
+								return true;
+							case QuikFixTags.StopPrice:
+								stopPrice = reader.ReadDecimal();
+								return true;
+							case QuikFixTags.StopLimitPrice:
+								stopLimitPrice = reader.ReadDecimal();
+								return true;
+							case QuikFixTags.IsMarketStopLimit:
+								isMarketStopLimit = reader.ReadBool();
+								return true;
+							case QuikFixTags.ActiveTimeFrom:
+								activeTimeFrom = reader.ReadDateTime().ApplyTimeZone(SessionHolder.UtcOffset);
+								return true;
+							case QuikFixTags.ActiveTimeTo:
+								activeTimeTo = reader.ReadDateTime().ApplyTimeZone(SessionHolder.UtcOffset);
+								return true;
+							case QuikFixTags.ConditionOrderId:
+								conditionOrderId = reader.ReadLong();
+								return true;
+							case QuikFixTags.ConditionOrderPartiallyMatched:
+								conditionOrderPartiallyMatched = reader.ReadBool();
+								return true;
+							case QuikFixTags.ConditionOrderUseMatchedBalance:
+								conditionOrderUseMatchedBalance = reader.ReadBool();
+								return true;
+							case QuikFixTags.LinkedOrderPrice:
+								linkedOrderPrice = reader.ReadDecimal();
+								return true;
+							case QuikFixTags.Offset:
+								offset = reader.ReadString();
+								return true;
+							case QuikFixTags.StopSpread:
+								stopSpread = reader.ReadString();
+								return true;
+							case QuikFixTags.IsMarketTakeProfit:
+								isMarketTakeProfit = reader.ReadBool();
+								return true;
+							default:
+								return false;
+						}
+					});
+
+					if (executions == null)
+						return null;
+
+					var exec = executions.First();
 
 					var condition = new QuikOrderCondition
 					{
-						Type = (QuikOrderConditionTypes)fixMsg.Type.Obj,
-						Result = fixMsg.IsSetResult() ? (QuikOrderConditionResults?)fixMsg.Result.Obj : null,
-						StopPriceCondition = (QuikStopPriceConditions)fixMsg.StopPriceCondition.Obj,
-						StopPrice = fixMsg.IsSetStopPx() ? fixMsg.StopPx.Obj : (decimal?)null,
-						StopLimitPrice = fixMsg.IsSetStopLimitPrice() ? fixMsg.StopLimitPrice.Obj : (decimal?)null,
-						IsMarketStopLimit = fixMsg.IsSetIsMarketStopLimit() ? fixMsg.IsMarketStopLimit.Obj : (bool?)null,
-						ConditionOrderId = fixMsg.IsSetConditionOrderId() ? fixMsg.ConditionOrderId.Obj : (long?)null,
-						ConditionOrderSide = (Sides)fixMsg.ConditionOrderSide.Obj,
-						ConditionOrderPartiallyMatched = fixMsg.IsSetConditionOrderPartiallyMatched() ? fixMsg.ConditionOrderPartiallyMatched.Obj : (bool?)null,
-						ConditionOrderUseMatchedBalance = fixMsg.IsSetConditionOrderUseMatchedBalance() ? fixMsg.ConditionOrderUseMatchedBalance.Obj : (bool?)null,
-						LinkedOrderPrice = fixMsg.IsSetLinkedOrderPrice() ? fixMsg.LinkedOrderPrice.Obj : (decimal?)null,
-						LinkedOrderCancel = fixMsg.LinkedOrderCancel.Obj,
-						Offset = fixMsg.IsSetOffset() ? fixMsg.Offset.Obj.ToUnit() : null,
-						Spread = fixMsg.IsSetStopSpread() ? fixMsg.StopSpread.Obj.ToUnit() : null,
-						IsMarketTakeProfit = fixMsg.IsSetIsMarketTakeProfit() ? fixMsg.IsMarketTakeProfit.Obj : (bool?)null,
+						Type = (QuikOrderConditionTypes?)type,
+						Result = (QuikOrderConditionResults?)result,
+						StopPriceCondition = (QuikStopPriceConditions?)stopPriceCondition,
+						StopPrice = stopPrice,
+						StopLimitPrice = stopLimitPrice,
+						IsMarketStopLimit = isMarketStopLimit,
+						ConditionOrderId = conditionOrderId,
+						ConditionOrderSide = (Sides?)conditionOrderSide,
+						ConditionOrderPartiallyMatched = conditionOrderPartiallyMatched,
+						ConditionOrderUseMatchedBalance = conditionOrderUseMatchedBalance,
+						LinkedOrderPrice = linkedOrderPrice,
+						LinkedOrderCancel = linkedOrderCancel,
+						Offset = offset == null ? null : offset.ToUnit(),
+						Spread = stopSpread == null ? null : stopSpread.ToUnit(),
+						IsMarketTakeProfit = isMarketTakeProfit,
 					};
 
-					if (fixMsg.IsSetOtherSecurityCode())
-						condition.OtherSecurityId = new SecurityId { SecurityCode = fixMsg.OtherSecurityCode.Obj };
-					if (fixMsg.IsSetActiveTimeFrom() && fixMsg.IsSetActiveTimeTo())
-						condition.ActiveTime = new Range<DateTimeOffset>(fixMsg.ActiveTimeFrom.Obj.ToDateTimeOffset(SessionHolder.UtcOffset), fixMsg.ActiveTimeTo.Obj.ToDateTimeOffset(SessionHolder.UtcOffset));
+					if (otherSecurityCode != null)
+						condition.OtherSecurityId = new SecurityId { SecurityCode = otherSecurityCode };
+
+					if (activeTimeFrom != null && activeTimeTo != null)
+						condition.ActiveTime = new Range<DateTimeOffset>(activeTimeFrom.Value, activeTimeTo.Value);
 
 					exec.Condition = condition;
 
@@ -137,7 +270,7 @@
 				}
 			}
 
-			return base.ProcessTransactionMessage(fixMessage);
+			return base.ProcessTransactionMessage(msgType, reader);
 		}
 	}
 }

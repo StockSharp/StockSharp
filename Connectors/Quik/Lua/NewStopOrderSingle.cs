@@ -9,24 +9,20 @@ namespace StockSharp.Quik.Lua
 	{
 		public NewStopOrderSingle()
 		{
-			Header.SetField(new MsgType(MsgType));
+			Header.SetField(new MsgType(QuikFixMessages.NewStopOrderSingle));
 		}
 
-		public new const string MsgType = "StockSharpD";
-
 		#region Type
-
-		private const int _typeFieldTag = 5020;
 
 		public class TypeField : IntField
 		{
 			public TypeField()
-				: base(_typeFieldTag)
+				: base((int)QuikFixTags.Type)
 			{
 			}
 
 			public TypeField(int value)
-				: base(_typeFieldTag, value)
+				: base((int)QuikFixTags.Type, value)
 			{
 			}
 		}
@@ -46,17 +42,15 @@ namespace StockSharp.Quik.Lua
 
 		#region Result
 
-		private const int _resultFieldTag = 5021;
-
 		public class ResultField : IntField
 		{
 			public ResultField()
-				: base(_resultFieldTag)
+				: base((int)QuikFixTags.Result)
 			{
 			}
 
 			public ResultField(int value)
-				: base(_resultFieldTag, value)
+				: base((int)QuikFixTags.Result, value)
 			{
 			}
 		}
@@ -74,24 +68,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetResult()
 		{
-			return IsSetField(_resultFieldTag);
+			return IsSetField((int)QuikFixTags.Result);
 		}
 
 		#endregion
 
 		#region OtherSecurity
 
-		private const int _otherSecurityCodeFieldTag = 5022;
-
 		public class OtherSecurityCodeField : StringField
 		{
 			public OtherSecurityCodeField()
-				: base(_otherSecurityCodeFieldTag)
+				: base((int)QuikFixTags.OtherSecurityCode)
 			{
 			}
 
 			public OtherSecurityCodeField(string value)
-				: base(_otherSecurityCodeFieldTag, value)
+				: base((int)QuikFixTags.OtherSecurityCode, value)
 			{
 			}
 		}
@@ -109,24 +101,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetOtherSecurityCode()
 		{
-			return IsSetField(_otherSecurityCodeFieldTag);
+			return IsSetField((int)QuikFixTags.OtherSecurityCode);
 		}
 
 		#endregion
 
 		#region StopPriceCondition
 
-		private const int _stopPriceConditionFieldTag = 5023;
-
 		public class StopPriceConditionField : IntField
 		{
 			public StopPriceConditionField()
-				: base(_stopPriceConditionFieldTag)
+				: base((int)QuikFixTags.StopPriceCondition)
 			{
 			}
 
 			public StopPriceConditionField(int value)
-				: base(_stopPriceConditionFieldTag, value)
+				: base((int)QuikFixTags.StopPriceCondition, value)
 			{
 			}
 		}
@@ -146,17 +136,15 @@ namespace StockSharp.Quik.Lua
 
 		#region StopLimitPrice
 
-		private const int _stopLimitPriceFieldTag = 5024;
-
 		public class StopLimitPriceField : DecimalField
 		{
 			public StopLimitPriceField()
-				: base(_stopLimitPriceFieldTag)
+				: base((int)QuikFixTags.StopLimitPrice)
 			{
 			}
 
 			public StopLimitPriceField(decimal value)
-				: base(_stopLimitPriceFieldTag, value)
+				: base((int)QuikFixTags.StopLimitPrice, value)
 			{
 			}
 		}
@@ -174,24 +162,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetStopLimitPrice()
 		{
-			return IsSetField(_stopLimitPriceFieldTag);
+			return IsSetField((int)QuikFixTags.StopLimitPrice);
 		}
 
 		#endregion
 
 		#region IsMarketStopLimit
 
-		private const int _isMarketStopLimitFieldTag = 5025;
-
 		public class IsMarketStopLimitField : BooleanField
 		{
 			public IsMarketStopLimitField()
-				: base(_isMarketStopLimitFieldTag)
+				: base((int)QuikFixTags.IsMarketStopLimit)
 			{
 			}
 
 			public IsMarketStopLimitField(bool value)
-				: base(_isMarketStopLimitFieldTag, value)
+				: base((int)QuikFixTags.IsMarketStopLimit, value)
 			{
 			}
 		}
@@ -209,24 +195,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetIsMarketStopLimit()
 		{
-			return IsSetField(_isMarketStopLimitFieldTag);
+			return IsSetField((int)QuikFixTags.IsMarketStopLimit);
 		}
 
 		#endregion
 
 		#region ActiveTime
 
-		private const int _activeTimeFromFieldTag = 5026;
-
 		public class ActiveTimeFromField : DateTimeField
 		{
 			public ActiveTimeFromField()
-				: base(_activeTimeFromFieldTag)
+				: base((int)QuikFixTags.ActiveTimeFrom)
 			{
 			}
 
 			public ActiveTimeFromField(DateTime value)
-				: base(_activeTimeFromFieldTag, value)
+				: base((int)QuikFixTags.ActiveTimeFrom, value)
 			{
 			}
 		}
@@ -244,20 +228,18 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetActiveTimeFrom()
 		{
-			return IsSetField(_activeTimeFromFieldTag);
+			return IsSetField((int)QuikFixTags.ActiveTimeFrom);
 		}
-
-		private const int _activeTimeToFieldTag = 5027;
 
 		public class ActiveTimeToField : DateTimeField
 		{
 			public ActiveTimeToField()
-				: base(_activeTimeToFieldTag)
+				: base((int)QuikFixTags.ActiveTimeTo)
 			{
 			}
 
 			public ActiveTimeToField(DateTime value)
-				: base(_activeTimeToFieldTag, value)
+				: base((int)QuikFixTags.ActiveTimeTo, value)
 			{
 			}
 		}
@@ -275,24 +257,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetActiveTimeTo()
 		{
-			return IsSetField(_activeTimeToFieldTag);
+			return IsSetField((int)QuikFixTags.ActiveTimeTo);
 		}
 
 		#endregion
 
 		#region ConditionOrderId
 
-		private const int _conditionOrderIdFieldTag = 5028;
-
 		public class ConditionOrderIdField : IntField
 		{
 			public ConditionOrderIdField()
-				: base(_conditionOrderIdFieldTag)
+				: base((int)QuikFixTags.ConditionOrderId)
 			{
 			}
 
 			public ConditionOrderIdField(int value)
-				: base(_conditionOrderIdFieldTag, value)
+				: base((int)QuikFixTags.ConditionOrderId, value)
 			{
 			}
 		}
@@ -310,24 +290,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetConditionOrderId()
 		{
-			return IsSetField(_conditionOrderIdFieldTag);
+			return IsSetField((int)QuikFixTags.ConditionOrderId);
 		}
 
 		#endregion
 
 		#region ConditionOrderSide
 
-		private const int _conditionOrderSideFieldTag = 5029;
-
 		public class ConditionOrderSideField : IntField
 		{
 			public ConditionOrderSideField()
-				: base(_conditionOrderSideFieldTag)
+				: base((int)QuikFixTags.ConditionOrderSide)
 			{
 			}
 
 			public ConditionOrderSideField(int value)
-				: base(_conditionOrderSideFieldTag, value)
+				: base((int)QuikFixTags.ConditionOrderSide, value)
 			{
 			}
 		}
@@ -347,17 +325,15 @@ namespace StockSharp.Quik.Lua
 
 		#region ConditionOrderPartiallyMatched
 
-		private const int _conditionOrderPartiallyMatchedFieldTag = 5030;
-
 		public class ConditionOrderPartiallyMatchedField : BooleanField
 		{
 			public ConditionOrderPartiallyMatchedField()
-				: base(_conditionOrderPartiallyMatchedFieldTag)
+				: base((int)QuikFixTags.ConditionOrderPartiallyMatched)
 			{
 			}
 
 			public ConditionOrderPartiallyMatchedField(bool value)
-				: base(_conditionOrderPartiallyMatchedFieldTag, value)
+				: base((int)QuikFixTags.ConditionOrderPartiallyMatched, value)
 			{
 			}
 		}
@@ -375,24 +351,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetConditionOrderPartiallyMatched()
 		{
-			return IsSetField(_conditionOrderPartiallyMatchedFieldTag);
+			return IsSetField((int)QuikFixTags.ConditionOrderPartiallyMatched);
 		}
 
 		#endregion
 
 		#region ConditionOrderUseMatchedBalance
 
-		private const int _conditionOrderUseMatchedBalanceFieldTag = 5031;
-
 		public class ConditionOrderUseMatchedBalanceField : BooleanField
 		{
 			public ConditionOrderUseMatchedBalanceField()
-				: base(_conditionOrderUseMatchedBalanceFieldTag)
+				: base((int)QuikFixTags.ConditionOrderUseMatchedBalance)
 			{
 			}
 
 			public ConditionOrderUseMatchedBalanceField(bool value)
-				: base(_conditionOrderUseMatchedBalanceFieldTag, value)
+				: base((int)QuikFixTags.ConditionOrderUseMatchedBalance, value)
 			{
 			}
 		}
@@ -410,24 +384,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetConditionOrderUseMatchedBalance()
 		{
-			return IsSetField(_conditionOrderUseMatchedBalanceFieldTag);
+			return IsSetField((int)QuikFixTags.ConditionOrderUseMatchedBalance);
 		}
 
 		#endregion
 
 		#region LinkedOrderPrice
 
-		private const int _linkedOrderPriceFieldTag = 5032;
-
 		public class LinkedOrderPriceField : DecimalField
 		{
 			public LinkedOrderPriceField()
-				: base(_linkedOrderPriceFieldTag)
+				: base((int)QuikFixTags.LinkedOrderPrice)
 			{
 			}
 
 			public LinkedOrderPriceField(decimal value)
-				: base(_linkedOrderPriceFieldTag, value)
+				: base((int)QuikFixTags.LinkedOrderPrice, value)
 			{
 			}
 		}
@@ -445,24 +417,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetLinkedOrderPrice()
 		{
-			return IsSetField(_linkedOrderPriceFieldTag);
+			return IsSetField((int)QuikFixTags.LinkedOrderPrice);
 		}
 
 		#endregion
 
 		#region LinkedOrderCancel
 
-		private const int _linkedOrderCancelFieldTag = 5033;
-
 		public class LinkedOrderCancelField : BooleanField
 		{
 			public LinkedOrderCancelField()
-				: base(_linkedOrderCancelFieldTag)
+				: base((int)QuikFixTags.LinkedOrderCancel)
 			{
 			}
 
 			public LinkedOrderCancelField(bool value)
-				: base(_linkedOrderCancelFieldTag, value)
+				: base((int)QuikFixTags.LinkedOrderCancel, value)
 			{
 			}
 		}
@@ -482,17 +452,15 @@ namespace StockSharp.Quik.Lua
 
 		#region Offset
 
-		private const int _offsetFieldTag = 5034;
-
 		public class OffsetField : StringField
 		{
 			public OffsetField()
-				: base(_offsetFieldTag)
+				: base((int)QuikFixTags.Offset)
 			{
 			}
 
 			public OffsetField(string value)
-				: base(_offsetFieldTag, value)
+				: base((int)QuikFixTags.Offset, value)
 			{
 			}
 		}
@@ -510,24 +478,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetOffset()
 		{
-			return IsSetField(_offsetFieldTag);
+			return IsSetField((int)QuikFixTags.Offset);
 		}
 
 		#endregion
 
 		#region Spread
 
-		private const int _spreadFieldTag = 5035;
-
 		public class SpreadField : StringField
 		{
 			public SpreadField()
-				: base(_spreadFieldTag)
+				: base((int)QuikFixTags.StopSpread)
 			{
 			}
 
 			public SpreadField(string value)
-				: base(_spreadFieldTag, value)
+				: base((int)QuikFixTags.StopSpread, value)
 			{
 			}
 		}
@@ -545,24 +511,22 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetStopSpread()
 		{
-			return IsSetField(_spreadFieldTag);
+			return IsSetField((int)QuikFixTags.StopSpread);
 		}
 
 		#endregion
 
 		#region IsMarketTakeProfit
 
-		private const int _isMarketTakeProfitFieldTag = 5036;
-
 		public class IsMarketTakeProfitField : BooleanField
 		{
 			public IsMarketTakeProfitField()
-				: base(_isMarketTakeProfitFieldTag)
+				: base((int)QuikFixTags.IsMarketTakeProfit)
 			{
 			}
 
 			public IsMarketTakeProfitField(bool value)
-				: base(_isMarketTakeProfitFieldTag, value)
+				: base((int)QuikFixTags.IsMarketTakeProfit, value)
 			{
 			}
 		}
@@ -580,7 +544,7 @@ namespace StockSharp.Quik.Lua
 
 		public bool IsSetIsMarketTakeProfit()
 		{
-			return IsSetField(_isMarketTakeProfitFieldTag);
+			return IsSetField((int)QuikFixTags.IsMarketTakeProfit);
 		}
 
 		#endregion

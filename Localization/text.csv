@@ -1503,7 +1503,7 @@ Str1609;Unknown FIX version.;Неизвестная версия FIX.
 Str1610;Session board is not specified.;Площадка у сессии не заполнена.
 Str1611;Connection broken.;Подключение разорвано.
 Str1612Params;Message {0} is too long.;Длина сообщения {0} слишком большая.
-Str1613;Binary;Бинарная
+Str1613;Binary;Бинарный
 Str1614Params;Quotations {0} request for {1} was not correctly handled by the FIX server. Error code {2}.;Запрос котировок {0} для {1} не был корректно обработано FIX сервером. Код ошибки {2}.
 Str1615Params;Security for market-data with request ID {0} not found.;Инструмент для маркет-данных с идентификатором запроса {0} не найден.
 Str1616Params;Error receiving market-date. Code '{0}', text '{1}'.;Ошибка получение маркет-даты. Код '{0}', текст '{1}'.
@@ -1554,6 +1554,7 @@ Str1660;Depth;Глубина
 Str1661;Session.;Сессия.
 Str1662;Version;Версия
 Str1663;Version FIX protocol.;Версия FIX протокола.
+FixFormat;FIX protocol format.;Формат FIX протокола.
 Str1664;Sender;Отправитель
 Str1665;Sender ID.;Идентификатор отправителя.
 Str1666;Receiver;Получатель

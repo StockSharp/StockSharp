@@ -20166,6 +20166,19 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// FIX protocol format.
+		/// </summary>
+		public const string FixFormatKey = "FixFormat";
+
+		/// <summary>
+		/// FIX protocol format.
+		/// </summary>
+		public static string FixFormat
+		{
+			get { return GetString(FixFormatKey); }
+		}
+
+		/// <summary>
 		/// Sender
 		/// </summary>
 		public const string Str1664Key = "Str1664";
