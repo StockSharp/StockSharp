@@ -166,7 +166,7 @@
 				if (volume > 0)
 				{
 					_openedPosSide = trade.Side;
-					_openedTrades.Push(new RefPair<decimal, decimal>(price, volume));
+					_openedTrades.Push(RefTuple.Create(price, volume));
 				}
 
 				RealizedPnL += _multiplier * pnl;

@@ -34,7 +34,7 @@ namespace StockSharp.Btce
 				regMsg.Volume
 			);
 
-			_orderInfo.Add(reply.Command.OrderId, new RefPair<long, decimal>(regMsg.TransactionId, regMsg.Volume));
+			_orderInfo.Add(reply.Command.OrderId, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
 
 			SendOutMessage(new ExecutionMessage
 			{
@@ -158,7 +158,7 @@ namespace StockSharp.Btce
 				foreach (var o in orders)
 				{
 					var order = o;
-					_orderInfo.SafeAdd(order.Id, key => new RefPair<long, decimal>(TransactionIdGenerator.GetNextId(), (decimal)order.Volume));
+					_orderInfo.SafeAdd(order.Id, key => RefTuple.Create(TransactionIdGenerator.GetNextId(), (decimal)order.Volume));
 				}
 
 				var trades = Session.GetMyTrades(0).Items.Values;

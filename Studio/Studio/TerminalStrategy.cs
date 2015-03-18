@@ -406,7 +406,7 @@ namespace StockSharp.Studio
 				if ((isNew || !CanProcess) && isNew)
 					SubscribeSeries(candleSeries);
 
-				_elementsInfo.SafeAdd(element, e => new RefPair<DateTimeOffset, CandleSeries>(DateTimeOffset.MinValue, candleSeries));
+				_elementsInfo.SafeAdd(element, e => RefTuple.Create(DateTimeOffset.MinValue, candleSeries));
 				_elementsBySeries.SafeAdd(candleSeries).Add(element);
 			}
 		}
@@ -430,7 +430,7 @@ namespace StockSharp.Studio
 
 				var lastDate = values == null || values.IsEmpty() ? DateTimeOffset.MinValue : values.Last().First;
 
-				_elementsInfo.SafeAdd(element, e => new RefPair<DateTimeOffset, CandleSeries>(lastDate, candleSeries));
+				_elementsInfo.SafeAdd(element, e => RefTuple.Create(lastDate, candleSeries));
 				_elementsBySeries.SafeAdd(candleSeries).Add(element);
 			}
 

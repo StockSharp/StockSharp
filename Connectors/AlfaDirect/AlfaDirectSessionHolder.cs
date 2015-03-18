@@ -89,11 +89,11 @@ namespace StockSharp.AlfaDirect
 		public AlfaDirectSessionHolder(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			SecurityClassInfo.Add("FORTS", new RefPair<SecurityTypes, string>(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add("INDEX", new RefPair<SecurityTypes, string>(SecurityTypes.Index, ExchangeBoard.Micex.Code));
-			SecurityClassInfo.Add("INDEX2", new RefPair<SecurityTypes, string>(SecurityTypes.Index, "INDEX"));
-			SecurityClassInfo.Add("MICEX_SHR_T", new RefPair<SecurityTypes, string>(SecurityTypes.Stock, ExchangeBoard.Micex.Code));
-			SecurityClassInfo.Add("RTS_STANDARD", new RefPair<SecurityTypes, string>(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("FORTS", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("INDEX", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Micex.Code));
+			SecurityClassInfo.Add("INDEX2", RefTuple.Create(SecurityTypes.Index, "INDEX"));
+			SecurityClassInfo.Add("MICEX_SHR_T", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Micex.Code));
+			SecurityClassInfo.Add("RTS_STANDARD", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
 
 			IsTransactionEnabled = true;
 			IsMarketDataEnabled = true;

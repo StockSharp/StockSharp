@@ -385,20 +385,20 @@ namespace StockSharp.Quik
 			IsAsyncMode = true;
 			Path = QuikTerminal.GetDefaultPath();
 
-			SecurityClassInfo.Add("SPBOPT", new RefPair<SecurityTypes, string>(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add("SPBFUT", new RefPair<SecurityTypes, string>(SecurityTypes.Future, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("SPBOPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("SPBFUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
 
 			// http://stocksharp.com/forum/yaf_postsm11628_Pozitsii-po-dierivativam.aspx#post11628
-			SecurityClassInfo.Add("OPTUX", new RefPair<SecurityTypes, string>(SecurityTypes.Option, ExchangeBoard.Ux.Code));
-			SecurityClassInfo.Add("FUTUX", new RefPair<SecurityTypes, string>(SecurityTypes.Future, ExchangeBoard.Ux.Code));
-			//SecurityClassInfo.Add("GTS", new RefPair<SecurityTypes, string>(SecurityTypes.Stock, ExchangeBoard.UxStock.Code));
+			SecurityClassInfo.Add("OPTUX", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Ux.Code));
+			SecurityClassInfo.Add("FUTUX", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Ux.Code));
+			//SecurityClassInfo.Add("GTS", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.UxStock.Code));
 
 			// http://groups.google.ru/group/stocksharp/msg/28518b814c925521
-			SecurityClassInfo.Add("RTSST", new RefPair<SecurityTypes, string>(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("RTSST", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
 
-			SecurityClassInfo.Add("QJSIM", new RefPair<SecurityTypes, string>(SecurityTypes.Stock, ExchangeBoard.MicexJunior.Code));
+			SecurityClassInfo.Add("QJSIM", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexJunior.Code));
 
-			SecurityClassInfo.Add("RTSIDX", new RefPair<SecurityTypes, string>(SecurityTypes.Index, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("RTSIDX", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Forts.Code));
 
 			UtcOffset = TimeHelper.Moscow.BaseUtcOffset;
 

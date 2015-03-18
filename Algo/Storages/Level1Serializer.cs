@@ -292,7 +292,7 @@ namespace StockSharp.Algo.Storages
 
 		private static RefPair<decimal, decimal> ReadInfo(Stream stream)
 		{
-			return new RefPair<decimal, decimal>(stream.Read<decimal>(), stream.Read<decimal>());
+			return RefTuple.Create(stream.Read<decimal>(), stream.Read<decimal>());
 		}
 
 		protected override void CopyFrom(Level1MetaInfo src)
@@ -348,7 +348,7 @@ namespace StockSharp.Algo.Storages
 
 		private static RefPair<decimal, decimal> Clone(RefPair<decimal, decimal> info)
 		{
-			return new RefPair<decimal, decimal>(info.First, info.Second);
+			return RefTuple.Create(info.First, info.Second);
 		}
 	}
 

@@ -290,7 +290,7 @@ namespace StockSharp.Algo
 			{
 				var connected = message.Error == null;
 
-				_adapterStates[innerAdapter] = new RefPair<bool, Exception>(connected, message.Error);
+				_adapterStates[innerAdapter] = RefTuple.Create(connected, message.Error);
 
 				if (_canRaiseConnected && connected)
 				{
@@ -330,7 +330,7 @@ namespace StockSharp.Algo
 
 			var canProcess = _innerAdapters.SyncGet(c =>
 			{
-				_adapterStates[innerAdapter] = new RefPair<bool, Exception>(false, message.Error);
+				_adapterStates[innerAdapter] = RefTuple.Create(false, message.Error);
 
 				if (_canRaiseDisconnected && _adapterStates.Values.All(p => !p.First))
 				{
@@ -380,7 +380,7 @@ namespace StockSharp.Algo
 
 			var enumerator = GetConnectedAdapters().ToArray().Cast<IMessageAdapter>().GetEnumerator();
 
-			_subscriptionQueue.Add(key, new RefPair<IEnumerator<IMessageAdapter>, bool>(enumerator, false));
+			_subscriptionQueue.Add(key, RefTuple.Create(enumerator, false));
 
 			ProcessSubscriptionAction(enumerator, message);
 		}

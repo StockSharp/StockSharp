@@ -144,9 +144,9 @@ namespace StockSharp.SmartCom
 			IsTransactionEnabled = true;
 			IsMarketDataEnabled = true;
 
-			SecurityClassInfo.Add("OPT", new RefPair<SecurityTypes, string>(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add("OPTM", new RefPair<SecurityTypes, string>(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add("FUT", new RefPair<SecurityTypes, string>(SecurityTypes.Future, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
 		}
 
 		private ISmartComWrapper _session;

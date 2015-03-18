@@ -1149,7 +1149,7 @@ namespace StockSharp.Algo
 
 			var enumerator = GetConnectedConnectors().ToArray().Cast<IConnector>().GetEnumerator();
 
-			_subscriptionQueue.Add(key, new RefTriple<IEnumerator<IConnector>, SubscriptionAction, SubscriptionAction>(enumerator, action, null));
+			_subscriptionQueue.Add(key, RefTuple.Create(enumerator, action, (SubscriptionAction)null));
 
 			ProcessSubscriptionAction(enumerator, security, type, action);
 		}

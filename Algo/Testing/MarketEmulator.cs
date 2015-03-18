@@ -955,7 +955,7 @@ namespace StockSharp.Algo.Testing
 					if (!register)
 						return;
 
-					quotes[message.Price] = pair = new RefPair<List<ExecutionMessage>, QuoteChange>(new List<ExecutionMessage>(), new QuoteChange(message.Side, message.Price, 0));
+					quotes[message.Price] = pair = RefTuple.Create(new List<ExecutionMessage>(), new QuoteChange(message.Side, message.Price, 0));
 				}
 
 				var level = pair.First;
@@ -1185,7 +1185,7 @@ namespace StockSharp.Algo.Testing
 					});
 				}
 
-				_positions[posMsg.SecurityId] = new RefPair<decimal, decimal>(beginValue, 0);
+				_positions[posMsg.SecurityId] = RefTuple.Create(beginValue, 0m);
 
 				if (beginValue == 0m)
 					return;
@@ -1222,7 +1222,7 @@ namespace StockSharp.Algo.Testing
 			{
 				var reqMoney = GetRequiredMoney(orderMsg.SecurityId, orderMsg.Side, orderMsg.Price);
 
-				var pos = _positions.SafeAdd(orderMsg.SecurityId, k => new RefPair<decimal, decimal>(0, 0));
+				var pos = _positions.SafeAdd(orderMsg.SecurityId, k => RefTuple.Create(0m, 0m));
 
 				var sign = orderMsg.Side == Sides.Buy ? 1 : -1;
 				var totalPos = pos.First + pos.Second;
@@ -1250,7 +1250,7 @@ namespace StockSharp.Algo.Testing
 				tradeMsg.Commission = _parent._commissionManager.ProcessExecution(tradeMsg);
 
 				bool isNew;
-				var pos = _positions.SafeAdd(tradeMsg.SecurityId, k => new RefPair<decimal, decimal>(0, 0), out isNew);
+				var pos = _positions.SafeAdd(tradeMsg.SecurityId, k => RefTuple.Create(0m, 0m), out isNew);
 
 				var totalPos = pos.First + pos.Second;
 				var positionChange = tradeMsg.GetPosition();
@@ -1341,7 +1341,7 @@ namespace StockSharp.Algo.Testing
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
 				var volume = execMsg.Balance ?? execMsg.GetVolume();
 
-				var pos = _positions.SafeAdd(execMsg.SecurityId, k => new RefPair<decimal, decimal>(0, 0));
+				var pos = _positions.SafeAdd(execMsg.SecurityId, k => RefTuple.Create(0m, 0m));
 
 				var sign = execMsg.Side == Sides.Buy ? 1 : -1;
 				var totalPos = pos.First + pos.Second;
