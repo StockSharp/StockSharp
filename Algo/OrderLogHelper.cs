@@ -53,7 +53,7 @@ namespace StockSharp.Algo
 			if (item == null)
 				throw new ArgumentNullException("item");
 
-			return item.OrderState == OrderStates.Active && item.TradePrice == 0;
+			return item.OrderState == OrderStates.Active && item.TradePrice == null;
 		}
 
 		/// <summary>
@@ -76,7 +76,7 @@ namespace StockSharp.Algo
 			if (item == null)
 				throw new ArgumentNullException("item");
 
-			return item.OrderState == OrderStates.Done && item.TradePrice == 0;
+			return item.OrderState == OrderStates.Done && item.TradePrice == null;
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@ namespace StockSharp.Algo
 			if (item == null)
 				throw new ArgumentNullException("item");
 
-			return item.TradeId != 0;
+			return item.TradeId != null;
 		}
 
 		/// <summary>
@@ -293,18 +293,18 @@ namespace StockSharp.Algo
 
 						var tradeId = currItem.TradeId;
 
-						if (tradeId == 0)
+						if (tradeId == null)
 							continue;
 
-						var prevItem = _trades.TryGetValue(tradeId);
+						var prevItem = _trades.TryGetValue(tradeId.Value);
 
 						if (prevItem == null)
 						{
-							_trades.Add(tradeId, Tuple.Create(currItem.OrderId, currItem.Side));
+							_trades.Add(tradeId.Value, Tuple.Create(currItem.GetOrderId(), currItem.Side));
 						}
 						else
 						{
-							_trades.Remove(tradeId);
+							_trades.Remove(tradeId.Value);
 
 							Current = new ExecutionMessage
 							{

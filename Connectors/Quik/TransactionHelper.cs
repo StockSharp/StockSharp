@@ -78,7 +78,7 @@ namespace StockSharp.Quik
 
 			transaction.SetExpiryDate(message.TillDate);
 
-			if (message.VisibleVolume != message.Volume)
+			if (message.VisibleVolume != null && message.VisibleVolume != message.Volume)
 			{
 				return transaction
 						.SetAction(TransactionActions.Iceberg)

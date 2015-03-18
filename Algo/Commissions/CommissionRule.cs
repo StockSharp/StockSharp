@@ -609,7 +609,7 @@ namespace StockSharp.Algo.Commissions
 			if (message.ExecutionType != ExecutionTypes.Trade)
 				return null;
 
-			_currentTurnOver += message.TradePrice * message.Volume;
+			_currentTurnOver += message.GetTradePrice() * message.GetVolume();
 
 			if (_currentTurnOver < TurnOver)
 				return null;

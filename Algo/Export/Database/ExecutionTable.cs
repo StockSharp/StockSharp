@@ -62,15 +62,15 @@
 				{ "ServerTime", value.ServerTime },
 				{ "PortfolioName", value.PortfolioName },
 				{ "TransactionId", value.TransactionId },
-				{ "OrderId", value.OrderId == 0 ? value.OrderStringId : value.OrderId.To<string>() },
+				{ "OrderId", value.OrderId == null ? value.OrderStringId : value.OrderId.To<string>() },
 				{ "Price", value.Price },
 				{ "Volume", value.Volume },
 				{ "Balance", value.Balance },
 				{ "Side", (int)value.Side },
 				{ "OrderType", (int)value.OrderType },
 				{ "OrderState", (int?)value.OrderState },
-				{ "TradeId", value.TradeId == 0 ? value.TradeStringId : value.TradeId.To<string>() },
-				{ "TradePrice", value.TradePrice == 0 ? (decimal?)null : value.TradePrice },
+				{ "TradeId", value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
+				{ "TradePrice", value.TradePrice },
 			};
 			return result;
 		}

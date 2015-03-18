@@ -133,8 +133,8 @@ namespace StockSharp.OpenECry
 					draft.End = message.ExpiryDate.Value.UtcDateTime;
 			}
 
-			if (message.VisibleVolume < message.Volume)
-				draft.SetIcebergData((int)message.VisibleVolume);
+			if (message.VisibleVolume != null && message.VisibleVolume < message.Volume)
+				draft.SetIcebergData((int)message.VisibleVolume.Value);
 
 			var invalid = draft.GetInvalidParts();
 			if (invalid != OrderParts.None)

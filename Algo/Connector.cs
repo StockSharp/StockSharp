@@ -126,7 +126,9 @@ namespace StockSharp.Algo
 
 					case OrderStates.Active:
 					{
-						_executions.SafeAdd(key, k => new Dictionary<long, decimal>())[message.OriginalTransactionId] = message.Balance;
+						if (message.Balance != null)
+							_executions.SafeAdd(key, k => new Dictionary<long, decimal>())[message.OriginalTransactionId] = message.Balance.Value;
+
 						break;
 					}
 				}

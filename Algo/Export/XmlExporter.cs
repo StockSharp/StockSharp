@@ -43,7 +43,7 @@ namespace StockSharp.Algo.Export
 					{
 						writer.WriteStartElement("trade");
 
-						writer.WriteAttribute("id", trade.TradeId == 0 ? trade.TradeStringId : trade.TradeId.To<string>());
+						writer.WriteAttribute("id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>());
 						writer.WriteAttribute("serverTime", trade.ServerTime.ToString(_timeFormat));
 						writer.WriteAttribute("price", trade.TradePrice);
 						writer.WriteAttribute("volume", trade.Volume);
@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Export
 					{
 						writer.WriteStartElement("item");
 
-						writer.WriteAttribute("id", item.OrderId == 0 ? item.OrderStringId : item.OrderId.To<string>());
+						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
 						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
 						writer.WriteAttribute("price", item.Price);
 						writer.WriteAttribute("volume", item.Volume);
@@ -77,9 +77,9 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("timeInForce", item.TimeInForce);
 						writer.WriteAttribute("isSystem", item.IsSystem);
 
-						if (item.TradePrice != 0)
+						if (item.TradePrice != null)
 						{
-							writer.WriteAttribute("tradeId", item.TradeId == 0 ? item.TradeStringId : item.TradeId.To<string>());
+							writer.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
 							writer.WriteAttribute("tradePrice", item.TradePrice);
 
 							if (item.OpenInterest != null)
@@ -100,14 +100,14 @@ namespace StockSharp.Algo.Export
 						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
 						writer.WriteAttribute("portfolio", item.PortfolioName);
 						writer.WriteAttribute("transactionId", item.TransactionId);
-						writer.WriteAttribute("id", item.OrderId == 0 ? item.OrderStringId : item.OrderId.To<string>());
+						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
 						writer.WriteAttribute("price", item.Price);
 						writer.WriteAttribute("volume", item.Volume);
 						writer.WriteAttribute("balance", item.Balance);
 						writer.WriteAttribute("side", item.Side);
 						writer.WriteAttribute("type", item.OrderType);
 						writer.WriteAttribute("state", item.OrderState);
-						writer.WriteAttribute("tradeId", item.TradeId == 0 ? item.TradeStringId : item.TradeId.To<string>());
+						writer.WriteAttribute("tradeId", item.TradeId == null ? item.TradeStringId : item.TradeId.To<string>());
 						writer.WriteAttribute("tradePrice", item.TradePrice);
 
 						writer.WriteEndElement();

@@ -45,7 +45,7 @@ namespace StockSharp.Transaq
 						SecId = (int)regMsg.SecurityId.Native,
 						ExpDate = expDate,
 						BrokerRef = regMsg.Comment,
-						Hidden = (int)(regMsg.Volume - regMsg.VisibleVolume),
+						Hidden = (int)(regMsg.Volume - (regMsg.VisibleVolume ?? regMsg.Volume)),
 					};
 
 					break;
@@ -72,7 +72,7 @@ namespace StockSharp.Transaq
 							ValidBefore = cond.ValidBefore,
 							ExpDate = expDate,
 							BrokerRef = regMsg.Comment,
-							Hidden = (int)(regMsg.Volume - regMsg.VisibleVolume),
+							Hidden = (int)(regMsg.Volume - (regMsg.VisibleVolume ?? regMsg.Volume)),
 						};
 					}
 					else if (regMsg.Condition is TransaqOrderCondition)
@@ -344,7 +344,7 @@ namespace StockSharp.Transaq
 				{
 					var stopOrder = (TransaqStopOrder)order;
 
-					execMsg.OrderId = stopOrder.ActiveOrderNo ?? 0;
+					execMsg.OrderId = stopOrder.ActiveOrderNo;
 					execMsg.OrderType = OrderTypes.Conditional;
 					execMsg.ServerTime = stopOrder.AcceptTime == null
 						? DateTimeOffset.MinValue

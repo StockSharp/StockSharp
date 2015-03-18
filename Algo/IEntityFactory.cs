@@ -41,10 +41,10 @@
 		/// Создать тиковую сделку по ее номеру.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
-		/// <param name="id">Номер сделки.</param>
+		/// <param name="id">Номер сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
 		/// <param name="stringId">Номер сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
 		/// <returns>Созданная сделка.</returns>
-		Trade CreateTrade(Security security, long id, string stringId);
+		Trade CreateTrade(Security security, long? id, string stringId);
 
 		/// <summary>
 		/// Создать заявку по номеру транзакции.
@@ -160,12 +160,12 @@
 		/// Создать тиковую сделку по ее номеру.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
-		/// <param name="id">Номер сделки.</param>
+		/// <param name="id">Номер сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
 		/// <param name="stringId">Номер сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
 		/// <returns>Созданная сделка.</returns>
-		public virtual Trade CreateTrade(Security security, long id, string stringId)
+		public virtual Trade CreateTrade(Security security, long? id, string stringId)
 		{
-			return new Trade { Security = security, Id = id, StringId = stringId };
+			return new Trade { Security = security, Id = id ?? 0, StringId = stringId };
 		}
 
 		/// <summary>

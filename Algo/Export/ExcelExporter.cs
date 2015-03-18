@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Export
 						foreach (var message in messages)
 						{
 							worker
-								.SetCell(0, index, message.TradeId == 0 ? message.TradeStringId : message.TradeId.To<string>())
+								.SetCell(0, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
 								.SetCell(1, index, message.ServerTime)
 								.SetCell(2, index, message.TradePrice)
 								.SetCell(3, index, message.Volume)
@@ -102,7 +102,7 @@ namespace StockSharp.Algo.Export
 						foreach (var message in messages)
 						{
 							worker
-								.SetCell(0, index, message.OrderId == 0 ? message.OrderStringId : message.OrderId.To<string>())
+								.SetCell(0, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
 								.SetCell(1, index, message.ServerTime)
 								.SetCell(2, index, message.Price)
 								.SetCell(3, index, message.Volume)
@@ -111,10 +111,10 @@ namespace StockSharp.Algo.Export
 								.SetCell(6, index, message.TimeInForce)
 								.SetCell(7, index, message.IsSystem);
 
-							if (message.TradePrice != 0)
+							if (message.TradePrice != null)
 							{
 								worker
-									.SetCell(8, index, message.TradeId == 0 ? message.TradeStringId : message.TradeId.To<string>())
+									.SetCell(8, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
 									.SetCell(9, index, message.TradePrice)
 									.SetCell(10, index, message.OpenInterest);
 							}
@@ -154,14 +154,14 @@ namespace StockSharp.Algo.Export
 								.SetCell(0, index, message.ServerTime)
 								.SetCell(1, index, message.PortfolioName)
 								.SetCell(2, index, message.TransactionId)
-								.SetCell(3, index, message.OrderId == 0 ? message.OrderStringId : message.OrderId.To<string>())
+								.SetCell(3, index, message.OrderId == null ? message.OrderStringId : message.OrderId.To<string>())
 								.SetCell(4, index, message.Price)
 								.SetCell(5, index, message.Volume)
 								.SetCell(6, index, message.Balance)
 								.SetCell(7, index, message.Side)
 								.SetCell(8, index, message.OrderType)
 								.SetCell(9, index, message.OrderState)
-								.SetCell(10, index, message.TradeId == 0 ? message.TradeStringId : message.TradeId.To<string>())
+								.SetCell(10, index, message.TradeId == null ? message.TradeStringId : message.TradeId.To<string>())
 								.SetCell(11, index, message.TradePrice);
 
 							index++;

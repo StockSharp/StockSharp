@@ -311,7 +311,8 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
-		public decimal VisibleVolume { get; set; }
+		[Nullable]
+		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
 		/// Направление заявки (покупка или продажа).

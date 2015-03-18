@@ -282,8 +282,8 @@ namespace StockSharp.Algo
 				PortfolioName = order.Portfolio == null ? null : order.Portfolio.Name,
 				ExecutionType = ExecutionTypes.OrderLog,
 				IsCancelled = (order.State == OrderStates.Done && trade == null),
-				TradeId = trade != null ? trade.Id : 0,
-				TradePrice = trade != null ? trade.Price : 0,
+				TradeId = trade != null ? trade.Id : (long?)null,
+				TradePrice = trade != null ? trade.Price : (decimal?)null,
 			};
 		}
 
@@ -920,9 +920,9 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			trade.Id = message.TradeId;
-			trade.Price = message.TradePrice;
-			trade.Volume = message.Volume;
+			trade.Id = message.TradeId ?? 0;
+			trade.Price = message.TradePrice ?? 0;
+			trade.Volume = message.Volume ?? 0;
 			trade.Status = message.TradeStatus;
 			trade.IsSystem = message.IsSystem;
 			trade.Time = message.ServerTime;
@@ -959,14 +959,14 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException("order");
 
-			order.Id = message.OrderId;
+			order.Id = message.OrderId ?? 0;
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
 			order.Direction = message.Side;
 			order.Price = message.Price;
-			order.Volume = message.Volume;
-			order.Balance = message.Balance;
+			order.Volume = message.Volume ?? 0;
+			order.Balance = message.Balance ?? 0;
 			order.VisibleVolume = message.VisibleVolume;
 			order.Type = message.OrderType;
 			order.Status = message.OrderStatus;
@@ -1065,7 +1065,7 @@ namespace StockSharp.Algo
 			return message.ToOrderLog(new OrderLogItem
 			{
 				Order = new Order { Security = security },
-				Trade = message.TradeId != 0 ? new Trade { Security = security } : null
+				Trade = message.TradeId != null ? new Trade { Security = security } : null
 			});
 		}
 
@@ -1087,12 +1087,12 @@ namespace StockSharp.Algo
 
 			order.Portfolio = Portfolio.AnonymousPortfolio;
 
-			order.Id = message.OrderId;
+			order.Id = message.OrderId ?? 0;
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Price = message.Price;
-			order.Volume = message.Volume;
-			order.Balance = message.Balance;
+			order.Volume = message.Volume ?? 0;
+			order.Balance = message.Balance ?? 0;
 			order.Direction = message.Side;
 			order.Time = message.ServerTime;
 			order.LastChangeTime = message.ServerTime;
@@ -1105,16 +1105,16 @@ namespace StockSharp.Algo
 			if (message.OrderState != null)
 				order.State = message.OrderState.Value;
 			else
-				order.State = message.IsCancelled || message.TradeId != 0 ? OrderStates.Done : OrderStates.Active;
+				order.State = message.IsCancelled || message.TradeId != null ? OrderStates.Done : OrderStates.Active;
 
-			if (message.TradeId != 0)
+			if (message.TradeId != null)
 			{
 				var trade = item.Trade;
 
-				trade.Id = message.TradeId;
-				trade.Price = message.TradePrice;
+				trade.Id = message.TradeId ?? 0;
+				trade.Price = message.TradePrice ?? 0;
 				trade.Time = message.ServerTime;
-				trade.Volume = message.Volume;
+				trade.Volume = message.Volume ?? 0;
 				trade.IsSystem = message.IsSystem;
 				trade.Status = message.TradeStatus;
 			}

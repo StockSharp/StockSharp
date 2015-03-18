@@ -335,16 +335,16 @@ namespace StockSharp.Quik.Lua
 						{
 							case ExecutionTypes.Order:
 							{
-								if (execMsg.OrderId != 0 && execMsg.OriginalTransactionId != 0)
+								if (execMsg.OrderId != null && execMsg.OriginalTransactionId != 0)
 								{
-									_transactionsByOrderId.SafeAdd(execMsg.OrderId, i => execMsg.OriginalTransactionId);
+									_transactionsByOrderId.SafeAdd(execMsg.OrderId.Value, i => execMsg.OriginalTransactionId);
 
-									var trades = _tradesByOrderId.TryGetValue(execMsg.OrderId);
+									var trades = _tradesByOrderId.TryGetValue(execMsg.OrderId.Value);
 
 									if (trades != null)
 									{
 										trades.ForEach(SendOutMessage);
-										_tradesByOrderId.Remove(execMsg.OrderId);
+										_tradesByOrderId.Remove(execMsg.OrderId.Value);
 									}
 								}
 
@@ -356,15 +356,20 @@ namespace StockSharp.Quik.Lua
 								if (execMsg.OriginalTransactionId != 0)
 									break;
 
-								var origTransactionId = _transactionsByOrderId.TryGetValue2(execMsg.OrderId);
+								var orderId = execMsg.OrderId;
 
-								if (origTransactionId == null)
+								if (orderId != null)
 								{
-									_tradesByOrderId.SafeAdd(execMsg.OrderId).Add(execMsg);
-									return;
+									var origTransactionId = _transactionsByOrderId.TryGetValue2(orderId.Value);
+
+									if (origTransactionId == null)
+									{
+										_tradesByOrderId.SafeAdd(orderId.Value).Add(execMsg);
+										return;
+									}
+
+									execMsg.OriginalTransactionId = origTransactionId.Value;	
 								}
-								
-								execMsg.OriginalTransactionId = origTransactionId.Value;
 
 								break;
 							} 
@@ -433,7 +438,7 @@ namespace StockSharp.Quik.Lua
 
 				switch (msgType)
 				{
-					case NewStopOrderSingle.MsgType:
+					case QuikFixMessages.NewStopOrderSingle:
 					{
 						this.AddInfoLog("From client {0}: NewStopOrderSingle", client);
 
@@ -484,38 +489,57 @@ namespace StockSharp.Quik.Lua
 
 					var condition = (QuikOrderCondition)order.Condition;
 
-					fixMsg.Type = new StopOrderExecutionReport.TypeField((int)condition.Type);
-					fixMsg.StopPriceCondition = new StopOrderExecutionReport.StopPriceConditionField((int)condition.StopPriceCondition);
-					fixMsg.ConditionOrderSide = new StopOrderExecutionReport.ConditionOrderSideField((int)condition.ConditionOrderSide);
-					fixMsg.LinkedOrderCancel = new StopOrderExecutionReport.LinkedOrderCancelField(condition.LinkedOrderCancel);
+					if (condition.Type != null)
+						fixMsg.Type = new StopOrderExecutionReport.TypeField((int)condition.Type);
+
+					if (condition.StopPriceCondition != null)
+						fixMsg.StopPriceCondition = new StopOrderExecutionReport.StopPriceConditionField((int)condition.StopPriceCondition);
+
+					if (condition.ConditionOrderSide != null)
+						fixMsg.ConditionOrderSide = new StopOrderExecutionReport.ConditionOrderSideField((int)condition.ConditionOrderSide);
+
+					if (condition.LinkedOrderCancel != null)
+						fixMsg.LinkedOrderCancel = new StopOrderExecutionReport.LinkedOrderCancelField(condition.LinkedOrderCancel.Value);
 
 					if (condition.Result != null)
 						fixMsg.Result = new StopOrderExecutionReport.ResultField((int)condition.Result);
+					
 					if (condition.OtherSecurityId != null)
 						fixMsg.OtherSecurityCode = new StopOrderExecutionReport.OtherSecurityCodeField(condition.OtherSecurityId.Value.SecurityCode);
+					
 					if (condition.StopPrice != null)
 						fixMsg.StopPx = new StopPx(condition.StopPrice.Value);
+					
 					if (condition.StopLimitPrice != null)
 						fixMsg.StopLimitPrice = new StopOrderExecutionReport.StopLimitPriceField(condition.StopLimitPrice.Value);
+					
 					if (condition.IsMarketStopLimit != null)
 						fixMsg.IsMarketStopLimit = new StopOrderExecutionReport.IsMarketStopLimitField(condition.IsMarketStopLimit.Value);
+					
 					if (condition.ActiveTime != null)
 					{
 						fixMsg.ActiveTimeFrom = new StopOrderExecutionReport.ActiveTimeFromField(condition.ActiveTime.Min.UtcDateTime);
 						fixMsg.ActiveTimeTo = new StopOrderExecutionReport.ActiveTimeToField(condition.ActiveTime.Min.UtcDateTime);
 					}
+					
 					if (condition.ConditionOrderId != null)
 						fixMsg.ConditionOrderId = new StopOrderExecutionReport.ConditionOrderIdField((int)condition.ConditionOrderId);
+					
 					if (condition.ConditionOrderPartiallyMatched != null)
 						fixMsg.ConditionOrderPartiallyMatched = new StopOrderExecutionReport.ConditionOrderPartiallyMatchedField(condition.ConditionOrderPartiallyMatched.Value);
+					
 					if (condition.ConditionOrderUseMatchedBalance != null)
 						fixMsg.ConditionOrderUseMatchedBalance = new StopOrderExecutionReport.ConditionOrderUseMatchedBalanceField(condition.ConditionOrderUseMatchedBalance.Value);
+					
 					if (condition.LinkedOrderPrice != null)
 						fixMsg.LinkedOrderPrice = new StopOrderExecutionReport.LinkedOrderPriceField(condition.LinkedOrderPrice.Value);
+					
 					if (condition.Offset != null)
 						fixMsg.Offset = new StopOrderExecutionReport.OffsetField(condition.Offset.ToString());
+					
 					if (condition.Spread != null)
 						fixMsg.StopSpread = new StopOrderExecutionReport.SpreadField(condition.Spread.ToString());
+					
 					if (condition.IsMarketTakeProfit != null)
 						fixMsg.IsMarketTakeProfit = new StopOrderExecutionReport.IsMarketTakeProfitField(condition.IsMarketTakeProfit.Value);
 

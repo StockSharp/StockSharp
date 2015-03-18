@@ -384,7 +384,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			return message.Side == Sides.Buy ? message.Volume : -message.Volume;
+			return (message.Side == Sides.Buy ? message.Volume : -message.Volume) ?? 0;
 		}
 
 		/// <summary>
@@ -539,10 +539,7 @@ namespace StockSharp.Algo
 		/// <returns>Прибыль-убыток.</returns>
 		public static decimal GetPnL(this ExecutionMessage trade, decimal currentPrice)
 		{
-			if (trade == null)
-				throw new ArgumentNullException("trade");
-
-			return GetPnL(trade.TradePrice, trade.Volume, trade.Side, currentPrice);
+			return GetPnL(trade.GetTradePrice(), trade.GetVolume(), trade.Side, currentPrice);
 		}
 
 		internal static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)
@@ -965,19 +962,21 @@ namespace StockSharp.Algo
 
 			foreach (var trade in trades)
 			{
-				minTradePrice = minTradePrice.Min(trade.TradePrice);
-				maxTradePrice = maxTradePrice.Max(trade.TradePrice);
+				var price = trade.GetTradePrice();
 
-				var quote = depth.GetQuote(trade.TradePrice);
+				minTradePrice = minTradePrice.Min(price);
+				maxTradePrice = maxTradePrice.Max(price);
+
+				var quote = depth.GetQuote(price);
 
 				if (null == quote)
 					continue;
 
 				decimal vol;
-				if (!changedVolume.TryGetValue(trade.TradePrice, out vol))
+				if (!changedVolume.TryGetValue(price, out vol))
 					vol = quote.Volume;
 
-				vol -= trade.Volume;
+				vol -= trade.GetVolume();
 				changedVolume[quote.Price] = vol;
 			}
 
@@ -1443,7 +1442,7 @@ namespace StockSharp.Algo
 			if (order.OrderState != OrderStates.Done)	// для ускорения в эмуляторе
 				return false;
 
-			return order.OrderState == OrderStates.Done && order.Balance != 0;
+			return order.OrderState == OrderStates.Done && order.Balance > 0;
 		}
 
 		/// <summary>

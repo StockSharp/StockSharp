@@ -121,7 +121,7 @@
 					switch (execMsg.ExecutionType)
 					{
 						case ExecutionTypes.Tick:
-							_lastOrderPrice = execMsg.TradePrice;
+							_lastOrderPrice = execMsg.GetTradePrice();
 							break;
 						default:
 							return null;
@@ -194,7 +194,7 @@
 
 				if (isMatched && trade != null)
 				{
-					item.Volume = RandomGen.GetInt(1, (int)activeOrder.Volume);
+					item.Volume = RandomGen.GetInt(1, (int)activeOrder.GetVolume());
 
 					item.TradeId = trade.TradeId;
 					item.TradePrice = trade.TradePrice;

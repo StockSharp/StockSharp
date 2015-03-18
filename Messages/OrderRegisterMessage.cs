@@ -30,8 +30,6 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public decimal Price { get; set; }
 
-		private decimal _volume;
-
 		/// <summary>
 		/// Количество контрактов в заявке.
 		/// </summary>
@@ -39,15 +37,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
 		[MainCategory]
-		public decimal Volume
-		{
-			get { return _volume; }
-			set
-			{
-				_volume = value;
-				VisibleVolume = value;
-			}
-		}
+		public decimal Volume { get; set; }
 
 		/// <summary>
 		/// Видимое количество контрактов в заявке.
@@ -56,7 +46,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
-		public decimal VisibleVolume { get; set; }
+		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
 		/// Направление заявки (покупка или продажа).

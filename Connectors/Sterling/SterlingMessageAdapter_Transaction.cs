@@ -17,10 +17,10 @@ namespace StockSharp.Sterling
 			var order = new STIOrder
 			{
 				Account = regMsg.PortfolioName, 
-				Quantity = (int) regMsg.Volume, 
-				Display = (int) regMsg.VisibleVolume, 
+				Quantity = (int)regMsg.Volume,
+				Display = (int)(regMsg.VisibleVolume ?? regMsg.Volume), 
 				ClOrderID = regMsg.TransactionId.To<string>(), 
-				LmtPrice = (double) regMsg.Price, 
+				LmtPrice = (double)regMsg.Price, 
 				Symbol = regMsg.SecurityId.SecurityCode, 
 				Destination = regMsg.SecurityId.BoardCode, 
 				Tif = regMsg.TimeInForce.ToSterlingTif(regMsg.TillDate), 

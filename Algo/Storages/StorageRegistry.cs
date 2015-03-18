@@ -185,7 +185,7 @@ namespace StockSharp.Algo.Storages
 		private sealed class TradeStorage : ConvertableStorage<ExecutionMessage, Trade, long>
 		{
 			public TradeStorage(Security security, IMarketDataStorageDrive drive, IMarketDataSerializer<ExecutionMessage> serializer)
-				: base(security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.TradeId, serializer, drive)
+				: base(security, ExecutionTypes.Tick, trade => trade.ServerTime, trade => trade.SecurityId, trade => trade.TradeId ?? 0, serializer, drive)
 			{
 			}
 

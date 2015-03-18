@@ -53,7 +53,7 @@
 		{
 			var result = new Dictionary<string, object>
 			{
-				{ "OrderId", value.OrderId == 0 ? value.OrderStringId : value.OrderId.To<string>() },
+				{ "OrderId", value.OrderId == null ? value.OrderStringId : value.OrderId.To<string>() },
 				{ "SecurityCode", value.SecurityId.SecurityCode },
 				{ "BoardCode", value.SecurityId.BoardCode },
 				{ "ServerTime", value.ServerTime },
@@ -64,8 +64,8 @@
 				{ "Status", (int?)value.OrderStatus },
 				{ "State", (int?)value.OrderState },
 				{ "TimeInForce", (int)value.TimeInForce },
-				{ "TradeId", value.TradeId == 0 ? value.TradeStringId : value.TradeId.To<string>() },
-				{ "TradePrice", value.TradePrice == 0 ? (decimal?)null : value.TradePrice },
+				{ "TradeId", value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
+				{ "TradePrice", value.TradePrice },
 				{ "OpenInterest", value.OpenInterest },
 			};
 			return result;

@@ -98,11 +98,11 @@
 					{
 						case ExecutionTypes.Tick:
 						case ExecutionTypes.Trade:
-							_lastTradePrice = execMsg.TradePrice;
+							_lastTradePrice = execMsg.TradePrice.Value;
 							break;
 						case ExecutionTypes.OrderLog:
-							if (execMsg.TradePrice != 0)
-								_lastTradePrice = execMsg.TradePrice;
+							if (execMsg.TradePrice != null)
+								_lastTradePrice = execMsg.TradePrice.Value;
 							break;
 						default:
 							return null;

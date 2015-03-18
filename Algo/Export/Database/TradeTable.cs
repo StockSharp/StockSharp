@@ -48,7 +48,7 @@
 		{
 			var result = new Dictionary<string, object>
 			{
-				{ "Id", value.TradeId == 0 ? value.TradeStringId : value.TradeId.To<string>() },
+				{ "Id", value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
 				{ "SecurityCode", value.SecurityId.SecurityCode },
 				{ "BoardCode", value.SecurityId.BoardCode },
 				{ "ServerTime", value.ServerTime },

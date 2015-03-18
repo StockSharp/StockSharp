@@ -119,7 +119,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
 		[DescriptionLoc(LocalizedStrings.OrderIdStringKey, true)]
 		[MainCategory]
-		public long OrderId { get; set; }
+		public long? OrderId { get; set; }
 
 		/// <summary>
 		/// Идентификатор заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
@@ -173,7 +173,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.OrderVolumeKey)]
 		[MainCategory]
-		public decimal Volume { get; set; }
+		public decimal? Volume { get; set; }
 
 		/// <summary>
 		/// Видимое количество контрактов в заявке.
@@ -182,7 +182,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
-		public decimal VisibleVolume { get; set; }
+		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
 		/// Направление заявки (покупка или продажа).
@@ -200,7 +200,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str130Key)]
 		[DescriptionLoc(LocalizedStrings.Str131Key)]
 		[MainCategory]
-		public decimal Balance { get; set; }
+		public decimal? Balance { get; set; }
 
 		/// <summary>
 		/// Тип заявки.
@@ -288,7 +288,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
 		[DescriptionLoc(LocalizedStrings.Str145Key)]
 		[MainCategory]
-		public long TradeId { get; set; }
+		public long? TradeId { get; set; }
 
 		/// <summary>
 		/// Идентификатор сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).
@@ -306,14 +306,14 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str147Key)]
 		[MainCategory]
-		public decimal TradePrice { get; set; }
+		public decimal? TradePrice { get; set; }
 
 		/// <summary>
 		/// Системный статус сделки.
 		/// </summary>
 		[DataMember]
 		[Browsable(false)]
-		public int TradeStatus { get; set; }
+		public int? TradeStatus { get; set; }
 
 		/// <summary>
 		/// Инициатор сделки (продавец или покупатель).

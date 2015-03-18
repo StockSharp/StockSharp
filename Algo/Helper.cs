@@ -182,5 +182,74 @@ namespace StockSharp.Algo
 				return value;
 			}
 		}
+
+		public static long GetTradeId(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var tradeId = message.TradeId;
+
+			if (tradeId == null)
+				throw new ArgumentOutOfRangeException("message", null, LocalizedStrings.Str1020);
+
+			return tradeId.Value;
+		}
+
+		public static decimal GetTradePrice(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var price = message.TradePrice;
+
+			if (price == null)
+				throw new ArgumentOutOfRangeException("message", null, LocalizedStrings.Str1021Params.Put(message.TradeId));
+
+			return price.Value;
+		}
+
+		public static decimal GetVolume(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var volume = message.Volume;
+
+			if (volume != null)
+				return volume.Value;
+
+			var errorMsg = message.ExecutionType == ExecutionTypes.Tick || message.ExecutionType == ExecutionTypes.Trade
+				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
+				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
+
+			throw new ArgumentOutOfRangeException("message", null, errorMsg);
+		}
+
+		public static decimal GetBalance(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var balance = message.Balance;
+
+			if (balance != null)
+				return balance.Value;
+
+			throw new ArgumentOutOfRangeException("message");
+		}
+
+		public static long GetOrderId(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var orderId = message.OrderId;
+
+			if (orderId != null)
+				return orderId.Value;
+
+			throw new ArgumentOutOfRangeException("message", null, LocalizedStrings.Str925);
+		}
 	}
 }

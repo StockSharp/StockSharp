@@ -358,5 +358,26 @@ namespace StockSharp.Algo.Storages
 
 			return board == null ? metaInfo.LocalOffset : board.Exchange.TimeZoneInfo.BaseUtcOffset;
 		}
+
+		public static void WriteNullableInt<T>(this BitArrayWriter writer, T? value)
+			where T : struct
+		{
+			if (value == null)
+				writer.Write(false);
+			else
+			{
+				writer.Write(true);
+				writer.WriteInt(value.To<int>());
+			}
+		}
+
+		public static T? ReadNullableInt<T>(this BitArrayReader reader)
+			where T : struct
+		{
+			if (!reader.Read())
+				return null;
+
+			return reader.ReadInt().To<T?>();
+		}
 	}
 }

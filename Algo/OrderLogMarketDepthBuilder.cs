@@ -80,6 +80,8 @@ namespace StockSharp.Algo
 			if (item.ExecutionType != ExecutionTypes.OrderLog)
 				throw new ArgumentException("item");
 
+			var volume = item.GetVolume();
+
 			var changed = false;
 
 			try
@@ -103,7 +105,7 @@ namespace StockSharp.Algo
 
 				_lastUpdateTime = item.ServerTime.LocalDateTime;
 
-				if (!item.IsSystem || item.TradePrice != 0 || item.Price == 0 /* нулевая цена может появится при поставке опционов */)
+				if (!item.IsSystem || item.TradePrice != null || item.Price == 0 /* нулевая цена может появится при поставке опционов */)
 					return changed;
 
 				if (item.IsOrderLogRegistered())
@@ -126,7 +128,7 @@ namespace StockSharp.Algo
 								{
 									Side = item.Side,
 									Price = item.Price,
-									Volume = item.Volume,
+									Volume = volume,
 								};
 
 								quotes.Add(item.Price, quote);
@@ -137,7 +139,7 @@ namespace StockSharp.Algo
 									_depth.Asks = GetArray(quotes);
 							}
 							else
-								quote.Volume += item.Volume;
+								quote.Volume += volume;
 
 							changed = true;
 						}
@@ -169,7 +171,7 @@ namespace StockSharp.Algo
 
 							if (quote != null)
 							{
-								quote.Volume -= item.Volume;
+								quote.Volume -= volume;
 
 								if (quote.Volume <= 0)
 								{
@@ -210,10 +212,10 @@ namespace StockSharp.Algo
 
 			try
 			{
-				var volume = _matchingOrder.Volume;
+				var volume = _matchingOrder.GetVolume();
 
 				if (item != null && _matchingOrder.OrderId == item.OrderId)
-					volume -= item.Volume;
+					volume -= item.GetVolume();
 
 				// если заявка была вся отменена. например, по причине http://forum.rts.ru/viewtopic.asp?t=24197
 				if (volume == 0)

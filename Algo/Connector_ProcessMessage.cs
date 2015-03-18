@@ -1135,7 +1135,7 @@ namespace StockSharp.Algo
 
 		private void ProcessOrderLogMessage(Security security, ExecutionMessage message)
 		{
-			var trade = (message.TradeId != 0 || !message.TradeStringId.IsEmpty())
+			var trade = (message.TradeId != null || !message.TradeStringId.IsEmpty())
 				? EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId)
 				: null;
 
@@ -1199,13 +1199,13 @@ namespace StockSharp.Algo
 				if (!message.IsSystem)
 					values[(int)Level1Fields.IsSystem] = message.IsSystem;
 
-				if (message.TradeId != 0)
+				if (message.TradeId != null)
 				{
 					values[(int)Level1Fields.LastTradeId] = message.TradeId;
 					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeId, message.TradeId));
 				}
 
-				if (message.Volume != 0)
+				if (message.Volume != null)
 				{
 					values[(int)Level1Fields.Volume] = message.Volume;
 					changes.Add(new KeyValuePair<Level1Fields, object>(Level1Fields.LastTradeVolume, message.Volume));
@@ -1356,8 +1356,8 @@ namespace StockSharp.Algo
 			{
 				List<ExecutionMessage> nonOrderedMyTrades;
 
-				if (message.OrderId != 0)
-					nonOrderedMyTrades = _nonOrderedByIdMyTrades.SafeAdd(message.OrderId);
+				if (message.OrderId != null)
+					nonOrderedMyTrades = _nonOrderedByIdMyTrades.SafeAdd(message.OrderId.Value);
 				else if (message.OriginalTransactionId != 0)
 					nonOrderedMyTrades = _nonOrderedByTransactionIdMyTrades.SafeAdd(message.OriginalTransactionId);
 				else
@@ -1411,7 +1411,7 @@ namespace StockSharp.Algo
 							_entityCache.GetOrderByTransactionId(message.OriginalTransactionId, false)
 							??
 							_entityCache.GetOrderByTransactionId(message.OriginalTransactionId, true)
-						            ?? _entityCache.GetOrderById(message.OrderId));
+						            ?? _entityCache.GetOrderById(message.OrderId ?? 0));
 
 						if (order == null)
 							throw new InvalidOperationException(LocalizedStrings.Str689Params.Put(message.OrderId, message.OriginalTransactionId));

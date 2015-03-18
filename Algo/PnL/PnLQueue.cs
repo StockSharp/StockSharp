@@ -125,7 +125,8 @@
 
 			var closedVolume = 0m;
 			var pnl = 0m;
-			var volume = trade.Volume;
+			var volume = trade.GetVolume();
+			var price = trade.GetTradePrice();
 
 			_unrealizedPnL = null;
 
@@ -145,7 +146,7 @@
 							var diff = currTrade.Second.Min(volume);
 							closedVolume += diff;
 
-							pnl += TraderHelper.GetPnL(currTrade.First, diff, _openedPosSide, trade.TradePrice);
+							pnl += TraderHelper.GetPnL(currTrade.First, diff, _openedPosSide, price);
 
 							volume -= diff;
 							currTrade.Second -= diff;
@@ -165,7 +166,7 @@
 				if (volume > 0)
 				{
 					_openedPosSide = trade.Side;
-					_openedTrades.Push(new RefPair<decimal, decimal>(trade.TradePrice, volume));
+					_openedTrades.Push(new RefPair<decimal, decimal>(price, volume));
 				}
 
 				RealizedPnL += _multiplier * pnl;
@@ -222,9 +223,9 @@
 		/// <param name="execMsg">Сообщение, содержащее информацию о тиковой сделке.</param>
 		public void ProcessExecution(ExecutionMessage execMsg)
 		{
-			if (execMsg.TradePrice != 0)
+			if (execMsg.TradePrice != null)
 			{
-				TradePrice = execMsg.TradePrice;
+				TradePrice = execMsg.TradePrice.Value;
 				_unrealizedPnL = null;
 			}
 		}

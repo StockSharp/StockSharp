@@ -157,7 +157,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var item = items.First();
 
-				metaInfo.FirstOrderId = metaInfo.LastOrderId = item.OrderId;
+				metaInfo.FirstOrderId = metaInfo.LastOrderId = item.GetOrderId();
 				metaInfo.FirstTransactionId = metaInfo.LastTransactionId = item.TransactionId;
 				metaInfo.ServerOffset = item.ServerTime.Offset;
 			}
@@ -169,10 +169,11 @@ namespace StockSharp.Algo.Storages
 
 			foreach (var item in items)
 			{
-				var hasTrade = item.TradeId != 0 || item.TradePrice != 0;
+				var hasTrade = item.TradeId != null || item.TradePrice != null;
 
-				if (item.OrderId <= 0)
-					throw new ArgumentOutOfRangeException("items", item.OrderId, LocalizedStrings.Str925);
+				var orderId = item.GetOrderId();
+				if (orderId < 0)
+					throw new ArgumentOutOfRangeException("items", orderId, LocalizedStrings.Str925);
 
 				// sell market orders has zero price (if security do not have min allowed price)
 				// execution ticks (like option execution) may be a zero cost
@@ -180,13 +181,18 @@ namespace StockSharp.Algo.Storages
 				//if (item.Price < 0)
 				//	throw new ArgumentOutOfRangeException("items", item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
 
-				if (item.Volume <= 0)
-					throw new ArgumentOutOfRangeException("items", item.Volume, LocalizedStrings.Str927Params.Put(item.OrderId));
+				var volume = item.GetVolume();
+				if (volume <= 0)
+					throw new ArgumentOutOfRangeException("items", volume, LocalizedStrings.Str927Params.Put(item.OrderId));
+
+				long? tradeId = null;
 
 				if (hasTrade)
 				{
-					if (item.TradeId <= 0)
-						throw new ArgumentOutOfRangeException("items", item.TradeId, LocalizedStrings.Str1012Params.Put(item.OrderId));
+					tradeId = item.GetTradeId();
+
+					if (tradeId <= 0)
+						throw new ArgumentOutOfRangeException("items", tradeId, LocalizedStrings.Str1012Params.Put(item.OrderId));
 
 					// execution ticks (like option execution) may be a zero cost
 					// ticks for spreads may be a zero cost or less than zero
@@ -194,7 +200,7 @@ namespace StockSharp.Algo.Storages
 					//	throw new ArgumentOutOfRangeException("items", item.TradePrice, LocalizedStrings.Str929Params.Put(item.TradeId, item.OrderId));
 				}
 
-				metaInfo.LastOrderId = writer.SerializeId(item.OrderId, metaInfo.LastOrderId);
+				metaInfo.LastOrderId = writer.SerializeId(orderId, metaInfo.LastOrderId);
 
 				var orderPrice = item.Price;
 
@@ -222,7 +228,7 @@ namespace StockSharp.Algo.Storages
 					}
 				}
 
-				writer.WriteVolume(item.Volume, metaInfo, SecurityId);
+				writer.WriteVolume(volume, metaInfo, SecurityId);
 
 				writer.Write(item.Side == Sides.Buy);
 
@@ -234,12 +240,12 @@ namespace StockSharp.Algo.Storages
 
 					if (metaInfo.FirstTradeId == 0)
 					{
-						metaInfo.FirstTradeId = metaInfo.LastTradeId = item.TradeId;
+						metaInfo.FirstTradeId = metaInfo.LastTradeId = tradeId.Value;
 					}
 
-					metaInfo.LastTradeId = writer.SerializeId(item.TradeId, metaInfo.LastTradeId);
+					metaInfo.LastTradeId = writer.SerializeId(tradeId.Value, metaInfo.LastTradeId);
 
-					writer.WritePriceEx(item.TradePrice, metaInfo, SecurityId);
+					writer.WritePriceEx(item.GetTradePrice(), metaInfo, SecurityId);
 				}
 				else
 				{
@@ -250,15 +256,7 @@ namespace StockSharp.Algo.Storages
 				if (metaInfo.Version < MarketDataVersions.Version31)
 					continue;
 
-				var status = item.OrderStatus;
-
-				if (status == null)
-					writer.Write(false);
-				else
-				{
-					writer.Write(true);
-					writer.WriteInt((int)status);
-				}
+				writer.WriteNullableInt(item.OrderStatus);
 
 				if (metaInfo.Version < MarketDataVersions.Version33)
 					continue;
@@ -347,16 +345,17 @@ namespace StockSharp.Algo.Storages
 			else
 			{
 				var active = reader.Read();
-				execMsg.OrderState =  active ? OrderStates.Active : OrderStates.Done;
+				execMsg.OrderState = active ? OrderStates.Active : OrderStates.Done;
 				execMsg.IsCancelled = !active;
 			}
 
 			if (metaInfo.Version >= MarketDataVersions.Version31)
 			{
-				if (reader.Read())
+				execMsg.OrderStatus = reader.ReadNullableInt<OrderStatus>();
+
+				if (execMsg.OrderStatus != null)
 				{
-					var status = reader.ReadInt();
-					execMsg.OrderStatus = (OrderStatus?)status;
+					var status = (int)execMsg.OrderStatus.Value;
 
 					if (status.HasBits(0x01))
 						execMsg.TimeInForce = TimeInForce.PutInQueue;

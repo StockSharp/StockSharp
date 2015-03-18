@@ -369,7 +369,7 @@ namespace StockSharp.Algo
 
 				o.Time = message.ServerTime;
 				o.Price = message.Price;
-				o.Volume = message.Volume;
+				o.Volume = message.Volume ?? 0;
 				o.Direction = message.Side;
 				o.Portfolio = GetPortfolio(message.PortfolioName);
 				o.TimeInForce = message.TimeInForce;
@@ -383,7 +383,7 @@ namespace StockSharp.Algo
 
 			var order = orderInfo.Item1;
 			var isCancelled = orderInfo.Item2;
-			var isReReregisterCancelled = orderInfo.Item3;
+			//var isReReregisterCancelled = orderInfo.Item3;
 			var raiseNewOrder = orderInfo.Item4;
 
 			var isPending = order.State == OrderStates.Pending;
@@ -399,18 +399,23 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				order.Id = message.OrderId;
+				if (message.OrderId != null)
+					order.Id = message.OrderId.Value;
+
 				order.StringId = message.OrderStringId;
 				order.BoardId = message.OrderBoardId;
 
-				// некоторые коннекторы не транслируют при отмене отмененный объем
-				// esper. при перерегистрации заявок необходимо обновлять баланс
-				if (message.Balance > 0 || !isCancelled || isReReregisterCancelled)
-				{
-					// BTCE коннектор не транслирует баланс заявки
-					if (!(message.OrderState == OrderStates.Active && message.Balance == 0))
-						order.Balance = message.Balance;
-				}
+				//// некоторые коннекторы не транслируют при отмене отмененный объем
+				//// esper. при перерегистрации заявок необходимо обновлять баланс
+				//if (message.Balance > 0 || !isCancelled || isReReregisterCancelled)
+				//{
+				//	// BTCE коннектор не транслирует баланс заявки
+				//	if (!(message.OrderState == OrderStates.Active && message.Balance == 0))
+				//		order.Balance = message.Balance;
+				//}
+
+				if (message.Balance != null)
+					order.Balance = message.Balance.Value;
 
 				// IB коннектор не транслирует состояние заявки в одном из своих сообщений
 				if (message.OrderState != null)
@@ -426,8 +431,8 @@ namespace StockSharp.Algo
 				order.LocalTime = message.LocalTime;
 
 				//нулевой объем может быть при перерегистрации
-				if (order.Volume == 0)
-					order.Volume = message.Volume;
+				if (order.Volume == 0 && message.Volume != null)
+					order.Volume = message.Volume.Value;
 
 				if (message.Commission != null)
 					order.Commission = message.Commission;
@@ -539,10 +544,10 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			if (message.OriginalTransactionId == 0 && message.OrderId == 0 && message.OrderStringId.IsEmpty())
+			if (message.OriginalTransactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
 				throw new ArgumentOutOfRangeException("message", message.OriginalTransactionId, LocalizedStrings.Str715);
 
-			var myTrade = _cache.GetData(security).MyTrades.TryGetValue(Tuple.Create(message.OriginalTransactionId, message.TradeId));
+			var myTrade = _cache.GetData(security).MyTrades.TryGetValue(Tuple.Create(message.OriginalTransactionId, message.TradeId ?? 0));
 
 			if (myTrade != null)
 				return Tuple.Create(myTrade, false);
@@ -639,12 +644,12 @@ namespace StockSharp.Algo
 			return Tuple.Create(transactionId, type == OrderTypes.Conditional, isCancel);
 		}
 
-		public Order GetOrder(Security security, long transactionId, long orderId, string orderStringId, OrderTypes orderType = OrderTypes.Limit, bool isCancel = false)
+		public Order GetOrder(Security security, long transactionId, long? orderId, string orderStringId, OrderTypes orderType = OrderTypes.Limit, bool isCancel = false)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			if (transactionId == 0 && orderId == 0 && orderStringId.IsEmpty())
+			if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str719);
 
 			var data = _cache.GetData(security);
@@ -652,18 +657,18 @@ namespace StockSharp.Algo
 			if (transactionId != 0)
 				return (Order)data.Orders.TryGetValue(CreateOrderKey(orderType, transactionId, isCancel));
 
-			if (orderId != 0)
-				return data.OrdersById.TryGetValue(orderId);
+			if (orderId != null)
+				return data.OrdersById.TryGetValue(orderId.Value);
 
 			return data.OrdersByStringId.TryGetValue(orderStringId);
 		}
 
-		private Tuple<Order, bool, bool, bool> GetOrderInfo(Security security, OrderTypes type, long transactionId, long orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
+		private Tuple<Order, bool, bool, bool> GetOrderInfo(Security security, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
 		{
 			if (createOrder == null)
 				throw new ArgumentNullException("createOrder");
 
-			if (transactionId == 0 && orderId == 0 && orderStringId.IsEmpty())
+			if (transactionId == 0 && orderId == null && orderStringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str719);
 
 			var isNew2 = false;
@@ -712,7 +717,7 @@ namespace StockSharp.Algo
 			return Tuple.Create((Order)order, false, false, raiseNewOrder);
 		}
 
-		public Tuple<Trade, bool> GetTrade(Security security, long id, string strId, Func<long, string, Trade> createTrade)
+		public Tuple<Trade, bool> GetTrade(Security security, long? id, string strId, Func<long?, string, Trade> createTrade)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -726,13 +731,13 @@ namespace StockSharp.Algo
 
 			var securityData = _cache.GetData(security);
 
-			if (id != 0)
+			if (id != null)
 			{
-				trade = securityData.TradesById.SafeAdd(id, k =>
+				trade = securityData.TradesById.SafeAdd(id.Value, k =>
 				{
 					isNew = true;
 
-					var t = createTrade(id, strId);
+					var t = createTrade(id.Value, strId);
 					_cache.AddTrade(t);
 					return t;
 				});
@@ -743,7 +748,7 @@ namespace StockSharp.Algo
 				{
 					isNew = true;
 
-					var t = createTrade(id, strId);
+					var t = createTrade(null, strId);
 					_cache.AddTrade(t);
 					return t;
 				});
@@ -752,7 +757,7 @@ namespace StockSharp.Algo
 			{
 				isNew = true;
 
-				trade = createTrade(id, strId);
+				trade = createTrade(null, null);
 				_cache.AddTrade(trade);
 				securityData.Trades.Add(trade);
 			}

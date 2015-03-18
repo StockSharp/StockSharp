@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Storages
 		public ExecutionSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version51;
+			Version = MarketDataVersions.Version52;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)
@@ -178,8 +178,8 @@ namespace StockSharp.Algo.Storages
 			{
 				var msg = messages.First();
 
-				metaInfo.FirstOrderId = metaInfo.LastOrderId = msg.OrderId;
-				metaInfo.FirstTradeId = metaInfo.LastTradeId = msg.TradeId;
+				metaInfo.FirstOrderId = metaInfo.LastOrderId = msg.OrderId ?? 0;
+				metaInfo.FirstTradeId = metaInfo.LastTradeId = msg.TradeId ?? 0;
 				metaInfo.FirstTransactionId = metaInfo.LastTransactionId = msg.TransactionId;
 				metaInfo.FirstOriginalTransactionId = metaInfo.LastOriginalTransactionId = msg.OriginalTransactionId;
 				metaInfo.FirstCommission = metaInfo.LastCommission = msg.Commission ?? 0;
@@ -204,17 +204,19 @@ namespace StockSharp.Algo.Storages
 
 				// нулевая цена возможна, если идет "рыночная" продажа по инструменту без планок
 				if (msg.Price < 0)
-					throw new ArgumentOutOfRangeException("messages", msg.Price, LocalizedStrings.Str926Params.Put(msg.OrderId == 0 ? msg.OrderStringId : msg.OrderId.To<string>()));
+					throw new ArgumentOutOfRangeException("messages", msg.Price, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
-				if (msg.Volume < 0)
-					throw new ArgumentOutOfRangeException("messages", msg.Volume, LocalizedStrings.Str927Params.Put(msg.OrderId == 0 ? msg.OrderStringId : msg.OrderId.To<string>()));
+				var volume = msg.GetVolume();
+
+				if (volume < 0)
+					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
 				if (isTrade)
 				{
-					if (msg.TradeId <= 0)
+					if (msg.TradeId == null || msg.TradeId <= 0)
 						throw new ArgumentOutOfRangeException("messages", msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
 
-					if (msg.TradePrice <= 0)
+					if (msg.TradePrice == null || msg.TradePrice <= 0)
 						throw new ArgumentOutOfRangeException("messages", msg.TradePrice, LocalizedStrings.Str929Params.Put(msg.TradeId, msg.OrderId));
 				}
 
@@ -226,14 +228,14 @@ namespace StockSharp.Algo.Storages
 				if (!isTrade)
 				{
 					if (metaInfo.Version < MarketDataVersions.Version50)
-						metaInfo.LastOrderId = writer.SerializeId(msg.OrderId, metaInfo.LastOrderId);
+						metaInfo.LastOrderId = writer.SerializeId(msg.OrderId ?? 0, metaInfo.LastOrderId);
 					else
 					{
-						writer.Write(msg.OrderId > 0);
+						writer.Write(msg.OrderId != null);
 
-						if (msg.OrderId > 0)
+						if (msg.OrderId != null)
 						{
-							metaInfo.LastOrderId = writer.SerializeId(msg.OrderId, metaInfo.LastOrderId);
+							metaInfo.LastOrderId = writer.SerializeId(msg.OrderId.Value, metaInfo.LastOrderId);
 						}
 						else
 						{
@@ -252,14 +254,14 @@ namespace StockSharp.Algo.Storages
 				else
 				{
 					if (metaInfo.Version < MarketDataVersions.Version50)
-						metaInfo.LastTradeId = writer.SerializeId(msg.TradeId, metaInfo.LastTradeId);
+						metaInfo.LastTradeId = writer.SerializeId(msg.TradeId ?? 0, metaInfo.LastTradeId);
 					else
 					{
-						writer.Write(msg.TradeId > 0);
+						writer.Write(msg.TradeId != null);
 
-						if (msg.TradeId > 0)
+						if (msg.TradeId != null)
 						{
-							metaInfo.LastTradeId = writer.SerializeId(msg.TradeId, metaInfo.LastTradeId);
+							metaInfo.LastTradeId = writer.SerializeId(msg.TradeId.Value, metaInfo.LastTradeId);
 						}
 						else
 						{
@@ -272,20 +274,23 @@ namespace StockSharp.Algo.Storages
 				}
 
 				writer.Write(msg.Side == Sides.Buy);
-				writer.WritePriceEx(!isTrade ? msg.Price : msg.TradePrice, metaInfo, SecurityId);
+				writer.WritePriceEx(!isTrade ? msg.Price : msg.GetTradePrice(), metaInfo, SecurityId);
 
-				writer.WriteVolume(msg.Volume, metaInfo, SecurityId);
-				writer.WriteVolume(msg.VisibleVolume, metaInfo, SecurityId);
-				writer.WriteVolume(msg.Balance, metaInfo, SecurityId);
+				writer.WriteVolume(volume, metaInfo, SecurityId);
+				writer.WriteVolume(msg.VisibleVolume ?? 0, metaInfo, SecurityId);
+				writer.WriteVolume(msg.GetBalance(), metaInfo, SecurityId);
 
 				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset);
 
 				writer.WriteInt((int)msg.OrderType);
 
-				WriteNullableInt(writer, msg.OrderState);
-				WriteNullableInt(writer, msg.OrderStatus);
+				writer.WriteNullableInt(msg.OrderState);
+				writer.WriteNullableInt(msg.OrderStatus);
 
-				writer.WriteInt(msg.TradeStatus);
+				if (metaInfo.Version < MarketDataVersions.Version52)
+					writer.WriteInt(msg.TradeStatus ?? 0);
+				else
+					writer.WriteNullableInt(msg.TradeStatus);
 				
 				writer.WriteInt((int)msg.TimeInForce);
 				writer.Write(msg.IsSystem);
@@ -366,10 +371,12 @@ namespace StockSharp.Algo.Storages
 
 			var type = reader.ReadInt().To<OrderTypes>();
 
-			var state = ReadNullableInt<OrderStates>(reader);
-			var status = ReadNullableInt<OrderStatus>(reader);
+			var state = reader.ReadNullableInt<OrderStates>();
+			var status = reader.ReadNullableInt<OrderStatus>();
 
-			var tradeStatus = reader.ReadInt();
+			var tradeStatus = metaInfo.Version < MarketDataVersions.Version52
+				? reader.ReadInt()
+				: reader.ReadNullableInt<int>();
 
 			var timeInForce = reader.ReadInt().To<TimeInForce>();
 			var isSystem = reader.Read();
@@ -438,18 +445,6 @@ namespace StockSharp.Algo.Storages
 			return msg;
 		}
 
-		private static void WriteNullableInt<T>(BitArrayWriter writer, T? value)
-			where T : struct
-		{
-			if (value == null)
-				writer.Write(false);
-			else
-			{
-				writer.Write(true);
-				writer.WriteInt(value.To<int>());
-			}
-		}
-
 		private static void WriteCommission(BitArrayWriter writer, ExecutionSerializerMetaInfo metaInfo, decimal? value)
 		{
 			if (value == null)
@@ -474,15 +469,6 @@ namespace StockSharp.Algo.Storages
 				items.TryAdd(value);
 				writer.WriteInt(items.IndexOf(value));
 			}
-		}
-
-		private static T? ReadNullableInt<T>(BitArrayReader reader)
-			where T : struct
-		{
-			if (!reader.Read())
-				return null;
-
-			return reader.ReadInt().To<T?>();
 		}
 
 		private static decimal? ReadCommission(BitArrayReader reader, ExecutionSerializerMetaInfo metaInfo)

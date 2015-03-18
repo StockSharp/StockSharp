@@ -66,14 +66,16 @@
 			if (trade == null)
 				throw new ArgumentNullException("trade");
 
-			if (_tradeInfos.TryGetValue(trade.TradeId, out info))
+			var tradeId = trade.GetTradeId();
+
+			if (_tradeInfos.TryGetValue(tradeId, out info))
 				return false;
 
 			var queue = _securityPnLs.SafeAdd(trade.SecurityId, security => new PnLQueue(security));
 
 			info = queue.Process(trade);
 
-			_tradeInfos.Add(trade.TradeId, info);
+			_tradeInfos.Add(tradeId, info);
 			_realizedPnL += info.PnL;
 
 			return true;

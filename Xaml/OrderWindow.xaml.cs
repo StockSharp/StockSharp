@@ -184,7 +184,7 @@ namespace StockSharp.Xaml
 				_order.Portfolio = Portfolio;
 				_order.Price = PriceCtrl.Value ?? 0;
 				_order.Volume = VolumeCtrl.Value ?? 0;
-				_order.VisibleVolume = VisibleVolumeCtrl.Value ?? 0;
+				_order.VisibleVolume = VisibleVolumeCtrl.Value;
 				_order.Direction = IsBuyCtrl.IsChecked == true ? Sides.Buy : Sides.Sell;
 
 				switch ((OrderWindowTif)TimeInForceCtrl.SelectedValue)

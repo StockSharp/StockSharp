@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Testing
 								throw new InvalidOperationException();
 							case ExecutionTypes.OrderLog:
 							{
-								if (execMsg.TradeId == 0)
+								if (execMsg.TradeId == null)
 									UpdateQuotes(execMsg, result);
 
 								// добавляем в результат ОЛ только из хранилища или из генератора
@@ -402,7 +402,7 @@ namespace StockSharp.Algo.Testing
 				switch (execution.ExecutionType)
 				{
 					case ExecutionTypes.Tick:
-						price = execution.TradePrice;
+						price = execution.GetTradePrice();
 						break;
 
 					case ExecutionTypes.OrderLog:
@@ -554,7 +554,7 @@ namespace StockSharp.Algo.Testing
 						this.AddInfoLog(LocalizedStrings.Str1157Params, execution.TransactionId);
 
 						// при восстановлении заявки у нее уже есть номер
-						if (replyMsg.OrderId == 0)
+						if (replyMsg.OrderId == null)
 						{
 							replyMsg.Balance = execution.Volume;
 							replyMsg.OrderState = OrderStates.Active;
@@ -625,10 +625,10 @@ namespace StockSharp.Algo.Testing
 				// различие лишь в том, что для чужих заявок не транслируется информация о сделках.
 				// матчинг чужих заявок на равне со своими дает наиболее реалистичный сценарий обновления стакана.
 
-				if (message.TradeId != 0)
+				if (message.TradeId != null)
 					throw new ArgumentException(LocalizedStrings.Str1159, "message");
 
-				if (message.Volume <= 0)
+				if (message.Volume == null || message.Volume <= 0)
 					throw new ArgumentOutOfRangeException("message", message.Volume, LocalizedStrings.Str1160Params.Put(message.TransactionId));
 
 				UpdateQuote(message, !message.IsCancelled);
@@ -691,7 +691,7 @@ namespace StockSharp.Algo.Testing
 
 				var quotes = GetQuotes(order.Side.Invert());
 
-				var leftBalance = order.Balance;
+				var leftBalance = order.GetBalance();
 				var sign = order.Side == Sides.Buy ? 1 : -1;
 
 				foreach (var pair in quotes.ToArray())
@@ -722,7 +722,7 @@ namespace StockSharp.Algo.Testing
 							break;
 						}
 
-						var volume = quote.Balance.Min(leftBalance);
+						var volume = quote.GetBalance().Min(leftBalance);
 
 						if (volume <= 0)
 							throw new InvalidOperationException(LocalizedStrings.Str1162);
@@ -761,7 +761,7 @@ namespace StockSharp.Algo.Testing
 				if (result == null)
 					return;
 
-				leftBalance = order.Balance - executions.Values.Sum();
+				leftBalance = order.GetBalance() - executions.Values.Sum();
 
 				switch (order.TimeInForce)
 				{
@@ -960,6 +960,8 @@ namespace StockSharp.Algo.Testing
 
 				var level = pair.First;
 
+				var volume = message.GetVolume();
+
 				if (register)
 				{
 					//если пришло увеличение объема на уровне, то всегда добавляем в конец очереди, даже для диффа стаканов
@@ -972,16 +974,16 @@ namespace StockSharp.Algo.Testing
 					clone.Balance = message.Volume;
 					clone.Volume = message.Volume;
 
-					AddTotalVolume(message.Side, message.Volume);
+					AddTotalVolume(message.Side, volume);
 
-					pair.Second.Volume += message.Volume;
+					pair.Second.Volume += volume;
 					level.Add(clone);
 				}
 				else
 				{
 					if (message.TransactionId == 0)
 					{
-						var leftBalance = message.Volume;
+						var leftBalance = volume;
 
 						// пришел дифф по стакану - начиная с конца убираем снятый объем
 						for (var i = level.Count - 1; i >= 0 && leftBalance > 0; i--)
@@ -991,20 +993,23 @@ namespace StockSharp.Algo.Testing
 							if (msg.TransactionId != message.TransactionId)
 								continue;
 
-							leftBalance -= msg.Balance;
+							var balance = msg.GetBalance();
+							leftBalance -= balance;
 
 							if (leftBalance < 0)
 							{
+								leftBalance = -leftBalance;
+
 								//var clone = (ExecutionMessage)message.Clone();
 								var clone = _messagePool.Allocate<ExecutionMessage>(MessageTypes.Execution);
 
 								clone.TransactionId = message.TransactionId;
 								clone.Price = message.Price;
 								clone.PortfolioName = message.PortfolioName;
-								clone.Balance = leftBalance.Abs();
+								clone.Balance = leftBalance;
 								clone.Volume = message.Volume;
 
-								var diff = clone.Balance - msg.Balance;
+								var diff = leftBalance - balance;
 								AddTotalVolume(message.Side, diff);
 								pair.Second.Volume += diff;
 
@@ -1012,9 +1017,9 @@ namespace StockSharp.Algo.Testing
 								break;
 							}
 
-							AddTotalVolume(message.Side, -msg.Balance);
+							AddTotalVolume(message.Side, -balance);
 
-							pair.Second.Volume -= msg.Balance;
+							pair.Second.Volume -= balance;
 							level.RemoveAt(i);
 							_messagePool.Free(msg);
 						}
@@ -1029,9 +1034,11 @@ namespace StockSharp.Algo.Testing
 
 						if (quote != null)
 						{
-							AddTotalVolume(message.Side, -quote.Balance);
+							var balance = quote.GetBalance();
 
-							pair.Second.Volume -= quote.Balance;
+							AddTotalVolume(message.Side, -balance);
+
+							pair.Second.Volume -= balance;
 							level.Remove(quote);
 							_messagePool.Free(quote);
 						}
@@ -1221,9 +1228,9 @@ namespace StockSharp.Algo.Testing
 				var totalPos = pos.First + pos.Second;
 
 				if (register)
-					pos.Second += orderMsg.Volume * sign;
+					pos.Second += orderMsg.GetVolume() * sign;
 				else
-					pos.Second -= orderMsg.Balance * sign;
+					pos.Second -= orderMsg.GetBalance() * sign;
 
 				var commission = _parent._commissionManager.ProcessExecution(orderMsg);
 
@@ -1332,7 +1339,7 @@ namespace StockSharp.Algo.Testing
 				var reqMoney = GetRequiredMoney(execMsg.SecurityId, execMsg.Side, execMsg.Price);
 
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
-				var volume = execMsg.Balance != 0 ? execMsg.Balance : execMsg.Volume;
+				var volume = execMsg.Balance ?? execMsg.GetVolume();
 
 				var pos = _positions.SafeAdd(execMsg.SecurityId, k => new RefPair<decimal, decimal>(0, 0));
 
