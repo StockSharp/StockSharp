@@ -10,10 +10,10 @@
 	{
 		object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			var londId = values[0].To<long>();
+			var londId = values[0].To<long?>();
 			var strId = values[1].To<string>();
 
-			return londId == 0 ? strId : londId.To<string>();
+			return londId == null ? strId : londId.To<string>();
 		}
 
 		object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
