@@ -230,7 +230,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str548Key)]
 		[MainCategory]
 		[PropertyOrder(7)]
-		[ReadOnly(true)]
+		//[ReadOnly(true)]
 		public int Decimals
 		{
 			get { return _decimals; }
@@ -395,6 +395,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
 		[DerivativesCategory]
 		[PropertyOrder(1)]
+		[Nullable]
 		public decimal? Strike
 		{
 			get { return _strike; }

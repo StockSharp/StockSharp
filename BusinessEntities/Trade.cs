@@ -131,7 +131,8 @@ namespace StockSharp.BusinessEntities
 		/// Системный статус сделки.
 		/// </summary>
 		[Browsable(false)]
-		public int Status { get; set; }
+		[Nullable]
+		public int? Status { get; set; }
 
 		/// <summary>
 		/// Количество открытых позиций (открытый интерес).
