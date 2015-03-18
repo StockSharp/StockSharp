@@ -751,27 +751,31 @@ namespace StockSharp.Quik.Lua
 				case MessageTypes.Level1Change:
 				{
 					var l1Msg = (Level1ChangeMessage)message;
-					var prevLevel1 = _prevLevel1.TryGetValue(l1Msg.SecurityId);
 
-					if (prevLevel1 == null)
+					lock (_prevLevel1.SyncRoot)
 					{
-						_prevLevel1.Add(l1Msg.SecurityId, (Level1ChangeMessage)l1Msg.Clone());
-					}
-					else
-					{
-						l1Msg.Changes.RemoveWhere(p =>
+						var prevLevel1 = _prevLevel1.TryGetValue(l1Msg.SecurityId);
+
+						if (prevLevel1 == null)
 						{
-							var prevValue = prevLevel1.Changes.TryGetValue(p.Key);
+							_prevLevel1.Add(l1Msg.SecurityId, (Level1ChangeMessage)l1Msg.Clone());
+						}
+						else
+						{
+							l1Msg.Changes.RemoveWhere(p =>
+							{
+								var prevValue = prevLevel1.Changes.TryGetValue(p.Key);
 
-							if (prevValue != null && prevValue.Equals(p.Value))
-								return true;
+								if (prevValue != null && prevValue.Equals(p.Value))
+									return true;
 
-							prevLevel1.Changes[p.Key] = p.Value;
-							return false;
-						});
+								prevLevel1.Changes[p.Key] = p.Value;
+								return false;
+							});
 
-						if (l1Msg.Changes.Count == 0)
-							return;
+							if (l1Msg.Changes.Count == 0)
+								return;
+						}	
 					}
 
 					break;
