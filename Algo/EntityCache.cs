@@ -654,11 +654,19 @@ namespace StockSharp.Algo
 
 			var data = _cache.GetData(security);
 
+			Order order = null;
+
 			if (transactionId != 0)
-				return (Order)data.Orders.TryGetValue(CreateOrderKey(orderType, transactionId, isCancel));
+				order = (Order)data.Orders.TryGetValue(CreateOrderKey(orderType, transactionId, isCancel));
+
+			if (order != null)
+				return order;
 
 			if (orderId != null)
-				return data.OrdersById.TryGetValue(orderId.Value);
+				order = data.OrdersById.TryGetValue(orderId.Value);
+
+			if (order != null)
+				return order;
 
 			return data.OrdersByStringId.TryGetValue(orderStringId);
 		}
