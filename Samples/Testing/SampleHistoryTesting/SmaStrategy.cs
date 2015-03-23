@@ -9,7 +9,6 @@ namespace SampleHistoryTesting
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Strategies;
-	using StockSharp.Algo.Strategies.Quoting;
 	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
@@ -103,12 +102,15 @@ namespace SampleHistoryTesting
 				}
 				else
 				{
+					// регистрируем заявку (обычным способом - лимитированной заявкой)
+					RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
+
 					// переворачиваем позицию через котирование
-					var strategy = new MarketQuotingStrategy(direction, volume)
-					{
-						WaitAllTrades = true,
-					};
-					ChildStrategies.Add(strategy);
+					//var strategy = new MarketQuotingStrategy(direction, volume)
+					//{
+					//	WaitAllTrades = true,
+					//};
+					//ChildStrategies.Add(strategy);
 				}
 
 				// запоминаем текущее положение относительно друг друга

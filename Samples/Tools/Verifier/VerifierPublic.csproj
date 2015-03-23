@@ -63,6 +63,9 @@
     <Reference Include="StockSharp.Fix">
       <HintPath>..\..\..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Licensing">
+      <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />

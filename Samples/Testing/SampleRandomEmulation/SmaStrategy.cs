@@ -6,7 +6,6 @@ namespace SampleRandomEmulation
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;
 	using StockSharp.Algo.Strategies;
-	using StockSharp.Algo.Strategies.Quoting;
 	using StockSharp.Messages;
 
 	class SmaStrategy : Strategy
@@ -65,11 +64,11 @@ namespace SampleRandomEmulation
 				var volume = Position == 0 ? Volume : Position.Abs() * 2;
 
 				// регистрируем заявку (обычным способом - лимитированной заявкой)
-				//RegisterOrder(this.CreateOrder(direction, (decimal)Security.GetCurrentPrice(direction), volume));
+				RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
 
 				// переворачиваем позицию через котирование
-				var strategy = new MarketQuotingStrategy(direction, volume);
-				ChildStrategies.Add(strategy);
+				//var strategy = new MarketQuotingStrategy(direction, volume);
+				//ChildStrategies.Add(strategy);
 
 				// запоминаем текущее положение относительно друг друга
 				_isShortLessThenLong = isShortLessThenLong;

@@ -43,6 +43,9 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Licensing">
+      <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Rithmic">
       <HintPath>..\..\..\Connectors\Rithmic\StockSharp.Rithmic.dll</HintPath>
     </Reference>

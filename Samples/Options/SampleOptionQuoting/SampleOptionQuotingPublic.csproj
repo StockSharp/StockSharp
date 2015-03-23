@@ -44,6 +44,10 @@
     <Reference Include="StockSharp.Algo.Strategies">
       <HintPath>..\..\..\Algo.Strategies\StockSharp.Algo.Strategies.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.Licensing, Version=4.2.73.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\References\StockSharp.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Plaza">
       <HintPath>..\..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
     </Reference>
