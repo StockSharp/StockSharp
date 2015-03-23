@@ -36,7 +36,7 @@ namespace StockSharp.Hydra.Panes
 
 		public override string Title
 		{
-			get { return LocalizedStrings.Str2908 + SelectedSecurity; }
+			get { return LocalizedStrings.OrderLog + " " + SelectedSecurity; }
 		}
 
 		public override Security SelectedSecurity

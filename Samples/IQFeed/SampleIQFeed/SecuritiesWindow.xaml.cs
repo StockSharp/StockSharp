@@ -83,7 +83,7 @@ namespace SampleIQFeed
 				trader.RegisterMarketDepth(security);
 
 				// создаем окно со стаканом
-				var wnd = new QuotesWindow { Title = security.Id + LocalizedStrings.Str2957 };
+				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;
 			});

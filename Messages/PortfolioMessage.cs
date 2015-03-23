@@ -129,6 +129,10 @@ namespace StockSharp.Messages
 			return CopyTo(new PortfolioMessage());
 		}
 
+		/// <summary>
+		/// Скопировать данные сообщения в <paramref name="destination"/>.
+		/// </summary>
+		/// <param name="destination">Объект, в который копируется информация.</param>
 		protected PortfolioMessage CopyTo(PortfolioMessage destination)
 		{
 			destination.PortfolioName = PortfolioName;

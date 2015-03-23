@@ -171,7 +171,7 @@ namespace SampleRandomEmulation
 						if (_connector.IsFinished)
 						{
 							TestingProcess.Value = TestingProcess.Maximum;
-							MessageBox.Show(LocalizedStrings.Str3024 + (DateTime.Now - _startEmulationTime));
+							MessageBox.Show(LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
 						}
 						else
 							MessageBox.Show(LocalizedStrings.cancelled);

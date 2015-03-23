@@ -76,7 +76,7 @@ namespace SampleBitStamp
 			var window = _quotesWindows.SafeAdd(security, key =>
 			{
 				// создаем окно со стаканом
-				var wnd = new QuotesWindow { Title = security.Id + LocalizedStrings.Str2957 };
+				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;
 			});

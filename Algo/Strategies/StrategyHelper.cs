@@ -515,7 +515,7 @@ namespace StockSharp.Algo.Strategies
 			public NewMyTradesStrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				Name = LocalizedStrings.Str1251 + strategy;
+				Name = LocalizedStrings.Str1251 + " " + strategy;
 				Strategy.NewMyTrades += OnStrategyNewMyTrades;
 			}
 
@@ -536,7 +536,7 @@ namespace StockSharp.Algo.Strategies
 			public OrderRegisteredStrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				Name = LocalizedStrings.Str1252 + strategy;
+				Name = LocalizedStrings.Str1252 + " " + strategy;
 				Strategy.OrderRegistered += Activate;
 				Strategy.StopOrderRegistered += Activate;
 			}
@@ -554,7 +554,7 @@ namespace StockSharp.Algo.Strategies
 			public OrderChangedStrategyRule(Strategy strategy)
 				: base(strategy)
 			{
-				Name = LocalizedStrings.Str1253 + strategy;
+				Name = LocalizedStrings.Str1253 + " " + strategy;
 				Strategy.OrderChanged += Activate;
 				Strategy.StopOrderChanged += Activate;
 			}

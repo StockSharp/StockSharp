@@ -23,12 +23,12 @@ namespace StockSharp.Hydra.Windows
 
 		private readonly Dictionary<Type, string> _dataTypes = new Dictionary<Type, string>
 		{
-			{ typeof(Trade), LocalizedStrings.Str1023 },
-			{ typeof(MarketDepth), LocalizedStrings.Str933 },
-			{ typeof(OrderLogItem), LocalizedStrings.Str2936 },
-			{ typeof(Level1ChangeMessage), "level 1" },
-			{ typeof(Candle), LocalizedStrings.Str2937 },
-			{ typeof(ExecutionMessage), "executions" },
+			{ typeof(Trade), LocalizedStrings.Str985 },
+			{ typeof(MarketDepth), LocalizedStrings.Str1414 },
+			{ typeof(OrderLogItem), LocalizedStrings.OrderLog },
+			{ typeof(Level1ChangeMessage), "Level 1" },
+			{ typeof(Candle), LocalizedStrings.Candles },
+			{ typeof(ExecutionMessage), "Executions" },
 		};
 
 		public TaskSettingsWindow()

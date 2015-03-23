@@ -88,7 +88,7 @@ namespace SampleIB
 			if (Depth.IsChecked == true)
 			{
 				// создаем окно со стаканом
-				var wnd = new QuotesWindow { Title = SelectedSecurity.Id + LocalizedStrings.Str2957 };
+				var wnd = new QuotesWindow { Title = SelectedSecurity.Id + " " + LocalizedStrings.MarketDepth };
 				_quotesWindows.Add(SelectedSecurity, wnd);
 
 				// начинаем получать котировки стакана

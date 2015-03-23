@@ -58,7 +58,7 @@ Str60;Is order reregistration as a single transaction supported.;Поддерж�
 MarketOrders;Market orders;Рыночные заявки
 MarketOrdersSupported;Are market type orders supported.;Поддерживается ли рыночный тип заявок.
 Str64;Securities expiration times.;Время экспирации инструментов.
-WorkingHours;Board working hours;Время работы площадки.
+WorkingHours;Board working hours.;Время работы площадки.
 TimeZone;Time zone;Часовой пояс
 Str68;Information about the time zone where the stock exchange is situated.;Информация о временной зоне, где находится биржа.
 SecurityId;Security ID;Идентификатор инструмента
@@ -357,7 +357,7 @@ OptionStrikePrice;Option strike price.;Страйк цена опциона.
 OptionsContract;Options contract;Опцион
 OptionContractType;Option contract type.;Тип опциона.
 BinaryOption;Binary option;Бинарный опцион
-TypeBinaryOption;Type of binary option;Тип бинарного опциона.
+TypeBinaryOption;Type of binary option.;Тип бинарного опциона.
 Str382;Trading security currency.;Валюта торгового инструмента.
 Class;Class;Класс
 SecurityClass;Security class.;Класс инструмента.
@@ -377,8 +377,8 @@ ShareFund;Share (Open-end fund);Паи
 Str398;Cryptocurrency;Крипто-валюта
 Str399;Assigned;Назначена
 Str400;Suspended;Приостановлена
-Str401;Completed (forced) ;Завершена (принудительно)
-Str402;Completed ;Завершена
+Str401;Completed (forced);Завершена (принудительно)
+Str402;Completed;Завершена
 Str403;Buy;Покупка
 Str404;Sell;Продажа
 Str405;Put in queue;Поставить в очередь
@@ -442,7 +442,7 @@ Str503;Information about own trade.;Информация о собственно
 Str504;Order;Заявка
 Str505;Order, for which a trade was filled.;Заявка, по которой совершена сделка.
 Str506;Trade;Сделка
-Str507;Information about the trade;Информация о сделке.
+Str507;Information about tick trade.;Информация о тиковой сделке.
 Str509Params;{0} from order {1};{0} от заявки {1}
 Str510;News, released for a particular security, whole board or globally for the market.;Новость, выпущенная для конкретного инструмента, всей площадки или глобально по рынку.
 Str511;Stock exchange board;Биржевая площадка
@@ -466,7 +466,7 @@ Str528;Time of last change;Время последнего изменения
 Str529;Time of last order change (Cancellation, Fill).;Время последнего изменения заявки (Снятие, Сведение).
 Str530;Last change local time;Локальное время последнего изменения
 Str531;Last trade change local time (Cancellation, Fill).;Локальное время последнего изменения заявки (Снятие, Сведение).
-Str532;Tied order;Связанная заявка
+Str532;Linked order;Связанная заявка
 Str533;Order created by a stop-order during condition activation (empty value, if stop-condition has not been activated).;Биржевая заявка, которая была создана стоп-заявкой при активации условия (пустое значение, если стоп-условие еще не было активировано).
 Str534Params;{0}/{1} {2} Price={3} Volume={4} State={5} Score={6};{0}/{1} {2} Цена={3} Объем={4} Сост={5} Бал={6}
 Str535;Orders log item.;Строка лога заявок.
@@ -536,7 +536,7 @@ Str606;Trade received local time.;Локальное время получени
 TradeVolume;Number of contracts in a trade.;Количество контрактов в сделке.
 Str608;Order direction (buy or sell), which led to the trade.;Направление заявки (покупка или продажа), которая привела к сделке.
 SystemTrade;System trade;Системная сделка
-IsSystemTrade;Is a system trade;Является ли сделка системной.
+IsSystemTrade;Is a system trade.;Является ли сделка системной.
 LimitedValueNotMath;Limited value can not participate in mathematical operations.;Лимитированное значение не может участвовать в арифметических операциях.
 PercentagesCannotCompare;Percentages '{0}' can not be compared to non percentages '{1}'.;Проценты '{0}' нельзя сравнивать с не процентами '{1}'.
 UnknownUnitMeasurement;Unknown unit of measurement '{0}'.;Неизвестная единица измерения '{0}'.
@@ -705,7 +705,7 @@ Str785;Exponential Moving Average.;Экспоненциальная скольз
 Str786;Hull Moving Average.;Скользящая средняя Халла.
 Str787;Period of resulting average;Период результирующей средней
 Str788;Peiod of resulting average. If equal to 0, period of resulting average is equal to the square root of HMA period. By default equal to 0.;Период результирующей средней. Если равно 0, период результирующей средней равен квадратному корню периода HMA. По умолчанию равно 0.
-Str789;Jurik Moving Average;Юриковская (Jurik's) скользящая средняя.
+Str789;Jurik Moving Average.;Юриковская (Jurik's) скользящая средняя.
 Str790;Phase;Фаза
 Str791;Moving average phase.;Фаза скользящей средней.
 Str792;Kaufman adaptive moving average.;Адаптивная скользящая средняя Кауфманна.
@@ -847,7 +847,6 @@ Str929Params;Wrong price of trade {0} order {1}.;Неправильная цен
 Str930;filling;исполнения
 Str931;All transferred changes are empty.;Все переданные изменения являются пустыми.
 Str932Params;Best bid {0} is greater or equal to best ask {1} during {2}.;Лучший бид {0} больше или равен лучшему офферу {1} во время {2}.
-Str933;market depths;стаканы
 Str934;market depths (local);стаканы (локальное)
 Str935;Wrong price of quote.;Неправильная цена котировки.
 Str936;Wrong volume of quote.;Неправильный объем котировки.
@@ -899,7 +898,7 @@ Export;Export;Экспорт
 ExportSettings;Export settings.;Настройки для экспорта.
 Str983;Profitable trades;Прибыльных сделок
 Str984;Number of trades won (whose profit is greater than 0).;Количество выигранных сделок (прибыль которых больше 0).
-Str985;Trades ;Сделки
+Str985;Trades;Сделки
 Str986;Losing trades;Убыточных сделок
 Str987;Number of trades lost with zero profit (whose profit is less than or equal to 0).;Количество проигранных сделок и с нулевой прибылью (прибыль которых меньше равна 0).
 Str988;Total trades;Всего сделок
@@ -930,44 +929,43 @@ Str1013;orders;заявки
 Str1014;To value can not be less than From value.;Значение to не может быть меньше значения from.
 Str1016Params;Wrong parameter of candle {0}. Candle parameter is equal {1}, storage accepts {2}.;Неправильный параметр свечи {0}. Параметр свечи равен {1}, хранилище принимает {2}.
 WrongCandleType;Wrong type of candle.;Неправильный тип свечи.
-Str1018;Unknown type of market-data;Неизвестный тип маркет-данных.
+Str1018;Unknown type of market-data.;Неизвестный тип маркет-данных.
 Str1019Params;Wrong type of data of trade {0}.;Неправильный тип данных сделки {0}.
 Str1020;Wrong trade number.;Неправильный номер сделки.
 Str1021Params;Wrong price of trade {0}.;Неправильная цена сделки {0}.
 Str1022Params;Wrong volume of trade {0}.;Неправильный объем сделки {0}.
-Str1023;trades ;сделки
 Str1024;trades (local);сделки (локальное)
 Str1025;Empty security ID.;Идентификатор инструмента пустой.
 Str1026Params;Security for {0} is equal {1}, but should be {2}.;Инструмент для {0} равен {1}, а должен быть {2}.
 Str1027Params;Security {0} volume step is equal zero.;Инструмент {0} имеет нулевой шаг объема.
 Str1028;Subscribed to events.;Подписалось на события.
-Str1030;Error cancelling order ;Ошибка снятия заявки 
-Str1031;Order change ;Изменение заявки 
-Str1032;New trades for order;Новые сделки заявки 
-Str1033;All order trades ;Все сделки заявки 
-Str1034;Order registration;Регистрация заявки 
-Str1035;Stop-order activation;Активация стоп-заявки 
-Str1036;Partial order filling;Частичное исполнение заявки 
-Str1037;Cancel order;Отмена заявки 
-Str1038;Completely filled;Полное исполнение 
+Str1030;Error cancelling order;Ошибка снятия заявки
+Str1031;Order change;Изменение заявки
+Str1032;New trades for order;Новые сделки заявки
+Str1033;All order trades;Все сделки заявки
+Str1034;Order registration;Регистрация заявки
+Str1035;Stop-order activation;Активация стоп-заявки
+Str1036;Partial order filling;Частичное исполнение заявки
+Str1037;Cancel order;Отмена заявки
+Str1038;Completely filled;Полное исполнение
 Str1039;Portfolio does not have information about connection.;Портфель не имеет информации о подключении.
 Str1040Params;Portfolio {0} balance decreased below {1};Уменьшение денег портфеля {0} ниже {1}
 Str1041Params;Portfolio {0} balance increased above {1};Увеличение денег портфеля {0} выше {1}
-Str1042;Position change;Изменение позиции 
+Str1042;Position change;Изменение позиции
 Str1043;Position does not have information about portfolio.;Позиция не имеет информацию о портфеле.
 Str1044Params;Position {0} decreased below {1};Уменьшение позиции {0} ниже {1}
 Str1045Params;Position {0} increased above {1};Увеличение позиции {0} выше {1}
-Str1046;Security change;Изменение инструмента 
-Str1047;New trades of a security;Новые сделки инструмента 
+Str1046;Security change;Изменение инструмента
+Str1047;New trades of a security;Новые сделки инструмента
 Str1048;New entries in orders log for security ;Новые записи в логе заявок для инструмента 
-Str1049;Security's last trade;Последняя сделка инструмента 
-Str1050;Security market depth change ;Изменение стакана инструмента 
+Str1049;Security's last trade;Последняя сделка инструмента
+Str1050;Security market depth change;Изменение стакана инструмента
 Str1051;Price value can not be zero.;Значение цены не может быть нулевым.
 Str1052;Price value can not be negative.;Значение цены не может быть отрицательным.
 Str1053;Quote is missing.;Отсутствует котировка.
 Str1054;Last trade is missing.;Последняя сделка отсутствует.
 Str1055;Exact time;Точное время
-Str1056;Market depth change ;Изменение стакана 
+Str1056;Market depth change;Изменение стакана
 Str1057Params;Increasing spread size of market depth {0} by {1};Повышение размера спреда стакана {0} на {1}
 Str1058Params;Decreasing spread size of market depth {0} by {1};Понижение размера спреда стакана {0} на {1}
 Str1059Params;Increasing best bid of market depth {0} by {1};Повышение лучшего бида стакана {0} на {1}
@@ -975,16 +973,16 @@ Str1060Params;Decreasing best bid of market depth {0} by {1};Понижение 
 Str1061Params;Increasing best ask of market depth {0} by {1};Повышение лучшего аска стакана {0} на {1}
 Str1062Params;Decreasing best ask of market depth {0} by {1};Понижение лучшего аска стакана {0} на {1}
 Str1063;Missing quote in market depth.;В стакане отсутствует котировка.
-Str1064;Changed candles;Измененные свечи 
-Str1065;Candle change ;Изменение свечи 
-Str1066;End of candle;Окончание свечи 
+Str1064;Changed candles;Измененные свечи
+Str1065;Candle change;Изменение свечи
+Str1066;End of candle;Окончание свечи
 Str1067Params;Icreasing close price of candle {0} above {1};Повышение цены закрытия свечи {0} выше {1}
 Str1068Params;Decreasing close price of candle {0} below {1};Понижение цены закрытия свечи {0} ниже {1}
 Str1069Params; - volume exceeding {0}; - превышение объема выше {0}
 Str1070;Registration ID does not contain information about current candle.;Идентификатор регистрации не содержит информацию о текущей свече.
 Str1071Params; - current candle exceeding {0}; - превышения объема текущей свечи выше {0}
-Str1072;Started candles;Начатые свечи 
-Str1073;Finished candles;Законченные свечи 
+Str1072;Started candles;Начатые свечи
+Str1073;Finished candles;Законченные свечи
 Str1075Params;{0}% of current candle is completed.;Завершение текущей свечи на {0}%.
 Str1076Params;{0}% of current candles is completed.;Завершение текущих свечек на {0}%.
 Str1077;Percentage change must be positive.;Процент изменения должен быть положительным.
@@ -1061,7 +1059,7 @@ Str1149;Trading board information is missing.;Отсутствует инфор�
 Str1150;Traded security information is missing.;Отсутствует информация о торговом инструменте.
 Str1151Params;Error at {0} for order {1}.;Ошибка на {0} для заявки {1}.
 Str1152;cancellation;отмену
-Str1153;registration ;регистрацию
+Str1153;registration;регистрацию
 Str1154;Random error.;Случайная ошибка.
 Str1155Params;Order {0} cancelled.;Заявка {0} снята.
 Str1156Params;Order {0} not found.;Заявка {0} не найдена.
@@ -1088,7 +1086,7 @@ Str1176;Combine on touch;Сводить при касании
 Str1177;When emulating trades combination, combine orders, when trade price touched the order price (equal to order price).;При эмулировании сведения по сделкам, производить сведение заявок, когда цена сделки коснулась цены заявки (равна цене заявки).
 Str1178;Market depth (lifetime);Стакан (время жизни)
 Str1179;Maximum time, during which a market depth is in an emulator. If there was no update during that time, the market depth is erased. This property can be used to delete old market depths if there are gaps in the data.;Максимальное время, которое стакан находится в эмуляторе. Если за это время не произошло обновление, стакан стирается. Это свойство можно использовать, чтобы убирать старые стаканы при наличии дыр в данных.
-Str1180;Errors percentage.;Процент ошибок
+Str1180;Errors percentage.;Процент ошибок.
 Str1181;New orders registration error percentage value. can be from 0 (no errors) to 100.;Процентное значение ошибки регистрации новых заявок. Значение может быть от 0 (не будет ни одной ошибки) до 100.
 Str1182;Percentage value can not be negative.;Процентное значение не может быть отрицательным.
 Str1183;Percentage value can not be greater than 100.;Процентное значение не может быть больше 100.
@@ -1103,9 +1101,9 @@ Str1191;Number, starting from which the emulator will generate orders numbers.;�
 Str1192;Trade number;Номер сделки
 Str1193;Number, starting with which the emulator will generate trades numbers.;Номер, начиная с которого эмулятор будет генерировать номера для сделок.
 Str1194;Number, starting with which the emulator will generate orders transactions numbers.;Номер, начиная с которого эмулятор будет генерировать номера для транзакций заявок.
-Str1195;Spread size.;Размер спреда
+Str1195;Spread size;Размер спреда
 Str1196;Spread size in price steps. Used in determining spread when generating market depths from ticks.;Размер спреда в шагах цены. Используется при определение спреда для генерации стакана из тиковых сделок.
-Str1197;Market depth;Глубина стакана
+Str1197;Depth;Глубина стакана
 Str1198;Maximum depth of a market depth, which will be generated from ticks.;Максимальная глубина стакана, который будет генерироваться из тиков.
 Str1199;Number of volume steps;Количество шагов объема
 Str1200;Number of volume steps of an order exceeding those of a tick trade. Used in testing with ticks.;Количество шагов объема, на которое заявка больше тиковой сделки. Используется при тестировании на тиковых сделках.
@@ -1141,7 +1139,7 @@ Str1230Params;For security {0} previous position {1}, new {2}.;Для инстр
 Str1231;Reverse position.;Переворот позиции.
 Str1232Params;Position increased by {0}.;Увеличение позиции на {0}.
 Str1233Params;Position changed to {0}.;Изменение позиции на {0}.
-Str1234Params;Position decreased by {0};Уменьшение позиции на {0}.
+Str1234Params;Position decreased by {0}.;Уменьшение позиции на {0}.
 Str1235;Stops were not found.;Стопы не были найдены.
 Str1236Params;Stops decreased by {0}.;Уменьшение стопов на {0}.
 Str1237;No protective strategies.;Нет защитных стратегий.
@@ -1158,9 +1156,9 @@ Str1247Params;Delta total {0}, Futures position {1}, Directional position {2}, D
 Str1248;Information about both take-profit and stop-loss is missing.;Одновременно отсутствует информация о тейк-профит и стол-лоссе.
 Str1249;P&L change;Изменение P&L
 Str1250;Position change;Изменение позиции
-Str1251;New trades of a strategy;Новые сделки стратегии 
-Str1252;New strategy order;Новая заявка стратегии 
-Str1253;Strategy order change;Изменение заявки стратегии 
+Str1251;New trades of a strategy;Новые сделки стратегии
+Str1252;New strategy order;Новая заявка стратегии
+Str1253;Strategy order change;Изменение заявки стратегии
 Str1254; - error; - ошибка
 Str1255Params;Position decreased below {0};Уменьшение позиции ниже {0}
 Str1256Params;Position increased above {0};Увеличение позиции выше {0}
@@ -1197,7 +1195,7 @@ Str1288;Quoting direction can not be changed when the position is zero.;Нель
 Str1289Params;Quoting volume change. Old volume {0}, new volume {1}.;Изменение объема для котирования. Старый объем {0}, новый объем {1}.
 Str1290;Quoted volume must be positive.;Котируемый объем должен быть положительным.
 Str1291;Wrong value.;Неправильное значение.
-Str1292;Action was not executed! Strategy is expected to stop!;Действие не выполнено! Ожидается остановка стратегии!
+Str1292;Action was not executed. Strategy is expected to stop.;Действие не выполнено. Ожидается остановка стратегии.
 Str1293Params;Quoting to {0} volume {1}.;Котирование на {0} объема {1}.
 Str1294Params;Finishing quoting with unfilled volume equal {0}.;Заканчиваем котирование с неисполненным объемом равный {0}.
 Str1295Params;Position changed by {0}. Remaining volume {1}.;Позиция изменилась на {0}. Оставшийся объем {1}.
@@ -1223,7 +1221,7 @@ Str1314Params;Requoting registered for order {0} to {1} with price {2}.;Пере
 Str1315Params;Cancel order {0}.;Отмена заявки {0}.
 Str1316Params;Order {0} was canceled. Cancellation time {1}.;Заявка {0} была снята. Время снятия {1}.
 Str1317Params;Cannot requote. Maximum number {0} of tries was made.;Невозможно перекотировать. Было совершено максимальное количество {0} попыток.
-Str1318;Order can not be reregistered, since the interval has not yet expired.;Заявка не может быть перерегистрирована, так как еще не истек интервал. 
+Str1318;Order can not be reregistered, since the interval has not yet expired.;Заявка не может быть перерегистрирована, так как еще не истек интервал.
 Str1319Params;Remaining {0}, beginning {1}, current {2}, interval {3}.;Осталось {0}, начало {1}, текущее {2}, интервал {3}.
 Strategy;Strategy;Стратегия
 Str1321;Total working time;Общее время работы
@@ -1267,9 +1265,9 @@ Str1367;Maximum number of errors can not be less than one.;Максимальн�
 Str1368Params;Transition from state {0} to {1}.;Переход из состояния {0} в {1}.
 Str1369Params;Strategy {0} is already stopped, and can not be transferred to state {1}.;Стратегия {0} уже остановлена, и не может быть переведена в состояние {1}.
 Str1370;Waiting for all active orders to be cancelled.;Ожидание снятия всех активных заявок.
-Str1371;stopped ;остановлена
-Str1372;stopping ;останавливается
-Str1373;Started;запущена
+Str1371;stopped;остановлена
+Str1372;stopping;останавливается
+Str1373;Started;Запущена
 Str1374Params;Strategy {0}. [{1},{2}]. Position {3}.;Стратегия {0}. [{1},{2}]. Позиция {3}.
 Str1375;Orders storage time cannot be negative.;Время хранения заявок не может быть отрицательным.
 Str1376;Operational volume.;Объем, которым необходимо оперировать.
@@ -1311,8 +1309,7 @@ Str1411;Unrealized profit recalculation interval.;Интервал пересч�
 Str1413;What trades to use.;Какие использовать сделки.
 Str1414;Market depths;Стаканы
 Str1415;What market depths to use.;Какие использовать стаканы.
-Str1416;Order log;Лог Заявок
-Str1417;Use orders log;Использовать лог заявок.
+Str1417;Use orders log.;Использовать лог заявок.
 Str1418;Number of strategies;Кол-во стратегий
 Str1419;Number of simultaneously tested strategies.;Количество одновременно тестируемых стратегий.
 Str1420;Code is executing. Execution must be restarted.;Код выполняется. Необходимо перезапустить выполнение.
@@ -1364,7 +1361,7 @@ Str1467;Cancel checking for updates;Прервать проверку обнов
 Str1468;Cancel update;Прервать обновление
 Str1469;List of changes in version %version%;Список изменений в версии %version%
 Str1470;Check for updates;Проверить обновления
-Str1471;Checking for updates ;Выполняется проверка обновлений
+Str1471;Checking for updates;Выполняется проверка обновлений
 Str1472;Close;Закрыть
 Str1473;Updates loading;Загрузка обновлений
 Str1474;Load update;Загрузить обновление
@@ -1381,7 +1378,7 @@ Str1484;Cancel updates unpacking;Отменить распаковку обно�
 Str1485;Update successful;Обновление успешно завершено
 Str1486;Repeat later;Повторить позже
 Str1487;Repeat now;Повторить сейчас
-Str1488;New updates available ;Доступны новые обновления
+Str1488;New updates available;Доступны новые обновления
 Str1489;Error installing updates;Ошибка при установке обновлений
 Str1490;Update now;Обновить сейчас
 Str1491;View list of changes;Просмотреть список изменений
@@ -1416,7 +1413,7 @@ Str1519;Save;Сохранить
 Str1520;Reset settings;Сбросить настройки
 Str1521;< Choose >;< Выберите >
 Str1522Params;Security with code {0} not found;Инструмент с кодом {0} не найден
-Str1523Params;Error in index {0}'. format;Ошибка в формате индекса '{0}'.
+Str1523Params;Error in index '{0}' format.;Ошибка в формате индекса '{0}'.
 Str1524;Options have different underlying assets.;Опционы имеют разные базовые активы.
 Str1525;Pair options;Пара опционов
 Str1526;Information about the option.;Информация об опционе.
@@ -1451,7 +1448,7 @@ Str1554;Working connection can not be deleted.;Нельзя удалить по�
 Str1555;Working connection can not be edited.;Нельзя редактировать подключенное соединение.
 Str1556;Connection status can not be changed in the connected state. You must disconnect first.;Нельзя изменять статус подключения в подключенном состоянии. Необходимо в начале отключиться.
 Str1557;Disconnect;Отключить подключение
-Str1558;Activate connection.;Включить подключение
+Str1558;Activate connection;Включить подключение
 Str1559;Common;Общее
 Str1560;Connection successfully checked.;Подключение успешно проверено.
 Str1561;Cannot connect.;Невозможно установить подключение.
@@ -1464,7 +1461,6 @@ Str1567;Price NULL Volume NULL;Цена NULL Объем NULL
 Str1568Params;Price {0} Volume {1};Цена {0} Объем {1}
 Str1569;All;Все
 Str1570;Progress;Прогресс
-Str1571;Start;Запускать 
 Str1574;File loading...;Загрузка файла...
 Str1575;Specified file not found.;Указанный файл не найден.
 Str1576Params;Type of configuration {0}.;Тип конфигурации {0}.
@@ -1620,7 +1616,7 @@ Str1728Params;Order, placed by stop-order {0}, rejected by trading system.;За�
 Str1729Params;Order {0} was completely filled, but balance was not updated and is equal to {1}.;Заявка {0} исполнилась полностью, но баланс не обновлен и равен {1}.
 Str1730;More or equal;Больше или равно
 Str1731;Less than or equal;Меньше или равно
-Str1732;Tied;Связанная
+Str1732;Linked;Связанная
 Str1733;Stop-limit;Стоп-лимит
 Str1735;Take-profit + stop-limit;Тейк-профит + стоп-лимит
 Str1737;Stop-order type;Тип стоп-заявки
@@ -1644,10 +1640,10 @@ Str1755;Activation in case of partial execution;Активация при час
 Str1756;Partial order filling is taken into account. «On execution» order will be activated when order-condition is partially met.;Частичное исполнение заявки учитывается. Заявка «по исполнению» будет активирована при частичном исполнении заявки-условия.
 Str1757;Filled volume;Исполненный объем
 Str1758;Use filled order volume as quantity for the new stop-order being placed. Filled volume of order-condition is used as security quantity in «on execution» order.;Брать исполненный объем заявки в качестве количества выставляемой стоп-заявки. В качестве количества бумаг в заявке «по исполнению» принимается исполненный объем заявки-условия.
-Str1759;Price of tied order;Цена связанной заявки
-Str1760;Price of tied limit order;Цена связанной лимитированной заявки.
+Str1759;Price of linked order;Цена связанной заявки
+Str1760;Price of linked limit order.;Цена связанной лимитированной заявки.
 Str1761;Cancellation when partially filled;Снятие при частичном исполнении
-Str1762;Sign that the stop-order was cancelled when its tied limit order was partially filled.;Признак снятия стоп-заявки при частичном исполнении связанной лимитированной заявки.
+Str1762;Sign that the stop-order was cancelled when its linked limit order was partially filled.;Признак снятия стоп-заявки при частичном исполнении связанной лимитированной заявки.
 Str1763;Offset from maximum;Отступ от максимума
 Str1764;Offset from maximum (minimum) price of last transaction.;Величина отступа от максимума (минимума) цены последней сделки.
 Str1766;Protection spread size.;Величина защитного спрэда.
@@ -1668,9 +1664,9 @@ Str1780;DDE server name.;Название DDE сервера.
 Str1781;Asynchrous mode;Асинхронный режим
 Str1782;Use asynchrous mode to send transaction (register, reregister and cancel orders).;Использовать асинхронный режим для отправки транзакций (регистрация, перерегистрация и отмена заявок).
 Str1783;Load portfolios currencies;Загружать валюты портфелей
-Str1784;Load history of securities changes from «Portfolios currencies» table.;"Загружать историю изменений инструментов из таблицы ""Валюты портфелей""."
+Str1784;Load history of securities changes from «Portfolios currencies» table.;Загружать историю изменений инструментов из таблицы «Валюты портфелей».
 Str1785;Load history of changes;Загружать историю изменений
-Str1786;Load history of securities changes from «Securities (changes)» table.;"Загружать историю изменений инструментов из таблицы ""Инструменты (изменения)""."
+Str1786;Load history of securities changes from «Securities (changes)» table.;Загружать историю изменений инструментов из таблицы «Инструменты (изменения)».
 Str1787;Securities DDE table settings.;Настройки DDE таблицы Инструменты.
 Str1788;Securities (changes);Инструменты (изменения)
 Str1789;Securities (changes) DDE table settings.;Настройки DDE таблицы Инструменты (изменения).
@@ -1809,7 +1805,7 @@ Str1932;Extra lines on axis;Доп. линии на оси
 Str1933;Show extra grid lines on the axis.;Показывать дополнительные линии сетки на оси.
 Str1934;Extra grid lines;Доп. линии сетки
 Str1935;Show extra grid lines.;Показывать дополнительные линии сетки.
-Str1936;Labels on the axis ;Надписи на оси
+Str1936;Axis labels;Надписи на оси
 Str1937;Show labels on the axis.;Показывать надписи на оси.
 Str1938;Labels format;Формат надписей
 Str1940;Japanese candles;Японские свечи
@@ -1919,9 +1915,9 @@ Str2048;Chinkou line color.;Цвет Chinkou линии.
 Str2049;Color of increasing candle.;Цвет для возрастающей свечи.
 Str2050;Color of decreasing candle.;Цвет для убывающей свечи.
 Str2051;Auto zoom;Автомасштаб
-Str2052;Use automatic scaling «Bubble» mode.;"Использовать автоматическое масштабирование для режима ""Пузырь""."
+Str2052;Use automatic scaling «Bubble» mode.;Использовать автоматическое масштабирование для режима «Пузырь».
 Str2053;Scale;Масштаб
-Str2054;"Manual scale for ""Bubble"" mode.";"Ручной масштаб для режима ""Пузырь""."
+Str2054;Manual scale for «Bubble» mode.;"Ручной масштаб для режима «Пузырь».
 Str2055;Line settings;Настройки линии
 Str2056;Line colur (bar and etc.), with which it will be drawn on chart.;Цвет линии (бара и т.д.), с которым она будет рисоваться на графике.
 Str2057;Additional line color (bars etc), with which it will be drawn on the chart.;Дополнительный цвет линии (бара и т.д.), с которым она будет рисоваться на графике.
@@ -2208,7 +2204,7 @@ Str2386;Legs description;Описание ног
 Str2388;Legs prices;Цены ног
 Str2390;Condition for short sales.;Условие для коротких продаж.
 Str2391;Price shift range;Диапазон сдвига цены
-Str2392;Order price shift range;Диапазон сдвига цены заявки.
+Str2392;Order price shift range.;Диапазон сдвига цены заявки.
 ElectronicTrading;Electronic trading;Электронные торги
 Str2395;Company quotes;Котировки фирмы
 Str2397;Max offset from best pairs;Макс сдвиг от лучших пар
@@ -2256,7 +2252,7 @@ Str2442;Hide order in market depth. Only possible when sending order to ISLAND s
 Str2443;Activate after;Активировать после
 Str2444;Activate after given time.;Активировать после заданного времени.
 Str2445;Cancel with wrong price;Отменять с некорректной ценой
-Str2446;Cancel orders with wrong price.;Отменять заявки с некорректной ценой. 
+Str2446;Cancel orders with wrong price.;Отменять заявки с некорректной ценой.
 Str2447;Trader ID;Идентификатор трейдера
 Str2448;Trader ID.;Идентификатор трейдера.
 Str2449;Wait for required volume;Ожидать необходимого объема
@@ -2281,7 +2277,7 @@ Str2467;Starting price. Only for BOX stock exchange.;Стартовая цена
 Str2468;Underlying asset price;Цена базового актива
 Str2469;Underlying asset price.;Цена базового актива.
 Str2470;Underlying asset delta;Дельта базового актива
-Str2472;Min price of underlying asset.;Мин цена базового актива
+Str2472;Min price of asset;Мин цена актива
 Str2473;Minimum price of underlying asset.;Минимальная цена базового актива.
 Str2474;Max price of an underlying asset.;Макс цена базового актива.
 Str2475;Maximum price of underlying asset.;Максимальная цена базового актива.
@@ -2397,7 +2393,7 @@ Str2586;User temporarily blocked.;Пользователь временно за
 Str2587;Connection is not allowed for current software.;Для данного ПО подключение не разрешено.
 Str2588;User with same name is already connected to server.;Пользователь с таким именем уже подключен к серверу.
 Str2590Params;Quote for {0} have zero volume.;Котировка для {0} имеет нулевой объем.
-Str2591Params;Price of best bid {0} is greater or equal to the price of best ask {1} for security {0}.;Цена лучшего бида {0} больше или равна цене лучшего оффера {1} для инструмента {0}.
+Str2591Params;Price of best bid {0} is greater or equal to the price of best ask {1} for security {2}.;Цена лучшего бида {0} больше или равна цене лучшего оффера {1} для инструмента {2}.
 Str2592;Connection to RTS.;Подключение к РТС.
 Str2593;Additional;Дополнительное
 Str2594;Server address. By default it's value us equal to the local computer address 127.0.0.1:4001.;Адрес сервера. По-умолчанию значение равно адресу локального компьютера 127.0.0.1:4001.
@@ -2552,7 +2548,7 @@ Str2741;Failed to stop router process.;Не удалось остановить 
 Str2742Params;Column {0} already has an index.;Колонка {0} уже имеет индекс.
 Str2743Params;Column {0} belongs to table {1}, whilst the table's system name is {2}.;Колонка {0} относиться к таблице {1}, в то время как сама таблица имеет системное имя {2}.
 Str2744;Error occured.;Произошла ошибка.
-Str2745Params;{0} Code {1}, discription '{2}'.;{0} Код {1}, описание '{2}'.
+Str2745Params;{0} Code {1}, description '{2}'.;{0} Код {1}, описание '{2}'.
 Str2746;Unknown type of state.;Неизвестный тип состояния.
 Str2747Params;Column {0} of table {1} with index {2} is missing in the data.;Колонка {0} таблицы {1} с индексом {2} не присутствует в данных.
 Str2748Params;Column {0} of table {1} has type '{2}'. Impossible to cast to type '{3}'.;Колонка {0} таблицы {1} имеет тип '{2}'. Приведение к типу '{3}' невозможно.
@@ -2698,10 +2694,9 @@ Str2899Params;Unknown type of task {0}. Data will be deleted.;Неизвестн
 Str2900Params;Task {0} not found.;Задача {0} не найдена.
 Str2903Params;License does not support simultaneous work of several copies '{0}'.;Лицензия не поддерживает одновременную работу нескольких копий '{0}'.
 Str2904Params;Add task {0}...;Добавление задачи {0}...
-Str2905;Task settings match default settings. Task will be disabled!;Настройки задачи соответствуют настройкам по умолчанию. Задача будет выключена!
+Str2905;Task settings match default settings. Task will be disabled.;Настройки задачи соответствуют настройкам по умолчанию. Задача будет выключена.
 Str2906;Initializing.;Инициализируется.
 Str2907;Task has no selected securities.;Задача не имеет выбранных инструментов.
-Str2908;Order log (OL) ;Лог заявок (ОЛ) 
 Str2910Params;Unknown type of export '{0}'.;Неизвестный тип экспорта '{0}'.
 Str2911;Too much data to display;Данных слишком много для отображения
 Str2912Params;Uploaded {0} of {1};Выгружено {0} из {1}
@@ -2727,10 +2722,8 @@ Str2930Params;New security added {0}.;Добавлен новый инструм
 Str2931Params;Dates cache for security {0} in directory '{1}' was reset.;Кэш дат для инструмента {0} в директории '{1}' сброшен.
 Str2932;Start;Запустить
 Str2933;Show;Показать
-Str2934;Changes;Изменения 
+Str2934;Changes;Изменения
 Str2935;At least one change must be selected.;Необходимо выбрать хотя бы одно изменение.
-Str2936;order log ;лог заявок
-Str2937;candles;свечи
 Str2938;One of the fields in incorrectly set.;Одно из полей задано неверно.
 Str2940Params;Errors count esceeded {0}.;Количество ошибок превысило {0}.
 Str2941;Loading...;Загрузка...
@@ -2748,7 +2741,6 @@ Str2953;Manual selection of {0} start mode is enabled. To work in selected mode 
 Str2954;S#.Data settings will be reset. This operation is irreversible. Are you sure you want to continue?;Настройки S#.Data будут сброшены. Данная операция не обратима. Вы уверены, что хотите продолжить?
 Str2955;Data processing error;Ошибка обработки данных
 Str2956Params;Error subscribing to {0} for {1};Ошибка подписки на {0} для {1}
-Str2957; market depth; стакан
 Str2958;Connection restored.;Подключение восстановлено.
 Str2959;Error connection;Ошибка соединения
 Str2960;Error registering order;Ошибка регистрации заявки
@@ -2812,15 +2804,15 @@ Str3019;On candles;На свечах
 Str3020;On candles&market depths;На свечах&стаканах
 Str3021;On orders log;На логе заявок
 PnLUnreal;P&L (unrealized) ;P&L (нереализ) 
-Str3024;Completed in;Закончено за 
-cancelled;cancelled;Отменено
+Str3024;Completed in {0}.;Закончено за {0}.
+cancelled;Cancelled;Отменено
 Str3026Params;Long {0} Short {1};Длинная {0} Короткая {1}
 ObtainingLicense;Obtaining license...;Получение лицензии...
 InvalidProcess;Invalid process.;Неподходящий процесс для обработки.
 Str3030Params;DDE export. {0};Экспорт DDE. {0}
 Str3031Params;Table {0}. {1};Таблица {0}. {1}
 Warning;Warning;Предупреждение
-Str3033Params;Alert! At {0} '{1}'.{2};Оповещение! В {0} случилось '{1}'.{2}
+Str3033Params;Alert. At {0} '{1}'.{2};Оповещение. В {0} случилось '{1}'.{2}
 Select;Select;Выберите
 Str3035;RI open interest exceeded a value of 100 000 contracts.;Открытый интерес по RI превысил значение 100 000 контрактов.
 NotAuthorized;Not authorized;Нет авторизации
@@ -2842,7 +2834,7 @@ Str3052;Diagram element name.;Название элемента схемы.
 Str3053;Element logging level.;Уровень логирования элемента.
 Str3054;Show element parameters in higher order elements.;Отображать параметры элемента в элементах более высокого уровня.
 Str3055Params;No socket with ID {0} found;Не найден сокет с идентификатором {0}
-Str3056Params;Element {0} already tied with {1} through {2}.;Элемент {0} уже связан с {1} через {2}.
+Str3056Params;Element {0} already binded with {1} through {2}.;Элемент {0} уже связан с {1} через {2}.
 Str3057;Current values of diagram element parameters;Текущие значения параметров элемента схемы
 Input;Input;Вход
 Output;Output;Выход
@@ -2984,7 +2976,7 @@ Str3200;Chart;График
 Str3201;Chart to display a series of candles.;График для отображения серий свечек.
 Str3205;Chat;Чат
 Str3206;Chat with other participants.;Чат с другими участниками.
-Str3207;To enter chat you must connect to S#. Connect now? ;Для входа в чат необходимо подключиться к S#. Подключиться сейчас?
+Str3207;To enter chat you must connect to S#. Connect now?;Для входа в чат необходимо подключиться к S#. Подключиться сейчас?
 Str3208Params;User '{0}' left chat.;Пользователь '{0}' покинул чат.
 Str3209Params;User '{0}' joined chat.;Пользователь '{0}' присоединился к чату.
 Str3210Params;Chat ({0});Чат ({0})
@@ -3275,7 +3267,7 @@ Str3512Params;Number of headers {0} can not be greater than {1}.;Количес�
 Str3513Params;Candles for security {0}/{1} and period {2} were not registered earlier.;Свечи по инструменту {0}/{1} и периоду {2} не были ранее зарегистрированы.
 Str3514Params;Command {0} not executed because '{1}'.;Команда {0} не выполнена по причине '{1}'.
 Str3515;Take + stop;Тейк + стоп
-Str3517;Tied order.;Связанная заявка.
+Str3517;Linked order.;Связанная заявка.
 Str3518;Active until;Действительна до
 Str3519;Valid until.;До какого момента времени действительна.
 Str3520;Activation price, when reached an order will be placed at the price specified in the price field.;Цена активации, при достижении которой будет выставлена заявка по цене указанной в поле цена.
@@ -3294,13 +3286,13 @@ Str3533;Volume. Absolute or percentage value.;Объем. Абсолютное �
 Str3534;Correction;Коррекция
 Str3535;If set, then after order activation at an activation price and further price lowering (TP to sell) or furter rising price (TP to buy) an order will be sent at a price that includes a protection spread. Absolute value or percentage.;Если задано, то после активации заявки по цене активации и снижении цены (для TP на продажу) или повышения цены (для TP на покупку) будет послана заявка по цене, с учетом защитного спреда. Абсолютное значение, или в процентах.
 Str3536;Protection spread;Защитный спред
-Str3537;stop. Quantity, which will be added (in case of TP to buy) or subtracted (in case of TP to sell) to activation price, when the order is sent to the exchange. Absolute or percentage value.;Защитный спред. Величина, которя будет прибавлятся (при TP на покупку) или отниматься (при TP на продажу) к цене активации, при отравке заявки на биржу. Абсолютное значение, или в процентах.
+Str3537;Protective spread. Quantity, which will be added (in case of TP to buy) or subtracted (in case of TP to sell) to activation price, when the order is sent to the exchange. Absolute or percentage value.;Защитный спред. Величина, которя будет прибавлятся (при TP на покупку) или отниматься (при TP на продажу) к цене активации, при отравке заявки на биржу. Абсолютное значение, или в процентах.
 Str3538;Connection to broker using Transaq.;Подключение к брокеру, использующий Transaq.
 Str3539;Proxy;Прокси
 Str3540;Proxy.;Прокси.
 Str3541;Connector logging level. By default is Standard.;Уровень логирования коннектора. По умолчанию Standard.
 Str3542;Full path to dll file, containing Transaq API. By default equal txmlconnector.dll.;Полный путь к dll файлу, содержащее Transaq API. По-умолчанию равно txmlconnector.dll.
-Str3543;Data for the stock market ;Данные для фондового рынка
+Str3543;Data for the stock market;Данные для фондового рынка
 Str3544;Transmit data for the stock market.;Передавать ли данные для фондового рынка.
 Str3545;Connect to HFT Finam server.;Подключаться ли к HFT серверу Финам.
 Str3546;Aggregation period;Период агрегирования
@@ -3358,9 +3350,9 @@ Str3599;Trading;Торговля
 Str3600;Testing;Тестирование
 Str3601;Optimization result;Результат оптимизации
 Str3602Params;Security {0} is missing information about the stock exchange.;У инструмента {0} отсутствует информация о бирже.
-Str3604;Analytics;Аналитика 
-Str3605;Terminal;Терминал 
-Str3606;Testing;Тестирование 
+Str3604;Analytics;Аналитика
+Str3605;Terminal;Терминал
+Str3606;Testing;Тестирование
 Str3607Params;Failed to load assembly {0}.;Не удалось загрузить сборку {0}.
 Str3608;Strategy type not found in compiled assembly.;Не найден тип стратегии в скомпилированной сборке.
 Str3609;Moving avereages crossing strategy, created in visual diagram designer.;Стратегия пересечения скользящих средних, сделанная с помощью дизайнера.
@@ -3373,7 +3365,7 @@ Str3615Params;For strategy '{0}' scheme is not specified.;Для стратег�
 Str3616Params;Strategy '{0}' diagram contains errors.;Схема стратегии '{0}' содержит ошибки.
 Str3617Params;To close the tab {0} strategy or testing process must be stopped.;Для закрытия вкладки {0} необходимо остановить стратегию или процесс тестирования.
 Str3618Params;Security {0} added to saving.;Добавление на сохранение инструмента {0}.
-Str3619Params;Portfolio {0} added to saving;Добавление на сохранение портфеля {0}.
+Str3619Params;Portfolio {0} added to saving.;Добавление на сохранение портфеля {0}.
 Str3620Params;News {0} added to saving.;Добавление на сохранение новости {0}.
 Str3621Params;Search for portfolio {0}.;Поиск портфеля {0}.
 Str3622Params;No suitable portfolio {0}.;Нет подходящего портфеля {0}.
@@ -3414,16 +3406,14 @@ Str3659Params;Version {0} is already present in releases.;Версия {0} уж�
 Str3660Params;Copying files from {0} to {1};Копирование файлов из {0} в {1}
 Str3661Params;Compilation of project {0}|{1} {2};Компиляция проекта {0}|{1} {2}
 Str3662;Error compiling project;Ошибка при компиляции проекта
-Str3663;Project successfully compiled.;Компиляция проекта завершена успешно
-Str3664Params;Environment {0} variable not found.;Не найдена переменная среды {0}
-Str3665Params;Directory {0} for variable {0} not found;Не найдена директория {0} для переменной {0}
+Str3663;Project successfully compiled.;Проект успешно скомпилирован.
 Str3666;Obfuscation of files;Обфускация файлов
 Str3667Params;Obfuscation {0}.;Обфускация {0}.
-Str3668Params;Obfuscation error for {0}!;Ошибка обфускации для {0}!
+Str3668Params;Obfuscation error for {0}.;Ошибка обфускации для {0}.
 Str3669;Building updates;Построение обновлений
 Str3670Params;File with description of version {0};Файл с описанием версии {0}
 Str3671;Error building updates;Ошибка при построении обновлений
-Str3672;Completed building updates!;Построение обновлений завершено!
+Str3672;Completed building updates.;Построение обновлений завершено.
 Str3673;Path to a directory where publication data is stored is not specified.;Не указан путь к директории где хранятся данные для публикации.
 Str3674;WyBuild project file name is not specified.;Не указано имя файла проекта wyBuild.
 Str3675;Path to the assembly of a published project is not specified.;Не указан путь к сборке публикуемого проекта.
@@ -3449,12 +3439,12 @@ Str3694;History address;Адрес истории
 Str3695;History server address.;Адрес сервера истории.
 Str3696;Market data address.;Адрес маркет-данных
 Str3697;Market data server address.;Адрес сервера маркет-данных.
-Str3698; Error code; Код ошибки 
+Str3698;Error code;Код ошибки
 Str3700Params;Column {0} is missing in table {1}.;Колонка {0} отсутствует в таблице {1}.
 Str3701;Tables metainformation was not received.;Метаинформация о таблицах не получена.
 Str3702Params;Metainformation about table {0} was not received.;Метаинформация о таблице {0} не получена.
-Str3703Params;Unable to open table! {0}.;Неудалось открыть таблицу! {0}.
-Str3704;Failed to get security from secCode;не удалось получить security по secCode
+Str3703Params;Unable to open table {0}.;Неудалось открыть таблицу {0}.
+Str3704;Failed to get security from secCode;Не удалось получить security по secCode
 Str3705;Unsuccessful attempt to establish a connection.;Неудачная попытка установить соединение.
 Str3706Params;Type of order {0} is unknown.;Тип заявки {0} не известен.
 Str3707Params;Order {0} direction is unknown.;Направление заявки {0} не известно.
@@ -3554,7 +3544,7 @@ Str3838Params;Start downloading quotes for {0} for {1}.;Старт загруз�
 Str3839Params;Error loading quotes for {0} for {1}.;Ошибка загрузки котировок за {0} для {1}.
 Str3840Params;Source is designed to get history data from {0}.;Источник предназначен для получения исторических данных с {0}.
 Str3843;Cannot cast adapter with type {0} to {1}.;Невозможно привести адаптера с типом {0} к {1}.
-TaskSettings;{0} task settngs;Настройки задачи {0}
+TaskSettings;{0} task settings;Настройки задачи {0}
 Str3846; for period of; за период
 IndicatorNotFound;Indicator for {0} element is not found.;Индикатор для элемента {0} не найден.
 Candles1Min;1 min. candles;1 мин. свечек
@@ -3602,7 +3592,7 @@ XamlStr70;Order registration time.;Время выставления заявк�
 XamlStr72;Time in force:;Время жизни:
 XamlStr73;Last trade time;Время посл. сделки
 XamlStr74;Last operation time;Время последней операции
-XamlStr76;Settings OK!;Все настроено правильно!
+XamlStr76;Settings OK.;Все настроено правильно.
 Paste;Paste;Вставить
 XamlStr78;Auto login;Входить автоматически
 XamlStr79;Select security...;Выберите инструмент...
@@ -3678,7 +3668,7 @@ XamlStr180;Runned Quiks:;Запущенные Quik:
 XamlStr182;Order fail;Заявка-Ошибка
 XamlStr186;Value (S#);Значение (S#)
 XamlStr187;Value (file);Значение (файл)
-XamlStr189;Loading data. Wait…;Идет загрузка данных. Подождите...
+XamlStr189;Loading data. Wait...;Идет загрузка данных. Подождите...
 XamlStr191;From OL;Из ОЛ
 XamlStr192;From composite element;Из составного элемента
 XamlStr193;From:;Из:
@@ -3771,7 +3761,7 @@ StartTime;Start time;Начало работы
 XamlStr341;Begin:;Начало:
 XamlStr342;Begin;Начальное
 XamlStr343;Start drawing chart for the security;Начать построение графика для инструмента
-XamlStr344;No data type is selected;Не выбран ни один тип данных.
+XamlStr344;No data type is selected.;Не выбран ни один тип данных.
 NotBuild;Do not build;Не строить
 XamlStr352;New algo-order...;Новая алго-заявка...
 XamlStr353;New order...;Новая заявка...
@@ -3862,7 +3852,7 @@ XamlStr477;Security search;Поиск инструмента
 XamlStr479;Search on the exchange;Поиск на бирже
 XamlStr480;Until cancelled;Пока не снимется
 XamlStr481;Show review panel;Показать панель обзора
-XamlStr482;Show candles on chart…;Показать свечи на графике...
+XamlStr482;Show candles on chart...;Показать свечи на графике...
 OpenFile;Open file;Показать файл
 OpenLicense;Open license file;Показать файл лицензии
 ShowTooltip;Show tooltip;Показывать всплывающую подсказку
@@ -4002,7 +3992,6 @@ XamlStr649;Server (lookup):;Сервер (lookup):
 XamlStr650;Server (admin):;Сервер (админ):
 XamlStr651;Server:;Сервер:
 XamlStr652;Synchronize data with directories;Синхронизировать данные с директориями
-XamlStr653;Synchronize data with directories…;Синхронизировать данные с директориями...
 XamlStr655;Download;Скачать
 XamlStr658;Compile;Скомпилировать
 XamlStr659;copy;скопировать
@@ -4129,14 +4118,14 @@ Str2898;Creating task '{0}'.;Создание задачи '{0}'.
 Str2902Params;Deleting task '{0}'.;Удаление задачи '{0}'.
 Str3028Params;License file was downloaded into folder '{0}'.;Файл лицензии был сохранен в директорию '{0}'.
 Str2948Params;Tasks '{0}' has same working directory '{1}'.;Задачи '{0}' имеют одинаковую рабочую директорию '{1}'.
-EmptyMessageTime;Message '{0}' has empty server time.Сообщение '{0}' имеет пустое серверное время.
+EmptyMessageTime;Message '{0}' has empty server time.;Сообщение '{0}' имеет пустое серверное время.
 DownloadingCandles;Downloading candles...;Скачивание свечей...
 DownloadingTicks;Downloading ticks...;Скачивание тиков...
 DownloadingTrades;Downloading trades for {0:d}...;Скачивание сделок за {0:d}...
 InvalidFolderPath;Invalid folder path.;Неверно указан путь.
 InvalidFilePath;Invalid file path.;Неверно указан путь к файлу.
 About;About;О программе
-AllRightReserved;All right reserved.;Все права защищены
+AllRightReserved;All right reserved.;Все права защищены.
 Grouping;Grouping;Группировка
 GroupingHeader;Show column header in grouping;Показывать имя столбца в заголовке группы
 ClipboardCsv;Clipboard (as csv);Буфер обмена (текст)

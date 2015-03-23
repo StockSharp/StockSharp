@@ -101,6 +101,8 @@ namespace StockSharp.Studio
 			var info = strategy.StrategyInfo;
 			var index = info.Strategies.Count(s => s.SessionType == strategy.SessionType) + 1;
 
+			string name;
+
 			switch (strategy.SessionType)
 			{
 				case SessionType.Battle:
@@ -109,15 +111,15 @@ namespace StockSharp.Studio
 						case StrategyInfoTypes.SourceCode:
 						case StrategyInfoTypes.Diagram:
 						case StrategyInfoTypes.Assembly:
-							strategy.Name = LocalizedStrings.Str3599 + " " + index;
+							name = LocalizedStrings.Str3599;
 							break;
 
 						case StrategyInfoTypes.Analytics:
-							strategy.Name = LocalizedStrings.Str3604 + index;
+							name = LocalizedStrings.Str3604;
 							break;
 
 						case StrategyInfoTypes.Terminal:
-							strategy.Name = LocalizedStrings.Str3605 + index;
+							name = LocalizedStrings.Str3605;
 							break;
 
 						default:
@@ -126,16 +128,18 @@ namespace StockSharp.Studio
 					break;
 
 				case SessionType.Emulation:
-					strategy.Name = LocalizedStrings.Str3606 + index;
+					name = LocalizedStrings.Str3606;
 					break;
 
 				case SessionType.Optimization:
-					strategy.Name = LocalizedStrings.Str3177 + " " + index;
+					name = LocalizedStrings.Str3177;
 					break;
 
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+
+			strategy.Name = name + " " + index;
 		}
 
 		private static void UpdateStrategies(this StrategyInfo info)

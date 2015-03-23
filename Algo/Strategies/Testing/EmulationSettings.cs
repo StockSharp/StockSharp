@@ -144,7 +144,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(40)]
-		[DisplayNameLoc(LocalizedStrings.Str1416Key)]
+		[DisplayNameLoc(LocalizedStrings.OrderLogKey)]
 		[DescriptionLoc(LocalizedStrings.Str1417Key)]
 		public EmulationMarketDataModes OrderLogDataMode
 		{

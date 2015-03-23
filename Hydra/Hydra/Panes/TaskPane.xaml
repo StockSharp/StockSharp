@@ -230,7 +230,7 @@
 								<TextBlock Grid.Column="0" Text="T" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str985}" Visibility="{Binding Path=IsTradeEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="1" Text="D" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1414}" Visibility="{Binding Path=IsDepthEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="2" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="3" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1416}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="3" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OrderLog}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="4" Text="L1" Margin="1" ToolTip="Level 1" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
                                 <TextBlock Grid.Column="5" Text="E" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OwnTransactions}" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 							</Grid>
@@ -281,7 +281,7 @@
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Str985}" Height="23" x:Name="Trades" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Str1414}" Height="23" x:Name="Depths" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Height="23" x:Name="Candles" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="Candles_OnClick" MouseEnter="Candles_OnMouseEnter" Style="{StaticResource CandleStyle}" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Str1416}" Height="23" x:Name="OrderLog" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Height="23" x:Name="OrderLog" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="Level 1" Height="23" x:Name="Level1Changes" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
                     <CheckBox Content="{x:Static loc:LocalizedStrings.OwnTransactions}" Height="23" x:Name="Executions" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 				</StackPanel>

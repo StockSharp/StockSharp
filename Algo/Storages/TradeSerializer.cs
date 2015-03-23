@@ -127,7 +127,7 @@ namespace StockSharp.Algo.Storages
 				writer.WritePriceEx(msg.GetTradePrice(), metaInfo, SecurityId);
 				writer.WriteSide(msg.OriginSide);
 
-				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1023, allowNonOrdered, isUtc, metaInfo.ServerOffset);
+				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str985, allowNonOrdered, isUtc, metaInfo.ServerOffset);
 
 				if (metaInfo.Version < MarketDataVersions.Version40)
 					continue;

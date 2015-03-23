@@ -14,7 +14,7 @@ namespace StockSharp.Alor
 	public class AlorException : ApplicationException
 	{
 		internal AlorException(string message, SFE code)
-			: base(message + LocalizedStrings.Str3698 + code)
+			: base(message + " " + LocalizedStrings.Str3698 + " " + code)
 		{
 			Code = code.ToString();
 		}

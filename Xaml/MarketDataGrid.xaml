@@ -18,7 +18,7 @@
 
         <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str985}" Binding="{Binding Path=IsTick, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsTick"/>
         <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1414}" Binding="{Binding Path=IsDepth, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsDepth"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1416}" Binding="{Binding Path=IsOrderLog, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsOrderLog"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.OrderLog}" Binding="{Binding Path=IsOrderLog, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsOrderLog"/>
 		<DataGridTextColumn Header="Level1" Binding="{Binding Path=IsLevel1, Mode=OneWay, Converter={StaticResource BoolToCheckMarkConverter}}" SortMemberPath="IsLevel1"/>
 	</ex:UniversalGrid.Columns>
 </ex:UniversalGrid>

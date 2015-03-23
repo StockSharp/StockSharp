@@ -412,7 +412,7 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Trade"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Depth"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Candle"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="News"/>
                     <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Execution"/>
@@ -422,7 +422,7 @@
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1416}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
                     <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
@@ -440,7 +440,11 @@
 					<MenuItem x:Name="EraseData" Header="{x:Static loc:LocalizedStrings.XamlStr786}" Click="EraseData_Click" IsEnabled="{Binding Path=IsStarted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}, Converter={StaticResource BoolToOppositeConverter}}"/>
 					<Separator/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2831}" Command="{x:Static hydra:MainWindow.BoardsCommand}" />
-					<MenuItem x:Name="Synchronize" Header="{x:Static loc:LocalizedStrings.XamlStr653}" Click="Synchronize_Click" IsEnabled="{Binding Path=IsStarted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}, Converter={StaticResource BoolToOppositeConverter}}"/>
+					<MenuItem x:Name="Synchronize" Click="Synchronize_Click" IsEnabled="{Binding Path=IsStarted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hydra:MainWindow}}, Converter={StaticResource BoolToOppositeConverter}}">
+						<MenuItem.Header>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr652}" />...</TextBlock>
+						</MenuItem.Header>
+					</MenuItem>
 					<Separator/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.NetworkSettings}" x:Name="ProxyButton" Click="ProxtSettings_Click"/>
 					<MenuItem x:Name="ServiceButton" Click="Settings_Click">
@@ -501,7 +505,7 @@
 					<Button Content="{x:Static loc:LocalizedStrings.Str985}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str1414}" Width="85" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
-					<Button Content="{x:Static loc:LocalizedStrings.Str1416}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
+					<Button Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<Button Content="Level 1" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<Button Content="{x:Static loc:LocalizedStrings.News}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
                     <Button Content="Executions" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>

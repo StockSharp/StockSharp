@@ -783,12 +783,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Board working hours
+		/// Board working hours.
 		/// </summary>
 		public const string WorkingHoursKey = "WorkingHours";
 
 		/// <summary>
-		/// Board working hours
+		/// Board working hours.
 		/// </summary>
 		public static string WorkingHours
 		{
@@ -4670,12 +4670,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Type of binary option
+		/// Type of binary option.
 		/// </summary>
 		public const string TypeBinaryOptionKey = "TypeBinaryOption";
 
 		/// <summary>
-		/// Type of binary option
+		/// Type of binary option.
 		/// </summary>
 		public static string TypeBinaryOption
 		{
@@ -5775,12 +5775,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Information about the trade
+		/// Information about tick trade.
 		/// </summary>
 		public const string Str507Key = "Str507";
 
 		/// <summary>
-		/// Information about the trade
+		/// Information about tick trade.
 		/// </summary>
 		public static string Str507
 		{
@@ -6087,12 +6087,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Tied order
+		/// Linked order
 		/// </summary>
 		public const string Str532Key = "Str532";
 
 		/// <summary>
-		/// Tied order
+		/// Linked order
 		/// </summary>
 		public static string Str532
 		{
@@ -6997,12 +6997,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Is a system trade
+		/// Is a system trade.
 		/// </summary>
 		public const string IsSystemTradeKey = "IsSystemTrade";
 
 		/// <summary>
-		/// Is a system trade
+		/// Is a system trade.
 		/// </summary>
 		public static string IsSystemTrade
 		{
@@ -9129,12 +9129,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Jurik Moving Average
+		/// Jurik Moving Average.
 		/// </summary>
 		public const string Str789Key = "Str789";
 
 		/// <summary>
-		/// Jurik Moving Average
+		/// Jurik Moving Average.
 		/// </summary>
 		public static string Str789
 		{
@@ -10975,19 +10975,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// market depths
-		/// </summary>
-		public const string Str933Key = "Str933";
-
-		/// <summary>
-		/// market depths
-		/// </summary>
-		public static string Str933
-		{
-			get { return GetString(Str933Key); }
-		}
-
-		/// <summary>
 		/// market depths (local)
 		/// </summary>
 		public const string Str934Key = "Str934";
@@ -12054,12 +12041,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Unknown type of market-data
+		/// Unknown type of market-data.
 		/// </summary>
 		public const string Str1018Key = "Str1018";
 
 		/// <summary>
-		/// Unknown type of market-data
+		/// Unknown type of market-data.
 		/// </summary>
 		public static string Str1018
 		{
@@ -12116,19 +12103,6 @@ namespace StockSharp.Localization
 		public static string Str1022Params
 		{
 			get { return GetString(Str1022ParamsKey); }
-		}
-
-		/// <summary>
-		/// trades
-		/// </summary>
-		public const string Str1023Key = "Str1023";
-
-		/// <summary>
-		/// trades
-		/// </summary>
-		public static string Str1023
-		{
-			get { return GetString(Str1023Key); }
 		}
 
 		/// <summary>
@@ -14303,12 +14277,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Spread size.
+		/// Spread size
 		/// </summary>
 		public const string Str1195Key = "Str1195";
 
 		/// <summary>
-		/// Spread size.
+		/// Spread size
 		/// </summary>
 		public static string Str1195
 		{
@@ -14329,12 +14303,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Market depth
+		/// Depth
 		/// </summary>
 		public const string Str1197Key = "Str1197";
 
 		/// <summary>
-		/// Market depth
+		/// Depth
 		/// </summary>
 		public static string Str1197
 		{
@@ -14797,12 +14771,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Position decreased by {0}
+		/// Position decreased by {0}.
 		/// </summary>
 		public const string Str1234ParamsKey = "Str1234Params";
 
 		/// <summary>
-		/// Position decreased by {0}
+		/// Position decreased by {0}.
 		/// </summary>
 		public static string Str1234Params
 		{
@@ -15525,12 +15499,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Action was not executed! Strategy is expected to stop!
+		/// Action was not executed. Strategy is expected to stop.
 		/// </summary>
 		public const string Str1292Key = "Str1292";
 
 		/// <summary>
-		/// Action was not executed! Strategy is expected to stop!
+		/// Action was not executed. Strategy is expected to stop.
 		/// </summary>
 		public static string Str1292
 		{
@@ -17007,25 +16981,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order log
-		/// </summary>
-		public const string Str1416Key = "Str1416";
-
-		/// <summary>
-		/// Order log
-		/// </summary>
-		public static string Str1416
-		{
-			get { return GetString(Str1416Key); }
-		}
-
-		/// <summary>
-		/// Use orders log
+		/// Use orders log.
 		/// </summary>
 		public const string Str1417Key = "Str1417";
 
 		/// <summary>
-		/// Use orders log
+		/// Use orders log.
 		/// </summary>
 		public static string Str1417
 		{
@@ -18372,12 +18333,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Error in index {0}'. format
+		/// Error in index '{0}' format.
 		/// </summary>
 		public const string Str1523ParamsKey = "Str1523Params";
 
 		/// <summary>
-		/// Error in index {0}'. format
+		/// Error in index '{0}' format.
 		/// </summary>
 		public static string Str1523Params
 		{
@@ -18827,12 +18788,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Activate connection.
+		/// Activate connection
 		/// </summary>
 		public const string Str1558Key = "Str1558";
 
 		/// <summary>
-		/// Activate connection.
+		/// Activate connection
 		/// </summary>
 		public static string Str1558
 		{
@@ -18993,19 +18954,6 @@ namespace StockSharp.Localization
 		public static string Str1570
 		{
 			get { return GetString(Str1570Key); }
-		}
-
-		/// <summary>
-		/// Start
-		/// </summary>
-		public const string Str1571Key = "Str1571";
-
-		/// <summary>
-		/// Start
-		/// </summary>
-		public static string Str1571
-		{
-			get { return GetString(Str1571Key); }
 		}
 
 		/// <summary>
@@ -21024,12 +20972,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Tied
+		/// Linked
 		/// </summary>
 		public const string Str1732Key = "Str1732";
 
 		/// <summary>
-		/// Tied
+		/// Linked
 		/// </summary>
 		public static string Str1732
 		{
@@ -21336,12 +21284,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Price of tied order
+		/// Price of linked order
 		/// </summary>
 		public const string Str1759Key = "Str1759";
 
 		/// <summary>
-		/// Price of tied order
+		/// Price of linked order
 		/// </summary>
 		public static string Str1759
 		{
@@ -21349,12 +21297,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Price of tied limit order
+		/// Price of linked limit order.
 		/// </summary>
 		public const string Str1760Key = "Str1760";
 
 		/// <summary>
-		/// Price of tied limit order
+		/// Price of linked limit order.
 		/// </summary>
 		public static string Str1760
 		{
@@ -21375,12 +21323,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Sign that the stop-order was cancelled when its tied limit order was partially filled.
+		/// Sign that the stop-order was cancelled when its linked limit order was partially filled.
 		/// </summary>
 		public const string Str1762Key = "Str1762";
 
 		/// <summary>
-		/// Sign that the stop-order was cancelled when its tied limit order was partially filled.
+		/// Sign that the stop-order was cancelled when its linked limit order was partially filled.
 		/// </summary>
 		public static string Str1762
 		{
@@ -23481,12 +23429,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Labels on the axis
+		/// Axis labels
 		/// </summary>
 		public const string Str1936Key = "Str1936";
 
 		/// <summary>
-		/// Labels on the axis
+		/// Axis labels
 		/// </summary>
 		public static string Str1936
 		{
@@ -28655,12 +28603,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order price shift range
+		/// Order price shift range.
 		/// </summary>
 		public const string Str2392Key = "Str2392";
 
 		/// <summary>
-		/// Order price shift range
+		/// Order price shift range.
 		/// </summary>
 		public static string Str2392
 		{
@@ -29604,12 +29552,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Min price of underlying asset.
+		/// Min price of asset
 		/// </summary>
 		public const string Str2472Key = "Str2472";
 
 		/// <summary>
-		/// Min price of underlying asset.
+		/// Min price of asset
 		/// </summary>
 		public static string Str2472
 		{
@@ -31112,12 +31060,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Price of best bid {0} is greater or equal to the price of best ask {1} for security {0}.
+		/// Price of best bid {0} is greater or equal to the price of best ask {1} for security {2}.
 		/// </summary>
 		public const string Str2591ParamsKey = "Str2591Params";
 
 		/// <summary>
-		/// Price of best bid {0} is greater or equal to the price of best ask {1} for security {0}.
+		/// Price of best bid {0} is greater or equal to the price of best ask {1} for security {2}.
 		/// </summary>
 		public static string Str2591Params
 		{
@@ -33114,12 +33062,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// {0} Code {1}, discription '{2}'.
+		/// {0} Code {1}, description '{2}'.
 		/// </summary>
 		public const string Str2745ParamsKey = "Str2745Params";
 
 		/// <summary>
-		/// {0} Code {1}, discription '{2}'.
+		/// {0} Code {1}, description '{2}'.
 		/// </summary>
 		public static string Str2745Params
 		{
@@ -35012,12 +34960,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Task settings match default settings. Task will be disabled!
+		/// Task settings match default settings. Task will be disabled.
 		/// </summary>
 		public const string Str2905Key = "Str2905";
 
 		/// <summary>
-		/// Task settings match default settings. Task will be disabled!
+		/// Task settings match default settings. Task will be disabled.
 		/// </summary>
 		public static string Str2905
 		{
@@ -35048,19 +34996,6 @@ namespace StockSharp.Localization
 		public static string Str2907
 		{
 			get { return GetString(Str2907Key); }
-		}
-
-		/// <summary>
-		/// Order log (OL)
-		/// </summary>
-		public const string Str2908Key = "Str2908";
-
-		/// <summary>
-		/// Order log (OL)
-		/// </summary>
-		public static string Str2908
-		{
-			get { return GetString(Str2908Key); }
 		}
 
 		/// <summary>
@@ -35402,32 +35337,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// order log
-		/// </summary>
-		public const string Str2936Key = "Str2936";
-
-		/// <summary>
-		/// order log
-		/// </summary>
-		public static string Str2936
-		{
-			get { return GetString(Str2936Key); }
-		}
-
-		/// <summary>
-		/// candles
-		/// </summary>
-		public const string Str2937Key = "Str2937";
-
-		/// <summary>
-		/// candles
-		/// </summary>
-		public static string Str2937
-		{
-			get { return GetString(Str2937Key); }
-		}
-
-		/// <summary>
 		/// One of the fields in incorrectly set.
 		/// </summary>
 		public const string Str2938Key = "Str2938";
@@ -35646,19 +35555,6 @@ namespace StockSharp.Localization
 		public static string Str2956Params
 		{
 			get { return GetString(Str2956ParamsKey); }
-		}
-
-		/// <summary>
-		/// market depth
-		/// </summary>
-		public const string Str2957Key = "Str2957";
-
-		/// <summary>
-		/// market depth
-		/// </summary>
-		public static string Str2957
-		{
-			get { return GetString(Str2957Key); }
 		}
 
 		/// <summary>
@@ -36455,12 +36351,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Completed in
+		/// Completed in {0}.
 		/// </summary>
 		public const string Str3024Key = "Str3024";
 
 		/// <summary>
-		/// Completed in
+		/// Completed in {0}.
 		/// </summary>
 		public static string Str3024
 		{
@@ -36559,12 +36455,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Alert! At {0} '{1}'.{2}
+		/// Alert. At {0} '{1}'.{2}
 		/// </summary>
 		public const string Str3033ParamsKey = "Str3033Params";
 
 		/// <summary>
-		/// Alert! At {0} '{1}'.{2}
+		/// Alert. At {0} '{1}'.{2}
 		/// </summary>
 		public static string Str3033Params
 		{
@@ -36845,12 +36741,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Element {0} already tied with {1} through {2}.
+		/// Element {0} already binded with {1} through {2}.
 		/// </summary>
 		public const string Str3056ParamsKey = "Str3056Params";
 
 		/// <summary>
-		/// Element {0} already tied with {1} through {2}.
+		/// Element {0} already binded with {1} through {2}.
 		/// </summary>
 		public static string Str3056Params
 		{
@@ -42474,12 +42370,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Tied order.
+		/// Linked order.
 		/// </summary>
 		public const string Str3517Key = "Str3517";
 
 		/// <summary>
-		/// Tied order.
+		/// Linked order.
 		/// </summary>
 		public static string Str3517
 		{
@@ -42721,12 +42617,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// stop. Quantity, which will be added (in case of TP to buy) or subtracted (in case of TP to sell) to activation price, when the order is sent to the exchange. Absolute or percentage value.
+		/// Protective spread. Quantity, which will be added (in case of TP to buy) or subtracted (in case of TP to sell) to activation price, when the order is sent to the exchange. Absolute or percentage value.
 		/// </summary>
 		public const string Str3537Key = "Str3537";
 
 		/// <summary>
-		/// stop. Quantity, which will be added (in case of TP to buy) or subtracted (in case of TP to sell) to activation price, when the order is sent to the exchange. Absolute or percentage value.
+		/// Protective spread. Quantity, which will be added (in case of TP to buy) or subtracted (in case of TP to sell) to activation price, when the order is sent to the exchange. Absolute or percentage value.
 		/// </summary>
 		public static string Str3537
 		{
@@ -43748,12 +43644,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Portfolio {0} added to saving
+		/// Portfolio {0} added to saving.
 		/// </summary>
 		public const string Str3619ParamsKey = "Str3619Params";
 
 		/// <summary>
-		/// Portfolio {0} added to saving
+		/// Portfolio {0} added to saving.
 		/// </summary>
 		public static string Str3619Params
 		{
@@ -44294,32 +44190,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Environment {0} variable not found.
-		/// </summary>
-		public const string Str3664ParamsKey = "Str3664Params";
-
-		/// <summary>
-		/// Environment {0} variable not found.
-		/// </summary>
-		public static string Str3664Params
-		{
-			get { return GetString(Str3664ParamsKey); }
-		}
-
-		/// <summary>
-		/// Directory {0} for variable {0} not found
-		/// </summary>
-		public const string Str3665ParamsKey = "Str3665Params";
-
-		/// <summary>
-		/// Directory {0} for variable {0} not found
-		/// </summary>
-		public static string Str3665Params
-		{
-			get { return GetString(Str3665ParamsKey); }
-		}
-
-		/// <summary>
 		/// Obfuscation of files
 		/// </summary>
 		public const string Str3666Key = "Str3666";
@@ -44346,12 +44216,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Obfuscation error for {0}!
+		/// Obfuscation error for {0}.
 		/// </summary>
 		public const string Str3668ParamsKey = "Str3668Params";
 
 		/// <summary>
-		/// Obfuscation error for {0}!
+		/// Obfuscation error for {0}.
 		/// </summary>
 		public static string Str3668Params
 		{
@@ -44398,12 +44268,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Completed building updates!
+		/// Completed building updates.
 		/// </summary>
 		public const string Str3672Key = "Str3672";
 
 		/// <summary>
-		/// Completed building updates!
+		/// Completed building updates.
 		/// </summary>
 		public static string Str3672
 		{
@@ -44788,12 +44658,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Unable to open table! {0}.
+		/// Unable to open table {0}.
 		/// </summary>
 		public const string Str3703ParamsKey = "Str3703Params";
 
 		/// <summary>
-		/// Unable to open table! {0}.
+		/// Unable to open table {0}.
 		/// </summary>
 		public static string Str3703Params
 		{
@@ -46101,12 +45971,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// {0} task settngs
+		/// {0} task settings
 		/// </summary>
 		public const string TaskSettingsKey = "TaskSettings";
 
 		/// <summary>
-		/// {0} task settngs
+		/// {0} task settings
 		/// </summary>
 		public static string TaskSettings
 		{
@@ -46727,12 +46597,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Settings OK!
+		/// Settings OK.
 		/// </summary>
 		public const string XamlStr76Key = "XamlStr76";
 
 		/// <summary>
-		/// Settings OK!
+		/// Settings OK.
 		/// </summary>
 		public static string XamlStr76
 		{
@@ -47715,12 +47585,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Loading data. Wait…
+		/// Loading data. Wait...
 		/// </summary>
 		public const string XamlStr189Key = "XamlStr189";
 
 		/// <summary>
-		/// Loading data. Wait…
+		/// Loading data. Wait...
 		/// </summary>
 		public static string XamlStr189
 		{
@@ -48925,12 +48795,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// No data type is selected
+		/// No data type is selected.
 		/// </summary>
 		public const string XamlStr344Key = "XamlStr344";
 
 		/// <summary>
-		/// No data type is selected
+		/// No data type is selected.
 		/// </summary>
 		public static string XamlStr344
 		{
@@ -50108,12 +49978,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Show candles on chart…
+		/// Show candles on chart...
 		/// </summary>
 		public const string XamlStr482Key = "XamlStr482";
 
 		/// <summary>
-		/// Show candles on chart…
+		/// Show candles on chart...
 		/// </summary>
 		public static string XamlStr482
 		{
@@ -51912,19 +51782,6 @@ namespace StockSharp.Localization
 		public static string XamlStr652
 		{
 			get { return GetString(XamlStr652Key); }
-		}
-
-		/// <summary>
-		/// Synchronize data with directories…
-		/// </summary>
-		public const string XamlStr653Key = "XamlStr653";
-
-		/// <summary>
-		/// Synchronize data with directories…
-		/// </summary>
-		public static string XamlStr653
-		{
-			get { return GetString(XamlStr653Key); }
 		}
 
 		/// <summary>

@@ -82,7 +82,7 @@ namespace SampleMicex
 				// создаем окно со стаканом
 				var wnd = new QuotesWindow
 				{
-					Title = security.Id + LocalizedStrings.Str2957,
+					Title = security.Id + " " + LocalizedStrings.MarketDepth,
 					DepthCtrl =
 					{
 						MaxDepth = MainWindow.Instance.Depth.Text.To<int>()

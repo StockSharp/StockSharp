@@ -105,7 +105,7 @@ namespace StockSharp.Algo.Storages
 				if (bid != null && ask != null && bid.Price > ask.Price)
 					throw new ArgumentException(LocalizedStrings.Str932Params.Put(bid.Price, ask.Price, quoteMsg.ServerTime), "messages");
 
-				metaInfo.LastTime = writer.WriteTime(quoteMsg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str933, allowNonOrdered, isUtc, metaInfo.ServerOffset);
+				metaInfo.LastTime = writer.WriteTime(quoteMsg.ServerTime, metaInfo.LastTime, LocalizedStrings.MarketDepth, allowNonOrdered, isUtc, metaInfo.ServerOffset);
 
 				var isFull = prevQuoteMsg == null;
 
