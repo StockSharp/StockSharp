@@ -31671,12 +31671,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Threads pool was not stopped in the allocated time.
+		/// Connection pool was not stopped in the allocated time.
 		/// </summary>
 		public const string Str2634Key = "Str2634";
 
 		/// <summary>
-		/// Threads pool was not stopped in the allocated time.
+		/// Connection pool was not stopped in the allocated time.
 		/// </summary>
 		public static string Str2634
 		{

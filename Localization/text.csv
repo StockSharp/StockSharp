@@ -2440,7 +2440,7 @@ Str2630;Error connecting to Plaza server.;Ошибка подключения к
 Str2631Params;Connection lost. Connection state {0}.;Подключение потеряно. Состояние подключения {0}.
 Str2632Params;Unknown connection {0} state.;Неизвестное состояние соединения {0}.
 Str2633;Plaza error.;Ошибка Plaza.
-Str2634;Threads pool was not stopped in the allocated time.;Пул потоков не был остановлен за отведенное время.
+Str2634;Connection pool was not stopped in the allocated time.;Пул соединений не был остановлен за отведенное время.
 Str2635;Futures: orders log;Фьючерсы: журнал заявок
 Str2636;Futures: trades log;Фьючерсы: журнал сделок
 Str2637;Futures: multileg trades log;Фьючерсы: журнал сделок по связкам
