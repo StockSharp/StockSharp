@@ -17,7 +17,6 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	[Ignore(FieldName = "IsDisposed")]
 	[KnownType(typeof(TimeZoneInfo))]
 	[KnownType(typeof(TimeZoneInfo.AdjustmentRule))]
 	[KnownType(typeof(TimeZoneInfo.AdjustmentRule[]))]

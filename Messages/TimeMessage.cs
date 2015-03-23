@@ -1,12 +1,15 @@
 ﻿namespace StockSharp.Messages
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	using Ecng.Common;
 
 	/// <summary>
 	/// Сообщение, содержащее данные о текущем времени.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public sealed class TimeMessage : Message
 	{
 		/// <summary>
@@ -20,12 +23,14 @@
 		/// <summary>
 		/// Идентификатор запроса.
 		/// </summary>
+		[DataMember]
 		public string TransactionId { get; set; }
 
 		/// <summary>
 		/// Номер первоначального сообщения <see cref="TimeMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
+		[DataMember]
 		public string OriginalTransactionId { get; set; }
 
 		///// <summary>
@@ -37,6 +42,7 @@
 		/// <summary>
 		/// Серверное время.
 		/// </summary>
+		[DataMember]
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>

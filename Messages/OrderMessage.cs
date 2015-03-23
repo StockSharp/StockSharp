@@ -1,5 +1,6 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 	
 	using StockSharp.Localization;
@@ -7,6 +8,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее общую информацию о заявке.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public abstract class OrderMessage : SecurityMessage
 	{
 		/// <summary>

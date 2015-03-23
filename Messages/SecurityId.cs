@@ -12,6 +12,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Идентификатор инструмента.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public struct SecurityId : IEquatable<SecurityId>
 	{
 		private string _securityCode;

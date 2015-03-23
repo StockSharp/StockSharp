@@ -2,6 +2,7 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
 	using Ecng.Common;
@@ -12,6 +13,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее рыночные данные или команду.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public abstract class Message : Cloneable<Message>, IExtendableEntity
 	{
 		/// <summary>
@@ -20,12 +23,19 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str203Key)]
 		[DescriptionLoc(LocalizedStrings.Str204Key)]
 		[MainCategory]
+		[DataMember]
 		public DateTime LocalTime { get; set; }
+
+		[field: NonSerialized]
+		private readonly MessageTypes _type;
 
 		/// <summary>
 		/// Тип сообщения.
 		/// </summary>
-		public MessageTypes Type { get; private set; }
+		public MessageTypes Type
+		{
+			get { return _type; }
+		}
 
 		[field: NonSerialized]
 		private IDictionary<object, object> _extensionInfo;
@@ -53,7 +63,7 @@ namespace StockSharp.Messages
 		/// <param name="type">Тип сообщения.</param>
 		protected Message(MessageTypes type)
 		{
-			Type = type;
+			_type = type;
 		}
 
 		/// <summary>

@@ -1,5 +1,6 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -9,6 +10,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, запрашивающее текущие зарегистрированные заявки и сделки.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class OrderStatusMessage : Message
 	{
 		/// <summary>
@@ -23,16 +26,19 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Идентификатор запрашиваемой заявки.
 		/// </summary>
+		[DataMember]
 		public long? OrderId { get; set; }
 
 		/// <summary>
 		/// Идентификатор запрашиваемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
 		/// </summary>
+		[DataMember]
 		public string OrderStringId { get; set; }
 
 		/// <summary>
 		/// Номер транзакции запрашиваемой заявки.
 		/// </summary>
+		[DataMember]
 		public long? OrderTransactionId { get; set; }
 
 		/// <summary>

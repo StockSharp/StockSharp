@@ -1,8 +1,13 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	/// <summary>
 	/// Сообщение очистки очереди обработки.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ClearMessageQueueMessage : Message
 	{
 		/// <summary>
@@ -13,11 +18,13 @@
 		/// <summary>
 		/// Идентификатор инструмента.
 		/// </summary>
+		[DataMember]
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
 		/// Дополнительный аргумент для фильтра маркет-данных.
 		/// </summary>
+		[DataMember]
 		public object Arg { get; set; }
 
 		/// <summary>

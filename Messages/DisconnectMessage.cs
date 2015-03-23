@@ -1,8 +1,13 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	/// <summary>
 	/// Сообщение об отключении от торговой системы (при отправке используется как команда, при получении является событием отключения).
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class DisconnectMessage : BaseConnectionMessage
 	{
 		/// <summary>

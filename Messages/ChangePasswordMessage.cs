@@ -1,11 +1,14 @@
 ﻿namespace StockSharp.Messages
 {
 	using System;
+	using System.Runtime.Serialization;
 	using System.Security;
 
 	/// <summary>
 	/// Сообщение изменения пароля.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ChangePasswordMessage : Message
 	{
 		/// <summary>
@@ -19,22 +22,26 @@
 		/// <summary>
 		/// Номер запроса.
 		/// </summary>
+		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// Номер первоначального сообщения <see cref="ChangePasswordMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
+		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
 		/// Новый пароль.
 		/// </summary>
+		[DataMember]
 		public SecureString NewPassword { get; set; }
 
 		/// <summary>
 		/// Информация об ошибке смены пароля.
 		/// </summary>
+		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>

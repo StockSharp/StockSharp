@@ -12,6 +12,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные по котировкам.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public sealed class QuoteChangeMessage : Message
 	{
 		/// <summary>

@@ -1,20 +1,27 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	using Ecng.Common;
 
 	/// <summary>
 	/// Сообщение, содержащее информацию для перерегистрации пары заявок.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class OrderPairReplaceMessage : SecurityMessage
 	{
 		/// <summary>
 		/// Сообщение, содержащее информацию для перерегистрации первой заявки.
 		/// </summary>
+		[DataMember]
 		public OrderReplaceMessage Message1 { get; set; }
 
 		/// <summary>
 		/// Сообщение, содержащее информацию для перерегистрации второй заявки.
 		/// </summary>
+		[DataMember]
 		public OrderReplaceMessage Message2 { get; set; }
 
 		/// <summary>

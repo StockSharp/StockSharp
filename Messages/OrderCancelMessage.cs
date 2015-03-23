@@ -1,35 +1,45 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	using Ecng.Common;
 
 	/// <summary>
 	/// Сообщение, содержащее данные для снятия заявки.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class OrderCancelMessage : OrderMessage
 	{
 		/// <summary>
 		/// Идентификатор отменяемой заявки.
 		/// </summary>
+		[DataMember]
 		public long OrderId { get; set; }
 
 		/// <summary>
 		/// Идентификатор отменяемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
 		/// </summary>
+		[DataMember]
 		public string OrderStringId { get; set; }
 
 		/// <summary>
 		/// Номер транзакции отмены.
 		/// </summary>
+		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
 		/// Номер транзакции отменяемой заявки.
 		/// </summary>
+		[DataMember]
 		public long OrderTransactionId { get; set; }
 
 		/// <summary>
 		/// Отменяемый объем. Если значение не указано, то отменяется весь активный объем заявки.
 		/// </summary>
+		[DataMember]
 		public decimal Volume { get; set; }
 
 		/// <summary>

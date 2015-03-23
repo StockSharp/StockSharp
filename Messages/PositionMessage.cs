@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -9,6 +10,8 @@
 	/// <summary>
 	/// Сообщение, содержащее данные о позиции.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public sealed class PositionMessage : Message
 	{
 		/// <summary>
@@ -58,6 +61,7 @@
 		/// Номер первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
+		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>

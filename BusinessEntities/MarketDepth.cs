@@ -13,7 +13,6 @@ namespace StockSharp.BusinessEntities
 	using MoreLinq;
 
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -21,7 +20,6 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	[Ignore(FieldName = "IsDisposed")]
 	//[EntityFactory(typeof(UnitializedEntityFactory<MarketDepth>))]
 	public class MarketDepth : Cloneable<MarketDepth>, IEnumerable<Quote>, ISynchronizedCollection
 	{

@@ -1,15 +1,19 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Linq;
 	using System.Runtime.Serialization;
 
 	using Ecng.Collections;
 	using Ecng.Common;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Сообщение, содержащее данные по изменениям для позиции.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public sealed class PortfolioChangeMessage : BaseChangeMessage<PositionChangeTypes>
 	{
 		/// <summary>

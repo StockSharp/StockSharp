@@ -1,25 +1,33 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	using Ecng.Common;
 
 	/// <summary>
 	/// Сообщение, содержащее информацию для перерегистрации заявки.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class OrderReplaceMessage : OrderRegisterMessage
 	{
 		/// <summary>
 		/// Идентификатор перерегистрируемой заявки.
 		/// </summary>
+		[DataMember]
 		public long OldOrderId { get; set; }
 
 		/// <summary>
 		/// Идентификатор перерегистрируемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
 		/// </summary>
+		[DataMember]
 		public string OldOrderStringId { get; set; }
 
 		/// <summary>
 		/// Номер транзакции перерегистрируемой заявки.
 		/// </summary>
+		[DataMember]
 		public long OldTransactionId { get; set; }
 
 		/// <summary>

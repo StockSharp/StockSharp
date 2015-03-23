@@ -1,23 +1,28 @@
 ﻿namespace StockSharp.Messages
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	using Ecng.Common;
 
 	/// <summary>
 	/// Сообщение окончания поиска инструментов.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class SecurityLookupResultMessage : Message
 	{
 		/// <summary>
 		/// Номер первоначального сообщения <see cref="SecurityLookupMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
+		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
 		/// Информация об ошибке поиска инструментов.
 		/// </summary>
+		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>

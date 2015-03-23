@@ -25,7 +25,6 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	[Ignore(FieldName = "IsDisposed")]
 	public class ExchangeBoard : Equatable<ExchangeBoard>, IExtendableEntity, IPersistable, INotifyPropertyChanged
 	{
 		private class InMemoryExchangeInfoProvider : IExchangeInfoProvider

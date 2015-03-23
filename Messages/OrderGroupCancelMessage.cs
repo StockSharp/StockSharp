@@ -1,5 +1,6 @@
 namespace StockSharp.Messages
 {
+	using System;
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
@@ -9,6 +10,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее фильтр для снятия заявок.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class OrderGroupCancelMessage : OrderMessage
 	{
 		///// <summary>
@@ -23,6 +26,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Номер транзакции отмены.
 		/// </summary>
+		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>

@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.BusinessEntities
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -7,6 +8,8 @@
 	/// <summary>
 	/// Корзина инструментов.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public abstract class BasketSecurity : Security
 	{
 		/// <summary>

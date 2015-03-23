@@ -5,7 +5,6 @@ namespace StockSharp.BusinessEntities
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
-	using NetDataContract = System.Runtime.Serialization.DataContractAttribute;
 
 	using Ecng.Common;
 	using Ecng.Serialization;
@@ -19,8 +18,7 @@ namespace StockSharp.BusinessEntities
 	/// Котировка стакана, представляющая бид или оффер.
 	/// </summary>
 	[Serializable]
-	[NetDataContract]
-	[Ignore(FieldName = "IsDisposed")]
+	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
 	[ExpandableObject]

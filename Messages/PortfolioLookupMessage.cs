@@ -1,10 +1,15 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	using Ecng.Common;
 
 	/// <summary>
 	/// Сообщение поиска инструментов по заданному критерию.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class PortfolioLookupMessage : PortfolioMessage
 	{
 		/// <summary>
@@ -21,15 +26,7 @@
 		/// <returns>Копия.</returns>
 		public override Message Clone()
 		{
-			return new PortfolioLookupMessage
-			{
-				TransactionId = TransactionId,
-				PortfolioName = PortfolioName,
-				Currency = Currency,
-				BoardCode = BoardCode,
-				IsSubscribe = IsSubscribe,
-				LocalTime = LocalTime,
-			};
+			return CopyTo(new PortfolioLookupMessage());
 		}
 
 		/// <summary>

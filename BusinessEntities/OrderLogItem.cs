@@ -11,6 +11,7 @@ namespace StockSharp.BusinessEntities
 	/// Строчка лога заявок.
 	/// </summary>
 	[Serializable]
+	[System.Runtime.Serialization.DataContract]
 	[DescriptionLoc(LocalizedStrings.Str535Key)]
 	public class OrderLogItem : MyTrade
 	{

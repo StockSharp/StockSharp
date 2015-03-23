@@ -3,7 +3,6 @@ namespace StockSharp.BusinessEntities
 	using System;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -13,7 +12,6 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	[Ignore(FieldName = "IsDisposed")]
 	public class MarketDepthPair
 	{
 		private readonly bool _isFull;

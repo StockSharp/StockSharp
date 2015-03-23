@@ -12,6 +12,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение поиска инструментов по заданному критерию.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class SecurityLookupMessage : SecurityMessage, IEquatable<SecurityLookupMessage>
 	{
 		/// <summary>

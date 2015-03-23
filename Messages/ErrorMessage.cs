@@ -1,12 +1,15 @@
 ﻿namespace StockSharp.Messages
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	using Ecng.Common;
 
 	/// <summary>
 	/// Сообщение об ошибке.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ErrorMessage : Message
 	{
 		/// <summary>
@@ -20,6 +23,7 @@
 		/// <summary>
 		/// Информация об ошибке.
 		/// </summary>
+		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>

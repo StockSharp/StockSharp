@@ -14,6 +14,8 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// Базовые класс, описывающий денежную позицию и позицию по инструменту.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public abstract class BasePosition : NotifiableObject, IExtendableEntity
 	{
 		/// <summary>

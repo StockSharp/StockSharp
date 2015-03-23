@@ -2,17 +2,14 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
-	using NetDataContract = System.Runtime.Serialization.DataContractAttribute;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
 	/// <summary>
 	/// Валюта.
 	/// </summary>
-	[NetDataContract]
+	[DataContract]
 	[Serializable]
-	[Ignore(FieldName = "IsDisposed")]
 	public class Currency : Equatable<Currency>
 	{
 		/// <summary>

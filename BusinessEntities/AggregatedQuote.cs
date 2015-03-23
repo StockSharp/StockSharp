@@ -12,6 +12,8 @@ namespace StockSharp.BusinessEntities
 	/// <summary>
 	/// Агрегированная котировка.
 	/// </summary>
+	[System.Runtime.Serialization.DataContract]
+	[Serializable]
 	public class AggregatedQuote : Quote
 	{
 		private sealed class InnerQuotesList : BaseList<Quote>

@@ -16,19 +16,12 @@
         /// </summary>
         public RpsOrderInfo()
         {
-            Partner = null;
-            SettleCode = null;
-            SettleDate = null;
-            MatchRef = null;
-            ForAccount = null;
-			CurrencyType = CurrencyTypes.RUB;
         }
 
 		/// <summary>
 		/// Код организации – партнера по внебиржевой сделке.
 		/// </summary>
 		[DataMember]
-		[Nullable]
 		public string Partner { get; set; }
 
 		/// <summary>
@@ -45,22 +38,18 @@
 		/// Необязательный параметр.
 		/// </summary>
 		[DataMember]
-		[Nullable]
 		public string MatchRef { get; set; }
 
 		/// <summary>
 		/// Код расчетов при исполнении внебиржевых заявок.
 		/// </summary>
 		[DataMember]
-		[Nullable]
 		public string SettleCode { get; set; }
-
 
 		/// <summary>
 		/// Лицо, от имени которого и за чей счет регистрируется сделка (параметр внебиржевой сделки).
 		/// </summary>
 		[DataMember]
-		[Nullable]
 		public string ForAccount { get; set; }
 
 		/// <summary>

@@ -32,6 +32,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные о портфеле.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class PortfolioMessage : Message
 	{
 		/// <summary>
@@ -74,6 +76,7 @@ namespace StockSharp.Messages
 		/// Номер первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
+		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
@@ -88,6 +91,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Является ли сообщение подпиской на изменения портфеля.
 		/// </summary>
+		[DataMember]
 		public bool IsSubscribe { get; set; }
 
 		/// <summary>
@@ -122,20 +126,22 @@ namespace StockSharp.Messages
 		/// <returns>Копия.</returns>
 		public override Message Clone()
 		{
-			var clone = new PortfolioMessage
-			{
-				PortfolioName = PortfolioName,
-				Currency = Currency,
-				BoardCode = BoardCode,
-				OriginalTransactionId = OriginalTransactionId,
-				IsSubscribe = IsSubscribe,
-				State = State,
-				TransactionId = TransactionId,
-			};
+			return CopyTo(new PortfolioMessage());
+		}
 
-			this.CopyExtensionInfo(clone);
+		protected PortfolioMessage CopyTo(PortfolioMessage destination)
+		{
+			destination.PortfolioName = PortfolioName;
+			destination.Currency = Currency;
+			destination.BoardCode = BoardCode;
+			destination.OriginalTransactionId = OriginalTransactionId;
+			destination.IsSubscribe = IsSubscribe;
+			destination.State = State;
+			destination.TransactionId = TransactionId;
 
-			return clone;
+			this.CopyExtensionInfo(destination);
+
+			return destination;
 		}
 	}
 }

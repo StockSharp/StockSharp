@@ -19,7 +19,6 @@ namespace StockSharp.BusinessEntities
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	[Ignore(FieldName = "IsDisposed")]
 	[DisplayNameLoc(LocalizedStrings.Str504Key)]
 	[DescriptionLoc(LocalizedStrings.Str516Key)]
 	[CategoryOrderLoc(MainCategoryAttribute.NameKey, 0)]

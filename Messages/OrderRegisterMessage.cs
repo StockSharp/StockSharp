@@ -10,6 +10,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее информацию для регистрации заявки.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class OrderRegisterMessage : OrderMessage
 	{
 		/// <summary>
@@ -111,11 +113,6 @@ namespace StockSharp.Messages
 		[DescriptionLoc(LocalizedStrings.Str236Key)]
 		[MainCategory]
 		public RpsOrderInfo RpsInfo { get; set; }
-
-		///// <summary>
-		///// Валюта, в которой выражается значение цены <see cref="Price"/>.
-		///// </summary>
-		//public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
 		/// Создать <see cref="OrderRegisterMessage"/>.

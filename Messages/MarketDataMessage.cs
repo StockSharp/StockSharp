@@ -11,36 +11,44 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Типы маркет-данных.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public enum MarketDataTypes
 	{
 		/// <summary>
 		/// Первый уровень маркет-данных.
 		/// </summary>
+		[EnumMember]
 		Level1,
 
 		/// <summary>
 		/// Глубина рынка (стаканы).
 		/// </summary>
+		[EnumMember]
 		MarketDepth,
 
 		/// <summary>
 		/// Тиковые сделки.
 		/// </summary>
+		[EnumMember]
 		Trades,
 
 		/// <summary>
 		/// Лог заявок.
 		/// </summary>
+		[EnumMember]
 		OrderLog,
 
 		/// <summary>
 		/// Новости.
 		/// </summary>
+		[EnumMember]
 		News,
 
 		/// <summary>
 		/// Свечи (тайм-фрейм).
 		/// </summary>
+		[EnumMember]
 		CandleTimeFrame,
 
 		/// <summary>
@@ -51,27 +59,33 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Свеча (объем).
 		/// </summary>
+		[EnumMember]
 		CandleVolume,
 
 		/// <summary>
 		/// Свеча (рендж).
 		/// </summary>
+		[EnumMember]
 		CandleRange,
 
 		/// <summary>
 		/// Свеча (X&amp;0).
 		/// </summary>
+		[EnumMember]
 		CandlePnF,
 
 		/// <summary>
 		/// Свеча (ренко).
 		/// </summary>
+		[EnumMember]
 		CandleRenko,
 	}
 
 	/// <summary>
 	/// Сообщение о подписке или отписки на маркет-данные (при отправке используется как команда, при получении является событием подтверждения).
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class MarketDataMessage : SecurityMessage
 	{
 		/// <summary>
@@ -105,6 +119,7 @@ namespace StockSharp.Messages
 		/// Тип маркет-данных.
 		/// </summary>
 		[Browsable(false)]
+		[DataMember]
 		public MarketDataTypes DataType { get; set; }
 
 		/// <summary>
@@ -119,11 +134,13 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Является ли сообщение подпиской на маркет-данные.
 		/// </summary>
+		[DataMember]
 		public bool IsSubscribe { get; set; }
 
 		/// <summary>
 		/// Идентификатор запроса.
 		/// </summary>
+		[DataMember]
 		public long TransactionId { get; set; }
 
 		///// <summary>
@@ -135,21 +152,25 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Информация об ошибке. Сигнализирует об ошибке подписки или отписки.
 		/// </summary>
+		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>
 		/// Количество маркет-данных.
 		/// </summary>
+		[DataMember]
 		public long Count { get; set; }
 
 		/// <summary>
 		/// Максимальная грубина стакана. Используется в случае <see cref="DataType"/> равные <see cref="MarketDataTypes.MarketDepth"/>.
 		/// </summary>
+		[DataMember]
 		public int MaxDepth { get; set; }
 
 		/// <summary>
 		/// Идентификатор новости. Используется, если идет запрос получения текста новости.
 		/// </summary>
+		[DataMember]
 		public string NewsId { get; set; }
 
 		/// <summary>

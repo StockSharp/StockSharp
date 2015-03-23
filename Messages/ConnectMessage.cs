@@ -1,8 +1,13 @@
 ﻿namespace StockSharp.Messages
 {
+	using System;
+	using System.Runtime.Serialization;
+
 	/// <summary>
 	/// Сообщение о подключении к торговой системе (при отправке используется как команда, при получении является событием подключения).
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class ConnectMessage : BaseConnectionMessage
 	{
 		/// <summary>

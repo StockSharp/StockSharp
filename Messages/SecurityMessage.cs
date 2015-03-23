@@ -11,6 +11,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные об инструменте.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class SecurityMessage : Message
 	{
 		/// <summary>
@@ -149,6 +151,7 @@ namespace StockSharp.Messages
 		/// Номер первоначального сообщения <see cref="SecurityLookupMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
+		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>

@@ -10,32 +10,40 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Состояния свечи.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public enum CandleStates
 	{
 		/// <summary>
 		/// Пустое состояние (свеча отсутствует).
 		/// </summary>
+		[EnumMember]
 		None,
 
 		/// <summary>
 		/// Свеча запущена на формирование.
 		/// </summary>
+		[EnumMember]
 		Started,
 
 		/// <summary>
 		/// Свеча изменена.
 		/// </summary>
+		[EnumMember]
 		Changed,
 
 		/// <summary>
 		/// Свеча закончена.
 		/// </summary>
+		[EnumMember]
 		Finished,
 	}
 
 	/// <summary>
 	/// Сообщение, содержащее данные о свече.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public abstract class CandleMessage : Message
 	{
 		/// <summary>
@@ -207,11 +215,13 @@ namespace StockSharp.Messages
 		/// Номер первоначального сообщения <see cref="MarketDataMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
+		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
 		/// Является ли сообщение последним в запрашиваемом пакете свечек.
 		/// </summary>
+		[DataMember]
 		public bool IsFinished { get; set; }
 
 		/// <summary>
@@ -274,6 +284,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные о тайм-фрейм свече.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class TimeFrameCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -315,6 +327,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные о свече, группируемая по количеству сделок.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class TickCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -356,6 +370,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные о свече, группируемая по количеству контрактов.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class VolumeCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -397,6 +413,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные о свече, группируемая по ценовому диапазону.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class RangeCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -531,6 +549,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные о свече пункто-цифрового графика (график крестики-нолики).
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class PnFCandleMessage : CandleMessage
 	{
 		/// <summary>
@@ -579,6 +599,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные о Рэнко свече.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class RenkoCandleMessage : CandleMessage
 	{
 		/// <summary>

@@ -13,6 +13,8 @@ namespace StockSharp.Messages
 	/// Сообщение, содержащее изменения.
 	/// </summary>
 	/// <typeparam name="TField">Тип изменений.</typeparam>
+	[DataContract]
+	[Serializable]
 	public abstract class BaseChangeMessage<TField> : Message
 	{
 		/// <summary>

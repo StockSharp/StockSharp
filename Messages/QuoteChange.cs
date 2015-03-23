@@ -14,7 +14,7 @@ namespace StockSharp.Messages
 	/// Котировка стакана, представляющая бид или оффер.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
-	[Ignore(FieldName = "IsDisposed")]
+	[Serializable]
 	[DisplayNameLoc(LocalizedStrings.Str273Key)]
 	[DescriptionLoc(LocalizedStrings.Str274Key)]
 	public class QuoteChange : Equatable<QuoteChange>, IExtendableEntity

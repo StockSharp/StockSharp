@@ -4,6 +4,7 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
+	using System.Runtime.Serialization;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -14,7 +15,6 @@ namespace StockSharp.Messages
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
-	[Ignore(FieldName = "IsDisposed")]
 	[TypeSchemaFactory(SearchBy.Properties, VisibleScopes.Public)]
 	public abstract class OrderCondition : Cloneable<OrderCondition>
 	{
@@ -31,6 +31,7 @@ namespace StockSharp.Messages
 		/// Параметры условия.
 		/// </summary>
 		[Browsable(false)]
+		[DataMember]
 		public IDictionary<string, object> Parameters
 		{
 			get { return _parameters; }

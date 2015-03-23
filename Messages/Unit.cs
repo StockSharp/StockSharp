@@ -55,7 +55,6 @@ namespace StockSharp.Messages
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
-	[Ignore(FieldName = "IsDisposed")]
 	public class Unit : Equatable<Unit>, IOperable<Unit>
 	{
 		/// <summary>

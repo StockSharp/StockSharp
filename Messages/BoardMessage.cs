@@ -10,6 +10,8 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные об электронной площадке.
 	/// </summary>
+	[DataContract]
+	[Serializable]
 	public class BoardMessage : Message
 	{
 		/// <summary>
