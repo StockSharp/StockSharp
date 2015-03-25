@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+		<para>
+			Для работы с источником маркет-данных <token>iqfeed_external</token> необходимо использовать <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference>.
+			Механизм взаимодействия показан на данном рисунке:
+		</para>
+		
+		<mediaLink><image placement="center" xlink:href="IQFeed"/></mediaLink>
+		
+		<alert class="caution">
+			<para>
+				<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> поддерживает только получение маркет-данных и не предоставляет возможности для отправления торговых приказов.
+			</para>
+		</alert>
+	</introduction>
+  </developerConceptualDocument>
+</topic>

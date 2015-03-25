@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>С помощью <token>hydra</token> можно склеить различные виды маркет-данных по разным контрактам в один непрерывный инструмент.</para> 
+		<para>Для этого, в главном окне, в выпадающем меню кнопки "Дополнительно" необходимо выбрать "Склеивание данных". После открытия окно примет следующий вид.</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingWindow" /></mediaLink>
+		
+		<para>Перед тем как склеивать данные, необходимо проверить, какие маркет-данные есть.
+		Для этого выбирается путь где лежат данные и по очереди просматриваются инструменты которые предполагается склеить.
+		Если имеются пропуски, то необходимо докачать нужные маркет-данные(например с финама).</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCheckData" /></mediaLink>
+		
+		<para>В качестве примера будет рассмотрено склеивание тиков и 5 мин. по фючерсу на индекс RTS.</para>
+		<para>Первый шаг - создание непрерывного инструмента. Для этого необходимо нажать кнопку "Создать склееный фьючерс", после чего появится окно следующего вида:</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCSWindow" /></mediaLink>
+		
+		<para>Для создания непрерывного фьючерса необходимо задать имя и добавить контракты.
+		Добавить контракты можно двумя способами.</para>
+		
+		<list class="bullet">
+  			<listItem>
+  				<para>Вручную, нажимая кнопку +.</para>
+  				<mediaLink><image placement="center" xlink:href="HydraGluingCSCustom" /></mediaLink>
+  			</listItem>
+  			<listItem>
+  				<para>Если в качестве имени задать первые две буквы контракта, например RI, и нажать кнопку "Авто", то будут добавлены все найденные в БД инструменты.</para>
+  				<mediaLink><image placement="center" xlink:href="HydraGluingCSAuto" /></mediaLink>
+  			</listItem>
+		</list>
+  		
+  		<para>После того как добавлены контракты, и выставлены даты перехода, необходимо выбрать тип данных который будет склеиваться.
+		Если выбраны свечки, то необходимо указать ТФ свечек.</para>
+		
+		<alert class="note">
+			<para>Важно: Свечки должны быть заранее скачаны с финама. Иначе нечего будет склеивать.</para>
+		</alert>
+
+		<mediaLink><image placement="center" xlink:href="HydraGluingpPreparing" /></mediaLink>
+		
+		<para>И нажать кнопку "Склеить".</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCandles" /></mediaLink>
+
+		<para>Затем необходимо выбрать тип маркет-данных тики и повторно нажать кнопку склеить.</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingTrades" /></mediaLink>
+		
+		<para>После этого можно просмотреть что склеилось.</para>
+		<mediaLink><image placement="center" xlink:href="HydraGluingCheckGluingData" /></mediaLink>
+		
+		<para> И при необходимости выгрузить, например в txt, 
+		<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">тики</link> или 
+		<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">свечки</link>. </para>
+
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+     <introduction>
+      <mediaLink>
+        <image placement="left" xlink:href="hydra_settings_transaq" />
+      </mediaLink>
+      <list class="bullet">
+        <listItem>
+          <legacyBold>Логин</legacyBold> - логин.
+		</listItem>
+        <listItem>
+          <legacyBold>Пароль</legacyBold> - пароль.
+		</listItem>
+        <listItem>
+          <legacyBold>Адрес</legacyBold> - адрес сервера Transaq.
+		</listItem>
+        <listItem>
+          <legacyBold>Используется ли прокси</legacyBold> - используется ли прокси для подключения к интернету.
+		</listItem>
+        <listItem>
+          <legacyBold>Тип прокси</legacyBold> - тип протокола, который использует прокси.
+		</listItem>
+        <listItem>
+          <legacyBold>Логин(прокси)</legacyBold> - логин(если прокси требует авторизации).
+		</listItem>
+        <listItem>
+          <legacyBold>Пароль(прокси)</legacyBold> - пароль(если прокси требует авторизации).
+		</listItem>
+        <listItem>
+          <legacyBold>Proxy адрес</legacyBold> - адрес Proxy сервера.
+		</listItem>		
+        <listItem>
+          <legacyBold>Работать с</legacyBold> - время начала работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Работать до</legacyBold> - время окончания работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Интервал работы</legacyBold> - интервал работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+		</listItem>
+        <listItem>
+          <legacyBold>Игнорировать ошибки</legacyBold> - игнорировать ошибки при сохранении данных. При наборе критического количества ошибок, источник не будет остановлен.
+		</listItem>		
+        <listItem>
+          <legacyBold>Типы изменений</legacyBold> - типы изменений инструментов, которые будут сохраняться из данного источника.
+		</listItem>			
+      </list>
+    </introduction>
+  </developerWalkthroughDocument>
+</topic>

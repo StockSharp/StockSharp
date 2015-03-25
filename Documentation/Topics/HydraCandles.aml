@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="621927b7-839f-4492-8dbb-162e63d57769" revisionNumber="1">
+  <developerHowToDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para><token>hydra</token> позволяет на основе скаченных сделок формировать свечки, которые в последствии можно экспортировать в форматы
+      <token>excel</token>, xml, sql, bin или txt. Последний можно настраивать под любой формат через файл <legacyItalic>txt_export_candles.st</legacyItalic>,
+      что позволяет в последствии использовать данные в любых программах теханализа (WealthLab, AmiBroker и т.д.).</para>
+    </introduction>
+
+    <procedure>
+      <title>Генерация свечек</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>В главном окне нажать кнопку <legacyBold>Свечки</legacyBold>, откроется следующее окно:</para>
+            <mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_main" />
+	  		</mediaLink>
+          </content>
+        </step>
+        
+         <step>
+          <content>
+            <para>
+            	Далее выбрать из выпадающего списка интересующий тип свечки (поддерживаются все <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">стандартные свечки</link>),
+            	параметр, выбрать в <legacyBold>Построить из:</legacyBold> из чего будут строится свечки, выбрать инструмент и нажать на кнопку <mediaLinkInline><image xlink:href="hydra_find"/></mediaLinkInline>.
+            	После этого произойдет генерация свечек на основе найденных данных. Например, для свечек типа
+            	<codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> будет сформировано следующее:
+            </para>
+            	
+            <mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_tf" />
+	  		</mediaLink>
+	  		
+	  		<para>
+	  			А для свечек типа <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference> будет сформировано:
+	  		</para>
+
+	  		<mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_volume" />
+	  		</mediaLink>
+	  		
+	  		
+			<alert class="note">
+  				<para>Если в <legacyBold>Построить из:</legacyBold> выбрать <legacyBold>не строить</legacyBold>, то будет произведен поиск готовых свечек, 
+  				которые были скачены через источник <link xlink:href="bad33f32-1a13-4ba7-a335-326e6249d1be">Finam</link>.</para>
+			</alert>
+
+          </content>
+        </step>
+        
+        <step>
+          <content>
+            <para>Если необходимо графически посмотреть сгенерированные свечки, то нужно нажать на кнопку <mediaLinkInline><image xlink:href="hydra_candles"/></mediaLinkInline>
+            и после этого откроется график:</para>
+            <mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_tf_chart" />
+	  		</mediaLink>
+	  		<mediaLink>
+		  		<image placement="center" xlink:href="hydra_candles_volume_chart" />
+	  		</mediaLink>
+          </content>
+        </step>
+        
+        <step>
+          <content>
+    		<para>Сгенерированные свечки можно экспортировать в форматы Excel, xml или txt. 
+    		Последний формат конфигурируется через файл txt_export_candles.st. Данный файл с помощью специального преобразования трансформирует сделки в txt формат. </para>
+          </content>
+        </step>        
+      </steps>
+    </procedure>
+  </developerHowToDocument>
+</topic>

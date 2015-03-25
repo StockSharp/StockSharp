@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>
+			Для работы программы, написанной с применением библиотеки <token>stocksharp</token>, неообходимо скачать лицензию.
+		</para>
+		<para>
+			Лицензия <token>stocksharp</token> существует в трех версиях:
+		</para>
+		
+		<list class="bullet">
+  			<listItem>
+  				<para>
+  					<legacyBold>Базовая</legacyBold> - предоставляется бесплатно всем желающим в негораниченном количестве (штук).
+  					<link xlink:href="e3e9f831-56ac-44a4-840c-3d5969ff1fd7">Инструкция получения лицензии</link>.
+  				</para>
+  			</listItem>
+  			<listItem>
+  				<para>
+  					<legacyBold>Базовая+</legacyBold> - предоставляется только ученикам, прошедшим обучение (<token>stocksharpeducation</token>).
+  				</para>
+  			</listItem>
+  			<listItem>
+  				<para>
+  					<legacyBold>Корпоративная</legacyBold> - предоставляется платно с рядом расширенных возможностей (<externalLink>
+					<linkText>подробнее про корпоративную лицензию</linkText>
+					<linkUri>http://stocksharp.com/products/pricing/</linkUri>
+				</externalLink>):
+  				</para>
+  				<list class="ordered">
+					<listItem>Коннекторы прямого доступа к биржам (CGate, MicexBridge).</listItem>
+					<listItem>FIX коннекторы (в т.ч. прямое подключение к серверу <token>quik</token>).</listItem>
+					<listItem>FIX-сервер для роутинга заявок, эмуляции торгов, сохранения хода торгов для каждого клиента.</listItem>
+					<listItem>Доступ к online репозитарию с обновляемыми исходными кодами.</listItem>
+					<listItem>Сервер исторических данных.</listItem>
+				</list>
+  			</listItem>
+  		</list>
+
+		<para>
+			У библиотеки <token>stocksharp</token> есть триальный период, в течении которого не требуется наличие полной лицензии.
+			Это сделано для тех, кто хочет попробовать платформу, а также для тех, кому потребуется время разобраться во всех деталях.
+		</para>
+		<para>
+			Триальная лицензия выдается на месяц и автоматически скачивается при первом запуске программы (если в каталоге из которого запускается программа
+		 	или в <legacyBold>Мои документы\StockSharp\</legacyBold> не будет находится файл stocksharp_license.xml).
+		</para>
+
+		<para>
+			По вопросам приобретения лицензии для <legacyBold>сторонних разработчиков</legacyBold> необходимо обращаться через <token>stocksharpcontacts</token>.
+			Для данной группы пользователей в LicenseTool доступен режим подписи исполняемого файла, отключающего проверку наличия лицензии на компьютерах их пользователей.
+		</para>
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

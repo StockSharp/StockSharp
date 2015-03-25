@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="84d6a0fb-607f-4d87-be8a-e2b58006493e" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+   <introduction>
+		<para>
+			Для написания торговых роботов для <token>etrade_external</token> необходимо использовать <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>.
+			Механизм взаимодействия показан на данном рисунке:
+		</para>
+		
+		<mediaLink><image placement="center" xlink:href="ETrade"/></mediaLink>
+	</introduction>
+  </developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="db31c1e5-17a3-45d0-a3ad-34d4f2b1cd9f" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <summary>
+		<para>В <token>stocksharp</token> входит механизм подсчета проскальзывания, который позволяет оценить быстроту алгоритма (и его реализацию),путем мониторинга цены первоначальной заявки и последующих сделок.</para>
+	</summary>
+
+    <introduction>
+		<para>Учет проскальзывание ведется через специальный менеджер (по аналогии со свечками, где есть <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>).
+		Базовый интерфейс менеджера проскальзывания называется <codeEntityReference>T:StockSharp.Algo.Slippage.ISlippageManager</codeEntityReference>.
+		Данный интерфейс имеет реализацию в виде <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Slippage.SlippageManager</codeEntityReference>.</para>
+
+		<para>Если торговый алгоритм реализован с помощью механизма стратегий <token>stocksharp</token>, то класс <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>
+		самостоятельно регистрирует подсчитывает поступающие заявки на учет проскальзывания через вызов метода 
+		<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Slippage.SlippageManager.Registering(StockSharp.BusinessEntities.Order)</codeEntityReference>.
+		Если для алгоритма требуется изменение в логике проскальзывания, то из кода стратегии можно вызвать метод 
+		<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Slippage.SlippageManager.Registering(StockSharp.BusinessEntities.Order,System.Decimal)</codeEntityReference>,
+		передав в него новую ожидаемую цену:</para>
+	  
+		<code language="C#">SlippageManager.Registering(myOrder, newEstimatedPrice);</code>
+		
+		<para>Если стратегия использует механизм перерегистрации заявок (<link xlink:href="4b427409-9aa9-41d3-bb97-98745d1bba8e">Замена заявок</link>), например, как в <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link>,
+		то необходимо вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Slippage.SlippageManager.ReRegistering(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>:</para>
+		
+		<code language="C#">SlippageManager.ReRegistering(oldOrder, newOrder);</code>
+	</introduction>
+
+	<prerequisites>
+		<content>
+			<para><link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Стратегии</link></para>
+			<para><link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link></para>
+		</content>
+	</prerequisites>
+    
+	<procedure>
+		<title>Добавление в SampleSMA учет проскальзывания</title>
+			<steps class="ordered">
+				<step>
+					<content>
+						<para>Так как SampleSMA использует механизм котирования, то в этом алгоритме необходимо учитывать проскальзывание.</para>
+						<para>В окно вывода информации необходимо добавить текстовое поле для проскальзывания:</para>
+			
+						<code language="C#">
+						<![CDATA[
+<Label Grid.Column="0" Grid.Row="4" Content="Проскаль.:" />
+<Label x:Name="Slippage" Grid.Column="1" Grid.Row="4" />
+						]]>
+						</code>
+					</content>
+				</step>
+				<step>
+					<content>
+						<para>Далее, необходимо расширить метод-обработчик события изменения параметров стратегии:</para>
+						<code language="C#">
+						<![CDATA[
+private void OnStrategyPropertyChanged(object sender, PropertyChangedEventArgs e)
+{
+	this.Sync(() =>
+	{
+		Status.Content = _strategy.ProcessState;
+		Slippage.Content = _strategy.SlippageManager.Slippage;
+	});
+}
+						]]>
+						</code>
+					</content>
+				</step>
+			</steps>
+	</procedure>
+
+	<nextSteps>
+		<content>
+			<para>
+				<link xlink:href="f59e2adf-df08-4c4f-b857-3fab819d1784">Прибыль-убыток</link>
+			</para>
+		</content>
+	</nextSteps>
+    
+	</developerWalkthroughDocument>
+</topic>

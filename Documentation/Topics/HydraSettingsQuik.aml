@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="54a1e95e-ea39-4322-9613-e74859a3a596" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <mediaLink>
+        <image placement="left" xlink:href="hydra_settings_quik" />
+      </mediaLink>
+      <list class="bullet">
+        <listItem>
+          <legacyBold>Путь</legacyBold> - путь к директории, где установлен <token>quik</token>.
+		</listItem>
+        <listItem>
+          <legacyBold>DDE сервер</legacyBold> - название DDE сервера. По умолчанию равно hydra.
+		</listItem>
+        <listItem>
+          <legacyBold>Доп. колонки / Доп. колонки история</legacyBold> - список дополнительных колонок для экспорта из таблицы Инструменты / Инструменты (изменения).
+		</listItem>	
+        <listItem>
+          <legacyBold>История изменений</legacyBold> - загружать историю изменений по инструментам.
+		</listItem>		
+        <listItem>
+          <legacyBold>Работать с</legacyBold> - время начала работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Работать до</legacyBold> - время окончания работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Интервал работы</legacyBold> - интервал работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+		</listItem>
+        <listItem>
+          <legacyBold>Игнорировать ошибки</legacyBold> - игнорировать ошибки при сохранении данных. При наборе критического количества ошибок, источник не будет остановлен.
+		</listItem>	
+        <listItem>
+          <legacyBold>Типы изменений</legacyBold> - типы изменений инструментов, которые будет сохраняться из данного источника.
+		</listItem>			
+      </list>
+      <alert class="caution">
+			Для Quik источника должны быть настроены соответствующим образом таблицы в терминале <token>quik</token>. Если таблицы уже настроены
+			в формате <token>stocksharp</token>, то ничего делать не требуется. Если таблицы не были настроены до этого, и использование
+			<token>stocksharp</token> не предполагается, то необходимо настроить только таблицы Инструменты и Все сделки как показано в разделе
+			<link xlink:href="5c13da7b-b6e4-4fd4-958a-66c93c58b941">Настройка Quik</link>.
+	  </alert>
+    </introduction>
+    
+	<section address="Section1">
+	  	<title>Настройки для экспорта дополнительных колонок из таблицы Инструменты.</title>
+		<content>
+	  		<para>В таблице Инструменты добавить нужные дополнительные колонки.</para>
+			<mediaLink>
+        		<image placement="left" xlink:href="hydra_settings_quik_securities" />
+			</mediaLink>	  	
+	  	
+	  		<para>В пункте <legacyBold>Доп. колонки</legacyBold>, в выпадающем окне выбрать нужные колонках.</para>
+			
+			<alert class="caution">
+				<para><legacyBold>Колонки должны идти в том же порядке как они идут в QUIK!</legacyBold></para>
+				<para>Если добавленные доп. колонки в QUIK идут в порядке: Стоимость шага, Страйк, Волатильность, Базовый актив, и т.д.</para>
+				<para>То и в выпадающем окне они должны идти в том же порядке(сверху вниз): сначала идет Стоимость шага цена, Цена страйк, затем Волатильность опциона и т.д.</para>
+			</alert>
+		</content>
+	</section>
+	
+	<section address="Section2">
+	  	<title>Настройки для экспорта дополнительных колонок из таблицы Инструменты (изменения).</title>
+		<content>
+	  		<para>Экспорт данных из таблицы Инструменты (изменения) позволяет сохранять данные не только с момента запуска скачивания данныx, но и за весь текущий торговый день.</para>
+	  		<para>В таблице Инструменты(изменения) добавить нужные дополнительные колонки.</para>
+			<mediaLink>
+        		<image placement="left" xlink:href="hydra_settings_quik_securities_changes" />
+			</mediaLink>	  	
+	  	
+	  		<para>В пункте <legacyBold>Доп. колонки история</legacyBold>, в выпадающем списке поставить галочки на нужных колонках.</para>
+			
+			<alert class="caution">
+				<para><legacyBold>Колонки должны идти в том же порядке как они идут в QUIK!</legacyBold> По тому же принципу как и при выборе доп. колонок для таблицы Инструменты.</para>
+				<para>Также необходимо чтобы инструменты которые находятся в данной таблице, находились и в таблице Инструменты.</para>
+			</alert>
+		</content>
+	</section>
+  </developerWalkthroughDocument>
+</topic>

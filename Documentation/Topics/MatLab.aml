@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e3f889a5-ddcd-4c77-a174-2f24385386a0" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para>
+		  <token>matlab</token> предоставляет возможность использовать в своих скриптах <token>dotnet</token> классы, в том числе и <token>stocksharp</token>.
+	  </para>
+		<para>
+			Интеграция между <token>matlab</token> и <token>stocksharp</token> позволяет создавать торговых роботов (или аналитические
+			программы, оперирующие данными напрямую с торговых площадок) в единой среде языка M.
+		</para>
+    </introduction>
+     <prerequisites>
+		 <content>
+			 <para>
+				 <link xlink:href="5c13da7b-b6e4-4fd4-958a-66c93c58b941">Настройка Quik</link>
+			 </para>
+		 </content>
+	 </prerequisites> 
+    <!-- One or more procedure or section with procedure -->
+    <procedure>
+      <title>Связь MatLab и Quik</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>
+				В качестве демонстрации в дистрибутиве находится скрипт в папке Samples\MatLab, которой показывает, как можно в <token>matlab</token>-е
+				получать данные из терминала <token>quik</token>, а так же отправлять в него заявки, осуществляя тем самым полный цикл автоматической торговли.
+			</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>
+				Необходимо создать шлюз <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference> к торговой системе (в данном случае был выбран
+				<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>), и передать его в <codeEntityReference>T:StockSharp.MatLab.MatLabTrader</codeEntityReference>.
+				Последний нужен для того, чтобы подписаться на события получения маркет-данных (напрямую к событиям
+				<codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference> в <token>matlab</token> подписаться невозможно):
+			</para>
+			  <code>
+trader = StockSharp.MatLab.MatLabTrader(StockSharp.Quik.QuikTrader);
+
+addlistener(trader, 'Connected', @traderConnected);
+addlistener(trader, 'NewSecurities', @newSecurities);
+addlistener(trader, 'SecuritiesChanged', @securitiesChanged);
+addlistener(trader, 'NewPortfolios', @newPortfolios);
+addlistener(trader, 'NewOrders', @newOrders);
+addlistener(trader, 'OrdersChanged', @ordersChanged);
+addlistener(trader, 'NewMyTrades', @newMyTrades);
+addlistener(trader, 'NewPositions', @newPositions);
+addlistener(trader, 'PositionsChanged', @positionsChanged);
+addlistener(trader, 'ProcessDataError', @processError);
+addlistener(trader, 'ConnectionError', @processError);
+			  </code>
+          </content>
+        </step>
+		  <step>
+			  <content>
+				  <para>
+					  Обработка основных событий <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>:
+				  </para>
+				  <code>
+function traderConnected(sender, args)
+global trader;
+StartExport(trader.RealTrader);
+
+function processError(sender, args)
+disp(char(args.Error.message))
+
+function newSecurities(sender, args)
+global hGui;
+
+set(hGui.selectSecurityBtn, 'Enable', 'on')
+
+data = cellstr(get(hGui.secListBox, 'String'));
+
+for i = 1 : args.Securities.Length
+	data = [data; char(args.Securities(i).Id)];
+end
+
+set(hGui.secListBox, 'string', data);
+				  </code>
+			  </content>
+		  </step>
+		  <step>
+			  <content>
+				  <para>
+					  Запрос получения обновлений (сделки, стаканы) по выбранному инструменту:
+				  </para>
+				  <code>
+function selectSecurityBtn_Callback(hObject, eventdata, handles)
+securityIds = get(handles.secListBox, 'String');
+selectedSecurityId = securityIds{get(handles.secListBox, 'Value')};
+
+global trader;
+global selectedSecurity;
+
+securities = NET.invokeGenericMethod('System.Linq.Enumerable', 'ToArray', ...
+{'StockSharp.BusinessEntities.Security'}, trader.RealTrader.Securities);
+
+for i = 1 : securities.Length
+	security = securities(i);
+
+	if (strcmp(char(security.Id), selectedSecurityId) == 1)
+		selectedSecurity = security;
+		RegisterSecurity(trader.RealTrader, security);
+		RegisterTrades(trader.RealTrader, security);
+		RegisterMarketDepth(trader.RealTrader, security);
+		set(handles.newOrderBtn, 'Enable', 'on')
+		break;
+	end
+end
+				  </code>
+			  </content>
+		  </step>
+		  <step>
+			  <content>
+				  <para>
+					  Отправка заявки на регистрацию:
+				  </para>
+				  <code>
+function newOrderBtn_Callback(hObject, eventdata, handles)
+global trader;
+global selectedSecurity;
+
+order = StockSharp.BusinessEntities.Order();
+order.Security = selectedSecurity;
+order.Price = str2double(get(handles.priceTxt, 'String'));
+order.Volume = str2double(get(handles.volumeTxt, 'String'));
+
+if (get(handles.isBuyChBox, 'Value') == 1)
+	order.Direction = StockSharp.BusinessEntities.OrderDirections.Buy;
+else
+	order.Direction = StockSharp.BusinessEntities.OrderDirections.Sell;
+end
+
+portfolios = NET.invokeGenericMethod('System.Linq.Enumerable', 'ToArray', ...
+{'StockSharp.BusinessEntities.Portfolio'}, trader.RealTrader.Portfolios);
+
+portfolioNames = get(handles.portfoliosCombo, 'String');
+portfolioName = portfolioNames{get(handles.portfoliosCombo, 'Value')};
+
+for i = 1 : portfolios.Length
+	portfolio = portfolios(i);
+
+	if (strcmp(char(portfolio.Name), portfolioName) == 1)
+		order.Portfolio = portfolio;
+		break;
+	end
+end
+
+RegisterOrder(trader.RealTrader, order);
+				  </code>
+			  </content>
+		  </step>
+		  <step>
+			  <content>
+				  <para>
+					  В итоге должно получиться следующее:
+				  </para>
+				  <mediaLink>
+					  <image placement="center" xlink:href="matlab" />
+				  </mediaLink>
+			  </content>
+		  </step>
+      </steps>
+    </procedure>
+    <relatedTopics>
+    </relatedTopics>
+  </developerWalkthroughDocument>
+</topic>

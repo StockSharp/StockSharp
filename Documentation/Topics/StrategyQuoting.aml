@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="24250c24-029c-4dbc-bc8b-4afde645e483" revisionNumber="0">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+	<introduction>
+	  <para>
+		Алгоритм котирования позволяет контролировать позицию выставленных заявок в стакане. Необходимость в такой функциональности возникает тогда,
+		когда необходимо быстро открывать и закрывать позиции по выгодным ценам. Также, благодаря быстрому мониторингу стакана, котирование позволяет
+		реализовывать скальперские приводы на сверх малых тайм-фреймах.
+	  </para>
+	  <para>
+		Также, котирование позволяет эмулировать рыночные заявки на бирже <token>forts</token>, где тип заявок
+		<codeEntityReference qualifyHint="true">F:StockSharp.BusinessEntities.OrderTypes.Market</codeEntityReference> не поддерживается.
+	  </para>
+	</introduction>
+
+    <prerequisites>
+      <content>
+		  <para>
+			  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Дочерние стратегии</link>
+		  </para>
+		  <para>
+			  <link xlink:href="ad145f75-a2d4-4766-af60-79489b84846c">Экспорт стакана</link>
+		  </para>
+      </content>
+    </prerequisites>
+    
+    <!-- One or more procedure or section elements -->
+
+	<section>
+      <!--<title>Optional section</title>-->
+
+      <content>
+		<para>
+		  Для реализации котирования в <token>stocksharp</token> входит класс <codeEntityReference>T:StockSharp.Algo.Strategies.QuotingStrategy</codeEntityReference>.
+		  Это базовый абстрактный класс для всех производных алгоритмов:
+		</para>
+		  <list class="bullet">
+			<listItem>
+			  <codeEntityReference>T:StockSharp.Algo.Strategies.MarketQuotingStrategy</codeEntityReference> – данный алгоритм мониторит лучшую котировку
+			  (<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestBid</codeEntityReference> для покупки
+			  или <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestAsk</codeEntityReference> для продажи),
+			  выставляя свои заявки по этим же ценам, или чуть лучше, в зависимости от значения
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.MarketQuotingStrategy.PriceOffset</codeEntityReference>.
+			  Дополнительно, в <codeEntityReference>T:StockSharp.Algo.Strategies.MarketQuotingStrategy</codeEntityReference> входит параметр
+			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.MarketQuotingStrategy.PriceType</codeEntityReference>, который контролирует
+			  положение передвижения заявки в спреде:
+			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Following</codeEntityReference> – алгоритм смотрит лучшую котировку,
+			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Opposite</codeEntityReference> – лучшую противоположную котировку и
+			  <codeEntityReference qualifyHint="true">F:StockSharp.Algo.MarketPriceTypes.Middle</codeEntityReference> – алгоритм будет ставить заявку в середину спреда.
+			  Данный параметр влияет на то, как скоро будет удовлетворена заявка.
+			</listItem>
+			<listItem>
+			  <codeEntityReference>T:StockSharp.Algo.Strategies.BestByVolumeQuotingStrategy</codeEntityReference> – смотрит, какой объем стоит перед котируемой заявкой,
+			  и если он превышает допустимую норму <codeEntityReference>P:StockSharp.Algo.Strategies.BestByVolumeQuotingStrategy.VolumeExchange</codeEntityReference>, то заявка передвигается на край спреда.
+			</listItem>
+			<listItem>
+			  <codeEntityReference>T:StockSharp.Algo.Strategies.BestByPriceQuotingStrategy</codeEntityReference> – смотрит, насколько далеко котируемая заявка ушла от лучшей котировки.
+			  Если был превышен допустимый интервал <codeEntityReference>P:StockSharp.Algo.Strategies.BestByPriceQuotingStrategy.BestPriceOffset</codeEntityReference>, то заявка передвигается на край спреда.
+			</listItem>
+			<listItem>
+			  <codeEntityReference>T:StockSharp.Algo.Strategies.LastTradeQuotingStrategy</codeEntityReference> – аналогичен <codeEntityReference>T:StockSharp.Algo.Strategies.MarketQuotingStrategy</codeEntityReference> за исключением того, что мониторится не стакан,
+			  а последняя сделка <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.LastTrade</codeEntityReference>.
+			</listItem>
+			  <listItem>
+				  <codeEntityReference>T:StockSharp.Algo.Strategies.LevelQuotingStrategy</codeEntityReference> – котирование по заданному уровню в стакане.
+			  </listItem>
+			  <listItem>
+				  <codeEntityReference>T:StockSharp.Algo.Strategies.LimitQuotingStrategy</codeEntityReference> – котирование по лимитированной цене.
+			  </listItem>
+		  </list>
+      </content>
+    </section>
+
+    <procedure>
+      <title>Добавление в SampleSMA котирование</title>
+
+	  <steps class="ordered">
+        <step>
+          <content>
+            <para>
+				Для того, чтобы алгоритм скользящей средней, описанный в разделе <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Торговые стратегии</link>, 
+				стал работать совместно с котировщиком, перед началом работы необходимо включить экспорт стакана по <token>dde</token>:</para>
+			  <code language="C#">if (!_isLkohDdeStarted)
+{
+	// для алгоритма котирования необходимо включить экспорт стакана
+	_trader.RegisterMarketDepth(lkoh);
+	_isLkohDdeStarted = true;
+}</code>
+          </content>
+        </step>
+		  <step>
+			  <content>
+				  <para>Необходимо заменить код в классе SmaStrategy c:</para>
+<code language="C#">// регистрируем ее
+base.RegisterOrder(order);</code>
+		<para>
+		  на:
+		</para>
+		<code language="C#">var strategy = new MarketQuotingStrategy(order, new Unit());
+base.ChildStrategies.Add(strategy);</code>
+		<!--para>
+		  После этого <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> выполнит до конца метод SmaStrategy.OnProcess
+		  и уже после этого будет вызывать другой метод – <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.QuotingStrategy.OnProcess</codeEntityReference>.
+		  По завершению его работы (когда котируемая стратегия перейдет в статус <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessStates.Stopped</codeEntityReference>),
+		  <codeEntityReference>T:StockSharp.Algo.Strategies.RealTimeStrategyManager</codeEntityReference> возобновит работу с SmaStrategy.
+		</para-->
+			  </content>
+		  </step>
+      </steps>
+    </procedure>
+    
+    <nextSteps>
+      <content>
+        <para>
+		  <link xlink:href="63952fce-6e43-4427-985a-1654e8d9cfc1">Тейк-профит и стоп-лосс</link>
+		</para>
+      </content>
+    </nextSteps>
+    
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+                
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+    
+  </developerWalkthroughDocument>
+</topic>

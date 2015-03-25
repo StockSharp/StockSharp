@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6f3be323-80bb-4823-9d27-8060c238af32" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.BaseTrader.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
+		но с указанием стоп-условия 
+		<codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECOrderCondition</codeEntityReference>
+		и типа заявки 
+		<codeEntityReference qualifyHint="false">F:StockSharp.BusinessEntities.OrderTypes.Conditional</codeEntityReference>:</para>
+        
+        <code language="C#">
+        <![CDATA[
+private void Send_Click(object sender, RoutedEventArgs e)
+{
+    var stopOrder = new Order
+    {
+        Portfolio = Portfolio.SelectedPortfolio,
+        Type = OrderTypes.Conditional,
+        Volume = Volume.Text.To<decimal>(),
+        Price = Price.Text.To<decimal>(),
+        Security = Security,
+        Direction = IsBuy.IsChecked == true ? OrderDirections.Buy : OrderDirections.Sell,
+        ExpiryDate = IsOneDay.IsChecked == true ? DateTime.Today : DateTime.MaxValue,
+        StopCondition = new OECOrderCondition(StopMarket ? OECStopType.StopMarket : OECStopType.StopLimit, StopPrice.Text.To<decimal>())
+    };
+
+    MainWindow.Instance.Trader.RegisterOrder(stopOrder);
+    DialogResult = true;
+}
+		]]>
+		</code>		
+
+		<para>Для работы с условиями стоп-заявок адаптер <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECTrader</codeEntityReference> предоставляет специальный класс 
+		<codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECOrderCondition</codeEntityReference>. Данным классом поддерживаются следующие типы стоп-заявок:</para>
+
+		<list class="bullet">
+			<listItem>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OEC.OECStopType.StopMarket</codeEntityReference> – после достижения стоп-цены автоматически выставляется рыночная заявка.</para>
+			</listItem>
+			<listItem>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OEC.OECStopType.StopLimit</codeEntityReference> – после достижения стоп-цены автоматически выставляется лимитная заявка.</para>
+			</listItem>
+			<listItem>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OEC.OECStopType.TrailingStopMarket</codeEntityReference> – cтоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
+				оставаясь на заранее заявленном интервале от рыночной цены. В случае, если рынок достигает стоп-цены, автоматически выставляется рыночная заявка.</para>
+			</listItem>
+			<listItem>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OEC.OECStopType.TrailingStopLimit</codeEntityReference> – 
+				Как <codeEntityReference qualifyHint="false">F:StockSharp.OEC.OECStopType.TrailingStopMarket</codeEntityReference>, но при достижении стоп-цены выставляется лимитная заявка.</para>
+			</listItem>
+		</list>
+	</introduction>
+
+	</developerWalkthroughDocument>
+</topic>

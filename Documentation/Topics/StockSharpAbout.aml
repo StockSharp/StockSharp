@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" revisionNumber="0">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<summary>
+			<para>
+				<token>stocksharp</token> - это бесплатная платформа для программирования торговых роботов на <token>dotnet</token> (например, на языке
+				<token>csharp</token>). <token>stocksharp</token> максимально скрывает технические детали. Трейдер, программирующий на <token>stocksharp</token>,
+				сосредоточен только на ключевых моментах - самих торговых действиях.
+			</para>
+			<!--para>
+				В качестве шлюза к торговой системе используются реализации интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>.
+				Детальное описание схемы работы <token>stocksharp</token> написано в разделе <link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7">Архитектура StockSharp</link>.
+			</para-->
+		</summary>
+		
+		<procedure>
+			<title>Преимущества и возможности библиотеки:</title>
+				<steps class="ordered">
+					<step>
+						<content>
+						Используется современная платформа <token>dotnet</token> с мощной и быстрой функциональностью. Нет ограничений, которые
+						присутствуют в скриптовых языках (таких как AFL, QPILE и т.д.), а так же дает значительный прирост в производительности.
+						</content>
+					</step>
+					
+					<step>
+						<content>
+						Доступ как к <link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5">российским</link>, так и к
+						<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">зарубежным</link> биржам.
+						</content>
+						<!--content>
+						Быстрая обработка алгоритмов стратегий. Программа компилируется в машинные инструкции (что дает большой прирост в производительности).
+						Нет синтетических секундных задержек при выполнении алгоритма (основное ограничение практически всех встроенных языков в таких
+						программах как WealthLab, AmiBroker и т.д.).
+						</content-->
+					</step>
+					
+					<step>
+						<content>
+						Запуск нескольких сотен одновременно работающих алгоритмов по различным инструментам и тайм-фреймам
+						(скорость зависит только от мощности компьютера, а не от ограничения внешней программы).
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+						<link xlink:href="febbcf31-63d1-449d-847e-92fd8424f926">Тестирование</link> стратегий как на свечках, так и на основе тиковых сделок и стаканах для значительно точных результатов.
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+						Прямой доступ к бирже <token>rts</token> через <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza2</link>
+						с возможностью создавать скальперские или HFT стратегии.
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+					  	<link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780">Переподключение</link> в случае разрыва связи, а также поддержание работоспособности
+					  	программ в случае аварийно неустойчивого соединения.
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+					  	Готовые стратегии. Например, <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link> одновременно множества заявок для покупки-продажи по лучшим
+					  	ценам для создания стратегий типа Market Making (ММ).
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+						Переносимость от одной торговой программы к другой без изменения кода. Например, с <token>quik</token> на <token>smartcom</token>, наоборот,
+						с <token>alfa</token> на <token>plaza</token> и т.д.. Подробнее, в разделе <link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7" />.
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+						Специальная программа <token>hydra</token> скачивания исторических данных для тестирования стратегий.
+						</content>
+					</step>
+					
+					<step>
+						<content>
+						Анализ стратегий в среде <link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0">MatLab</link>.
+						</content>
+					</step>
+				</steps>
+		</procedure>
+	
+		<relatedTopics>
+			<link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7">Архитектура StockSharp</link>
+	
+			<!--link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636">Quik</link>
+			<link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc">SmartCOM</link>
+			<link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391">Альфа-Директ</link>
+			<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza II</link>
+			<link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981">OEC Trader</link>
+
+			<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4">Управление заявками</link>
+
+			<link xlink:href="7a8a9518-6270-4cfe-a829-fa6c40e5fabd">Хранение данных</link>
+
+			<link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>
+			<link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Индикаторы</link>
+			<link xlink:href="82437493-cd53-41eb-b756-d913af0f4f8e">Логирование</link>
+			<link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Стратегии</link>
+			<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link>
+			<link xlink:href="8ab11b62-a6d0-4507-a101-1bd63d9933c0">Торговые алгоритмы</link>
+			<link xlink:href="b85270c7-ee7f-4dbc-a0a3-aac466b75f98">Опционы</link>
+			
+			<link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780">Переподключение</link>
+			<link xlink:href="16070956-6e63-4cef-b6a8-6eb42372c424">Биржевое время</link>
+			<link xlink:href="7387c108-01ed-48f2-81f6-653c71d1e628">Платформо-независимость</link>
+			<link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d">BasketTrader</link>
+			<link xlink:href="a8486498-a2d8-4924-b009-8b93138b268a">Арифметические операции</link>
+			<link xlink:href="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92">Пользовательский интерфейс (GUI)</link>
+			<link xlink:href="aca28ee6-5c0c-47ee-a7e6-fe295e001be7">Конвертация валют</link>
+			<link xlink:href="4efd0545-a100-44ed-bdf5-4588e5665199">Примеры</link-->
+		</relatedTopics>
+
+	</developerConceptualDocument>
+</topic>

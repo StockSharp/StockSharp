@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7d845e99-6bde-437e-b7f4-059be0438894" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+    		Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать "Дополнительно" и в выпадающем меню выбрать "Настройки".
+    	</para>
+		<mediaLink>
+        	<image placement="center" xlink:href="hydra_settings" />
+		</mediaLink>
+      
+      <list class="bullet">
+        <listItem>
+          <legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим(одна <token>hydra</token> качает данные, другие качают с нее).
+		</listItem>
+        <listItem>
+          <legacyBold>Анонимно</legacyBold> - анонимно, настройка для HydraServer.
+		</listItem>  
+        <listItem>
+          <legacyBold>Биржевая площадка</legacyBold> - показывать колонку "Лот".
+		</listItem>	
+        <listItem>
+          <legacyBold>Лот</legacyBold> - показывать колонку "Лот".
+		</listItem>	
+        <listItem>
+          <legacyBold>Шаг цены</legacyBold> - показывать колонку "Шаг цены".
+		</listItem>			
+        <listItem>
+          <legacyBold>Автостарт</legacyBold> - автостарт скачивания котировок при запуске.
+		</listItem>
+        <listItem>
+          <legacyBold>Трей</legacyBold> - сворачивать в трей.
+		</listItem>
+        <listItem>
+          <legacyBold>Авто-стоп</legacyBold> - остановка работы по времени.
+		</listItem>		
+        <listItem>
+          <legacyBold>Время для Авто-стоп</legacyBold> - время для Авто-стоп.
+		</listItem>	
+      </list>		
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>Ниже перечислены события <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ITrader</codeEntityReference> связанные с заявками:</para>
+		
+		<list class="bullet">
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.NewOrders</codeEntityReference> - cобытие появления новых заявок.
+			</listItem>
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.OrdersCancelFailed</codeEntityReference> - cобытие об ошибках, связанных со снятием заявок.
+			</listItem>
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.OrdersChanged</codeEntityReference> - cобытие изменения состояния заявок (снята, удовлетворена).
+			</listItem>
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.OrdersRegisterFailed</codeEntityReference> - cобытие об ошибках, связанных с регистрацией заявок.
+			</listItem>
+			
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.NewStopOrders</codeEntityReference> - cобытие появления новых стоп-заявок.
+			</listItem>
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.StopOrdersCancelFailed</codeEntityReference> - cобытие об ошибках, связанных со снятием стоп-заявок.
+			</listItem>
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.StopOrdersChanged</codeEntityReference> - cобытие изменения состояния стоп-заявок.
+			</listItem>
+			<listItem>
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.StopOrdersRegisterFailed</codeEntityReference> - cобытие об ошибках, связанных с регистрацией стоп-заявок.
+			</listItem>
+		</list>
+
+		<para>
+			Отправка транзакций (регистрация, замена или снятие заявок) идёт в асинхронном режиме. Асинхронный режим позволяет торговой
+			программе не дожидаться подтверждения биржей принятия транзакции, продолжив дальше выполнять работу. Это сокращает время простоя программы, и увеличивает
+			скорость реагирования на изменения ситуации на рынке.
+		</para>
+		<para>
+			Чтобы узнать в программе, когда биржа присвоила заявке <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Id</codeEntityReference>,
+			необходимо подписатся на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.OrdersChanged</codeEntityReference>
+			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.StopOrdersChanged</codeEntityReference>).
+			Для определения неудачной регистрации используется событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.OrdersRegisterFailed</codeEntityReference>
+			(или для стоп-заявок <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.StopOrdersRegisterFailed</codeEntityReference>).
+		</para>
+		<alert class="caution">
+			<para>
+				Если при старте приложения из шлюза были переданы ранее зарегистрированные заявки, то они передаются все через события <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.NewOrders</codeEntityReference>,
+				независимо от их состояния (кроме состояния <codeEntityReference>F:StockSharp.BusinessEntities.OrderStates.Failed</codeEntityReference>). Это сделано потому, что событие
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.NewOrders</codeEntityReference> отражает факт появления новых заявок в программе, а не событие успешной
+				регистрации заявки.
+			</para>
+		</alert>
+	</introduction>
+    <relatedTopics>
+      <link xlink:href="6c09c760-1aee-4bfe-814c-db42d06b31ec">Асинхронный режим</link>
+      <link xlink:href="cbce846a-dd31-4baa-ba77-2bac3eb38b2f">Номер транзакции</link>
+    </relatedTopics>	
+    </developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="973860e9-8f2d-4035-98de-bb88b33b6751" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para><token>stocksharp</token> предусмотрена возможность построения кривых доходности (эквити) с целью дальнейшего анализа работы торгового робота.
+      Данные для кривой получаются с помощью класса 
+      <codeEntityReference qualifyHint="false">T:StockSharp.Algo.PnL.PnLManager</codeEntityReference>. Данный класс
+      производит рассчет текущего значения, оповещая робота об изменениях через событие 
+      <codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>.
+      </para>
+      
+      <para>
+      	Для расчета параметров кривой (максимальная просадка, коэффициент Шарпа и т.д.) используется 
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.StatisticManager</codeEntityReference>.
+      	Эти параметры хранятся в свойстве 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Statistics.StatisticManager.Parameters</codeEntityReference>.
+      	Каждый параметр реализует интерфейсы 
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IPnLStatisticParameter</codeEntityReference>, 
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.ITradeStatisticParameter</codeEntityReference>,      	
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IOrderStatisticParameter</codeEntityReference> или
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Statistics.IPositionStatisticParameter</codeEntityReference>.
+      	Если требуется особый параметр расчета, то необходимо реализовать один из этих интерфейсов и добавить параметр в 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Statistics.StatisticManager.Parameters</codeEntityReference>.
+      </para>
+      
+      <para>
+      	В разделе <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link> показано использование
+      	<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>
+      	применительно к <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">торговым стратегиям</link>:
+      </para>
+      <code language="C#">
+_strategy.PnLChanged += () =>
+{
+	var data = new EquityData
+	{
+		Time = _strategy.Trader.MarketTime,
+		Value = _strategy.PnL,
+	};
+
+	this.GuiAsync(() => _curveItems.Add(data));
+};      
+      </code>
+      <para>
+      	Менеджер статистики получается через свойство 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.StatisticManager</codeEntityReference>.
+      </para>
+      <para>
+      	При появлении новых данных, кривая будет отрисовываться на специальном графике <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference>.
+      	Чтобы начать рисовать кривую на данном графике, необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color)</codeEntityReference>.
+      	Полученная коллекция заполняется данными, которые передаются во время обработки события 
+      	<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>.
+      </para>
+      <para>
+      	График <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference> позволяет рисовать одновременно несколько кривых, чтобы иметь
+      	возможность их сравнивать по доходности друг с другом. Пример такого подхода показан в разделе <link xlink:href="24a5c734-199f-4090-943d-6324a04f335b">тестирования на истории (оптимизация)</link>.
+      </para>
+      <para>
+      	В разделе <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link> показано использование визуальной панели
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Xaml.StatisticParameterPanel</codeEntityReference>, которая позволяет отображать параметры 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.StatisticParameterPanel.Parameters</codeEntityReference>.
+      </para>
+    </introduction>
+    <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
+    <!-- One or more procedure or section with procedure -->
+    <!--procedure>
+      <title>Procedure title</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>First step</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Second step</para>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+    <section address="Section1">
+      <title>Optional section title</title>
+      <content>
+        <procedure>
+          <title>Procedure #2</title>
+          <steps class="ordered">
+            <step>
+              <content>
+                <para>First step</para>
+              </content>
+            </step>
+            <step>
+              <content>
+                <para>Second step</para>
+              </content>
+            </step>
+          </steps>
+        </procedure>
+      </content>
+    </section-->
+    <!-- Optional next steps info
+    <nextSteps>
+      <content><para>Next steps info goes here</para></content>
+    </nextSteps>
+    -->
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID">Link text</link>
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on CodePlex</linkText>
+          <linkAlternateText>Go to CodePlex</linkAlternateText>
+          <linkUri>http://shfb.codeplex.com</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerWalkthroughDocument>
+</topic>

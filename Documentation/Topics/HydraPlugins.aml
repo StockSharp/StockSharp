@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+      <para>
+		  Программа <token>hydra</token> построена с использованием подключаемых расширений в виде источников данных. Все стандартные источники являются
+		  такими же расширения, и их можно удалить из программы. Для этого нужно в подпапке <legacyItalic>Plugins</legacyItalic> в директории, где установлена
+		  <token>hydra</token> удалить нужное подключение, которое представлено в виде dll. Точно так же добавляются новые. Например, когда нужно добавить источник
+		  рыночных данных с других ресурсов, которые не входят стандартно. Ниже представлен процесс создания источника для <token>rts</token>, который входит
+		  стандартно.
+	  </para>
+		<alert class="note">
+			Все источники и сама программа <token>hydra</token> доступна в исходниках, и находится в дистрибутиве <token>stocksharp</token> в папке Hydra.
+		</alert>
+    </introduction>
+
+	  <procedure>
+		  <title>Этапы создание источника</title>
+		  <steps class="ordered">
+			  <step>
+				  <content>
+					  <para>
+						  Каждый источник должен реализовать интерфейс <codeEntityReference>T:StockSharp.Hydra.Core.IMarketDataSource</codeEntityReference>
+						  (или отнаследоваться от классов <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.BaseMarketDataSource</codeEntityReference> или
+						  <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.TraderMarketDataSource`1</codeEntityReference>):
+					  </para>
+<code language="C#">
+<![CDATA[
+	class RtsSource : BaseMarketDataSource
+	{
+		private RtsSettings _settings;
+		private RtsHistorySource _source;
+
+		protected override void ApplySettings(MarketDataSourceSettings settings, bool isNew)
+		{
+			_settings = new RtsSettings(settings);
+
+			_source = new RtsHistorySource(SecurityStorage) { DumpFolder = GetTempPath() };
+
+			if (isNew)
+			{
+				_settings.Offset = 3;
+				_settings.StartFrom = _source.MinAvaliableTime;
+				_settings.IsDownloadUsdRate = true;
+				_settings.UsdRateLastDate = FortsDailyData.UsdRateMinAvailableTime;
+			}
+		}
+
+		public override Uri Icon
+		{
+			get { return "rts_logo.png".GetResourceUrl(GetType()); }
+		}
+
+		public override MarketDataSourceSettings Settings
+		{
+			get { return _settings; }
+		}
+
+		public override bool IsSupportHistoricalData { get { return true; } }
+
+		public override void SaveSettings()
+		{
+			base.SaveSettings();
+
+			if (_source != null)
+				_source.DumpFolder = GetTempPath();
+		}
+
+		private string GetTempPath()
+		{
+			var tempPath = Path.Combine(_settings.StorageFolder, "TemporaryFiles");
+
+			if (!Directory.Exists(tempPath))
+				Directory.CreateDirectory(tempPath);
+
+			return tempPath;
+		}
+
+		public override string Name
+		{
+			get { return "RTS"; }
+		}
+
+		public override string Description
+		{
+			get { return "Источник предназначен для получения рыночных данных c FTP-сервера биржи ММВБ-РТС."; }
+		}
+	}
+]]>
+</code>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  Свойство <codeEntityReference qualifyHint="true">P:StockSharp.Hydra.Core.IMarketDataSource.Settings</codeEntityReference> используется
+						  для хранения настроек источника. Класс, возращаемый из данного свойства, должен быть наследником
+						  <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.MarketDataSourceSettings</codeEntityReference>:
+					  </para>
+					  <code language="C#">
+					  <![CDATA[
+[DisplayName("Настройки источника Rts")]
+private sealed class RtsSettings : MarketDataSourceSettings
+{
+	public RtsSettings(MarketDataSourceSettings settings)
+		: base(settings)
+	{
+	}
+
+	[Category("РТС")]
+	[DisplayName("Временной отступ")]
+	[Description("Временной отступ в днях от текущей даты, который необходим для предотвращения скачивания неполных данных за текущую торговую сессию.")]
+	[PropertyOrder(1)]
+	public int Offset
+	{
+		get { return ExtensionInfo["RtsOffset"].To<int>(); }
+		set { ExtensionInfo["RtsOffset"] = value; }
+	}
+
+	[Category("РТС")]
+	[DisplayName("Начальная дата")]
+	[Description("С какой даты начать скачивать данные.")]
+	[PropertyOrder(0)]
+	public DateTime StartFrom
+	{
+		get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
+		set { ExtensionInfo["StartFrom"] = value; }
+	}
+
+	[Category("РТС")]
+	[DisplayName("USD-RUR")]
+	[Description("Закачивать ли индикативный курс доллара США к российскому рублю.")]
+	[PropertyOrder(2)]
+	public bool IsDownloadUsdRate
+	{
+		get { return (bool)ExtensionInfo["IsDownloadUsdRate"]; }
+		set { ExtensionInfo["IsDownloadUsdRate"] = value; }
+	}
+
+	[Category("РТС")]
+	[DisplayName("Системные сделки")]
+	[Description("Закачивать ли только системные сделки.")]
+	[PropertyOrder(3)]
+	public bool IsSystemOnly
+	{
+		get { return (bool)ExtensionInfo["IsSystemOnly"]; }
+		set { ExtensionInfo["IsSystemOnly"] = value; }
+	}
+
+	[Browsable(true)]
+	public override bool AutoIntervalChange
+	{
+		get { return base.AutoIntervalChange; }
+		set { base.AutoIntervalChange = value; }
+	}
+}
+				]]>
+				</code>
+				</content>
+			  </step>
+			   <step>
+				  <content>
+					  <para>
+						  Завершающим этапом необходимо реализовать метод <codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseMarketDataSource.Load</codeEntityReference>,
+						  в котором реализуется логика скачивания маркет-данных. В случае с RtsTradeSource, вся логика находится в самом <token>stocksharp</token>
+						  и используется класс <codeEntityReference>T:StockSharp.Algo.History.Rts.RtsHistorySource</codeEntityReference>:
+					  </para>
+					  <code language="C#">
+					  <![CDATA[
+protected override void Load()
+{
+	// если фильтр по инструментам выключен (выбран инструмент все инструменты)
+	var allSecurity = this.GetAllSecurity();
+
+	var offset = TimeSpan.FromDays(_settings.Offset);
+
+	if ((_settings.StartFrom + offset) < DateTime.Today)
+	{
+		this.AddInfoLog("Старт с {0}.", _settings.StartFrom.ToShortDateString());
+
+		IDictionary<Security, IList<Trade>> trades = new Dictionary<Security, IList<Trade>>();
+		_source.LoadTrades(_settings.StartFrom, trades);
+
+		if (allSecurity == null)
+			trades = trades.Where(p => Securities.Contains(p.Key)).ToDictionary();
+
+		if (IsSupportHistoricalData && RedownloadMode)
+			DeleteTrades(trades.Select(t => t.Key).Distinct(), _settings.StartFrom);
+
+		SaveTrades(trades.ToDictionary(kv => kv.Key, kv => (IEnumerable<Trade>)kv.Value));
+
+		_settings.StartFrom += TimeSpan.FromDays(1);
+		SaveSettings();
+	}
+	else
+	{
+		this.AddInfoLog("Дата {0} вне диапазона.", _settings.StartFrom.ToShortDateString());
+
+		TryIncreaseInterval();
+	}
+
+	if (_settings.IsDownloadUsdRate && (_settings.UsdRateLastDate + offset) < DateTime.Today)
+	{
+		var secId = _source.SecurityIdGenerator.GenerateId("USDRUR", ExchangeBoard.Forts);
+		var usdRur = SecurityStorage.LoadBy("Id", secId);
+
+		if (usdRur == null)
+		{
+			usdRur = new Security
+			{
+				Id = secId,
+				Code = "USDRUR",
+				Name = "Курс USD-RUR",
+				Type = SecurityTypes.Index,
+				Class = string.Empty,
+				ExtensionInfo = new Dictionary<object, object>(),
+				Exchange = Exchange.Rts,
+				MinStepSize = 0.0001m,
+			};
+
+			SecurityStorage.Save(usdRur);
+
+			this.AddInfoLog("Создан USDRUR.");
+		}
+
+		this.AddInfoLog("Старт с {0} для {1}.", _settings.StartFrom.ToShortDateString(), usdRur.Id);
+
+		var rate = FortsDailyData.GetUsdRate(_settings.UsdRateLastDate, DateTime.Today - offset);
+
+		SaveTrades(usdRur, rate.Select(p => new Trade
+		{
+			Security = usdRur,
+			Price = p.Value,
+			Time = p.Key,
+		}).OrderBy(t => t.Time));
+
+		_settings.UsdRateLastDate = DateTime.Today - offset;
+		SaveSettings();
+	}
+}
+
+				]]>
+				</code>
+				</content>
+			  </step>
+		  </steps>
+	  </procedure>
+
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

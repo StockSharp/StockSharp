@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a2f51940-0932-432e-8255-433610cfd457" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>Для учета комиссий в торговом роботе используется Менеджер расчета комиссии 
+		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>.</para>
+		
+		<para>Тарифный план создается с помощью добавления соответсвующих правил 
+		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRule</codeEntityReference>,
+		на основе которых в дальнейшем и будет вестись расчет комиссий.</para>
+	</introduction>
+
+	<procedure>
+		<title>Созадание CommissionManager</title>
+			<steps class="ordered">
+				<step>
+					<content>
+						<para>Создать <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>:</para>
+						
+						<code language="C#">
+						<![CDATA[
+private CommissionManager _commissionManager = new CommissionManager();
+						]]>
+						</code>
+					</content>
+				</step>
+				
+				<step>
+					<content>
+						<para>Далее, необходимо создать правило:</para>
+						
+						<code language="C#">
+						<![CDATA[
+ CommissionRule commissionRule = new CommissionRule {Type = CommissionTypes.PerTradeVolume, Value = new Unit(1m)};
+						]]>
+						</code>
+					</content>
+				</step>
+				
+				<step>
+					<content>
+						<para>И добавить его в <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>:</para>
+						
+						<code language="C#">
+						<![CDATA[
+_commissionManager.Rules.Add(commissionRule);;
+						]]>
+						</code>
+					</content>
+				</step>				
+			</steps>
+	</procedure>
+	
+	<summary>
+		<para>Подсчет комиссии можно вести как по сделкам, так и по заявкам.</para>
+		<para>Для подсчета комиссии по сделке вызывается метод 
+		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessMyTrade(StockSharp.BusinessEntities.MyTrade)</codeEntityReference>,
+		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.MyTrade</codeEntityReference>.</para>
+		<para>Для подсчета комиссии по заявке вызывается метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Commissions.CommissionManager.ProcessOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
+		в который в качестве параметра передается <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.Order</codeEntityReference>.</para>
+		<para>Суммарное значение комиссии можно узнать через <codeEntityReference qualifyHint="false">P:StockSharp.Algo.Commissions.CommissionManager.Commission</codeEntityReference>.</para>
+	</summary>
+    
+    <summary>
+    	<para>Также готовые тарифные планы для многих популярных брокеров можно получить с сервера <token>stocksharp</token>
+    	с помощью <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRegistry</codeEntityReference>:</para>
+    </summary>
+    
+	<procedure>
+		<title>Получение тарифных планов</title>
+			<steps class="ordered">
+				<step>
+					<content>
+						<para>Создать <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRegistry</codeEntityReference>:</para>
+						
+						<code language="C#">
+						<![CDATA[
+private QuikTrader _trader;
+private CommissionRegistry _commissionRegistry;
+
+...
+
+_commissionRegistry = new CommissionRegistry(_trader, new Uri("http://stocksharp.com/services/commissionservice.svc"));
+						]]>
+						</code>
+					</content>
+				</step>
+				
+				<step>
+					<content>
+						<para>Создать <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>
+						и указать в нем тарифный план. Для примера возьмем первый из списка доступных:</para>
+						
+						<code language="C#">
+						<![CDATA[
+private QuikTrader _trader;
+private CommissionRegistry _commissionRegistry;
+private CommissionManager _commissionManager = new CommissionManager();
+
+...
+
+_commissionRegistry = new CommissionRegistry(_trader, new Uri("http://stocksharp.com/services/commissionservice.svc"));
+_commissionManager.CommissionProfile = _commissionRegistry.Get(_commissionRegistry.Names.First());
+						]]>
+						</code>
+					</content>
+				</step>
+			</steps>
+	</procedure>    
+    
+  </developerWalkthroughDocument>
+</topic>

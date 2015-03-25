@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>На текущий момент <token>stocksharp</token> поддерживает следующие западные коннекторы:</para>
+		<list class="ordered">
+			<listItem><codeEntityReference>T:StockSharp.OEC.OECTrader</codeEntityReference> для <token>OpenECry</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> для <token>IB</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> для <token>blackwood</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> для <token>iqfeed</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.ETrade.ETradeTrader</codeEntityReference> для <token>etrade</token></listItem>
+		</list>
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

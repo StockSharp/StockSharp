@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" revisionNumber="0">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	  <introduction>
+		<para>
+			  Архитектура <token>stocksharp</token> устроена таким образом, что торговые алгоритмы работают через реализацию специального интерфейса
+			  <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>. Это обеспечивает платформо-независимость, что дает ряд преимуществ:
+	    </para>
+		<list class="ordered">
+			<listItem>
+				Можно мигрировать с одной платформы на другую при техническом превосходстве одной из них (например, с <token>quik</token> на <token>smartcom</token>).
+				Особенно важен данный пункт, когда предполагается автоматизация достаточно большого количество процессов торговли.
+			</listItem>
+			<listItem>
+				При выходе новой функциональности нет необходимости переписывать код под новую версию. <token>stocksharp</token> следит за
+				нововведениями, и даст возможность использовать новую "фичу" привычным для <token>stocksharp</token> образом.
+			</listItem>
+			<listItem>
+				Проще найти ответ на технический вопрос, так как <token>stocksharp</token> покрывает сразу несколько торговых терминалов. Есть
+				возможность сравнить в единой среде какой терминал лучше подходит для задачи.
+			</listItem>
+			<listItem>
+				Если торговые программы разрабатываются для использования другими пользователями (например, на продажу), платформонезависимость
+				увеличивает количество клиентов за счет работы сразу на нескольких терминалах.
+			</listItem>
+			<listItem>
+				Проще поддерживать программу, так как используется одна общая торговая функциональность.
+			</listItem>
+		</list>
+		  <para>
+			  <mediaLink>
+					<image placement="center" xlink:href="platformindep" />
+			  </mediaLink>
+		  </para>
+				
+		  <para>Библиотека разделена на следующие основные блоки:</para>
+		<list class="bullet">
+			<listItem>
+				<codeEntityReference>N:StockSharp.BusinessEntities</codeEntityReference> - основные торговые объекты (инструмент, заявка, сделка и
+				т.д.). В том числе находится и само описание интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>.
+			</listItem>
+			
+			<listItem>
+				<codeEntityReference>N:StockSharp.Algo</codeEntityReference> - каркас для написания торговых стратегий (подробнее, <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Торговые стратегии</link>)
+				с автоматическим расчетом всех необходимых параметров (проскальзывание, позиция, прибыль-убыток и т.д.), работа со свечками и распознование
+				графических паттернов (подробнее, <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>), стратегии котирования заявок
+				по нескольким схемам (подробнее, <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">котирование</link>).
+				Дополнительно, в <codeEntityReference>N:StockSharp.Algo</codeEntityReference> входит ряд вспомагательных алгоритмов
+				(очистка стакана от своих заявок, вычисление рыночной цены, округление цены до шага цены по инструменту и т.д.), которые упрощают
+				создание торговых роботов.
+			</listItem>					
+			
+			<listItem>
+				<codeEntityReference qualifyHint="false">N:StockSharp.Xaml</codeEntityReference> - графические компоненты (график для отрисовки свечек, окно для логов, монитор работы стратегий и т.д.).
+			</listItem>
+			
+			<listItem>
+				<codeEntityReference qualifyHint="false">N:StockSharp.Logging</codeEntityReference> - специальный компоненты для сохранения отладочное информации. А так же оповещение
+				через внешние системы (email, sms, звуковым сигналом) в случае возникновения проблем у робота.
+			</listItem>
+		
+			<listItem>
+				Остальные блоки содержат реализацию коннекторов к одноименным торговым системам (например, <codeEntityReference>N:StockSharp.Quik</codeEntityReference> содержит реализацию коннектора
+				к <token>quik</token>).
+			</listItem>
+		</list>
+	  </introduction>
+  </developerWalkthroughDocument>
+</topic>

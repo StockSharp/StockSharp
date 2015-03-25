@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="d27245ae-abfd-4d6b-b8c4-d1a24a45116f" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+	  <introduction>
+		  <para>
+			  Тестирование на рыночных данных представляет собой торговлю с реальным подключением к бирже ("живые" котировки), но без реального выставления
+			  заявок на биржу. Все регистрируемые заявки перехватываются, и их исполнение эмулируется на основе рыночных стаканов. Такое тестирование может
+			  быть полезно, например, если разрабатывается торговый тренажер. Или необходимо проверить торговый алгоритм на краткосрочном отрезке времени с
+			  реальными котировками.
+		  </para>
+	  </introduction>
+
+	  <procedure>
+		  <title>Тестирование на рыночных данных стратегии скользящих средних из примеров SampleSMA и SampleSmartSMA</title>
+		  <steps class="ordered">
+			  <step>
+				  <content>
+					  <alert class="note">
+						  Пример находится в папке SampleRealTimeTesting. За основу был взят SampleSmartSMA.
+					  </alert>
+					  <para>
+						  Создание шлюза <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference> для тестирования на рыночных
+						  данных. Так как используется пример SampleSmartSMA, то создание шлюза для <token>smartcom</token>:
+					  </para>
+					  <code language="C#">_trader = new SmartTrader(this.Login.Text, this.Password.Password, this.Address.SelectedAddress);</code>
+					  <para>заменяется на:</para>
+					  <code language="C#"><![CDATA[_trader = new RealTimeEmulationTrader<SmartTrader>(new SmartTrader(this.Login.Text, this.Password.Password, this.Address.SelectedAddress));]]></code>
+				  </content>
+			  </step>
+
+			  <step>
+				  <content>
+					  <para>
+						  Пример выглядит и работает как оригинальный, но при этом не выставляет реальных заявок в <token>smartcom</token>:
+					  </para>
+					  <mediaLink>
+						  <image placement="center" xlink:href="samplesmartsma" />
+					  </mediaLink>
+				  </content>
+			  </step>
+		  </steps>
+	  </procedure>
+
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

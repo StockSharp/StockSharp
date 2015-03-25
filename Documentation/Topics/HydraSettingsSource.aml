@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Для настройки источников маркет-данных необxодимо нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline> у соответствующего источника.</para>
+      <para>На данный момент <token>hydra</token> поддерживает следующие источники:</para>
+      <list class="bullet">
+        <listItem>
+          <para>
+            <link xlink:href="bad33f32-1a13-4ba7-a335-326e6249d1be">Finam</link> - с сайта.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="0da19c49-1f11-455e-bbd5-c20e428e5149">RTS</link> - с FTP.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49">Micex</link> - прямое подключение к ММВБ.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="e81b1b7f-5c96-488e-a90d-e60cb8675977">FIX</link> - прямое подключение через FIX/FAST.
+          </para>
+        </listItem>        
+        <listItem>
+          <para>
+            <link xlink:href="53930a42-ae5a-45fc-b9cf-8295584bf8fc">Plaza II</link> - прямое подключение к бирже.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="065a9dec-12d0-49d0-be8c-9f9b48f6a899">Transaq</link> - подключение черезе Transaq API.
+          </para>
+        </listItem>        
+        <listItem>
+          <para>Из терминалов:</para>
+          <para><link xlink:href="2a908a19-0272-48e1-b143-df7ff9e2607c">Альфа-Директ</link></para>
+          <para><link xlink:href="54a1e95e-ea39-4322-9613-e74859a3a596">Quik</link></para>
+          <para><link xlink:href="1cca5a33-e5ab-434e-bfed-287389fea2eb">SmartCom</link></para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="f9e23239-7587-41ad-9644-c6df8e467c38">IQFeed</link> - западного источника маркет-данных.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="89a8b34c-63cf-4623-bbb7-90251d53e8e6">Blackwood(Fusion)</link> - западного брокера Blackwood(Fusion).
+          </para>
+        </listItem>        
+        <listItem>
+          <para>
+            <link xlink:href="bcb8050d-d330-4071-affc-b6ed5639e1fb">Interactive Brokers</link> - западного брокера Interactive Brokers.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="0b962432-d81d-4646-a818-9fa7093cbe4f">LMAX</link> - западного брокера LMAX.
+          </para>
+        </listItem>        
+        <listItem>
+          <para>
+            <link xlink:href="4d84a1e0-fe23-4b14-8323-c5f68f117cc7">OpenECry</link> - западного брокера OpenECry.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="184da0f9-29db-4397-8497-1ed4c8f7ea0d">UX</link> - с украинской биржи.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f">HydraServer</link> - с другой запущенной программы <token>hydra</token>.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="53c15f3a-4320-422d-850a-22ef6c90d76b">ЛЧИ</link> - ход торгов на конкурсе ЛЧИ (все года).
+          </para>
+        </listItem>        
+      </list>
+    </introduction>
+  </developerWalkthroughDocument>
+</topic>

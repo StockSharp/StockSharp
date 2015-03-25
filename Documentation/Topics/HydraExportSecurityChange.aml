@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_security_change" />
+      </mediaLink>
+      <para>
+      	Также можно выбрать какие именно типы изменений должны экспортироваться. Для этого надо нажать на кнопку "Доступные типы изменений" и в выпадающем окне выбрать нужные:
+      </para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_security_change_selected" />
+      </mediaLink>      
+      <para>
+			Найденные изменения можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Последний формат конфигурируется через файл 
+			<legacyItalic>txt_export_securitychanges.st</legacyItalic>. Данный файл с помощью специального преобразования трансформирует сделки в txt формат.
+		</para>
+    </introduction>
+  </developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
+      <mediaLink>
+        <image placement="center" xlink:href="hydra_export_depth" />
+      </mediaLink>
+      <alert class="note">
+        <para>Стаканы могут быть созданы из файлов ордер лога. Для этого надо поставить соответствующую галочку.</para>
+      </alert>
+      <para>
+			Найденные стаканы можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Последний формат конфигурируется через файл 
+			<legacyItalic>txt_export_depths.st</legacyItalic>. Данный файл с помощью специального преобразования трансформирует сделки в txt формат.
+		</para>
+    </introduction>
+  </developerWalkthroughDocument>
+</topic>

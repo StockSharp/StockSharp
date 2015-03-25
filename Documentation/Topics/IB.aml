@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>Для написания торговых роботов для <token>IB_external</token> необходимо использовать <codeEntityReference qualifyHint="false">T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference>. 
+		Механизм взаимодействия показан на данном рисунке:</para>
+		
+		<mediaLink><image placement="center" xlink:href="IBTrader"/></mediaLink>
+		
+		<para>Как видно из рисунка, взаимодействует происходит через терминал <token>IB_TWS</token> или <token>IB_Gate</token>, которые должны быть заранее установлены и настроены.</para>
+	</introduction>
+
+	</developerWalkthroughDocument>
+</topic>

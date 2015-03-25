@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>Задача - повторяющееся действие в определенное время.</para>
+    	<para>Для того чтобы просмотреть список задач, необходимо в левой панели выбрать соответсвующий пунк. 
+    	Работа с задачами идет точно также как и с источниками - задачу можно добавит, удалить, редактировать, включить/выключить.</para>
+    	<para>На теущий момент в <token>hydra</token>  доступны следующие задачи:</para>
+    	
+      <list class="bullet">
+        <listItem>
+          <para>
+            Экспорт свечек - задача предназначена для экспорта свечек в txt формат.
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+            ОрдерЛог в свечки - задача предназначена для конвертации ОрдерЛога в ТФ свечки.
+          </para>
+        </listItem>
+      </list> 
+    </introduction>
+  </developerWalkthroughDocument>
+</topic>

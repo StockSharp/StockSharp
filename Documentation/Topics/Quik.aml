@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" revisionNumber="0">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+		  <para>
+			  Для написания торговых роботов под <token>quik_external</token> необходимо использовать <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>.
+			  Механизм взаимодействия показан на данном рисунке:
+		  </para>
+		  <para>
+			  <mediaLink>
+				  <image placement="center" xlink:href="quiktrader" />
+			  </mediaLink>
+		  </para>
+		  <para>
+			  На рисунке показана связь по <token>dde</token>. <token>dde</token> - это технология самой быстрой передачи данных,
+			  которую поддерживает <token>quik_external</token>. Преимущество <token>dde</token> в том, что она умеет максимально быстро передавать
+			  большие объемы данных. Например, это полезно при передаче данных из таблицы всех сделок, когда в секунду может появляться до сотни сделок.
+		  </para>
+    </introduction>
+
+    <!--<section>
+      <title>A topic section</title>
+
+      <content>
+        <para>Some topic content</para>
+      </content>
+    </section>-->
+
+    <relatedTopics>
+		<link xlink:href="5c13da7b-b6e4-4fd4-958a-66c93c58b941">Настройка Quik</link>
+		<link xlink:href="32bb7203-202c-44f7-a6c4-79791c690a3a">Verifier</link>
+		<link xlink:href="b6fea084-f43c-4eb7-ab63-ad3031d748a5">Создание первой стратегии</link>
+		<link xlink:href="6c09c760-1aee-4bfe-814c-db42d06b31ec">Асинхронный режим</link>
+		<link xlink:href="ad145f75-a2d4-4766-af60-79489b84846c">Экспорт стакана</link>
+		<link xlink:href="4261879e-9bb3-482c-9fc5-27ecb07bdf5e">Экспорт дополнительных колонок</link>
+		<link xlink:href="7d73f7bf-ae8b-4d76-9895-cffb6342203f">Экспорт произвольных таблиц</link>
+		<!--<link xlink:href="448078e0-339b-4817-a97a-210b1ad2966f">Модификация стандартных таблиц</link>-->
+		<link xlink:href="0b0bd6e0-7ddf-407d-9e03-a218796163af">Строка транзакции</link>
+		<link xlink:href="a82865dd-98ed-4579-8f48-dd8f806c39e7">Стоп-заявки</link>
+		<link xlink:href="9fb00dd4-4f0a-42a9-ab0f-9946b7acf6fe">Работа с несколькими Quik-ами</link>
+		<link xlink:href="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1">Включение и выключение Quik</link>
+		<link xlink:href="a616c5a8-227a-4fe9-869c-d32af3e62710">Управление окном Quik</link>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+        
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

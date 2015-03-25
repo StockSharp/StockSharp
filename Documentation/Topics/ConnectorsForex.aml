@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+		<para>На текущий момент <token>stocksharp</token> поддерживает следующие Forex коннекторы:</para>
+		<list class="ordered">
+			<listItem><codeEntityReference>T:StockSharp.LMAX.LmaxTrader</codeEntityReference> для <token>lmax</token></listItem>
+		</list>
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

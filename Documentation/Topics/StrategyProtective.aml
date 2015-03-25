@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="63952fce-6e43-4427-985a-1654e8d9cfc1" revisionNumber="0">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+      <para>
+		С помощью подхода <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">дочерних стратегий</link> и использования
+		<codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference> в <token>stocksharp</token> реализован механизм
+		автоматической защиты позиции через стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference>
+		и <codeEntityReference>T:StockSharp.Algo.Strategies.StopLossStrategy</codeEntityReference>. Данные стратегии имеют ряд преимуществ перед обычными
+		стоп заявками:
+	  </para>
+	  	<list class="ordered">
+	  		<listItem>
+	  			<para>Защитные стратегии не выставляют заявки до тех пор, пока не наступит условие. Размер депозита под заявки при этом не блокируются брокером.</para>
+	  		</listItem>
+	  		<listItem>
+	  			<para>Стратегии платформо-независимые, а значит будут работать через любого брокера вне зависимости от их технологии.
+	  			Стоп-заявки же, условия которых задаются через <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Condition</codeEntityReference>,
+				эмулируются платформами <token>quik</token>, <token>smartcom</token> и т.д. самостоятельно, и их логика привязана к брокеру.</para>
+	  		</listItem>
+	  		<listItem>
+	  			<para>Защитные стратегии могут работать при прямом подключении к биржам.</para>
+	  		</listItem>
+	  		<listItem>
+	  			<para>Автоматическое отслеживание частичного или полного закрытия защищаемой позиции (с последующим снятием стопов). А также переворот
+	  			позиции. Например, когда была длинная позиция, и она была перевернута в короткую. Стопы в этом случае нужно так же "перевернуть".</para>
+	  		</listItem>
+		</list>
+		
+		<alert class="warning">
+  			<para>Для правильной работы защитных стратегий, при использовании в качестве подключения <token>quik</token>, необходимо добавить доп. колонки
+  			<codeEntityReference qualifyHint="true">P:StockSharp.Quik.DdeSecurityColumns.MaxPrice</codeEntityReference> и 
+  			<codeEntityReference qualifyHint="true">P:StockSharp.Quik.DdeSecurityColumns.MinPrice</codeEntityReference>. И соответствующие колонки в <token>quik</token> таблицу "Инструменты".</para>
+  			<para>Подробнее - <link xlink:href="4261879e-9bb3-482c-9fc5-27ecb07bdf5e">Экспорт дополнительных колонок</link>.</para>
+		</alert>
+    </introduction>
+
+    <prerequisites>
+      <content>
+        <para>
+		  <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">Дочерние стратегии</link>
+		</para>
+		<para>
+			<link xlink:href="8c0327db-494a-4fe0-aba8-0d4b93dea60e">Событийная модель</link>
+		</para>
+      </content>
+    </prerequisites>
+    
+    <!-- One or more procedure or section elements -->
+
+    <procedure>
+      <title>Тейк-профит и Стоп-лосс</title>
+
+      <steps class="ordered">
+		  <step>
+			  <content>
+				  <para>
+					  В качестве примера разобрана регистрация заявки на покупку "по рынку" и последующая защита длинной позиции. Для этого создается
+					  правило, реагирующее на появление у заявки сделок (подробнее, в разделе <link xlink:href="8c0327db-494a-4fe0-aba8-0d4b93dea60e">Событийная модель</link>):
+				  </para>
+				  <code language="C#">
+public class MyStrategy : Strategy
+{
+	public void OpenPosition()
+	{
+		// создаем заявку для открытия длинной позиции
+		var longPos = this.BuyAtMarket();
+		
+		// регистрируем правило, отслеживающее появление новых сделок по заявке
+		longPos
+			.WhenNewTrades()
+			.Do(OnNewOrderTrades)
+			.Apply(this);
+		
+		// отправляем заявку на регистрацию
+		RegisterOrder(longPos);
+	}
+}
+					</code>
+			  </content>
+		  </step>
+        <step>
+          <content>
+          	<para>
+          		Чтобы защитить позицию необходимо использовать стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference>
+				или <codeEntityReference>T:StockSharp.Algo.Strategies.StopLossStrategy</codeEntityReference>. Если требуется одновременная защита с двух
+				сторон, то рекомендуется использовать <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStopLossStrategy</codeEntityReference>.
+				Данная стратегия автоматически изменяет объем одной из стратегий при частичной активации (например, при касании стоп-лосс уровня закрылась
+				лишь часть позиции, а затем рынок снова вернулся в безубыточную зону):
+          	</para>
+			<code language="C#"><![CDATA[private void OnNewOrderTrades(IEnumerable<MyTrade> trades)
+{
+	// для каждой сделки добавляем защитную пару стратегии
+	var protectiveStrategies = trades.Select(t =>
+	{
+		// выставляет тейк-профит в 40 пунктов
+		var takeProfit = new TakeProfitStrategy(t, 40);
+
+		// выставляет стоп-лосс в 20 пунктов
+		var stopLoss = new StopLossStrategy(t, 20);
+
+		return new TakeProfitStopLossStrategy(takeProfit, stopLoss);
+	});
+
+	ChildStrategies.AddRange(protectiveStrategies);
+}]]></code>
+          </content>
+        </step>
+      </steps>
+    </procedure>
+    
+    <section>
+      <title>Автоматическое закрытие и переворот позиции</title>
+
+      <content>
+        <para>
+        	Стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference> и
+        	<codeEntityReference>T:StockSharp.Algo.Strategies.StopLossStrategy</codeEntityReference> не отслеживают частичное закрытия позиции или ее переворот
+        	(например, позиция была закрыта руками в терминале и была открыта в противоположную сторону). Для того, чтобы автоматически отслеживать в роботе
+        	подобные ситуации, необходимо использовать <codeEntityReference>T:StockSharp.Algo.Strategies.AutoProtectiveStrategy</codeEntityReference>.
+        	Данная стратегия через поступающие в нее сделки (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})</codeEntityReference>)
+        	решает, что нужно сделать: защитить их (если идет открытие позиции или ее увеличение) или остановить защитные стратеии (если идет закрытие позиции или ее уменьшение).
+        	Также стратегия автоматически переворачивает защитные стратегии в случае переворота позиции (из длинной в короткую или из короткой в длинную).
+        </para>
+      </content>
+    </section>
+
+    <nextSteps>
+      <content>
+        <para>
+		  <link xlink:href="eeaa9b57-9108-4cbb-a9c1-e135eee35ae5">Отчеты</link>
+		</para>
+      </content>
+    </nextSteps>
+    
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+                
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+    
+  </developerWalkthroughDocument>
+</topic>

@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para>
+      	<token>stocksharp</token> стандартно предоставляет более 70 индикаторов технического анализа, что позволяет не создавать с нуля необходимый индикатор, а использовать
+      	уже готовый (или создать свой на основе существующих, как показано в разделе <link xlink:href="ec4c3abe-3779-4a5f-899c-697b049254d4">Собственный индикатор</link>). 
+      	Все базовые классы по работе с ииндикаторами находятся в пространстве имен
+      	<codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference>. Также в нем находятся все готовые инидкаторы, которые разделены по нескольким разделам: 
+      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Misc</codeEntityReference>, 
+      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Oscillator</codeEntityReference>,
+      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Trend</codeEntityReference>,
+      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Williams</codeEntityReference>.
+      </para>
+    </introduction>
+    <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
+    <!-- One or more procedure or section with procedure -->
+    <procedure>
+      <title>Подключение индикатора в робот</title>
+      <steps class="ordered">
+        <step>
+          <content>
+            <para>В самом начале нужно создать индикатор. Индикатор создается как и обычный .NET объект:</para>
+			<code language="C#"><![CDATA[var longSma = new SimpleMovingAverage { Length = 80 };]]></code>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Далее, необходимо заполнять его данными. Например, это может быть цена закрытия свечки:</para>
+            <code language="C#"><![CDATA[foreach (var candle in candles)
+	longSma.Process((DecimalIndicatorValue)candle.ClosePrice);]]></code>
+			<para>
+				Индикатор принимает на вход <codeEntityReference>T:StockSharp.Algo.Indicators.IIndicatorValue</codeEntityReference>. Некоторые из индикаторов
+				оперируют простым числом, как, например, <codeEntityReference>T:StockSharp.Algo.Indicators.Trend.SimpleMovingAverage</codeEntityReference>.
+				Другим требуются полностью свечка, как, например, <codeEntityReference>T:StockSharp.Algo.Indicators.Misc.MedianPrice</codeEntityReference>.
+				Поэтому входящие значения необходимо приводить или к <codeEntityReference>T:StockSharp.Algo.Indicators.DecimalIndicatorValue</codeEntityReference>
+				или к <codeEntityReference>T:StockSharp.Algo.Indicators.CandleIndicatorValue</codeEntityReference>. Результирующее значение индикатора
+				работает по тем же правилам, что и входящее значение.
+			</para>
+          </content>
+        </step>
+        <step>
+          <content>
+            <para>Для того, чтобы получить текущее значение индикатора, используется метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Indicators.IIndicatorValue.GetValue``1</codeEntityReference>:</para>
+			<code language="C#"><![CDATA[// вычисляем новое положение относительно друг друга
+var isShortLessThenLong = ShortSma.GetValue<decimal>(0) < LongSma.GetValue<decimal>(0);
+
+// если произошло пересечение
+if (_isShortLessThenLong != isShortLessThenLong)
+{
+	// если короткая меньше чем длинная, то продажа, иначе, покупка.
+	var direction = isShortLessThenLong ? OrderDirections.Sell : OrderDirections.Buy;
+
+	// создаем заявку
+	var order = this.CreateOrder(direction, Security.GetMarketPrice(direction), Volume);
+
+	// регистрируем заявку
+	RegisterOrder(order);
+
+	// запоминаем текущее положение относительно друг друга
+	_isShortLessThenLong = isShortLessThenLong;
+}]]></code>
+          </content>
+        </step>
+      </steps>
+      <!-- <conclusion>Optional conclusion</conclusion> -->
+    </procedure>
+    <!-- Optional additional procedure or section with procedure -->
+    <!--section address="Section1">
+      <title>Optional section title</title>
+      <content>
+        <procedure>
+          <title>Procedure #2</title>
+          <steps class="ordered">
+            <step>
+              <content>
+                <para>First step</para>
+              </content>
+            </step>
+            <step>
+              <content>
+                <para>Second step</para>
+              </content>
+            </step>
+          </steps>
+        </procedure>
+      </content>
+    </section-->
+    <!-- Optional next steps info
+    <nextSteps>
+      <content><para>Next steps info goes here</para></content>
+    </nextSteps>
+    -->
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID">Link text</link>
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on CodePlex</linkText>
+          <linkAlternateText>Go to CodePlex</linkAlternateText>
+          <linkUri>http://shfb.codeplex.com</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerWalkthroughDocument>
+</topic>
