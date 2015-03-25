@@ -79,7 +79,7 @@ namespace StockSharp.Xaml
 						.Owner(this)
 						.Error();
 
-			if (security.PriceStep == 0)
+			if (security.PriceStep == null)
 			{
 				mbBuilder.Text(LocalizedStrings.Str1546).Show();
 				return;

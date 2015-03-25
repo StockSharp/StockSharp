@@ -353,7 +353,7 @@ namespace StockSharp.Algo
 		{
 			security.CheckPriceStep();
 
-			return price.Round(security.PriceStep, security.Decimals,
+			return price.Round(security.PriceStep ?? 1m, security.Decimals ?? 0,
 				rule == ShrinkRules.Auto
 					? (MidpointRounding?)null
 					: (rule == ShrinkRules.Less ? MidpointRounding.AwayFromZero : MidpointRounding.ToEven)).RemoveTrailingZeros();
@@ -438,7 +438,7 @@ namespace StockSharp.Algo
 			if (position == null)
 				throw new ArgumentNullException("position");
 
-			return (position.CurrentValue / position.Security.VolumeStep).Abs();
+			return (position.CurrentValue / position.Security.VolumeStep ?? 1m).Abs();
 		}
 
 		/// <summary>
@@ -573,7 +573,7 @@ namespace StockSharp.Algo
 
 			var security = position.Security;
 
-			return currentPrice * position.CurrentValue * security.StepPrice / security.PriceStep;
+			return currentPrice * position.CurrentValue * security.StepPrice / security.PriceStep ?? 1;
 		}
 
 		/// <summary>
@@ -764,7 +764,7 @@ namespace StockSharp.Algo
 			if (depth == null)
 				throw new ArgumentNullException("depth");
 
-			return depth.Sparse(depth.Security.PriceStep);
+			return depth.Sparse(depth.Security.PriceStep ?? 1m);
 		}
 
 		/// <summary>
@@ -1994,6 +1994,10 @@ namespace StockSharp.Algo
 				ExternalId = criteria.SecurityId.ToExternalId(),
 				Board = criteria.SecurityId.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(criteria.SecurityId.BoardCode),
 				ShortName = criteria.ShortName,
+				Decimals = criteria.Decimals,
+				PriceStep = criteria.PriceStep,
+				VolumeStep = criteria.VolumeStep,
+				Multiplier = criteria.Multiplier,
 				OptionType = criteria.OptionType,
 				Strike = criteria.Strike,
 				BinaryOptionType = criteria.BinaryOptionType,
@@ -2003,18 +2007,6 @@ namespace StockSharp.Algo
 					? null
 					: connector.SecurityIdGenerator.GenerateId(criteria.UnderlyingSecurityCode, criteria.SecurityId.BoardCode),
 			};
-
-			if (criteria.PriceStep != null)
-				security.PriceStep = criteria.PriceStep.Value;
-
-			if (criteria.Decimals != null)
-				security.Decimals = criteria.Decimals.Value;
-
-			if (criteria.VolumeStep != null)
-				security.VolumeStep = criteria.VolumeStep.Value;
-
-			if (criteria.Multiplier != null)
-				security.Multiplier = criteria.Multiplier.Value;
 
 			return security;
 		}

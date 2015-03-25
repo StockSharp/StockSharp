@@ -149,17 +149,17 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _priceStep = 0.01m;
+		private decimal? _priceStep;
 
 		/// <summary>
-		/// Минимальный шаг цены. По-умолчанию равно 0.01.
+		/// Минимальный шаг цены.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
 		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
 		[MainCategory]
 		[PropertyOrder(5)]
-		public decimal PriceStep
+		public decimal? PriceStep
 		{
 			get { return _priceStep; }
 			set
@@ -168,22 +168,21 @@ namespace StockSharp.BusinessEntities
 					return;
 
 				_priceStep = value;
-				Decimals = _priceStep.GetCachedDecimals();
 				Notify("PriceStep");
 			}
 		}
 
-		private decimal _volumeStep = 1;
+		private decimal? _volumeStep;
 
 		/// <summary>
-		/// Минимальный шаг объема. По-умолчанию равно 1.
+		/// Минимальный шаг объема.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str365Key)]
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
 		[PropertyOrder(6)]
-		public decimal VolumeStep
+		public decimal? VolumeStep
 		{
 			get { return _volumeStep; }
 			set
@@ -196,17 +195,17 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _multiplier = 1;
+		private decimal? _multiplier;
 
 		/// <summary>
-		/// Коэфициент объема между лотом и активом. По-умолчанию равен 1.
+		/// Коэфициент объема между лотом и активом.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str330Key)]
 		[DescriptionLoc(LocalizedStrings.LotVolumeKey)]
 		[MainCategory]
 		[PropertyOrder(7)]
-		public decimal Multiplier
+		public decimal? Multiplier
 		{
 			get { return _multiplier; }
 			set
@@ -219,11 +218,10 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private int _decimals = 2;
+		private int? _decimals;
 
 		/// <summary>
-		/// Количество знаков в цене после запятой. Автоматически выставляется при установке <see cref="Security.PriceStep"/>.
-		/// По-умолчанию равно 2-ум знакам.
+		/// Количество знаков в цене после запятой.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str547Key)]
@@ -231,7 +229,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		[PropertyOrder(7)]
 		//[ReadOnly(true)]
-		public int Decimals
+		public int? Decimals
 		{
 			get { return _decimals; }
 			set
@@ -501,10 +499,10 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _stepPrice = 1;
+		private decimal? _stepPrice;
 
 		/// <summary>
-		/// Стоимость шага цены. По-умолчанию равно 1.
+		/// Стоимость шага цены.
 		/// </summary>
 		//[DataMember]
 		[Ignore]
@@ -515,7 +513,7 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(0)]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal StepPrice
+		public decimal? StepPrice
 		{
 			get { return _stepPrice; }
 			set
@@ -771,10 +769,10 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _minPrice = 0.01m;
+		private decimal? _minPrice;
 
 		/// <summary>
-		/// Нижний лимит цены. По-умолчанию равно 0.01.
+		/// Нижний лимит цены.
 		/// </summary>
 		//[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceMinKey)]
@@ -784,7 +782,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal MinPrice
+		public decimal? MinPrice
 		{
 			get { return _minPrice; }
 			set
@@ -797,10 +795,10 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private decimal _maxPrice = decimal.MaxValue;
+		private decimal? _maxPrice;
 
 		/// <summary>
-		/// Верхний лимит цены. По-умолчанию равно <see cref="decimal.MaxValue"/>.
+		/// Верхний лимит цены.
 		/// </summary>
 		//[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceMaxKey)]
@@ -810,7 +808,7 @@ namespace StockSharp.BusinessEntities
 		[XmlIgnore]
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
-		public decimal MaxPrice
+		public decimal? MaxPrice
 		{
 			get { return _maxPrice; }
 			set

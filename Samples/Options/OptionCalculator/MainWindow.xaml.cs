@@ -177,8 +177,8 @@ namespace OptionCalculator
 				Volume = RandomGen.GetInt(10000)
 			};
 
-			s.BestBid = new Quote(s, s.StepPrice * RandomGen.GetInt(100), s.VolumeStep * RandomGen.GetInt(100), Sides.Buy);
-			s.BestAsk = new Quote(s, s.BestBid.Price.Max(s.StepPrice * RandomGen.GetInt(100)), s.VolumeStep * RandomGen.GetInt(100), Sides.Sell);
+			s.BestBid = new Quote(s, s.StepPrice ?? 1m * RandomGen.GetInt(100), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Buy);
+			s.BestAsk = new Quote(s, s.BestBid.Price.Max(s.StepPrice ?? 1m * RandomGen.GetInt(100)), s.VolumeStep ?? 1m * RandomGen.GetInt(100), Sides.Sell);
 
 			return s;
 		}

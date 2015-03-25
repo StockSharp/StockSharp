@@ -229,7 +229,7 @@ namespace StockSharp.Studio.Services
 						if (security == null)
 							throw new InvalidOperationException(LocalizedStrings.Str704Params.Put(candleMsg.SecurityId));
 
-						var volumeStep = security.VolumeStep;
+						var volumeStep = security.VolumeStep ?? 1m;
 						var decimals = volumeStep.GetCachedDecimals();
 
 						var trades = candleMsg.ToTrades(volumeStep, decimals);

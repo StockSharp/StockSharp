@@ -34,7 +34,7 @@ namespace SampleStorage
 					Id = i + 1,
 					Security = security,
 					Volume = RandomGen.GetInt(1, 10),
-					Price = RandomGen.GetInt(1, 100) * security.PriceStep + 99
+					Price = RandomGen.GetInt(1, 100) * security.PriceStep ?? 1m + 99
 				};
 
 				trades.Add(t);

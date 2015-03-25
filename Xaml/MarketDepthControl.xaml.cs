@@ -221,11 +221,17 @@
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			var priceDecFormat = new string('0', security.Decimals);
-			PriceTextFormat = "0" + (priceDecFormat.Length == 0 ? string.Empty : "." + priceDecFormat);
+			if (security.Decimals != null)
+			{
+				var priceDecFormat = new string('0', security.Decimals.Value);
+				PriceTextFormat = "0" + (priceDecFormat.Length == 0 ? string.Empty : "." + priceDecFormat);	
+			}
 
-			var volDecFormat = new string('0', security.VolumeStep.GetCachedDecimals());
-			VolumeTextFormat = "0" + (volDecFormat.Length == 0 ? string.Empty : "." + volDecFormat);
+			if (security.VolumeStep != null)
+			{
+				var volDecFormat = new string('0', security.VolumeStep.Value.GetCachedDecimals());
+				VolumeTextFormat = "0" + (volDecFormat.Length == 0 ? string.Empty : "." + volDecFormat);	
+			}
 
 			_prevSecurity = security;
 		}

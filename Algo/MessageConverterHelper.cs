@@ -502,7 +502,7 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			var security = new Security
+			return new Security
 			{
 				Id = message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode,
 				Code = message.SecurityId.SecurityCode,
@@ -518,22 +518,12 @@ namespace StockSharp.Algo
 				ExpiryDate = message.ExpiryDate,
 				SettlementDate = message.SettlementDate,
 				UnderlyingSecurityId = message.UnderlyingSecurityCode + "@" + message.SecurityId.BoardCode,
-				Currency = message.Currency
+				Currency = message.Currency,
+				PriceStep = message.PriceStep,
+				Decimals = message.Decimals,
+				VolumeStep = message.VolumeStep,
+				Multiplier = message.Multiplier
 			};
-
-			if (message.PriceStep != null)
-				security.PriceStep = message.PriceStep.Value;
-
-			if (message.Decimals != null)
-				security.Decimals = message.Decimals.Value;
-
-			if (message.VolumeStep != null)
-				security.VolumeStep = message.VolumeStep.Value;
-
-			if (message.Multiplier != null)
-				security.Multiplier = message.Multiplier.Value;
-
-			return security;
 		}
 
 		/// <summary>

@@ -782,14 +782,19 @@ namespace StockSharp.Algo
 					s.Multiplier = message.Multiplier.Value;
 
 				if (message.PriceStep != null)
+				{
 					s.PriceStep = message.PriceStep.Value;
+
+					if (message.Decimals == null && s.Decimals == null)
+						s.Decimals = message.PriceStep.Value.GetCachedDecimals();
+				}
 
 				if (message.Decimals != null)
 				{
 					s.Decimals = message.Decimals.Value;
 
 					if (message.PriceStep == null)
-						s.PriceStep = s.Decimals.GetPriceStep();
+						s.PriceStep = message.Decimals.Value.GetPriceStep();
 				}
 
 				if (!message.Name.IsEmpty())

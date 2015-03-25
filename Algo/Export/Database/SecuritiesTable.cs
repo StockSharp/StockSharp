@@ -31,8 +31,8 @@ namespace StockSharp.Algo.Export.Database
 			};
 			yield return new ColumnDescription("PriceStep")
 			{
-				DbType = typeof(decimal),
-				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep.GetCachedDecimals() }
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep == null ? 1 : security.PriceStep.Value.GetCachedDecimals() }
 			};
 			//yield return new ColumnDescription("StepPrice")
 			//{
@@ -41,17 +41,17 @@ namespace StockSharp.Algo.Export.Database
 			//};
 			yield return new ColumnDescription("VolumeStep")
 			{
-				DbType = typeof(decimal),
-				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep.GetCachedDecimals() }
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() }
 			};
 			yield return new ColumnDescription("Multiplier")
 			{
-				DbType = typeof(decimal),
-				ValueRestriction = new DecimalRestriction { Scale = security.Multiplier.GetCachedDecimals() }
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction { Scale = security.Multiplier == null ? 1 : security.Multiplier.Value.GetCachedDecimals() }
 			};
 			yield return new ColumnDescription("Decimals")
 			{
-				DbType = typeof(int),
+				DbType = typeof(int?),
 			};
 			yield return new ColumnDescription("SecurityType")
 			{

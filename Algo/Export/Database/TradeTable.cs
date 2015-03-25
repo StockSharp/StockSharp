@@ -37,10 +37,10 @@
 			};
 			yield return new ColumnDescription("ServerTime") { DbType = typeof(DateTimeOffset) };
 			yield return new ColumnDescription("LocalTime") { DbType = typeof(DateTime) };
-			yield return new ColumnDescription("Price") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep.GetCachedDecimals() } };
-			yield return new ColumnDescription("Volume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep.GetCachedDecimals() } };
+			yield return new ColumnDescription("Price") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.PriceStep == null ? 1 : security.PriceStep.Value.GetCachedDecimals() } };
+			yield return new ColumnDescription("Volume") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
 			yield return new ColumnDescription("OriginSide") { DbType = typeof(int?) };
-			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep.GetCachedDecimals() } };
+			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
 			yield return new ColumnDescription("IsUpTick") { DbType = typeof(bool?) };
 		}
 

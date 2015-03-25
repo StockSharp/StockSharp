@@ -466,7 +466,7 @@
 
 			return candles
 				.ToMessages<Candle, CandleMessage>()
-				.ToTrades(candle.Security.VolumeStep)
+				.ToTrades(candle.Security.VolumeStep ?? 1m)
 				.ToEntities<ExecutionMessage, Trade>(candle.Security);
 		}
 

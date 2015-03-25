@@ -157,7 +157,7 @@ namespace StockSharp.Algo
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			if (security.PriceStep == 0)
+			if (security.PriceStep == null)
 				throw new ArgumentException(LocalizedStrings.Str905Params.Put(security.Id));
 
 			return security;

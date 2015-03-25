@@ -65,12 +65,12 @@
 			yield return CreateDecimalColumn("ClosePrice", security.PriceStep);
 			yield return CreateDecimalColumn("HighPrice", security.PriceStep);
 			yield return CreateDecimalColumn("LowPrice", security.PriceStep);
-			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep.GetCachedDecimals() } };
+			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
 		}
 
-		private static ColumnDescription CreateDecimalColumn(string name, decimal step)
+		private static ColumnDescription CreateDecimalColumn(string name, decimal? step)
 		{
-			return new ColumnDescription(name) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = step.GetCachedDecimals() } };
+			return new ColumnDescription(name) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = (step ?? 1m).GetCachedDecimals() } };
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(CandleMessage value)

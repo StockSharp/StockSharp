@@ -93,7 +93,7 @@ namespace StockSharp.Hydra.Panes
 					return StorageRegistry
 							.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), SelectedSecurity, TimeSpan.FromMinutes(1), Drive, StorageFormat)
 							.Load(from, to)
-							.ToTrades(SelectedSecurity.VolumeStep)
+							.ToTrades(SelectedSecurity.VolumeStep ?? 1m)
 							.ToCandles(CandleSeries);
 			
 				default:

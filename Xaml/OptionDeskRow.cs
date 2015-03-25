@@ -229,11 +229,11 @@ namespace StockSharp.Xaml
 				decimal? pnl = null;
 
 				if (Call != null)
-					pnl = Call.PnL * (Call.OpenInterest ?? 0).Max(Call.Option.VolumeStep);
+					pnl = Call.PnL * (Call.OpenInterest ?? 0).Max(Call.Option.VolumeStep ?? 1);
 
 				if (Put != null)
 				{
-					var putPnL = Put.PnL * (Put.OpenInterest ?? 0).Max(Put.Option.VolumeStep);
+					var putPnL = Put.PnL * (Put.OpenInterest ?? 0).Max(Put.Option.VolumeStep ?? 1);
 
 					if (pnl < putPnL)
 						pnl = putPnL;

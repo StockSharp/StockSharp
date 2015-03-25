@@ -112,10 +112,10 @@ namespace StockSharp.BusinessEntities
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			if (security.PriceStep == 0)
+			if (security.PriceStep == null)
 				throw new ArgumentException(LocalizedStrings.Str1546, "security");
 
-			return price.Round(security.PriceStep, security.Decimals, null);
+			return price.Round(security.PriceStep ?? 1m, security.Decimals ?? 0, null);
 		}
 
 		/// <summary>

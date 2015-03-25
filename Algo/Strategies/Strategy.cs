@@ -2174,7 +2174,7 @@ namespace StockSharp.Algo.Strategies
 		private void UpdatePnLManager(Security security)
 		{
 			var msg = new Level1ChangeMessage { SecurityId = security.ToSecurityId(), ServerTime = CurrentTime }
-					.Add(Level1Fields.PriceStep, security.PriceStep)
+					.TryAdd(Level1Fields.PriceStep, security.PriceStep)
 					.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(security, Level1Fields.StepPrice));
 
 			PnLManager.ProcessMessage(msg);

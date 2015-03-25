@@ -281,7 +281,7 @@ namespace StockSharp.Studio.Controls
 			var asset = _currentSecurity;
 
 			if (_lastTradePrice != 0)
-				PosChart.Refresh(_lastTradePrice, asset.PriceStep, _currentDate, (asset.ExpiryDate ?? DateTimeOffset.Now).LocalDateTime + TimeSpan.FromDays(1));
+				PosChart.Refresh(_lastTradePrice, asset.PriceStep ?? 1m, _currentDate, (asset.ExpiryDate ?? DateTimeOffset.Now).LocalDateTime + TimeSpan.FromDays(1));
 		}
 
 		private void SetPriceLimits()

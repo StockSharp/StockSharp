@@ -32,12 +32,12 @@
 			yield return new ColumnDescription("Price")
 			{
 				DbType = typeof(decimal),
-				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep.GetCachedDecimals() }
+				ValueRestriction = new DecimalRestriction { Scale = security.PriceStep == null ? 1 : security.PriceStep.Value.GetCachedDecimals() }
 			};
 			yield return new ColumnDescription("Volume")
 			{
 				DbType = typeof(decimal),
-				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep.GetCachedDecimals() }
+				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() }
 			};
 			yield return new ColumnDescription("Side") { IsPrimaryKey = true, DbType = typeof(int) };
 			yield return new ColumnDescription("ServerTime") { IsPrimaryKey = true, DbType = typeof(DateTimeOffset) };
