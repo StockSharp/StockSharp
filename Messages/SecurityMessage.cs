@@ -5,13 +5,14 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Сообщение, содержащее данные об инструменте.
 	/// </summary>
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class SecurityMessage : Message
 	{
@@ -50,6 +51,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str365Key)]
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
+		[Nullable]
 		public decimal? VolumeStep { get; set; }
 
 		/// <summary>
@@ -59,6 +61,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str330Key)]
 		[DescriptionLoc(LocalizedStrings.LotVolumeKey)]
 		[MainCategory]
+		[Nullable]
 		public decimal? Multiplier { get; set; }
 
 		/// <summary>
@@ -68,6 +71,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str547Key)]
 		[DescriptionLoc(LocalizedStrings.Str548Key)]
 		[MainCategory]
+		[Nullable]
 		public int? Decimals { get; set; }
 
 		/// <summary>
@@ -77,6 +81,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
 		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
 		[MainCategory]
+		[Nullable]
 		public decimal? PriceStep { get; set; }
 
 		/// <summary>
@@ -86,6 +91,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TypeKey)]
 		[DescriptionLoc(LocalizedStrings.Str360Key)]
 		[MainCategory]
+		[Nullable]
 		public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
@@ -95,6 +101,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str371Key)]
 		[MainCategory]
+		[Nullable]
 		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <summary>
@@ -104,6 +111,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.PaymentDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str373Key)]
 		[MainCategory]
+		[Nullable]
 		public DateTimeOffset? SettlementDate { get; set; }
 
 		/// <summary>
@@ -120,6 +128,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
 		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
+		[Nullable]
 		public decimal? Strike { get; set; }
 
 		/// <summary>
@@ -128,6 +137,7 @@ namespace StockSharp.Messages
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OptionsContractKey)]
 		[DescriptionLoc(LocalizedStrings.OptionContractTypeKey)]
+		[Nullable]
 		public OptionTypes? OptionType { get; set; }
 
 		/// <summary>
@@ -145,6 +155,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str250Key)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
+		[Nullable]
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>

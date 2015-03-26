@@ -4,13 +4,14 @@
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Сообщение, содержащее данные о позиции.
 	/// </summary>
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public sealed class PositionMessage : Message
 	{
@@ -55,6 +56,7 @@
 		[DisplayNameLoc(LocalizedStrings.Str272Key)]
 		[DescriptionLoc(LocalizedStrings.Str267Key)]
 		[MainCategory]
+		[Nullable]
 		public TPlusLimits? LimitType { get; set; }
 
 		/// <summary>

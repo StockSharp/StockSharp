@@ -119,6 +119,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.IsSystemTradeKey)]
 		[MainCategory]
 		[PropertyOrder(6)]
+		[Nullable]
 		public bool? IsSystem { get; set; }
 
 		/// <summary>

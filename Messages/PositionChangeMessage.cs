@@ -7,13 +7,14 @@ namespace StockSharp.Messages
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Типы значения изменения в <see cref="PositionChangeMessage"/>.
 	/// </summary>
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public enum PositionChangeTypes
 	{
@@ -126,7 +127,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Сообщение, содержащее данные об изменениях позиции.
 	/// </summary>
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public sealed class PositionChangeMessage : BaseChangeMessage<PositionChangeTypes>
 	{
@@ -163,6 +164,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str266Key)]
 		[DescriptionLoc(LocalizedStrings.Str267Key)]
 		[MainCategory]
+		[Nullable]
 		public TPlusLimits? LimitType { get; set; }
 
 		/// <summary>

@@ -4,13 +4,14 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Сообщение, содержащее информацию для регистрации заявки.
 	/// </summary>
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class OrderRegisterMessage : OrderMessage
 	{
@@ -48,6 +49,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str127Key)]
 		[MainCategory]
+		[Nullable]
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>

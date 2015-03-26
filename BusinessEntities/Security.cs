@@ -159,6 +159,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.MinPriceStepKey)]
 		[MainCategory]
 		[PropertyOrder(5)]
+		[Nullable]
 		public decimal? PriceStep
 		{
 			get { return _priceStep; }
@@ -182,6 +183,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
 		[PropertyOrder(6)]
+		[Nullable]
 		public decimal? VolumeStep
 		{
 			get { return _volumeStep; }
@@ -205,6 +207,7 @@ namespace StockSharp.BusinessEntities
 		[DescriptionLoc(LocalizedStrings.LotVolumeKey)]
 		[MainCategory]
 		[PropertyOrder(7)]
+		[Nullable]
 		public decimal? Multiplier
 		{
 			get { return _multiplier; }
@@ -229,6 +232,7 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		[PropertyOrder(7)]
 		//[ReadOnly(true)]
+		[Nullable]
 		public int? Decimals
 		{
 			get { return _decimals; }
