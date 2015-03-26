@@ -24,6 +24,7 @@ namespace StockSharp.Hydra.Google
 		private const string _sourceName = "Google";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class GoogleSettings : HydraTaskSettings
 		{
 			public GoogleSettings(HydraTaskSettings settings)

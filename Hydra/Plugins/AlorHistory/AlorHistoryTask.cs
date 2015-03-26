@@ -28,6 +28,7 @@ namespace StockSharp.Hydra.AlorHistory
 		private const string _sourceName = "Alor (история)";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class AlorHistorySettings : HydraTaskSettings
 		{
 			public AlorHistorySettings(HydraTaskSettings settings)

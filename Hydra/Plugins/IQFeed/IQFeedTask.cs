@@ -29,6 +29,7 @@ namespace StockSharp.Hydra.IQFeed
 		private const string _sourceName = "IQFeed";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class IQFeedSettings : ConnectorHydraTaskSettings
 		{
 			private const string _category = _sourceName;

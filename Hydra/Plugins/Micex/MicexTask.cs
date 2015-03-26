@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.Micex
 		private const string _sourceName = "Micex";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class MicexSettings : ConnectorHydraTaskSettings
 		{
 			public MicexSettings(HydraTaskSettings settings)

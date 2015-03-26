@@ -29,6 +29,7 @@ namespace StockSharp.Hydra.SmartCom
 		private const string _sourceName = "SmartCOM";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class SmartComSettings : ConnectorHydraTaskSettings
 		{
 			public SmartComSettings(HydraTaskSettings settings)

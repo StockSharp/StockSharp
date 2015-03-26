@@ -27,6 +27,7 @@ namespace StockSharp.Hydra.Transaq
 		private const string _sourceName = "Transaq";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class TransaqSettings : ConnectorHydraTaskSettings
 		{
 			public TransaqSettings(HydraTaskSettings settings)

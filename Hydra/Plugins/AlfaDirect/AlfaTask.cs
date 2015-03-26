@@ -26,6 +26,7 @@ namespace StockSharp.Hydra.AlfaDirect
 		private const string _sourceName = "AlfaDirect";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class AlfaSettings : ConnectorHydraTaskSettings
 		{
 			public AlfaSettings(HydraTaskSettings settings)

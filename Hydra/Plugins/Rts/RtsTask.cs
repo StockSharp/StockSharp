@@ -29,6 +29,7 @@ namespace StockSharp.Hydra.Rts
 		private const string _sourceName = "RTS";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class RtsSettings : HydraTaskSettings
 		{
 			private const string _rtsStndard = "RTS Standard";

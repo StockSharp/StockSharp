@@ -11,22 +11,25 @@ namespace StockSharp.Hydra.BitStamp
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+
 	[TaskDisplayName(_sourceName)]
 	[Category(TaskCategories.Crypto)]
-	class BtceTask : ConnectorHydraTask<BitStampTrader>
+	class BitStampTask : ConnectorHydraTask<BitStampTrader>
 	{
 		private const string _sourceName = "BitStamp";
 
 		[TaskSettingsDisplayName(_sourceName)]
-		private sealed class BtceSettings : ConnectorHydraTaskSettings
+		[CategoryOrder(_sourceName, 0)]
+		private sealed class BitStampSettings : ConnectorHydraTaskSettings
 		{
-			public BtceSettings(HydraTaskSettings settings)
+			public BitStampSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
 			}
 		}
 
-		private BtceSettings _settings;
+		private BitStampSettings _settings;
 
 		public override Uri Icon
 		{
@@ -45,7 +48,7 @@ namespace StockSharp.Hydra.BitStamp
 
 		protected override MarketDataConnector<BitStampTrader> CreateTrader(HydraTaskSettings settings)
 		{
-			_settings = new BtceSettings(settings);
+			_settings = new BitStampSettings(settings);
 
 			return new MarketDataConnector<BitStampTrader>(EntityRegistry.Securities, this, () => new BitStampTrader
 			{

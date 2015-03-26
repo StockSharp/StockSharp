@@ -29,6 +29,7 @@ namespace StockSharp.Hydra.GainCapital
 		private const string _sourceName = "GainCapital";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class GainCapitalSettings : HydraTaskSettings
 		{
 			public GainCapitalSettings(HydraTaskSettings settings)

@@ -18,7 +18,7 @@ namespace StockSharp.Hydra.FinViz
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	//using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
 	[TaskDisplayName(_sourceName)]
@@ -27,6 +27,7 @@ namespace StockSharp.Hydra.FinViz
 		private const string _sourceName = "FinViz";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class FinVizSettings : HydraTaskSettings
 		{
 			public FinVizSettings(HydraTaskSettings settings)

@@ -24,6 +24,7 @@ namespace StockSharp.Hydra.Oanda
 		private const string _sourceName = "OANDA";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class OandaSettings : ConnectorHydraTaskSettings
 		{
 			public OandaSettings(HydraTaskSettings settings)

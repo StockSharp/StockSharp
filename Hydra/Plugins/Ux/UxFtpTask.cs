@@ -29,6 +29,7 @@ namespace StockSharp.Hydra.Ux
 		private const string _sourceName = "UX (FTP)";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class UxFtpSettings : HydraTaskSettings
 		{
 			public UxFtpSettings(HydraTaskSettings settings)

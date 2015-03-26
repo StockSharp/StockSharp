@@ -28,6 +28,7 @@
 		private const string _sourceName = "Quandl";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class QuandlSettings : HydraTaskSettings
 		{
 			public QuandlSettings(HydraTaskSettings settings)

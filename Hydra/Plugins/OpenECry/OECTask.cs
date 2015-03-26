@@ -26,6 +26,7 @@ namespace StockSharp.Hydra.OpenECry
 		private const string _sourceName = "OpenECry";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class OECSettings : ConnectorHydraTaskSettings
 		{
 			public OECSettings(HydraTaskSettings settings)

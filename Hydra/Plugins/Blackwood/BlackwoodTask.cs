@@ -27,6 +27,7 @@ namespace StockSharp.Hydra.Blackwood
 		private const string _sourceName = "Fusion/Blackwood";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class BlackwoodSettings : ConnectorHydraTaskSettings
 		{
 			public BlackwoodSettings(HydraTaskSettings settings)

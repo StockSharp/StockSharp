@@ -28,6 +28,7 @@ namespace StockSharp.Hydra.RtsCompetition
 		private const string _sourceName = "ЛЧИ";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class RtsCompetitionSettings : HydraTaskSettings
 		{
 			public RtsCompetitionSettings(HydraTaskSettings settings)

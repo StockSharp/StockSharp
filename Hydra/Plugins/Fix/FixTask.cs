@@ -19,6 +19,7 @@ namespace StockSharp.Hydra.Fix
 		private const string _sourceName = "FIX";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class FixSettings : ConnectorHydraTaskSettings
 		{
 			public FixSettings(HydraTaskSettings settings)

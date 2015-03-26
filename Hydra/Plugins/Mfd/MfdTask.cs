@@ -31,6 +31,7 @@ namespace StockSharp.Hydra.Mfd
 		private const string _sourceName = "MFD";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class MfdSettings : HydraTaskSettings
 		{
 			public MfdSettings(HydraTaskSettings settings)

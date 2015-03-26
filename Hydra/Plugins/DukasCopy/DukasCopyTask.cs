@@ -30,6 +30,7 @@ namespace StockSharp.Hydra.DukasCopy
 		private const string _sourceName = "DukasCopy";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class DukasCopySettings : HydraTaskSettings
 		{
 			public DukasCopySettings(HydraTaskSettings settings)

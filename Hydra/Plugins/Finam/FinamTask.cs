@@ -31,6 +31,7 @@ namespace StockSharp.Hydra.Finam
 		private const string _sourceName = "Finam";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class FinamSettings : HydraTaskSettings
 		{
 			public FinamSettings(HydraTaskSettings settings)

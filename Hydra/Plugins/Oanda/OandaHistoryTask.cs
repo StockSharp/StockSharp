@@ -26,6 +26,7 @@ namespace StockSharp.Hydra.Oanda
 		private const string _sourceName = "OANDA (история)";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class OandaHistorySettings : HydraTaskSettings
 		{
 			public OandaHistorySettings(HydraTaskSettings settings)

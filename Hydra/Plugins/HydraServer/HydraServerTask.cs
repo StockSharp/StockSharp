@@ -30,6 +30,7 @@ namespace StockSharp.Hydra.HydraServer
 		private const string _sourceName = "S#.Data Server";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class HydraServerSettings : HydraTaskSettings
 		{
 			public HydraServerSettings(HydraTaskSettings settings)

@@ -29,6 +29,7 @@ namespace StockSharp.Hydra.TrueFX
 		private const string _sourceName = "TrueFX";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class TrueFXSettings : HydraTaskSettings
 		{
 			public TrueFXSettings(HydraTaskSettings settings)

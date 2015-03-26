@@ -27,6 +27,7 @@ namespace StockSharp.Hydra.Yahoo
 		private const string _sourceName = "Yahoo";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class YahooSettings : HydraTaskSettings
 		{
 			public YahooSettings(HydraTaskSettings settings)

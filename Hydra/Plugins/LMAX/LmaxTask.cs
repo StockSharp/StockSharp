@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.LMAX
 		private const string _sourceName = "LMAX";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class LmaxSettings : ConnectorHydraTaskSettings
 		{
 			public LmaxSettings(HydraTaskSettings settings)

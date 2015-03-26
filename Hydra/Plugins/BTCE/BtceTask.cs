@@ -11,6 +11,8 @@ namespace StockSharp.Hydra.Btce
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+
 	[TaskDisplayName(_sourceName)]
 	[Category(TaskCategories.Crypto)]
 	class BtceTask : ConnectorHydraTask<BtceTrader>
@@ -18,6 +20,7 @@ namespace StockSharp.Hydra.Btce
 		private const string _sourceName = "BTCE";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class BtceSettings : ConnectorHydraTaskSettings
 		{
 			public BtceSettings(HydraTaskSettings settings)

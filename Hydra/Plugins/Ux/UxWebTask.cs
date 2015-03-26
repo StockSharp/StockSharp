@@ -31,6 +31,7 @@ namespace StockSharp.Hydra.Ux
 		private const string _sourceName = "UX (сайт)";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class UxWebSettings : HydraTaskSettings
 		{
 			public UxWebSettings(HydraTaskSettings settings)

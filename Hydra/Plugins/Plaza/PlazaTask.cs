@@ -30,6 +30,7 @@ namespace StockSharp.Hydra.Plaza
 		private const string _sourceName = "Plaza";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class PlazaSettings : ConnectorHydraTaskSettings
 		{
 			public PlazaSettings(HydraTaskSettings settings)

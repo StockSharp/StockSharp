@@ -10,6 +10,8 @@ namespace StockSharp.Hydra.Sterling
 	using StockSharp.Localization;
 	using StockSharp.Sterling;
 
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+
 	[Category(TaskCategories.American)]
 	[TaskDisplayName(_sourceName)]
 	class SterlingTask : ConnectorHydraTask<SterlingTrader>
@@ -17,6 +19,7 @@ namespace StockSharp.Hydra.Sterling
 		private const string _sourceName = "Sterling";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class SterlingSettings : ConnectorHydraTaskSettings
 		{
 			public SterlingSettings(HydraTaskSettings settings)

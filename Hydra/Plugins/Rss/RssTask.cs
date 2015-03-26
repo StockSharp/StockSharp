@@ -23,6 +23,7 @@ namespace StockSharp.Hydra.Rss
 		private const string _sourceName = "RSS";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class RssSettings : ConnectorHydraTaskSettings
 		{
 			public RssSettings(HydraTaskSettings settings)

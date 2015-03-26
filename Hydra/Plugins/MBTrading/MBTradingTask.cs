@@ -30,6 +30,7 @@ namespace StockSharp.Hydra.MBTrading
 		private const string _sourceName = "MBTrading";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class MBTradingSettings : HydraTaskSettings
 		{
 			public MBTradingSettings(HydraTaskSettings settings)

@@ -24,6 +24,7 @@ namespace StockSharp.Hydra.Rithmic
 		private const string _sourceName = "Rithmic";
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrder(_sourceName, 0)]
 		private sealed class RithmicSettings : ConnectorHydraTaskSettings
 		{
 			public RithmicSettings(HydraTaskSettings settings)

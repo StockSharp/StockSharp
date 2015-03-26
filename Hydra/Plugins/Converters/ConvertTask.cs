@@ -42,6 +42,7 @@ namespace StockSharp.Hydra.Converters
 		}
 
 		[TaskSettingsDisplayName(LocalizedStrings.Str3131Key, true)]
+		//[CategoryOrder(_sourceName, 0)]
 		private sealed class ConvertTaskSettings : HydraTaskSettings
 		{
 			public ConvertTaskSettings(HydraTaskSettings settings)
