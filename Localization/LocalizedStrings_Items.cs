@@ -26263,19 +26263,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// New candle {0}: {1};{2};{3};{4}; volume {5}
-		/// </summary>
-		public const string Str2177ParamsKey = "Str2177Params";
-
-		/// <summary>
-		/// New candle {0}: {1};{2};{3};{4}; volume {5}
-		/// </summary>
-		public static string Str2177Params
-		{
-			get { return GetString(Str2177ParamsKey); }
-		}
-
-		/// <summary>
 		/// Received security {0}.
 		/// </summary>
 		public const string Str2188ParamsKey = "Str2188Params";

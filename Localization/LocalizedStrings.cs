@@ -9,7 +9,7 @@ namespace StockSharp.Localization
 	/// <summary>
 	/// Localized strings.
 	/// </summary>
-	public partial class LocalizedStrings
+	public static partial class LocalizedStrings
 	{
 		static LocalizedStrings()
 		{
@@ -23,7 +23,7 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Error handler to track missed translations or resource keys.
 		/// </summary>
-		public event Action<string, bool> Missing
+		public static event Action<string, bool> Missing
 		{
 			add { LocalizationHelper.DefaultManager.Missing += value; }
 			remove { LocalizationHelper.DefaultManager.Missing -= value; }

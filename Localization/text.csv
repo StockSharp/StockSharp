@@ -1,4 +1,4 @@
-CannotCreateConsoleWindow;Cannot create a console window.;Невозможно создать консольное окно.
+﻿CannotCreateConsoleWindow;Cannot create a console window.;Невозможно создать консольное окно.
 UnknownLevelLog;Unknown level of logs.;Неизвестный уровень логов.
 NameFileNotContainFileName;Name of file {0} does not contain a file name.;Название файла {0} не содержит имя файла.
 RollerFileIndexMustGreatZero;Roller file index must be greater than zero.;Индекс роллируемого файла должен быть больше нуля.
@@ -1917,7 +1917,7 @@ Str2050;Color of decreasing candle.;Цвет для убывающей свеч�
 Str2051;Auto zoom;Автомасштаб
 Str2052;Use automatic scaling «Bubble» mode.;Использовать автоматическое масштабирование для режима «Пузырь».
 Str2053;Scale;Масштаб
-Str2054;Manual scale for «Bubble» mode.;"Ручной масштаб для режима «Пузырь».
+Str2054;Manual scale for «Bubble» mode.;Ручной масштаб для режима «Пузырь».
 Str2055;Line settings;Настройки линии
 Str2056;Line colur (bar and etc.), with which it will be drawn on chart.;Цвет линии (бара и т.д.), с которым она будет рисоваться на графике.
 Str2057;Additional line color (bars etc), with which it will be drawn on the chart.;Дополнительный цвет линии (бара и т.д.), с которым она будет рисоваться на графике.
@@ -2023,7 +2023,6 @@ Str2173Params;Trade {0} at price {1} for security {2} with volume {3} in {4}.;С
 Str2174Params;Waiting for security and portfolio {0} to appear in the program...;Дожидаемся появления в программе инструмента и портфеля {0}...
 Str2175;Waiting for security data to update...;Дожидаемся обновления данных по инструменту...
 Str2176Params;Current value of spread middle {0:0.##};Текущее значение середины спреда {0:0.##}
-Str2177Params;"New candle {0}: {1};{2};{3};{4}; volume {5}";"Новая свеча {0}: {1};{2};{3};{4}; объем {5}"
 Str2188Params;Received security {0}.;Получен инструмент {0}.
 Str2189Params;Task state can not be changed from {0} to {1}.;Нельзя перевести задачу из состояния {0} в состояние {1}.
 Str2190Params;Moved into state {0}.;Перешел в состояние {0}.
@@ -2371,7 +2370,7 @@ Str2563;OpenECry user name.;Имя пользователя OpenECry.
 Str2564;OpenECry user password.;Пароль пользователя OpenECry.
 Str2565;Unique software ID.;Уникальный идентификатор программного обеспечения.
 Str2566;Required mode of connection to the terminal.;Требуемый режим подключения к терминалу.
-Str2567;"Use ""native"" reconnection mechanism.";"Использовать ""родной"" механизм восстановления подключения."
+Str2567;Use «native» reconnection mechanism.;Использовать «родной» механизм восстановления подключения.
 Str2568;Use OpenECry API logging.;Использовать логирование OpenECry API.
 Str2570;Stop type;Тип стопа
 Str2571;Stop type.;Тип стопа.
@@ -2610,9 +2609,9 @@ Str2803;Use for old DDE connection.;Использовать для старое
 Str2804;Path;Путь
 Str2805;Path to directory, where Quik is installed.;Путь к директории, где установлен Quik.
 Str2806;Extra columns;Доп. колонки
-Str2807;"List of extra columns for exporting changes from table ""Securities"".";"Список дополнительных колонок для экспорта изменений из таблицы ""Инструменты""."
+Str2807;List of extra columns for exporting changes from table «Securities».;Список дополнительных колонок для экспорта изменений из таблицы «Инструменты».
 Str2808;Extra columns history;Доп. колонки история
-Str2809;"List of extra columns for exporting changes from table ""Securities (changes)"".";"Список дополнительных колонок для экспорта изменений из таблицы ""Инструменты (изменения)""."
+Str2809;List of extra columns for exporting changes from table «Securities (changes)».;Список дополнительных колонок для экспорта изменений из таблицы «Инструменты (изменения)».
 Str2810;History of changes;История изменений
 Str2811Params;Message type {0} is not supported.;Сообщение типа {0} не поддерживается.
 Str2812;All securities data loading is only possible in DDE mode.;Закачка данных по всем инструментам возможна только для DDE режима.
@@ -3172,12 +3171,12 @@ Str3413;Connection type.;Тип подключения.
 Str3414;Addresses;Адреса
 Str3415;List of addresses and ports for access servers.;Список адресов и портов серверов доступа.
 Str3416;Server;Сервер
-Str3417;"Access server ID, e.g. ""EQ_TEST"".";"Идентификатор сервера доступа, например ""EQ_TEST""."
+Str3417;Access server ID, e.g. «EQ_TEST».;Идентификатор сервера доступа, например «EQ_TEST».
 Str3418;Interface;Интерфейс
 Str3419;Interface ID for MICEX trading system.;Идентификатор интерфейса торговой системы ММВБ.
 Str3420;User ID in MICEX trading system.;Идентификатор пользователя в торговой системе ММВБ.
 Str3421;MICEX trading system password.;Пароль пользователя в торговой системе ММВБ.
-Str3422;"Loggin level in N,M format. Maximum logging level is equal to ""5,2"". Minimum (disabled) is ""0,0"".";"Уровень логирования в формате N,M. Максимальный уровень логирования равен ""5,2"". Минимальный (выключен) ""0,0""."
+Str3422;Loggin level in N,M format. Maximum logging level is equal to «5,2». Minimum (disabled) is «0,0».;Уровень логирования в формате N,M. Максимальный уровень логирования равен «5,2». Минимальный (выключен) «0,0».
 Str3423;Compression;Компрессия
 Str3424;Data compression parameter. By default equal to BZip.;Параметр компрессии данных. По-умолчанию равен BZip.
 Str3425;Client code;Код клиента
@@ -3185,7 +3184,7 @@ Str3426;Client code assigned by the broker.;Код клиента, присво�
 Str3427;Service;Сервис
 Str3428;Trading system service name.;Имя сервиса торговой системы.
 Str3429;Language;Язык
-Str3430;"Error messages language. Allowed values: ""English"", ""Russian"", ""Ukrainian"".";"Язык для сообщений об ошибках. Допустимые значения: ""English"", ""Russian"", ""Ukrainian""."
+Str3430;Error messages language. Allowed values: «English», «Russian», «Ukrainian».;Язык для сообщений об ошибках. Допустимые значения: «English», «Russian», «Ukrainian».
 Str3431;Preferred server;Предпочитаемый сервер
 Str3432;Preferred server access address.;Адрес предпочитаемого сервера доступа.
 Str3433;Field where user commentary for the transaction is written.;Поле, в которое нужно записывать пользовательский комментарий транзакции.

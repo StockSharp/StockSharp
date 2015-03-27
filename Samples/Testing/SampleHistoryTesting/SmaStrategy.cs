@@ -74,7 +74,7 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			this.AddInfoLog(LocalizedStrings.Str2177Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume));
+			this.AddInfoLog(LocalizedStrings.Str3634Params.Put(candle.OpenTime, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.Security));
 
 			// добавляем новую свечу
 			var longValue = LongSma.Process(candle);
