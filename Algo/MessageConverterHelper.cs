@@ -1286,5 +1286,70 @@ namespace StockSharp.Algo
 			var changes = message.Changes;
 			return new Quote(security, (decimal)changes[priceField], (decimal?)changes.TryGetValue(volumeField) ?? 0m, side);
 		}
+
+		/// <summary>
+		/// Преобразовать <see cref="NewsMessage"/> в <see cref="News"/>.
+		/// </summary>
+		/// <param name="message">Сообщение.</param>
+		/// <returns>Новость.</returns>
+		public static News ToNews(this NewsMessage message)
+		{
+			return new News
+			{
+				Id = message.Id,
+				Source = message.Source,
+				ServerTime = message.ServerTime,
+				Story = message.Story,
+				Url = message.Url,
+				Headline = message.Headline,
+				Board = message.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(message.BoardCode),
+				LocalTime = message.LocalTime,
+			};
+		}
+
+		/// <summary>
+		/// Преобразовать тип бизнес-объекта в тип сообщения.
+		/// </summary>
+		/// <param name="dataType">Тип бизнес-объекта.</param>
+		/// <param name="arg">Параметр данных.</param>
+		/// <returns>Тип сообщения.</returns>
+		public static Type ToMessageType(this Type dataType, ref object arg)
+		{
+			if (dataType == typeof(Trade))
+			{
+				arg = ExecutionTypes.Tick;
+				return typeof(ExecutionMessage);
+			}
+			else if (dataType == typeof(MarketDepth))
+				return typeof(QuoteChangeMessage);
+			else if (dataType == typeof(Order))
+			{
+				arg = ExecutionTypes.Order;
+				return typeof(ExecutionMessage);
+			}
+			else if (dataType == typeof(MyTrade))
+			{
+				arg = ExecutionTypes.Trade;
+				return typeof(ExecutionMessage);
+			}
+			else if (dataType == typeof(OrderLogItem))
+			{
+				arg = ExecutionTypes.OrderLog;
+				return typeof(ExecutionMessage);
+			}
+			else if (dataType.IsSubclassOf(typeof(Candle)))
+			{
+				if (arg == null)
+					throw new ArgumentNullException("arg");
+
+				return dataType.ToCandleMessageType();
+			}
+			else if (dataType == typeof(News))
+				return typeof(NewsMessage);
+			else if (dataType == typeof(Security))
+				return typeof(SecurityMessage);
+			else
+				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+		}
 	}
 }

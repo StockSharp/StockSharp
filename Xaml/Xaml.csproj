@@ -205,6 +205,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="NewsMessageGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NewsMessagePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PropertyGrid\DateTimeOffsetEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -465,6 +473,12 @@
       <DependentUpon>ExecutionGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="MultiIdConverter.cs" />
+    <Compile Include="NewsMessageGrid.xaml.cs">
+      <DependentUpon>NewsMessageGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewsMessagePanel.xaml.cs">
+      <DependentUpon>NewsMessagePanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OrderConditionalGrid.cs" />
     <Compile Include="PropertyGrid\DateTimeOffsetEditor.xaml.cs">
       <DependentUpon>DateTimeOffsetEditor.xaml</DependentUpon>

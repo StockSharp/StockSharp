@@ -30,7 +30,6 @@
 		public static RoutedCommand OpenUrlCommand = new RoutedCommand();
 
 		private readonly ThreadSafeObservableCollection<News> _news;
-		private readonly IConnector _connector;
 
 		/// <summary>
 		/// Создать <see cref="NewsGrid"/>.
@@ -38,8 +37,6 @@
 		public NewsGrid()
 		{
 			InitializeComponent();
-
-			_connector = ConfigManager.TryGetService<IConnector>();
 
 			var itemsSource = new ObservableCollectionEx<News>();
 			ItemsSource = itemsSource;
@@ -83,12 +80,12 @@
 
 		private void ExecutedRequestStoryCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			SelectedNews.ForEach(_connector.RequestNewsStory);
+			SelectedNews.ForEach(ConfigManager.GetService<IConnector>().RequestNewsStory);
 		}
 
 		private void CanExecuteRequestStoryCommand(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = _connector != null && SelectedNews.Any(n => n.Story.IsEmpty());
+			e.CanExecute = ConfigManager.IsServiceRegistered<IConnector>() && SelectedNews.Any(n => n.Story.IsEmpty());
 		}
 
 		private void CanExecuteOpenUrlCommand(object sender, CanExecuteRoutedEventArgs e)
