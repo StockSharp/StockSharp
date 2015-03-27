@@ -124,6 +124,7 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="SmartComService.cs" />
     <Compile Include="SmartComMessageAdapter_MarketData.cs" />
     <Compile Include="SmartComMessageAdapter.cs" />
     <Compile Include="SmartComSessionHolder.cs" />

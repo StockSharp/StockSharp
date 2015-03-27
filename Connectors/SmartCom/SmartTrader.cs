@@ -2,11 +2,8 @@ namespace StockSharp.SmartCom
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
 	using System.Net;
 	using System.Security;
-	using System.ServiceProcess;
 	using System.Threading;
 
 	using Ecng.ComponentModel;
@@ -15,7 +12,6 @@ namespace StockSharp.SmartCom
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
-	using StockSharp.Logging;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo;
 	using StockSharp.Messages;
@@ -171,12 +167,6 @@ namespace StockSharp.SmartCom
 		}
 
 		/// <summary>
-		/// Получать ли все тиковые сделки с начала сессии при вызове метода <see cref="IConnector.RegisterTrades"/>
-		/// или только сделки с момента вызова данного метода. По-умолчанию выключено.
-		/// </summary>
-		public bool TradesFromSessionStart { get; set; }
-
-		/// <summary>
 		/// Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
@@ -221,7 +211,9 @@ namespace StockSharp.SmartCom
 					from = to - timeFrame;
 
 				RequestCandles(series.Security, timeFrame, new Range<DateTimeOffset>(from, to));
-				_realTimeSeries.Add(series);
+
+				if (to == DateTimeOffset.MaxValue)
+					_realTimeSeries.Add(series);
 			}
 		}
 
@@ -308,59 +300,6 @@ namespace StockSharp.SmartCom
 		}
 
 		/// <summary>
-		/// Остановить процесс SmartCom2.exe.
-		/// </summary>
-		public static void KillSmartComProcess()
-		{
-			var process = Process.GetProcesses().FirstOrDefault(p => p.ProcessName == "SmartCom2");
-
-			if (process == null)
-				return;
-
-			process.Kill();
-			TimeSpan.FromSeconds(3).Sleep();
-		}
-
-		/// <summary>
-		/// Перезапустить службу SmartCOM.
-		/// </summary>
-		public void RestartSmartComService()
-		{
-			var service = new ServiceController("SmartCom2");
-
-			var timeout = RestartServiceTimeOut;
-			var msStarting = Environment.TickCount;
-			var waitIndefinitely = timeout == TimeSpan.Zero;
-
-			if (service.CanStop)
-			{
-				this.AddDebugLog(LocalizedStrings.Str1891);
-				service.Stop();
-			}
-
-			if (waitIndefinitely)
-				service.WaitForStatus(ServiceControllerStatus.Stopped);
-			else
-				service.WaitForStatus(ServiceControllerStatus.Stopped, timeout);
-
-			this.AddDebugLog(LocalizedStrings.Str1892);
-
-			var msStarted = Environment.TickCount;
-			timeout = timeout - TimeSpan.FromMilliseconds((msStarted - msStarting));
-
-			this.AddDebugLog(LocalizedStrings.Str1893);
-
-			service.Start();
-
-			if (waitIndefinitely)
-				service.WaitForStatus(ServiceControllerStatus.Running);
-			else
-				service.WaitForStatus(ServiceControllerStatus.Running, timeout);
-
-			this.AddDebugLog(LocalizedStrings.Str1894);
-		}
-
-		/// <summary>
 		/// Подключиться к торговой системе.
 		/// </summary>
 		protected override void OnConnect()
@@ -378,7 +317,7 @@ namespace StockSharp.SmartCom
 			{
 				// SmartCOM 3 не является сервисом и не требует перезапуска
 				if (RestartService && Version == SmartComVersions.V2)
-					RestartSmartComService();
+					SmartComService.RestartSmartComService(RestartServiceTimeOut);
 			}
 			catch (Exception ex)
 			{
@@ -449,7 +388,6 @@ namespace StockSharp.SmartCom
 		{
 			base.Save(storage);
 
-			storage.SetValue("TradesFromSessionStart", TradesFromSessionStart);
 			storage.SetValue("RestartService", RestartService);
 			storage.SetValue("RestartServiceTimeOut", RestartServiceTimeOut);
 			storage.SetValue("RealTimeCandleOffset", RealTimeCandleOffset);
@@ -463,7 +401,6 @@ namespace StockSharp.SmartCom
 		{
 			base.Load(storage);
 
-			TradesFromSessionStart = storage.GetValue<bool>("TradesFromSessionStart");
 			RestartService = storage.GetValue("RestartService", true);
 			RestartServiceTimeOut = storage.GetValue("RestartServiceTimeOut", TimeSpan.FromSeconds(5));
 			RealTimeCandleOffset = storage.GetValue("RealTimeCandleOffset", TimeSpan.FromSeconds(5));
