@@ -1,7 +1,10 @@
 StockSharp API Change log
 ========================
 ###v4.2.74:
+* (feature) FIX connector. IFixWriter IFixReader interfaces.
+* (feature) TextExporter refactoring.
 * (feature) Xaml. NewsMessageGrid
+* (feature) SmartCom. SmallComService utility class.
 * (feature) Plaza. Fix control connection state in CGate mode.
 * (feature) Transaq 2.10.8
 * (bug) FIX connector and Quik LUA. Fix MarketDepth subscription for ALL security.
