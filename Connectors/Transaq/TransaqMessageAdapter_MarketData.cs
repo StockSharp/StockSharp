@@ -107,15 +107,20 @@ namespace StockSharp.Transaq
 					{
 						if (mdMsg.NewsId.IsEmpty())
 						{
-							var count = (int)mdMsg.Count;
+							var count = mdMsg.Count;
 
-							if (count <= 0)
-								throw new InvalidOperationException(LocalizedStrings.Str3511Params.Put(count));
+							if (count == 0)
+								count = MaxNewsHeaderCount;
+							else
+							{
+								if (count < 0)
+									throw new InvalidOperationException(LocalizedStrings.Str3511Params.Put(count));
 
-							if (count > MaxNewsHeaderCount)
-								throw new InvalidOperationException(LocalizedStrings.Str3512Params.Put(count, MaxNewsHeaderCount));
-
-							SendCommand(new RequestOldNewsMessage { Count = count });
+								if (count > MaxNewsHeaderCount)
+									throw new InvalidOperationException(LocalizedStrings.Str3512Params.Put(count, MaxNewsHeaderCount));
+							}
+							
+							SendCommand(new RequestOldNewsMessage { Count = (int)count });
 						}
 						else
 						{

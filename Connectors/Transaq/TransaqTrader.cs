@@ -148,47 +148,6 @@ namespace StockSharp.Transaq
 		}
 
 		/// <summary>
-		/// Сменить пароль для подключения к серверу. Максимальная длинна 19 символов.
-		/// </summary>
-		/// <param name="currPass">Текущий пароль.</param>
-		/// <param name="newPass">Новый пароль.</param>
-		/// <param name="handler">Обработчик результата.</param>
-		public void ChangePassword(string currPass, string newPass, Action<bool, string> handler)
-		{
-			if (handler == null)
-				throw new ArgumentNullException("handler");
-
-			// TODO
-			//var command = new ChangePassMessage
-			//{
-			//	NewPass = newPass,
-			//	OldPass = currPass
-			//};
-
-			//SendCommand(command, result =>
-			//{
-			//	var text = result.Text;
-
-			//	if (result.IsSuccess)
-			//		this.AddInfoLog(text);
-			//	else
-			//		RaiseProcessDataError(new InvalidOperationException(text));
-
-			//	handler(result.IsSuccess, text);
-			//});
-		}
-
-		#region News
-
-		/// <summary>
-		/// Начать получать новости.
-		/// </summary>
-		protected override void OnRegisterNews()
-		{
-			GetNewsHeader(TransaqMessageAdapter.MaxNewsHeaderCount);
-		}
-
-		/// <summary>
 		/// Запросить заголовки старых новостей.
 		/// </summary>
 		/// <param name="count">Количество заголовков новостей.</param>
@@ -201,18 +160,6 @@ namespace StockSharp.Transaq
 				Count = count,
 				IsSubscribe = true
 			});
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Вызвать событие <see cref="NewCandles"/>
-		/// </summary>
-		/// <param name="candleSeries">Серия свечек.</param>
-		/// <param name="candles">Свечи.</param>
-		protected virtual void RaiseNewCandles(CandleSeries candleSeries, IEnumerable<TimeFrameCandle> candles)
-		{
-			NewCandles.SafeInvoke(candleSeries, candles);
 		}
 
 		/// <summary>
