@@ -69,8 +69,6 @@ namespace StockSharp.Algo.Export
 			if (values == null)
 				throw new ArgumentNullException("values");
 
-			var secId = Security.ToSecurityId();
-
 			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
 				if (dataType == typeof(Trade))
@@ -79,8 +77,6 @@ namespace StockSharp.Algo.Export
 					Export(((IEnumerable<MarketDepth>)values).Select(d => d.ToMessage()));
 				else if (dataType == typeof(QuoteChangeMessage))
 					Export((IEnumerable<QuoteChangeMessage>)values);
-				//else if (dataType == typeof(SecurityChange))
-				//	Export(((IEnumerable<SecurityChange>)values).ToMessages(Security.ToSecurityId()));
 				else if (dataType == typeof(Level1ChangeMessage))
 					Export((IEnumerable<Level1ChangeMessage>)values);
 				else if (dataType == typeof(OrderLogItem))
@@ -96,7 +92,7 @@ namespace StockSharp.Algo.Export
 				else if (dataType == typeof(NewsMessage))
 					Export((IEnumerable<NewsMessage>)values);
 				else if (dataType == typeof(Security))
-					Export(((IEnumerable<Security>)values).Select(s => s.ToMessage(secId)));
+					Export(((IEnumerable<Security>)values).Select(s => s.ToMessage()));
 				else if (dataType == typeof(SecurityMessage))
 					Export((IEnumerable<SecurityMessage>)values);
 				else

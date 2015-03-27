@@ -196,7 +196,7 @@ namespace StockSharp.Hydra.Panes
 			if (path == null)
 				return;
 
-			Progress.Start(null, typeof(SecurityMessage), null, securities.Select(s => s.ToMessage(s.ToSecurityId())).ToEx(securities.Count), path);
+			Progress.Start(null, typeof(SecurityMessage), null, securities.Select(s => s.ToMessage()).ToEx(securities.Count), path);
 		}
 	}
 }

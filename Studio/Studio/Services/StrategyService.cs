@@ -166,7 +166,7 @@ namespace StockSharp.Studio.Services
 							.SessionHolder
 							.SecurityProvider
 							.LookupAll()
-							.ForEach(s => MarketDataAdapter.SendOutMessage(s.ToMessage(s.ToSecurityId())));
+							.ForEach(s => MarketDataAdapter.SendOutMessage(s.ToMessage()));
 
 						break;
 					}

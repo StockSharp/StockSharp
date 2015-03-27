@@ -605,7 +605,7 @@ namespace StockSharp.Algo.Testing
 		{
 			MarketDataAdapter.SendOutMessage(security.Board.ToMessage());
 
-			MarketDataAdapter.SendOutMessage(security.ToMessage(security.ToSecurityId()));
+			MarketDataAdapter.SendOutMessage(security.ToMessage());
 
 			//MarketDataAdapter.SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
 			//	.Add(Level1Fields.StepPrice, security.StepPrice)

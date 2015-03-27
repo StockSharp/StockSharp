@@ -464,16 +464,15 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
 		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <param name="originalTransactionId">Идентификатор запроса на поиск инструментов.</param>
 		/// <returns>Сообщение.</returns>
-		public static SecurityMessage ToMessage(this Security security, SecurityId securityId, long originalTransactionId = 0)
+		public static SecurityMessage ToMessage(this Security security, SecurityId? securityId = null)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
 
 			return new SecurityMessage
 			{
-				SecurityId = securityId,
+				SecurityId = securityId ?? security.ToSecurityId(),
 				Name = security.Name,
 				ShortName = security.ShortName,
 				PriceStep = security.PriceStep,
@@ -488,7 +487,6 @@ namespace StockSharp.Algo
 				UnderlyingSecurityCode = security.UnderlyingSecurityId.IsEmpty() ? null : security.UnderlyingSecurityId.Split('@')[0],
 				SettlementDate = security.SettlementDate,
 				ExpiryDate = security.ExpiryDate,
-				OriginalTransactionId = originalTransactionId
 			};
 		}
 
