@@ -76,18 +76,7 @@
 
 			LogsDir = Path.Combine(BaseApplication.AppDataPath, "Logs");
 
-			_timerToken = GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(() =>
-			{
-				lock (_timerSync)
-				{
-					if (!_needToSave)
-						return;
-
-					_needToSave = false;
-				}
-
-				Save();
-			});
+			_timerToken = GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(Save);
 		}
 
 		// после обфускации название типа нечитаемо
@@ -100,6 +89,14 @@
 		{
 			try
 			{
+				lock (_timerSync)
+				{
+					if (!_needToSave)
+						return;
+
+					_needToSave = false;
+				}
+
 				CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
 					var root = new SettingsStorage();
@@ -216,15 +213,17 @@
 				{
 					try
 					{
-						wnds[i].Pane = panes[i].LoadEntire<IPane>();
+						var wnd = wnds[i];
 
-						if (wnds[i].Pane.IsValid)
+						wnd.Pane = panes[i].LoadEntire<IPane>();
+
+						if (wnd.Pane.IsValid)
 						{
 							if (panes[i].GetValue<bool>("isActive"))
-								activeWnd = wnds[i];
+								activeWnd = wnd;
 						}
 						else
-							wnds[i].Pane = null;
+							wnd.Pane = null;
 					}
 					catch (Exception ex)
 					{
