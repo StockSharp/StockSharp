@@ -81,8 +81,8 @@ namespace StockSharp.Hydra.Rithmic
 			[PropertyOrder(3)]
 			public RithmicServers Server
 			{
-				get { return ExtensionInfo["RithmicServers"].To<RithmicServers>(); }
-				set { ExtensionInfo["AdminConnectionPoint"] = value.To<string>(); }
+				get { return ExtensionInfo["Server"].To<RithmicServers>(); }
+				set { ExtensionInfo["Server"] = value.To<string>(); }
 			}
 
 			/// <summary>
