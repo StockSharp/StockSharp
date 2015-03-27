@@ -35,6 +35,13 @@ namespace StockSharp.Hydra
 			database.Execute(walCmd, new SerializationItemCollection(), false);
 		}
 
+		private void Execute(string query)
+		{
+			((Database)_entityRegistry.Storage)
+				.GetCommand(Query.Execute(query), null, new FieldList(), new FieldList(), false)
+				.ExecuteNonQuery(new SerializationItemCollection());
+		}
+
 		private void CheckDatabase()
 		{
 			if (_entityRegistry.Version.Compare(HydraEntityRegistry.LatestVersion) == 0)
@@ -88,62 +95,44 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 7)) == 0)
 			{
-				var query = Query
-					.Execute(@"
+				Execute(@"
 					update HydraTaskSecurity
 					set
 						[Security] = 'ALL@ALL'
 					where
 						[Security] LIKE 'ALL@%'");
 
-				var cmd = database.GetCommand(query, null, new FieldList(), new FieldList(), false);
-				cmd.ExecuteNonQuery(new SerializationItemCollection());
-
 				_entityRegistry.Version = new Version(2, 8);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 8)) == 0)
 			{
-				var queryFrom = Query
-					.Execute(@"
+				Execute(@"
 					update HydraTaskSecurity
 					set
 						[CandleSeries] = replace([CandleSeries], '<From>01/01/0001 00:00:00</From>', '<From>01/01/0001 00:00:00 +00:00</From>')");
 
-				var cmdFrom = database.GetCommand(queryFrom, null, new FieldList(), new FieldList(), false);
-				cmdFrom.ExecuteNonQuery(new SerializationItemCollection());
-
-				var queryTo = Query
-					.Execute(@"
+				Execute(@"
 					update HydraTaskSecurity
 					set
 						[CandleSeries] = replace([CandleSeries], '<To>9999-12-31T23:59:59.9999999</To>', '<To>12/31/9999 23:59:59 +00:00</To>')");
-
-				var cmdTo = database.GetCommand(queryTo, null, new FieldList(), new FieldList(), false);
-				cmdTo.ExecuteNonQuery(new SerializationItemCollection());
 
 				_entityRegistry.Version = new Version(2, 9);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 9)) == 0)
 			{
-				var query = Query
-					.Execute(@"
+				Execute(@"
 					update HydraTaskSettings
 					set
 						[ExtensionInfo] = replace([ExtensionInfo], '<From>01/01/0001 00:00:00</From>', '<From>01/01/0001 00:00:00 +00:00</From>')");
-
-				database
-					.GetCommand(query, null, new FieldList(), new FieldList(), false)
-					.ExecuteNonQuery(new SerializationItemCollection());
 
 				_entityRegistry.Version = new Version(2, 10);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 10)) == 0)
 			{
-				var query = Query
-					.Execute(@"
+				Execute(@"
 					alter table [Security] RENAME TO tmp;
 					create table [Security] (
 						[Id] varchar NOT NULL, [Name] varchar, [Code] varchar NOT NULL, [Class] varchar, [ShortName] varchar,
@@ -155,10 +144,6 @@ namespace StockSharp.Hydra
 						[Plaza] varchar);
 					insert into [Security] select * from tmp;
 					drop table tmp;");
-
-				database
-					.GetCommand(query, null, new FieldList(), new FieldList(), false)
-					.ExecuteNonQuery(new SerializationItemCollection());
 
 				_entityRegistry.Version = new Version(2, 11);
 			}
@@ -172,33 +157,37 @@ namespace StockSharp.Hydra
 
 			if (_entityRegistry.Version.Compare(new Version(2, 12)) == 0)
 			{
-				var query = Query
-					.Execute(@"
-							alter table [HydraTaskSecurity] add column ExecutionCount integer;
-							alter table [HydraTaskSecurity] add column ExecutionLastTime time;");
-
-				database
-					.GetCommand(query, null, new FieldList(), new FieldList(), false)
-					.ExecuteNonQuery(new SerializationItemCollection());
+				Execute(@"
+						alter table [HydraTaskSecurity] add column ExecutionCount integer;
+						alter table [HydraTaskSecurity] add column ExecutionLastTime time;");
 
 				_entityRegistry.Version = new Version(2, 13);
 			}
 
 			if (_entityRegistry.Version.Compare(new Version(2, 13)) == 0)
 			{
-				database
-					.GetCommand(Query
-					.Execute("update [HydraTaskSecurity] set ExecutionCount = 0 where ExecutionCount is null"),
-						null, new FieldList(), new FieldList(), false)
-					.ExecuteNonQuery(new SerializationItemCollection());
-
-				database
-					.GetCommand(Query
-					.Execute("update [HydraTaskSecurity] set CandleCount = 0 where CandleCount is null"),
-						null, new FieldList(), new FieldList(), false)
-					.ExecuteNonQuery(new SerializationItemCollection());
+				Execute("update [HydraTaskSecurity] set ExecutionCount = 0 where ExecutionCount is null");
+				Execute("update [HydraTaskSecurity] set CandleCount = 0 where CandleCount is null");
 
 				_entityRegistry.Version = new Version(2, 14);
+			}
+
+			if (_entityRegistry.Version.Compare(new Version(2, 14)) == 0)
+			{
+				Execute(@"
+					alter table [Security] RENAME TO tmp;
+					create table [Security] (
+						[Id] varchar NOT NULL, [Name] varchar, [Code] varchar NOT NULL, [Class] varchar, [ShortName] varchar,
+						[PriceStep] real, [VolumeStep] real, [Multiplier] real, [Decimals] integer,
+						[Type] integer, [ExpiryDate] varchar, [SettlementDate] varchar, [ExtensionInfo] text,
+						[Currency] integer, [Board] varchar NOT NULL, [UnderlyingSecurityId] varchar, [Strike] real,
+						[OptionType] integer, [BinaryOptionType] varchar, [Bloomberg] varchar, [Cusip] varchar,
+						[Isin] varchar, [IQfeed] varchar, [Ric] varchar, [Sedol] varchar, [InteractiveBrokers] integer,
+						[Plaza] varchar);
+					insert into [Security] select * from tmp;
+					drop table tmp;");
+
+				_entityRegistry.Version = new Version(2, 15);
 				return;
 			}
 
