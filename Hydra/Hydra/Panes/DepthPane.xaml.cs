@@ -55,11 +55,6 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
-		public override bool InProcess
-		{
-			get { return Progress.IsStarted; }
-		}
-
 		private IEnumerableEx<QuoteChangeMessage> GetDepths()
 		{
 			int maxDepth;

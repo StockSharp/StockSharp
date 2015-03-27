@@ -43,11 +43,6 @@
 			set { SelectSecurityBtn.SelectedSecurity = value; }
 		}
 
-		public override bool InProcess
-		{
-			get { return Progress.IsStarted; }
-		}
-
 		private IEnumerableEx<ExecutionMessage> GetExecutions()
 		{
 			var executions = StorageRegistry

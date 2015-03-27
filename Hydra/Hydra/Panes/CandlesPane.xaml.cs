@@ -46,11 +46,6 @@ namespace StockSharp.Hydra.Panes
 			set { SelectSecurityBtn.SelectedSecurity = value; }
 		}
 
-		public override bool InProcess
-		{
-			get { return Progress.IsStarted; }
-		}
-
 		private CandleSeries CandleSeries
 		{
 			get { return new CandleSeries(CandleSettings.Settings.CandleType, SelectedSecurity, Arg); }

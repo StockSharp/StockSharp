@@ -13,6 +13,7 @@ namespace StockSharp.Hydra.Panes
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -20,6 +21,7 @@ namespace StockSharp.Hydra.Panes
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	public partial class AllSecuritiesPane : IPane
 	{
@@ -181,18 +183,20 @@ namespace StockSharp.Hydra.Panes
 
 		private void ExportBtn_OnExportStarted()
 		{
-			if (SecurityPicker.FilteredSecurities.Count == 0)
+			var securities = SecurityPicker.FilteredSecurities;
+
+			if (securities.Count == 0)
 			{
 				Progress.DoesntExist();
 				return;
 			}
 
-			var path = ExportBtn.GetPath(null, typeof(Security), null, null, null, null);
+			var path = ExportBtn.GetPath(null, typeof(SecurityMessage), null, null, null, null);
 
 			if (path == null)
 				return;
 
-			Progress.Start(null, typeof(Security), null, SecurityPicker.FilteredSecurities.ToEx(), path);
+			Progress.Start(null, typeof(SecurityMessage), null, securities.Select(s => s.ToMessage(s.ToSecurityId())).ToEx(securities.Count), path);
 		}
 	}
 }

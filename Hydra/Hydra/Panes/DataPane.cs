@@ -43,7 +43,11 @@ namespace StockSharp.Hydra.Panes
 			get { return null; }
 		}
 
-		public abstract bool InProcess { get; }
+		public virtual bool InProcess
+		{
+			get { return Progress.IsStarted; }
+		}
+
 		public virtual bool IsValid
 		{
 			get { return true; }
