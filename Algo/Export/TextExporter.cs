@@ -2,9 +2,10 @@ namespace StockSharp.Algo.Export
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Configuration;
 	using System.IO;
 	using System.Linq;
+
+	using Ecng.Common;
 
 	using SmartFormat;
 	using SmartFormat.Core.Formatting;
@@ -18,6 +19,8 @@ namespace StockSharp.Algo.Export
 	/// </summary>
 	public class TextExporter : BaseExporter
 	{
+		private readonly string _template;
+
 		/// <summary>
 		/// Создать <see cref="TextExporter"/>.
 		/// </summary>
@@ -25,9 +28,14 @@ namespace StockSharp.Algo.Export
 		/// <param name="arg">Параметр данных.</param>
 		/// <param name="isCancelled">Обработчик, возвращающий признак прерывания экспорта.</param>
 		/// <param name="fileName">Путь к файлу.</param>
-		public TextExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName)
+		/// <param name="template">Шаблон форматирование строки.</param>
+		public TextExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, string template)
 			: base(security, arg, isCancelled, fileName)
 		{
+			if (template.IsEmpty())
+				throw new ArgumentNullException("template");
+
+			_template = template;
 		}
 
 		/// <summary>
@@ -36,25 +44,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Сообщения.</param>
 		protected override void Export(IEnumerable<ExecutionMessage> messages)
 		{
-			string template;
-
-			switch ((ExecutionTypes)Arg)
-			{
-				case ExecutionTypes.Tick:
-				case ExecutionTypes.Trade:
-					template = "txt_export_trades";
-					break;
-				case ExecutionTypes.Order:
-					template = "txt_export_executions";
-					break;
-				case ExecutionTypes.OrderLog:
-					template = "txt_export_orderlog";
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			Do(messages, template);
+			Do(messages);
 		}
 
 		/// <summary>
@@ -63,7 +53,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Сообщения.</param>
 		protected override void Export(IEnumerable<QuoteChangeMessage> messages)
 		{
-			Do(messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d))), "txt_export_depths");
+			Do(messages.SelectMany(d => d.Asks.Concat(d.Bids).OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d))));
 		}
 
 		/// <summary>
@@ -72,7 +62,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Сообщения.</param>
 		protected override void Export(IEnumerable<Level1ChangeMessage> messages)
 		{
-			Do(messages, "txt_export_level1");
+			Do(messages);
 		}
 
 		/// <summary>
@@ -81,7 +71,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Сообщения.</param>
 		protected override void Export(IEnumerable<CandleMessage> messages)
 		{
-			Do(messages, "txt_export_candles");
+			Do(messages);
 		}
 
 		/// <summary>
@@ -90,7 +80,7 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Сообщения.</param>
 		protected override void Export(IEnumerable<NewsMessage> messages)
 		{
-			Do(messages, "txt_export_news");
+			Do(messages);
 		}
 
 		/// <summary>
@@ -99,14 +89,14 @@ namespace StockSharp.Algo.Export
 		/// <param name="messages">Сообщения.</param>
 		protected override void Export(IEnumerable<SecurityMessage> messages)
 		{
-			Do(messages, "txt_export_securities");
+			Do(messages);
 		}
 
-		private void Do<TValue>(IEnumerable<TValue> values, string templateName)
+		private void Do<TValue>(IEnumerable<TValue> values)
 		{
 			using (var writer = new StreamWriter(Path))
 			{
-				var template = ConfigurationManager.AppSettings.Get(templateName);
+				//var template = ConfigurationManager.AppSettings.Get(templateName);
 
 				FormatCache templateCache = null;
 				var formater = Smart.Default;
@@ -116,7 +106,7 @@ namespace StockSharp.Algo.Export
 					if (!CanProcess())
 						break;
 
-					writer.WriteLine(formater.FormatWithCache(ref templateCache, template, value));
+					writer.WriteLine(formater.FormatWithCache(ref templateCache, _template, value));
 				}
 
 				writer.Flush();

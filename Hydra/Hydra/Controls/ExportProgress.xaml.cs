@@ -56,11 +56,11 @@ namespace StockSharp.Hydra.Controls
 
 		public void Start(Security security, Type dataType, object arg, IEnumerableEx values, object path)
 		{
-			if (security == null && dataType != typeof(News) && dataType != typeof(Security))
-				throw new ArgumentNullException("security");
-
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
+
+			if (security == null && dataType != typeof(NewsMessage) && dataType != typeof(SecurityMessage))
+				throw new ArgumentNullException("security");
 
 			if (values == null)
 				throw new ArgumentNullException("values");
@@ -111,7 +111,7 @@ namespace StockSharp.Hydra.Controls
 					break;
 				case ExportTypes.Txt:
 					fileName = (string)path;
-					exporter = new TextExporter(security, arg, isCancelled, fileName);
+					exporter = new TextExporter(security, arg, isCancelled, fileName, dataType.GetTxtTemplate(arg));
 					break;
 				case ExportTypes.Sql:
 					fileName = null;
@@ -149,9 +149,7 @@ namespace StockSharp.Hydra.Controls
 			_worker.DoWork += (s, e) =>
 			{
 				var storageRegistry = ConfigManager.GetService<IStorageRegistry>();
-				var storage = dataType.IsSubclassOf(typeof(CandleMessage))
-					? storageRegistry.GetCandleStorage(dataType, security, arg, sourceDrive, format)
-					: storageRegistry.GetStorage(security, dataType, arg, sourceDrive, format);
+				var storage = storageRegistry.GetStorage(security, dataType, arg, sourceDrive, format);
 
 				try
 				{
@@ -174,8 +172,6 @@ namespace StockSharp.Hydra.Controls
 								count = ((IMarketDataStorage<QuoteChangeMessage>)storage).Load(d).Count;
 							else if (dataType == typeof(Level1ChangeMessage))
 								count = ((IMarketDataStorage<Level1ChangeMessage>)storage).Load(d).Count;
-							//else if (dataType == typeof(OrderLogItem))
-							//	count = ((IMarketDataStorage<OrderLogItem>)storage).Load(d).Count;
 							else if (dataType.IsSubclassOf(typeof(CandleMessage)))
 								count = ((IMarketDataStorage<CandleMessage>)storage).Load(d).Count;
 							else

@@ -512,7 +512,6 @@ namespace StockSharp.Algo.Storages
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>> _depthStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>> _level1Storages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>> _candleStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>>();
-
 		private readonly SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>> _executionStorages = new SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>>();
 
 		/// <summary>
@@ -967,19 +966,10 @@ namespace StockSharp.Algo.Storages
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
 
-			if (dataType == typeof(Trade))
-				return GetTradeStorage(security, drive, format);
-			else if (dataType == typeof(MarketDepth))
-				return GetMarketDepthStorage(security, drive, format);
-			//else if (dataType == typeof(SecurityChange))
-			//	return GetSecurityChangeStorage(security, drive, format);
-			else if (dataType == typeof(OrderLogItem))
-				return GetOrderLogStorage(security, drive, format);
-			else if (dataType.IsSubclassOf(typeof(Candle)))
-				return GetCandleStorage(dataType, security, arg, drive, format);
-			else if (dataType == typeof(Order))
-				return GetExecutionStorage(security, ExecutionTypes.Order, drive, format);
-			else if (dataType == typeof(ExecutionMessage))
+			if (!dataType.IsSubclassOf(typeof(Message)))
+				dataType = dataType.ToMessageType(ref arg);
+
+			if (dataType == typeof(ExecutionMessage))
 				return GetExecutionStorage(security, (ExecutionTypes)arg, drive, format);
 			else if (dataType == typeof(Level1ChangeMessage))
 				return GetLevel1MessageStorage(security, drive, format);

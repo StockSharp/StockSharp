@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Configuration;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -11,6 +12,7 @@
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -110,29 +112,23 @@
 		/// <returns>Имя эспортируемого файла.</returns>
 		public static string GetFileName(this Security security, Type dataType, object arg, DateTime? from, DateTime? to, ExportTypes type)
 		{
-			if (security == null && dataType != typeof(News) && dataType != typeof(Security))
-				throw new ArgumentNullException("security");
-
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
 
+			if (security == null && dataType != typeof(NewsMessage) && dataType != typeof(SecurityMessage))
+				throw new ArgumentNullException("security");
+
 			string fileName;
 
-			if (dataType == typeof(Trade))
-				fileName = "trades";
-			else if (dataType == typeof(MarketDepth) || dataType == typeof(QuoteChangeMessage))
+			if (dataType == typeof(QuoteChangeMessage))
 				fileName = "depths";
 			else if (dataType == typeof(Level1ChangeMessage))
 				fileName = "level1";
-			else if (dataType == typeof(OrderLogItem))
-				fileName = "orderLog";
-			else if (dataType.IsSubclassOf(typeof(Candle)))
-				fileName = "candles_{0}_{1}".Put(dataType.Name, arg).Replace(':', '_');
 			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
 				fileName = "candles_{0}_{1}".Put(typeof(TimeFrameCandle).Name, arg).Replace(':', '_');
-			else if (dataType == typeof(News))
+			else if (dataType == typeof(NewsMessage))
 				fileName = "news";
-			else if (dataType == typeof(Security) || dataType == typeof(SecurityMessage))
+			else if (dataType == typeof(SecurityMessage))
 				fileName = "securities";
 			else if (dataType == typeof(ExecutionMessage))
 			{
@@ -195,6 +191,56 @@
 				throw new ArgumentNullException("security");
 
 			return security.Security.Board.WorkingTime.IsTradeDate(date, true);
+		}
+
+		/// <summary>
+		/// Получить шаблон для текстового экспорта данных.
+		/// </summary>
+		/// <param name="dataType">Тип данных.</param>
+		/// <param name="arg">Параметр данных.</param>
+		/// <returns>Шаблон для текстового экспорта данных.</returns>
+		public static string GetTxtTemplate(this Type dataType, object arg)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException("dataType");
+
+			string templateName;
+
+			if (dataType == typeof(SecurityMessage))
+				templateName = "txt_export_securities";
+			else if (dataType == typeof(NewsMessage))
+				templateName = "txt_export_news";
+			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+				templateName = "txt_export_candles";
+			else if (dataType == typeof(Level1ChangeMessage))
+				templateName = "txt_export_level1";
+			else if (dataType == typeof(QuoteChangeMessage))
+				templateName = "txt_export_depths";
+			else if (dataType == typeof(ExecutionMessage))
+			{
+				if (arg == null)
+					throw new ArgumentNullException("arg");
+
+				switch ((ExecutionTypes)arg)
+				{
+					case ExecutionTypes.Tick:
+						templateName = "txt_export_trades";
+						break;
+					case ExecutionTypes.Order:
+					case ExecutionTypes.Trade:
+						templateName = "txt_export_executions";
+						break;
+					case ExecutionTypes.OrderLog:
+						templateName = "txt_export_orderlog";
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			else
+				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+
+			return ConfigurationManager.AppSettings.Get(templateName);
 		}
 	}
 }

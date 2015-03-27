@@ -12,13 +12,12 @@ namespace StockSharp.Hydra.Converters
 	using Ecng.Xaml;
 	using Ecng.Xaml.Database;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Export;
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
-	using StockSharp.Messages;
 	using StockSharp.Xaml.PropertyGrid;
 	using StockSharp.Localization;
 
@@ -234,20 +233,17 @@ namespace StockSharp.Hydra.Converters
 				if (path.IsEmpty())
 					path = DriveCache.Instance.DefaultDrive.Path;
 
-				foreach (var dataType in (allSecurity == null ? security.MarketDataTypes : supportedDataTypes))
+				foreach (var t in (allSecurity == null ? security.MarketDataTypes : supportedDataTypes))
 				{
 					if (!CanProcess())
 						break;
 
+					var arg = _settings.CandleSettings.Arg;
+					var dataType = t.ToMessageType(ref arg);
+
 					this.AddInfoLog(LocalizedStrings.Str3769Params.Put(security.Security.Id, dataType.Name, _settings.ExportType));
 
-					var fromStorage = dataType == typeof(Candle)
-						? StorageRegistry.GetCandleStorage(_settings.CandleSettings.CandleType, security.Security, _settings.CandleSettings.Arg, _settings.Drive, _settings.StorageFormat)
-						: StorageRegistry.GetStorage(security.Security, dataType, null, _settings.Drive, _settings.StorageFormat);
-
-					var arg = dataType == typeof(Candle) ? _settings.CandleSettings.Arg
-						: (dataType == typeof(OrderLogItem) ? ExecutionTypes.OrderLog :
-						(dataType == typeof(Trade) ? (object)ExecutionTypes.Tick : null));
+					var fromStorage = StorageRegistry.GetStorage(security.Security, dataType, arg, _settings.Drive, _settings.StorageFormat);
 
 					var from = fromStorage.GetFromDate();
 					var to = fromStorage.GetToDate();
@@ -277,9 +273,7 @@ namespace StockSharp.Hydra.Converters
 					else
 					{
 						var fileName = Path.Combine(path, security.Security.GetFileName(
-							dataType == typeof(Candle) ? _settings.CandleSettings.CandleType : dataType,
-							dataType == typeof(Candle) ? _settings.CandleSettings.Arg : null,
-							from.Value, to.Value, _settings.ExportType));
+							dataType, arg, from.Value, to.Value, _settings.ExportType));
 
 						switch (_settings.ExportType)
 						{
@@ -290,7 +284,7 @@ namespace StockSharp.Hydra.Converters
 								exporter = new XmlExporter(security.Security, arg, isCancelled, fileName);
 								break;
 							case ExportTypes.Txt:
-								exporter = new TextExporter(security.Security, arg, isCancelled, fileName);
+								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, dataType.GetTxtTemplate(arg));
 								break;
 							case ExportTypes.Bin:
 								exporter = new BinExporter(security.Security, arg, isCancelled, DriveCache.Instance.GetDrive(path));
