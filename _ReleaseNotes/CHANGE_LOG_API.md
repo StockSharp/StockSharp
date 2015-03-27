@@ -1,5 +1,14 @@
 StockSharp API Change log
 ========================
+###v4.2.74:
+* (feature) Xaml. NewsMessageGrid
+* (feature) Plaza. Fix control connection state in CGate mode.
+* (feature) Transaq 2.10.8
+* (bug) FIX connector and Quik LUA. Fix MarketDepth subscription for ALL security.
+* (bug) Messages and Entities. Serialization fixes.
+* (feature) Plaza. Spectra 4 (ASTS).
+* (feature) Security. PriceStep, VolumeStep, Decimals, Multiplier, MinPrice, MaxPrice are nullable.
+
 ###v4.2.73:
 * (feature) FIX connector. Client side no longer use QuickFix
 * (bug) LuaFixServer. Level1 thread safety.

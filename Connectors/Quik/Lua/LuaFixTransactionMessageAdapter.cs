@@ -28,7 +28,7 @@
 		/// </summary>
 		/// <param name="writer">Писатель FIX данных.</param>
 		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
-		protected override void SendFixOrderCondition(FixWriter writer, OrderRegisterMessage regMsg)
+		protected override void SendFixOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
 			var condition = (QuikOrderCondition)regMsg.Condition;
 
@@ -144,7 +144,7 @@
 		/// <param name="msgType">Тип FIX сообщения.</param>
 		/// <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
 		/// <returns>Успешно ли обработаны данные.</returns>
-		protected override bool? ProcessTransactionMessage(string msgType, FixReader reader)
+		protected override bool? ProcessTransactionMessage(string msgType, IFixReader reader)
 		{
 			switch (msgType)
 			{
