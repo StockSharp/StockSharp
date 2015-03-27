@@ -92,6 +92,7 @@ namespace StockSharp.Algo.Export
 					break;
 				}
 				case ExecutionTypes.Order:
+				case ExecutionTypes.Trade:
 				{
 					Do(messages, "executions", (writer, item) =>
 					{
@@ -143,7 +144,6 @@ namespace StockSharp.Algo.Export
 
 					writer.WriteEndElement();
 				}
-			
 
 				writer.WriteEndElement();
 			});
@@ -244,10 +244,14 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("code", security.SecurityId.SecurityCode);
 				writer.WriteAttribute("board", security.SecurityId.BoardCode);
 
+				if (!security.Name.IsEmpty())
+					writer.WriteAttribute("name", security.Name);
+
+				if (!security.ShortName.IsEmpty())
+					writer.WriteAttribute("shortName", security.ShortName);
+
 				if (security.PriceStep != null)
 					writer.WriteAttribute("priceStep", security.PriceStep.Value);
-
-				//writer.WriteAttribute("stepPrice", security.StepPrice);
 
 				if (security.VolumeStep != null)
 					writer.WriteAttribute("volumeStep", security.VolumeStep.Value);
@@ -281,6 +285,30 @@ namespace StockSharp.Algo.Export
 
 				if (security.SettlementDate != null)
 					writer.WriteAttribute("settlementDate", security.SettlementDate.Value.ToString("yyyy-MM-dd"));
+
+				if (!security.SecurityId.Bloomberg.IsEmpty())
+					writer.WriteAttribute("bloomberg", security.SecurityId.Bloomberg);
+
+				if (!security.SecurityId.Cusip.IsEmpty())
+					writer.WriteAttribute("cusip", security.SecurityId.Cusip);
+
+				if (!security.SecurityId.IQFeed.IsEmpty())
+					writer.WriteAttribute("iqfeed", security.SecurityId.IQFeed);
+
+				if (security.SecurityId.InteractiveBrokers != null)
+					writer.WriteAttribute("ib", security.SecurityId.InteractiveBrokers);
+
+				if (!security.SecurityId.Isin.IsEmpty())
+					writer.WriteAttribute("isin", security.SecurityId.Isin);
+
+				if (!security.SecurityId.Plaza.IsEmpty())
+					writer.WriteAttribute("plaza", security.SecurityId.Plaza);
+
+				if (!security.SecurityId.Ric.IsEmpty())
+					writer.WriteAttribute("ric", security.SecurityId.Ric);
+
+				if (!security.SecurityId.Sedol.IsEmpty())
+					writer.WriteAttribute("sedol", security.SecurityId.Sedol);
 
 				writer.WriteEndElement();
 			});

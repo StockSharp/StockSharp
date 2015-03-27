@@ -384,41 +384,69 @@ namespace StockSharp.Algo.Export
 		{
 			Do(worker =>
 			{
-				worker
-					.SetCell(0, 0, LocalizedStrings.Code).SetStyle(0, typeof(string))
-					.SetCell(1, 0, LocalizedStrings.Board).SetStyle(1, typeof(string))
-					.SetCell(2, 0, LocalizedStrings.PriceStep).SetStyle(2, typeof(decimal))
-					//.SetCell(3, 0, "Стоимость шага").SetStyle(3, typeof(decimal))
-					.SetCell(3, 0, LocalizedStrings.Str365).SetStyle(4, typeof(decimal))
-					.SetCell(4, 0, LocalizedStrings.Str330).SetStyle(5, typeof(decimal))
-					.SetCell(5, 0, LocalizedStrings.Type).SetStyle(5, typeof(string))
-					.SetCell(6, 0, LocalizedStrings.Str547Key).SetStyle(6, typeof(decimal))
-					.SetCell(7, 0, LocalizedStrings.Str551).SetStyle(7, typeof(string))
-					.SetCell(8, 0, LocalizedStrings.Strike).SetStyle(8, typeof(decimal))
-					.SetCell(9, 0, LocalizedStrings.UnderlyingAsset).SetStyle(9, typeof(string))
-					.SetCell(10, 0, LocalizedStrings.ExpiryDate).SetStyle(10, "yyyy-MM-dd");
+				var colIndex = 0;
 
-				var index = 1;
+				worker
+					.SetCell(colIndex, 0, LocalizedStrings.Code).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.Board).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.Name).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.Str363).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.PriceStep).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.Str365).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.Str330).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.Type).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.Str547).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.Str551).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.Strike).SetStyle(colIndex++, typeof(decimal))
+					.SetCell(colIndex, 0, LocalizedStrings.UnderlyingAsset).SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, LocalizedStrings.ExpiryDate).SetStyle(colIndex++, "yyyy-MM-dd")
+					.SetCell(colIndex, 0, LocalizedStrings.PaymentDate).SetStyle(colIndex++, "yyyy-MM-dd")
+					.SetCell(colIndex, 0, LocalizedStrings.Str250).SetStyle(colIndex++, typeof(string))
+
+					.SetCell(colIndex, 0, "Bloomberg").SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, "CUSIP").SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, "IQFeed").SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, "InteractiveBrokers").SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, "ISIN").SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, "Plaza").SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, "RIC").SetStyle(colIndex++, typeof(string))
+					.SetCell(colIndex, 0, "SEDOL").SetStyle(colIndex, typeof(string));
+
+				var rowIndex = 1;
 
 				foreach (var security in messages)
 				{
+					colIndex = 0;
+
 					worker
-						.SetCell(0, index, security.SecurityId.SecurityCode)
-						.SetCell(1, index, security.SecurityId.BoardCode)
-						.SetCell(2, index, security.PriceStep)
-						//.SetCell(3, index, security.StepPrice)
-						.SetCell(3, index, security.VolumeStep)
-						.SetCell(4, index, security.Multiplier)
-						.SetCell(5, index, security.SecurityType == null ? string.Empty : security.SecurityType.Value.GetDisplayName())
-						.SetCell(6, index, security.Decimals)
-						.SetCell(7, index, security.OptionType == null ? string.Empty : security.OptionType.Value.GetDisplayName())
-						.SetCell(8, index, security.Strike)
-						.SetCell(9, index, security.UnderlyingSecurityCode)
-						.SetCell(10, index, security.ExpiryDate);
+						.SetCell(colIndex++, rowIndex, security.SecurityId.SecurityCode)
+						.SetCell(colIndex++, rowIndex, security.SecurityId.BoardCode)
+						.SetCell(colIndex++, rowIndex, security.Name)
+						.SetCell(colIndex++, rowIndex, security.ShortName)
+						.SetCell(colIndex++, rowIndex, security.PriceStep)
+						.SetCell(colIndex++, rowIndex, security.VolumeStep)
+						.SetCell(colIndex++, rowIndex, security.Multiplier)
+						.SetCell(colIndex++, rowIndex, security.SecurityType == null ? string.Empty : security.SecurityType.Value.GetDisplayName())
+						.SetCell(colIndex++, rowIndex, security.Decimals)
+						.SetCell(colIndex++, rowIndex, security.OptionType == null ? string.Empty : security.OptionType.Value.GetDisplayName())
+						.SetCell(colIndex++, rowIndex, security.Strike)
+						.SetCell(colIndex++, rowIndex, security.BinaryOptionType)
+						.SetCell(colIndex++, rowIndex, security.UnderlyingSecurityCode)
+						.SetCell(colIndex++, rowIndex, security.ExpiryDate)
+						.SetCell(colIndex++, rowIndex, security.SettlementDate)
+						.SetCell(colIndex++, rowIndex, security.Currency == null ? string.Empty : security.Currency.Value.GetDisplayName())
+						.SetCell(colIndex++, rowIndex, security.SecurityId.Bloomberg)
+						.SetCell(colIndex++, rowIndex, security.SecurityId.Cusip)
+						.SetCell(colIndex++, rowIndex, security.SecurityId.IQFeed)
+						.SetCell(colIndex++, rowIndex, security.SecurityId.InteractiveBrokers)
+						.SetCell(colIndex++, rowIndex, security.SecurityId.Isin)
+						.SetCell(colIndex++, rowIndex, security.SecurityId.Plaza)
+						.SetCell(colIndex++, rowIndex, security.SecurityId.Ric)
+						.SetCell(colIndex, rowIndex, security.SecurityId.Sedol);
 
-					index++;
+					rowIndex++;
 
-					if (!Check(index))
+					if (!Check(rowIndex))
 						break;
 				}
 			});
