@@ -1,60 +1,42 @@
 namespace StockSharp.Hydra.Panes
 {
 	using System;
+	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 	using Ecng.Configuration;
-	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
-	public partial class NewsPane : IPane
+	public partial class NewsPane
 	{
-		private readonly IEntityRegistry _entityRegistry;
-
 		public NewsPane()
 		{
 			InitializeComponent();
 
-			Progress.Init(ExportBtn, MainGrid);
-
-			From = DateTime.Today - TimeSpan.FromDays(7);
-			To = DateTime.Today + TimeSpan.FromDays(1);
-
-			_entityRegistry = ConfigManager.GetService<IEntityRegistry>();
-
-			ExportBtn.EnableType(ExportTypes.Bin, false);
+			Init(ExportBtn, MainGrid, GetNews);
 		}
 
-		string IPane.Title
+		protected override Type DataType
+		{
+			get { return typeof(NewsMessage); }
+		}
+
+		public override string Title
 		{
 			get { return LocalizedStrings.News; }
 		}
 
-		Uri IPane.Icon
+		public override Security SelectedSecurity
 		{
 			get { return null; }
-		}
-
-		bool IPane.IsValid
-		{
-			get { return true; }
-		}
-
-		private DateTime? From
-		{
-			get { return FromCtrl.Value; }
-			set { FromCtrl.Value = value; }
-		}
-
-		private DateTime? To
-		{
-			get { return ToCtrl.Value; }
-			set { ToCtrl.Value = value; }
+			set { }
 		}
 
 		private void OnDateValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -62,56 +44,20 @@ namespace StockSharp.Hydra.Panes
 			Progress.ClearStatus();
 		}
 
-		private IEnumerableEx<News> GetNews()
+		private IEnumerableEx<NewsMessage> GetNews()
 		{
-			return _entityRegistry.News.ToEx();
-		}
-
-		private void ExportBtn_OnExportStarted()
-		{
-			var news = GetNews();
-
-			if (news.Count == 0)
-			{
-				Progress.DoesntExist();
-				return;
-			}
-
-			var path = ExportBtn.GetPath(null, typeof(News), null, From, To, null);
-
-			if (path == null)
-				return;
-
-			Progress.Start(null, typeof(News), null, news, path);
-		}
-
-		public void Load(SettingsStorage storage)
-		{
-			if (storage.ContainsKey("From"))
-				From = storage.GetValue<DateTime>("From");
-
-			if (storage.ContainsKey("To"))
-				To = storage.GetValue<DateTime>("To");
-		}
-
-		public void Save(SettingsStorage storage)
-		{
-			if (From != null)
-				storage.SetValue("From", (DateTime)From);
-
-			if (To != null)
-				storage.SetValue("To", (DateTime)To);
-		}
-
-		void IDisposable.Dispose()
-		{
-			Progress.Stop();
+			// TODO
+			var news = ConfigManager.GetService<IEntityRegistry>().News;
+			return news
+				.Where(n => n.ServerTime >= From && n.ServerTime <= To + TimeHelper.LessOneDay)
+				.Select(n => n.ToMessage())
+				.ToEx(news.Count);
 		}
 
 		private void Find_OnClick(object sender, RoutedEventArgs e)
 		{
-			NewsPanel.NewsGrid.News.Clear();
-			Progress.Load(GetNews(), NewsPanel.NewsGrid.News.AddRange, 1000);
+			NewsPanel.NewsGrid.Messages.Clear();
+			Progress.Load(GetNews(), NewsPanel.NewsGrid.Messages.AddRange, 1000);
 		}
 	}
 }
