@@ -300,7 +300,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.PaymentDateKey)]
+		[DisplayNameLoc(LocalizedStrings.SettlementDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str373Key)]
 		[MainCategory]
 		public DateTimeOffset? SettlementDate

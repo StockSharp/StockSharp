@@ -108,7 +108,7 @@ namespace StockSharp.Messages
 		/// Дата выплат по инструмента (для деривативов и облигаций).
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.PaymentDateKey)]
+		[DisplayNameLoc(LocalizedStrings.SettlementDateKey)]
 		[DescriptionLoc(LocalizedStrings.Str373Key)]
 		[MainCategory]
 		[Nullable]

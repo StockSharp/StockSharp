@@ -348,8 +348,8 @@ PriceStep;Price step;Шаг цены
 MinPriceStep;Minimum price step.;Минимальный шаг цены.
 ExpiryDate;Expiration date;Дата экспирация
 Str371;Security expiration date (for derivatives - expiration, for bonds — redemption).;Дата экспирация инструмента (для деривативов - экспирация, для облигаций - погашение).
-PaymentDate;Payment date;Дата выплат
-Str373;Payment date for security (for derivatives and bonds).;Дата выплат по инструмента (для деривативов и облигаций).
+SettlementDate;Settlement date;Дата выплат
+Str373;Settlement date for security (for derivatives and bonds).;Дата выплат по инструмента (для деривативов и облигаций).
 UnderlyingAsset;Underlying asset;Базовый актив
 UnderlyingAssetCode;Underlying asset code, on which the current security is based.;Код базового актива, на основе которого построен данный инструмент.
 Strike;Strike;Страйк

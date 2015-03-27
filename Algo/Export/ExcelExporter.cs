@@ -400,7 +400,7 @@ namespace StockSharp.Algo.Export
 					.SetCell(colIndex, 0, LocalizedStrings.Strike).SetStyle(colIndex++, typeof(decimal))
 					.SetCell(colIndex, 0, LocalizedStrings.UnderlyingAsset).SetStyle(colIndex++, typeof(string))
 					.SetCell(colIndex, 0, LocalizedStrings.ExpiryDate).SetStyle(colIndex++, "yyyy-MM-dd")
-					.SetCell(colIndex, 0, LocalizedStrings.PaymentDate).SetStyle(colIndex++, "yyyy-MM-dd")
+					.SetCell(colIndex, 0, LocalizedStrings.SettlementDate).SetStyle(colIndex++, "yyyy-MM-dd")
 					.SetCell(colIndex, 0, LocalizedStrings.Str250).SetStyle(colIndex++, typeof(string))
 
 					.SetCell(colIndex, 0, "Bloomberg").SetStyle(colIndex++, typeof(string))

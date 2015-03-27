@@ -4553,25 +4553,25 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Payment date
+		/// Settlement date
 		/// </summary>
-		public const string PaymentDateKey = "PaymentDate";
+		public const string SettlementDateKey = "SettlementDate";
 
 		/// <summary>
-		/// Payment date
+		/// Settlement date
 		/// </summary>
-		public static string PaymentDate
+		public static string SettlementDate
 		{
-			get { return GetString(PaymentDateKey); }
+			get { return GetString(SettlementDateKey); }
 		}
 
 		/// <summary>
-		/// Payment date for security (for derivatives and bonds).
+		/// Settlement date for security (for derivatives and bonds).
 		/// </summary>
 		public const string Str373Key = "Str373";
 
 		/// <summary>
-		/// Payment date for security (for derivatives and bonds).
+		/// Settlement date for security (for derivatives and bonds).
 		/// </summary>
 		public static string Str373
 		{
