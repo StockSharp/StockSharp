@@ -148,21 +148,6 @@ namespace StockSharp.Transaq
 		}
 
 		/// <summary>
-		/// Запросить заголовки старых новостей.
-		/// </summary>
-		/// <param name="count">Количество заголовков новостей.</param>
-		private void GetNewsHeader(int count)
-		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
-			{
-				TransactionId = TransactionIdGenerator.GetNextId(),
-				DataType = MarketDataTypes.News,
-				Count = count,
-				IsSubscribe = true
-			});
-		}
-
-		/// <summary>
 		/// Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
