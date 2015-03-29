@@ -361,7 +361,7 @@ namespace StockSharp.Algo.Export
 					worker
 						.SetCell(0, index, n.Id)
 						.SetCell(1, index, n.ServerTime)
-						.SetCell(2, index, n.SecurityId.SecurityCode)
+						.SetCell(2, index, n.SecurityId == null ? null : n.SecurityId.Value.SecurityCode)
 						.SetCell(3, index, n.BoardCode)
 						.SetCell(4, index, n.Headline)
 						.SetCell(5, index, n.Story)

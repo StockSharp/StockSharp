@@ -1157,7 +1157,7 @@ namespace StockSharp.Algo
 				Id = news.Id,
 				Story = news.Story,
 				Headline = news.Headline,
-				SecurityId = news.Security == null ? default(SecurityId) : news.Security.ToSecurityId(),
+				SecurityId = news.Security == null ? (SecurityId?)null : news.Security.ToSecurityId(),
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
 			};
 		}

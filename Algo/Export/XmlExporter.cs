@@ -210,8 +210,8 @@ namespace StockSharp.Algo.Export
 				writer.WriteAttribute("serverTime", n.ServerTime.ToString(_timeFormat));
 				writer.WriteAttribute("localTime", n.LocalTime.ToString(_timeFormat));
 
-				if (!n.SecurityId.IsDefault())
-					writer.WriteAttribute("securityCode", n.SecurityId.SecurityCode);
+				if (n.SecurityId != null)
+					writer.WriteAttribute("securityCode", n.SecurityId.Value.SecurityCode);
 
 				if (!n.BoardCode.IsEmpty())
 					writer.WriteAttribute("boardCode", n.BoardCode);
