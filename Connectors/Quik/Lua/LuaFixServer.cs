@@ -14,10 +14,9 @@ namespace StockSharp.Quik.Lua
 
 	using MoreLinq;
 
-	using QuickFix.Fields;
-
 	using StockSharp.Algo;
 	using StockSharp.Fix;
+	using StockSharp.Fix.Native;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -427,25 +426,21 @@ namespace StockSharp.Quik.Lua
 			{
 			}
 
-			protected override long OnCreateTransactionId(string client, long requestId)
+			protected override long OnCreateTransactionId(FixSession session, string requestId)
 			{
-				return requestId;
+				return requestId.To<long>();
 			}
 
-			protected override void OnProcess(FixSession session, string client, string msgStr, bool isMarketData)
+			protected override void OnProcess(FixSession session, string msgType, string msgStr)
 			{
-				var msgType = QuickFix.Message.GetMsgType(msgStr);
-
 				switch (msgType)
 				{
 					case QuikFixMessages.NewStopOrderSingle:
 					{
-						this.AddInfoLog("From client {0}: NewStopOrderSingle", client);
-
-						var fixMsg = session.ToMessage<NewStopOrderSingle>(msgStr);
+						var fixMsg = ToMessage<NewStopOrderSingle>(msgStr);
 						var regMsg = fixMsg.ToRegisterMessage();
 
-						regMsg.TransactionId = CreateTransactionId(client, regMsg.TransactionId);
+						regMsg.TransactionId = CreateTransactionId(session, regMsg.TransactionId.To<string>());
 
 						var condition = new QuikOrderCondition
 						{
@@ -478,75 +473,12 @@ namespace StockSharp.Quik.Lua
 					}
 				}
 
-				base.OnProcess(session, client, msgStr, isMarketData);
+				base.OnProcess(session, msgType, msgStr);
 			}
 
-			protected override void SendOrder(IEnumerable<string> receivers, ExecutionMessage order)
+			protected override void WriterFixOrderCondition(IFixWriter writer, ExecutionMessage message)
 			{
-				if (order.OrderType == OrderTypes.Conditional)
-				{
-					var fixMsg = order.ToExecutionReport<StopOrderExecutionReport>(order.TransactionId == 0 ? (long?)null : GetRequestId(order.TransactionId), GetRequestId(order.OriginalTransactionId));
-
-					var condition = (QuikOrderCondition)order.Condition;
-
-					if (condition.Type != null)
-						fixMsg.Type = new StopOrderExecutionReport.TypeField((int)condition.Type);
-
-					if (condition.StopPriceCondition != null)
-						fixMsg.StopPriceCondition = new StopOrderExecutionReport.StopPriceConditionField((int)condition.StopPriceCondition);
-
-					if (condition.ConditionOrderSide != null)
-						fixMsg.ConditionOrderSide = new StopOrderExecutionReport.ConditionOrderSideField((int)condition.ConditionOrderSide);
-
-					if (condition.LinkedOrderCancel != null)
-						fixMsg.LinkedOrderCancel = new StopOrderExecutionReport.LinkedOrderCancelField(condition.LinkedOrderCancel.Value);
-
-					if (condition.Result != null)
-						fixMsg.Result = new StopOrderExecutionReport.ResultField((int)condition.Result);
-					
-					if (condition.OtherSecurityId != null)
-						fixMsg.OtherSecurityCode = new StopOrderExecutionReport.OtherSecurityCodeField(condition.OtherSecurityId.Value.SecurityCode);
-					
-					if (condition.StopPrice != null)
-						fixMsg.StopPx = new StopPx(condition.StopPrice.Value);
-					
-					if (condition.StopLimitPrice != null)
-						fixMsg.StopLimitPrice = new StopOrderExecutionReport.StopLimitPriceField(condition.StopLimitPrice.Value);
-					
-					if (condition.IsMarketStopLimit != null)
-						fixMsg.IsMarketStopLimit = new StopOrderExecutionReport.IsMarketStopLimitField(condition.IsMarketStopLimit.Value);
-					
-					if (condition.ActiveTime != null)
-					{
-						fixMsg.ActiveTimeFrom = new StopOrderExecutionReport.ActiveTimeFromField(condition.ActiveTime.Min.UtcDateTime);
-						fixMsg.ActiveTimeTo = new StopOrderExecutionReport.ActiveTimeToField(condition.ActiveTime.Min.UtcDateTime);
-					}
-					
-					if (condition.ConditionOrderId != null)
-						fixMsg.ConditionOrderId = new StopOrderExecutionReport.ConditionOrderIdField((int)condition.ConditionOrderId);
-					
-					if (condition.ConditionOrderPartiallyMatched != null)
-						fixMsg.ConditionOrderPartiallyMatched = new StopOrderExecutionReport.ConditionOrderPartiallyMatchedField(condition.ConditionOrderPartiallyMatched.Value);
-					
-					if (condition.ConditionOrderUseMatchedBalance != null)
-						fixMsg.ConditionOrderUseMatchedBalance = new StopOrderExecutionReport.ConditionOrderUseMatchedBalanceField(condition.ConditionOrderUseMatchedBalance.Value);
-					
-					if (condition.LinkedOrderPrice != null)
-						fixMsg.LinkedOrderPrice = new StopOrderExecutionReport.LinkedOrderPriceField(condition.LinkedOrderPrice.Value);
-					
-					if (condition.Offset != null)
-						fixMsg.Offset = new StopOrderExecutionReport.OffsetField(condition.Offset.ToString());
-					
-					if (condition.Spread != null)
-						fixMsg.StopSpread = new StopOrderExecutionReport.SpreadField(condition.Spread.ToString());
-					
-					if (condition.IsMarketTakeProfit != null)
-						fixMsg.IsMarketTakeProfit = new StopOrderExecutionReport.IsMarketTakeProfitField(condition.IsMarketTakeProfit.Value);
-
-					SendMessage(receivers, false, fixMsg);
-				}
-				else
-					base.SendOrder(receivers, order);
+				writer.WriteOrderCondition((QuikOrderCondition)message.Condition);
 			}
 		}
 
@@ -710,7 +642,7 @@ namespace StockSharp.Quik.Lua
 		/// <returns>Нужно ли обрабатывать маркет-данные.</returns>
 		public bool NeedProcess(MarketDataTypes dataType, SecurityId securityId)
 		{
-			return _fixServer.HasReceivers(dataType, new SecurityId
+			return _fixServer.HasSubscriptions(dataType, new SecurityId
 			{
 				SecurityCode = securityId.SecurityCode,
 				BoardCode = _sessionHolder.GetBoardCode(securityId.BoardCode)
@@ -724,7 +656,9 @@ namespace StockSharp.Quik.Lua
 		public void AddTransactionId(long transactionId)
 		{
 			LogReceiver.AddInfoLog("Added trans id {0} mapping.", transactionId);
-			_fixServer.AddTransactionId(Login, transactionId, transactionId);
+			
+			// TODO
+			//_fixServer.AddTransactionId(Login, transactionId, transactionId);
 		}
 
 		/// <summary>
