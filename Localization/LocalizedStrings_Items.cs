@@ -53863,5 +53863,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(ExportSchemaKey); }
 		}
+
+		/// <summary>
+		/// Control connection lost.
+		/// </summary>
+		public const string IsControlConnectionLostKey = "IsControlConnectionLost";
+
+		/// <summary>
+		/// Control connection lost.
+		/// </summary>
+		public static string IsControlConnectionLost
+		{
+			get { return GetString(IsControlConnectionLostKey); }
+		}
 	}
 }

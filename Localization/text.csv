@@ -4170,3 +4170,4 @@ InterfaceNotSupportTransaction;Interface '{{0}}' does not support transaction '{
 AllDepths;All depths;Все стаканы
 RequestAllDepths;Request depths for all securities.;Запрашиваемое стаканы по всем инструментам.
 ExportSchema;Export schema to container;Экспортировать схему в контейнер
+IsControlConnectionLost;Control connection lost.;Контролировать потерю соединения с роутером.
