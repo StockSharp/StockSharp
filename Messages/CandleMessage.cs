@@ -131,25 +131,25 @@ namespace StockSharp.Messages
 		/// Объем открытия.
 		/// </summary>
 		[DataMember]
-		public decimal OpenVolume { get; set; }
+		public decimal? OpenVolume { get; set; }
 
 		/// <summary>
 		/// Объем закрытия.
 		/// </summary>
 		[DataMember]
-		public decimal CloseVolume { get; set; }
+		public decimal? CloseVolume { get; set; }
 
 		/// <summary>
 		/// Максимальный объем.
 		/// </summary>
 		[DataMember]
-		public decimal HighVolume { get; set; }
+		public decimal? HighVolume { get; set; }
 
 		/// <summary>
 		/// Минимальный объем.
 		/// </summary>
 		[DataMember]
-		public decimal LowVolume { get; set; }
+		public decimal? LowVolume { get; set; }
 
 		/// <summary>
 		/// Относительный объем.

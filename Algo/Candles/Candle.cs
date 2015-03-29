@@ -174,13 +174,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private decimal _openVolume;
+		private decimal? _openVolume;
 
 		/// <summary>
 		/// Объем открытия.
 		/// </summary>
 		[DataMember]
-		public decimal OpenVolume
+		public decimal? OpenVolume
 		{
 			get { return _openVolume; }
 			set
@@ -190,13 +190,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private decimal _closeVolume;
+		private decimal? _closeVolume;
 
 		/// <summary>
 		/// Объем закрытия.
 		/// </summary>
 		[DataMember]
-		public decimal CloseVolume
+		public decimal? CloseVolume
 		{
 			get { return _closeVolume; }
 			set
@@ -206,13 +206,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private decimal _highVolume;
+		private decimal? _highVolume;
 
 		/// <summary>
 		/// Максимальный объем.
 		/// </summary>
 		[DataMember]
-		public decimal HighVolume
+		public decimal? HighVolume
 		{
 			get { return _highVolume; }
 			set
@@ -222,13 +222,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private decimal _lowVolume;
+		private decimal? _lowVolume;
 
 		/// <summary>
 		/// Минимальный объем.
 		/// </summary>
 		[DataMember]
-		public decimal LowVolume
+		public decimal? LowVolume
 		{
 			get { return _lowVolume; }
 			set

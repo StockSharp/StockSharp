@@ -329,9 +329,10 @@ namespace StockSharp.LMAX
 									if (cells.Length == 5)
 									{
 										message.OpenPrice = cells[1].To<decimal>();
-										message.OpenVolume = !cells[2].IsEmpty() ? cells[2].To<decimal>() : 0;
+										message.OpenVolume = !cells[2].IsEmpty() ? cells[2].To<decimal>() : (decimal?)null;
+
 										message.ClosePrice = cells[3].To<decimal>();
-										message.CloseVolume = !cells[4].IsEmpty() ? cells[4].To<decimal>() : 0;
+										message.CloseVolume = !cells[4].IsEmpty() ? cells[4].To<decimal>() : (decimal?)null;
 									}
 									else
 									{

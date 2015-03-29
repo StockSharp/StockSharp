@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException("arg");
 
 			_arg = arg;
-			Version = MarketDataVersions.Version50;
+			Version = MarketDataVersions.Version51;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<TCandleMessage> candles, CandleMetaInfo metaInfo)
@@ -161,10 +161,47 @@ namespace StockSharp.Algo.Storages
 
 				if (metaInfo.Version >= MarketDataVersions.Version46)
 				{
-					writer.WriteVolume(candle.OpenVolume, metaInfo, SecurityId);
-					writer.WriteVolume(candle.HighVolume, metaInfo, SecurityId);
-					writer.WriteVolume(candle.LowVolume, metaInfo, SecurityId);
-					writer.WriteVolume(candle.CloseVolume, metaInfo, SecurityId);
+					if (metaInfo.Version < MarketDataVersions.Version51)
+					{
+						writer.WriteVolume(candle.OpenVolume ?? 0m, metaInfo, SecurityId);
+						writer.WriteVolume(candle.HighVolume ?? 0m, metaInfo, SecurityId);
+						writer.WriteVolume(candle.LowVolume ?? 0m, metaInfo, SecurityId);
+						writer.WriteVolume(candle.CloseVolume ?? 0m, metaInfo, SecurityId);
+					}
+					else
+					{
+						if (candle.OpenVolume == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+							writer.WriteVolume(candle.OpenVolume.Value, metaInfo, SecurityId);
+						}
+
+						if (candle.HighVolume == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+							writer.WriteVolume(candle.HighVolume.Value, metaInfo, SecurityId);
+						}
+
+						if (candle.LowVolume == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+							writer.WriteVolume(candle.LowVolume.Value, metaInfo, SecurityId);
+						}
+
+						if (candle.CloseVolume == null)
+							writer.Write(false);
+						else
+						{
+							writer.Write(true);
+							writer.WriteVolume(candle.CloseVolume.Value, metaInfo, SecurityId);
+						}
+					}
 				}
 
 				writer.WriteInt((int)candle.State);
@@ -243,10 +280,20 @@ namespace StockSharp.Algo.Storages
 
 			if (metaInfo.Version >= MarketDataVersions.Version46)
 			{
-				candle.OpenVolume = reader.ReadVolume(metaInfo);
-				candle.HighVolume = reader.ReadVolume(metaInfo);
-				candle.LowVolume = reader.ReadVolume(metaInfo);
-				candle.CloseVolume = reader.ReadVolume(metaInfo);
+				if (metaInfo.Version < MarketDataVersions.Version51)
+				{
+					candle.OpenVolume = reader.ReadVolume(metaInfo);
+					candle.HighVolume = reader.ReadVolume(metaInfo);
+					candle.LowVolume = reader.ReadVolume(metaInfo);
+					candle.CloseVolume = reader.ReadVolume(metaInfo);
+				}
+				else
+				{
+					candle.OpenVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+					candle.HighVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+					candle.LowVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+					candle.CloseVolume = reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+				}
 			}
 
 			candle.State = (CandleStates)reader.ReadInt();
