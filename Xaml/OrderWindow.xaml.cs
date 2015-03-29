@@ -268,6 +268,9 @@ namespace StockSharp.Xaml
 					case TimeInForce.CancelBalance:
 						TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
 						break;
+					case null:
+						TimeInForceCtrl.SelectedValue = null;
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}

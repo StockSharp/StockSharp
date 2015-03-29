@@ -372,7 +372,6 @@ namespace StockSharp.Algo
 				o.Volume = message.Volume ?? 0;
 				o.Direction = message.Side;
 				o.Portfolio = GetPortfolio(message.PortfolioName);
-				o.TimeInForce = message.TimeInForce;
 				o.Comment = message.Comment;
 				o.ExpiryDate = message.ExpiryDate;
 				o.Condition = message.Condition;
@@ -436,6 +435,9 @@ namespace StockSharp.Algo
 
 				if (message.Commission != null)
 					order.Commission = message.Commission;
+
+				if (message.TimeInForce != null)
+					order.TimeInForce = message.TimeInForce.Value;
 
 				if (isPending)
 				{

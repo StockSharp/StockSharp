@@ -99,11 +99,12 @@ namespace StockSharp.Sterling
 			}
 		}
 
-		public static string ToSterlingTif(this TimeInForce tif, DateTimeOffset expiryDate)
+		public static string ToSterlingTif(this TimeInForce? tif, DateTimeOffset expiryDate)
 		{
 			switch (tif)
 			{
 				case TimeInForce.PutInQueue:
+				case null:
 				{
 					if (expiryDate == DateTime.MaxValue)
 						return "G";	// GTC

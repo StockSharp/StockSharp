@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Storages
 		public ExecutionSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version52;
+			Version = MarketDataVersions.Version53;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)
@@ -292,7 +292,15 @@ namespace StockSharp.Algo.Storages
 				else
 					writer.WriteNullableInt(msg.TradeStatus);
 				
-				writer.WriteInt((int)msg.TimeInForce);
+				if (metaInfo.Version < MarketDataVersions.Version53)
+					writer.WriteInt((int)(msg.TimeInForce ?? TimeInForce.PutInQueue));
+				else
+				{
+					writer.Write(msg.TimeInForce != null);
+
+					if (msg.TimeInForce != null)
+						writer.WriteInt((int)msg.TimeInForce.Value);
+				}
 
 				if (metaInfo.Version < MarketDataVersions.Version52)
 					writer.Write(msg.IsSystem ?? true);
@@ -387,7 +395,10 @@ namespace StockSharp.Algo.Storages
 				? reader.ReadInt()
 				: reader.ReadNullableInt<int>();
 
-			var timeInForce = reader.ReadInt().To<TimeInForce>();
+			var timeInForce = metaInfo.Version < MarketDataVersions.Version53
+				? reader.ReadInt().To<TimeInForce>()
+				: reader.Read() ? reader.ReadInt().To<TimeInForce>() : (TimeInForce?)null;
+
 			var isSystem = metaInfo.Version < MarketDataVersions.Version52
 						? reader.Read()
 						: (reader.Read() ? reader.Read() : (bool?)null);

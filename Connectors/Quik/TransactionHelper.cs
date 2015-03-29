@@ -114,8 +114,8 @@ namespace StockSharp.Quik
 						.SetAction(TransactionActions.NewOrder)
 						.SetPrice(message.Price);
 
-					if (!(message.SecurityId.SecurityType == SecurityTypes.Future && message.TimeInForce == TimeInForce.PutInQueue))
-						transaction.SetTimeInForce(message.TimeInForce);
+					if (message.TimeInForce != null && !(message.SecurityId.SecurityType == SecurityTypes.Future && message.TimeInForce == TimeInForce.PutInQueue))
+						transaction.SetTimeInForce(message.TimeInForce.Value);
 
 					break;
 				case OrderTypes.Conditional:

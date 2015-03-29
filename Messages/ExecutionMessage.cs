@@ -289,7 +289,8 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str143Key)]
 		[DescriptionLoc(LocalizedStrings.Str144Key)]
 		[MainCategory]
-		public TimeInForce TimeInForce { get; set; }
+		[Nullable]
+		public TimeInForce? TimeInForce { get; set; }
 
 		/// <summary>
 		/// Идентификатор сделки.

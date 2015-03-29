@@ -29,6 +29,7 @@ namespace StockSharp.LMAX
 			switch (message.TimeInForce)
 			{
 				case TimeInForce.PutInQueue:
+				case null:
 					tif = message.TillDate == DateTimeOffset.MaxValue ? LmaxTimeInForce.GoodTilCancelled : LmaxTimeInForce.GoodForDay;
 					break;
 				case TimeInForce.MatchOrCancel:
