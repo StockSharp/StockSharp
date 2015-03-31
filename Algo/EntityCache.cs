@@ -371,11 +371,13 @@ namespace StockSharp.Algo
 				o.Price = message.Price;
 				o.Volume = message.Volume ?? 0;
 				o.Direction = message.Side;
-				o.Portfolio = GetPortfolio(message.PortfolioName);
 				o.Comment = message.Comment;
 				o.ExpiryDate = message.ExpiryDate;
 				o.Condition = message.Condition;
 				o.UserOrderId = message.UserOrderId;
+				o.Portfolio = message.PortfolioName.IsEmpty()
+					? _portfolios.FirstOrDefault().Value
+					: ProcessPortfolio(message.PortfolioName).Item1;
 
 				return o;
 			}, out isNew, true);
@@ -561,7 +563,56 @@ namespace StockSharp.Algo
 
 			var trade = message.ToTrade(EntityFactory.CreateTrade(security, message.TradeId, message.TradeStringId));
 
-			return AddMyTrade(order, trade, message);
+			var isNew = false;
+
+			myTrade = _cache.GetData(order.Security).MyTrades.SafeAdd(Tuple.Create(order.TransactionId, trade.Id), key =>
+			{
+				isNew = true;
+
+				var t = EntityFactory.CreateMyTrade(order, trade);
+
+				if (t.ExtensionInfo == null)
+					t.ExtensionInfo = new Dictionary<object, object>();
+
+				if (message.Commission != null)
+					t.Commission = message.Commission;
+
+				if (message.Slippage != null)
+					t.Slippage = message.Slippage;
+
+				message.CopyExtensionInfo(t);
+
+				//trades.Add(t);
+				_cache.MyTrades.Add(t);
+
+				return t;
+			});
+
+			return Tuple.Create(myTrade, isNew);
+
+			// mika
+			// http://stocksharp.com/forum/yaf_postst1072_Probliemy-so-sdielkami--pozitsiiami.aspx
+			// из-за того, что сделки по заявке иногда приходит быстрее события NewOrders, неправильно расчитывается поза по стратегиям
+
+			//var raiseOrderChanged = false;
+
+			//trades.SyncDo(d =>
+			//{
+			//    var newBalance = order.Volume - d.Sum(t => t.Trade.Volume);
+
+			//    if (order.Balance > newBalance)
+			//    {
+			//        raiseOrderChanged = true;
+
+			//        order.Balance = newBalance;
+
+			//        if (order.Balance == 0)
+			//            order.State = OrderStates.Done;
+			//    }
+			//});
+
+			//if (raiseOrderChanged)
+			//    RaiseOrderChanged(order);
 		}
 
 		public Tuple<Trade, bool> ProcessTradeMessage(Security security, ExecutionMessage message)
@@ -670,7 +721,7 @@ namespace StockSharp.Algo
 			if (order != null)
 				return order;
 
-			return data.OrdersByStringId.TryGetValue(orderStringId);
+			return orderStringId == null ? null : data.OrdersByStringId.TryGetValue(orderStringId);
 		}
 
 		private Tuple<Order, bool, bool, bool> GetOrderInfo(Security security, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
@@ -773,73 +824,6 @@ namespace StockSharp.Algo
 			}
 
 			return Tuple.Create(trade, isNew);
-		}
-
-		private Tuple<MyTrade, bool> AddMyTrade(Order order, Trade trade, ExecutionMessage message)
-		{
-			if (order == null)
-				throw new ArgumentNullException("order");
-
-			if (trade == null)
-				throw new ArgumentNullException("trade");
-
-			var isNew = false;
-
-			var myTrade = _cache.GetData(order.Security).MyTrades.SafeAdd(Tuple.Create(order.TransactionId, trade.Id), key =>
-			{
-				isNew = true;
-
-				var t = EntityFactory.CreateMyTrade(order, trade);
-
-				if (t.ExtensionInfo == null)
-					t.ExtensionInfo = new Dictionary<object, object>();
-
-				if (message.Commission != null)
-					t.Commission = message.Commission;
-
-				if (message.Slippage != null)
-					t.Slippage = message.Slippage;
-
-				message.CopyExtensionInfo(t);
-
-				//trades.Add(t);
-				_cache.MyTrades.Add(t);
-
-				return t;
-			});
-
-			return Tuple.Create(myTrade, isNew);
-
-			// mika
-			// http://stocksharp.com/forum/yaf_postst1072_Probliemy-so-sdielkami--pozitsiiami.aspx
-			// из-за того, что сделки по заявке иногда приходит быстрее события NewOrders, неправильно расчитывается поза по стратегиям
-
-			//var raiseOrderChanged = false;
-
-			//trades.SyncDo(d =>
-			//{
-			//    var newBalance = order.Volume - d.Sum(t => t.Trade.Volume);
-
-			//    if (order.Balance > newBalance)
-			//    {
-			//        raiseOrderChanged = true;
-
-			//        order.Balance = newBalance;
-
-			//        if (order.Balance == 0)
-			//            order.State = OrderStates.Done;
-			//    }
-			//});
-
-			//if (raiseOrderChanged)
-			//    RaiseOrderChanged(order);
-		}
-
-		private Portfolio GetPortfolio(string name)
-		{
-			return !name.IsEmpty() 
-				? ProcessPortfolio(name).Item1 
-				: _portfolios.FirstOrDefault().Value;
 		}
 
 		public Tuple<Portfolio, bool, bool> ProcessPortfolio(string name, Func<Portfolio, bool> changePortfolio = null)
