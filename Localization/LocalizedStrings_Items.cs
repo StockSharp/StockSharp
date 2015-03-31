@@ -19555,12 +19555,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Session '{0}'. From server: '{1}'
+		/// Session '{0}'. Received: '{1}'
 		/// </summary>
 		public const string Str1621ParamsKey = "Str1621Params";
 
 		/// <summary>
-		/// Session '{0}'. From server: '{1}'
+		/// Session '{0}'. Received: '{1}'
 		/// </summary>
 		public static string Str1621Params
 		{

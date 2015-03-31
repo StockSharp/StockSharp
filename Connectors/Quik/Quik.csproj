@@ -98,9 +98,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickFix">
-      <HintPath>..\Fix\QuickFix.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -121,7 +118,6 @@
     <Compile Include="Lua\LuaFixServer.cs" />
     <Compile Include="Lua\LuaFixTransactionMessageAdapter.cs" />
     <Compile Include="Lua\LuaRequest.cs" />
-    <Compile Include="Lua\NewStopOrderSingle.cs" />
     <Compile Include="Lua\QuikFixTags.cs" />
     <Compile Include="Native\Api.cs" />
     <Compile Include="Native\Codes.cs" />

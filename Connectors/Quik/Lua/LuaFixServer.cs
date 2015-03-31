@@ -10,7 +10,6 @@ namespace StockSharp.Quik.Lua
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
@@ -89,49 +88,31 @@ namespace StockSharp.Quik.Lua
 				return requestId.To<long>();
 			}
 
-			protected override void OnProcess(FixSession session, string msgType, string msgStr)
+			protected override bool? OnProcess(FixSession session, string msgType, IFixReader reader)
 			{
 				switch (msgType)
 				{
 					case QuikFixMessages.NewStopOrderSingle:
 					{
-						var fixMsg = ToMessage<NewStopOrderSingle>(msgStr);
-						var regMsg = fixMsg.ToRegisterMessage();
+						var condition = new QuikOrderCondition();
+
+						var dto = TimeHelper.Moscow.BaseUtcOffset;
+
+						var regMsg = reader.ReadOrderRegisterMessage(dto,
+							tag => reader.ReadOrderCondition(tag, dto, condition));
+
+						if (regMsg == null)
+							return null;
 
 						regMsg.TransactionId = CreateTransactionId(session, regMsg.TransactionId.To<string>());
-
-						var condition = new QuikOrderCondition
-						{
-							Type = (QuikOrderConditionTypes)fixMsg.Type.Obj,
-							Result = fixMsg.IsSetResult() ? (QuikOrderConditionResults?)fixMsg.Result.Obj : null,
-							StopPriceCondition = (QuikStopPriceConditions)fixMsg.StopPriceCondition.Obj,
-							StopPrice = fixMsg.IsSetStopPx() ? fixMsg.StopPx.Obj : (decimal?)null,
-							StopLimitPrice = fixMsg.IsSetStopLimitPrice() ? fixMsg.StopLimitPrice.Obj : (decimal?)null,
-							IsMarketStopLimit = fixMsg.IsSetIsMarketStopLimit() ? fixMsg.IsMarketStopLimit.Obj : (bool?)null,
-							ConditionOrderId = fixMsg.IsSetConditionOrderId() ? fixMsg.ConditionOrderId.Obj : (long?)null,
-							ConditionOrderSide = (Sides)fixMsg.ConditionOrderSide.Obj,
-							ConditionOrderPartiallyMatched = fixMsg.IsSetConditionOrderPartiallyMatched() ? fixMsg.ConditionOrderPartiallyMatched.Obj : (bool?)null,
-							ConditionOrderUseMatchedBalance = fixMsg.IsSetConditionOrderUseMatchedBalance() ? fixMsg.ConditionOrderUseMatchedBalance.Obj : (bool?)null,
-							LinkedOrderPrice = fixMsg.IsSetLinkedOrderPrice() ? fixMsg.LinkedOrderPrice.Obj : (decimal?)null,
-							LinkedOrderCancel = fixMsg.LinkedOrderCancel.Obj,
-							Offset = fixMsg.IsSetOffset() ? fixMsg.Offset.Obj.ToUnit() : null,
-							Spread = fixMsg.IsSetStopSpread() ? fixMsg.StopSpread.Obj.ToUnit() : null,
-							IsMarketTakeProfit = fixMsg.IsSetIsMarketTakeProfit() ? fixMsg.IsMarketTakeProfit.Obj : (bool?)null,
-						};
-
-						if (fixMsg.IsSetOtherSecurityCode())
-							condition.OtherSecurityId = new SecurityId { SecurityCode = fixMsg.OtherSecurityCode.Obj };
-						if (fixMsg.IsSetActiveTimeFrom() && fixMsg.IsSetActiveTimeTo())
-							condition.ActiveTime = new Range<DateTimeOffset>(fixMsg.ActiveTimeFrom.Obj.ApplyTimeZone(TimeHelper.Moscow), fixMsg.ActiveTimeTo.Obj.ApplyTimeZone(TimeHelper.Moscow));
-
 						regMsg.Condition = condition;
 
 						RaiseNewOutMessage(regMsg);
-						return;
+						return true;
 					}
 				}
 
-				base.OnProcess(session, msgType, msgStr);
+				return base.OnProcess(session, msgType, reader);
 			}
 
 			protected override void WriterFixOrderCondition(IFixWriter writer, ExecutionMessage message)

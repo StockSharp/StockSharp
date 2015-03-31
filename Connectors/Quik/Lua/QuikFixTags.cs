@@ -1,6 +1,12 @@
 ﻿namespace StockSharp.Quik.Lua
 {
+	using System;
+
+	using Ecng.Common;
+	using Ecng.ComponentModel;
+
 	using StockSharp.Fix.Native;
+	using StockSharp.Messages;
 
 	enum QuikFixTags
 	{
@@ -137,6 +143,75 @@
 			{
 				writer.Write((FixTags)QuikFixTags.IsMarketTakeProfit);
 				writer.Write(condition.IsMarketTakeProfit.Value);
+			}
+		}
+
+		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeSpan dateTimeOffset, QuikOrderCondition condition)
+		{
+			switch ((QuikFixTags)tag)
+			{
+				case QuikFixTags.Type:
+					condition.Type = (QuikOrderConditionTypes)reader.ReadInt();
+					return true;
+				case QuikFixTags.StopPriceCondition:
+					condition.StopPriceCondition = (QuikStopPriceConditions)reader.ReadInt();
+					return true;
+				case QuikFixTags.ConditionOrderSide:
+					condition.ConditionOrderSide = (Sides)reader.ReadInt();
+					return true;
+				case QuikFixTags.LinkedOrderCancel:
+					condition.LinkedOrderCancel = reader.ReadBool();
+					return true;
+				case QuikFixTags.Result:
+					condition.Result = (QuikOrderConditionResults)reader.ReadInt();
+					return true;
+				case QuikFixTags.OtherSecurityCode:
+					condition.OtherSecurityId = new SecurityId { SecurityCode = reader.ReadString() };
+					return true;
+				case QuikFixTags.StopPrice:
+					condition.StopPrice = reader.ReadDecimal();
+					return true;
+				case QuikFixTags.StopLimitPrice:
+					condition.StopLimitPrice = reader.ReadDecimal();
+					return true;
+				case QuikFixTags.IsMarketStopLimit:
+					condition.IsMarketStopLimit = reader.ReadBool();
+					return true;
+				case QuikFixTags.ActiveTimeFrom:
+					if (condition.ActiveTime == null)
+						condition.ActiveTime = new Range<DateTimeOffset>();
+
+					condition.ActiveTime.Min = reader.ReadDateTime().ApplyTimeZone(dateTimeOffset);
+					return true;
+				case QuikFixTags.ActiveTimeTo:
+					if (condition.ActiveTime == null)
+						condition.ActiveTime = new Range<DateTimeOffset>();
+
+					condition.ActiveTime.Max = reader.ReadDateTime().ApplyTimeZone(dateTimeOffset);
+					return true;
+				case QuikFixTags.ConditionOrderId:
+					condition.ConditionOrderId = reader.ReadLong();
+					return true;
+				case QuikFixTags.ConditionOrderPartiallyMatched:
+					condition.ConditionOrderPartiallyMatched = reader.ReadBool();
+					return true;
+				case QuikFixTags.ConditionOrderUseMatchedBalance:
+					condition.ConditionOrderUseMatchedBalance = reader.ReadBool();
+					return true;
+				case QuikFixTags.LinkedOrderPrice:
+					condition.LinkedOrderPrice = reader.ReadDecimal();
+					return true;
+				case QuikFixTags.Offset:
+					condition.Offset = reader.ReadString().ToUnit();
+					return true;
+				case QuikFixTags.StopSpread:
+					condition.Spread = reader.ReadString().ToUnit();
+					return true;
+				case QuikFixTags.IsMarketTakeProfit:
+					condition.IsMarketTakeProfit = reader.ReadBool();
+					return true;
+				default:
+					return false;
 			}
 		}
 	}
