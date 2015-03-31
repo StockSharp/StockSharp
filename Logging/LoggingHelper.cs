@@ -192,10 +192,10 @@
 			if (source == null)
 				throw new ArgumentNullException("source");
 
-			var level = source.LogLevel;
-
 			do
 			{
+				var level = source.LogLevel;
+
 				if (level != LogLevels.Inherit)
 					return level;
 
