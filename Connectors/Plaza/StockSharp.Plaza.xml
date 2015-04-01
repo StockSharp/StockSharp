@@ -2854,6 +2854,11 @@
             По-умолчанию путь равен локальной директории.
             </remarks>
     </member>
+    <member name="P:StockSharp.Plaza.PlazaSessionHolder.IsControlConnectionLost">
+      <summary>
+            Контролировать потерю соединения с роутером.
+            </summary>
+    </member>
     <member name="P:StockSharp.Plaza.PlazaSessionHolder.DefaultFutureDepthTable">
       <summary>
             Таблица данных для стакана фьючерсных контрактов, которая будет запускаться при запуске потоков репликации.
@@ -4435,6 +4440,11 @@
     <member name="P:StockSharp.Plaza.PlazaConnectionPool.Password">
       <summary>
             Пароль.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaConnectionPool.IsControlConnectionLost">
+      <summary>
+            Контролировать потерю соединения с роутером.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaConnectionPool.Address">
@@ -7038,6 +7048,11 @@
     <member name="P:StockSharp.Plaza.PlazaTrader.BrokerCode">
       <summary>
             Код брокерской фирмы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaTrader.IsControlConnectionLost">
+      <summary>
+            Контролировать потерю соединения с роутером.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.StreamManager">
