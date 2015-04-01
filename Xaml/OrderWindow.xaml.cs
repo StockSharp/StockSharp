@@ -310,8 +310,8 @@ namespace StockSharp.Xaml
 
 			var isNull = Security == null;
 
-			PriceCtrl.Increment = isNull ? 0.01m : Security.PriceStep;
-			VolumeCtrl.Increment = isNull ? 1m : Security.VolumeStep;
+			PriceCtrl.Increment = isNull ? 0.01m : Security.PriceStep ?? 1m;
+			VolumeCtrl.Increment = isNull ? 1m : Security.VolumeStep ?? 1m;
 
 			MinPrice.IsEnabled = MaxPrice.IsEnabled = BestBidPrice.IsEnabled = BestAskPrice.IsEnabled
 				= LastTradePrice.IsEnabled = !isNull;
