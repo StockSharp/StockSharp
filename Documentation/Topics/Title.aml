@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="a48b036a-dc6f-44f7-b7e4-d02f3cc38f86" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.
+       <autoOutline />-->
+     <para>StockSharp (S#) - комплекс бесплатных программных продуктов, включающий
+      весь необходимый аресенал для автоматизации биржевой торговли. Позволяет выполнять
+      профессиональную разработку программ, как для механической (роботы) и "ручной" торговли, так
+      и для биржевого анализа и тестирования торговых систем. Подключения к большинству 
+      популярных торговых платформ:</para>
+		<list class="bullet">
+  			<listItem><para><link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5">Российские коннекторы</link></para></listItem>
+  			<listItem><para><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Зарубежные коннекторы</link></para></listItem>
+  			<listItem><para><link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b">Коннекторы для Forex</link></para></listItem>
+  			<listItem><para><link xlink:href="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9">Коннекторы для BitCoins</link></para></listItem>
+		</list>
+      <para>дают возможность использовать S# на всех международных и российских
+      торговых площадках.</para>
+     <para>Разработка S# осуществляется компанией
+      	<externalLink>
+			<linkText>StockSharp LTD</linkText>
+			<linkAlternateText>Торговые роботы StockSharp.</linkAlternateText>
+			<linkUri>http://stocksharp.com/</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+ 	  в рамках проекта open-source software (программное
+      обеспечение с открытыми исходными кодами) под лицензией [<link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">название лицензии</link>].
+      Хостинг проекта - 
+      <externalLink>
+		<linkText>StockSharp.</linkText>
+		<linkAlternateText>Trading and algorithmic trading open source platform (stock markets, forex, bitcoins and options).</linkAlternateText>
+		<linkUri>https://github.com/StockSharp</linkUri>
+		<linkTarget>_blank</linkTarget>
+		</externalLink>
+	</para>
+ 
+    </introduction> 
+    
+       
+    <section address="Section1">
+      <title>Продукты StockSharp</title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <!-- <para>Add one or more sections with content</para>-->
+      </content>
+      
+      <sections>
+          <section address="SubSection1">
+              <title>S#.Api</title>
+              <content>
+                  <para><link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22">Библиотека для профессиональной разработки торговых роботов на языке C#.</link></para>
+              </content>
+          </section>
+          <section address="SubSection2">
+              <title>S#.Data</title>
+              <content>
+                  <para><link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">Программа для автоматической загрузки исторических и реал-тайм маркет-данных.</link></para>
+              </content>
+          </section>
+          <section address="SubSection3">
+              <title>S#.Studio</title>
+              <content>
+                  <para><link xlink:href="49ba804f-908b-473a-a31f-76540d8a79d7">Графическая среда для создания торговых роботов и автоматической торговли.</link></para>
+              </content>
+          </section>
+          <section address="SubSection4">
+              <title>S#.MatLab</title>
+              <content>
+                  <para><link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0">Интеграция MatLab с торговыми системами. Торговля из скриптов MatLab.</link></para>
+              </content>
+          </section>
+          <section address="SubSection5">
+              <title>S#.WealthLab</title>
+              <content>
+                  <para><link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99">Интеграция WealthLab с торговыми системами.</link></para>
+              </content>
+          </section>
+          <section address="SubSection6">
+              <title>S#.Shell</title>
+              <content>
+                  <para><link xlink:href="#addr">Готовый каркас для торговых стратегий.</link></para>
+              </content>
+          </section>
+          <section address="SubSection7">
+              <title>ЛЧИ Viewer</title>
+              <content>
+                  <para><link xlink:href="#addr">Графики конкурса ЛЧИ со сделками участников.</link></para>
+              </content>
+          </section>
+      </sections>
+     </section>
+     <relatedTopics>
+     	<link xlink:href="a594740e-58f1-4148-afe7-d41abc4d486b">Справочные материалы</link>
+     	<externalLink>
+			<linkText>Форум StockSharp</linkText>
+			<linkAlternateText>Форум StockSharp</linkAlternateText>
+			<linkUri>http://stocksharp.com/forum/</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+		<externalLink>
+			<linkText>Канал StockSharp на YouTube</linkText>
+			<linkAlternateText>Канал StockSharp на YouTube</linkAlternateText>
+			<linkUri>http://www.youtube.com/user/StockSharp/</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+
+
+     </relatedTopics>
+ 
+  </developerConceptualDocument>
+</topic>
