@@ -209,8 +209,8 @@ namespace StockSharp.Algo.Storages
 		private static readonly MemberProxy _setSecurityId;
 		private static readonly MemberProxy _setExecutionType;
 		private static readonly FastInvoker<VoidType, VoidType, TData> _ctor;
-		private const string _allTimeFormat = "HH:mm:ss.FFFFFF zzz";
-		private const string _candleTimeFormat = "HH:mm:ss zzz";
+		private const string _allTimeFormat = "HHmmssffffff zzz";
+		private const string _candleTimeFormat = "HHmmss zzz";
 		private static readonly string _timeFormat;
 		private static readonly SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]> _info = new SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]>();
 		private static readonly bool _isLevel1 = typeof(TData) == typeof(Level1ChangeMessage);
