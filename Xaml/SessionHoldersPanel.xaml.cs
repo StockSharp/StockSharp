@@ -24,7 +24,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Panel create new connections <see cref="IMessageSessionHolder"/>.
+	/// Панель создания новых подключений <see cref="IMessageSessionHolder"/>.
 	/// </summary>
 	public partial class SessionHoldersPanel
 	{
@@ -366,50 +366,50 @@ namespace StockSharp.Xaml
 	}
 
 	/// <summary>
-	/// Information about the connection.
+	/// Информация о подключении.
 	/// </summary>
 	public class ConnectorInfo
 	{
 		/// <summary>
-		///Connection name.
+		/// Название подключения.
 		/// </summary>
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Description of the connection.
+		/// Описание подключения.
 		/// </summary>
 		public string Description { get; set; }
 
 		/// <summary>
-		/// Description of the connection.
+		/// Описание подключения.
 		/// </summary>
 		public string Category { get; set; }
 
 		/// <summary>
-		/// Type of container for the session.
+		/// Тип контейнера для сессии.
 		/// </summary>
 		public Type SessionHolderType { get; private set; }
 
 		/// <summary>
-		/// The level of logging.
+		/// Уровень логирования.
 		/// </summary>
 		public LogLevels LogLevel { get; private set; }
 
 		/// <summary>
-		/// Target audience.
+		/// Целевая аудитория.
 		/// </summary>
 		public Languages PreferLanguage { get; private set; }
 
 		/// <summary>
-		/// Platform.
+		/// Платформа.
 		/// </summary>
 		public Platforms Platform { get; private set; }
 
 		/// <summary>
-		/// Create A <see cref="ConnectorInfo"/>.
+		/// Создать <see cref="ConnectorInfo"/>.
 		/// </summary>
-		/// <param name="sessionHolderType">Type of container for the session.</param>
-		/// <param name="logLevel">The level of logging.</param>
+		/// <param name="sessionHolderType">Тип контейнера для сессии.</param>
+		/// <param name="logLevel">Уровень логирования.</param>
 		public ConnectorInfo(Type sessionHolderType, LogLevels logLevel = LogLevels.Inherit)
 		{
 			if (sessionHolderType == null)
