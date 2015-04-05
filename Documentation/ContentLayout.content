@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" isSelected="true" title="Лицензия StockSharp">
+  <Topic id="a48b036a-dc6f-44f7-b7e4-d02f3cc38f86" visible="True" isDefault="true" isSelected="true" title="StockSharp" />
+  <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензия StockSharp">
     <Topic id="e3e9f831-56ac-44a4-840c-3d5969ff1fd7" visible="True" title="Инструкция скачивания" />
   </Topic>
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
@@ -8,7 +9,8 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура StockSharp" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
     <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (российские)">
-      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" title="Quik">
+      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
+        <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
         <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
         <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
         <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
@@ -58,7 +60,7 @@
       </Topic>
       <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" title="Micex Bridge" />
     </Topic>
-    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Коннекторы (америка)">
+    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (америка)">
       <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" title="OpenECry">
         <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Пример работы с OECTrader" />
         <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Стоп-заявки" />
@@ -95,7 +97,7 @@
       <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG" />
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX" />
     </Topic>
-    <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" isExpanded="true" title="Коннекторы Forex">
+    <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Коннекторы Forex">
       <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
         <Topic id="9cd10cbc-8534-4d44-bf3b-60b0a3f03590" visible="True" title="Пример работы с LMaxTrader" />
         <Topic id="c6236e85-fb9e-4c4d-9585-6b4b687e8b35" visible="True" title="Стоп-заявки" />
@@ -103,7 +105,7 @@
       </Topic>
       <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" title="Oanda" />
     </Topic>
-    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" isExpanded="true" title="Коннекторы Bitcoins">
+    <Topic id="4c2ed7ba-9cb8-45d4-90be-5dc79e7f13c9" visible="True" title="Коннекторы Bitcoins">
       <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" title="BTC-E" />
       <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp" />
     </Topic>
