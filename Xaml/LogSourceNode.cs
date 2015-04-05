@@ -6,7 +6,7 @@
 	using Ecng.Xaml;
 
 	/// <summary>
-	/// Узел дерева источника логов.
+	/// The source node of the tree logs.
 	/// </summary>
 	public class LogSourceNode : Disposable
 	{

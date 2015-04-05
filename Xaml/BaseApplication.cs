@@ -219,8 +219,8 @@
 
 			if (CheckTargetPlatform)
 			{
-				//если одним из аргументов является путь к самому приложению,
-				//то значит оно запущено из под специального загрузчика
+				//if one of the arguments is the path to the application itself,
+				//it means that it is running out of a special boot loader
 				var executablePath = Assembly.GetEntryAssembly().Location;
 				if (e.Args.Any(a => a == executablePath) || !Environment.Is64BitOperatingSystem)
 				{
