@@ -3,11 +3,6 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.
-       <autoOutline />-->
      <para>StockSharp (S#) - комплекс бесплатных программных продуктов, включающий
       весь необходимый аресенал для автоматизации биржевой торговли. Позволяет выполнять
       профессиональную разработку программ, как для механической (роботы) и "ручной" торговли, так
