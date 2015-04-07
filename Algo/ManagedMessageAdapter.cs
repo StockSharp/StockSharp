@@ -81,6 +81,11 @@ namespace StockSharp.Algo
 			get { return _innerAdapter.SessionHolder; }
 		}
 
+		OrderCondition IMessageAdapter.CreateOrderCondition()
+		{
+			return _innerAdapter.CreateOrderCondition();
+		}
+
 		private Action<Message> _newOutMessage;
 
 		event Action<Message> IMessageChannel.NewOutMessage

@@ -27,6 +27,15 @@ namespace StockSharp.AlfaDirect
 			Platform = Platforms.x86;
 		}
 
+		/// <summary>
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// </summary>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public override OrderCondition CreateOrderCondition()
+		{
+			return new AlfaOrderCondition();
+		}
+
 		private AlfaWrapper Wrapper
 		{
 			get { return _wrapper; }

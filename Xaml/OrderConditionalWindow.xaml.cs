@@ -116,8 +116,8 @@ namespace StockSharp.Xaml
 				var basketAdapter = connector.TransactionAdapter as BasketMessageAdapter;
 				if (basketAdapter != null)
 					adapter = basketAdapter.Portfolios.TryGetValue(Portfolio.Name);
-#warning Conditions
-				//Condition.SelectedObject = adapter == null ? null : adapter.CreateOrderCondition();
+
+				Condition.SelectedObject = adapter == null ? null : adapter.CreateOrderCondition();
 			}
 		}
 

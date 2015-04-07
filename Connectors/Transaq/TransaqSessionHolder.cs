@@ -214,15 +214,6 @@ namespace StockSharp.Transaq
 		public TimeSpan? ServerTimeDiff { get; internal set; }
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
-		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
-		public override OrderCondition CreateOrderCondition()
-		{
-			return new TransaqOrderCondition();
-		}
-
-		/// <summary>
 		/// Сохранить настройки.
 		/// </summary>
 		/// <param name="storage">Хранилище настроек.</param>

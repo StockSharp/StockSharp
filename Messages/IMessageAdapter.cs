@@ -42,5 +42,11 @@
 		/// Обработчик исходящих сообщений.
 		/// </summary>
 		IMessageProcessor OutMessageProcessor { get; set; }
+
+		/// <summary>
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// </summary>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		OrderCondition CreateOrderCondition();
 	}
 }
