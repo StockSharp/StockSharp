@@ -45,7 +45,7 @@ namespace StockSharp.Quik
 			_ddeAdapter = new QuikDdeAdapter(_sessionHolder);
 
 			_luaTransactionAdapter = new LuaFixTransactionMessageAdapter(_sessionHolder);
-			_luaMarketDataAdapter = new FixMessageAdapter(MessageAdapterTypes.MarketData, _sessionHolder, _sessionHolder.MarketDataSession);
+			_luaMarketDataAdapter = new FixMessageAdapter(_sessionHolder, _sessionHolder.MarketDataSession);
 
 			SessionHolderOnIsLuaChanged();
 			_sessionHolder.IsLuaChanged += SessionHolderOnIsLuaChanged;
@@ -354,9 +354,9 @@ namespace StockSharp.Quik
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			switch (message.Type)
 			{
@@ -372,7 +372,7 @@ namespace StockSharp.Quik
 				}
 			}
 
-			base.OnProcessMessage(message, adapterType, direction);
+			base.OnProcessMessage(message, adapter, direction);
 		}
 
 		/// <summary>

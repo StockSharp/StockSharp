@@ -9,8 +9,6 @@ namespace StockSharp.OpenECry
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using OEC.API;
-
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -139,26 +137,6 @@ namespace StockSharp.OpenECry
 		[PropertyOrder(6)]
 		public bool EnableOECLogging { get; set; }
 
-		private OECClient _session;
-
-		internal OECClient Session
-		{
-			get { return _session; }
-			set
-			{
-				if (_session != null)
-					UnInitialize.SafeInvoke();
-
-				_session = value;
-
-				if (_session != null)
-					Initialize.SafeInvoke();
-			}
-		}
-
-		internal event Action Initialize;
-		internal event Action UnInitialize;
-
 		private static readonly HashSet<TimeSpan> _timeFrames = new HashSet<TimeSpan>(new[]
 		{
 			TimeSpan.FromSeconds(1),
@@ -185,24 +163,6 @@ namespace StockSharp.OpenECry
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new OpenECryOrderCondition();
-		}
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new OpenECryMessageAdapter(MessageAdapterTypes.Transaction, this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new OpenECryMessageAdapter(MessageAdapterTypes.MarketData, this);
 		}
 
 		/// <summary>

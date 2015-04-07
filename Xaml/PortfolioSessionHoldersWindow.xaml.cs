@@ -54,7 +54,7 @@ namespace StockSharp.Xaml
 				_sessionHolder = value;
 
 				_items.Clear();
-				_items.AddRange(_sessionHolder.Portfolios.Select(p => new Row(p.Key, p.Value)));
+				//_items.AddRange(_sessionHolder.Portfolios.Select(p => new Row(p.Key, p.Value)));
 
 				AdaptersComboBox.ItemsSource = _sessionHolder.InnerSessions;
 			}
@@ -80,7 +80,7 @@ namespace StockSharp.Xaml
 		{
 			var item = SelectedItem;
 
-			SessionHolder.Portfolios.Remove(item.Item1);
+			//SessionHolder.Portfolios.Remove(item.Item1);
 			_items.Remove(item);
 		}
 
@@ -94,7 +94,7 @@ namespace StockSharp.Xaml
 			var portfolio = PortfoliosComboBox.SelectedPortfolio.Name;
 			var sessionHolder = (IMessageSessionHolder)AdaptersComboBox.SelectedItem;
 
-			if (SessionHolder.Portfolios.ContainsKey(portfolio))
+			//if (SessionHolder.Portfolios.ContainsKey(portfolio))
 			{
 				new MessageBoxBuilder()
 					.Caption(Title)
@@ -106,7 +106,7 @@ namespace StockSharp.Xaml
 			}
 
 			_items.Add(new Row(portfolio, sessionHolder));
-			SessionHolder.Portfolios[portfolio] = sessionHolder;
+			//SessionHolder.Portfolios[portfolio] = sessionHolder;
 
 			PortfoliosComboBox.SelectedPortfolio = null;
 			AdaptersComboBox.SelectedItem = null;

@@ -40,11 +40,11 @@ namespace StockSharp.Algo.Testing
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
-			if (adapterType == MessageAdapterTypes.MarketData && direction == MessageDirections.Out)
+			if (adapter == MarketDataAdapter && direction == MessageDirections.Out)
 			{
 				switch (message.Type)
 				{
@@ -54,7 +54,7 @@ namespace StockSharp.Algo.Testing
 					case MessageTypes.Error:
 					case MessageTypes.SecurityLookupResult:
 					case MessageTypes.PortfolioLookupResult:
-						base.OnProcessMessage(message, adapterType, direction);
+						base.OnProcessMessage(message, adapter, direction);
 						break;
 
 					case MessageTypes.Execution:
@@ -64,7 +64,7 @@ namespace StockSharp.Algo.Testing
 						if (execMsg.ExecutionType != ExecutionTypes.Trade)
 							TransactionAdapter.SendInMessage(message);
 						else
-							base.OnProcessMessage(message, adapterType, direction);
+							base.OnProcessMessage(message, adapter, direction);
 
 						break;
 					}
@@ -75,7 +75,7 @@ namespace StockSharp.Algo.Testing
 				}
 			}
 			else
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, adapter, direction);
 		}
 	}
 }

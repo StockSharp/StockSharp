@@ -33,7 +33,7 @@ namespace StockSharp.Hydra.Quik
 			/// <summary>
 			/// Атрибут для поддержки динамически показываемых свойств
 			/// </summary>
-			[AttributeUsage(AttributeTargets.Property, Inherited = true)]
+			[AttributeUsage(AttributeTargets.Property)]
 			private sealed class DynamicPropertyFilterAttribute : Attribute
 			{
 				private readonly string _propertyName;
@@ -326,7 +326,7 @@ namespace StockSharp.Hydra.Quik
 		private sealed class HydraQuikTransactionAdapter : MessageAdapter<MessageSessionHolder>
 		{
 			public HydraQuikTransactionAdapter(MessageSessionHolder sessionHolder)
-				: base(MessageAdapterTypes.Transaction, sessionHolder)
+				: base(sessionHolder)
 			{
 			}
 

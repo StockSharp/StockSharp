@@ -29,7 +29,7 @@ namespace StockSharp.SmartCom
 
 			var condition = (SmartComOrderCondition)regMsg.Condition;
 
-			Session.RegisterOrder(
+			_wrapper.RegisterOrder(
 				regMsg.PortfolioName, (string)regMsg.SecurityId.Native, regMsg.Side == Sides.Buy ? SmartOrderAction.Buy : SmartOrderAction.Sell,
 				regMsg.GetSmartOrderType(), regMsg.TillDate == DateTimeOffset.MaxValue ? SmartOrderValidity.Gtc : SmartOrderValidity.Day,
 				(double)regMsg.Price, (int)regMsg.Volume, condition != null ? (double)condition.StopPrice : 0, (int)regMsg.TransactionId);
@@ -37,7 +37,7 @@ namespace StockSharp.SmartCom
 
 		private void ProcessCancelMessage(OrderCancelMessage cancelMsg)
 		{
-			Session.CancelOrder(cancelMsg.PortfolioName, (string)cancelMsg.SecurityId.Native, cancelMsg.OrderStringId);
+			_wrapper.CancelOrder(cancelMsg.PortfolioName, (string)cancelMsg.SecurityId.Native, cancelMsg.OrderStringId);
 		}
 
 		private void ProcessReplaceMessage(OrderReplaceMessage replaceMsg)
@@ -53,15 +53,15 @@ namespace StockSharp.SmartCom
 
 			//this.AddOrderInfoLog(newOrder, "ReRegisterOrder", () => "ReRegisterOrder(FORTS), old tid={0}, id={1}, sid={2}".Put(oldOrder.TransactionId, oldOrder.Id, oldOrder.GetSmartId()));
 
-			Session.ReRegisterOrder(replaceMsg.PortfolioName, (double)replaceMsg.Price, replaceMsg.OldOrderStringId);
+			_wrapper.ReRegisterOrder(replaceMsg.PortfolioName, (double)replaceMsg.Price, replaceMsg.OldOrderStringId);
 		}
 
 		private void ProcessPortfolioMessage(PortfolioMessage pfMsg)
 		{
 			if (pfMsg.IsSubscribe)
-				Session.SubscribePortfolio(pfMsg.PortfolioName);
+				_wrapper.SubscribePortfolio(pfMsg.PortfolioName);
 			else
-				Session.UnSubscribePortfolio(pfMsg.PortfolioName);
+				_wrapper.UnSubscribePortfolio(pfMsg.PortfolioName);
 		}
 
 		private void ProcessPortolioLookupMessage(PortfolioLookupMessage pfMsg)
@@ -69,7 +69,7 @@ namespace StockSharp.SmartCom
 			if (_lookupPortfoliosId == 0)
 			{
 				_lookupPortfoliosId = pfMsg.TransactionId;
-				Session.LookupPortfolios();
+				_wrapper.LookupPortfolios();
 			}
 			else
 				SendOutError(LocalizedStrings.Str1868);

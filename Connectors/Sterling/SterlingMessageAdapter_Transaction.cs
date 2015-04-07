@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SterlingLib;
-using StockSharp.Messages;
-using Ecng.Common;
-using Ecng.Collections;
-
-namespace StockSharp.Sterling
+﻿namespace StockSharp.Sterling
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
+	using Ecng.Collections;
+	using Ecng.Common;
+
+	using SterlingLib;
+
+	using StockSharp.Messages;
+
 	partial class SterlingMessageAdapter
 	{
 		private void ProcessOrderRegisterMessage(OrderRegisterMessage regMsg)
@@ -78,8 +81,8 @@ namespace StockSharp.Sterling
 			var replaceOrder = new STIOrder
 			{
 				Account = replaceMsg.PortfolioName, 
-				Quantity = (int) replaceMsg.Volume, 
-				Display = (int) replaceMsg.VisibleVolume, 
+				Quantity = (int) replaceMsg.Volume,
+				Display = (int)(replaceMsg.VisibleVolume ?? replaceMsg.Volume), 
 				ClOrderID = replaceMsg.TransactionId.To<string>(), 
 				LmtPrice = (double) replaceMsg.Price, 
 				Symbol = replaceMsg.SecurityId.SecurityCode, 
@@ -102,7 +105,7 @@ namespace StockSharp.Sterling
 		{
 			if (executionMsg.ExtensionInfo != null && executionMsg.ExtensionInfo.ContainsKey("GetMyTrades"))
 			{
-				var myTrades = SessionHolder.Session.GetMyTrades();
+				var myTrades = _client.GetMyTrades();
 
 				foreach (var trade in myTrades.Where(t => t.bstrClOrderId != ""))
 				{
@@ -126,7 +129,7 @@ namespace StockSharp.Sterling
 
 			if (executionMsg.ExtensionInfo != null && executionMsg.ExtensionInfo.ContainsKey("GetOrders"))
 			{
-				var orders = SessionHolder.Session.GetOrders();
+				var orders = _client.GetOrders();
 
 				foreach (var order in orders.Where(o => o.bstrClOrderId != ""))
 				{
@@ -153,34 +156,34 @@ namespace StockSharp.Sterling
 
 		private void ProcessPositionMessage(PositionMessage posMsg)
 		{
-			if (posMsg.ExtensionInfo != null && posMsg.ExtensionInfo.ContainsKey("GetPositions"))
+			if (posMsg.ExtensionInfo == null || !posMsg.ExtensionInfo.ContainsKey("GetPositions"))
+				return;
+
+			var pos = _client.GetPositions();
+
+			foreach (var position in pos)
 			{
-				var pos = SessionHolder.Session.GetPositions();
-
-				foreach (var position in pos)
+				var m = new PositionMessage
 				{
-					var m = new PositionMessage
-					{
-						PortfolioName = position.bstrAcct,
-						SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
-					};
+					PortfolioName = position.bstrAcct,
+					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
+				};
 
-					SendOutMessage(m);
+				SendOutMessage(m);
 
-					var message = new PositionChangeMessage
-					{
-						PortfolioName = position.bstrAcct,
-						SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
-						ServerTime = SessionHolder.CurrentTime
-					};
+				var message = new PositionChangeMessage
+				{
+					PortfolioName = position.bstrAcct,
+					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
+					ServerTime = SessionHolder.CurrentTime
+				};
 
-					message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.RealizedPnL, (decimal)position.fReal));
-					message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.BeginValue, (decimal)position.nOpeningPosition));
-					message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.CurrentValue, (decimal)(position.nOpeningPosition + (position.nSharesBot - position.nSharesSld))));
-					message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.Commission, (decimal)position.fPositionCost));
+				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.RealizedPnL, (decimal)position.fReal));
+				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.BeginValue, (decimal)position.nOpeningPosition));
+				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.CurrentValue, (decimal)(position.nOpeningPosition + (position.nSharesBot - position.nSharesSld))));
+				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.Commission, (decimal)position.fPositionCost));
 
-					SendOutMessage(message);
-				}
+				SendOutMessage(message);
 			}
 		}
 

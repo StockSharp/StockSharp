@@ -67,6 +67,7 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="SterlingClient.cs" />
     <Compile Include="SterlingMessageAdapter.cs" />
     <Compile Include="SterlingMessageAdapter_MarketData.cs" />
     <Compile Include="SterlingMessageAdapter_Transaction.cs" />

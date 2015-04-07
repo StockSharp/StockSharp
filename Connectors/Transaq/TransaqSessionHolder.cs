@@ -7,13 +7,11 @@ namespace StockSharp.Transaq
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 	using Ecng.Localization;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
 	using StockSharp.Messages;
-	using StockSharp.Transaq.Native;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -31,8 +29,6 @@ namespace StockSharp.Transaq
 	[TargetPlatform(Languages.Russian)]
 	public class TransaqSessionHolder : MessageSessionHolder
 	{
-		private readonly SynchronizedDictionary<Type, Action<BaseResponse>> _handlerBunch = new SynchronizedDictionary<Type, Action<BaseResponse>>();
-
 		/// <summary>
 		/// Логин.
 		/// </summary>
@@ -180,24 +176,6 @@ namespace StockSharp.Transaq
 		}
 
 		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new TransaqMessageAdapter(MessageAdapterTypes.Transaction, this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new TransaqMessageAdapter(MessageAdapterTypes.MarketData, this);
-		}
-
-		/// <summary>
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
@@ -217,9 +195,6 @@ namespace StockSharp.Transaq
 			IsMarketDataEnabled = true;
 		}
 
-		[Browsable(false)]
-		internal ApiClient Session { get; set; }
-
 		/// <summary>
 		/// Версия коннектора.
 		/// </summary>
@@ -237,26 +212,6 @@ namespace StockSharp.Transaq
 		/// </summary>
 		[Browsable(false)]
 		public TimeSpan? ServerTimeDiff { get; internal set; }
-
-		internal void AddHandler<T>(Action<T> handler)
-			where T : BaseResponse
-		{
-			if (handler == null)
-				throw new ArgumentNullException("handler");
-
-			_handlerBunch[typeof(T)] = response => handler((T)response);
-		}
-
-		internal void ProcessResponse(BaseResponse response)
-		{
-			var handler = _handlerBunch.TryGetValue(response.GetType());
-
-			//if (handler.IsNull())
-			//	throw new ArgumentException("Ответ '{0}' не содержит обработчика.".Put(t.Name));
-
-			if (handler != null)
-				handler(response);
-		}
 
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.

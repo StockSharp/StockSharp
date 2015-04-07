@@ -8,6 +8,7 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.InteractiveBrokers.Native;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Адаптер сообщений для InteractiveBrokers.
@@ -20,70 +21,27 @@ namespace StockSharp.InteractiveBrokers
 		private readonly SynchronizedPairSet<Tuple<MarketDataTypes, SecurityId, object>, long> _requestIds = new SynchronizedPairSet<Tuple<MarketDataTypes, SecurityId, object>, long>();
 		private readonly SynchronizedDictionary<string, long> _pfRequests = new SynchronizedDictionary<string, long>();
 
-		private bool _isSessionOwner;
+		private IBSocket _socket;
 
 		/// <summary>
 		/// Создать <see cref="InteractiveBrokersMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public InteractiveBrokersMessageAdapter(MessageAdapterTypes type, InteractiveBrokersSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		public InteractiveBrokersMessageAdapter(InteractiveBrokersSessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-					SessionHolder.ProcessResponse += OnProcessTransactionResponse;
-					SessionHolder.ProcessOrderError += OnProcessOrderError;
-					SessionHolder.ProcessOrderCancelled += OnProcessOrderCancelled;
-					break;
-				case MessageAdapterTypes.MarketData:
-					SessionHolder.ProcessResponse += OnProcessMarketDataResponse;
-					SessionHolder.ProcessMarketDataError += OnProcessMarketDataError;
-					SessionHolder.ProcessSecurityLookupNoFound += OnProcessSecurityLookupNoFound;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException("type");
-			}
-
-			SessionHolder.ProcessTimeShift += OnProcessTimeShift;
 		}
 
 		private void OnProcessTimeShift(TimeSpan timeShift)
 		{
-			if (_isSessionOwner)
-				SendOutMessage(new TimeMessage { ServerTime = DateTimeOffset.UtcNow + timeShift });
-		}
-
-		/// <summary>
-		/// Освободить занятые ресурсы.
-		/// </summary>
-		protected override void DisposeManaged()
-		{
-			SessionHolder.ProcessTimeShift -= OnProcessTimeShift;
-
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-					SessionHolder.ProcessResponse -= OnProcessTransactionResponse;
-					SessionHolder.ProcessOrderError -= OnProcessOrderError;
-					SessionHolder.ProcessOrderCancelled -= OnProcessOrderCancelled;
-					break;
-				case MessageAdapterTypes.MarketData:
-					SessionHolder.ProcessResponse -= OnProcessMarketDataResponse;
-					SessionHolder.ProcessMarketDataError -= OnProcessMarketDataError;
-					SessionHolder.ProcessSecurityLookupNoFound -= OnProcessSecurityLookupNoFound;
-					break;
-			}
-
-			base.DisposeManaged();
+			SendOutMessage(new TimeMessage { ServerTime = DateTimeOffset.UtcNow + timeShift });
 		}
 
 		private IBSocket Session
 		{
 			get
 			{
-				var session = SessionHolder.Session;
+				var session = _socket;
 
 				if (session == null)
 					throw new InvalidOperationException(LocalizedStrings.Str2511);
@@ -133,6 +91,22 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public override bool PortfolioLookupRequired
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// </summary>
+		public override bool OrderStatusRequired
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -142,102 +116,72 @@ namespace StockSharp.InteractiveBrokers
 			{
 				case MessageTypes.Connect:
 				{
+					if (_socket != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
+
 					_depths.Clear();
 					_secIdByTradeIds.Clear();
 
-					if (SessionHolder.Session == null)
+					_socket = new IBSocket { Parent = SessionHolder };
+					_socket.ProcessResponse += OnProcessResponse;
+					_socket.Connect(SessionHolder.Address);
+
+					_socket.Send((int)_clientVersion);
+
+					_socket.ServerVersion = (ServerVersions)_socket.ReadInt();
+
+					if (_socket.ServerVersion >= ServerVersions.V20)
 					{
-						var socket = new IBSocket { Parent = SessionHolder };
-
-						socket.Connect(SessionHolder.Address);
-
-						socket.Send((int)_clientVersion);
-
-						socket.ServerVersion = (ServerVersions)socket.ReadInt();
-
-						if (socket.ServerVersion >= ServerVersions.V20)
-						{
-							var str = socket.ReadStr();
-							SessionHolder.ConnectedTime = str.Substring(0, str.LastIndexOf(' ')).ToDateTime("yyyyMMdd HH:mm:ss");
-						}
-
-						if (socket.ServerVersion < _minimumServerVersion)
-						{
-							throw new InvalidOperationException(LocalizedStrings.Str2513Params
-								.Put((int)socket.ServerVersion, (int)_minimumServerVersion));
-						}
-
-						if (socket.ServerVersion >= ServerVersions.V3)
-						{
-							if (socket.ServerVersion >= ServerVersions.V70)
-							{
-								if (!SessionHolder.ExtraAuth)
-								{
-									socket.Send((int)RequestMessages.StartApi);
-									socket.Send((int)ServerVersions.V1);
-									socket.Send(SessionHolder.ClientId);
-								}
-							}
-							else
-								socket.Send(SessionHolder.ClientId);
-						}
-
-						socket.StartListening(error => SendOutMessage(new ConnectMessage { Error = error }));
-
-						_isSessionOwner = true;
-
-						SessionHolder.Session = socket;
+						var str = _socket.ReadStr();
+						SessionHolder.ConnectedTime = str.Substring(0, str.LastIndexOf(' ')).ToDateTime("yyyyMMdd HH:mm:ss");
 					}
+
+					if (_socket.ServerVersion < _minimumServerVersion)
+					{
+						throw new InvalidOperationException(LocalizedStrings.Str2513Params
+							.Put((int)_socket.ServerVersion, (int)_minimumServerVersion));
+					}
+
+					if (_socket.ServerVersion >= ServerVersions.V3)
+					{
+						if (_socket.ServerVersion >= ServerVersions.V70)
+						{
+							if (!SessionHolder.ExtraAuth)
+							{
+								_socket.Send((int)RequestMessages.StartApi);
+								_socket.Send((int)ServerVersions.V1);
+								_socket.Send(SessionHolder.ClientId);
+							}
+						}
+						else
+							_socket.Send(SessionHolder.ClientId);
+					}
+
+					_socket.StartListening(error => SendOutMessage(new ConnectMessage { Error = error }));
 					
 					SendOutMessage(new ConnectMessage());
 
-					if (_isSessionOwner)
-					{
-						// отправляется автоматически 
-						//RequestIds(1);
+					// отправляется автоматически 
+					//RequestIds(1);
 
-						SetServerLogLevel();
-						SetMarketDataType();
+					SetServerLogLevel();
+					SetMarketDataType();
 
-						RequestCurrentTime();
-					}
-
-					switch (Type)
-					{
-						case MessageAdapterTypes.Transaction:
-							SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-							SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-							break;
-						case MessageAdapterTypes.MarketData:
-							//RequestScannerParameters();
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
+					RequestCurrentTime();
 
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					switch (Type)
-					{
-						case MessageAdapterTypes.Transaction:
-							UnSubscribePosition();
-							UnSubscribeAccountSummary(_pfRequests.GetAndRemove("ALL"));
-							break;
-						case MessageAdapterTypes.MarketData:
-							break;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
+					if (_socket == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
-					if (_isSessionOwner)
-					{
-						SessionHolder.Session.Dispose();
-						SessionHolder.Session = null;
-						_isSessionOwner = false;
-					}
+					UnSubscribePosition();
+					UnSubscribeAccountSummary(_pfRequests.GetAndRemove("ALL"));
+
+					_socket.Dispose();
+					_socket = null;
 
 					SendOutMessage(new DisconnectMessage());
 
@@ -442,6 +386,174 @@ namespace StockSharp.InteractiveBrokers
 					break;
 				}
 			}
+		}
+
+		// TODO https://www.interactivebrokers.com/en/software/api/apiguide/tables/api_message_codes.htm
+		enum NotifyCodes
+		{
+			OrderDuplicateId = 103,
+			OrderFilled = 104,
+			OrderNotMatchPrev = 105,
+			OrderCannotTransmitId = 106,
+			OrderCannotTransmitIncomplete = 107,
+			OrderPriceOutOfRange = 109,
+			OrderCannotTransmit = 132,
+			OrderSubmitFailed = 133,
+			SecurityNoDefinition = 200,
+			Rejected = 201,
+			OrderCancelled = 202,
+			OrderVolumeTooSmall = 481,
+		}
+
+		private bool OnProcessResponse(IBSocket socket)
+		{
+			var str = socket.ReadStr(false);
+
+			if (str.IsEmpty())
+			{
+				socket.AddErrorLog(LocalizedStrings.Str2524);
+				return false;
+			}
+
+			var message = (ResponseMessages)str.To<int>();
+
+			socket.AddDebugLog("Msg: {0}", message);
+
+			if (message == ResponseMessages.Error)
+				return false;
+
+			var version = (ServerVersions)socket.ReadInt();
+
+			switch (message)
+			{
+				case ResponseMessages.CurrentTime:
+				{
+					// http://www.interactivebrokers.com/en/software/api/apiguide/java/currenttime.htm
+
+					var time = socket.ReadLongDateTime();
+					OnProcessTimeShift(TimeHelper.Now - time);
+
+					break;
+				}
+				case ResponseMessages.ErrorMessage:
+				{
+					if (version < ServerVersions.V2)
+					{
+						OnProcessMarketDataError(socket.ReadStr());
+					}
+					else
+					{
+						var id = socket.ReadInt();
+						var code = socket.ReadInt();
+						var msg = socket.ReadStr();
+
+						socket.AddInfoLog(() => msg);
+
+						if (id == -1)
+							break;
+
+						switch ((NotifyCodes)code)
+						{
+							case NotifyCodes.OrderCancelled:
+							{
+								OnProcessOrderCancelled(id);
+								break;
+							}
+							case NotifyCodes.OrderCannotTransmit:
+							case NotifyCodes.OrderCannotTransmitId:
+							case NotifyCodes.OrderCannotTransmitIncomplete:
+							case NotifyCodes.OrderDuplicateId:
+							case NotifyCodes.OrderFilled:
+							case NotifyCodes.OrderNotMatchPrev:
+							case NotifyCodes.OrderPriceOutOfRange:
+							case NotifyCodes.OrderSubmitFailed:
+							case NotifyCodes.OrderVolumeTooSmall:
+							case NotifyCodes.Rejected:
+							{
+								OnProcessOrderError(id, msg);
+								break;
+							}
+							case NotifyCodes.SecurityNoDefinition:
+								OnProcessSecurityLookupNoFound(id);
+								break;
+							default:
+								OnProcessMarketDataError(LocalizedStrings.Str2525Params.Put(msg, id, code));
+								break;
+						}
+					}
+
+					break;
+				}
+				case ResponseMessages.VerifyMessageApi:
+				{
+					/*int version =*/
+					socket.ReadInt();
+					/*var apiData = */
+					socket.ReadStr();
+
+					//eWrapper().verifyMessageAPI(apiData);
+					break;
+				}
+				case ResponseMessages.VerifyCompleted:
+				{
+					/*int version =*/
+					socket.ReadInt();
+					var isSuccessfulStr = socket.ReadStr();
+					var isSuccessful = "true".CompareIgnoreCase(isSuccessfulStr);
+					/*var errorText = */
+					socket.ReadStr();
+
+					if (isSuccessful)
+					{
+						throw new NotSupportedException();
+						//m_parent.startAPI();
+					}
+
+					//eWrapper().verifyCompleted(isSuccessful, errorText);
+					break;
+				}
+				case ResponseMessages.DisplayGroupList:
+				{
+					/*int version =*/
+					socket.ReadInt();
+					/*var reqId = */
+					socket.ReadInt();
+					/*var groups = */
+					socket.ReadStr();
+
+					//eWrapper().displayGroupList(reqId, groups);
+					break;
+				}
+				case ResponseMessages.DisplayGroupUpdated:
+				{
+					/*int version =*/
+					socket.ReadInt();
+					/*var reqId = */
+					socket.ReadInt();
+					/*var contractInfo = */
+					socket.ReadStr();
+
+					//eWrapper().displayGroupUpdated(reqId, contractInfo);
+					break;
+				}
+				default:
+				{
+					if (!message.IsDefined())
+						return false;
+
+					var handled = ProcessTransactionResponse(socket, message, version);
+
+					if (!handled)
+						handled = ProcessMarketDataResponse(socket, message, version);
+
+					if (!handled)
+						throw new InvalidOperationException(LocalizedStrings.Str1622Params.Put(message));
+
+					break;
+				}
+			}
+
+			return true;
 		}
 
 		private void SetServerLogLevel()

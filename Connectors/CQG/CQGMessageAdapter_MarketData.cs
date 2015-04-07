@@ -18,7 +18,7 @@ namespace StockSharp.CQG
 
 		private void SessionOnInstrumentSubscribed(string symbol, CQGInstrument cqgInstrument)
 		{
-			SessionHolder.Instruments[symbol] = cqgInstrument;
+			_instruments[symbol] = cqgInstrument;
 
 			OptionTypes? optionType = null;
 

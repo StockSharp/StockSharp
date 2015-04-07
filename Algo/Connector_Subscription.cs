@@ -943,6 +943,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnStartExport()
 		{
+			if (TransactionAdapter == MarketDataAdapter && ConnectionState == ConnectionStates.Connected)
+			{
+				RaiseExportStarted();
+				return;
+			}
+
 			MarketDataAdapter.SendInMessage(new ConnectMessage());
 		}
 

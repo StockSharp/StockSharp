@@ -30,6 +30,8 @@ namespace StockSharp.OpenECry
 		{
 			base.SessionHolder = new OpenECrySessionHolder(TransactionIdGenerator);
 
+			TransactionAdapter = MarketDataAdapter = new OpenECryMessageAdapter(SessionHolder);
+
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
 		}
@@ -103,14 +105,14 @@ namespace StockSharp.OpenECry
 			set { SessionHolder.EnableOECLogging = value; }
 		}
 
-		/// <summary>
-		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="IConnector.Connect"/>.
-		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
-		protected override bool IsConnectionAlive()
-		{
-			return SessionHolder.Session != null && !SessionHolder.Session.CompleteConnected;
-		}
+		///// <summary>
+		///// Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="IConnector.Connect"/>.
+		///// </summary>
+		///// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
+		//protected override bool IsConnectionAlive()
+		//{
+		//	return SessionHolder.Session != null && !SessionHolder.Session.CompleteConnected;
+		//}
 
 		/// <summary>
 		/// Отправить сообщение другому пользователю.
@@ -202,15 +204,15 @@ namespace StockSharp.OpenECry
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			var candleMsg = message as CandleMessage;
 
 			if (candleMsg == null)
 			{
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, adapter, direction);
 				return;
 			}
 

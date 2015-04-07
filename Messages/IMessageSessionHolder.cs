@@ -41,7 +41,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Интерфейс, описывающий контейнер для сессии.
 	/// </summary>
-	public interface IMessageSessionHolder : IPersistable, ILogReceiver, IMessageChannel
+	public interface IMessageSessionHolder : IPersistable, ILogReceiver
 	{
 		/// <summary>
 		/// Генератор идентификаторов транзакций.
@@ -118,17 +118,5 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
 		OrderCondition CreateOrderCondition();
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		IMessageAdapter CreateTransactionAdapter();
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		IMessageAdapter CreateMarketDataAdapter();
 	}
 }

@@ -6,7 +6,6 @@ namespace StockSharp.Btce
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Btce.Native;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -32,24 +31,6 @@ namespace StockSharp.Btce
 		{
 			IsTransactionEnabled = true;
 			IsMarketDataEnabled = true;
-		}
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new BtceMessageAdapter(MessageAdapterTypes.Transaction, this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new BtceMessageAdapter(MessageAdapterTypes.MarketData, this);
 		}
 
 		/// <summary>
@@ -92,27 +73,6 @@ namespace StockSharp.Btce
 		public override bool JoinInProcessors
 		{
 			get { return false; }
-		}
-
-		private BtceClient _session;
-
-		[Browsable(false)]
-		internal BtceClient Session
-		{
-			get { return _session; }
-			set
-			{
-				if (_session == value)
-					return;
-
-				if (_session != null)
-					_session.Parent = null;
-
-				_session = value;
-
-				if (_session != null)
-					_session.Parent = this;
-			}
 		}
 
 		/// <summary>

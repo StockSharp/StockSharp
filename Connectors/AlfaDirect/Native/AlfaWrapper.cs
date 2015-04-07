@@ -177,7 +177,7 @@ namespace StockSharp.AlfaDirect.Native
 						if (_connState == ConnectionStates.Disconnecting)
 							Disconnected.SafeInvoke();
 						else
-							ConnectionError.SafeInvoke(new AlfaException(ADLite.tagStateCodes.stcNotConnected, LocalizedStrings.Str1611));
+							ConnectionError.SafeInvoke(new AlfaException(tagStateCodes.stcNotConnected, LocalizedStrings.Str1611));
 
 						_connState = ConnectionStates.Disconnected;
 
@@ -231,7 +231,7 @@ namespace StockSharp.AlfaDirect.Native
 
 			var secCode = message.SecurityId.SecurityCode;
 			var account = message.PortfolioName.AccountFromPortfolioName(); // Портфель
-			var placeCode = _sessionHolder.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
+			var placeCode = _sessionHolder.SecurityClassInfo.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
 			var endDate = (message.TillDate != DateTimeOffset.MaxValue
 				? marketTime.Date.AddTicks(new TimeSpan(23, 55, 00).Ticks)
 				: message.TillDate).ToLocalTime(TimeHelper.Moscow); // Срок действия поручения.
@@ -319,7 +319,7 @@ namespace StockSharp.AlfaDirect.Native
 			string placeCode = null;
 			if (!securityId.IsDefault())
 			{
-				placeCode = _sessionHolder.GetSecurityClass(securityType, securityId.BoardCode);
+				placeCode = _sessionHolder.SecurityClassInfo.GetSecurityClass(securityType, securityId.BoardCode);
 
 				if (placeCode == null)
 					throw new InvalidOperationException(LocalizedStrings.Str2278);
@@ -331,7 +331,7 @@ namespace StockSharp.AlfaDirect.Native
 
 		public void LookupCandles(MarketDataMessage message)
 		{
-			var placeCode = _sessionHolder.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
+			var placeCode = _sessionHolder.SecurityClassInfo.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
 			_logReceiver.AddDebugLog("Candles SC={0} PC={1} TF={2} F={3} T={4}", message.SecurityId.SecurityCode, placeCode, message.Arg, message.From, message.To);
 
 			if (placeCode == null)

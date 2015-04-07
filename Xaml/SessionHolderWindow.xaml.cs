@@ -57,13 +57,13 @@ namespace StockSharp.Xaml
 
 			var connector = new Connector
 			{
-				MarketDataAdapter = _editableSession.IsMarketDataEnabled
-					? _editableSession.CreateMarketDataAdapter()
-					: new PassThroughMessageAdapter(_editableSession),
+				//MarketDataAdapter = _editableSession.IsMarketDataEnabled
+				//	? _editableSession.CreateMarketDataAdapter()
+				//	: new PassThroughMessageAdapter(_editableSession),
 
-				TransactionAdapter = _editableSession.IsTransactionEnabled
-					? _editableSession.CreateTransactionAdapter()
-					: new PassThroughMessageAdapter(_editableSession)
+				//TransactionAdapter = _editableSession.IsTransactionEnabled
+				//	? _editableSession.CreateTransactionAdapter()
+				//	: new PassThroughMessageAdapter(_editableSession)
 			};
 
 			connector.ApplyMessageProcessor(MessageDirections.In, true, true);

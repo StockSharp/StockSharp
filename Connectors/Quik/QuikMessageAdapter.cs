@@ -13,10 +13,9 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Инициализировать <see cref="QuikMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		protected QuikMessageAdapter(MessageAdapterTypes type, QuikSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		protected QuikMessageAdapter(QuikSessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
 		}
 

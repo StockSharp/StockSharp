@@ -209,11 +209,11 @@ namespace StockSharp.Messages
 				var bidVolume = message.Changes.TryGetValue(Level1Fields.BestBidVolume);
 				var askVolume = message.Changes.TryGetValue(Level1Fields.BestAskVolume);
 
-				_bid.Price = bidPrice == null ? 0 : (decimal)bidPrice;
-				_bid.Volume = bidVolume == null ? 0 : (decimal)bidVolume;
+				_bid.Price = (decimal?)bidPrice ?? 0m;
+				_bid.Volume = (decimal?)bidVolume ?? 0m;
 
-				_ask.Price = askPrice == null ? 0 : (decimal)askPrice;
-				_ask.Volume = askVolume == null ? 0 : (decimal)askVolume;
+				_ask.Price = (decimal?)askPrice ?? 0m;
+				_ask.Volume = (decimal?)askVolume ?? 0m;
 
 				_localTime = message.LocalTime;
 				_serverTime = message.ServerTime;
@@ -251,15 +251,13 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Инициализировать <see cref="MessageAdapter{TSessionHolder}"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
 		///// <param name="checkLicense">Проверять наличие лицензии.</param>
-		protected MessageAdapter(MessageAdapterTypes type, TSessionHolder sessionHolder/*, bool checkLicense = true*/)
+		protected MessageAdapter(TSessionHolder sessionHolder/*, bool checkLicense = true*/)
 		{
 			Platform = Platforms.AnyCPU;
 			//_checkLicense = checkLicense;
 
-			Type = type;
 			TransactionIdGenerator = sessionHolder.TransactionIdGenerator;
 			SessionHolder = sessionHolder;
 		}
@@ -284,6 +282,30 @@ namespace StockSharp.Messages
 		IMessageSessionHolder IMessageAdapter.SessionHolder
 		{
 			get { return SessionHolder; }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public virtual bool PortfolioLookupRequired
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// </summary>
+		public virtual bool SecurityLookupRequired
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// </summary>
+		public virtual bool OrderStatusRequired
+		{
+			get { return false; }
 		}
 
 		/// <summary>
@@ -693,11 +715,6 @@ namespace StockSharp.Messages
 		public IdGenerator TransactionIdGenerator { get; private set; }
 
 		/// <summary>
-		/// Тип адаптера.
-		/// </summary>
-		public MessageAdapterTypes Type { get; private set; }
-
-		/// <summary>
 		/// Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей.
 		/// </summary>
 		/// <remarks>
@@ -933,13 +950,13 @@ namespace StockSharp.Messages
 				{
 					var time = SessionHolder.CurrentTime;
 
-					if (Type == MessageAdapterTypes.MarketData)
-					{
+					//if (Type == MessageAdapterTypes.MarketData)
+					//{
 						// TimeMsg нужен для оповещения внешнего кода о живом адаптере (или для изменения текущего времени)
 						// Поэтому когда в очереди есть другие сообщения нет смысла добавлять еще и TimeMsg
 						if (_outMessageProcessor.MessageCount == 0)
 							SendOutMessage(new TimeMessage());
-					}
+					//}
 
 					TimeMessage timeMsg;
 
@@ -1104,7 +1121,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
 		public PassThroughMessageAdapter(IMessageSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+			: base(sessionHolder)
 		{
 		}
 

@@ -33,7 +33,10 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public SmartTrader()
 		{
-			base.SessionHolder = new SmartComSessionHolder(TransactionIdGenerator);
+			var sessionHolder = new SmartComSessionHolder(TransactionIdGenerator);
+			base.SessionHolder = sessionHolder;
+
+			TransactionAdapter = MarketDataAdapter = new SmartComMessageAdapter(sessionHolder);
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
@@ -48,15 +51,15 @@ namespace StockSharp.SmartCom
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			var candleMsg = message as CandleMessage;
 
 			if (candleMsg == null)
 			{
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, adapter, direction);
 				return;
 			}
 

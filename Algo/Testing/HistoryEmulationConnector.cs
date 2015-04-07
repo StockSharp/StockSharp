@@ -164,6 +164,7 @@ namespace StockSharp.Algo.Testing
 
 			_sessionHolder = new HistorySessionHolder(TransactionIdGenerator, securityProvider);
 
+			TransactionAdapter = new EmulationMessageAdapter(_sessionHolder);
 			MarketDataAdapter = _marketDataAdapter = new HistoryMessageAdapter(_sessionHolder) { StorageRegistry = storageRegistry };
 
 			_sessionHolder.MarketTimeChangedInterval = TimeSpan.FromSeconds(1);
@@ -423,13 +424,13 @@ namespace StockSharp.Algo.Testing
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			try
 			{
-				if (adapterType == MessageAdapterTypes.Transaction)
+				if (adapter == TransactionAdapter)
 				{
 					switch (message.Type)
 					{
@@ -474,14 +475,14 @@ namespace StockSharp.Algo.Testing
 							if (State == EmulationStates.Stopping && message.Type != MessageTypes.Disconnect)
 								break;
 
-							base.OnProcessMessage(message, adapterType, direction);
+							base.OnProcessMessage(message, adapter, direction);
 							ProcessedEventCount++;
 							break;
 						}
 					}
 				}
 				else
-					base.OnProcessMessage(message, adapterType, direction);
+					base.OnProcessMessage(message, adapter, direction);
 			}
 			catch (Exception ex)
 			{

@@ -1,15 +1,11 @@
 namespace StockSharp.CQG
 {
-	using System;
 	using System.ComponentModel;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
-	using global::CQG;
-
-	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	/// <summary>
 	/// Контейнер для сессии.
@@ -31,28 +27,6 @@ namespace StockSharp.CQG
 			IsMarketDataEnabled = true;
 		}
 
-		private CQGCEL _session;
-
-		internal CQGCEL Session
-		{
-			get { return _session; }
-			set
-			{
-				if (_session != null)
-					UnInitialize.SafeInvoke();
-
-				_session = value;
-
-				if (_session != null)
-					Initialize.SafeInvoke();
-			}
-		}
-
-		internal event Action Initialize;
-		internal event Action UnInitialize;
-
-		internal readonly SynchronizedDictionary<string, CQGInstrument> Instruments = new SynchronizedDictionary<string, CQGInstrument>();
-
 		/// <summary>
 		/// Получить строковое представление контейнера.
 		/// </summary>
@@ -60,24 +34,6 @@ namespace StockSharp.CQG
 		public override string ToString()
 		{
 			return string.Empty;
-		}
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new CQGMessageAdapter(MessageAdapterTypes.Transaction, this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new CQGMessageAdapter(MessageAdapterTypes.MarketData, this);
 		}
 	}
 }

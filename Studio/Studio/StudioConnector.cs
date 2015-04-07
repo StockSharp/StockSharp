@@ -35,7 +35,7 @@ namespace StockSharp.Studio
 			}
 
 			public StudioMarketDataAdapter(BasketSessionHolder sessionHolder)
-				: base(MessageAdapterTypes.MarketData, sessionHolder)
+				: base(sessionHolder)
 			{
 			}
 
@@ -93,16 +93,6 @@ namespace StockSharp.Studio
 
 		private sealed class StudioHistorySessionHolder : HistorySessionHolder
 		{
-			public override IMessageAdapter CreateMarketDataAdapter()
-			{
-				return null;
-			}
-
-			public override IMessageAdapter CreateTransactionAdapter()
-			{
-				return new StudioEmulationAdapter(this);
-			}
-
 			public StudioHistorySessionHolder(IdGenerator transactionIdGenerator)
 				: base(transactionIdGenerator)
 			{
@@ -389,7 +379,7 @@ namespace StockSharp.Studio
 			SessionHolder = _sessionHolder = new BasketSessionHolder(TransactionIdGenerator);
 
 			MarketDataAdapter = _marketDataAdapter = new StudioMarketDataAdapter(_sessionHolder);
-			TransactionAdapter = _transactionAdapter = new BasketMessageAdapter(MessageAdapterTypes.Transaction, _sessionHolder);
+			TransactionAdapter = _transactionAdapter = new BasketMessageAdapter(_sessionHolder);
 
 			ApplyMessageProcessor(MessageDirections.In, true, false);
 			ApplyMessageProcessor(MessageDirections.In, false, true);
@@ -428,8 +418,8 @@ namespace StockSharp.Studio
 			if (emulationSessionHolder == null)
 				_sessionHolder.InnerSessions.Add(emulationSessionHolder = new StudioHistorySessionHolder(TransactionIdGenerator), 1);
 
-			if (!_sessionHolder.Portfolios.ContainsKey("Simulator"))
-				_sessionHolder.Portfolios.Add("Simulator", emulationSessionHolder);
+			//if (!_transactionAdapter.Portfolios.ContainsKey("Simulator"))
+			//	_transactionAdapter.Portfolios.Add("Simulator", emulationSessionHolder);
 		}
 
 		private IEnumerable<Portfolio> GetEmulationPortfolios()
@@ -443,12 +433,12 @@ namespace StockSharp.Studio
 
 			foreach (var portfolio in portfolios)
 			{
-				var sessionHolder = _sessionHolder.Portfolios.TryGetValue(portfolio.Name);
+				//var sessionHolder = _transactionAdapter.Portfolios.TryGetValue(portfolio.Name);
 
-				if (sessionHolder != emu.SessionHolder)
-					continue;
+				//if (sessionHolder != emu.SessionHolder)
+				//	continue;
 
-				yield return portfolio;
+				//yield return portfolio;
 			}
 		}
 
@@ -612,14 +602,14 @@ namespace StockSharp.Studio
 			base.UnSubscribeMarketData(security, type);
 		}
 
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
 				{
-					if (direction == MessageDirections.Out && 
-						adapterType == MessageAdapterTypes.MarketData &&
+					if (direction == MessageDirections.Out &&
+						adapter == MarketDataAdapter &&
 						((ConnectMessage)message).Error == null)
 					{
 						SendPortfoliosToEmulator();
@@ -631,7 +621,7 @@ namespace StockSharp.Studio
 
 				case MessageTypes.Disconnect:
 				{
-					if (direction == MessageDirections.Out && adapterType == MessageAdapterTypes.MarketData)
+					if (direction == MessageDirections.Out && adapter == MarketDataAdapter)
 						ResetMarketDataSubscriptions();
 					break;
 				}
@@ -667,7 +657,7 @@ namespace StockSharp.Studio
 				}
 			}
 
-			base.OnProcessMessage(message, adapterType, direction);
+			base.OnProcessMessage(message, adapter, direction);
 		}
 	}
 

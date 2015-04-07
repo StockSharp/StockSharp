@@ -47,24 +47,6 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new EmulationMessageAdapter(this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new HistoryMessageAdapter(this);
-		}
-
-		/// <summary>
 		/// Поставщик информации об инструментах.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; private set; }

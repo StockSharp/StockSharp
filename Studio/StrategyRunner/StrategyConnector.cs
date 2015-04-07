@@ -20,8 +20,8 @@
 
 			SessionHolder = BasketSessionHolder = new BasketSessionHolder(TransactionIdGenerator);
 
-			TransactionAdapter = new BasketMessageAdapter(MessageAdapterTypes.Transaction, BasketSessionHolder);
-			MarketDataAdapter = new BasketMessageAdapter(MessageAdapterTypes.MarketData, BasketSessionHolder);
+			TransactionAdapter = new BasketMessageAdapter(BasketSessionHolder);
+			MarketDataAdapter = new BasketMessageAdapter(BasketSessionHolder);
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);

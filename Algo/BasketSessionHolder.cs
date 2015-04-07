@@ -100,22 +100,12 @@
 		}
 
 		/// <summary>
-		/// Портфели, которые используются для отправки транзакций.
-		/// </summary>
-		public IDictionary<string, IMessageSessionHolder> Portfolios { get; private set; }
-
-		//TODO временно для корректной инициализации MessageProcessor-ов
-		internal Dictionary<IMessageSessionHolder, AdaptersHolder> Adapters { get; private set; }
-
-		/// <summary>
 		/// Создать <see cref="BasketSessionHolder"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
 		public BasketSessionHolder(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			Adapters = new Dictionary<IMessageSessionHolder, AdaptersHolder>();
-			Portfolios = new SynchronizedDictionary<string, IMessageSessionHolder>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		/// <summary>
@@ -125,7 +115,7 @@
 		public override void Load(SettingsStorage storage)
 		{
 			InnerSessions.Clear();
-			Portfolios.Clear();
+			//Portfolios.Clear();
 
 			storage
 				.GetValue<IEnumerable<SettingsStorage>>("InnerSessions")
@@ -139,8 +129,8 @@
 					var portfolios = s.GetValue<IEnumerable<string>>("Portfolios");
 					if (portfolios != null)
 					{
-						foreach (var portfolio in portfolios)
-							Portfolios[portfolio] = sessionHolder;
+						//foreach (var portfolio in portfolios)
+						//	Portfolios[portfolio] = sessionHolder;
 					}
 				});
 
@@ -157,29 +147,11 @@
 			{
 				var settings = s.SaveEntire(true);
 				settings.SetValue("Priority", InnerSessions[s]);
-				settings.SetValue("Portfolios", Portfolios.Where(p => p.Value == s).Select(p => p.Key).ToArray());
+				//settings.SetValue("Portfolios", Portfolios.Where(p => p.Value == s).Select(p => p.Key).ToArray());
 				return settings;
 			}).ToArray());
 
 			base.Save(storage);
-		}
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new BasketMessageAdapter(MessageAdapterTypes.Transaction, this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new BasketMessageAdapter(MessageAdapterTypes.MarketData, this);
 		}
 	}
 }

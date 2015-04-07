@@ -111,13 +111,13 @@ namespace StockSharp.Xaml
 			{
 				var connector = (Connector)Portfolio.Connector;
 
-				var session = connector.TransactionAdapter.SessionHolder;
+				var adapter = connector.TransactionAdapter;
 
-				var basketSession = session as BasketSessionHolder;
-				if (basketSession != null)
-					session = basketSession.Portfolios.TryGetValue(Portfolio.Name);
-
-				Condition.SelectedObject = session == null ? null : session.CreateOrderCondition();
+				var basketAdapter = connector.TransactionAdapter as BasketMessageAdapter;
+				if (basketAdapter != null)
+					adapter = basketAdapter.Portfolios.TryGetValue(Portfolio.Name);
+#warning Conditions
+				//Condition.SelectedObject = adapter == null ? null : adapter.CreateOrderCondition();
 			}
 		}
 

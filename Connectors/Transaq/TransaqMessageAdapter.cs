@@ -4,6 +4,7 @@ namespace StockSharp.Transaq
 	using System.Globalization;
 	using System.Net;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 
 	using StockSharp.Logging;
@@ -11,9 +12,6 @@ namespace StockSharp.Transaq
 	using StockSharp.Transaq.Native;
 	using StockSharp.Transaq.Native.Commands;
 	using StockSharp.Transaq.Native.Responses;
-
-	using ConnectMessage = StockSharp.Messages.ConnectMessage;
-	using DisconnectMessage = StockSharp.Messages.DisconnectMessage;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -21,72 +19,62 @@ namespace StockSharp.Transaq
 	/// </summary>
 	public partial class TransaqMessageAdapter : MessageAdapter<TransaqSessionHolder>
 	{
-		private bool _isSessionOwner;
+		private readonly SynchronizedDictionary<Type, Action<BaseResponse>> _handlerBunch = new SynchronizedDictionary<Type, Action<BaseResponse>>();
+		private ApiClient _client;
 
 		/// <summary>
 		/// Создать <see cref="TransaqMessageAdapter"/>.
 		/// </summary>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		/// <param name="type">Тип адаптера.</param>
-		public TransaqMessageAdapter(MessageAdapterTypes type, TransaqSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		public TransaqMessageAdapter(TransaqSessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
-			switch (type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					SessionHolder.AddHandler<ClientLimitsResponse>(OnClientLimitsResponse);
-					SessionHolder.AddHandler<ClientResponse>(OnClientResponse);
-					SessionHolder.AddHandler<LeverageControlResponse>(OnLeverageControlResponse);
-					SessionHolder.AddHandler<MarketOrdResponse>(OnMarketOrdResponse);
-					SessionHolder.AddHandler<OrdersResponse>(OnOrdersResponse);
-					SessionHolder.AddHandler<OvernightResponse>(OnOvernightResponse);
-					SessionHolder.AddHandler<PositionsResponse>(OnPositionsResponse);
-					SessionHolder.AddHandler<TradesResponse>(OnTradesResponse);
-					SessionHolder.AddHandler<PortfolioTPlusResponse>(OnPortfolioTPlusResponse);
+			AddHandler<ClientLimitsResponse>(OnClientLimitsResponse);
+			AddHandler<ClientResponse>(OnClientResponse);
+			AddHandler<LeverageControlResponse>(OnLeverageControlResponse);
+			AddHandler<MarketOrdResponse>(OnMarketOrdResponse);
+			AddHandler<OrdersResponse>(OnOrdersResponse);
+			AddHandler<OvernightResponse>(OnOvernightResponse);
+			AddHandler<PositionsResponse>(OnPositionsResponse);
+			AddHandler<TradesResponse>(OnTradesResponse);
+			AddHandler<PortfolioTPlusResponse>(OnPortfolioTPlusResponse);
 
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					SessionHolder.AddHandler<AllTradesResponse>(OnAllTradesResponse);
-					SessionHolder.AddHandler<CandleKindsResponse>(OnCandleKindsResponse);
-					SessionHolder.AddHandler<CandlesResponse>(OnCandlesResponse);
-					SessionHolder.AddHandler<MarketsResponse>(OnMarketsResponse);
-					SessionHolder.AddHandler<NewsBodyResponse>(OnNewsBodyResponse);
-					SessionHolder.AddHandler<NewsHeaderResponse>(OnNewsHeaderResponse);
-					SessionHolder.AddHandler<QuotationsResponse>(OnQuotationsResponse);
-					SessionHolder.AddHandler<QuotesResponse>(OnQuotesResponse);
-					SessionHolder.AddHandler<SecInfoResponse>(OnSecInfoResponse);
-					SessionHolder.AddHandler<SecuritiesResponse>(OnSecuritiesResponse);
-					SessionHolder.AddHandler<TicksResponse>(OnTicksResponse);
-					SessionHolder.AddHandler<BoardsResponse>(OnBoardsResponse);
-					SessionHolder.AddHandler<PitsResponse>(OnPitsResponse);
-					SessionHolder.AddHandler<MessagesResponse>(OnMessagesResponse);
+			AddHandler<AllTradesResponse>(OnAllTradesResponse);
+			AddHandler<CandleKindsResponse>(OnCandleKindsResponse);
+			AddHandler<CandlesResponse>(OnCandlesResponse);
+			AddHandler<MarketsResponse>(OnMarketsResponse);
+			AddHandler<NewsBodyResponse>(OnNewsBodyResponse);
+			AddHandler<NewsHeaderResponse>(OnNewsHeaderResponse);
+			AddHandler<QuotationsResponse>(OnQuotationsResponse);
+			AddHandler<QuotesResponse>(OnQuotesResponse);
+			AddHandler<SecInfoResponse>(OnSecInfoResponse);
+			AddHandler<SecuritiesResponse>(OnSecuritiesResponse);
+			AddHandler<TicksResponse>(OnTicksResponse);
+			AddHandler<BoardsResponse>(OnBoardsResponse);
+			AddHandler<PitsResponse>(OnPitsResponse);
+			AddHandler<MessagesResponse>(OnMessagesResponse);
 
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException("type");
-			}
+			AddHandler<ServerStatusResponse>(OnServerStatusResponse);
+			AddHandler<ConnectorVersionResponse>(OnConnectorVersionResponse);
+			AddHandler<CurrentServerResponse>(OnCurrentServerResponse);
 		}
 
-		private ApiClient Session
+		/// <summary>
+		/// Освободить занятые ресурсы.
+		/// </summary>
+		protected override void DisposeManaged()
 		{
-			get
-			{
-				if (SessionHolder.Session == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1856);
+			_handlerBunch.Clear();
+			base.DisposeManaged();
+		}
 
-				return SessionHolder.Session;
-			}
-			set
-			{
-				if (SessionHolder.Session != null)
-					throw new InvalidOperationException(LocalizedStrings.Str1619);
+		private void AddHandler<T>(Action<T> handler)
+			where T : BaseResponse
+		{
+			if (handler == null)
+				throw new ArgumentNullException("handler");
 
-				SessionHolder.Session = value;
-			}
+			_handlerBunch[typeof(T)] = response => handler((T)response);
 		}
 
 		/// <summary>
@@ -151,6 +139,9 @@ namespace StockSharp.Transaq
 
 		private void Connect()
 		{
+			if (_client != null)
+				throw new InvalidOperationException(LocalizedStrings.Str1619);
+
 			_registeredSecurityIds.Clear();
 			_candleTransactions.Clear();
 			_quotes.Clear();
@@ -158,33 +149,22 @@ namespace StockSharp.Transaq
 			_orders.Clear();
 			_ordersTypes.Clear();
 
-			if (SessionHolder.Session == null)
-			{
-				_isSessionOwner = true;
-
-				SessionHolder.AddHandler<ServerStatusResponse>(OnServerStatusResponse);
-				SessionHolder.AddHandler<ConnectorVersionResponse>(OnConnectorVersionResponse);
-				SessionHolder.AddHandler<CurrentServerResponse>(OnCurrentServerResponse);
-
-				Session = new ApiClient(OnCallback,
+			_client = new ApiClient(OnCallback,
 					SessionHolder.DllPath,
 					SessionHolder.IsHFT,
 					SessionHolder.ApiLogsPath,
 					SessionHolder.ApiLogLevel);
 
-				SendCommand(new Native.Commands.ConnectMessage
-				{
-					Login = SessionHolder.Login,
-					Password = SessionHolder.Password.To<string>(),
-					EndPoint = SessionHolder.Address.To<EndPoint>(),
-					Proxy = SessionHolder.Proxy,
-					MicexRegisters = SessionHolder.MicexRegisters,
-					RqDelay = SessionHolder.MarketDataInterval == null ? (int?)null : (int)SessionHolder.MarketDataInterval.Value.TotalMilliseconds,
-					Milliseconds = true,
-				}, false);
-			}
-			else
-				SendOutMessage(new ConnectMessage());
+			SendCommand(new Native.Commands.ConnectMessage
+			{
+				Login = SessionHolder.Login,
+				Password = SessionHolder.Password.To<string>(),
+				EndPoint = SessionHolder.Address.To<EndPoint>(),
+				Proxy = SessionHolder.Proxy,
+				MicexRegisters = SessionHolder.MicexRegisters,
+				RqDelay = SessionHolder.MarketDataInterval == null ? (int?)null : (int)SessionHolder.MarketDataInterval.Value.TotalMilliseconds,
+				Milliseconds = true,
+			}, false);
 		}
 
 		private void OnCallback(string data)
@@ -203,7 +183,10 @@ namespace StockSharp.Transaq
 
 				SessionHolder.AddDebugLog(type.Name);
 
-				SessionHolder.ProcessResponse(response);
+				var handler = _handlerBunch.TryGetValue(response.GetType());
+
+				if (handler != null)
+					handler(response);
 			}
 			catch (Exception ex)
 			{
@@ -214,7 +197,7 @@ namespace StockSharp.Transaq
 		private BaseResponse SendCommand(BaseCommandMessage command, bool throwError = true)
 		{
 			var commandXml = XmlSerializeHelper.Serialize(command);
-			var result = XmlSerializeHelper.Deserialize(Session.SendCommand(commandXml));
+			var result = XmlSerializeHelper.Deserialize(_client.SendCommand(commandXml));
 
 			if (!result.IsSuccess)
 			{
@@ -229,24 +212,22 @@ namespace StockSharp.Transaq
 
 		private void Disconnect()
 		{
-			if (!_isSessionOwner)
-				return;
+			if (_client == null)
+				throw new InvalidOperationException(LocalizedStrings.Str1856);
 
 			SendCommand(new Native.Commands.DisconnectMessage(), false);
-			
-			SessionHolder.Session.Dispose();
-			SessionHolder.Session = null;
+
+			_client.Dispose();
+			_client = null;
 		}
 
 		private void OnDisconnected(Exception error)
 		{
-			SendOutMessage(new DisconnectMessage { Error = error });
+			SendOutMessage(new Messages.DisconnectMessage { Error = error });
 
 			SessionHolder.ConnectorVersion = null;
 			SessionHolder.CurrentServer = -1;
 			SessionHolder.ServerTimeDiff = null;
-
-			_isSessionOwner = false;
 		}
 
 		private void OnServerStatusResponse(ServerStatusResponse response)
@@ -262,7 +243,7 @@ namespace StockSharp.Transaq
 
 			if (isConnected)
 			{
-				SendOutMessage(new ConnectMessage());
+				SendOutMessage(new Messages.ConnectMessage());
 				SendInMessage(new InitMessage());
 			}
 			else

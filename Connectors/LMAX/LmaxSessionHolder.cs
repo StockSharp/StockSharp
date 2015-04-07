@@ -5,8 +5,6 @@ namespace StockSharp.LMAX
 	using System.ComponentModel;
 	using System.Security;
 
-	using Com.Lmax.Api;
-
 	using Ecng.Common;
 	using Ecng.Serialization;
 
@@ -64,24 +62,6 @@ namespace StockSharp.LMAX
 		public bool IsDownloadSecurityFromSite { get; set; }
 
 		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new LmaxMessageAdapter(MessageAdapterTypes.Transaction, this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new LmaxMessageAdapter(MessageAdapterTypes.MarketData, this);
-		}
-
-		/// <summary>
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
@@ -100,27 +80,6 @@ namespace StockSharp.LMAX
 			IsTransactionEnabled = true;
 			IsMarketDataEnabled = true;
 		}
-
-		private ISession _session;
-
-		[Browsable(false)]
-		internal ISession Session
-		{
-			get { return _session; }
-			set
-			{
-				if (_session != null)
-					UnInitialize.SafeInvoke();
-
-				_session = value;
-
-				if (_session != null)
-					Initialize.SafeInvoke();
-			}
-		}
-
-		internal event Action Initialize;
-		internal event Action UnInitialize;
 
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.

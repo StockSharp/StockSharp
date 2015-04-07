@@ -42,8 +42,8 @@ namespace SpeedTest
 
 				var session = new BasketSessionHolder(_connector.TransactionIdGenerator);
 
-				_connector.MarketDataAdapter = new BasketMessageAdapter(MessageAdapterTypes.MarketData, session);
-				_connector.TransactionAdapter = new BasketMessageAdapter(MessageAdapterTypes.Transaction, session);
+				_connector.MarketDataAdapter = new BasketMessageAdapter(session);
+				_connector.TransactionAdapter = new BasketMessageAdapter(session);
 
 				_connector.ApplyMessageProcessor(MessageDirections.In, true, false);
 				_connector.ApplyMessageProcessor(MessageDirections.In, false, true);

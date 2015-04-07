@@ -61,9 +61,19 @@ namespace StockSharp.Algo
 			_innerAdapter.Dispose();
 		}
 
-		MessageAdapterTypes IMessageAdapter.Type
+		bool IMessageAdapter.PortfolioLookupRequired
 		{
-			get { return _innerAdapter.Type; }
+			get { return _innerAdapter.PortfolioLookupRequired; }
+		}
+
+		bool IMessageAdapter.OrderStatusRequired
+		{
+			get { return _innerAdapter.OrderStatusRequired; }
+		}
+
+		bool IMessageAdapter.SecurityLookupRequired
+		{
+			get { return _innerAdapter.SecurityLookupRequired; }
 		}
 
 		IMessageSessionHolder IMessageAdapter.SessionHolder

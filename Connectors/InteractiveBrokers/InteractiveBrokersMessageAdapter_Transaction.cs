@@ -1369,7 +1369,7 @@ namespace StockSharp.InteractiveBrokers
 			SendOutMessage(msg);
 		}
 
-		private void OnProcessTransactionResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
+		private bool ProcessTransactionResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
 		{
 			switch (message)
 			{
@@ -1377,89 +1377,91 @@ namespace StockSharp.InteractiveBrokers
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/orderstatus.htm
 					ReadOrderStatus(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.Portfolio:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updateaccountvalue.htm
 					ReadPortfolio(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.PortfolioPosition:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updateportfolio.htm
 					ReadPortfolioPosition(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.PortfolioUpdateTime:
 				{
 					ReadPortfolioUpdateTime(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.OpenOrder:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/openorder.htm
 					ReadOpenOrder(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.NextOrderId:
 				{
 					ReadNextOrderId(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.MyTrade:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/execdetails.htm
 					ReadMyTrade(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.ManagedAccounts:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/managedaccounts.htm
 					ReadManagedAccounts(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.OpenOrderEnd:
 				{
 					//openOrderEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.AccountDownloadEnd:
 				{
 					ReadPortfolioName(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.MyTradeEnd:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/execdetailsend.htm
 					ReadMyTradeEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.CommissionReport:
 				{
 					ReadCommissionReport(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.Position:
 				{
 					ReadPosition(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.PositionEnd:
 				{
 					ReadPositionEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.AccountSummary:
 				{
 					ReadAccountSummary(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.AccountSummaryEnd:
 				{
 					ReadAccountSummaryEnd(socket);
-					break;
+					return true;
 				}
+				default:
+					return false;
 			}
 		}
 

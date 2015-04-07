@@ -47,18 +47,18 @@ namespace StockSharp.SmartCom
 				case MarketDataTypes.Level1:
 				{
 					if (mdMsg.IsSubscribe)
-						Session.SubscribeSecurity(smartId);
+						_wrapper.SubscribeSecurity(smartId);
 					else
-						Session.UnSubscribeSecurity(smartId);
+						_wrapper.UnSubscribeSecurity(smartId);
 
 					break;
 				}
 				case MarketDataTypes.MarketDepth:
 				{
 					if (mdMsg.IsSubscribe)
-						Session.SubscribeMarketDepth(smartId);
+						_wrapper.SubscribeMarketDepth(smartId);
 					else
-						Session.UnSubscribeMarketDepth(smartId);
+						_wrapper.UnSubscribeMarketDepth(smartId);
 
 					break;
 				}
@@ -67,15 +67,15 @@ namespace StockSharp.SmartCom
 					if (mdMsg.From.IsDefault())
 					{
 						if (mdMsg.IsSubscribe)
-							Session.SubscribeTrades(smartId);
+							_wrapper.SubscribeTrades(smartId);
 						else
-							Session.UnSubscribeTrades(smartId);
+							_wrapper.UnSubscribeTrades(smartId);
 					}
 					else
 					{
 						const int maxTradeCount = 1000000;
 						SessionHolder.AddDebugLog("RequestHistoryTrades SecId = {0} From {1} Count = {2}", smartId, mdMsg.From, maxTradeCount);
-						Session.RequestHistoryTrades(smartId, mdMsg.From.ToLocalTime(TimeHelper.Moscow), maxTradeCount);
+						_wrapper.RequestHistoryTrades(smartId, mdMsg.From.ToLocalTime(TimeHelper.Moscow), maxTradeCount);
 					}
 
 					break;
@@ -93,7 +93,7 @@ namespace StockSharp.SmartCom
 					_candleTransactions.SafeAdd(smartId)[tf] = Tuple.Create(mdMsg.TransactionId, new List<CandleMessage>());
 
 					SessionHolder.AddDebugLog("RequestHistoryBars SecId {0} TF {1} From {2} Count {3}", smartId, tf, mdMsg.From, count);
-					Session.RequestHistoryBars(smartId, tf, mdMsg.From.ToLocalTime(TimeHelper.Moscow), (int)count);
+					_wrapper.RequestHistoryBars(smartId, tf, mdMsg.From.ToLocalTime(TimeHelper.Moscow), (int)count);
 
 					break;
 				}
@@ -111,7 +111,7 @@ namespace StockSharp.SmartCom
 			if (_lookupSecuritiesId == 0)
 			{
 				_lookupSecuritiesId = message.TransactionId;
-				Session.LookupSecurities();
+				_wrapper.LookupSecurities();
 			}
 			else
 				SendOutError(LocalizedStrings.Str1854);

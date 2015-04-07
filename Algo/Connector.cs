@@ -220,9 +220,6 @@ namespace StockSharp.Algo
 					throw new ArgumentNullException("value");
 
 				_sessionHolder = value;
-
-				TransactionAdapter = value.CreateTransactionAdapter();
-				MarketDataAdapter = value.CreateMarketDataAdapter();
 			}
 		}
 
@@ -605,6 +602,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnConnect()
 		{
+			if (TransactionAdapter == MarketDataAdapter && ExportState == ConnectionStates.Connected)
+			{
+				RaiseConnected();
+				return;
+			}
+
 			TransactionAdapter.SendInMessage(new ConnectMessage());
 		}
 

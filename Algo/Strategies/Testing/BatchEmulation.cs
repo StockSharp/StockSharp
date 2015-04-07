@@ -105,7 +105,7 @@
 			private bool _isInitialized;
 
 			public BasketEmulationAdapter(BasketSessionHolder sessionHolder, EmulationSettings settings)
-				: base(MessageAdapterTypes.Transaction, sessionHolder)
+				: base(sessionHolder)
 			{
 				_settings = settings;
 			}
@@ -120,7 +120,7 @@
 					{
 						if (!_isInitialized)
 						{
-							CreateInnerAdapters();
+							//CreateInnerAdapters();
 
 							_isInitialized = true;
 						}
@@ -188,22 +188,22 @@
 				}
 			}
 
-			protected override void CreateInnerAdapters()
-			{
-				var tradeIdGenerator = new IncrementalIdGenerator();
-				var orderIdGenerator = new IncrementalIdGenerator();
+			//protected override void CreateInnerAdapters()
+			//{
+			//	var tradeIdGenerator = new IncrementalIdGenerator();
+			//	var orderIdGenerator = new IncrementalIdGenerator();
 
-				foreach (var session in SessionHolder.InnerSessions)
-				{
-					if (!session.IsTransactionEnabled)
-						continue;
+			//	foreach (var session in SessionHolder.InnerSessions)
+			//	{
+			//		if (!session.IsTransactionEnabled)
+			//			continue;
 
-					var adapter = (EmulationMessageAdapter)session.CreateTransactionAdapter();
+			//		var adapter = (EmulationMessageAdapter)session.CreateTransactionAdapter();
 
-					ApplySettings(adapter, tradeIdGenerator, orderIdGenerator);
-					AddInnerAdapter(adapter, SessionHolder.InnerSessions[session]);
-				}
-			}
+			//		ApplySettings(adapter, tradeIdGenerator, orderIdGenerator);
+			//		AddInnerAdapter(adapter, SessionHolder.InnerSessions[session]);
+			//	}
+			//}
 
 			protected override void DisposeInnerAdapters()
 			{
@@ -477,7 +477,7 @@
 		private void InitAdapters(IEnumerable<Strategy> strategies)
 		{
 			_basketSessionHolder.InnerSessions.Clear();
-			_basketSessionHolder.Portfolios.Clear();
+			//_basketSessionHolder.Portfolios.Clear();
 
 			var id = 0;
 
@@ -508,7 +508,7 @@
 			};
 
 			_basketSessionHolder.InnerSessions.Add(session, 0);
-			_basketSessionHolder.Portfolios[portfolio] = session;
+			//_basketSessionHolder.Portfolios[portfolio] = session;
 		}
 
 		private void ApplySettings()

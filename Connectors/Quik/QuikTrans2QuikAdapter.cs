@@ -86,7 +86,7 @@ namespace StockSharp.Quik
 		/// </summary>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
 		public QuikTrans2QuikAdapter(QuikSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+			: base(sessionHolder)
 		{
 			Platform = Platforms.x86;
 			SessionHolder.DllNameChanged += ResetApi;

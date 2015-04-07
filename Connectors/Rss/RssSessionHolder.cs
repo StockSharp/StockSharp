@@ -8,10 +8,9 @@ namespace StockSharp.Rss
 
 	using StockSharp.Messages;
 	using StockSharp.Rss.Xaml;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Контейнер для сессии.
@@ -67,24 +66,6 @@ namespace StockSharp.Rss
 		[DescriptionLoc(LocalizedStrings.Str3507Key)]
 		[PropertyOrder(1)]
 		public string CustomDateFormat { get; set; }
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return null;
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new RssMarketDataMessageAdapter(this);
-		}
 
 		/// <summary>
 		/// Проверить введенные параметры на валидность.

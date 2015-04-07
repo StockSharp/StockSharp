@@ -11,7 +11,7 @@
 	class LuaFixTransactionMessageAdapter : FixMessageAdapter
 	{
 		public LuaFixTransactionMessageAdapter(FixSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder, sessionHolder.TransactionSession)
+			: base(sessionHolder, sessionHolder.TransactionSession)
 		{
 		}
 

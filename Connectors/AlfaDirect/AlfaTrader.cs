@@ -30,7 +30,12 @@
 		/// </summary>
 		public AlfaTrader()
 		{
-			base.SessionHolder = new AlfaDirectSessionHolder(TransactionIdGenerator);
+			var adapter = new AlfaDirectMessageAdapter(new AlfaDirectSessionHolder(TransactionIdGenerator));
+
+			base.SessionHolder = adapter.SessionHolder;
+
+			TransactionAdapter = adapter;
+			MarketDataAdapter = adapter;
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
@@ -84,16 +89,16 @@
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
-			if (direction == MessageDirections.Out && adapterType == MessageAdapterTypes.MarketData)
+			if (direction == MessageDirections.Out && adapter == MarketDataAdapter)
 			{
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
-						if (((ConnectMessage) message).Error == null)
+						if (((ConnectMessage)message).Error == null)
 						{
 							_candlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
 								(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range.Min, range.Max, _series.TryGetKey(series)), TimeSpan.FromSeconds(3));
@@ -127,7 +132,7 @@
 				}
 			}
 
-			base.OnProcessMessage(message, adapterType, direction);
+			base.OnProcessMessage(message, adapter, direction);
 		}
 
 		/// <summary>
@@ -162,9 +167,11 @@
 			var transactionId = TransactionIdGenerator.GetNextId();
 
 			_series[transactionId] = series;
-			_realTimeSeries.Add(series);
 
 			RequestCandles(series.Security, timeFrame, from, to, transactionId);
+
+			if (to == DateTimeOffset.MaxValue)
+				_realTimeSeries.Add(series);
 		}
 
 		private void RequestCandles(Security security, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long transactionId)

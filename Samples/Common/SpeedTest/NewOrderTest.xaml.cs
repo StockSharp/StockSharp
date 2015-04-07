@@ -28,7 +28,7 @@
 		{
 			try
 			{
-				var adapter = ((BasketSessionHolder)_connector.TransactionAdapter.SessionHolder).Portfolios.TryGetValue(Portfolios.SelectedPortfolio.Name);
+				var adapter = ((BasketMessageAdapter)_connector.TransactionAdapter).Portfolios.TryGetValue(Portfolios.SelectedPortfolio.Name);
 
 				var sp = new SpeedTestStrategy(int.Parse(NumberOfTests.Text))
 				{
@@ -36,9 +36,9 @@
 					Portfolio = Portfolios.SelectedPortfolio,
 					Security = Securities.SelectedSecurity,
 					Volume = 1,
-					TraderName = adapter is QuikSessionHolder
+					TraderName = adapter is QuikMessageAdapter
 					             	? "Quik"
-									: adapter is SmartComSessionHolder ? "SmartCom" : "Plaza",
+									: adapter is SmartComMessageAdapter ? "SmartCom" : "Plaza",
 				};
 
 				_connector.RegisterMarketDepth(sp.Security);

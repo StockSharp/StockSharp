@@ -27,7 +27,7 @@ namespace StockSharp.Btce
 
 		private void ProcessOrderRegister(OrderRegisterMessage regMsg)
 		{
-			var reply = Session.MakeOrder(
+			var reply = _client.MakeOrder(
 				regMsg.SecurityId.SecurityCode.Replace('/', '_').ToLowerInvariant(),
 				regMsg.Side.ToBtce(),
 				regMsg.Price,
@@ -52,7 +52,7 @@ namespace StockSharp.Btce
 
 		private void ProcessOrderCancel(OrderCancelMessage cancelMsg)
 		{
-			var reply = Session.CancelOrder(cancelMsg.OrderId);
+			var reply = _client.CancelOrder(cancelMsg.OrderId);
 
 			SendOutMessage(new ExecutionMessage
 			{
@@ -153,7 +153,7 @@ namespace StockSharp.Btce
 			{
 				_requestOrderFirst = false;
 
-				var orders = Session.GetOrders().Items.Values;
+				var orders = _client.GetOrders().Items.Values;
 
 				foreach (var o in orders)
 				{
@@ -161,7 +161,7 @@ namespace StockSharp.Btce
 					_orderInfo.SafeAdd(order.Id, key => RefTuple.Create(TransactionIdGenerator.GetNextId(), (decimal)order.Volume));
 				}
 
-				var trades = Session.GetMyTrades(0).Items.Values;
+				var trades = _client.GetMyTrades(0).Items.Values;
 
 				foreach (var trade in trades.OrderBy(t => t.Id))
 				{
@@ -193,7 +193,7 @@ namespace StockSharp.Btce
 
 			if (_hasMyTrades)
 			{
-				var mtReply = Session.GetMyTrades(_lastMyTradeId + 1);
+				var mtReply = _client.GetMyTrades(_lastMyTradeId + 1);
 
 				_hasMyTrades = false;
 
@@ -205,7 +205,7 @@ namespace StockSharp.Btce
 
 			if (_hasActiveOrders)
 			{
-				var orderReply = Session.GetOrders();
+				var orderReply = _client.GetOrders();
 
 				_hasActiveOrders = false;
 

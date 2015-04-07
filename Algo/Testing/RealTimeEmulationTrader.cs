@@ -155,11 +155,11 @@ namespace StockSharp.Algo.Testing
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
-			if (message.Type == MessageTypes.Connect && adapterType == MessageAdapterTypes.Transaction && direction == MessageDirections.Out)
+			if (message.Type == MessageTypes.Connect && adapter == TransactionAdapter && direction == MessageDirections.Out)
 			{
 				// передаем первоначальное значение размера портфеля в эмулятор
 				TransactionAdapter.SendInMessage(_portfolio.ToMessage());
@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Testing
 				}.Add(PositionChangeTypes.BeginValue, _portfolio.BeginValue));
 			}
 
-			base.OnProcessMessage(message, adapterType, direction);
+			base.OnProcessMessage(message, adapter, direction);
 		}
 
 		/// <summary>

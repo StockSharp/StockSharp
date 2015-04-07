@@ -17,7 +17,7 @@ namespace StockSharp.Rss
 		private sealed class RssTransactionMessageAdapter : MessageAdapter<IMessageSessionHolder>
 		{
 			public RssTransactionMessageAdapter(IMessageSessionHolder sessionHolder)
-				: base(MessageAdapterTypes.Transaction, sessionHolder)
+				: base(sessionHolder)
 			{
 			}
 
@@ -50,6 +50,7 @@ namespace StockSharp.Rss
 			base.SessionHolder = new RssSessionHolder(TransactionIdGenerator);
 
 			TransactionAdapter = new RssTransactionMessageAdapter(SessionHolder);
+			MarketDataAdapter = new RssMarketDataMessageAdapter(SessionHolder);
 
 			ApplyMessageProcessor(MessageDirections.In, true, false);
 			ApplyMessageProcessor(MessageDirections.In, false, true);

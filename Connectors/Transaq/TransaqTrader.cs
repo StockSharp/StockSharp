@@ -22,16 +22,21 @@ namespace StockSharp.Transaq
 	public class TransaqTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
-		private readonly TransaqMessageAdapter _marketDataAdapter;
+		private readonly TransaqMessageAdapter _adapter;
 
 		/// <summary>
 		/// Создать <see cref="TransaqTrader"/>.
 		/// </summary>
 		public TransaqTrader()
 		{
-			base.SessionHolder = new TransaqSessionHolder(TransactionIdGenerator);
+			var sessionHolder = new TransaqSessionHolder(TransactionIdGenerator);
 
-			_marketDataAdapter = MarketDataAdapter.To<TransaqMessageAdapter>();
+			base.SessionHolder = sessionHolder;
+
+			_adapter = new TransaqMessageAdapter(sessionHolder);
+
+			TransactionAdapter = _adapter;
+			MarketDataAdapter = _adapter;
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
@@ -154,7 +159,7 @@ namespace StockSharp.Transaq
 		/// <returns>Временные диапазоны.</returns>
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
 		{
-			if (series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan && _marketDataAdapter.CandleTimeFrames.Contains((TimeSpan)series.Arg))
+			if (series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan && _adapter.CandleTimeFrames.Contains((TimeSpan)series.Arg))
 			{
 				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, CurrentTime);
 			}
@@ -214,15 +219,15 @@ namespace StockSharp.Transaq
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			var candleMsg = message as CandleMessage;
 
 			if (candleMsg == null)
 			{
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, adapter, direction);
 				return;
 			}
 
@@ -238,9 +243,8 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// Сменить пароль.
 		/// </summary>
-		/// <param name="adapterType">Тип адаптера, в который необходимо отправить сообщение о смене пароля.</param>
 		/// <param name="newPassword">Новый пароль.</param>
-		public void ChangePassword(MessageAdapterTypes adapterType, string newPassword)
+		public void ChangePassword(string newPassword)
 		{
 			var msg = new ChangePasswordMessage
 			{
@@ -248,17 +252,7 @@ namespace StockSharp.Transaq
 				TransactionId = TransactionIdGenerator.GetNextId()
 			};
 
-			switch (adapterType)
-			{
-				case MessageAdapterTypes.Transaction:
-					TransactionAdapter.SendInMessage(msg);
-					break;
-				case MessageAdapterTypes.MarketData:
-					MarketDataAdapter.SendInMessage(msg);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException("adapterType");
-			}
+			_adapter.SendInMessage(msg);
 		}
 	}
 }

@@ -148,7 +148,7 @@ namespace StockSharp.Quik
 		/// </summary>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
 		public QuikDdeAdapter(QuikSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+			: base(sessionHolder)
 		{
 			// http://stocksharp.com/forum/yaf_postst1166_Probliema-s-pierienosom-zaiavok-s-viechierniei-siessii.aspx
 			_eveningClasses.Add("FUTEVN");

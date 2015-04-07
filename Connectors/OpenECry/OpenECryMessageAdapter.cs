@@ -88,148 +88,15 @@ namespace StockSharp.OpenECry
 			}
 		}
 
-		private bool _isSessionOwner;
+		private OECClient _client;
 
 		/// <summary>
 		/// Создать <see cref="OpenECryMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public OpenECryMessageAdapter(MessageAdapterTypes type, OpenECrySessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		public OpenECryMessageAdapter(OpenECrySessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
-			SessionHolder.Initialize += SessionHolderOnInitialize;
-			SessionHolder.UnInitialize += SessionHolderOnUnInitialize;
-		}
-
-		private void SessionHolderOnInitialize()
-		{
-			if (_isSessionOwner)
-			{
-				SessionHolder.Session.OnLoginComplete += SessionOnLoginComplete;
-				SessionHolder.Session.OnLoginFailed += SessionOnLoginFailed;
-				SessionHolder.Session.OnDisconnected += SessionOnDisconnected;
-				SessionHolder.Session.OnBeginEvents += SessionOnBeginEvents;
-				SessionHolder.Session.OnEndEvents += SessionOnEndEvents;
-				SessionHolder.Session.OnError += SessionOnError;
-			}
-
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-					SessionHolder.Session.OnAccountRiskLimitChanged += SessionOnAccountRiskLimitChanged;
-					SessionHolder.Session.OnAccountSummaryChanged += SessionOnAccountSummaryChanged;
-					SessionHolder.Session.OnAllocationBlocksChanged += SessionOnAllocationBlocksChanged;
-					SessionHolder.Session.OnAvgPositionChanged += SessionOnAvgPositionChanged;
-					SessionHolder.Session.OnBalanceChanged += SessionOnBalanceChanged;
-					SessionHolder.Session.OnCommandUpdated += SessionOnCommandUpdated;
-					SessionHolder.Session.OnCompoundPositionGroupChanged += SessionOnCompoundPositionGroupChanged;
-					SessionHolder.Session.OnOrderConfirmed += SessionOnOrderConfirmed;
-					SessionHolder.Session.OnOrderFilled += SessionOnOrderFilled;
-					SessionHolder.Session.OnOrderStateChanged += SessionOnOrderStateChanged;
-					SessionHolder.Session.OnDetailedPositionChanged += SessionOnDetailedPositionChanged;
-					SessionHolder.Session.OnMarginCalculationCompleted += SessionOnMarginCalculationCompleted;
-					SessionHolder.Session.OnPortfolioMarginChanged += SessionOnPortfolioMarginChanged;
-					SessionHolder.Session.OnPostAllocation += SessionOnPostAllocation;
-					SessionHolder.Session.OnRiskLimitDetailsReceived += SessionOnRiskLimitDetailsReceived;
-					break;
-				case MessageAdapterTypes.MarketData:
-					SessionHolder.Session.OnBarsReceived += SessionOnBarsReceived;
-					SessionHolder.Session.OnContinuousContractRuleChanged += SessionOnContinuousContractRuleChanged;
-					SessionHolder.Session.OnContractChanged += SessionOnContractChanged;
-					SessionHolder.Session.OnContractCreated += SessionOnContractCreated;
-					SessionHolder.Session.OnContractRiskLimitChanged += SessionOnContractRiskLimitChanged;
-					SessionHolder.Session.OnContractsChanged += SessionOnContractsChanged;
-					SessionHolder.Session.OnCurrencyPriceChanged += SessionOnCurrencyPriceChanged;
-					SessionHolder.Session.OnDOMChanged += SessionOnDomChanged;
-					SessionHolder.Session.OnDealQuoteUpdated += SessionOnDealQuoteUpdated;
-					SessionHolder.Session.OnHistogramReceived += SessionOnHistogramReceived;
-					SessionHolder.Session.OnHistoryReceived += SessionOnHistoryReceived;
-					SessionHolder.Session.OnIndexComponentsReceived += SessionOnIndexComponentsReceived;
-					SessionHolder.Session.OnLoggedUserClientsChanged += SessionOnLoggedUserClientsChanged;
-					SessionHolder.Session.OnNewsMessage += SessionOnNewsMessage;
-					SessionHolder.Session.OnOsmAlgoListLoaded += SessionOnOsmAlgoListLoaded;
-					SessionHolder.Session.OnOsmAlgoListUpdated += SessionOnOsmAlgoListUpdated;
-					SessionHolder.Session.OnPitGroupsChanged += SessionOnPitGroupsChanged;
-					SessionHolder.Session.OnPriceChanged += SessionOnPriceChanged;
-					SessionHolder.Session.OnPriceTick += SessionOnPriceTick;
-					SessionHolder.Session.OnProductCalendarUpdated += SessionOnProductCalendarUpdated;
-					SessionHolder.Session.OnQuoteDetailsChanged += SessionOnQuoteDetailsChanged;
-					SessionHolder.Session.OnRelationsChanged += SessionOnRelationsChanged;
-					SessionHolder.Session.OnSymbolLookupReceived += SessionOnSymbolLookupReceived;
-					SessionHolder.Session.OnTicksReceived += SessionOnTicksReceived;
-					SessionHolder.Session.OnTradersChanged += SessionOnTradersChanged;
-					SessionHolder.Session.OnUserMessage += SessionOnUserMessage;
-					SessionHolder.Session.OnUserStatusChanged += SessionOnUserStatusChanged;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		private void SessionHolderOnUnInitialize()
-		{
-			if (_isSessionOwner)
-			{
-				SessionHolder.Session.OnLoginComplete -= SessionOnLoginComplete;
-				SessionHolder.Session.OnLoginFailed -= SessionOnLoginFailed;
-				SessionHolder.Session.OnDisconnected -= SessionOnDisconnected;
-				SessionHolder.Session.OnBeginEvents -= SessionOnBeginEvents;
-				SessionHolder.Session.OnEndEvents -= SessionOnEndEvents;
-				SessionHolder.Session.OnError -= SessionOnError;
-			}
-
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-					SessionHolder.Session.OnAccountRiskLimitChanged -= SessionOnAccountRiskLimitChanged;
-					SessionHolder.Session.OnAccountSummaryChanged -= SessionOnAccountSummaryChanged;
-					SessionHolder.Session.OnAllocationBlocksChanged -= SessionOnAllocationBlocksChanged;
-					SessionHolder.Session.OnAvgPositionChanged -= SessionOnAvgPositionChanged;
-					SessionHolder.Session.OnBalanceChanged -= SessionOnBalanceChanged;
-					SessionHolder.Session.OnCommandUpdated -= SessionOnCommandUpdated;
-					SessionHolder.Session.OnCompoundPositionGroupChanged -= SessionOnCompoundPositionGroupChanged;
-					SessionHolder.Session.OnOrderConfirmed -= SessionOnOrderConfirmed;
-					SessionHolder.Session.OnOrderFilled -= SessionOnOrderFilled;
-					SessionHolder.Session.OnOrderStateChanged -= SessionOnOrderStateChanged;
-					SessionHolder.Session.OnDetailedPositionChanged -= SessionOnDetailedPositionChanged;
-					SessionHolder.Session.OnMarginCalculationCompleted -= SessionOnMarginCalculationCompleted;
-					SessionHolder.Session.OnPortfolioMarginChanged -= SessionOnPortfolioMarginChanged;
-					SessionHolder.Session.OnPostAllocation -= SessionOnPostAllocation;
-					SessionHolder.Session.OnRiskLimitDetailsReceived -= SessionOnRiskLimitDetailsReceived;
-					break;
-				case MessageAdapterTypes.MarketData:
-					SessionHolder.Session.OnBarsReceived -= SessionOnBarsReceived;
-					SessionHolder.Session.OnContinuousContractRuleChanged -= SessionOnContinuousContractRuleChanged;
-					SessionHolder.Session.OnContractChanged -= SessionOnContractChanged;
-					SessionHolder.Session.OnContractCreated -= SessionOnContractCreated;
-					SessionHolder.Session.OnContractRiskLimitChanged -= SessionOnContractRiskLimitChanged;
-					SessionHolder.Session.OnContractsChanged -= SessionOnContractsChanged;
-					SessionHolder.Session.OnCurrencyPriceChanged -= SessionOnCurrencyPriceChanged;
-					SessionHolder.Session.OnDOMChanged -= SessionOnDomChanged;
-					SessionHolder.Session.OnDealQuoteUpdated -= SessionOnDealQuoteUpdated;
-					SessionHolder.Session.OnHistogramReceived -= SessionOnHistogramReceived;
-					SessionHolder.Session.OnHistoryReceived -= SessionOnHistoryReceived;
-					SessionHolder.Session.OnIndexComponentsReceived -= SessionOnIndexComponentsReceived;
-					SessionHolder.Session.OnLoggedUserClientsChanged -= SessionOnLoggedUserClientsChanged;
-					SessionHolder.Session.OnNewsMessage -= SessionOnNewsMessage;
-					SessionHolder.Session.OnOsmAlgoListLoaded -= SessionOnOsmAlgoListLoaded;
-					SessionHolder.Session.OnOsmAlgoListUpdated -= SessionOnOsmAlgoListUpdated;
-					SessionHolder.Session.OnPitGroupsChanged -= SessionOnPitGroupsChanged;
-					SessionHolder.Session.OnPriceChanged -= SessionOnPriceChanged;
-					SessionHolder.Session.OnPriceTick -= SessionOnPriceTick;
-					SessionHolder.Session.OnProductCalendarUpdated -= SessionOnProductCalendarUpdated;
-					SessionHolder.Session.OnQuoteDetailsChanged -= SessionOnQuoteDetailsChanged;
-					SessionHolder.Session.OnRelationsChanged -= SessionOnRelationsChanged;
-					SessionHolder.Session.OnSymbolLookupReceived -= SessionOnSymbolLookupReceived;
-					SessionHolder.Session.OnTicksReceived -= SessionOnTicksReceived;
-					SessionHolder.Session.OnTradersChanged -= SessionOnTradersChanged;
-					SessionHolder.Session.OnUserMessage -= SessionOnUserMessage;
-					SessionHolder.Session.OnUserStatusChanged -= SessionOnUserStatusChanged;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
 		}
 
 		private void SessionOnLoginComplete()
@@ -244,9 +111,59 @@ namespace StockSharp.OpenECry
 				Error = new InvalidOperationException(reason.GetDescription())
 			});
 
-			SessionHolder.Session.Dispose();
-			SessionHolder.Session = null;
-			_isSessionOwner = false;
+			_client.OnLoginComplete -= SessionOnLoginComplete;
+			_client.OnLoginFailed -= SessionOnLoginFailed;
+			_client.OnDisconnected -= SessionOnDisconnected;
+			_client.OnBeginEvents -= SessionOnBeginEvents;
+			_client.OnEndEvents -= SessionOnEndEvents;
+			_client.OnError -= SessionOnError;
+
+			_client.OnAccountRiskLimitChanged -= SessionOnAccountRiskLimitChanged;
+			_client.OnAccountSummaryChanged -= SessionOnAccountSummaryChanged;
+			_client.OnAllocationBlocksChanged -= SessionOnAllocationBlocksChanged;
+			_client.OnAvgPositionChanged -= SessionOnAvgPositionChanged;
+			_client.OnBalanceChanged -= SessionOnBalanceChanged;
+			_client.OnCommandUpdated -= SessionOnCommandUpdated;
+			_client.OnCompoundPositionGroupChanged -= SessionOnCompoundPositionGroupChanged;
+			_client.OnOrderConfirmed -= SessionOnOrderConfirmed;
+			_client.OnOrderFilled -= SessionOnOrderFilled;
+			_client.OnOrderStateChanged -= SessionOnOrderStateChanged;
+			_client.OnDetailedPositionChanged -= SessionOnDetailedPositionChanged;
+			_client.OnMarginCalculationCompleted -= SessionOnMarginCalculationCompleted;
+			_client.OnPortfolioMarginChanged -= SessionOnPortfolioMarginChanged;
+			_client.OnPostAllocation -= SessionOnPostAllocation;
+			_client.OnRiskLimitDetailsReceived -= SessionOnRiskLimitDetailsReceived;
+
+			_client.OnBarsReceived -= SessionOnBarsReceived;
+			_client.OnContinuousContractRuleChanged -= SessionOnContinuousContractRuleChanged;
+			_client.OnContractChanged -= SessionOnContractChanged;
+			_client.OnContractCreated -= SessionOnContractCreated;
+			_client.OnContractRiskLimitChanged -= SessionOnContractRiskLimitChanged;
+			_client.OnContractsChanged -= SessionOnContractsChanged;
+			_client.OnCurrencyPriceChanged -= SessionOnCurrencyPriceChanged;
+			_client.OnDOMChanged -= SessionOnDomChanged;
+			_client.OnDealQuoteUpdated -= SessionOnDealQuoteUpdated;
+			_client.OnHistogramReceived -= SessionOnHistogramReceived;
+			_client.OnHistoryReceived -= SessionOnHistoryReceived;
+			_client.OnIndexComponentsReceived -= SessionOnIndexComponentsReceived;
+			_client.OnLoggedUserClientsChanged -= SessionOnLoggedUserClientsChanged;
+			_client.OnNewsMessage -= SessionOnNewsMessage;
+			_client.OnOsmAlgoListLoaded -= SessionOnOsmAlgoListLoaded;
+			_client.OnOsmAlgoListUpdated -= SessionOnOsmAlgoListUpdated;
+			_client.OnPitGroupsChanged -= SessionOnPitGroupsChanged;
+			_client.OnPriceChanged -= SessionOnPriceChanged;
+			_client.OnPriceTick -= SessionOnPriceTick;
+			_client.OnProductCalendarUpdated -= SessionOnProductCalendarUpdated;
+			_client.OnQuoteDetailsChanged -= SessionOnQuoteDetailsChanged;
+			_client.OnRelationsChanged -= SessionOnRelationsChanged;
+			_client.OnSymbolLookupReceived -= SessionOnSymbolLookupReceived;
+			_client.OnTicksReceived -= SessionOnTicksReceived;
+			_client.OnTradersChanged -= SessionOnTradersChanged;
+			_client.OnUserMessage -= SessionOnUserMessage;
+			_client.OnUserStatusChanged -= SessionOnUserStatusChanged;
+
+			_client.Dispose();
+			_client = null;
 		}
 
 		private void SessionOnDisconnected(bool unexpected)
@@ -256,15 +173,14 @@ namespace StockSharp.OpenECry
 				Error = unexpected ? new InvalidOperationException(LocalizedStrings.Str2551) : null
 			});
 
-			SessionHolder.Session = null;
-			_isSessionOwner = false;
+			_client = null;
 		}
 
 		private void SessionOnError(Exception exception)
 		{
-			if (SessionHolder.Session != null)
+			if (_client != null)
 			{
-				if (!SessionHolder.Session.CompleteConnected)
+				if (!_client.CompleteConnected)
 					SessionOnDisconnected(true);
 				else
 					SendOutError(exception);
@@ -281,41 +197,19 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
 		/// </summary>
-		protected override void DisposeManaged()
+		public override bool PortfolioLookupRequired
 		{
-			SessionHolder.Initialize -= SessionHolderOnInitialize;
-			SessionHolder.UnInitialize -= SessionHolderOnUnInitialize;
-
-			base.DisposeManaged();
+			get { return true; }
 		}
 
 		/// <summary>
-		/// Добавить <see cref="Message"/> в исходящую очередь <see cref="IMessageAdapter"/>.
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		public override void SendOutMessage(Message message)
+		public override bool OrderStatusRequired
 		{
-			base.SendOutMessage(message);
-
-			var connectMsg = message as ConnectMessage;
-
-			if (connectMsg != null && connectMsg.Error == null)
-			{
-				switch (Type)
-				{
-					case MessageAdapterTypes.Transaction:
-						SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						break;
-					case MessageAdapterTypes.MarketData:
-						//SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
+			get { return true; }
 		}
 
 		/// <summary>
@@ -328,64 +222,108 @@ namespace StockSharp.OpenECry
 			{
 				case MessageTypes.Connect:
 				{
+					if (_client != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
+
 					_subscriptions.Clear();
 
-					if (SessionHolder.Session == null)
+					switch (SessionHolder.Remoting)
 					{
-						_isSessionOwner = true;
-
-						switch (SessionHolder.Remoting)
-						{
-							case OpenECryRemoting.None:
-							case OpenECryRemoting.Primary:
-								SessionHolder.Session = new OECClient(new InPlaceThreadPolicy())
-								{
-									UUID = SessionHolder.Uuid,
-									EventBatchInterval = 0,
-									RemoteHostingEnabled = SessionHolder.Remoting == OpenECryRemoting.Primary,
-									//PriceHost = "",
-									//AutoSubscribe = false
-								};
-								break;
-							case OpenECryRemoting.Secondary:
-								SessionHolder.Session = OECClient.CreateInstance(true);
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-
-						if (SessionHolder.EnableOECLogging)
-						{
-							if (SessionHolder.Remoting == OpenECryRemoting.Secondary)
+						case OpenECryRemoting.None:
+						case OpenECryRemoting.Primary:
+							_client = new OECClient(new InPlaceThreadPolicy())
 							{
-								SessionHolder.AddWarningLog(LocalizedStrings.Str2552);
-							}
-							else
-							{
-								Log.ConsoleOutput = false;
-								SessionHolder.Session.SetLoggingConfig(new LoggingConfiguration { Level = LogLevel.All });
-								Log.Initialize(new OECLogger(SessionHolder));
-								Log.Start();
-							}
-						}
-						
-						SessionHolder.Session.Connect(SessionHolder.Address.GetHost(), SessionHolder.Address.GetPort(), SessionHolder.Login, SessionHolder.Password.To<string>(), SessionHolder.UseNativeReconnect);
+								UUID = SessionHolder.Uuid,
+								EventBatchInterval = 0,
+								RemoteHostingEnabled = SessionHolder.Remoting == OpenECryRemoting.Primary,
+								//PriceHost = "",
+								//AutoSubscribe = false
+							};
+							break;
+						case OpenECryRemoting.Secondary:
+							_client = OECClient.CreateInstance(true);
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
 					}
-					else
-						SendOutMessage(new ConnectMessage());
+
+					if (SessionHolder.EnableOECLogging)
+					{
+						if (SessionHolder.Remoting == OpenECryRemoting.Secondary)
+						{
+							SessionHolder.AddWarningLog(LocalizedStrings.Str2552);
+						}
+						else
+						{
+							Log.ConsoleOutput = false;
+							_client.SetLoggingConfig(new LoggingConfiguration { Level = LogLevel.All });
+							Log.Initialize(new OECLogger(SessionHolder));
+							Log.Start();
+						}
+					}
+
+					_client.OnLoginComplete += SessionOnLoginComplete;
+					_client.OnLoginFailed += SessionOnLoginFailed;
+					_client.OnDisconnected += SessionOnDisconnected;
+					_client.OnBeginEvents += SessionOnBeginEvents;
+					_client.OnEndEvents += SessionOnEndEvents;
+					_client.OnError += SessionOnError;
+
+					_client.OnAccountRiskLimitChanged += SessionOnAccountRiskLimitChanged;
+					_client.OnAccountSummaryChanged += SessionOnAccountSummaryChanged;
+					_client.OnAllocationBlocksChanged += SessionOnAllocationBlocksChanged;
+					_client.OnAvgPositionChanged += SessionOnAvgPositionChanged;
+					_client.OnBalanceChanged += SessionOnBalanceChanged;
+					_client.OnCommandUpdated += SessionOnCommandUpdated;
+					_client.OnCompoundPositionGroupChanged += SessionOnCompoundPositionGroupChanged;
+					_client.OnOrderConfirmed += SessionOnOrderConfirmed;
+					_client.OnOrderFilled += SessionOnOrderFilled;
+					_client.OnOrderStateChanged += SessionOnOrderStateChanged;
+					_client.OnDetailedPositionChanged += SessionOnDetailedPositionChanged;
+					_client.OnMarginCalculationCompleted += SessionOnMarginCalculationCompleted;
+					_client.OnPortfolioMarginChanged += SessionOnPortfolioMarginChanged;
+					_client.OnPostAllocation += SessionOnPostAllocation;
+					_client.OnRiskLimitDetailsReceived += SessionOnRiskLimitDetailsReceived;
+
+					_client.OnBarsReceived += SessionOnBarsReceived;
+					_client.OnContinuousContractRuleChanged += SessionOnContinuousContractRuleChanged;
+					_client.OnContractChanged += SessionOnContractChanged;
+					_client.OnContractCreated += SessionOnContractCreated;
+					_client.OnContractRiskLimitChanged += SessionOnContractRiskLimitChanged;
+					_client.OnContractsChanged += SessionOnContractsChanged;
+					_client.OnCurrencyPriceChanged += SessionOnCurrencyPriceChanged;
+					_client.OnDOMChanged += SessionOnDomChanged;
+					_client.OnDealQuoteUpdated += SessionOnDealQuoteUpdated;
+					_client.OnHistogramReceived += SessionOnHistogramReceived;
+					_client.OnHistoryReceived += SessionOnHistoryReceived;
+					_client.OnIndexComponentsReceived += SessionOnIndexComponentsReceived;
+					_client.OnLoggedUserClientsChanged += SessionOnLoggedUserClientsChanged;
+					_client.OnNewsMessage += SessionOnNewsMessage;
+					_client.OnOsmAlgoListLoaded += SessionOnOsmAlgoListLoaded;
+					_client.OnOsmAlgoListUpdated += SessionOnOsmAlgoListUpdated;
+					_client.OnPitGroupsChanged += SessionOnPitGroupsChanged;
+					_client.OnPriceChanged += SessionOnPriceChanged;
+					_client.OnPriceTick += SessionOnPriceTick;
+					_client.OnProductCalendarUpdated += SessionOnProductCalendarUpdated;
+					_client.OnQuoteDetailsChanged += SessionOnQuoteDetailsChanged;
+					_client.OnRelationsChanged += SessionOnRelationsChanged;
+					_client.OnSymbolLookupReceived += SessionOnSymbolLookupReceived;
+					_client.OnTicksReceived += SessionOnTicksReceived;
+					_client.OnTradersChanged += SessionOnTradersChanged;
+					_client.OnUserMessage += SessionOnUserMessage;
+					_client.OnUserStatusChanged += SessionOnUserStatusChanged;
+
+					_client.Connect(SessionHolder.Address.GetHost(), SessionHolder.Address.GetPort(), SessionHolder.Login, SessionHolder.Password.To<string>(), SessionHolder.UseNativeReconnect);
 
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					if (_isSessionOwner)
-					{
-						SessionHolder.Session.Disconnect();
-					}
-					else
-						SendOutMessage(new DisconnectMessage());
+					if (_client == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
+					_client.Disconnect();
 					break;
 				}
 
@@ -434,7 +372,7 @@ namespace StockSharp.OpenECry
 				case MessageTypes.News:
 				{
 					var newsMsg = (Messages.NewsMessage)message;
-					SessionHolder.Session.SendMessage(SessionHolder.Session.Users[newsMsg.Source], newsMsg.Headline);
+					_client.SendMessage(_client.Users[newsMsg.Source], newsMsg.Headline);
 					break;
 				}
 			}

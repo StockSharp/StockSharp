@@ -140,15 +140,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Портфели, которые используются для отправки транзакций.
+		/// </summary>
+		public IDictionary<string, IMessageAdapter> Portfolios { get; private set; }
+
+		/// <summary>
 		/// Создать <see cref="BasketMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public BasketMessageAdapter(MessageAdapterTypes type, BasketSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		public BasketMessageAdapter(BasketSessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
 			_innerAdapters = new InnerAdapterList(this);
 			//SessionHolder.SetChilds(_innerAdapters);
+
+			Portfolios = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		/// <summary>
@@ -160,7 +166,6 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					CreateInnerAdapters();
 					GetSortedAdapters().ForEach(a => a.SendInMessage(message.Clone()));
 					break;
 
@@ -177,9 +182,7 @@ namespace StockSharp.Algo
 				case MessageTypes.OrderGroupCancel:
 				{
 					var orderMessage = (OrderMessage)message;
-					var sessionHolder = SessionHolder.Portfolios.TryGetValue(orderMessage.PortfolioName);
-
-					var adapter = InnerAdapters.FirstOrDefault(a => a.SessionHolder == sessionHolder);
+					var adapter = Portfolios.TryGetValue(orderMessage.PortfolioName);
 
 					if (adapter != null)
 					{
@@ -257,21 +260,21 @@ namespace StockSharp.Algo
 					return;
 
 				case MessageTypes.Portfolio:
-					SetPortfolioSessionHolder(((PortfolioMessage)message).PortfolioName, innerAdapter.SessionHolder);
+					SetPortfolioSessionHolder(((PortfolioMessage)message).PortfolioName, innerAdapter);
 					break;
 
 				case MessageTypes.PortfolioChange:
-					SetPortfolioSessionHolder(((PortfolioChangeMessage)message).PortfolioName, innerAdapter.SessionHolder);
+					SetPortfolioSessionHolder(((PortfolioChangeMessage)message).PortfolioName, innerAdapter);
 					break;
 			}
 
 			SendOutMessage(message);
 		}
 
-		private void SetPortfolioSessionHolder(string portfolio, IMessageSessionHolder sessionHolder)
+		private void SetPortfolioSessionHolder(string portfolio, IMessageAdapter adapter)
 		{
-			if (!SessionHolder.Portfolios.ContainsKey(portfolio))
-				SessionHolder.Portfolios[portfolio] = sessionHolder;
+			if (!Portfolios.ContainsKey(portfolio))
+				Portfolios[portfolio] = adapter;
 		}
 
 		#region Connect/disconnect
@@ -486,25 +489,25 @@ namespace StockSharp.Algo
 				});
 		}
 
-		/// <summary>
-		/// Создать адаптеры для <see cref="MessageAdapter{TSessionHolder}.SessionHolder"/>.
-		/// </summary>
-		protected virtual void CreateInnerAdapters()
-		{
-			foreach (var session in SessionHolder.InnerSessions)
-			{
-				var adapterHolder = SessionHolder.Adapters.TryGetValue(session) 
-					?? new AdaptersHolder(session, SessionHolder.AddErrorLog);
+		///// <summary>
+		///// Создать адаптеры для <see cref="BasketSessionHolder"/>.
+		///// </summary>
+		//protected virtual void CreateInnerAdapters()
+		//{
+		//	foreach (var session in SessionHolder.InnerSessions)
+		//	{
+		//		var adapterHolder = SessionHolder.Adapters.TryGetValue(session) 
+		//			?? new AdaptersHolder(session, SessionHolder.AddErrorLog);
 
-				if (session.IsMarketDataEnabled && Type == MessageAdapterTypes.MarketData)
-					AddInnerAdapter(adapterHolder.MarketDataAdapter, SessionHolder.InnerSessions[session]);
+		//		if (session.IsMarketDataEnabled && Type == MessageAdapterTypes.MarketData)
+		//			AddInnerAdapter(adapterHolder.MarketDataAdapter, SessionHolder.InnerSessions[session]);
 
-				if (session.IsTransactionEnabled && Type == MessageAdapterTypes.Transaction)
-					AddInnerAdapter(adapterHolder.TransactionAdapter, SessionHolder.InnerSessions[session]);
+		//		if (session.IsTransactionEnabled && Type == MessageAdapterTypes.Transaction)
+		//			AddInnerAdapter(adapterHolder.TransactionAdapter, SessionHolder.InnerSessions[session]);
 
-				SessionHolder.Adapters[session] = adapterHolder;
-			}
-		}
+		//		SessionHolder.Adapters[session] = adapterHolder;
+		//	}
+		//}
 
 		/// <summary>
 		/// Добавить адаптер.
@@ -530,12 +533,12 @@ namespace StockSharp.Algo
 				lock (_innerAdapters.SyncRoot)
 					_innerAdapters.UnSubscribe(adapter);
 
-				var holder = SessionHolder.Adapters.TryGetValue(adapter.SessionHolder);
+				//var holder = SessionHolder.Adapters.TryGetValue(adapter.SessionHolder);
 
-				if (holder != null && holder.TryDispose(Type == MessageAdapterTypes.Transaction))
-					SessionHolder.Adapters.Remove(adapter.SessionHolder);
+				//if (holder != null && holder.TryDispose(Type == MessageAdapterTypes.Transaction))
+				//	SessionHolder.Adapters.Remove(adapter.SessionHolder);
 
-				adapter.Dispose();
+				//adapter.Dispose();
 			}
 
 			_innerAdapters.Clear();

@@ -139,7 +139,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		/// <param name="sessionHolder">Контейнер для сессии, внутри которой происходит обработка сообщений.</param>
 		public HistoryMessageAdapter(HistorySessionHolder sessionHolder)
-			: base(MessageAdapterTypes.MarketData, sessionHolder)
+			: base(sessionHolder)
 		{
 			_sessionHolder = sessionHolder;
 

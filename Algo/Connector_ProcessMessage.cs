@@ -147,7 +147,7 @@ namespace StockSharp.Algo
 
 		private void TransactionAdapterOnNewOutMessage(Message message)
 		{
-			OnProcessMessage(message, MessageAdapterTypes.Transaction, MessageDirections.Out);
+			OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
 
 			if (IsDisposeAdapters(message))
 				TransactionAdapter = null;
@@ -222,7 +222,7 @@ namespace StockSharp.Algo
 
 		private void MarketDataAdapterOnNewOutMessage(Message message)
 		{
-			OnProcessMessage(message, MessageAdapterTypes.MarketData, MessageDirections.Out);
+			OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
 
 			if (IsDisposeAdapters(message))
 				MarketDataAdapter = null;
@@ -325,9 +325,9 @@ namespace StockSharp.Algo
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
+		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected virtual void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected virtual void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			if (!(message.Type == MessageTypes.Time && direction == MessageDirections.Out))
 				this.AddDebugLog("BP:{0}", message);
@@ -430,11 +430,11 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Connect:
-						ProcessConnectMessage((ConnectMessage)message, adapterType, direction);
+						ProcessConnectMessage((ConnectMessage)message, adapter, direction);
 						break;
 
 					case MessageTypes.Disconnect:
-						ProcessConnectMessage((DisconnectMessage)message, adapterType, direction);
+						ProcessConnectMessage((DisconnectMessage)message, adapter, direction);
 						break;
 
 					case MessageTypes.SecurityLookup:
@@ -459,7 +459,7 @@ namespace StockSharp.Algo
 				RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
 			}
 
-			if (message.Type != MessageTypes.Time && direction == MessageDirections.Out && adapterType == MessageAdapterTypes.MarketData)
+			if (message.Type != MessageTypes.Time && direction == MessageDirections.Out && adapter == MarketDataAdapter)
 				RaiseNewDataExported();
 		}
 
@@ -617,26 +617,31 @@ namespace StockSharp.Algo
 			RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error));
 		}
 
-		private void ProcessConnectMessage(BaseConnectionMessage message, MessageAdapterTypes adapterType, MessageDirections direction)
+		private void ProcessConnectMessage(BaseConnectionMessage message, IMessageAdapter adapter, MessageDirections direction)
 		{
 			if (direction != MessageDirections.Out)
 				throw new ArgumentOutOfRangeException("direction");
 
-			switch (adapterType)
+			if (adapter == TransactionAdapter)
 			{
-				case MessageAdapterTypes.Transaction:
-				{
-					ProcessConnectMessage(message, ConnectionState, _prevConnectionState, RaiseConnected, RaiseDisconnected, RaiseConnectionError, ReConnectionSettings.ConnectionSettings);
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					ProcessConnectMessage(message, ExportState, _prevExportState, RaiseExportStarted, RaiseExportStopped, RaiseExportError, ReConnectionSettings.ExportSettings);
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException("adapterType");
+				ProcessConnectMessage(message, ConnectionState, _prevConnectionState, RaiseConnected, RaiseDisconnected, RaiseConnectionError, ReConnectionSettings.ConnectionSettings);
+
+				if (adapter.PortfolioLookupRequired)
+					adapter.SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+
+				if (adapter.OrderStatusRequired)
+					adapter.SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 			}
+			else if (adapter == MarketDataAdapter)
+			{
+				ProcessConnectMessage(message, ExportState, _prevExportState, RaiseExportStarted, RaiseExportStopped, RaiseExportError, ReConnectionSettings.ExportSettings);
+				
+				if (adapter.SecurityLookupRequired)
+					adapter.SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+
+			}
+			else
+				throw new ArgumentOutOfRangeException("adapter");
 		}
 
 		private void ProcessSessionMessage(SessionMessage message)
@@ -1478,7 +1483,7 @@ namespace StockSharp.Algo
 			{
 				try
 				{
-					OnProcessMessage(msg, MessageAdapterTypes.MarketData, MessageDirections.Out);
+					OnProcessMessage(msg, MarketDataAdapter, MessageDirections.Out);
 					_messageStat.Remove(msg);
 				}
 				catch (Exception error)

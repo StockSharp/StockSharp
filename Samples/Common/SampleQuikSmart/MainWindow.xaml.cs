@@ -112,8 +112,8 @@ namespace SampleQuikSmart
 
 					var session = new BasketSessionHolder(Connector.TransactionIdGenerator);
 
-					Connector.MarketDataAdapter = new BasketMessageAdapter(MessageAdapterTypes.MarketData, session);
-					Connector.TransactionAdapter = new BasketMessageAdapter(MessageAdapterTypes.Transaction, session);
+					Connector.MarketDataAdapter = new BasketMessageAdapter(session);
+					Connector.TransactionAdapter = new BasketMessageAdapter(session);
 
 					Connector.ApplyMessageProcessor(MessageDirections.In, true, false);
 					Connector.ApplyMessageProcessor(MessageDirections.In, false, true);

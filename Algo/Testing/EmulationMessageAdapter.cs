@@ -26,7 +26,7 @@
 		/// <param name="emulator">Эмулятор торгов.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
 		public EmulationMessageAdapter(IMarketEmulator emulator, IMessageSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+			: base(sessionHolder)
 		{
 			Emulator = emulator;
 		}

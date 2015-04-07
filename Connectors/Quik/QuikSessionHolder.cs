@@ -14,7 +14,6 @@ namespace StockSharp.Quik
 	using StockSharp.BusinessEntities;
 	using StockSharp.Fix;
 	using StockSharp.Messages;
-	using StockSharp.Quik.Lua;
 	using StockSharp.Quik.Xaml;
 	using StockSharp.Localization;
 
@@ -404,24 +403,6 @@ namespace StockSharp.Quik
 
 			IsTransactionEnabled = true;
 			IsMarketDataEnabled = true;
-		}
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return IsDde ? (IMessageAdapter)new QuikTrans2QuikAdapter(this) : new LuaFixTransactionMessageAdapter(this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return IsDde ? new QuikDdeAdapter(this) : base.CreateMarketDataAdapter();
 		}
 
 		/// <summary>

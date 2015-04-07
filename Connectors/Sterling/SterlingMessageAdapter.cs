@@ -1,100 +1,24 @@
-﻿using System;
-using StockSharp.Messages;
-
-namespace StockSharp.Sterling
+﻿namespace StockSharp.Sterling
 {
+	using System;
+
+	using StockSharp.Localization;
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// Адаптер сообщений для Sterling.
 	/// </summary>
 	public partial class SterlingMessageAdapter : MessageAdapter<SterlingSessionHolder>
 	{
-		private bool _isSessionOwner;
+		private SterlingClient _client;
 
 		/// <summary>
 		/// Создать <see cref="SterlingMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public SterlingMessageAdapter(MessageAdapterTypes type, SterlingSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		public SterlingMessageAdapter(SterlingSessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
-			SessionHolder.Initialize += OnSessionInitialize;
-			SessionHolder.UnInitialize += OnSessionUnInitialize;
-		}
-
-		/// <summary>
-		/// Освободить занятые ресурсы.
-		/// </summary>
-		protected override void DisposeManaged()
-		{
-			SessionHolder.Initialize -= OnSessionInitialize;
-			SessionHolder.UnInitialize -= OnSessionUnInitialize;
-
-			base.DisposeManaged();
-		}
-
-		private void OnSessionInitialize()
-		{
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					SessionHolder.Session.OnStiOrderConfirm += SessionOnStiOrderConfirm;
-					SessionHolder.Session.OnStiOrderReject += SessionOnStiOrderReject;
-					SessionHolder.Session.OnStiOrderUpdate += SessionOnStiOrderUpdate;
-					SessionHolder.Session.OnStiTradeUpdate += SessionOnStiTradeUpdate;
-					SessionHolder.Session.OnStiAcctUpdate += SessionOnStiAcctUpdate;
-					SessionHolder.Session.OnStiPositionUpdate += SessionOnStiPositionUpdate;
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					SessionHolder.Session.OnStiQuoteUpdate += SessionOnStiQuoteUpdate;
-					SessionHolder.Session.OnStiQuoteSnap += SessionOnStiQuoteSnap;
-					SessionHolder.Session.OnStiQuoteRqst += SessionOnStiQuoteRqst;
-					SessionHolder.Session.OnStil2Update += SessionOnStil2Update;
-					SessionHolder.Session.OnStil2Reply += SessionOnStil2Reply;
-					SessionHolder.Session.OnStiGreeksUpdate += SessionOnStiGreeksUpdate;
-					SessionHolder.Session.OnStiNewsUpdate += SessionOnStiNewsUpdate;
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			SessionHolder.Session.OnStiShutdown += SessionOnOnStiShutdown;
-		}
-
-		private void OnSessionUnInitialize()
-		{
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					SessionHolder.Session.OnStiOrderConfirm -= SessionOnStiOrderConfirm;
-					SessionHolder.Session.OnStiOrderReject -= SessionOnStiOrderReject;
-					SessionHolder.Session.OnStiOrderUpdate -= SessionOnStiOrderUpdate;
-					SessionHolder.Session.OnStiTradeUpdate -= SessionOnStiTradeUpdate;
-					SessionHolder.Session.OnStiAcctUpdate -= SessionOnStiAcctUpdate;
-					SessionHolder.Session.OnStiPositionUpdate -= SessionOnStiPositionUpdate;
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					SessionHolder.Session.OnStiQuoteUpdate -= SessionOnStiQuoteUpdate;
-					SessionHolder.Session.OnStiQuoteSnap -= SessionOnStiQuoteSnap;
-					SessionHolder.Session.OnStiQuoteRqst -= SessionOnStiQuoteRqst;
-					SessionHolder.Session.OnStil2Update -= SessionOnStil2Update;
-					SessionHolder.Session.OnStil2Reply -= SessionOnStil2Reply;
-					SessionHolder.Session.OnStiGreeksUpdate -= SessionOnStiGreeksUpdate;
-					SessionHolder.Session.OnStiNewsUpdate -= SessionOnStiNewsUpdate;
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			SessionHolder.Session.OnStiShutdown -= SessionOnOnStiShutdown;
 		}
 
 		private void SessionOnOnStiShutdown()
@@ -115,62 +39,88 @@ namespace StockSharp.Sterling
 			{
 				case MessageTypes.Connect:
 				{
-					if (SessionHolder.Session == null)
-					{
-						_isSessionOwner = true;
-						SessionHolder.Session = new SterlingSessionHolder.SterlingSession();
-						SendOutMessage(new ConnectMessage());
-					}
-					else
-					{
-						SendOutMessage(new ConnectMessage());
-					}
+					if (_client != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
+
+					_client = new SterlingClient();
+
+					_client.OnStiOrderConfirm += SessionOnStiOrderConfirm;
+					_client.OnStiOrderReject += SessionOnStiOrderReject;
+					_client.OnStiOrderUpdate += SessionOnStiOrderUpdate;
+					_client.OnStiTradeUpdate += SessionOnStiTradeUpdate;
+					_client.OnStiAcctUpdate += SessionOnStiAcctUpdate;
+					_client.OnStiPositionUpdate += SessionOnStiPositionUpdate;
+
+					_client.OnStiQuoteUpdate += SessionOnStiQuoteUpdate;
+					_client.OnStiQuoteSnap += SessionOnStiQuoteSnap;
+					_client.OnStiQuoteRqst += SessionOnStiQuoteRqst;
+					_client.OnStil2Update += SessionOnStil2Update;
+					_client.OnStil2Reply += SessionOnStil2Reply;
+					_client.OnStiGreeksUpdate += SessionOnStiGreeksUpdate;
+					_client.OnStiNewsUpdate += SessionOnStiNewsUpdate;
+
+					_client.OnStiShutdown += SessionOnOnStiShutdown;
+
+					SendOutMessage(new ConnectMessage());
 
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					if (_isSessionOwner)
-					{
-						SessionHolder.Session = null;
-						SendOutMessage(new DisconnectMessage());
-					}
-					else
-					{
-						SendOutMessage(new DisconnectMessage());
-					}
+					if (_client == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1856);
+
+					_client.OnStiOrderConfirm -= SessionOnStiOrderConfirm;
+					_client.OnStiOrderReject -= SessionOnStiOrderReject;
+					_client.OnStiOrderUpdate -= SessionOnStiOrderUpdate;
+					_client.OnStiTradeUpdate -= SessionOnStiTradeUpdate;
+					_client.OnStiAcctUpdate -= SessionOnStiAcctUpdate;
+					_client.OnStiPositionUpdate -= SessionOnStiPositionUpdate;
+
+					_client.OnStiQuoteUpdate -= SessionOnStiQuoteUpdate;
+					_client.OnStiQuoteSnap -= SessionOnStiQuoteSnap;
+					_client.OnStiQuoteRqst -= SessionOnStiQuoteRqst;
+					_client.OnStil2Update -= SessionOnStil2Update;
+					_client.OnStil2Reply -= SessionOnStil2Reply;
+					_client.OnStiGreeksUpdate -= SessionOnStiGreeksUpdate;
+					_client.OnStiNewsUpdate -= SessionOnStiNewsUpdate;
+
+					_client.OnStiShutdown -= SessionOnOnStiShutdown;
+					_client = null;
+
+					SendOutMessage(new DisconnectMessage());
 
 					break;
 				}
 
 				case MessageTypes.MarketData:
 				{
-					ProcessMarketData((MarketDataMessage) message);
+					ProcessMarketData((MarketDataMessage)message);
 					break;
 				}
 
 				case MessageTypes.OrderRegister:
 				{
-					ProcessOrderRegisterMessage((OrderRegisterMessage) message);
+					ProcessOrderRegisterMessage((OrderRegisterMessage)message);
 					break;
 				}
 
 				case MessageTypes.OrderCancel:
 				{
-					ProcessOrderCancelMessage((OrderCancelMessage) message);
+					ProcessOrderCancelMessage((OrderCancelMessage)message);
 					break;
 				}
 
 				case MessageTypes.OrderReplace:
 				{
-					ProcessOrderReplaceMessage((OrderReplaceMessage) message);
+					ProcessOrderReplaceMessage((OrderReplaceMessage)message);
 					break;
 				}
 
 				case MessageTypes.PortfolioLookup:
 				{
-					var portfolios = SessionHolder.Session.GetPortfolios();
+					var portfolios = _client.GetPortfolios();
 
 					foreach (var portfolio in portfolios)
 					{
@@ -186,25 +136,25 @@ namespace StockSharp.Sterling
 
 				case MessageTypes.Security:
 				{
-					ProcessSecurityMessage((SecurityMessage) message);
+					ProcessSecurityMessage((SecurityMessage)message);
 					break;
 				}
 
 				case MessageTypes.Execution:
 				{
-					ProcessExecutionMessage((ExecutionMessage) message);
+					ProcessExecutionMessage((ExecutionMessage)message);
 					break;
 				}
 
 				case MessageTypes.Position:
 				{
-					ProcessPositionMessage((PositionMessage) message);
+					ProcessPositionMessage((PositionMessage)message);
 					break;
 				}
 
 				case MessageTypes.PositionChange:
 				{
-					ProcessPositionChangeMessage((PositionChangeMessage) message);
+					ProcessPositionChangeMessage((PositionChangeMessage)message);
 					break;
 				}
 			}

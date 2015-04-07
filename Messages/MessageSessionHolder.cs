@@ -218,103 +218,6 @@ namespace StockSharp.Messages
 
 			base.Save(storage);
 		}
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public abstract IMessageAdapter CreateTransactionAdapter();
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public abstract IMessageAdapter CreateMarketDataAdapter();
-
-		private IMessageAdapter _transactionAdapter;
-		private IMessageAdapter _marketDataAdapter;
-
-		/// <summary>
-		/// Отправить сообщение.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		public virtual void SendInMessage(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Security:
-				case MessageTypes.SecurityLookup:
-				case MessageTypes.News:
-				case MessageTypes.MarketData:
-				{
-					if (_marketDataAdapter != null)
-						_marketDataAdapter.SendInMessage(message);
-					
-					break;
-				}
-				case MessageTypes.OrderRegister:
-				case MessageTypes.OrderReplace:
-				case MessageTypes.OrderPairReplace:
-				case MessageTypes.OrderCancel:
-				case MessageTypes.OrderGroupCancel:
-				case MessageTypes.Portfolio:
-				case MessageTypes.Position:
-				case MessageTypes.PortfolioLookup:
-				case MessageTypes.OrderStatus:
-				{
-					if (_transactionAdapter != null)
-						_transactionAdapter.SendInMessage(message);
-					
-					break;
-				}
-				case MessageTypes.Time:
-				case MessageTypes.Connect:
-				{
-					if (IsTransactionEnabled)
-					{
-						_transactionAdapter = CreateTransactionAdapter();
-						_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
-						_transactionAdapter.SendInMessage(message);
-					}
-
-					if (IsMarketDataEnabled)
-					{
-						_marketDataAdapter = CreateMarketDataAdapter();
-						_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;
-						_marketDataAdapter.SendInMessage(message);
-					}
-
-					break;
-				}
-				case MessageTypes.Disconnect:
-				case MessageTypes.ChangePassword:
-				case MessageTypes.ClearMessageQueue:
-				{
-					if (_marketDataAdapter != null)
-						_marketDataAdapter.SendInMessage(message);
-					
-					if (_transactionAdapter != null)
-						_transactionAdapter.SendInMessage(message);
-					
-					break;
-				}
-			}
-		}
-
-		private void MarketDataAdapterOnNewOutMessage(Message message)
-		{
-			NewOutMessage.SafeInvoke(message);
-		}
-
-		private void TransactionAdapterOnNewOutMessage(Message message)
-		{
-			NewOutMessage.SafeInvoke(message);
-		}
-
-		/// <summary>
-		/// Событие появления нового сообщения.
-		/// </summary>
-		public event Action<Message> NewOutMessage;
 	}
 
 	/// <summary>
@@ -329,24 +232,6 @@ namespace StockSharp.Messages
 		public PassThroughSessionHolder(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-		}
-
-		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return null;
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return null;
 		}
 	}
 }

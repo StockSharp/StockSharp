@@ -20,7 +20,7 @@ namespace StockSharp.Rss
 		/// </summary>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
 		public RssMarketDataMessageAdapter(RssSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.MarketData, sessionHolder)
+			: base(sessionHolder)
 		{
 		}
 

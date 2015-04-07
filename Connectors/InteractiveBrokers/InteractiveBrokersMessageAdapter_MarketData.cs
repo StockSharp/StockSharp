@@ -1439,7 +1439,7 @@ namespace StockSharp.InteractiveBrokers
 			});
 		}
 
-		private void OnProcessMarketDataResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
+		private bool ProcessMarketDataResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
 		{
 			switch (message)
 			{
@@ -1447,53 +1447,53 @@ namespace StockSharp.InteractiveBrokers
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickprice.htm
 					ReadTickPrice(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickVolume:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/ticksize.htm
 					ReadTickVolume(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickOptionComputation:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickoptioncomputation.htm
 					ReadTickOptionComputation(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickGeneric:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickgeneric.htm
 					ReadTickGeneric(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickString:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickstring.htm
 					ReadTickString(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickEfp:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickefp.htm
 					ReadTickEfp(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.ScannerData:
 				{
 					ReadScannerData(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.SecurityInfo:
 				{
 					ReadSecurityInfo(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.BondInfo:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/bondcontractdetails.htm
 					ReadBondInfo(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.MarketDepth:
 				case ResponseMessages.MarketDepthL2:
@@ -1501,65 +1501,67 @@ namespace StockSharp.InteractiveBrokers
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updatemktdepth.htm
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updatemktdepthl2.htm
 					ReadMarketDepth(socket, message);
-					break;
+					return true;
 				}
 				case ResponseMessages.NewsBulletins:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updatenewsbulletin.htm
 					ReadNewsBulletins(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.FinancialAdvice:
 				{
 					ReadFinancialAdvice(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.HistoricalData:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/historicaldata.htm
 					ReadHistoricalData(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.ScannerParameters:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/scannerparameters.htm
 					ReadScannerParameters(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.RealTimeBars:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/realtimebar.htm
 					ReadRealTimeBars(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.FundamentalData:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/fundamentaldata.htm
 					ReadFundamentalData(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.SecurityInfoEnd:
 				{
 					ReadSecurityInfoEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.DeltaNuetralValidation:
 				{
 					ReadDeltaNuetralValidation(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickSnapshotEnd:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/ticksnapshotend.htm
 					ReadTickSnapshotEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.MarketDataType:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/marketdatatype.htm
 					ReadMarketDataType(socket);
-					break;
+					return true;
 				}
+				default:
+					return false;
 			}
 		}
 

@@ -25,7 +25,7 @@ namespace StockSharp.OpenECry
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
 		{
-			foreach (var account in SessionHolder.Session.Accounts)
+			foreach (var account in _client.Accounts)
 			{
 				ProcessAccount(account, null);
 
@@ -41,12 +41,12 @@ namespace StockSharp.OpenECry
 
 		private void ProcessOrderRegister(OrderRegisterMessage message)
 		{
-			var draft = SessionHolder.Session.CreateDraft();
+			var draft = _client.CreateDraft();
 
 			draft.Comments = message.Comment;
-			draft.Account = SessionHolder.Session.Accounts[message.PortfolioName];
-			draft.Contract = SessionHolder.Session.Contracts[message.SecurityId.SecurityCode];
-			draft.Route = SessionHolder.Session.Routes[message.SecurityId.BoardCode];
+			draft.Account = _client.Accounts[message.PortfolioName];
+			draft.Contract = _client.Contracts[message.SecurityId.SecurityCode];
+			draft.Route = _client.Routes[message.SecurityId.BoardCode];
 			draft.Side = message.Side.ToOec();
 			draft.Quantity = (int)message.Volume;
 
@@ -140,19 +140,19 @@ namespace StockSharp.OpenECry
 			if (invalid != OrderParts.None)
 				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid.ToString()));
 
-			var newOrder = SessionHolder.Session.SendOrder(draft);
+			var newOrder = _client.SendOrder(draft);
 			_orderTransactions.Add(newOrder, message.TransactionId);
 			ProcessOrder(newOrder, message.TransactionId);
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage message)
 		{
-			SessionHolder.Session.CancelOrder(_orderTransactions[message.OrderTransactionId]);
+			_client.CancelOrder(_orderTransactions[message.OrderTransactionId]);
 		}
 
 		private void ProcessOrderReplace(OrderReplaceMessage message)
 		{
-			var draft = SessionHolder.Session.CreateDraft(_orderTransactions[message.OldTransactionId]);
+			var draft = _client.CreateDraft(_orderTransactions[message.OldTransactionId]);
 
 			draft.Price = (double)message.Price;
 			draft.Quantity = (int)message.Volume;
@@ -161,7 +161,7 @@ namespace StockSharp.OpenECry
 			if (invalid != OrderParts.None)
 				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid.ToString()));
 
-			var newOrder = SessionHolder.Session.ModifyOrder(draft);
+			var newOrder = _client.ModifyOrder(draft);
 			_orderTransactions.Add(newOrder, message.TransactionId);
 			ProcessOrder(newOrder, message.TransactionId);
 		}
@@ -585,7 +585,7 @@ namespace StockSharp.OpenECry
 
 		private void ProcessOrderStatusMessage()
 		{
-			foreach (var order in SessionHolder.Session.Orders)
+			foreach (var order in _client.Orders)
 			{
 				var trId = TransactionIdGenerator.GetNextId();
 				_orderTransactions.Add(order, trId);

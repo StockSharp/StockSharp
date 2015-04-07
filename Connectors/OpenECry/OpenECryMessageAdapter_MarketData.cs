@@ -22,43 +22,41 @@ namespace StockSharp.OpenECry
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
 			var key = Tuple.Create(message.SecurityId, message.DataType);
-			var session = SessionHolder.Session;
-
 			switch (message.DataType)
 			{
 				case MarketDataTypes.Level1:
 				{
-					var contract = session.Contracts[message.SecurityId.SecurityCode];
+					var contract = _client.Contracts[message.SecurityId.SecurityCode];
 
 					if (message.IsSubscribe)
-						session.Subscribe(contract);
+						_client.Subscribe(contract);
 					else
-						session.Unsubscribe(contract);
+						_client.Unsubscribe(contract);
 
 					break;
 				}
 				case MarketDataTypes.MarketDepth:
 				{
-					var contract = session.Contracts[message.SecurityId.SecurityCode];
+					var contract = _client.Contracts[message.SecurityId.SecurityCode];
 
 					if (message.IsSubscribe)
-						session.SubscribeDOM(contract);
+						_client.SubscribeDOM(contract);
 					else
-						session.UnsubscribeDOM(contract);
+						_client.UnsubscribeDOM(contract);
 
 					break;
 				}
 				case MarketDataTypes.Trades:
 				{
-					var contract = session.Contracts[message.SecurityId.SecurityCode];
+					var contract = _client.Contracts[message.SecurityId.SecurityCode];
 
 					if (message.IsSubscribe)
 					{
-						var subscription = session.SubscribeTicks(contract, message.From.UtcDateTime);
+						var subscription = _client.SubscribeTicks(contract, message.From.UtcDateTime);
 						_subscriptions.Add(key, subscription);
 					}
 					else
-						session.CancelSubscription(_subscriptions[key]);
+						_client.CancelSubscription(_subscriptions[key]);
 
 					break;
 				}
@@ -71,7 +69,7 @@ namespace StockSharp.OpenECry
 				case MarketDataTypes.CandleVolume:
 				case MarketDataTypes.CandleRange:
 				{
-					var contract = session.Contracts[message.SecurityId.SecurityCode];
+					var contract = _client.Contracts[message.SecurityId.SecurityCode];
 
 					if (message.IsSubscribe)
 					{
@@ -135,13 +133,13 @@ namespace StockSharp.OpenECry
 						}
 
 						var subscription = message.Count == 0
-							? session.SubscribeBars(contract, message.From.UtcDateTime, subscriptionType, interval)
-							: session.SubscribeBars(contract, (int)message.Count, subscriptionType, interval, false);
+							? _client.SubscribeBars(contract, message.From.UtcDateTime, subscriptionType, interval)
+							: _client.SubscribeBars(contract, (int)message.Count, subscriptionType, interval, false);
 
 						_subscriptions.Add(key, subscription);
 					}
 					else
-						session.CancelSubscription(_subscriptions[key]);
+						_client.CancelSubscription(_subscriptions[key]);
 
 					break;
 				}
@@ -163,7 +161,7 @@ namespace StockSharp.OpenECry
 
 			if (!message.SecurityId.BoardCode.IsEmpty())
 			{
-				var exchange = SessionHolder.Session.Exchanges[message.SecurityId.BoardCode];
+				var exchange = _client.Exchanges[message.SecurityId.BoardCode];
 
 				if (exchange != null)
 					criteria.Exchange = exchange;
@@ -171,7 +169,7 @@ namespace StockSharp.OpenECry
 
 			if (!message.UnderlyingSecurityCode.IsEmpty())
 			{
-				var contract = SessionHolder.Session.BaseContracts[message.UnderlyingSecurityCode];
+				var contract = _client.BaseContracts[message.UnderlyingSecurityCode];
 
 				if (contract != null)
 					criteria.BaseContract = contract;
@@ -227,7 +225,7 @@ namespace StockSharp.OpenECry
 					throw new ArgumentOutOfRangeException("message", message.SecurityType, LocalizedStrings.Str2117);
 			}
 
-			SessionHolder.Session.SymbolLookup(criteria);
+			_client.SymbolLookup(criteria);
 		}
 
 		private void SessionOnSymbolLookupReceived(OEC.API.SymbolLookupCriteria criteria, ContractList contracts)

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using StockSharp.Algo;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
-
-namespace StockSharp.Sterling
+﻿namespace StockSharp.Sterling
 {
+	using System.Collections.Generic;
+
+	using StockSharp.Algo;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с терминалом Sterling.
 	/// </summary>
@@ -17,8 +18,11 @@ namespace StockSharp.Sterling
 		{
 			var sessionHolder = new SterlingSessionHolder(TransactionIdGenerator);
 
-			TransactionAdapter = new SterlingMessageAdapter(MessageAdapterTypes.Transaction, sessionHolder);
-			MarketDataAdapter = new SterlingMessageAdapter(MessageAdapterTypes.MarketData, sessionHolder);
+			var adapter = new SterlingMessageAdapter(sessionHolder);
+
+			base.SessionHolder = sessionHolder;
+			TransactionAdapter = adapter;
+			MarketDataAdapter = adapter;
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);

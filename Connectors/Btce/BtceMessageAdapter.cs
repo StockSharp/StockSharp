@@ -12,29 +12,15 @@ namespace StockSharp.Btce
 	public partial class BtceMessageAdapter : MessageAdapter<BtceSessionHolder>
 	{
 		private const string _boardCode = "BTCE";
-		private bool _isSessionOwner;
+		private BtceClient _client;
 		
 		/// <summary>
 		/// Создать <see cref="BtceMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public BtceMessageAdapter(MessageAdapterTypes type, BtceSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		public BtceMessageAdapter(BtceSessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
-		}
-
-		private BtceClient Session
-		{
-			get
-			{
-				var session = SessionHolder.Session;
-				
-				if (session == null)
-					throw new InvalidOperationException(LocalizedStrings.Str2153);
-
-				return session;
-			}
 		}
 
 		/// <summary>
@@ -46,29 +32,19 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Добавить <see cref="Messages.Message"/> в выходную очередь <see cref="IMessageAdapter"/>.
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		public override void SendOutMessage(Message message)
+		public override bool OrderStatusRequired
 		{
-			base.SendOutMessage(message);
+			get { return true; }
+		}
 
-			var connectMsg = message as ConnectMessage;
-
-			if (connectMsg != null && connectMsg.Error == null)
-			{
-				switch (Type)
-				{
-					case MessageAdapterTypes.Transaction:
-						SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						break;
-					case MessageAdapterTypes.MarketData:
-						SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// </summary>
+		public override bool SecurityLookupRequired
+		{
+			get { return true; }
 		}
 
 		/// <summary>
@@ -81,62 +57,55 @@ namespace StockSharp.Btce
 			{
 				case MessageTypes.Connect:
 				{
+					if (_client != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
+
 					_subscribedLevel1.Clear();
 					_subscribedDepths.Clear();
 					_subscribedTicks.Clear();
 
-					if (SessionHolder.Session == null)
+					_lastTickId = 0;
+					_lastMyTradeId = 0;
+
+					_orderInfo.Clear();
+
+					_hasActiveOrders = true;
+					_hasMyTrades = true;
+					_requestOrderFirst = true;
+
+					_client = new BtceClient(SessionHolder.Key, SessionHolder.Secret);
+
+					var reply = _client.GetInfo();
+
+					SendOutMessage(new ConnectMessage());
+
+					SendOutMessage(new PortfolioMessage
 					{
-						_isSessionOwner = true;
-						SessionHolder.Session = new BtceClient(SessionHolder.Key, SessionHolder.Secret);
-					}
+						PortfolioName = GetPortfolioName(),
+						State = reply.State.Rights.CanTrade ? PortfolioStates.Active : PortfolioStates.Blocked
+					});
 
-					if (Type == MessageAdapterTypes.Transaction)
-					{
-						_lastTickId = 0;
-						_lastMyTradeId = 0;
-
-						_orderInfo.Clear();
-
-						_hasActiveOrders = true;
-						_hasMyTrades = true;
-						_requestOrderFirst = true;
-
-						var reply = Session.GetInfo();
-
-						SendOutMessage(new ConnectMessage());
-
-						SendOutMessage(new PortfolioMessage
-						{
-							PortfolioName = GetPortfolioName(),
-							State = reply.State.Rights.CanTrade ? PortfolioStates.Active : PortfolioStates.Blocked
-						});
-
-						ProcessFunds(reply.State.Funds);
-					}
-					else
-						SendOutMessage(new ConnectMessage());
+					ProcessFunds(reply.State.Funds);
 
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
+					if (_client == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1856);
+
 					SendOutMessage(new DisconnectMessage());
 
-					if (_isSessionOwner)
-					{
-						_isSessionOwner = false;
-						SessionHolder.Session.Dispose();
-						SessionHolder.Session = null;
-					}
+					_client.Dispose();
+					_client = null;
 
 					break;
 				}
 
 				case MessageTypes.PortfolioLookup:
 				{
-					ProcessFunds(Session.GetInfo().State.Funds);
+					ProcessFunds(_client.GetInfo().State.Funds);
 					break;
 				}
 
@@ -172,26 +141,13 @@ namespace StockSharp.Btce
 
 				case MessageTypes.Time:
 				{
-					switch (Type)
+					if (_hasActiveOrders || _hasMyTrades)
 					{
-						case MessageAdapterTypes.Transaction:
-						{
-							if (_hasActiveOrders || _hasMyTrades)
-							{
-								SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-								SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-							}
-							
-							break;
-						}
-						case MessageAdapterTypes.MarketData:
-						{
-							ProcessSubscriptions();
-							break;
-						}
-						default:
-							throw new ArgumentOutOfRangeException();
+						SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+						SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 					}
+
+					ProcessSubscriptions();
 
 					break;
 				}

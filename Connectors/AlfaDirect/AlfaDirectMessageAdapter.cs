@@ -15,210 +15,45 @@ namespace StockSharp.AlfaDirect
 	/// </summary>
 	public partial class AlfaDirectMessageAdapter : MessageAdapter<AlfaDirectSessionHolder>
 	{
-		private readonly AlfaDirectSessionHolder _sessionHolder;
-		private AlfaDirectSessionHolder.IAlfaSession _session;
-		private bool _sessionOwner;
-		private bool _adapterIsActive;
-		private bool _subscribed;
+		private AlfaWrapper _wrapper;
 
 		/// <summary>
 		/// Создать <see cref="AlfaDirectMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
 		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public AlfaDirectMessageAdapter(MessageAdapterTypes type, AlfaDirectSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		public AlfaDirectMessageAdapter(AlfaDirectSessionHolder sessionHolder)
+			: base(sessionHolder)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
-
-			_sessionHolder = sessionHolder;
-			_sessionHolder.Initialize += OnSessionInitialize;
-			_sessionHolder.UnInitialize += OnSessionUnInitialize;
-
 			Platform = Platforms.x86;
-
-			OnSessionInitialize();
-		}
-
-		/// <summary>Освободить занятые ресурсы.</summary>
-		protected override void DisposeManaged()
-		{
-			_sessionHolder.Initialize -= OnSessionInitialize;
-			_sessionHolder.UnInitialize -= OnSessionUnInitialize;
-
-			base.DisposeManaged();
 		}
 
 		private AlfaWrapper Wrapper
 		{
-			get { return _sessionHolder.Wrapper; }
-		}
-
-		private void OnSessionInitialize()
-		{
-			_alfaIds.Clear();
-			_localIds.Clear();
-
-			if (Wrapper == null)
-				return;
-
-			if (_adapterIsActive)
-				SubscribeWrapper();
-		}
-
-		private void OnSessionUnInitialize()
-		{
-			UnsubscribeWrapper();
-		}
-
-		private void SubscribeWrapper()
-		{
-			if (_subscribed)
-			{
-				SessionHolder.AddWarningLog("SubscribeWrapper: already subscribed");
-				return;
-			}
-
-			if (_sessionOwner)
-			{
-				Wrapper.Connected += OnWrapperConnected;
-				Wrapper.Disconnected += OnWrapperDisconnected;
-				Wrapper.ConnectionError += OnConnectionError;
-				Wrapper.Error += SendOutError;
-			}
-
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					Wrapper.ProcessOrder += OnProcessOrders;
-					Wrapper.ProcessOrderConfirmed += OnProcessOrderConfirmed;
-					Wrapper.ProcessOrderFailed += OnProcessOrderFailed;
-					Wrapper.ProcessPositions += OnProcessPositions;
-					Wrapper.ProcessMyTrades += OnProcessMyTrades;
-					Wrapper.ProcessNews += OnProcessNews;
-					
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					Wrapper.ProcessSecurities += OnProcessSecurities;
-					Wrapper.ProcessLevel1 += OnProcessLevel1;
-					Wrapper.ProcessQuotes += OnProcessQuotes;
-					Wrapper.ProcessTrades += OnProcessTrades;
-					Wrapper.ProcessCandles += OnProcessCandles;
-
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			_subscribed = true;
-		}
-
-		private void UnsubscribeWrapper()
-		{
-			if (!_subscribed)
-			{
-				SessionHolder.AddWarningLog("UnsubscribeWrapper: not subscribed");
-				return;
-			}
-
-			if (_sessionOwner)
-			{
-				Wrapper.Connected -= OnWrapperConnected;
-				Wrapper.Disconnected -= OnWrapperDisconnected;
-				Wrapper.ConnectionError -= OnConnectionError;
-			}
-
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					Wrapper.ProcessOrder -= OnProcessOrders;
-					Wrapper.ProcessOrderConfirmed -= OnProcessOrderConfirmed;
-					Wrapper.ProcessOrderFailed -= OnProcessOrderFailed;
-					Wrapper.ProcessPositions -= OnProcessPositions;
-					Wrapper.ProcessMyTrades -= OnProcessMyTrades;
-					Wrapper.ProcessNews -= OnProcessNews;
-
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					Wrapper.ProcessSecurities += OnProcessSecurities;
-					Wrapper.ProcessLevel1 -= OnProcessLevel1;
-					Wrapper.ProcessQuotes -= OnProcessQuotes;
-					Wrapper.ProcessTrades -= OnProcessTrades;
-					Wrapper.ProcessCandles -= OnProcessCandles;
-
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			_subscribed = false;
+			get { return _wrapper; }
 		}
 
 		/// <summary>
-		/// Добавить <see cref="StockSharp.Messages.Message"/> в выходную очередь <see cref="IMessageAdapter"/>.
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		public override void SendOutMessage(Message message)
+		public override bool SecurityLookupRequired
 		{
-			switch (message.Type)
-			{
-				case MessageTypes.Connect:
-				{
-					base.SendOutMessage(message);
+			get { return true; }
+		}
 
-					var connectMsg = (ConnectMessage)message;
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public override bool PortfolioLookupRequired
+		{
+			get { return true; }
+		}
 
-					if (connectMsg.Error == null)
-					{
-						switch (Type)
-						{
-							case MessageAdapterTypes.Transaction:
-								SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-								SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-								break;
-							case MessageAdapterTypes.MarketData:
-								SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-
-					return;
-				}
-
-				case MessageTypes.Disconnect:
-				{
-					var connectMsg = (DisconnectMessage)message;
-
-					if (connectMsg.Error == null)
-					{
-						switch (Type)
-						{
-							case MessageAdapterTypes.Transaction:
-								Wrapper.StopExportOrders();
-								Wrapper.StopExportPortfolios();
-								Wrapper.StopExportMyTrades();
-								break;
-						}
-					}
-
-					base.SendOutMessage(message);
-
-					return;
-				}
-			}
-
-			base.SendOutMessage(message);
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// </summary>
+		public override bool OrderStatusRequired
+		{
+			get { return true; }
 		}
 
 		/// <summary>
@@ -231,36 +66,70 @@ namespace StockSharp.AlfaDirect
 			{
 				case MessageTypes.Connect:
 				{
-					_adapterIsActive = true;
+					_alfaIds.Clear();
+					_localIds.Clear();
 
-					if (_session == null)
-					{
-						_sessionOwner = _sessionHolder.Wrapper == null;
-						_session = _sessionHolder.GetSession(SessionHolder);
-					}
+					if (_wrapper != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-					SubscribeWrapper();
+					_wrapper = new AlfaWrapper(SessionHolder, SessionHolder);
 
-					if (Wrapper.IsConnected || !_sessionOwner)
+					_wrapper.Connected += OnWrapperConnected;
+					_wrapper.Disconnected += OnWrapperDisconnected;
+					_wrapper.ConnectionError += OnConnectionError;
+					_wrapper.Error += SendOutError;
+
+					_wrapper.ProcessOrder += OnProcessOrders;
+					_wrapper.ProcessOrderConfirmed += OnProcessOrderConfirmed;
+					_wrapper.ProcessOrderFailed += OnProcessOrderFailed;
+					_wrapper.ProcessPositions += OnProcessPositions;
+					_wrapper.ProcessMyTrades += OnProcessMyTrades;
+
+					_wrapper.ProcessNews += OnProcessNews;
+					_wrapper.ProcessSecurities += OnProcessSecurities;
+					_wrapper.ProcessLevel1 += OnProcessLevel1;
+					_wrapper.ProcessQuotes += OnProcessQuotes;
+					_wrapper.ProcessTrades += OnProcessTrades;
+					_wrapper.ProcessCandles += OnProcessCandles;
+
+					if (_wrapper.IsConnected)
 						SendOutMessage(new ConnectMessage());
-
 					else if (!Wrapper.IsConnecting)
-						Wrapper.Connect(SessionHolder.Login, SessionHolder.Password.To<string>());
+						_wrapper.Connect(SessionHolder.Login, SessionHolder.Password.To<string>());
 
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					UnsubscribeWrapper();
-					_adapterIsActive = false;
-					SendOutMessage(new DisconnectMessage());
+					if (_wrapper == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
-					if (_session != null)
-					{
-						_session.Dispose();
-						_session = null;
-					}
+					_wrapper.StopExportOrders();
+					_wrapper.StopExportPortfolios();
+					_wrapper.StopExportMyTrades();
+
+					_wrapper.Connected -= OnWrapperConnected;
+					_wrapper.Disconnected -= OnWrapperDisconnected;
+					_wrapper.ConnectionError -= OnConnectionError;
+
+					_wrapper.ProcessOrder -= OnProcessOrders;
+					_wrapper.ProcessOrderConfirmed -= OnProcessOrderConfirmed;
+					_wrapper.ProcessOrderFailed -= OnProcessOrderFailed;
+					_wrapper.ProcessPositions -= OnProcessPositions;
+					_wrapper.ProcessMyTrades -= OnProcessMyTrades;
+
+					_wrapper.ProcessNews -= OnProcessNews;
+					_wrapper.ProcessSecurities += OnProcessSecurities;
+					_wrapper.ProcessLevel1 -= OnProcessLevel1;
+					_wrapper.ProcessQuotes -= OnProcessQuotes;
+					_wrapper.ProcessTrades -= OnProcessTrades;
+					_wrapper.ProcessCandles -= OnProcessCandles;
+
+					_wrapper.Dispose();
+					_wrapper = null;
+					
+					SendOutMessage(new DisconnectMessage());
 
 					break;
 				}

@@ -146,7 +146,7 @@ namespace StockSharp.Studio.Services
 				_strategy.SetIsInitialization(false);
 			}
 
-			protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+			protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 			{
 				_historyMessageAdapter.SessionHolder.UpdateCurrentTime(message.LocalTime);
 
@@ -154,7 +154,7 @@ namespace StockSharp.Studio.Services
 				{
 					case MessageTypes.Connect:
 					{
-						if (adapterType == MessageAdapterTypes.MarketData)
+						if (adapter == MarketDataAdapter)
 							break;
 
 						_isHistory = true;
@@ -179,7 +179,7 @@ namespace StockSharp.Studio.Services
 
 						if (_onlyInitialize)
 						{
-							if (adapterType == MessageAdapterTypes.MarketData)
+							if (adapter == MarketDataAdapter)
 								new StopStrategyCommand(_strategy).Process(this);
 
 							return;
@@ -235,13 +235,13 @@ namespace StockSharp.Studio.Services
 						var trades = candleMsg.ToTrades(volumeStep, decimals);
 
 						foreach (var executionMessage in trades)
-							base.OnProcessMessage(executionMessage, adapterType, direction);
+							base.OnProcessMessage(executionMessage, adapter, direction);
 
 						return;
 					}
 				}
 
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, adapter, direction);
 			}
 
 			public override void SubscribeMarketData(Security security, MarketDataTypes type)

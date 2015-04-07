@@ -1,7 +1,6 @@
 namespace StockSharp.AlfaDirect
 {
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	/// <summary>

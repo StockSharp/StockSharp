@@ -20,6 +20,8 @@
 		{
 			base.SessionHolder = new BtceSessionHolder(TransactionIdGenerator);
 
+			TransactionAdapter = MarketDataAdapter = new BtceMessageAdapter(SessionHolder);
+
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
 		}

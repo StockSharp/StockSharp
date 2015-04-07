@@ -20,7 +20,7 @@ namespace StockSharp.Btce
 
 		private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 		{
-			var reply = Session.GetInstruments();
+			var reply = _client.GetInstruments();
 
 			foreach (var info in reply.Items.Values)
 			{
@@ -106,7 +106,7 @@ namespace StockSharp.Btce
 		{
 			if (_subscribedLevel1.Count > 0)
 			{
-				var tickerReply = Session.GetTickers(_subscribedLevel1.Cache.Select(id => id.SecurityCode.ToBtceCode()));
+				var tickerReply = _client.GetTickers(_subscribedLevel1.Cache.Select(id => id.SecurityCode.ToBtceCode()));
 
 				foreach (var ticker in tickerReply.Items.Values)
 				{
@@ -138,7 +138,7 @@ namespace StockSharp.Btce
 			{
 				foreach (var group in _subscribedDepths.CachedPairs.GroupBy(p => p.Value))
 				{
-					var depthReply = Session.GetDepths(group.Key, group.Select(p => p.Key).Select(id => id.SecurityCode.ToBtceCode()));
+					var depthReply = _client.GetDepths(group.Key, group.Select(p => p.Key).Select(id => id.SecurityCode.ToBtceCode()));
 
 					foreach (var pair in depthReply.Items)
 					{
@@ -159,7 +159,7 @@ namespace StockSharp.Btce
 
 			if (_subscribedTicks.Count > 0)
 			{
-				var tradeReply = Session.GetTrades(_tickCount, _subscribedTicks.Cache.Select(id => id.SecurityCode.ToBtceCode()));
+				var tradeReply = _client.GetTrades(_tickCount, _subscribedTicks.Cache.Select(id => id.SecurityCode.ToBtceCode()));
 
 				// меняем на глубину 50
 				_tickCount = 50;

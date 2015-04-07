@@ -30,6 +30,9 @@ namespace StockSharp.SmartCom
 	[TargetPlatform(Languages.Russian)]
 	public class SmartComSessionHolder : MessageSessionHolder
 	{
+		internal event Action VersionChanged;
+		private SmartComVersions _version;
+
 		/// <summary>
 		/// Версия SmartCOM API. По-умолчанию равна <see cref="SmartComVersions.V3"/>.
 		/// </summary>
@@ -106,24 +109,6 @@ namespace StockSharp.SmartCom
 		public string ServerSettings { get; set; }
 
 		/// <summary>
-		/// Создать транзакционный адаптер.
-		/// </summary>
-		/// <returns>Транзакционный адаптер.</returns>
-		public override IMessageAdapter CreateTransactionAdapter()
-		{
-			return new SmartComMessageAdapter(MessageAdapterTypes.Transaction, this);
-		}
-
-		/// <summary>
-		/// Создать адаптер маркет-данных.
-		/// </summary>
-		/// <returns>Адаптер маркет-данных.</returns>
-		public override IMessageAdapter CreateMarketDataAdapter()
-		{
-			return new SmartComMessageAdapter(MessageAdapterTypes.MarketData, this);
-		}
-
-		/// <summary>
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		[Browsable(false)]
@@ -148,29 +133,6 @@ namespace StockSharp.SmartCom
 			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
 		}
-
-		private ISmartComWrapper _session;
-		private SmartComVersions _version;
-
-		[Browsable(false)]
-		internal ISmartComWrapper Session
-		{
-			get { return _session; }
-			set
-			{
-				if (_session != null)
-					UnInitialize.SafeInvoke();
-
-				_session = value;
-
-				if (_session != null)
-					Initialize.SafeInvoke();
-			}
-		}
-
-		internal event Action Initialize;
-		internal event Action UnInitialize;
-		internal event Action VersionChanged;
 
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
