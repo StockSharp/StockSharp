@@ -992,7 +992,9 @@ namespace StockSharp.Algo
 
 		private void ProcessNewsMessage(Security security, NewsMessage message)
 		{
-			if (security != null || message.SecurityId.SecurityCode.IsEmpty())
+			var secId = message.SecurityId;
+
+			if (security != null || secId == null)
 			{
 				var news = _entityCache.ProcessNewsMessage(security, message);
 
@@ -1002,7 +1004,7 @@ namespace StockSharp.Algo
 					RaiseNewsChanged(news.Item1);
 			}
 			else
-				ProcessSecurityAction(message, m => m.SecurityId, ProcessNewsMessage);
+				ProcessSecurityAction(message, m => secId.Value, ProcessNewsMessage);
 		}
 
 		private void ProcessQuotesMessage(Security security, QuoteChangeMessage message)

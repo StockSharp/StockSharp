@@ -19555,12 +19555,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Session '{0}'. From server: '{1}'
+		/// Session '{0}'. Received: '{1}'
 		/// </summary>
 		public const string Str1621ParamsKey = "Str1621Params";
 
 		/// <summary>
-		/// Session '{0}'. From server: '{1}'
+		/// Session '{0}'. Received: '{1}'
 		/// </summary>
 		public static string Str1621Params
 		{
@@ -53862,6 +53862,19 @@ namespace StockSharp.Localization
 		public static string ExportSchema
 		{
 			get { return GetString(ExportSchemaKey); }
+		}
+
+		/// <summary>
+		/// Control connection lost.
+		/// </summary>
+		public const string IsControlConnectionLostKey = "IsControlConnectionLost";
+
+		/// <summary>
+		/// Control connection lost.
+		/// </summary>
+		public static string IsControlConnectionLost
+		{
+			get { return GetString(IsControlConnectionLostKey); }
 		}
 	}
 }

@@ -58,19 +58,25 @@
 				DbType = typeof(DateTimeOffset)
 			};
 			yield return new ColumnDescription("CloseTime") { DbType = typeof(DateTimeOffset) };
-			yield return CreateDecimalColumn("OpenVolume", security.VolumeStep);
-			yield return CreateDecimalColumn("CloseVolume", security.VolumeStep);
-			yield return CreateDecimalColumn("RelativeVolume", security.VolumeStep);
 			yield return CreateDecimalColumn("OpenPrice", security.PriceStep);
 			yield return CreateDecimalColumn("ClosePrice", security.PriceStep);
 			yield return CreateDecimalColumn("HighPrice", security.PriceStep);
 			yield return CreateDecimalColumn("LowPrice", security.PriceStep);
-			yield return new ColumnDescription("OpenInterest") { DbType = typeof(decimal?), ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() } };
+			yield return CreateDecimalColumn("TotalVolume", security.VolumeStep);
+			yield return new ColumnDescription("OpenInterest")
+			{
+				DbType = typeof(decimal?),
+				ValueRestriction = new DecimalRestriction { Scale = security.VolumeStep == null ? 1 : security.VolumeStep.Value.GetCachedDecimals() }
+			};
 		}
 
 		private static ColumnDescription CreateDecimalColumn(string name, decimal? step)
 		{
-			return new ColumnDescription(name) { DbType = typeof(decimal), ValueRestriction = new DecimalRestriction { Scale = (step ?? 1m).GetCachedDecimals() } };
+			return new ColumnDescription(name)
+			{
+				DbType = typeof(decimal),
+				ValueRestriction = new DecimalRestriction { Scale = (step ?? 1m).GetCachedDecimals() }
+			};
 		}
 
 		protected override IDictionary<string, object> ConvertToParameters(CandleMessage value)
@@ -83,13 +89,11 @@
 				{ "Argument", _arg.To<string>() },
 				{ "OpenTime", value.OpenTime },
 				{ "CloseTime", value.CloseTime },
-				{ "OpenVolume", value.OpenVolume },
-				{ "CloseVolume", value.CloseVolume },
-				{ "RelativeVolume", value.RelativeVolume },
 				{ "OpenPrice", value.OpenPrice },
 				{ "ClosePrice", value.ClosePrice },
 				{ "HighPrice", value.HighPrice },
 				{ "LowPrice", value.LowPrice },
+				{ "TotalVolume", value.TotalVolume },
 				{ "OpenInterest", value.OpenInterest },
 			};
 			return result;

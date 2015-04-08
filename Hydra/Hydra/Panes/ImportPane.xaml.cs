@@ -793,9 +793,9 @@ namespace StockSharp.Hydra.Panes
 									ne.Board = ExchangeBoard.GetOrCreateBoard(news.BoardCode);
 								}
 
-								if (!news.SecurityId.IsDefault())
+								if (news.SecurityId != null)
 								{
-									ne.Security = InitSecurity(news.SecurityId);
+									ne.Security = InitSecurity(news.SecurityId.Value);
 									_entityRegistry.Securities.Save(ne.Security);
 								}
 

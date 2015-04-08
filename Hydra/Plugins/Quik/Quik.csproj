@@ -120,7 +120,6 @@
 
 copy StockSharp.Quik.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.dll
 copy StockSharp.Fix.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Fix.dll
-copy QuickFix.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\QuickFix.dll
 copy ..\..\..\..\..\Connectors\Quik\Lua\StockSharp.QuikLua.dll ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.QuikLua.dll
 copy ..\..\..\..\..\Connectors\Quik\Lua\StockSharp.Quik.lua ..\..\..\..\Hydra\bin\$(ConfigurationName)\Plugins\StockSharp.Quik.lua</PostBuildEvent>
   </PropertyGroup>

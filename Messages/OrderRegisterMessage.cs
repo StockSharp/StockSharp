@@ -98,7 +98,8 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str231Key)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
 		[MainCategory]
-		public TimeInForce TimeInForce { get; set; }
+		[Nullable]
+		public TimeInForce? TimeInForce { get; set; }
 
 		/// <summary>
 		/// Информация для РЕПО\РЕПО-М заявок.

@@ -77,7 +77,14 @@
 				if (_message != null)
 					return _message;
 
-				_message = _getMessage();
+				try
+				{
+					_message = _getMessage();
+				}
+				catch (Exception ex)
+				{
+					_message = ex.ToString();
+				}
 
 				// делегат может захватить из внешнего кода лишние данные, что не будут удаляться GC
 				// в случае, если LogMessage будет храниться где-то (например, в LogControl)

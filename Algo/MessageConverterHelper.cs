@@ -51,6 +51,16 @@ namespace StockSharp.Algo
 			{ typeof(RenkoCandle), typeof(RenkoCandleMessage) },
 		};
 
+		private static readonly PairSet<MessageTypes, MarketDataTypes> _candleDataTypes = new PairSet<MessageTypes, MarketDataTypes>
+		{
+			{ MessageTypes.CandleTimeFrame, MarketDataTypes.CandleTimeFrame },
+			{ MessageTypes.CandleTick, MarketDataTypes.CandleTick },
+			{ MessageTypes.CandleVolume, MarketDataTypes.CandleVolume },
+			{ MessageTypes.CandleRange, MarketDataTypes.CandleRange },
+			{ MessageTypes.CandlePnF, MarketDataTypes.CandlePnF },
+			{ MessageTypes.CandleRenko, MarketDataTypes.CandleRenko },
+		};
+
 		/// <summary>
 		/// Преобразовать тип свечи <see cref="Candle"/> в тип сообщения <see cref="CandleMessage"/>.
 		/// </summary>
@@ -75,6 +85,26 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("messageType");
 
 			return _candleTypes.GetKey(messageType);
+		}
+
+		/// <summary>
+		/// Преобразовать тип свечек <see cref="MarketDataTypes"/> в тип сообщения <see cref="MessageTypes"/>.
+		/// </summary>
+		/// <param name="type">Тип свечек.</param>
+		/// <returns>Тип сообщения.</returns>
+		public static MessageTypes ToCandleMessageType(this MarketDataTypes type)
+		{
+			return _candleDataTypes[type];
+		}
+
+		/// <summary>
+		/// Преобразовать тип сообщения <see cref="MessageTypes"/> в тип свечек <see cref="MarketDataTypes"/>.
+		/// </summary>
+		/// <param name="type">Тип сообщения.</param>
+		/// <returns>Тип свечек.</returns>
+		public static MarketDataTypes ToCandleMarketDataType(this MessageTypes type)
+		{
+			return _candleDataTypes[type];
 		}
 
 		/// <summary>
@@ -1127,7 +1157,7 @@ namespace StockSharp.Algo
 				Id = news.Id,
 				Story = news.Story,
 				Headline = news.Headline,
-				SecurityId = news.Security == null ? default(SecurityId) : news.Security.ToSecurityId(),
+				SecurityId = news.Security == null ? (SecurityId?)null : news.Security.ToSecurityId(),
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
 			};
 		}

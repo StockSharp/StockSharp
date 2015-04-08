@@ -238,6 +238,7 @@ namespace StockSharp.InteractiveBrokers.Native
 				switch (msg.TimeInForce)
 				{
 					case TimeInForce.PutInQueue:
+					case null:
 					{
 						if (msg.TillDate == DateTimeOffset.MaxValue)
 							return socket.Send("GTC");

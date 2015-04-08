@@ -4,6 +4,7 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
@@ -11,7 +12,7 @@ namespace StockSharp.Messages
 	/// Сообщение, содержащее данные о новости.
 	/// </summary>
 	[Serializable]
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	public class NewsMessage : Message
 	{
 		/// <summary>
@@ -40,7 +41,8 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 		[DescriptionLoc(LocalizedStrings.Str212Key)]
 		[MainCategory]
-		public SecurityId SecurityId { get; set; }
+		[Nullable]
+		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
 		/// Источник новости.

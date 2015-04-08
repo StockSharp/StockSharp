@@ -211,7 +211,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Контейнер для сессии.
 		/// </summary>
-		public IMessageSessionHolder SessionHolder
+		public virtual IMessageSessionHolder SessionHolder
 		{
 			get { return _sessionHolder; }
 			protected set

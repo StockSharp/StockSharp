@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Storages
 		public OrderLogSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version49;
+			Version = MarketDataVersions.Version50;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> items, OrderLogMetaInfo metaInfo)
@@ -261,7 +261,15 @@ namespace StockSharp.Algo.Storages
 				if (metaInfo.Version < MarketDataVersions.Version33)
 					continue;
 
-				writer.WriteInt((int)item.TimeInForce);
+				if (metaInfo.Version < MarketDataVersions.Version50)
+					writer.WriteInt((int)(item.TimeInForce ?? TimeInForce.PutInQueue));
+				else
+				{
+					writer.Write(item.TimeInForce != null);
+
+					if (item.TimeInForce != null)
+						writer.WriteInt((int)item.TimeInForce.Value);
+				}
 
 				if (metaInfo.Version >= MarketDataVersions.Version49)
 				{
@@ -375,7 +383,11 @@ namespace StockSharp.Algo.Storages
 				// Лучше ExecCond писать отдельным полем так как возможно только Плаза пишет это в статус
 				if (metaInfo.Version >= MarketDataVersions.Version33)
 				{
-					execMsg.TimeInForce = (TimeInForce)reader.ReadInt();
+					if (metaInfo.Version < MarketDataVersions.Version50)
+						execMsg.TimeInForce = (TimeInForce)reader.ReadInt();
+					else
+						execMsg.TimeInForce = reader.Read() ? (TimeInForce)reader.ReadInt() : (TimeInForce?)null;
+
 					execMsg.IsSystem = metaInfo.Version < MarketDataVersions.Version49
 						? reader.Read()
 						: (reader.Read() ? reader.Read() : (bool?)null);

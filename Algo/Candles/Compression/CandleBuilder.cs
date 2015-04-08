@@ -419,8 +419,8 @@ namespace StockSharp.Algo.Candles.Compression
 			candle.ClosePrice = value.Price;
 			candle.TotalPrice += value.Price;
 
-			candle.LowVolume = candle.LowVolume.Min(value.Volume);
-			candle.HighVolume = candle.HighVolume.Max(value.Volume);
+			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
+			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
 			candle.CloseVolume = value.Volume;
 			candle.TotalVolume += value.Volume;
 
@@ -1161,8 +1161,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 			candle.TotalPrice += value.Price;
 
-			candle.LowVolume = candle.LowVolume.Min(value.Volume);
-			candle.HighVolume = candle.HighVolume.Max(value.Volume);
+			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
+			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
 			candle.CloseVolume = value.Volume;
 			candle.TotalVolume += value.Volume;
 			candle.CloseTime = value.Time;
@@ -1290,8 +1290,8 @@ namespace StockSharp.Algo.Candles.Compression
 			candle.HighPrice = Math.Max(candle.HighPrice, value.Price);
 			candle.LowPrice = Math.Min(candle.LowPrice, value.Price);
 
-			candle.HighVolume = Math.Max(candle.HighVolume, value.Volume);
-			candle.LowVolume = Math.Min(candle.LowVolume, value.Volume);
+			candle.HighVolume = Math.Max(candle.HighVolume ?? 0m, value.Volume);
+			candle.LowVolume = Math.Min(candle.LowVolume ?? 0m, value.Volume);
 
 			candle.CloseVolume = value.Volume;
 

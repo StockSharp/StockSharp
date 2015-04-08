@@ -1335,7 +1335,7 @@ namespace StockSharp.InteractiveBrokers
 					ClosePrice = close,
 					TotalVolume = volume,
 					OpenTime = time,
-					CloseVolume = barCount,
+					TotalTicks = barCount,
 					SecurityId = secId,
 					OriginalTransactionId = requestId,
 					State = CandleStates.Finished,
