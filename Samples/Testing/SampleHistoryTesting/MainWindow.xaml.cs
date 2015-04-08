@@ -251,7 +251,7 @@ namespace SampleHistoryTesting
 						return;
 
 					// отправляем данные Level1 для инструмента
-					connector.MarketDataAdapter.SendOutMessage(level1Info);
+					connector.SendOutMessage(level1Info, connector.MarketDataAdapter);
 
 					// тест подразумевает наличие стаканов
 					if (emulationInfo.UseMarketDepth)

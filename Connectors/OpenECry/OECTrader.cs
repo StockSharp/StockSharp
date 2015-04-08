@@ -29,10 +29,9 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public OECTrader()
 		{
-			TransactionAdapter = MarketDataAdapter = _adapter = new OpenECryMessageAdapter(TransactionIdGenerator);
+			_adapter = new OpenECryMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
 		}
 
 		/// <summary>

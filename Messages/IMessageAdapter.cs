@@ -19,12 +19,12 @@
 		IdGenerator TransactionIdGenerator { get; }
 
 		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
+		/// <see langword="true"/>, если адаптер используется для получения маркет-данных, иначе, <see langword="false"/>.
 		/// </summary>
 		bool IsMarketDataEnabled { get; set; }
 
 		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		/// <see langword="true"/>, если адаптер используется для отправки транзакций, иначе, <see langword="false"/>.
 		/// </summary>
 		bool IsTransactionEnabled { get; set; }
 
@@ -32,16 +32,6 @@
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
 		bool IsValid { get; }
-
-		/// <summary>
-		/// Объединять обработчики входящих сообщений для адаптеров.
-		/// </summary>
-		bool JoinInProcessors { get; }
-
-		/// <summary>
-		/// Объединять обработчики исходящих сообщений для адаптеров.
-		/// </summary>
-		bool JoinOutProcessors { get; }
 
 		/// <summary>
 		/// Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.
@@ -62,11 +52,6 @@
 		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
 		/// </summary>
 		TimeSpan MarketTimeChangedInterval { get; set; }
-
-		/// <summary>
-		/// Являются ли подключения адаптеров независимыми друг от друга.
-		/// </summary>
-		bool IsAdaptersIndependent { get; }
 
 		/// <summary>
 		/// Создавать объединенный инструмент для инструментов с разных торговых площадок.
@@ -97,22 +82,6 @@
 		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
 		/// </summary>
 		bool OrderStatusRequired { get; }
-
-		/// <summary>
-		/// Добавить <see cref="Message"/> в исходящую очередь <see cref="IMessageAdapter"/>.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		void SendOutMessage(Message message);
-
-		/// <summary>
-		/// Обработчик входящих сообщений.
-		/// </summary>
-		IMessageProcessor InMessageProcessor { get; set; }
-
-		/// <summary>
-		/// Обработчик исходящих сообщений.
-		/// </summary>
-		IMessageProcessor OutMessageProcessor { get; set; }
 
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.

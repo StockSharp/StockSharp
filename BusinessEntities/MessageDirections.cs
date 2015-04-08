@@ -1,5 +1,7 @@
-﻿namespace StockSharp.Messages
+﻿namespace StockSharp.BusinessEntities
 {
+	using StockSharp.Messages;
+
 	/// <summary>
 	/// Направления сообщений.
 	/// </summary>

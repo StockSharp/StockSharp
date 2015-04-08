@@ -43,12 +43,8 @@ namespace SpeedTest
 				var transactionAdapter = new BasketMessageAdapter(_connector.TransactionIdGenerator);
 				var marketDataAdapter = new BasketMessageAdapter(_connector.TransactionIdGenerator);
 
-				_connector.MarketDataAdapter = marketDataAdapter;
-				_connector.TransactionAdapter = transactionAdapter;
-
-				_connector.ApplyMessageProcessor(MessageDirections.In, true, false);
-				_connector.ApplyMessageProcessor(MessageDirections.In, false, true);
-				_connector.ApplyMessageProcessor(MessageDirections.Out, true, true);
+				_connector.MarketDataAdapter = marketDataAdapter.ToChannel(_connector, "MD");
+				_connector.TransactionAdapter = transactionAdapter.ToChannel(_connector, "TS");
 
 				if (QuikCheckBox.IsChecked == true)
 				{

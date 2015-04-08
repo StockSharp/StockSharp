@@ -101,7 +101,7 @@ namespace SampleRandomEmulation
 					return;
 
 				// отправляем данные Level1 для инструмента
-				_connector.MarketDataAdapter.SendOutMessage(level1Info);
+				_connector.SendOutMessage(level1Info, _connector.MarketDataAdapter);
 
 				_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
 				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });

@@ -9,6 +9,7 @@ namespace StockSharp.Algo
 	using Ecng.Net;
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
@@ -3470,6 +3471,18 @@ namespace StockSharp.Algo
 				return managedAdapter.InnerAdapter.To<T>();
 
 			throw new InvalidCastException(LocalizedStrings.Str3843.Put(adapter.GetType(), typeof(T)));
+		}
+
+		/// <summary>
+		/// Преобразовать адаптер в <see cref="ChannelMessageAdapter"/>.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		/// <param name="connector">Подключение. Используется для определения имени канала.</param>
+		/// <param name="name">Имя канала.</param>
+		/// <returns>Адаптер сообщений, пересылающий сообщения через транспортный канал <see cref="IMessageChannel"/>.</returns>
+		public static ChannelMessageAdapter ToChannel(this IMessageAdapter adapter, Connector connector, string name = null)
+		{
+			return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name ?? connector.GetType().GetDisplayName(), connector.SendOutError));
 		}
 	}
 }

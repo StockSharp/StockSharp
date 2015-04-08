@@ -87,9 +87,6 @@ namespace StockSharp.Studio.Services
 
 				_historyMessageAdapter.BasketStorage.InnerStorages.AddRange(GetExecutionStorages());
 
-				ApplyMessageProcessor(MessageDirections.In, true, true);
-				ApplyMessageProcessor(MessageDirections.Out, true, true);
-
 				this.LookupById(strategy.Security.Id);
 
 				new ChartAutoRangeCommand(true).Process(_strategy);
@@ -122,7 +119,7 @@ namespace StockSharp.Studio.Services
 				}
 
 				if (!_isHistory)
-					MarketDataAdapter.SendOutMessage(message);
+					SendOutMessage(message, MarketDataAdapter);
 			}
 
 			private void ProcessTime(DateTimeOffset time, string boardCode)
@@ -161,7 +158,7 @@ namespace StockSharp.Studio.Services
 						_historyMessageAdapter
 							.SecurityProvider
 							.LookupAll()
-							.ForEach(s => MarketDataAdapter.SendOutMessage(s.ToMessage()));
+							.ForEach(s => SendOutMessage(s.ToMessage(), MarketDataAdapter));
 
 						break;
 					}
@@ -191,7 +188,7 @@ namespace StockSharp.Studio.Services
 						messages.AddRange(_realConnector.OrderCancelFails.Select(o => o.ToMessage()));
 						messages.AddRange(_realConnector.MyTrades.Select(t => t.ToMessage()));
 
-						messages.ForEach(m => MarketDataAdapter.SendOutMessage(m));
+						messages.ForEach(m => SendOutMessage(m, MarketDataAdapter));
 
 						_isHistory = false;
 

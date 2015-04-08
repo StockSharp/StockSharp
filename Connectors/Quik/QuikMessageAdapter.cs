@@ -1,7 +1,6 @@
 namespace StockSharp.Quik
 {
 	using System;
-	using System.ComponentModel;
 
 	using Ecng.Common;
 	using Ecng.Localization;
@@ -22,24 +21,6 @@ namespace StockSharp.Quik
 			: base(transactionIdGenerator)
 		{
 			SecurityClassInfo.FillDefault();
-		}
-
-		/// <summary>
-		/// Являются ли подключения адаптеров независимыми друг от друга.
-		/// </summary>
-		[Browsable(false)]
-		public override bool IsAdaptersIndependent
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// Объединять обработчики входящих сообщений для адаптеров.
-		/// </summary>
-		[Browsable(false)]
-		public override bool JoinInProcessors
-		{
-			get { return false; }
 		}
 
 		internal Func<QuikTerminal> GetTerminal;

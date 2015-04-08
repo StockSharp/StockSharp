@@ -15,7 +15,9 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		protected BaseEmulationConnector()
 		{
-			TransactionAdapter = _adapter = new EmulationMessageAdapter(new MarketEmulator(), TransactionIdGenerator);
+			_adapter = new EmulationMessageAdapter(new MarketEmulator(), TransactionIdGenerator);
+
+			TransactionAdapter = _adapter.ToChannel(this);
 		}
 
 		/// <summary>
@@ -34,6 +36,13 @@ namespace StockSharp.Algo.Testing
 		{
 			get { return _adapter.Emulator; }
 			set { _adapter.Emulator = value; }
+		}
+
+		/// <summary>
+		/// Запустить таймер генерации с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
+		/// </summary>
+		protected override void StartMarketTimer()
+		{
 		}
 
 		/// <summary>

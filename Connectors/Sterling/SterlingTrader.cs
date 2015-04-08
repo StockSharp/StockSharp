@@ -18,11 +18,7 @@
 		{
 			var adapter = new SterlingMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = adapter;
-			MarketDataAdapter = adapter;
-
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			TransactionAdapter = MarketDataAdapter = adapter.ToChannel(this);
 		}
 
 		public void StartExport()

@@ -9,6 +9,7 @@ namespace SampleIQFeed
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
+	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.IQFeed;
 	using StockSharp.Logging;

@@ -34,11 +34,7 @@
 		{
 			_adapter = new AlfaDirectMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = _adapter;
-			MarketDataAdapter = _adapter;
-
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
 		}
 
 		/// <summary>

@@ -6,7 +6,6 @@
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с биржей BTC-e.
@@ -20,10 +19,9 @@
 		/// </summary>
 		public BtceTrader()
 		{
-			TransactionAdapter = MarketDataAdapter = _adapter = new BtceMessageAdapter(TransactionIdGenerator);
+			_adapter = new BtceMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
 		}
 
 		/// <summary>

@@ -5,8 +5,18 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Интерфейс, описывающий транспортный канал сообщений.
 	/// </summary>
-	public interface IMessageChannel
+	public interface IMessageChannel : IDisposable
 	{
+		/// <summary>
+		/// Открыть канал.
+		/// </summary>
+		void Open();
+
+		/// <summary>
+		/// Закрыть канал.
+		/// </summary>
+		void Close();
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>

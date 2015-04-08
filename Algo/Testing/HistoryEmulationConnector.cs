@@ -45,73 +45,6 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private sealed class NonThreadMessageProcessor : IMessageProcessor
-		{
-			private readonly IMessageProcessor _messageProcessor;
-			private bool _isStarted;
-
-			bool IMessageProcessor.IsStarted
-			{
-				get { return _isStarted; }
-			}
-
-			int IMessageProcessor.MessageCount
-			{
-				get { return _messageProcessor.MessageCount; }
-			}
-
-			int IMessageProcessor.MaxMessageCount
-			{
-				get { return 1; }
-				set { }
-			}
-
-			private Action<Message, IMessageAdapter> _newMessage;
-
-			event Action<Message, IMessageAdapter> IMessageProcessor.NewMessage
-			{
-				add { _newMessage += value; }
-				remove { _newMessage -= value; }
-			}
-
-			private Action _stopped;
-
-			event Action IMessageProcessor.Stopped
-			{
-				add { _stopped += value; }
-				remove { _stopped -= value; }
-			}
-
-			void IMessageProcessor.EnqueueMessage(Message message, IMessageAdapter adapter, bool force)
-			{
-				_newMessage.SafeInvoke(message, adapter);
-			}
-
-			void IMessageProcessor.Start()
-			{
-				_isStarted = true;
-			}
-
-			void IMessageProcessor.Stop()
-			{
-				_isStarted = false;
-				_stopped.SafeInvoke();
-			}
-
-			void IMessageProcessor.Clear(ClearMessageQueueMessage message)
-			{
-				_messageProcessor.Clear(message);
-			}
-
-			public NonThreadMessageProcessor(IMessageProcessor messageProcessor)
-			{
-				if (messageProcessor == null)
-					throw new ArgumentNullException("messageProcessor");
-
-				_messageProcessor = messageProcessor;
-			}
-		}
-
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int>();
 		private readonly SyncObject _suspendLock = new SyncObject();
 		
@@ -168,8 +101,8 @@ namespace StockSharp.Algo.Testing
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			_marketDataAdapter.ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true, new NonThreadMessageProcessor(TransactionAdapter.InMessageProcessor));
+			//ApplyMessageProcessor(MessageDirections.In, true, true);
+			//ApplyMessageProcessor(MessageDirections.Out, true, true, new NonThreadMessageProcessor(TransactionAdapter.InMessageProcessor));
 		}
 
 		private readonly Dictionary<Portfolio, decimal> _initialMoney;
@@ -222,7 +155,7 @@ namespace StockSharp.Algo.Testing
 				}
 				catch (Exception ex)
 				{
-					RaiseProcessDataError(ex);
+					SendOutError(ex);
 				}
 			}
 		}
@@ -481,7 +414,7 @@ namespace StockSharp.Algo.Testing
 			}
 			catch (Exception ex)
 			{
-				RaiseProcessDataError(ex);
+				SendOutError(ex);
 				SetEmulationState(EmulationStates.Stopping);
 			}
 		}
@@ -585,23 +518,22 @@ namespace StockSharp.Algo.Testing
 
 		private void SendPortfolio(Portfolio portfolio)
 		{
-			MarketDataAdapter.SendOutMessage(portfolio.ToMessage());
+			SendOutMessage(portfolio.ToMessage(), MarketDataAdapter);
 
 			var money = _initialMoney[portfolio];
 
-			MarketDataAdapter.SendOutMessage(
+			SendOutMessage(
 				_marketDataAdapter
 					.CreatePortfolioChangeMessage(portfolio.Name)
 						.Add(PositionChangeTypes.BeginValue, money)
 						.Add(PositionChangeTypes.CurrentValue, money)
-						.Add(PositionChangeTypes.BlockedValue, 0m));
+						.Add(PositionChangeTypes.BlockedValue, 0m), MarketDataAdapter);
 		}
 
 		private void SendSecurity(Security security)
 		{
-			MarketDataAdapter.SendOutMessage(security.Board.ToMessage());
-
-			MarketDataAdapter.SendOutMessage(security.ToMessage());
+			SendOutMessage(security.Board.ToMessage(), MarketDataAdapter);
+			SendOutMessage(security.ToMessage(), MarketDataAdapter);
 
 			//MarketDataAdapter.SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
 			//	.Add(Level1Fields.StepPrice, security.StepPrice)

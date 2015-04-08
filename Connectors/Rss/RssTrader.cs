@@ -50,11 +50,9 @@ namespace StockSharp.Rss
 		public RssTrader()
 		{
 			TransactionAdapter = new RssTransactionMessageAdapter(TransactionIdGenerator);
-			MarketDataAdapter = _adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
-
-			ApplyMessageProcessor(MessageDirections.In, true, false);
-			ApplyMessageProcessor(MessageDirections.In, false, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			
+			_adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
+			MarketDataAdapter = _adapter.ToChannel(this);
 		}
 
 		/// <summary>

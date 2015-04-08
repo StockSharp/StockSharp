@@ -113,12 +113,8 @@ namespace SampleQuikSmart
 					var transactionAdapter = new BasketMessageAdapter(Connector.TransactionIdGenerator);
 					var marketDataAdapter = new BasketMessageAdapter(Connector.TransactionIdGenerator);
 
-					Connector.MarketDataAdapter = marketDataAdapter;
-					Connector.TransactionAdapter = transactionAdapter;
-
-					Connector.ApplyMessageProcessor(MessageDirections.In, true, false);
-					Connector.ApplyMessageProcessor(MessageDirections.In, false, true);
-					Connector.ApplyMessageProcessor(MessageDirections.Out, true, true);
+					Connector.MarketDataAdapter = marketDataAdapter.ToChannel(Connector, "MD");
+					Connector.TransactionAdapter = transactionAdapter.ToChannel(Connector, "TS");
 
 					// добавляем подключения к SmartCOM и Quik
 					//session.InnerSessions.Add(new QuikSessionHolder(Connector.TransactionIdGenerator)

@@ -97,9 +97,6 @@ namespace StockSharp.Algo.Testing
 
 			if (_ownTrader)
 				UnderlyingConnector.Log += RaiseLog;
-
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
 		}
 
 		/// <summary>

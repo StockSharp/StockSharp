@@ -21,6 +21,7 @@
 
 	using Ookii.Dialogs.Wpf;
 
+	using StockSharp.Messages;
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Strategies;

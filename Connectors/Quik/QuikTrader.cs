@@ -61,6 +61,7 @@ namespace StockSharp.Quik
 				MarketData = FixMarketData.None,
 				UtcOffset = TimeHelper.Moscow.BaseUtcOffset
 			};
+
 			_luaMarketDataAdapter = new FixMessageAdapter(TransactionIdGenerator)
 			{
 				Login = "quik",
@@ -76,10 +77,6 @@ namespace StockSharp.Quik
 			};
 
 			IsDde = false;
-
-			ApplyMessageProcessor(MessageDirections.In, true, false);
-			ApplyMessageProcessor(MessageDirections.In, false, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
 		}
 
 		private bool _isDde;
@@ -96,13 +93,13 @@ namespace StockSharp.Quik
 
 				if (value)
 				{
-					TransactionAdapter = _trans2QuikAdapter;
-					MarketDataAdapter = _ddeAdapter;
+					TransactionAdapter = _trans2QuikAdapter.ToChannel(this);
+					MarketDataAdapter = _ddeAdapter.ToChannel(this);
 				}
 				else
 				{
-					TransactionAdapter = _luaTransactionAdapter;
-					MarketDataAdapter = _luaMarketDataAdapter;
+					TransactionAdapter = _luaTransactionAdapter.ToChannel(this);
+					MarketDataAdapter = _luaMarketDataAdapter.ToChannel(this);
 				}
 			}
 		}

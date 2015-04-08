@@ -59,13 +59,6 @@
 			}
 		}
 
-		/// <summary>
-		/// Запустить таймер генерации с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
-		/// </summary>
-		protected override void StartMarketTimer()
-		{
-		}
-
 		private DateTimeOffset _currentTime;
 
 		/// <summary>

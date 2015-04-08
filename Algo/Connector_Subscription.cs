@@ -125,7 +125,7 @@ namespace StockSharp.Algo
 				if (security == null)
 				{
 					message.Error = new ArgumentException(LocalizedStrings.Str692Params.Put(message.SecurityId, _connector.Name));
-					_connector.MarketDataAdapter.SendOutMessage(message);
+					_connector.SendOutMessage(message, _connector.MarketDataAdapter);
 				}
 				else
 				{
@@ -464,12 +464,12 @@ namespace StockSharp.Algo
 
 				if (subscribed == true)
 				{
-					_connector.MarketDataAdapter.SendOutMessage(new MarketDataMessage
+					_connector.SendOutMessage(new MarketDataMessage
 					{
 						DataType = type,
 						IsSubscribe = true,
 						//SecurityId = securityId,
-					}.FillSecurityInfo(_connector, subscriber));
+					}.FillSecurityInfo(_connector, subscriber), _connector.MarketDataAdapter);
 				}
 			}
 
@@ -712,11 +712,11 @@ namespace StockSharp.Algo
 		{
 			// при подписке на отфильтрованный стакан необходимо заполнить его
 			// первоначальное состояние в пототке обработки всех остальных сообщений
-			MarketDataAdapter.SendOutMessage(new MarketDataMessage
+			SendOutMessage(new MarketDataMessage
 			{
 				IsSubscribe = true,
 				DataType = _filteredMarketDepth
-			}.FillSecurityInfo(this, security));	
+			}.FillSecurityInfo(this, security), MarketDataAdapter);	
 		}
 
 		/// <summary>
@@ -730,11 +730,11 @@ namespace StockSharp.Algo
 
 		private void OnUnRegisterFilteredMarketDepth(Security security)
 		{
-			MarketDataAdapter.SendOutMessage(new MarketDataMessage
+			SendOutMessage(new MarketDataMessage
 			{
 				IsSubscribe = false,
 				DataType = _filteredMarketDepth
-			}.FillSecurityInfo(this, security));
+			}.FillSecurityInfo(this, security), MarketDataAdapter);
 		}
 
 		/// <summary>
@@ -930,6 +930,8 @@ namespace StockSharp.Algo
 				return;
 			}
 
+			TryOpenChannel();
+
 			ExportState = ConnectionStates.Connecting;
 			RaiseNewDataExported();
 
@@ -943,7 +945,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnStartExport()
 		{
-			if (TransactionAdapter == MarketDataAdapter && ConnectionState == ConnectionStates.Connected)
+			if (!IsMarketDataIndependent && ConnectionState == ConnectionStates.Connected)
 			{
 				RaiseExportStarted();
 				return;

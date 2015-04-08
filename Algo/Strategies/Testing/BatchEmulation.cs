@@ -21,64 +21,6 @@
 	/// </summary>
 	public class BatchEmulation
 	{
-		private sealed class NonThreadMessageProcessor : IMessageProcessor
-		{
-			private bool _isStarted;
-
-			bool IMessageProcessor.IsStarted
-			{
-				get { return _isStarted; }
-			}
-
-			int IMessageProcessor.MessageCount
-			{
-				get { return 0; }
-			}
-
-			int IMessageProcessor.MaxMessageCount
-			{
-				get { return 1; }
-				set { }
-			}
-
-			private Action<Message, IMessageAdapter> _newMessage;
-
-			event Action<Message, IMessageAdapter> IMessageProcessor.NewMessage
-			{
-				add { _newMessage += value; }
-				remove { _newMessage -= value; }
-			}
-
-			private Action _stopped;
-
-			event Action IMessageProcessor.Stopped
-			{
-				add { _stopped += value; }
-				remove { _stopped -= value; }
-			}
-
-			void IMessageProcessor.EnqueueMessage(Message message, IMessageAdapter adapter, bool force)
-			{
-				_newMessage.SafeInvoke(message, adapter);
-			}
-
-			void IMessageProcessor.Start()
-			{
-				_isStarted = true;
-			}
-
-			void IMessageProcessor.Stop()
-			{
-				_isStarted = false;
-				_stopped.SafeInvoke();
-			}
-
-			void IMessageProcessor.Clear(ClearMessageQueueMessage message)
-			{
-				throw new NotImplementedException();
-			}
-		}
-
 		private sealed class BasketEmulationAdapter : BasketMessageAdapter
 		{
 			private readonly EmulationSettings _settings;
@@ -200,9 +142,6 @@
 
 			private void ApplySettings(EmulationMessageAdapter adapter, IncrementalIdGenerator tradeIdGenerator, IncrementalIdGenerator orderIdGenerator)
 			{
-				adapter.InMessageProcessor = new NonThreadMessageProcessor();
-				adapter.OutMessageProcessor = new NonThreadMessageProcessor();
-
 				adapter.Emulator.Settings.Load(_settings.Save());
 				((MarketEmulator)adapter.Emulator).TradeIdGenerator = tradeIdGenerator;
 				((MarketEmulator)adapter.Emulator).OrderIdGenerator = orderIdGenerator;
@@ -216,10 +155,6 @@
 					return;
 
 				base.SendOutMessage(message);
-			}
-
-			protected override void StartMarketTimer()
-			{
 			}
 		}
 
@@ -366,10 +301,7 @@
 
 			//_basketSessionHolder = new HistoryBasketSessionHolder(EmulationConnector.TransactionIdGenerator);
 
-			EmulationConnector.TransactionAdapter = new BasketEmulationAdapter(EmulationConnector.TransactionIdGenerator, EmulationSettings)
-			{
-				OutMessageProcessor = new NonThreadMessageProcessor()
-			};
+			EmulationConnector.TransactionAdapter = new BasketEmulationAdapter(EmulationConnector.TransactionIdGenerator, EmulationSettings);
 
 			EmulationConnector.StateChanged += EmulationConnectorOnStateChanged;
 			EmulationConnector.MarketTimeChanged += EmulationConnectorOnMarketTimeChanged;

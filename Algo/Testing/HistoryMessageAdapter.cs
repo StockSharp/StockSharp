@@ -25,7 +25,7 @@ namespace StockSharp.Algo.Testing
 		private readonly CachedSynchronizedDictionary<SecurityId, OrderLogGenerator> _orderLogGenerators = new CachedSynchronizedDictionary<SecurityId, OrderLogGenerator>();
 
 		private readonly BasketMarketDataStorage<Message> _basketStorage = new BasketMarketDataStorage<Message>();
-		private readonly SyncObject _syncRoot = new SyncObject();
+		//private readonly SyncObject _syncRoot = new SyncObject();
 
 		private Thread _loadingThread;
 		private bool _running;
@@ -204,28 +204,21 @@ namespace StockSharp.Algo.Testing
 			base.DisposeManaged();
 		}
 
-		/// <summary>
-		/// Запустить таймер генерации с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
-		/// </summary>
-		protected override void StartMarketTimer()
-		{
-		}
+		///// <summary>
+		///// Метод обработки исходящих сообщений.
+		///// </summary>
+		///// <param name="message">Сообщение.</param>
+		///// <param name="adapter">Адаптер.</param>
+		//protected override void OnOutMessageProcessor(Message message, IMessageAdapter adapter)
+		//{
+		//	base.OnOutMessageProcessor(message, adapter);
 
-		/// <summary>
-		/// Метод обработки исходящих сообщений.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер.</param>
-		protected override void OnOutMessageProcessor(Message message, IMessageAdapter adapter)
-		{
-			base.OnOutMessageProcessor(message, adapter);
-
-			lock (_syncRoot)
-			{
-				if (_running && OutMessageProcessor.MessageCount < MaxMessageCount)
-					_syncRoot.Pulse();
-			}
-		}
+		//	lock (_syncRoot)
+		//	{
+		//		if (_running && OutMessageProcessor.MessageCount < MaxMessageCount)
+		//			_syncRoot.Pulse();
+		//	}
+		//}
 
 		/// <summary>
 		/// Отправить сообщение.
@@ -272,7 +265,7 @@ namespace StockSharp.Algo.Testing
 					{
 						// DisconnectMessage должен быть отправлен самым последним
 						_disconnecting = true;
-						_syncRoot.Pulse();
+						//_syncRoot.Pulse();
 					}
 
 					return;
@@ -553,11 +546,11 @@ namespace StockSharp.Algo.Testing
 				LoadedEventCount++;
 				SendOutMessage(msg);
 
-				lock (_syncRoot)
-				{
-					if (OutMessageProcessor.MessageCount > MaxMessageCount)
-						_syncRoot.Wait();
-				}
+				//lock (_syncRoot)
+				//{
+				//	if (OutMessageProcessor.MessageCount > MaxMessageCount)
+				//		_syncRoot.Wait();
+				//}
 			}
 		}
 

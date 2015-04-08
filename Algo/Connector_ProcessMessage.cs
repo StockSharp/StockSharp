@@ -14,13 +14,8 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
-		private readonly CachedSynchronizedDictionary<IMessageProcessor, ISmartPointer> _processorPointers = new CachedSynchronizedDictionary<IMessageProcessor, ISmartPointer>();
-		//private readonly CachedSynchronizedDictionary<IMessageSessionHolder, ISmartPointer> _sessionHolderPointers = new CachedSynchronizedDictionary<IMessageSessionHolder, ISmartPointer>();
-
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
-
-		private bool _joinIn;
-		private bool _joinOut;
+		private readonly InMemoryMessageChannel _outMessageChannel;
 
 		private bool _isDisposing;
 
@@ -37,42 +32,25 @@ namespace StockSharp.Algo
 			return false;
 		}
 
-		//private void IncRefSession(IMessageAdapter adapter)
-		//{
-		//	if (adapter == null)
-		//		throw new ArgumentNullException("adapter");
+		/// <summary>
+		/// Отправить сообщение в исходящую очередь.
+		/// </summary>
+		/// <param name="message">Сообщение.</param>
+		/// <param name="adapter">Адаптер.</param>
+		public void SendOutMessage(Message message, IMessageAdapter adapter)
+		{
+			_outMessageChannel.SendInMessage(message, adapter);
+		}
 
-		//	_sessionHolderPointers.SafeAdd(adapter.SessionHolder, key =>
-		//	{
-		//		if (key.Parent == null)
-		//			key.Parent = this;
+		/// <summary>
+		/// Отправить ошибку в исходящую очередь.
+		/// </summary>
+		/// <param name="error">Описание ошибки.</param>
+		public void SendOutError(Exception error)
+		{
+			_outMessageChannel.SendInMessage(new ErrorMessage { Error = error }, TransactionAdapter ?? MarketDataAdapter);
+		}
 
-		//		return new SmartPointer<IMessageSessionHolder>(key, h =>
-		//		{
-		//			if (!_isDisposing)
-		//				return;
-
-		//			if (h.Parent == this)
-		//				h.Parent = null;
-
-		//			_sessionHolderPointers.Remove(h);
-
-		//			h.Dispose();
-		//		});
-		//	});
-		//}
-
-		//private void DecRefSession(IMessageAdapter adapter)
-		//{
-		//	if (adapter == null)
-		//		throw new ArgumentNullException("adapter");
-
-		//	var pointer = _sessionHolderPointers.TryGetValue(adapter.SessionHolder);
-		//	if (pointer != null)
-		//		pointer.DecRef();
-		//}
-
-		private readonly SyncObject _transactionAdapterSync = new SyncObject();
 		private IMessageAdapter _transactionAdapter;
 
 		/// <summary>
@@ -83,43 +61,28 @@ namespace StockSharp.Algo
 			get { return _transactionAdapter; }
 			set
 			{
-				lock (_transactionAdapterSync)
+				if (_transactionAdapter == value)
+					return;
+
+				if (_transactionAdapter != null)
 				{
-					if (_transactionAdapter == value)
-						return;
+					var managedAdapter = _transactionAdapter as ManagedMessageAdapter;
+					if (managedAdapter != null && MarketDataAdapter != null)
+						MarketDataAdapter.NewOutMessage -= managedAdapter.ProcessMessage;
 
-					if (_transactionAdapter != null)
-					{
-						var managedAdapter = _transactionAdapter as ManagedMessageAdapter;
-						if (managedAdapter != null && MarketDataAdapter != null)
-							MarketDataAdapter.NewOutMessage -= managedAdapter.ProcessMessage;
+					_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
+					_transactionAdapter.Dispose();
 
-						_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
-						_transactionAdapter.Dispose();
+					ReConnectionSettings.ConnectionSettings.AdapterSettings = new MessageAdapterReConnectionSettings();
+				}
 
-						ReConnectionSettings.ConnectionSettings.AdapterSettings = new MessageAdapterReConnectionSettings();
+				_transactionAdapter = value;
 
-						//DecRefSession(_transactionAdapter);
+				if (_transactionAdapter == null)
+					return;
 
-						if (_transactionAdapter.InMessageProcessor != null)
-						{
-							DecRefProcessor(_transactionAdapter.InMessageProcessor);
-							_transactionAdapter.InMessageProcessor = null;
-						}
-
-						if (_transactionAdapter.OutMessageProcessor != null)
-						{
-							DecRefProcessor(_transactionAdapter.OutMessageProcessor);
-							_transactionAdapter.OutMessageProcessor = null;
-						}
-					}
-
-					_transactionAdapter = value;
-					TrySetMarketDataIndependent();
-
-					if (_transactionAdapter == null)
-						return;
-
+				if (IsMarketDataIndependent)
+				{
 					if (CalculateMessages)
 					{
 						var managedAdapter = new ManagedMessageAdapter(value);
@@ -130,24 +93,16 @@ namespace StockSharp.Algo
 						_transactionAdapter = managedAdapter;
 					}
 
-					//IncRefSession(_transactionAdapter);
-
 					_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
-
-					if (_joinIn)
-						TransactionAdapter.InMessageProcessor = MarketDataAdapter.InMessageProcessor;
-
-					if (_joinOut)
-						TransactionAdapter.OutMessageProcessor = MarketDataAdapter.OutMessageProcessor;
-
-					ReConnectionSettings.ConnectionSettings.AdapterSettings = TransactionAdapter.ReConnectionSettings;
 				}
+				
+				ReConnectionSettings.ConnectionSettings.AdapterSettings = TransactionAdapter.ReConnectionSettings;
 			}
 		}
 
 		private void TransactionAdapterOnNewOutMessage(Message message)
 		{
-			OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
+			SendOutMessage(message, TransactionAdapter);
 
 			if (IsDisposeAdapters(message))
 				TransactionAdapter = null;
@@ -180,40 +135,22 @@ namespace StockSharp.Algo
 						_marketDataAdapter.Dispose();
 
 						ReConnectionSettings.ExportSettings.AdapterSettings = new MessageAdapterReConnectionSettings();
-
-						//DecRefSession(_marketDataAdapter);
-
-						if (_marketDataAdapter.InMessageProcessor != null)
-						{
-							DecRefProcessor(_marketDataAdapter.InMessageProcessor);
-							_marketDataAdapter.InMessageProcessor = null;
-						}
-
-						if (_marketDataAdapter.OutMessageProcessor != null)
-						{
-							DecRefProcessor(_marketDataAdapter.OutMessageProcessor);
-							_marketDataAdapter.OutMessageProcessor = null;
-						}
 					}
 
 					_marketDataAdapter = value;
-					TrySetMarketDataIndependent();
 
 					if (_marketDataAdapter == null)
 						return;
 
-					if (mangedAdapter != null)
-						_marketDataAdapter.NewOutMessage += mangedAdapter.ProcessMessage;
+					if (IsMarketDataIndependent)
+					{
+						if (mangedAdapter != null)
+							_marketDataAdapter.NewOutMessage += mangedAdapter.ProcessMessage;
 
-					//IncRefSession(_marketDataAdapter);
+						//IncRefSession(_marketDataAdapter);
 
-					_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;
-
-					if (_joinIn)
-						MarketDataAdapter.InMessageProcessor = TransactionAdapter.InMessageProcessor;
-
-					if (_joinOut)
-						MarketDataAdapter.OutMessageProcessor = TransactionAdapter.OutMessageProcessor;
+						_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;	
+					}
 
 					ReConnectionSettings.ExportSettings.AdapterSettings = MarketDataAdapter.ReConnectionSettings;
 				}
@@ -222,109 +159,101 @@ namespace StockSharp.Algo
 
 		private void MarketDataAdapterOnNewOutMessage(Message message)
 		{
-			OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
+			SendOutMessage(message, MarketDataAdapter);
 
 			if (IsDisposeAdapters(message))
 				MarketDataAdapter = null;
 		}
 
-		private void DecRefProcessor(IMessageProcessor processor)
-		{
-			var ptr = _processorPointers.TryGetValue(processor);
+		///// <summary>
+		///// Проинициализировать обработчик сообщений для адаптеров <see cref="TransactionAdapter"/> и <see cref="MarketDataAdapter"/>.
+		///// </summary>
+		///// <param name="direction">Направление, определяющее тип обработчика.</param>
+		///// <param name="isTransaction">Нужно ли проинициализировать <see cref="TransactionAdapter"/>.</param>
+		///// <param name="isMarketData">Нужно ли проинициализировать <see cref="MarketDataAdapter"/>.</param>
+		///// <param name="defaultProcessor">Обработчик сообщений по-умолчанию. Если не задан, то будет создан автоматически.</param>
+		//public void ApplyMessageProcessor(MessageDirections direction, bool isTransaction, bool isMarketData, IMessageProcessor defaultProcessor = null)
+		//{
+		//	var processor = new MessageProcessorPool(defaultProcessor ?? new MessageProcessor("Processor '{0}' ({1})".Put(GetType().Name.Replace("Trader", string.Empty), direction), RaiseProcessDataError));
+		//	ISmartPointer pointer = new SmartPointer<IMessageProcessor>(processor, p =>
+		//	{
+		//		if (!_isDisposing)
+		//			return;
 
-			if (ptr != null)
-				ptr.DecRef();
-		}
+		//		p.Stop();
+		//		_processorPointers.Remove(p);
+		//	});
 
-		/// <summary>
-		/// Проинициализировать обработчик сообщений для адаптеров <see cref="TransactionAdapter"/> и <see cref="MarketDataAdapter"/>.
-		/// </summary>
-		/// <param name="direction">Направление, определяющее тип обработчика.</param>
-		/// <param name="isTransaction">Нужно ли проинициализировать <see cref="TransactionAdapter"/>.</param>
-		/// <param name="isMarketData">Нужно ли проинициализировать <see cref="MarketDataAdapter"/>.</param>
-		/// <param name="defaultProcessor">Обработчик сообщений по-умолчанию. Если не задан, то будет создан автоматически.</param>
-		public void ApplyMessageProcessor(MessageDirections direction, bool isTransaction, bool isMarketData, IMessageProcessor defaultProcessor = null)
-		{
-			var processor = new MessageProcessorPool(defaultProcessor ?? new MessageProcessor("Processor '{0}' ({1})".Put(GetType().Name.Replace("Trader", string.Empty), direction), RaiseProcessDataError));
-			ISmartPointer pointer = new SmartPointer<IMessageProcessor>(processor, p =>
-			{
-				if (!_isDisposing)
-					return;
+		//	_processorPointers[processor] = pointer;
 
-				p.Stop();
-				_processorPointers.Remove(p);
-			});
+		//	switch (direction)
+		//	{
+		//		case MessageDirections.In:
+		//			_joinIn = true;
 
-			_processorPointers[processor] = pointer;
+		//			if (isTransaction)
+		//			{
+		//				if (TransactionAdapter.InMessageProcessor != null)
+		//				{
+		//					DecRefProcessor(TransactionAdapter.InMessageProcessor);
+		//					TransactionAdapter.InMessageProcessor = null;
+		//				}
 
-			switch (direction)
-			{
-				case MessageDirections.In:
-					_joinIn = true;
+		//				pointer.IncRef();
+		//				TransactionAdapter.InMessageProcessor = processor;
+		//			}
 
-					if (isTransaction)
-					{
-						if (TransactionAdapter.InMessageProcessor != null)
-						{
-							DecRefProcessor(TransactionAdapter.InMessageProcessor);
-							TransactionAdapter.InMessageProcessor = null;
-						}
+		//			if (isMarketData)
+		//			{
+		//				if (MarketDataAdapter.InMessageProcessor != null)
+		//				{
+		//					DecRefProcessor(MarketDataAdapter.InMessageProcessor);
+		//					MarketDataAdapter.InMessageProcessor = null;
+		//				}
 
-						pointer.IncRef();
-						TransactionAdapter.InMessageProcessor = processor;
-					}
+		//				pointer.IncRef();
+		//				MarketDataAdapter.InMessageProcessor = processor;
+		//			}
 
-					if (isMarketData)
-					{
-						if (MarketDataAdapter.InMessageProcessor != null)
-						{
-							DecRefProcessor(MarketDataAdapter.InMessageProcessor);
-							MarketDataAdapter.InMessageProcessor = null;
-						}
+		//			break;
+		//		case MessageDirections.Out:
+		//			_joinOut = true;
 
-						pointer.IncRef();
-						MarketDataAdapter.InMessageProcessor = processor;
-					}
+		//			if (isTransaction)
+		//			{
+		//				if (TransactionAdapter.OutMessageProcessor != null)
+		//				{
+		//					DecRefProcessor(TransactionAdapter.OutMessageProcessor);
+		//					TransactionAdapter.OutMessageProcessor = null;
+		//				}
 
-					break;
-				case MessageDirections.Out:
-					_joinOut = true;
+		//				pointer.IncRef();
+		//				TransactionAdapter.OutMessageProcessor = processor;
+		//			}
 
-					if (isTransaction)
-					{
-						if (TransactionAdapter.OutMessageProcessor != null)
-						{
-							DecRefProcessor(TransactionAdapter.OutMessageProcessor);
-							TransactionAdapter.OutMessageProcessor = null;
-						}
+		//			if (isMarketData)
+		//			{
+		//				if (MarketDataAdapter.OutMessageProcessor != null)
+		//				{
+		//					DecRefProcessor(MarketDataAdapter.OutMessageProcessor);
+		//					MarketDataAdapter.OutMessageProcessor = null;
+		//				}
 
-						pointer.IncRef();
-						TransactionAdapter.OutMessageProcessor = processor;
-					}
+		//				pointer.IncRef();
+		//				MarketDataAdapter.OutMessageProcessor = processor;
+		//			}
 
-					if (isMarketData)
-					{
-						if (MarketDataAdapter.OutMessageProcessor != null)
-						{
-							DecRefProcessor(MarketDataAdapter.OutMessageProcessor);
-							MarketDataAdapter.OutMessageProcessor = null;
-						}
-
-						pointer.IncRef();
-						MarketDataAdapter.OutMessageProcessor = processor;
-					}
-
-					break;
-				default:
-					_processorPointers.Remove(processor);
-					throw new ArgumentOutOfRangeException("direction");
-			}
-		}
+		//			break;
+		//		default:
+		//			_processorPointers.Remove(processor);
+		//			throw new ArgumentOutOfRangeException("direction");
+		//	}
+		//}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// Обработать сообщение.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		/// <param name="message">Сообщение.</param>
 		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
 		protected virtual void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
@@ -441,7 +370,7 @@ namespace StockSharp.Algo
 					{
 						var lookupMsg = (SecurityLookupMessage)message;
 						_securityLookups.Add(lookupMsg.TransactionId, (SecurityLookupMessage)lookupMsg.Clone());
-						MarketDataAdapter.SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+						SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId }, MarketDataAdapter);
 						break;
 					}
 
@@ -638,7 +567,6 @@ namespace StockSharp.Algo
 				
 				if (adapter.SecurityLookupRequired)
 					adapter.SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-
 			}
 			else
 				throw new ArgumentOutOfRangeException("adapter");
@@ -895,7 +823,7 @@ namespace StockSharp.Algo
 				else
 				{
 					_securityLookups.Add(nextCriteria.TransactionId, (SecurityLookupMessage)nextCriteria.Clone());
-					MarketDataAdapter.SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = nextCriteria.TransactionId });
+					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = nextCriteria.TransactionId }, MarketDataAdapter);
 				}
 			}
 		}

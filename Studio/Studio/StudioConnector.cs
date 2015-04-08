@@ -373,12 +373,11 @@ namespace StockSharp.Studio
 		{
 			EntityFactory = new StudioEntityFactory(this);
 
-			MarketDataAdapter = _marketDataAdapter = new StudioMarketDataAdapter(TransactionIdGenerator);
-			TransactionAdapter = _transactionAdapter = new BasketMessageAdapter(TransactionIdGenerator);
+			_marketDataAdapter = new StudioMarketDataAdapter(TransactionIdGenerator);
+			_transactionAdapter = new BasketMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, false);
-			ApplyMessageProcessor(MessageDirections.In, false, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			MarketDataAdapter = _marketDataAdapter.ToChannel(this, "MD");
+			TransactionAdapter = _transactionAdapter.ToChannel(this, "TS");
 
 			_transactionAdapter.NewOutMessage += TransactionAdapterNewOutMessage;
 
@@ -678,11 +677,8 @@ namespace StockSharp.Studio
 		{
 			EntityFactory = new StudioConnectorEntityFactory();
 
-			MarketDataAdapter = _adapter = new PassThroughMessageAdapter(TransactionIdGenerator);
-			TransactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator);
-
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			_adapter = new PassThroughMessageAdapter(TransactionIdGenerator);
+			MarketDataAdapter = TransactionAdapter = _adapter.ToChannel(this);
 
 			_entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
 			_entityRegistry.Securities.Added += s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s)));

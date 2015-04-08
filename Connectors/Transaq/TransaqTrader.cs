@@ -31,11 +31,7 @@ namespace StockSharp.Transaq
 		{
 			_adapter = new TransaqMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = _adapter;
-			MarketDataAdapter = _adapter;
-
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
 		}
 
 		/// <summary>
@@ -174,10 +170,7 @@ namespace StockSharp.Transaq
 
 			if (_candleSeries.Values.Contains(series))
 			{
-				MarketDataAdapter.SendOutMessage(new ErrorMessage
-				{
-					Error = new InvalidOperationException(LocalizedStrings.Str3568Params.Put(series))
-				});
+				SendOutError(new InvalidOperationException(LocalizedStrings.Str3568Params.Put(series)));
 				return;
 			}
 

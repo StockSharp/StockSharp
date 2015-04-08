@@ -476,7 +476,7 @@ namespace StockSharp.Algo
 		/// Вызвать событие <see cref="ProcessDataError"/>.
 		/// </summary>
 		/// <param name="exception">Ошибка обработки данных.</param>
-		protected void RaiseProcessDataError(Exception exception)
+		private void RaiseProcessDataError(Exception exception)
 		{
 			if (exception == null)
 				throw new ArgumentNullException("exception");

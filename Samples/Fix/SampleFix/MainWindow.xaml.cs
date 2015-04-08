@@ -4,8 +4,6 @@ namespace SampleFix
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
-	using System.Net;
-	using System.Security;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -14,6 +12,7 @@ namespace SampleFix
 
 	using MoreLinq;
 
+	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Fix;
 	using StockSharp.Logging;

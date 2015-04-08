@@ -12,6 +12,7 @@ namespace SampleRithmic
 
 	using Ookii.Dialogs.Wpf;
 
+	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Rithmic;
 	using StockSharp.Logging;

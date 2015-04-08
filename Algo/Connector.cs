@@ -3,6 +3,7 @@ namespace StockSharp.Algo
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -189,6 +190,13 @@ namespace StockSharp.Algo
 
 		private readonly ISecurityProvider _securityProvider;
 
+		private bool _isChannelOpened;
+
+		private Timer _marketTimeChangedTimer;
+		private readonly SyncObject _timeSync = new SyncObject();
+		private bool _canSendTimeIn;
+		private DateTime _heartbeatPrevTime;
+
 		/// <summary>
 		/// Создать <see cref="Connector"/>.
 		/// </summary>
@@ -204,6 +212,14 @@ namespace StockSharp.Algo
 
 			_securityProvider = new ConnectorSecurityProvider(this);
 			SlippageManager = new SlippageManager();
+
+			_outMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseProcessDataError);
+			_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
+		}
+
+		private void OutMessageChannelOnNewOutMessage(Message message, IMessageAdapter adapter)
+		{
+			OnProcessMessage(message, adapter, MessageDirections.Out);
 		}
 
 		//private IMessageSessionHolder _sessionHolder;
@@ -226,20 +242,23 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Является ли подключение <see cref="MarketDataAdapter"/> незавимыми от <see cref="TransactionAdapter"/>.
 		/// </summary>
-		public bool IsMarketDataIndependent { get; private set; }
-
-		private void TrySetMarketDataIndependent()
+		public bool IsMarketDataIndependent
 		{
-			IsMarketDataIndependent = TransactionAdapter == null || MarketDataAdapter == null;
-
-			if (IsMarketDataIndependent)
-				return;
-
-			IsMarketDataIndependent = TransactionAdapter.GetType() != MarketDataAdapter.GetType();
-
-			if (!IsMarketDataIndependent)
-				IsMarketDataIndependent = TransactionAdapter.IsAdaptersIndependent;
+			get { return TransactionAdapter != MarketDataAdapter; }
 		}
+
+		//private void TrySetMarketDataIndependent()
+		//{
+		//	IsMarketDataIndependent = TransactionAdapter == null || MarketDataAdapter == null;
+
+		//	if (IsMarketDataIndependent)
+		//		return;
+
+		//	IsMarketDataIndependent = TransactionAdapter.GetType() != MarketDataAdapter.GetType();
+
+		//	if (!IsMarketDataIndependent)
+		//		IsMarketDataIndependent = TransactionAdapter.IsAdaptersIndependent;
+		//}
 
 		/// <summary>
 		/// Настройки контроля подключения <see cref="IConnector"/> к торговой системе.
@@ -571,6 +590,15 @@ namespace StockSharp.Algo
 		///// </summary>
 		//public TimeSpan? TimeShift { get; private set; }
 
+		private void TryOpenChannel()
+		{
+			if (_isChannelOpened)
+				return;
+
+			_outMessageChannel.Open();
+			_isChannelOpened = true;
+		}
+
 		/// <summary>
 		/// Подключиться к торговой системе.
 		/// </summary>
@@ -588,6 +616,8 @@ namespace StockSharp.Algo
 
 				ConnectionState = ConnectionStates.Connecting;
 
+				TryOpenChannel();
+
 				//_reConnectionManager.Connect();
 				OnConnect();
 			}
@@ -602,7 +632,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnConnect()
 		{
-			if (TransactionAdapter == MarketDataAdapter && ExportState == ConnectionStates.Connected)
+			if (!IsMarketDataIndependent && ExportState == ConnectionStates.Connected)
 			{
 				RaiseConnected();
 				return;
@@ -721,7 +751,7 @@ namespace StockSharp.Algo
 			if (!NeedLookupSecurities(criteria.SecurityId))
 			{
 				_securityLookups.Add(criteria.TransactionId, (SecurityLookupMessage)criteria.Clone());
-				MarketDataAdapter.SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = criteria.TransactionId });
+				SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = criteria.TransactionId }, MarketDataAdapter);
 				return;
 			}
 
@@ -1082,12 +1112,12 @@ namespace StockSharp.Algo
 
 		private void SendOrderFailed(Order order, Exception error)
 		{
-			TransactionAdapter.SendOutMessage(new OrderFail
+			SendOutMessage(new OrderFail
 			{
 				Order = order,
 				Error = error,
 				ServerTime = CurrentTime,
-			}.ToMessage());
+			}.ToMessage(), TransactionAdapter);
 		}
 
 		/// <summary>
@@ -1102,7 +1132,7 @@ namespace StockSharp.Algo
 				throw new ArgumentException(LocalizedStrings.Str1101Params.Put(order.TransactionId));
 
 			//RaiseNewOrder(order);
-			TransactionAdapter.SendOutMessage(order.ToMessage());
+			SendOutMessage(order.ToMessage(), TransactionAdapter);
 		}
 
 		/// <summary>
@@ -1477,6 +1507,85 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Запустить таймер генерации с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
+		/// </summary>
+		protected virtual void StartMarketTimer()
+		{
+			if (null != _marketTimeChangedTimer)
+				return;
+
+			//_marketTimeChangedTimer = ThreadingHelper
+			//	.Timer(() =>
+			//	{
+			//		var time = CurrentTime;
+
+			//		//if (Type == MessageAdapterTypes.MarketData)
+			//		//{
+			//		// TimeMsg нужен для оповещения внешнего кода о живом адаптере (или для изменения текущего времени)
+			//		// Поэтому когда в очереди есть другие сообщения нет смысла добавлять еще и TimeMsg
+			//		if (_outMessageChannel.MessageCount == 0)
+			//		{
+			//			SendOutMessage(new TimeMessage(), MarketDataAdapter);
+
+			//			if (IsMarketDataIndependent)
+			//				SendOutMessage(new TimeMessage(), TransactionAdapter);
+			//		}
+			//		//}
+
+			//		TimeMessage timeMsg;
+
+			//		lock (_timeSync)
+			//		{
+			//			if (_currState != ConnectionStates.Connected)
+			//				return;
+
+			//			if (CanSendTimeMessage)
+			//			{
+			//				// TimeMsg нужно отправлять в очередь, если предыдущее сообщение было обработано.
+			//				// Иначе, из-за медленной обработки, кол-во TimeMsg может вырасти до большого значения.
+
+			//				if (!_canSendTimeIn)
+			//					return;
+
+			//				_canSendTimeIn = false;
+
+			//				timeMsg = new TimeMessage();
+			//			}
+			//			else
+			//			{
+			//				if (_heartbeatPrevTime.IsDefault())
+			//				{
+			//					_heartbeatPrevTime = time.LocalDateTime;
+			//					return;
+			//				}
+
+			//				if ((time - _heartbeatPrevTime) < HeartbeatInterval)
+			//					return;
+
+			//				timeMsg = new TimeMessage { TransactionId = TransactionIdGenerator.GetNextId().To<string>() };
+
+			//				_heartbeatPrevTime = time.LocalDateTime;
+			//			}
+			//		}
+
+			//		SendInMessage(timeMsg);
+			//	})
+			//	.Interval(TransactionAdapter.MarketTimeChangedInterval.Min(MarketDataAdapter.MarketTimeChangedInterval));
+		}
+
+		/// <summary>
+		/// Остановить таймер, запущенный ранее через <see cref="StartMarketTimer"/>.
+		/// </summary>
+		protected void StopMarketTimer()
+		{
+			if (null == _marketTimeChangedTimer)
+				return;
+
+			_marketTimeChangedTimer.Dispose();
+			_marketTimeChangedTimer = null;
+		}
+
+		/// <summary>
 		/// Освободить занятые ресурсы. В частности, отключиться от торговой системы через <see cref="Disconnect"/>.
 		/// </summary>
 		protected override void DisposeManaged()
@@ -1539,14 +1648,14 @@ namespace StockSharp.Algo
 
 			_connectorStat.Remove(this);
 
-			lock (_processorPointers.SyncRoot)
-			{
-				_processorPointers.CachedValues.ForEach(p =>
-				{
-					if (p.Counter == 0)
-						p.Dispose();
-				});
-			}
+			//lock (_processorPointers.SyncRoot)
+			//{
+			//	_processorPointers.CachedValues.ForEach(p =>
+			//	{
+			//		if (p.Counter == 0)
+			//			p.Dispose();
+			//	});
+			//}
 
 			//lock (_sessionHolderPointers.SyncRoot)
 			//{

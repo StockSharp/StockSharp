@@ -52,15 +52,6 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Объединять обработчики входящих сообщений для адаптеров.
-		/// </summary>
-		[Browsable(false)]
-		public override bool JoinInProcessors
-		{
-			get { return false; }
-		}
-
-		/// <summary>
 		/// Сохранить настройки.
 		/// </summary>
 		/// <param name="storage">Хранилище настроек.</param>

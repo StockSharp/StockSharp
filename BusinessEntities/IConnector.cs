@@ -9,37 +9,6 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Состояния подключений.
-	/// </summary>
-	public enum ConnectionStates
-	{
-		/// <summary>
-		/// Не активно.
-		/// </summary>
-		Disconnected,
-
-		/// <summary>
-		/// В процессе отключения.
-		/// </summary>
-		Disconnecting,
-
-		/// <summary>
-		/// В процессе подключения.
-		/// </summary>
-		Connecting,
-
-		/// <summary>
-		/// Подключение активно.
-		/// </summary>
-		Connected,
-
-		/// <summary>
-		/// Ошибка подключения.
-		/// </summary>
-		Failed,
-	}
-
-	/// <summary>
 	/// Основной интерфейс, предоставляющий подключение с торговыми системами.
 	/// </summary>
 	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider

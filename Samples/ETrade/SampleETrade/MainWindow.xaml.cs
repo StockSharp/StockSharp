@@ -12,6 +12,7 @@ namespace SampleETrade
 
 	using MoreLinq;
 
+	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.ETrade;
 	using StockSharp.ETrade.Native;

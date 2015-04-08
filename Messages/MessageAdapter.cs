@@ -4,7 +4,6 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
-	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -23,37 +22,6 @@ namespace StockSharp.Messages
 	/// </summary>
 	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
-		/// <summary>
-		/// Состояния подключений.
-		/// </summary>
-		private enum ConnectionStates
-		{
-			/// <summary>
-			/// Не активно.
-			/// </summary>
-			Disconnected,
-
-			/// <summary>
-			/// В процессе отключения.
-			/// </summary>
-			Disconnecting,
-
-			/// <summary>
-			/// В процессе подключения.
-			/// </summary>
-			Connecting,
-
-			/// <summary>
-			/// Подключение активно.
-			/// </summary>
-			Connected,
-
-			/// <summary>
-			/// Ошибка подключения.
-			/// </summary>
-			Failed,
-		}
-
 		/// <summary>
 		/// Ожидание выполнения некоего действия, связанного с ключом.
 		/// </summary>
@@ -229,26 +197,21 @@ namespace StockSharp.Messages
 
 		//private readonly bool _checkLicense;
 
-		private Timer _marketTimeChangedTimer;
-		private DateTime _heartbeatPrevTime;
 		private DateTime _prevTime;
 
 		// дополнительные состояния для ConnectionStates
-		private const ConnectionStates _none = (ConnectionStates)0 - 1;
-		private const ConnectionStates _reConnecting = (ConnectionStates)10;
+		//private const ConnectionStates _none = (ConnectionStates)0 - 1;
+		//private const ConnectionStates _reConnecting = (ConnectionStates)10;
 		//private const ConnectionStates _reStartingExport = (ConnectionStates)11;
 
-		private ConnectionStates _currState = _none;
-		private ConnectionStates _prevState = _none;
+		//private ConnectionStates _currState = _none;
+		//private ConnectionStates _prevState = _none;
 
-		private int _connectingAttemptCount;
-		private TimeSpan _connectionTimeOut;
+		//private int _connectingAttemptCount;
+		//private TimeSpan _connectionTimeOut;
 
 		private readonly CodeTimeOut<long> _secLookupTimeOut = new CodeTimeOut<long>();
 		private readonly CodeTimeOut<long> _pfLookupTimeOut = new CodeTimeOut<long>();
-
-		private readonly SyncObject _timeSync = new SyncObject();
-		private bool _canSendTimeIn;
 
 		/// <summary>
 		/// Инициализировать <see cref="MessageAdapter"/>.
@@ -292,18 +255,6 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool IsValid { get { return true; } }
-
-		/// <summary>
-		/// Объединять обработчики входящих сообщений для адаптеров.
-		/// </summary>
-		[Browsable(false)]
-		public virtual bool JoinInProcessors { get { return true; } }
-
-		/// <summary>
-		/// Объединять обработчики исходящих сообщений для адаптеров.
-		/// </summary>
-		[Browsable(false)]
-		public virtual bool JoinOutProcessors { get { return true; } }
 
 		/// <summary>
 		/// Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.
@@ -392,15 +343,6 @@ namespace StockSharp.Messages
 		public bool CreateDepthFromLevel1 { get; set; }
 
 		/// <summary>
-		/// Являются ли подключения адаптеров независимыми друг от друга.
-		/// </summary>
-		[Browsable(false)]
-		public virtual bool IsAdaptersIndependent
-		{
-			get { return false; }
-		}
-
-		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
 		/// </summary>
 		public virtual bool PortfolioLookupRequired
@@ -445,55 +387,6 @@ namespace StockSharp.Messages
 		/// </summary>
 		public Platforms Platform { get; protected set; }
 
-		private IMessageProcessor _inMessageProcessor;
-
-		/// <summary>
-		/// Обработчик входящих сообщений.
-		/// </summary>
-		public IMessageProcessor InMessageProcessor
-		{
-			get { return _inMessageProcessor; }
-			set
-			{
-				if (_inMessageProcessor == value)
-					return;
-
-				if (_inMessageProcessor != null)
-					_inMessageProcessor.NewMessage -= OnInMessageProcessor;
-
-				_inMessageProcessor = value;
-
-				if (_inMessageProcessor == null)
-					return;
-
-				_inMessageProcessor.NewMessage += OnInMessageProcessor;
-			}
-		}
-
-		private IMessageProcessor _outMessageProcessor;
-
-		/// <summary>
-		/// Обработчик исходящих сообщений.
-		/// </summary>
-		public IMessageProcessor OutMessageProcessor
-		{
-			get { return _outMessageProcessor; }
-			set
-			{
-				if (_outMessageProcessor == value)
-					return;
-
-				if (_outMessageProcessor != null)
-					_outMessageProcessor.NewMessage -= OnOutMessageProcessor;
-
-				_outMessageProcessor = value;
-
-				if (_outMessageProcessor == null)
-					return;
-
-				_outMessageProcessor.NewMessage += OnOutMessageProcessor;
-			}
-		}
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
@@ -503,20 +396,109 @@ namespace StockSharp.Messages
 			return null;
 		}
 
+		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
+		{
+			if (!CreateAssociatedSecurity)
+				return;
+
+			if (quoteMsg.SecurityId.IsDefault())
+				return;
+
+			var builder = _quoteChangeDepthBuilders
+				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
+
+			NewOutMessage.SafeInvoke(builder.Process(quoteMsg));
+		}
+
+		private SecurityId CloneSecurityId(SecurityId securityId)
+		{
+			return new SecurityId
+			{
+				SecurityCode = securityId.SecurityCode,
+				BoardCode = AssociatedBoardCode,
+				SecurityType = securityId.SecurityType,
+				Bloomberg = securityId.Bloomberg,
+				Cusip = securityId.Cusip,
+				IQFeed = securityId.IQFeed,
+				InteractiveBrokers = securityId.InteractiveBrokers,
+				Isin = securityId.Isin,
+				Native = securityId.Native,
+				Plaza = securityId.Plaza,
+				Ric = securityId.Ric,
+				Sedol = securityId.Sedol,
+			};
+		}
+
 		/// <summary>
-		/// Метод для обработки входящих сообщений для <see cref="InMessageProcessor"/>.
+		/// Генератор идентификаторов транзакций.
+		/// </summary>
+		public IdGenerator TransactionIdGenerator { get; private set; }
+
+		/// <summary>
+		/// Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей.
+		/// </summary>
+		/// <remarks>
+		/// Значение по умолчанию равно 10 секундам.
+		/// </remarks>
+		public TimeSpan LookupTimeOut
+		{
+			get { return _secLookupTimeOut.TimeOut; }
+			set
+			{
+				_secLookupTimeOut.TimeOut = value;
+				_pfLookupTimeOut.TimeOut = value;
+			}
+		}
+
+		/// <summary>
+		/// Событие получения исходящего сообщения.
+		/// </summary>
+		public event Action<Message> NewOutMessage;
+
+		void IMessageChannel.Open()
+		{
+		}
+
+		void IMessageChannel.Close()
+		{
+		}
+
+		/// <summary>
+		/// Отправить входящее сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер.</param>
-		protected virtual void OnInMessageProcessor(Message message, IMessageAdapter adapter)
+		public void SendInMessage(Message message)
 		{
-			if (this != adapter)
-				return;
+			//if (!CheckLicense(message))
+			//	return;
+
+			if (message.Type == MessageTypes.Connect)
+			{
+				if (!Platform.IsCompatible())
+				{
+					SendOutMessage(new ConnectMessage
+					{
+						Error = new InvalidOperationException(LocalizedStrings.Str169Params.Put(GetType().Name, Platform))
+					});
+
+					return;
+				}
+			}
+
+#warning force
+			//месседжи с заявками могут складываться из потока обработки
+			var force = message.Type == MessageTypes.OrderRegister ||
+			            message.Type == MessageTypes.OrderReplace ||
+			            message.Type == MessageTypes.OrderPairReplace ||
+			            message.Type == MessageTypes.OrderCancel ||
+			            message.Type == MessageTypes.OrderGroupCancel;
+
+			InitMessageLocalTime(message);
 
 			// при отключенном состоянии пропускаем только TimeMessage
 			// остальные типы сообщений могут использоваться (например, в эмуляторе)
-			if ((_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected) && message.Type == MessageTypes.Time)
-				return;
+			//if ((_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected) && message.Type == MessageTypes.Time)
+			//	return;
 
 			switch (message.Type)
 			{
@@ -534,43 +516,44 @@ namespace StockSharp.Messages
 
 					break;
 				}
-				case MessageTypes.Connect:
-				{
-					lock (_timeSync)
-					{
-						_canSendTimeIn = true;
-						_currState = ConnectionStates.Connecting;	
-					}
+				//case MessageTypes.Connect:
+				//{
+				//	lock (_timeSync)
+				//	{
+				//		_canSendTimeIn = true;
+				//		_currState = ConnectionStates.Connecting;
+				//	}
 
-					if (_prevState == _none)
-					{
-						_connectionTimeOut = ReConnectionSettings.TimeOutInterval;
-						_connectingAttemptCount = ReConnectionSettings.AttemptCount;
-					}
-					else
-						_connectionTimeOut = ReConnectionSettings.Interval;
+				//	if (_prevState == _none)
+				//	{
+				//		_connectionTimeOut = ReConnectionSettings.TimeOutInterval;
+				//		_connectingAttemptCount = ReConnectionSettings.AttemptCount;
+				//	}
+				//	else
+				//		_connectionTimeOut = ReConnectionSettings.Interval;
 
-					break;
-				}
-				case MessageTypes.Disconnect:
-				{
-					lock (_timeSync)
-						_currState = ConnectionStates.Disconnecting;
+				//	break;
+				//}
+				//case MessageTypes.Disconnect:
+				//{
+				//	lock (_timeSync)
+				//		_currState = ConnectionStates.Disconnecting;
 
-					_connectionTimeOut = ReConnectionSettings.TimeOutInterval;
+				//	_connectionTimeOut = ReConnectionSettings.TimeOutInterval;
 
-					break;
-				}
-				case MessageTypes.Time:
-				{
-					lock (_timeSync)
-						_canSendTimeIn = true;
+				//	break;
+				//}
+				//case MessageTypes.Time:
+				//{
+				//	lock (_timeSync)
+				//		_canSendTimeIn = true;
 
-					break;
-				}
+				//	break;
+				//}
 				case MessageTypes.ClearMessageQueue:
 				{
-					InMessageProcessor.Clear((ClearMessageQueueMessage)message);
+#warning Clear
+					//InMessageProcessor.Clear((ClearMessageQueueMessage)message);
 					return;
 				}
 			}
@@ -653,15 +636,15 @@ namespace StockSharp.Messages
 					}
 
 					case MessageTypes.SecurityLookup:
-					{
-						var lookupMsg = (SecurityLookupMessage)message;
-						SendOutMessage(new SecurityLookupResultMessage
 						{
-							OriginalTransactionId = lookupMsg.TransactionId,
-							Error = ex
-						});
-						return;
-					}
+							var lookupMsg = (SecurityLookupMessage)message;
+							SendOutMessage(new SecurityLookupResultMessage
+							{
+								OriginalTransactionId = lookupMsg.TransactionId,
+								Error = ex
+							});
+							return;
+						}
 
 					case MessageTypes.PortfolioLookup:
 					{
@@ -688,209 +671,6 @@ namespace StockSharp.Messages
 
 				SendOutError(ex);
 			}
-		}
-
-		/// <summary>
-		/// Метод обработки исходящих сообщений для <see cref="OutMessageProcessor"/>.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер.</param>
-		protected virtual void OnOutMessageProcessor(Message message, IMessageAdapter adapter)
-		{
-			if (this != adapter)
-				return;
-
-			switch (message.Type)
-			{
-				case MessageTypes.ClearMessageQueue:
-					OutMessageProcessor.Clear((ClearMessageQueueMessage)message);
-					return;
-
-				case MessageTypes.Security:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					if (!CreateAssociatedSecurity)
-						break;
-
-					var clone = (SecurityMessage)message.Clone();
-					clone.SecurityId = CloneSecurityId(clone.SecurityId);
-					NewOutMessage.SafeInvoke(clone);
-
-					break;
-				}
-
-				case MessageTypes.Level1Change:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					var l1Msg = (Level1ChangeMessage)message;
-
-					if (l1Msg.SecurityId.IsDefault())
-						break;
-
-					if (CreateAssociatedSecurity)
-					{
-						// обновление BestXXX для ALL из конкретных тикеров
-						var clone = (Level1ChangeMessage)l1Msg.Clone();
-						clone.SecurityId = CloneSecurityId(clone.SecurityId);
-						NewOutMessage.SafeInvoke(clone);
-					}
-
-					if (CreateDepthFromLevel1)
-					{
-						// генерация стакана из Level1
-						var builder = _level1DepthBuilders.SafeAdd(l1Msg.SecurityId, c => new Level1DepthBuilder(c));
-
-						if (builder.Process(l1Msg))
-						{
-							var quoteMsg = builder.QuoteChange;
-
-							NewOutMessage.SafeInvoke(quoteMsg);
-							CreateAssociatedSecurityQuotes(quoteMsg);
-						}
-					}
-					
-					break;
-				}
-
-				case MessageTypes.QuoteChange:
-				{
-					var quoteMsg = (QuoteChangeMessage)message;
-
-					NewOutMessage.SafeInvoke(quoteMsg);
-
-					if (CreateDepthFromLevel1)
-						_level1DepthBuilders.SafeAdd(quoteMsg.SecurityId, c => new Level1DepthBuilder(c)).HasDepth = true;
-
-					CreateAssociatedSecurityQuotes(quoteMsg);
-					break;
-				}
-
-				case MessageTypes.Execution:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					if (!CreateAssociatedSecurity)
-						break;
-
-					var execMsg = (ExecutionMessage)message;
-
-					if (execMsg.SecurityId.IsDefault())
-						break;
-
-					switch (execMsg.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-						case ExecutionTypes.OrderLog:
-						{
-							var clone = (ExecutionMessage)message.Clone();
-							clone.SecurityId = CloneSecurityId(clone.SecurityId);
-							NewOutMessage.SafeInvoke(clone);
-							break;
-						}
-					}
-
-					break;
-				}
-
-				default:
-					NewOutMessage.SafeInvoke(message);
-					break;
-			}
-		}
-
-		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
-		{
-			if (!CreateAssociatedSecurity)
-				return;
-
-			if (quoteMsg.SecurityId.IsDefault())
-				return;
-
-			var builder = _quoteChangeDepthBuilders
-				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
-
-			NewOutMessage.SafeInvoke(builder.Process(quoteMsg));
-		}
-
-		private SecurityId CloneSecurityId(SecurityId securityId)
-		{
-			return new SecurityId
-			{
-				SecurityCode = securityId.SecurityCode,
-				BoardCode = AssociatedBoardCode,
-				SecurityType = securityId.SecurityType,
-				Bloomberg = securityId.Bloomberg,
-				Cusip = securityId.Cusip,
-				IQFeed = securityId.IQFeed,
-				InteractiveBrokers = securityId.InteractiveBrokers,
-				Isin = securityId.Isin,
-				Native = securityId.Native,
-				Plaza = securityId.Plaza,
-				Ric = securityId.Ric,
-				Sedol = securityId.Sedol,
-			};
-		}
-
-		/// <summary>
-		/// Генератор идентификаторов транзакций.
-		/// </summary>
-		public IdGenerator TransactionIdGenerator { get; private set; }
-
-		/// <summary>
-		/// Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей.
-		/// </summary>
-		/// <remarks>
-		/// Значение по умолчанию равно 10 секундам.
-		/// </remarks>
-		public TimeSpan LookupTimeOut
-		{
-			get { return _secLookupTimeOut.TimeOut; }
-			set
-			{
-				_secLookupTimeOut.TimeOut = value;
-				_pfLookupTimeOut.TimeOut = value;
-			}
-		}
-
-		/// <summary>
-		/// Событие получения исходящего сообщения.
-		/// </summary>
-		public event Action<Message> NewOutMessage;
-
-		/// <summary>
-		/// Отправить входящее сообщение.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		public virtual void SendInMessage(Message message)
-		{
-			//if (!CheckLicense(message))
-			//	return;
-
-			if (message.Type == MessageTypes.Connect)
-			{
-				if (!Platform.IsCompatible())
-				{
-					SendOutMessage(new ConnectMessage
-					{
-						Error = new InvalidOperationException(LocalizedStrings.Str169Params.Put(GetType().Name, Platform))
-					});
-
-					return;
-				}
-			}
-
-			//месседжи с заявками могут складываться из потока обработки
-			var force = message.Type == MessageTypes.OrderRegister ||
-			            message.Type == MessageTypes.OrderReplace ||
-			            message.Type == MessageTypes.OrderPairReplace ||
-			            message.Type == MessageTypes.OrderCancel ||
-			            message.Type == MessageTypes.OrderGroupCancel;
-
-			InitMessageLocalTime(message);
-
-			_inMessageProcessor.EnqueueMessage(message, this, force);
 		}
 
 		//private bool CheckLicense(Message message)
@@ -955,35 +735,127 @@ namespace StockSharp.Messages
 		{
 			InitMessageLocalTime(message);
 
-			_outMessageProcessor.EnqueueMessage(message, this, false);
-
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
-				{
-					if (((ConnectMessage)message).Error == null)
-					{
-						lock (_timeSync)
-							_prevState = _currState = ConnectionStates.Connected;
+				//case MessageTypes.Connect:
+				//{
+				//	if (((ConnectMessage)message).Error == null)
+				//	{
+				//		lock (_timeSync)
+				//			_prevState = _currState = ConnectionStates.Connected;
 
-						StartMarketTimer();
-					}
-					else
+				//		StartMarketTimer();
+				//	}
+				//	else
+				//	{
+				//		lock (_timeSync)
+				//			_prevState = _currState = ConnectionStates.Failed;
+				//	}
+
+				//	break;
+				//}
+				//case MessageTypes.Disconnect:
+				//{
+				//	lock (_timeSync)
+				//		_prevState = _currState = ConnectionStates.Disconnected;
+
+				//	StopMarketTimer();
+				//	break;
+				//}
+
+				case MessageTypes.ClearMessageQueue:
+#warning Clear
+					//OutMessageProcessor.Clear((ClearMessageQueueMessage)message);
+					return;
+
+				case MessageTypes.Security:
+				{
+					NewOutMessage.SafeInvoke(message);
+
+					if (!CreateAssociatedSecurity)
+						break;
+
+					var clone = (SecurityMessage)message.Clone();
+					clone.SecurityId = CloneSecurityId(clone.SecurityId);
+					NewOutMessage.SafeInvoke(clone);
+
+					break;
+				}
+
+				case MessageTypes.Level1Change:
+				{
+					NewOutMessage.SafeInvoke(message);
+
+					var l1Msg = (Level1ChangeMessage)message;
+
+					if (l1Msg.SecurityId.IsDefault())
+						break;
+
+					if (CreateAssociatedSecurity)
 					{
-						lock (_timeSync)
-							_prevState = _currState = ConnectionStates.Failed;
+						// обновление BestXXX для ALL из конкретных тикеров
+						var clone = (Level1ChangeMessage)l1Msg.Clone();
+						clone.SecurityId = CloneSecurityId(clone.SecurityId);
+						NewOutMessage.SafeInvoke(clone);
+					}
+
+					if (CreateDepthFromLevel1)
+					{
+						// генерация стакана из Level1
+						var builder = _level1DepthBuilders.SafeAdd(l1Msg.SecurityId, c => new Level1DepthBuilder(c));
+
+						if (builder.Process(l1Msg))
+						{
+							var quoteMsg = builder.QuoteChange;
+
+							NewOutMessage.SafeInvoke(quoteMsg);
+							CreateAssociatedSecurityQuotes(quoteMsg);
+						}
 					}
 
 					break;
 				}
-				case MessageTypes.Disconnect:
-				{
-					lock (_timeSync)
-						_prevState = _currState = ConnectionStates.Disconnected;
 
-					StopMarketTimer();
+				case MessageTypes.QuoteChange:
+				{
+					var quoteMsg = (QuoteChangeMessage)message;
+
+					NewOutMessage.SafeInvoke(quoteMsg);
+
+					if (CreateDepthFromLevel1)
+						_level1DepthBuilders.SafeAdd(quoteMsg.SecurityId, c => new Level1DepthBuilder(c)).HasDepth = true;
+
+					CreateAssociatedSecurityQuotes(quoteMsg);
 					break;
 				}
+
+				case MessageTypes.Execution:
+				{
+					NewOutMessage.SafeInvoke(message);
+
+					if (!CreateAssociatedSecurity)
+						break;
+
+					var execMsg = (ExecutionMessage)message;
+
+					if (execMsg.SecurityId.IsDefault())
+						break;
+
+					switch (execMsg.ExecutionType)
+					{
+						case ExecutionTypes.Tick:
+						case ExecutionTypes.OrderLog:
+						{
+							var clone = (ExecutionMessage)message.Clone();
+							clone.SecurityId = CloneSecurityId(clone.SecurityId);
+							NewOutMessage.SafeInvoke(clone);
+							break;
+						}
+					}
+
+					break;
+				}
+
 				default:
 				{
 					if (_prevTime != DateTime.MinValue)
@@ -1007,10 +879,11 @@ namespace StockSharp.Messages
 							.ProcessTime(diff)
 							.ForEach(id => SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = id }));
 
-						ProcessReconnection(diff);
+						//ProcessReconnection(diff);
 					}
 
 					_prevTime = message.LocalTime;
+					NewOutMessage.SafeInvoke(message);
 					break;
 				}
 			}
@@ -1061,171 +934,97 @@ namespace StockSharp.Messages
 			get { return false; }
 		}
 
-		/// <summary>
-		/// Запустить таймер генерации с интервалом <see cref="MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
-		/// </summary>
-		protected virtual void StartMarketTimer()
-		{
-			if (null != _marketTimeChangedTimer)
-				return;
+		//private void ProcessReconnection(TimeSpan diff)
+		//{
+		//	switch (_currState)
+		//	{
+		//		case ConnectionStates.Disconnecting:
+		//		case ConnectionStates.Connecting:
+		//		{
+		//			_connectionTimeOut -= diff;
 
-			_marketTimeChangedTimer = ThreadingHelper
-				.Timer(() =>
-				{
-					var time = CurrentTime;
+		//			if (_connectionTimeOut <= TimeSpan.Zero)
+		//			{
+		//				this.AddWarningLog("RCM: Connecting Timeout Left {0}.", _connectionTimeOut);
 
-					//if (Type == MessageAdapterTypes.MarketData)
-					//{
-						// TimeMsg нужен для оповещения внешнего кода о живом адаптере (или для изменения текущего времени)
-						// Поэтому когда в очереди есть другие сообщения нет смысла добавлять еще и TimeMsg
-						if (_outMessageProcessor.MessageCount == 0)
-							SendOutMessage(new TimeMessage());
-					//}
+		//				switch (_currState)
+		//				{
+		//					case ConnectionStates.Connecting:
+		//						SendOutMessage(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.Str170) });
+		//						break;
+		//					case ConnectionStates.Disconnecting:
+		//						SendOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.Str171) });
+		//						break;
+		//				}
 
-					TimeMessage timeMsg;
+		//				if (_prevState != _none)
+		//				{
+		//					this.AddInfoLog("RCM: Connecting AttemptError.");
 
-					lock (_timeSync)
-					{
-						if (_currState != ConnectionStates.Connected)
-							return;
+		//					//ReConnectionSettings.RaiseAttemptError(new TimeoutException(message));
+		//					lock (_timeSync)
+		//						_currState = _prevState;
+		//				}
+		//				else
+		//				{
+		//					//ReConnectionSettings.RaiseTimeOut();
 
-						if (CanSendTimeMessage)
-						{
-							// TimeMsg нужно отправлять в очередь, если предыдущее сообщение было обработано.
-							// Иначе, из-за медленной обработки, кол-во TimeMsg может вырасти до большого значения.
-						
-							if (!_canSendTimeIn)
-								return;
+		//					if (_currState == ConnectionStates.Connecting && _connectingAttemptCount > 0)
+		//					{
+		//						lock (_timeSync)
+		//							_currState = _reConnecting;
 
-							_canSendTimeIn = false;
+		//						this.AddInfoLog("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
+		//					}
+		//					else
+		//					{
+		//						lock (_timeSync)
+		//							_currState = _none;
+		//					}
+		//				}
+		//			}
 
-							timeMsg = new TimeMessage();
-						}
-						else
-						{
-							if (_heartbeatPrevTime.IsDefault())
-							{
-								_heartbeatPrevTime = time.LocalDateTime;
-								return;
-							}
-							
-							if ((time - _heartbeatPrevTime) < HeartbeatInterval)
-								return;
+		//			break;
+		//		}
+		//		case _reConnecting:
+		//		{
+		//			if (_connectingAttemptCount == 0)
+		//			{
+		//				this.AddWarningLog("RCM: Reconnecting attemts {0} PrevState {1}.", _connectingAttemptCount, _prevState);
 
-							timeMsg = new TimeMessage { TransactionId = TransactionIdGenerator.GetNextId().To<string>() };
+		//				lock (_timeSync)
+		//					_currState = _none;
 
-							_heartbeatPrevTime = time.LocalDateTime;
-						}
-					}
+		//				break;
+		//			}
 
-					SendInMessage(timeMsg);
-				})
-				.Interval(MarketTimeChangedInterval);
-		}
+		//			_connectionTimeOut -= diff;
 
-		/// <summary>
-		/// Остановить таймер, запущенный ранее через <see cref="StartMarketTimer"/>.
-		/// </summary>
-		protected void StopMarketTimer()
-		{
-			if (null == _marketTimeChangedTimer)
-				return;
+		//			if (_connectionTimeOut > TimeSpan.Zero)
+		//				break;
 
-			_marketTimeChangedTimer.Dispose();
-			_marketTimeChangedTimer = null;
-		}
+		//			if (IsTradeTime())
+		//			{
+		//				this.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", _currState, _prevState, _connectingAttemptCount);
 
-		private void ProcessReconnection(TimeSpan diff)
-		{
-			switch (_currState)
-			{
-				case ConnectionStates.Disconnecting:
-				case ConnectionStates.Connecting:
-				{
-					_connectionTimeOut -= diff;
+		//				if (_connectingAttemptCount != -1)
+		//					_connectingAttemptCount--;
 
-					if (_connectionTimeOut <= TimeSpan.Zero)
-					{
-						this.AddWarningLog("RCM: Connecting Timeout Left {0}.", _connectionTimeOut);
+		//				_connectionTimeOut = ReConnectionSettings.Interval;
 
-						switch (_currState)
-						{
-							case ConnectionStates.Connecting:
-								SendOutMessage(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.Str170) });
-								break;
-							case ConnectionStates.Disconnecting:
-								SendOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.Str171) });
-								break;
-						}
+		//				_prevState = _currState;
+		//				SendInMessage(new ConnectMessage());
+		//			}
+		//			else
+		//			{
+		//				this.AddWarningLog("RCM: Out of trade time. CurrState {0}.", _currState);
+		//				_connectionTimeOut = TimeSpan.FromMinutes(1);
+		//			}
 
-						if (_prevState != _none)
-						{
-							this.AddInfoLog("RCM: Connecting AttemptError.");
-
-							//ReConnectionSettings.RaiseAttemptError(new TimeoutException(message));
-							lock (_timeSync)
-								_currState = _prevState;
-						}
-						else
-						{
-							//ReConnectionSettings.RaiseTimeOut();
-
-							if (_currState == ConnectionStates.Connecting && _connectingAttemptCount > 0)
-							{
-								lock (_timeSync)
-									_currState = _reConnecting;
-
-								this.AddInfoLog("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
-							}
-							else
-							{
-								lock (_timeSync)
-									_currState = _none;
-							}
-						}
-					}
-
-					break;
-				}
-				case _reConnecting:
-				{
-					if (_connectingAttemptCount == 0)
-					{
-						this.AddWarningLog("RCM: Reconnecting attemts {0} PrevState {1}.", _connectingAttemptCount, _prevState);
-
-						lock (_timeSync)
-							_currState = _none;
-
-						break;
-					}
-
-					_connectionTimeOut -= diff;
-
-					if (_connectionTimeOut > TimeSpan.Zero)
-						break;
-
-					if (IsTradeTime())
-					{
-						this.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", _currState, _prevState, _connectingAttemptCount);
-
-						if (_connectingAttemptCount != -1)
-							_connectingAttemptCount--;
-
-						_connectionTimeOut = ReConnectionSettings.Interval;
-
-						_prevState = _currState;
-						SendInMessage(new ConnectMessage());
-					}
-					else
-					{
-						this.AddWarningLog("RCM: Out of trade time. CurrState {0}.", _currState);
-						_connectionTimeOut = TimeSpan.FromMinutes(1);
-					}
-
-					break;
-				}
-			}
-		}
+		//			break;
+		//		}
+		//	}
+		//}
 
 		private bool IsTradeTime()
 		{

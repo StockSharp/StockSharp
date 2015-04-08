@@ -88,16 +88,6 @@ namespace StockSharp.Algo
 			return _innerAdapter.CreateOrderCondition();
 		}
 
-		bool IMessageAdapter.JoinInProcessors
-		{
-			get { return _innerAdapter.JoinInProcessors; }
-		}
-
-		bool IMessageAdapter.JoinOutProcessors
-		{
-			get { return _innerAdapter.JoinOutProcessors; }
-		}
-
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo
 		{
 			get { return _innerAdapter.SecurityClassInfo; }
@@ -118,11 +108,6 @@ namespace StockSharp.Algo
 		{
 			get { return _innerAdapter.MarketTimeChangedInterval; }
 			set { _innerAdapter.MarketTimeChangedInterval = value; }
-		}
-
-		bool IMessageAdapter.IsAdaptersIndependent
-		{
-			get { return _innerAdapter.IsAdaptersIndependent; }
 		}
 
 		bool IMessageAdapter.CreateAssociatedSecurity
@@ -236,25 +221,23 @@ namespace StockSharp.Algo
 			_innerAdapter.SendInMessage(message);
 		}
 
-		void IMessageAdapter.SendOutMessage(Message message)
+		void IMessageChannel.Open()
 		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = _innerAdapter.CurrentTime.LocalDateTime;
-
-			_innerAdapter.SendOutMessage(message);
+			_innerAdapter.Open();
 		}
 
-		IMessageProcessor IMessageAdapter.InMessageProcessor
+		void IMessageChannel.Close()
 		{
-			get { return _innerAdapter.InMessageProcessor; }
-			set { _innerAdapter.InMessageProcessor = value; }
+			_innerAdapter.Close();
 		}
 
-		IMessageProcessor IMessageAdapter.OutMessageProcessor
-		{
-			get { return _innerAdapter.OutMessageProcessor; }
-			set { _innerAdapter.OutMessageProcessor = value; }
-		}
+		//void IMessageAdapter.SendOutMessage(Message message)
+		//{
+		//	if (message.LocalTime.IsDefault())
+		//		message.LocalTime = _innerAdapter.CurrentTime.LocalDateTime;
+
+		//	_innerAdapter.SendOutMessage(message);
+		//}
 
 		private void ProcessOutMessage(Message message)
 		{

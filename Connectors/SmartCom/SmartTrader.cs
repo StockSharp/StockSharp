@@ -35,10 +35,9 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public SmartTrader()
 		{
-			TransactionAdapter = MarketDataAdapter = _adapter = new SmartComMessageAdapter(TransactionIdGenerator);
+			_adapter = new SmartComMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
 		}
 
 		/// <summary>
@@ -318,7 +317,7 @@ namespace StockSharp.SmartCom
 			}
 			catch (Exception ex)
 			{
-				TransactionAdapter.SendOutMessage(new ErrorMessage { Error = ex });
+				SendOutError(ex);
 			}
 
 			base.OnConnect();

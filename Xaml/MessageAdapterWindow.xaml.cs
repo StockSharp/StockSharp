@@ -66,8 +66,9 @@ namespace StockSharp.Xaml
 				//	: new PassThroughMessageAdapter(_editableSession)
 			};
 
-			connector.ApplyMessageProcessor(MessageDirections.In, true, true);
-			connector.ApplyMessageProcessor(MessageDirections.Out, true, true);
+			var channel = new InMemoryMessageChannel("Basket", connector.SendOutError);
+			connector.TransactionAdapter = new ChannelMessageAdapter(_adapter, channel);
+			connector.MarketDataAdapter = new ChannelMessageAdapter(_adapter, channel);
 
 			connector.ExportStarted += () =>
 			{

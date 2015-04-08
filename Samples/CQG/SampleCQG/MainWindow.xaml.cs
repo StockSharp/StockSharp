@@ -10,6 +10,7 @@ namespace SampleCQG
 
 	using MoreLinq;
 
+	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.CQG;
 	using StockSharp.Logging;

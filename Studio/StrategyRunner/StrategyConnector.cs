@@ -4,7 +4,6 @@
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	class StrategyConnector : Connector
 	{
@@ -16,11 +15,8 @@
 		{
 			EntityFactory = _entityFactory = new StrategyEntityFactory();
 
-			TransactionAdapter = new BasketMessageAdapter(TransactionIdGenerator);
-			MarketDataAdapter = new BasketMessageAdapter(TransactionIdGenerator);
-
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			TransactionAdapter = new BasketMessageAdapter(TransactionIdGenerator).ToChannel(this);
+			MarketDataAdapter = new BasketMessageAdapter(TransactionIdGenerator).ToChannel(this);
 		}
 
 		/// <summary>

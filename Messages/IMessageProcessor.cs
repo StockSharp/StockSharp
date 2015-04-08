@@ -31,11 +31,6 @@ namespace StockSharp.Messages
 		event Action<Message, IMessageAdapter> NewMessage;
 
 		/// <summary>
-		/// Событие остановки обработчика.
-		/// </summary>
-		event Action Stopped;
-
-		/// <summary>
 		/// Добавить сообщение в очередь на обработку.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
