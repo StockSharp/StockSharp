@@ -104,7 +104,6 @@
     <Compile Include="BaseChangeMessage.cs" />
     <Compile Include="ErrorMessage.cs" />
     <Compile Include="MessageAdapter.cs" />
-    <Compile Include="MessageAdapterReConnectionSettings.cs" />
     <Compile Include="MessageTypes.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="NewsMessage.cs" />

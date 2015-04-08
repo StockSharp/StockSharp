@@ -72,8 +72,6 @@ namespace StockSharp.Algo
 
 					_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
 					_transactionAdapter.Dispose();
-
-					ReConnectionSettings.ConnectionSettings.AdapterSettings = new MessageAdapterReConnectionSettings();
 				}
 
 				_transactionAdapter = value;
@@ -95,8 +93,6 @@ namespace StockSharp.Algo
 
 					_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
 				}
-				
-				ReConnectionSettings.ConnectionSettings.AdapterSettings = TransactionAdapter.ReConnectionSettings;
 			}
 		}
 
@@ -133,8 +129,6 @@ namespace StockSharp.Algo
 
 						_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
 						_marketDataAdapter.Dispose();
-
-						ReConnectionSettings.ExportSettings.AdapterSettings = new MessageAdapterReConnectionSettings();
 					}
 
 					_marketDataAdapter = value;
@@ -151,8 +145,6 @@ namespace StockSharp.Algo
 
 						_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;	
 					}
-
-					ReConnectionSettings.ExportSettings.AdapterSettings = MarketDataAdapter.ReConnectionSettings;
 				}
 			}
 		}

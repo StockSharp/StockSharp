@@ -25,28 +25,13 @@ namespace StockSharp.Algo
 		[DisplayNameLoc(LocalizedStrings.SettingsKey)]
 		[DescriptionLoc(LocalizedStrings.Str173Key)]
 		[ExpandableObject]
-		public class Settings
+		public class Settings : IPersistable
 		{
 			internal Settings()
 			{
 			}
 
-			private MessageAdapterReConnectionSettings _adapterSettings = new MessageAdapterReConnectionSettings();
-
-			internal MessageAdapterReConnectionSettings AdapterSettings
-			{
-				get { return _adapterSettings; }
-				set
-				{
-					if (value == null)
-						throw new ArgumentNullException("value");
-
-					// копируем настройки, что были до этого внесены
-					value.Load(_adapterSettings.Save());
-
-					_adapterSettings = value;
-				}
-			}
+			private TimeSpan _interval = TimeSpan.FromSeconds(10);
 
 			/// <summary>
 			/// Интервал, с которым будут происходить попытки установить соединение. По умолчанию интервал равен 10 секунд.
@@ -56,9 +41,17 @@ namespace StockSharp.Algo
 			[DescriptionLoc(LocalizedStrings.Str176Key)]
 			public TimeSpan Interval
 			{
-				get { return AdapterSettings.Interval; }
-				set { AdapterSettings.Interval = value; }
+				get { return _interval; }
+				set
+				{
+					if (value < TimeSpan.Zero)
+						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+
+					_interval = value;
+				}
 			}
+
+			private int _attemptCount;
 
 			/// <summary>
 			/// Количество попыток установить первоначальное соединение, если оно не было установлено (тайм-аут, сетевой сбой и т.д.).
@@ -69,9 +62,17 @@ namespace StockSharp.Algo
 			[DescriptionLoc(LocalizedStrings.Str179Key)]
 			public int AttemptCount
 			{
-				get { return AdapterSettings.AttemptCount; }
-				set { AdapterSettings.AttemptCount = value; }
+				get { return _attemptCount; }
+				set
+				{
+					if (value < -1)
+						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+
+					_attemptCount = value;
+				}
 			}
+
+			private int _reAttemptCount = 100;
 
 			/// <summary>
 			/// Количество попыток переподключиться, если соединение было утеряно в процессе работы.
@@ -82,21 +83,56 @@ namespace StockSharp.Algo
 			[DescriptionLoc(LocalizedStrings.Str181Key)]
 			public int ReAttemptCount
 			{
-				get { return AdapterSettings.ReAttemptCount; }
-				set { AdapterSettings.ReAttemptCount = value; }
+				get { return _reAttemptCount; }
+				set
+				{
+					if (value < -1)
+						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+
+					_reAttemptCount = value;
+				}
 			}
 
+			private TimeSpan _timeOutInterval = TimeSpan.FromSeconds(30);
+
 			/// <summary>
-			/// Время ожидания успешного подключения/отключения.
-			/// Если значение равно <see cref="TimeSpan.Zero"/>, то мониторинг не производится.
+			/// Время ожидания успешного подключения/отключения. Если значение равно <see cref="TimeSpan.Zero"/>, то мониторинг не производится.
+			/// По-умолчанию значение равно 30 секундам.
 			/// </summary>
 			[CategoryLoc(LocalizedStrings.Str174Key)]
 			[DisplayNameLoc(LocalizedStrings.Str182Key)]
 			[DescriptionLoc(LocalizedStrings.Str183Key)]
 			public TimeSpan TimeOutInterval
 			{
-				get { return AdapterSettings.TimeOutInterval; }
-				set { AdapterSettings.TimeOutInterval = value; }
+				get { return _timeOutInterval; }
+				set
+				{
+					if (value < TimeSpan.Zero)
+						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str177);
+
+					_timeOutInterval = value;
+				}
+			}
+
+			private WorkingTime _workingTime = new WorkingTime();
+
+			/// <summary>
+			/// Режим работы, во время которого необходимо производить подключения.
+			/// Например, нет необходимости проводить подключение, когда окончены торги на бирже.
+			/// </summary>
+			[CategoryLoc(LocalizedStrings.Str174Key)]
+			[DisplayNameLoc(LocalizedStrings.Str184Key)]
+			[DescriptionLoc(LocalizedStrings.Str185Key)]
+			public WorkingTime WorkingTime
+			{
+				get { return _workingTime; }
+				set
+				{
+					if (value == null)
+						throw new ArgumentNullException("value");
+
+					_workingTime = value;
+				}
 			}
 
 			/// <summary>
@@ -117,6 +153,36 @@ namespace StockSharp.Algo
 			internal void RaiseTimeOut()
 			{
 				TimeOut.SafeInvoke();
+			}
+
+
+
+			/// <summary>
+			/// Загрузить настройки.
+			/// </summary>
+			/// <param name="storage">Хранилище настроек.</param>
+			public void Load(SettingsStorage storage)
+			{
+				if (storage.ContainsKey("WorkingTime"))
+					WorkingTime.Load(storage.GetValue<SettingsStorage>("WorkingTime"));
+
+				Interval = storage.GetValue<TimeSpan>("Interval");
+				AttemptCount = storage.GetValue<int>("AttemptCount");
+				ReAttemptCount = storage.GetValue<int>("ReAttemptCount");
+				TimeOutInterval = storage.GetValue<TimeSpan>("TimeOutInterval");
+			}
+
+			/// <summary>
+			/// Сохранить настройки.
+			/// </summary>
+			/// <param name="storage">Хранилище настроек.</param>
+			public void Save(SettingsStorage storage)
+			{
+				storage.SetValue("WorkingTime", WorkingTime.Save());
+				storage.SetValue("Interval", Interval);
+				storage.SetValue("AttemptCount", AttemptCount);
+				storage.SetValue("ReAttemptCount", ReAttemptCount);
+				storage.SetValue("TimeOutInterval", TimeOutInterval);
 			}
 		}
 
@@ -154,8 +220,8 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str185Key)]
 		public WorkingTime WorkingTime
 		{
-			get { return ConnectionSettings.AdapterSettings.WorkingTime; }
-			set { ConnectionSettings.AdapterSettings.WorkingTime = value; }
+			get { return ConnectionSettings.WorkingTime; }
+			set { ConnectionSettings.WorkingTime = value; }
 		}
 
 		/// <summary>
@@ -164,8 +230,8 @@ namespace StockSharp.Algo
 		/// <param name="storage">Хранилище настроек.</param>
 		public void Load(SettingsStorage storage)
 		{
-			ConnectionSettings.AdapterSettings.Load(storage.GetValue<SettingsStorage>("ConnectionSettings"));
-			ExportSettings.AdapterSettings.Load(storage.GetValue<SettingsStorage>("ExportSettings"));
+			ConnectionSettings.Load(storage.GetValue<SettingsStorage>("ConnectionSettings"));
+			ExportSettings.Load(storage.GetValue<SettingsStorage>("ExportSettings"));
 		}
 
 		/// <summary>
@@ -174,8 +240,8 @@ namespace StockSharp.Algo
 		/// <param name="storage">Хранилище настроек.</param>
 		public void Save(SettingsStorage storage)
 		{
-			storage.SetValue("ConnectionSettings", ConnectionSettings.AdapterSettings.Save());
-			storage.SetValue("ExportSettings", ExportSettings.AdapterSettings.Save());
+			storage.SetValue("ConnectionSettings", ConnectionSettings.Save());
+			storage.SetValue("ExportSettings", ExportSettings.Save());
 		}
 	}
 }

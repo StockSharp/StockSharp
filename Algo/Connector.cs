@@ -1686,7 +1686,7 @@ namespace StockSharp.Algo
 			OrdersKeepCount = storage.GetValue("OrdersKeepCount", OrdersKeepCount);
 			UpdateSecurityLastQuotes = storage.GetValue("UpdateSecurityLastQuotes", true);
 			UpdateSecurityByLevel1 = storage.GetValue("UpdateSecurityByLevel1", true);
-			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
+			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
 
 			TransactionAdapter.Load(storage.GetValue<SettingsStorage>("TransactionAdapter"));
 
@@ -1712,7 +1712,7 @@ namespace StockSharp.Algo
 			storage.SetValue("OrdersKeepCount", OrdersKeepCount);
 			storage.SetValue("UpdateSecurityLastQuotes", UpdateSecurityLastQuotes);
 			storage.SetValue("UpdateSecurityByLevel1", UpdateSecurityByLevel1);
-			//storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
+			storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
 
 			storage.SetValue("TransactionAdapter", TransactionAdapter.Save());
 

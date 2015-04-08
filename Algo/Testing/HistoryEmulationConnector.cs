@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Testing
 
 			_marketDataAdapter.MarketTimeChangedInterval = TimeSpan.FromSeconds(1);
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-			_marketDataAdapter.ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
+			ReConnectionSettings.ExportSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 			//ApplyMessageProcessor(MessageDirections.In, true, true);
 			//ApplyMessageProcessor(MessageDirections.Out, true, true, new NonThreadMessageProcessor(TransactionAdapter.InMessageProcessor));

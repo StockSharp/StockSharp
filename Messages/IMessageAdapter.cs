@@ -39,11 +39,6 @@
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		/// <summary>
-		/// Настройки механизма отслеживания соединений.
-		/// </summary>
-		MessageAdapterReConnectionSettings ReConnectionSettings { get; }
-
-		/// <summary>
 		/// Интервал оповещения сервера о том, что подключение еще живое. По-умолчанию равно 1 минуте.
 		/// </summary>
 		TimeSpan HeartbeatInterval { get; set; }

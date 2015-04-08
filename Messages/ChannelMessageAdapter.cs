@@ -150,11 +150,6 @@
 			get { return _adapter.SecurityClassInfo; }
 		}
 
-		MessageAdapterReConnectionSettings IMessageAdapter.ReConnectionSettings
-		{
-			get { return _adapter.ReConnectionSettings; }
-		}
-
 		TimeSpan IMessageAdapter.HeartbeatInterval
 		{
 			get { return _adapter.HeartbeatInterval; }

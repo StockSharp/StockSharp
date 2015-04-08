@@ -93,11 +93,6 @@ namespace StockSharp.Algo
 			get { return _innerAdapter.SecurityClassInfo; }
 		}
 
-		MessageAdapterReConnectionSettings IMessageAdapter.ReConnectionSettings
-		{
-			get { return _innerAdapter.ReConnectionSettings; }
-		}
-
 		TimeSpan IMessageAdapter.HeartbeatInterval
 		{
 			get { return _innerAdapter.HeartbeatInterval; }

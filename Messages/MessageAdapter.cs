@@ -227,7 +227,6 @@ namespace StockSharp.Messages
 
 			TransactionIdGenerator = transactionIdGenerator;
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
-			ReConnectionSettings = new MessageAdapterReConnectionSettings();
 
 			CreateDepthFromLevel1 = true;
 		}
@@ -261,12 +260,6 @@ namespace StockSharp.Messages
 		/// </summary>
 		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; private set; }
-
-		/// <summary>
-		/// Настройки механизма отслеживания соединений.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		public MessageAdapterReConnectionSettings ReConnectionSettings { get; private set; }
 
 		private TimeSpan _heartbeatInterval = TimeSpan.FromMinutes(1);
 
@@ -1041,7 +1034,6 @@ namespace StockSharp.Messages
 		{
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>("MarketTimeChangedInterval");
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
-			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
 
 			IsMarketDataEnabled = storage.GetValue<bool>("IsMarketDataEnabled");
 			IsTransactionEnabled = storage.GetValue<bool>("IsTransactionEnabled");
@@ -1061,7 +1053,6 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
-			storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
 
 			storage.SetValue("IsMarketDataEnabled", IsMarketDataEnabled);
 			storage.SetValue("IsTransactionEnabled", IsTransactionEnabled);
