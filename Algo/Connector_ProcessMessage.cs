@@ -14,6 +14,19 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
+		private class AdapterMessage : Message
+		{
+			public Message Message { get; private set; }
+			public IMessageAdapter Adapter { get; private set; }
+
+			public AdapterMessage(Message message, IMessageAdapter adapter)
+				: base((MessageTypes)(-666))
+			{
+				Message = message;
+				Adapter = adapter;
+			}
+		}
+
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
 		private readonly InMemoryMessageChannel _outMessageChannel;
 
@@ -32,6 +45,12 @@ namespace StockSharp.Algo
 			return false;
 		}
 
+		private void OutMessageChannelOnNewOutMessage(Message message)
+		{
+			var adapterMessage = (AdapterMessage)message;
+			OnProcessMessage(adapterMessage.Message, adapterMessage.Adapter, MessageDirections.Out);
+		}
+
 		/// <summary>
 		/// Отправить сообщение в исходящую очередь.
 		/// </summary>
@@ -39,7 +58,7 @@ namespace StockSharp.Algo
 		/// <param name="adapter">Адаптер.</param>
 		public void SendOutMessage(Message message, IMessageAdapter adapter)
 		{
-			_outMessageChannel.SendInMessage(message, adapter);
+			_outMessageChannel.SendInMessage(new AdapterMessage(message, adapter));
 		}
 
 		/// <summary>
@@ -48,7 +67,7 @@ namespace StockSharp.Algo
 		/// <param name="error">Описание ошибки.</param>
 		public void SendOutError(Exception error)
 		{
-			_outMessageChannel.SendInMessage(new ErrorMessage { Error = error }, TransactionAdapter ?? MarketDataAdapter);
+			SendOutMessage(new ErrorMessage { Error = error }, TransactionAdapter ?? MarketDataAdapter);
 		}
 
 		private IMessageAdapter _transactionAdapter;
@@ -156,91 +175,6 @@ namespace StockSharp.Algo
 			if (IsDisposeAdapters(message))
 				MarketDataAdapter = null;
 		}
-
-		///// <summary>
-		///// Проинициализировать обработчик сообщений для адаптеров <see cref="TransactionAdapter"/> и <see cref="MarketDataAdapter"/>.
-		///// </summary>
-		///// <param name="direction">Направление, определяющее тип обработчика.</param>
-		///// <param name="isTransaction">Нужно ли проинициализировать <see cref="TransactionAdapter"/>.</param>
-		///// <param name="isMarketData">Нужно ли проинициализировать <see cref="MarketDataAdapter"/>.</param>
-		///// <param name="defaultProcessor">Обработчик сообщений по-умолчанию. Если не задан, то будет создан автоматически.</param>
-		//public void ApplyMessageProcessor(MessageDirections direction, bool isTransaction, bool isMarketData, IMessageProcessor defaultProcessor = null)
-		//{
-		//	var processor = new MessageProcessorPool(defaultProcessor ?? new MessageProcessor("Processor '{0}' ({1})".Put(GetType().Name.Replace("Trader", string.Empty), direction), RaiseProcessDataError));
-		//	ISmartPointer pointer = new SmartPointer<IMessageProcessor>(processor, p =>
-		//	{
-		//		if (!_isDisposing)
-		//			return;
-
-		//		p.Stop();
-		//		_processorPointers.Remove(p);
-		//	});
-
-		//	_processorPointers[processor] = pointer;
-
-		//	switch (direction)
-		//	{
-		//		case MessageDirections.In:
-		//			_joinIn = true;
-
-		//			if (isTransaction)
-		//			{
-		//				if (TransactionAdapter.InMessageProcessor != null)
-		//				{
-		//					DecRefProcessor(TransactionAdapter.InMessageProcessor);
-		//					TransactionAdapter.InMessageProcessor = null;
-		//				}
-
-		//				pointer.IncRef();
-		//				TransactionAdapter.InMessageProcessor = processor;
-		//			}
-
-		//			if (isMarketData)
-		//			{
-		//				if (MarketDataAdapter.InMessageProcessor != null)
-		//				{
-		//					DecRefProcessor(MarketDataAdapter.InMessageProcessor);
-		//					MarketDataAdapter.InMessageProcessor = null;
-		//				}
-
-		//				pointer.IncRef();
-		//				MarketDataAdapter.InMessageProcessor = processor;
-		//			}
-
-		//			break;
-		//		case MessageDirections.Out:
-		//			_joinOut = true;
-
-		//			if (isTransaction)
-		//			{
-		//				if (TransactionAdapter.OutMessageProcessor != null)
-		//				{
-		//					DecRefProcessor(TransactionAdapter.OutMessageProcessor);
-		//					TransactionAdapter.OutMessageProcessor = null;
-		//				}
-
-		//				pointer.IncRef();
-		//				TransactionAdapter.OutMessageProcessor = processor;
-		//			}
-
-		//			if (isMarketData)
-		//			{
-		//				if (MarketDataAdapter.OutMessageProcessor != null)
-		//				{
-		//					DecRefProcessor(MarketDataAdapter.OutMessageProcessor);
-		//					MarketDataAdapter.OutMessageProcessor = null;
-		//				}
-
-		//				pointer.IncRef();
-		//				MarketDataAdapter.OutMessageProcessor = processor;
-		//			}
-
-		//			break;
-		//		default:
-		//			_processorPointers.Remove(processor);
-		//			throw new ArgumentOutOfRangeException("direction");
-		//	}
-		//}
 
 		/// <summary>
 		/// Обработать сообщение.

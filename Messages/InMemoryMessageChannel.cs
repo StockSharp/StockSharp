@@ -11,18 +11,18 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 
-	using MessageItem = System.Tuple<Messages.Message, Messages.IMessageAdapter>;
-	using Pair = System.Collections.Generic.KeyValuePair<System.DateTime, System.Tuple<Messages.Message, Messages.IMessageAdapter>>;
+	//using MessageItem = System.Tuple<Messages.Message, Messages.IMessageAdapter>;
+	using Pair = System.Collections.Generic.KeyValuePair<System.DateTime, Messages.Message>;
 
 	/// <summary>
 	/// Транспортный канал сообщений, основанный на очереди и работающий в пределах одного процесса.
 	/// </summary>
 	public class InMemoryMessageChannel : IMessageChannel
 	{
-		private class BlockingPriorityQueue : BaseBlockingQueue<Pair, OrderedPriorityQueue<DateTime, MessageItem>>
+		private class BlockingPriorityQueue : BaseBlockingQueue<Pair, OrderedPriorityQueue<DateTime, Message>>
 		{
 			public BlockingPriorityQueue()
-				: base(new OrderedPriorityQueue<DateTime, MessageItem>())
+				: base(new OrderedPriorityQueue<DateTime, Message>())
 			{
 			}
 
@@ -53,21 +53,21 @@
 							messages = InnerCollection
 								.Where(m =>
 								{
-									if (m.Value.Item1.Type != MessageTypes.Execution)
+									if (m.Value.Type != MessageTypes.Execution)
 										return false;
 
-									var execMsg = (ExecutionMessage)m.Value.Item1;
+									var execMsg = (ExecutionMessage)m.Value;
 
 									return execMsg.SecurityId == message.SecurityId && (message.Arg == null || message.Arg.Compare(execMsg.ExecutionType) == 0);
 								});
 							break;
 
 						case MessageTypes.QuoteChange:
-							messages = InnerCollection.Where(m => m.Value.Item1.Type == MessageTypes.QuoteChange && ((QuoteChangeMessage)m.Value.Item1).SecurityId == message.SecurityId);
+							messages = InnerCollection.Where(m => m.Value.Type == MessageTypes.QuoteChange && ((QuoteChangeMessage)m.Value).SecurityId == message.SecurityId);
 							break;
 
 						case MessageTypes.Level1Change:
-							messages = InnerCollection.Where(m => m.Value.Item1.Type == MessageTypes.Level1Change && ((Level1ChangeMessage)m.Value.Item1).SecurityId == message.SecurityId);
+							messages = InnerCollection.Where(m => m.Value.Type == MessageTypes.Level1Change && ((Level1ChangeMessage)m.Value).SecurityId == message.SecurityId);
 							break;
 
 						default:
@@ -152,12 +152,12 @@
 					{
 						try
 						{
-							MessageItem item;
+							Message message;
 
-							if (!TryDequeue(out item))
+							if (!TryDequeue(out message))
 								break;
 
-							NewOutMessage.SafeInvoke(item.Item1, item.Item2);
+							NewOutMessage.SafeInvoke(message);
 						}
 						catch (Exception ex)
 						{
@@ -172,19 +172,19 @@
 				.Launch();
 		}
 
-		private bool TryDequeue(out MessageItem item)
+		private bool TryDequeue(out Message message)
 		{
 			Pair pair;
 
 			if (!_messageQueue.TryDequeue(out pair))
 			{
-				item = null;
+				message = null;
 				return false;
 			}
 
-			_msgStat.Remove(pair.Value.Item1);
+			_msgStat.Remove(pair.Value);
 
-			item = pair.Value;
+			message = pair.Value;
 			return true;
 		}
 
@@ -196,35 +196,23 @@
 			_messageQueue.Close();
 		}
 
-		void IMessageChannel.SendInMessage(Message message)
-		{
-			SendInMessage(message, null);
-		}
-
-		event Action<Message> IMessageChannel.NewOutMessage
-		{
-			add { }
-			remove { }
-		}
-
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер.</param>
-		public void SendInMessage(Message message, IMessageAdapter adapter)
+		public void SendInMessage(Message message)
 		{
 			if (_messageQueue.IsClosed)
 				throw new InvalidOperationException();
 
 			_msgStat.Add(message);
-			_messageQueue.Enqueue(new Pair(message.LocalTime, new MessageItem(message, adapter)));
+			_messageQueue.Enqueue(new Pair(message.LocalTime, message));
 		}
 
 		/// <summary>
 		/// Событие появления нового сообщения.
 		/// </summary>
-		public event Action<Message, IMessageAdapter> NewOutMessage;
+		public event Action<Message> NewOutMessage;
 
 		void IDisposable.Dispose()
 		{

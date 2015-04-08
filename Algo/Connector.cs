@@ -217,28 +217,6 @@ namespace StockSharp.Algo
 			_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
 		}
 
-		private void OutMessageChannelOnNewOutMessage(Message message, IMessageAdapter adapter)
-		{
-			OnProcessMessage(message, adapter, MessageDirections.Out);
-		}
-
-		//private IMessageSessionHolder _sessionHolder;
-
-		///// <summary>
-		///// Контейнер для сессии.
-		///// </summary>
-		//public virtual IMessageSessionHolder SessionHolder
-		//{
-		//	get { return _sessionHolder; }
-		//	protected set
-		//	{
-		//		if (value == null)
-		//			throw new ArgumentNullException("value");
-
-		//		_sessionHolder = value;
-		//	}
-		//}
-
 		/// <summary>
 		/// Является ли подключение <see cref="MarketDataAdapter"/> незавимыми от <see cref="TransactionAdapter"/>.
 		/// </summary>
@@ -246,19 +224,6 @@ namespace StockSharp.Algo
 		{
 			get { return TransactionAdapter != MarketDataAdapter; }
 		}
-
-		//private void TrySetMarketDataIndependent()
-		//{
-		//	IsMarketDataIndependent = TransactionAdapter == null || MarketDataAdapter == null;
-
-		//	if (IsMarketDataIndependent)
-		//		return;
-
-		//	IsMarketDataIndependent = TransactionAdapter.GetType() != MarketDataAdapter.GetType();
-
-		//	if (!IsMarketDataIndependent)
-		//		IsMarketDataIndependent = TransactionAdapter.IsAdaptersIndependent;
-		//}
 
 		/// <summary>
 		/// Настройки контроля подключения <see cref="IConnector"/> к торговой системе.
@@ -1647,24 +1612,6 @@ namespace StockSharp.Algo
 			base.DisposeManaged();
 
 			_connectorStat.Remove(this);
-
-			//lock (_processorPointers.SyncRoot)
-			//{
-			//	_processorPointers.CachedValues.ForEach(p =>
-			//	{
-			//		if (p.Counter == 0)
-			//			p.Dispose();
-			//	});
-			//}
-
-			//lock (_sessionHolderPointers.SyncRoot)
-			//{
-			//	_sessionHolderPointers.CachedValues.ForEach(p =>
-			//	{
-			//		if (p.Counter == 0)
-			//			p.Dispose();
-			//	});	
-			//}
 
 			if (ConnectionState == ConnectionStates.Disconnected || ConnectionState == ConnectionStates.Failed)
 				TransactionAdapter = null;
