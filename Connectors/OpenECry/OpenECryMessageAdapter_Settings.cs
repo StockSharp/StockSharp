@@ -9,7 +9,6 @@ namespace StockSharp.OpenECry
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -39,28 +38,14 @@ namespace StockSharp.OpenECry
 		Secondary
 	}
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("OpenECry")]
 	[CategoryLoc(LocalizedStrings.Str2119Key)]
 	[DescriptionLoc(LocalizedStrings.Str2561Key)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]
-	public class OpenECrySessionHolder : MessageSessionHolder
+	partial class OpenECryMessageAdapter
 	{
-		/// <summary>
-		/// Создать <see cref="OpenECrySessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public OpenECrySessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
-		}
-
 		private EndPoint _address = OpenECryAddresses.Api;
 
 		/// <summary>

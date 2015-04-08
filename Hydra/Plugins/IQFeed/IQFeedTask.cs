@@ -169,7 +169,7 @@ namespace StockSharp.Hydra.IQFeed
 
 		public IQFeedTask()
 		{
-			_supportedCandleSeries = IQFeedSessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = IQFeedMarketDataMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf

@@ -77,7 +77,7 @@ namespace StockSharp.SmartCom
 
 		private void OnOrderReRegisterFailed(string smartOrderId)
 		{
-			SessionHolder.AddErrorLog(() => "MoveFailed, smartOrderId={0}".Put(smartOrderId));
+			this.AddErrorLog(() => "MoveFailed, smartOrderId={0}".Put(smartOrderId));
 
 			var transactionId = GetTransactionBySmartId(smartOrderId);
 			SendOutMessage(new ExecutionMessage
@@ -92,7 +92,7 @@ namespace StockSharp.SmartCom
 
 		private void OnOrderReRegistered(string smartOrderId)
 		{
-			SessionHolder.AddInfoLog(() => "MoveSucc, smartOrderId={0}".Put(smartOrderId));
+			this.AddInfoLog(() => "MoveSucc, smartOrderId={0}".Put(smartOrderId));
 		}
 
 		private void OnNewPortfolio(int row, int rowCount, string portfolioName, string exchange, SmartPortfolioStatus status)
@@ -123,7 +123,7 @@ namespace StockSharp.SmartCom
 		private void OnPortfolioChanged(string portfolioName, decimal cash, decimal leverage, decimal commission, decimal saldo)
 		{
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePortfolioChangeMessage(portfolioName)
 						.Add(PositionChangeTypes.Leverage, leverage)
 						.Add(PositionChangeTypes.Commission, commission)
@@ -134,7 +134,7 @@ namespace StockSharp.SmartCom
 		private void OnPositionChanged(string portfolioName, string smartId, decimal avPrice, decimal amount, decimal planned)
 		{
 			SendOutMessage(
-				SessionHolder.CreatePositionChangeMessage(portfolioName, new SecurityId { Native = smartId })
+				this.CreatePositionChangeMessage(portfolioName, new SecurityId { Native = smartId })
 				.Add(PositionChangeTypes.BlockedValue, planned)
 				.Add(PositionChangeTypes.AveragePrice, avPrice)
 				.Add(PositionChangeTypes.CurrentValueInLots, amount));
@@ -142,7 +142,7 @@ namespace StockSharp.SmartCom
 
 		private void OnNewMyTrade(string portfolio, string smartId, long orderId, decimal price, decimal volume, DateTime time, long tradeId)
 		{
-			SessionHolder.AddInfoLog("SmartTrader.AddTrade: tradeId {0} orderId {1} price {2} volume {3} time {4} security {5}",
+			this.AddInfoLog("SmartTrader.AddTrade: tradeId {0} orderId {1} price {2} volume {3} time {4} security {5}",
 				tradeId, orderId, price, volume, time, smartId);
 
 			SendOutMessage(new ExecutionMessage
@@ -203,7 +203,7 @@ namespace StockSharp.SmartCom
 		private void OnOrderChanged(string portfolioName, string secSmartId, SmartOrderState state, SmartOrderAction action, SmartOrderType smartType, bool isOneDay,
 			decimal price, int volume, decimal stop, int balance, DateTime time, string smartOrderId, long orderId, int status, int transactionId)
 		{
-			SessionHolder.AddInfoLog(() => "SmartTrader.UpdateOrder: id {0} smartId {1} type {2} direction {3} price {4} volume {5} balance {6} time {7} security {8} state {9}"
+			this.AddInfoLog(() => "SmartTrader.UpdateOrder: id {0} smartId {1} type {2} direction {3} price {4} volume {5} balance {6} time {7} security {8} state {9}"
 				.Put(orderId, smartOrderId, smartType, action, price, volume, balance, time, secSmartId, state));
 
 			var side = action.ToSide();

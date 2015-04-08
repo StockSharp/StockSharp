@@ -9,14 +9,14 @@
 	/// <summary>
 	/// Адаптер, исполняющий сообщения в <see cref="IMarketEmulator"/>.
 	/// </summary>
-	public class EmulationMessageAdapter : MessageAdapter<IMessageSessionHolder>
+	public class EmulationMessageAdapter : MessageAdapter
 	{
 		/// <summary>
 		/// Создать <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public EmulationMessageAdapter(IMessageSessionHolder sessionHolder)
-			: this(new MarketEmulator(), sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public EmulationMessageAdapter(IdGenerator transactionIdGenerator)
+			: this(new MarketEmulator(), transactionIdGenerator)
 		{
 		}
 
@@ -24,9 +24,9 @@
 		/// Создать <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <param name="emulator">Эмулятор торгов.</param>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public EmulationMessageAdapter(IMarketEmulator emulator, IMessageSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public EmulationMessageAdapter(IMarketEmulator emulator, IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
 			Emulator = emulator;
 		}
@@ -54,16 +54,26 @@
 				}
 
 				_emulator = value;
-				_emulator.Parent = SessionHolder;
+				_emulator.Parent = this;
 				_emulator.NewOutMessage += SendOutMessage;
 			}
 		}
 
 		/// <summary>
-		/// Запустить таймер генерации с интервалом <see cref="MessageSessionHolder.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
+		/// Запустить таймер генерации с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
 		/// </summary>
 		protected override void StartMarketTimer()
 		{
+		}
+
+		private DateTimeOffset _currentTime;
+
+		/// <summary>
+		/// Текущее время.
+		/// </summary>
+		public override DateTimeOffset CurrentTime
+		{
+			get { return _currentTime; }
 		}
 
 		/// <summary>
@@ -72,7 +82,7 @@
 		/// <param name="message">Сообщение.</param>
 		protected override void OnSendInMessage(Message message)
 		{
-			SessionHolder.DoIf<IMessageSessionHolder, HistorySessionHolder>(s => s.UpdateCurrentTime(message.GetServerTime()));
+			_currentTime = message.GetServerTime();
 
 			switch (message.Type)
 			{

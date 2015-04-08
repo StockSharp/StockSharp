@@ -27,7 +27,7 @@ namespace SampleOEC
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = OpenECrySessionHolder.TimeFrames;
+			CandlesPeriods.ItemsSource = OpenECryMessageAdapter.TimeFrames;
 			CandlesPeriods.SelectedIndex = 0;
 		}
 

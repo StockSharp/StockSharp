@@ -619,7 +619,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SetMarketDataType()
 		{
 			ProcessRequest(RequestMessages.SetMarketDataType, ServerVersions.V55, ServerVersions.V1,
-				socket => socket.Send(SessionHolder.IsRealTimeMarketData ? 1 : 2));
+				socket => socket.Send(IsRealTimeMarketData ? 1 : 2));
 		}
 
 		///// <summary>
@@ -683,7 +683,7 @@ namespace StockSharp.InteractiveBrokers
 			return new Level1ChangeMessage
 			{
 				SecurityId = GetSecurityId(requestId),
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
 			};
 		}
 
@@ -1211,7 +1211,7 @@ namespace StockSharp.InteractiveBrokers
 
 			var quotes = side == Sides.Buy ? prevQuotes.Item1 : prevQuotes.Item2;
 
-			SessionHolder.AddDebugLog("MD {0} {1} POS {2} PRICE {3} VOL {4}", secId, operation, pos, price, volume);
+			this.AddDebugLog("MD {0} {1} POS {2} PRICE {3} VOL {4}", secId, operation, pos, price, volume);
 
 			switch (operation)
 			{
@@ -1269,7 +1269,7 @@ namespace StockSharp.InteractiveBrokers
 				SecurityId = secId,
 				Bids = prevQuotes.Item1.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
 				Asks = prevQuotes.Item2.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+				ServerTime = this.CurrentTime.Convert(TimeZoneInfo.Utc),
 			});
 		}
 
@@ -1286,7 +1286,7 @@ namespace StockSharp.InteractiveBrokers
 				BoardCode = originatingExch,
 				Headline = newsMessage,
 				ExtensionInfo = new Dictionary<object, object> { { "Type", newsType } },
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Est)
+				ServerTime = this.CurrentTime.Convert(TimeHelper.Est)
 			});
 		}
 
@@ -1422,7 +1422,7 @@ namespace StockSharp.InteractiveBrokers
 			/* requestId */
 			socket.ReadInt();
 
-			SessionHolder.IsRealTimeMarketData = socket.ReadBool();
+			IsRealTimeMarketData = socket.ReadBool();
 
 			//marketDataType(reqId, mdt);
 		}

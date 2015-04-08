@@ -9,36 +9,18 @@ namespace StockSharp.InteractiveBrokers
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("Interactive Brokers")]
 	[CategoryLoc(LocalizedStrings.Str2119Key)]
 	[DescriptionLoc(LocalizedStrings.Str2516Key)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]
-	public class InteractiveBrokersSessionHolder : MessageSessionHolder
+	partial class InteractiveBrokersMessageAdapter
 	{
-		/// <summary>
-		/// Создать <see cref="InteractiveBrokersSessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public InteractiveBrokersSessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			Address = DefaultAddress;
-			ServerLogLevel = ServerLogLevels.Detail;
-			CreateAssociatedSecurity = true;
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
-		}
-
 		/// <summary>
 		/// Адрес по-умолчанию.
 		/// </summary>

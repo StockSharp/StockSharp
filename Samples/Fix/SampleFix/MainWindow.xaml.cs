@@ -4,6 +4,8 @@ namespace SampleFix
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
+	using System.Net;
+	using System.Security;
 	using System.Windows;
 
 	using Ecng.Common;
@@ -52,8 +54,8 @@ namespace SampleFix
 				Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 			}
 
-			MarketDataSessionSettings.SelectedObject = Trader.MarketDataSession;
-			TransactionSessionSettings.SelectedObject = Trader.TransactionSession;
+			MarketDataSessionSettings.SelectedObject = Trader.MarketDataAdapter;
+			TransactionSessionSettings.SelectedObject = Trader.TransactionAdapter;
 
 			Instance = this;
 
@@ -105,7 +107,7 @@ namespace SampleFix
 				// подписываемся на событие успешного соединения
 				Trader.Connected += () =>
 				{
-					if (Trader.MarketDataSession.Address != null)
+					if (((FixMessageAdapter)Trader.MarketDataAdapter).Address != null)
 						Trader.StartExport();
 
 					this.GuiAsync(() => ChangeConnectStatus(true));
@@ -172,7 +174,7 @@ namespace SampleFix
 			}
 			else if (Trader.ConnectionState == ConnectionStates.Connected)
 			{
-				if (Trader.ExportState == ConnectionStates.Connected && Trader.MarketDataSession.Address != null)
+				if (Trader.ExportState == ConnectionStates.Connected && ((FixMessageAdapter)Trader.MarketDataAdapter).Address != null)
 					Trader.StopExport();
 
 				Trader.Disconnect();

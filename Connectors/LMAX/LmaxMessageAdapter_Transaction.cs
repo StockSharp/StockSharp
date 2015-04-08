@@ -88,7 +88,7 @@ namespace StockSharp.LMAX
 
 		private void OnSessionPositionChanged(PositionEvent lmaxPos)
 		{
-			SendOutMessage(SessionHolder
+			SendOutMessage(this
 				.CreatePositionChangeMessage(
 						lmaxPos.AccountId.To<string>(),
 						new SecurityId { Native = lmaxPos.InstrumentId }
@@ -187,7 +187,7 @@ namespace StockSharp.LMAX
 				OrderStringId = lmaxOrder.OrderId,
 				ExecutionType = ExecutionTypes.Order,
 				Commission = lmaxOrder.Commission,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
 			};
 
 			msg.OrderState = lmaxOrder.CancelledQuantity > 0
@@ -218,14 +218,14 @@ namespace StockSharp.LMAX
 				ExecutionType = ExecutionTypes.Trade,
 				Side = execution.Order.Quantity > 0 ? Sides.Buy : Sides.Sell,
 				Commission = execution.Order.Commission,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
 			});
 		}
 
 		private void OnSessionAccountStateUpdated(AccountStateEvent accountState)
 		{
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePortfolioChangeMessage(accountState.AccountId.To<string>())
 						.Add(PositionChangeTypes.CurrentPrice, accountState.Balance)
 						.Add(PositionChangeTypes.VariationMargin, accountState.Margin)
@@ -247,7 +247,7 @@ namespace StockSharp.LMAX
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(evt.Reason),
 				PortfolioName = evt.AccountId.To<string>(),
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
 			});
 		}
 	}

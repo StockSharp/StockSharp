@@ -84,7 +84,7 @@ namespace StockSharp.Hydra.OpenECry
 
 		public OECTask()
 		{
-			_supportedCandleSeries = OpenECrySessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = OpenECryMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf

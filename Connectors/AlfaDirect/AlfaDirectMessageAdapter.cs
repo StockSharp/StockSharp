@@ -6,6 +6,7 @@ namespace StockSharp.AlfaDirect
 	using Ecng.Interop;
 
 	using StockSharp.AlfaDirect.Native;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -13,18 +14,27 @@ namespace StockSharp.AlfaDirect
 	/// <summary>
 	/// Адаптер сообщений для AlfaDirect.
 	/// </summary>
-	public partial class AlfaDirectMessageAdapter : MessageAdapter<AlfaDirectSessionHolder>
+	public partial class AlfaDirectMessageAdapter : MessageAdapter
 	{
 		private AlfaWrapper _wrapper;
 
 		/// <summary>
 		/// Создать <see cref="AlfaDirectMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public AlfaDirectMessageAdapter(AlfaDirectSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public AlfaDirectMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
 			Platform = Platforms.x86;
+
+			SecurityClassInfo.Add("FORTS", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("INDEX", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Micex.Code));
+			SecurityClassInfo.Add("INDEX2", RefTuple.Create(SecurityTypes.Index, "INDEX"));
+			SecurityClassInfo.Add("MICEX_SHR_T", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Micex.Code));
+			SecurityClassInfo.Add("RTS_STANDARD", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
+
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>
@@ -81,7 +91,7 @@ namespace StockSharp.AlfaDirect
 					if (_wrapper != null)
 						throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-					_wrapper = new AlfaWrapper(SessionHolder, SessionHolder);
+					_wrapper = new AlfaWrapper(this);
 
 					_wrapper.Connected += OnWrapperConnected;
 					_wrapper.Disconnected += OnWrapperDisconnected;
@@ -104,7 +114,7 @@ namespace StockSharp.AlfaDirect
 					if (_wrapper.IsConnected)
 						SendOutMessage(new ConnectMessage());
 					else if (!Wrapper.IsConnecting)
-						_wrapper.Connect(SessionHolder.Login, SessionHolder.Password.To<string>());
+						_wrapper.Connect(Login, Password.To<string>());
 
 					break;
 				}
@@ -183,7 +193,7 @@ namespace StockSharp.AlfaDirect
 					if (pfMsg.IsSubscribe)
 						Wrapper.StartExportPortfolios();
 					else
-						SessionHolder.AddWarningLog("ignore portfolios unsubscribe");
+						this.AddWarningLog("ignore portfolios unsubscribe");
 
 					break;
 				}
@@ -218,19 +228,19 @@ namespace StockSharp.AlfaDirect
 
 		private void OnWrapperDisconnected()
 		{
-			SessionHolder.AddInfoLog(LocalizedStrings.Str2254);
+			this.AddInfoLog(LocalizedStrings.Str2254);
 			SendOutMessage(new DisconnectMessage());
 		}
 
 		private void OnWrapperConnected()
 		{
-			SessionHolder.AddInfoLog(LocalizedStrings.Str2255);
+			this.AddInfoLog(LocalizedStrings.Str2255);
 			SendOutMessage(new ConnectMessage());
 		}
 
 		private void OnConnectionError(Exception ex)
 		{
-			SessionHolder.AddInfoLog(LocalizedStrings.Str3458Params.Put(ex.Message));
+			this.AddInfoLog(LocalizedStrings.Str3458Params.Put(ex.Message));
 			SendOutMessage(new ConnectMessage { Error = ex });
 		}
 	}

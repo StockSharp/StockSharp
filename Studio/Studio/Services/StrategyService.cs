@@ -70,24 +70,20 @@ namespace StockSharp.Studio.Services
 
 				_securityProvider = new StudioSecurityProvider();
 
-				var session = new HistorySessionHolder(TransactionIdGenerator, _securityProvider)
+				var storageRegistry = new StudioStorageRegistry { MarketDataSettings = strategy.MarketDataSettings };
+
+				MarketDataAdapter = _historyMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, _securityProvider)
 				{
 					StartDate = startDate,
 					StopDate = stopDate,
-				};
-				session.UpdateCurrentTime(startDate);
-
-				var storageRegistry = new StudioStorageRegistry { MarketDataSettings = strategy.MarketDataSettings };
-
-				MarketDataAdapter = _historyMessageAdapter = new HistoryMessageAdapter(session)
-				{
 					StorageRegistry = storageRegistry
 				};
-				TransactionAdapter = new PassThroughMessageAdapter(session);
+				_historyMessageAdapter.UpdateCurrentTime(startDate);
+				TransactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator);
 
-				_historyMessageAdapter.SessionHolder.MarketTimeChangedInterval = useCandlesTimeFrame;
+				_historyMessageAdapter.MarketTimeChangedInterval = useCandlesTimeFrame;
 				// при инициализации по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-				_historyMessageAdapter.SessionHolder.ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
+				_historyMessageAdapter.ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 				_historyMessageAdapter.BasketStorage.InnerStorages.AddRange(GetExecutionStorages());
 
@@ -148,7 +144,7 @@ namespace StockSharp.Studio.Services
 
 			protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 			{
-				_historyMessageAdapter.SessionHolder.UpdateCurrentTime(message.LocalTime);
+				_historyMessageAdapter.UpdateCurrentTime(message.LocalTime);
 
 				switch (message.Type)
 				{
@@ -163,7 +159,6 @@ namespace StockSharp.Studio.Services
 						_strategy.SetIsInitialization(true);
 
 						_historyMessageAdapter
-							.SessionHolder
 							.SecurityProvider
 							.LookupAll()
 							.ForEach(s => MarketDataAdapter.SendOutMessage(s.ToMessage()));
@@ -185,8 +180,8 @@ namespace StockSharp.Studio.Services
 							return;
 						}
 
-						_historyMessageAdapter.SessionHolder.StopDate = DateTimeOffset.MaxValue;
-						_historyMessageAdapter.SessionHolder.MarketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
+						_historyMessageAdapter.StopDate = DateTimeOffset.MaxValue;
+						_historyMessageAdapter.MarketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
 
 						var messages = new List<Message>();
 
@@ -253,8 +248,8 @@ namespace StockSharp.Studio.Services
 						//SecurityId = GetSecurityId(security),
 						DataType = MarketDataTypes.CandleTimeFrame,
 						IsSubscribe = true,
-						From = _historyMessageAdapter.SessionHolder.StartDate,
-						To = _historyMessageAdapter.SessionHolder.StopDate,
+						From = _historyMessageAdapter.StartDate,
+						To = _historyMessageAdapter.StopDate,
 						Arg = _useCandlesTimeFrame
 					}.FillSecurityInfo(this, security));
 				}

@@ -15,7 +15,7 @@ namespace StockSharp.Algo
 	partial class Connector
 	{
 		private readonly CachedSynchronizedDictionary<IMessageProcessor, ISmartPointer> _processorPointers = new CachedSynchronizedDictionary<IMessageProcessor, ISmartPointer>();
-		private readonly CachedSynchronizedDictionary<IMessageSessionHolder, ISmartPointer> _sessionHolderPointers = new CachedSynchronizedDictionary<IMessageSessionHolder, ISmartPointer>();
+		//private readonly CachedSynchronizedDictionary<IMessageSessionHolder, ISmartPointer> _sessionHolderPointers = new CachedSynchronizedDictionary<IMessageSessionHolder, ISmartPointer>();
 
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
 
@@ -37,40 +37,40 @@ namespace StockSharp.Algo
 			return false;
 		}
 
-		private void IncRefSession(IMessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+		//private void IncRefSession(IMessageAdapter adapter)
+		//{
+		//	if (adapter == null)
+		//		throw new ArgumentNullException("adapter");
 
-			_sessionHolderPointers.SafeAdd(adapter.SessionHolder, key =>
-			{
-				if (key.Parent == null)
-					key.Parent = this;
+		//	_sessionHolderPointers.SafeAdd(adapter.SessionHolder, key =>
+		//	{
+		//		if (key.Parent == null)
+		//			key.Parent = this;
 
-				return new SmartPointer<IMessageSessionHolder>(key, h =>
-				{
-					if (!_isDisposing)
-						return;
+		//		return new SmartPointer<IMessageSessionHolder>(key, h =>
+		//		{
+		//			if (!_isDisposing)
+		//				return;
 
-					if (h.Parent == this)
-						h.Parent = null;
+		//			if (h.Parent == this)
+		//				h.Parent = null;
 
-					_sessionHolderPointers.Remove(h);
+		//			_sessionHolderPointers.Remove(h);
 
-					h.Dispose();
-				});
-			});
-		}
+		//			h.Dispose();
+		//		});
+		//	});
+		//}
 
-		private void DecRefSession(IMessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+		//private void DecRefSession(IMessageAdapter adapter)
+		//{
+		//	if (adapter == null)
+		//		throw new ArgumentNullException("adapter");
 
-			var pointer = _sessionHolderPointers.TryGetValue(adapter.SessionHolder);
-			if (pointer != null)
-				pointer.DecRef();
-		}
+		//	var pointer = _sessionHolderPointers.TryGetValue(adapter.SessionHolder);
+		//	if (pointer != null)
+		//		pointer.DecRef();
+		//}
 
 		private readonly SyncObject _transactionAdapterSync = new SyncObject();
 		private IMessageAdapter _transactionAdapter;
@@ -99,7 +99,7 @@ namespace StockSharp.Algo
 
 						ReConnectionSettings.ConnectionSettings.AdapterSettings = new MessageAdapterReConnectionSettings();
 
-						DecRefSession(_transactionAdapter);
+						//DecRefSession(_transactionAdapter);
 
 						if (_transactionAdapter.InMessageProcessor != null)
 						{
@@ -130,7 +130,7 @@ namespace StockSharp.Algo
 						_transactionAdapter = managedAdapter;
 					}
 
-					IncRefSession(_transactionAdapter);
+					//IncRefSession(_transactionAdapter);
 
 					_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
 
@@ -140,7 +140,7 @@ namespace StockSharp.Algo
 					if (_joinOut)
 						TransactionAdapter.OutMessageProcessor = MarketDataAdapter.OutMessageProcessor;
 
-					ReConnectionSettings.ConnectionSettings.AdapterSettings = TransactionAdapter.SessionHolder.ReConnectionSettings;
+					ReConnectionSettings.ConnectionSettings.AdapterSettings = TransactionAdapter.ReConnectionSettings;
 				}
 			}
 		}
@@ -181,7 +181,7 @@ namespace StockSharp.Algo
 
 						ReConnectionSettings.ExportSettings.AdapterSettings = new MessageAdapterReConnectionSettings();
 
-						DecRefSession(_marketDataAdapter);
+						//DecRefSession(_marketDataAdapter);
 
 						if (_marketDataAdapter.InMessageProcessor != null)
 						{
@@ -205,7 +205,7 @@ namespace StockSharp.Algo
 					if (mangedAdapter != null)
 						_marketDataAdapter.NewOutMessage += mangedAdapter.ProcessMessage;
 
-					IncRefSession(_marketDataAdapter);
+					//IncRefSession(_marketDataAdapter);
 
 					_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;
 
@@ -215,7 +215,7 @@ namespace StockSharp.Algo
 					if (_joinOut)
 						MarketDataAdapter.OutMessageProcessor = TransactionAdapter.OutMessageProcessor;
 
-					ReConnectionSettings.ExportSettings.AdapterSettings = MarketDataAdapter.SessionHolder.ReConnectionSettings;
+					ReConnectionSettings.ExportSettings.AdapterSettings = MarketDataAdapter.ReConnectionSettings;
 				}
 			}
 		}
@@ -1087,7 +1087,7 @@ namespace StockSharp.Algo
 				RaiseSecurityChanged(security);
 
 				// стаканы по ALL обновляют BestXXX по конкретным инструментам
-				if (security.Board.Code == MarketDataAdapter.SessionHolder.AssociatedBoardCode)
+				if (security.Board.Code == MarketDataAdapter.AssociatedBoardCode)
 				{
 					var changedSecurities = new Dictionary<Security, RefPair<bool, bool>>();
 

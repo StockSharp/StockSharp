@@ -34,8 +34,8 @@ namespace StockSharp.Studio
 				get { return true; }
 			}
 
-			public StudioMarketDataAdapter(BasketSessionHolder sessionHolder)
-				: base(sessionHolder)
+			public StudioMarketDataAdapter(IdGenerator transactionIdGenerator)
+				: base(transactionIdGenerator)
 			{
 			}
 
@@ -91,20 +91,20 @@ namespace StockSharp.Studio
 			}
 		}
 
-		private sealed class StudioHistorySessionHolder : HistorySessionHolder
-		{
-			public StudioHistorySessionHolder(IdGenerator transactionIdGenerator)
-				: base(transactionIdGenerator)
-			{
-				IsTransactionEnabled = true;
-				IsMarketDataEnabled = false;
-			}
-		}
+		//private sealed class StudioHistorySessionHolder : HistorySessionHolder
+		//{
+		//	public StudioHistorySessionHolder(IdGenerator transactionIdGenerator)
+		//		: base(transactionIdGenerator)
+		//	{
+		//		IsTransactionEnabled = true;
+		//		IsMarketDataEnabled = false;
+		//	}
+		//}
 
 		private sealed class StudioEmulationAdapter : EmulationMessageAdapter
 		{
-			public StudioEmulationAdapter(IMessageSessionHolder sessionHolder)
-				: base(sessionHolder)
+			public StudioEmulationAdapter(IdGenerator transactionIdGenerator)
+				: base(transactionIdGenerator)
 			{
 			}
 
@@ -364,22 +364,17 @@ namespace StockSharp.Studio
 
 		private readonly CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>> _exports = new CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>>();
 
-		private readonly BasketSessionHolder _sessionHolder;
 		private readonly StudioMarketDataAdapter _marketDataAdapter;
 		private readonly BasketMessageAdapter _transactionAdapter;
 
 		private bool _newsRegistered;
 
-		public BasketSessionHolder BasketSessionHolder { get { return _sessionHolder; } }
-
 		public StudioConnector()
 		{
 			EntityFactory = new StudioEntityFactory(this);
 
-			SessionHolder = _sessionHolder = new BasketSessionHolder(TransactionIdGenerator);
-
-			MarketDataAdapter = _marketDataAdapter = new StudioMarketDataAdapter(_sessionHolder);
-			TransactionAdapter = _transactionAdapter = new BasketMessageAdapter(_sessionHolder);
+			MarketDataAdapter = _marketDataAdapter = new StudioMarketDataAdapter(TransactionIdGenerator);
+			TransactionAdapter = _transactionAdapter = new BasketMessageAdapter(TransactionIdGenerator);
 
 			ApplyMessageProcessor(MessageDirections.In, true, false);
 			ApplyMessageProcessor(MessageDirections.In, false, true);
@@ -413,10 +408,13 @@ namespace StockSharp.Studio
 
 		private void CreateEmulationSessionHolder()
 		{
-			var emulationSessionHolder = _sessionHolder.InnerSessions.OfType<StudioHistorySessionHolder>().FirstOrDefault();
+			var emulationSessionHolder = _transactionAdapter.InnerAdapters.OfType<StudioEmulationAdapter>().FirstOrDefault();
 
 			if (emulationSessionHolder == null)
-				_sessionHolder.InnerSessions.Add(emulationSessionHolder = new StudioHistorySessionHolder(TransactionIdGenerator), 1);
+			{
+				emulationSessionHolder = new StudioEmulationAdapter(TransactionIdGenerator);
+				_transactionAdapter.InnerAdapters[emulationSessionHolder] = 1;
+			}
 
 			//if (!_transactionAdapter.Portfolios.ContainsKey("Simulator"))
 			//	_transactionAdapter.Portfolios.Add("Simulator", emulationSessionHolder);
@@ -433,12 +431,12 @@ namespace StockSharp.Studio
 
 			foreach (var portfolio in portfolios)
 			{
-				//var sessionHolder = _transactionAdapter.Portfolios.TryGetValue(portfolio.Name);
+				var adapter = _transactionAdapter.Portfolios.TryGetValue(portfolio.Name);
 
-				//if (sessionHolder != emu.SessionHolder)
-				//	continue;
+				if (adapter != emu)
+					continue;
 
-				//yield return portfolio;
+				yield return portfolio;
 			}
 		}
 
@@ -680,8 +678,8 @@ namespace StockSharp.Studio
 		{
 			EntityFactory = new StudioConnectorEntityFactory();
 
-			MarketDataAdapter = _adapter = new PassThroughMessageAdapter(new PassThroughSessionHolder(TransactionIdGenerator));
-			TransactionAdapter = new PassThroughMessageAdapter(new PassThroughSessionHolder(TransactionIdGenerator));
+			MarketDataAdapter = _adapter = new PassThroughMessageAdapter(TransactionIdGenerator);
+			TransactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator);
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);

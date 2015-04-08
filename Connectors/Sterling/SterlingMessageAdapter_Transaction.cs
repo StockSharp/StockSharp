@@ -175,7 +175,7 @@
 				{
 					PortfolioName = position.bstrAcct,
 					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
-					ServerTime = SessionHolder.CurrentTime
+					ServerTime = CurrentTime
 				};
 
 				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.RealizedPnL, (decimal)position.fReal));

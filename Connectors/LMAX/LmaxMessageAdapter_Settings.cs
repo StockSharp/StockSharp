@@ -8,14 +8,10 @@ namespace StockSharp.LMAX
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("LMAX")]
 	[Category("Forex")]
 	[DescriptionLoc(LocalizedStrings.Str3387Key)]
@@ -23,7 +19,7 @@ namespace StockSharp.LMAX
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 2)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 3)]
-	public class LmaxSessionHolder : MessageSessionHolder
+	partial class LmaxMessageAdapter
 	{
 		/// <summary>
 		/// Логин.
@@ -68,17 +64,6 @@ namespace StockSharp.LMAX
 		public override bool IsValid
 		{
 			get { return !Login.IsEmpty() && !Password.IsEmpty(); }
-		}
-
-		/// <summary>
-		/// Создать <see cref="LmaxSessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public LmaxSessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
 		}
 
 		private static readonly HashSet<TimeSpan> _timeFrames = new HashSet<TimeSpan>(new[]

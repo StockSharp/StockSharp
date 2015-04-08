@@ -120,7 +120,7 @@ namespace StockSharp.AlfaDirect
 				{
 					Native = paperNo,
 					SecurityCode = code,
-					BoardCode = SessionHolder.GetBoardCode(f.PlaceCode.GetValue(cols))
+					BoardCode = this.GetBoardCode(f.PlaceCode.GetValue(cols))
 				};
 
 				var msg = new SecurityMessage
@@ -274,7 +274,7 @@ namespace StockSharp.AlfaDirect
 				}
 				else
 				{
-					SessionHolder.AddWarningLog(LocalizedStrings.Str2257Params, line);
+					this.AddWarningLog(LocalizedStrings.Str2257Params, line);
 				}
 			}
 		}
@@ -346,7 +346,7 @@ namespace StockSharp.AlfaDirect
 					Asks = asks,
 					SecurityId = new SecurityId { Native = paperNo },
 					IsSorted = true,
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+					ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 				});	
 			}
 		}

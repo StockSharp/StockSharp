@@ -14,18 +14,15 @@ namespace StockSharp.Xaml
 
 	using StockSharp.Algo;
 	using StockSharp.Messages;
-
-	using Row = System.Tuple<string, Messages.IMessageSessionHolder>;
-
 	using StockSharp.Localization;
+	using Row = System.Tuple<string, Messages.IMessageAdapter>;
 
 	/// <summary>
 	/// Окно создания редактирования сопоставлений портфелей и адаптеров.
 	/// </summary>
-	public partial class PortfolioSessionHoldersWindow
+	public partial class PortfolioMessageAdaptersWindow
 	{
 		private readonly ObservableCollection<Row> _items = new ObservableCollection<Row>();
-		private BasketSessionHolder _sessionHolder;
 
 		/// <summary>
 		/// <see cref="RoutedCommand"/> на удаление сопоставления.
@@ -37,26 +34,28 @@ namespace StockSharp.Xaml
 		/// </summary>
 		public static readonly RoutedCommand AddCommand = new RoutedCommand();
 
+		private BasketMessageAdapter _adapter;
+
 		/// <summary>
-		/// Контейнер для сессии.
+		/// Адаптер-агрегатор.
 		/// </summary>
-		public BasketSessionHolder SessionHolder
+		public BasketMessageAdapter Adapter
 		{
-			get { return _sessionHolder; }
+			get { return _adapter; }
 			set
 			{
-				if (_sessionHolder == value)
+				if (_adapter == value)
 					return;
 
 				if (value == null)
 					throw new ArgumentNullException("value");
 
-				_sessionHolder = value;
+				_adapter = value;
 
 				_items.Clear();
-				//_items.AddRange(_sessionHolder.Portfolios.Select(p => new Row(p.Key, p.Value)));
+				_items.AddRange(_adapter.Portfolios.Select(p => new Row(p.Key, p.Value)));
 
-				AdaptersComboBox.ItemsSource = _sessionHolder.InnerSessions;
+				AdaptersComboBox.ItemsSource = _adapter.InnerAdapters;
 			}
 		}
 
@@ -66,9 +65,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Создать <see cref="PortfolioSessionHoldersWindow"/>.
+		/// Создать <see cref="PortfolioMessageAdaptersWindow"/>.
 		/// </summary>
-		public PortfolioSessionHoldersWindow()
+		public PortfolioMessageAdaptersWindow()
 		{
 			InitializeComponent();
 
@@ -80,7 +79,7 @@ namespace StockSharp.Xaml
 		{
 			var item = SelectedItem;
 
-			//SessionHolder.Portfolios.Remove(item.Item1);
+			Adapter.Portfolios.Remove(item.Item1);
 			_items.Remove(item);
 		}
 
@@ -92,9 +91,9 @@ namespace StockSharp.Xaml
 		private void ExecutedAdd(object sender, ExecutedRoutedEventArgs e)
 		{
 			var portfolio = PortfoliosComboBox.SelectedPortfolio.Name;
-			var sessionHolder = (IMessageSessionHolder)AdaptersComboBox.SelectedItem;
+			var adapter = (IMessageAdapter)AdaptersComboBox.SelectedItem;
 
-			//if (SessionHolder.Portfolios.ContainsKey(portfolio))
+			if (Adapter.Portfolios.ContainsKey(portfolio))
 			{
 				new MessageBoxBuilder()
 					.Caption(Title)
@@ -105,8 +104,8 @@ namespace StockSharp.Xaml
 				return;
 			}
 
-			_items.Add(new Row(portfolio, sessionHolder));
-			//SessionHolder.Portfolios[portfolio] = sessionHolder;
+			_items.Add(new Row(portfolio, adapter));
+			Adapter.Portfolios[portfolio] = adapter;
 
 			PortfoliosComboBox.SelectedPortfolio = null;
 			AdaptersComboBox.SelectedItem = null;
@@ -125,7 +124,7 @@ namespace StockSharp.Xaml
 			if (value is string)
 				return value;
 
-			var sessionHolder = (IMessageSessionHolder)value;
+			var sessionHolder = (IMessageAdapter)value;
 
 			var title = sessionHolder.GetType().GetDisplayName();
 			var descr = sessionHolder.ToString();

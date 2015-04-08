@@ -3257,27 +3257,27 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить описание инструмента по классу из <see cref="IMessageSessionHolder.SecurityClassInfo"/>.
+		/// Получить описание инструмента по классу.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
+		/// <param name="securityClassInfo">Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.</param>
 		/// <param name="secClass">Класс инструмента.</param>
-		/// <returns>Описание инструмента. Если класс не найден в <see cref="IMessageSessionHolder.SecurityClassInfo"/>,
+		/// <returns>Описание инструмента. Если класс не найден,
 		/// то будет возвращено значение <see langword="null"/> в качестве типа инструмента.</returns>
-		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IMessageSessionHolder sessionHolder, string secClass)
+		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
-			var pair = sessionHolder.SecurityClassInfo.TryGetValue(secClass);
+			var pair = securityClassInfo.TryGetValue(secClass);
 			return Tuple.Create(pair == null ? (SecurityTypes?)null : pair.First, pair == null ? secClass : pair.Second);
 		}
 
 		/// <summary>
 		/// Получить код площадки для класса инструмента.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
+		/// <param name="adapter">Адаптер к торговой системе.</param>
 		/// <param name="secClass">Класс инструмента.</param>
 		/// <returns>Код площадки.</returns>
-		public static string GetBoardCode(this IMessageSessionHolder sessionHolder, string secClass)
+		public static string GetBoardCode(this IMessageAdapter adapter, string secClass)
 		{
-			return sessionHolder.GetSecurityClassInfo(secClass).Item2;
+			return adapter.SecurityClassInfo.GetSecurityClassInfo(secClass).Item2;
 		}
 
 		/// <summary>

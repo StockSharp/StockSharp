@@ -92,7 +92,7 @@
     <Compile Include="OpenECryMessageAdapter.cs" />
     <Compile Include="OpenECryMessageAdapter_MarketData.cs" />
     <Compile Include="OpenECryMessageAdapter_Transaction.cs" />
-    <Compile Include="OpenECrySessionHolder.cs" />
+    <Compile Include="OpenECryMessageAdapter_Settings.cs" />
     <Compile Include="Xaml\OpenECryAddressComboBox.cs" />
     <Compile Include="OpenECryAddresses.cs" />
     <Compile Include="OpenECryOrderCondition.cs" />

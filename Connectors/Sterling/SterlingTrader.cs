@@ -16,11 +16,8 @@
 		/// </summary>
 		public SterlingTrader()
 		{
-			var sessionHolder = new SterlingSessionHolder(TransactionIdGenerator);
+			var adapter = new SterlingMessageAdapter(TransactionIdGenerator);
 
-			var adapter = new SterlingMessageAdapter(sessionHolder);
-
-			base.SessionHolder = sessionHolder;
 			TransactionAdapter = adapter;
 			MarketDataAdapter = adapter;
 

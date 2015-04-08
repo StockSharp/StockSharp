@@ -320,7 +320,7 @@ namespace StockSharp.Sterling
 					SecurityCode = structGreeksUpdate.bstrSymbol,
 					//BoardCode = structGreeksUpdate.bstrExch,
 				},
-				ServerTime = SessionHolder.CurrentTime,
+				ServerTime = CurrentTime,
 			};
 
 			message.TryAdd(Level1Fields.Delta, (decimal)structGreeksUpdate.fDelta);

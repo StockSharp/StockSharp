@@ -14,18 +14,25 @@ namespace StockSharp.SmartCom
 	/// <summary>
 	/// Адаптер сообщений для SmartCOM.
 	/// </summary>
-	public partial class SmartComMessageAdapter : MessageAdapter<SmartComSessionHolder>
+	public partial class SmartComMessageAdapter : MessageAdapter
 	{
 		private ISmartComWrapper _wrapper;
 
 		/// <summary>
 		/// Создать <see cref="SmartComMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public SmartComMessageAdapter(SmartComSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public SmartComMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
-			SessionHolder.VersionChanged += OnSessionVersionChanged;
+			Version = SmartComVersions.V3;
+
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
+
+			SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
 
 			PortfolioBoardCodes = new Dictionary<string, string>
 			{
@@ -34,7 +41,7 @@ namespace StockSharp.SmartCom
 			    { "RTS_FUT", ExchangeBoard.Forts.Code },
 			};
 
-			OnSessionVersionChanged();
+			UpdatePlatform();
 		}
 
 		/// <summary>
@@ -46,19 +53,9 @@ namespace StockSharp.SmartCom
 			return new SmartComOrderCondition();
 		}
 
-		/// <summary>
-		/// Освободить занятые ресурсы.
-		/// </summary>
-		protected override void DisposeManaged()
+		private void UpdatePlatform()
 		{
-			SessionHolder.VersionChanged -= OnSessionVersionChanged;
-
-			base.DisposeManaged();
-		}
-
-		private void OnSessionVersionChanged()
-		{
-			Platform = SessionHolder.Version == SmartComVersions.V3 ? Platforms.AnyCPU : Platforms.x86;
+			Platform = Version == SmartComVersions.V3 ? Platforms.AnyCPU : Platforms.x86;
 		}
 
 		/// <summary>
@@ -100,7 +97,7 @@ namespace StockSharp.SmartCom
 					//_smartOrderIds.Clear();
 					//_smartIdOrders.Clear();
 
-					switch (SessionHolder.Version)
+					switch (Version)
 					{
 						case SmartComVersions.V2:
 							_wrapper = new SmartCom2Wrapper();
@@ -109,13 +106,13 @@ namespace StockSharp.SmartCom
 							_wrapper = (Environment.Is64BitProcess
 								? (ISmartComWrapper)new SmartCom3Wrapper64
 								{
-									ClientSettings = SessionHolder.ClientSettings,
-									ServerSettings = SessionHolder.ServerSettings,
+									ClientSettings = ClientSettings,
+									ServerSettings = ServerSettings,
 								}
 								: new SmartCom3Wrapper32
 								{
-									ClientSettings = SessionHolder.ClientSettings,
-									ServerSettings = SessionHolder.ServerSettings,
+									ClientSettings = ClientSettings,
+									ServerSettings = ServerSettings,
 								});
 
 							break;
@@ -144,7 +141,7 @@ namespace StockSharp.SmartCom
 					_wrapper.Connected += OnConnected;
 					_wrapper.Disconnected += OnDisconnected;
 
-					_wrapper.Connect(SessionHolder.Address.GetHost(), (short)SessionHolder.Address.GetPort(), SessionHolder.Login, SessionHolder.Password.To<string>());
+					_wrapper.Connect(Address.GetHost(), (short)Address.GetPort(), Login, Password.To<string>());
 
 					break;
 				}

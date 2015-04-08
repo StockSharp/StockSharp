@@ -34,7 +34,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Адаптер-агрегатор, позволяющий оперировать одновременно несколькими адаптерами, подключенных к разным торговым системам.
 	/// </summary>
-	public class BasketMessageAdapter : MessageAdapter<BasketSessionHolder>
+	public class BasketMessageAdapter : MessageAdapter
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
@@ -147,9 +147,9 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Создать <see cref="BasketMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public BasketMessageAdapter(BasketSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
 			_innerAdapters = new InnerAdapterList(this);
 			//SessionHolder.SetChilds(_innerAdapters);
@@ -284,8 +284,8 @@ namespace StockSharp.Algo
 		
 		private void ProcessInnerAdapterConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
 		{
-			if(message.Error != null)
-				SessionHolder.AddErrorLog(LocalizedStrings.Str625Params, innerAdapter.GetType().Name, message.Error);
+			if (message.Error != null)
+				this.AddErrorLog(LocalizedStrings.Str625Params, innerAdapter.GetType().Name, message.Error);
 
 			Exception error = null;
 
@@ -327,7 +327,7 @@ namespace StockSharp.Algo
 		private void ProcessInnerAdapterDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
 		{
 			if (message.Error != null)
-				SessionHolder.AddErrorLog(LocalizedStrings.Str627Params, innerAdapter.GetType().Name, message.Error);
+				this.AddErrorLog(LocalizedStrings.Str627Params, innerAdapter.GetType().Name, message.Error);
 
 			Exception error = null;
 
@@ -423,7 +423,7 @@ namespace StockSharp.Algo
 
 			if (message.Error == null)
 			{
-				SessionHolder.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
+				this.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
 
 				_subscriptionQueue.Remove(key);
 
@@ -439,7 +439,7 @@ namespace StockSharp.Algo
 			}
 			else
 			{
-				SessionHolder.AddDebugLog(LocalizedStrings.Str631Params, adapter, message.SecurityId, message.DataType, message.Error);
+				this.AddDebugLog(LocalizedStrings.Str631Params, adapter, message.SecurityId, message.DataType, message.Error);
 
 				if (cancel)
 					RaiseSubscriptionFailed(message, new InvalidOperationException(LocalizedStrings.SubscriptionProcessCancelled));
@@ -462,7 +462,7 @@ namespace StockSharp.Algo
 		{
 			_subscriptionQueue.Remove(Tuple.Create(message.SecurityId, message.DataType));
 
-			SessionHolder.AddDebugLog(LocalizedStrings.Str634Params, message.SecurityId, message.DataType, error);
+			this.AddDebugLog(LocalizedStrings.Str634Params, message.SecurityId, message.DataType, error);
 
 			RaiseMarketDataMessage(message, error);
 		}

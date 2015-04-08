@@ -1,4 +1,4 @@
-<UserControl x:Class="StockSharp.Xaml.SessionHoldersPanel"
+<UserControl x:Class="StockSharp.Xaml.MessageAdaptersPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -49,11 +49,11 @@
                     Executed="ExecutedAddConnection"
                     CanExecute="CanExecuteAddConnection" />-->
 
-		<CommandBinding Command="{x:Static local:SessionHoldersPanel.RemoveSessionCommand}"
+		<CommandBinding Command="{x:Static local:MessageAdaptersPanel.RemoveSessionCommand}"
                     Executed="ExecutedRemoveSession"
                     CanExecute="CanExecuteRemoveSession" />
 
-		<CommandBinding Command="{x:Static local:SessionHoldersPanel.EnableSessionCommand}"
+		<CommandBinding Command="{x:Static local:MessageAdaptersPanel.EnableSessionCommand}"
                     Executed="ExecutedEnableSession"
                     CanExecute="CanExecuteEnableSession" />
 	</UserControl.CommandBindings>
@@ -80,13 +80,13 @@
 				</xctk:DropDownButton.DropDownContent>
 			</xctk:DropDownButton>
 
-			<Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr795}" Command="{x:Static local:SessionHoldersPanel.RemoveSessionCommand}">
+			<Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr795}" Command="{x:Static local:MessageAdaptersPanel.RemoveSessionCommand}">
                 <ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png" Style="{StaticResource toolbarImageStyle}" />
 			</Button>
 			
 			<Separator/>
-			
-			<Button ToolTip="{x:Static loc:LocalizedStrings.Str1557}" Command="{x:Static local:SessionHoldersPanel.EnableSessionCommand}">
+
+			<Button ToolTip="{x:Static loc:LocalizedStrings.Str1557}" Command="{x:Static local:MessageAdaptersPanel.EnableSessionCommand}">
                 <ex:BmpImage x:Name="EnableImg" Source="pack://application:,,,/StockSharp.Xaml;component/Images/enabled.png" Style="{StaticResource toolbarImageStyle}" />
 			</Button>
 

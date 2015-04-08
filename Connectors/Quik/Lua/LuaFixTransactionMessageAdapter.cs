@@ -3,6 +3,8 @@
 	using System.ComponentModel;
 	using System.Linq;
 
+	using Ecng.Common;
+
 	using StockSharp.Fix;
 	using StockSharp.Fix.Native;
 	using StockSharp.Messages;
@@ -10,8 +12,8 @@
 	[DisplayName("LuaFixTransactionMessageAdapter")]
 	class LuaFixTransactionMessageAdapter : FixMessageAdapter
 	{
-		public LuaFixTransactionMessageAdapter(FixSessionHolder sessionHolder)
-			: base(sessionHolder, sessionHolder.TransactionSession)
+		public LuaFixTransactionMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
 		}
 
@@ -34,8 +36,8 @@
 				{
 					var condition = new QuikOrderCondition();
 
-					var executions = reader.ReadExecutionMessage(Session, SessionHolder.UtcOffset,
-						tag => reader.ReadOrderCondition(tag, SessionHolder.UtcOffset, condition));
+					var executions = reader.ReadExecutionMessage(this,
+						tag => reader.ReadOrderCondition(tag, UtcOffset, condition));
 
 					if (executions == null)
 						return null;

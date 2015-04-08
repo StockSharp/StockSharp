@@ -5,7 +5,9 @@ namespace StockSharp.Quik
 	using System.Net;
 	using System.Security;
 
+	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Algo;
@@ -21,7 +23,6 @@ namespace StockSharp.Quik
 	{
 		private readonly QuikTrans2QuikAdapter _trans2QuikAdapter;
 		private readonly QuikDdeAdapter _ddeAdapter;
-		private readonly QuikSessionHolder _sessionHolder;
 
 		private readonly FixMessageAdapter _luaTransactionAdapter;
 		private readonly FixMessageAdapter _luaMarketDataAdapter;
@@ -40,50 +41,70 @@ namespace StockSharp.Quik
 		/// <param name="path">Путь к директории, где установлен Quik (или путь к файлу info.exe).</param>
 		public QuikTrader(string path)
 		{
-			_sessionHolder = new QuikSessionHolder(TransactionIdGenerator) { Path = path };
-			_trans2QuikAdapter = new QuikTrans2QuikAdapter(_sessionHolder);
-			_ddeAdapter = new QuikDdeAdapter(_sessionHolder);
+			Path = path;
 
-			_luaTransactionAdapter = new LuaFixTransactionMessageAdapter(_sessionHolder);
-			_luaMarketDataAdapter = new FixMessageAdapter(_sessionHolder, _sessionHolder.MarketDataSession);
+			_trans2QuikAdapter = new QuikTrans2QuikAdapter(TransactionIdGenerator);
+			_ddeAdapter = new QuikDdeAdapter(TransactionIdGenerator);
 
-			SessionHolderOnIsLuaChanged();
-			_sessionHolder.IsLuaChanged += SessionHolderOnIsLuaChanged;
+			_trans2QuikAdapter.GetTerminal = _ddeAdapter.GetTerminal = () => Terminal;
+
+			_luaTransactionAdapter = new LuaFixTransactionMessageAdapter(TransactionIdGenerator)
+			{
+				Login = "quik",
+				Password = "quik".To<SecureString>(),
+				Address = "localhost:5001".To<EndPoint>(),
+				TargetCompId = "StockSharpTS",
+				SenderCompId = "quik",
+				ExchangeBoard = ExchangeBoard.Forts,
+				Version = FixVersions.Fix44,
+				RequestAllPortfolios = true,
+				MarketData = FixMarketData.None,
+				UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+			};
+			_luaMarketDataAdapter = new FixMessageAdapter(TransactionIdGenerator)
+			{
+				Login = "quik",
+				Password = "quik".To<SecureString>(),
+				Address = "localhost:5001".To<EndPoint>(),
+				TargetCompId = "StockSharpMD",
+				SenderCompId = "quik",
+				ExchangeBoard = ExchangeBoard.Forts,
+				Version = FixVersions.Fix44,
+				RequestAllSecurities = true,
+				MarketData = FixMarketData.MarketData,
+				UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+			};
+
+			IsDde = false;
 
 			ApplyMessageProcessor(MessageDirections.In, true, false);
 			ApplyMessageProcessor(MessageDirections.In, false, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
 		}
 
-		/// <summary>
-		/// Контейнер для сессии.
-		/// </summary>
-		public override IMessageSessionHolder SessionHolder
-		{
-			get { return _sessionHolder; }
-		}
-
-		private void SessionHolderOnIsLuaChanged()
-		{
-			if (IsDde)
-			{
-				TransactionAdapter = _trans2QuikAdapter;
-				MarketDataAdapter = _ddeAdapter;
-			}
-			else
-			{
-				TransactionAdapter = _luaTransactionAdapter;
-				MarketDataAdapter = _luaMarketDataAdapter;
-			}
-		}
+		private bool _isDde;
 
 		/// <summary>
 		/// Использовать для старое подключение DDE + Trans2Quik. По-умолчанию выключено.
 		/// </summary>
 		public bool IsDde
 		{
-			get { return _sessionHolder.IsDde; }
-			set { _sessionHolder.IsDde = value; }
+			get { return _isDde; }
+			set
+			{
+				_isDde = value;
+
+				if (value)
+				{
+					TransactionAdapter = _trans2QuikAdapter;
+					MarketDataAdapter = _ddeAdapter;
+				}
+				else
+				{
+					TransactionAdapter = _luaTransactionAdapter;
+					MarketDataAdapter = _luaMarketDataAdapter;
+				}
+			}
 		}
 
 		/// <summary>
@@ -91,8 +112,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public bool RequestAllSecurities
 		{
-			get { return _sessionHolder.MarketDataSession.RequestAllSecurities; }
-			set { _sessionHolder.MarketDataSession.RequestAllSecurities = value; }
+			get { return _luaMarketDataAdapter.RequestAllSecurities; }
+			set { _luaMarketDataAdapter.RequestAllSecurities = value; }
 		}
 
 		/// <summary>
@@ -108,8 +129,8 @@ namespace StockSharp.Quik
 		/// </summary>
 		public string DllName
 		{
-			get { return _sessionHolder.DllName; }
-			set { _sessionHolder.DllName = value; }
+			get { return _trans2QuikAdapter.DllName; }
+			set { _trans2QuikAdapter.DllName = value; }
 		}
 
 		/// <summary>
@@ -117,17 +138,27 @@ namespace StockSharp.Quik
 		/// </summary>
 		public string DdeServer
 		{
-			get { return _sessionHolder.DdeServer; }
-			set { _sessionHolder.DdeServer = value; }
+			get { return _ddeAdapter.DdeServer; }
+			set { _ddeAdapter.DdeServer = value; }
 		}
 
+		private string _path;
+
 		/// <summary>
-		/// Путь к директории, где установлен Quik (или путь к файлу info.exe). По-умолчанию равно <see cref="QuikTerminal.GetDefaultPath"/>.
+		/// Путь к директории, где установлен Quik (или путь к файлу info.exe).
+		/// По-умолчанию равно <see cref="QuikTerminal.GetDefaultPath"/>.
 		/// </summary>
 		public string Path
 		{
-			get { return _sessionHolder.Path; }
-			set { _sessionHolder.Path = value; }
+			get { return _path; }
+			set
+			{
+				if (Path == value)
+					return;
+
+				Terminal = null;
+				_path = value;
+			}
 		}
 
 		/// <summary>
@@ -135,11 +166,11 @@ namespace StockSharp.Quik
 		/// </summary>
 		public EndPoint LuaFixServerAddress
 		{
-			get { return _sessionHolder.TransactionSession.Address; }
+			get { return _luaTransactionAdapter.Address; }
 			set
 			{
-				_sessionHolder.TransactionSession.Address = value;
-				_sessionHolder.MarketDataSession.Address = value;
+				_luaTransactionAdapter.Address = value;
+				_luaMarketDataAdapter.Address = value;
 			}
 		}
 
@@ -148,14 +179,14 @@ namespace StockSharp.Quik
 		/// </summary>
 		public string LuaLogin
 		{
-			get { return _sessionHolder.TransactionSession.SenderCompId; }
+			get { return _luaTransactionAdapter.SenderCompId; }
 			set
 			{
-				_sessionHolder.TransactionSession.SenderCompId = value;
-				_sessionHolder.TransactionSession.Login = value;
+				_luaTransactionAdapter.SenderCompId = value;
+				_luaTransactionAdapter.Login = value;
 
-				_sessionHolder.MarketDataSession.SenderCompId = value;
-				_sessionHolder.MarketDataSession.Login = value;
+				_luaMarketDataAdapter.SenderCompId = value;
+				_luaMarketDataAdapter.Login = value;
 			}
 		}
 
@@ -164,20 +195,60 @@ namespace StockSharp.Quik
 		/// </summary>
 		public SecureString LuaPassword
 		{
-			get { return _sessionHolder.TransactionSession.Password; }
+			get { return _luaTransactionAdapter.Password; }
 			set
 			{
-				_sessionHolder.TransactionSession.Password = value;
-				_sessionHolder.MarketDataSession.Password = value;
+				_luaTransactionAdapter.Password = value;
+				_luaMarketDataAdapter.Password = value;
 			}
 		}
+
+		private static readonly SynchronizedSet<string> _terminalPaths = new SynchronizedSet<string>();
+
+		private QuikTerminal _terminal;
 
 		/// <summary>
 		/// Вспомогательный класс для управления терминалом Quik.
 		/// </summary>
 		public QuikTerminal Terminal
 		{
-			get { return _sessionHolder.Terminal; }
+			get
+			{
+				if (Path.IsEmpty())
+					return null;
+
+				if (_terminal == null)
+				{
+					_terminal = QuikTerminal.Get(Path);
+					_terminal.Adapter = _ddeAdapter;
+				}
+
+				return _terminal;
+			}
+			private set
+			{
+				if (_terminal == value)
+					return;
+
+				if (_terminal != null)
+				{
+					_terminalPaths.Remove(_terminal.FileName);
+
+					_terminal.Adapter = _ddeAdapter;
+					_terminal = null;
+				}
+
+				if (value != null)
+				{
+					if (!_terminalPaths.TryAdd(value.FileName))
+						throw new InvalidOperationException(LocalizedStrings.Str1807Params.Put(value.FileName));
+
+					_terminal = value;
+					_terminal.Adapter = _ddeAdapter;
+				}
+
+				//TerminalChanged.SafeInvoke();
+			}
 		}
 
 		/// <summary>
@@ -189,8 +260,8 @@ namespace StockSharp.Quik
 		/// </remarks>
 		public bool IsAsyncMode
 		{
-			get { return _sessionHolder.IsAsyncMode; }
-			set { _sessionHolder.IsAsyncMode = value; }
+			get { return _trans2QuikAdapter.IsAsyncMode; }
+			set { _trans2QuikAdapter.IsAsyncMode = value; }
 		}
 
 		/// <summary>
@@ -267,68 +338,68 @@ namespace StockSharp.Quik
 		/// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение и экспорт не активен.</returns>
 		protected override bool IsExportAlive()
 		{
-			return IsDde ? _trans2QuikAdapter.IsConnectionAlive : base.IsExportAlive();
+			return IsDde ? Terminal.IsExportStarted : base.IsExportAlive();
 		}
 
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты.
 		/// </summary>
-		public DdeTable SecuritiesTable { get { return _sessionHolder.SecuritiesTable; } }
+		public DdeTable SecuritiesTable { get { return _ddeAdapter.SecuritiesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Инструменты (изменения).
 		/// </summary>
-		public DdeTable SecuritiesChangeTable { get { return _sessionHolder.SecuritiesChangeTable; } }
+		public DdeTable SecuritiesChangeTable { get { return _ddeAdapter.SecuritiesChangeTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Сделки.
 		/// </summary>
-		public DdeTable TradesTable { get { return _sessionHolder.TradesTable; } }
+		public DdeTable TradesTable { get { return _ddeAdapter.TradesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Мои Сделки.
 		/// </summary>
-		public DdeTable MyTradesTable { get { return _sessionHolder.MyTradesTable; } }
+		public DdeTable MyTradesTable { get { return _ddeAdapter.MyTradesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Заявки.
 		/// </summary>
-		public DdeTable OrdersTable { get { return _sessionHolder.OrdersTable; } }
+		public DdeTable OrdersTable { get { return _ddeAdapter.OrdersTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Стоп-Заявки.
 		/// </summary>
-		public DdeTable StopOrdersTable { get { return _sessionHolder.StopOrdersTable; } }
+		public DdeTable StopOrdersTable { get { return _ddeAdapter.StopOrdersTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы со стаканом.
 		/// </summary>
-		public DdeTable QuotesTable { get { return _sessionHolder.QuotesTable; } }
+		public DdeTable QuotesTable { get { return _ddeAdapter.QuotesTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по бумагам.
 		/// </summary>
-		public DdeTable EquityPortfoliosTable { get { return _sessionHolder.EquityPortfoliosTable; } }
+		public DdeTable EquityPortfoliosTable { get { return _ddeAdapter.EquityPortfoliosTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Портфель по деривативам.
 		/// </summary>
-		public DdeTable DerivativePortfoliosTable { get { return _sessionHolder.DerivativePortfoliosTable; } }
+		public DdeTable DerivativePortfoliosTable { get { return _ddeAdapter.DerivativePortfoliosTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по бумагам.
 		/// </summary>
-		public DdeTable EquityPositionsTable { get { return _sessionHolder.EquityPositionsTable; } }
+		public DdeTable EquityPositionsTable { get { return _ddeAdapter.EquityPositionsTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Позиции по деривативам.
 		/// </summary>
-		public DdeTable DerivativePositionsTable { get { return _sessionHolder.DerivativePositionsTable; } }
+		public DdeTable DerivativePositionsTable { get { return _ddeAdapter.DerivativePositionsTable; } }
 
 		/// <summary>
 		/// Настройки DDE таблицы Валюты портфелей.
 		/// </summary>
-		public DdeTable CurrencyPortfoliosTable { get { return _sessionHolder.CurrencyPortfoliosTable; } }
+		public DdeTable CurrencyPortfoliosTable { get { return _ddeAdapter.CurrencyPortfoliosTable; } }
 
 		/// <summary>
 		/// Список произвольных таблиц.
@@ -346,8 +417,8 @@ namespace StockSharp.Quik
 		/// </remarks>
 		public bool SupportManualOrders
 		{
-			get { return _sessionHolder.SupportManualOrders; }
-			set { _sessionHolder.SupportManualOrders = value; }
+			get { return _ddeAdapter.SupportManualOrders; }
+			set { _ddeAdapter.SupportManualOrders = value; }
 		}
 
 		/// <summary>
@@ -490,12 +561,27 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы. В частности, отключиться от торговой системы через <see cref="Connector.Disconnect"/>.
+		/// Сохранить настройки.
 		/// </summary>
-		protected override void DisposeManaged()
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Save(SettingsStorage storage)
 		{
-			_sessionHolder.IsLuaChanged -= SessionHolderOnIsLuaChanged;
-			base.DisposeManaged();
+			storage.SetValue("IsDde", IsDde);
+			storage.SetValue("Path", Path);
+
+			base.Save(storage);
+		}
+
+		/// <summary>
+		/// Загрузить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Load(SettingsStorage storage)
+		{
+			IsDde = storage.GetValue<bool>("IsDde");
+			Path = storage.GetValue<string>("Path");
+
+			base.Load(storage);
 		}
 	}
 }

@@ -7,7 +7,6 @@ namespace StockSharp.Quik.Lua
 	using System.Net;
 	using System.Reflection;
 	using System.Security;
-	using SystemProcess = System.Diagnostics.Process;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -26,56 +25,6 @@ namespace StockSharp.Quik.Lua
 	/// </summary>
 	public class LuaFixServer : Disposable
 	{
-		[DisplayName("Quik")]
-		private sealed class LuaSession : QuikSessionHolder
-		{
-			public BlockingQueue<LuaRequest> Requests { get; private set; }
-
-			public LuaSession(IdGenerator transactionIdGenerator)
-				: base(transactionIdGenerator)
-			{
-				Requests = new BlockingQueue<LuaRequest>();
-				Requests.Close();
-			}
-
-			public void ReplaceSecurityId(SecurityId securityId, Action<SecurityId> setSecurityId)
-			{
-				if (setSecurityId == null)
-					throw new ArgumentNullException("setSecurityId");
-
-				ReplaceBoardCode(securityId.BoardCode, boardCode => setSecurityId(new SecurityId { SecurityCode = securityId.SecurityCode, BoardCode = boardCode }));
-			}
-
-			public void ReplaceBoardCode(string classCode, Action<string> setBoardCode)
-			{
-				if (setBoardCode == null)
-					throw new ArgumentNullException("setBoardCode");
-
-				if (classCode.IsEmpty())
-					return;
-
-				var info = this.GetSecurityClassInfo(classCode);
-
-				if (info == null)
-					return;
-
-				setBoardCode(info.Item2);
-			}
-
-			public string GetBoardCode(string classCode)
-			{
-				if (classCode.IsEmpty())
-					return classCode;
-
-				var info = this.GetSecurityClassInfo(classCode);
-
-				if (info == null)
-					return classCode;
-
-				return info.Item2;
-			}
-		}
-
 		[DisplayName("FixServer")]
 		private sealed class FixServerEx : FixServer
 		{
@@ -141,7 +90,6 @@ namespace StockSharp.Quik.Lua
 		private readonly LogManager _logManager = new LogManager();
 
 		private readonly FixServerEx _fixServer;
-		private readonly LuaSession _sessionHolder;
 		private readonly SynchronizedDictionary<SecurityId, Level1ChangeMessage> _prevLevel1 = new CachedSynchronizedDictionary<SecurityId, Level1ChangeMessage>();
 		
 		private readonly Dictionary<long, long> _transactionsByOrderId = new Dictionary<long, long>();
@@ -149,6 +97,10 @@ namespace StockSharp.Quik.Lua
 		private readonly Dictionary<long, List<ExecutionMessage>> _tradesByOrderId = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, string> _depoNames = new Dictionary<string, string>();
 		private readonly SynchronizedDictionary<long, Transaction> _transactions = new SynchronizedDictionary<long, Transaction>();
+
+		private readonly BlockingQueue<LuaRequest> _requests = new BlockingQueue<LuaRequest>();
+
+		private readonly IDictionary<string, RefPair<SecurityTypes, string>> _securityClassInfo = new SynchronizedDictionary<string, RefPair<SecurityTypes, string>>();
 
 		private sealed class QuikNativeApp : BaseLogReceiver
 		{
@@ -164,10 +116,8 @@ namespace StockSharp.Quik.Lua
 		/// </summary>
 		public LuaFixServer()
 		{
-			_sessionHolder = new LuaSession(new MillisecondIncrementalIdGenerator())
-			{
-				Path = SystemProcess.GetCurrentProcess().MainModule.FileName
-			};
+			_requests.Close();
+			_securityClassInfo.FillDefault();
 
 			_fixServer = new FixServerEx((l, p) =>
 			{
@@ -182,7 +132,7 @@ namespace StockSharp.Quik.Lua
 
 			_fixServer.NewOutMessage += message =>
 			{
-				_sessionHolder.AddDebugLog("In. {0}", message);
+				_fixServer.AddDebugLog("In. {0}", message);
 
 				switch (message.Type)
 				{
@@ -207,11 +157,11 @@ namespace StockSharp.Quik.Lua
 						{
 							SecurityCode = secMsg.SecurityId.SecurityCode,
 							BoardCode = !secMsg.SecurityId.BoardCode.IsEmpty()
-								? _sessionHolder.GetSecurityClass(secMsg.SecurityId)
+								? _securityClassInfo.GetSecurityClass(secMsg.SecurityId)
 								: null
 						};
 
-						_sessionHolder.Requests.Enqueue(new LuaRequest
+						_requests.Enqueue(new LuaRequest
 						{
 							MessageType = MessageTypes.SecurityLookup,
 							TransactionId = secMsg.TransactionId,
@@ -228,7 +178,7 @@ namespace StockSharp.Quik.Lua
 
 					case MessageTypes.PortfolioLookup:
 						var pfMsg = (PortfolioLookupMessage)message;
-						_sessionHolder.Requests.Enqueue(new LuaRequest
+						_requests.Enqueue(new LuaRequest
 						{
 							MessageType = MessageTypes.PortfolioLookup,
 							TransactionId = pfMsg.TransactionId
@@ -237,7 +187,7 @@ namespace StockSharp.Quik.Lua
 
 					case MessageTypes.OrderStatus:
 						var statusMsg = (OrderStatusMessage)message;
-						_sessionHolder.Requests.Enqueue(new LuaRequest
+						_requests.Enqueue(new LuaRequest
 						{
 							MessageType = MessageTypes.OrderStatus,
 							TransactionId = statusMsg.TransactionId
@@ -259,7 +209,6 @@ namespace StockSharp.Quik.Lua
 
 			_logManager.Application = new QuikNativeApp();
 
-			_logManager.Sources.Add(_sessionHolder);
 			_logManager.Sources.Add(_fixServer);
 
 			LogFile = "StockSharp.QuikLua.log";
@@ -272,14 +221,14 @@ namespace StockSharp.Quik.Lua
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			_sessionHolder.Requests.Enqueue(new LuaRequest
+			_requests.Enqueue(new LuaRequest
 			{
 				MessageType = message.Type,
 				DataType = message.DataType,
 				SecurityId = new SecurityId
 				{
 					SecurityCode = message.SecurityId.SecurityCode,
-					BoardCode = _sessionHolder.GetSecurityClass(message.SecurityId)
+					BoardCode = _securityClassInfo.GetSecurityClass(message.SecurityId)
 				},
 				IsSubscribe = message.IsSubscribe,
 				TransactionId = message.TransactionId
@@ -296,22 +245,22 @@ namespace StockSharp.Quik.Lua
 			{
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(_sessionHolder.CreateRegisterTransaction(regMsg, _depoNames.TryGetValue(regMsg.PortfolioName)), message.Type, regMsg.TransactionId, regMsg.OrderType);
+					RegisterTransaction(regMsg.CreateRegisterTransaction(_depoNames.TryGetValue(regMsg.PortfolioName), _securityClassInfo), message.Type, regMsg.TransactionId, regMsg.OrderType);
 					break;
 
 				case MessageTypes.OrderReplace:
 					var replMsg = (OrderReplaceMessage)message;
-					RegisterTransaction(_sessionHolder.CreateMoveTransaction(replMsg), message.Type, replMsg.TransactionId, replMsg.OrderType);
+					RegisterTransaction(replMsg.CreateMoveTransaction(_securityClassInfo), message.Type, replMsg.TransactionId, replMsg.OrderType);
 					break;
 
 				case MessageTypes.OrderCancel:
 					var cancelMsg = (OrderCancelMessage)message;
-					RegisterTransaction(_sessionHolder.CreateCancelTransaction(cancelMsg), message.Type, cancelMsg.TransactionId, cancelMsg.OrderType);
+					RegisterTransaction(cancelMsg.CreateCancelTransaction(_securityClassInfo), message.Type, cancelMsg.TransactionId, cancelMsg.OrderType);
 					break;
 
 				case MessageTypes.OrderGroupCancel:
 					var cancelGroupMsg = (OrderGroupCancelMessage)message;
-					RegisterTransaction(_sessionHolder.CreateCancelFuturesTransaction(cancelGroupMsg), message.Type, cancelGroupMsg.TransactionId, cancelGroupMsg.OrderType);
+					RegisterTransaction(cancelGroupMsg.CreateCancelFuturesTransaction(_securityClassInfo), message.Type, cancelGroupMsg.TransactionId, cancelGroupMsg.OrderType);
 					break;
 
 				default:
@@ -326,7 +275,7 @@ namespace StockSharp.Quik.Lua
 
 			_transactions.Add(transactionId, transaction);
 
-			_sessionHolder.Requests.Enqueue(new LuaRequest
+			_requests.Enqueue(new LuaRequest
 			{
 				MessageType = messageType,
 				TransactionId = transactionId,
@@ -376,8 +325,8 @@ namespace StockSharp.Quik.Lua
 		/// </summary>
 		public bool IncrementalDepthUpdates
 		{
-			get { return _fixServer.IncrementalDepthUpdates; }
-			set { _fixServer.IncrementalDepthUpdates = value; }
+			get { return _fixServer.MarketDataSession.IncrementalDepthUpdates; }
+			set { _fixServer.MarketDataSession.IncrementalDepthUpdates = value; }
 		}
 
 		// TODO
@@ -408,7 +357,7 @@ namespace StockSharp.Quik.Lua
 		/// </summary>
 		public void Start()
 		{
-			_sessionHolder.Requests.Open();
+			_requests.Open();
 			_fixServer.Start();
 		}
 
@@ -417,7 +366,7 @@ namespace StockSharp.Quik.Lua
 		/// </summary>
 		public void Stop()
 		{
-			_sessionHolder.Requests.Close();
+			_requests.Close();
 			_fixServer.Stop();
 			_prevLevel1.Clear();
 		}
@@ -444,7 +393,7 @@ namespace StockSharp.Quik.Lua
 			return _fixServer.HasSubscriptions(dataType, new SecurityId
 			{
 				SecurityCode = securityId.SecurityCode,
-				BoardCode = _sessionHolder.GetBoardCode(securityId.BoardCode)
+				BoardCode = GetBoardCode(securityId.BoardCode)
 			});
 		}
 
@@ -500,7 +449,7 @@ namespace StockSharp.Quik.Lua
 						}
 					}
 
-					_sessionHolder.ReplaceSecurityId(l1Msg.SecurityId, id => l1Msg.SecurityId = id);
+					ReplaceSecurityId(l1Msg.SecurityId, id => l1Msg.SecurityId = id);
 
 					break;
 				}
@@ -510,20 +459,19 @@ namespace StockSharp.Quik.Lua
 					var secMsg = (SecurityMessage)message;
 
 					var classCode = secMsg.SecurityId.BoardCode;
-					var classInfo = _sessionHolder.GetSecurityClassInfo(classCode);
+					var classInfo = _securityClassInfo.GetSecurityClassInfo(classCode);
 
 					// из квика не транслируется поле тип инструмента, если тип инструмента не найден по классу, то берем по умолчанию.
 					secMsg.SecurityType = secMsg.Multiplier == 0 ? SecurityTypes.Index : (classInfo.Item1 ?? SecurityTypes.Stock);
 
-					_sessionHolder.ReplaceSecurityId(secMsg.SecurityId, id => secMsg.SecurityId = id);
+					ReplaceSecurityId(secMsg.SecurityId, id => secMsg.SecurityId = id);
 					break;
 				}
 
 				case MessageTypes.QuoteChange:
 				{
 					var quoteMsg = (QuoteChangeMessage)message;
-					_sessionHolder.ReplaceSecurityId(quoteMsg.SecurityId, id => quoteMsg.SecurityId = id);
-					quoteMsg.ServerTime = _sessionHolder.CurrentTime.Convert(TimeHelper.Moscow);
+					ReplaceSecurityId(quoteMsg.SecurityId, id => quoteMsg.SecurityId = id);
 					break;
 				}
 
@@ -617,14 +565,14 @@ namespace StockSharp.Quik.Lua
 						}
 					}
 
-					_sessionHolder.ReplaceSecurityId(execMsg.SecurityId, id => execMsg.SecurityId = id);
+					ReplaceSecurityId(execMsg.SecurityId, id => execMsg.SecurityId = id);
 					break;
 				}
 
 				case MessageTypes.Portfolio:
 				{
 					var pfMsg = (PortfolioMessage)message;
-					_sessionHolder.ReplaceBoardCode(pfMsg.BoardCode, board => pfMsg.BoardCode = board);
+					ReplaceBoardCode(pfMsg.BoardCode, board => pfMsg.BoardCode = board);
 					break;
 				}
 
@@ -632,7 +580,7 @@ namespace StockSharp.Quik.Lua
 				{
 					var pfMsg = (PortfolioChangeMessage)message;
 
-					_sessionHolder.ReplaceBoardCode(pfMsg.BoardCode, board => pfMsg.BoardCode = board);
+					ReplaceBoardCode(pfMsg.BoardCode, board => pfMsg.BoardCode = board);
 
 					var depoName = (string)pfMsg.Changes.TryGetValue(PositionChangeTypes.DepoName);
 					if (!depoName.IsEmpty())
@@ -644,19 +592,56 @@ namespace StockSharp.Quik.Lua
 				case MessageTypes.Position:
 				{
 					var pfMsg = (PositionMessage)message;
-					_sessionHolder.ReplaceSecurityId(pfMsg.SecurityId, id => pfMsg.SecurityId = id);
+					ReplaceSecurityId(pfMsg.SecurityId, id => pfMsg.SecurityId = id);
 					break;
 				}
 
 				case MessageTypes.PositionChange:
 				{
 					var pfMsg = (PositionChangeMessage)message;
-					_sessionHolder.ReplaceSecurityId(pfMsg.SecurityId, id => pfMsg.SecurityId = id);
+					ReplaceSecurityId(pfMsg.SecurityId, id => pfMsg.SecurityId = id);
 					break;
 				}
 			}
 
 			_fixServer.SendInMessage(message);
+		}
+
+		private void ReplaceSecurityId(SecurityId securityId, Action<SecurityId> setSecurityId)
+		{
+			if (setSecurityId == null)
+				throw new ArgumentNullException("setSecurityId");
+
+			ReplaceBoardCode(securityId.BoardCode, boardCode => setSecurityId(new SecurityId { SecurityCode = securityId.SecurityCode, BoardCode = boardCode }));
+		}
+
+		private void ReplaceBoardCode(string classCode, Action<string> setBoardCode)
+		{
+			if (setBoardCode == null)
+				throw new ArgumentNullException("setBoardCode");
+
+			if (classCode.IsEmpty())
+				return;
+
+			var info = _securityClassInfo.GetSecurityClassInfo(classCode);
+
+			if (info == null)
+				return;
+
+			setBoardCode(info.Item2);
+		}
+
+		private string GetBoardCode(string classCode)
+		{
+			if (classCode.IsEmpty())
+				return classCode;
+
+			var info = _securityClassInfo.GetSecurityClassInfo(classCode);
+
+			if (info == null)
+				return classCode;
+
+			return info.Item2;
 		}
 
 		/// <summary>
@@ -666,7 +651,7 @@ namespace StockSharp.Quik.Lua
 		public LuaRequest GetNextRequest()
 		{
 			LuaRequest request;
-			_sessionHolder.Requests.TryDequeue(out request);
+			_requests.TryDequeue(out request);
 			return request;
 		}
 	}

@@ -79,8 +79,17 @@
 			}
 		}
 
-		private sealed class HistoryBasketSessionHolder : BasketSessionHolder
+		private sealed class BasketEmulationAdapter : BasketMessageAdapter
 		{
+			private readonly EmulationSettings _settings;
+			private bool _isInitialized;
+
+			public BasketEmulationAdapter(IdGenerator transactionIdGenerator, EmulationSettings settings)
+				: base(transactionIdGenerator)
+			{
+				_settings = settings;
+			}
+
 			private DateTimeOffset _currentTime;
 
 			public override DateTimeOffset CurrentTime
@@ -88,31 +97,9 @@
 				get { return _currentTime; }
 			}
 
-			public HistoryBasketSessionHolder(IdGenerator transactionIdGenerator)
-				: base(transactionIdGenerator)
-			{
-			}
-
-			public void UpdateCurrentTime(DateTimeOffset currentTime)
-			{
-				_currentTime = currentTime;
-			}
-		}
-
-		private sealed class BasketEmulationAdapter : BasketMessageAdapter
-		{
-			private readonly EmulationSettings _settings;
-			private bool _isInitialized;
-
-			public BasketEmulationAdapter(BasketSessionHolder sessionHolder, EmulationSettings settings)
-				: base(sessionHolder)
-			{
-				_settings = settings;
-			}
-
 			protected override void OnSendInMessage(Message message)
 			{
-				SessionHolder.DoIf<IMessageSessionHolder, HistoryBasketSessionHolder>(s => s.UpdateCurrentTime(message.LocalTime));
+				_currentTime = message.LocalTime;
 
 				switch (message.Type)
 				{
@@ -237,7 +224,7 @@
 		}
 
 		private readonly SynchronizedDictionary<Strategy, Tuple<Portfolio, Security>> _strategyInfo = new SynchronizedDictionary<Strategy, Tuple<Portfolio, Security>>();
-		private readonly HistoryBasketSessionHolder _basketSessionHolder;
+		//private readonly HistoryBasketSessionHolder _basketSessionHolder;
 
 		private EmulationStates _prev = EmulationStates.Stopped;
 
@@ -251,7 +238,7 @@
 
 		private IEnumerable<Security> EmulatorSecurities
 		{
-			get { return ((MessageAdapter<HistorySessionHolder>)EmulationConnector.MarketDataAdapter).SessionHolder.SecurityProvider.LookupAll(); }
+			get { return ((HistoryMessageAdapter)EmulationConnector.MarketDataAdapter).SecurityProvider.LookupAll(); }
 		}
 
 		/// <summary>
@@ -377,9 +364,9 @@
 				UpdateSecurityByLevel1 = false
 			};
 
-			_basketSessionHolder = new HistoryBasketSessionHolder(EmulationConnector.TransactionIdGenerator);
+			//_basketSessionHolder = new HistoryBasketSessionHolder(EmulationConnector.TransactionIdGenerator);
 
-			EmulationConnector.TransactionAdapter = new BasketEmulationAdapter(_basketSessionHolder, EmulationSettings)
+			EmulationConnector.TransactionAdapter = new BasketEmulationAdapter(EmulationConnector.TransactionIdGenerator, EmulationSettings)
 			{
 				OutMessageProcessor = new NonThreadMessageProcessor()
 			};
@@ -476,7 +463,7 @@
 
 		private void InitAdapters(IEnumerable<Strategy> strategies)
 		{
-			_basketSessionHolder.InnerSessions.Clear();
+			//_basketSessionHolder.InnerSessions.Clear();
 			//_basketSessionHolder.Portfolios.Clear();
 
 			var id = 0;
@@ -491,7 +478,7 @@
 				portfolio.Name += "_" + ++id;
 				EmulationConnector.RegisterPortfolio(portfolio);
 
-				AddHistorySessionHolder(portfolio.Name);
+				AddHistoryAdapter(portfolio.Name);
 
 				strategy.Connector = EmulationConnector;
 				strategy.Portfolio = portfolio;
@@ -499,15 +486,15 @@
 			}
 		}
 
-		private void AddHistorySessionHolder(string portfolio)
+		private void AddHistoryAdapter(string portfolio)
 		{
-			var session = new HistorySessionHolder(EmulationConnector.TransactionIdGenerator)
+			var session = new HistoryMessageAdapter(EmulationConnector.TransactionIdGenerator)
 			{
 				IsMarketDataEnabled = false,
 				IsTransactionEnabled = true,
 			};
 
-			_basketSessionHolder.InnerSessions.Add(session, 0);
+			//_basketSessionHolder.InnerSessions.Add(session, 0);
 			//_basketSessionHolder.Portfolios[portfolio] = session;
 		}
 
@@ -558,7 +545,7 @@
 			}
 
 			EmulationConnector.MarketEmulator.Settings.UseCandlesTimeFrame = EmulationSettings.UseCandlesTimeFrame;
-			EmulationConnector.MarketDataAdapter.SessionHolder.MarketTimeChangedInterval = EmulationSettings.MarketTimeChangedInterval;
+			EmulationConnector.MarketDataAdapter.MarketTimeChangedInterval = EmulationSettings.MarketTimeChangedInterval;
 			EmulationConnector.LogLevel = EmulationSettings.LogLevel;
 
 			MemoryStatistics.Instance.LogLevel = EmulationSettings.LogLevel;

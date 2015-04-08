@@ -262,7 +262,7 @@ namespace StockSharp.Transaq
 			if (response.MlIntraDay != null)
 			{
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(response.Id)
 							.Add(PositionChangeTypes.Leverage, response.MlIntraDay.Value));	
 			}
@@ -276,7 +276,7 @@ namespace StockSharp.Transaq
 			if (response.LeverageFact != null)
 			{
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(response.Client)
 							.Add(PositionChangeTypes.Leverage, response.LeverageFact.Value));	
 			}
@@ -412,7 +412,7 @@ namespace StockSharp.Transaq
 			foreach (var pos in response.MoneyPositions.GroupBy(p => p.Client))
 			{
 				SendOutMessage(
-					SessionHolder.CreatePortfolioChangeMessage(pos.Key)
+					this.CreatePortfolioChangeMessage(pos.Key)
 						.Add(PositionChangeTypes.BeginValue, pos.Sum(p => p.SaldoIn))
 						.Add(PositionChangeTypes.CurrentValue, pos.Sum(p => p.Saldo))
 						.Add(PositionChangeTypes.Commission, pos.Sum(p => p.Commission)));
@@ -426,7 +426,7 @@ namespace StockSharp.Transaq
 						PortfolioName = pos.Client,
 						SecurityId = new SecurityId { Native = pos.SecId },
 						DepoName = pos.Register,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+						ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 					}
 					.Add(PositionChangeTypes.BeginValue, pos.SaldoIn)
 					.Add(PositionChangeTypes.CurrentValue, pos.Saldo)
@@ -436,7 +436,7 @@ namespace StockSharp.Transaq
 			foreach (var fortsMoney in response.FortsMoneys)
 			{
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(fortsMoney.Client)
 							.Add(PositionChangeTypes.BeginValue, fortsMoney.Free)
 							.Add(PositionChangeTypes.CurrentValue, fortsMoney.Current)
@@ -446,7 +446,7 @@ namespace StockSharp.Transaq
 
 			foreach (var pos in response.FortsPositions)
 			{
-				SendOutMessage(SessionHolder
+				SendOutMessage(this
 					.CreatePositionChangeMessage(pos.Client, new SecurityId { Native = pos.SecId })
 						.Add(PositionChangeTypes.BeginValue, (decimal)pos.StartNet)
 						.Add(PositionChangeTypes.CurrentValue, (decimal)pos.TotalNet)
@@ -488,7 +488,7 @@ namespace StockSharp.Transaq
 		private void OnPortfolioTPlusResponse(PortfolioTPlusResponse response)
 		{
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePortfolioChangeMessage(response.Client)
 						.Add(PositionChangeTypes.RealizedPnL, response.PnLIntraday)
 						.Add(PositionChangeTypes.UnrealizedPnL, response.PnLIncome)
@@ -498,7 +498,7 @@ namespace StockSharp.Transaq
 
 			foreach (var security in response.Securities)
 			{
-				SendOutMessage(SessionHolder
+				SendOutMessage(this
 					.CreatePositionChangeMessage(response.Client, new SecurityId { Native = security.SecId })
 						.Add(PositionChangeTypes.CurrentPrice, security.Price)
 						.Add(PositionChangeTypes.CurrentValue, (decimal)security.OpenBalance)

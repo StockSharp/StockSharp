@@ -22,23 +22,17 @@ namespace StockSharp.OpenECry
 	public sealed class OECTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedPairSet<long, CandleSeries> _series = new SynchronizedPairSet<long, CandleSeries>();
-		
+		private readonly OpenECryMessageAdapter _adapter;
+
 		/// <summary>
 		/// Создать <see cref="OECTrader"/>.
 		/// </summary>
 		public OECTrader()
 		{
-			base.SessionHolder = new OpenECrySessionHolder(TransactionIdGenerator);
-
-			TransactionAdapter = MarketDataAdapter = new OpenECryMessageAdapter(SessionHolder);
+			TransactionAdapter = MarketDataAdapter = _adapter = new OpenECryMessageAdapter(TransactionIdGenerator);
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new OpenECrySessionHolder SessionHolder
-		{
-			get { return (OpenECrySessionHolder)base.SessionHolder; }
 		}
 
 		/// <summary>
@@ -46,8 +40,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public string Uuid
 		{
-			get { return SessionHolder.Uuid; }
-			set { SessionHolder.Uuid = value; }
+			get { return _adapter.Uuid; }
+			set { _adapter.Uuid = value; }
 		}
 
 		/// <summary>
@@ -55,8 +49,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -64,8 +58,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -73,8 +67,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public OpenECryRemoting RemotingRequired
 		{
-			get { return SessionHolder.Remoting; }
-			set { SessionHolder.Remoting = value; }
+			get { return _adapter.Remoting; }
+			set { _adapter.Remoting = value; }
 		}
 
 		/// <summary>
@@ -83,8 +77,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public bool UseNativeReconnect
 		{
-			get { return SessionHolder.UseNativeReconnect; }
-			set { SessionHolder.UseNativeReconnect = value; }
+			get { return _adapter.UseNativeReconnect; }
+			set { _adapter.UseNativeReconnect = value; }
 		}
 
 		/// <summary>
@@ -92,8 +86,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		/// <summary>
@@ -101,8 +95,8 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public bool EnableOECLogging
 		{
-			get { return SessionHolder.EnableOECLogging; }
-			set { SessionHolder.EnableOECLogging = value; }
+			get { return _adapter.EnableOECLogging; }
+			set { _adapter.EnableOECLogging = value; }
 		}
 
 		///// <summary>
@@ -136,7 +130,7 @@ namespace StockSharp.OpenECry
 
 			var tf = (TimeSpan)series.Arg;
 
-			if (OpenECrySessionHolder.TimeFrames.Contains(tf))
+			if (OpenECryMessageAdapter.TimeFrames.Contains(tf))
 				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, CurrentTime);
 		}
 

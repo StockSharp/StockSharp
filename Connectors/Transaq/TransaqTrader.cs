@@ -29,11 +29,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public TransaqTrader()
 		{
-			var sessionHolder = new TransaqSessionHolder(TransactionIdGenerator);
-
-			base.SessionHolder = sessionHolder;
-
-			_adapter = new TransaqMessageAdapter(sessionHolder);
+			_adapter = new TransaqMessageAdapter(TransactionIdGenerator);
 
 			TransactionAdapter = _adapter;
 			MarketDataAdapter = _adapter;
@@ -42,18 +38,13 @@ namespace StockSharp.Transaq
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
 		}
 
-		private new TransaqSessionHolder SessionHolder
-		{
-			get { return (TransaqSessionHolder)base.SessionHolder; }
-		}
-
 		/// <summary>
 		/// Пароль.
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -61,8 +52,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -70,8 +61,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		/// <summary>
@@ -79,8 +70,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public Proxy Proxy
 		{
-			get { return SessionHolder.Proxy; }
-			set { SessionHolder.Proxy = value; }
+			get { return _adapter.Proxy; }
+			set { _adapter.Proxy = value; }
 		}
 
 		/// <summary>
@@ -88,8 +79,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public ApiLogLevels ApiLogLevel
 		{
-			get { return SessionHolder.ApiLogLevel; }
-			set { SessionHolder.ApiLogLevel = value; }
+			get { return _adapter.ApiLogLevel; }
+			set { _adapter.ApiLogLevel = value; }
 		}
 
 		/// <summary>
@@ -97,8 +88,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public string DllPath
 		{
-			get { return SessionHolder.DllPath; }
-			set { SessionHolder.DllPath = value; }
+			get { return _adapter.DllPath; }
+			set { _adapter.DllPath = value; }
 		}
 
 		/// <summary>
@@ -106,8 +97,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public bool MicexRegisters
 		{
-			get { return SessionHolder.MicexRegisters; }
-			set { SessionHolder.MicexRegisters = value; }
+			get { return _adapter.MicexRegisters; }
+			set { _adapter.MicexRegisters = value; }
 		}
 
 		/// <summary>
@@ -115,8 +106,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public bool IsHFT
 		{
-			get { return SessionHolder.IsHFT; }
-			set { SessionHolder.IsHFT = value; }
+			get { return _adapter.IsHFT; }
+			set { _adapter.IsHFT = value; }
 		}
 
 		/// <summary>
@@ -124,8 +115,8 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public TimeSpan? MarketDataInterval
 		{
-			get { return SessionHolder.MarketDataInterval; }
-			set { SessionHolder.MarketDataInterval = value; }
+			get { return _adapter.MarketDataInterval; }
+			set { _adapter.MarketDataInterval = value; }
 		}
 
 		/// <summary>
@@ -133,7 +124,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public string ConnectorVersion
 		{
-			get { return SessionHolder.ConnectorVersion; }
+			get { return _adapter.ConnectorVersion; }
 		}
 
 		/// <summary>
@@ -141,7 +132,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public int CurrentServer
 		{
-			get { return SessionHolder.CurrentServer; }
+			get { return _adapter.CurrentServer; }
 		}
 
 		/// <summary>
@@ -149,7 +140,7 @@ namespace StockSharp.Transaq
 		/// </summary>
 		public TimeSpan? ServerTimeDiff
 		{
-			get { return SessionHolder.ServerTimeDiff; }
+			get { return _adapter.ServerTimeDiff; }
 		}
 
 		/// <summary>

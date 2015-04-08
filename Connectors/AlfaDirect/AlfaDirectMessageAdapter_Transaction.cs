@@ -32,7 +32,7 @@ namespace StockSharp.AlfaDirect
 				oldAlfaTransId = _alfaIds.SafeAdd(alfaTransactionId, k => orderId, out added);
 
 			if (!added)
-				SessionHolder.AddWarningLog("element exists: _alfaIds[{0}]={1}, new orderId={2}", alfaTransactionId, oldAlfaTransId, orderId);
+				this.AddWarningLog("element exists: _alfaIds[{0}]={1}, new orderId={2}", alfaTransactionId, oldAlfaTransId, orderId);
 		}
 
 		private void OnProcessOrders(string[] data)
@@ -40,7 +40,7 @@ namespace StockSharp.AlfaDirect
 			var f = Wrapper.FieldsOrders;
 
 			if (data.Length > 0)
-				SessionHolder.AddLog(LogLevels.Debug, () => "OnProcessOrders:\n" + data.Join("\n"));
+				this.AddLog(LogLevels.Debug, () => "OnProcessOrders:\n" + data.Join("\n"));
 
 			foreach (var str in data)
 			{
@@ -65,7 +65,7 @@ namespace StockSharp.AlfaDirect
 
 					if (transId == 0)
 					{
-						SessionHolder.AddWarningLog("transaction id for order #{0} not found. creating new one.", orderId);
+						this.AddWarningLog("transaction id for order #{0} not found. creating new one.", orderId);
 						transId = TransactionIdGenerator.GetNextId();
 						if (alfaTransactionId == 0)
 						{
@@ -79,7 +79,7 @@ namespace StockSharp.AlfaDirect
 				var msg = new ExecutionMessage
 				{
 					SecurityId = new SecurityId { Native = f.PaperNo.GetValue(cols) },
-					PortfolioName = GetPortfolioName(f.AccCode.GetValue(cols), SessionHolder.GetBoardCode(f.PlaceCode.GetValue(cols))),
+					PortfolioName = GetPortfolioName(f.AccCode.GetValue(cols), this.GetBoardCode(f.PlaceCode.GetValue(cols))),
 					Side = f.BuySellStr.GetValue(cols),
 					Price = f.Price.GetValue(cols),
 					Volume = f.Qty.GetValue(cols),
@@ -153,7 +153,7 @@ namespace StockSharp.AlfaDirect
 						msg.OrderType = OrderTypes.Limit;
 						break;
 					default:
-						SessionHolder.AddWarningLog("Unknown order type '{0}' (id={1})", orderType, orderId);
+						this.AddWarningLog("Unknown order type '{0}' (id={1})", orderType, orderId);
 						break;
 				}
 
@@ -178,7 +178,7 @@ namespace StockSharp.AlfaDirect
 						break;
 
 					default:
-						SessionHolder.AddInfoLog("Order status {0} is not taken into account", status);
+						this.AddInfoLog("Order status {0} is not taken into account", status);
 						break;
 				}
 
@@ -192,7 +192,7 @@ namespace StockSharp.AlfaDirect
 
 			if (transactionId == 0)
 			{
-				SessionHolder.AddWarningLog("ProcessOrderFailed: unknown alfaTransactionId={0}", alfaTransactionId);
+				this.AddWarningLog("ProcessOrderFailed: unknown alfaTransactionId={0}", alfaTransactionId);
 				return;
 			}
 
@@ -215,12 +215,12 @@ namespace StockSharp.AlfaDirect
 			{
 				var cols = str.ToColumns();
 
-				var portfolioName = GetPortfolioName(f.AccCode.GetValue(cols), SessionHolder.GetBoardCode(f.PlaceCode.GetValue(cols)));
+				var portfolioName = GetPortfolioName(f.AccCode.GetValue(cols), this.GetBoardCode(f.PlaceCode.GetValue(cols)));
 				var secCode = f.PaperCode.GetValue(cols);
 
 				if (secCode == "money")
 				{
-					var changesMsg = portfChangeMessages.SafeAdd(portfolioName, name => SessionHolder.CreatePortfolioChangeMessage(name));
+					var changesMsg = portfChangeMessages.SafeAdd(portfolioName, this.CreatePortfolioChangeMessage);
 
 					changesMsg.Add(PositionChangeTypes.RealizedPnL, f.PnL.GetValue(cols));
 					changesMsg.Add(PositionChangeTypes.UnrealizedPnL, f.ProfitVol.GetValue(cols));
@@ -238,7 +238,7 @@ namespace StockSharp.AlfaDirect
 						SecurityId = secId
 					});
 
-					var changesMsg = SessionHolder.CreatePositionChangeMessage(portfolioName, secId);
+					var changesMsg = this.CreatePositionChangeMessage(portfolioName, secId);
 
 					changesMsg.Add(PositionChangeTypes.RealizedPnL, f.PnL.GetValue(cols));
 					changesMsg.Add(PositionChangeTypes.UnrealizedPnL, f.ProfitVol.GetValue(cols));
@@ -251,7 +251,7 @@ namespace StockSharp.AlfaDirect
 
 					if (varMargin != 0)
 					{
-						var portfChangesMsg = portfChangeMessages.SafeAdd(portfolioName, name => SessionHolder.CreatePortfolioChangeMessage(name));
+						var portfChangesMsg = portfChangeMessages.SafeAdd(portfolioName, this.CreatePortfolioChangeMessage);
 						var oldVm = portfChangesMsg.Changes.TryGetValue(PositionChangeTypes.VariationMargin);
 
 						if(oldVm == null)
@@ -288,7 +288,7 @@ namespace StockSharp.AlfaDirect
 
 				if (orderId == 0)
 				{
-					SessionHolder.AddWarningLog(LocalizedStrings.Str2259Params, tradeId);
+					this.AddWarningLog(LocalizedStrings.Str2259Params, tradeId);
 					continue;
 				}
 

@@ -13,7 +13,7 @@ namespace StockSharp.InteractiveBrokers
 	/// <summary>
 	/// Адаптер сообщений для InteractiveBrokers.
 	/// </summary>
-	public partial class InteractiveBrokersMessageAdapter : MessageAdapter<InteractiveBrokersSessionHolder>
+	public partial class InteractiveBrokersMessageAdapter : MessageAdapter
 	{
 		private const ServerVersions _minimumServerVersion = ServerVersions.V38;
 		private const ServerVersions _clientVersion = ServerVersions.V63;
@@ -26,10 +26,15 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Создать <see cref="InteractiveBrokersMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public InteractiveBrokersMessageAdapter(InteractiveBrokersSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public InteractiveBrokersMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			Address = DefaultAddress;
+			ServerLogLevel = ServerLogLevels.Detail;
+			CreateAssociatedSecurity = true;
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>
@@ -131,9 +136,9 @@ namespace StockSharp.InteractiveBrokers
 					_depths.Clear();
 					_secIdByTradeIds.Clear();
 
-					_socket = new IBSocket { Parent = SessionHolder };
+					_socket = new IBSocket { Parent = this };
 					_socket.ProcessResponse += OnProcessResponse;
-					_socket.Connect(SessionHolder.Address);
+					_socket.Connect(Address);
 
 					_socket.Send((int)_clientVersion);
 
@@ -142,7 +147,7 @@ namespace StockSharp.InteractiveBrokers
 					if (_socket.ServerVersion >= ServerVersions.V20)
 					{
 						var str = _socket.ReadStr();
-						SessionHolder.ConnectedTime = str.Substring(0, str.LastIndexOf(' ')).ToDateTime("yyyyMMdd HH:mm:ss");
+						ConnectedTime = str.Substring(0, str.LastIndexOf(' ')).ToDateTime("yyyyMMdd HH:mm:ss");
 					}
 
 					if (_socket.ServerVersion < _minimumServerVersion)
@@ -155,15 +160,15 @@ namespace StockSharp.InteractiveBrokers
 					{
 						if (_socket.ServerVersion >= ServerVersions.V70)
 						{
-							if (!SessionHolder.ExtraAuth)
+							if (!ExtraAuth)
 							{
 								_socket.Send((int)RequestMessages.StartApi);
 								_socket.Send((int)ServerVersions.V1);
-								_socket.Send(SessionHolder.ClientId);
+								_socket.Send(ClientId);
 							}
 						}
 						else
-							_socket.Send(SessionHolder.ClientId);
+							_socket.Send(ClientId);
 					}
 
 					_socket.StartListening(error => SendOutMessage(new ConnectMessage { Error = error }));
@@ -235,7 +240,7 @@ namespace StockSharp.InteractiveBrokers
 							if (mdMsg.IsSubscribe)
 							{
 								_requestIds.Add(key, mdMsg.TransactionId);
-								SubscribeMarketData(mdMsg, SessionHolder.Fields, false, false);
+								SubscribeMarketData(mdMsg, Fields, false, false);
 							}
 							else
 								UnSubscribeMarketData(_requestIds[key]);
@@ -567,7 +572,7 @@ namespace StockSharp.InteractiveBrokers
 
 		private void SetServerLogLevel()
 		{
-			ProcessRequest(RequestMessages.SetServerLogLevel, 0, ServerVersions.V1, socket => socket.Send((int)SessionHolder.ServerLogLevel));
+			ProcessRequest(RequestMessages.SetServerLogLevel, 0, ServerVersions.V1, socket => socket.Send((int)ServerLogLevel));
 		}
 
 		/// <summary>

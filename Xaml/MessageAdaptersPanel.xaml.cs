@@ -24,27 +24,27 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Панель создания новых подключений <see cref="IMessageSessionHolder"/>.
+	/// Панель создания новых подключений <see cref="IMessageAdapter"/>.
 	/// </summary>
-	public partial class SessionHoldersPanel
+	public partial class MessageAdaptersPanel
 	{
 		private sealed class ConnectorRow : NotifiableObject
 		{
-			public ConnectorRow(ConnectorInfo info, IMessageSessionHolder sessionHolder)
+			public ConnectorRow(ConnectorInfo info, IMessageAdapter adapter)
 			{
 				if (info == null)
 					throw new ArgumentNullException("info");
 
-				if (sessionHolder == null)
-					throw new ArgumentNullException("sessionHolder");
+				if (adapter == null)
+					throw new ArgumentNullException("adapter");
 
 				Info = info;
-				SessionHolder = sessionHolder;
+				Adapter = adapter;
 			}
 
 			public ConnectorInfo Info { get; private set; }
 
-			public IMessageSessionHolder SessionHolder { get; private set; }
+			public IMessageAdapter Adapter { get; private set; }
 
 			private bool _isEnabled = true;
 
@@ -60,7 +60,7 @@ namespace StockSharp.Xaml
 
 			public string Description
 			{
-				get { return SessionHolder.ToString(); }
+				get { return Adapter.ToString(); }
 			}
 
 			public void Refresh()
@@ -73,11 +73,11 @@ namespace StockSharp.Xaml
 
 		private sealed class ConnectorInfoList : BaseList<ConnectorInfo>
 		{
-			private readonly SessionHoldersPanel _parent;
+			private readonly MessageAdaptersPanel _parent;
 			private readonly Languages _language;
 			private readonly Dictionary<ConnectorInfo, MenuItem> _items = new Dictionary<ConnectorInfo, MenuItem>();
 
-			public ConnectorInfoList(SessionHoldersPanel parent)
+			public ConnectorInfoList(MessageAdaptersPanel parent)
 			{
 				if (parent == null)
 					throw new ArgumentNullException("parent");
@@ -101,22 +101,19 @@ namespace StockSharp.Xaml
 
 				mi.Click += (sender, args) =>
 				{
-					var sessionHolder = item.SessionHolderType.CreateInstanceArgs<IMessageSessionHolder>(new object[] { _parent.SessionHolder.TransactionIdGenerator });
+					var adapter = item.AdapterType.CreateInstanceArgs<IMessageAdapter>(new object[] { _parent.Adapter.TransactionIdGenerator });
 
-					//sessionHolder.IsMarketDataEnabled = sessionHolder.MarketDataAdapterType != null;
-					//sessionHolder.IsTransactionEnabled = sessionHolder.TransactionAdapterType != null;
-
-					var wnd = new SessionHolderWindow
+					var wnd = new MessageAdapterWindow
 					{
-						SessionHolder = sessionHolder,
+						Adapter = adapter,
 					};
 
 					if (!wnd.ShowModal(_parent))
 						return;
 
-					var row = new ConnectorRow(item, wnd.SessionHolder);
+					var row = new ConnectorRow(item, wnd.Adapter);
 
-					_parent.SessionHolder.InnerSessions.Add(wnd.SessionHolder, 0);
+					_parent.Adapter.InnerAdapters[wnd.Adapter] = 0;
 
 					_parent._connectorRows.Add(row);
 					_parent.ConnectorsChanged.SafeInvoke();
@@ -196,9 +193,9 @@ namespace StockSharp.Xaml
 		private readonly ObservableCollection<ConnectorRow> _connectorRows = new ObservableCollection<ConnectorRow>();
 
 		/// <summary>
-		/// Создать <see cref="SessionHoldersPanel"/>.
+		/// Создать <see cref="MessageAdaptersPanel"/>.
 		/// </summary>
-		public SessionHoldersPanel()
+		public MessageAdaptersPanel()
 		{
 			InitializeComponent();
 
@@ -215,27 +212,27 @@ namespace StockSharp.Xaml
 			set { AutoConnectCtrl.IsChecked = value; }
 		}
 
-		private BasketSessionHolder _sessionHolder;
+		private BasketMessageAdapter _adapter;
 
 		/// <summary>
-		/// Сессия-агрегатор.
+		/// Адаптер-агрегатор.
 		/// </summary>
-		public BasketSessionHolder SessionHolder
+		public BasketMessageAdapter Adapter
 		{
-			get { return _sessionHolder; }
+			get { return _adapter; }
 			set
 			{
-				_sessionHolder = value;
+				_adapter = value;
 
 				_connectorRows.Clear();
 
-				if (_sessionHolder == null)
+				if (_adapter == null)
 					return;
 
 				// TODO добавить панель настроек для эмуляционной сессии
-				var sessions = _sessionHolder.InnerSessions.Where(s => !(s is HistorySessionHolder));
+				var adapters = _adapter.InnerAdapters.Where(s => !(s is HistoryMessageAdapter));
 
-				_connectorRows.AddRange(sessions.Select(s => new ConnectorRow(GetInfo(s), s) { IsEnabled = _sessionHolder.InnerSessions[s] != -1 }));
+				_connectorRows.AddRange(adapters.Select(a => new ConnectorRow(GetInfo(a), a) { IsEnabled = _adapter.InnerAdapters[a] != -1 }));
 			}
 		}
 
@@ -264,15 +261,15 @@ namespace StockSharp.Xaml
 			get { return ConnectorsGrid != null ? (ConnectorRow)ConnectorsGrid.SelectedItem : null; }
 		}
 
-		private ConnectorInfo GetInfo(IMessageSessionHolder sessionHolder)
+		private ConnectorInfo GetInfo(IMessageAdapter adapter)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
 
-			var info = ConnectorsInfo.FirstOrDefault(i => i.SessionHolderType.IsInstanceOfType(sessionHolder));
+			var info = ConnectorsInfo.FirstOrDefault(i => i.AdapterType.IsInstanceOfType(adapter));
 
 			if (info == null)
-				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(sessionHolder.GetType()), "sessionHolder");
+				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(adapter.GetType()), "adapter");
 
 			return info;
 		}
@@ -301,7 +298,7 @@ namespace StockSharp.Xaml
 			if (!CheckConnected(LocalizedStrings.Str1554))
 				return;
 
-			SessionHolder.InnerSessions.Remove(SelectedInfo.SessionHolder);
+			Adapter.InnerAdapters.Remove(SelectedInfo.Adapter);
 			_connectorRows.Remove(SelectedInfo);
 			ConnectorsChanged.SafeInvoke();
 		}
@@ -319,9 +316,9 @@ namespace StockSharp.Xaml
 			if (!CheckConnected(LocalizedStrings.Str1555))
 				return;
 
-			var wnd = new SessionHolderWindow
+			var wnd = new MessageAdapterWindow
 			{
-				SessionHolder = SelectedInfo.SessionHolder
+				Adapter = SelectedInfo.Adapter
 			};
 
 			if (!wnd.ShowModal(this))
@@ -344,7 +341,7 @@ namespace StockSharp.Xaml
 
 			SelectedInfo.IsEnabled = !SelectedInfo.IsEnabled;
 
-			SessionHolder.InnerSessions[SelectedInfo.SessionHolder] = SelectedInfo.IsEnabled ? 0 : -1;
+			Adapter.InnerAdapters[SelectedInfo.Adapter] = SelectedInfo.IsEnabled ? 0 : -1;
 
 			ChangeDisableEnableIcon(SelectedInfo.IsEnabled);
 			ConnectorsChanged.SafeInvoke();
@@ -386,9 +383,9 @@ namespace StockSharp.Xaml
 		public string Category { get; set; }
 
 		/// <summary>
-		/// Тип контейнера для сессии.
+		/// Тип адаптера.
 		/// </summary>
-		public Type SessionHolderType { get; private set; }
+		public Type AdapterType { get; private set; }
 
 		/// <summary>
 		/// Уровень логирования.
@@ -408,20 +405,23 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Создать <see cref="ConnectorInfo"/>.
 		/// </summary>
-		/// <param name="sessionHolderType">Тип контейнера для сессии.</param>
+		/// <param name="adapterType">Тип адаптера.</param>
 		/// <param name="logLevel">Уровень логирования.</param>
-		public ConnectorInfo(Type sessionHolderType, LogLevels logLevel = LogLevels.Inherit)
+		public ConnectorInfo(Type adapterType, LogLevels logLevel = LogLevels.Inherit)
 		{
-			if (sessionHolderType == null)
-				throw new ArgumentNullException("sessionHolderType");
+			if (adapterType == null)
+				throw new ArgumentNullException("adapterType");
 
-			Name = sessionHolderType.GetDisplayName();
-			Description = sessionHolderType.GetDescription();
-			Category = sessionHolderType.GetCategory(LocalizedStrings.Str1559);
-			SessionHolderType = sessionHolderType;
+			if (!typeof(IMessageAdapter).IsAssignableFrom(adapterType))
+				throw new ArgumentException("adapterType");
+
+			Name = adapterType.GetDisplayName();
+			Description = adapterType.GetDescription();
+			Category = adapterType.GetCategory(LocalizedStrings.Str1559);
+			AdapterType = adapterType;
 			LogLevel = logLevel;
 
-			var targetPlatform = sessionHolderType.GetAttribute<TargetPlatformAttribute>();
+			var targetPlatform = adapterType.GetAttribute<TargetPlatformAttribute>();
 			if (targetPlatform != null)
 			{
 				PreferLanguage = targetPlatform.PreferLanguage;

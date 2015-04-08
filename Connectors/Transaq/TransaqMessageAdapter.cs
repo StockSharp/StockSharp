@@ -17,7 +17,7 @@ namespace StockSharp.Transaq
 	/// <summary>
 	/// Адаптер сообщений для Transaq.
 	/// </summary>
-	public partial class TransaqMessageAdapter : MessageAdapter<TransaqSessionHolder>
+	public partial class TransaqMessageAdapter : MessageAdapter
 	{
 		private readonly SynchronizedDictionary<Type, Action<BaseResponse>> _handlerBunch = new SynchronizedDictionary<Type, Action<BaseResponse>>();
 		private ApiClient _client;
@@ -25,10 +25,13 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// Создать <see cref="TransaqMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public TransaqMessageAdapter(TransaqSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public TransaqMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
+
 			AddHandler<ClientLimitsResponse>(OnClientLimitsResponse);
 			AddHandler<ClientResponse>(OnClientResponse);
 			AddHandler<LeverageControlResponse>(OnLeverageControlResponse);
@@ -135,7 +138,7 @@ namespace StockSharp.Transaq
 
 					SendCommand(new ChangePassMessage
 					{
-						OldPass = SessionHolder.Password.To<string>(),
+						OldPass = Password.To<string>(),
 						NewPass = pwdMsg.NewPassword.To<string>()
 					});
 
@@ -159,19 +162,19 @@ namespace StockSharp.Transaq
 			_ordersTypes.Clear();
 
 			_client = new ApiClient(OnCallback,
-					SessionHolder.DllPath,
-					SessionHolder.IsHFT,
-					SessionHolder.ApiLogsPath,
-					SessionHolder.ApiLogLevel);
+					DllPath,
+					IsHFT,
+					ApiLogsPath,
+					ApiLogLevel);
 
 			SendCommand(new Native.Commands.ConnectMessage
 			{
-				Login = SessionHolder.Login,
-				Password = SessionHolder.Password.To<string>(),
-				EndPoint = SessionHolder.Address.To<EndPoint>(),
-				Proxy = SessionHolder.Proxy,
-				MicexRegisters = SessionHolder.MicexRegisters,
-				RqDelay = SessionHolder.MarketDataInterval == null ? (int?)null : (int)SessionHolder.MarketDataInterval.Value.TotalMilliseconds,
+				Login = Login,
+				Password = Password.To<string>(),
+				EndPoint = Address.To<EndPoint>(),
+				Proxy = Proxy,
+				MicexRegisters = MicexRegisters,
+				RqDelay = MarketDataInterval == null ? (int?)null : (int)MarketDataInterval.Value.TotalMilliseconds,
 				Milliseconds = true,
 			}, false);
 		}
@@ -190,7 +193,7 @@ namespace StockSharp.Transaq
 
 				var type = response.GetType();
 
-				SessionHolder.AddDebugLog(type.Name);
+				this.AddDebugLog(type.Name);
 
 				var handler = _handlerBunch.TryGetValue(response.GetType());
 
@@ -210,7 +213,7 @@ namespace StockSharp.Transaq
 
 			if (!result.IsSuccess)
 			{
-				SessionHolder.AddErrorLog(LocalizedStrings.Str3514Params, command.Id, result.Text);
+				this.AddErrorLog(LocalizedStrings.Str3514Params, command.Id, result.Text);
 
 				if (throwError)
 					throw new InvalidOperationException(result.Text);
@@ -234,9 +237,9 @@ namespace StockSharp.Transaq
 		{
 			SendOutMessage(new Messages.DisconnectMessage { Error = error });
 
-			SessionHolder.ConnectorVersion = null;
-			SessionHolder.CurrentServer = -1;
-			SessionHolder.ServerTimeDiff = null;
+			ConnectorVersion = null;
+			CurrentServer = -1;
+			ServerTimeDiff = null;
 		}
 
 		private void OnServerStatusResponse(ServerStatusResponse response)
@@ -275,12 +278,12 @@ namespace StockSharp.Transaq
 
 		private void OnConnectorVersionResponse(ConnectorVersionResponse response)
 		{
-			SessionHolder.ConnectorVersion = response.Version;
+			ConnectorVersion = response.Version;
 		}
 
 		private void OnCurrentServerResponse(CurrentServerResponse response)
 		{
-			SessionHolder.CurrentServer = response.Id;
+			CurrentServer = response.Id;
 		}
 	}
 }

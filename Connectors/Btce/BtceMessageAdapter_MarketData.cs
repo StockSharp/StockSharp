@@ -151,7 +151,7 @@ namespace StockSharp.Btce
 							},
 							Bids = pair.Value.Bids.Select(vp => vp.ToStockSharp(Sides.Buy)).ToArray(),
 							Asks = pair.Value.Asks.Select(vp => vp.ToStockSharp(Sides.Sell)).ToArray(),
-							ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+							ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 						});
 					}
 				}

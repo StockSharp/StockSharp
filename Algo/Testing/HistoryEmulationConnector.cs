@@ -115,7 +115,6 @@ namespace StockSharp.Algo.Testing
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int>();
 		private readonly SyncObject _suspendLock = new SyncObject();
 		
-		private readonly HistorySessionHolder _sessionHolder;
 		private readonly HistoryMessageAdapter _marketDataAdapter;
 
 		/// <summary>
@@ -162,19 +161,15 @@ namespace StockSharp.Algo.Testing
 			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
 			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
 
-			_sessionHolder = new HistorySessionHolder(TransactionIdGenerator, securityProvider);
+			TransactionAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
+			MarketDataAdapter = _marketDataAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
 
-			TransactionAdapter = new EmulationMessageAdapter(_sessionHolder);
-			MarketDataAdapter = _marketDataAdapter = new HistoryMessageAdapter(_sessionHolder) { StorageRegistry = storageRegistry };
-
-			_sessionHolder.MarketTimeChangedInterval = TimeSpan.FromSeconds(1);
+			_marketDataAdapter.MarketTimeChangedInterval = TimeSpan.FromSeconds(1);
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-			_sessionHolder.ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
+			_marketDataAdapter.ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true, new NonThreadMessageProcessor(TransactionAdapter.InMessageProcessor));
-
-			((MessageAdapter<IMessageSessionHolder>)TransactionAdapter).SessionHolder = _sessionHolder;
 		}
 
 		private readonly Dictionary<Portfolio, decimal> _initialMoney;
@@ -347,7 +342,7 @@ namespace StockSharp.Algo.Testing
 			// подписчики StateChanged запускают стратегии, которые интересуются MarketTime в OnRunning
 			TransactionAdapter.SendInMessage(new ResetMessage());
 
-			_sessionHolder.SecurityProvider.LookupAll().ForEach(SendSecurity);
+			_marketDataAdapter.SecurityProvider.LookupAll().ForEach(SendSecurity);
 			_initialMoney.ForEach(p => SendPortfolio(p.Key));
 
 			SetEmulationState(EmulationStates.Started);
@@ -525,9 +520,9 @@ namespace StockSharp.Algo.Testing
 				{
 					if (State == EmulationStates.Stopped)
 					{
-						_sessionHolder.StartDate = msg.StartDate;
-						_sessionHolder.StopDate = msg.StopDate;
-						_sessionHolder.UpdateCurrentTime(msg.StartDate);
+						_marketDataAdapter.StartDate = msg.StartDate;
+						_marketDataAdapter.StopDate = msg.StopDate;
+						_marketDataAdapter.UpdateCurrentTime(msg.StartDate);
 
 						State = msg.NewState;
 						OnEmulationStarting();
@@ -595,7 +590,7 @@ namespace StockSharp.Algo.Testing
 			var money = _initialMoney[portfolio];
 
 			MarketDataAdapter.SendOutMessage(
-				_sessionHolder
+				_marketDataAdapter
 					.CreatePortfolioChangeMessage(portfolio.Name)
 						.Add(PositionChangeTypes.BeginValue, money)
 						.Add(PositionChangeTypes.CurrentValue, money)
@@ -658,7 +653,7 @@ namespace StockSharp.Algo.Testing
 		/// <returns>Найденные инструменты.</returns>
 		public override IEnumerable<Security> Lookup(Security criteria)
 		{
-			var securities = _sessionHolder.SecurityProvider.Lookup(criteria);
+			var securities = _marketDataAdapter.SecurityProvider.Lookup(criteria);
 
 			if (State == EmulationStates.Started)
 			{
@@ -876,7 +871,7 @@ namespace StockSharp.Algo.Testing
 		{
 			if (UseExternalCandleSource && series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan && (TimeSpan)series.Arg == MarketEmulator.Settings.UseCandlesTimeFrame)
 			{
-				yield return new Range<DateTimeOffset>(_sessionHolder.StartDate, _sessionHolder.StopDate.EndOfDay());
+				yield return new Range<DateTimeOffset>(_marketDataAdapter.StartDate, _marketDataAdapter.StopDate.EndOfDay());
 			}
 		}
 

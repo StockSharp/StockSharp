@@ -27,7 +27,7 @@ namespace SampleLMAX
 		{
 			InitializeComponent();
 
-			CandlesPeriods.ItemsSource = LmaxSessionHolder.TimeFrames;
+			CandlesPeriods.ItemsSource = LmaxMessageAdapter.TimeFrames;
 			CandlesPeriods.SelectedIndex = 1;
 		}
 

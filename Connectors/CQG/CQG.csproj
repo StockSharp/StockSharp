@@ -68,7 +68,7 @@
     <Compile Include="CQGMessageAdapter_MarketData.cs" />
     <Compile Include="CQGMessageAdapter_Transaction.cs" />
     <Compile Include="CQGOrderCondition.cs" />
-    <Compile Include="CQGSessionHolder.cs" />
+    <Compile Include="CQGMessageAdapter_Settings.cs" />
     <Compile Include="CQGTrader.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

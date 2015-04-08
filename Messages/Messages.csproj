@@ -95,7 +95,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IExtendableEntity.cs" />
     <Compile Include="IMessageAdapter.cs" />
-    <Compile Include="IMessageSessionHolder.cs" />
+    <Compile Include="TargetPlatformAttribute.cs" />
     <Compile Include="IMessageChannel.cs" />
     <Compile Include="IMessageProcessor.cs" />
     <Compile Include="MainCategoryAttribute.cs" />
@@ -103,7 +103,6 @@
     <Compile Include="ErrorMessage.cs" />
     <Compile Include="MessageAdapter.cs" />
     <Compile Include="MessageAdapterReConnectionSettings.cs" />
-    <Compile Include="MessageSessionHolder.cs" />
     <Compile Include="MessageDirections.cs" />
     <Compile Include="MessageProcessor.cs" />
     <Compile Include="MessageProcessorPool.cs" />

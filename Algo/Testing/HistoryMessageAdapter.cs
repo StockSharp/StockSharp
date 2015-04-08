@@ -18,7 +18,7 @@ namespace StockSharp.Algo.Testing
 	/// <summary>
 	/// Адаптер, получающий сообщения из хранилища <see cref="IStorageRegistry"/>.
 	/// </summary>
-	public class HistoryMessageAdapter : MessageAdapter<HistorySessionHolder>
+	public class HistoryMessageAdapter : MessageAdapter
 	{
 		private readonly CachedSynchronizedDictionary<SecurityId, MarketDepthGenerator> _depthGenerators = new CachedSynchronizedDictionary<SecurityId, MarketDepthGenerator>();
 		private readonly CachedSynchronizedDictionary<SecurityId, TradeGenerator> _tradeGenerators = new CachedSynchronizedDictionary<SecurityId, TradeGenerator>();
@@ -26,8 +26,6 @@ namespace StockSharp.Algo.Testing
 
 		private readonly BasketMarketDataStorage<Message> _basketStorage = new BasketMarketDataStorage<Message>();
 		private readonly SyncObject _syncRoot = new SyncObject();
-
-		private readonly HistorySessionHolder _sessionHolder;
 
 		private Thread _loadingThread;
 		private bool _running;
@@ -37,8 +35,7 @@ namespace StockSharp.Algo.Testing
 		{
 			get
 			{
-				return _sessionHolder
-					.SecurityProvider
+				return SecurityProvider
 					.LookupAll()
 					.Select(s => s.Board)
 					.Distinct();
@@ -135,17 +132,66 @@ namespace StockSharp.Algo.Testing
 		public BasketMarketDataStorage<Message> BasketStorage { get { return _basketStorage; } }
 
 		/// <summary>
+		/// Поставщик информации об инструментах.
+		/// </summary>
+		public ISecurityProvider SecurityProvider { get; private set; }
+
+		/// <summary>
 		/// Создать <see cref="HistoryMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии, внутри которой происходит обработка сообщений.</param>
-		public HistoryMessageAdapter(HistorySessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public HistoryMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
-			_sessionHolder = sessionHolder;
-
 			_basketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<TimeMessage>(d => GetTimeLine(d)));
 
 			MaxMessageCount = 1000;
+
+			StartDate = DateTimeOffset.MinValue;
+			StopDate = DateTimeOffset.MaxValue;
+		}
+
+		/// <summary>
+		/// Создать <see cref="HistoryMessageAdapter"/>.
+		/// </summary>
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="securityProvider">Поставщик информации об инструментах.</param>
+		public HistoryMessageAdapter(IdGenerator transactionIdGenerator, ISecurityProvider securityProvider)
+			: this(transactionIdGenerator)
+		{
+			SecurityProvider = securityProvider;
+		}
+
+		/// <summary>
+		/// Дата в истории, с которой необходимо начать эмуляцию.
+		/// </summary>
+		public DateTimeOffset StartDate { get; set; }
+
+		/// <summary>
+		/// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
+		/// </summary>
+		public DateTimeOffset StopDate { get; set; }
+
+		private DateTimeOffset _currentTime;
+
+		/// <summary>
+		/// Текущее время.
+		/// </summary>
+		public override DateTimeOffset CurrentTime
+		{
+			get { return _currentTime; }
+		}
+
+		/// <summary>
+		/// Установить значение для <see cref="CurrentTime"/>.
+		/// </summary>
+		/// <param name="currentTime">Новое текущее время.</param>
+		public void UpdateCurrentTime(DateTimeOffset currentTime)
+		{
+			if (currentTime < StartDate || currentTime > StopDate)
+				throw new ArgumentOutOfRangeException("currentTime", LocalizedStrings.Str1126Params.Put(currentTime, StartDate, StopDate));
+
+			_currentTime = currentTime;
 		}
 
 		/// <summary>
@@ -159,7 +205,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Запустить таймер генерации с интервалом <see cref="IMessageSessionHolder.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
+		/// Запустить таймер генерации с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
 		/// </summary>
 		protected override void StartMarketTimer()
 		{
@@ -242,7 +288,7 @@ namespace StockSharp.Algo.Testing
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			var security = _sessionHolder.SecurityProvider.LookupById(message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode);
+			var security = SecurityProvider.LookupById(message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode);
 
 			if (security == null)
 			{
@@ -433,7 +479,7 @@ namespace StockSharp.Algo.Testing
 		{
 			try
 			{
-				var loadDate = _sessionHolder.StartDate;
+				var loadDate = StartDate;
 
 				EnqueueGenerators(_tradeGenerators, MarketDataTypes.Trades);
 				EnqueueGenerators(_depthGenerators, MarketDataTypes.MarketDepth);
@@ -441,11 +487,11 @@ namespace StockSharp.Algo.Testing
 
 				var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
 
-				while (loadDate.Date <= _sessionHolder.StopDate.Date && _running)
+				while (loadDate.Date <= StopDate.Date && _running)
 				{
 					if (Boards.Any(b => b.IsTradeDate(loadDate, true)))
 					{
-						SessionHolder.AddInfoLog("Loading {0} Events: {1}", loadDate.Date, LoadedEventCount);
+						this.AddInfoLog("Loading {0} Events: {1}", loadDate.Date, LoadedEventCount);
 
 						var enumerator = _basketStorage.Load(loadDate.Date);
 
@@ -461,7 +507,7 @@ namespace StockSharp.Algo.Testing
 					loadDate = loadDate.Date.AddDays(1);
 				}
 
-				SendOutMessage(new LastMessage { LocalTime = _sessionHolder.StopDate.LocalDateTime });
+				SendOutMessage(new LastMessage { LocalTime = StopDate.LocalDateTime });
 			}
 			catch (Exception ex)
 			{
@@ -477,8 +523,8 @@ namespace StockSharp.Algo.Testing
 
 		private void SendOutMessages(DateTimeOffset loadDate, IEnumerator<Message> enumerator)
 		{
-			var checkFromTime = loadDate.Date == _sessionHolder.StartDate.Date && loadDate.Date != loadDate;
-			var checkToTime = loadDate.Date == _sessionHolder.StopDate.Date;
+			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.Date != loadDate;
+			var checkToTime = loadDate.Date == StopDate.Date;
 
 			while (enumerator.MoveNext() && _running)
 			{
@@ -491,7 +537,7 @@ namespace StockSharp.Algo.Testing
 					// пропускаем только стаканы, тики и ОЛ
 					if (msg.Type == MessageTypes.QuoteChange || msg.Type == MessageTypes.Execution)
 					{
-						if (msg.LocalTime < _sessionHolder.StartDate)
+						if (msg.LocalTime < StartDate)
 							continue;
 
 						checkFromTime = false;
@@ -500,7 +546,7 @@ namespace StockSharp.Algo.Testing
 
 				if (checkToTime)
 				{
-					if (msg.LocalTime > _sessionHolder.StopDate)
+					if (msg.LocalTime > StopDate)
 						break;
 				}
 
@@ -525,7 +571,7 @@ namespace StockSharp.Algo.Testing
 					SecurityId = pair.Key,
 					Generator = pair.Value,
 					IsSubscribe = true,
-					TransactionId = SessionHolder.TransactionIdGenerator.GetNextId(),
+					TransactionId = TransactionIdGenerator.GetNextId(),
 					DataType = type,
 				});
 			}
@@ -586,7 +632,7 @@ namespace StockSharp.Algo.Testing
 
 			foreach (var range in ranges)
 			{
-				for (var time = range.Item2.Min; time <= range.Item2.Max; time += SessionHolder.MarketTimeChangedInterval)
+				for (var time = range.Item2.Min; time <= range.Item2.Max; time += MarketTimeChangedInterval)
 				{
 					var serverTime = GetTime(date, time);
 
@@ -637,7 +683,7 @@ namespace StockSharp.Algo.Testing
 		{
 			for (var i = 0; i < PostTradeMarketTimeChangedCount; i++)
 			{
-				lastTime += SessionHolder.MarketTimeChangedInterval;
+				lastTime += MarketTimeChangedInterval;
 
 				if (lastTime > TimeHelper.LessOneDay)
 					break;
@@ -647,6 +693,15 @@ namespace StockSharp.Algo.Testing
 					ServerTime = GetTime(date, lastTime)
 				};
 			}
+		}
+
+		/// <summary>
+		/// Получить строковое представление.
+		/// </summary>
+		/// <returns>Строковое представление.</returns>
+		public override string ToString()
+		{
+			return LocalizedStrings.Str1127Params.Put(StartDate, StopDate);
 		}
 	}
 }

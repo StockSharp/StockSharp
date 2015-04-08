@@ -11,16 +11,14 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Окно создания новых подключений <see cref="IMessageSessionHolder"/>.
+	/// Окно создания новых подключений <see cref="IMessageAdapter"/>.
 	/// </summary>
-	public partial class SessionHoldersWindow
+	public partial class MessageAdaptersWindow
 	{
-		private BasketSessionHolder _sourceSessionHolder;
-
 		/// <summary>
-		/// Создать <see cref="SessionHoldersWindow"/>.
+		/// Создать <see cref="MessageAdaptersWindow"/>.
 		/// </summary>
-		public SessionHoldersWindow()
+		public MessageAdaptersWindow()
 		{
 			InitializeComponent();
 		}
@@ -43,25 +41,27 @@
 			set { ConnectorsPanel.AutoConnect = value; }
 		}
 
+		private BasketMessageAdapter _adapter;
+
 		/// <summary>
-		/// Сессия-агрегатор.
+		/// Адаптер-агрегатор.
 		/// </summary>
-		public BasketSessionHolder SessionHolder
+		public BasketMessageAdapter Adapter
 		{
-			get { return _sourceSessionHolder; }
+			get { return _adapter; }
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException("value");
 
-				if (_sourceSessionHolder == value)
+				if (_adapter == value)
 					return;
 
-				_sourceSessionHolder = value;
+				_adapter = value;
 
-				var clone = new BasketSessionHolder(_sourceSessionHolder.TransactionIdGenerator);
-				clone.Load(_sourceSessionHolder.Save());
-				ConnectorsPanel.SessionHolder = clone;
+				var clone = new BasketMessageAdapter(_adapter.TransactionIdGenerator);
+				clone.Load(_adapter.Save());
+				ConnectorsPanel.Adapter = clone;
 			}
 		}
 
@@ -80,7 +80,7 @@
 
 		private void Ok_OnClick(object sender, RoutedEventArgs e)
 		{
-			_sourceSessionHolder.Load(ConnectorsPanel.SessionHolder.Save());
+			_adapter.Load(ConnectorsPanel.Adapter.Save());
 
 			DialogResult = true;
 			Close();

@@ -181,7 +181,7 @@ namespace StockSharp.OpenECry
 			if (position == null)
 				throw new ArgumentNullException("position");
 
-			SendOutMessage(SessionHolder
+			SendOutMessage(this
 				.CreatePositionChangeMessage(
 					position.Account.Name,
 					new SecurityId
@@ -221,7 +221,7 @@ namespace StockSharp.OpenECry
 				.Where(pos => balance == account.TotalBalance || pos.Contract.Currency.ID == balance.Currency.ID)
 				.Sum(pos => pos.RealizedCommissions.SafeCast() + pos.OpenCommissions.SafeCast());
 
-			var msg = SessionHolder.CreatePortfolioChangeMessage(account.Name)
+			var msg = this.CreatePortfolioChangeMessage(account.Name)
 				.TryAdd(PositionChangeTypes.BeginValue, balance.Cash.SafeCast())
 				.TryAdd(PositionChangeTypes.RealizedPnL, balance.RealizedPnL.SafeCast())
 				.TryAdd(PositionChangeTypes.UnrealizedPnL, balance.OpenPnL.SafeCast())

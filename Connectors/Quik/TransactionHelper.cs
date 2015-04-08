@@ -1,6 +1,7 @@
 namespace StockSharp.Quik
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 
@@ -11,11 +12,8 @@ namespace StockSharp.Quik
 
 	static class TransactionHelper
 	{
-		public static Transaction CreateMoveTransaction(this IMessageSessionHolder sessionHolder, OrderReplaceMessage message)
+		public static Transaction CreateMoveTransaction(this OrderReplaceMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
-
 			if (message == null)
 				throw new ArgumentNullException("message");
 
@@ -27,17 +25,17 @@ namespace StockSharp.Quik
 			return
 				new Transaction(TransactionTypes.ReRegister, message)
 					.SetAction(TransactionActions.MoveOrders)
-					.SetSecurity(sessionHolder, message)
+					.SetSecurity(message, securityClassInfo)
 					.SetFortsMode(message.Volume == 0 ? 0 : 1)
 					.SetFirstOrderId(message.OldOrderId)
 					.SetFirstOrderPrice(message.Price)
 					.SetFirstVolume((int)message.Volume);
 		}
 
-		public static Transaction CreateRegisterTransaction(this IMessageSessionHolder sessionHolder, OrderRegisterMessage message, string orderAccount)
+		public static Transaction CreateRegisterTransaction(this OrderRegisterMessage message, string orderAccount, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
+			if (securityClassInfo == null)
+				throw new ArgumentNullException("securityClassInfo");
 
 			if (message == null)
 				throw new ArgumentNullException("message");
@@ -57,7 +55,7 @@ namespace StockSharp.Quik
 
 			transaction
 				.SetAccount(orderAccount)
-				.SetSecurity(sessionHolder, message)
+				.SetSecurity(message, securityClassInfo)
 				.SetVolume((int)message.Volume);
 
 			//20-ти символьное составное поле, может содержать код клиента и текстовый комментарий с тем же разделителем, что и при вводе заявки вручную.
@@ -155,7 +153,7 @@ namespace StockSharp.Quik
 								throw new ArgumentException();
 
 							stopOrderKind = TransactionStopOrderKinds.ConditionPriceByOtherSecurity;
-							transaction.SetOtherSecurity(sessionHolder, (SecurityId)otherSec);
+							transaction.SetOtherSecurity((SecurityId)otherSec, securityClassInfo);
 
 							stopPriceCondition = condition.StopPriceCondition == QuikStopPriceConditions.MoreOrEqual ? ">=" : "<=";
 							break;
@@ -315,17 +313,14 @@ namespace StockSharp.Quik
 			return transaction;
 		}
 
-		public static Transaction CreateCancelTransaction(this IMessageSessionHolder sessionHolder, OrderCancelMessage message)
+		public static Transaction CreateCancelTransaction(this OrderCancelMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
-
 			if (message == null)
 				throw new ArgumentNullException("message");
 
 			var transaction = new Transaction(TransactionTypes.Cancel, message);
 
-			transaction.SetSecurity(sessionHolder, message);
+			transaction.SetSecurity(message, securityClassInfo);
 
 			string action;
 			Func<long, Transaction> idSetterFunc = transaction.SetOrderId;
@@ -354,11 +349,8 @@ namespace StockSharp.Quik
 			return transaction;
 		}
 
-		public static Transaction CreateCancelFuturesTransaction(this IMessageSessionHolder sessionHolder, OrderGroupCancelMessage message)
+		public static Transaction CreateCancelFuturesTransaction(this OrderGroupCancelMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
-
 			if (message == null) 
 				throw new ArgumentNullException("message");
 
@@ -384,7 +376,7 @@ namespace StockSharp.Quik
 				.SetAccount(message.PortfolioName)
 				.SetBaseContract(underlyingSecurityCode)
 				.SetAction(TransactionActions.KillAllFuturesOrders)
-				.SetClassCode(sessionHolder.GetSecurityClass(message.SecurityId));
+				.SetClassCode(securityClassInfo.GetSecurityClass(message.SecurityId));
 
 			if (message.Side != null)
 				transaction.SetSide(message.Side.Value);
@@ -402,18 +394,17 @@ namespace StockSharp.Quik
 			return orderRegisterMessage != null ? orderRegisterMessage.TransactionId : 0;
 		}
 
-		private static Transaction SetSecurity(this Transaction transaction, IMessageSessionHolder sessionHolder, OrderMessage message)
+		private static Transaction SetSecurity(this Transaction transaction, OrderMessage message, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
 			return
 				transaction
-					.SetClassCode(sessionHolder.GetSecurityClass(message.SecurityId))
+					.SetClassCode(securityClassInfo.GetSecurityClass(message.SecurityId))
 					.SetSecurityCode(message.SecurityId.SecurityCode);
 		}
 
-		private static Transaction SetOtherSecurity(this Transaction transaction, IMessageSessionHolder sessionHolder, SecurityId securityId)
+		private static Transaction SetOtherSecurity(this Transaction transaction, SecurityId securityId, IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
 		{
-			var secClass = sessionHolder.GetSecurityClass(securityId);
-
+			var secClass = securityClassInfo.GetSecurityClass(securityId);
 			return transaction.SetOtherSecurity(securityId.SecurityCode, secClass);
 		}
 

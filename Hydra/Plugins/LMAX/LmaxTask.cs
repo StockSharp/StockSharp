@@ -76,7 +76,7 @@ namespace StockSharp.Hydra.LMAX
 
 		public LmaxTask()
 		{
-			_supportedCandleSeries = LmaxSessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = LmaxMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf

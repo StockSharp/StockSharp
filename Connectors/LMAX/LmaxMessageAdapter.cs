@@ -13,7 +13,7 @@ namespace StockSharp.LMAX
 	/// <summary>
 	/// Адаптер сообщений для LMAX.
 	/// </summary>
-	public partial class LmaxMessageAdapter : MessageAdapter<LmaxSessionHolder>
+	public partial class LmaxMessageAdapter : MessageAdapter
 	{
 		private LmaxApi _api;
 		private ISession _session;
@@ -21,10 +21,12 @@ namespace StockSharp.LMAX
 		/// <summary>
 		/// Создать <see cref="LmaxMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public LmaxMessageAdapter(LmaxSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public LmaxMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>
@@ -52,11 +54,11 @@ namespace StockSharp.LMAX
 					if (_api != null)
 						throw new InvalidOperationException(LocalizedStrings.Str3378);
 
-					_isDownloadSecurityFromSite = SessionHolder.IsDownloadSecurityFromSite;
+					_isDownloadSecurityFromSite = IsDownloadSecurityFromSite;
 					_isHistoricalSubscribed = false;
 
-					_api = new LmaxApi("https://{0}api.lmaxtrader.com".Put(SessionHolder.IsDemo ? "test" : string.Empty));
-					_api.Login(new LoginRequest(SessionHolder.Login, SessionHolder.Password.To<string>(), SessionHolder.IsDemo ? ProductType.CFD_DEMO : ProductType.CFD_LIVE), OnLoginOk, OnLoginFailure);
+					_api = new LmaxApi("https://{0}api.lmaxtrader.com".Put(IsDemo ? "test" : string.Empty));
+					_api.Login(new LoginRequest(Login, Password.To<string>(), IsDemo ? ProductType.CFD_DEMO : ProductType.CFD_LIVE), OnLoginOk, OnLoginFailure);
 
 					break;
 				}

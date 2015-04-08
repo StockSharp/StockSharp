@@ -293,7 +293,7 @@ namespace StockSharp.OpenECry
 					SecurityId = new SecurityId
 					{
 						SecurityCode = contract.Symbol,
-						BoardCode = GetBoardCode(ticks.Exchanges[i], contract, SessionHolder.AssociatedBoardCode),
+						BoardCode = GetBoardCode(ticks.Exchanges[i], contract, AssociatedBoardCode),
 					},
 					ServerTime = ticks.Timestamps[i].ApplyTimeZone(TimeHelper.Est)
 				}
@@ -325,7 +325,7 @@ namespace StockSharp.OpenECry
 			{
 				Source = user.Name,
 				Headline = message,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Est)
+				ServerTime = CurrentTime.Convert(TimeHelper.Est)
 			});
 		}
 
@@ -375,7 +375,7 @@ namespace StockSharp.OpenECry
 			{
 				BoardCode = channel,
 				Headline = message,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Est)
+				ServerTime = CurrentTime.Convert(TimeHelper.Est)
 			});
 		}
 
@@ -417,7 +417,7 @@ namespace StockSharp.OpenECry
 				SecurityId = new SecurityId
 				{
 					SecurityCode = contract.Symbol,
-					BoardCode = SessionHolder.AssociatedBoardCode
+					BoardCode = AssociatedBoardCode
 				},
 				ServerTime = dom.LastUpdate.ApplyTimeZone(TimeHelper.Est),
 				Bids = bids,

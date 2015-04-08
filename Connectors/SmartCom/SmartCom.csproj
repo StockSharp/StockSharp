@@ -127,7 +127,7 @@
     <Compile Include="SmartComService.cs" />
     <Compile Include="SmartComMessageAdapter_MarketData.cs" />
     <Compile Include="SmartComMessageAdapter.cs" />
-    <Compile Include="SmartComSessionHolder.cs" />
+    <Compile Include="SmartComMessageAdapter_Settings.cs" />
     <Compile Include="SmartComMessageAdapter_Transaction.cs" />
     <Compile Include="Native\ISmartComWrapper.cs" />
     <Compile Include="Native\SmartCom3Wrapper32.cs" />

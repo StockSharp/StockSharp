@@ -311,7 +311,7 @@ namespace StockSharp.Quik
 
 			var processStartInfo = new ProcessStartInfo { FileName = FileName };
 
-			if (System.Environment.OSVersion.Version.Major >= 6)  // Windows Vista or higher
+			if (Environment.OSVersion.Version.Major >= 6)  // Windows Vista or higher
 			{
 				processStartInfo.Verb = "runas";
 			}
@@ -536,22 +536,27 @@ namespace StockSharp.Quik
 			get { return !StatusBar.GetText().IsEmpty(); }
 		}
 
-		private QuikSessionHolder _sessionHolder;
+		/// <summary>
+		/// Использовать для старое подключение DDE + Trans2Quik. По-умолчанию выключено.
+		/// </summary>
+		public bool IsDde { get; set; }
 
-		internal QuikSessionHolder SessionHolder
+		private QuikDdeAdapter _adapter;
+
+		internal QuikDdeAdapter Adapter
 		{
 			private get
 			{
-				if (_sessionHolder == null)
+				if (_adapter == null)
 					throw new InvalidOperationException(LocalizedStrings.Str1816);
 
-				return _sessionHolder;
+				return _adapter;
 			}
 			set
 			{
-				_sessionHolder = value;
+				_adapter = value;
 
-				if (_sessionHolder == null)
+				if (_adapter == null)
 					_allTables = null;
 				else
 				{
@@ -592,11 +597,11 @@ namespace StockSharp.Quik
 			{
 				var except = new List<DdeTable>();
 
-				if (!SessionHolder.UseCurrencyPortfolios)
-					except.Add(SessionHolder.CurrencyPortfoliosTable);
+				if (!Adapter.UseCurrencyPortfolios)
+					except.Add(Adapter.CurrencyPortfoliosTable);
 
-				if (!SessionHolder.UseSecuritiesChange)
-					except.Add(SessionHolder.SecuritiesChangeTable);
+				if (!Adapter.UseSecuritiesChange)
+					except.Add(Adapter.SecuritiesChangeTable);
 
 				return except.Count == 0 ? AllTables : AllTables.Except(except);
 			}
@@ -857,7 +862,7 @@ namespace StockSharp.Quik
 			if (ddeTables == null)
 				throw new ArgumentNullException("ddeTables");
 
-			if (ddeTables.Any(t => t == SessionHolder.QuotesTable))
+			if (ddeTables.Any(t => t == Adapter.QuotesTable))
 				throw new ArgumentException(LocalizedStrings.Str1819, "ddeTables");
 		}
 
@@ -874,7 +879,7 @@ namespace StockSharp.Quik
 
 				var quotesWindow = GetQuotesWindow(security);
 
-				quotesWindow.Book = SessionHolder.QuotesTable.Caption;
+				quotesWindow.Book = Adapter.QuotesTable.Caption;
 				quotesWindow.Sheet = GetSecurityId(security);
 
 				StartDde(quotesWindow, new DdeSettings());
@@ -1123,14 +1128,14 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Проверить, содержит ли таблица <see cref="QuikSessionHolder.SecuritiesTable"/> указанный инструмент.
+		/// Проверить, содержит ли таблица <see cref="QuikDdeAdapter.SecuritiesTable"/> указанный инструмент.
 		/// </summary>
 		/// <param name="securityId">Идентификатор инструмента.</param>
 		/// <returns><see langword="true"/>, если стакан можно открыть, иначе, <see langword="false"/>.</returns>
 		public bool SecuritiesTableContains(SecurityId securityId)
 		{
 			var securityCode = securityId.SecurityCode;
-			var securityClass = SessionHolder.GetSecurityClass(securityId);
+			var securityClass = Adapter.SecurityClassInfo.GetSecurityClass(securityId);
 
 			var text = GetSecuritiesTableData();
 
@@ -1146,9 +1151,9 @@ namespace StockSharp.Quik
 		{
 			lock (_winApiLock)
 			{
-				var table = SessionHolder.SecuritiesTable;
+				var table = Adapter.SecuritiesTable;
 
-				var window = SessionHolder.IsDde
+				var window = IsDde
 					? GetTableWindow(table.Caption)
 					: GetTableWindowByClass(table.ClassName);
 
@@ -1168,10 +1173,10 @@ namespace StockSharp.Quik
 
 		private bool IsRequiredSecurity(string securityCode, string securityClass, IList<string> parts)
 		{
-			if (!SessionHolder.IsDde)
+			if (!IsDde)
 				return parts.Any(i => i.CompareIgnoreCase(securityCode)) && parts.Any(i => i.CompareIgnoreCase(securityClass));
 
-			var table = SessionHolder.SecuritiesTable;
+			var table = Adapter.SecuritiesTable;
 
 			var secCode = parts[table.Columns.IndexOf(DdeSecurityColumns.Code) + 1];
 			var secClass = parts[table.Columns.IndexOf(DdeSecurityColumns.Class) + 1];
@@ -1185,7 +1190,7 @@ namespace StockSharp.Quik
 		/// <param name="securityId">Идентификатор нструмента, для которого необходимо открыть окно стакана.</param>
 		public void OpenQuotes(SecurityId securityId)
 		{
-			var securityClass = SessionHolder.GetSecurityClass(securityId);
+			var securityClass = Adapter.SecurityClassInfo.GetSecurityClass(securityId);
 
 			lock (_winApiLock)
 			{
@@ -1193,9 +1198,9 @@ namespace StockSharp.Quik
 
 				var text = GetSecuritiesTableData();
 
-				var table = SessionHolder.SecuritiesTable;
+				var table = Adapter.SecuritiesTable;
 
-				var window = SessionHolder.IsDde
+				var window = IsDde
 					? GetTableWindow(table.Caption)
 					: GetTableWindowByClass(table.ClassName);
 
@@ -1235,7 +1240,7 @@ namespace StockSharp.Quik
 				window.SendMessage(WM.CHAR, (int)VirtualKeys.Return, 1);
 
 				// при Lua подключении стакан может иметь любое название и настройки.
-				if (!SessionHolder.IsDde)
+				if (!IsDde)
 					return;
 
 				var currentTables = QuotesWindows;
@@ -1312,7 +1317,7 @@ namespace StockSharp.Quik
 		/// <returns>Ошибки настроек.</returns>
 		public IEnumerable<DdeSettingsResult> GetTableSettings(params DdeTable[] tables)
 		{
-			return SessionHolder.IsDde ? GetDdeTableSettings(tables) : GetLuaTableSettings(tables);
+			return IsDde ? GetDdeTableSettings(tables) : GetLuaTableSettings(tables);
 		}
 
 		private IEnumerable<DdeSettingsResult> GetLuaTableSettings(params DdeTable[] tables)
@@ -1329,7 +1334,7 @@ namespace StockSharp.Quik
 
 				CloseAllEditWindows();
 
-				foreach (var table in tables.Where(t => t != SessionHolder.QuotesTable))
+				foreach (var table in tables.Where(t => t != Adapter.QuotesTable))
 				{
 					var window = GetTableWindowByClass(table.ClassName, false);
 
@@ -1347,7 +1352,7 @@ namespace StockSharp.Quik
 				throw new ArgumentNullException("tables");
 
 			if (tables.Length == 0)
-				tables = FilteredAllTables.Concat(SessionHolder.QuotesTable).ToArray();
+				tables = FilteredAllTables.Concat(Adapter.QuotesTable).ToArray();
 
 			lock (_winApiLock)
 			{
@@ -1357,7 +1362,7 @@ namespace StockSharp.Quik
 
 				foreach (var table in tables)
 				{
-					if (table == SessionHolder.QuotesTable)
+					if (table == Adapter.QuotesTable)
 					{
 						foreach (var quotesWindow in QuotesWindows)
 						{
@@ -1394,7 +1399,7 @@ namespace StockSharp.Quik
 
 			try
 			{
-				if (table == SessionHolder.SecuritiesTable)
+				if (table == Adapter.SecuritiesTable)
 				{
 					var ctrl = editWnd.AllChildWindows.First(e => e.DialogID == 10442);
 					if (ctrl.CheckState == CheckState.Checked)
@@ -1407,27 +1412,27 @@ namespace StockSharp.Quik
 
 				int columnsCtrlId;
 
-				if (table == SessionHolder.SecuritiesTable)
+				if (table == Adapter.SecuritiesTable)
 					columnsCtrlId = 10411;
-				else if (table == SessionHolder.SecuritiesChangeTable)
+				else if (table == Adapter.SecuritiesChangeTable)
 					columnsCtrlId = 10511;
-				else if (table == SessionHolder.OrdersTable)
+				else if (table == Adapter.OrdersTable)
 					columnsCtrlId = 11806;
-				else if (table == SessionHolder.StopOrdersTable)
+				else if (table == Adapter.StopOrdersTable)
 					columnsCtrlId = 31257;
-				else if (table == SessionHolder.TradesTable)
+				else if (table == Adapter.TradesTable)
 					columnsCtrlId = 30303;
-				else if (table == SessionHolder.MyTradesTable)
+				else if (table == Adapter.MyTradesTable)
 					columnsCtrlId = 11709;
-				else if (table == SessionHolder.EquityPortfoliosTable)
+				else if (table == Adapter.EquityPortfoliosTable)
 					columnsCtrlId = 17903;
-				else if (table == SessionHolder.DerivativePortfoliosTable)
+				else if (table == Adapter.DerivativePortfoliosTable)
 					columnsCtrlId = 30857;
-				else if (table == SessionHolder.EquityPositionsTable)
+				else if (table == Adapter.EquityPositionsTable)
 					columnsCtrlId = 12707;
-				else if (table == SessionHolder.DerivativePositionsTable)
+				else if (table == Adapter.DerivativePositionsTable)
 					columnsCtrlId = 30909;
-				else if (table == SessionHolder.QuotesTable)
+				else if (table == Adapter.QuotesTable)
 					columnsCtrlId = 12405;
 				else
 					throw new InvalidOperationException(LocalizedStrings.Str1825);
@@ -1460,7 +1465,7 @@ namespace StockSharp.Quik
 
 					var tableCaption = table.Caption;
 
-					if (table == SessionHolder.QuotesTable)
+					if (table == Adapter.QuotesTable)
 						tableCaption = window.Title;
 
 					results.Add(new DdeSettingsResult(table, new InvalidOperationException(
@@ -1617,7 +1622,7 @@ namespace StockSharp.Quik
 			if (ddeSettings == null)
 				throw new ArgumentNullException("ddeSettings");
 
-			ddeWindow.DdeServer = SessionHolder.DdeServer;
+			ddeWindow.DdeServer = Adapter.DdeServer;
 
 			ddeWindow.Row = 1;
 			ddeWindow.Column = 1;
@@ -1807,7 +1812,7 @@ namespace StockSharp.Quik
 			{
 				CloseAllEditWindows();
 
-				var editWindow = OpenEditWindow(SessionHolder.SecuritiesTable);
+				var editWindow = OpenEditWindow(Adapter.SecuritiesTable);
 				var securityTypesWnd = editWindow.AllChildWindows.First(e => e.DialogID == 10402);
 				var securityTypesCtrl = securityTypesWnd.ToListBox();
 				var addCtrl = editWindow.AllChildWindows.First(e => e.DialogID == 10404);
@@ -1848,7 +1853,7 @@ namespace StockSharp.Quik
 
 				CloseEditWindow(editWindow, founded);
 
-				if (founded && IsDdeStarted(SessionHolder.SecuritiesTable))
+				if (founded && IsDdeStarted(Adapter.SecuritiesTable))
 				{
 					WaitAndCloseDdeWindow();
 				}
@@ -1871,7 +1876,7 @@ namespace StockSharp.Quik
 			{
 				CloseAllEditWindows();
 
-				var editWindow = OpenEditWindow(SessionHolder.SecuritiesTable);
+				var editWindow = OpenEditWindow(Adapter.SecuritiesTable);
 
 				var selectedSecuritiesCtrl = editWindow.AllChildWindows.First(e => e.DialogID == 10403).ToListBox();
 				var removeCtrl = editWindow.AllChildWindows.First(e => e.DialogID == 10405);
@@ -1904,7 +1909,7 @@ namespace StockSharp.Quik
 
 				CloseEditWindow(editWindow, founded);
 
-				if (founded && IsDdeStarted(SessionHolder.SecuritiesTable))
+				if (founded && IsDdeStarted(Adapter.SecuritiesTable))
 				{
 					WaitAndCloseDdeWindow();
 				}
@@ -1944,7 +1949,7 @@ namespace StockSharp.Quik
 			{
 				CloseAllEditWindows();
 
-				var editWindow = OpenEditWindow(SessionHolder.TradesTable);
+				var editWindow = OpenEditWindow(Adapter.TradesTable);
 
 				var securityTypesCtrl = editWindow.AllChildWindows.First(e => e.DialogID == 9000).ToListBox();
 			    var itemsCount = securityTypesCtrl.Count;
@@ -1993,7 +1998,7 @@ namespace StockSharp.Quik
 
 				CloseEditWindow(editWindow, founded);
 
-				if (founded && IsDdeStarted(SessionHolder.TradesTable))
+				if (founded && IsDdeStarted(Adapter.TradesTable))
 				{
 					WaitAndCloseDdeWindow();
 				}

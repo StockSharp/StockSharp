@@ -206,22 +206,22 @@ namespace StockSharp.Algo
 			SlippageManager = new SlippageManager();
 		}
 
-		private IMessageSessionHolder _sessionHolder;
+		//private IMessageSessionHolder _sessionHolder;
 
-		/// <summary>
-		/// Контейнер для сессии.
-		/// </summary>
-		public virtual IMessageSessionHolder SessionHolder
-		{
-			get { return _sessionHolder; }
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException("value");
+		///// <summary>
+		///// Контейнер для сессии.
+		///// </summary>
+		//public virtual IMessageSessionHolder SessionHolder
+		//{
+		//	get { return _sessionHolder; }
+		//	protected set
+		//	{
+		//		if (value == null)
+		//			throw new ArgumentNullException("value");
 
-				_sessionHolder = value;
-			}
-		}
+		//		_sessionHolder = value;
+		//	}
+		//}
 
 		/// <summary>
 		/// Является ли подключение <see cref="MarketDataAdapter"/> незавимыми от <see cref="TransactionAdapter"/>.
@@ -235,10 +235,10 @@ namespace StockSharp.Algo
 			if (IsMarketDataIndependent)
 				return;
 
-			IsMarketDataIndependent = TransactionAdapter.SessionHolder.GetType() != MarketDataAdapter.SessionHolder.GetType();
+			IsMarketDataIndependent = TransactionAdapter.GetType() != MarketDataAdapter.GetType();
 
 			if (!IsMarketDataIndependent)
-				IsMarketDataIndependent = TransactionAdapter.SessionHolder.IsAdaptersIndependent;
+				IsMarketDataIndependent = TransactionAdapter.IsAdaptersIndependent;
 		}
 
 		/// <summary>
@@ -1216,12 +1216,7 @@ namespace StockSharp.Algo
 			if (adapter == null)
 				return;
 
-			var session = adapter.SessionHolder;
-
-			if (session == null)
-				return;
-
-			if (diff >= session.MarketTimeChangedInterval)
+			if (diff >= adapter.MarketTimeChangedInterval)
 			{
 				_prevTime = _currentTime;
 				RaiseMarketTimeChanged(diff);
@@ -1377,7 +1372,7 @@ namespace StockSharp.Algo
 
 		private string GetBoardCode(string secClass)
 		{
-			return MarketDataAdapter.SessionHolder.GetBoardCode(secClass);
+			return MarketDataAdapter.GetBoardCode(secClass);
 		}
 
 		/// <summary>
@@ -1553,14 +1548,14 @@ namespace StockSharp.Algo
 				});
 			}
 
-			lock (_sessionHolderPointers.SyncRoot)
-			{
-				_sessionHolderPointers.CachedValues.ForEach(p =>
-				{
-					if (p.Counter == 0)
-						p.Dispose();
-				});	
-			}
+			//lock (_sessionHolderPointers.SyncRoot)
+			//{
+			//	_sessionHolderPointers.CachedValues.ForEach(p =>
+			//	{
+			//		if (p.Counter == 0)
+			//			p.Dispose();
+			//	});	
+			//}
 
 			if (ConnectionState == ConnectionStates.Disconnected || ConnectionState == ConnectionStates.Failed)
 				TransactionAdapter = null;
@@ -1584,10 +1579,10 @@ namespace StockSharp.Algo
 			UpdateSecurityByLevel1 = storage.GetValue("UpdateSecurityByLevel1", true);
 			//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
 
-			TransactionAdapter.SessionHolder.Load(storage.GetValue<SettingsStorage>("TransactionSession"));
+			TransactionAdapter.Load(storage.GetValue<SettingsStorage>("TransactionAdapter"));
 
-			if (storage.ContainsKey("MarketDataSession"))
-				MarketDataAdapter.SessionHolder.Load(storage.GetValue<SettingsStorage>("MarketDataSession"));
+			if (storage.ContainsKey("MarketDataAdapter"))
+				MarketDataAdapter.Load(storage.GetValue<SettingsStorage>("MarketDataAdapter"));
 
 			CreateDepthFromOrdersLog = storage.GetValue<bool>("CreateDepthFromOrdersLog");
 			CreateTradesFromOrdersLog = storage.GetValue<bool>("CreateTradesFromOrdersLog");
@@ -1610,10 +1605,10 @@ namespace StockSharp.Algo
 			storage.SetValue("UpdateSecurityByLevel1", UpdateSecurityByLevel1);
 			//storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
 
-			storage.SetValue("TransactionSession", TransactionAdapter.SessionHolder.Save());
+			storage.SetValue("TransactionAdapter", TransactionAdapter.Save());
 
-			if (TransactionAdapter.SessionHolder != MarketDataAdapter.SessionHolder)
-				storage.SetValue("MarketDataSession", MarketDataAdapter.SessionHolder.Save());
+			if (TransactionAdapter != MarketDataAdapter)
+				storage.SetValue("MarketDataAdapter", MarketDataAdapter.Save());
 
 			storage.SetValue("CreateDepthFromOrdersLog", CreateDepthFromOrdersLog);
 			storage.SetValue("CreateTradesFromOrdersLog", CreateTradesFromOrdersLog);

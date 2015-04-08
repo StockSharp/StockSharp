@@ -85,7 +85,7 @@ namespace StockSharp.Hydra.Blackwood
 
 		public BlackwoodTask()
 		{
-			_supportedCandleSeries = BlackwoodSessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = BlackwoodMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf

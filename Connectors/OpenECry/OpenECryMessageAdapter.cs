@@ -15,7 +15,7 @@ namespace StockSharp.OpenECry
 	/// <summary>
 	/// Адаптер сообщений для OpenECry.
 	/// </summary>
-	public partial class OpenECryMessageAdapter : MessageAdapter<OpenECrySessionHolder>
+	public partial class OpenECryMessageAdapter : MessageAdapter
 	{
 		private class InPlaceThreadPolicy : ThreadingPolicy
 		{
@@ -45,14 +45,14 @@ namespace StockSharp.OpenECry
 
 		class OECLogger : ILogImpl
 		{
-			private readonly OpenECrySessionHolder _sessionHolder;
+			private readonly OpenECryMessageAdapter _adapter;
 
-			public OECLogger(OpenECrySessionHolder sessionHolder)
+			public OECLogger(OpenECryMessageAdapter adapter)
 			{
-				if (sessionHolder == null)
-					throw new ArgumentNullException("sessionHolder");
+				if (adapter == null)
+					throw new ArgumentNullException("adapter");
 
-				_sessionHolder = sessionHolder;
+				_adapter = adapter;
 			}
 
 			void ILogImpl.Start(string path)
@@ -70,17 +70,17 @@ namespace StockSharp.OpenECry
 					case Severity.N_A:
 					case Severity.Prf:
 					case Severity.Dbg:
-						_sessionHolder.AddDebugLog(format, args);
+						_adapter.AddDebugLog(format, args);
 						break;
 					case Severity.Inf:
-						_sessionHolder.AddInfoLog(format, args);
+						_adapter.AddInfoLog(format, args);
 						break;
 					case Severity.Wrn:
-						_sessionHolder.AddWarningLog(format, args);
+						_adapter.AddWarningLog(format, args);
 						break;
 					case Severity.Err:
 					case Severity.Crt:
-						_sessionHolder.AddErrorLog(format, args);
+						_adapter.AddErrorLog(format, args);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException("severity");
@@ -93,10 +93,12 @@ namespace StockSharp.OpenECry
 		/// <summary>
 		/// Создать <see cref="OpenECryMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public OpenECryMessageAdapter(OpenECrySessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public OpenECryMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>
@@ -236,15 +238,15 @@ namespace StockSharp.OpenECry
 
 					_subscriptions.Clear();
 
-					switch (SessionHolder.Remoting)
+					switch (Remoting)
 					{
 						case OpenECryRemoting.None:
 						case OpenECryRemoting.Primary:
 							_client = new OECClient(new InPlaceThreadPolicy())
 							{
-								UUID = SessionHolder.Uuid,
+								UUID = Uuid,
 								EventBatchInterval = 0,
-								RemoteHostingEnabled = SessionHolder.Remoting == OpenECryRemoting.Primary,
+								RemoteHostingEnabled = Remoting == OpenECryRemoting.Primary,
 								//PriceHost = "",
 								//AutoSubscribe = false
 							};
@@ -256,18 +258,18 @@ namespace StockSharp.OpenECry
 							throw new ArgumentOutOfRangeException();
 					}
 
-					if (SessionHolder.EnableOECLogging)
+					if (EnableOECLogging)
 					{
-						if (SessionHolder.Remoting == OpenECryRemoting.Secondary)
+						if (Remoting == OpenECryRemoting.Secondary)
 						{
-							SessionHolder.AddWarningLog(LocalizedStrings.Str2552);
+							this.AddWarningLog(LocalizedStrings.Str2552);
 						}
 						else
 						{
-							Log.ConsoleOutput = false;
-							_client.SetLoggingConfig(new LoggingConfiguration { Level = LogLevel.All });
-							Log.Initialize(new OECLogger(SessionHolder));
-							Log.Start();
+							OEC.Log.ConsoleOutput = false;
+							_client.SetLoggingConfig(new LoggingConfiguration { Level = OEC.API.LogLevel.All });
+							OEC.Log.Initialize(new OECLogger(this));
+							OEC.Log.Start();
 						}
 					}
 
@@ -322,7 +324,7 @@ namespace StockSharp.OpenECry
 					_client.OnUserMessage += SessionOnUserMessage;
 					_client.OnUserStatusChanged += SessionOnUserStatusChanged;
 
-					_client.Connect(SessionHolder.Address.GetHost(), SessionHolder.Address.GetPort(), SessionHolder.Login, SessionHolder.Password.To<string>(), SessionHolder.UseNativeReconnect);
+					_client.Connect(Address.GetHost(), Address.GetPort(), Login, Password.To<string>(), UseNativeReconnect);
 
 					break;
 				}

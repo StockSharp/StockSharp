@@ -2,6 +2,8 @@ namespace StockSharp.Btce
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Btce.Native;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -9,7 +11,7 @@ namespace StockSharp.Btce
 	/// <summary>
 	/// Адаптер сообщений для BTC-e.
 	/// </summary>
-	public partial class BtceMessageAdapter : MessageAdapter<BtceSessionHolder>
+	public partial class BtceMessageAdapter : MessageAdapter
 	{
 		private const string _boardCode = "BTCE";
 		private BtceClient _client;
@@ -17,10 +19,12 @@ namespace StockSharp.Btce
 		/// <summary>
 		/// Создать <see cref="BtceMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public BtceMessageAdapter(BtceSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public BtceMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>
@@ -73,7 +77,7 @@ namespace StockSharp.Btce
 					_hasMyTrades = true;
 					_requestOrderFirst = true;
 
-					_client = new BtceClient(SessionHolder.Key, SessionHolder.Secret);
+					_client = new BtceClient(Key, Secret);
 
 					var reply = _client.GetInfo();
 

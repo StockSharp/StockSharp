@@ -13,15 +13,16 @@ namespace StockSharp.Rss
 	/// <summary>
 	/// Маркет-дата адаптер сообщений для Rss.
 	/// </summary>
-	public class RssMarketDataMessageAdapter : MessageAdapter<RssSessionHolder>
+	public partial class RssMarketDataMessageAdapter : MessageAdapter
 	{
 		/// <summary>
 		/// Создать <see cref="RssMarketDataMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public RssMarketDataMessageAdapter(RssSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public RssMarketDataMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>
@@ -34,7 +35,7 @@ namespace StockSharp.Rss
 			{
 				case MessageTypes.Connect:
 				{
-					var error = SessionHolder.Address == null
+					var error = Address == null
 						? new InvalidOperationException(LocalizedStrings.Str3503)
 						: null;
 
@@ -51,7 +52,7 @@ namespace StockSharp.Rss
 
 				case MessageTypes.Time: // обработка heartbeat
 				{
-					using (var reader = new XmlReaderEx(SessionHolder.Address.To<string>()) { CustomDateFormat = SessionHolder.CustomDateFormat })
+					using (var reader = new XmlReaderEx(Address.To<string>()) { CustomDateFormat = CustomDateFormat })
 					{
 						var feed = SyndicationFeed.Load(reader);
 

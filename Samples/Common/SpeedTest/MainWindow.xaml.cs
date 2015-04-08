@@ -40,10 +40,11 @@ namespace SpeedTest
 				_connector = new Connector();
 				_connector.Connected += _connector.StartExport;
 
-				var session = new BasketSessionHolder(_connector.TransactionIdGenerator);
+				var transactionAdapter = new BasketMessageAdapter(_connector.TransactionIdGenerator);
+				var marketDataAdapter = new BasketMessageAdapter(_connector.TransactionIdGenerator);
 
-				_connector.MarketDataAdapter = new BasketMessageAdapter(session);
-				_connector.TransactionAdapter = new BasketMessageAdapter(session);
+				_connector.MarketDataAdapter = marketDataAdapter;
+				_connector.TransactionAdapter = transactionAdapter;
 
 				_connector.ApplyMessageProcessor(MessageDirections.In, true, false);
 				_connector.ApplyMessageProcessor(MessageDirections.In, false, true);
@@ -51,36 +52,47 @@ namespace SpeedTest
 
 				if (QuikCheckBox.IsChecked == true)
 				{
-					session.InnerSessions.Add(new QuikSessionHolder(_connector.TransactionIdGenerator)
-					{
-						IsTransactionEnabled = true,
-						IsMarketDataEnabled = true,
-					}, 1);
+					//session.InnerSessions.Add(new QuikSessionHolder(_connector.TransactionIdGenerator)
+					//{
+					//	IsTransactionEnabled = true,
+					//	IsMarketDataEnabled = true,
+					//}, 1);
 				}
 
 				if (SmartComCheckBox.IsChecked == true)
 				{
-					session.InnerSessions.Add(new SmartComSessionHolder(_connector.TransactionIdGenerator)
+					var smartCom = new SmartComMessageAdapter(_connector.TransactionIdGenerator)
 					{
 						Login = Login.Text,
 						Password = Password.Password.To<SecureString>(),
 						Address = Address.SelectedAddress,
 						IsTransactionEnabled = true,
 						IsMarketDataEnabled = true,
-					}, 0);
+					};
+					transactionAdapter.InnerAdapters[smartCom] = 0;
+					marketDataAdapter.InnerAdapters[smartCom] = 0;
 				}
 
 				if (PlazaCheckBox.IsChecked == true)
 				{
-					session.InnerSessions.Add(new PlazaSessionHolder(_connector.TransactionIdGenerator)
+					var pool = new PlazaConnectionPool();
+					transactionAdapter.InnerAdapters[new PlazaTransactionMessageAdapter(_connector.TransactionIdGenerator, pool)
 					{
-						IsCGate = true,
-						IsTransactionEnabled = true,
-						IsMarketDataEnabled = true,
-					}, 0);
+						ConnectionPoolSettings =
+						{
+							IsCGate = true,
+						}
+					}] = 0;
+					marketDataAdapter.InnerAdapters[new PlazaStreamMessageAdapter(_connector.TransactionIdGenerator, pool)
+					{
+						ConnectionPoolSettings =
+						{
+							IsCGate = true,
+						}
+					}] = 0;
 				}
 
-				if (session.InnerSessions.Count == 0)
+				if (transactionAdapter.InnerAdapters.Count == 0)
 				{
 					MessageBox.Show(LocalizedStrings.Str2971);
 					return;

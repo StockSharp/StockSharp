@@ -230,8 +230,8 @@ namespace SampleIB
 		private void OnAddrTypeChecked(object sender, RoutedEventArgs e)
 		{
 			Address.Text = (Tws.IsChecked == true
-				? InteractiveBrokersSessionHolder.DefaultAddress
-				: InteractiveBrokersSessionHolder.DefaultGatewayAddress).To<string>();
+				? InteractiveBrokersMessageAdapter.DefaultAddress
+				: InteractiveBrokersMessageAdapter.DefaultGatewayAddress).To<string>();
 		}
 	}
 }

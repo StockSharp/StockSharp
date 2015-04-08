@@ -146,12 +146,18 @@
 			var connectionSettings = _settings.GetValue<SettingsStorage>("Connection");
 
 			if (connectionSettings != null)
-				_connector.BasketSessionHolder.Load(connectionSettings);
+			{
+				_connector.TransactionAdapter.Load(connectionSettings.GetValue<SettingsStorage>("TransactionAdapter"));
+				_connector.MarketDataAdapter.Load(connectionSettings.GetValue<SettingsStorage>("MarketDataAdapter"));
+			}
 		}
 
 		private void SaveSettings()
 		{
-			_settings.SetValue("Connection", _connector.BasketSessionHolder.Save());
+			var connectionSettings = new SettingsStorage();
+			connectionSettings.SetValue("TransactionAdapter", _connector.TransactionAdapter.Save());
+			connectionSettings.SetValue("MarketDataAdapter", _connector.MarketDataAdapter.Save());
+			_settings.SetValue("Connection", connectionSettings);
 			//_settings.SetValue("LogManager", _logManager.Save());
 			_settings.SetValue("Layout", DockSite.SaveLayout());
 
@@ -216,10 +222,10 @@
 
 		private void ExecutedConnectionSettings(object sender, ExecutedRoutedEventArgs e)
 		{
-			var wnd = new SessionHoldersWindow();
+			var wnd = new MessageAdaptersWindow();
 			wnd.CheckConnectionState += () => _connector.ConnectionState;
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.SessionHolder = _connector.BasketSessionHolder;
+			wnd.Adapter = (BasketMessageAdapter)_connector.MarketDataAdapter;
 
 			if (wnd.ShowModal(this))
 			{

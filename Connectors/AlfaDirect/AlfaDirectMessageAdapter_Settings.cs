@@ -8,15 +8,11 @@ namespace StockSharp.AlfaDirect
 	using Ecng.Localization;
 	using Ecng.Serialization;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("AlfaDirect")]
 	[CategoryLoc(LocalizedStrings.Str1769Key)]
 	[DescriptionLoc(LocalizedStrings.Str2260Key)]
@@ -24,7 +20,7 @@ namespace StockSharp.AlfaDirect
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]
 	[TargetPlatform(Languages.Russian, Platforms.x86)]
-	public class AlfaDirectSessionHolder : MessageSessionHolder
+	partial class AlfaDirectMessageAdapter
 	{
 		/// <summary>
 		/// Имя пользователя в терминале Альфа-Директ.
@@ -57,23 +53,6 @@ namespace StockSharp.AlfaDirect
 				else
 					return !Password.IsEmpty();
 			}
-		}
-
-		/// <summary>
-		/// Создать <see cref="AlfaDirectSessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public AlfaDirectSessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			SecurityClassInfo.Add("FORTS", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add("INDEX", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Micex.Code));
-			SecurityClassInfo.Add("INDEX2", RefTuple.Create(SecurityTypes.Index, "INDEX"));
-			SecurityClassInfo.Add("MICEX_SHR_T", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Micex.Code));
-			SecurityClassInfo.Add("RTS_STANDARD", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
-
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>

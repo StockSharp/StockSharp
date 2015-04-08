@@ -110,37 +110,34 @@ namespace SampleQuikSmart
 					// создаем агрегирующее подключение (+ сразу инициализируем настройки переподключения)
 					Connector = InitReconnectionSettings(new Connector());
 
-					var session = new BasketSessionHolder(Connector.TransactionIdGenerator);
+					var transactionAdapter = new BasketMessageAdapter(Connector.TransactionIdGenerator);
+					var marketDataAdapter = new BasketMessageAdapter(Connector.TransactionIdGenerator);
 
-					Connector.MarketDataAdapter = new BasketMessageAdapter(session);
-					Connector.TransactionAdapter = new BasketMessageAdapter(session);
+					Connector.MarketDataAdapter = marketDataAdapter;
+					Connector.TransactionAdapter = transactionAdapter;
 
 					Connector.ApplyMessageProcessor(MessageDirections.In, true, false);
 					Connector.ApplyMessageProcessor(MessageDirections.In, false, true);
 					Connector.ApplyMessageProcessor(MessageDirections.Out, true, true);
 
 					// добавляем подключения к SmartCOM и Quik
-					session.InnerSessions.Add(new QuikSessionHolder(Connector.TransactionIdGenerator)
-					{
-						IsDde = isDde,
-						Path = QuikPath.Text,
-						IsTransactionEnabled = true,
-						IsMarketDataEnabled = true,
-					}, 1);
-					//session.InnerSessions.Add(new PlazaSessionHolder(Connector.TransactionIdGenerator)
+					//session.InnerSessions.Add(new QuikSessionHolder(Connector.TransactionIdGenerator)
 					//{
-					//	IsCGate = true,
+					//	IsDde = isDde,
+					//	Path = QuikPath.Text,
 					//	IsTransactionEnabled = true,
 					//	IsMarketDataEnabled = true,
-					//}, 0);
-					session.InnerSessions.Add(new SmartComSessionHolder(Connector.TransactionIdGenerator)
+					//}, 1);
+					var smartCom = new SmartComMessageAdapter(Connector.TransactionIdGenerator)
 					{
 						Login = SmartLogin.Text,
 						Password = SmartPassword.Password.To<SecureString>(),
 						Address = SmartAddress.SelectedAddress,
 						IsTransactionEnabled = true,
 						IsMarketDataEnabled = true,
-					}, 0);
+					};
+					transactionAdapter.InnerAdapters[smartCom] = 0;
+					marketDataAdapter.InnerAdapters[smartCom] = 0;
 
 					// очищаем из текстового поля в целях безопасности
 					//SmartPassword.Clear();

@@ -2,23 +2,26 @@
 {
 	using System;
 
+	using Ecng.Common;
+
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// Адаптер сообщений для Sterling.
 	/// </summary>
-	public partial class SterlingMessageAdapter : MessageAdapter<SterlingSessionHolder>
+	public partial class SterlingMessageAdapter : MessageAdapter
 	{
 		private SterlingClient _client;
 
 		/// <summary>
 		/// Создать <see cref="SterlingMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public SterlingMessageAdapter(SterlingSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public SterlingMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			CreateAssociatedSecurity = true;
 		}
 
 		/// <summary>

@@ -6,33 +6,19 @@ namespace StockSharp.Rss
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Messages;
 	using StockSharp.Rss.Xaml;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("RSS")]
 	[DescriptionLoc(LocalizedStrings.Str3504Key)]
 	[CategoryOrder(_rss, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]
-	public class RssSessionHolder : MessageSessionHolder
+	partial class RssMarketDataMessageAdapter
 	{
 		private const string _rss = "RSS";
-
-		/// <summary>
-		/// Создать <see cref="RssSessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public RssSessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			IsMarketDataEnabled = true;
-		}
 
 		private Uri _address;
 

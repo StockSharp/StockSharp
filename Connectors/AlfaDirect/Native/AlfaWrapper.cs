@@ -29,13 +29,11 @@ namespace StockSharp.AlfaDirect.Native
 		public FieldList FieldsNews       {get {return _tableNews.Fields;}}
 		public FieldList FieldsAccounts   {get {return _tableAccounts.Fields;}}
 
-		private readonly ILogReceiver _logReceiver;
-
 		//private readonly PairSet<string, string> _securityCurrencies = new PairSet<string, string>();
 
 		private readonly AlfaDirectClass _ad;
 		private readonly CultureInfo _sysCulture;
-		private readonly AlfaDirectSessionHolder _sessionHolder;
+		private readonly AlfaDirectMessageAdapter _adapter;
 
 		private ConnectionStates _connState;
 
@@ -49,36 +47,35 @@ namespace StockSharp.AlfaDirect.Native
 			get { return _connState == ConnectionStates.Connecting; }
 		}
 
-		public AlfaWrapper(AlfaDirectSessionHolder sessionHolder, ILogReceiver logReceiver)
+		public AlfaWrapper(AlfaDirectMessageAdapter adapter)
 		{
-			if (logReceiver == null)
-				throw new ArgumentNullException("logReceiver");
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
 
-			_sessionHolder = sessionHolder;
-			_logReceiver = logReceiver;
+			_adapter = adapter;
 
 			_sysCulture = ThreadingHelper.GetSystemCulture();
 
-			_logReceiver.AddInfoLog(LocalizedStrings.Str2270Params, _sysCulture);
+			_adapter.AddInfoLog(LocalizedStrings.Str2270Params, _sysCulture);
 
 			_ad = new AlfaDirectClass();
 			_ad.OnConnectionChanged += OnConnectionChanged;
 			_ad.OnTableChanged += OnTableChanged;
 			_ad.OrderConfirmed += OrderConfirmed;
 
-			_tableSecurities = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.papers, "paper_no, p_code, ansi_name, place_code, at_code, lot_size, i_last_update, expired, mat_date, price_step, base_paper_no, go_buy, go_sell, price_step_cost, curr_code, strike");
-			_tableDepth      = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.queue,  "paper_no, sell_qty, price, buy_qty");
-			_tableLevel1     = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.fin_info, "paper_no, status, go_buy, go_sell, open_pos_qty, open_price, close_price, sell, sell_qty, buy, buy_qty, min_deal, max_deal, lot_size, volatility, theor_price, last_price, last_qty, last_update_date, last_update_time, price_step, buy_sqty, sell_sqty, buy_count, sell_count", "trading_status");
-			_tableTrades     = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.all_trades, "paper_no, trd_no, qty, price, ts_time, b_s", "b_s_num");
-			_tableOrders     = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.orders, "ord_no, acc_code, paper_no, status, b_s, price, qty, rest, ts_time, comments, place_code, stop_price, avg_trd_price, blank, updt_grow_price, updt_down_price, updt_new_price, trailing_level, trailing_slippage", "order_status, b_s_str");
-			_tablePositions  = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.balance, "acc_code, p_code, place_code, paper_no, income_rest, real_rest, forword_rest, pl, profit_vol, income_vol, real_vol, open_vol, var_margin, balance_price");
-			_tableMyTrades   = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.trades, "trd_no, ord_no, treaty, paper_no, price, qty, b_s, ts_time", "b_s_str");
-			_tableNews       = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.news, "new_no, provider, db_data, subject, body");
-			_tableAccounts   = new AlfaTable(_ad, _logReceiver, AlfaTable.TableName.accounts, "treaty");
+			_tableSecurities = new AlfaTable(_ad, _adapter, AlfaTable.TableName.papers, "paper_no, p_code, ansi_name, place_code, at_code, lot_size, i_last_update, expired, mat_date, price_step, base_paper_no, go_buy, go_sell, price_step_cost, curr_code, strike");
+			_tableDepth      = new AlfaTable(_ad, _adapter, AlfaTable.TableName.queue,  "paper_no, sell_qty, price, buy_qty");
+			_tableLevel1     = new AlfaTable(_ad, _adapter, AlfaTable.TableName.fin_info, "paper_no, status, go_buy, go_sell, open_pos_qty, open_price, close_price, sell, sell_qty, buy, buy_qty, min_deal, max_deal, lot_size, volatility, theor_price, last_price, last_qty, last_update_date, last_update_time, price_step, buy_sqty, sell_sqty, buy_count, sell_count", "trading_status");
+			_tableTrades     = new AlfaTable(_ad, _adapter, AlfaTable.TableName.all_trades, "paper_no, trd_no, qty, price, ts_time, b_s", "b_s_num");
+			_tableOrders     = new AlfaTable(_ad, _adapter, AlfaTable.TableName.orders, "ord_no, acc_code, paper_no, status, b_s, price, qty, rest, ts_time, comments, place_code, stop_price, avg_trd_price, blank, updt_grow_price, updt_down_price, updt_new_price, trailing_level, trailing_slippage", "order_status, b_s_str");
+			_tablePositions  = new AlfaTable(_ad, _adapter, AlfaTable.TableName.balance, "acc_code, p_code, place_code, paper_no, income_rest, real_rest, forword_rest, pl, profit_vol, income_vol, real_vol, open_vol, var_margin, balance_price");
+			_tableMyTrades   = new AlfaTable(_ad, _adapter, AlfaTable.TableName.trades, "trd_no, ord_no, treaty, paper_no, price, qty, b_s, ts_time", "b_s_str");
+			_tableNews       = new AlfaTable(_ad, _adapter, AlfaTable.TableName.news, "new_no, provider, db_data, subject, body");
+			_tableAccounts   = new AlfaTable(_ad, _adapter, AlfaTable.TableName.accounts, "treaty");
 
 			_connState = IsConnected ? ConnectionStates.Connected : ConnectionStates.Disconnected;
 
-			_logReceiver.AddInfoLog("AlfaDirect {0}", _ad.Version.ToString());
+			_adapter.AddInfoLog("AlfaDirect {0}", _ad.Version.ToString());
 		}
 
 		protected override void DisposeManaged()
@@ -86,8 +83,8 @@ namespace StockSharp.AlfaDirect.Native
 			_ad.OnConnectionChanged -= OnConnectionChanged;
 			_ad.OnTableChanged -= OnTableChanged;
 			_ad.OrderConfirmed -= OrderConfirmed;
-			
-			_logReceiver.AddInfoLog("Releasing AlfaDirect COM object...");
+
+			_adapter.AddInfoLog("Releasing AlfaDirect COM object...");
 			
 			try
 			{
@@ -95,7 +92,7 @@ namespace StockSharp.AlfaDirect.Native
 			}
 			catch (Exception e)
 			{
-				_logReceiver.AddWarningLog("error releasing COM object: {0}", e);
+				_adapter.AddWarningLog("error releasing COM object: {0}", e);
 			}
 
 			base.DisposeManaged();
@@ -130,7 +127,7 @@ namespace StockSharp.AlfaDirect.Native
 				if (data == null)
 					return;
 
-				_logReceiver.AddDebugLog("OnTableChanged: TN={0} WR={1} DT={2} FT={3}", tableName, tableParams, data, fieldTypes);
+				_adapter.AddDebugLog("OnTableChanged: TN={0} WR={1} DT={2} FT={3}", tableName, tableParams, data, fieldTypes);
 
 				DoInSysCulture(() =>
 				{
@@ -156,7 +153,7 @@ namespace StockSharp.AlfaDirect.Native
 			}
 			catch (Exception e)
 			{
-				_logReceiver.AddErrorLog(LocalizedStrings.Str2271Params, e);
+				_adapter.AddErrorLog(LocalizedStrings.Str2271Params, e);
 				Error.SafeInvoke(e);
 			}
 		}
@@ -165,7 +162,7 @@ namespace StockSharp.AlfaDirect.Native
 		{
 			try
 			{
-				_logReceiver.AddInfoLog("OnConnectionChanged {0}", state);
+				_adapter.AddInfoLog("OnConnectionChanged {0}", state);
 
 				switch (state)
 				{
@@ -189,7 +186,7 @@ namespace StockSharp.AlfaDirect.Native
 			}
 			catch (Exception e)
 			{
-				_logReceiver.AddErrorLog(LocalizedStrings.Str2273Params, e);
+				_adapter.AddErrorLog(LocalizedStrings.Str2273Params, e);
 				Error.SafeInvoke(e);
 			}
 		}
@@ -231,7 +228,7 @@ namespace StockSharp.AlfaDirect.Native
 
 			var secCode = message.SecurityId.SecurityCode;
 			var account = message.PortfolioName.AccountFromPortfolioName(); // Портфель
-			var placeCode = _sessionHolder.SecurityClassInfo.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
+			var placeCode = _adapter.SecurityClassInfo.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
 			var endDate = (message.TillDate != DateTimeOffset.MaxValue
 				? marketTime.Date.AddTicks(new TimeSpan(23, 55, 00).Ticks)
 				: message.TillDate).ToLocalTime(TimeHelper.Moscow); // Срок действия поручения.
@@ -247,7 +244,7 @@ namespace StockSharp.AlfaDirect.Native
 
 			int id;
 
-			_logReceiver.AddInfoLog("Register: {0} {1}/{2} tran={3}  {4} {5}@{6}, mtime={7}, cur={8}", account, secCode, placeCode, comments, buySell, quantity, price, marketTime, currency);
+			_adapter.AddInfoLog("Register: {0} {1}/{2} tran={3}  {4} {5}@{6}, mtime={7}, cur={8}", account, secCode, placeCode, comments, buySell, quantity, price, marketTime, currency);
 
 			if (placeCode == null)
 				throw new InvalidOperationException(LocalizedStrings.Str2274Params.Put(message.TransactionId));
@@ -294,7 +291,7 @@ namespace StockSharp.AlfaDirect.Native
 
 		public void CancelOrders(bool? isStopOrder, string portfolioName, Sides? side, SecurityId securityId, SecurityTypes? securityType)
 		{
-			_logReceiver.AddDebugLog("CancelOrders: stop={0}, portf={1}, side={2}, id={3}", isStopOrder, portfolioName, side, securityId);
+			_adapter.AddDebugLog("CancelOrders: stop={0}, portf={1}, side={2}, id={3}", isStopOrder, portfolioName, side, securityId);
 
 			var isBuySell = (side == null) ? null : side.Value.ToAlfaDirect();
 			var account = portfolioName.IsEmpty() ? null : portfolioName.AccountFromPortfolioName();
@@ -319,7 +316,7 @@ namespace StockSharp.AlfaDirect.Native
 			string placeCode = null;
 			if (!securityId.IsDefault())
 			{
-				placeCode = _sessionHolder.SecurityClassInfo.GetSecurityClass(securityType, securityId.BoardCode);
+				placeCode = _adapter.SecurityClassInfo.GetSecurityClass(securityType, securityId.BoardCode);
 
 				if (placeCode == null)
 					throw new InvalidOperationException(LocalizedStrings.Str2278);
@@ -331,8 +328,8 @@ namespace StockSharp.AlfaDirect.Native
 
 		public void LookupCandles(MarketDataMessage message)
 		{
-			var placeCode = _sessionHolder.SecurityClassInfo.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
-			_logReceiver.AddDebugLog("Candles SC={0} PC={1} TF={2} F={3} T={4}", message.SecurityId.SecurityCode, placeCode, message.Arg, message.From, message.To);
+			var placeCode = _adapter.SecurityClassInfo.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
+			_adapter.AddDebugLog("Candles SC={0} PC={1} TF={2} F={3} T={4}", message.SecurityId.SecurityCode, placeCode, message.Arg, message.From, message.To);
 
 			if (placeCode == null)
 				throw new InvalidOperationException(LocalizedStrings.Str2279);
@@ -345,7 +342,7 @@ namespace StockSharp.AlfaDirect.Native
 			if (_ad.LastResult != StateCodes.stcSuccess)
 				ThrowInError((tagStateCodes)_ad.LastResult);
 
-			_logReceiver.AddDebugLog("Candles DT={0}", data);
+			_adapter.AddDebugLog("Candles DT={0}", data);
 
 			DoInSysCulture(() => ProcessCandles.SafeInvoke(message, data.ToRows()));
 		}
@@ -354,7 +351,7 @@ namespace StockSharp.AlfaDirect.Native
 		{
 			try
 			{
-				_logReceiver.AddInfoLog("OrderConfirmed ID={0} Num={1} Msg={2} Status={3}", alfaTransactionId, orderNum, message, status);
+				_adapter.AddInfoLog("OrderConfirmed ID={0} Num={1} Msg={2} Status={3}", alfaTransactionId, orderNum, message, status);
 
 				if (status == eCommandResult.crSuccess)
 				{
@@ -370,7 +367,7 @@ namespace StockSharp.AlfaDirect.Native
 			}
 			catch (Exception e)
 			{
-				_logReceiver.AddErrorLog(LocalizedStrings.Str2280Params, e);
+				_adapter.AddErrorLog(LocalizedStrings.Str2280Params, e);
 				Error.SafeInvoke(e);
 			}
 		}

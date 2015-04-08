@@ -15,7 +15,7 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		protected BaseEmulationConnector()
 		{
-			TransactionAdapter = _adapter = new EmulationMessageAdapter(new MarketEmulator(), new PassThroughSessionHolder(TransactionIdGenerator));
+			TransactionAdapter = _adapter = new EmulationMessageAdapter(new MarketEmulator(), TransactionIdGenerator);
 		}
 
 		/// <summary>

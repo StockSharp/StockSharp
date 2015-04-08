@@ -111,7 +111,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 
 			if (settings.IsDefault)
 			{
-				_settings.Address = InteractiveBrokersSessionHolder.DefaultAddress;
+				_settings.Address = InteractiveBrokersMessageAdapter.DefaultAddress;
 				_settings.IsDownloadNews = true;
 				_settings.ClientId = 0;
 				_settings.ServerLogLevel = ServerLogLevels.System;

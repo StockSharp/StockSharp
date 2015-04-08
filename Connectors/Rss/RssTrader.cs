@@ -14,10 +14,10 @@ namespace StockSharp.Rss
 	/// </summary>
 	public class RssTrader : Connector
     {
-		private sealed class RssTransactionMessageAdapter : MessageAdapter<IMessageSessionHolder>
+		private sealed class RssTransactionMessageAdapter : MessageAdapter
 		{
-			public RssTransactionMessageAdapter(IMessageSessionHolder sessionHolder)
-				: base(sessionHolder)
+			public RssTransactionMessageAdapter(IdGenerator transactionIdGenerator)
+				: base(transactionIdGenerator)
 			{
 			}
 
@@ -42,24 +42,19 @@ namespace StockSharp.Rss
 			}
 		}
 
+		private readonly RssMarketDataMessageAdapter _adapter;
+
 		/// <summary>
 		/// Создать <see cref="RssTrader"/>.
 		/// </summary>
 		public RssTrader()
 		{
-			base.SessionHolder = new RssSessionHolder(TransactionIdGenerator);
-
-			TransactionAdapter = new RssTransactionMessageAdapter(SessionHolder);
-			MarketDataAdapter = new RssMarketDataMessageAdapter(SessionHolder);
+			TransactionAdapter = new RssTransactionMessageAdapter(TransactionIdGenerator);
+			MarketDataAdapter = _adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
 
 			ApplyMessageProcessor(MessageDirections.In, true, false);
 			ApplyMessageProcessor(MessageDirections.In, false, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new RssSessionHolder SessionHolder
-		{
-			get { return (RssSessionHolder)base.SessionHolder; }
 		}
 
 		/// <summary>
@@ -67,8 +62,8 @@ namespace StockSharp.Rss
 		/// </summary>
 		public Uri Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		/// <summary>
@@ -76,8 +71,8 @@ namespace StockSharp.Rss
 		/// </summary>
 		public string CustomDateFormat
 		{
-			get { return SessionHolder.CustomDateFormat; }
-			set { SessionHolder.CustomDateFormat = value; }
+			get { return _adapter.CustomDateFormat; }
+			set { _adapter.CustomDateFormat = value; }
 		}
     }
 }

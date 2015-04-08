@@ -22,7 +22,7 @@ namespace StockSharp.Btce
 
 		private string GetPortfolioName()
 		{
-			return SessionHolder.Key.To<string>().GetHashCode().To<string>();
+			return Key.To<string>().GetHashCode().To<string>();
 		}
 
 		private void ProcessOrderRegister(OrderRegisterMessage regMsg)
@@ -141,7 +141,7 @@ namespace StockSharp.Btce
 		{
 			foreach (var fund in funds)
 			{
-				SendOutMessage(SessionHolder
+				SendOutMessage(this
 					.CreatePortfolioChangeMessage(fund.Key)
 						.Add(PositionChangeTypes.CurrentValue, (decimal)fund.Value));
 			}

@@ -1,4 +1,4 @@
-<Window x:Class="StockSharp.Xaml.SessionHoldersWindow"
+<Window x:Class="StockSharp.Xaml.MessageAdaptersWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:local="clr-namespace:StockSharp.Xaml" xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
@@ -19,7 +19,7 @@
 			<ColumnDefinition Width="90"/>
 		</Grid.ColumnDefinitions>
 
-		<local:SessionHoldersPanel Grid.Column="0" Grid.ColumnSpan="4" x:Name="ConnectorsPanel" />
+		<local:MessageAdaptersPanel Grid.Column="0" Grid.ColumnSpan="4" x:Name="ConnectorsPanel" />
 
 		<Button Grid.Row="2" Grid.Column="0" Margin="1" Click="ProxySettings_OnClick">
 			<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NetworkSettings}" />...</TextBlock>

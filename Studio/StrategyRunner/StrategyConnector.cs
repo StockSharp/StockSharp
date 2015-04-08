@@ -10,18 +10,14 @@
 	{
 		private readonly StrategyEntityFactory _entityFactory;
 
-		public BasketSessionHolder BasketSessionHolder { get; private set; }
-
 		public ISecurityList SecurityList { get { return _entityFactory.Securities; } }
 
 		public StrategyConnector()
 		{
 			EntityFactory = _entityFactory = new StrategyEntityFactory();
 
-			SessionHolder = BasketSessionHolder = new BasketSessionHolder(TransactionIdGenerator);
-
-			TransactionAdapter = new BasketMessageAdapter(BasketSessionHolder);
-			MarketDataAdapter = new BasketMessageAdapter(BasketSessionHolder);
+			TransactionAdapter = new BasketMessageAdapter(TransactionIdGenerator);
+			MarketDataAdapter = new BasketMessageAdapter(TransactionIdGenerator);
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);

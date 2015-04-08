@@ -24,26 +24,21 @@
 		
 		private readonly SynchronizedPairSet<long, CandleSeries> _series = new SynchronizedPairSet<long, CandleSeries>();
 		private readonly CachedSynchronizedSet<CandleSeries> _realTimeSeries = new CachedSynchronizedSet<CandleSeries>();
-		
+
+		private readonly AlfaDirectMessageAdapter _adapter;
+
 		/// <summary>
 		/// Создать <see cref="AlfaTrader"/>.
 		/// </summary>
 		public AlfaTrader()
 		{
-			var adapter = new AlfaDirectMessageAdapter(new AlfaDirectSessionHolder(TransactionIdGenerator));
+			_adapter = new AlfaDirectMessageAdapter(TransactionIdGenerator);
 
-			base.SessionHolder = adapter.SessionHolder;
-
-			TransactionAdapter = adapter;
-			MarketDataAdapter = adapter;
+			TransactionAdapter = _adapter;
+			MarketDataAdapter = _adapter;
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new AlfaDirectSessionHolder SessionHolder
-		{
-			get { return (AlfaDirectSessionHolder)base.SessionHolder; }
 		}
 
 		/// <summary>
@@ -60,8 +55,8 @@
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -69,8 +64,8 @@
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);

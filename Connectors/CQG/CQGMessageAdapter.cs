@@ -13,7 +13,7 @@ namespace StockSharp.CQG
 	/// <summary>
 	/// Адаптер сообщений для CQG.
 	/// </summary>
-	public partial class CQGMessageAdapter : MessageAdapter<CQGSessionHolder>
+	public partial class CQGMessageAdapter : MessageAdapter
 	{
 		private readonly SynchronizedDictionary<long, CQGOrder> _orders = new SynchronizedDictionary<long, CQGOrder>();
 		private readonly SynchronizedDictionary<string, CQGAccount> _accounts = new SynchronizedDictionary<string, CQGAccount>();
@@ -23,10 +23,13 @@ namespace StockSharp.CQG
 		/// <summary>
 		/// Создать <see cref="CQGMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public CQGMessageAdapter(CQGSessionHolder sessionHolder)
-			: base(sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public CQGMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			CreateAssociatedSecurity = true;
+			IsTransactionEnabled = true;
+			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>

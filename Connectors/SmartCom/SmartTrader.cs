@@ -28,23 +28,17 @@ namespace StockSharp.SmartCom
 
 		private Timer _realTimeCandlesTimer;
 
+		private readonly SmartComMessageAdapter _adapter;
+
 		/// <summary>
 		/// Создать <see cref="SmartTrader"/>.
 		/// </summary>
 		public SmartTrader()
 		{
-			var sessionHolder = new SmartComSessionHolder(TransactionIdGenerator);
-			base.SessionHolder = sessionHolder;
-
-			TransactionAdapter = MarketDataAdapter = new SmartComMessageAdapter(sessionHolder);
+			TransactionAdapter = MarketDataAdapter = _adapter = new SmartComMessageAdapter(TransactionIdGenerator);
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new SmartComSessionHolder SessionHolder
-		{
-			get { return (SmartComSessionHolder)base.SessionHolder; }
 		}
 
 		/// <summary>
@@ -72,8 +66,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public SmartComVersions Version
 		{
-			get { return SessionHolder.Version; }
-			set { SessionHolder.Version = value; }
+			get { return _adapter.Version; }
+			set { _adapter.Version = value; }
 		}
 
 		/// <summary>
@@ -81,8 +75,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -90,8 +84,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -99,8 +93,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		/// <summary>
@@ -108,8 +102,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string ClientSettings
 		{
-			get { return SessionHolder.ClientSettings; }
-			set { SessionHolder.ClientSettings = value; }
+			get { return _adapter.ClientSettings; }
+			set { _adapter.ClientSettings = value; }
 		}
 
 		/// <summary>
@@ -117,8 +111,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string ServerSettings
 		{
-			get { return SessionHolder.ServerSettings; }
-			set { SessionHolder.ServerSettings = value; }
+			get { return _adapter.ServerSettings; }
+			set { _adapter.ServerSettings = value; }
 		}
 
 		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);

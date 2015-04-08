@@ -6,33 +6,18 @@ namespace StockSharp.Btce
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("BTC-e")]
 	[CategoryLoc(LocalizedStrings.Str3302Key)]
 	[DescriptionLoc(LocalizedStrings.Str3342Key)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]
-	public class BtceSessionHolder : MessageSessionHolder
+	partial class BtceMessageAdapter
 	{
-		/// <summary>
-		/// Создать <see cref="BtceSessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public BtceSessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
-		}
-
 		/// <summary>
 		/// Ключ.
 		/// </summary>

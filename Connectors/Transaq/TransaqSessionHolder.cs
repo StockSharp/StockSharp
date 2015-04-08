@@ -16,9 +16,6 @@ namespace StockSharp.Transaq
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("Transaq")]
 	[CategoryLoc(LocalizedStrings.Str1769Key)]
 	[DescriptionLoc(LocalizedStrings.Str3538Key)]
@@ -27,7 +24,7 @@ namespace StockSharp.Transaq
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 2)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 3)]
 	[TargetPlatform(Languages.Russian)]
-	public class TransaqSessionHolder : MessageSessionHolder
+	partial class TransaqMessageAdapter
 	{
 		/// <summary>
 		/// Логин.
@@ -182,17 +179,6 @@ namespace StockSharp.Transaq
 		public override bool IsValid
 		{
 			get { return !Login.IsEmpty() && !Password.IsEmpty(); }
-		}
-
-		/// <summary>
-		/// Создать <see cref="TransaqSessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public TransaqSessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
 		}
 
 		/// <summary>

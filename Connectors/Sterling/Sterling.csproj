@@ -72,7 +72,7 @@
     <Compile Include="SterlingMessageAdapter_MarketData.cs" />
     <Compile Include="SterlingMessageAdapter_Transaction.cs" />
     <Compile Include="SterlingOrderCondition.cs" />
-    <Compile Include="SterlingSessionHolder.cs" />
+    <Compile Include="SterlingMessageAdapter_Settings.cs" />
     <Compile Include="SterlingTrader.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

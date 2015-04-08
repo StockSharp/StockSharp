@@ -21,21 +21,19 @@ namespace StockSharp.LMAX
 	public class LmaxTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _series = new SynchronizedDictionary<long, CandleSeries>();
+		private readonly LmaxMessageAdapter _adapter;
 
 		/// <summary>
 		/// Создать <see cref="LmaxTrader"/>.
 		/// </summary>
 		public LmaxTrader()
 		{
-			base.SessionHolder = new LmaxSessionHolder(TransactionIdGenerator);
+			_adapter = new LmaxMessageAdapter(TransactionIdGenerator);
+
+			TransactionAdapter = MarketDataAdapter = _adapter;
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new LmaxSessionHolder SessionHolder
-		{
-			get { return (LmaxSessionHolder)base.SessionHolder; }
 		}
 
 		/// <summary>
@@ -52,8 +50,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -61,8 +59,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -70,8 +68,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public bool IsDemo
 		{
-			get { return SessionHolder.IsDemo; }
-			set { SessionHolder.IsDemo = value; }
+			get { return _adapter.IsDemo; }
+			set { _adapter.IsDemo = value; }
 		}
 
 		/// <summary>
@@ -79,8 +77,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public bool IsDownloadSecurityFromSite
 		{
-			get { return SessionHolder.IsDownloadSecurityFromSite; }
-			set { SessionHolder.IsDownloadSecurityFromSite = value; }
+			get { return _adapter.IsDownloadSecurityFromSite; }
+			set { _adapter.IsDownloadSecurityFromSite = value; }
 		}
 
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
@@ -90,7 +88,7 @@ namespace StockSharp.LMAX
 
 			var tf = (TimeSpan)series.Arg;
 
-			if (LmaxSessionHolder.TimeFrames.Contains(tf))
+			if (LmaxMessageAdapter.TimeFrames.Contains(tf))
 				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, CurrentTime);
 		}
 

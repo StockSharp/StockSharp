@@ -184,7 +184,7 @@ namespace StockSharp.Hydra.Plaza
 					_settings.Login = string.Empty;
 					_settings.Password = new SecureString();
 					_settings.IsCGate = false;
-					_settings.CGateKey = PlazaSessionHolder.DemoCGateKey;
+					_settings.CGateKey = PlazaConnectionPoolSettings.DemoCGateKey;
 					_settings.OnlySystemTrades = true;
 					_settings.IsFastRepl = false;
 

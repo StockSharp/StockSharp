@@ -277,7 +277,7 @@ namespace StockSharp.Transaq
 			{
 				Id = response.Id.To<string>(),
 				Story = response.Text,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow)
+				ServerTime = CurrentTime.Convert(TimeHelper.Moscow)
 			});
 		}
 
@@ -290,7 +290,7 @@ namespace StockSharp.Transaq
 				Id = response.Id.To<string>(),
 				Story = response.Text,
 				ServerTime = response.TimeStamp == null
-					? SessionHolder.CurrentTime.Convert(TimeHelper.Moscow)
+					? CurrentTime.Convert(TimeHelper.Moscow)
 					: response.TimeStamp.Value.ApplyTimeZone(TimeHelper.Moscow),
 			});
 		}
@@ -302,7 +302,7 @@ namespace StockSharp.Transaq
 				var message = new Level1ChangeMessage
 				{
 					SecurityId = new SecurityId { Native = quote.SecId },
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+					ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 				};
 
 				message.TryAdd(Level1Fields.AccruedCouponIncome, quote.AccruedIntValue);
@@ -382,7 +382,7 @@ namespace StockSharp.Transaq
 					SecurityId = new SecurityId { Native = group.Key },
 					Bids = tuple.Item1.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
 					Asks = tuple.Item2.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+					ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 				});
 			}
 		}
@@ -406,7 +406,7 @@ namespace StockSharp.Transaq
 			var l1Msg = new Level1ChangeMessage
 			{
 				SecurityId = new SecurityId { Native = response.SecId },
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+				ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 			};
 
 			l1Msg.TryAdd(Level1Fields.MinPrice, response.MinPrice);
@@ -454,7 +454,7 @@ namespace StockSharp.Transaq
 					new Level1ChangeMessage
 					{
 						SecurityId = securityId,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+						ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 					}
 					.Add(Level1Fields.State, security.Active ? SecurityStates.Trading : SecurityStates.Stoped)
 					.TryAdd(Level1Fields.StepPrice, security.PointCost));
@@ -522,7 +522,7 @@ namespace StockSharp.Transaq
 					Headline = message.Text,
 					Story = message.Text,
 					ServerTime = message.Date == null
-						? SessionHolder.CurrentTime.Convert(TimeHelper.Moscow)
+						? CurrentTime.Convert(TimeHelper.Moscow)
 						: message.Date.Value.ApplyTimeZone(TimeHelper.Moscow),
 				});
 			}

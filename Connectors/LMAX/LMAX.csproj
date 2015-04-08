@@ -77,7 +77,7 @@
     </Compile>
     <Compile Include="LmaxMessageAdapter.cs" />
     <Compile Include="LmaxOrderCondition.cs" />
-    <Compile Include="LmaxSessionHolder.cs" />
+    <Compile Include="LmaxMessageAdapter_Settings.cs" />
     <Compile Include="LmaxTrader.cs" />
     <Compile Include="LmaxMessageAdapter_MarketData.cs" />
     <Compile Include="LmaxMessageAdapter_Transaction.cs" />

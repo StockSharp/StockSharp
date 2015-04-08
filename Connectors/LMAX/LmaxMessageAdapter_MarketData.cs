@@ -165,7 +165,7 @@ namespace StockSharp.LMAX
 					new Level1ChangeMessage
 					{
 						SecurityId = securityId,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+						ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
 					}
 					.TryAdd(Level1Fields.StepPrice, instrument.Contract.UnitPrice));
 			}
@@ -264,7 +264,7 @@ namespace StockSharp.LMAX
 				new Level1ChangeMessage
 				{
 					SecurityId = new SecurityId { Native = orderBookStatusEvent.InstrumentId },
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+					ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
 				}
 				.Add(Level1Fields.State, state));
 		}

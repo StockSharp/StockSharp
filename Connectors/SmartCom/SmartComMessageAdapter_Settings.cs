@@ -9,7 +9,6 @@ namespace StockSharp.SmartCom
 	using Ecng.Localization;
 	using Ecng.Serialization;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.SmartCom.Native;
 	using StockSharp.SmartCom.Xaml;
@@ -17,9 +16,6 @@ namespace StockSharp.SmartCom
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	/// <summary>
-	/// Контейнер для сессии.
-	/// </summary>
 	[DisplayName("SmartCOM")]
 	[CategoryLoc(LocalizedStrings.Str1769Key)]
 	[DescriptionLoc(LocalizedStrings.Str1857Key)]
@@ -28,9 +24,8 @@ namespace StockSharp.SmartCom
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 2)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 3)]
 	[TargetPlatform(Languages.Russian)]
-	public class SmartComSessionHolder : MessageSessionHolder
+	partial class SmartComMessageAdapter
 	{
-		internal event Action VersionChanged;
 		private SmartComVersions _version;
 
 		/// <summary>
@@ -46,7 +41,7 @@ namespace StockSharp.SmartCom
 			set
 			{
 				_version = value;
-				VersionChanged.SafeInvoke();
+				UpdatePlatform();
 			}
 		}
 
@@ -115,23 +110,6 @@ namespace StockSharp.SmartCom
 		public override bool IsValid
 		{
 			get { return !Login.IsEmpty() && !Password.IsEmpty() && Address != null; }
-		}
-
-		/// <summary>
-		/// Создать <see cref="SmartComSessionHolder"/>.
-		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		public SmartComSessionHolder(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			Version = SmartComVersions.V3;
-
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
-
-			SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
 		}
 
 		/// <summary>

@@ -95,7 +95,7 @@
     <Compile Include="InteractiveBrokersMessageAdapter.cs" />
     <Compile Include="InteractiveBrokersMessageAdapter_MarketData.cs" />
     <Compile Include="InteractiveBrokersMessageAdapter_Transaction.cs" />
-    <Compile Include="InteractiveBrokersSessionHolder.cs" />
+    <Compile Include="InteractiveBrokersMessageAdapter_Settings.cs" />
     <Compile Include="Native\ResponseMessages.cs" />
     <Compile Include="Native\FieldTypes.cs" />
     <Compile Include="MyTradeFilter.cs" />

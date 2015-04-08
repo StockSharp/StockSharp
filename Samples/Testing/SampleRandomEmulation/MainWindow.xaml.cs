@@ -91,7 +91,7 @@ namespace SampleRandomEmulation
 				new[] { security },
 				new[] { portfolio });
 
-			_connector.MarketDataAdapter.SessionHolder.MarketTimeChangedInterval = timeFrame;
+			_connector.MarketDataAdapter.MarketTimeChangedInterval = timeFrame;
 
 			_logManager.Sources.Add(_connector);
 

@@ -208,22 +208,20 @@
 	public class IBTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
-		private readonly SynchronizedDictionary<long, object> _states = new SynchronizedDictionary<long, object>(); 
+		private readonly SynchronizedDictionary<long, object> _states = new SynchronizedDictionary<long, object>();
+		private readonly InteractiveBrokersMessageAdapter _adapter;
 
 		/// <summary>
 		/// Создать <see cref="IBTrader"/>.
 		/// </summary>
 		public IBTrader()
 		{
-			base.SessionHolder = new InteractiveBrokersSessionHolder(TransactionIdGenerator);
+			_adapter = new InteractiveBrokersMessageAdapter(TransactionIdGenerator);
+
+			TransactionAdapter = MarketDataAdapter = _adapter;
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new InteractiveBrokersSessionHolder SessionHolder
-		{
-			get { return (InteractiveBrokersSessionHolder)base.SessionHolder; }
 		}
 
 		/// <summary>
@@ -231,8 +229,8 @@
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		///// <summary>
@@ -249,7 +247,7 @@
 		///// </summary>
 		//public DateTimeOffset ConnectedTime
 		//{
-		//	get { return SessionHolder.CurrentTime; }
+		//	get { return _adapter.CurrentTime; }
 		//}
 
 		/// <summary>
@@ -257,8 +255,8 @@
 		/// </summary>
 		public int ClientId
 		{
-			get { return SessionHolder.ClientId; }
-			set { SessionHolder.ClientId = value; }
+			get { return _adapter.ClientId; }
+			set { _adapter.ClientId = value; }
 		}
 
 		/// <summary>
@@ -266,8 +264,8 @@
 		/// </summary>
 		public ServerLogLevels ServerLogLevel
 		{
-			get { return SessionHolder.ServerLogLevel; }
-			set { SessionHolder.ServerLogLevel = value; }
+			get { return _adapter.ServerLogLevel; }
+			set { _adapter.ServerLogLevel = value; }
 		}
 
 		/// <summary>
@@ -275,8 +273,8 @@
 		/// </summary>
 		public bool IsRealTimeMarketData
 		{
-			get { return SessionHolder.IsRealTimeMarketData; }
-			set { SessionHolder.IsRealTimeMarketData = value; }
+			get { return _adapter.IsRealTimeMarketData; }
+			set { _adapter.IsRealTimeMarketData = value; }
 		}
 
 		/// <summary>

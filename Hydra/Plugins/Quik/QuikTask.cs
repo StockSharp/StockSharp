@@ -323,10 +323,10 @@ namespace StockSharp.Hydra.Quik
 			return new QuikMarketDataConnector(EntityRegistry.Securities, this, CreateHydraQuikTrader, _settings);
 		}
 
-		private sealed class HydraQuikTransactionAdapter : MessageAdapter<MessageSessionHolder>
+		private sealed class HydraQuikTransactionAdapter : MessageAdapter
 		{
-			public HydraQuikTransactionAdapter(MessageSessionHolder sessionHolder)
-				: base(sessionHolder)
+			public HydraQuikTransactionAdapter(IdGenerator transactionIdGenerator)
+				: base(transactionIdGenerator)
 			{
 			}
 
@@ -362,7 +362,7 @@ namespace StockSharp.Hydra.Quik
 			};
 
 			if (_settings.IsDde)
-				connector.TransactionAdapter = new HydraQuikTransactionAdapter((MessageSessionHolder)connector.TransactionAdapter.SessionHolder);
+				connector.TransactionAdapter = new HydraQuikTransactionAdapter(connector.TransactionAdapter.TransactionIdGenerator);
 
 			//Добавление выбранных колонок в экспорт
 			if (!_settings.IsDownloadSecurityChangesHistory)

@@ -573,7 +573,7 @@ namespace StockSharp.InteractiveBrokers
 			if (port == null || currency == "BASE")
 				return;
 
-			var pfMsg = SessionHolder.CreatePortfolioChangeMessage(port);
+			var pfMsg = this.CreatePortfolioChangeMessage(port);
 
 			switch (name)
 			{
@@ -675,7 +675,7 @@ namespace StockSharp.InteractiveBrokers
 				return;
 
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePositionChangeMessage(portfolio, secId)
 						.Add(PositionChangeTypes.CurrentValue, (decimal)position)
 						.Add(PositionChangeTypes.CurrentPrice, marketPrice)
@@ -1323,7 +1323,7 @@ namespace StockSharp.InteractiveBrokers
 				Class = secClass
 			});
 
-			SendOutMessage(SessionHolder
+			SendOutMessage(this
 				.CreatePositionChangeMessage(account, secId)
 					.Add(PositionChangeTypes.CurrentValue, (decimal)pos)
 					.Add(PositionChangeTypes.AveragePrice, avgCost));
@@ -1343,7 +1343,7 @@ namespace StockSharp.InteractiveBrokers
 			var value = socket.ReadStr();
 			var currency = socket.ReadCurrency();
 
-			var msg = SessionHolder.CreatePortfolioChangeMessage(account);
+			var msg = this.CreatePortfolioChangeMessage(account);
 
 			msg.Add(PositionChangeTypes.Currency, currency);
 

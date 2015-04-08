@@ -12,37 +12,37 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно редактирования настроек подключения <see cref="IMessageSessionHolder"/>.
+	/// Окно редактирования настроек подключения <see cref="IMessageAdapter"/>.
 	/// </summary>
-	public partial class SessionHolderWindow
+	public partial class MessageAdapterWindow
 	{
-		private IMessageSessionHolder _sessionHolder;
-		private IMessageSessionHolder _editableSession;
+		private IMessageAdapter _adapter;
+		private IMessageAdapter _editableAdapter;
 
 		/// <summary>
-		/// Контейнер для сессии.
+		/// Адаптер к торговой системе.
 		/// </summary>
-		public IMessageSessionHolder SessionHolder
+		public IMessageAdapter Adapter
 		{
-			get { return _sessionHolder; }
+			get { return _adapter; }
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException("value");
 
-				_sessionHolder = value;
+				_adapter = value;
 
-				_editableSession = _sessionHolder.GetType().CreateInstanceArgs<IMessageSessionHolder>(new object[] { _sessionHolder.TransactionIdGenerator });
-				_editableSession.Load(_sessionHolder.Save());
+				_editableAdapter = _adapter.GetType().CreateInstanceArgs<IMessageAdapter>(new object[] { _adapter.TransactionIdGenerator });
+				_editableAdapter.Load(_adapter.Save());
 
-				SettingsGrid.SelectedObject = _editableSession;
+				SettingsGrid.SelectedObject = _editableAdapter;
 			}
 		}
 
 		/// <summary>
-		/// Создать <see cref="SessionHolderWindow"/>.
+		/// Создать <see cref="MessageAdapterWindow"/>.
 		/// </summary>
-		public SessionHolderWindow()
+		public MessageAdapterWindow()
 		{
 			InitializeComponent();
 		}
@@ -115,14 +115,14 @@ namespace StockSharp.Xaml
 			if (!CheckIsValid())
 				return;
 
-			SessionHolder.Load(_editableSession.Save());
+			Adapter.Load(_editableAdapter.Save());
 
 			DialogResult = true;
 		}
 
 		private bool CheckIsValid()
 		{
-			if (!_editableSession.IsValid)
+			if (!_editableAdapter.IsValid)
 			{
 				new MessageBoxBuilder()
 					.Text(LocalizedStrings.Str1562)
@@ -133,7 +133,7 @@ namespace StockSharp.Xaml
 				return false;
 			}
 
-			if (_editableSession.IsMarketDataEnabled == false && _editableSession.IsTransactionEnabled == false)
+			if (_editableAdapter.IsMarketDataEnabled == false && _editableAdapter.IsTransactionEnabled == false)
 			{
 				new MessageBoxBuilder()
 					.Text(LocalizedStrings.Str1563)

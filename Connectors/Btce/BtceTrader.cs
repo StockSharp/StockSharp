@@ -13,22 +13,17 @@
 	/// </summary>
 	public class BtceTrader : Connector
 	{
+		private readonly BtceMessageAdapter _adapter;
+
 		/// <summary>
 		/// Создать <see cref="BtceTrader"/>.
 		/// </summary>
 		public BtceTrader()
 		{
-			base.SessionHolder = new BtceSessionHolder(TransactionIdGenerator);
-
-			TransactionAdapter = MarketDataAdapter = new BtceMessageAdapter(SessionHolder);
+			TransactionAdapter = MarketDataAdapter = _adapter = new BtceMessageAdapter(TransactionIdGenerator);
 
 			ApplyMessageProcessor(MessageDirections.In, true, true);
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new BtceSessionHolder SessionHolder
-		{
-			get { return (BtceSessionHolder)base.SessionHolder; }
 		}
 
 		/// <summary>
@@ -45,8 +40,8 @@
 		/// </summary>
 		public string Key
 		{
-			get { return SessionHolder.Key.To<string>(); }
-			set { SessionHolder.Key = value.To<SecureString>(); }
+			get { return _adapter.Key.To<string>(); }
+			set { _adapter.Key = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -54,8 +49,8 @@
 		/// </summary>
 		public string Secret
 		{
-			get { return SessionHolder.Secret.To<string>(); }
-			set { SessionHolder.Secret = value.To<SecureString>(); }
+			get { return _adapter.Secret.To<string>(); }
+			set { _adapter.Secret = value.To<SecureString>(); }
 		}
 	}
 }

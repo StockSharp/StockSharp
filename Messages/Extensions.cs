@@ -12,15 +12,15 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Создать <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
+		/// <param name="adapter">Апаптер к торговой системе.</param>
 		/// <param name="pfName">Название портфеля.</param>
 		/// <returns>Сообщение об изменении портфеля.</returns>
-		public static PortfolioChangeMessage CreatePortfolioChangeMessage(this IMessageSessionHolder sessionHolder, string pfName)
+		public static PortfolioChangeMessage CreatePortfolioChangeMessage(this IMessageAdapter adapter, string pfName)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
 
-			var time = sessionHolder.CurrentTime;
+			var time = adapter.CurrentTime;
 
 			return new PortfolioChangeMessage
 			{
@@ -33,16 +33,16 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Создать <see cref="PositionChangeMessage"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
+		/// <param name="adapter">Апаптер к торговой системе.</param>
 		/// <param name="pfName">Название портфеля.</param>
 		/// <param name="securityId">Идентификатор инструмента.</param>
 		/// <returns>Сообщение об изменении позиции.</returns>
-		public static PositionChangeMessage CreatePositionChangeMessage(this IMessageSessionHolder sessionHolder, string pfName, SecurityId securityId)
+		public static PositionChangeMessage CreatePositionChangeMessage(this IMessageAdapter adapter, string pfName, SecurityId securityId)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
 
-			var time = sessionHolder.CurrentTime;
+			var time = adapter.CurrentTime;
 
 			return new PositionChangeMessage
 			{
