@@ -344,7 +344,9 @@ namespace StockSharp.Algo
 				RepoInfo = order.RepoInfo,
 				RpsInfo = order.RpsInfo,
 				//IsSystem = order.IsSystem,
-				UserOrderId = order.UserOrderId
+				UserOrderId = order.UserOrderId,
+				BrokerCode = order.BrokerCode,
+				ClientCode = order.ClientCode,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);
@@ -373,7 +375,9 @@ namespace StockSharp.Algo
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
 				Volume = order.Balance,
-				UserOrderId = order.UserOrderId
+				UserOrderId = order.UserOrderId,
+				BrokerCode = order.BrokerCode,
+				ClientCode = order.ClientCode,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);
@@ -417,7 +421,10 @@ namespace StockSharp.Algo
 				OldOrderStringId = oldOrder.StringId,
 				OldTransactionId = oldOrder.TransactionId,
 
-				UserOrderId = oldOrder.UserOrderId
+				UserOrderId = oldOrder.UserOrderId,
+
+				BrokerCode = oldOrder.BrokerCode,
+				ClientCode = oldOrder.ClientCode,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg);

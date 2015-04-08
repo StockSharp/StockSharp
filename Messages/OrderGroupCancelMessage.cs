@@ -80,6 +80,8 @@ namespace StockSharp.Messages
 				//SecurityType = SecurityType,
 				Side = Side,
 				TransactionId = TransactionId,
+				ClientCode = ClientCode,
+				BrokerCode = BrokerCode,
 			};
 
 			CopyTo(clone);

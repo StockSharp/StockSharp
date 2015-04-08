@@ -158,7 +158,9 @@ namespace StockSharp.Messages
 				VisibleVolume = VisibleVolume,
 				Volume = Volume,
 				Currency = Currency,
-				UserOrderId = UserOrderId
+				UserOrderId = UserOrderId,
+				ClientCode = ClientCode,
+				BrokerCode = BrokerCode,
 			};
 
 			CopyTo(clone);

@@ -63,7 +63,9 @@
 				OldOrderId = OldOrderId,
 				OldOrderStringId = OldOrderStringId,
 				OldTransactionId = OldTransactionId,
-				UserOrderId = UserOrderId
+				UserOrderId = UserOrderId,
+				ClientCode = ClientCode,
+				BrokerCode = BrokerCode,
 			};
 
 			CopyTo(clone);

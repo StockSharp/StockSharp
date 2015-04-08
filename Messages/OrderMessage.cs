@@ -40,6 +40,22 @@ namespace StockSharp.Messages
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Код брокерской фирмы.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str2593Key)]
+		[DisplayNameLoc(LocalizedStrings.BrokerKey)]
+		[DescriptionLoc(LocalizedStrings.Str2619Key)]
+		public string BrokerCode { get; set; }
+
+		/// <summary>
+		/// Код клиента, присвоенный брокером.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str2593Key)]
+		[DisplayNameLoc(LocalizedStrings.Str3425Key)]
+		[DescriptionLoc(LocalizedStrings.Str3426Key)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// Инициализировать <see cref="OrderMessage"/>.
 		/// </summary>
 		/// <param name="type">Тип сообщения.</param>

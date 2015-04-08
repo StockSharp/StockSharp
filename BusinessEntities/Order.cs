@@ -565,6 +565,24 @@ namespace StockSharp.BusinessEntities
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Код брокерской фирмы.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.BrokerKey)]
+		[DescriptionLoc(LocalizedStrings.Str2619Key)]
+		public string BrokerCode { get; set; }
+
+		/// <summary>
+		/// Код клиента, присвоенный брокером.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.Str3425Key)]
+		[DescriptionLoc(LocalizedStrings.Str3426Key)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// Получить строковое представление.
 		/// </summary>
 		/// <returns>Строковое представление.</returns>
