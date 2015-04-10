@@ -3571,8 +3571,8 @@ XamlStr40;Bid-Ask;Бид-Оффер
 BrokerLicense;Broker license;Брокерская лицензия
 XamlStr45;In source;В источнике
 XamlStr46;It might be necessary to enter your username and password on E*TRADE website in the process of verification code obtaining. In this case it is necessary after successful authentication to press the button above once more to obtain verification code.;В процессе получения кода верификации может потребоваться ввести имя пользователя и пароль на сайте E*TRADE. В этом случае после успешной аутентификации на сайте E*TRADE необходимо нажать кнопку выше повторно для получения кода верификации.
-XamlStr47;in x64 mode;в режиме x64
-XamlStr48;in x86 mode;в режиме x86
+XamlStr47;in 64-bit mode;в 64-ех битном режиме
+XamlStr48;in 32-bit mode;в 32-ух битном режиме
 Online;Online;В сети
 ToCompositeElem;To composite element;В составной элемент
 InStorage;In storage;В хранилище
@@ -3662,7 +3662,7 @@ XamlStr174;Change order;Заменить заявку
 XamlStr175;Sign up for the next algotrading course;Записаться на ближайшие курсы по алготрейдингу
 XamlStr176;Remember choice (start selected configuration automatically);Запомнить выбор (запускать выбранную конфигурацию автоматически)
 XamlStr177;Request all securities;Запрашивать все инструменты
-XamlStr178;Launch are available in x86 or x64 modes.;Запуск возможен в режимах x86 и x64.
+XamlStr178;Launch are available in 32- or 64- bit modes.;Запуск возможен в режимах 32-ух и 64-ех бит.
 XamlStr180;Runned Quiks:;Запущенные Quik:
 XamlStr182;Order fail;Заявка-Ошибка
 XamlStr186;Value (S#);Значение (S#)

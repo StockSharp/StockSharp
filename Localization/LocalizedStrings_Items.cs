@@ -46323,12 +46323,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// in x64 mode
+		/// in 64-bit mode
 		/// </summary>
 		public const string XamlStr47Key = "XamlStr47";
 
 		/// <summary>
-		/// in x64 mode
+		/// in 64-bit mode
 		/// </summary>
 		public static string XamlStr47
 		{
@@ -46336,12 +46336,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// in x86 mode
+		/// in 32-bit mode
 		/// </summary>
 		public const string XamlStr48Key = "XamlStr48";
 
 		/// <summary>
-		/// in x86 mode
+		/// in 32-bit mode
 		/// </summary>
 		public static string XamlStr48
 		{
@@ -47507,12 +47507,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Launch are available in x86 or x64 modes.
+		/// Launch are available in 32- or 64- bit modes.
 		/// </summary>
 		public const string XamlStr178Key = "XamlStr178";
 
 		/// <summary>
-		/// Launch are available in x86 or x64 modes.
+		/// Launch are available in 32- or 64- bit modes.
 		/// </summary>
 		public static string XamlStr178
 		{
