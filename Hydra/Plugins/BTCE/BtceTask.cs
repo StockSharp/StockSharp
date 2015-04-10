@@ -52,7 +52,7 @@ namespace StockSharp.Hydra.Btce
 
 			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, () => new BtceTrader
 			{
-				TransactionAdapter = new PassThroughMessageAdapter(new PassThroughSessionHolder(new IncrementalIdGenerator()))
+				TransactionAdapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
 			});
 		}
 	}

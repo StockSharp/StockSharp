@@ -32,9 +32,22 @@ namespace StockSharp.AlfaDirect
 			SecurityClassInfo.Add("INDEX2", RefTuple.Create(SecurityTypes.Index, "INDEX"));
 			SecurityClassInfo.Add("MICEX_SHR_T", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Micex.Code));
 			SecurityClassInfo.Add("RTS_STANDARD", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
+		}
 
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsMarketDataEnabled
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsTransactionEnabled
+		{
+			get { return true; }
 		}
 
 		/// <summary>

@@ -102,7 +102,7 @@ namespace StockSharp.Hydra.Rithmic
 
 		public RithmicTask()
 		{
-			_supportedCandleSeries = RithmicSessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = RithmicMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf

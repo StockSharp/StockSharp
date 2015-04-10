@@ -129,8 +129,6 @@ namespace SampleQuikSmart
 						Login = SmartLogin.Text,
 						Password = SmartPassword.Password.To<SecureString>(),
 						Address = SmartAddress.SelectedAddress,
-						IsTransactionEnabled = true,
-						IsMarketDataEnabled = true,
 					};
 					transactionAdapter.InnerAdapters[smartCom] = 0;
 					marketDataAdapter.InnerAdapters[smartCom] = 0;

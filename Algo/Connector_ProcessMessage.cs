@@ -58,6 +58,7 @@ namespace StockSharp.Algo
 		/// <param name="adapter">Адаптер.</param>
 		public void SendOutMessage(Message message, IMessageAdapter adapter)
 		{
+			message.LocalTime = adapter.CurrentTime.LocalDateTime;
 			_outMessageChannel.SendInMessage(new AdapterMessage(message, adapter));
 		}
 

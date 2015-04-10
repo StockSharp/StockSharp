@@ -52,7 +52,7 @@ namespace StockSharp.Hydra.BitStamp
 
 			return new MarketDataConnector<BitStampTrader>(EntityRegistry.Securities, this, () => new BitStampTrader
 			{
-				TransactionAdapter = new PassThroughMessageAdapter(new PassThroughSessionHolder(new IncrementalIdGenerator()))
+				TransactionAdapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
 			});
 		}
 	}

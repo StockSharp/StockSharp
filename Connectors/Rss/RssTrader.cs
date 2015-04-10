@@ -21,6 +21,16 @@ namespace StockSharp.Rss
 			{
 			}
 
+			public override bool IsMarketDataEnabled
+			{
+				get { return false; }
+			}
+
+			public override bool IsTransactionEnabled
+			{
+				get { return true; }
+			}
+
 			protected override void OnSendInMessage(Message message)
 			{
 				switch (message.Type)

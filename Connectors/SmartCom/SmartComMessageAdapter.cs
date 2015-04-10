@@ -27,9 +27,6 @@ namespace StockSharp.SmartCom
 		{
 			Version = SmartComVersions.V3;
 
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
-
 			SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
@@ -42,6 +39,22 @@ namespace StockSharp.SmartCom
 			};
 
 			UpdatePlatform();
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsMarketDataEnabled
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsTransactionEnabled
+		{
+			get { return true; }
 		}
 
 		/// <summary>

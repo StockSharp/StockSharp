@@ -31,6 +31,22 @@ namespace StockSharp.Algo.Testing
 		private bool _running;
 		private bool _disconnecting;
 
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsMarketDataEnabled
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsTransactionEnabled
+		{
+			get { return false; }
+		}
+
 		private IEnumerable<ExchangeBoard> Boards
 		{
 			get

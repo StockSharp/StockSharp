@@ -422,8 +422,6 @@
 		{
 			var session = new HistoryMessageAdapter(EmulationConnector.TransactionIdGenerator)
 			{
-				IsMarketDataEnabled = false,
-				IsTransactionEnabled = true,
 			};
 
 			//_basketSessionHolder.InnerSessions.Add(session, 0);

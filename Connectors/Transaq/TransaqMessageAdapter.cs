@@ -29,9 +29,6 @@ namespace StockSharp.Transaq
 		public TransaqMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			IsTransactionEnabled = true;
-			IsMarketDataEnabled = true;
-
 			AddHandler<ClientLimitsResponse>(OnClientLimitsResponse);
 			AddHandler<ClientResponse>(OnClientResponse);
 			AddHandler<LeverageControlResponse>(OnLeverageControlResponse);
@@ -78,6 +75,22 @@ namespace StockSharp.Transaq
 				throw new ArgumentNullException("handler");
 
 			_handlerBunch[typeof(T)] = response => handler((T)response);
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsMarketDataEnabled
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsTransactionEnabled
+		{
+			get { return true; }
 		}
 
 		/// <summary>

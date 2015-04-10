@@ -22,7 +22,22 @@ namespace StockSharp.Rss
 		public RssMarketDataMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			IsMarketDataEnabled = true;
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsMarketDataEnabled
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		/// </summary>
+		public override bool IsTransactionEnabled
+		{
+			get { return false; }
 		}
 
 		/// <summary>

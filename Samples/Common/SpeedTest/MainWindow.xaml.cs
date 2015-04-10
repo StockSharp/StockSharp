@@ -62,8 +62,6 @@ namespace SpeedTest
 						Login = Login.Text,
 						Password = Password.Password.To<SecureString>(),
 						Address = Address.SelectedAddress,
-						IsTransactionEnabled = true,
-						IsMarketDataEnabled = true,
 					};
 					transactionAdapter.InnerAdapters[smartCom] = 0;
 					marketDataAdapter.InnerAdapters[smartCom] = 0;
