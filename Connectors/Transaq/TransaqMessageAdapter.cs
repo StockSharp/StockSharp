@@ -21,6 +21,7 @@ namespace StockSharp.Transaq
 	{
 		private readonly SynchronizedDictionary<Type, Action<BaseResponse>> _handlerBunch = new SynchronizedDictionary<Type, Action<BaseResponse>>();
 		private ApiClient _client;
+		private bool _isInitialized;
 
 		/// <summary>
 		/// Создать <see cref="TransaqMessageAdapter"/>.
@@ -108,6 +109,12 @@ namespace StockSharp.Transaq
 		/// <param name="message">Сообщение.</param>
 		protected override void OnSendInMessage(Message message)
 		{
+			if (_client != null && !_isInitialized && message.Type != MessageTypes.Connect && message.Type != MessageTypes.Disconnect)
+			{
+				Init();
+				_isInitialized = true;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
@@ -116,10 +123,6 @@ namespace StockSharp.Transaq
 
 				case MessageTypes.Disconnect:
 					Disconnect();
-					break;
-
-				case InitMessage.MsgType:
-					Init();
 					break;
 
 				case MessageTypes.OrderRegister:
@@ -166,6 +169,8 @@ namespace StockSharp.Transaq
 		{
 			if (_client != null)
 				throw new InvalidOperationException(LocalizedStrings.Str1619);
+
+			_isInitialized = false;
 
 			_registeredSecurityIds.Clear();
 			_candleTransactions.Clear();
@@ -269,7 +274,6 @@ namespace StockSharp.Transaq
 			if (isConnected)
 			{
 				SendOutMessage(new Messages.ConnectMessage());
-				SendInMessage(new InitMessage());
 			}
 			else
 			{

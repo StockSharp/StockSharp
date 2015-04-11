@@ -107,11 +107,12 @@ namespace StockSharp.SmartCom
 				}
 			});
 
-			SendInMessage(new PortfolioMessage
-			{
-				PortfolioName = portfolioName,
-				IsSubscribe = true,
-			});
+			// надо использовать из клиентского кода явную подписку
+			//SendInMessage(new PortfolioMessage
+			//{
+			//	PortfolioName = portfolioName,
+			//	IsSubscribe = true,
+			//});
 
 			if ((row + 1) < rowCount)
 				return;
