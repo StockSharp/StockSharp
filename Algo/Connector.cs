@@ -555,6 +555,26 @@ namespace StockSharp.Algo
 		///// </summary>
 		//public TimeSpan? TimeShift { get; private set; }
 
+		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
+
+		/// <summary>
+		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str186Key)]
+		[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
+		[DescriptionLoc(LocalizedStrings.Str195Key)]
+		public virtual TimeSpan MarketTimeChangedInterval
+		{
+			get { return _marketTimeChangedInterval; }
+			set
+			{
+				if (value <= TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str196);
+
+				_marketTimeChangedInterval = value;
+			}
+		}
+
 		private void TryOpenChannel()
 		{
 			if (_isChannelOpened)
@@ -1206,12 +1226,7 @@ namespace StockSharp.Algo
 
 			var diff = _currentTime - _prevTime;
 
-			var adapter = MarketDataAdapter;
-
-			if (adapter == null)
-				return;
-
-			if (diff >= adapter.MarketTimeChangedInterval)
+			if (diff >= MarketTimeChangedInterval)
 			{
 				_prevTime = _currentTime;
 				RaiseMarketTimeChanged(diff);
@@ -1472,7 +1487,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Запустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/>.
+		/// Запустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="MarketTimeChangedInterval"/>.
 		/// </summary>
 		protected virtual void StartMarketTimer()
 		{
@@ -1643,6 +1658,8 @@ namespace StockSharp.Algo
 			CreateDepthFromOrdersLog = storage.GetValue<bool>("CreateDepthFromOrdersLog");
 			CreateTradesFromOrdersLog = storage.GetValue<bool>("CreateTradesFromOrdersLog");
 
+			MarketTimeChangedInterval = storage.GetValue<TimeSpan>("MarketTimeChangedInterval");
+
 			base.Load(storage);
 		}
 
@@ -1668,6 +1685,8 @@ namespace StockSharp.Algo
 
 			storage.SetValue("CreateDepthFromOrdersLog", CreateDepthFromOrdersLog);
 			storage.SetValue("CreateTradesFromOrdersLog", CreateTradesFromOrdersLog);
+
+			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
 
 			base.Save(storage);
 		}

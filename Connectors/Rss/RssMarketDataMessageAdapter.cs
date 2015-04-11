@@ -22,6 +22,7 @@ namespace StockSharp.Rss
 		public RssMarketDataMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
+			HeartbeatInterval = TimeSpan.FromMinutes(5);
 		}
 
 		/// <summary>
@@ -41,6 +42,14 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// </summary>
+		public override bool SecurityLookupRequired
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -55,9 +64,6 @@ namespace StockSharp.Rss
 						: null;
 
 					SendOutMessage(new ConnectMessage { Error = error });
-
-					if (error == null)
-						SendInMessage(new TimeMessage());
 					break;
 				}
 
@@ -65,27 +71,30 @@ namespace StockSharp.Rss
 					SendOutMessage(new DisconnectMessage());
 					break;
 
-				case MessageTypes.Time: // обработка heartbeat
-				{
-					using (var reader = new XmlReaderEx(Address.To<string>()) { CustomDateFormat = CustomDateFormat })
-					{
-						var feed = SyndicationFeed.Load(reader);
-
-						foreach (var item in feed.Items)
-						{
-							SendOutMessage(new NewsMessage
-							{
-								Id = item.Id,
-								Source = feed.Authors.Select(a => a.Name).Join(","),
-								ServerTime = item.PublishDate.DateTime,
-								Headline = item.Title.Text,
-								Story = item.Summary == null ? string.Empty : item.Summary.Text,
-								Url = item.Links.Any() ? item.Links[0].Uri : null
-							});
-						}
-					}
-
+				case MessageTypes.SecurityLookup:
+				case MessageTypes.Time: // heartbeat handling
+					ProcessRss();
 					break;
+			}
+		}
+
+		private void ProcessRss()
+		{
+			using (var reader = new XmlReaderEx(Address.To<string>()) { CustomDateFormat = CustomDateFormat })
+			{
+				var feed = SyndicationFeed.Load(reader);
+
+				foreach (var item in feed.Items)
+				{
+					SendOutMessage(new NewsMessage
+					{
+						Id = item.Id,
+						Source = feed.Authors.Select(a => a.Name).Join(","),
+						ServerTime = item.PublishDate.DateTime,
+						Headline = item.Title.Text,
+						Story = item.Summary == null ? string.Empty : item.Summary.Text,
+						Url = item.Links.Any() ? item.Links[0].Uri : null
+					});
 				}
 			}
 		}

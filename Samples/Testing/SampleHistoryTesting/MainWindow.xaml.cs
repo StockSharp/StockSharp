@@ -237,7 +237,7 @@ namespace SampleHistoryTesting
 					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
 				};
 
-				connector.MarketDataAdapter.MarketTimeChangedInterval = timeFrame;
+				connector.MarketTimeChangedInterval = timeFrame;
 
 				((ILogSource)connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
 

@@ -261,10 +261,11 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; private set; }
 
-		private TimeSpan _heartbeatInterval = TimeSpan.FromMinutes(1);
+		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
 		/// <summary>
-		/// Интервал оповещения сервера о том, что подключение еще живое. По-умолчанию равно 1 минуте.
+		/// Интервал оповещения сервера о том, что подключение еще живое.
+		/// Значение <see cref="TimeSpan.Zero"/> означает выключенное оповещение.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.Str192Key)]
@@ -278,26 +279,6 @@ namespace StockSharp.Messages
 					throw new ArgumentOutOfRangeException();
 
 				_heartbeatInterval = value;
-			}
-		}
-
-		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
-
-		/// <summary>
-		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
-		[DescriptionLoc(LocalizedStrings.Str195Key)]
-		public TimeSpan MarketTimeChangedInterval
-		{
-			get { return _marketTimeChangedInterval; }
-			set
-			{
-				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str196);
-
-				_marketTimeChangedInterval = value;
 			}
 		}
 
@@ -855,14 +836,14 @@ namespace StockSharp.Messages
 					{
 						var diff = message.LocalTime - _prevTime;
 
-						if (message.Type != MessageTypes.Time && diff >= MarketTimeChangedInterval)
-						{
-							SendOutMessage(new TimeMessage
-							{
-								LocalTime = message.LocalTime,
-								ServerTime = message.GetServerTime(),
-							});
-						}
+						//if (message.Type != MessageTypes.Time && diff >= MarketTimeChangedInterval)
+						//{
+						//	SendOutMessage(new TimeMessage
+						//	{
+						//		LocalTime = message.LocalTime,
+						//		ServerTime = message.GetServerTime(),
+						//	});
+						//}
 
 						_secLookupTimeOut
 							.ProcessTime(diff)
@@ -917,14 +898,6 @@ namespace StockSharp.Messages
 		protected void SendOutSecurityMessage(SecurityId securityId)
 		{
 			SendOutMessage(new SecurityMessage { SecurityId = securityId });
-		}
-
-		/// <summary>
-		/// Нужно ли отправлять в адаптер сообщение типа <see cref="TimeMessage"/>.
-		/// </summary>
-		protected virtual bool CanSendTimeMessage
-		{
-			get { return false; }
 		}
 
 		//private void ProcessReconnection(TimeSpan diff)
@@ -1032,7 +1005,6 @@ namespace StockSharp.Messages
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			MarketTimeChangedInterval = storage.GetValue<TimeSpan>("MarketTimeChangedInterval");
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
 
 			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
@@ -1048,7 +1020,6 @@ namespace StockSharp.Messages
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
 
 			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);

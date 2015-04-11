@@ -475,7 +475,7 @@
 			}
 
 			EmulationConnector.MarketEmulator.Settings.UseCandlesTimeFrame = EmulationSettings.UseCandlesTimeFrame;
-			EmulationConnector.MarketDataAdapter.MarketTimeChangedInterval = EmulationSettings.MarketTimeChangedInterval;
+			EmulationConnector.MarketTimeChangedInterval = EmulationSettings.MarketTimeChangedInterval;
 			EmulationConnector.LogLevel = EmulationSettings.LogLevel;
 
 			MemoryStatistics.Instance.LogLevel = EmulationSettings.LogLevel;

@@ -97,12 +97,17 @@ namespace StockSharp.Algo.Testing
 			TransactionAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
 			MarketDataAdapter = _marketDataAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
 
-			_marketDataAdapter.MarketTimeChangedInterval = TimeSpan.FromSeconds(1);
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.ExportSettings.TimeOutInterval = TimeSpan.MaxValue;
+		}
 
-			//ApplyMessageProcessor(MessageDirections.In, true, true);
-			//ApplyMessageProcessor(MessageDirections.Out, true, true, new NonThreadMessageProcessor(TransactionAdapter.InMessageProcessor));
+		/// <summary>
+		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
+		/// </summary>
+		public override TimeSpan MarketTimeChangedInterval
+		{
+			get { return _marketDataAdapter.MarketTimeChangedInterval; }
+			set { _marketDataAdapter.MarketTimeChangedInterval = value; }
 		}
 
 		private readonly Dictionary<Portfolio, decimal> _initialMoney;

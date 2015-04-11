@@ -99,12 +99,6 @@ namespace StockSharp.Algo
 			set { _innerAdapter.HeartbeatInterval = value; }
 		}
 
-		TimeSpan IMessageAdapter.MarketTimeChangedInterval
-		{
-			get { return _innerAdapter.MarketTimeChangedInterval; }
-			set { _innerAdapter.MarketTimeChangedInterval = value; }
-		}
-
 		bool IMessageAdapter.CreateAssociatedSecurity
 		{
 			get { return _innerAdapter.CreateAssociatedSecurity; }

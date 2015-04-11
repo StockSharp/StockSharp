@@ -147,7 +147,7 @@ namespace StockSharp.Btce
 			}
 		}
 
-		private void ProcessOrderStatusMessage()
+		private void ProcessOrderStatus()
 		{
 			if (_requestOrderFirst)
 			{
@@ -215,6 +215,11 @@ namespace StockSharp.Btce
 					ProcessOrder(order);
 				}
 			}
+		}
+
+		private void ProcessPortfolioLookup()
+		{
+			ProcessFunds(_client.GetInfo().State.Funds);
 		}
 	}
 }

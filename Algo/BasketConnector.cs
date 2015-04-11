@@ -14,10 +14,8 @@ namespace StockSharp.Algo
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-
-	using SubscriptionAction = System.Action<BusinessEntities.IConnector, BusinessEntities.Security>;
-
 	using StockSharp.Localization;
+	using SubscriptionAction = System.Action<BusinessEntities.IConnector, BusinessEntities.Security>;
 
 	/// <summary>
 	/// Интерфейс, описывающий список подключений к торговым системам, с которыми оперирует агрегатор.

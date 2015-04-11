@@ -152,6 +152,26 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; private set; }
 
+		private TimeSpan _marketTimeChangedInterval = TimeSpan.FromSeconds(1);
+
+		/// <summary>
+		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 1 секунде.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str186Key)]
+		[DisplayNameLoc(LocalizedStrings.TimeIntervalKey)]
+		[DescriptionLoc(LocalizedStrings.Str195Key)]
+		public virtual TimeSpan MarketTimeChangedInterval
+		{
+			get { return _marketTimeChangedInterval; }
+			set
+			{
+				if (value <= TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str196);
+
+				_marketTimeChangedInterval = value;
+			}
+		}
+
 		/// <summary>
 		/// Создать <see cref="HistoryMessageAdapter"/>.
 		/// </summary>

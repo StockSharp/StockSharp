@@ -39,7 +39,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Запустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="IMessageAdapter.MarketTimeChangedInterval"/>.
+		/// Запустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="Connector.MarketTimeChangedInterval"/>.
 		/// </summary>
 		protected override void StartMarketTimer()
 		{

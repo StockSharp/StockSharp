@@ -44,11 +44,6 @@
 		TimeSpan HeartbeatInterval { get; set; }
 
 		/// <summary>
-		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
-		/// </summary>
-		TimeSpan MarketTimeChangedInterval { get; set; }
-
-		/// <summary>
 		/// Создавать объединенный инструмент для инструментов с разных торговых площадок.
 		/// </summary>
 		bool CreateAssociatedSecurity { get; set; }

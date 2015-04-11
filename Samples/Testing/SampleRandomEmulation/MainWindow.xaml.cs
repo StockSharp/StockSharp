@@ -89,9 +89,8 @@ namespace SampleRandomEmulation
 			// создаем подключение для эмуляции
 			_connector = new HistoryEmulationConnector(
 				new[] { security },
-				new[] { portfolio });
-
-			_connector.MarketDataAdapter.MarketTimeChangedInterval = timeFrame;
+				new[] { portfolio })
+			{ MarketTimeChangedInterval = timeFrame };
 
 			_logManager.Sources.Add(_connector);
 

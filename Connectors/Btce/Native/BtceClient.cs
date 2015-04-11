@@ -15,7 +15,6 @@ namespace StockSharp.Btce.Native
 	using Ecng.Common;
 
 	using StockSharp.Logging;
-
 	using StockSharp.Localization;
 
 	/// <summary>

@@ -25,6 +25,7 @@ namespace StockSharp.LMAX
 		public LmaxMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
+			HeartbeatInterval = TimeSpan.FromSeconds(60);
 		}
 
 		/// <summary>

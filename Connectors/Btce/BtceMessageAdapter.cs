@@ -23,6 +23,7 @@ namespace StockSharp.Btce
 		public BtceMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
+			HeartbeatInterval = TimeSpan.FromSeconds(1);
 		}
 
 		/// <summary>
@@ -37,14 +38,6 @@ namespace StockSharp.Btce
 		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
 		/// </summary>
 		public override bool IsTransactionEnabled
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// Нужно ли отправлять в адаптер сообщение типа <see cref="TimeMessage"/>.
-		/// </summary>
-		protected override bool CanSendTimeMessage
 		{
 			get { return true; }
 		}
@@ -123,7 +116,7 @@ namespace StockSharp.Btce
 
 				case MessageTypes.PortfolioLookup:
 				{
-					ProcessFunds(_client.GetInfo().State.Funds);
+					ProcessPortfolioLookup();
 					break;
 				}
 
@@ -135,7 +128,7 @@ namespace StockSharp.Btce
 
 				case MessageTypes.OrderStatus:
 				{
-					ProcessOrderStatusMessage();
+					ProcessOrderStatus();
 					break;
 				}
 
@@ -161,8 +154,8 @@ namespace StockSharp.Btce
 				{
 					if (_hasActiveOrders || _hasMyTrades)
 					{
-						SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+						ProcessOrderStatus();
+						ProcessPortfolioLookup();
 					}
 
 					ProcessSubscriptions();

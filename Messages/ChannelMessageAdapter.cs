@@ -154,12 +154,6 @@
 			set { _adapter.HeartbeatInterval = value; }
 		}
 
-		TimeSpan IMessageAdapter.MarketTimeChangedInterval
-		{
-			get { return _adapter.MarketTimeChangedInterval; }
-			set { _adapter.MarketTimeChangedInterval = value; }
-		}
-
 		bool IMessageAdapter.CreateAssociatedSecurity
 		{
 			get { return _adapter.CreateAssociatedSecurity; }
