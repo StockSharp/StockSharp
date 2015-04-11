@@ -100,22 +100,6 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsMarketDataEnabled
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsTransactionEnabled
-		{
-			get { return true; }
-		}
-
-		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
 		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
@@ -226,7 +210,7 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public override bool PortfolioLookupRequired
 		{
-			get { return true; }
+			get { return IsTransactionEnabled; }
 		}
 
 		/// <summary>
@@ -234,7 +218,7 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public override bool OrderStatusRequired
 		{
-			get { return true; }
+			get { return IsTransactionEnabled; }
 		}
 
 		/// <summary>

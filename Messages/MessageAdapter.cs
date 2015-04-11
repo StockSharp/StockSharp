@@ -229,6 +229,8 @@ namespace StockSharp.Messages
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
 
 			CreateDepthFromLevel1 = true;
+
+			IsMarketDataEnabled = IsTransactionEnabled = true;
 		}
 
 		/// <summary>
@@ -238,7 +240,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.MarketDataKey)]
 		[DescriptionLoc(LocalizedStrings.UseMarketDataSessionKey)]
 		[PropertyOrder(1)]
-		public abstract bool IsMarketDataEnabled { get; }
+		public bool IsMarketDataEnabled { get; set; }
 
 		/// <summary>
 		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
@@ -247,7 +249,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TransactionsKey)]
 		[DescriptionLoc(LocalizedStrings.UseTransactionalSessionKey)]
 		[PropertyOrder(2)]
-		public abstract bool IsTransactionEnabled { get; }
+		public bool IsTransactionEnabled { get; set; }
 
 		/// <summary>
 		/// Проверить введенные параметры на валидность.
@@ -1007,6 +1009,9 @@ namespace StockSharp.Messages
 		{
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
 
+			IsMarketDataEnabled = storage.GetValue<bool>("IsMarketDataEnabled");
+			IsTransactionEnabled = storage.GetValue<bool>("IsTransactionEnabled");
+
 			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
 			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
 			CreateDepthFromLevel1 = storage.GetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
@@ -1021,6 +1026,9 @@ namespace StockSharp.Messages
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
+
+			storage.SetValue("IsMarketDataEnabled", IsMarketDataEnabled);
+			storage.SetValue("IsTransactionEnabled", IsTransactionEnabled);
 
 			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
 			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
@@ -1042,22 +1050,6 @@ namespace StockSharp.Messages
 		public PassThroughMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsMarketDataEnabled
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsTransactionEnabled
-		{
-			get { return true; }
 		}
 
 		/// <summary>

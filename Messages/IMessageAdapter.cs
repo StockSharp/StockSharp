@@ -21,12 +21,12 @@
 		/// <summary>
 		/// <see langword="true"/>, если адаптер используется для получения маркет-данных, иначе, <see langword="false"/>.
 		/// </summary>
-		bool IsMarketDataEnabled { get; }
+		bool IsMarketDataEnabled { get; set; }
 
 		/// <summary>
 		/// <see langword="true"/>, если адаптер используется для отправки транзакций, иначе, <see langword="false"/>.
 		/// </summary>
-		bool IsTransactionEnabled { get; }
+		bool IsTransactionEnabled { get; set; }
 
 		/// <summary>
 		/// Проверить введенные параметры на валидность.

@@ -158,22 +158,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsMarketDataEnabled
-		{
-			get { return _innerAdapters.Cache.Any(a => a.IsMarketDataEnabled); }
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsTransactionEnabled
-		{
-			get { return _innerAdapters.Cache.Any(a => a.IsTransactionEnabled); }
-		}
-
-		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>

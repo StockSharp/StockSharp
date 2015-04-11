@@ -76,22 +76,6 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsMarketDataEnabled
-		{
-			get { return false; }
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsTransactionEnabled
-		{
-			get { return true; }
-		}
-
-		/// <summary>
 		/// Проверить, установлено ли еще соединение.
 		/// </summary>
 		public bool IsConnectionAlive { get { return Api.IsConnected; } }
@@ -111,6 +95,7 @@ namespace StockSharp.Quik
 			IsAsyncMode = true;
 			Platform = Platforms.x86;
 			//SessionHolder.TerminalChanged += ResetApi;
+			IsMarketDataEnabled = false;
 		}
 
 		private const string _category = "TRANS2QUIK";

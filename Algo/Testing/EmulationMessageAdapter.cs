@@ -29,6 +29,7 @@
 			: base(transactionIdGenerator)
 		{
 			Emulator = emulator;
+			IsMarketDataEnabled = false;
 		}
 
 		private IMarketEmulator _emulator;
@@ -57,22 +58,6 @@
 				_emulator.Parent = this;
 				_emulator.NewOutMessage += SendOutMessage;
 			}
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsMarketDataEnabled
-		{
-			get { return false; }
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsTransactionEnabled
-		{
-			get { return true; }
 		}
 
 		private DateTimeOffset _currentTime;

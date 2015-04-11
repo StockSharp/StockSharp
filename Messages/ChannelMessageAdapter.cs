@@ -131,11 +131,13 @@
 		bool IMessageAdapter.IsMarketDataEnabled
 		{
 			get { return _adapter.IsMarketDataEnabled; }
+			set { _adapter.IsMarketDataEnabled = value; }
 		}
 
 		bool IMessageAdapter.IsTransactionEnabled
 		{
 			get { return _adapter.IsTransactionEnabled; }
+			set { _adapter.IsTransactionEnabled = value; }
 		}
 
 		bool IMessageAdapter.IsValid

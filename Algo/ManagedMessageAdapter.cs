@@ -120,11 +120,13 @@ namespace StockSharp.Algo
 		bool IMessageAdapter.IsMarketDataEnabled
 		{
 			get { return _innerAdapter.IsMarketDataEnabled; }
+			set { _innerAdapter.IsMarketDataEnabled = value; }
 		}
 
 		bool IMessageAdapter.IsTransactionEnabled
 		{
 			get { return _innerAdapter.IsTransactionEnabled; }
+			set { _innerAdapter.IsTransactionEnabled = value; }
 		}
 
 		bool IMessageAdapter.IsValid

@@ -27,27 +27,11 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsMarketDataEnabled
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
-		/// </summary>
-		public override bool IsTransactionEnabled
-		{
-			get { return true; }
-		}
-
-		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
 		/// </summary>
 		public override bool OrderStatusRequired
 		{
-			get { return true; }
+			get { return IsTransactionEnabled; }
 		}
 
 		/// <summary>
@@ -55,7 +39,7 @@ namespace StockSharp.Btce
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
-			get { return true; }
+			get { return IsMarketDataEnabled; }
 		}
 
 		/// <summary>

@@ -19,16 +19,7 @@ namespace StockSharp.Rss
 			public RssTransactionMessageAdapter(IdGenerator transactionIdGenerator)
 				: base(transactionIdGenerator)
 			{
-			}
-
-			public override bool IsMarketDataEnabled
-			{
-				get { return false; }
-			}
-
-			public override bool IsTransactionEnabled
-			{
-				get { return true; }
+				IsMarketDataEnabled = false;
 			}
 
 			protected override void OnSendInMessage(Message message)
