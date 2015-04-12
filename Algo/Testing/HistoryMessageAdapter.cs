@@ -457,7 +457,7 @@ namespace StockSharp.Algo.Testing
 
 			SendOutMessage(new ClearMessageQueueMessage
 			{
-				MessageTypes = messageType,
+				ClearMessageType = messageType,
 				SecurityId = security.ToSecurityId(),
 				Arg = arg
 			});

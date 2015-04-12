@@ -14,38 +14,63 @@
 	public class ChannelMessageAdapter : IMessageAdapter
 	{
 		private readonly IMessageAdapter _adapter;
-		private readonly IMessageChannel _channel;
-
-		private bool _isChannelOpened;
+		private readonly IMessageChannel _inputChannel;
+		private readonly IMessageChannel _outputChannel;
 
 		/// <summary>
 		/// Создать <see cref="ChannelMessageAdapter"/>.
 		/// </summary>
 		/// <param name="adapter">Адаптер.</param>
-		/// <param name="channel">Транспортный канал сообщений.</param>
-		public ChannelMessageAdapter(IMessageAdapter adapter, IMessageChannel channel)
+		/// <param name="inputChannel">Транспортный канал входящих сообщений.</param>
+		/// <param name="outputChannel">Транспортный канал исходящих сообщений.</param>
+		public ChannelMessageAdapter(IMessageAdapter adapter, IMessageChannel inputChannel, IMessageChannel outputChannel)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException("adapter");
 
-			if (channel == null)
-				throw new ArgumentNullException("channel");
+			if (inputChannel == null)
+				throw new ArgumentNullException("inputChannel");
 
 			_adapter = adapter;
-			_channel = channel;
+			_inputChannel = inputChannel;
+			_outputChannel = outputChannel;
 
-			_channel.NewOutMessage += ChannelOnNewOutMessage;
+			_inputChannel.NewOutMessage += InputChannelOnNewOutMessage;
+			_outputChannel.NewOutMessage += OutputChannelOnNewOutMessage;
+
+			_adapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
 
-		private void ChannelOnNewOutMessage(Message message)
+		private void OutputChannelOnNewOutMessage(Message message)
+		{
+			_newMessage.SafeInvoke(message);
+		}
+
+		private void AdapterOnNewOutMessage(Message message)
+		{
+			if (!_outputChannel.IsOpened)
+				_outputChannel.Open();
+
+			_outputChannel.SendInMessage(message);
+		}
+
+		private void InputChannelOnNewOutMessage(Message message)
 		{
 			_adapter.SendInMessage(message);
 		}
 
 		void IDisposable.Dispose()
 		{
-			_channel.NewOutMessage -= ChannelOnNewOutMessage;
-			_channel.Dispose();
+			_inputChannel.NewOutMessage -= InputChannelOnNewOutMessage;
+			_outputChannel.NewOutMessage -= OutputChannelOnNewOutMessage;
+
+			_adapter.NewOutMessage -= AdapterOnNewOutMessage;
+			_adapter.Dispose();
+		}
+
+		bool IMessageChannel.IsOpened
+		{
+			get { return _adapter.IsOpened; }
 		}
 
 		void IMessageChannel.Open()
@@ -60,19 +85,18 @@
 
 		void IMessageChannel.SendInMessage(Message message)
 		{
-			if (!_isChannelOpened)
-			{
-				_channel.Open();
-				_isChannelOpened = true;
-			}
+			if (!_inputChannel.IsOpened)
+				_inputChannel.Open();
 
-			_channel.SendInMessage(message);
+			_inputChannel.SendInMessage(message);
 		}
+
+		private Action<Message> _newMessage;
 
 		event Action<Message> IMessageChannel.NewOutMessage
 		{
-			add { _adapter.NewOutMessage += value; }
-			remove { _adapter.NewOutMessage -= value; }
+			add { _newMessage += value; }
+			remove { _newMessage -= value; }
 		}
 
 		void IPersistable.Load(SettingsStorage storage)

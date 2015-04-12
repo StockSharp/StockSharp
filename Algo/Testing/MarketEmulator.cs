@@ -1772,6 +1772,11 @@ namespace StockSharp.Algo.Testing
 			_portfoliosPrevRecalc = time;
 		}
 
+		bool IMessageChannel.IsOpened
+		{
+			get { return true; }
+		}
+
 		void IMessageChannel.Open()
 		{
 		}

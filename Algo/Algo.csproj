@@ -186,6 +186,7 @@
     <Compile Include="Commissions\ICommissionRule.cs" />
     <Compile Include="Connector_ProcessMessage.cs" />
     <Compile Include="Connector_Raise.cs" />
+    <Compile Include="Connector_Heartbeat.cs" />
     <Compile Include="Connector_Subscription.cs" />
     <Compile Include="ContinuousSecurity.cs" />
     <Compile Include="Derivatives\BasketBlackScholes.cs" />
@@ -420,7 +421,7 @@
     <Compile Include="Testing\ClearingMessage.cs" />
     <Compile Include="Testing\HistoryMessageAdapter.cs" />
     <Compile Include="Testing\EmulationMessageAdapter.cs" />
-    <Compile Include="Testing\ExtendedMessageTypes.cs" />
+    <Compile Include="ExtendedMessageTypes.cs" />
     <Compile Include="Testing\EmulationStateMessage.cs" />
     <Compile Include="Testing\HistoryEmulationConnector.cs" />
     <Compile Include="MessageConverterHelper.cs" />

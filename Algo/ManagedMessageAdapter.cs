@@ -182,6 +182,11 @@ namespace StockSharp.Algo
 			_innerAdapter.Save(storage);
 		}
 
+		bool IMessageChannel.IsOpened
+		{
+			get { return _innerAdapter.IsOpened; }
+		}
+
 		private Action<Message> _newOutMessage;
 
 		event Action<Message> IMessageChannel.NewOutMessage

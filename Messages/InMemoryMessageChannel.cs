@@ -1,9 +1,7 @@
 ﻿namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -11,7 +9,6 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 
-	//using MessageItem = System.Tuple<Messages.Message, Messages.IMessageAdapter>;
 	using Pair = System.Collections.Generic.KeyValuePair<System.DateTime, Messages.Message>;
 
 	/// <summary>
@@ -45,36 +42,34 @@
 			{
 				lock (SyncRoot)
 				{
-					IEnumerable<Pair> messages;
-
-					switch (message.MessageTypes)
+					switch (message.ClearMessageType)
 					{
 						case MessageTypes.Execution:
-							messages = InnerCollection
-								.Where(m =>
+							InnerCollection
+								.RemoveWhere(m =>
 								{
 									if (m.Value.Type != MessageTypes.Execution)
 										return false;
 
 									var execMsg = (ExecutionMessage)m.Value;
 
-									return execMsg.SecurityId == message.SecurityId && (message.Arg == null || message.Arg.Compare(execMsg.ExecutionType) == 0);
+									return (message.SecurityId == null || execMsg.SecurityId == message.SecurityId) && (message.Arg == null || message.Arg.Compare(execMsg.ExecutionType) == 0);
 								});
+
 							break;
 
 						case MessageTypes.QuoteChange:
-							messages = InnerCollection.Where(m => m.Value.Type == MessageTypes.QuoteChange && ((QuoteChangeMessage)m.Value).SecurityId == message.SecurityId);
+							InnerCollection.RemoveWhere(m => m.Value.Type == MessageTypes.QuoteChange && (message.SecurityId == null || ((QuoteChangeMessage)m.Value).SecurityId == message.SecurityId));
 							break;
 
 						case MessageTypes.Level1Change:
-							messages = InnerCollection.Where(m => m.Value.Type == MessageTypes.Level1Change && ((Level1ChangeMessage)m.Value).SecurityId == message.SecurityId);
+							InnerCollection.RemoveWhere(m => m.Value.Type == MessageTypes.Level1Change && (message.SecurityId == null || ((Level1ChangeMessage)m.Value).SecurityId == message.SecurityId));
 							break;
 
-						default:
-							return;
+						case null:
+							InnerCollection.Clear();
+							break;
 					}
-
-					InnerCollection.RemoveRange(messages);
 				}
 			}
 		}
@@ -137,6 +132,14 @@
 		/// Событие закрытия канала.
 		/// </summary>
 		public event Action Closed;
+
+		/// <summary>
+		/// Открыт ли канал.
+		/// </summary>
+		public bool IsOpened
+		{
+			get { return !_messageQueue.IsClosed; }
+		}
 
 		/// <summary>
 		/// Открыть канал.
@@ -202,11 +205,20 @@
 		/// <param name="message">Сообщение.</param>
 		public void SendInMessage(Message message)
 		{
-			if (_messageQueue.IsClosed)
+			if (!IsOpened)
 				throw new InvalidOperationException();
 
-			_msgStat.Add(message);
-			_messageQueue.Enqueue(new Pair(message.LocalTime, message));
+			var clearMsg = message as ClearMessageQueueMessage;
+
+			if (clearMsg != null)
+			{
+				_messageQueue.Clear(clearMsg);
+			}
+			else
+			{
+				_msgStat.Add(message);
+				_messageQueue.Enqueue(new Pair(message.LocalTime, message));	
+			}
 		}
 
 		/// <summary>

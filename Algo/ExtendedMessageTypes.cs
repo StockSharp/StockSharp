@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Testing
+﻿namespace StockSharp.Algo
 {
 	using System.Reflection;
 
@@ -14,5 +14,7 @@
 		public const MessageTypes EmulationState = (MessageTypes)(-5);
 		public const MessageTypes Generator = (MessageTypes)(-6);
 		public const MessageTypes CommissionRule = (MessageTypes)(-7);
+		public const MessageTypes CleanQueue = (MessageTypes)(-8);
+		public const MessageTypes Adapter = (MessageTypes)(-66);
 	}
 }

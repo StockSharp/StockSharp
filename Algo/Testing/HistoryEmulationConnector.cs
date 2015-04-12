@@ -99,6 +99,8 @@ namespace StockSharp.Algo.Testing
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.ExportSettings.TimeOutInterval = TimeSpan.MaxValue;
+
+			OutMessageChannel = new PassThroughMessageChannel();
 		}
 
 		/// <summary>

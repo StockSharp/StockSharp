@@ -190,12 +190,9 @@ namespace StockSharp.Algo
 
 		private readonly ISecurityProvider _securityProvider;
 
-		private bool _isChannelOpened;
-
 		private Timer _marketTimeChangedTimer;
-		private readonly SyncObject _timeSync = new SyncObject();
-		private bool _canSendTimeIn;
-		private DateTime _heartbeatPrevTime;
+		private readonly TimeMessage _marketTimeMessage = new TimeMessage();
+		private bool _isMarketTimeMessageHandled;
 
 		/// <summary>
 		/// Создать <see cref="Connector"/>.
@@ -213,8 +210,32 @@ namespace StockSharp.Algo
 			_securityProvider = new ConnectorSecurityProvider(this);
 			SlippageManager = new SlippageManager();
 
-			_outMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseProcessDataError);
-			_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
+			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseProcessDataError);
+		}
+
+		private IMessageChannel _outMessageChannel;
+
+		/// <summary>
+		/// Транспортный канал исходящих сообщений.
+		/// </summary>
+		public IMessageChannel OutMessageChannel
+		{
+			get { return _outMessageChannel; }
+			protected set
+			{
+				if (value == null)
+					throw new ArgumentNullException();
+
+				if (value == _outMessageChannel)
+					return;
+
+				if (_outMessageChannel != null)
+					_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
+
+				_outMessageChannel = value;
+
+				_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
+			}
 		}
 
 		/// <summary>
@@ -577,11 +598,10 @@ namespace StockSharp.Algo
 
 		private void TryOpenChannel()
 		{
-			if (_isChannelOpened)
+			if (OutMessageChannel.IsOpened)
 				return;
 
-			_outMessageChannel.Open();
-			_isChannelOpened = true;
+			OutMessageChannel.Open();
 		}
 
 		/// <summary>
@@ -604,6 +624,7 @@ namespace StockSharp.Algo
 				TryOpenChannel();
 
 				//_reConnectionManager.Connect();
+				StartMarketTimer();
 				OnConnect();
 			}
 			catch (Exception ex)
@@ -1216,8 +1237,17 @@ namespace StockSharp.Algo
 
 		private DateTimeOffset _prevTime;
 
-		private void ProcessTimeInterval()
+		private void ProcessTimeInterval(Message message)
 		{
+			if (message == _marketTimeMessage)
+				_isMarketTimeMessageHandled = true;
+
+			// output messages from adapters goes asynchronously
+			if (_currentTime > message.LocalTime)
+				return;
+
+			_currentTime = message.LocalTime;
+
 			if (_prevTime.IsDefault())
 			{
 				_prevTime = _currentTime;
@@ -1494,63 +1524,17 @@ namespace StockSharp.Algo
 			if (null != _marketTimeChangedTimer)
 				return;
 
-			//_marketTimeChangedTimer = ThreadingHelper
-			//	.Timer(() =>
-			//	{
-			//		var time = CurrentTime;
+			_isMarketTimeMessageHandled = true;
 
-			//		//if (Type == MessageAdapterTypes.MarketData)
-			//		//{
-			//		// TimeMsg нужен для оповещения внешнего кода о живом адаптере (или для изменения текущего времени)
-			//		// Поэтому когда в очереди есть другие сообщения нет смысла добавлять еще и TimeMsg
-			//		if (_outMessageChannel.MessageCount == 0)
-			//		{
-			//			SendOutMessage(new TimeMessage(), MarketDataAdapter);
-
-			//			if (IsMarketDataIndependent)
-			//				SendOutMessage(new TimeMessage(), TransactionAdapter);
-			//		}
-			//		//}
-
-			//		TimeMessage timeMsg;
-
-			//		lock (_timeSync)
-			//		{
-			//			if (_currState != ConnectionStates.Connected)
-			//				return;
-
-			//			if (CanSendTimeMessage)
-			//			{
-			//				// TimeMsg нужно отправлять в очередь, если предыдущее сообщение было обработано.
-			//				// Иначе, из-за медленной обработки, кол-во TimeMsg может вырасти до большого значения.
-
-			//				if (!_canSendTimeIn)
-			//					return;
-
-			//				_canSendTimeIn = false;
-
-			//				timeMsg = new TimeMessage();
-			//			}
-			//			else
-			//			{
-			//				if (_heartbeatPrevTime.IsDefault())
-			//				{
-			//					_heartbeatPrevTime = time.LocalDateTime;
-			//					return;
-			//				}
-
-			//				if ((time - _heartbeatPrevTime) < HeartbeatInterval)
-			//					return;
-
-			//				timeMsg = new TimeMessage { TransactionId = TransactionIdGenerator.GetNextId().To<string>() };
-
-			//				_heartbeatPrevTime = time.LocalDateTime;
-			//			}
-			//		}
-
-			//		SendInMessage(timeMsg);
-			//	})
-			//	.Interval(TransactionAdapter.MarketTimeChangedInterval.Min(MarketDataAdapter.MarketTimeChangedInterval));
+			_marketTimeChangedTimer = ThreadingHelper
+				.Timer(() =>
+				{
+					// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
+					// No need to put _marketTimeMessage again, if it still in queue.
+					if (_isMarketTimeMessageHandled)
+						SendOutMessage(_marketTimeMessage, MarketDataAdapter);
+				})
+				.Interval(MarketTimeChangedInterval);
 		}
 
 		/// <summary>
@@ -1570,7 +1554,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_isDisposing = true;
+			//_isDisposing = true;
 
 			if (ExportState == ConnectionStates.Connected)
 			{
@@ -1628,11 +1612,11 @@ namespace StockSharp.Algo
 
 			_connectorStat.Remove(this);
 
-			if (ConnectionState == ConnectionStates.Disconnected || ConnectionState == ConnectionStates.Failed)
-				TransactionAdapter = null;
+			//if (ConnectionState == ConnectionStates.Disconnected || ConnectionState == ConnectionStates.Failed)
+			//	TransactionAdapter = null;
 
-			if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
-				MarketDataAdapter = null;
+			//if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
+			//	MarketDataAdapter = null;
 		}
 
 		/// <summary>

@@ -2,47 +2,15 @@ namespace StockSharp.Rss
 {
 	using System;
 
-	using Ecng.Common;
-
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с RSS фидами.
 	/// </summary>
 	public class RssTrader : Connector
     {
-		private sealed class RssTransactionMessageAdapter : MessageAdapter
-		{
-			public RssTransactionMessageAdapter(IdGenerator transactionIdGenerator)
-				: base(transactionIdGenerator)
-			{
-				IsMarketDataEnabled = false;
-			}
-
-			protected override void OnSendInMessage(Message message)
-			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-						SendOutMessage(new ConnectMessage());
-						break;
-
-					case MessageTypes.Disconnect:
-						SendOutMessage(new DisconnectMessage());
-						break;
-
-					case MessageTypes.Time: // обработка heartbeat
-						break;
-
-					default:
-						throw new NotSupportedException(LocalizedStrings.Str2143Params.Put(message.Type));
-				}
-			}
-		}
-
 		private readonly RssMarketDataMessageAdapter _adapter;
 
 		/// <summary>
@@ -50,7 +18,7 @@ namespace StockSharp.Rss
 		/// </summary>
 		public RssTrader()
 		{
-			TransactionAdapter = new RssTransactionMessageAdapter(TransactionIdGenerator);
+			TransactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator) { IsMarketDataEnabled = false };
 			
 			_adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
 			MarketDataAdapter = _adapter.ToChannel(this);

@@ -931,6 +931,7 @@ namespace StockSharp.Algo
 			}
 
 			TryOpenChannel();
+			StartMarketTimer();
 
 			ExportState = ConnectionStates.Connecting;
 			RaiseNewDataExported();

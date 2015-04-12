@@ -11,15 +11,17 @@
 	public class ClearMessageQueueMessage : Message
 	{
 		/// <summary>
-		/// Тип сообщений.
+		/// Тип сообщений, которые необходимо удалить.
+		/// Если значение равно <see langword="null"/>, то необходимо удалить все сообщения.
 		/// </summary>
-		public MessageTypes MessageTypes { get; set; }
+		public MessageTypes? ClearMessageType { get; set; }
 
 		/// <summary>
 		/// Идентификатор инструмента.
+		/// Если значение равно <see langword="null"/>, то необходимо удалить сообщения для всех инструментов.
 		/// </summary>
 		[DataMember]
-		public SecurityId SecurityId { get; set; }
+		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
 		/// Дополнительный аргумент для фильтра маркет-данных.

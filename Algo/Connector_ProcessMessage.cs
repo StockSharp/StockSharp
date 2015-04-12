@@ -20,7 +20,7 @@ namespace StockSharp.Algo
 			public IMessageAdapter Adapter { get; private set; }
 
 			public AdapterMessage(Message message, IMessageAdapter adapter)
-				: base((MessageTypes)(-666))
+				: base(ExtendedMessageTypes.Adapter)
 			{
 				Message = message;
 				Adapter = adapter;
@@ -28,42 +28,51 @@ namespace StockSharp.Algo
 		}
 
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
-		private readonly InMemoryMessageChannel _outMessageChannel;
 
-		private bool _isDisposing;
+		//private bool _isDisposing;
 
-		private bool IsDisposeAdapters(Message message)
+		//private bool IsDisposeAdapters(Message message)
+		//{
+		//	if (!_isDisposing)
+		//		return false;
+
+		//	if (message.Type == MessageTypes.Disconnect)
+		//		return true;
+		//	else if (message.Type == MessageTypes.Connect && ((ConnectMessage)message).Error != null)
+		//		return true;
+
+		//	return false;
+		//}
+
+		private void OutMessageChannelOnNewOutMessage(Message channelMessage)
 		{
-			if (!_isDisposing)
-				return false;
+			var adapterMessage = (AdapterMessage)channelMessage;
+			var message = adapterMessage.Message;
+			var adapter = adapterMessage.Adapter;
 
-			if (message.Type == MessageTypes.Disconnect)
-				return true;
-			else if (message.Type == MessageTypes.Connect && ((ConnectMessage)message).Error != null)
-				return true;
+			if (message.IsBack)
+			{
+				message.IsBack = false;
+				adapter.SendInMessage(message);
+				return;
+			}
 
-			return false;
-		}
-
-		private void OutMessageChannelOnNewOutMessage(Message message)
-		{
-			var adapterMessage = (AdapterMessage)message;
-			OnProcessMessage(adapterMessage.Message, adapterMessage.Adapter, MessageDirections.Out);
+			OnProcessMessage(message, adapter, MessageDirections.Out);
 		}
 
 		/// <summary>
-		/// Отправить сообщение в исходящую очередь.
+		/// Отправить исходящее сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
 		/// <param name="adapter">Адаптер.</param>
 		public void SendOutMessage(Message message, IMessageAdapter adapter)
 		{
 			message.LocalTime = adapter.CurrentTime.LocalDateTime;
-			_outMessageChannel.SendInMessage(new AdapterMessage(message, adapter));
+			OutMessageChannel.SendInMessage(new AdapterMessage(message, adapter));
 		}
 
 		/// <summary>
-		/// Отправить ошибку в исходящую очередь.
+		/// Отправить ошибку.
 		/// </summary>
 		/// <param name="error">Описание ошибки.</param>
 		public void SendOutError(Exception error)
@@ -90,7 +99,7 @@ namespace StockSharp.Algo
 					if (managedAdapter != null && MarketDataAdapter != null)
 						MarketDataAdapter.NewOutMessage -= managedAdapter.ProcessMessage;
 
-					_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
+					//_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
 					_transactionAdapter.Dispose();
 				}
 
@@ -99,11 +108,13 @@ namespace StockSharp.Algo
 				if (_transactionAdapter == null)
 					return;
 
+				_transactionAdapter = new HeartbeatAdapter(value, ReConnectionSettings.ConnectionSettings);
+
 				if (IsMarketDataIndependent)
 				{
 					if (CalculateMessages)
 					{
-						var managedAdapter = new ManagedMessageAdapter(value);
+						var managedAdapter = new ManagedMessageAdapter(_transactionAdapter);
 
 						if (MarketDataAdapter != null)
 							MarketDataAdapter.NewOutMessage += managedAdapter.ProcessMessage;
@@ -111,18 +122,18 @@ namespace StockSharp.Algo
 						_transactionAdapter = managedAdapter;
 					}
 
-					_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
+					//_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
 				}
 			}
 		}
 
-		private void TransactionAdapterOnNewOutMessage(Message message)
-		{
-			SendOutMessage(message, TransactionAdapter);
+		//private void TransactionAdapterOnNewOutMessage(Message message)
+		//{
+		//	OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
 
-			if (IsDisposeAdapters(message))
-				TransactionAdapter = null;
-		}
+		//	if (IsDisposeAdapters(message))
+		//		TransactionAdapter = null;
+		//}
 
 		private readonly SyncObject _marketDataAdapterSync = new SyncObject();
 		private IMessageAdapter _marketDataAdapter;
@@ -147,7 +158,7 @@ namespace StockSharp.Algo
 						if (mangedAdapter != null)
 							_marketDataAdapter.NewOutMessage -= mangedAdapter.ProcessMessage;
 
-						_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
+						//_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
 						_marketDataAdapter.Dispose();
 					}
 
@@ -158,24 +169,26 @@ namespace StockSharp.Algo
 
 					if (IsMarketDataIndependent)
 					{
+						_marketDataAdapter = new HeartbeatAdapter(value, ReConnectionSettings.ExportSettings);
+
 						if (mangedAdapter != null)
 							_marketDataAdapter.NewOutMessage += mangedAdapter.ProcessMessage;
 
 						//IncRefSession(_marketDataAdapter);
 
-						_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;	
+						//_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;	
 					}
 				}
 			}
 		}
 
-		private void MarketDataAdapterOnNewOutMessage(Message message)
-		{
-			SendOutMessage(message, MarketDataAdapter);
+		//private void MarketDataAdapterOnNewOutMessage(Message message)
+		//{
+		//	OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
 
-			if (IsDisposeAdapters(message))
-				MarketDataAdapter = null;
-		}
+		//	if (IsDisposeAdapters(message))
+		//		MarketDataAdapter = null;
+		//}
 
 		/// <summary>
 		/// Обработать сообщение.
@@ -188,8 +201,7 @@ namespace StockSharp.Algo
 			if (!(message.Type == MessageTypes.Time && direction == MessageDirections.Out))
 				this.AddDebugLog("BP:{0}", message);
 
-			_currentTime = message.LocalTime;
-			ProcessTimeInterval();
+			ProcessTimeInterval(message);
 
 			RaiseNewMessage(message, direction);
 
@@ -463,6 +475,7 @@ namespace StockSharp.Algo
 				case ConnectionStates.Disconnected:
 				case ConnectionStates.Failed:
 				{
+					StopMarketTimer();
 					break;
 				}
 				default:
@@ -487,6 +500,12 @@ namespace StockSharp.Algo
 
 				if (adapter.OrderStatusRequired)
 					adapter.SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+
+				if (!IsMarketDataIndependent)
+				{
+					if (adapter.SecurityLookupRequired)
+						adapter.SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+				}
 			}
 			else if (adapter == MarketDataAdapter)
 			{

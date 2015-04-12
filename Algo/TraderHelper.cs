@@ -3482,7 +3482,8 @@ namespace StockSharp.Algo
 		/// <returns>Адаптер сообщений, пересылающий сообщения через транспортный канал <see cref="IMessageChannel"/>.</returns>
 		public static ChannelMessageAdapter ToChannel(this IMessageAdapter adapter, Connector connector, string name = null)
 		{
-			return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name ?? connector.GetType().GetDisplayName(), connector.SendOutError));
+			name = name ?? connector.GetType().GetDisplayName();
+			return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name, connector.SendOutError), connector.OutMessageChannel);
 		}
 	}
 }
