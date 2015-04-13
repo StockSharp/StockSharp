@@ -163,10 +163,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		public event Action<Exception> ProcessDataError;
 
-		/// <summary>
-		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
-		/// </summary>
-		public event Action NewDataExported;
+		///// <summary>
+		///// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
+		///// </summary>
+		//public event Action NewDataExported;
 
 		/// <summary>
 		/// Событие, передающее результат поиска, запущенного через метод <see cref="IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)"/>.
@@ -487,13 +487,13 @@ namespace StockSharp.Algo
 			ProcessDataError.SafeInvoke(exception);
 		}
 
-		/// <summary>
-		/// Вызвать событие <see cref="NewDataExported"/>.
-		/// </summary>
-		private void RaiseNewDataExported()
-		{
-			NewDataExported.SafeInvoke();
-		}
+		///// <summary>
+		///// Вызвать событие <see cref="NewDataExported"/>.
+		///// </summary>
+		//private void RaiseNewDataExported()
+		//{
+		//	NewDataExported.SafeInvoke();
+		//}
 
 		/// <summary>
 		/// Вызвать событие <see cref="MarketTimeChanged"/>.

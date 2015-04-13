@@ -69,7 +69,6 @@ namespace StockSharp.Xaml
 				Connector.ExportStarted += ExportStartedHandler;
 				Connector.ExportStopped += ExportStoppedHandler;
 				Connector.ExportError += ExportErrorHandler;
-				Connector.NewDataExported += NewDataExportedHandler;
 				Connector.ProcessDataError += ProcessDataErrorHandler;
 				Connector.MarketTimeChanged += MarketTimeChangedHandler;
 				Connector.LookupSecuritiesResult += LookupSecuritiesResultHandler;
@@ -427,20 +426,6 @@ namespace StockSharp.Xaml
 		private void ConnectionErrorHandler(Exception exception)
 		{
 			AddGuiAction(() => ConnectionError.SafeInvoke(exception));
-		}
-
-		#endregion
-
-		#region NewDataExported
-
-		/// <summary>
-		/// Событие, сигнализирующее о новых экспортируемых данных.
-		/// </summary>
-		public event Action NewDataExported;
-
-		private void NewDataExportedHandler()
-		{
-			AddGuiAction(() => NewDataExported.SafeInvoke());
 		}
 
 		#endregion
@@ -1142,7 +1127,6 @@ namespace StockSharp.Xaml
 			Connector.ExportStarted -= ExportStartedHandler;
 			Connector.ExportStopped -= ExportStoppedHandler;
 			Connector.ExportError -= ExportErrorHandler;
-			Connector.NewDataExported -= NewDataExportedHandler;
 			Connector.ProcessDataError -= ProcessDataErrorHandler;
 			Connector.MarketTimeChanged -= MarketTimeChangedHandler;
 			Connector.LookupSecuritiesResult -= LookupSecuritiesResultHandler;

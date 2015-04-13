@@ -410,7 +410,6 @@
     <Compile Include="IDailyInfoSoap.cs" />
     <Compile Include="PnL\IPnLManager.cs" />
     <Compile Include="Positions\IPositionManager.cs" />
-    <Compile Include="BasketConnector.cs" />
     <Compile Include="Slippage\SlippageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProcessStates.cs" />

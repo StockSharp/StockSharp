@@ -934,7 +934,7 @@ namespace StockSharp.Algo
 			StartMarketTimer();
 
 			ExportState = ConnectionStates.Connecting;
-			RaiseNewDataExported();
+			//RaiseNewDataExported();
 
 			_prevTime = default(DateTimeOffset);
 

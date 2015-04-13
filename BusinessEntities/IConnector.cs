@@ -158,10 +158,10 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		event Action<Exception> ProcessDataError;
 
-		/// <summary>
-		/// Событие, сигнализирующее о новых экспортируемых данных.
-		/// </summary>
-		event Action NewDataExported;
+		///// <summary>
+		///// Событие, сигнализирующее о новых экспортируемых данных.
+		///// </summary>
+		//event Action NewDataExported;
 
 		/// <summary>
 		/// Событие, сигнализирующее об изменении текущего времени на биржевых площадках <see cref="ExchangeBoards"/>.

@@ -46,18 +46,12 @@ namespace StockSharp.Algo
 
 		private void OutMessageChannelOnNewOutMessage(Message channelMessage)
 		{
-			var adapterMessage = (AdapterMessage)channelMessage;
-			var message = adapterMessage.Message;
-			var adapter = adapterMessage.Adapter;
-
-			if (message.IsBack)
-			{
-				message.IsBack = false;
-				adapter.SendInMessage(message);
+			var adapterMessage = channelMessage as AdapterMessage;
+			
+			if (adapterMessage == null)
 				return;
-			}
 
-			OnProcessMessage(message, adapter, MessageDirections.Out);
+			OnProcessMessage(adapterMessage.Message, adapterMessage.Adapter, MessageDirections.Out);
 		}
 
 		/// <summary>
@@ -99,7 +93,7 @@ namespace StockSharp.Algo
 					if (managedAdapter != null && MarketDataAdapter != null)
 						MarketDataAdapter.NewOutMessage -= managedAdapter.ProcessMessage;
 
-					//_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
+					_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
 					_transactionAdapter.Dispose();
 				}
 
@@ -122,18 +116,23 @@ namespace StockSharp.Algo
 						_transactionAdapter = managedAdapter;
 					}
 
-					//_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
+					_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
 				}
 			}
 		}
 
-		//private void TransactionAdapterOnNewOutMessage(Message message)
-		//{
-		//	OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
+		private void TransactionAdapterOnNewOutMessage(Message message)
+		{
+			var adapterMessage = message as AdapterMessage;
 
-		//	if (IsDisposeAdapters(message))
-		//		TransactionAdapter = null;
-		//}
+			if (adapterMessage != null)
+				return;
+
+			OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
+
+			//if (IsDisposeAdapters(message))
+			//	TransactionAdapter = null;
+		}
 
 		private readonly SyncObject _marketDataAdapterSync = new SyncObject();
 		private IMessageAdapter _marketDataAdapter;
@@ -158,7 +157,7 @@ namespace StockSharp.Algo
 						if (mangedAdapter != null)
 							_marketDataAdapter.NewOutMessage -= mangedAdapter.ProcessMessage;
 
-						//_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
+						_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
 						_marketDataAdapter.Dispose();
 					}
 
@@ -176,19 +175,24 @@ namespace StockSharp.Algo
 
 						//IncRefSession(_marketDataAdapter);
 
-						//_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;	
+						_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;	
 					}
 				}
 			}
 		}
 
-		//private void MarketDataAdapterOnNewOutMessage(Message message)
-		//{
-		//	OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
+		private void MarketDataAdapterOnNewOutMessage(Message message)
+		{
+			var adapterMessage = message as AdapterMessage;
 
-		//	if (IsDisposeAdapters(message))
-		//		MarketDataAdapter = null;
-		//}
+			if (adapterMessage != null)
+				return;
+
+			OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
+
+			//if (IsDisposeAdapters(message))
+			//	MarketDataAdapter = null;
+		}
 
 		/// <summary>
 		/// Обработать сообщение.
@@ -198,6 +202,13 @@ namespace StockSharp.Algo
 		/// <param name="direction">Направление сообщения.</param>
 		protected virtual void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
+			if (message.IsBack)
+			{
+				message.IsBack = false;
+				adapter.SendInMessage(message);
+				return;
+			}
+
 			if (!(message.Type == MessageTypes.Time && direction == MessageDirections.Out))
 				this.AddDebugLog("BP:{0}", message);
 
@@ -327,8 +338,8 @@ namespace StockSharp.Algo
 				RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
 			}
 
-			if (message.Type != MessageTypes.Time && direction == MessageDirections.Out && adapter == MarketDataAdapter)
-				RaiseNewDataExported();
+			//if (message.Type != MessageTypes.Time && direction == MessageDirections.Out && adapter == MarketDataAdapter)
+			//	RaiseNewDataExported();
 		}
 
 		private void ProcessSecurityAction<TMessage>(TMessage message, Func<TMessage, SecurityId> getId, Action<Security, TMessage> action, bool ignoreIfNotExist = false, string associatedBoard = null)
