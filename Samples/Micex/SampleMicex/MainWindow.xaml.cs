@@ -75,7 +75,7 @@ namespace SampleMicex
 					Trader.Addresses = new[] { Address.Text.To<EndPoint>() };
 					Trader.Server = Server.Text;
 					Trader.Login = Login.Text;
-					Trader.CompressionLevel = (CompressionLevels)Compression.Text.To<int>();
+					Trader.CompressionLevel = (CompressionLevels)Compression.SelectedValue;
 					Trader.Interface = Interface.Text;
 					Trader.OrderBookDepth = Depth.Text.To<int>();
 

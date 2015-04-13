@@ -3,8 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:micex="clr-namespace:StockSharp.Micex.Xaml;assembly=StockSharp.Micex"
+    xmlns:micex2="clr-namespace:StockSharp.Micex;assembly=StockSharp.Micex"
+    xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
     Title="{x:Static loc:LocalizedStrings.XamlStr550}"
-	Height="124" Width="640" WindowStartupLocation="CenterScreen">
+	Height="124" Width="750" WindowStartupLocation="CenterScreen">
     <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
@@ -31,19 +33,21 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
 			<Button x:Name="ConnectBtn" Grid.Column="0" Background="LightPink" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" TabIndex="3" />
 
 			<TextBox x:Name="Address" Grid.Column="2">localhost:15005</TextBox>
 			<TextBox x:Name="Server" Grid.Column="3">EQ_TEST</TextBox>
-			<micex:MicexInterfaceComboBox x:Name="Interface" Grid.Column="4" SelectedValue="IFCBroker_24" />
-			<TextBox x:Name="Login" Grid.Column="5" Text="" Width="100" />
-			<TextBlock Text="Compression:" Grid.Column="6"/>
-			<TextBox x:Name="Compression" Grid.Column="7"  Text="0" Width="12"/>
-			<PasswordBox x:Name="Password" Grid.Column="8" Width="100" />
-			<TextBlock Text="Depth:" Grid.Column="9"/>
-			<TextBox x:Name="Depth" Grid.Column="10" Text="10" Width="20"/>
+			<micex:MicexInterfaceComboBox x:Name="Interface" Grid.Column="4" SelectedValue="IFCBroker_24" Width="100" />
+			<TextBlock Grid.Column="5"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
+			<TextBox x:Name="Login" Grid.Column="6" Text="" Width="100" />
+			<TextBlock Grid.Column="7"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
+			<PasswordBox x:Name="Password" Grid.Column="8" Width="80" />
+			<ex:EnumComboBox x:Name="Compression" Grid.Column="9" Width="60" EnumType="{x:Type micex2:CompressionLevels}" SelectedIndex="0" />
+			<TextBlock Grid.Column="10"><Run Text="{x:Static loc:LocalizedStrings.Str1660}" />:</TextBlock>
+			<TextBox x:Name="Depth" Grid.Column="11" Text="10" Width="20"/>
 		</Grid>
 
 		<Button x:Name="ShowSecurities" Grid.Column="0" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
