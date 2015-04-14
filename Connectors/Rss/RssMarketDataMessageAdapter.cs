@@ -15,6 +15,8 @@ namespace StockSharp.Rss
 	/// </summary>
 	public partial class RssMarketDataMessageAdapter : MessageAdapter
 	{
+		private bool _isSubscribed;
+
 		/// <summary>
 		/// Создать <see cref="RssMarketDataMessageAdapter"/>.
 		/// </summary>
@@ -24,14 +26,6 @@ namespace StockSharp.Rss
 		{
 			HeartbeatInterval = TimeSpan.FromMinutes(5);
 			IsTransactionEnabled = false;
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
-		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return true; }
 		}
 
 		/// <summary>
@@ -48,6 +42,7 @@ namespace StockSharp.Rss
 						? new InvalidOperationException(LocalizedStrings.Str3503)
 						: null;
 
+					_isSubscribed = false;
 					SendOutMessage(new ConnectMessage { Error = error });
 					break;
 				}
@@ -56,10 +51,35 @@ namespace StockSharp.Rss
 					SendOutMessage(new DisconnectMessage());
 					break;
 
-				case MessageTypes.SecurityLookup:
-				case MessageTypes.Time: // heartbeat handling
-					ProcessRss();
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					switch (mdMsg.DataType)
+					{
+						case MarketDataTypes.News:
+						{
+							_isSubscribed = mdMsg.IsSubscribe;
+							break;
+						}
+						default:
+							throw new ArgumentOutOfRangeException("message", mdMsg.DataType, LocalizedStrings.Str1618);
+					}
+
+					var reply = (MarketDataMessage)mdMsg.Clone();
+					reply.OriginalTransactionId = mdMsg.TransactionId;
+					SendOutMessage(reply);
+
 					break;
+				}
+
+				case MessageTypes.Time: // heartbeat handling
+				{
+					if (_isSubscribed)
+						ProcessRss();
+
+					break;
+				}
 			}
 		}
 
