@@ -218,7 +218,7 @@
 		{
 			_adapter = new InteractiveBrokersMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -338,7 +338,7 @@
 
 			_states.Add(transactionId, filter);
 
-			MarketDataAdapter.SendInMessage(new ScannerMarketDataMessage(filter)
+			SendInMessage(new ScannerMarketDataMessage(filter)
 			{
 				TransactionId = transactionId,
 				IsSubscribe = isSubscribe
@@ -358,7 +358,7 @@
 
 			_states.Add(transactionId, Tuple.Create(security, report));
 
-			MarketDataAdapter.SendInMessage(new FundamentalReportMarketDataMessage(report)
+			SendInMessage(new FundamentalReportMarketDataMessage(report)
 			{
 				//SecurityId = GetSecurityId(security),
 				TransactionId = transactionId,
@@ -379,7 +379,7 @@
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
 
-			MarketDataAdapter.SendInMessage(new OptionCalcMarketDataMessage(impliedVolatility, optionPrice, assetPrice)
+			SendInMessage(new OptionCalcMarketDataMessage(impliedVolatility, optionPrice, assetPrice)
 			{
 				//SecurityId = GetSecurityId(security),
 				TransactionId = transactionId,
@@ -414,7 +414,7 @@
 
 			_candleSeries.Add(transactionId, series);
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = transactionId,
 				DataType = MarketDataTypes.CandleTimeFrame,
@@ -432,7 +432,7 @@
 		/// <param name="series">Серия свечек.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.CandleTimeFrame,

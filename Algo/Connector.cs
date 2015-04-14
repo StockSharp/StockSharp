@@ -211,31 +211,11 @@ namespace StockSharp.Algo
 			SlippageManager = new SlippageManager();
 
 			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseProcessDataError);
-		}
 
-		private IMessageChannel _outMessageChannel;
-
-		/// <summary>
-		/// Транспортный канал исходящих сообщений.
-		/// </summary>
-		public IMessageChannel OutMessageChannel
-		{
-			get { return _outMessageChannel; }
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException();
-
-				if (value == _outMessageChannel)
-					return;
-
-				if (_outMessageChannel != null)
-					_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
-
-				_outMessageChannel = value;
-
-				_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
-			}
+			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
+			Adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
+			Adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
+			Adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
 		}
 
 		/// <summary>
@@ -288,21 +268,13 @@ namespace StockSharp.Algo
 			set { _entityCache.OrdersKeepCount = value; }
 		}
 
-		private IdGenerator _transactionIdGenerator = new MillisecondIncrementalIdGenerator();
-
 		/// <summary>
 		/// Генератор идентификаторов транзакций.
 		/// </summary>
 		public IdGenerator TransactionIdGenerator
 		{
-			get { return _transactionIdGenerator; }
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException("value");
-
-				_transactionIdGenerator = value;
-			}
+			get { return Adapter.TransactionIdGenerator; }
+			set { Adapter.TransactionIdGenerator = value; }
 		}
 
 		private SecurityIdGenerator _securityIdGenerator = new SecurityIdGenerator();
@@ -644,7 +616,7 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			TransactionAdapter.SendInMessage(new ConnectMessage());
+			SendInMessage(new ConnectMessage());
 		}
 
 		/// <summary>
@@ -691,7 +663,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnDisconnect()
 		{
-			TransactionAdapter.SendInMessage(new DisconnectMessage());
+			SendInMessage(new DisconnectMessage());
 		}
 
 		/// <summary>
@@ -766,7 +738,7 @@ namespace StockSharp.Algo
 				_lookupQueue.Enqueue(criteria);
 
 				if (_lookupQueue.Count == 1)
-					MarketDataAdapter.SendInMessage(criteria);
+					SendInMessage(criteria);
 			}
 		}
 
@@ -802,7 +774,7 @@ namespace StockSharp.Algo
 
 			_portfolioLookups.Add(msg.TransactionId, msg);
 
-			TransactionAdapter.SendInMessage(msg);
+			SendInMessage(msg);
 		}
 
 		/// <summary>
@@ -1156,7 +1128,7 @@ namespace StockSharp.Algo
 			if (CalculateMessages)
 				SlippageManager.ProcessMessage(regMsg);
 
-			TransactionAdapter.SendInMessage(regMsg);
+			SendInMessage(regMsg);
 		}
 
 		/// <summary>
@@ -1169,7 +1141,7 @@ namespace StockSharp.Algo
 			if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
 			{
 				var replaceMsg = oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security));
-				TransactionAdapter.SendInMessage(replaceMsg);
+				SendInMessage(replaceMsg);
 			}
 			else
 			{
@@ -1202,7 +1174,7 @@ namespace StockSharp.Algo
 		protected virtual void OnCancelOrder(Order order, long transactionId)
 		{
 			var cancelMsg = order.CreateCancelMessage(GetSecurityId(order.Security), transactionId);
-			TransactionAdapter.SendInMessage(cancelMsg);
+			SendInMessage(cancelMsg);
 		}
 
 		/// <summary>
@@ -1232,7 +1204,7 @@ namespace StockSharp.Algo
 		protected virtual void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			var cancelMsg = MessageConverterHelper.CreateGroupCancelMessage(transactionId, isStopOrder, portfolio, direction, board, security == null ? default(SecurityId) : GetSecurityId(security), security);
-			TransactionAdapter.SendInMessage(cancelMsg);
+			SendInMessage(cancelMsg);
 		}
 
 		private DateTimeOffset _prevTime;
@@ -1617,6 +1589,10 @@ namespace StockSharp.Algo
 
 			//if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
 			//	MarketDataAdapter = null;
+
+			Adapter.InnerAdapters.Added -= InnerAdaptersOnAdded;
+			Adapter.InnerAdapters.Removed -= InnerAdaptersOnRemoved;
+			Adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
 		}
 
 		/// <summary>
@@ -1634,10 +1610,7 @@ namespace StockSharp.Algo
 			UpdateSecurityByLevel1 = storage.GetValue("UpdateSecurityByLevel1", true);
 			ReConnectionSettings.Load(storage.GetValue<SettingsStorage>("ReConnectionSettings"));
 
-			TransactionAdapter.Load(storage.GetValue<SettingsStorage>("TransactionAdapter"));
-
-			if (storage.ContainsKey("MarketDataAdapter"))
-				MarketDataAdapter.Load(storage.GetValue<SettingsStorage>("MarketDataAdapter"));
+			Adapter.Load(storage.GetValue<SettingsStorage>("Adapter"));
 
 			CreateDepthFromOrdersLog = storage.GetValue<bool>("CreateDepthFromOrdersLog");
 			CreateTradesFromOrdersLog = storage.GetValue<bool>("CreateTradesFromOrdersLog");
@@ -1662,10 +1635,7 @@ namespace StockSharp.Algo
 			storage.SetValue("UpdateSecurityByLevel1", UpdateSecurityByLevel1);
 			storage.SetValue("ReConnectionSettings", ReConnectionSettings.Save());
 
-			storage.SetValue("TransactionAdapter", TransactionAdapter.Save());
-
-			if (TransactionAdapter != MarketDataAdapter)
-				storage.SetValue("MarketDataAdapter", MarketDataAdapter.Save());
+			storage.SetValue("Adapter", Adapter.Save());
 
 			storage.SetValue("CreateDepthFromOrdersLog", CreateDepthFromOrdersLog);
 			storage.SetValue("CreateTradesFromOrdersLog", CreateTradesFromOrdersLog);

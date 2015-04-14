@@ -8,10 +8,8 @@ namespace StockSharp.Algo.Testing
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-
-	using EntityFactory = StockSharp.Algo.EntityFactory;
-
 	using StockSharp.Localization;
+	using EntityFactory = StockSharp.Algo.EntityFactory;
 
 	/// <summary>
 	/// Симуляционное подключение, предназначенный для тестирования стратегии c реальном подключения к торговой системе через <see cref="UnderlyingConnector"/>,
@@ -93,7 +91,7 @@ namespace StockSharp.Algo.Testing
 
 			//MarketEmulator.Settings.UseMarketDepth = true;
 
-			MarketDataAdapter = UnderlyingConnector.MarketDataAdapter;
+			Adapter.InnerAdapters.Add(UnderlyingConnector.MarketDataAdapter);
 
 			if (_ownTrader)
 				UnderlyingConnector.Log += RaiseLog;

@@ -1103,7 +1103,7 @@ Str1193;Number, starting with which the emulator will generate trades numbers.;�
 Str1194;Number, starting with which the emulator will generate orders transactions numbers.;Номер, начиная с которого эмулятор будет генерировать номера для транзакций заявок.
 Str1195;Spread size;Размер спреда
 Str1196;Spread size in price steps. Used in determining spread when generating market depths from ticks.;Размер спреда в шагах цены. Используется при определение спреда для генерации стакана из тиковых сделок.
-Str1197;Depth;Глубина стакана
+Str1197;Depth of book;Глубина стакана
 Str1198;Maximum depth of a market depth, which will be generated from ticks.;Максимальная глубина стакана, который будет генерироваться из тиков.
 Str1199;Number of volume steps;Количество шагов объема
 Str1200;Number of volume steps of an order exceeding those of a tick trade. Used in testing with ticks.;Количество шагов объема, на которое заявка больше тиковой сделки. Используется при тестировании на тиковых сделках.

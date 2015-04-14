@@ -218,7 +218,7 @@ namespace SampleSterling
 
 		private void AddSecurities()
 		{
-			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			Trader.SendInMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{
@@ -229,7 +229,7 @@ namespace SampleSterling
 				SecurityType = SecurityTypes.Stock,
 			});
 
-			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			Trader.SendInMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{
@@ -240,7 +240,7 @@ namespace SampleSterling
 				SecurityType = SecurityTypes.Stock,
 			});
 
-			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			Trader.SendInMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{
@@ -251,7 +251,7 @@ namespace SampleSterling
 				SecurityType = SecurityTypes.Stock,
 			});
 
-			Trader.MarketDataAdapter.SendInMessage(new SecurityMessage
+			Trader.SendInMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{

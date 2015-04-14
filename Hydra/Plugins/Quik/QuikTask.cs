@@ -323,34 +323,34 @@ namespace StockSharp.Hydra.Quik
 			return new QuikMarketDataConnector(EntityRegistry.Securities, this, CreateHydraQuikTrader, _settings);
 		}
 
-		private sealed class HydraQuikTransactionAdapter : MessageAdapter
-		{
-			public HydraQuikTransactionAdapter(IdGenerator transactionIdGenerator)
-				: base(transactionIdGenerator)
-			{
-				IsMarketDataEnabled = false;
-			}
+		//private sealed class HydraQuikTransactionAdapter : MessageAdapter
+		//{
+		//	public HydraQuikTransactionAdapter(IdGenerator transactionIdGenerator)
+		//		: base(transactionIdGenerator)
+		//	{
+		//		IsMarketDataEnabled = false;
+		//	}
 
-			protected override void OnSendInMessage(Message message)
-			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-						SendOutMessage(new ConnectMessage());
-						break;
+		//	protected override void OnSendInMessage(Message message)
+		//	{
+		//		switch (message.Type)
+		//		{
+		//			case MessageTypes.Connect:
+		//				SendOutMessage(new ConnectMessage());
+		//				break;
 
-					case MessageTypes.Disconnect:
-						SendOutMessage(new DisconnectMessage());
-						break;
+		//			case MessageTypes.Disconnect:
+		//				SendOutMessage(new DisconnectMessage());
+		//				break;
 
-					case MessageTypes.Time: // обработка heartbeat
-						break;
+		//			case MessageTypes.Time: // обработка heartbeat
+		//				break;
 
-					default:
-						throw new NotSupportedException(LocalizedStrings.Str2811Params.Put(message.Type));
-				}
-			}
-		}
+		//			default:
+		//				throw new NotSupportedException(LocalizedStrings.Str2811Params.Put(message.Type));
+		//		}
+		//	}
+		//}
 
 		private HydraQuikTrader CreateHydraQuikTrader()
 		{
@@ -362,8 +362,10 @@ namespace StockSharp.Hydra.Quik
 				IsDownloadSecurityChangesHistory = _settings.IsDownloadSecurityChangesHistory,
 			};
 
-			if (_settings.IsDde)
-				connector.TransactionAdapter = new HydraQuikTransactionAdapter(connector.TransactionAdapter.TransactionIdGenerator);
+			connector.Adapter.InnerAdapters.Remove(connector.TransactionAdapter);
+
+			//if (_settings.IsDde)
+			//	connector.TransactionAdapter = new HydraQuikTransactionAdapter(connector.TransactionAdapter.TransactionIdGenerator);
 
 			//Добавление выбранных колонок в экспорт
 			if (!_settings.IsDownloadSecurityChangesHistory)

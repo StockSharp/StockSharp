@@ -3,6 +3,7 @@ namespace SpeedTest
 	using System;
 	using System.Collections.ObjectModel;
 	using System.Linq;
+	using System.Net;
 	using System.Security;
 	using System.Windows;
 	using System.Windows.Media;
@@ -12,11 +13,11 @@ namespace SpeedTest
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
+	using StockSharp.Fix;
 	using StockSharp.Plaza;
-	using StockSharp.Quik;
 	using StockSharp.SmartCom;	
-	using StockSharp.Localization;	
+	using StockSharp.Localization;
+	using StockSharp.Quik.Lua;
 
 	public partial class MainWindow
 	{
@@ -40,19 +41,36 @@ namespace SpeedTest
 				_connector = new Connector();
 				_connector.Connected += _connector.StartExport;
 
-				var transactionAdapter = new BasketMessageAdapter(_connector.TransactionIdGenerator);
-				var marketDataAdapter = new BasketMessageAdapter(_connector.TransactionIdGenerator);
-
-				_connector.MarketDataAdapter = marketDataAdapter.ToChannel(_connector, "MD");
-				_connector.TransactionAdapter = transactionAdapter.ToChannel(_connector, "TS");
-
 				if (QuikCheckBox.IsChecked == true)
 				{
-					//session.InnerSessions.Add(new QuikSessionHolder(_connector.TransactionIdGenerator)
-					//{
-					//	IsTransactionEnabled = true,
-					//	IsMarketDataEnabled = true,
-					//}, 1);
+					var quikTs = new LuaFixTransactionMessageAdapter(_connector.TransactionIdGenerator)
+					{
+						Login = "quik",
+						Password = "quik".To<SecureString>(),
+						Address = "localhost:5001".To<EndPoint>(),
+						TargetCompId = "StockSharpTS",
+						SenderCompId = "quik",
+						ExchangeBoard = ExchangeBoard.Forts,
+						Version = FixVersions.Fix44,
+						RequestAllPortfolios = true,
+						MarketData = FixMarketData.None,
+						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+					};
+					var quikMd = new FixMessageAdapter(_connector.TransactionIdGenerator)
+					{
+						Login = "quik",
+						Password = "quik".To<SecureString>(),
+						Address = "localhost:5001".To<EndPoint>(),
+						TargetCompId = "StockSharpMD",
+						SenderCompId = "quik",
+						ExchangeBoard = ExchangeBoard.Forts,
+						Version = FixVersions.Fix44,
+						RequestAllSecurities = true,
+						MarketData = FixMarketData.MarketData,
+						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+					};
+					_connector.Adapter.InnerAdapters[quikMd.ToChannel(_connector, "Quik MD")] = 1;
+					_connector.Adapter.InnerAdapters[quikTs.ToChannel(_connector, "Quik TS")] = 1;
 				}
 
 				if (SmartComCheckBox.IsChecked == true)
@@ -63,30 +81,30 @@ namespace SpeedTest
 						Password = Password.Password.To<SecureString>(),
 						Address = Address.SelectedAddress,
 					};
-					transactionAdapter.InnerAdapters[smartCom] = 0;
-					marketDataAdapter.InnerAdapters[smartCom] = 0;
+					_connector.Adapter.InnerAdapters[smartCom.ToChannel(_connector, "SmartCOM")] = 0;
 				}
 
 				if (PlazaCheckBox.IsChecked == true)
 				{
 					var pool = new PlazaConnectionPool();
-					transactionAdapter.InnerAdapters[new PlazaTransactionMessageAdapter(_connector.TransactionIdGenerator, pool)
+
+					_connector.Adapter.InnerAdapters[new PlazaTransactionMessageAdapter(_connector.TransactionIdGenerator, pool)
 					{
 						ConnectionPoolSettings =
 						{
 							IsCGate = true,
 						}
-					}] = 0;
-					marketDataAdapter.InnerAdapters[new PlazaStreamMessageAdapter(_connector.TransactionIdGenerator, pool)
+					}.ToChannel(_connector, "Plaza TS")] = 0;
+					_connector.Adapter.InnerAdapters[new PlazaStreamMessageAdapter(_connector.TransactionIdGenerator, pool)
 					{
 						ConnectionPoolSettings =
 						{
 							IsCGate = true,
 						}
-					}] = 0;
+					}.ToChannel(_connector, "Plaza MD")] = 0;
 				}
 
-				if (transactionAdapter.InnerAdapters.Count == 0)
+				if (_connector.Adapter.InnerAdapters.Count == 0)
 				{
 					MessageBox.Show(LocalizedStrings.Str2971);
 					return;

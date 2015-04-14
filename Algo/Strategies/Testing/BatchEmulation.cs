@@ -301,7 +301,7 @@
 
 			//_basketSessionHolder = new HistoryBasketSessionHolder(EmulationConnector.TransactionIdGenerator);
 
-			EmulationConnector.TransactionAdapter = new BasketEmulationAdapter(EmulationConnector.TransactionIdGenerator, EmulationSettings);
+			EmulationConnector.Adapter.InnerAdapters.Add(new BasketEmulationAdapter(EmulationConnector.TransactionIdGenerator, EmulationSettings));
 
 			EmulationConnector.StateChanged += EmulationConnectorOnStateChanged;
 			EmulationConnector.MarketTimeChanged += EmulationConnectorOnMarketTimeChanged;

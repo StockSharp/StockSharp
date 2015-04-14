@@ -18,25 +18,25 @@
 		{
 			var adapter = new SterlingMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
 		}
 
 		public void StartExport()
 		{
-			MarketDataAdapter.SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+			SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
 			var exm = new ExecutionMessage {ExtensionInfo = new Dictionary<object, object>()};
 		
 			exm.ExtensionInfo.Add(new KeyValuePair<object, object>("GetMyTrades", null));
 			exm.ExtensionInfo.Add(new KeyValuePair<object, object>("GetOrders", null));
 
-			MarketDataAdapter.SendInMessage(exm);
+			SendInMessage(exm);
 
 			var posm = new PositionMessage { ExtensionInfo = new Dictionary<object, object>() };
 			
 			posm.ExtensionInfo.Add(new KeyValuePair<object, object>("GetPositions", null));
 
-			MarketDataAdapter.SendInMessage(posm);
+			SendInMessage(posm);
 		}
     }
 }

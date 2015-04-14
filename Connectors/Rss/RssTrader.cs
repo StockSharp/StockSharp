@@ -4,7 +4,6 @@ namespace StockSharp.Rss
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с RSS фидами.
@@ -18,10 +17,9 @@ namespace StockSharp.Rss
 		/// </summary>
 		public RssTrader()
 		{
-			TransactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator) { IsMarketDataEnabled = false };
-			
 			_adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
-			MarketDataAdapter = _adapter.ToChannel(this);
+
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>

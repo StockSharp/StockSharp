@@ -1,6 +1,5 @@
 ﻿namespace StockSharp.Quik.Lua
 {
-	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -9,15 +8,26 @@
 	using StockSharp.Fix.Native;
 	using StockSharp.Messages;
 
-	[DisplayName("LuaFixTransactionMessageAdapter")]
-	class LuaFixTransactionMessageAdapter : FixMessageAdapter
+	/// <summary>
+	/// Адаптер сообщений для Quik LUA FIX.
+	/// </summary>
+	public class LuaFixTransactionMessageAdapter : FixMessageAdapter
 	{
+		/// <summary>
+		/// Создать <see cref="LuaFixTransactionMessageAdapter"/>.
+		/// </summary>
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
 		public LuaFixTransactionMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
 			IsMarketDataEnabled = false;
 		}
 
+		/// <summary>
+		/// Записать данные по условию заявки.
+		/// </summary>
+		/// <param name="writer">Писатель FIX данных.</param>
+		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
 		protected override void WriteFixOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
 			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition);

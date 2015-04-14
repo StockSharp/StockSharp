@@ -31,7 +31,7 @@ namespace StockSharp.OpenECry
 		{
 			_adapter = new OpenECryMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace StockSharp.OpenECry
 		/// <param name="text">Текст сообщения.</param>
 		public void SendMessage(string userName, string text)
 		{
-			MarketDataAdapter.SendInMessage(new NewsMessage
+			SendInMessage(new NewsMessage
 			{
 				Source = userName,
 				Headline = text,
@@ -159,7 +159,7 @@ namespace StockSharp.OpenECry
 
 			_series.Add(transactionId, series);
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = transactionId,
 				DataType = MarketDataTypes.CandleTimeFrame,
@@ -182,7 +182,7 @@ namespace StockSharp.OpenECry
 			if (originalTransactionId == 0)
 				return;
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				OriginalTransactionId = originalTransactionId,
 				TransactionId = TransactionIdGenerator.GetNextId(),

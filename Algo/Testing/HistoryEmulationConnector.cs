@@ -94,8 +94,9 @@ namespace StockSharp.Algo.Testing
 			_initialMoney = portfolios.ToDictionary(pf => pf, pf => pf.BeginValue);
 			EntityFactory = new EmulationEntityFactory(securityProvider, _initialMoney.Keys);
 
-			TransactionAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
-			MarketDataAdapter = _marketDataAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
+			Adapter.InnerAdapters.Clear();
+			Adapter.InnerAdapters.Add(new EmulationMessageAdapter(TransactionIdGenerator));
+			Adapter.InnerAdapters.Add(_marketDataAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry });
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.ExportSettings.TimeOutInterval = TimeSpan.MaxValue;

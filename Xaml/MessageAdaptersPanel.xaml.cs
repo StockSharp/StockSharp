@@ -18,7 +18,6 @@ namespace StockSharp.Xaml
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Testing;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;

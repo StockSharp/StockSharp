@@ -31,7 +31,7 @@ namespace StockSharp.Transaq
 		{
 			_adapter = new TransaqMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -178,7 +178,7 @@ namespace StockSharp.Transaq
 
 			_candleSeries[transactionId] = series;
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				From = from,
 				To = to,
@@ -236,7 +236,7 @@ namespace StockSharp.Transaq
 				TransactionId = TransactionIdGenerator.GetNextId()
 			};
 
-			_adapter.SendInMessage(msg);
+			SendInMessage(msg);
 		}
 	}
 }

@@ -1420,7 +1420,7 @@ namespace StockSharp.Studio
 			wnd.CheckConnectionState += () => _algoService.Connector.ConnectionState;
 			wnd.AutoConnect = _persistableService.GetAutoConnect();
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.Adapter = (BasketMessageAdapter)_algoService.Connector.MarketDataAdapter;
+			wnd.Adapter = _algoService.Connector.Adapter;
 
 			var retVal = wnd.ShowModal(this);
 

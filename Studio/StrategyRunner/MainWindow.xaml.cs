@@ -226,7 +226,7 @@
 			var wnd = new MessageAdaptersWindow();
 			wnd.CheckConnectionState += () => _connector.ConnectionState;
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.Adapter = (BasketMessageAdapter)_connector.MarketDataAdapter;
+			wnd.Adapter = _connector.Adapter;
 
 			if (wnd.ShowModal(this))
 			{

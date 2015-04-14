@@ -44,6 +44,31 @@ namespace StockSharp.Algo
 		//	return false;
 		//}
 
+		private IMessageChannel _outMessageChannel;
+
+		/// <summary>
+		/// Транспортный канал исходящих сообщений.
+		/// </summary>
+		public IMessageChannel OutMessageChannel
+		{
+			get { return _outMessageChannel; }
+			protected set
+			{
+				if (value == null)
+					throw new ArgumentNullException();
+
+				if (value == _outMessageChannel)
+					return;
+
+				if (_outMessageChannel != null)
+					_outMessageChannel.NewOutMessage -= OutMessageChannelOnNewOutMessage;
+
+				_outMessageChannel = value;
+
+				_outMessageChannel.NewOutMessage += OutMessageChannelOnNewOutMessage;
+			}
+		}
+
 		private void OutMessageChannelOnNewOutMessage(Message channelMessage)
 		{
 			var adapterMessage = channelMessage as AdapterMessage;
@@ -52,6 +77,28 @@ namespace StockSharp.Algo
 				return;
 
 			OnProcessMessage(adapterMessage.Message, adapterMessage.Adapter, MessageDirections.Out);
+		}
+
+		private IMessageAdapter _inAdapter;
+		private BasketMessageAdapter _adapter;
+
+		/// <summary>
+		/// Адаптер сообщений.
+		/// </summary>
+		public BasketMessageAdapter Adapter
+		{
+			get { return _adapter; }
+			private set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				_adapter = value;
+				_inAdapter = _adapter;
+
+				if (CalculateMessages)
+					_inAdapter = new ManagedMessageAdapter(_inAdapter);
+			}
 		}
 
 		/// <summary>
@@ -74,125 +121,116 @@ namespace StockSharp.Algo
 			SendOutMessage(new ErrorMessage { Error = error }, TransactionAdapter ?? MarketDataAdapter);
 		}
 
-		private IMessageAdapter _transactionAdapter;
+		/// <summary>
+		/// Отправить сообщение.
+		/// </summary>
+		/// <param name="message">Сообщение.</param>
+		public void SendInMessage(Message message)
+		{
+			_inAdapter.SendInMessage(message);
+		}
+
+		private void InnerAdaptersOnAdded(IMessageAdapter adapter)
+		{
+			if (adapter.IsTransactionEnabled)
+				TransactionAdapter = adapter;
+
+			if (adapter.IsTransactionEnabled)
+				MarketDataAdapter = adapter;
+		}
+
+		private void InnerAdaptersOnRemoved(IMessageAdapter adapter)
+		{
+			if (TransactionAdapter == adapter)
+				TransactionAdapter = null;
+
+			if (MarketDataAdapter == adapter)
+				MarketDataAdapter = null;
+		}
+
+		private void InnerAdaptersOnCleared()
+		{
+			TransactionAdapter = null;
+			MarketDataAdapter = null;
+		}
+
+		//private IMessageAdapter _transactionAdapter;
 
 		/// <summary>
 		/// Адаптер для транзакций.
 		/// </summary>
-		public IMessageAdapter TransactionAdapter
-		{
-			get { return _transactionAdapter; }
-			set
-			{
-				if (_transactionAdapter == value)
-					return;
+		public IMessageAdapter TransactionAdapter { get; private set; }
+		//{
+		//	get { return _transactionAdapter; }
+		//	private set
+		//	{
+		//		if (_transactionAdapter == value)
+		//			return;
 
-				if (_transactionAdapter != null)
-				{
-					var managedAdapter = _transactionAdapter as ManagedMessageAdapter;
-					if (managedAdapter != null && MarketDataAdapter != null)
-						MarketDataAdapter.NewOutMessage -= managedAdapter.ProcessMessage;
+		//		if (_transactionAdapter != null)
+		//			_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
 
-					_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
-					_transactionAdapter.Dispose();
-				}
+		//		_transactionAdapter = value;
 
-				_transactionAdapter = value;
+		//		if (_transactionAdapter == null)
+		//			return;
 
-				if (_transactionAdapter == null)
-					return;
+		//		if (IsMarketDataIndependent)
+		//			_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
+		//	}
+		//}
 
-				_transactionAdapter = new HeartbeatAdapter(value, ReConnectionSettings.ConnectionSettings);
+		//private void TransactionAdapterOnNewOutMessage(Message message)
+		//{
+		//	var adapterMessage = message as AdapterMessage;
 
-				if (IsMarketDataIndependent)
-				{
-					if (CalculateMessages)
-					{
-						var managedAdapter = new ManagedMessageAdapter(_transactionAdapter);
+		//	if (adapterMessage != null)
+		//		return;
 
-						if (MarketDataAdapter != null)
-							MarketDataAdapter.NewOutMessage += managedAdapter.ProcessMessage;
+		//	OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
 
-						_transactionAdapter = managedAdapter;
-					}
+		//	//if (IsDisposeAdapters(message))
+		//	//	TransactionAdapter = null;
+		//}
 
-					_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
-				}
-			}
-		}
-
-		private void TransactionAdapterOnNewOutMessage(Message message)
-		{
-			var adapterMessage = message as AdapterMessage;
-
-			if (adapterMessage != null)
-				return;
-
-			OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
-
-			//if (IsDisposeAdapters(message))
-			//	TransactionAdapter = null;
-		}
-
-		private readonly SyncObject _marketDataAdapterSync = new SyncObject();
-		private IMessageAdapter _marketDataAdapter;
+		//private IMessageAdapter _marketDataAdapter;
 
 		/// <summary>
 		/// Адаптер для маркет-данных.
 		/// </summary>
-		public IMessageAdapter MarketDataAdapter
-		{
-			get { return _marketDataAdapter; }
-			set
-			{
-				lock (_marketDataAdapterSync)
-				{
-					if (_marketDataAdapter == value)
-						return;
+		public IMessageAdapter MarketDataAdapter { get; private set; }
+		//{
+		//	get { return _marketDataAdapter; }
+		//	private set
+		//	{
+		//		if (_marketDataAdapter == value)
+		//			return;
 
-					var mangedAdapter = TransactionAdapter as ManagedMessageAdapter;
+		//		if (_marketDataAdapter != null)
+		//			_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
 
-					if (_marketDataAdapter != null)
-					{
-						if (mangedAdapter != null)
-							_marketDataAdapter.NewOutMessage -= mangedAdapter.ProcessMessage;
+		//		_marketDataAdapter = value;
 
-						_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
-						_marketDataAdapter.Dispose();
-					}
+		//		if (_marketDataAdapter == null)
+		//			return;
 
-					_marketDataAdapter = value;
+		//		if (IsMarketDataIndependent)
+		//			_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;
+		//	}
+		//}
 
-					if (_marketDataAdapter == null)
-						return;
+		//private void MarketDataAdapterOnNewOutMessage(Message message)
+		//{
+		//	var adapterMessage = message as AdapterMessage;
 
-					if (IsMarketDataIndependent)
-					{
-						_marketDataAdapter = new HeartbeatAdapter(value, ReConnectionSettings.ExportSettings);
+		//	if (adapterMessage != null)
+		//		return;
 
-						if (mangedAdapter != null)
-							_marketDataAdapter.NewOutMessage += mangedAdapter.ProcessMessage;
+		//	OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
 
-						//IncRefSession(_marketDataAdapter);
-
-						_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;	
-					}
-				}
-			}
-		}
-
-		private void MarketDataAdapterOnNewOutMessage(Message message)
-		{
-			var adapterMessage = message as AdapterMessage;
-
-			if (adapterMessage != null)
-				return;
-
-			OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
-
-			//if (IsDisposeAdapters(message))
-			//	MarketDataAdapter = null;
-		}
+		//	//if (IsDisposeAdapters(message))
+		//	//	MarketDataAdapter = null;
+		//}
 
 		/// <summary>
 		/// Обработать сообщение.
@@ -506,24 +544,24 @@ namespace StockSharp.Algo
 			{
 				ProcessConnectMessage(message, ConnectionState, _prevConnectionState, RaiseConnected, RaiseDisconnected, RaiseConnectionError, ReConnectionSettings.ConnectionSettings);
 
-				if (adapter.PortfolioLookupRequired)
-					adapter.SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+				if (Adapter.PortfolioLookupRequired)
+					SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
-				if (adapter.OrderStatusRequired)
-					adapter.SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+				if (Adapter.OrderStatusRequired)
+					SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
 				if (!IsMarketDataIndependent)
 				{
-					if (adapter.SecurityLookupRequired)
-						adapter.SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+					if (Adapter.SecurityLookupRequired)
+						SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 				}
 			}
 			else if (adapter == MarketDataAdapter)
 			{
 				ProcessConnectMessage(message, ExportState, _prevExportState, RaiseExportStarted, RaiseExportStopped, RaiseExportError, ReConnectionSettings.ExportSettings);
-				
-				if (adapter.SecurityLookupRequired)
-					adapter.SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+
+				if (Adapter.SecurityLookupRequired)
+					SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 			}
 			else
 				throw new ArgumentOutOfRangeException("adapter");
@@ -776,7 +814,7 @@ namespace StockSharp.Algo
 
 				//если есть еще запросы, для которых нет инструментов, то отправляем следующий
 				if (NeedLookupSecurities(nextCriteria.SecurityId))
-					MarketDataAdapter.SendInMessage(nextCriteria);
+					SendInMessage(nextCriteria);
 				else
 				{
 					_securityLookups.Add(nextCriteria.TransactionId, (SecurityLookupMessage)nextCriteria.Clone());

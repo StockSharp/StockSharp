@@ -30,7 +30,7 @@ namespace StockSharp.LMAX
 		{
 			_adapter = new LmaxMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -115,7 +115,7 @@ namespace StockSharp.LMAX
 
 			_series.Add(transactionId, series);
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = transactionId,
 				DataType = MarketDataTypes.CandleTimeFrame,

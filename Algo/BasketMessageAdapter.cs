@@ -16,7 +16,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Интерфейс, описывающий список адаптеров к торговым системам, с которыми оперирует агрегатор.
 	/// </summary>
-	public interface IInnerAdapterList : ISynchronizedCollection<IMessageAdapter>
+	public interface IInnerAdapterList : ISynchronizedCollection<IMessageAdapter>, INotifyList<IMessageAdapter>
 	{
 		/// <summary>
 		/// Внутренние адаптеры, отсортированные по скорости работы.
@@ -152,7 +152,6 @@ namespace StockSharp.Algo
 			: base(transactionIdGenerator)
 		{
 			_innerAdapters = new InnerAdapterList(this);
-			//SessionHolder.SetChilds(_innerAdapters);
 
 			Portfolios = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
 		}

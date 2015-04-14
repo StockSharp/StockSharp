@@ -72,14 +72,14 @@ namespace StockSharp.Studio.Services
 
 				var storageRegistry = new StudioStorageRegistry { MarketDataSettings = strategy.MarketDataSettings };
 
-				MarketDataAdapter = _historyMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, _securityProvider)
+				Adapter.InnerAdapters.Add(_historyMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, _securityProvider)
 				{
 					StartDate = startDate,
 					StopDate = stopDate,
 					StorageRegistry = storageRegistry
-				};
+				});
 				_historyMessageAdapter.UpdateCurrentTime(startDate);
-				TransactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator);
+				Adapter.InnerAdapters.Add(new PassThroughMessageAdapter(TransactionIdGenerator) { IsMarketDataEnabled = false });
 
 				_historyMessageAdapter.MarketTimeChangedInterval = useCandlesTimeFrame;
 
@@ -241,7 +241,7 @@ namespace StockSharp.Studio.Services
 			{
 				if (_isHistory && type == MarketDataTypes.Trades)
 				{
-					_historyMessageAdapter.SendInMessage(new MarketDataMessage
+					SendInMessage(new MarketDataMessage
 					{
 						//SecurityId = GetSecurityId(security),
 						DataType = MarketDataTypes.CandleTimeFrame,
@@ -289,7 +289,7 @@ namespace StockSharp.Studio.Services
 				if (depoName != null)
 					regMsg.AddValue(PositionChangeTypes.DepoName, depoName);
 
-				_realConnector.TransactionAdapter.SendInMessage(regMsg);
+				_realConnector.SendInMessage(regMsg);
 			}
 
 			/// <summary>
@@ -300,7 +300,7 @@ namespace StockSharp.Studio.Services
 			protected override void OnReRegisterOrder(Order oldOrder, Order newOrder)
 			{
 				if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
-					_realConnector.TransactionAdapter.SendInMessage(oldOrder.CreateReplaceMessage(newOrder, _realConnector.GetSecurityId(newOrder.Security)));
+					_realConnector.SendInMessage(oldOrder.CreateReplaceMessage(newOrder, _realConnector.GetSecurityId(newOrder.Security)));
 				else
 					base.OnReRegisterOrder(oldOrder, newOrder);
 			}
@@ -315,7 +315,7 @@ namespace StockSharp.Studio.Services
 			protected override void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 			{
 				if (IsSupportAtomicReRegister && oldOrder1.Security.Board.IsSupportAtomicReRegister)
-					_realConnector.TransactionAdapter.SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, _realConnector.GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, _realConnector.GetSecurityId(newOrder2.Security)));
+					_realConnector.SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, _realConnector.GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, _realConnector.GetSecurityId(newOrder2.Security)));
 				else
 					base.OnReRegisterOrderPair(oldOrder1, newOrder1, oldOrder2, newOrder2);
 			}
@@ -327,7 +327,7 @@ namespace StockSharp.Studio.Services
 			/// <param name="transactionId">Идентификатор транзакции отмены.</param>
 			protected override void OnCancelOrder(Order order, long transactionId)
 			{
-				_realConnector.TransactionAdapter.SendInMessage(order.CreateCancelMessage(_realConnector.GetSecurityId(order.Security), transactionId));
+				_realConnector.SendInMessage(order.CreateCancelMessage(_realConnector.GetSecurityId(order.Security), transactionId));
 			}
 
 			#endregion

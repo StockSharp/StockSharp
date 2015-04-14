@@ -3,6 +3,7 @@ namespace SampleQuikSmart
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Net;
 	using System.Security;
 	using System.Windows;
 
@@ -13,11 +14,12 @@ namespace SampleQuikSmart
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
-	using StockSharp.Messages;
 	using StockSharp.Quik;
 	using StockSharp.SmartCom;
 	using StockSharp.Algo;
+	using StockSharp.Fix;
 	using StockSharp.Localization;
+	using StockSharp.Quik.Lua;
 
 	public partial class MainWindow
 	{
@@ -31,7 +33,7 @@ namespace SampleQuikSmart
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
@@ -110,28 +112,43 @@ namespace SampleQuikSmart
 					// создаем агрегирующее подключение (+ сразу инициализируем настройки переподключения)
 					Connector = InitReconnectionSettings(new Connector());
 
-					var transactionAdapter = new BasketMessageAdapter(Connector.TransactionIdGenerator);
-					var marketDataAdapter = new BasketMessageAdapter(Connector.TransactionIdGenerator);
-
-					Connector.MarketDataAdapter = marketDataAdapter.ToChannel(Connector, "MD");
-					Connector.TransactionAdapter = transactionAdapter.ToChannel(Connector, "TS");
-
 					// добавляем подключения к SmartCOM и Quik
-					//session.InnerSessions.Add(new QuikSessionHolder(Connector.TransactionIdGenerator)
-					//{
-					//	IsDde = isDde,
-					//	Path = QuikPath.Text,
-					//	IsTransactionEnabled = true,
-					//	IsMarketDataEnabled = true,
-					//}, 1);
+					var quikTs = new LuaFixTransactionMessageAdapter(Connector.TransactionIdGenerator)
+					{
+						Login = "quik",
+						Password = "quik".To<SecureString>(),
+						Address = "localhost:5001".To<EndPoint>(),
+						TargetCompId = "StockSharpTS",
+						SenderCompId = "quik",
+						ExchangeBoard = ExchangeBoard.Forts,
+						Version = FixVersions.Fix44,
+						RequestAllPortfolios = true,
+						MarketData = FixMarketData.None,
+						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+					};
+					var quikMd = new FixMessageAdapter(Connector.TransactionIdGenerator)
+					{
+						Login = "quik",
+						Password = "quik".To<SecureString>(),
+						Address = "localhost:5001".To<EndPoint>(),
+						TargetCompId = "StockSharpMD",
+						SenderCompId = "quik",
+						ExchangeBoard = ExchangeBoard.Forts,
+						Version = FixVersions.Fix44,
+						RequestAllSecurities = true,
+						MarketData = FixMarketData.MarketData,
+						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+					};
+					Connector.Adapter.InnerAdapters[quikMd] = 1;
+					Connector.Adapter.InnerAdapters[quikTs] = 1;
+
 					var smartCom = new SmartComMessageAdapter(Connector.TransactionIdGenerator)
 					{
 						Login = SmartLogin.Text,
 						Password = SmartPassword.Password.To<SecureString>(),
 						Address = SmartAddress.SelectedAddress,
 					};
-					transactionAdapter.InnerAdapters[smartCom] = 0;
-					marketDataAdapter.InnerAdapters[smartCom] = 0;
+					Connector.Adapter.InnerAdapters[smartCom] = 0;
 
 					// очищаем из текстового поля в целях безопасности
 					//SmartPassword.Clear();

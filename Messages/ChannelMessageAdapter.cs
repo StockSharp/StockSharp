@@ -65,7 +65,7 @@
 			_outputChannel.NewOutMessage -= OutputChannelOnNewOutMessage;
 
 			_adapter.NewOutMessage -= AdapterOnNewOutMessage;
-			_adapter.Dispose();
+			//_adapter.Dispose();
 		}
 
 		bool IMessageChannel.IsOpened

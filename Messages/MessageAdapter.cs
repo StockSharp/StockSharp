@@ -394,10 +394,22 @@ namespace StockSharp.Messages
 			};
 		}
 
+		private IdGenerator _transactionIdGenerator;
+
 		/// <summary>
 		/// Генератор идентификаторов транзакций.
 		/// </summary>
-		public IdGenerator TransactionIdGenerator { get; private set; }
+		public IdGenerator TransactionIdGenerator
+		{
+			get { return _transactionIdGenerator; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				_transactionIdGenerator = value;
+			}
+		}
 
 		/// <summary>
 		/// Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей.

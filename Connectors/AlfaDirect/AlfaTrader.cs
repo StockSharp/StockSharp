@@ -34,7 +34,7 @@
 		{
 			_adapter = new AlfaDirectMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -167,7 +167,7 @@
 
 		private void RequestCandles(Security security, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long transactionId)
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				From = from,
 				To = to,

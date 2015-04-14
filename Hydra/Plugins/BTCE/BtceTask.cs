@@ -2,6 +2,7 @@ namespace StockSharp.Hydra.Btce
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -50,10 +51,15 @@ namespace StockSharp.Hydra.Btce
 		{
 			_settings = new BtceSettings(settings);
 
-			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, () => new BtceTrader
-			{
-				TransactionAdapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
-			});
+			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, CreateConnector);
+		}
+
+		private static BtceTrader CreateConnector()
+		{
+			var trader = new BtceTrader();
+			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
+			trader.Adapter.InnerAdapters.Add(new PassThroughMessageAdapter(new IncrementalIdGenerator()) { IsMarketDataEnabled = false });
+			return trader;
 		}
 	}
 }

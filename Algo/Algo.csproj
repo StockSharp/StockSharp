@@ -186,7 +186,7 @@
     <Compile Include="Commissions\ICommissionRule.cs" />
     <Compile Include="Connector_ProcessMessage.cs" />
     <Compile Include="Connector_Raise.cs" />
-    <Compile Include="Connector_Heartbeat.cs" />
+    <Compile Include="HeartbeatAdapter.cs" />
     <Compile Include="Connector_Subscription.cs" />
     <Compile Include="ContinuousSecurity.cs" />
     <Compile Include="Derivatives\BasketBlackScholes.cs" />

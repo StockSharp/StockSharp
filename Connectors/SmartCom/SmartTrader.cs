@@ -37,7 +37,7 @@ namespace StockSharp.SmartCom
 		{
 			_adapter = new SmartComMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = _adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -279,7 +279,7 @@ namespace StockSharp.SmartCom
 			var scope = Scope<CandleSeries>.Current;
 			_series.Add(transactionId, scope == null ? new CandleSeries(typeof(TimeFrameCandle), security, tf) : scope.Value);
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = transactionId,
 				//SecurityId = GetSecurityId(security),
@@ -354,7 +354,7 @@ namespace StockSharp.SmartCom
 			    && oldOrder.Security.Board.IsSupportAtomicReRegister
 			    // http://www.itinvest.ru/forum/index.php?showtopic=63720&view=findpost&p=262059
 			    && oldOrder.Balance == newOrder.Volume)
-				TransactionAdapter.SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
+				SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
 			else
 				base.OnReRegisterOrder(oldOrder, newOrder);
 		}

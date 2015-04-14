@@ -91,15 +91,17 @@ namespace StockSharp.Quik
 			{
 				_isDde = value;
 
+				Adapter.InnerAdapters.Clear();
+
 				if (value)
 				{
-					TransactionAdapter = _trans2QuikAdapter.ToChannel(this);
-					MarketDataAdapter = _ddeAdapter.ToChannel(this);
+					Adapter.InnerAdapters.Add(_trans2QuikAdapter.ToChannel(this));
+					Adapter.InnerAdapters.Add(_ddeAdapter.ToChannel(this));
 				}
 				else
 				{
-					TransactionAdapter = _luaTransactionAdapter.ToChannel(this);
-					MarketDataAdapter = _luaMarketDataAdapter.ToChannel(this);
+					Adapter.InnerAdapters.Add(_luaTransactionAdapter.ToChannel(this));
+					Adapter.InnerAdapters.Add(_luaMarketDataAdapter.ToChannel(this));
 				}
 			}
 		}
@@ -454,7 +456,7 @@ namespace StockSharp.Quik
 			//http://quik.ru/forum/import/57855/57855/
 			//Поэтому делаем Cancel, потом Register
 			if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister && !IsCommonMonetaryPosition)
-				TransactionAdapter.SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
+				SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
 			else
 				base.OnReRegisterOrder(oldOrder, newOrder);
 		}
@@ -486,7 +488,7 @@ namespace StockSharp.Quik
 		{
 			CheckIsDde();
 			ExportState = ConnectionStates.Connecting;
-			MarketDataAdapter.SendInMessage(new CustomExportMessage(true, ddeTables));
+			SendInMessage(new CustomExportMessage(true, ddeTables));
 		}
 
 		/// <summary>
@@ -496,7 +498,7 @@ namespace StockSharp.Quik
 		public void StopExport(IEnumerable<DdeTable> ddeTables)
 		{
 			CheckIsDde();
-			MarketDataAdapter.SendInMessage(new CustomExportMessage(false, ddeTables));
+			SendInMessage(new CustomExportMessage(false, ddeTables));
 		}
 
 		/// <summary>
@@ -507,7 +509,7 @@ namespace StockSharp.Quik
 		{
 			CheckIsDde();
 			ExportState = ConnectionStates.Connecting;
-			MarketDataAdapter.SendInMessage(new CustomExportMessage(true, customTable));
+			SendInMessage(new CustomExportMessage(true, customTable));
 		}
 
 		/// <summary>
@@ -517,7 +519,7 @@ namespace StockSharp.Quik
 		public void StopExport(DdeCustomTable customTable)
 		{
 			CheckIsDde();
-			MarketDataAdapter.SendInMessage(new CustomExportMessage(false, customTable));
+			SendInMessage(new CustomExportMessage(false, customTable));
 		}
 
 		/// <summary>
@@ -528,7 +530,7 @@ namespace StockSharp.Quik
 		{
 			CheckIsDde();
 			ExportState = ConnectionStates.Connecting;
-			MarketDataAdapter.SendInMessage(new CustomExportMessage(true, caption));
+			SendInMessage(new CustomExportMessage(true, caption));
 		}
 
 		/// <summary>
@@ -538,7 +540,7 @@ namespace StockSharp.Quik
 		public void StopExport(string caption)
 		{
 			CheckIsDde();
-			MarketDataAdapter.SendInMessage(new CustomExportMessage(false, caption));
+			SendInMessage(new CustomExportMessage(false, caption));
 		}
 
 		private void CheckIsDde()

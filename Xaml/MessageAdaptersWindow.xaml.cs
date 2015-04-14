@@ -7,7 +7,6 @@
 	using Ecng.Serialization;
 
 	using StockSharp.Algo;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>

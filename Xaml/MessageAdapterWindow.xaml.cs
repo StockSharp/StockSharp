@@ -55,21 +55,9 @@ namespace StockSharp.Xaml
 			BusyIndicator.IsBusy = true;
 			Test.IsEnabled = false;
 
-			var connector = new Connector
-			{
-				//MarketDataAdapter = _editableSession.IsMarketDataEnabled
-				//	? _editableSession.CreateMarketDataAdapter()
-				//	: new PassThroughMessageAdapter(_editableSession),
-
-				//TransactionAdapter = _editableSession.IsTransactionEnabled
-				//	? _editableSession.CreateTransactionAdapter()
-				//	: new PassThroughMessageAdapter(_editableSession)
-			};
-
-			var inChannel = new InMemoryMessageChannel("Basket", connector.SendOutError);
-			connector.TransactionAdapter = new ChannelMessageAdapter(_adapter, inChannel, connector.OutMessageChannel);
-			connector.MarketDataAdapter = new ChannelMessageAdapter(_adapter, inChannel, connector.OutMessageChannel);
-
+			var connector = new Connector();
+			connector.Adapter.InnerAdapters.Add(_editableAdapter);
+			
 			connector.ExportStarted += () =>
 			{
 				connector.Dispose();

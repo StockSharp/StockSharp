@@ -2,6 +2,7 @@ namespace StockSharp.Hydra.BitStamp
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -50,10 +51,15 @@ namespace StockSharp.Hydra.BitStamp
 		{
 			_settings = new BitStampSettings(settings);
 
-			return new MarketDataConnector<BitStampTrader>(EntityRegistry.Securities, this, () => new BitStampTrader
-			{
-				TransactionAdapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
-			});
+			return new MarketDataConnector<BitStampTrader>(EntityRegistry.Securities, this, CreateConnector);
+		}
+
+		private static BitStampTrader CreateConnector()
+		{
+			var trader = new BitStampTrader();
+			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
+			trader.Adapter.InnerAdapters.Add(new PassThroughMessageAdapter(new IncrementalIdGenerator()) { IsMarketDataEnabled = false });
+			return trader;
 		}
 	}
 }

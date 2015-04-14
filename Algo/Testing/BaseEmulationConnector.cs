@@ -8,16 +8,13 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public abstract class BaseEmulationConnector : Connector
 	{
-		private readonly EmulationMessageAdapter _adapter;
-
 		/// <summary>
 		/// Инициализировать <see cref="BaseEmulationConnector"/>.
 		/// </summary>
 		protected BaseEmulationConnector()
 		{
-			_adapter = new EmulationMessageAdapter(new MarketEmulator(), TransactionIdGenerator);
-
-			TransactionAdapter = _adapter.ToChannel(this);
+			var adapter = new EmulationMessageAdapter(new MarketEmulator(), TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -34,8 +31,8 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IMarketEmulator MarketEmulator
 		{
-			get { return _adapter.Emulator; }
-			set { _adapter.Emulator = value; }
+			get { return ((EmulationMessageAdapter)TransactionAdapter).Emulator; }
+			set { ((EmulationMessageAdapter)TransactionAdapter).Emulator = value; }
 		}
 
 		/// <summary>
@@ -71,7 +68,7 @@ namespace StockSharp.Algo.Testing
 						var execMsg = (ExecutionMessage)message;
 
 						if (execMsg.ExecutionType != ExecutionTypes.Trade)
-							TransactionAdapter.SendInMessage(message);
+							SendInMessage(message);
 						else
 							base.OnProcessMessage(message, adapter, direction);
 
@@ -79,7 +76,7 @@ namespace StockSharp.Algo.Testing
 					}
 
 					default:
-						TransactionAdapter.SendInMessage(message);
+						SendInMessage(message);
 						break;
 				}
 			}

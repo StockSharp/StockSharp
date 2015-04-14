@@ -14303,12 +14303,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Depth
+		/// Depth of book
 		/// </summary>
 		public const string Str1197Key = "Str1197";
 
 		/// <summary>
-		/// Depth
+		/// Depth of book
 		/// </summary>
 		public static string Str1197
 		{

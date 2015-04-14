@@ -14,9 +14,6 @@
 		public StrategyConnector()
 		{
 			EntityFactory = _entityFactory = new StrategyEntityFactory();
-
-			TransactionAdapter = new BasketMessageAdapter(TransactionIdGenerator).ToChannel(this);
-			MarketDataAdapter = new BasketMessageAdapter(TransactionIdGenerator).ToChannel(this);
 		}
 
 		/// <summary>

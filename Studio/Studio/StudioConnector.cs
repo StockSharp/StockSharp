@@ -365,7 +365,6 @@ namespace StockSharp.Studio
 		private readonly CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>> _exports = new CachedSynchronizedDictionary<Security, SynchronizedDictionary<MarketDataTypes, bool>>();
 
 		private readonly StudioMarketDataAdapter _marketDataAdapter;
-		private readonly BasketMessageAdapter _transactionAdapter;
 
 		private bool _newsRegistered;
 
@@ -374,12 +373,8 @@ namespace StockSharp.Studio
 			EntityFactory = new StudioEntityFactory(this);
 
 			_marketDataAdapter = new StudioMarketDataAdapter(TransactionIdGenerator);
-			_transactionAdapter = new BasketMessageAdapter(TransactionIdGenerator);
 
-			MarketDataAdapter = _marketDataAdapter.ToChannel(this, "MD");
-			TransactionAdapter = _transactionAdapter.ToChannel(this, "TS");
-
-			_transactionAdapter.NewOutMessage += TransactionAdapterNewOutMessage;
+			Adapter.InnerAdapters.Add(_marketDataAdapter.ToChannel(this, "MD"));
 
 			CreateEmulationSessionHolder();
 
@@ -407,12 +402,12 @@ namespace StockSharp.Studio
 
 		private void CreateEmulationSessionHolder()
 		{
-			var emulationSessionHolder = _transactionAdapter.InnerAdapters.OfType<StudioEmulationAdapter>().FirstOrDefault();
+			var emulationSessionHolder = Adapter.InnerAdapters.OfType<StudioEmulationAdapter>().FirstOrDefault();
 
 			if (emulationSessionHolder == null)
 			{
 				emulationSessionHolder = new StudioEmulationAdapter(TransactionIdGenerator);
-				_transactionAdapter.InnerAdapters[emulationSessionHolder] = 1;
+				Adapter.InnerAdapters[emulationSessionHolder] = 1;
 			}
 
 			//if (!_transactionAdapter.Portfolios.ContainsKey("Simulator"))
@@ -421,7 +416,7 @@ namespace StockSharp.Studio
 
 		private IEnumerable<Portfolio> GetEmulationPortfolios()
 		{
-			var emu = _transactionAdapter.InnerAdapters.OfType<EmulationMessageAdapter>().FirstOrDefault();
+			var emu = Adapter.InnerAdapters.OfType<EmulationMessageAdapter>().FirstOrDefault();
 
 			if (emu == null)
 				yield break;
@@ -430,7 +425,7 @@ namespace StockSharp.Studio
 
 			foreach (var portfolio in portfolios)
 			{
-				var adapter = _transactionAdapter.Portfolios.TryGetValue(portfolio.Name);
+				var adapter = Adapter.Portfolios.TryGetValue(portfolio.Name);
 
 				if (adapter != emu)
 					continue;
@@ -469,7 +464,7 @@ namespace StockSharp.Studio
 			if (messages == null)
 				throw new ArgumentNullException("messages");
 
-			var emu = _transactionAdapter.InnerAdapters.OfType<EmulationMessageAdapter>().FirstOrDefault();
+			var emu = Adapter.InnerAdapters.OfType<EmulationMessageAdapter>().FirstOrDefault();
 
 			if (emu == null)
 			{
@@ -478,41 +473,6 @@ namespace StockSharp.Studio
 			}
 
 			messages.ForEach(emu.SendInMessage);
-		}
-
-		private void TransactionAdapterNewOutMessage(Message message)
-		{
-			switch (message.Type)
-			{
-				case MessageTypes.Connect:
-				{
-					var emu = _transactionAdapter.InnerAdapters.OfType<StudioEmulationAdapter>().FirstOrDefault();
-
-					if (emu == null)
-					{
-						this.AddWarningLog(LocalizedStrings.Str3625);
-						break;
-					}
-
-					emu.Emulator.Settings.ConvertTime = true;
-					emu.Emulator.Settings.InitialOrderId = DateTime.Now.Ticks;
-					emu.Emulator.Settings.InitialTradeId = DateTime.Now.Ticks;
-
-					_marketDataAdapter.NewOutMessage += emu.ProcessMessage;
-
-					break;
-				}
-
-				case MessageTypes.Disconnect:
-				{
-					var emu = _transactionAdapter.InnerAdapters.OfType<StudioEmulationAdapter>().FirstOrDefault();
-
-					if (emu != null)
-						_marketDataAdapter.NewOutMessage -= emu.ProcessMessage;
-
-					break;
-				}
-			}
 		}
 
 		private void TrySubscribeMarketData()
@@ -605,12 +565,29 @@ namespace StockSharp.Studio
 			{
 				case MessageTypes.Connect:
 				{
-					if (direction == MessageDirections.Out &&
-						adapter == MarketDataAdapter &&
-						((ConnectMessage)message).Error == null)
+					if (adapter == MarketDataAdapter)
 					{
-						SendPortfoliosToEmulator();
-						TrySubscribeMarketData();
+						if (direction == MessageDirections.Out && ((ConnectMessage)message).Error == null)
+						{
+							SendPortfoliosToEmulator();
+							TrySubscribeMarketData();	
+						}
+					}
+					else
+					{
+						var emu = Adapter.InnerAdapters.OfType<StudioEmulationAdapter>().FirstOrDefault();
+
+						if (emu == null)
+						{
+							this.AddWarningLog(LocalizedStrings.Str3625);
+							break;
+						}
+
+						emu.Emulator.Settings.ConvertTime = true;
+						emu.Emulator.Settings.InitialOrderId = DateTime.Now.Ticks;
+						emu.Emulator.Settings.InitialTradeId = DateTime.Now.Ticks;
+
+						_marketDataAdapter.NewOutMessage += emu.ProcessMessage;
 					}
 
 					break;					
@@ -618,8 +595,19 @@ namespace StockSharp.Studio
 
 				case MessageTypes.Disconnect:
 				{
-					if (direction == MessageDirections.Out && adapter == MarketDataAdapter)
+					if (direction != MessageDirections.Out)
+						break;
+
+					if (adapter == MarketDataAdapter)
 						ResetMarketDataSubscriptions();
+					else
+					{
+						var emu = Adapter.InnerAdapters.OfType<StudioEmulationAdapter>().FirstOrDefault();
+
+						if (emu != null)
+							_marketDataAdapter.NewOutMessage -= emu.ProcessMessage;
+					}
+
 					break;
 				}
 
@@ -678,7 +666,7 @@ namespace StockSharp.Studio
 			EntityFactory = new StudioConnectorEntityFactory();
 
 			_adapter = new PassThroughMessageAdapter(TransactionIdGenerator);
-			MarketDataAdapter = TransactionAdapter = _adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 
 			_entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
 			_entityRegistry.Securities.Added += s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s)));

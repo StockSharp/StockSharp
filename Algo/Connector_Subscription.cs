@@ -129,7 +129,7 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					_connector.MarketDataAdapter.SendInMessage(message);
+					_connector.SendInMessage(message);
 				}
 			}
 
@@ -521,7 +521,7 @@ namespace StockSharp.Algo
 
 				msg.FillSecurityInfo(_connector, subscriber);
 
-				_connector.MarketDataAdapter.SendInMessage(msg);
+				_connector.SendInMessage(msg);
 			}
 
 			//public void ReStart()
@@ -790,7 +790,7 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Портфель, по которому необходимо начать получать новую информацию.</param>
 		protected virtual void OnRegisterPortfolio(Portfolio portfolio)
 		{
-			TransactionAdapter.SendInMessage(new PortfolioMessage
+			SendInMessage(new PortfolioMessage
 			{
 				PortfolioName = portfolio.Name,
 				TransactionId = TransactionIdGenerator.GetNextId(),
@@ -813,7 +813,7 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Портфель, по которому необходимо остановить получение новой информации.</param>
 		protected virtual void OnUnRegisterPortfolio(Portfolio portfolio)
 		{
-			TransactionAdapter.SendInMessage(new PortfolioMessage
+			SendInMessage(new PortfolioMessage
 			{
 				PortfolioName = portfolio.Name,
 				TransactionId = TransactionIdGenerator.GetNextId(),
@@ -870,7 +870,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnRegisterNews()
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.News,
@@ -895,7 +895,7 @@ namespace StockSharp.Algo
 			if (news == null)
 				throw new ArgumentNullException("news");
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.News,
@@ -909,7 +909,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnUnRegisterNews()
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.News,
@@ -952,7 +952,7 @@ namespace StockSharp.Algo
 				return;
 			}
 
-			MarketDataAdapter.SendInMessage(new ConnectMessage());
+			SendInMessage(new ConnectMessage());
 		}
 
 		/// <summary>
@@ -979,7 +979,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnStopExport()
 		{
-			MarketDataAdapter.SendInMessage(new DisconnectMessage());
+			SendInMessage(new DisconnectMessage());
 		}
 
 		//internal void ReStartExport()

@@ -326,7 +326,7 @@ namespace SampleHistoryTesting
 				};
 
 				// комиссия в 1 копейку за сделку
-				connector.MarketEmulator.SendInMessage(new CommissionRuleMessage
+				connector.SendInMessage(new CommissionRuleMessage
 				{
 					Rule = new CommissionPerTradeRule { Value = 0.01m }
 				});

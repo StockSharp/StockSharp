@@ -15,7 +15,7 @@
 		{
 			var adapter = new CQGMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = MarketDataAdapter = adapter.ToChannel(this);
+			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
 		}
     }
 }
