@@ -43,6 +43,22 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
+		/// Поддерживается ли торговой системой поиск инструментов.
+		/// </summary>
+		protected override bool IsSupportNativeSecurityLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Поддерживается ли торговой системой поиск портфелей.
+		/// </summary>
+		protected override bool IsSupportNativePortfolioLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -100,7 +116,7 @@ namespace StockSharp.Btce
 
 				case MessageTypes.PortfolioLookup:
 				{
-					ProcessPortfolioLookup();
+					ProcessPortfolioLookup((PortfolioLookupMessage)message);
 					break;
 				}
 
@@ -139,7 +155,7 @@ namespace StockSharp.Btce
 					if (_hasActiveOrders || _hasMyTrades)
 					{
 						ProcessOrderStatus();
-						ProcessPortfolioLookup();
+						ProcessPortfolioLookup(null);
 					}
 
 					ProcessSubscriptions();

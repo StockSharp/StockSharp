@@ -119,6 +119,22 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
+		/// Поддерживается ли торговой системой поиск инструментов.
+		/// </summary>
+		protected override bool IsSupportNativeSecurityLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Поддерживается ли торговой системой поиск портфелей.
+		/// </summary>
+		protected override bool IsSupportNativePortfolioLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>

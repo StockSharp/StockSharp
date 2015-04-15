@@ -267,6 +267,8 @@
 
 				SendOutMessage(message);
 			}
+
+			SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = message.TransactionId });
 		}
 	}
 }

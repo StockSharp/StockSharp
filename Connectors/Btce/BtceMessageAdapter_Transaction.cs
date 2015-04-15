@@ -217,9 +217,12 @@ namespace StockSharp.Btce
 			}
 		}
 
-		private void ProcessPortfolioLookup()
+		private void ProcessPortfolioLookup(PortfolioLookupMessage message)
 		{
 			ProcessFunds(_client.GetInfo().State.Funds);
+
+			if (message != null)
+				SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = message.TransactionId });
 		}
 	}
 }
