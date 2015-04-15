@@ -12,8 +12,6 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	
-
 	partial class Connector
 	{
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
@@ -32,6 +30,11 @@ namespace StockSharp.Algo
 
 		//	return false;
 		//}
+
+		private void AdapterOnNewOutMessage(Message message)
+		{
+			OutMessageChannel.SendInMessage(message);
+		}
 
 		private IMessageChannel _outMessageChannel;
 
@@ -139,83 +142,15 @@ namespace StockSharp.Algo
 			MarketDataAdapter = null;
 		}
 
-		//private IMessageAdapter _transactionAdapter;
-
 		/// <summary>
 		/// Адаптер для транзакций.
 		/// </summary>
 		public IMessageAdapter TransactionAdapter { get; private set; }
-		//{
-		//	get { return _transactionAdapter; }
-		//	private set
-		//	{
-		//		if (_transactionAdapter == value)
-		//			return;
-
-		//		if (_transactionAdapter != null)
-		//			_transactionAdapter.NewOutMessage -= TransactionAdapterOnNewOutMessage;
-
-		//		_transactionAdapter = value;
-
-		//		if (_transactionAdapter == null)
-		//			return;
-
-		//		if (IsMarketDataIndependent)
-		//			_transactionAdapter.NewOutMessage += TransactionAdapterOnNewOutMessage;
-		//	}
-		//}
-
-		//private void TransactionAdapterOnNewOutMessage(Message message)
-		//{
-		//	var adapterMessage = message as AdapterMessage;
-
-		//	if (adapterMessage != null)
-		//		return;
-
-		//	OnProcessMessage(message, TransactionAdapter, MessageDirections.Out);
-
-		//	//if (IsDisposeAdapters(message))
-		//	//	TransactionAdapter = null;
-		//}
-
-		//private IMessageAdapter _marketDataAdapter;
 
 		/// <summary>
 		/// Адаптер для маркет-данных.
 		/// </summary>
 		public IMessageAdapter MarketDataAdapter { get; private set; }
-		//{
-		//	get { return _marketDataAdapter; }
-		//	private set
-		//	{
-		//		if (_marketDataAdapter == value)
-		//			return;
-
-		//		if (_marketDataAdapter != null)
-		//			_marketDataAdapter.NewOutMessage -= MarketDataAdapterOnNewOutMessage;
-
-		//		_marketDataAdapter = value;
-
-		//		if (_marketDataAdapter == null)
-		//			return;
-
-		//		if (IsMarketDataIndependent)
-		//			_marketDataAdapter.NewOutMessage += MarketDataAdapterOnNewOutMessage;
-		//	}
-		//}
-
-		//private void MarketDataAdapterOnNewOutMessage(Message message)
-		//{
-		//	var adapterMessage = message as AdapterMessage;
-
-		//	if (adapterMessage != null)
-		//		return;
-
-		//	OnProcessMessage(message, MarketDataAdapter, MessageDirections.Out);
-
-		//	//if (IsDisposeAdapters(message))
-		//	//	MarketDataAdapter = null;
-		//}
 
 		/// <summary>
 		/// Обработать сообщение.

@@ -45,6 +45,30 @@ namespace StockSharp.Algo
 				get { return Cache.Where(t => this[t] != -1).OrderBy(t => this[t]); }
 			}
 
+			protected override bool OnAdding(IMessageAdapter item)
+			{
+				_enables.Add(item, 0);
+				return base.OnAdding(item);
+			}
+
+			protected override bool OnInserting(int index, IMessageAdapter item)
+			{
+				_enables.Add(item, 0);
+				return base.OnInserting(index, item);
+			}
+
+			protected override bool OnRemoving(IMessageAdapter item)
+			{
+				_enables.Remove(item);
+				return base.OnRemoving(item);
+			}
+
+			protected override bool OnClearing()
+			{
+				_enables.Clear();
+				return base.OnClearing();
+			}
+
 			public int this[IMessageAdapter adapter]
 			{
 				get
@@ -101,6 +125,64 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public override bool PortfolioLookupRequired
+		{
+			get { return GetSortedAdapters().Any(a => a.PortfolioLookupRequired); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// </summary>
+		public override bool OrderStatusRequired
+		{
+			get { return GetSortedAdapters().Any(a => a.OrderStatusRequired); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// </summary>
+		public override bool SecurityLookupRequired
+		{
+			get { return GetSortedAdapters().Any(a => a.SecurityLookupRequired); }
+		}
+
+		/// <summary>
+		/// Поддерживается ли торговой системой поиск портфелей.
+		/// </summary>
+		protected override bool IsSupportNativePortfolioLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Поддерживается ли торговой системой поиск инструментов.
+		/// </summary>
+		protected override bool IsSupportNativeSecurityLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// </summary>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public override OrderCondition CreateOrderCondition()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// </summary>
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		public override bool IsConnectionAlive()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -120,6 +202,10 @@ namespace StockSharp.Algo
 						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewMessage(a, m);
 						return hearbeatAdapter;
 					}));
+
+					if (_enabledAdapters.Count == 0)
+						throw new InvalidOperationException(LocalizedStrings.Str3650);
+
 					_enabledAdapters.Values.ForEach(a => a.SendInMessage(message));
 					break;
 
@@ -355,7 +441,7 @@ namespace StockSharp.Algo
 			}
 
 			if (canProcess)
-				SendOutMessage(innerAdapter, new ConnectMessage { Error = error });
+				SendOutMessage(innerAdapter, new ConnectMessage { Error = error, LocalTime = message.LocalTime });
 		}
 
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
@@ -382,7 +468,7 @@ namespace StockSharp.Algo
 			}
 
 			if (canProcess)
-				SendOutMessage(innerAdapter, new DisconnectMessage { Error = error });
+				SendOutMessage(innerAdapter, new DisconnectMessage { Error = error, LocalTime = message.LocalTime });
 		}
 
 		private void ProcessSubscriptionAction(IEnumerator<IMessageAdapter> enumerator, MarketDataMessage message)
@@ -447,6 +533,9 @@ namespace StockSharp.Algo
 
 		private void SendOutMessage(IMessageAdapter adapter, Message message)
 		{
+			if (message.LocalTime.IsDefault())
+				message.LocalTime = adapter.CurrentTime.LocalDateTime;
+
 			SendOutMessage(new BasketMessage(message, adapter));
 		}
 

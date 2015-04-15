@@ -3483,7 +3483,7 @@ namespace StockSharp.Algo
 		public static ChannelMessageAdapter ToChannel(this IMessageAdapter adapter, Connector connector, string name = null)
 		{
 			name = name ?? connector.GetType().GetDisplayName();
-			return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name, connector.SendOutError), connector.OutMessageChannel);
+			return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name, connector.SendOutError), new PassThroughMessageChannel());
 		}
 	}
 }

@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Globalization;
+	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -188,6 +189,10 @@
 			_msgStat.Remove(pair.Value);
 
 			message = pair.Value;
+
+			if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
+				Console.WriteLine("<< ({0}) {1}", Thread.CurrentThread.Name, message);
+
 			return true;
 		}
 
@@ -216,6 +221,9 @@
 			}
 			else
 			{
+				if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
+					Console.WriteLine(">> ({0}) {1}", Thread.CurrentThread.Name, message);
+
 				_msgStat.Add(message);
 				_messageQueue.Enqueue(new Pair(message.LocalTime, message));	
 			}

@@ -101,6 +101,8 @@
 					break;
 				}
 			}
+
+			_newOutMessage.SafeInvoke(message);
 		}
 
 		void IMessageChannel.SendInMessage(Message message)
@@ -278,10 +280,12 @@
 			_adapter.Close();
 		}
 
+		private Action<Message> _newOutMessage;
+
 		event Action<Message> IMessageChannel.NewOutMessage
 		{
-			add { _adapter.NewOutMessage += value; }
-			remove { _adapter.NewOutMessage -= value; }
+			add { _newOutMessage += value; }
+			remove { _newOutMessage -= value; }
 		}
 
 		void IPersistable.Load(SettingsStorage storage)
