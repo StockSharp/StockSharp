@@ -24,7 +24,7 @@ namespace StockSharp.SmartCom
 
 		private void ProcessRegisterMessage(OrderRegisterMessage regMsg)
 		{
-			if (regMsg.TimeInForce != TimeInForce.PutInQueue)
+			if (regMsg.TimeInForce != TimeInForce.PutInQueue && regMsg.TimeInForce != null)
 				throw new ArgumentException(LocalizedStrings.Str1867Params.Put(regMsg.TimeInForce));
 
 			var condition = (SmartComOrderCondition)regMsg.Condition;

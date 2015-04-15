@@ -749,11 +749,6 @@
             Индикатор "торговые операции разрешены/запрещены".
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxBoardsColumns.CurrCode">
-      <summary>
-            Код валюты.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxBoardsColumns.MarketId">
       <summary>
             Идентификатор рынка, к которому относится данный режим.
@@ -774,6 +769,11 @@
       <summary>
             Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
             Таблица BOARDS: режимы торгов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxBoardsSpotColumns.CurrCode">
+      <summary>
+            Код валюты.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns">
@@ -903,11 +903,6 @@
             Количество сделок за торговый день.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.YieldAtWaPrice">
-      <summary>
-            Доходность по средневзвешенной цене.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.PriceMinusPrevWaPrice">
       <summary>
             Цена последней сделки (LAST) к оценке предыдущего дня (PREVWAPRICE).
@@ -916,11 +911,6 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.ClosePrice">
       <summary>
             Цена послеторгового периода.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.CloseYield">
-      <summary>
-            Доходность по цене послеторгового периода.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.LastBid">
@@ -948,32 +938,9 @@
             Рыночная цена по результатам торгов сегодняшнего дня, за одну ценную бумагу.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.Duration">
-      <summary>
-            Дюрация.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.SettleCode">
       <summary>
             Код расчетов по умолчанию для данного инструмента.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.LOpenPrice">
-      <summary>
-            Цена открытия.
-            </summary>
-      <remarks>
-            Не используется.
-            </remarks>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.LCurrentPrice">
-      <summary>
-            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок заключенных за последние 10 минут.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.LClosePrice">
-      <summary>
-            Официальная цена закрытия, рассчитываемая по методике ФСФР как средневзвешенная цена сделок за последние 10 минут торговой сессии, включая сделки послеторгового периода.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.MarketPrice2">
@@ -986,9 +953,9 @@
             Признаваемая котировка, рассчитываемая в соответствии с методикой ФСФР.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.OpenPeriodPrice">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonColumns.SettleDate">
       <summary>
-            Цена предторгового периода.
+            Дата расчетов.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxCommonCurrencyColumns">
@@ -1008,9 +975,62 @@
             Таблица COMMON: общие показатели по инструментам.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.CounterPrice">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.YieldAtWaPrice">
       <summary>
-            Цена контрагента.
+            Доходность по средневзвешенной цене.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.CloseYield">
+      <summary>
+            Доходность по цене послеторгового периода.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.Duration">
+      <summary>
+            Дюрация.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.LOpenPrice">
+      <summary>
+            Цена открытия.
+            </summary>
+      <remarks>
+            Не используется.
+            </remarks>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.LCurrentPrice">
+      <summary>
+            Официальная текущая цена, рассчитываемая как средневзвешенная цена сделок заключенных за последние 10 минут.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.LClosePrice">
+      <summary>
+            Официальная цена закрытия, рассчитываемая по методике ФСФР как средневзвешенная цена сделок за последние 10 минут торговой сессии, включая сделки послеторгового периода.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.OpenPeriodPrice">
+      <summary>
+            Цена предторгового периода.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.ClosingAuctionPrice">
+      <summary>
+            Цена АЗ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.ClosingAuctionVolume">
+      <summary>
+            Количество АЗ.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.DpValIndicatorBuy">
+      <summary>
+            Заявок на покупку (АКП).
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxCommonSpotColumns.DpValIndicatorSell">
+      <summary>
+            Заявок на продажу (АКП).
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxCurrencyColumns">
@@ -1045,6 +1065,90 @@
       <summary>
             Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
             Таблица CURRENCY: справочник валют.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns">
+      <summary>
+            Колонки таблицы, содержащей индексы.
+            MCXSPOT_INFO_REPL - таблица INDEXES.
+            MCXCC_INFO_REPL - таблица INDEXES.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.IndexBoard">
+      <summary>
+            Режим.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.IndexCode">
+      <summary>
+            Код индекса.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.Name">
+      <summary>
+            Наименование.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.ShortName">
+      <summary>
+            Индекс.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.CurrentValue">
+      <summary>
+            Текущий.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.LastValue">
+      <summary>
+            Закрытие.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.Decimals">
+      <summary>
+            Кол-во десят. знаков.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.LatName">
+      <summary>
+            Англ. наименование.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.Time">
+      <summary>
+            Время вычисления.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.OpenValue">
+      <summary>
+            Открытие.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.ValToday">
+      <summary>
+            Объем торгов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.Min">
+      <summary>
+            Минимум.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxIndexColumns.Max">
+      <summary>
+            Максимум.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxIndexCurrencyColumns">
+      <summary>
+            Поток MCXCC_INFO_REPL - Фондовый рынок : справочная информация.
+            Таблица INDEXES: индексы.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxIndexSpotColumns">
+      <summary>
+            Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
+            Таблица INDEXES: индексы.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxMarketsColumns">
@@ -1118,11 +1222,6 @@
             Количество ценных бумаг, выраженное в лотах.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxOrderBookColumns.Yield">
-      <summary>
-            Доходность по цене котировки.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxOrderBookColumns.Time">
       <summary>
             Время изменения стакана.
@@ -1138,6 +1237,21 @@
       <summary>
             Поток MCXSPOT_AGGR_REPL - Фондовый рынок : котировки по инструментам.
             Таблица ORDERBOOK: котировки по инструменту.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxOrderBookSpotColumns.Yield">
+      <summary>
+            Доходность по цене котировки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxOrderBookSpotColumns.ActivationTime">
+      <summary>
+            Время активации.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxOrderBookSpotColumns.RepoValue">
+      <summary>
+            Сумма РЕПО.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns">
@@ -1230,63 +1344,10 @@
             Используется для форматирования значений полей с типом PRICE.
             </remarks>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.Yield">
-      <summary>
-            Доходность, рассчитанная по цене сделки.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.AccruedInt">
-      <summary>
-            Накопленный купонный доход на дату торгов в расчете на одну бумагу, выраженный в руб.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.PrimaryDist">
-      <summary>
-            Индикатор информирующий, что по данному инструменту проводится аукцион.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.MatDate">
-      <summary>
-            Дата погашения.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.CouponValue">
-      <summary>
-            Величина купона, выраженная в руб.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.CouponPeriod">
-      <summary>
-            Длительность купона, выраженная в днях.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.NextCoupon">
-      <summary>
-            Дата окончания купона.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.IssueSize">
-      <summary>
-            Объем выпуска.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.PrevWaPrice">
       <summary>
             Значение оценки (WAPRICE) предыдущего торгового дня.
             </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.YieldAtPrevWaPrice">
-      <summary>
-            Доходность по оценке предыдущего торгового дня.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.Repo2Price">
-      <summary>
-            Цена второй части РЕПО.
-            </summary>
-      <remarks>
-            Не используется. Устаревшее.
-            </remarks>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.CurrencyId">
       <summary>
@@ -1329,24 +1390,9 @@
             Наименование финансового инструмента на английском языке.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.RegNumber">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.OriginTradingStatus">
       <summary>
-            Номер государственной регистрации.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.PrevLegalClosePrice">
-      <summary>
-            Официальная цена закрытия предыдущего дня, рассчитываемая по методике ФСФР как средневзвешенная цена сделок за последние 10 минут торговой сессии, включая сделки послеторгового периода.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.PrevAdmittedQuote">
-      <summary>
-            Признаваемая котировка предыдущего дня, цена за одну ценную бумагу.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesColumns.SecType">
-      <summary>
-            Тип ценной бумаги.
+            Состояние сессии.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesCurrencyColumns">
@@ -1379,6 +1425,109 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.LotSizeChangeDate">
       <summary>
             Дата последнего изменения размера лота.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.Yield">
+      <summary>
+            Доходность, рассчитанная по цене сделки.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.AccruedInt">
+      <summary>
+            Накопленный купонный доход на дату торгов в расчете на одну бумагу, выраженный в руб.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.PrimaryDist">
+      <summary>
+            Индикатор информирующий, что по данному инструменту проводится аукцион.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.MatDate">
+      <summary>
+            Дата погашения.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.CouponValue">
+      <summary>
+            Величина купона, выраженная в руб.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.CouponPeriod">
+      <summary>
+            Длительность купона, выраженная в днях.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.NextCoupon">
+      <summary>
+            Дата окончания купона.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.IssueSize">
+      <summary>
+            Объем выпуска.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.YieldAtPrevWaPrice">
+      <summary>
+            Доходность по оценке предыдущего торгового дня.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.Repo2Price">
+      <summary>
+            Цена второй части РЕПО.
+            </summary>
+      <remarks>
+            Не используется. Устаревшее.
+            </remarks>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.RegNumber">
+      <summary>
+            Номер государственной регистрации.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.PrevLegalClosePrice">
+      <summary>
+            Официальная цена закрытия предыдущего дня, рассчитываемая по методике ФСФР как средневзвешенная цена сделок за последние 10 минут торговой сессии, включая сделки послеторгового периода.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.PrevAdmittedQuote">
+      <summary>
+            Признаваемая котировка предыдущего дня, цена за одну ценную бумагу.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.SecType">
+      <summary>
+            Тип ценной бумаги.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.IssueSizePlaced">
+      <summary>
+            Объем в обращении.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.FullCoveredFlag">
+      <summary>
+            Запрет необеспеченных торгов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.ListLevel">
+      <summary>
+            Уровень листинга.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.Comments">
+      <summary>
+            Комментарии.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.DividendValue">
+      <summary>
+            Величина дивидендов, руб..
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxSecuritiesSpotColumns.DividendDate">
+      <summary>
+            Дата закрытия реестра.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxSecSettleCodeColumns">
@@ -1489,35 +1638,40 @@
             Таблица SETTLECODES: коды расчетов.
             </summary>
     </member>
-    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTeInfoColumns">
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxStatsColumns">
       <summary>
             Колонки таблицы, содержащей информацию о торговом сервере.
-            MCXSPOT_INFO_REPL - таблица TEINFO.
-            MCXCC_INFO_REPL - таблица TEINFO.
+            MCXSPOT_INFO_REPL - таблица STATS.
+            MCXCC_INFO_REPL - таблица STATS.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTeInfoColumns.Session">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxStatsColumns.Session">
       <summary>
             Уникальный номер торговой сессии.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTeInfoColumns.TeVersion">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxStatsColumns.TeVersion">
       <summary>
             Версия.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTeInfoColumns.SystemId">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxStatsColumns.SystemId">
       <summary>
             Тип торговой системы.
             </summary>
     </member>
-    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTeInfoCurrencyColumns">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxStatsColumns.TestSystem">
       <summary>
-            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
-            Таблица TEINFO: информация о торговом сервере.
+            Тестовая система.
             </summary>
     </member>
-    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTeInfoSpotColumns">
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxStatsCurrencyColumns">
+      <summary>
+            Поток MCXCC_INFO_REPL - Валютный рынок : справочная информация.
+            Таблица STATS: информация о торговом сервере.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Plaza.Metadata.PlazaMcxStatsSpotColumns">
       <summary>
             Поток MCXSPOT_INFO_REPL - Фондовый рынок : справочная информация.
             Таблица TEINFO: информация о торговом сервере.
@@ -1599,11 +1753,6 @@
             Объем сделки, выраженный в лотах.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesColumns.Yield">
-      <summary>
-            Доходность, рассчитанная по цене сделки.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesColumns.Period">
       <summary>
             Период торговой сессии, когда была заключена сделка.
@@ -1624,15 +1773,15 @@
             Направленность заявки инициирующей заключение сделки - "купля/продажа".
             </summary>
     </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesColumns.Value">
+      <summary>
+            Объем сделки, выраженный в руб.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTradesCurrencyColumns">
       <summary>
             Поток MCXCC_MDTRADE_REPL - Валютный рынок : все сделки.
             Таблица ALL_TRADES: все сделки.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesCurrencyColumns.Value">
-      <summary>
-            Объем сделки, выраженный в руб.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesCurrencyColumns.Accruedint">
@@ -1646,14 +1795,14 @@
             Таблица ALL_TRADES: все сделки.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesSpotColumns.Value">
-      <summary>
-            Объем сделки, выраженный в руб.
-            </summary>
-    </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesSpotColumns.Accruedint">
       <summary>
             Процентный доход, выраженный в руб.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesSpotColumns.Yield">
+      <summary>
+            Доходность, рассчитанная по цене сделки.
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesSpotColumns.RepoRate">
@@ -1674,6 +1823,16 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesSpotColumns.RepoTerm">
       <summary>
             Срок РЕПО в календарных днях.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesSpotColumns.SettleDate">
+      <summary>
+            Дата расчетов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaMcxTradesSpotColumns.Open">
+      <summary>
+            Первая.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaMcxTradeTimeColumns">
@@ -3660,12 +3819,12 @@
             Колонки таблицы с сообщениями на валютном рынке.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxTeInfoSpot">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxStatsSpot">
       <summary>
             Колонки таблицы с информацией о торговом сервере на фондовом рынке.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxTeInfoCurrency">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxStatsCurrency">
       <summary>
             Колонки таблицы с информацией о торговом сервере на валютном рынке.
             </summary>
@@ -3688,6 +3847,16 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxSecSettleCodeCurrency">
       <summary>
             Колонки таблицы с накопленным доходом и ставками РЕПО на дату расчетов торгов на валютном рынке.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxIndexCurrency">
+      <summary>
+            Колонки таблицы с индексами на валютном рынке.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaColumnRegistry.McxIndexSpot">
+      <summary>
+            Колонки таблицы с индексами на фондовом рынке.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaTradeDerivativeColumns">
@@ -4845,12 +5014,12 @@
             Валютный рынок: сообщения.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxTeInfoSpot">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxStatsSpot">
       <summary>
             Фондовый рынок: информация о торговом сервере.
             </summary>
     </member>
-    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxTeInfoCurrency">
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxStatsCurrency">
       <summary>
             Валютный рынок: информация о торговом сервере.
             </summary>
@@ -4873,6 +5042,16 @@
     <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxSecSettleCodeCurrency">
       <summary>
             Валютный рынок: накопленный доход и ставки РЕПО на дату расчетов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxIndexCurrency">
+      <summary>
+            Валютный рынок: индексы.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.McxIndexSpot">
+      <summary>
+            Фондовый рынок: индексы.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.Metadata.PlazaTableRegistry.Item(System.String)">
@@ -6494,6 +6673,13 @@
             </summary>
       <param name="column">Колонка.</param>
       <returns>Значение типа <see cref="T:System.Boolean" />.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaRecord.GetByte(StockSharp.Plaza.Metadata.PlazaColumn)">
+      <summary>
+            Получить значение типа <see cref="T:System.Byte" />.
+            </summary>
+      <param name="column">Колонка.</param>
+      <returns>Значение типа <see cref="T:System.Byte" />.</returns>
     </member>
     <member name="M:StockSharp.Plaza.PlazaRecord.GetString(StockSharp.Plaza.Metadata.PlazaColumn)">
       <summary>

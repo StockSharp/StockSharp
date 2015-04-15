@@ -55,6 +55,14 @@ namespace StockSharp.Quik
 			ApplyMessageProcessor(MessageDirections.Out, true, true);
 		}
 
+		/// <summary>
+		/// Контейнер для сессии.
+		/// </summary>
+		public override IMessageSessionHolder SessionHolder
+		{
+			get { return _sessionHolder; }
+		}
+
 		private void SessionHolderOnIsLuaChanged()
 		{
 			if (IsDde)

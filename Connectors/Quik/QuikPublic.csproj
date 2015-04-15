@@ -98,9 +98,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickFix">
-      <HintPath>..\Fix\QuickFix.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Fix">
       <HintPath>..\Fix\StockSharp.Fix.dll</HintPath>
     </Reference>

@@ -166,7 +166,7 @@ namespace StockSharp.LMAX
 			// тиковый ТФ
 			if (candleMsg.TotalVolume == 0)
 			{
-				candle.TotalVolume = candle.OpenVolume + candle.CloseVolume;
+				candle.TotalVolume = (candle.OpenVolume + candle.CloseVolume) ?? 0;
 				candle.HighPrice = candle.OpenPrice.Max(candle.ClosePrice);
 				candle.LowPrice = candle.OpenPrice.Min(candle.ClosePrice);
 			}

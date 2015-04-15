@@ -177,13 +177,13 @@ namespace StockSharp.Algo.Candles
 					indexCandle.TotalVolume = Calculate(buffer, c => c.TotalVolume);
 					indexCandle.TotalPrice = Calculate(buffer, c => c.TotalPrice);
 					indexCandle.OpenPrice = (decimal)openPrice;
-					indexCandle.OpenVolume = Calculate(buffer, c => c.OpenVolume);
+					indexCandle.OpenVolume = Calculate(buffer, c => c.OpenVolume ?? 0);
 					indexCandle.ClosePrice = Calculate(buffer, c => c.ClosePrice);
-					indexCandle.CloseVolume = Calculate(buffer, c => c.CloseVolume);
+					indexCandle.CloseVolume = Calculate(buffer, c => c.CloseVolume ?? 0);
 					indexCandle.HighPrice = Calculate(buffer, c => c.HighPrice);
-					indexCandle.HighVolume = Calculate(buffer, c => c.HighVolume);
+					indexCandle.HighVolume = Calculate(buffer, c => c.HighVolume ?? 0);
 					indexCandle.LowPrice = Calculate(buffer, c => c.LowPrice);
-					indexCandle.LowVolume = Calculate(buffer, c => c.LowVolume);
+					indexCandle.LowVolume = Calculate(buffer, c => c.LowVolume ?? 0);
 
 					// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
 					if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)

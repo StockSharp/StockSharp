@@ -1507,7 +1507,7 @@ Str1617;Connector does not support text news receiving.;Коннектор не 
 Str1618;Unsupported type of market-data.;Неподдерживаемый тип маркет-данных.
 Str1619;Connection was not broken from previous time.;Подключение не было разорвано с предыдущего раза.
 Str1620;Counter value is unacceptable.;Значение счетчика является недопустимым.
-Str1621Params;Session '{0}'. From server: '{1}';Сессия '{0}'. From server: '{1}'
+Str1621Params;Session '{0}'. Received: '{1}';Сессия '{0}'. Получено: '{1}'
 Str1622Params;Message {0} is unacceptable.;Сообщение {0} является недопустимым.
 Str1623;User authorization error.;Ошибка авторизации пользователя.
 Str1624Params;Error receiving state of session {0}. Reason '{1}'.;Ошибка получения состояния сессии {0}. Причина '{1}'.
@@ -4170,3 +4170,4 @@ InterfaceNotSupportTransaction;Interface '{{0}}' does not support transaction '{
 AllDepths;All depths;Все стаканы
 RequestAllDepths;Request depths for all securities.;Запрашиваемое стаканы по всем инструментам.
 ExportSchema;Export schema to container;Экспортировать схему в контейнер
+IsControlConnectionLost;Control connection lost.;Контролировать потерю соединения с роутером.

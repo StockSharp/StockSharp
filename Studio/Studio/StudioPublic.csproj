@@ -61,9 +61,6 @@
     <Reference Include="MoreLinq">
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="QuickFix">
-      <HintPath>..\..\Connectors\Fix\QuickFix.dll</HintPath>
-    </Reference>
     <Reference Include="StockSharp.Algo.History">
       <HintPath>..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
     </Reference>

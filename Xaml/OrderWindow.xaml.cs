@@ -187,7 +187,7 @@ namespace StockSharp.Xaml
 				_order.VisibleVolume = VisibleVolumeCtrl.Value;
 				_order.Direction = IsBuyCtrl.IsChecked == true ? Sides.Buy : Sides.Sell;
 
-				switch ((OrderWindowTif)TimeInForceCtrl.SelectedValue)
+				switch ((OrderWindowTif?)TimeInForceCtrl.SelectedValue)
 				{
 					case OrderWindowTif.MatchOrCancel:
 						_order.TimeInForce = TimeInForce.MatchOrCancel;
@@ -206,6 +206,8 @@ namespace StockSharp.Xaml
 					case OrderWindowTif.Gtd:
 						_order.TimeInForce = TimeInForce.PutInQueue;
 						_order.ExpiryDate = (ExpiryDate.Value ?? DateTime.Today).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo);
+						break;
+					case null:
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -268,6 +270,9 @@ namespace StockSharp.Xaml
 					case TimeInForce.CancelBalance:
 						TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
 						break;
+					case null:
+						TimeInForceCtrl.SelectedValue = null;
+						break;
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
@@ -305,8 +310,8 @@ namespace StockSharp.Xaml
 
 			var isNull = Security == null;
 
-			PriceCtrl.Increment = isNull ? 0.01m : Security.PriceStep;
-			VolumeCtrl.Increment = isNull ? 1m : Security.VolumeStep;
+			PriceCtrl.Increment = isNull ? 0.01m : Security.PriceStep ?? 1m;
+			VolumeCtrl.Increment = isNull ? 1m : Security.VolumeStep ?? 1m;
 
 			MinPrice.IsEnabled = MaxPrice.IsEnabled = BestBidPrice.IsEnabled = BestAskPrice.IsEnabled
 				= LastTradePrice.IsEnabled = !isNull;

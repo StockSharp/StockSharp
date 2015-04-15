@@ -13,7 +13,7 @@ namespace StockSharp.Transaq.Native
 
 	static class TransaqHelper
 	{
-		public static NewOrderUnfilleds ToTransaq(this TimeInForce cond)
+		public static NewOrderUnfilleds ToTransaq(this TimeInForce? cond)
 		{
 			switch (cond)
 			{
@@ -24,6 +24,7 @@ namespace StockSharp.Transaq.Native
 					return NewOrderUnfilleds.ImmOrCancel;
 
 				case TimeInForce.PutInQueue:
+				case null:
 					return NewOrderUnfilleds.PutInQueue;
 
 				default:

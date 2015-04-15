@@ -333,48 +333,53 @@ namespace StockSharp.Logging
 
 				var writer = group.Key;
 
-				foreach (var message in group)
+				try
 				{
-					WriteMessage(writer, message);
-
-					if (MaxLength <= 0 || writer.BaseStream.Position < MaxLength)
-						continue;
-
-					var fileName = _fileNames[writer];
-					_fileNames.Remove(writer);
-
-					var key = _writers[writer];
-					writer.Dispose();
-						
-					var maxIndex = 0;
-
-					while (File.Exists(GetRollingFileName(fileName, maxIndex + 1)))
+					foreach (var message in group)
 					{
-						maxIndex++;
-					}
+						WriteMessage(writer, message);
 
-					for (var i = maxIndex; i > 0; i--)
-					{
-						File.Move(GetRollingFileName(fileName, i), GetRollingFileName(fileName, i + 1));
-					}
+						if (MaxLength <= 0 || writer.BaseStream.Position < MaxLength)
+							continue;
 
-					File.Move(fileName, GetRollingFileName(fileName, 1));
+						var fileName = _fileNames[writer];
+						_fileNames.Remove(writer);
 
-					if (MaxCount > 0)
-					{
-						maxIndex++;
+						var key = _writers[writer];
+						writer.Dispose();
 
-						for (var i = MaxCount; i <= maxIndex; i++)
+						var maxIndex = 0;
+
+						while (File.Exists(GetRollingFileName(fileName, maxIndex + 1)))
 						{
-							File.Delete(GetRollingFileName(fileName, i));
+							maxIndex++;
 						}
+
+						for (var i = maxIndex; i > 0; i--)
+						{
+							File.Move(GetRollingFileName(fileName, i), GetRollingFileName(fileName, i + 1));
+						}
+
+						File.Move(fileName, GetRollingFileName(fileName, 1));
+
+						if (MaxCount > 0)
+						{
+							maxIndex++;
+
+							for (var i = MaxCount; i <= maxIndex; i++)
+							{
+								File.Delete(GetRollingFileName(fileName, i));
+							}
+						}
+
+						writer = OnCreateWriter(fileName);
+						_writers[key] = writer;
 					}
-
-					writer = OnCreateWriter(fileName);
-					_writers[key] = writer;
 				}
-
-				writer.Flush();
+				finally
+				{
+					writer.Flush();
+				}
 			}
 		}
 

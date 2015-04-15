@@ -39,7 +39,7 @@
 			yield return new ColumnDescription("Side") { DbType = typeof(int) };
 			yield return new ColumnDescription("Status") { DbType = typeof(int?) };
 			yield return new ColumnDescription("State") { DbType = typeof(int?) };
-			yield return new ColumnDescription("TimeInForce") { DbType = typeof(int) };
+			yield return new ColumnDescription("TimeInForce") { DbType = typeof(int?) };
 			yield return new ColumnDescription("TradeId")
 			{
 				DbType = typeof(string),
@@ -63,7 +63,7 @@
 				{ "Side", (int)value.Side },
 				{ "Status", (int?)value.OrderStatus },
 				{ "State", (int?)value.OrderState },
-				{ "TimeInForce", (int)value.TimeInForce },
+				{ "TimeInForce", (int?)value.TimeInForce },
 				{ "TradeId", value.TradeId == null ? value.TradeStringId : value.TradeId.To<string>() },
 				{ "TradePrice", value.TradePrice },
 				{ "OpenInterest", value.OpenInterest },
