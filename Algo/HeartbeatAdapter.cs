@@ -68,8 +68,11 @@
 						if (_adapter.HeartbeatInterval == TimeSpan.Zero)
 							break;
 
-						_isTimeMessageHandled = true;
-						_heartBeatTimer = ThreadingHelper.Timer(OnHeartbeatTimer).Interval(_adapter.HeartbeatInterval);
+						lock (_timeSync)
+						{
+							_isTimeMessageHandled = true;
+							_heartBeatTimer = ThreadingHelper.Timer(OnHeartbeatTimer).Interval(_adapter.HeartbeatInterval);	
+						}
 					}
 					else
 					{
@@ -82,10 +85,16 @@
 				case MessageTypes.Disconnect:
 				{
 					lock (_timeSync)
+					{
 						_prevState = _currState = ConnectionStates.Disconnected;
 
-					_heartBeatTimer.Dispose();
-					_heartBeatTimer = null;
+						if (_heartBeatTimer != null)
+						{
+							_heartBeatTimer.Dispose();
+							_heartBeatTimer = null;
+						}
+					}
+					
 					break;
 				}
 

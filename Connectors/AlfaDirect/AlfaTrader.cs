@@ -84,12 +84,12 @@
 		/// <param name="direction">Направление сообщения.</param>
 		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
-			if (direction == MessageDirections.Out && adapter == MarketDataAdapter)
+			if (direction == MessageDirections.Out)
 			{
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
-						if (((ConnectMessage)message).Error == null)
+						if (((ConnectMessage)message).Error == null && adapter.IsMarketDataEnabled)
 						{
 							_candlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
 								(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range.Min, range.Max, _series.TryGetKey(series)), TimeSpan.FromSeconds(3));
@@ -98,8 +98,11 @@
 						break;
 
 					case MessageTypes.Disconnect:
-						if (((DisconnectMessage)message).Error == null)
+						if (((DisconnectMessage)message).Error == null && _candlesTimer != null)
+						{
 							_candlesTimer.Dispose();
+							_candlesTimer = null;
+						}
 
 						break;
 

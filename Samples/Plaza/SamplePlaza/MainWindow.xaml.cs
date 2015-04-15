@@ -111,7 +111,7 @@ namespace SamplePlaza
 						revisionManager.Tables.Add(Trader.TableRegistry.TradeOption);
 
 						Trader.Tables.Clear();
-						Trader.SyncTables(Tables.SelectedTables);
+						Trader.TableRegistry.SyncTables(Tables.SelectedTables);
 
 						if (Trader.Tables.Contains(Trader.TableRegistry.AnonymousOrdersLog))
 						{

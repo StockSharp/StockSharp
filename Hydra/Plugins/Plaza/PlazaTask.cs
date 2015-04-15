@@ -226,7 +226,7 @@ namespace StockSharp.Hydra.Plaza
 
 			connector.TableRegistry.StreamRegistry.IsFastRepl = _settings.IsFastRepl;
 
-			connector.SyncTables(_settings.Tables);
+			connector.TableRegistry.SyncTables(_settings.Tables);
 
 			// добавляем все возможные колонки во все таблицы
 			connector.Tables.ForEach(t => t.Metadata.AllColumns.ForEach(c => t.Columns.TryAdd(c)));
