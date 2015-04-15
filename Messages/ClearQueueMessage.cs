@@ -8,7 +8,7 @@
 	/// </summary>
 	[DataContract]
 	[Serializable]
-	public class ClearMessageQueueMessage : Message
+	public class ClearQueueMessage : Message
 	{
 		/// <summary>
 		/// Тип сообщений, которые необходимо удалить.
@@ -30,10 +30,10 @@
 		public object Arg { get; set; }
 
 		/// <summary>
-		/// Инициализировать <see cref="ClearMessageQueueMessage"/>.
+		/// Инициализировать <see cref="ClearQueueMessage"/>.
 		/// </summary>
-		public ClearMessageQueueMessage()
-			: base(MessageTypes.ClearMessageQueue)
+		public ClearQueueMessage()
+			: base(MessageTypes.ClearQueue)
 		{
 		}
 	}

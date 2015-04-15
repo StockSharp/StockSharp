@@ -161,7 +161,7 @@
 		/// <summary>
 		/// Очистить очередь сообщений.
 		/// </summary>
-		ClearMessageQueue,
+		ClearQueue,
 
 		/// <summary>
 		/// Свеча (тиковая).

@@ -190,9 +190,10 @@ namespace StockSharp.Algo
 
 		private readonly ISecurityProvider _securityProvider;
 
-		private Timer _marketTimeChangedTimer;
+		private readonly SyncObject _marketTimerSync = new SyncObject();
+		private Timer _marketTimer;
 		private readonly TimeMessage _marketTimeMessage = new TimeMessage();
-		private bool _isMarketTimeMessageHandled;
+		private bool _isMarketTimeHandled;
 
 		/// <summary>
 		/// Создать <see cref="Connector"/>.
@@ -1137,7 +1138,10 @@ namespace StockSharp.Algo
 		private void ProcessTimeInterval(Message message)
 		{
 			if (message == _marketTimeMessage)
-				_isMarketTimeMessageHandled = true;
+			{
+				lock (_marketTimerSync)
+					_isMarketTimeHandled = true;
+			}
 
 			// output messages from adapters goes asynchronously
 			if (_currentTime > message.LocalTime)
@@ -1417,18 +1421,26 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void StartMarketTimer()
 		{
-			if (null != _marketTimeChangedTimer)
+			if (null != _marketTimer)
 				return;
 
-			_isMarketTimeMessageHandled = true;
+			_isMarketTimeHandled = true;
 
-			_marketTimeChangedTimer = ThreadingHelper
+			_marketTimer = ThreadingHelper
 				.Timer(() =>
 				{
 					// TimeMsg required for notify invoke MarketTimeChanged event (and active time based IMarketRule-s)
 					// No need to put _marketTimeMessage again, if it still in queue.
-					if (_isMarketTimeMessageHandled)
-						SendOutMessage(_marketTimeMessage, MarketDataAdapter);
+
+					lock (_marketTimerSync)
+					{
+						if (!_isMarketTimeHandled)
+							return;
+
+						_isMarketTimeHandled = false;
+					}
+
+					SendOutMessage(_marketTimeMessage, MarketDataAdapter);
 				})
 				.Interval(MarketTimeChangedInterval);
 		}
@@ -1438,11 +1450,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected void StopMarketTimer()
 		{
-			if (null == _marketTimeChangedTimer)
+			if (null == _marketTimer)
 				return;
 
-			_marketTimeChangedTimer.Dispose();
-			_marketTimeChangedTimer = null;
+			_marketTimer.Dispose();
+			_marketTimer = null;
 		}
 
 		/// <summary>

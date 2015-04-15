@@ -350,6 +350,13 @@ namespace StockSharp.Algo
 		/// <param name="message">Сообщение.</param>
 		protected virtual void OnInnerAdapterNewMessage(IMessageAdapter innerAdapter, Message message)
 		{
+			if (message.IsBack)
+			{
+				message.IsBack = false;
+				innerAdapter.SendInMessage(message);
+				return;
+			}
+
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
@@ -500,8 +507,7 @@ namespace StockSharp.Algo
 				//в процессе подписки пользователь отменил ее - надо отписаться от получения данных
 				var cancelMessage = (MarketDataMessage)message.Clone();
 				cancelMessage.IsSubscribe = false;
-				cancelMessage.IsBack = true;
-				SendOutMessage(cancelMessage);
+				adapter.SendInMessage(cancelMessage);
 			}
 			else
 			{

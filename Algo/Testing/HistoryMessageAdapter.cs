@@ -455,7 +455,7 @@ namespace StockSharp.Algo.Testing
 			if (storage != null)
 				_basketStorage.InnerStorages.Remove(storage);
 
-			SendOutMessage(new ClearMessageQueueMessage
+			SendOutMessage(new ClearQueueMessage
 			{
 				ClearMessageType = messageType,
 				SecurityId = security.ToSecurityId(),

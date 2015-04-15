@@ -12,7 +12,6 @@
 
 	class RestoredConnectMessage : ConnectMessage
 	{
-		
 	}
 
 	/// <summary>
@@ -96,6 +95,8 @@
 					{
 						lock (_timeSync)
 							_isTimeMessageHandled = true;
+
+						return;
 					}
 
 					break;
@@ -154,6 +155,8 @@
 
 				if (!_isTimeMessageHandled)
 					return;
+
+				_isTimeMessageHandled = false;
 			}
 
 			_timeMessage.IsBack = true;

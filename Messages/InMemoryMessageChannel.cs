@@ -1,8 +1,8 @@
 ﻿namespace StockSharp.Messages
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -10,36 +10,34 @@
 	using StockSharp.Localization;
 	using StockSharp.Logging;
 
-	using Pair = System.Collections.Generic.KeyValuePair<System.DateTime, Messages.Message>;
-
 	/// <summary>
 	/// Транспортный канал сообщений, основанный на очереди и работающий в пределах одного процесса.
 	/// </summary>
 	public class InMemoryMessageChannel : IMessageChannel
 	{
-		private class BlockingPriorityQueue : BaseBlockingQueue<Pair, OrderedPriorityQueue<DateTime, Message>>
+		private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTime, Message>, OrderedPriorityQueue<DateTime, Message>>
 		{
 			public BlockingPriorityQueue()
 				: base(new OrderedPriorityQueue<DateTime, Message>())
 			{
 			}
 
-			protected override void OnEnqueue(Pair item, bool force)
+			protected override void OnEnqueue(KeyValuePair<DateTime, Message> item, bool force)
 			{
 				InnerCollection.Enqueue(item.Key, item.Value);
 			}
 
-			protected override Pair OnDequeue()
+			protected override KeyValuePair<DateTime, Message> OnDequeue()
 			{
 				return InnerCollection.Dequeue();
 			}
 
-			protected override Pair OnPeek()
+			protected override KeyValuePair<DateTime, Message> OnPeek()
 			{
 				return InnerCollection.Peek();
 			}
 
-			public void Clear(ClearMessageQueueMessage message)
+			public void Clear(ClearQueueMessage message)
 			{
 				lock (SyncRoot)
 				{
@@ -156,12 +154,18 @@
 					{
 						try
 						{
-							Message message;
+							KeyValuePair<DateTime, Message> pair;
 
-							if (!TryDequeue(out message))
+							if (!_messageQueue.TryDequeue(out pair))
+							{
 								break;
+							}
 
-							NewOutMessage.SafeInvoke(message);
+							//if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
+							//	Console.WriteLine("<< ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
+
+							_msgStat.Remove(pair.Value);
+							NewOutMessage.SafeInvoke(pair.Value);
 						}
 						catch (Exception ex)
 						{
@@ -174,26 +178,6 @@
 				.Name("{0} channel thread.".Put(Name))
 				//.Culture(CultureInfo.InvariantCulture)
 				.Launch();
-		}
-
-		private bool TryDequeue(out Message message)
-		{
-			Pair pair;
-
-			if (!_messageQueue.TryDequeue(out pair))
-			{
-				message = null;
-				return false;
-			}
-
-			_msgStat.Remove(pair.Value);
-
-			message = pair.Value;
-
-			if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
-				Console.WriteLine("<< ({0}) {1}", Thread.CurrentThread.Name, message);
-
-			return true;
 		}
 
 		/// <summary>
@@ -213,7 +197,7 @@
 			if (!IsOpened)
 				throw new InvalidOperationException();
 
-			var clearMsg = message as ClearMessageQueueMessage;
+			var clearMsg = message as ClearQueueMessage;
 
 			if (clearMsg != null)
 			{
@@ -221,11 +205,11 @@
 			}
 			else
 			{
-				if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
-					Console.WriteLine(">> ({0}) {1}", Thread.CurrentThread.Name, message);
+				//if (!(message is TimeMessage) && message.GetType().Name != "BasketMessage")
+				//	Console.WriteLine(">> ({0}) {1}", System.Threading.Thread.CurrentThread.Name, message);
 
 				_msgStat.Add(message);
-				_messageQueue.Enqueue(new Pair(message.LocalTime, message));	
+				_messageQueue.Enqueue(new KeyValuePair<DateTime, Message>(message.LocalTime, message));	
 			}
 		}
 
