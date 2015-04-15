@@ -984,7 +984,7 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException("order");
 
-			order.Id = message.OrderId ?? 0;
+			order.Id = message.OrderId;
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
@@ -1112,7 +1112,7 @@ namespace StockSharp.Algo
 
 			order.Portfolio = Portfolio.AnonymousPortfolio;
 
-			order.Id = message.OrderId ?? 0;
+			order.Id = message.OrderId;
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Price = message.Price;

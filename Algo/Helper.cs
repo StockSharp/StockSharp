@@ -43,8 +43,8 @@ namespace StockSharp.Algo
 		{
 			order.ChechOrderState(checkVolume);
 
-			if (order.Id != 0 || !order.StringId.IsEmpty())
-				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == 0 ? order.StringId : order.Id.To<string>()), "order");
+			if (order.Id != null || !order.StringId.IsEmpty())
+				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), "order");
 
 			if (!checkTransactionId)
 				return;
@@ -89,7 +89,7 @@ namespace StockSharp.Algo
 		{
 			order.ChechOrderState(false);
 
-			if (order.TransactionId == 0 && order.Id == 0 && order.StringId.IsEmpty())
+			if (order.TransactionId == 0 && order.Id == null && order.StringId.IsEmpty())
 				throw new ArgumentException(LocalizedStrings.Str899, "order");
 		}
 

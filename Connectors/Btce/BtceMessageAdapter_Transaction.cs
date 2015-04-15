@@ -52,7 +52,10 @@ namespace StockSharp.Btce
 
 		private void ProcessOrderCancel(OrderCancelMessage cancelMsg)
 		{
-			var reply = _client.CancelOrder(cancelMsg.OrderId);
+			if (cancelMsg.OrderId == null)
+				throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(cancelMsg.OrderTransactionId));
+
+			var reply = _client.CancelOrder(cancelMsg.OrderId.Value);
 
 			SendOutMessage(new ExecutionMessage
 			{

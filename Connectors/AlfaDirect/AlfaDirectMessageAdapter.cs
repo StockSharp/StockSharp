@@ -185,10 +185,10 @@ namespace StockSharp.AlfaDirect
 				{
 					var cancelMsg = (OrderCancelMessage)message;
 
-					if (cancelMsg.OrderId == 0)
+					if (cancelMsg.OrderId == null)
 						throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(cancelMsg.OrderTransactionId));
 
-					Wrapper.CancelOrder(cancelMsg.OrderId);
+					Wrapper.CancelOrder(cancelMsg.OrderId.Value);
 					break;
 				}
 

@@ -22,12 +22,15 @@ namespace StockSharp.Quik
 				throw new ArgumentOutOfRangeException("message", message.Type, LocalizedStrings.Str1847);
 			}
 
+			if (message.OldOrderId == null)
+				throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(message.OldTransactionId));
+
 			return
 				new Transaction(TransactionTypes.ReRegister, message)
 					.SetAction(TransactionActions.MoveOrders)
 					.SetSecurity(message, securityClassInfo)
 					.SetFortsMode(message.Volume == 0 ? 0 : 1)
-					.SetFirstOrderId(message.OldOrderId)
+					.SetFirstOrderId(message.OldOrderId.Value)
 					.SetFirstOrderPrice(message.Price)
 					.SetFirstVolume((int)message.Volume);
 		}
@@ -344,7 +347,10 @@ namespace StockSharp.Quik
 					throw new ArgumentOutOfRangeException("message", message.Type, LocalizedStrings.Str1600);
 			}
 
-			idSetterFunc(message.OrderId).SetAction(action);
+			if (message.OrderId == null)
+				throw new InvalidOperationException(LocalizedStrings.Str2252Params.Put(message.OrderTransactionId));
+
+			idSetterFunc(message.OrderId.Value).SetAction(action);
 
 			return transaction;
 		}

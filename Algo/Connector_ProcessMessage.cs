@@ -1064,7 +1064,7 @@ namespace StockSharp.Algo
 					var derivedOrder = _entityCache.GetOrder(security, 0L, message.DerivedOrderId ?? 0, message.DerivedOrderStringId);
 
 					if (derivedOrder == null)
-						_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId ?? 0, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o) => s.DerivedOrder = o));
+						_orderStopOrderAssociations.Add(Tuple.Create(message.DerivedOrderId, message.DerivedOrderStringId), new RefPair<Order, Action<Order, Order>>(order, (s, o) => s.DerivedOrder = o));
 					else
 						order.DerivedOrder = derivedOrder;
 				}
@@ -1090,8 +1090,8 @@ namespace StockSharp.Algo
 						RaiseOrdersChanged(new[] { order });
 				}
 
-				if (order.Id != 0)
-					ProcessMyTrades(order, order.Id, _nonOrderedByIdMyTrades);
+				if (order.Id != null)
+					ProcessMyTrades(order, order.Id.Value, _nonOrderedByIdMyTrades);
 
 				ProcessMyTrades(order, order.TransactionId, _nonOrderedByTransactionIdMyTrades);
 
@@ -1111,7 +1111,7 @@ namespace StockSharp.Algo
 
 				TryProcessFilteredMarketDepth(security, message);
 
-				var isRegisterFail = (fail.Order.Id == 0 && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
+				var isRegisterFail = (fail.Order.Id == null && fail.Order.StringId.IsEmpty()) || fail.Order.Status == OrderStatus.RejectedBySystem;
 
 				this.AddErrorLog(() => (isRegisterFail ? "OrderFailed" : "OrderCancelFailed")
 					+ Environment.NewLine + fail.Order + Environment.NewLine + fail.Error);

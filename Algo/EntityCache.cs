@@ -388,7 +388,7 @@ namespace StockSharp.Algo
 			var raiseNewOrder = orderInfo.Item3;
 
 			var isPending = order.State == OrderStates.Pending;
-			var isPrevIdSet = (order.Id != 0 || !order.StringId.IsEmpty());
+			var isPrevIdSet = (order.Id != null || !order.StringId.IsEmpty());
 
 			bool isChanged;
 
@@ -455,13 +455,13 @@ namespace StockSharp.Algo
 				isChanged = true;
 			}
 
-			if (isNew || (!isPrevIdSet && (order.Id != 0 || !order.StringId.IsEmpty())))
+			if (isNew || (!isPrevIdSet && (order.Id != null || !order.StringId.IsEmpty())))
 			{
-				if (order.Id != 0)
+				if (order.Id != null)
 				{
 					// так как биржевые номера могут повторяться, то переписываем старые заявки новыми как наиболее актуальными
-					_cache.GetData(order.Security).OrdersById[order.Id] = order;
-					_cache.AllOrdersById[order.Id] = order;
+					_cache.GetData(order.Security).OrdersById[order.Id.Value] = order;
+					_cache.AllOrdersById[order.Id.Value] = order;
 				}
 				
 				if (!order.StringId.IsEmpty())

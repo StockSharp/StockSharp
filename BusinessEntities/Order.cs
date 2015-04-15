@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private long _id;
+		private long? _id;
 
 		/// <summary>
 		/// Идентификатор заявки.
@@ -87,7 +87,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str361Key)]
 		[DescriptionLoc(LocalizedStrings.OrderIdStringKey, true)]
 		[MainCategory]
-		public long Id
+		public long? Id
 		{
 			get { return _id; }
 			set
@@ -589,7 +589,7 @@ namespace StockSharp.BusinessEntities
 		public override string ToString()
 		{
 			return LocalizedStrings.Str534Params
-				.Put(TransactionId, Id == 0 ? StringId : Id.To<string>(), Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance);
+				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance);
 		}
 	}
 }

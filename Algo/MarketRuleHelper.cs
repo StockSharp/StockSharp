@@ -88,7 +88,7 @@ namespace StockSharp.Algo
 			/// <returns>Строковое представление.</returns>
 			public override string ToString()
 			{
-				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == 0 ? Order.StringId : Order.Id.To<string>()));
+				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == null ? Order.StringId : Order.Id.To<string>()));
 			}
 		}
 
