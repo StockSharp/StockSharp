@@ -213,6 +213,8 @@ namespace StockSharp.Hydra.Transaq
 					MarketDataInterval = _settings.MarketDataInterval
 				};
 
+				trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
+
 				if (_settings.UseProxy)
 				{
 					trader.Proxy = new StockSharp.Transaq.Proxy

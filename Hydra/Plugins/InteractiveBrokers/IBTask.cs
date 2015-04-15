@@ -118,12 +118,21 @@ namespace StockSharp.Hydra.InteractiveBrokers
 				_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
 			}
 
-			return new MarketDataConnector<IBTrader>(EntityRegistry.Securities, this, () => new IBTrader
+			return new MarketDataConnector<IBTrader>(EntityRegistry.Securities, this, CreateConnector);
+		}
+
+		private IBTrader CreateConnector()
+		{
+			var trader = new IBTrader
 			{
 				Address = _settings.Address,
 				ClientId = _settings.ClientId,
 				ServerLogLevel = _settings.ServerLogLevel
-			});
+			};
+
+			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
+
+			return trader;
 		}
 	}
 }

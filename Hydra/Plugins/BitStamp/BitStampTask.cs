@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.BitStamp
 
 	using StockSharp.BitStamp;
 	using StockSharp.Hydra.Core;
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -58,7 +57,6 @@ namespace StockSharp.Hydra.BitStamp
 		{
 			var trader = new BitStampTrader();
 			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
-			trader.Adapter.InnerAdapters.Add(new PassThroughMessageAdapter(new IncrementalIdGenerator()) { IsMarketDataEnabled = false });
 			return trader;
 		}
 	}

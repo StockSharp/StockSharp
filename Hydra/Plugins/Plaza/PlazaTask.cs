@@ -222,6 +222,8 @@ namespace StockSharp.Hydra.Plaza
 				OnlySystemTrades = _settings.OnlySystemTrades,
 			};
 
+			connector.Adapter.InnerAdapters.Remove(connector.TransactionAdapter);
+
 			connector.TableRegistry.StreamRegistry.IsFastRepl = _settings.IsFastRepl;
 
 			connector.SyncTables(_settings.Tables);

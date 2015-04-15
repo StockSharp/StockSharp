@@ -2,6 +2,7 @@ namespace StockSharp.Hydra.Micex
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Net;
 	using System.Security;
 
@@ -150,7 +151,12 @@ namespace StockSharp.Hydra.Micex
 				_settings.MicexLogLevel = null;
 			}
 
-			return new MarketDataConnector<MicexTrader>(EntityRegistry.Securities, this, () => new MicexTrader
+			return new MarketDataConnector<MicexTrader>(EntityRegistry.Securities, this, CreateConnector);
+		}
+
+		private MicexTrader CreateConnector()
+		{
+			var trader = new MicexTrader
 			{
 				Login = _settings.Login,
 				Password = _settings.Password.To<string>(),
@@ -160,7 +166,11 @@ namespace StockSharp.Hydra.Micex
 				OrderBookDepth = _settings.OrderBookDepth,
 				RequestAllDepths = _settings.RequestAllDepths,
 				MicexLogLevel = _settings.MicexLogLevel
-			});
+			};
+
+			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
+
+			return trader;
 		}
 	}
 }

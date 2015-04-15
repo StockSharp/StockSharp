@@ -15,10 +15,9 @@ namespace StockSharp.Hydra.Blackwood
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	[Category(TaskCategories.American)]
 	[TaskDisplayName(_sourceName)]
@@ -138,13 +137,22 @@ namespace StockSharp.Hydra.Blackwood
 				_settings.MarketDataAddress = new IPEndPoint(BlackwoodAddresses.WetBush, BlackwoodAddresses.MarketDataPort);
 			}
 
-			return new MarketDataConnector<BlackwoodTrader>(EntityRegistry.Securities, this, () => new BlackwoodTrader
+			return new MarketDataConnector<BlackwoodTrader>(EntityRegistry.Securities, this, CreateConnector);
+		}
+
+		private BlackwoodTrader CreateConnector()
+		{
+			var trader = new BlackwoodTrader
 			{
 				HistoricalDataAddress = _settings.HistoricalDataAddress,
 				MarketDataAddress = _settings.MarketDataAddress,
 				Login = _settings.Login,
 				Password = _settings.Password.To<string>(),
-			});
+			};
+
+			trader.Adapter.InnerAdapters.Remove(trader.TransactionAdapter);
+
+			return trader;
 		}
 	}
 }

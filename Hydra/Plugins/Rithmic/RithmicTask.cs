@@ -147,14 +147,23 @@ namespace StockSharp.Hydra.Rithmic
 				_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
 			}
 
-			return new MarketDataConnector<RithmicTrader>(EntityRegistry.Securities, this, () => new RithmicTrader
+			return new MarketDataConnector<RithmicTrader>(EntityRegistry.Securities, this, CreateConnector);
+		}
+
+		private RithmicTrader CreateConnector()
+		{
+			var trader = new RithmicTrader
 			{
 				UserName = _settings.UserName,
 				Password = _settings.Password.To<string>(),
 				CertFile = _settings.CertFile,
 				Server = _settings.Server,
 				LogFileName = _settings.LogFileName
-			});
+			};
+
+			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
+
+			return trader;
 		}
 	}
 }
