@@ -26,7 +26,6 @@ namespace SampleCandles
 	{
 		private readonly Dictionary<CandleSeries, ChartWindow> _chartWindows = new Dictionary<CandleSeries, ChartWindow>();
 		private QuikTrader _trader;
-		private bool _isDdeStarted;
 		private CandleManager _candleManager;
 		private readonly LogManager _logManager;
 
@@ -100,6 +99,7 @@ namespace SampleCandles
 					return;
 				}
 			}
+
 			if (_trader == null)
 			{
 				// создаем подключение
@@ -111,6 +111,11 @@ namespace SampleCandles
 						LuaPassword = Password.Password.To<SecureString>()
 					}
 					: new QuikTrader(Path.Text) { IsDde = true };
+
+				if (_trader.IsDde)
+				{
+					_trader.DdeTables = new[] { _trader.SecuritiesTable, _trader.TradesTable };
+				}
 
 				_logManager.Sources.Add(_trader);
 				// подписываемся на событие об успешном восстановлении соединения
@@ -127,7 +132,6 @@ namespace SampleCandles
 				_trader.MarketDataSubscriptionFailed += (security, type, error) =>
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 				
-				_trader.Connected += () => this.GuiAsync(() => ExportDde.IsEnabled = true);
 				_trader.NewSecurities += securities => this.GuiAsync(() => Security.ItemsSource = _trader.Securities);
 
 				_trader.Connect();
@@ -154,41 +158,10 @@ namespace SampleCandles
 
 			if (_trader != null)
 			{
-				if (_isDdeStarted)
-					StopDde();
-
 				_trader.Dispose();
 			}
 
 			base.OnClosing(e);
-		}
-
-		private void StartDde()
-		{
-			if (_trader.IsDde)
-				_trader.StartExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
-			else
-				_trader.StartExport();
-
-			_isDdeStarted = true;
-		}
-
-		private void StopDde()
-		{
-			if (_trader.IsDde)
-				_trader.StopExport(new[] { _trader.SecuritiesTable, _trader.TradesTable });
-			else
-				_trader.StopExport();
-
-			_isDdeStarted = false;
-		}
-
-		private void ExportDdeClick(object sender, RoutedEventArgs e)
-		{
-			if (_isDdeStarted)
-				StopDde();
-			else
-				StartDde();
 		}
 
 		private CandleTypes SelectedCandleType

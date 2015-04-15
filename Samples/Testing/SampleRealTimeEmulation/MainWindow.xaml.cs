@@ -118,8 +118,6 @@ namespace SampleRealTimeEmulation
 								_buffer.Add(candle);
 						};
 
-						_connector.StartExport();
-
 						this.GuiAsync(() =>
 						{
 							ConnectBtn.IsEnabled = false;

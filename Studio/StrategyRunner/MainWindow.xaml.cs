@@ -120,7 +120,6 @@
 				{
 					case ConnectionStates.Connected:
 						ConnectBtn.Background = _startedBg;
-						_connector.StartExport();
 						break;
 					case ConnectionStates.Disconnected:
 						ConnectBtn.Background = _stoppedBg;
@@ -206,7 +205,6 @@
 			switch (_connector.ConnectionState)
 			{
 				case ConnectionStates.Connected:
-					_connector.StopExport();
 					_connector.Disconnect();
 					break;
 

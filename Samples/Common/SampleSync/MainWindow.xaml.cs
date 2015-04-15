@@ -23,7 +23,6 @@ namespace SampleSync
 	{
 		private readonly Dictionary<CandleSeries, ChartWindow> _chartWindows = new Dictionary<CandleSeries, ChartWindow>();
 		private GuiConnector<QuikTrader> _connector;
-		private bool _isDdeStarted;
 		private ICandleManager _candleManager;
 
 		public MainWindow()
@@ -41,9 +40,6 @@ namespace SampleSync
 
 			if (_connector != null)
 			{
-				if (_isDdeStarted)
-					StopDde();
-
 				_connector.Dispose();
 				_connector.Connector.Dispose();
 			}
@@ -77,15 +73,13 @@ namespace SampleSync
 				// (пред. нужно закомментировать, это - раскомментировать)
 				// new GuiTrader<QuikTrader>(new QuikTrader(Path.Text));
 
-				_connector.Connected += () => ExportDde.IsEnabled = true;
-
 				// теперь можно обратиться к элементу окна 'Security' (это выпадающий список) без конструкции Sync
 				_connector.NewSecurities += securities => Security.ItemsSource = _connector.Securities;
 
 				// производим соединение
 				_connector.Connect();
 
-				// создаем синхронизованный менеджер свечек по несинхронизованному подключению
+				// создаем менеджер свечек по синхронизованному подключению
 				_candleManager = new CandleManager(_connector);
 
 				ConnectBtn.IsEnabled = false;
@@ -96,6 +90,7 @@ namespace SampleSync
 		{
 			var security = (Security)Security.SelectedValue;
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5));
+
 			_chartWindows.SafeAdd(series, key =>
 			{
 				var wnd = new ChartWindow
@@ -117,26 +112,6 @@ namespace SampleSync
 			}).Show();
 
 			_candleManager.Start(series);
-		}
-
-		private void StartDde()
-		{
-			_connector.Connector.StartExport(new[] { _connector.Connector.SecuritiesTable, _connector.Connector.TradesTable });
-			_isDdeStarted = true;
-		}
-
-		private void StopDde()
-		{
-			_connector.Connector.StopExport(new[] { _connector.Connector.SecuritiesTable, _connector.Connector.TradesTable });
-			_isDdeStarted = false;
-		}
-
-		private void ExportDdeClick(object sender, RoutedEventArgs e)
-		{
-			if (_isDdeStarted)
-				StopDde();
-			else
-				StartDde();
 		}
 
 		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)

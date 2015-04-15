@@ -7,20 +7,9 @@
 
 	class HydraQuikTrader : QuikTrader
 	{
-		protected override void OnStartExport()
+		protected override void OnConnect()
 		{
-			if (IsDde)
-				StartExport(Tables);
-			else
-				base.OnStartExport();
-		}
-
-		protected override void OnStopExport()
-		{
-			if (IsDde)
-				StopExport(Tables);
-			else
-				base.OnStopExport();
+			DdeTables = Tables;
 		}
 
 		protected override bool IsConnectionAlive()

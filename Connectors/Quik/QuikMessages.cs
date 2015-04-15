@@ -3,6 +3,8 @@
 	using System;
 	using System.Collections.Generic;
 
+	using Ecng.Common;
+
 	using StockSharp.Messages;
 
 	class HistoryLevel1ChangeMessage : Level1ChangeMessage
@@ -16,7 +18,7 @@
 		Caption
 	}
 
-	class CustomExportMessage : BaseConnectionMessage
+	class CustomExportMessage : MarketDataMessage
 	{
 		public CustomExportType ExportType { get; private set; }
 
@@ -26,14 +28,13 @@
 
 		public string Caption { get; private set; }
 
-		private CustomExportMessage(bool startExport, CustomExportType exportType)
-			: base(startExport ? MessageTypes.Connect : MessageTypes.Disconnect)
+		private CustomExportMessage(CustomExportType exportType)
 		{
 			ExportType = exportType;
 		}
 
-		public CustomExportMessage(bool startExport, DdeCustomTable table)
-			: this(startExport, CustomExportType.Table)
+		public CustomExportMessage(DdeCustomTable table)
+			: this(CustomExportType.Table)
 		{
 			if (table == null)
 				throw new ArgumentNullException("table");
@@ -41,8 +42,8 @@
 			Table = table;
 		}
 
-		public CustomExportMessage(bool startExport, IEnumerable<DdeTable> tables)
-			: this(startExport, CustomExportType.Tables)
+		public CustomExportMessage(IEnumerable<DdeTable> tables)
+			: this(CustomExportType.Tables)
 		{
 			if (tables == null)
 				throw new ArgumentNullException("tables");
@@ -50,10 +51,10 @@
 			Tables = tables;
 		}
 
-		public CustomExportMessage(bool startExport, string caption)
-			: this(startExport, CustomExportType.Caption)
+		public CustomExportMessage(string caption)
+			: this(CustomExportType.Caption)
 		{
-			if (caption == null)
+			if (caption.IsEmpty())
 				throw new ArgumentNullException("caption");
 
 			Caption = caption;

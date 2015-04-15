@@ -146,8 +146,6 @@ namespace SampleSmartSMA
 								ProcessCandle(candle);
 						};
 
-						_trader.StartExport();
-
 						this.GuiAsync(() =>
 						{
 							ConnectBtn.IsEnabled = false;

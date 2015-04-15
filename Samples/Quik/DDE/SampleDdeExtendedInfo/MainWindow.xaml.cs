@@ -22,7 +22,7 @@ namespace SampleDdeExtendedInfo
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_securitiesWindow.MakeHideable();
 
@@ -37,9 +37,6 @@ namespace SampleDdeExtendedInfo
 
 			if (Trader != null)
 			{
-				if (_isDdeStarted)
-					StopDde();
-
 				Trader.Dispose();
 			}
 
@@ -96,10 +93,11 @@ namespace SampleDdeExtendedInfo
 						Trader.QuotesTable.Columns.Add(DdeQuoteColumns.OwnAskVolume);
 						Trader.QuotesTable.Columns.Add(DdeQuoteColumns.OwnBidVolume);
 
+						Trader.DdeTables = new[] { Trader.SecuritiesTable };
+
 						Trader.Connected += () => this.GuiAsync(() =>
 						{
 							ShowSecurities.IsEnabled = true;
-							ExportDde.IsEnabled = true;
 
 							_isConnected = true;
 							ConnectBtn.Content = LocalizedStrings.Disconnect;
@@ -133,28 +131,6 @@ namespace SampleDdeExtendedInfo
 				window.Hide();
 			else
 				window.Show();
-		}
-
-		private bool _isDdeStarted;
-
-		private void StartDde()
-		{
-			Trader.StartExport(new[] { Trader.SecuritiesTable });
-			_isDdeStarted = true;
-		}
-
-		private void StopDde()
-		{
-			Trader.StopExport(new[] { Trader.SecuritiesTable });
-			_isDdeStarted = false;
-		}
-
-		private void ExportDdeClick(object sender, RoutedEventArgs e)
-		{
-			if (_isDdeStarted)
-				StopDde();
-			else
-				StartDde();
 		}
 	}
 }

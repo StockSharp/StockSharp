@@ -109,7 +109,8 @@ namespace SampleOEC
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
 
-						Trader.StartExport();
+						// запускаем подписку на новости
+						Trader.RegisterNews();
 					};
 
 					// подписываемся на событие разрыва соединения
@@ -122,9 +123,6 @@ namespace SampleOEC
 					});
 
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
-
-					// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-					Trader.ExportStarted += Trader.RegisterNews;
 
 					Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
@@ -174,7 +172,6 @@ namespace SampleOEC
 			else
 			{
 				Trader.UnRegisterNews();
-				Trader.StopExport();
 
 				Trader.Disconnect();
 			}

@@ -57,8 +57,8 @@ namespace StockSharp.Xaml
 
 			var connector = new Connector();
 			connector.Adapter.InnerAdapters.Add(_editableAdapter);
-			
-			connector.ExportStarted += () =>
+
+			connector.Connected += () =>
 			{
 				connector.Dispose();
 
@@ -74,9 +74,7 @@ namespace StockSharp.Xaml
 				});
 			};
 
-			connector.Connected += connector.StartExport;
-
-			Action<Exception> errorHandler = error =>
+			connector.ConnectionError += error =>
 			{
 				connector.Dispose();
 
@@ -92,9 +90,6 @@ namespace StockSharp.Xaml
 					Test.IsEnabled = true;
 				});
 			};
-
-			connector.ConnectionError += errorHandler;
-			connector.ExportError += errorHandler;
 
 			connector.Connect();
 		}

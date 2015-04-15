@@ -91,9 +91,6 @@ namespace SampleSmartCandles
 				securities.ForEach(_trader.RegisterTrades);
 			};
 
-			// запускаем экспорт в случае успешного подключения
-			_trader.Connected += _trader.StartExport;
-
 			_candleManager = new CandleManager(_trader);
 
             _trader.Connect();

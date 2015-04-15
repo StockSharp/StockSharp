@@ -94,11 +94,9 @@ namespace SampleIB
 						{
 							this.GuiAsync(() => ChangeConnectStatus(true));
 
-							Trader.StartExport();
+							// запускаем подписку на новости
+							Trader.RegisterNews();
 						};
-
-						// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-						Trader.ExportStarted += Trader.RegisterNews;
 
 						// подписываемся на событие разрыва соединения
 						Trader.ConnectionError += error => this.GuiAsync(() =>
@@ -150,7 +148,6 @@ namespace SampleIB
 				else
 				{
 					Trader.UnRegisterNews();
-					Trader.StopExport();
 
 					Trader.Disconnect();
 				}

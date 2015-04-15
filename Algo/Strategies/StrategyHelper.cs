@@ -412,7 +412,7 @@ namespace StockSharp.Algo.Strategies
 				};
 
 				connector.Connect();
-				connector.StartExport();
+				//connector.StartExport();
 
 				connector.UnderlyingConnector.Start(from, to);
 

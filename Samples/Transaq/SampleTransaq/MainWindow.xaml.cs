@@ -105,14 +105,12 @@ namespace SampleTransaq
 						// возводим флаг, что соединение установлено
 						_isConnected = true;
 
-						Trader.StartExport();
+						// запускаем подписку на новости
+						Trader.RegisterNews();
 
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
 					};
-
-					// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-					Trader.ExportStarted += Trader.RegisterNews;
 
 					// подписываемся на событие разрыва соединения
 					Trader.ConnectionError += error => this.GuiAsync(() =>
@@ -184,7 +182,6 @@ namespace SampleTransaq
 			else
 			{
 				Trader.UnRegisterNews();
-				Trader.StopExport();
 
 				Trader.Disconnect();
 			}

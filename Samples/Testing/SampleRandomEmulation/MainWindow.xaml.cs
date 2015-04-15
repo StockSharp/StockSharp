@@ -107,9 +107,8 @@ namespace SampleRandomEmulation
 			};
 
 			// соединяемся с трейдером и запускаем экспорт,
-			// чтобы инициализировать переданными инструментами и портфелями необходимые свойства EmulationTrader
+			// чтобы инициализировать переданными инструментами и портфелями необходимые свойства коннектора
 			_connector.Connect();
-			_connector.StartExport();
 
 			var candleManager = new CandleManager(_connector);
 

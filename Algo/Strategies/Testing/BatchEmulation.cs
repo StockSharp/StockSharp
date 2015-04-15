@@ -321,7 +321,7 @@
 
 					ApplySettings();
 
-					EmulationConnector.StartExport();
+					//EmulationConnector.StartExport();
 					OnEmulationStarting();
 
 					break;
@@ -332,7 +332,7 @@
 					break;
 
 				case EmulationStates.Stopping:
-					EmulationConnector.StopExport();
+					//EmulationConnector.StopExport();
 					break;
 
 				case EmulationStates.Stopped:

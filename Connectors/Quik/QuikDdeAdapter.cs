@@ -321,6 +321,21 @@ namespace StockSharp.Quik
 				DdeCurrencyPortfolioColumns.FirmId,
 				DdeCurrencyPortfolioColumns.Currency
 			});
+
+			_allTables = new[]
+			{
+				SecuritiesTable,
+				TradesTable,
+				OrdersTable,
+				StopOrdersTable,
+				MyTradesTable,
+				EquityPortfoliosTable,
+				DerivativePortfoliosTable,
+				EquityPositionsTable,
+				DerivativePositionsTable,
+				SecuritiesChangeTable,
+				CurrencyPortfoliosTable
+			};
 		}
 
 		/// <summary>
@@ -507,6 +522,53 @@ namespace StockSharp.Quik
 			get { return !DdeServer.IsEmpty(); }
 		}
 
+		private DdeTable[] _allTables;
+
+		internal DdeTable[] AllTables
+		{
+			get
+			{
+				if (_allTables == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1817);
+
+				return _allTables;
+			}
+		}
+
+		private IEnumerable<DdeTable> _tables;
+
+		/// <summary>
+		/// Таблицы, для которых будет запущен экспорт данных.
+		/// </summary>
+		public IEnumerable<DdeTable> Tables
+		{
+			get
+			{
+				if (_tables != null)
+					return _tables;
+
+				var except = new List<DdeTable>();
+
+				if (!UseCurrencyPortfolios)
+					except.Add(CurrencyPortfoliosTable);
+
+				if (!UseSecuritiesChange)
+					except.Add(SecuritiesChangeTable);
+
+				return except.Count == 0 ? AllTables : AllTables.Except(except);
+			}
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				if (value.IsEmpty())
+					throw new ArgumentOutOfRangeException("value");
+
+				_tables = value.ToArray();
+			}
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -522,31 +584,7 @@ namespace StockSharp.Quik
 					StartDdeServer();
 
 					var terminal = GetTerminal();
-
-					var customTablesMessage = message as CustomExportMessage;
-					if (customTablesMessage != null)
-					{
-						switch (customTablesMessage.ExportType)
-						{
-							case CustomExportType.Table:
-								terminal.StartDde(customTablesMessage.Table);
-								break;
-
-							case CustomExportType.Tables:
-								terminal.StartDde(customTablesMessage.Tables);
-								break;
-
-							case CustomExportType.Caption:
-								terminal.StartDde(customTablesMessage.Caption);
-								break;
-
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-					else
-						terminal.StartDde();
-
+					terminal.StartDde(Tables);
 					SendOutMessage(new ConnectMessage());
 					break;
 				}
@@ -554,31 +592,7 @@ namespace StockSharp.Quik
 				case MessageTypes.Disconnect:
 				{
 					var terminal = GetTerminal();
-
-					var customTablesMessage = message as CustomExportMessage;
-					if (customTablesMessage != null)
-					{
-						switch (customTablesMessage.ExportType)
-						{
-							case CustomExportType.Table:
-								terminal.StopDde(customTablesMessage.Table);
-								break;
-
-							case CustomExportType.Tables:
-								terminal.StopDde(customTablesMessage.Tables);
-								break;
-
-							case CustomExportType.Caption:
-								terminal.StopDde(customTablesMessage.Caption);
-								break;
-
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-					else
-						terminal.StopDde();
-
+					terminal.StopDde(Tables);
 					SendOutMessage(new DisconnectMessage());
 					break;
 				}
@@ -595,22 +609,66 @@ namespace StockSharp.Quik
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			switch (message.DataType)
+			var customTablesMessage = message as CustomExportMessage;
+			if (customTablesMessage != null)
 			{
-				case MarketDataTypes.Level1:
-					SubscribeSecurity(message);
-					break;
+				var terminal = GetTerminal();
 
-				case MarketDataTypes.MarketDepth:
-					SubscribeMarketDepth(message);
-					break;
+				switch (customTablesMessage.ExportType)
+				{
+					case CustomExportType.Table:
+					{
+						if (message.IsSubscribe)
+							terminal.StartDde(customTablesMessage.Table);
+						else
+							terminal.StopDde(customTablesMessage.Table);
 
-				case MarketDataTypes.Trades:
-					SubscribeTrades(message);
-					break;
+						break;
+					}
 
-				default:
-					throw new ArgumentOutOfRangeException("message", message.DataType, LocalizedStrings.Str1618);
+					case CustomExportType.Tables:
+					{
+						if (message.IsSubscribe)
+							terminal.StartDde(customTablesMessage.Tables);
+						else
+							terminal.StopDde(customTablesMessage.Tables);
+
+						break;
+					}
+
+					case CustomExportType.Caption:
+					{
+						if (message.IsSubscribe)
+							terminal.StartDde(customTablesMessage.Caption);
+						else
+							terminal.StopDde(customTablesMessage.Caption);
+
+						break;
+					}
+
+					default:
+						throw new ArgumentOutOfRangeException("message", customTablesMessage.ExportType, LocalizedStrings.Str1618);
+				}
+			}
+			else
+			{
+				switch (message.DataType)
+				{
+					case MarketDataTypes.Level1:
+						SubscribeSecurity(message);
+						break;
+
+					case MarketDataTypes.MarketDepth:
+						SubscribeMarketDepth(message);
+						break;
+
+					case MarketDataTypes.Trades:
+						SubscribeTrades(message);
+						break;
+
+					default:
+						throw new ArgumentOutOfRangeException("message", message.DataType, LocalizedStrings.Str1618);
+				}
 			}
 
 			var result = (MarketDataMessage)message.Clone();

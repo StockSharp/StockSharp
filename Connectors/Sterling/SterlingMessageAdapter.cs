@@ -42,6 +42,22 @@
 		}
 
 		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public override bool PortfolioLookupRequired
+		{
+			get { return IsTransactionEnabled; }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// </summary>
+		public override bool OrderStatusRequired
+		{
+			get { return IsTransactionEnabled; }
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -132,41 +148,13 @@
 
 				case MessageTypes.PortfolioLookup:
 				{
-					var portfolios = _client.GetPortfolios();
-
-					foreach (var portfolio in portfolios)
-					{
-						SendOutMessage(new PortfolioMessage
-						{
-							PortfolioName = portfolio.bstrAcct,
-							State = PortfolioStates.Active // ???
-						});
-					}
-
+					ProcessPortfolioLookupMessage((PortfolioLookupMessage)message);
 					break;
 				}
 
-				case MessageTypes.Security:
+				case MessageTypes.OrderStatus:
 				{
-					ProcessSecurityMessage((SecurityMessage)message);
-					break;
-				}
-
-				case MessageTypes.Execution:
-				{
-					ProcessExecutionMessage((ExecutionMessage)message);
-					break;
-				}
-
-				case MessageTypes.Position:
-				{
-					ProcessPositionMessage((PositionMessage)message);
-					break;
-				}
-
-				case MessageTypes.PositionChange:
-				{
-					ProcessPositionChangeMessage((PositionChangeMessage)message);
+					ProcessOrderStatusMessage();
 					break;
 				}
 			}

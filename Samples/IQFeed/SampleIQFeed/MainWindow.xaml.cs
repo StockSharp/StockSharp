@@ -76,17 +76,17 @@ namespace SampleIQFeed
 				_isInitialized = true;
 
 				// подписываемся на событие успешного экспорта
-				Trader.ExportStarted += () =>
+				Trader.Connected += () =>
 				{
 					Trader.RegisterNews();
 
 					// меняем надпись на Отключиться
 					this.GuiAsync(() => ChangeConnectStatus(true));
 				};
-				Trader.ExportStopped += () => this.GuiAsync(() => ChangeConnectStatus(false));
+				Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 				// подписываемся на событие разрыва соединения
-				Trader.ExportError += error => this.GuiAsync(() =>
+				Trader.ConnectionError += error => this.GuiAsync(() =>
 				{
 					// меняем надпись на Подключиться
 					this.GuiAsync(() => ChangeConnectStatus(false));
@@ -111,7 +111,7 @@ namespace SampleIQFeed
 				ShowNews.IsEnabled = ShowSecurities.IsEnabled = true;
 			}
 
-			if (Trader.ExportState == ConnectionStates.Disconnected || Trader.ExportState == ConnectionStates.Failed)
+			if (Trader.ConnectionState == ConnectionStates.Disconnected || Trader.ConnectionState == ConnectionStates.Failed)
 			{
 				//устанавливаем настройки для подключения
 				Trader.Level1Address = Level1AddressCtrl.Text.To<EndPoint>();
@@ -121,10 +121,10 @@ namespace SampleIQFeed
 
 				Trader.IsDownloadSecurityFromSite = DownloadSecurityFromSiteCtrl.IsChecked == true;
 
-				Trader.StartExport();	
+				Trader.Connect();	
 			}
 			else
-				Trader.StopExport();
+				Trader.Disconnect();
 		}
 
 		private void ChangeConnectStatus(bool isConnected)

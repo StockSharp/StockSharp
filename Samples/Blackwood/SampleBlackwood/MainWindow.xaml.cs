@@ -122,15 +122,9 @@ namespace SampleBlackwood
 						// возводим флаг, что соединение установлено
 						_isConnected = true;
 
-						Trader.StartExport();
-
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
-					};
 
-					// подписываемся на событие запуска экспорта
-					Trader.ExportStarted += () =>
-					{
 						// запускаем подписку на новости
 						Trader.RegisterNews();
 
@@ -214,7 +208,6 @@ namespace SampleBlackwood
 				Trader.SubscribeHighLow(false);
 
 				Trader.UnRegisterNews();
-				Trader.StopExport();
 
 				Trader.Disconnect();
 			}

@@ -94,11 +94,10 @@ namespace SampleMicex
 						Trader.Connected += () =>
 						{
 							this.GuiAsync(() => ChangeConnectStatus(true));
-							Trader.StartExport();
-						};
 
-						// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-						Trader.ExportStarted += Trader.RegisterNews;
+							// запускаем подписку на новости
+							Trader.RegisterNews();
+						};
 
 						// подписываемся на событие разрыва соединения
 						Trader.ConnectionError += error => this.GuiAsync(() =>
@@ -156,7 +155,6 @@ namespace SampleMicex
 				else
 				{
 					Trader.UnRegisterNews();
-					Trader.StopExport();
 
 					Trader.Disconnect();
 				}

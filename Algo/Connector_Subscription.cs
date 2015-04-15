@@ -10,7 +10,6 @@ namespace StockSharp.Algo
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -916,75 +915,5 @@ namespace StockSharp.Algo
 				IsSubscribe = false
 			});
 		}
-
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		public void StartExport()
-		{
-			this.AddInfoLog("StartExport");
-
-			if (ExportState != ConnectionStates.Disconnected && ExportState != ConnectionStates.Failed)
-			{
-				this.AddWarningLog(LocalizedStrings.Str693Params, ExportState);
-				return;
-			}
-
-			TryOpenChannel();
-			StartMarketTimer();
-
-			ExportState = ConnectionStates.Connecting;
-			//RaiseNewDataExported();
-
-			_prevTime = default(DateTimeOffset);
-
-			OnStartExport();
-		}
-
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		protected virtual void OnStartExport()
-		{
-			if (!IsMarketDataIndependent && ConnectionState == ConnectionStates.Connected)
-			{
-				RaiseExportStarted();
-				return;
-			}
-
-			SendInMessage(new ConnectMessage());
-		}
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="IConnector.StartExport"/>.
-		/// </summary>
-		public void StopExport()
-		{
-			this.AddInfoLog("StopExport");
-
-			if (ExportState != ConnectionStates.Connected)
-			{
-				this.AddWarningLog(LocalizedStrings.Str694Params, ExportState);
-				return;
-			}
-
-			ExportState = ConnectionStates.Disconnecting;
-
-			_subscriptionManager.Stop();
-			OnStopExport();
-		}
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу.
-		/// </summary>
-		protected virtual void OnStopExport()
-		{
-			SendInMessage(new DisconnectMessage());
-		}
-
-		//internal void ReStartExport()
-		//{
-		//	_subscriptionManager.ReStart();
-		//}
 	}
 }

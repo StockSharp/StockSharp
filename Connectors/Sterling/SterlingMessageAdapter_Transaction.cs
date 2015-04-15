@@ -1,14 +1,13 @@
 ﻿namespace StockSharp.Sterling
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 
 	using SterlingLib;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 
 	partial class SterlingMessageAdapter
@@ -101,95 +100,51 @@
 			replaceOrder.ReplaceOrder(0, replaceMsg.OldTransactionId.To<string>());
 		}
 
-		private void ProcessExecutionMessage(ExecutionMessage executionMsg)
+		private void ProcessOrderStatusMessage()
 		{
-			if (executionMsg.ExtensionInfo != null && executionMsg.ExtensionInfo.ContainsKey("GetMyTrades"))
-			{
-				var myTrades = _client.GetMyTrades();
+			var myTrades = _client.GetMyTrades();
 
-				foreach (var trade in myTrades.Where(t => t.bstrClOrderId != ""))
+			foreach (var trade in myTrades.Where(t => t.bstrClOrderId != ""))
+			{
+				SendOutMessage(new ExecutionMessage
 				{
-					SendOutMessage(new ExecutionMessage
-					{
-						ExecutionType = ExecutionTypes.Trade,
-						PortfolioName = trade.bstrAccount,
-						Volume = trade.nQuantity,
-						Price = (decimal)trade.fExecPrice,
-						Side = trade.bstrSide.ToSide(),
-						OriginalTransactionId = trade.bstrClOrderId.To<long>(),
-						SecurityId = new SecurityId { SecurityCode = trade.bstrSymbol, BoardCode = trade.bstrDestination },
-						OrderType = Enum.GetName(typeof(STIPriceTypes), trade.nPriceType).To<STIPriceTypes>().ToPriceTypes(),
-						OrderId = trade.nOrderRecordId,
-						TradeId = trade.nTradeRecordId,
-						Commission = trade.bEcnFee,
-						ServerTime = trade.bstrTradeTime.StrToDateTime()
-					});
-				}
+					ExecutionType = ExecutionTypes.Trade,
+					PortfolioName = trade.bstrAccount,
+					Volume = trade.nQuantity,
+					Price = (decimal)trade.fExecPrice,
+					Side = trade.bstrSide.ToSide(),
+					OriginalTransactionId = trade.bstrClOrderId.To<long>(),
+					SecurityId = new SecurityId { SecurityCode = trade.bstrSymbol, BoardCode = trade.bstrDestination },
+					OrderType = Enum.GetName(typeof(STIPriceTypes), trade.nPriceType).To<STIPriceTypes>().ToPriceTypes(),
+					OrderId = trade.nOrderRecordId,
+					TradeId = trade.nTradeRecordId,
+					Commission = trade.bEcnFee,
+					ServerTime = trade.bstrTradeTime.StrToDateTime(),
+				});
 			}
 
-			if (executionMsg.ExtensionInfo != null && executionMsg.ExtensionInfo.ContainsKey("GetOrders"))
+			var orders = _client.GetOrders();
+
+			foreach (var order in orders.Where(o => o.bstrClOrderId != ""))
 			{
-				var orders = _client.GetOrders();
-
-				foreach (var order in orders.Where(o => o.bstrClOrderId != ""))
+				SendOutMessage(new ExecutionMessage
 				{
-					SendOutMessage(new ExecutionMessage
-					{
-						ExecutionType = ExecutionTypes.Order,
-						PortfolioName = order.bstrAccount,
-						Volume = order.nQuantity,
-						VisibleVolume = order.nDisplay,
-						Price = (decimal)order.fLmtPrice,
-						Side = order.bstrSide.ToSide(),
-						OriginalTransactionId = order.bstrClOrderId.To<long>(),
-						SecurityId = new SecurityId { SecurityCode = order.bstrSymbol, BoardCode = order.bstrDestination },
-						TimeInForce = order.bstrTif.ToTif(),
-						OrderType = Enum.GetName(typeof(STIPriceTypes), order.nPriceType).To<STIPriceTypes>().ToPriceTypes(),
-						Comment = order.bstrUser,
-						OrderState = Enum.GetName(typeof(STIOrderStatus), order.nOrderStatus).To<STIOrderStatus>().ToOrderStates(),
-						OrderId = order.nOrderRecordId,
-						ServerTime = order.bstrOrderTime.StrToDateTime()
-					});
-				}
-			}		
-		}
-
-		private void ProcessPositionMessage(PositionMessage posMsg)
-		{
-			if (posMsg.ExtensionInfo == null || !posMsg.ExtensionInfo.ContainsKey("GetPositions"))
-				return;
-
-			var pos = _client.GetPositions();
-
-			foreach (var position in pos)
-			{
-				var m = new PositionMessage
-				{
-					PortfolioName = position.bstrAcct,
-					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
-				};
-
-				SendOutMessage(m);
-
-				var message = new PositionChangeMessage
-				{
-					PortfolioName = position.bstrAcct,
-					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
-					ServerTime = CurrentTime
-				};
-
-				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.RealizedPnL, (decimal)position.fReal));
-				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.BeginValue, (decimal)position.nOpeningPosition));
-				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.CurrentValue, (decimal)(position.nOpeningPosition + (position.nSharesBot - position.nSharesSld))));
-				message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.Commission, (decimal)position.fPositionCost));
-
-				SendOutMessage(message);
-			}
-		}
-
-		private void ProcessPositionChangeMessage(PositionChangeMessage posChgMsg)
-		{
-
+					ExecutionType = ExecutionTypes.Order,
+					PortfolioName = order.bstrAccount,
+					Volume = order.nQuantity,
+					VisibleVolume = order.nDisplay,
+					Price = (decimal)order.fLmtPrice,
+					Side = order.bstrSide.ToSide(),
+					OriginalTransactionId = order.bstrClOrderId.To<long>(),
+					SecurityId = new SecurityId { SecurityCode = order.bstrSymbol, BoardCode = order.bstrDestination },
+					TimeInForce = order.bstrTif.ToTif(),
+					OrderType = ((STIPriceTypes)order.nPriceType).ToPriceTypes(),
+					Comment = order.bstrUser,
+					OrderState = ((STIOrderStatus)order.nOrderStatus).ToOrderStates(),
+					OrderId = order.nOrderRecordId,
+					ServerTime = order.bstrOrderTime.StrToDateTime()
+				});
+			}	
 		}
 
 		private void SessionOnStiTradeUpdate(STITradeUpdateMsg msg)
@@ -263,12 +218,55 @@
 				SecurityId = new SecurityId { SecurityCode = msg.bstrSym, BoardCode = "All" },
 			};
 
-			message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.RealizedPnL, (decimal)msg.fReal));
-			message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.BeginValue, (decimal)msg.nOpeningPosition));
-			message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.CurrentValue, (decimal)(msg.nOpeningPosition + (msg.nSharesBot - msg.nSharesSld))));
-			message.Changes.TryAdd(new KeyValuePair<PositionChangeTypes, object>(PositionChangeTypes.Commission, (decimal)msg.fPositionCost));
+			message.TryAdd(PositionChangeTypes.RealizedPnL, (decimal)msg.fReal);
+			message.TryAdd(PositionChangeTypes.BeginValue, (decimal)msg.nOpeningPosition);
+			message.TryAdd(PositionChangeTypes.CurrentValue, (decimal)(msg.nOpeningPosition + (msg.nSharesBot - msg.nSharesSld)));
+			message.TryAdd(PositionChangeTypes.Commission, (decimal)msg.fPositionCost);
 
 			SendOutMessage(message);
+		}
+
+		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
+		{
+			var portfolios = _client.GetPortfolios();
+
+			foreach (var portfolio in portfolios)
+			{
+				SendOutMessage(new PortfolioMessage
+				{
+					PortfolioName = portfolio.bstrAcct,
+					State = PortfolioStates.Active, // ???
+					OriginalTransactionId = message.TransactionId,
+				});
+			}
+
+			var pos = _client.GetPositions();
+
+			foreach (var position in pos)
+			{
+				var m = new PositionMessage
+				{
+					PortfolioName = position.bstrAcct,
+					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
+					OriginalTransactionId = message.TransactionId,
+				};
+
+				SendOutMessage(m);
+
+				var changeMsg = new PositionChangeMessage
+				{
+					PortfolioName = position.bstrAcct,
+					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
+					ServerTime = CurrentTime
+				};
+
+				changeMsg.TryAdd(PositionChangeTypes.RealizedPnL, (decimal)position.fReal);
+				changeMsg.TryAdd(PositionChangeTypes.BeginValue, (decimal)position.nOpeningPosition);
+				changeMsg.TryAdd(PositionChangeTypes.CurrentValue, (decimal)(position.nOpeningPosition + (position.nSharesBot - position.nSharesSld)));
+				changeMsg.TryAdd(PositionChangeTypes.Commission, (decimal)position.fPositionCost);
+
+				SendOutMessage(message);
+			}
 		}
 	}
 }

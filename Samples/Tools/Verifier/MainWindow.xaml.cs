@@ -91,19 +91,17 @@ namespace StockSharp.Quik.Verifier
 
 			var connector = new QuikTrader(terminal.SystemProcess.MainModule.FileName) { IsDde = isDde };
 
-			var checkDde = isDde && CheckDde.IsChecked == true;
+			if (isDde && CheckDde.IsChecked == false)
+				connector.Adapter.InnerAdapters.Remove(connector.MarketDataAdapter);
 
 			connector.Connected += () => this.GuiAsync(() =>
 			{
-				if (checkDde)
-					connector.StartExport();
-
 				OnConnect(connector, null);
 			});
 
 			connector.ConnectionError += error => this.GuiSync(() => OnConnect(connector, error));
 
-			if (checkDde)
+			if (connector.MarketDataAdapter != null)
 				connector.ProcessDataError += error => _settingErrors.Add(new SettingsError(LocalizedStrings.Str3030Params.Put(error.Message), true));	
 
 			connector.Connect();

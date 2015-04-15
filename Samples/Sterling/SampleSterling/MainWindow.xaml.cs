@@ -100,7 +100,6 @@ namespace SampleSterling
 					{
 						this.GuiAsync(() => OnConnectionChanged(true));
 						AddSecurities();
-						Trader.StartExport();
 					};
 
 					// подписываемся на событие разрыва соединения
@@ -218,7 +217,7 @@ namespace SampleSterling
 
 		private void AddSecurities()
 		{
-			Trader.SendInMessage(new SecurityMessage
+			Trader.SendOutMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{
@@ -227,9 +226,9 @@ namespace SampleSterling
 				},
 				Name = "AAPL",
 				SecurityType = SecurityTypes.Stock,
-			});
+			}, Trader.MarketDataAdapter);
 
-			Trader.SendInMessage(new SecurityMessage
+			Trader.SendOutMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{
@@ -238,9 +237,9 @@ namespace SampleSterling
 				},
 				Name = "AAPL",
 				SecurityType = SecurityTypes.Stock,
-			});
+			}, Trader.MarketDataAdapter);
 
-			Trader.SendInMessage(new SecurityMessage
+			Trader.SendOutMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{
@@ -249,9 +248,9 @@ namespace SampleSterling
 				},
 				Name = "IBM",
 				SecurityType = SecurityTypes.Stock,
-			});
+			}, Trader.MarketDataAdapter);
 
-			Trader.SendInMessage(new SecurityMessage
+			Trader.SendOutMessage(new SecurityMessage
 			{
 				SecurityId = new SecurityId
 				{
@@ -260,8 +259,7 @@ namespace SampleSterling
 				},
 				Name = "IBM",
 				SecurityType = SecurityTypes.Stock,
-			});
+			}, Trader.MarketDataAdapter);
 		}
-
 	}
 }

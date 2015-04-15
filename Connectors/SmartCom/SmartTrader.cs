@@ -321,26 +321,18 @@ namespace StockSharp.SmartCom
 			}
 
 			base.OnConnect();
-		}
-
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		protected override void OnStartExport()
-		{
-			base.OnStartExport();
 
 			_realTimeCandlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
 				(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range), TimeSpan.FromSeconds(1));
 		}
 
 		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="IConnector.StartExport"/>.
+		/// Отключиться от торговой системы.
 		/// </summary>
-		protected override void OnStopExport()
+		protected override void OnDisconnect()
 		{
 			_realTimeCandlesTimer.Dispose();
-			base.OnStopExport();
+			base.OnDisconnect();
 		}
 
 		/// <summary>

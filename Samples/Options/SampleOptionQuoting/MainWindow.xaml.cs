@@ -240,7 +240,6 @@ namespace SampleOptionQuoting
 					RefreshChart();
 			});
 
-			Connector.Connected += () => Connector.StartExport();
 			Connector.Connect();
 		}
 

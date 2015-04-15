@@ -132,8 +132,6 @@ namespace StockSharp.Hydra.Core
 			_connector.ProcessDataError += OnError;
 			_connector.Connected += OnConnected;
 			_connector.ConnectionError += OnConnectionError;
-			_connector.ExportStarted += OnExportStarted;
-			_connector.ExportError += OnExportError;
 			_connector.NewTrades += OnNewTrades;
 			_connector.MarketDepthsChanged += OnMarketDepthsChanged;
 			_connector.NewOrderLogItems += OnNewOrderLogItems;
@@ -169,8 +167,6 @@ namespace StockSharp.Hydra.Core
 			_connector.ProcessDataError -= OnError;
 			_connector.Connected -= OnConnected;
 			_connector.ConnectionError -= OnConnectionError;
-			_connector.ExportStarted -= OnExportStarted;
-			_connector.ExportError -= OnExportError;
 			_connector.NewTrades -= OnNewTrades;
 			_connector.MarketDepthsChanged -= OnMarketDepthsChanged;
 			_connector.NewOrderLogItems -= OnNewOrderLogItems;
@@ -286,11 +282,6 @@ namespace StockSharp.Hydra.Core
 
 		private void OnConnected()
 		{
-			Connector.StartExport();
-		}
-
-		private void OnExportStarted()
-		{
 			if (_criteria == null)
 			{
 				if (_exportStarted)
@@ -310,11 +301,6 @@ namespace StockSharp.Hydra.Core
 				_criteria = null;
 				_isRefreshed = false;
 			}
-		}
-
-		private void OnExportError(Exception error)
-		{
-			OnConnectionError(error);
 		}
 
 		private void OnConnectionError(Exception error)

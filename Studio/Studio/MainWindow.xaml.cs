@@ -1126,7 +1126,6 @@ namespace StockSharp.Studio
 			connector.Connected += Trader_Connected;
 			connector.Disconnected += Trader_Disconnected;
 			connector.ConnectionError += Trader_ConnectionError;
-			connector.ExportError += Trader_ConnectionError;
 		}
 
 		private MarketDataSettingsCache CreateMarketDataSettingsCache()
@@ -1216,7 +1215,6 @@ namespace StockSharp.Studio
 			{
 				ConnectBtn.IsEnabled = false;
 
-				connector.StopExport();
 				connector.Disconnect();
 			}
 			catch (Exception ex)
@@ -1267,7 +1265,6 @@ namespace StockSharp.Studio
 			connector.Connected -= Trader_Connected;
 			connector.Disconnected -= Trader_Disconnected;
 			connector.ConnectionError -= Trader_ConnectionError;
-			connector.ExportError -= Trader_ConnectionError;
 
 			// временное решение для сохранения аннотаций на графике,
 			// т.к. нет способа определить изменение положения или параметров аннотаций.
@@ -1326,15 +1323,6 @@ namespace StockSharp.Studio
 			ChangeConnectionControls();
 
 			_showConnectionErrors = true;
-
-			try
-			{
-				_algoService.Connector.StartExport();
-			}
-			catch (Exception ex)
-			{
-				_algoService.Connector.AddErrorLog(ex);
-			}
 		}
 
 		private void Trader_Disconnected()

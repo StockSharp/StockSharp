@@ -514,8 +514,6 @@ namespace StockSharp.Studio.Services
 			strategy.SetCandleManager(CreateCandleManager(strategyConnector, TimeSpan.FromDays((strategy.HistoryDaysCount + 1) * 2)));
 			strategy.SetIsEmulation(false);
 
-			strategyConnector.Connected += strategyConnector.StartExport;
-
 			strategy.Start();
 			strategyConnector.Connect();
 		}

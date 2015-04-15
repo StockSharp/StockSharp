@@ -555,55 +555,6 @@ namespace StockSharp.Quik
 			set
 			{
 				_adapter = value;
-
-				if (_adapter == null)
-					_allTables = null;
-				else
-				{
-					_allTables = new[]
-					{
-						value.SecuritiesTable,
-						value.TradesTable,
-						value.OrdersTable,
-						value.StopOrdersTable,
-						value.MyTradesTable,
-						value.EquityPortfoliosTable,
-						value.DerivativePortfoliosTable,
-						value.EquityPositionsTable,
-						value.DerivativePositionsTable,
-						value.SecuritiesChangeTable,
-						value.CurrencyPortfoliosTable
-					};
-				}
-			}
-		}
-
-		private DdeTable[] _allTables;
-
-		private DdeTable[] AllTables
-		{
-			get
-			{
-				if (_allTables == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1817);
-
-				return _allTables;
-			}
-		}
-
-		private IEnumerable<DdeTable> FilteredAllTables
-		{
-			get
-			{
-				var except = new List<DdeTable>();
-
-				if (!Adapter.UseCurrencyPortfolios)
-					except.Add(Adapter.CurrencyPortfoliosTable);
-
-				if (!Adapter.UseSecuritiesChange)
-					except.Add(Adapter.SecuritiesChangeTable);
-
-				return except.Count == 0 ? AllTables : AllTables.Except(except);
 			}
 		}
 
@@ -825,10 +776,10 @@ namespace StockSharp.Quik
 
 		#region StartDde StopDde
 
-		internal void StartDde()
-		{
-			StartDde(FilteredAllTables);
-		}
+		//internal void StartDde()
+		//{
+		//	StartDde(FilteredAllTables);
+		//}
 
 		internal void StartDde(IEnumerable<DdeTable> ddeTables)
 		{
@@ -841,10 +792,10 @@ namespace StockSharp.Quik
 				StartDde(table.Caption);
 		}
 
-		internal void StopDde()
-		{
-			StopDde(FilteredAllTables);
-		}
+		//internal void StopDde()
+		//{
+		//	StopDde(FilteredAllTables);
+		//}
 
 		internal void StopDde(IEnumerable<DdeTable> ddeTables)
 		{
@@ -971,7 +922,7 @@ namespace StockSharp.Quik
 			if (caption.IsEmpty())
 				throw new ArgumentNullException("caption");
 
-			return AllTables.FirstOrDefault(t => t.Caption == caption);
+			return Adapter.AllTables.FirstOrDefault(t => t.Caption == caption);
 		}
 
 		#endregion
@@ -1009,7 +960,7 @@ namespace StockSharp.Quik
 					}
 				}
 				else
-					StartDde();
+					StartDde(Adapter.Tables);
 			});
 		}
 
@@ -1326,7 +1277,7 @@ namespace StockSharp.Quik
 				throw new ArgumentNullException("tables");
 
 			if (tables.Length == 0)
-				tables = FilteredAllTables.ToArray();
+				tables = Adapter.Tables.ToArray();
 
 			lock (_winApiLock)
 			{
@@ -1352,7 +1303,7 @@ namespace StockSharp.Quik
 				throw new ArgumentNullException("tables");
 
 			if (tables.Length == 0)
-				tables = FilteredAllTables.Concat(Adapter.QuotesTable).ToArray();
+				tables = Adapter.Tables.Concat(Adapter.QuotesTable).ToArray();
 
 			lock (_winApiLock)
 			{
@@ -1683,7 +1634,7 @@ namespace StockSharp.Quik
 
 			return ddeTables.Select(t =>
 			{
-				var index = AllTables.IndexOf(t);
+				var index = Adapter.AllTables.IndexOf(t);
 
 				if (index == -1)
 					throw new InvalidOperationException(LocalizedStrings.Str1833Params.Put(t.Caption));

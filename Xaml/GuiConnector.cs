@@ -66,9 +66,6 @@ namespace StockSharp.Xaml
 				Connector.Connected += ConnectedHandler;
 				Connector.Disconnected += DisconnectedHandler;
 				Connector.ConnectionError += ConnectionErrorHandler;
-				Connector.ExportStarted += ExportStartedHandler;
-				Connector.ExportStopped += ExportStoppedHandler;
-				Connector.ExportError += ExportErrorHandler;
 				Connector.ProcessDataError += ProcessDataErrorHandler;
 				Connector.MarketTimeChanged += MarketTimeChangedHandler;
 				Connector.LookupSecuritiesResult += LookupSecuritiesResultHandler;
@@ -515,48 +512,6 @@ namespace StockSharp.Xaml
 
 		#endregion
 
-		#region ExportStarted
-
-		/// <summary>
-		/// Событие успешного запуска экспорта.
-		/// </summary>
-		public event Action ExportStarted;
-
-		private void ExportStartedHandler()
-		{
-			AddGuiAction(() => ExportStarted.SafeInvoke());
-		}
-
-		#endregion
-
-		#region ExportStopped
-
-		/// <summary>
-		/// Событие успешной остановки экспорта.
-		/// </summary>
-		public event Action ExportStopped;
-
-		private void ExportStoppedHandler()
-		{
-			AddGuiAction(() => ExportStopped.SafeInvoke());
-		}
-
-		#endregion
-
-		#region ExportError
-
-		/// <summary>
-		/// Событие ошибки экспорта (например, соединения было разорвано).
-		/// </summary>
-		public event Action<Exception> ExportError;
-
-		private void ExportErrorHandler(Exception exception)
-		{
-			AddGuiAction(() => ExportError.SafeInvoke(exception));
-		}
-
-		#endregion
-
 		#region SessionStateChanged
 
 		/// <summary>
@@ -681,14 +636,6 @@ namespace StockSharp.Xaml
 		public ConnectionStates ConnectionState
 		{
 			get { return Connector.ConnectionState; }
-		}
-
-		/// <summary>
-		/// Состояние экспорта.
-		/// </summary>
-		public ConnectionStates ExportState
-		{
-			get { return Connector.ExportState; }
 		}
 
 		/// <summary>
@@ -1029,22 +976,6 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		public void StartExport()
-		{
-			Connector.StartExport();
-		}
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="IConnector.StartExport"/>.
-		/// </summary>
-		public void StopExport()
-		{
-			Connector.StopExport();
-		}
-
-		/// <summary>
 		/// Событие изменения инструмента.
 		/// </summary>
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
@@ -1124,9 +1055,6 @@ namespace StockSharp.Xaml
 			Connector.Connected -= ConnectedHandler;
 			Connector.Disconnected -= DisconnectedHandler;
 			Connector.ConnectionError -= ConnectionErrorHandler;
-			Connector.ExportStarted -= ExportStartedHandler;
-			Connector.ExportStopped -= ExportStoppedHandler;
-			Connector.ExportError -= ExportErrorHandler;
 			Connector.ProcessDataError -= ProcessDataErrorHandler;
 			Connector.MarketTimeChanged -= MarketTimeChangedHandler;
 			Connector.LookupSecuritiesResult -= LookupSecuritiesResultHandler;

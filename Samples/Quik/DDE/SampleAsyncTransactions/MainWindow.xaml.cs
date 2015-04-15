@@ -15,7 +15,6 @@ namespace SampleAsyncTransactions
 
 	public partial class MainWindow
 	{
-		private bool _isDdeStarted;
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 
 		public MainWindow()
@@ -45,9 +44,6 @@ namespace SampleAsyncTransactions
 
 			if (Trader != null)
 			{
-				if (_isDdeStarted)
-					StopDde();
-
 				Trader.Dispose();
 			}
 
@@ -77,7 +73,6 @@ namespace SampleAsyncTransactions
 
 				Portfolios.Connector = Trader;
 
-				Trader.Connected += () => this.GuiAsync(() => ExportDde.IsEnabled = true);
 				Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 
 				// подписываемся на событие о неудачной регистрации заявок
@@ -108,26 +103,6 @@ namespace SampleAsyncTransactions
 				foreach (var fail in fails)
 					MessageBox.Show(this, fail.Error.ToString(), LocalizedStrings.Str2982);
 			});
-		}
-
-		private void StartDde()
-		{
-			Trader.StartExport();
-			_isDdeStarted = true;
-		}
-
-		private void StopDde()
-		{
-			Trader.StopExport();
-			_isDdeStarted = false;
-		}
-
-		private void ExportDdeClick(object sender, RoutedEventArgs e)
-		{
-			if (_isDdeStarted)
-				StopDde();
-			else
-				StartDde();
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)

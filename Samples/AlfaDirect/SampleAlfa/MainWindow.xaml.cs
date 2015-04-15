@@ -102,12 +102,10 @@ namespace SampleAlfa
 						{
 							this.GuiAsync(() => ChangeConnectStatus(true));
 
-							Trader.StartExport();
+							// запускаем подписку на новости
+							Trader.RegisterNews();
 						};
 
-						// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-						Trader.ExportStarted += Trader.RegisterNews;
-						
 						// подписываемся на событие успешного отключения
 						Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
@@ -167,7 +165,6 @@ namespace SampleAlfa
 				else
 				{
 					Trader.UnRegisterNews();
-					Trader.StopExport();
 
 					Trader.Disconnect();
 				}

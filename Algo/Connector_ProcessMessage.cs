@@ -347,11 +347,11 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Connect:
-						ProcessConnectMessage((ConnectMessage)message, adapter, direction);
+						ProcessConnectMessage((ConnectMessage)message, direction);
 						break;
 
 					case MessageTypes.Disconnect:
-						ProcessConnectMessage((DisconnectMessage)message, adapter, direction);
+						ProcessConnectMessage((DisconnectMessage)message, direction);
 						break;
 
 					case MessageTypes.SecurityLookup:
@@ -451,23 +451,15 @@ namespace StockSharp.Algo
 			action(security, message);
 		}
 
-		private void ProcessConnectMessage(BaseConnectionMessage message, ConnectionStates state, ConnectionStates prevState, Action connected, Action disconnected, Action<Exception> connectionError, ReConnectionSettings.Settings settings)
+		private void ProcessConnectMessage(BaseConnectionMessage message, MessageDirections direction)
 		{
-			if (message == null)
-				throw new ArgumentNullException("message");
+			if (direction != MessageDirections.Out)
+				throw new ArgumentOutOfRangeException("direction");
 
-			if (connected == null)
-				throw new ArgumentNullException("connected");
-
-			if (disconnected == null)
-				throw new ArgumentNullException("disconnected");
-
-			if (connectionError == null)
-				throw new ArgumentNullException("connectionError");
-
+			//ProcessConnectMessage(message, ConnectionState, _prevConnectionState, RaiseConnected, RaiseDisconnected, RaiseConnectionError, ReConnectionSettings.ConnectionSettings);
 			var isConnect = message is ConnectMessage;
 
-			switch (state)
+			switch (ConnectionState)
 			{
 				case ConnectionStates.Connecting:
 				{
@@ -475,22 +467,31 @@ namespace StockSharp.Algo
 					{
 						if (message.Error == null)
 						{
-							connected();
+							RaiseConnected();
 
-							if (prevState == ConnectionStates.Failed)
-								settings.RaiseRestored();
+							if (Adapter.PortfolioLookupRequired)
+								SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+
+							if (Adapter.OrderStatusRequired)
+								SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+
+							if (Adapter.SecurityLookupRequired)
+								SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+
+							if (_prevConnectionState == ConnectionStates.Failed)
+								ReConnectionSettings.ConnectionSettings.RaiseRestored();
 						}
 						else
 						{
-							connectionError(message.Error);
+							RaiseConnectionError(message.Error);
 
 							if (message.Error is TimeoutException)
-								settings.RaiseTimeOut();
+								ReConnectionSettings.ConnectionSettings.RaiseTimeOut();
 						}
 					}
 					else
 					{
-						connectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
+						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
 					}
 
 					return;
@@ -499,14 +500,14 @@ namespace StockSharp.Algo
 				{
 					if (isConnect)
 					{
-						connectionError(new InvalidOperationException(LocalizedStrings.Str684, message.Error));
+						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str684, message.Error));
 					}
 					else
 					{
 						if (message.Error == null)
-							disconnected();
+							RaiseDisconnected();
 						else
-							connectionError(message.Error);
+							RaiseConnectionError(message.Error);
 					}
 
 					return;
@@ -515,7 +516,7 @@ namespace StockSharp.Algo
 				{
 					if (isConnect && message.Error != null)
 					{
-						connectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
+						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
 						return;
 					}
 
@@ -532,39 +533,7 @@ namespace StockSharp.Algo
 			}
 
 			// так как соединение установлено, то выдаем ошибку через ProcessDataError, чтобы не сбрасывать состояние
-			RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error));
-		}
-
-		private void ProcessConnectMessage(BaseConnectionMessage message, IMessageAdapter adapter, MessageDirections direction)
-		{
-			if (direction != MessageDirections.Out)
-				throw new ArgumentOutOfRangeException("direction");
-
-			if (adapter == TransactionAdapter)
-			{
-				ProcessConnectMessage(message, ConnectionState, _prevConnectionState, RaiseConnected, RaiseDisconnected, RaiseConnectionError, ReConnectionSettings.ConnectionSettings);
-
-				if (Adapter.PortfolioLookupRequired)
-					SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-
-				if (Adapter.OrderStatusRequired)
-					SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-
-				if (!IsMarketDataIndependent)
-				{
-					if (Adapter.SecurityLookupRequired)
-						SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-				}
-			}
-			else if (adapter == MarketDataAdapter)
-			{
-				ProcessConnectMessage(message, ExportState, _prevExportState, RaiseExportStarted, RaiseExportStopped, RaiseExportError, ReConnectionSettings.ExportSettings);
-
-				if (Adapter.SecurityLookupRequired)
-					SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-			}
-			else
-				throw new ArgumentOutOfRangeException("adapter");
+			RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(ConnectionState, message.GetType().Name), message.Error));
 		}
 
 		private void ProcessSessionMessage(SessionMessage message)

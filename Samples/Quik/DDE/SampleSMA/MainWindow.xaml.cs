@@ -36,7 +36,6 @@ namespace SampleSMA
 		private readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(5);
 		private QuikTrader _trader;
 		private SmaStrategy _strategy;
-		private bool _isDdeStarted;
 		private bool _isTodaySmaDrawn;
 		private CandleManager _candleManager;
 		private Security _lkoh;
@@ -44,15 +43,13 @@ namespace SampleSMA
 		private ChartCandleElement _candlesElem;
 		private ChartIndicatorElement _longMaElem;
 		private ChartIndicatorElement _shortMaElem;
-		private SimpleMovingAverage _longMa;
-		private SimpleMovingAverage _shortMa;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
 			_area = new ChartArea();
-			_chart.Areas.Add(_area);
+			Chart.Areas.Add(_area);
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
 			Path.Text = QuikTerminal.GetDefaultPath();
@@ -60,16 +57,13 @@ namespace SampleSMA
 
 		private void OrdersOrderSelected(object sender, SelectionChangedEventArgs e)
 		{
-			CancelOrders.IsEnabled = !_orders.SelectedOrders.IsEmpty();
+			CancelOrders.IsEnabled = !Orders.SelectedOrders.IsEmpty();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
 			if (_trader != null)
 			{
-				if (_isDdeStarted)
-					StopDde();
-
 				_trader.Dispose();
 			}
 
@@ -133,7 +127,7 @@ namespace SampleSMA
 								// найти те сделки, которые совершила стратегия скользящей средней
 								trades = trades.Where(t => _strategy.Orders.Any(o => o == t.Order));
 
-								_trades.Trades.AddRange(trades);
+								Trades.Trades.AddRange(trades);
 							}
 						};
 
@@ -153,7 +147,6 @@ namespace SampleSMA
 						this.GuiAsync(() =>
 						{
 							ConnectBtn.IsEnabled = false;
-							ExportDde.IsEnabled = true;
 							Report.IsEnabled = true;
 						});
 					};
@@ -184,29 +177,9 @@ namespace SampleSMA
 			});
 		}
 
-		private void StartDde()
-		{
-			_trader.StartExport();
-			_isDdeStarted = true;
-		}
-
-		private void StopDde()
-		{
-			_trader.StopExport();
-			_isDdeStarted = false;
-		}
-
-		private void ExportDdeClick(object sender, RoutedEventArgs e)
-		{
-			if (_isDdeStarted)
-				StopDde();
-			else
-				StartDde();
-		}
-
 		private void CancelOrdersClick(object sender, RoutedEventArgs e)
 		{
-			_orders.SelectedOrders.ForEach(_trader.CancelOrder);
+			Orders.SelectedOrders.ForEach(_trader.CancelOrder);
 		}
 
 		private void StartClick(object sender, RoutedEventArgs e)
@@ -236,7 +209,6 @@ namespace SampleSMA
 				_candlesElem = new ChartCandleElement();
 				_area.Elements.Add(_candlesElem);
 
-				_longMa = _strategy.LongSma;
 				_longMaElem = new ChartIndicatorElement
 				{
 					Title = LocalizedStrings.Long,
@@ -244,7 +216,6 @@ namespace SampleSMA
 				};
 				_area.Elements.Add(_longMaElem);
 
-				_shortMa = _strategy.ShortSma;
 				_shortMaElem = new ChartIndicatorElement
 				{
 					Title = LocalizedStrings.Short,
@@ -317,7 +288,7 @@ namespace SampleSMA
 			var longValue = candle.State == CandleStates.Finished ? _strategy.LongSma.Process(candle) : null;
 			var shortValue = candle.State == CandleStates.Finished ? _strategy.ShortSma.Process(candle) : null;
 
-			_chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
+			Chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
 			{
 				{ _candlesElem, candle },
 				{ _longMaElem, longValue },

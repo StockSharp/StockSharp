@@ -125,28 +125,6 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		protected override void OnStartExport()
-		{
-			if (_ownTrader)
-				UnderlyingConnector.StartExport();
-			else
-				RaiseExportStarted();
-		}
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу.
-		/// </summary>
-		protected override void OnStopExport()
-		{
-			if (_ownTrader)
-				UnderlyingConnector.StopExport();
-			else
-				RaiseExportStopped();
-		}
-
-		/// <summary>
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>

@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-    xmlns:SS="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
+    xmlns:ss="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
     Title="{x:Static loc:LocalizedStrings.XamlStr555}" Height="115" Width="516">
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -12,7 +12,6 @@
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
@@ -26,19 +25,17 @@
             <PasswordBox x:Name="SmartPassword" Width="100" />
 
             <Label Content="{x:Static loc:LocalizedStrings.XamlStr651}" HorizontalAlignment="Right" />
-			<SS:SmartComAddressComboBox x:Name="SmartAddress" />
+			<ss:SmartComAddressComboBox x:Name="SmartAddress" />
         </StackPanel>
-		
 
 		<Label Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.XamlStr592}" />
 		<TextBox x:Name="QuikPath" Text="" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
 		<Button x:Name="FindQuikPath" Grid.Column="3" Grid.Row="1" Content="..." Width="25" HorizontalAlignment="Left" Click="FindQuikPathClick" IsEnabled="{Binding ElementName=IsDde, Path=IsChecked}" />
         <CheckBox x:Name="IsDde" Grid.Column="3" Grid.Row="1" Margin="30,5,0,0" Content="{x:Static loc:LocalizedStrings.ObsoleteDDE}" />
 
-		<Button x:Name="ConnectBtn" Grid.Column="0" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-		<Button x:Name="Export" Grid.Column="1" Grid.Row="3" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Export}" Click="ExportClick" />
+		<Button x:Name="ConnectBtn" Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 		
-		<Button x:Name="ShowSecurities" Grid.Column="2" Grid.Row="3" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
-		<Button x:Name="ShowOrders" Grid.Column="3" Grid.Row="3" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
+		<Button x:Name="ShowSecurities" Grid.Column="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
+		<Button x:Name="ShowOrders" Grid.Column="3" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Orders}" Click="ShowOrdersClick" />
 	</Grid>
 </Window>

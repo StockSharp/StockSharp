@@ -98,8 +98,6 @@ namespace SampleLMAX
 						// возводим флаг, что соединение установлено
 						_isConnected = true;
 
-						Trader.StartExport();
-
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
 					};

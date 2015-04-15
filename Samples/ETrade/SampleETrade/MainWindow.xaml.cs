@@ -142,8 +142,6 @@ namespace SampleETrade
 					{
 						Properties.Settings.Default.AccessToken = Trader.AccessToken.Serialize();
 						OnConnectionChanged(true);
-
-						Trader.StartExport();
 					});
 
 					// подписываемся на событие разрыва соединения

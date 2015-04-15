@@ -287,9 +287,8 @@ namespace SampleHistoryTesting
 				};
 
 				// соединяемся с трейдером и запускаем экспорт,
-				// чтобы инициализировать переданными инструментами и портфелями необходимые свойства EmulationTrader
+				// чтобы инициализировать переданными инструментами и портфелями необходимые свойства коннектора
 				connector.Connect();
-				connector.StartExport();
 
 				var candleManager = new CandleManager(connector);
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);

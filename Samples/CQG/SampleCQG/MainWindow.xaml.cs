@@ -111,8 +111,6 @@ namespace SampleCQG
 					Trader.Connected += () =>
 					{
 						this.GuiAsync(() => OnConnectionChanged(true));
-
-						Trader.StartExport();
 					};
 
 					// подписываемся на событие разрыва соединения

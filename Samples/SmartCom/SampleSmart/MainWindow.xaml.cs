@@ -106,8 +106,6 @@ namespace SampleSmart
 
 						// разблокируем кнопку Подключиться
 						this.GuiAsync(() => ChangeConnectStatus(true));
-
-						Trader.StartExport();
 					};
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 

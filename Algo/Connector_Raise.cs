@@ -144,29 +144,9 @@ namespace StockSharp.Algo
 		public event Action<Exception> ConnectionError;
 
 		/// <summary>
-		/// Событие успешного запуска экспорта.
-		/// </summary>
-		public event Action ExportStarted;
-
-		/// <summary>
-		/// Событие успешной остановки экспорта.
-		/// </summary>
-		public event Action ExportStopped;
-
-		/// <summary>
-		/// Событие ошибки экспорта (например, соединения было разорвано).
-		/// </summary>
-		public event Action<Exception> ExportError;
-
-		/// <summary>
 		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
 		/// </summary>
 		public event Action<Exception> ProcessDataError;
-
-		///// <summary>
-		///// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
-		///// </summary>
-		//public event Action NewDataExported;
 
 		/// <summary>
 		/// Событие, передающее результат поиска, запущенного через метод <see cref="IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)"/>.
@@ -438,41 +418,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ExportStarted"/>.
-		/// </summary>
-		protected void RaiseExportStarted()
-		{
-			_prevTime = default(DateTimeOffset);
-
-			ExportState = ConnectionStates.Connected;
-			ExportStarted.SafeInvoke();
-		}
-
-		/// <summary>
-		/// Вызвать событие <see cref="ExportStopped"/>.
-		/// </summary>
-		protected void RaiseExportStopped()
-		{
-			ExportState = ConnectionStates.Disconnected;
-			ExportStopped.SafeInvoke();
-		}
-
-		/// <summary>
-		/// Вызвать событие <see cref="ExportError"/>.
-		/// </summary>
-		/// <param name="exception">Ошибка соединения.</param>
-		private void RaiseExportError(Exception exception)
-		{
-			if (exception == null)
-				throw new ArgumentNullException("exception");
-
-			ExportState = ConnectionStates.Failed;
-			ExportError.SafeInvoke(exception);
-
-			this.AddErrorLog(exception);
-		}
-
-		/// <summary>
 		/// Вызвать событие <see cref="ProcessDataError"/>.
 		/// </summary>
 		/// <param name="exception">Ошибка обработки данных.</param>
@@ -486,14 +431,6 @@ namespace StockSharp.Algo
 			this.AddErrorLog(exception);
 			ProcessDataError.SafeInvoke(exception);
 		}
-
-		///// <summary>
-		///// Вызвать событие <see cref="NewDataExported"/>.
-		///// </summary>
-		//private void RaiseNewDataExported()
-		//{
-		//	NewDataExported.SafeInvoke();
-		//}
 
 		/// <summary>
 		/// Вызвать событие <see cref="MarketTimeChanged"/>.

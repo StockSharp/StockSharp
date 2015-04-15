@@ -71,7 +71,6 @@ namespace SampleAlfaCandles
 
 			_trader.Connected += () =>
 			{
-				_trader.StartExport();
 				this.GuiAsync(() => ConnectBtn.IsEnabled = false);
 			};
 

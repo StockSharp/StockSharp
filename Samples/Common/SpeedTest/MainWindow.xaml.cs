@@ -39,7 +39,6 @@ namespace SpeedTest
 			if (_connector == null)
 			{
 				_connector = new Connector();
-				_connector.Connected += _connector.StartExport;
 
 				if (QuikCheckBox.IsChecked == true)
 				{
@@ -132,9 +131,10 @@ namespace SpeedTest
 
 				QuikCheckBox.IsEnabled = SmartComCheckBox.IsEnabled = true;
 				Strategies.Clear();
+
 				Connection.Background = new SolidColorBrush(Colors.LightCoral);
 				ConnectButton.Header = LocalizedStrings.Connect;
-				_connector.StopExport();
+
 				_connector.Disconnect();
 				_connector = null;
 

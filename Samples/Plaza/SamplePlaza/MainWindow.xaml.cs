@@ -125,7 +125,6 @@ namespace SamplePlaza
 						Trader.Connected += () =>
 						{
 							this.GuiAsync(() => ChangeConnectStatus(true));
-							Trader.StartExport();
 						};
 
 						// подписываемся на событие разрыва соединения
@@ -169,7 +168,6 @@ namespace SamplePlaza
 				}
 				else
 				{
-					Trader.StopExport();
 					Trader.Disconnect();
 				}
 			}

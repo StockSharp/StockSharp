@@ -512,7 +512,7 @@ namespace StockSharp.Studio
 		{
 			_newsRegistered = true;
 
-			if (ExportState == ConnectionStates.Connected)
+			if (ConnectionState == ConnectionStates.Connected)
 				base.OnRegisterNews();
 		}
 
@@ -537,7 +537,7 @@ namespace StockSharp.Studio
 
 			_exports.SafeAdd(security).SafeAdd(type);
 
-			if (ExportState == ConnectionStates.Connected)
+			if (ConnectionState == ConnectionStates.Connected)
 				base.SubscribeMarketData(security, type);
 		}
 
@@ -690,15 +690,10 @@ namespace StockSharp.Studio
 			Task.Factory.StartNew(() =>
 			{
 				base.OnConnect();
-				StartExport();
-			});
-		}
 
-		protected override void OnStartExport()
-		{
-			base.OnStartExport();
-			Securities.ForEach(s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s))));
-			Portfolios.ForEach(p => _adapter.SendOutMessage(p.ToMessage()));
+				Securities.ForEach(s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s))));
+				Portfolios.ForEach(p => _adapter.SendOutMessage(p.ToMessage()));
+			});
 		}
 	}
 

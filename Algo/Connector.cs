@@ -219,14 +219,6 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Является ли подключение <see cref="MarketDataAdapter"/> незавимыми от <see cref="TransactionAdapter"/>.
-		/// </summary>
-		public bool IsMarketDataIndependent
-		{
-			get { return TransactionAdapter != MarketDataAdapter; }
-		}
-
-		/// <summary>
 		/// Настройки контроля подключения <see cref="IConnector"/> к торговой системе.
 		/// </summary>
 		public ReConnectionSettings ReConnectionSettings { get; private set; }
@@ -476,33 +468,6 @@ namespace StockSharp.Algo
 			return true;
 		}
 
-		private ConnectionStates _prevExportState;
-		private ConnectionStates _exportState;
-
-		/// <summary>
-		/// Состояние экспорта.
-		/// </summary>
-		public virtual ConnectionStates ExportState
-		{
-			get { return _exportState; }
-			protected set
-			{
-				_exportState = value;
-
-				if (value != ConnectionStates.Connecting || value != ConnectionStates.Disconnecting)
-					_prevExportState = value;
-			}
-		}
-
-		/// <summary>
-		/// Проверить, установлено ли еще соединение для экспорта. Проверяется только в том случае, если <see cref="ExportState"/> равен <see cref="ConnectionStates.Connected"/>.
-		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение и экспорт не активен.</returns>
-		protected virtual bool IsExportAlive()
-		{
-			return IsMarketDataIndependent || IsConnectionAlive();
-		}
-
 		private bool _isSupportAtomicReRegister = true;
 
 		/// <summary>
@@ -595,7 +560,6 @@ namespace StockSharp.Algo
 
 				TryOpenChannel();
 
-				//_reConnectionManager.Connect();
 				StartMarketTimer();
 				OnConnect();
 			}
@@ -610,12 +574,6 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnConnect()
 		{
-			if (!IsMarketDataIndependent && ExportState == ConnectionStates.Connected)
-			{
-				RaiseConnected();
-				return;
-			}
-
 			SendInMessage(new ConnectMessage());
 		}
 
@@ -633,20 +591,8 @@ namespace StockSharp.Algo
 			}
 
 			ConnectionState = ConnectionStates.Disconnecting;
-			//_reConnectionManager.Disconnect();
 
-			try
-			{
-				if (!IsMarketDataIndependent)
-				{
-					if (ExportState == ConnectionStates.Connected)
-						StopExport();
-				}
-			}
-			catch (Exception ex)
-			{
-				RaiseConnectionError(ex);
-			}
+			_subscriptionManager.Stop();
 
 			try
 			{
@@ -1475,7 +1421,7 @@ namespace StockSharp.Algo
 			_orderCancelFails.Clear();
 			_orderRegisterFails.Clear();
 
-			_prevExportState = _exportState = ConnectionStates.Disconnected;
+			//_prevExportState = _exportState = ConnectionStates.Disconnected;
 			_prevConnectionState = _connectionState = ConnectionStates.Disconnected;
 
 			_suspendedSecurityMessages.Clear();
@@ -1527,32 +1473,6 @@ namespace StockSharp.Algo
 		protected override void DisposeManaged()
 		{
 			//_isDisposing = true;
-
-			if (ExportState == ConnectionStates.Connected)
-			{
-				var isExportAlive = false;
-
-				try
-				{
-					isExportAlive = IsExportAlive();
-				}
-				catch (Exception ex)
-				{
-					RaiseExportError(ex);
-				}
-
-				if (isExportAlive)
-				{
-					try
-					{
-						StopExport();
-					}
-					catch (Exception ex)
-					{
-						RaiseExportError(ex);
-					}
-				}
-			}
 
 			if (ConnectionState == ConnectionStates.Connected)
 			{

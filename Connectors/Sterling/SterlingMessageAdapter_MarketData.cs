@@ -78,16 +78,6 @@ namespace StockSharp.Sterling
 			SendOutMessage(reply);
 		}
 
-		private void ProcessBoardMessage(BoardMessage boardMsg)
-		{
-			SendOutMessage(boardMsg);
-		}
-
-		private void ProcessSecurityMessage(SecurityMessage securityMsg)
-		{
-			SendOutMessage(securityMsg);
-		}
-
 		private void SessionOnStiQuoteUpdate(ref structSTIQuoteUpdate structQuoteUpdate)
 		{
 			var message = new Level1ChangeMessage

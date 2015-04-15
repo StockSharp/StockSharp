@@ -224,7 +224,6 @@ namespace SampleQuikSmart
 		{
 			_isConnected = isConnected;
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
-			Export.IsEnabled = isConnected;
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)
@@ -246,11 +245,6 @@ namespace SampleQuikSmart
 				window.Hide();
 			else
 				window.Show();
-		}
-
-		private void ExportClick(object sender, RoutedEventArgs e)
-		{
-			Connector.StartExport();
 		}
 	}
 }

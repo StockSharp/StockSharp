@@ -90,12 +90,10 @@ namespace SampleFewQuiks
 					quikTrader1.Connected += () =>
 					{
 						Console.WriteLine(LocalizedStrings.Str2994Params.Put(quikTrader1.LuaFixServerAddress));
-						quikTrader1.StartExport();
 					};
 					quikTrader2.Connected += () =>
 					{
 						Console.WriteLine(LocalizedStrings.Str2994Params.Put(quikTrader2.LuaFixServerAddress));
-						quikTrader2.StartExport();
 					};
 
 					// производим подключение каждого из QuikTrader-а

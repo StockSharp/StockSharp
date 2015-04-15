@@ -328,16 +328,15 @@ namespace StockSharp.Quik
 		/// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
 		protected override bool IsConnectionAlive()
 		{
-			return IsDde ? _trans2QuikAdapter.IsConnectionAlive : base.IsConnectionAlive();
-		}
+			if (IsDde)
+			{
+				if (TransactionAdapter == null)
+					return Terminal.IsExportStarted;
+				else if (MarketDataAdapter == null)
+					return _trans2QuikAdapter.IsConnectionAlive;
+			}
 
-		/// <summary>
-		/// Проверить, установлено ли еще соединение для экспорта. Проверяется только в том случае, если <see cref="Connector.ExportState"/> равен <see cref="ConnectionStates.Connected"/>.
-		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение и экспорт не активен.</returns>
-		protected override bool IsExportAlive()
-		{
-			return IsDde ? Terminal.IsExportStarted : base.IsExportAlive();
+			return base.IsConnectionAlive();
 		}
 
 		/// <summary>
@@ -462,6 +461,15 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
+		/// Таблицы, для которых будет запущен экспорт данных по DDE.
+		/// </summary>
+		public IEnumerable<DdeTable> DdeTables
+		{
+			get { return _ddeAdapter.Tables; }
+			set { _ddeAdapter.Tables = value; }
+		}
+
+		/// <summary>
 		/// Отменить группу заявок на бирже по фильтру.
 		/// </summary>
 		/// <param name="transactionId">Идентификатор транзакции отмены.</param>
@@ -478,28 +486,28 @@ namespace StockSharp.Quik
 				this.CancelOrders(Orders, isStopOrder, portfolio, direction, board);
 		}
 
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу по таблицам, указанных параметром ddeTables.
-		/// </summary>
-		/// <example><code>// запускаем экспорт по таблице инструментов и заявкам.
-		/// _trader.StartExport(_trader.SecuritiesTable, _trader.OrdersTable);</code></example>
-		/// <param name="ddeTables">Таблицы, для которых необходимо запустить экспорт через DDE.</param>
-		public void StartExport(IEnumerable<DdeTable> ddeTables)
-		{
-			CheckIsDde();
-			ExportState = ConnectionStates.Connecting;
-			SendInMessage(new CustomExportMessage(true, ddeTables));
-		}
+		///// <summary>
+		///// Запустить экспорт данных из торговой системы в программу по таблицам, указанных параметром ddeTables.
+		///// </summary>
+		///// <example><code>// запускаем экспорт по таблице инструментов и заявкам.
+		///// _trader.StartExport(_trader.SecuritiesTable, _trader.OrdersTable);</code></example>
+		///// <param name="ddeTables">Таблицы, для которых необходимо запустить экспорт через DDE.</param>
+		//public void StartExport(IEnumerable<DdeTable> ddeTables)
+		//{
+		//	CheckIsDde();
+		//	ExportState = ConnectionStates.Connecting;
+		//	SendInMessage(new CustomExportMessage(ddeTables) { IsSubscribe = true });
+		//}
 
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу по таблицам, указанных параметром ddeTables.
-		/// </summary>
-		/// <param name="ddeTables">Таблицы, для которых необходимо остановить экспорт через DDE.</param>
-		public void StopExport(IEnumerable<DdeTable> ddeTables)
-		{
-			CheckIsDde();
-			SendInMessage(new CustomExportMessage(false, ddeTables));
-		}
+		///// <summary>
+		///// Остановить экспорт данных из торговой системы в программу по таблицам, указанных параметром ddeTables.
+		///// </summary>
+		///// <param name="ddeTables">Таблицы, для которых необходимо остановить экспорт через DDE.</param>
+		//public void StopExport(IEnumerable<DdeTable> ddeTables)
+		//{
+		//	CheckIsDde();
+		//	SendInMessage(new CustomExportMessage(ddeTables) { IsSubscribe = false });
+		//}
 
 		/// <summary>
 		/// Запустить экспорт данных из торговой системы в программу для произвольной таблицы, зарегистрированной в <see cref="QuikTrader.CustomTables"/>.
@@ -508,8 +516,8 @@ namespace StockSharp.Quik
 		public void StartExport(DdeCustomTable customTable)
 		{
 			CheckIsDde();
-			ExportState = ConnectionStates.Connecting;
-			SendInMessage(new CustomExportMessage(true, customTable));
+			//ExportState = ConnectionStates.Connecting;
+			SendInMessage(new CustomExportMessage(customTable) { IsSubscribe = true });
 		}
 
 		/// <summary>
@@ -519,7 +527,7 @@ namespace StockSharp.Quik
 		public void StopExport(DdeCustomTable customTable)
 		{
 			CheckIsDde();
-			SendInMessage(new CustomExportMessage(false, customTable));
+			SendInMessage(new CustomExportMessage(customTable) { IsSubscribe = false });
 		}
 
 		/// <summary>
@@ -529,8 +537,8 @@ namespace StockSharp.Quik
 		public void StartExport(string caption)
 		{
 			CheckIsDde();
-			ExportState = ConnectionStates.Connecting;
-			SendInMessage(new CustomExportMessage(true, caption));
+			//ExportState = ConnectionStates.Connecting;
+			SendInMessage(new CustomExportMessage(caption) { IsSubscribe = true });
 		}
 
 		/// <summary>
@@ -540,7 +548,7 @@ namespace StockSharp.Quik
 		public void StopExport(string caption)
 		{
 			CheckIsDde();
-			SendInMessage(new CustomExportMessage(false, caption));
+			SendInMessage(new CustomExportMessage(caption) { IsSubscribe = false });
 		}
 
 		private void CheckIsDde()

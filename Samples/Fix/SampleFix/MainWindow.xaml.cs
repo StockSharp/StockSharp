@@ -106,9 +106,6 @@ namespace SampleFix
 				// подписываемся на событие успешного соединения
 				Trader.Connected += () =>
 				{
-					if (((FixMessageAdapter)Trader.MarketDataAdapter).Address != null)
-						Trader.StartExport();
-
 					this.GuiAsync(() => ChangeConnectStatus(true));
 				};
 				Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
@@ -173,9 +170,6 @@ namespace SampleFix
 			}
 			else if (Trader.ConnectionState == ConnectionStates.Connected)
 			{
-				if (Trader.ExportState == ConnectionStates.Connected && ((FixMessageAdapter)Trader.MarketDataAdapter).Address != null)
-					Trader.StopExport();
-
 				Trader.Disconnect();
 			}
 		}
