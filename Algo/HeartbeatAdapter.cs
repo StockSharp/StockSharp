@@ -333,6 +333,11 @@
 			_adapter.AddLog(message);
 		}
 
+		ReConnectionSettings IMessageAdapter.ReConnectionSettings
+		{
+			get { return _adapter.ReConnectionSettings; }
+		}
+
 		IdGenerator IMessageAdapter.TransactionIdGenerator
 		{
 			get { return _adapter.TransactionIdGenerator; }
@@ -402,6 +407,11 @@
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
 			return _adapter.CreateOrderCondition();
+		}
+
+		bool IMessageAdapter.IsConnectionAlive()
+		{
+			return _adapter.IsConnectionAlive();
 		}
 	}
 }

@@ -361,6 +361,16 @@ namespace StockSharp.Messages
 			return null;
 		}
 
+		private readonly ReConnectionSettings _reConnectionSettings = new ReConnectionSettings();
+
+		/// <summary>
+		/// Настройки механизма отслеживания соединений <see cref="IMessageAdapter"/> с торговом системой.
+		/// </summary>
+		public ReConnectionSettings ReConnectionSettings
+		{
+			get { return _reConnectionSettings; }
+		}
+
 		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
 		{
 			if (!CreateAssociatedSecurity)
@@ -849,7 +859,7 @@ namespace StockSharp.Messages
 		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
 		/// </summary>
 		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
-		protected virtual bool IsConnectionAlive()
+		public virtual bool IsConnectionAlive()
 		{
 			return true;
 		}

@@ -39,6 +39,11 @@
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		/// <summary>
+		/// Настройки механизма отслеживания соединений <see cref="IMessageAdapter"/> с торговом системой.
+		/// </summary>
+		ReConnectionSettings ReConnectionSettings { get; }
+
+		/// <summary>
 		/// Интервал оповещения сервера о том, что подключение еще живое. По-умолчанию равно 1 минуте.
 		/// </summary>
 		TimeSpan HeartbeatInterval { get; set; }
@@ -78,5 +83,11 @@
 		/// </summary>
 		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
 		OrderCondition CreateOrderCondition();
+
+		/// <summary>
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// </summary>
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		bool IsConnectionAlive();
 	}
 }

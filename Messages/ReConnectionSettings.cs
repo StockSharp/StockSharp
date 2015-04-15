@@ -1,17 +1,15 @@
-namespace StockSharp.Algo
+namespace StockSharp.Messages
 {
 	using System;
 
 	using Ecng.Serialization;
 
-	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Настройки механизма отслеживания соединений <see cref="IConnector"/> с торговом системой.
+	/// Настройки механизма отслеживания соединений <see cref="IMessageAdapter"/> с торговом системой.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str977Key)]
 	[DescriptionLoc(LocalizedStrings.Str978Key)]

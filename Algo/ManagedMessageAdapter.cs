@@ -63,6 +63,11 @@ namespace StockSharp.Algo
 			_innerAdapter.Dispose();
 		}
 
+		ReConnectionSettings IMessageAdapter.ReConnectionSettings
+		{
+			get { return _innerAdapter.ReConnectionSettings; }
+		}
+
 		IdGenerator IMessageAdapter.TransactionIdGenerator
 		{
 			get { return _innerAdapter.TransactionIdGenerator; }
@@ -86,6 +91,11 @@ namespace StockSharp.Algo
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
 			return _innerAdapter.CreateOrderCondition();
+		}
+
+		bool IMessageAdapter.IsConnectionAlive()
+		{
+			return _innerAdapter.IsConnectionAlive();
 		}
 
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo

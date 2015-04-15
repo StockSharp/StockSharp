@@ -79,7 +79,7 @@ namespace StockSharp.Quik
 		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
 		/// </summary>
 		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
-		protected override bool IsConnectionAlive()
+		public override bool IsConnectionAlive()
 		{
 			return Api.IsConnected;
 		}

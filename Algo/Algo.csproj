@@ -354,7 +354,6 @@
     <Compile Include="IEntityFactory.cs" />
     <Compile Include="Latency\ILatencyManager.cs" />
     <Compile Include="MarketPriceTypes.cs" />
-    <Compile Include="ReConnectionSettings.cs" />
     <Compile Include="Statistics\ITradeStatisticParameter.cs" />
     <Compile Include="Statistics\StatisticManager.cs" />
     <Compile Include="SecurityIdGenerator.cs" />
