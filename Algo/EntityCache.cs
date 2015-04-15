@@ -339,7 +339,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("order");
 
 			bool isNew;
-			GetOrderInfo(order.Security, order.Type, order.TransactionId, 0L, null, id => order, out isNew);
+			GetOrderInfo(order.Security, order.Type, order.TransactionId, null, null, id => order, out isNew);
 			return isNew;
 		}
 
@@ -385,7 +385,7 @@ namespace StockSharp.Algo
 			var order = orderInfo.Item1;
 			var isCancelled = orderInfo.Item2;
 			//var isReReregisterCancelled = orderInfo.Item3;
-			var raiseNewOrder = orderInfo.Item4;
+			var raiseNewOrder = orderInfo.Item3;
 
 			var isPending = order.State == OrderStates.Pending;
 			var isPrevIdSet = (order.Id != 0 || !order.StringId.IsEmpty());
@@ -495,25 +495,40 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			if (message.OriginalTransactionId == 0)
-				throw new ArgumentOutOfRangeException("message", message.OriginalTransactionId, LocalizedStrings.Str715);
+			var data = _cache.GetData(security);
 
-			var orders = _cache.GetData(security).Orders;
+			Order order = null;
+
+			if (!message.OrderStringId.IsEmpty())
+				order = data.OrdersByStringId.TryGetValue(message.OrderStringId);
 
 			bool isCancelled;
 
-			var order = (Order)orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, true));
+			if (order == null)
+			{
+				if (message.OriginalTransactionId == 0)
+					throw new ArgumentOutOfRangeException("message", message.OriginalTransactionId, LocalizedStrings.Str715);
 
-			if (order != null && order.Id == message.OrderId)
-				isCancelled = true;
+				var orders = data.Orders;
+
+				order = (Order)orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, true));
+
+				if (order != null && order.Id == message.OrderId)
+					isCancelled = true;
+				else
+				{
+					order = (Order)orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, false));
+					isCancelled = false;
+				}
+
+				if (order == null)
+					return null;
+			}
 			else
 			{
-				order = (Order)orders.TryGetValue(CreateOrderKey(message.OrderType, message.OriginalTransactionId, false));
-				isCancelled = false;
+				var pair = data.Orders.LastOrDefault(p => p.Value.Order == order);
+				isCancelled = pair.Key.Item3;
 			}
-
-			if (order == null)
-				return null;
 
 			// ServerTime для заявки - это время регистрации
 			order.LastChangeTime = message.LocalTime;
@@ -724,7 +739,7 @@ namespace StockSharp.Algo
 			return orderStringId == null ? null : data.OrdersByStringId.TryGetValue(orderStringId);
 		}
 
-		private Tuple<Order, bool, bool, bool> GetOrderInfo(Security security, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
+		private Tuple<Order, bool, bool> GetOrderInfo(Security security, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
 		{
 			if (createOrder == null)
 				throw new ArgumentNullException("createOrder");
@@ -735,47 +750,57 @@ namespace StockSharp.Algo
 			var isNew2 = false;
 			var orders = _cache.GetData(security).Orders;
 
-			var cancelKey = CreateOrderKey(type, transactionId, true);
-			var registerKey = CreateOrderKey(type, transactionId, false);
+			OrderInfo info;
 
-			var cancelledOrder = (Order)orders.TryGetValue(cancelKey);
-
-			// проверяем не отмененная ли заявка пришла
-			if (cancelledOrder != null && (cancelledOrder.Id == orderId || (!cancelledOrder.StringId.IsEmpty() && cancelledOrder.StringId.CompareIgnoreCase(orderStringId))))
+			if (transactionId == 0)
 			{
-				isNew = false;
-				return Tuple.Create(cancelledOrder, true, (Order)orders.TryGetValue(registerKey) != null, false);
+				if (orderStringId.IsEmpty())
+					throw new ArgumentOutOfRangeException("transactionId");
+
+				info = orders.First(p => p.Value.Order.StringId.CompareIgnoreCase(orderStringId)).Value;
+			}
+			else
+			{
+				var cancelKey = CreateOrderKey(type, transactionId, true);
+				var registerKey = CreateOrderKey(type, transactionId, false);
+
+				var cancelledOrder = (Order)orders.TryGetValue(cancelKey);
+
+				// проверяем не отмененная ли заявка пришла
+				if (cancelledOrder != null && (cancelledOrder.Id == orderId || (!cancelledOrder.StringId.IsEmpty() && cancelledOrder.StringId.CompareIgnoreCase(orderStringId))))
+				{
+					isNew = false;
+					return Tuple.Create(cancelledOrder, true/*, (Order)orders.TryGetValue(registerKey) != null*/, false);
+				}
+
+				info = orders.SafeAdd(registerKey, key =>
+				{
+					isNew2 = true;
+
+					var o = createOrder(transactionId);
+
+					if (o == null)
+						throw new InvalidOperationException(LocalizedStrings.Str720Params.Put(transactionId));
+
+					if (o.ExtensionInfo == null)
+						o.ExtensionInfo = new Dictionary<object, object>();
+
+					_cache.AddOrder(o);
+
+					// с таким же номером транзакции может быть заявка по другому инструменту
+					_cache.AllOrdersByTransactionId.TryAdd(Tuple.Create(transactionId, type == OrderTypes.Conditional), o);
+
+					return new OrderInfo(o);
+				});
 			}
 
-			var order = orders.SafeAdd(registerKey, key =>
-			{
-				isNew2 = true;
-
-				var o = createOrder(transactionId);
-
-				if (o == null)
-					throw new InvalidOperationException(LocalizedStrings.Str720Params.Put(transactionId));
-
-				//TODO o.Connector = this;
-
-				if (o.ExtensionInfo == null)
-					o.ExtensionInfo = new Dictionary<object, object>();
-
-				_cache.AddOrder(o);
-
-				// с таким же номером транзакции может быть заявка по другому инструменту
-				_cache.AllOrdersByTransactionId.TryAdd(Tuple.Create(transactionId, type == OrderTypes.Conditional), o);
-
-				return new OrderInfo(o);
-			});
-
-			var raiseNewOrder = order.RaiseNewOrder;
+			var raiseNewOrder = info.RaiseNewOrder;
 
 			if (raiseNewOrder && newOrderRaised)
-				order.RaiseNewOrder = false;
+				info.RaiseNewOrder = false;
 
 			isNew = isNew2;
-			return Tuple.Create((Order)order, false, false, raiseNewOrder);
+			return Tuple.Create((Order)info, false, raiseNewOrder);
 		}
 
 		public Tuple<Trade, bool> GetTrade(Security security, long? id, string strId, Func<long?, string, Trade> createTrade)
@@ -843,7 +868,6 @@ namespace StockSharp.Algo
 				if (p.ExtensionInfo == null)
 					p.ExtensionInfo = new Dictionary<object, object>();
 
-				//TODO p.Connector = this;
 				return p;
 			}, out isNew);
 

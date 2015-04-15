@@ -9,6 +9,8 @@ namespace SampleSmart
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.SmartCom;
 	using StockSharp.SmartCom.Native;
@@ -129,7 +131,11 @@ namespace SampleSmart
 					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
 					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 					Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+					Trader.NewPortfolios += portfolios =>
+					{
+						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+						portfolios.ForEach(Trader.RegisterPortfolio);
+					};
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
 					// подписываемся на событие о неудачной регистрации заявок

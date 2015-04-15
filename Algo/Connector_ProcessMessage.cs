@@ -794,7 +794,7 @@ namespace StockSharp.Algo
 			{
 				if (!message.Changes.ContainsKey(PositionChangeTypes.CurrentValue))
 				{
-					var currValue = (decimal)valueInLots / security.VolumeStep;
+					var currValue = (decimal)valueInLots / (security.VolumeStep ?? 1);
 					message.Add(PositionChangeTypes.CurrentValue, currValue);
 				}
 

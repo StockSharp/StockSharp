@@ -140,7 +140,7 @@ namespace StockSharp.Messages
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Идентификатор заявки электронной площадки. Используется, если <see cref="OrderId"/> или <see cref="OrderStringId"/> содержит идентификатор брокерской системы.
+		/// Идентификатор заявки электронной площадки. Используется, если <see cref="OrderId"/> или <see cref="OrderStringId"/> содержат идентификаторы брокерской системы.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str117Key)]
