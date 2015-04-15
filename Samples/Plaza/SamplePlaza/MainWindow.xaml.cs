@@ -36,7 +36,7 @@ namespace SamplePlaza
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_ordersLogWindow.MakeHideable();
@@ -118,8 +118,8 @@ namespace SamplePlaza
 							Trader.CreateDepthFromOrdersLog = true;
 						}
 
-						Trader.ReConnectionSettings.ConnectionSettings.AttemptCount = -1;
-						Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+						Trader.ReConnectionSettings.AttemptCount = -1;
+						Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
 						// подписываемся на событие успешного соединения
 						Trader.Connected += () =>

@@ -16,7 +16,7 @@
 	public class HeartbeatAdapter : IMessageAdapter
 	{
 		private readonly IMessageAdapter _adapter;
-		private readonly ReConnectionSettings.Settings _settings;
+		private readonly ReConnectionSettings _settings;
 
 		private readonly SyncObject _timeSync = new SyncObject();
 
@@ -41,7 +41,7 @@
 		/// </summary>
 		/// <param name="adapter">Адаптер.</param>
 		/// <param name="settings">Настройки контроля подключения.</param>
-		public HeartbeatAdapter(IMessageAdapter adapter, ReConnectionSettings.Settings settings)
+		public HeartbeatAdapter(IMessageAdapter adapter, ReConnectionSettings settings)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException("adapter");

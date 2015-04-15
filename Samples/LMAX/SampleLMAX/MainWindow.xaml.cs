@@ -85,7 +85,7 @@ namespace SampleLMAX
 					// создаем подключение
 					Trader = new LmaxTrader();
 
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);

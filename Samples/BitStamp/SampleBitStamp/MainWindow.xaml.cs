@@ -95,7 +95,7 @@ namespace SampleBitStamp
 
 					_logManager.Sources.Add(Trader);
 
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);

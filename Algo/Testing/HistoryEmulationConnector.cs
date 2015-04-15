@@ -99,7 +99,7 @@ namespace StockSharp.Algo.Testing
 			Adapter.InnerAdapters.Add(_marketDataAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry });
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-			ReConnectionSettings.ExportSettings.TimeOutInterval = TimeSpan.MaxValue;
+			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 			OutMessageChannel = new PassThroughMessageChannel();
 		}

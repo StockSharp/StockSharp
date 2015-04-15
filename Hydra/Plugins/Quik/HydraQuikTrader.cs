@@ -12,11 +12,6 @@
 			DdeTables = Tables;
 		}
 
-		protected override bool IsConnectionAlive()
-		{
-			return false;
-		}
-
 		public bool IsDownloadSecurityChangesHistory { get; set; }
 
 		private IEnumerable<DdeTable> Tables

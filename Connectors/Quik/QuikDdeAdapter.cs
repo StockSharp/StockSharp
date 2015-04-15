@@ -339,6 +339,15 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// </summary>
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		protected override bool IsConnectionAlive()
+		{
+			return GetTerminal().IsExportStarted;
+		}
+
+		/// <summary>
 		/// Использовать в экспорте таблицу <see cref="CurrencyPortfoliosTable"/>. По-умолчанию не используется.
 		/// </summary>
 		[Category(_ddeCategory)]

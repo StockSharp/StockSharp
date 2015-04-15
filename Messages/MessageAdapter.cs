@@ -846,6 +846,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// </summary>
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		protected virtual bool IsConnectionAlive()
+		{
+			return true;
+		}
+
+		/// <summary>
 		/// Загрузить настройки.
 		/// </summary>
 		/// <param name="storage">Хранилище настроек.</param>

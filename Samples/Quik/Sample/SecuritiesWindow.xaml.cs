@@ -92,8 +92,8 @@ namespace Sample
 
 			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
 			{
-				// начинаем получать котировки стакана
-				trader.RegisterMarketDepth(security);
+				//// начинаем получать котировки стакана
+				//trader.RegisterMarketDepth(security);
 
 				// создаем окно со стаканом
 				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
@@ -111,6 +111,18 @@ namespace Sample
 				TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
 				trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
 				_initialized = true;
+
+				trader.SendInMessage(new MarketDataMessage
+				{
+					SecurityId = new SecurityId
+					{
+						SecurityCode = "ALL",
+						BoardCode = "ALL"
+					},
+					IsSubscribe = true,
+					DataType = MarketDataTypes.MarketDepth,
+					TransactionId = trader.TransactionIdGenerator.GetNextId()
+				});
 			}
 		}
 

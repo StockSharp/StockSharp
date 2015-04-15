@@ -96,7 +96,7 @@ namespace SampleFix
 			{
 				_isInitialized = true;
 
-				Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+				Trader.Restored += () => this.GuiAsync(() =>
 				{
 					// разблокируем кнопку Экспорт (соединение было восстановлено)
 					ChangeConnectStatus(true);

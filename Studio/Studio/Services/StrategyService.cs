@@ -84,7 +84,7 @@ namespace StockSharp.Studio.Services
 				_historyMessageAdapter.MarketTimeChangedInterval = useCandlesTimeFrame;
 
 				// при инициализации по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-				ReConnectionSettings.ExportSettings.TimeOutInterval = TimeSpan.MaxValue;
+				ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 				_historyMessageAdapter.BasketStorage.InnerStorages.AddRange(GetExecutionStorages());
 

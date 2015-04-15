@@ -323,23 +323,6 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="IConnector.Connect"/>.
-		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
-		protected override bool IsConnectionAlive()
-		{
-			if (IsDde)
-			{
-				if (TransactionAdapter == null)
-					return Terminal.IsExportStarted;
-				else if (MarketDataAdapter == null)
-					return _trans2QuikAdapter.IsConnectionAlive;
-			}
-
-			return base.IsConnectionAlive();
-		}
-
-		/// <summary>
 		/// Настройки DDE таблицы Инструменты.
 		/// </summary>
 		public DdeTable SecuritiesTable { get { return _ddeAdapter.SecuritiesTable; } }

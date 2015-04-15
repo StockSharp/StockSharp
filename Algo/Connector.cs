@@ -459,15 +459,6 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="IConnector.Connect"/>.
-		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
-		protected virtual bool IsConnectionAlive()
-		{
-			return true;
-		}
-
 		private bool _isSupportAtomicReRegister = true;
 
 		/// <summary>
@@ -1476,27 +1467,13 @@ namespace StockSharp.Algo
 
 			if (ConnectionState == ConnectionStates.Connected)
 			{
-				var isConnectionAlive = false;
-
 				try
 				{
-					isConnectionAlive = IsConnectionAlive();
+					Disconnect();
 				}
 				catch (Exception ex)
 				{
 					RaiseConnectionError(ex);
-				}
-
-				if (isConnectionAlive)
-				{
-					try
-					{
-						Disconnect();
-					}
-					catch (Exception ex)
-					{
-						RaiseConnectionError(ex);
-					}
 				}
 			}
 

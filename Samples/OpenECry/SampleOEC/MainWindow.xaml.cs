@@ -40,7 +40,7 @@ namespace SampleOEC
 			_portfoliosWindow.MakeHideable();
 			_newsWindow.MakeHideable();
 
-			MainWindow.Instance = this;
+			Instance = this;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -93,7 +93,7 @@ namespace SampleOEC
 						EnableOECLogging = true
 					};
 
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);

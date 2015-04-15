@@ -9,8 +9,6 @@ namespace SampleSmart
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
-	using MoreLinq;
-
 	using StockSharp.BusinessEntities;
 	using StockSharp.SmartCom;
 	using StockSharp.SmartCom.Native;
@@ -40,7 +38,7 @@ namespace SampleSmart
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
-			MainWindow.Instance = this;
+			Instance = this;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -91,7 +89,7 @@ namespace SampleSmart
 
 					// инициализируем механизм переподключения
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);

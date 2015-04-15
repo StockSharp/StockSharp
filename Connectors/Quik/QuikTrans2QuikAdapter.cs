@@ -76,9 +76,13 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Проверить, установлено ли еще соединение.
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
 		/// </summary>
-		public bool IsConnectionAlive { get { return Api.IsConnected; } }
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		protected override bool IsConnectionAlive()
+		{
+			return Api.IsConnected;
+		}
 
 		/// <summary>
 		/// Отформатировать транзакцию (добавить, удалить или заменить параметры) перед тем, как она будет отправлена в Quik.
@@ -314,7 +318,16 @@ namespace StockSharp.Quik
 						case Codes.QuikConnected:
 							try
 							{
-								var isAlive = IsConnectionAlive;
+								bool isAlive;
+
+								try
+								{
+									isAlive = IsConnectionAlive();
+								}
+								catch
+								{
+									isAlive = false;
+								}
 
 								GetTerminal().AssignProcess();
 

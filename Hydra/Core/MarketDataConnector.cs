@@ -470,11 +470,8 @@ namespace StockSharp.Hydra.Core
 
 				if (connectorSettings == null)
 				{
-					settings.ConnectionSettings.AttemptCount = -1;
-					settings.ConnectionSettings.ReAttemptCount = -1;
-
-					settings.ExportSettings.AttemptCount = -1;
-					settings.ExportSettings.ReAttemptCount = -1;
+					settings.AttemptCount = -1;
+					settings.ReAttemptCount = -1;
 				}
 				else
 				{

@@ -31,7 +31,7 @@ namespace SampleMicex
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
@@ -88,7 +88,7 @@ namespace SampleMicex
 
 						// инициализируем механизм переподключения
 						Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Micex.WorkingTime;
-						Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+						Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
 						// подписываемся на событие успешного соединения
 						Trader.Connected += () =>

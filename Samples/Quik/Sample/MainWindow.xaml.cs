@@ -31,7 +31,7 @@ namespace Sample
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
@@ -141,7 +141,7 @@ namespace Sample
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
 
 					// подписываемся на событие об успешном восстановлении соединения
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+					Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
 					// подписываемся на событие разрыва соединения
 					Trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));

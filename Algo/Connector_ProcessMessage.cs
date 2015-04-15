@@ -479,14 +479,14 @@ namespace StockSharp.Algo
 								SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
 							if (_prevConnectionState == ConnectionStates.Failed)
-								ReConnectionSettings.ConnectionSettings.RaiseRestored();
+								RaiseRestored();
 						}
 						else
 						{
 							RaiseConnectionError(message.Error);
 
 							if (message.Error is TimeoutException)
-								ReConnectionSettings.ConnectionSettings.RaiseTimeOut();
+								RaiseTimeOut();
 						}
 					}
 					else

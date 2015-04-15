@@ -73,7 +73,7 @@ namespace SampleQuikSmart
 		{
 			// инициализируем механизм переподключения
 			trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-			trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+			trader.Restored += () => this.GuiAsync(() =>
 			{
 				// разблокируем кнопку Экспорт (соединение было восстановлено)
 				ChangeConnectStatus(true);

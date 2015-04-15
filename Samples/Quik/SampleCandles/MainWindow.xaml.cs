@@ -119,7 +119,7 @@ namespace SampleCandles
 
 				_logManager.Sources.Add(_trader);
 				// подписываемся на событие об успешном восстановлении соединения
-				_trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+				_trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
 				// подписываемся на событие разрыва соединения
 				_trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));

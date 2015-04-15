@@ -179,6 +179,16 @@ namespace StockSharp.Algo
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
 
 		/// <summary>
+		/// Событие об успешном восстановлении соединения.
+		/// </summary>
+		public event Action Restored;
+
+		/// <summary>
+		/// Событие о тайм-ауте подключения.
+		/// </summary>
+		public event Action TimeOut;
+
+		/// <summary>
 		/// Вызвать событие <see cref="NewMyTrades"/>.
 		/// </summary>
 		/// <param name="trades">Мои сделки, которые нужно передать в событие.</param>
@@ -490,6 +500,16 @@ namespace StockSharp.Algo
 		private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)
 		{
 			ValuesChanged.SafeInvoke(security, changes, serverTime, localTime);
+		}
+
+		private void RaiseRestored()
+		{
+			Restored.SafeInvoke();
+		}
+
+		private void RaiseTimeOut()
+		{
+			TimeOut.SafeInvoke();
 		}
 	}
 }
