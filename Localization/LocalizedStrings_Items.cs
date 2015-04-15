@@ -7062,12 +7062,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Failed to connect to any connection.
+		/// Failed to connect of some connections.
 		/// </summary>
 		public const string Str626Key = "Str626";
 
 		/// <summary>
-		/// Failed to connect to any connection.
+		/// Failed to connect of some connections.
 		/// </summary>
 		public static string Str626
 		{

@@ -10,13 +10,17 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
+	class RestoredConnectMessage : ConnectMessage
+	{
+		
+	}
+
 	/// <summary>
 	/// Адаптер сообщений, контролирующий соединение.
 	/// </summary>
 	public class HeartbeatAdapter : IMessageAdapter
 	{
 		private readonly IMessageAdapter _adapter;
-		private readonly ReConnectionSettings _settings;
 
 		private readonly SyncObject _timeSync = new SyncObject();
 
@@ -40,17 +44,12 @@
 		/// Создать <see cref="HeartbeatAdapter"/>.
 		/// </summary>
 		/// <param name="adapter">Адаптер.</param>
-		/// <param name="settings">Настройки контроля подключения.</param>
-		public HeartbeatAdapter(IMessageAdapter adapter, ReConnectionSettings settings)
+		public HeartbeatAdapter(IMessageAdapter adapter)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException("adapter");
 
-			if (settings == null)
-				throw new ArgumentNullException("settings");
-
 			_adapter = adapter;
-			_settings = settings;
 
 			_adapter.NewOutMessage += AdapterOnNewOutMessage;
 		}

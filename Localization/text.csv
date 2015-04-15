@@ -546,7 +546,7 @@ UnitHandlerNotSet;Typed value handler has not been set.;Не установле�
 Str623Params;Adapter for work with portfolio {0} not found.;Адаптер для работы с портфелем {0} не найден.
 Str624Params;Adapter does not support obtaining data for {0}.;Адаптер не поддерживает получение данных для {0}.
 Str625Params;Connection error for {0}: {1};Ошибка подключения для {0}: {1}
-Str626;Failed to connect to any connection.;Не удалось установить ни одно подключение.
+Str626;Failed to connect of some connections.;Не удалось установить некоторые подключения.
 Str627Params;Error disconnecting for {0}: {1};Ошибка отключения для {0}: {1}
 Str628;Errors occured during shutdown.;В процессе отключения возникли ошибки.
 Str629Params;No suitable adapter found for security {0}.;Не найден подходящий адаптер для инструмента {0}.

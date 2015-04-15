@@ -147,6 +147,7 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BasketMessage.cs" />
     <Compile Include="BasketMessageAdapter.cs" />
     <Compile Include="BasketPortfolio.cs" />
     <Compile Include="BasketPosition.cs" />

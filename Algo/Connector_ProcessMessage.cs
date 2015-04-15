@@ -12,21 +12,10 @@ namespace StockSharp.Algo
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	
+
 	partial class Connector
 	{
-		private class AdapterMessage : Message
-		{
-			public Message Message { get; private set; }
-			public IMessageAdapter Adapter { get; private set; }
-
-			public AdapterMessage(Message message, IMessageAdapter adapter)
-				: base(ExtendedMessageTypes.Adapter)
-			{
-				Message = message;
-				Adapter = adapter;
-			}
-		}
-
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
 
 		//private bool _isDisposing;
@@ -69,14 +58,10 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void OutMessageChannelOnNewOutMessage(Message channelMessage)
+		private void OutMessageChannelOnNewOutMessage(Message message)
 		{
-			var adapterMessage = channelMessage as AdapterMessage;
-			
-			if (adapterMessage == null)
-				return;
-
-			OnProcessMessage(adapterMessage.Message, adapterMessage.Adapter, MessageDirections.Out);
+			var basketMessage = (BasketMessage)message;
+			OnProcessMessage(basketMessage.Message, basketMessage.Adapter, MessageDirections.Out);
 		}
 
 		private IMessageAdapter _inAdapter;
@@ -109,7 +94,7 @@ namespace StockSharp.Algo
 		public void SendOutMessage(Message message, IMessageAdapter adapter)
 		{
 			message.LocalTime = adapter.CurrentTime.LocalDateTime;
-			OutMessageChannel.SendInMessage(new AdapterMessage(message, adapter));
+			OutMessageChannel.SendInMessage(new BasketMessage(message, adapter));
 		}
 
 		/// <summary>
@@ -478,7 +463,7 @@ namespace StockSharp.Algo
 							if (Adapter.SecurityLookupRequired)
 								SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
-							if (_prevConnectionState == ConnectionStates.Failed)
+							if (message is RestoredConnectMessage)
 								RaiseRestored();
 						}
 						else

@@ -441,23 +441,10 @@ namespace StockSharp.Algo
 		/// </summary>
 		public ISlippageManager SlippageManager { get; private set; }
 
-		private ConnectionStates _prevConnectionState;
-		private ConnectionStates _connectionState;
-
 		/// <summary>
 		/// Состояние соединения.
 		/// </summary>
-		public ConnectionStates ConnectionState
-		{
-			get { return _connectionState; }
-			protected set
-			{
-				_connectionState = value;
-
-				if (value != ConnectionStates.Connecting || value != ConnectionStates.Disconnecting)
-					_prevConnectionState = value;
-			}
-		}
+		public ConnectionStates ConnectionState { get; private set; }
 
 		private bool _isSupportAtomicReRegister = true;
 
@@ -1412,8 +1399,7 @@ namespace StockSharp.Algo
 			_orderCancelFails.Clear();
 			_orderRegisterFails.Clear();
 
-			//_prevExportState = _exportState = ConnectionStates.Disconnected;
-			_prevConnectionState = _connectionState = ConnectionStates.Disconnected;
+			ConnectionState = ConnectionStates.Disconnected;
 
 			_suspendedSecurityMessages.Clear();
 
@@ -1490,6 +1476,8 @@ namespace StockSharp.Algo
 			Adapter.InnerAdapters.Added -= InnerAdaptersOnAdded;
 			Adapter.InnerAdapters.Removed -= InnerAdaptersOnRemoved;
 			Adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
+
+			Adapter.Dispose();
 		}
 
 		/// <summary>

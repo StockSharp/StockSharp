@@ -134,12 +134,6 @@
 			//	}
 			//}
 
-			protected override void DisposeInnerAdapters()
-			{
-				_isInitialized = false;
-				base.DisposeInnerAdapters();
-			}
-
 			private void ApplySettings(EmulationMessageAdapter adapter, IncrementalIdGenerator tradeIdGenerator, IncrementalIdGenerator orderIdGenerator)
 			{
 				adapter.Emulator.Settings.Load(_settings.Save());
