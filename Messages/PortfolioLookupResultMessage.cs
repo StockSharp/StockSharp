@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Message"/>.
+		/// Создать копию объекта <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()
