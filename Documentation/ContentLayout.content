@@ -196,6 +196,7 @@
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
       <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
       <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" />
+      <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" isSelected="true" title="BitStamp" />
       <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
       <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" />
       <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" />
@@ -207,7 +208,7 @@
       <Topic id="f9e23239-7587-41ad-9644-c6df8e467c38" visible="True" title="IQFeed" />
       <Topic id="bcb8050d-d330-4071-affc-b6ed5639e1fb" visible="True" title="Interactive Brokers" />
       <Topic id="0b962432-d81d-4646-a818-9fa7093cbe4f" visible="True" title="LMAX" />
-      <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" isSelected="true" title="ЛЧИ" />
+      <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" title="ЛЧИ" />
       <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
       <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" title="MFD" />
       <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" />
