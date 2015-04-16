@@ -222,7 +222,15 @@ namespace StockSharp.Btce
 
 		private void ProcessPortfolioLookup(PortfolioLookupMessage message)
 		{
-			ProcessFunds(_client.GetInfo().State.Funds);
+			var reply = _client.GetInfo();
+			ProcessFunds(reply.State.Funds);
+
+			SendOutMessage(new PortfolioMessage
+			{
+				PortfolioName = GetPortfolioName(),
+				State = reply.State.Rights.CanTrade ? PortfolioStates.Active : PortfolioStates.Blocked,
+				OriginalTransactionId = message == null ? 0 : message.TransactionId
+			});
 
 			if (message != null)
 				SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = message.TransactionId });

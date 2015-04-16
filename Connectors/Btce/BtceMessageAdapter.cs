@@ -27,6 +27,14 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public override bool PortfolioLookupRequired
+		{
+			get { return IsTransactionEnabled; }
+		}
+
+		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
 		/// </summary>
 		public override bool OrderStatusRequired
@@ -80,24 +88,13 @@ namespace StockSharp.Btce
 
 					_orderInfo.Clear();
 
-					_hasActiveOrders = true;
-					_hasMyTrades = true;
-					_requestOrderFirst = true;
+					_hasActiveOrders = false;
+					_hasMyTrades = false;
+					_requestOrderFirst = false;
 
 					_client = new BtceClient(Key, Secret);
 
-					var reply = _client.GetInfo();
-
 					SendOutMessage(new ConnectMessage());
-
-					SendOutMessage(new PortfolioMessage
-					{
-						PortfolioName = GetPortfolioName(),
-						State = reply.State.Rights.CanTrade ? PortfolioStates.Active : PortfolioStates.Blocked
-					});
-
-					ProcessFunds(reply.State.Funds);
-
 					break;
 				}
 
@@ -128,6 +125,10 @@ namespace StockSharp.Btce
 
 				case MessageTypes.OrderStatus:
 				{
+					_hasActiveOrders = true;
+					_hasMyTrades = true;
+					_requestOrderFirst = true;
+
 					ProcessOrderStatus();
 					break;
 				}
