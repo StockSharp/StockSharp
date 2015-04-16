@@ -68,11 +68,11 @@
 			if (securityId.IsEmpty())
 				throw new ArgumentNullException("securityId");
 
-			var parts = securityId.Split(Delimiter);
+			var index = securityId.LastIndexOf(Delimiter, StringComparison.InvariantCulture);
 
-			return parts.Length != 2
+			return index == -1
 				? Tuple.Create(securityId, ExchangeBoard.Associated.Code)
-				: Tuple.Create(parts[0], parts[1]);
+				: Tuple.Create(securityId.Substring(0, index), securityId.Substring(index + Delimiter.Length, securityId.Length - index - Delimiter.Length));
 		}
 	}
 }
