@@ -326,17 +326,17 @@ namespace StockSharp.Quik
 		public const string ActiveTo = "ACTIVE_TO_TIME";
 
 		/// <summary>
-		/// Номер заявки, снимаемой из торговой системы.
+		/// Идентификатор заявки, снимаемой из торговой системы.
 		/// </summary>
 		public const string OrderId = "ORDER_KEY";
 
 		/// <summary>
-		/// Номер стоп-заявки, снимаемой из торговой системы.
+		/// Идентификатор стоп-заявки, снимаемой из торговой системы.
 		/// </summary>
 		public const string StopOrderId = "STOP_ORDER_KEY";
 
 		/// <summary>
-		/// Уникальный идентификационный номер заявки.
+		/// Уникальный идентификатор заявки.
 		/// </summary>
 		public const string TransactionId = "TRANS_ID";
 
@@ -371,7 +371,7 @@ namespace StockSharp.Quik
 		public const string SpreadUnit = "SPREAD_UNITS";
 
 		/// <summary>
-		/// Регистрационный номер заявки-условия.
+		/// Регистрационный идентификатор заявки-условия.
 		/// </summary>
 		public const string ConditionOrderId = "BASE_ORDER_KEY";
 
@@ -396,7 +396,7 @@ namespace StockSharp.Quik
 		public const string FortsMode = "MODE";
 
 		/// <summary>
-		/// Номер первой заявки.
+		/// Идентификатор первой заявки.
 		/// </summary>
 		public const string FirstOrderId = "FIRST_ORDER_NUMBER";
 
@@ -411,7 +411,7 @@ namespace StockSharp.Quik
 		public const string FirstOrderNewPrice = "FIRST_ORDER_NEW_PRICE";
 
 		/// <summary>
-		/// Номер второй заявки.
+		/// Идентификатор второй заявки.
 		/// </summary>
 		public const string SecondOrderNumber = "SECOND_ORDER_NUMBER";
 

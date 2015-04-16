@@ -84,7 +84,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Номер транзакции.
+		/// Идентификатор транзакции.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -93,7 +93,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Номер первоначальной транзакции, для которой данное сообщение является ответом.
+		/// Идентификатор первоначальной транзакции, для которой данное сообщение является ответом.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OriginalTrasactionKey)]

@@ -25,13 +25,13 @@
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции отмены.
+		/// Идентификатор транзакции отмены.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции отменяемой заявки.
+		/// Идентификатор транзакции отменяемой заявки.
 		/// </summary>
 		[DataMember]
 		public long OrderTransactionId { get; set; }

@@ -16,7 +16,7 @@ namespace StockSharp.Messages
 	public class OrderRegisterMessage : OrderMessage
 	{
 		/// <summary>
-		/// Номер транзакции.
+		/// Идентификатор транзакции.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]

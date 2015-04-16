@@ -144,7 +144,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		///// <summary>
-		///// Номер первоначального сообщения <see cref="MarketDataMessage.TransactionId"/>,
+		///// Идентификатор первоначального сообщения <see cref="MarketDataMessage.TransactionId"/>,
 		///// для которого данное сообщение является ответом.
 		///// </summary>
 		//public long OriginalTransactionId { get; set; }

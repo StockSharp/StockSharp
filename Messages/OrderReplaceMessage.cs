@@ -25,7 +25,7 @@
 		public string OldOrderStringId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции перерегистрируемой заявки.
+		/// Идентификатор транзакции перерегистрируемой заявки.
 		/// </summary>
 		[DataMember]
 		public long OldTransactionId { get; set; }

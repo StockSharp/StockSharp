@@ -15,7 +15,7 @@ namespace StockSharp.Messages
 	public class OrderStatusMessage : Message
 	{
 		/// <summary>
-		/// Номер транзакции.
+		/// Идентификатор транзакции.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -36,7 +36,7 @@ namespace StockSharp.Messages
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции запрашиваемой заявки.
+		/// Идентификатор транзакции запрашиваемой заявки.
 		/// </summary>
 		[DataMember]
 		public long? OrderTransactionId { get; set; }

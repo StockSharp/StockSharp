@@ -13,7 +13,7 @@
 	public class PortfolioLookupResultMessage : Message
 	{
 		/// <summary>
-		/// Номер первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
+		/// Идентификатор первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
 		[DataMember]

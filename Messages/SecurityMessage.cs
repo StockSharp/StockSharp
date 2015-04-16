@@ -159,7 +159,7 @@ namespace StockSharp.Messages
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// Номер первоначального сообщения <see cref="SecurityLookupMessage.TransactionId"/>,
+		/// Идентификатор первоначального сообщения <see cref="SecurityLookupMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
 		[DataMember]

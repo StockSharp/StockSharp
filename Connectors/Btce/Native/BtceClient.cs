@@ -169,7 +169,7 @@ namespace StockSharp.Btce.Native
 		/// <summary>
 		/// Возвращает свои сделки на счете месяц по всем инструментам c определенной даты.
 		/// </summary>
-		/// <param name="fromId">Номер сделки, с которой нужны новые сделки.</param>
+		/// <param name="fromId">Идентификатор сделки, с которой нужны новые сделки.</param>
 		public MyTradesReply GetMyTrades(long fromId)
 		{
 			//var unixtime = (long)(since - Converter.GregorianStart).TotalSeconds;

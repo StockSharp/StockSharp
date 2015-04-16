@@ -38,20 +38,20 @@
 		Position CreatePosition(Portfolio portfolio, Security security);
 
 		/// <summary>
-		/// Создать тиковую сделку по ее номеру.
+		/// Создать тиковую сделку по ее идентификатору.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
-		/// <param name="id">Номер сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
-		/// <param name="stringId">Номер сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
+		/// <param name="id">Идентификатор сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
+		/// <param name="stringId">Идентификатор сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
 		/// <returns>Созданная сделка.</returns>
 		Trade CreateTrade(Security security, long? id, string stringId);
 
 		/// <summary>
-		/// Создать заявку по номеру транзакции.
+		/// Создать заявку по идентификатору транзакции.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
 		/// <param name="type">Тип заявки.</param>
-		/// <param name="transactionId">Номер транзакции регистрации заявки.</param>
+		/// <param name="transactionId">Идентификатор транзакции регистрации заявки.</param>
 		/// <returns>Созданная заявка.</returns>
 		Order CreateOrder(Security security, OrderTypes type, long transactionId);
 
@@ -157,11 +157,11 @@
 		}
 
 		/// <summary>
-		/// Создать тиковую сделку по ее номеру.
+		/// Создать тиковую сделку по ее идентификатору.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
-		/// <param name="id">Номер сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
-		/// <param name="stringId">Номер сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
+		/// <param name="id">Идентификатор сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
+		/// <param name="stringId">Идентификатор сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
 		/// <returns>Созданная сделка.</returns>
 		public virtual Trade CreateTrade(Security security, long? id, string stringId)
 		{
@@ -169,11 +169,11 @@
 		}
 
 		/// <summary>
-		/// Создать заявку по номеру транзакции.
+		/// Создать заявку по идентификатору транзакции.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
 		/// <param name="type">Тип заявки.</param>
-		/// <param name="transactionId">Номер транзакции регистрации заявки.</param>
+		/// <param name="transactionId">Идентификатор транзакции регистрации заявки.</param>
 		/// <returns>Созданная заявка.</returns>
 		public virtual Order CreateOrder(Security security, OrderTypes type, long transactionId)
 		{

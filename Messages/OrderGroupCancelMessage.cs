@@ -24,7 +24,7 @@ namespace StockSharp.Messages
 		//public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
-		/// Номер транзакции отмены.
+		/// Идентификатор транзакции отмены.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }

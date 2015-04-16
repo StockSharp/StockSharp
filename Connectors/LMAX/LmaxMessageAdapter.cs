@@ -143,10 +143,10 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Привести инструкцию к номеру транзакции.
+		/// Привести инструкцию к идентификатору транзакции.
 		/// </summary>
 		/// <param name="instructionId">Инструкция.</param>
-		/// <returns>Номер транзакции. Если инструкцию невозможно привести к числу, то будет возвращено null.</returns>
+		/// <returns>Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено null.</returns>
 		private static long? TryParseTransactionId(string instructionId)
 		{
 			long transactionId;

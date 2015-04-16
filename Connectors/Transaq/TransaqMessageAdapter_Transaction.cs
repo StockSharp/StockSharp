@@ -296,7 +296,7 @@ namespace StockSharp.Transaq
 				{
 					stockSharpTransactionId = order.TransactionId;
 
-					// если заявка пришла от терминала, то просто номер транзакции ассоциируем как стокшарповский
+					// если заявка пришла от терминала, то просто идентификатор транзакции ассоциируем как стокшарповский
 					_orders.Add(order.TransactionId, order.TransactionId);
 
 					_ordersTypes.Add(order.TransactionId, order is TransaqStopOrder ? OrderTypes.Conditional : OrderTypes.Limit);

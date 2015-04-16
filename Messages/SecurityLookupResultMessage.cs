@@ -13,7 +13,7 @@
 	public class SecurityLookupResultMessage : Message
 	{
 		/// <summary>
-		/// Номер первоначального сообщения <see cref="SecurityLookupMessage.TransactionId"/>,
+		/// Идентификатор первоначального сообщения <see cref="SecurityLookupMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
 		[DataMember]

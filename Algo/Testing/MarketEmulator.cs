@@ -1414,7 +1414,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Генератор номеров для заявок.
+		/// Генератор идентификаторов для заявок.
 		/// </summary>
 		public IncrementalIdGenerator OrderIdGenerator
 		{
@@ -1423,7 +1423,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Генератор номеров для сделок.
+		/// Генератор идентификаторов для сделок.
 		/// </summary>
 		public IncrementalIdGenerator TradeIdGenerator
 		{

@@ -164,7 +164,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Номер транзакции. Автоматически устанавливается при вызове метода <see cref="IConnector.RegisterOrder" />.
+		/// Идентификатор транзакции. Автоматически устанавливается при вызове метода <see cref="IConnector.RegisterOrder" />.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -505,7 +505,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <remarks>
 		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с заявкой.
-		/// Например, время активации, доходность для обычных заявок, или номер заявки-условия для стоп-заявки.
+		/// Например, время активации, доходность для обычных заявок, или идентификатор заявки-условия для стоп-заявки.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]

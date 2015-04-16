@@ -374,8 +374,8 @@
 		//[JsonProperty(PropertyName = "price")]
 		//public double Price { get; set; }
 
-		// после создания заявки здесь можно узнать ее номер
-		// для отмены заявки указывавается ее номер
+		// после создания заявки здесь можно узнать ее идентификатор
+		// для отмены заявки указывавается ее идентификатор
 		[JsonProperty(PropertyName = "order_id")]
 		public long OrderId { get; set; }
 

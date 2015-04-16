@@ -31,7 +31,7 @@
 		private IdGenerator _idGenerator;
 
 		/// <summary>
-		/// Генератор номера сделки <see cref="Trade.Id"/>.
+		/// Генератор идентификатора сделки <see cref="Trade.Id"/>.
 		/// </summary>
 		public IdGenerator IdGenerator
 		{

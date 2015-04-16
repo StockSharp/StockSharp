@@ -50,7 +50,7 @@
 		private IdGenerator _idGenerator;
 
 		/// <summary>
-		/// Генератор номера заявки <see cref="Order.Id"/>.
+		/// Генератор идентификатора заявки <see cref="Order.Id"/>.
 		/// </summary>
 		public IdGenerator IdGenerator
 		{
