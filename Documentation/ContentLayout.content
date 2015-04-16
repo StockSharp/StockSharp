@@ -198,7 +198,7 @@
       <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" />
       <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp" />
       <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
-      <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isSelected="true" title="BTCE" />
+      <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" title="BTCE" />
       <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" />
       <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" />
       <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
@@ -213,6 +213,7 @@
       <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
       <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" title="MFD" />
       <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" />
+      <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" isSelected="true" title="OANDA" />
       <Topic id="4d84a1e0-fe23-4b14-8323-c5f68f117cc7" visible="True" title="OpenECry" />
       <Topic id="53930a42-ae5a-45fc-b9cf-8295584bf8fc" visible="True" title="Plaza II" />
       <Topic id="54a1e95e-ea39-4322-9613-e74859a3a596" visible="True" title="Quik" />
