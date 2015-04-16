@@ -196,8 +196,9 @@
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
       <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
       <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" />
-      <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" isSelected="true" title="BitStamp" />
+      <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp" />
       <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
+      <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" isSelected="true" title="BTCE" />
       <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" />
       <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" />
       <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />

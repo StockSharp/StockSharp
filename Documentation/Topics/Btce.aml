@@ -1,18 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
+   
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
-      <para>Описание временно недоступно.</para>
+      <mediaLink>
+        <image placement="left" xlink:href="hydra_settings_btce" />
+      </mediaLink>
+      
+		<para><legacyBold>Основные</legacyBold></para>
+	   <list class="bullet">
+        <listItem>
+          <legacyBold>Работать с</legacyBold> - время начала работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Работать до</legacyBold> - время окончания работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Интервал работы</legacyBold> - интервал работы источника.
+		</listItem>
+        <listItem>
+          <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
+		</listItem>
+		<listItem>
+          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
+		</listItem>
+		<listItem>
+          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируются.
+		</listItem>
+		<listItem>
+          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
+		</listItem>
+		<listItem>
+          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+		</listItem>
+		<listItem>
+          <legacyBold>Поля Level1</legacyBold> - поддерживаемые поля маркет-данных первого уровня.
+		</listItem>
+      </list>
+      <para><legacyBold>Подключение</legacyBold></para>
+ 		<list class="bullet">
+		<listItem>
+          <legacyBold>Время ожидания</legacyBold> - время ожидания успешного подключения/отключения.
+		</listItem>
+		<listItem>
+          <legacyBold>Интервал</legacyBold> - интервал, с которым будут происходить попытки подключения.
+		</listItem>
+		<listItem>
+          <legacyBold>Первоначально</legacyBold> - количество попыток установить первоначальное подключение.
+		</listItem>
+		<listItem>
+          <legacyBold>Переподключение</legacyBold> - количество попыток переподключения, если соединение было разорвано в процессе работы.
+		</listItem>
+      </list>
+     <para><legacyBold>Режим работы</legacyBold></para>
+ 		<list class="bullet">
+		<listItem>
+          <legacyBold>Выходные дни</legacyBold> - выходные дни, выпадающие на будни.
+		</listItem>
+		<listItem>
+          <legacyBold>Периоды</legacyBold> - периоды действия расписания.
+		</listItem>
+		<listItem>
+          <legacyBold>Рабочие дни</legacyBold> - рабочие дни, выпадающие на субботу и воскресенье.
+		</listItem>
+      </list>
+      <para><legacyBold>Экспорт</legacyBold></para>
+ 		<list class="bullet">
+		<listItem>
+          <legacyBold>Время ожидания</legacyBold> - время ожидания успешного подключения/отключения.
+		</listItem>
+		<listItem>
+          <legacyBold>Интервал</legacyBold> - интервал, с которым будут происходить попытки подключения.
+		</listItem>
+		<listItem>
+          <legacyBold>Первоначально</legacyBold> - количество попыток установить первоначальное подключение.
+		</listItem>
+		<listItem>
+          <legacyBold>Переподключение</legacyBold> - количество попыток переподключения, если соединение было разорвано в процессе работы.
+		</listItem>
+      </list>
     </introduction>
   </developerConceptualDocument>
 </topic>
