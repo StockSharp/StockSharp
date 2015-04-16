@@ -339,7 +339,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("order");
 
 			bool isNew;
-			GetOrderInfo(order.Security, order.Type, order.TransactionId, null, null, id => order, out isNew);
+			GetOrderInfo(_cache.GetData(order.Security), order.Type, order.TransactionId, null, null, id => order, out isNew);
 			return isNew;
 		}
 
@@ -363,7 +363,9 @@ namespace StockSharp.Algo
 			if (transactionId == 0)
 				transactionId = message.OriginalTransactionId;
 
-			var orderInfo = GetOrderInfo(security, message.OrderType, transactionId, message.OrderId, message.OrderStringId, trId =>
+			var securityData = _cache.GetData(security);
+
+			var orderInfo = GetOrderInfo(securityData, message.OrderType, transactionId, message.OrderId, message.OrderStringId, trId =>
 			{
 				var o = EntityFactory.CreateOrder(security, message.OrderType, trId);
 
@@ -388,7 +390,7 @@ namespace StockSharp.Algo
 			var raiseNewOrder = orderInfo.Item3;
 
 			var isPending = order.State == OrderStates.Pending;
-			var isPrevIdSet = (order.Id != null || !order.StringId.IsEmpty());
+			//var isPrevIdSet = (order.Id != null || !order.StringId.IsEmpty());
 
 			bool isChanged;
 
@@ -403,8 +405,11 @@ namespace StockSharp.Algo
 				if (message.OrderId != null)
 					order.Id = message.OrderId.Value;
 
-				order.StringId = message.OrderStringId;
-				order.BoardId = message.OrderBoardId;
+				if (!message.OrderStringId.IsEmpty())
+					order.StringId = message.OrderStringId;
+
+				if (!message.OrderBoardId.IsEmpty())
+					order.BoardId = message.OrderBoardId;
 
 				//// некоторые коннекторы не транслируют при отмене отмененный объем
 				//// esper. при перерегистрации заявок необходимо обновлять баланс
@@ -455,22 +460,24 @@ namespace StockSharp.Algo
 				isChanged = true;
 			}
 
-			if (isNew || (!isPrevIdSet && (order.Id != null || !order.StringId.IsEmpty())))
+			//if (isNew || (!isPrevIdSet && (order.Id != null || !order.StringId.IsEmpty())))
+			//{
+
+			// так как биржевые идентифиаторы могут повторяться, то переписываем старые заявки новыми как наиболее актуальными
+					
+			if (order.Id != null)
 			{
-				if (order.Id != null)
-				{
-					// так как биржевые номера могут повторяться, то переписываем старые заявки новыми как наиболее актуальными
-					_cache.GetData(order.Security).OrdersById[order.Id.Value] = order;
-					_cache.AllOrdersById[order.Id.Value] = order;
-				}
-				
-				if (!order.StringId.IsEmpty())
-				{
-					_cache.GetData(order.Security).OrdersByStringId.Add(order.StringId, order);
-					_cache.AllOrdersByStringId.Add(order.StringId, order);
-				}
-				//throw new ArgumentOutOfRangeException("order", id, "Номер заявки задан неверно.");
+				securityData.OrdersById[order.Id.Value] = order;
+				_cache.AllOrdersById[order.Id.Value] = order;
 			}
+				
+			if (!order.StringId.IsEmpty())
+			{
+				securityData.OrdersByStringId[order.StringId] = order;
+				_cache.AllOrdersByStringId[order.StringId] = order;
+			}
+
+			//}
 
 			//if (message.OrderType == OrderTypes.Conditional && (message.DerivedOrderId != null || !message.DerivedOrderStringId.IsEmpty()))
 			//{
@@ -566,7 +573,9 @@ namespace StockSharp.Algo
 			if (message.OriginalTransactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
 				throw new ArgumentOutOfRangeException("message", message.OriginalTransactionId, LocalizedStrings.Str715);
 
-			var myTrade = _cache.GetData(security).MyTrades.TryGetValue(Tuple.Create(message.OriginalTransactionId, message.TradeId ?? 0));
+			var securityData = _cache.GetData(security);
+
+			var myTrade = securityData.MyTrades.TryGetValue(Tuple.Create(message.OriginalTransactionId, message.TradeId ?? 0));
 
 			if (myTrade != null)
 				return Tuple.Create(myTrade, false);
@@ -580,7 +589,7 @@ namespace StockSharp.Algo
 
 			var isNew = false;
 
-			myTrade = _cache.GetData(order.Security).MyTrades.SafeAdd(Tuple.Create(order.TransactionId, trade.Id), key =>
+			myTrade = securityData.MyTrades.SafeAdd(Tuple.Create(order.TransactionId, trade.Id), key =>
 			{
 				isNew = true;
 
@@ -739,7 +748,7 @@ namespace StockSharp.Algo
 			return orderStringId == null ? null : data.OrdersByStringId.TryGetValue(orderStringId);
 		}
 
-		private Tuple<Order, bool, bool> GetOrderInfo(Security security, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
+		private Tuple<Order, bool, bool> GetOrderInfo(Cache.SecurityData securityData, OrderTypes type, long transactionId, long? orderId, string orderStringId, Func<long, Order> createOrder, out bool isNew, bool newOrderRaised = false)
 		{
 			if (createOrder == null)
 				throw new ArgumentNullException("createOrder");
@@ -748,7 +757,7 @@ namespace StockSharp.Algo
 				throw new ArgumentException(LocalizedStrings.Str719);
 
 			var isNew2 = false;
-			var orders = _cache.GetData(security).Orders;
+			var orders = securityData.Orders;
 
 			OrderInfo info;
 
@@ -787,7 +796,7 @@ namespace StockSharp.Algo
 
 					_cache.AddOrder(o);
 
-					// с таким же номером транзакции может быть заявка по другому инструменту
+					// с таким же идентификатором транзакции может быть заявка по другому инструменту
 					_cache.AllOrdersByTransactionId.TryAdd(Tuple.Create(transactionId, type == OrderTypes.Conditional), o);
 
 					return new OrderInfo(o);
