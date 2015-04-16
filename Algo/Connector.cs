@@ -841,9 +841,15 @@ namespace StockSharp.Algo
 			{
 				this.AddOrderInfoLog(order, "RegisterOrder");
 
-				order.CheckOnNew(order.Type != OrderTypes.Conditional, initOrder);
+				CheckOnNew(order, order.Type != OrderTypes.Conditional, initOrder);
 
-				this.ChangeContinuousSecurity(order);
+				var cs = order.Security as ContinuousSecurity;
+
+				while (cs != null)
+				{
+					order.Security = cs.GetSecurity(order.Security.ToExchangeTime(CurrentTime));
+					cs = order.Security as ContinuousSecurity;
+				}
 
 				if (initOrder)
 					InitNewOrder(order);
@@ -901,8 +907,8 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					oldOrder.CheckOnOld();
-					newOrder.CheckOnNew(false);
+					CheckOnOld(oldOrder);
+					CheckOnNew(newOrder, false);
 
 					if (oldOrder.Comment.IsEmpty())
 						oldOrder.Comment = newOrder.Comment;
@@ -959,11 +965,11 @@ namespace StockSharp.Algo
 				}
 				else
 				{
-					oldOrder1.CheckOnOld();
-					newOrder1.CheckOnNew(false);
+					CheckOnOld(oldOrder1);
+					CheckOnNew(newOrder1, false);
 
-					oldOrder2.CheckOnOld();
-					newOrder2.CheckOnNew(false);
+					CheckOnOld(oldOrder2);
+					CheckOnNew(newOrder2, false);
 
 					if (oldOrder1.Comment.IsEmpty())
 						oldOrder1.Comment = newOrder1.Comment;
@@ -1000,7 +1006,7 @@ namespace StockSharp.Algo
 			{
 				this.AddOrderInfoLog(order, "CancelOrder");
 
-				order.CheckOnOld();
+				CheckOnOld(order);
 
 				var transactionId = TransactionIdGenerator.GetNextId();
 				_entityCache.AddOrderByCancelTransaction(transactionId, order);
@@ -1024,13 +1030,83 @@ namespace StockSharp.Algo
 			}.ToMessage(), TransactionAdapter);
 		}
 
+		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)
+		{
+			ChechOrderState(order);
+
+			if (checkVolume)
+			{
+				if (order.Volume == 0)
+					throw new ArgumentException(LocalizedStrings.Str894, "order");
+
+				if (order.Volume < 0)
+					throw new ArgumentOutOfRangeException("order", order.Volume, LocalizedStrings.Str895);
+			}
+
+			if (order.Id != null || !order.StringId.IsEmpty())
+				throw new ArgumentException(LocalizedStrings.Str896Params.Put(order.Id == null ? order.StringId : order.Id.To<string>()), "order");
+
+			if (!checkTransactionId)
+				return;
+
+			if (order.TransactionId != 0)
+				throw new ArgumentException(LocalizedStrings.Str897Params.Put(order.TransactionId), "order");
+
+			if (order.State != OrderStates.None)
+				throw new ArgumentException(LocalizedStrings.Str898Params.Put(order.State), "order");
+		}
+
+		private static void CheckOnOld(Order order)
+		{
+			ChechOrderState(order);
+
+			if (order.TransactionId == 0 && order.Id == null && order.StringId.IsEmpty())
+				throw new ArgumentException(LocalizedStrings.Str899, "order");
+		}
+
+		private static void ChechOrderState(Order order)
+		{
+			if (order == null)
+				throw new ArgumentNullException("order");
+
+			if (order.Type == OrderTypes.Conditional && order.Condition == null)
+				throw new ArgumentException(LocalizedStrings.Str889, "order");
+
+			if (order.Security == null)
+				throw new ArgumentException(LocalizedStrings.Str890, "order");
+
+			if (order.Portfolio == null)
+				throw new ArgumentException(LocalizedStrings.Str891, "order");
+
+			if (order.Price < 0)
+				throw new ArgumentOutOfRangeException("order", order.Price, LocalizedStrings.Str892);
+
+			if (order.Price == 0 && (order.Type == OrderTypes.Limit || order.Type == OrderTypes.ExtRepo || order.Type == OrderTypes.Repo || order.Type == OrderTypes.Rps))
+				throw new ArgumentException(LocalizedStrings.Str893, "order");
+		}
+
 		/// <summary>
 		/// Инициализировать новую заявку номером транзакции, информацией о подключении и т.д.
 		/// </summary>
 		/// <param name="order">Новая заявка.</param>
 		private void InitNewOrder(Order order)
 		{
-			order.InitOrder(this, TransactionIdGenerator);
+			order.Balance = order.Volume;
+
+			if (order.ExtensionInfo == null)
+				order.ExtensionInfo = new Dictionary<object, object>();
+
+			//order.InitializationTime = trader.MarketTime;
+			if (order.TransactionId == 0)
+				order.TransactionId = TransactionIdGenerator.GetNextId();
+
+			order.Connector = this;
+
+			if (order.Security is ContinuousSecurity)
+				order.Security = ((ContinuousSecurity)order.Security).GetSecurity(order.Security.ToExchangeTime(CurrentTime));
+
+			order.LocalTime = CurrentTime.LocalDateTime;
+			order.State = OrderStates.Pending;
 
 			if (!_entityCache.TryAddOrder(order))
 				throw new ArgumentException(LocalizedStrings.Str1101Params.Put(order.TransactionId));

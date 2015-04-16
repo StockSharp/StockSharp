@@ -1492,7 +1492,15 @@ namespace StockSharp.Algo
 		/// <returns>Сделки.</returns>
 		public static IEnumerable<MyTrade> GetTrades(this Order order)
 		{
-			return order.CheckTrader().MyTrades.Filter(order);
+			if (order == null)
+				throw new ArgumentNullException("order");
+
+			var connector = order.Connector;
+
+			if (connector == null)
+				throw new ArgumentException(LocalizedStrings.Str904Params.Put(order.TransactionId), "order");
+
+			return connector.MyTrades.Filter(order);
 		}
 
 		/// <summary>
