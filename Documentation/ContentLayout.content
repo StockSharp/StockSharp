@@ -197,30 +197,31 @@
       <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
       <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" />
       <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
+      <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" />
+      <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" />
+      <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
       <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
+      <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" />
+      <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
+      <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
       <Topic id="f9e23239-7587-41ad-9644-c6df8e467c38" visible="True" title="IQFeed" />
       <Topic id="bcb8050d-d330-4071-affc-b6ed5639e1fb" visible="True" title="Interactive Brokers" />
       <Topic id="0b962432-d81d-4646-a818-9fa7093cbe4f" visible="True" title="LMAX" />
+      <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" isSelected="true" title="ЛЧИ" />
       <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
-      <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" isSelected="true" title="MFD" />
+      <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" title="MFD" />
+      <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" />
       <Topic id="4d84a1e0-fe23-4b14-8323-c5f68f117cc7" visible="True" title="OpenECry" />
       <Topic id="53930a42-ae5a-45fc-b9cf-8295584bf8fc" visible="True" title="Plaza II" />
       <Topic id="54a1e95e-ea39-4322-9613-e74859a3a596" visible="True" title="Quik" />
-      <Topic id="1cca5a33-e5ab-434e-bfed-287389fea2eb" visible="True" title="SmartCom" />
-      <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
-      <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
+      <Topic id="bb5fedcc-9226-448e-8bb9-42969fba227e" visible="True" />
+      <Topic id="26ff0aad-623b-47e2-a8f8-a337506cd2ff" visible="True" title="Rithmic" />
       <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" title="RTS" />
       <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
-      <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
-      <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
-      <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" title="ЛЧИ" />
-      <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" />
-      <Topic id="bb5fedcc-9226-448e-8bb9-42969fba227e" visible="True" />
-      <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" />
-      <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" />
-      <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" />
+      <Topic id="1cca5a33-e5ab-434e-bfed-287389fea2eb" visible="True" title="SmartCom" />
+      <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
       <Topic id="a92bca75-1a0c-4581-a75a-6f13afd7975e" visible="True" />
-      <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
+      <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
       <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
     </Topic>
     <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Список инструментов" />
