@@ -417,7 +417,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			candle.ClosePrice = value.Price;
-			candle.TotalPrice += value.Price;
+			candle.TotalPrice += value.Price * value.Volume;
 
 			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
 			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
@@ -1085,7 +1085,7 @@ namespace StockSharp.Algo.Candles.Compression
 				HighVolume = value.Volume,
 				TotalVolume = value.Volume,
 
-				TotalPrice = value.Price,
+				TotalPrice = value.Price * value.Volume,
 
 				Type = pnfCandle == null ? PnFTypes.X : (pnfCandle.Type == PnFTypes.X ? PnFTypes.O : PnFTypes.X),
 			};
@@ -1159,7 +1159,7 @@ namespace StockSharp.Algo.Candles.Compression
 			else
 				candle.LowPrice = candle.ClosePrice;
 
-			candle.TotalPrice += value.Price;
+			candle.TotalPrice += value.Price * value.Volume;
 
 			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
 			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
@@ -1269,7 +1269,7 @@ namespace StockSharp.Algo.Candles.Compression
 				ClosePrice = closePrice,
 				HighPrice = Math.Max(openPrice, closePrice),
 				LowPrice = Math.Min(openPrice, closePrice),
-				TotalPrice = openPrice + closePrice,
+				TotalPrice = openPrice * value.Volume,
 				OpenVolume = value.Volume,
 				CloseVolume = value.Volume,
 				HighVolume = value.Volume,
@@ -1295,7 +1295,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			candle.CloseVolume = value.Volume;
 
-			candle.TotalPrice += value.Price;
+			candle.TotalPrice += value.Price * value.Volume;
 			candle.TotalVolume += value.Volume;
 
 			if (value.OrderDirection != null)
