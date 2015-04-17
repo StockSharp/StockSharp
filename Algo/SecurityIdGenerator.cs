@@ -59,20 +59,20 @@
 		}
 
 		/// <summary>
-		/// Получить коды инструмента и площадки по идентификатору инструмента.
+        /// Get codes tools and platforms on the identifier of the tool.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента <see cref="Security.Id"/>.</param>
-		/// <returns>Код инструмента <see cref="Security.Code"/> и код площадки <see cref="Security.Board"/>.</returns>
-		public virtual Tuple<string, string> Split(string securityId)
-		{
-			if (securityId.IsEmpty())
-				throw new ArgumentNullException("securityId");
+		/// <param name="securityId">Tool ID <see cref="Security.Id"/>.</param>
+		/// <returns>Get Quotes <see cref="Security.Code"/> and code pad <see cref="Security.Board"/>.</returns>
+        public virtual Tuple<string, string> Split(string securityId)
+        {
+            if (securityId.IsEmpty())
+                throw new ArgumentNullException("securityId");
 
-			var parts = securityId.Split(Delimiter);
+            var index = securityId.LastIndexOf(Delimiter, StringComparison.InvariantCulture);
 
-			return parts.Length != 2
-				? Tuple.Create(securityId, ExchangeBoard.Associated.Code)
-				: Tuple.Create(parts[0], parts[1]);
-		}
+            return index == -1
+             ? Tuple.Create(securityId, ExchangeBoard.Associated.Code)
+             : Tuple.Create(securityId.Substring(0, index), securityId.Substring(index + Delimiter.Length, securityId.Length - index - Delimiter.Length));
+        }
 	}
 }
