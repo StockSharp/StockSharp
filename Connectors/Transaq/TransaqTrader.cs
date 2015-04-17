@@ -140,6 +140,23 @@ namespace StockSharp.Transaq
 		}
 
 		/// <summary>
+		/// Список доступных периодов свечей.
+		/// </summary>
+		public IEnumerable<TimeSpan> CandleTimeFrames
+		{
+			get { return _adapter.CandleTimeFrames; }
+		}
+
+		/// <summary>
+		/// Событие инициализации поля <see cref="CandleTimeFrames"/>.
+		/// </summary>
+		public event Action CandleTimeFramesInitialized
+		{
+			add { _adapter.CandleTimeFramesInitialized += value; }
+			remove { _adapter.CandleTimeFramesInitialized -= value; }
+		}
+
+		/// <summary>
 		/// Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>

@@ -15,7 +15,6 @@ namespace SampleTransaq
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Transaq;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
 
@@ -30,18 +29,18 @@ namespace SampleTransaq
 
 			Loaded += (sender, args) =>
 			{
-				var mdAdapter = (TransaqMessageAdapter)MainWindow.Instance.Trader.MarketDataAdapter;
+				var trader = MainWindow.Instance.Trader;
 
 				Action initialize = () => this.GuiAsync(() =>
 				{
-					CandlesPeriods.ItemsSource = mdAdapter.CandleTimeFrames;
+					CandlesPeriods.ItemsSource = trader.CandleTimeFrames;
 					CandlesPeriods.SelectedIndex = 0;
 				});
 
-				if (mdAdapter.CandleTimeFrames.Any())
+				if (trader.CandleTimeFrames.Any())
 					initialize();
 				else
-					mdAdapter.CandleTimeFramesInitialized += initialize;
+					trader.CandleTimeFramesInitialized += initialize;
 			};
 		}
 

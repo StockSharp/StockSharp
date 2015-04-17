@@ -89,7 +89,7 @@
     <Compile Include="TransaqMessageAdapter_MarketData.cs" />
     <Compile Include="TransaqMessageAdapter.cs" />
     <Compile Include="TransaqOrderCondition.cs" />
-    <Compile Include="TransaqSessionHolder.cs" />
+    <Compile Include="TransaqMessageAdapter_Settings.cs" />
     <Compile Include="TransaqMessageAdapter_Transaction.cs" />
     <Compile Include="Native\Commands\CancelNegDealMessage.cs" />
     <Compile Include="Native\Commands\CancelReportMessage.cs" />
