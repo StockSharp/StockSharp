@@ -1,22 +1,5 @@
 StockSharp API Change log
 ========================
-###v4.2.75:
-* (feature) FixServer. No longer use QuickFix.
-* (feature) FixServer. Implements IMessageChannel.
-* (feature) FixServer. Separate market data and transactional endpoints.
-* (feature) FIX connector. FixMessageWriter.
-* (feature) FixServer. Use FixMessageWriter for outgoing messages.
-* (feature) FixServer. Support candles.
-* (feature) Order.TimeInForce and ExecMsg.TimeInForce are nullable.
-* (feature) CandleMessage. OpenVolume, HighVolume, LowVolume, CloseVolume are nullable.
-* (feature) NewsMessage.SecurityId is nullable.
-* (bug) OrderWnd. Fix step while nullable info.
-* (bug) EntityCache. Fix trade msg for unknown order.
-* (feature) Logging. Error handling.
-* (feature) Samples. OrdersWindow. Move order ability.
-* (feature) MessageConverterHelper. MessageTypes <-> MarketDataTypes for candles
-* (feature) PlazaTrader.IsControlConnectionLost
-
 ###v4.2.74:
 * (feature) FIX connector. IFixWriter IFixReader interfaces.
 * (feature) TextExporter refactoring.

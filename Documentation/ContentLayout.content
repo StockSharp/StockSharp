@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" isSelected="true" title="Лицензия StockSharp">
+  <Topic id="a48b036a-dc6f-44f7-b7e4-d02f3cc38f86" visible="True" isDefault="true" title="StockSharp" />
+  <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензия StockSharp">
     <Topic id="e3e9f831-56ac-44a4-840c-3d5969ff1fd7" visible="True" title="Инструкция скачивания" />
   </Topic>
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
@@ -8,7 +9,8 @@
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура StockSharp" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
     <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (российские)">
-      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" title="Quik">
+      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
+        <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
         <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
         <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
         <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
@@ -58,7 +60,7 @@
       </Topic>
       <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" title="Micex Bridge" />
     </Topic>
-    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Коннекторы (америка)">
+    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (америка)">
       <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" title="OpenECry">
         <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Пример работы с OECTrader" />
         <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Стоп-заявки" />
@@ -84,7 +86,7 @@
         <Topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" visible="True" title="Пример работы с ETradeTrader" />
         <Topic id="028b3872-d610-4ca4-9127-5434764f05de" visible="True" title="Стоп-заявки" />
       </Topic>
-      <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" isExpanded="true" title="IQFeed">
+      <Topic id="c7ff5937-e230-4db3-857f-4cd68583ebfc" visible="True" title="IQFeed">
         <Topic id="21aa8b6b-137d-4c28-87d9-dfbc5e446d95" visible="True" title="Подключение" />
         <Topic id="443734c7-7c88-47e0-a96a-4eec6fdfcfc7" visible="True" title="Получение инструментов" />
         <Topic id="310155fd-ef3a-40f4-9920-179dcaf2b6bf" visible="True" title="Исторические данные" />
@@ -189,34 +191,41 @@
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
   </Topic>
-  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" title="S#.Data">
+  <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка и работа" />
     <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
       <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
+      <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" />
+      <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp" />
       <Topic id="89a8b34c-63cf-4623-bbb7-90251d53e8e6" visible="True" title="Blackwood(Fusion)" />
+      <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" title="BTCE" />
+      <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" />
+      <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" />
+      <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
       <Topic id="e81b1b7f-5c96-488e-a90d-e60cb8675977" visible="True" title="Fix" />
+      <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" />
+      <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
+      <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
       <Topic id="f9e23239-7587-41ad-9644-c6df8e467c38" visible="True" title="IQFeed" />
       <Topic id="bcb8050d-d330-4071-affc-b6ed5639e1fb" visible="True" title="Interactive Brokers" />
       <Topic id="0b962432-d81d-4646-a818-9fa7093cbe4f" visible="True" title="LMAX" />
+      <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" title="ЛЧИ" />
       <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
+      <Topic id="01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2" visible="True" title="MFD" />
+      <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" />
+      <Topic id="c2162c96-d12f-4107-ac96-0238b793f466" visible="True" title="OANDA" />
       <Topic id="4d84a1e0-fe23-4b14-8323-c5f68f117cc7" visible="True" title="OpenECry" />
       <Topic id="53930a42-ae5a-45fc-b9cf-8295584bf8fc" visible="True" title="Plaza II" />
       <Topic id="54a1e95e-ea39-4322-9613-e74859a3a596" visible="True" title="Quik" />
+      <Topic id="bb5fedcc-9226-448e-8bb9-42969fba227e" visible="True" />
+      <Topic id="26ff0aad-623b-47e2-a8f8-a337506cd2ff" visible="True" title="Rithmic" />
+      <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" title="RTS" />
+      <Topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" visible="True" title="RSS" />
+      <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" isSelected="true" title="Sterling" />
       <Topic id="1cca5a33-e5ab-434e-bfed-287389fea2eb" visible="True" title="SmartCom" />
       <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
-      <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
-      <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" title="RTS" />
-      <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
-      <Topic id="c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f" visible="True" title="HydraServer" />
-      <Topic id="53c15f3a-4320-422d-850a-22ef6c90d76b" visible="True" title="ЛЧИ" />
-      <Topic id="34b9a25a-ecb2-4d82-b342-3fa46ec155ba" visible="True" />
-      <Topic id="bb5fedcc-9226-448e-8bb9-42969fba227e" visible="True" />
-      <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" />
-      <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" />
-      <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" />
-      <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" />
       <Topic id="a92bca75-1a0c-4581-a75a-6f13afd7975e" visible="True" />
-      <Topic id="0166d686-9fb0-4e78-8578-f5b706ad6a07" visible="True" title="Google" />
+      <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
       <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
     </Topic>
     <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Список инструментов" />

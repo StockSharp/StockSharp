@@ -4,7 +4,6 @@ namespace StockSharp.Quik.Lua
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
-	using System.Net;
 	using System.Reflection;
 	using System.Security;
 
@@ -28,30 +27,14 @@ namespace StockSharp.Quik.Lua
 		[DisplayName("FixServer")]
 		private sealed class FixServerEx : FixServer
 		{
-			private readonly SynchronizedSet<long> _transactionIds = new SynchronizedSet<long>(); 
-
 			public FixServerEx(Func<string, string, Tuple<TimeSpan, FixClientRoles>> authorize)
 				: base(authorize)
 			{
 			}
 
-			public void AddTransactionId(long transactionId)
-			{
-				this.AddInfoLog("Added trans id {0} mapping.", transactionId);
-				_transactionIds.Add(transactionId);
-			}
-
 			protected override long OnCreateTransactionId(FixSession session, string requestId)
 			{
 				return requestId.To<long>();
-			}
-
-			protected override string TryGetRequestId(long transactionId)
-			{
-				if (_transactionIds.Contains(transactionId))
-					return transactionId.To<string>();
-
-				return base.TryGetRequestId(transactionId);
 			}
 
 			protected override bool? OnProcess(FixSession session, string msgType, IFixReader reader)
@@ -285,23 +268,12 @@ namespace StockSharp.Quik.Lua
 		}
 
 		/// <summary>
-		/// Адрес, на котором FIX сервер будет обрабатывать транзакции.
-		/// По-умолчанию равен 127.0.0.1:5001.
+		/// Серверный порт, на котором будет работать FIX сервер.
 		/// </summary>
-		public EndPoint TransactionAddress
+		public int Port
 		{
-			get { return _fixServer.TransactionSession.Address; }
-			set { _fixServer.TransactionSession.Address = value; }
-		}
-
-		/// <summary>
-		/// Адрес, на котором FIX сервер будет рассылать маркет-данные.
-		/// По-умолчанию равен 127.0.0.1:5001.
-		/// </summary>
-		public EndPoint MarketDataAddress
-		{
-			get { return _fixServer.MarketDataSession.Address; }
-			set { _fixServer.MarketDataSession.Address = value; }
+			get { return _fixServer.Port; }
+			set { _fixServer.Port = value; }
 		}
 
 		/// <summary>
@@ -403,7 +375,10 @@ namespace StockSharp.Quik.Lua
 		/// <param name="transactionId">Идентификатор транзакции.</param>
 		public void AddTransactionId(long transactionId)
 		{
-			_fixServer.AddTransactionId(transactionId);
+			LogReceiver.AddInfoLog("Added trans id {0} mapping.", transactionId);
+			
+			// TODO
+			//_fixServer.AddTransactionId(Login, transactionId, transactionId);
 		}
 
 		/// <summary>
