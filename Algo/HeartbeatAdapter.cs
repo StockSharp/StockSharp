@@ -31,13 +31,15 @@
 		private ConnectionStates _currState = _none;
 		private ConnectionStates _prevState = _none;
 
-		//private int _connectingAttemptCount;
-		//private TimeSpan _connectionTimeOut;
+		private int _connectingAttemptCount;
+		private TimeSpan _connectionTimeOut;
 
 		private Timer _heartBeatTimer;
 
 		private readonly TimeMessage _timeMessage = new TimeMessage();
-		private bool _isTimeMessageHandled;
+		private bool _canSendTime;
+
+		private ReConnectionSettings _reConnectionSettings;
 
 		/// <summary>
 		/// Создать <see cref="HeartbeatAdapter"/>.
@@ -49,8 +51,9 @@
 				throw new ArgumentNullException("adapter");
 
 			_adapter = adapter;
-
 			_adapter.NewOutMessage += AdapterOnNewOutMessage;
+
+			_reConnectionSettings = _adapter.ReConnectionSettings;
 		}
 
 		private void AdapterOnNewOutMessage(Message message)
@@ -70,7 +73,7 @@
 
 						lock (_timeSync)
 						{
-							_isTimeMessageHandled = true;
+							_canSendTime = true;
 							_heartBeatTimer = ThreadingHelper.Timer(OnHeartbeatTimer).Interval(_adapter.HeartbeatInterval);	
 						}
 					}
@@ -103,7 +106,7 @@
 					if (message == _timeMessage)
 					{
 						lock (_timeSync)
-							_isTimeMessageHandled = true;
+							_canSendTime = true;
 
 						return;
 					}
@@ -117,40 +120,46 @@
 
 		void IMessageChannel.SendInMessage(Message message)
 		{
-			//case MessageTypes.Connect:
-			//{
-			//	lock (_timeSync)
-			//	{
-			//		_canSendTimeIn = true;
-			//		_currState = ConnectionStates.Connecting;
-			//	}
+			switch (message.Type)
+			{
+				//case MessageTypes.Connect:
+				//{
+				//	lock (_timeSync)
+				//	{
+				//		_currState = ConnectionStates.Connecting;
+				//	}
 
-			//	if (_prevState == _none)
-			//	{
-			//		_connectionTimeOut = ReConnectionSettings.TimeOutInterval;
-			//		_connectingAttemptCount = ReConnectionSettings.AttemptCount;
-			//	}
-			//	else
-			//		_connectionTimeOut = ReConnectionSettings.Interval;
+				//	if (_prevState == _none)
+				//	{
+				//		_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
+				//		_connectingAttemptCount = _reConnectionSettings.AttemptCount;
+				//	}
+				//	else
+				//		_connectionTimeOut = _reConnectionSettings.Interval;
 
-			//	break;
-			//}
-			//case MessageTypes.Disconnect:
-			//{
-			//	lock (_timeSync)
-			//		_currState = ConnectionStates.Disconnecting;
+				//	break;
+				//}
+				case MessageTypes.Disconnect:
+				{
+					//lock (_timeSync)
+					//	_currState = ConnectionStates.Disconnecting;
 
-			//	_connectionTimeOut = ReConnectionSettings.TimeOutInterval;
+					//_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
 
-			//	break;
-			//}
-			//case MessageTypes.Time:
-			//{
-			//	lock (_timeSync)
-			//		_canSendTimeIn = true;
+					lock (_timeSync)
+					{
+						_canSendTime = false;
 
-			//	break;
-			//}
+						if (_heartBeatTimer != null)
+						{
+							_heartBeatTimer.Dispose();
+							_heartBeatTimer = null;
+						}
+					}
+
+					break;
+				}
+			}
 
 			_adapter.SendInMessage(message);
 		}
@@ -162,10 +171,10 @@
 				if (_currState != ConnectionStates.Connected)
 					return;
 
-				if (!_isTimeMessageHandled)
+				if (!_canSendTime)
 					return;
 
-				_isTimeMessageHandled = false;
+				_canSendTime = false;
 			}
 
 			_timeMessage.IsBack = true;
