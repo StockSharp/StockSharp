@@ -160,13 +160,6 @@ namespace StockSharp.Algo
 		/// <param name="direction">Направление сообщения.</param>
 		protected virtual void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 		{
-			if (message.IsBack)
-			{
-				message.IsBack = false;
-				adapter.SendInMessage(message);
-				return;
-			}
-
 			if (!(message.Type == MessageTypes.Time && direction == MessageDirections.Out))
 				this.AddDebugLog("BP:{0}", message);
 
