@@ -533,7 +533,7 @@ namespace StockSharp.Quik
 		/// </summary>
 		public bool IsConnected
 		{
-			get { return !StatusBar.GetText().IsEmpty(); }
+			get { return MainWindow.GetMenu().Items[0].Items[1].IsEnabled; }
 		}
 
 		/// <summary>
