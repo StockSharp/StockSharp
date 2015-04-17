@@ -25,7 +25,7 @@ namespace StockSharp.LMAX
 		public LmaxMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			HeartbeatInterval = TimeSpan.FromSeconds(60);
+			HeartbeatInterval = TimeSpan.FromMinutes(10);
 		}
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace StockSharp.LMAX
 					_isDownloadSecurityFromSite = IsDownloadSecurityFromSite;
 					_isHistoricalSubscribed = false;
 
-					_api = new LmaxApi("https://{0}api.lmaxtrader.com".Put(IsDemo ? "test" : string.Empty));
+					_api = new LmaxApi(IsDemo ? "https://web-order.london-demo.lmax.com" : "https://api.lmaxtrader.com");
 					_api.Login(new LoginRequest(Login, Password.To<string>(), IsDemo ? ProductType.CFD_DEMO : ProductType.CFD_LIVE), OnLoginOk, OnLoginFailure);
 
 					break;
@@ -87,8 +87,7 @@ namespace StockSharp.LMAX
 
 				case MessageTypes.Time:
 				{
-					var timeMsg = (TimeMessage)message;
-					_session.RequestHeartbeat(new HeartbeatRequest(timeMsg.TransactionId), () => { }, CreateErrorHandler("RequestHeartbeat"));
+					_session.RequestHeartbeat(new HeartbeatRequest(TransactionIdGenerator.GetNextId().To<string>()), () => { }, CreateErrorHandler("RequestHeartbeat"));
 					break;
 				}
 
@@ -134,13 +133,13 @@ namespace StockSharp.LMAX
 			get { return IsTransactionEnabled; }
 		}
 
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
-		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return IsMarketDataEnabled; }
-		}
+		///// <summary>
+		///// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		///// </summary>
+		//public override bool SecurityLookupRequired
+		//{
+		//	get { return IsMarketDataEnabled; }
+		//}
 
 		/// <summary>
 		/// Привести инструкцию к идентификатору транзакции.
@@ -243,9 +242,19 @@ namespace StockSharp.LMAX
 				_session.Subscribe(new HeartbeatSubscriptionRequest(), () => { }, CreateErrorHandler("HeartbeatSubscriptionRequest"));
 				
 				ThreadingHelper
-					.Thread(() => _session.Start())
+					.Thread(() =>
+					{
+						try
+						{
+							_session.Start();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+					})
 					.Background(true)
-					.Name("LMAX Export thread")
+					.Name("LMAX session thread")
 					.Launch();
 			}
 			catch (Exception ex)
@@ -267,7 +276,8 @@ namespace StockSharp.LMAX
 
 		private void OnSessionHeartbeatReceived(string token)
 		{
-			//SendMessage(new TimeMessage { HeartbeatId = token });
+			// just receive. do not resend
+			//SendOutMessage(new TimeMessage { OriginalTransactionId = token, IsBack = true });
 		}
 
 		private void OnSessionEventStreamSessionDisconnected()

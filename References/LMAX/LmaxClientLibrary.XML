@@ -173,6 +173,32 @@
              Subscribe to all requests for heartbeats.
             </summary>
         </member>
+        <member name="M:Com.Lmax.Api.LmaxApiOptions.#ctor">
+            <summary>
+             Constructs an LmaxApiOptions object with default values of:
+             DefaultConnectionLimit = 5
+             ClientIdentifier = ""
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApiOptions.#ctor(System.String)">
+            <summary>
+             Constructs an LmaxApiOptions object with default values of:
+             DefaultConnectionLimit = 5
+            </summary>
+            <param name="clientIdentifier">Identifies the client in HTTP requests for diagnostic purposes (25 characters permitted).</param>
+        </member>
+        <member name="P:Com.Lmax.Api.LmaxApiOptions.ClientIdentifier">
+            <summary>
+            Gets or sets the ClientIdentifier, used to identify the client in HTTP requests for diagnostic purposes (25 characters permitted).
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.LmaxApiOptions.DefaultConnectionLimit">
+            <summary>
+            Gets or sets the maximum number of concurrent connections allowed by a System.Net.ServicePoint object per login.
+            
+            Note: the larger the value, the more resources used by the API (more sockets openened, threads created, etc.)
+            </summary>
+        </member>
         <member name="T:Com.Lmax.Api.LogoutRequest">
             <summary>
             Contains a of the necessary credential information and product type required
@@ -283,8 +309,8 @@
         </member>
         <member name="M:Com.Lmax.Api.ISession.PlaceLimitOrder(Com.Lmax.Api.Order.LimitOrderSpecification,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
             <summary>
-            Place a limit order onto the Lmax Trader platform.  This will response with an instruction id that can
-            be used to trace the state of an order.  The response to this call will be return before the
+            Place a limit order onto the Lmax Trader platform.  This will respond with an instruction id that can
+            be used to trace the state of an order.  The response to this call will occur before the
             order is actually placed on the exchange.  The execution reports and order responses will
             come back through an asynchronous event.
             </summary>
@@ -294,6 +320,17 @@
             been validated and passed onto the broker.</param>
             <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to place
             the order has failed.</param>
+        </member>
+        <member name="M:Com.Lmax.Api.ISession.PlaceClosingOrder(Com.Lmax.Api.Order.ClosingOrderSpecification,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
+            <summary>
+            Close the specified quantity on an instrument position. The response to this call will occur before the
+            order is actually placed on the exchange. The execution reports and order responses will come back
+            through an asynchronous event.
+            </summary>
+            <param name="closingOrderSpecification">The specification containing the details of which position to close and for what quantity</param>
+            <param name="instructionCallback">A <see cref="T:Com.Lmax.Api.OnInstructionResponse"/> called when an order has
+            been validated and passed onto the broker.</param>
+            <param name="failureCallback">A <see cref="T:Com.Lmax.Api.OnFailure"/> called if the call to close the order has failed.</param>
         </member>
         <member name="M:Com.Lmax.Api.ISession.PlaceStopOrder(Com.Lmax.Api.Order.StopOrderSpecification,Com.Lmax.Api.OnInstructionResponse,Com.Lmax.Api.OnFailure)">
             <summary>
@@ -680,6 +717,16 @@
             A <see cref="T:System.String"/> that contains the url of the system to connect to.
             </param>
             <param name="clientIdentifier">Identifies the client in HTTP requests for diagnostic purposes (25 characters permitted).</param>
+        </member>
+        <member name="M:Com.Lmax.Api.LmaxApi.#ctor(System.String,Com.Lmax.Api.LmaxApiOptions)">
+            <summary>
+            Construct an LmaxApi with the specific Lmax Trader platform to connect to.
+            For testing: 'https://testapi.lmaxtrader.com' and production: 'https://api.lmaxtrader.com'.
+            </summary>
+            <param name="urlBase">
+            A <see cref="T:System.String"/> that contains the url of the system to connect to.
+            </param>
+            <param name="apiOptions">Allows for configuration of the LmaxApi.</param>
         </member>
         <member name="M:Com.Lmax.Api.LmaxApi.Login(Com.Lmax.Api.LoginRequest,Com.Lmax.Api.OnLogin,Com.Lmax.Api.OnFailure)">
             <summary>
@@ -1433,6 +1480,60 @@
             Internal: Output this request.
             </summary>
             <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="T:Com.Lmax.Api.Order.ClosingOrderSpecification">
+            <summary>
+             Closing Order Specification.  Allows you to place an order which closes out a given quantity,
+             either against an instrument position, or against a specific order.
+            </summary>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.ClosingOrderSpecification.#ctor(System.String,System.Int64,System.Nullable{System.Decimal})">
+            <summary>
+             Construct a ClosingOrderSpecification. This allows you to close a quantity of your position on a given instrument by
+             placing a market order in the opposite direction of your existing position.
+            </summary>
+            <param name="instructionId">The user-defined correlation id</param>
+            <param name="instrumentId">The id of the instrument for the order book to close position on</param>
+            <param name="quantity">The quantity to close.  A signed value, where the sign indicates the side of the
+                                   market that order is placed.  Positive implies a buy order, where as negative is a sell</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.ClosingOrderSpecification.#ctor(System.String,System.Int64,System.String,System.Nullable{System.Decimal})">
+            <summary>
+             Construct a ClosingOrderSpecification. This allows you to close a quantity of your position on a given instrument by
+             placing a market order in the opposite direction of your existing position.
+            </summary>
+            <param name="instructionId">The user-defined correlation id</param>
+            <param name="instrumentId">The id of the instrument for the order book to close position on</param>
+            <param name="originalInstructionId">the instruction ID of the original order to close</param>
+            <param name="quantity">The quantity to close.  A signed value, where the sign indicates the side of the
+                                   market that order is placed.  Positive implies a buy order, where as negative is a sell</param>
+        </member>
+        <member name="M:Com.Lmax.Api.Order.ClosingOrderSpecification.WriteTo(Com.Lmax.Api.Internal.Xml.IStructuredWriter)">
+            <summary>
+            Internal: Output this request.
+            </summary>
+            <param name="writer">The destination for the content of this request</param>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.InstructionId">
+            <summary>
+            Get/Set the instruction id use for tracking the order.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.InstrumentId">
+            <summary>
+            Get/Set the instrument id that the order should be placed on.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.Quantity">
+            <summary>
+            Get/Set the of the order, the sign infers the side of the order.
+            A positive value is a buy, negative indicates sell.
+            </summary>
+        </member>
+        <member name="P:Com.Lmax.Api.Order.ClosingOrderSpecification.OriginalInstructionId">
+            <summary>
+             Get/Set the original instrument id that this specification refers to
+            </summary>
         </member>
         <member name="T:Com.Lmax.Api.Order.Execution">
             <summary>
