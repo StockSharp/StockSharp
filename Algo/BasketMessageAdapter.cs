@@ -93,7 +93,8 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, RefPair<IEnumerator<IMessageAdapter>, bool>> _subscriptionQueue = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, RefPair<IEnumerator<IMessageAdapter>, bool>>();
+		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter> _subscriptions = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter>();
 		private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly CachedSynchronizedList<IMessageAdapter> _connectedAdapters = new CachedSynchronizedList<IMessageAdapter>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _enabledAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
@@ -195,6 +196,7 @@ namespace StockSharp.Algo
 					_connectedAdapters.Clear();
 					_enabledAdapters.Clear();
 					_subscriptionQueue.Clear();
+					_subscriptions.Clear();
 					_enabledAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
 						var hearbeatAdapter = (IMessageAdapter)new HeartbeatAdapter(a);
@@ -299,31 +301,37 @@ namespace StockSharp.Algo
 
 								var enumerator = GetMarketDataAdapters().ToArray().Cast<IMessageAdapter>().GetEnumerator();
 
-								_subscriptionQueue.Add(key, RefTuple.Create(enumerator, false));
+								_subscriptionQueue.Add(key, enumerator);
 
 								ProcessSubscriptionAction(enumerator, mdMsg);
 							}
 							else
 							{
-								lock (_subscriptionQueue.SyncRoot)
-								{
-									var tuple = _subscriptionQueue.TryGetValue(key);
+								//lock (_subscriptionQueue.SyncRoot)
+								//{
+								//	var tuple = _subscriptionQueue.TryGetValue(key);
 									
-									if (tuple != null)
-									{
-										tuple.Second = true;
-										return;
-									}
-								}
+								//	if (tuple != null)
+								//	{
+								//		tuple.Second = true;
+								//		return;
+								//	}
+								//}
 
-								GetMarketDataAdapters().ForEach(a => a.SendInMessage(message.Clone()));
+								var adapter = _subscriptions.TryGetValue(key);
+
+								if (adapter != null)
+								{
+									_subscriptions.Remove(key);
+									adapter.SendInMessage(message);
+								}
 							}
 
 							break;
 						}
 
 						default:
-							RaiseMarketDataMessage(null, mdMsg, new InvalidOperationException(LocalizedStrings.Str624Params.Put(mdMsg.DataType)));
+							RaiseMarketDataMessage(null, mdMsg.TransactionId, new InvalidOperationException(LocalizedStrings.Str624Params.Put(mdMsg.DataType)));
 							break;
 					}
 					
@@ -483,58 +491,65 @@ namespace StockSharp.Algo
 			if (enumerator.MoveNext())
 				enumerator.Current.SendInMessage(message);
 			else
-				RaiseSubscriptionFailed(null, message, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId), "message"));
+			{
+				_subscriptionQueue.RemoveByValue(enumerator);
+				RaiseSubscriptionFailed(null, message.TransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId), "message"));
+			}
 		}
 
 		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var key = Tuple.Create(message.SecurityId, message.DataType);
 			
-			var tuple = _subscriptionQueue.TryGetValue(key);
-			var cancel = tuple != null && tuple.Second;
+			var enumerator = _subscriptionQueue.TryGetValue(key);
+			//var cancel = tuple != null && tuple.Second;
 
 			if (message.Error == null)
 			{
-				this.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
+				if (message.IsNotSupported)
+				{
+					if (enumerator != null)
+						ProcessSubscriptionAction(enumerator, message);
+					else
+						RaiseSubscriptionFailed(adapter, 0, new InvalidOperationException(LocalizedStrings.Str633Params.Put(message.SecurityId, message.DataType)));
+				}
+				else
+				{
+					this.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
+					_subscriptionQueue.Remove(key);
+					RaiseMarketDataMessage(adapter, 0, null);
+				}
 
-				_subscriptionQueue.Remove(key);
+				//if (!cancel)
+				//	return;
 
-				RaiseMarketDataMessage(adapter, message, null);
-
-				if (!cancel)
-					return;
-
-				//в процессе подписки пользователь отменил ее - надо отписаться от получения данных
-				var cancelMessage = (MarketDataMessage)message.Clone();
-				cancelMessage.IsSubscribe = false;
-				adapter.SendInMessage(cancelMessage);
+				////в процессе подписки пользователь отменил ее - надо отписаться от получения данных
+				//var cancelMessage = (MarketDataMessage)message.Clone();
+				//cancelMessage.IsSubscribe = false;
+				//adapter.SendInMessage(cancelMessage);
 			}
 			else
 			{
-				this.AddDebugLog(LocalizedStrings.Str631Params, adapter, message.SecurityId, message.DataType, message.Error);
-
-				if (cancel)
-					RaiseSubscriptionFailed(adapter, message, new InvalidOperationException(LocalizedStrings.SubscriptionProcessCancelled));
-				else if (tuple != null)
-					ProcessSubscriptionAction(tuple.First, message);
-				else
-					RaiseSubscriptionFailed(adapter, message, new InvalidOperationException(LocalizedStrings.Str633Params.Put(message.SecurityId, message.DataType)));
+				//this.AddDebugLog(LocalizedStrings.Str631Params, adapter, message.SecurityId, message.DataType, message.Error);
+				_subscriptionQueue.Remove(key);
+				RaiseSubscriptionFailed(adapter, 0, message.Error);
 			}
 		}
 
-		private void RaiseMarketDataMessage(IMessageAdapter adapter, MarketDataMessage request, Exception error)
+		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error)
 		{
-			var reply = (MarketDataMessage)request.Clone();
-			reply.OriginalTransactionId = request.TransactionId;
-			reply.Error = error;
-			SendOutMessage(adapter, reply);
+			SendOutMessage(adapter, new MarketDataMessage
+			{
+				OriginalTransactionId = originalTransactionId,
+				Error = error
+			});
 		}
 
-		private void RaiseSubscriptionFailed(IMessageAdapter adapter, MarketDataMessage message, Exception error)
+		private void RaiseSubscriptionFailed(IMessageAdapter adapter, long originalTransactionId, Exception error)
 		{
-			_subscriptionQueue.Remove(Tuple.Create(message.SecurityId, message.DataType));
-			this.AddDebugLog(LocalizedStrings.Str634Params, message.SecurityId, message.DataType, error);
-			RaiseMarketDataMessage(adapter, message, error);
+			//_subscriptionQueue.Remove(Tuple.Create(message.SecurityId, message.DataType));
+			//this.AddDebugLog(LocalizedStrings.Str634Params, message.SecurityId, message.DataType, error);
+			RaiseMarketDataMessage(adapter, originalTransactionId, error);
 		}
 
 		private void SendOutMessage(IMessageAdapter adapter, Message message)

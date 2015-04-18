@@ -676,7 +676,10 @@ namespace StockSharp.Quik
 						break;
 
 					default:
-						throw new ArgumentOutOfRangeException("message", message.DataType, LocalizedStrings.Str1618);
+					{
+						SendOutMarketDataNotSupported(message.TransactionId);
+						return;
+					}
 				}
 			}
 

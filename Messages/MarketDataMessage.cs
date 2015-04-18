@@ -106,15 +106,6 @@ namespace StockSharp.Messages
 		[MainCategory]
 		public DateTimeOffset To { get; set; }
 
-		///// <summary>
-		///// Идентификатор инструмента, для которого доступны данные.
-		///// </summary>
-		//[DataMember]
-		//[DisplayName("Инструмент")]
-		//[Description("Инструмент, для которого доступны данные.")]
-		//[MainCategory]
-		//public SecurityId SecurityId { get; set; }
-
 		/// <summary>
 		/// Тип маркет-данных.
 		/// </summary>
@@ -143,14 +134,14 @@ namespace StockSharp.Messages
 		[DataMember]
 		public long TransactionId { get; set; }
 
-		///// <summary>
-		///// Идентификатор первоначального сообщения <see cref="MarketDataMessage.TransactionId"/>,
-		///// для которого данное сообщение является ответом.
-		///// </summary>
-		//public long OriginalTransactionId { get; set; }
+		/// <summary>
+		/// Поддерживает ли торговая система запрашиваемый тип данных. Заполняется в случае ответа.
+		/// </summary>
+		[DataMember]
+		public bool IsNotSupported { get; set; }
 
 		/// <summary>
-		/// Информация об ошибке. Сигнализирует об ошибке подписки или отписки.
+		/// Информация об ошибке. Сигнализирует об ошибке подписки или отписки. Заполняется в случае ответа.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
@@ -209,12 +200,12 @@ namespace StockSharp.Messages
 				From = From,
 				To = To,
 				IsSubscribe = IsSubscribe,
-				//SecurityId = SecurityId,
 				TransactionId = TransactionId,
 				Count = Count,
 				MaxDepth = MaxDepth,
 				NewsId = NewsId,
-				LocalTime = LocalTime
+				LocalTime = LocalTime,
+				IsNotSupported = IsNotSupported
 			};
 
 			CopyTo(clone);

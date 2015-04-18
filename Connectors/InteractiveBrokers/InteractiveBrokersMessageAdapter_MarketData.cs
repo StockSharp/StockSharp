@@ -18,6 +18,144 @@ namespace StockSharp.InteractiveBrokers
 	{
 		private readonly Dictionary<SecurityId, Tuple<SortedDictionary<decimal, decimal>, SortedDictionary<decimal, decimal>>> _depths = new Dictionary<SecurityId, Tuple<SortedDictionary<decimal, decimal>, SortedDictionary<decimal, decimal>>>();
 
+		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
+		{
+			switch (mdMsg.DataType)
+			{
+				case MarketDataTypes.Level1:
+				{
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)null);
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeMarketData(mdMsg, Fields, false, false);
+					}
+					else
+						UnSubscribeMarketData(_requestIds[key]);
+
+					break;
+				}
+				case MarketDataTypes.MarketDepth:
+				{
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)null);
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeMarketDepth(mdMsg);
+					}
+					else
+						UnSubscriveMarketDepth(_requestIds[key]);
+
+					break;
+				}
+				case MarketDataTypes.Trades:
+					break;
+				case MarketDataTypes.News:
+				{
+					if (mdMsg.IsSubscribe)
+						SubscribeNewsBulletins(true);
+					else
+						UnSubscribeNewsBulletins();
+
+					break;
+				}
+				case MarketDataTypes.CandleTimeFrame:
+				{
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)Tuple.Create(mdMsg.Arg, mdMsg.To == DateTimeOffset.MaxValue));
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+
+						if (mdMsg.To == DateTimeOffset.MaxValue)
+							SubscribeRealTimeCandles(mdMsg);
+						else
+							SubscribeHistoricalCandles(mdMsg, CandleDataTypes.Trades);
+					}
+					else
+					{
+						var requestId = _requestIds[key];
+
+						if (mdMsg.To == DateTimeOffset.MaxValue)
+							UnSubscribeRealTimeCandles(mdMsg, requestId);
+						else
+						{
+							ProcessRequest(RequestMessages.UnSubscribeHistoricalData, 0, ServerVersions.V1,
+								socket => socket.Send(requestId));
+						}
+					}
+
+					break;
+				}
+				case ExtendedMarketDataTypes.Scanner:
+				{
+					var scannerMsg = (ScannerMarketDataMessage)mdMsg;
+
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)scannerMsg.Filter);
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeScanner(scannerMsg);
+					}
+					else
+						UnSubscribeScanner(_requestIds[key]);
+
+					break;
+				}
+				case ExtendedMarketDataTypes.FundamentalReport:
+				{
+					var reportMsg = (FundamentalReportMarketDataMessage)mdMsg;
+
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)reportMsg.Report);
+
+					if (reportMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeFundamentalReport(reportMsg);
+					}
+					else
+						UnSubscribeFundamentalReport(_requestIds[key]);
+
+					break;
+				}
+				case ExtendedMarketDataTypes.OptionCalc:
+				{
+					var optionMsg = (OptionCalcMarketDataMessage)mdMsg;
+
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)Tuple.Create(optionMsg.OptionPrice, optionMsg.ImpliedVolatility, optionMsg.AssetPrice));
+
+					if (optionMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+
+						SubscribeCalculateOptionPrice(optionMsg);
+						SubscribeCalculateImpliedVolatility(optionMsg);
+					}
+					else
+					{
+						var requestId = _requestIds[key];
+
+						UnSubscribeCalculateOptionPrice(requestId);
+						UnSubscribeCalculateImpliedVolatility(requestId);
+					}
+
+					break;
+				}
+				default:
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
+			}
+
+			var reply = (MarketDataMessage)mdMsg.Clone();
+			reply.OriginalTransactionId = mdMsg.OriginalTransactionId;
+			SendOutMessage(reply);
+		}
+
 		/// <summary>
 		/// Запустить сканер инструментов на основе заданных параметров.
 		/// </summary>

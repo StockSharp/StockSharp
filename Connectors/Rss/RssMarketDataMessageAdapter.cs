@@ -63,7 +63,10 @@ namespace StockSharp.Rss
 							break;
 						}
 						default:
-							throw new ArgumentOutOfRangeException("message", mdMsg.DataType, LocalizedStrings.Str1618);
+						{
+							SendOutMarketDataNotSupported(mdMsg.TransactionId);
+							return;
+						}
 					}
 
 					var reply = (MarketDataMessage)mdMsg.Clone();

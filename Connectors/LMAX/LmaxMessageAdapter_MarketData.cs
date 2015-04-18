@@ -232,7 +232,10 @@ namespace StockSharp.LMAX
 				case MarketDataTypes.Trades:
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("mdMsg", mdMsg.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
 			}
 
 			var result = (MarketDataMessage)mdMsg.Clone();

@@ -98,7 +98,10 @@ namespace StockSharp.SmartCom
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException("mdMsg", mdMsg.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
 			}
 
 			var reply = (MarketDataMessage)mdMsg.Clone();
