@@ -226,7 +226,7 @@ namespace SampleSterling
 				},
 				Name = "AAPL",
 				SecurityType = SecurityTypes.Stock,
-			}, Trader.MarketDataAdapter);
+			});
 
 			Trader.SendOutMessage(new SecurityMessage
 			{
@@ -237,7 +237,7 @@ namespace SampleSterling
 				},
 				Name = "AAPL",
 				SecurityType = SecurityTypes.Stock,
-			}, Trader.MarketDataAdapter);
+			});
 
 			Trader.SendOutMessage(new SecurityMessage
 			{
@@ -248,7 +248,7 @@ namespace SampleSterling
 				},
 				Name = "IBM",
 				SecurityType = SecurityTypes.Stock,
-			}, Trader.MarketDataAdapter);
+			});
 
 			Trader.SendOutMessage(new SecurityMessage
 			{
@@ -259,7 +259,7 @@ namespace SampleSterling
 				},
 				Name = "IBM",
 				SecurityType = SecurityTypes.Stock,
-			}, Trader.MarketDataAdapter);
+			});
 		}
 	}
 }

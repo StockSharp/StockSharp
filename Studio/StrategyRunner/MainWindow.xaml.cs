@@ -146,18 +146,12 @@
 			var connectionSettings = _settings.GetValue<SettingsStorage>("Connection");
 
 			if (connectionSettings != null)
-			{
-				_connector.TransactionAdapter.Load(connectionSettings.GetValue<SettingsStorage>("TransactionAdapter"));
-				_connector.MarketDataAdapter.Load(connectionSettings.GetValue<SettingsStorage>("MarketDataAdapter"));
-			}
+				_connector.Load(connectionSettings);
 		}
 
 		private void SaveSettings()
 		{
-			var connectionSettings = new SettingsStorage();
-			connectionSettings.SetValue("TransactionAdapter", _connector.TransactionAdapter.Save());
-			connectionSettings.SetValue("MarketDataAdapter", _connector.MarketDataAdapter.Save());
-			_settings.SetValue("Connection", connectionSettings);
+			_settings.SetValue("Connection", _connector.Save());
 			//_settings.SetValue("LogManager", _logManager.Save());
 			_settings.SetValue("Layout", DockSite.SaveLayout());
 

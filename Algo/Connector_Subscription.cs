@@ -124,7 +124,7 @@ namespace StockSharp.Algo
 				if (security == null)
 				{
 					message.Error = new ArgumentException(LocalizedStrings.Str692Params.Put(message.SecurityId, _connector.Name));
-					_connector.SendOutMessage(message, _connector.MarketDataAdapter);
+					_connector.SendOutMessage(message);
 				}
 				else
 				{
@@ -468,7 +468,7 @@ namespace StockSharp.Algo
 						DataType = type,
 						IsSubscribe = true,
 						//SecurityId = securityId,
-					}.FillSecurityInfo(_connector, subscriber), _connector.MarketDataAdapter);
+					}.FillSecurityInfo(_connector, subscriber));
 				}
 			}
 
@@ -715,7 +715,7 @@ namespace StockSharp.Algo
 			{
 				IsSubscribe = true,
 				DataType = _filteredMarketDepth
-			}.FillSecurityInfo(this, security), MarketDataAdapter);	
+			}.FillSecurityInfo(this, security));	
 		}
 
 		/// <summary>
@@ -733,7 +733,7 @@ namespace StockSharp.Algo
 			{
 				IsSubscribe = false,
 				DataType = _filteredMarketDepth
-			}.FillSecurityInfo(this, security), MarketDataAdapter);
+			}.FillSecurityInfo(this, security));
 		}
 
 		/// <summary>

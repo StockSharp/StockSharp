@@ -655,7 +655,7 @@ namespace StockSharp.Algo
 			if (!NeedLookupSecurities(criteria.SecurityId))
 			{
 				_securityLookups.Add(criteria.TransactionId, (SecurityLookupMessage)criteria.Clone());
-				SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = criteria.TransactionId }, MarketDataAdapter);
+				SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = criteria.TransactionId });
 				return;
 			}
 
@@ -1027,7 +1027,7 @@ namespace StockSharp.Algo
 				Order = order,
 				Error = error,
 				ServerTime = CurrentTime,
-			}.ToMessage(), TransactionAdapter);
+			}.ToMessage());
 		}
 
 		private static void CheckOnNew(Order order, bool checkVolume = true, bool checkTransactionId = true)
@@ -1112,7 +1112,7 @@ namespace StockSharp.Algo
 				throw new ArgumentException(LocalizedStrings.Str1101Params.Put(order.TransactionId));
 
 			//RaiseNewOrder(order);
-			SendOutMessage(order.ToMessage(), TransactionAdapter);
+			SendOutMessage(order.ToMessage());
 		}
 
 		/// <summary>
@@ -1516,7 +1516,8 @@ namespace StockSharp.Algo
 						_isMarketTimeHandled = false;
 					}
 
-					SendOutMessage(_marketTimeMessage, MarketDataAdapter);
+					_marketTimeMessage.LocalTime = TimeHelper.Now;
+					SendOutMessage(_marketTimeMessage);
 				})
 				.Interval(MarketTimeChangedInterval);
 		}

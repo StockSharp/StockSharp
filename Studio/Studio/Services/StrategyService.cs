@@ -78,7 +78,7 @@ namespace StockSharp.Studio.Services
 					StopDate = stopDate,
 					StorageRegistry = storageRegistry
 				});
-				_historyMessageAdapter.UpdateCurrentTime(startDate);
+				//_historyMessageAdapter.UpdateCurrentTime(startDate);
 				Adapter.InnerAdapters.Add(new PassThroughMessageAdapter(TransactionIdGenerator) { IsMarketDataEnabled = false });
 
 				_historyMessageAdapter.MarketTimeChangedInterval = useCandlesTimeFrame;
@@ -120,7 +120,7 @@ namespace StockSharp.Studio.Services
 				}
 
 				if (!_isHistory)
-					SendOutMessage(message, MarketDataAdapter);
+					SendOutMessage(message);
 			}
 
 			private void ProcessTime(DateTimeOffset time, string boardCode)
@@ -142,7 +142,7 @@ namespace StockSharp.Studio.Services
 
 			protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
 			{
-				_historyMessageAdapter.UpdateCurrentTime(message.LocalTime);
+				//_historyMessageAdapter.UpdateCurrentTime(message.LocalTime);
 
 				switch (message.Type)
 				{
@@ -159,7 +159,7 @@ namespace StockSharp.Studio.Services
 						_historyMessageAdapter
 							.SecurityProvider
 							.LookupAll()
-							.ForEach(s => SendOutMessage(s.ToMessage(), MarketDataAdapter));
+							.ForEach(s => SendOutMessage(s.ToMessage()));
 
 						break;
 					}
@@ -189,7 +189,7 @@ namespace StockSharp.Studio.Services
 						messages.AddRange(_realConnector.OrderCancelFails.Select(o => o.ToMessage()));
 						messages.AddRange(_realConnector.MyTrades.Select(t => t.ToMessage()));
 
-						messages.ForEach(m => SendOutMessage(m, MarketDataAdapter));
+						messages.ForEach(m => SendOutMessage(m));
 
 						_isHistory = false;
 

@@ -63,8 +63,11 @@ namespace StockSharp.Algo
 
 		private void OutMessageChannelOnNewOutMessage(Message message)
 		{
-			var basketMessage = (BasketMessage)message;
-			OnProcessMessage(basketMessage.Message, basketMessage.Adapter, MessageDirections.Out);
+			var basketMessage = message as BasketMessage;
+			if (basketMessage == null)
+				OnProcessMessage(message, null, MessageDirections.Out);
+			else
+				OnProcessMessage(basketMessage.Message, basketMessage.Adapter, MessageDirections.Out);
 		}
 
 		private IMessageAdapter _inAdapter;
@@ -101,12 +104,21 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Отправить исходящее сообщение.
+		/// </summary>
+		/// <param name="message">Сообщение.</param>
+		public void SendOutMessage(Message message)
+		{
+			OutMessageChannel.SendInMessage(message);
+		}
+
+		/// <summary>
 		/// Отправить ошибку.
 		/// </summary>
 		/// <param name="error">Описание ошибки.</param>
 		public void SendOutError(Exception error)
 		{
-			SendOutMessage(new ErrorMessage { Error = error }, TransactionAdapter ?? MarketDataAdapter);
+			SendOutMessage(new ErrorMessage { Error = error });
 		}
 
 		/// <summary>
@@ -271,7 +283,7 @@ namespace StockSharp.Algo
 					{
 						var lookupMsg = (SecurityLookupMessage)message;
 						_securityLookups.Add(lookupMsg.TransactionId, (SecurityLookupMessage)lookupMsg.Clone());
-						SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId }, MarketDataAdapter);
+						SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
 						break;
 					}
 
@@ -700,7 +712,7 @@ namespace StockSharp.Algo
 				else
 				{
 					_securityLookups.Add(nextCriteria.TransactionId, (SecurityLookupMessage)nextCriteria.Clone());
-					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = nextCriteria.TransactionId }, MarketDataAdapter);
+					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = nextCriteria.TransactionId });
 				}
 			}
 		}
@@ -1288,7 +1300,7 @@ namespace StockSharp.Algo
 			{
 				try
 				{
-					OnProcessMessage(msg, MarketDataAdapter, MessageDirections.Out);
+					OnProcessMessage(msg, null, MessageDirections.Out);
 					_messageStat.Remove(msg);
 				}
 				catch (Exception error)

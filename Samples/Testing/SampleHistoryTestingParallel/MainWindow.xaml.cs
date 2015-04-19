@@ -162,7 +162,7 @@ namespace SampleHistoryTestingParallel
 					return;
 
 				// отправляем данные Level1 для инструмента
-				connector.SendOutMessage(level1Info, connector.MarketDataAdapter);
+				connector.SendOutMessage(level1Info);
 
 				connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
 				{
