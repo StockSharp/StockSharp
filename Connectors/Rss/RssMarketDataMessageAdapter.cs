@@ -73,6 +73,9 @@ namespace StockSharp.Rss
 					reply.OriginalTransactionId = mdMsg.TransactionId;
 					SendOutMessage(reply);
 
+					if (_isSubscribed)
+						ProcessRss();
+
 					break;
 				}
 
