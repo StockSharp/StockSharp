@@ -1,11 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" revisionNumber="1">
+<topic id="26ff0aad-623b-47e2-a8f8-a337506cd2ff" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
     <introduction>
-      <mediaLink>
-        <image placement="left" xlink:href="hydra_settings_sterling" />
+       <mediaLink>
+        <image placement="left" xlink:href="hydra_settings_rithmic" />
       </mediaLink>
-      
+       <para><legacyBold>Rithmic</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+          <legacyBold>Логин</legacyBold> - логин.
+		</listItem>
+        <listItem>
+          <legacyBold>Пароль</legacyBold> - пароль.
+		</listItem>
+		<listItem>
+          <legacyBold>Сертификат</legacyBold> - путь к файлу сертификата, необходимому для подключения к системе Rithmic.
+		</listItem>
+		<listItem>
+          <legacyBold>Сервер</legacyBold> - тип сервера.
+		</listItem>
+		<listItem>
+          <legacyBold>Лог файл</legacyBold> - путь к лог файлу.
+		</listItem>
+		</list>
 		<para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">
         <listItem>
@@ -79,5 +97,6 @@
 		</listItem>
       </list>
     </introduction>
+   
   </developerConceptualDocument>
 </topic>
