@@ -3,6 +3,7 @@ namespace StockSharp.Hydra.Quik
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -46,14 +47,14 @@ namespace StockSharp.Hydra.Quik
 					get { return _propertyName; }
 				}
 
-				private readonly string _showOn;
+				private readonly object _showOn;
 
 				/// <summary>
 				/// Значения свойства от которого зависит видимость 
 				/// (через запятую, если несколько), при котором свойство, к
 				/// которому применен атрибут, будет видимо. 
 				/// </summary>
-				public string ShowOn
+				public object ShowOn
 				{
 					get { return _showOn; }
 				}
@@ -62,12 +63,12 @@ namespace StockSharp.Hydra.Quik
 				/// Конструктор  
 				/// </summary>
 				/// <param name="propName">Название свойства, от которого будет зависить видимость</param>
-				/// <param name="value">Значения свойства, через запятую, если несколько, при котором свойство, к
+				/// <param name="showOn">Значения свойства, через запятую, если несколько, при котором свойство, к
 				/// которому применен атрибут, будет видимо.</param>
-				public DynamicPropertyFilterAttribute(string propName, string value)
+				public DynamicPropertyFilterAttribute(string propName, object showOn)
 				{
 					_propertyName = propName;
-					_showOn = value;
+					_showOn = showOn;
 				}
 			}
 
@@ -124,7 +125,7 @@ namespace StockSharp.Hydra.Quik
 			[DescriptionLoc(LocalizedStrings.Str2807Key)]
 			[PropertyOrder(2)]
 			[Editor(typeof(DdeSecurityColumnsEditor), typeof(DdeSecurityColumnsEditor))]
-			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", "False")]
+			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", false)]
 			public List<string> ExtendedColumns
 			{
 				get { return (List<string>)ExtensionInfo["ExtendedColumns"]; }
@@ -136,7 +137,7 @@ namespace StockSharp.Hydra.Quik
 			[DescriptionLoc(LocalizedStrings.Str2809Key)]
 			[PropertyOrder(3)]
 			[Editor(typeof(DdeSecurityChangesColumnsEditor), typeof(DdeSecurityChangesColumnsEditor))]
-			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", "True")]
+			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", true)]
 			public List<string> ExtendedColumnsHistory
 			{
 				get { return (List<string>)ExtensionInfo["ExtendedColumnsHistory"]; }
@@ -174,9 +175,9 @@ namespace StockSharp.Hydra.Quik
 
 						dynamic = true;
 
-						var temp = pdc[dpf.PropertyName].GetValue(this);
+						var value = pdc[dpf.PropertyName].GetValue(this);
 
-						if (dpf.ShowOn.ContainsIgnoreCase(temp.ToString()))
+						if (Equals(dpf.ShowOn, value))
 						{
 							include = true;
 						}
@@ -323,49 +324,21 @@ namespace StockSharp.Hydra.Quik
 			return new QuikMarketDataConnector(EntityRegistry.Securities, this, CreateHydraQuikTrader, _settings);
 		}
 
-		//private sealed class HydraQuikTransactionAdapter : MessageAdapter
-		//{
-		//	public HydraQuikTransactionAdapter(IdGenerator transactionIdGenerator)
-		//		: base(transactionIdGenerator)
-		//	{
-		//		IsMarketDataEnabled = false;
-		//	}
-
-		//	protected override void OnSendInMessage(Message message)
-		//	{
-		//		switch (message.Type)
-		//		{
-		//			case MessageTypes.Connect:
-		//				SendOutMessage(new ConnectMessage());
-		//				break;
-
-		//			case MessageTypes.Disconnect:
-		//				SendOutMessage(new DisconnectMessage());
-		//				break;
-
-		//			case MessageTypes.Time: // обработка heartbeat
-		//				break;
-
-		//			default:
-		//				throw new NotSupportedException(LocalizedStrings.Str2811Params.Put(message.Type));
-		//		}
-		//	}
-		//}
-
-		private HydraQuikTrader CreateHydraQuikTrader()
+		private QuikTrader CreateHydraQuikTrader()
 		{
-			var connector = new HydraQuikTrader
+			var connector = new QuikTrader
 			{
 				IsDde = _settings.IsDde,
 				Path = _settings.Path,
 				DdeServer = _settings.DdeServer,
-				IsDownloadSecurityChangesHistory = _settings.IsDownloadSecurityChangesHistory,
 			};
 
-			connector.Adapter.InnerAdapters.Remove(connector.TransactionAdapter);
+			connector.DdeTables = new[] { connector.SecuritiesTable, connector.TradesTable, connector.OrdersTable, connector.StopOrdersTable, connector.MyTradesTable };
 
-			//if (_settings.IsDde)
-			//	connector.TransactionAdapter = new HydraQuikTransactionAdapter(connector.TransactionAdapter.TransactionIdGenerator);
+			if (_settings.IsDownloadSecurityChangesHistory)
+				connector.DdeTables = connector.DdeTables.Concat(new[] { connector.SecuritiesChangeTable });
+
+			connector.Adapter.InnerAdapters.Remove(connector.TransactionAdapter);
 
 			//Добавление выбранных колонок в экспорт
 			if (!_settings.IsDownloadSecurityChangesHistory)
