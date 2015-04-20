@@ -220,6 +220,7 @@ namespace StockSharp.Algo
 					GetMarketDataAdapters().ForEach(a => a.SendInMessage(message));
 					break;
 
+				case ExtendedMessageTypes.CommissionRule:
 				case MessageTypes.OrderStatus:
 				case MessageTypes.PortfolioLookup:
 					GetTransactionAdapters().ForEach(a => a.SendInMessage(message));
@@ -338,6 +339,10 @@ namespace StockSharp.Algo
 					
 					break;
 				}
+
+				default:
+					_connectedAdapters.Cache.ForEach(a => a.SendInMessage(message));
+					break;
 			}
 		}
 
@@ -416,7 +421,7 @@ namespace StockSharp.Algo
 					break;
 			}
 
-			SendOutMessage(innerAdapter, message);
+			SendOutMessage(message);
 		}
 
 		private void SetPortfolioAdapter(string portfolio, IMessageAdapter adapter)
@@ -457,7 +462,7 @@ namespace StockSharp.Algo
 			}
 
 			if (canProcess)
-				SendOutMessage(innerAdapter, new ConnectMessage { Error = error, LocalTime = message.LocalTime });
+				SendOutMessage(new ConnectMessage { Error = error, Adapter = innerAdapter, LocalTime = message.LocalTime });
 		}
 
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
@@ -484,7 +489,7 @@ namespace StockSharp.Algo
 			}
 
 			if (canProcess)
-				SendOutMessage(innerAdapter, new DisconnectMessage { Error = error, LocalTime = message.LocalTime });
+				SendOutMessage(new DisconnectMessage { Error = error, Adapter = innerAdapter, LocalTime = message.LocalTime });
 		}
 
 		private void ProcessSubscriptionAction(IEnumerator<IMessageAdapter> enumerator, MarketDataMessage message)
@@ -539,10 +544,11 @@ namespace StockSharp.Algo
 
 		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error)
 		{
-			SendOutMessage(adapter, new MarketDataMessage
+			SendOutMessage(new MarketDataMessage
 			{
 				OriginalTransactionId = originalTransactionId,
-				Error = error
+				Error = error,
+				Adapter = adapter,
 			});
 		}
 
@@ -553,13 +559,13 @@ namespace StockSharp.Algo
 			RaiseMarketDataMessage(adapter, originalTransactionId, error);
 		}
 
-		private void SendOutMessage(IMessageAdapter adapter, Message message)
-		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = adapter.CurrentTime.LocalDateTime;
+		//private void SendOutMessage(Message message)
+		//{
+		//	//if (message.LocalTime.IsDefault())
+		//	//	message.LocalTime = adapter.CurrentTime.LocalDateTime;
 
-			SendOutMessage(new BasketMessage(message, adapter));
-		}
+		//	SendOutMessage(message);
+		//}
 
 		/// <summary>
 		/// Получить адаптеры <see cref="IInnerAdapterList.SortedAdapters"/>, отсортированные в зависимости от заданного приоритета. По-умолчанию сортировка отсутствует.

@@ -42,46 +42,45 @@ namespace StockSharp.Algo.Testing
 		{
 		}
 
-		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
-		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
-		{
-			if (adapter == MarketDataAdapter && direction == MessageDirections.Out)
-			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-					case MessageTypes.Disconnect:
-					case MessageTypes.MarketData:
-					case MessageTypes.Error:
-					case MessageTypes.SecurityLookupResult:
-					case MessageTypes.PortfolioLookupResult:
-						base.OnProcessMessage(message, adapter, direction);
-						break;
+		///// <summary>
+		///// Обработать сообщение, содержащее рыночные данные.
+		///// </summary>
+		///// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		///// <param name="direction">Направление сообщения.</param>
+		//protected override void OnProcessMessage(Message message, MessageDirections direction)
+		//{
+		//	if (adapter == MarketDataAdapter && direction == MessageDirections.Out)
+		//	{
+		//		switch (message.Type)
+		//		{
+		//			case MessageTypes.Connect:
+		//			case MessageTypes.Disconnect:
+		//			case MessageTypes.MarketData:
+		//			case MessageTypes.Error:
+		//			case MessageTypes.SecurityLookupResult:
+		//			case MessageTypes.PortfolioLookupResult:
+		//				base.OnProcessMessage(message, direction);
+		//				break;
 
-					case MessageTypes.Execution:
-					{
-						var execMsg = (ExecutionMessage)message;
+		//			case MessageTypes.Execution:
+		//			{
+		//				var execMsg = (ExecutionMessage)message;
 
-						if (execMsg.ExecutionType != ExecutionTypes.Trade)
-							SendInMessage(message);
-						else
-							base.OnProcessMessage(message, adapter, direction);
+		//				if (execMsg.ExecutionType != ExecutionTypes.Trade)
+		//					SendInMessage(message);
+		//				else
+		//					base.OnProcessMessage(message, direction);
 
-						break;
-					}
+		//				break;
+		//			}
 
-					default:
-						SendInMessage(message);
-						break;
-				}
-			}
-			else
-				base.OnProcessMessage(message, adapter, direction);
-		}
+		//			default:
+		//				SendInMessage(message);
+		//				break;
+		//		}
+		//	}
+		//	else
+		//		base.OnProcessMessage(message, direction);
+		//}
 	}
 }

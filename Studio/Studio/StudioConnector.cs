@@ -559,13 +559,13 @@ namespace StockSharp.Studio
 			base.UnSubscribeMarketData(security, type);
 		}
 
-		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, MessageDirections direction)
 		{
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
 				{
-					if (adapter == MarketDataAdapter)
+					if (message.Adapter == MarketDataAdapter)
 					{
 						if (direction == MessageDirections.Out && ((ConnectMessage)message).Error == null)
 						{
@@ -598,7 +598,7 @@ namespace StockSharp.Studio
 					if (direction != MessageDirections.Out)
 						break;
 
-					if (adapter == MarketDataAdapter)
+					if (message.Adapter == MarketDataAdapter)
 						ResetMarketDataSubscriptions();
 					else
 					{
@@ -642,7 +642,7 @@ namespace StockSharp.Studio
 				}
 			}
 
-			base.OnProcessMessage(message, adapter, direction);
+			base.OnProcessMessage(message, direction);
 		}
 	}
 

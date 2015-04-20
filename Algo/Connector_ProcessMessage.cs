@@ -63,11 +63,7 @@ namespace StockSharp.Algo
 
 		private void OutMessageChannelOnNewOutMessage(Message message)
 		{
-			var basketMessage = message as BasketMessage;
-			if (basketMessage == null)
-				OnProcessMessage(message, null, MessageDirections.Out);
-			else
-				OnProcessMessage(basketMessage.Message, basketMessage.Adapter, MessageDirections.Out);
+			OnProcessMessage(message, MessageDirections.Out);
 		}
 
 		private IMessageAdapter _inAdapter;
@@ -96,19 +92,11 @@ namespace StockSharp.Algo
 		/// Отправить исходящее сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер.</param>
-		public void SendOutMessage(Message message, IMessageAdapter adapter)
-		{
-			message.LocalTime = adapter.CurrentTime.LocalDateTime;
-			OutMessageChannel.SendInMessage(new BasketMessage(message, adapter));
-		}
-
-		/// <summary>
-		/// Отправить исходящее сообщение.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
 		public void SendOutMessage(Message message)
 		{
+			if (message.LocalTime.IsDefault())
+				message.LocalTime = CurrentTime.LocalDateTime;
+
 			OutMessageChannel.SendInMessage(message);
 		}
 
@@ -168,9 +156,8 @@ namespace StockSharp.Algo
 		/// Обработать сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected virtual void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
+		protected virtual void OnProcessMessage(Message message, MessageDirections direction)
 		{
 			if (!(message.Type == MessageTypes.Time && direction == MessageDirections.Out))
 				this.AddDebugLog("BP:{0}", message);
@@ -1300,7 +1287,7 @@ namespace StockSharp.Algo
 			{
 				try
 				{
-					OnProcessMessage(msg, null, MessageDirections.Out);
+					OnProcessMessage(msg, MessageDirections.Out);
 					_messageStat.Remove(msg);
 				}
 				catch (Exception error)

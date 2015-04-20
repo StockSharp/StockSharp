@@ -140,7 +140,7 @@ namespace StockSharp.Studio.Services
 				_strategy.SetIsInitialization(false);
 			}
 
-			protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
+			protected override void OnProcessMessage(Message message, MessageDirections direction)
 			{
 				//_historyMessageAdapter.UpdateCurrentTime(message.LocalTime);
 
@@ -148,7 +148,7 @@ namespace StockSharp.Studio.Services
 				{
 					case MessageTypes.Connect:
 					{
-						if (adapter == MarketDataAdapter)
+						if (message.Adapter == MarketDataAdapter)
 							break;
 
 						_isHistory = true;
@@ -172,7 +172,7 @@ namespace StockSharp.Studio.Services
 
 						if (_onlyInitialize)
 						{
-							if (adapter == MarketDataAdapter)
+							if (message.Adapter == MarketDataAdapter)
 								new StopStrategyCommand(_strategy).Process(this);
 
 							return;
@@ -189,7 +189,7 @@ namespace StockSharp.Studio.Services
 						messages.AddRange(_realConnector.OrderCancelFails.Select(o => o.ToMessage()));
 						messages.AddRange(_realConnector.MyTrades.Select(t => t.ToMessage()));
 
-						messages.ForEach(m => SendOutMessage(m));
+						messages.ForEach(SendOutMessage);
 
 						_isHistory = false;
 
@@ -228,13 +228,13 @@ namespace StockSharp.Studio.Services
 						var trades = candleMsg.ToTrades(volumeStep, decimals);
 
 						foreach (var executionMessage in trades)
-							base.OnProcessMessage(executionMessage, adapter, direction);
+							base.OnProcessMessage(executionMessage, direction);
 
 						return;
 					}
 				}
 
-				base.OnProcessMessage(message, adapter, direction);
+				base.OnProcessMessage(message, direction);
 			}
 
 			public override void SubscribeMarketData(Security security, MarketDataTypes type)

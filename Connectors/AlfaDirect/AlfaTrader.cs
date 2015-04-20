@@ -80,16 +80,15 @@
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapter">Адаптер, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, IMessageAdapter adapter, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, MessageDirections direction)
 		{
 			if (direction == MessageDirections.Out)
 			{
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
-						if (((ConnectMessage)message).Error == null && adapter.IsMarketDataEnabled)
+						if (((ConnectMessage)message).Error == null)
 						{
 							_candlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
 								(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range.Min, range.Max, _series.TryGetKey(series)), TimeSpan.FromSeconds(3));
@@ -126,7 +125,7 @@
 				}
 			}
 
-			base.OnProcessMessage(message, adapter, direction);
+			base.OnProcessMessage(message, direction);
 		}
 
 		/// <summary>
