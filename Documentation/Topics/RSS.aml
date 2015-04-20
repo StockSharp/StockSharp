@@ -1,11 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" revisionNumber="1">
+<topic id="91454878-ec26-4872-9a85-1bfbc76dc77a" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <mediaLink>
-        <image placement="left" xlink:href="hydra_settings_sterling" />
+     <mediaLink>
+        <image placement="left" xlink:href="hydra_settings_rss" />
       </mediaLink>
-      
+       <para><legacyBold>RSS</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+          <legacyBold>Адрес</legacyBold> - адрес RSS фида.
+		</listItem>
+        <listItem>
+          <legacyBold>Формат дат</legacyBold> - необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy HH:mm:ss zzzz.
+		</listItem>
+		</list>
 		<para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">
         <listItem>
@@ -31,9 +39,6 @@
 		</listItem>
 		<listItem>
           <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
-		</listItem>
-		<listItem>
-          <legacyBold>Поля Level1</legacyBold> - поддерживаемые поля маркет-данных первого уровня.
 		</listItem>
       </list>
       <para><legacyBold>Подключение</legacyBold></para>
