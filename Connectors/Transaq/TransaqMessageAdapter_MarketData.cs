@@ -135,18 +135,28 @@ namespace StockSharp.Transaq
 					if (mdMsg.IsSubscribe)
 					{
 						var periodId = _candlePeriods.GetKeys((TimeSpan)mdMsg.Arg).First();
+						var secId = (int)mdMsg.SecurityId.Native;
+						var key = Tuple.Create(secId, periodId);
 
-						_candleTransactions.Add(Tuple.Create((int)mdMsg.SecurityId.Native, periodId), mdMsg.TransactionId);
+						_candleTransactions.Add(key, mdMsg.TransactionId);
 
 						var command = new RequestHistoryDataMessage
 						{
-							SecId = (int)mdMsg.SecurityId.Native,
+							SecId = secId,
 							Period = periodId,
 							Count = mdMsg.Count,
 							Reset = mdMsg.To == DateTimeOffset.MaxValue,
 						};
 
-						SendCommand(command);
+						try
+						{
+							SendCommand(command);
+						}
+						catch (Exception)
+						{
+							_candleTransactions.Remove(key);
+							throw;
+						}
 					}
 
 					break;

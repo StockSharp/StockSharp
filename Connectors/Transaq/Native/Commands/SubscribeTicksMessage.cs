@@ -15,8 +15,8 @@
 
 	internal class SubscribeTicksSecurity
 	{
-		public string Board { get; set; }
-		public string SecCode { get; set; }
+		//public string Board { get; set; }
+		//public string SecCode { get; set; }
 		public int TradeNo { get; set; }
 		public int SecId { get; set; }
 	}

@@ -12,8 +12,8 @@
 		}
 
 		public int SecId { get; set; }
-		public string Board { get; set; }
-		public string SecCode { get; set; }
+		//public string Board { get; set; }
+		//public string SecCode { get; set; }
 		public string Client { get; set; }
 		public decimal Price { get; set; }
 		public int Quantity { get; set; }
