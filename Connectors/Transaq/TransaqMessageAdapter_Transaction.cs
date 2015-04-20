@@ -52,10 +52,10 @@ namespace StockSharp.Transaq
 				}
 				case OrderTypes.Conditional:
 				{
-					if (regMsg.Condition is TransaqAlgoOrderCondition)
-					{
-						var cond = (TransaqAlgoOrderCondition)regMsg.Condition;
+					var cond = (TransaqOrderCondition)regMsg.Condition;
 
+					if (cond.Type == TransaqOrderConditionTypes.Algo)
+					{
 						command = new NewCondOrderMessage
 						{
 							ByMarket = regMsg.OrderType == OrderTypes.Market,
@@ -64,21 +64,19 @@ namespace StockSharp.Transaq
 							BuySell = regMsg.Side.ToTransaq(),
 							Price = regMsg.Price,
 							SecId = (int)regMsg.SecurityId.Native,
-							CondType = cond.Type,
-							CondValue = cond.Value,
-							ValidAfterType = cond.ValidAfterType,
-							ValidAfter = cond.ValidAfter,
-							ValidBeforeType = cond.ValidBeforeType,
-							ValidBefore = cond.ValidBefore,
+							CondType = cond.AlgoType ?? TransaqAlgoOrderConditionTypes.None,
+							CondValue = cond.AlgoValue ?? 0m,
+							ValidAfterType = cond.AlgoValidAfterType ?? TransaqAlgoOrderValidTypes.TillCancelled,
+							ValidAfter = cond.AlgoValidAfter,
+							ValidBeforeType = cond.AlgoValidBeforeType ?? TransaqAlgoOrderValidTypes.TillCancelled,
+							ValidBefore = cond.AlgoValidBefore,
 							ExpDate = expDate,
 							BrokerRef = regMsg.Comment,
 							Hidden = (int)(regMsg.Volume - (regMsg.VisibleVolume ?? regMsg.Volume)),
 						};
 					}
-					else if (regMsg.Condition is TransaqOrderCondition)
+					else// if (regMsg.Condition is TransaqOrderCondition)
 					{
-						var cond = (TransaqOrderCondition)regMsg.Condition;
-
 						if (!cond.CheckConditionUnitType())
 							throw new InvalidOperationException(LocalizedStrings.Str3549);
 
@@ -110,8 +108,8 @@ namespace StockSharp.Transaq
 
 						command = stopOrder;
 					}
-					else
-						throw new InvalidOperationException(LocalizedStrings.Str3550Params.Put(regMsg.Condition, regMsg.TransactionId));
+					//else
+					//	throw new InvalidOperationException(LocalizedStrings.Str3550Params.Put(regMsg.Condition, regMsg.TransactionId));
 
 					break;
 				}
@@ -330,13 +328,13 @@ namespace StockSharp.Transaq
 					{
 						execMsg.OrderType = OrderTypes.Conditional;
 
-						execMsg.Condition = new TransaqAlgoOrderCondition
+						execMsg.Condition = new TransaqOrderCondition
 						{
-							Type = usualOrder.ConditionType,
-							Value = usualOrder.ConditionValue.To<decimal>(),
+							AlgoType = usualOrder.ConditionType,
+							AlgoValue = usualOrder.ConditionValue.To<decimal>(),
 
-							ValidAfter = usualOrder.ValidAfter,
-							ValidBefore = usualOrder.ValidBefore,
+							AlgoValidAfter = usualOrder.ValidAfter,
+							AlgoValidBefore = usualOrder.ValidBefore,
 						};
 					}
 				}
@@ -366,7 +364,7 @@ namespace StockSharp.Transaq
 						//stopCond.StopLossUseCredit = stopOrder.StopLoss.UseCredit.To<bool>();
 						
 						if (stopOrder.StopLoss.GuardTime != null)
-							stopCond.StopLossGuardTime = (int)stopOrder.StopLoss.GuardTime.Value.TimeOfDay.TotalMinutes;
+							stopCond.StopLossProtectionTime = (int)stopOrder.StopLoss.GuardTime.Value.TimeOfDay.TotalMinutes;
 						
 						stopCond.StopLossComment = stopOrder.StopLoss.BrokerRef;
 					}
@@ -379,11 +377,11 @@ namespace StockSharp.Transaq
 						//stopCond.TakeProfitUseCredit = stopOrder.TakeProfit.UseCredit.To<bool>();
 						
 						if (stopOrder.TakeProfit.GuardTime != null)
-							stopCond.TakeProfitGuardTime = (int)stopOrder.TakeProfit.GuardTime.Value.TimeOfDay.TotalMinutes;
+							stopCond.TakeProfitProtectionTime = (int)stopOrder.TakeProfit.GuardTime.Value.TimeOfDay.TotalMinutes;
 						
 						stopCond.TakeProfitComment = stopOrder.TakeProfit.BrokerRef;
 						stopCond.TakeProfitCorrection = stopOrder.TakeProfit.Correction;
-						stopCond.TakeProfitGuardSpread = stopOrder.TakeProfit.GuardSpread;
+						stopCond.TakeProfitProtectionSpread = stopOrder.TakeProfit.GuardSpread;
 					}
 				}
 

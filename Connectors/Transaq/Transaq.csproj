@@ -122,7 +122,6 @@
     <Compile Include="Native\Commands\ServerStatusMessage.cs" />
     <Compile Include="Native\Commands\SubscribeMessage.cs" />
     <Compile Include="Native\Commands\SubscribeTicksMessage.cs" />
-    <Compile Include="TransaqAlgoOrderCondition.cs" />
     <Compile Include="Native\Commands\UnsubscribeMessage.cs" />
     <Compile Include="Native\Responses\AllTradesResponse.cs" />
     <Compile Include="Native\Responses\BoardsResponse.cs" />

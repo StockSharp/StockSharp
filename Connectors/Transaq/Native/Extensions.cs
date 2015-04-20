@@ -6,7 +6,6 @@
 	
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	static class Extensions
