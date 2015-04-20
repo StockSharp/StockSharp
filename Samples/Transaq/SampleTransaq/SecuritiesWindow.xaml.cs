@@ -7,7 +7,6 @@ namespace SampleTransaq
 	using System.Windows.Controls;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -72,7 +71,7 @@ namespace SampleTransaq
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = NewStopOrder.IsEnabled = NewAlgoOrder.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+			Quotes.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
 
 			TryEnableCandles();
 		}
@@ -103,19 +102,6 @@ namespace SampleTransaq
 
 			if (newOrder.ShowModal(this))
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-		}
-
-		private void NewAlgoOrderClick(object sender, RoutedEventArgs e)
-		{
-			var security = SecurityPicker.SelectedSecurity;
-
-			var newOrder = new NewAlgoOrderWindow
-			{
-				Title = LocalizedStrings.Str3678Params.Put(security.Code),
-				Security = security,
-			};
-
-			newOrder.ShowModal(this);
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)

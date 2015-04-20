@@ -20,7 +20,6 @@
 			</Button>
 			<Button x:Name="NewOrder" Content="{x:Static loc:LocalizedStrings.XamlStr353}" Width="100" IsEnabled="False" Click="NewOrderClick" />
 			<Button x:Name="NewStopOrder" Content="{x:Static loc:LocalizedStrings.XamlStr354}" Width="120" IsEnabled="False" Click="NewStopOrderClick" />
-			<Button x:Name="NewAlgoOrder" Content="{x:Static loc:LocalizedStrings.XamlStr352}" Width="120" IsEnabled="False" Click="NewAlgoOrderClick" />
 			<Button x:Name="Candles" Content="{x:Static loc:LocalizedStrings.Candles}" Width="100" IsEnabled="False" Click="CandlesClick" />
 			<ComboBox x:Name="CandlesPeriods" Width="100" SelectionChanged="CandlesPeriods_SelectionChanged" />
 		</StackPanel>
