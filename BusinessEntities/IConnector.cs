@@ -274,6 +274,16 @@ namespace StockSharp.BusinessEntities
 		IEnumerable<Portfolio> RegisteredPortfolios { get; }
 
 		/// <summary>
+		/// Адаптер для транзакций.
+		/// </summary>
+		IMessageAdapter TransactionAdapter { get; }
+
+		/// <summary>
+		/// Адаптер для маркет-данных.
+		/// </summary>
+		IMessageAdapter MarketDataAdapter { get; }
+
+		/// <summary>
 		/// Подключиться к торговой системе.
 		/// </summary>
 		void Connect();

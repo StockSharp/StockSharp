@@ -688,6 +688,22 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
+		/// Адаптер для транзакций.
+		/// </summary>
+		public IMessageAdapter TransactionAdapter
+		{
+			get { return Connector.TransactionAdapter; }
+		}
+
+		/// <summary>
+		/// Адаптер для маркет-данных.
+		/// </summary>
+		public IMessageAdapter MarketDataAdapter
+		{
+			get { return Connector.MarketDataAdapter; }
+		}
+
+		/// <summary>
 		/// Подключиться к торговой системе.
 		/// </summary>
 		public void Connect()
