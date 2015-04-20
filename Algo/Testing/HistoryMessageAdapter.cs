@@ -24,11 +24,7 @@ namespace StockSharp.Algo.Testing
 		private readonly CachedSynchronizedDictionary<SecurityId, TradeGenerator> _tradeGenerators = new CachedSynchronizedDictionary<SecurityId, TradeGenerator>();
 		private readonly CachedSynchronizedDictionary<SecurityId, OrderLogGenerator> _orderLogGenerators = new CachedSynchronizedDictionary<SecurityId, OrderLogGenerator>();
 
-		private readonly BasketMarketDataStorage<Message> _basketStorage = new BasketMarketDataStorage<Message>();
-		//private readonly SyncObject _syncRoot = new SyncObject();
-
 		private Thread _loadingThread;
-		private bool _running;
 		private bool _disconnecting;
 
 		private IEnumerable<ExchangeBoard> Boards
@@ -45,7 +41,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Число загруженных событий.
 		/// </summary>
-		public int LoadedEventCount { get; private set; }
+		public int LoadedMessageCount { get; private set; }
 
 		private int _postTradeMarketTimeChangedCount = 2;
 
@@ -66,11 +62,6 @@ namespace StockSharp.Algo.Testing
 				_postTradeMarketTimeChangedCount = value;
 			}
 		}
-
-		/// <summary>
-		/// Максимальный размер очереди сообщений, до которого читаются исторические данные.
-		/// </summary>
-		public int MaxMessageCount { get; set; }
 
 		private IStorageRegistry _storageRegistry;
 
@@ -112,24 +103,9 @@ namespace StockSharp.Algo.Testing
 		public StorageFormats StorageFormat { get; set; }
 
 		/// <summary>
-		/// Генераторы стаканов.
-		/// </summary>
-		public IDictionary<SecurityId, MarketDepthGenerator> DepthGenerators { get { return _depthGenerators; } }
-
-		/// <summary>
-		/// Генераторы сделок.
-		/// </summary>
-		public IDictionary<SecurityId, TradeGenerator> TradeGenerators { get { return _tradeGenerators; } }
-
-		/// <summary>
-		/// Генераторы лога заявок.
-		/// </summary>
-		public IDictionary<SecurityId, OrderLogGenerator> OrderLogGenerators { get { return _orderLogGenerators; } }
-
-		/// <summary>
 		/// Хранилище-агрегатор.
 		/// </summary>
-		public BasketMarketDataStorage<Message> BasketStorage { get { return _basketStorage; } }
+		public BasketMarketDataStorage<Message> BasketStorage { get; private set; }
 
 		/// <summary>
 		/// Поставщик информации об инструментах.
@@ -163,9 +139,8 @@ namespace StockSharp.Algo.Testing
 		public HistoryMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			_basketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<TimeMessage>(d => GetTimeLine(d)));
-
-			MaxMessageCount = 1000;
+			BasketStorage = new BasketMarketDataStorage<Message>();
+			BasketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<TimeMessage>(d => GetTimeLine(d)));
 
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
@@ -204,42 +179,14 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Установить значение для <see cref="CurrentTime"/>.
-		/// </summary>
-		/// <param name="currentTime">Новое текущее время.</param>
-		public void UpdateCurrentTime(DateTimeOffset currentTime)
-		{
-			if (currentTime < StartDate || currentTime > StopDate)
-				throw new ArgumentOutOfRangeException("currentTime", LocalizedStrings.Str1126Params.Put(currentTime, StartDate, StopDate));
-
-			_currentTime = currentTime;
-		}
-
-		/// <summary>
 		/// Освободить занятые ресурсы.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			_basketStorage.Dispose();
+			BasketStorage.Dispose();
 
 			base.DisposeManaged();
 		}
-
-		///// <summary>
-		///// Метод обработки исходящих сообщений.
-		///// </summary>
-		///// <param name="message">Сообщение.</param>
-		///// <param name="adapter">Адаптер.</param>
-		//protected override void OnOutMessageProcessor(Message message, IMessageAdapter adapter)
-		//{
-		//	base.OnOutMessageProcessor(message, adapter);
-
-		//	lock (_syncRoot)
-		//	{
-		//		if (_running && OutMessageProcessor.MessageCount < MaxMessageCount)
-		//			_syncRoot.Pulse();
-		//	}
-		//}
 
 		/// <summary>
 		/// Отправить сообщение.
@@ -254,41 +201,23 @@ namespace StockSharp.Algo.Testing
 					if (_loadingThread != null)
 						throw new InvalidOperationException(LocalizedStrings.Str1116);
 
-					LoadedEventCount = 0;
-					_running = true;
+					LoadedMessageCount = 0;
 					_disconnecting = false;
 
 					_loadingThread = ThreadingHelper
 						.Thread(OnLoad)
-						.Name("HistoryMessageAdapter. Loader thread")
+						.Name("HistoryMessageAdapter")
 						.Launch();
-
-					SendOutMessage(new ConnectMessage());
 
 					return;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					var running = _running;
-
-					_running = false;
-
 					if (_loadingThread == null)
-					{
-						// отправляем LastMessage только если не отправили его из OnLoad
-						if (!running)
-							SendOutMessage(new LastMessage());
+						throw new InvalidOperationException();
 
-						SendOutMessage(new DisconnectMessage());
-					}
-					else
-					{
-						// DisconnectMessage должен быть отправлен самым последним
-						_disconnecting = true;
-						//_syncRoot.Pulse();
-					}
-
+					_disconnecting = true;
 					return;
 				}
 
@@ -302,6 +231,54 @@ namespace StockSharp.Algo.Testing
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
+			var generatorMessage = message as GeneratorMarketDataMessage;
+
+			if (generatorMessage != null)
+			{
+				if (generatorMessage.Generator == null)
+					throw new ArgumentException("message");
+
+				var tradeGen = generatorMessage.Generator as TradeGenerator;
+
+				if (tradeGen != null)
+				{
+					if (generatorMessage.IsSubscribe)
+						_tradeGenerators.Add(generatorMessage.SecurityId, tradeGen);
+					else
+						_tradeGenerators.Remove(generatorMessage.SecurityId);
+				}
+				else
+				{
+					var depthGen = generatorMessage.Generator as MarketDepthGenerator;
+
+					if (depthGen != null)
+					{
+						if (generatorMessage.IsSubscribe)
+							_depthGenerators.Add(generatorMessage.SecurityId, depthGen);
+						else
+							_depthGenerators.Remove(generatorMessage.SecurityId);
+					}
+					else
+					{
+						var olGen = generatorMessage.Generator as OrderLogGenerator;
+
+						if (olGen != null)
+						{
+							if (generatorMessage.IsSubscribe)
+								_orderLogGenerators.Add(generatorMessage.SecurityId, olGen);
+							else
+								_orderLogGenerators.Remove(generatorMessage.SecurityId);
+						}
+						else
+						{
+							throw new InvalidOperationException();
+						}
+					}
+				}
+
+				return;
+			}
+
 			var security = SecurityProvider.LookupById(message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode);
 
 			if (security == null)
@@ -330,9 +307,9 @@ namespace StockSharp.Algo.Testing
 				{
 					if (message.IsSubscribe)
 					{
-						_basketStorage.InnerStorages.Add(StorageRegistry.GetLevel1MessageStorage(security, Drive, StorageFormat));
+						BasketStorage.InnerStorages.Add(StorageRegistry.GetLevel1MessageStorage(security, Drive, StorageFormat));
 
-						_basketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<ClearingMessage>(date => new[]
+						BasketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<ClearingMessage>(date => new[]
 						{
 							new ClearingMessage
 							{
@@ -354,7 +331,7 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.MarketDepth:
 				{
 					if (message.IsSubscribe)
-						_basketStorage.InnerStorages.Add((IMarketDataStorage<QuoteChangeMessage>)StorageRegistry.GetMarketDepthStorage(security, Drive, StorageFormat));
+						BasketStorage.InnerStorages.Add((IMarketDataStorage<QuoteChangeMessage>)StorageRegistry.GetMarketDepthStorage(security, Drive, StorageFormat));
 					else
 						RemoveStorage<IMarketDataStorage<QuoteChangeMessage>>(security, MessageTypes.QuoteChange, message.Arg);
 					
@@ -364,7 +341,7 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.Trades:
 				{
 					if (message.IsSubscribe)
-						_basketStorage.InnerStorages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetTradeStorage(security, Drive, StorageFormat));
+						BasketStorage.InnerStorages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetTradeStorage(security, Drive, StorageFormat));
 					else
 						RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, message.Arg);
 					
@@ -378,7 +355,7 @@ namespace StockSharp.Algo.Testing
 						//var msg = "OrderLog".ValidateLicense();
 
 						//if (msg == null)
-						_basketStorage.InnerStorages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetOrderLogStorage(security, Drive, StorageFormat));
+						BasketStorage.InnerStorages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetOrderLogStorage(security, Drive, StorageFormat));
 						//else
 						//	SessionHolder.AddErrorLog(msg);	
 					}
@@ -429,7 +406,7 @@ namespace StockSharp.Algo.Testing
 					}
 
 					if (message.IsSubscribe)
-						_basketStorage.InnerStorages.Add(StorageRegistry.GetCandleMessageStorage(candleMessageType, security, message.Arg, Drive, StorageFormat));
+						BasketStorage.InnerStorages.Add(StorageRegistry.GetCandleMessageStorage(candleMessageType, security, message.Arg, Drive, StorageFormat));
 					else
 						RemoveStorage<IMarketDataStorage<CandleMessage>>(security, msgType, message.Arg);
 
@@ -447,13 +424,13 @@ namespace StockSharp.Algo.Testing
 		private void RemoveStorage<T>(Security security, MessageTypes messageType, object arg)
 			where T : class, IMarketDataStorage
 		{
-			var storage = _basketStorage
+			var storage = BasketStorage
 				.InnerStorages
 				.OfType<T>()
 				.FirstOrDefault(s => s.Security == security && s.Arg.Compare(arg) == 0);
 
 			if (storage != null)
-				_basketStorage.InnerStorages.Remove(storage);
+				BasketStorage.InnerStorages.Remove(storage);
 
 			SendOutMessage(new ClearQueueMessage
 			{
@@ -493,21 +470,23 @@ namespace StockSharp.Algo.Testing
 		{
 			try
 			{
+				SendOutMessage(new ConnectMessage { LocalTime = StartDate.LocalDateTime });
+
 				var loadDate = StartDate;
 
-				EnqueueGenerators(_tradeGenerators, MarketDataTypes.Trades);
-				EnqueueGenerators(_depthGenerators, MarketDataTypes.MarketDepth);
-				EnqueueGenerators(_orderLogGenerators, MarketDataTypes.OrderLog);
+				EnqueueGenerators(_tradeGenerators.CachedPairs, MarketDataTypes.Trades);
+				EnqueueGenerators(_depthGenerators.CachedPairs, MarketDataTypes.MarketDepth);
+				EnqueueGenerators(_orderLogGenerators.CachedPairs, MarketDataTypes.OrderLog);
 
 				var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
 
-				while (loadDate.Date <= StopDate.Date && _running)
+				while (loadDate.Date <= StopDate.Date && !_disconnecting)
 				{
 					if (Boards.Any(b => b.IsTradeDate(loadDate, true)))
 					{
-						this.AddInfoLog("Loading {0} Events: {1}", loadDate.Date, LoadedEventCount);
+						this.AddInfoLog("Loading {0} Events: {1}", loadDate.Date, LoadedMessageCount);
 
-						var enumerator = _basketStorage.Load(loadDate.Date);
+						var enumerator = BasketStorage.Load(loadDate.Date);
 
 						// хранилище за указанную дату содержит только время и клиринг
 						var noData = !enumerator.DataTypes.Except(messageTypes).Any();
@@ -535,12 +514,24 @@ namespace StockSharp.Algo.Testing
 			_loadingThread = null;
 		}
 
+		/// <summary>
+		/// Отправить исходящее сообщение, вызвав событие <see cref="MessageAdapter.NewOutMessage"/>.
+		/// </summary>
+		/// <param name="message">Сообщение.</param>
+		public override void SendOutMessage(Message message)
+		{
+			LoadedMessageCount++;
+
+			_currentTime = message.GetServerTime();
+			base.SendOutMessage(message);
+		}
+
 		private void SendOutMessages(DateTimeOffset loadDate, IEnumerator<Message> enumerator)
 		{
 			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.Date != loadDate;
 			var checkToTime = loadDate.Date == StopDate.Date;
 
-			while (enumerator.MoveNext() && _running)
+			while (enumerator.MoveNext() && !_disconnecting)
 			{
 				var msg = enumerator.Current;
 
@@ -564,7 +555,6 @@ namespace StockSharp.Algo.Testing
 						break;
 				}
 
-				LoadedEventCount++;
 				SendOutMessage(msg);
 
 				//lock (_syncRoot)

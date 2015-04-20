@@ -788,7 +788,7 @@ namespace StockSharp.Algo
 
 				var basket = sec as BasketSecurity;
 
-				if (Connector is IEmulationConnector)
+				if (Connector is HistoryEmulationConnector)
 				{
 					// в рилтайме сделки приходят гарантированно по одной. см. BaseTrader.GetTrade
 					// в эмуляции сделки приходят кучками, но все для одного и того же интсрумента. см. EmuTrader.Message

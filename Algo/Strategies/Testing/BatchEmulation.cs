@@ -383,8 +383,10 @@
 
 			InitAdapters(_batch);
 
+			EmulationConnector.StartDate = EmulationSettings.StartTime;
+			EmulationConnector.StopDate = EmulationSettings.StopTime;
+
 			EmulationConnector.Connect();
-			EmulationConnector.Start(EmulationSettings.StartTime, EmulationSettings.StopTime);
 		}
 
 		private void InitAdapters(IEnumerable<Strategy> strategies)
@@ -517,7 +519,7 @@
 		public void Stop()
 		{
 			_cancelEmulation = true;
-			EmulationConnector.Stop();
+			EmulationConnector.Disconnect();
 		}
 	}
 }

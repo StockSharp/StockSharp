@@ -46,7 +46,7 @@ namespace SampleRandomEmulation
 			if (_connector != null)
 			{
 				_strategy.Stop();
-				_connector.Stop();
+				_connector.Disconnect();
 				_logManager.Sources.Clear();
 
 				_connector = null;
@@ -106,9 +106,9 @@ namespace SampleRandomEmulation
 				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
 			};
 
-			// соединяемся с трейдером и запускаем экспорт,
-			// чтобы инициализировать переданными инструментами и портфелями необходимые свойства коннектора
-			_connector.Connect();
+			// указываем даты начала и конца тестирования
+			_connector.StartDate = startTime;
+			_connector.StopDate = stopTime;
 
 			var candleManager = new CandleManager(_connector);
 
@@ -192,8 +192,9 @@ namespace SampleRandomEmulation
 
 			_startEmulationTime = DateTime.Now;
 
-			// запускаем эмуляцию
-			_connector.Start(new DateTime(2009, 6, 1), new DateTime(2009, 9, 1));
+			// соединяемся с трейдером и запускаем экспорт,
+			// чтобы инициализировать переданными инструментами и портфелями необходимые свойства коннектора
+			_connector.Connect();
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)

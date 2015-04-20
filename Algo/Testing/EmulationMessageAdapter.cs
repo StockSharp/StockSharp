@@ -71,6 +71,11 @@
 		}
 
 		/// <summary>
+		/// Число обработанных сообщений.
+		/// </summary>
+		public int ProcessedMessageCount { get; private set; }
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -81,6 +86,12 @@
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
+					ProcessedMessageCount = 0;
+
+					var incGen = TransactionIdGenerator as IncrementalIdGenerator;
+					if (incGen != null)
+						incGen.Current = Emulator.Settings.InitialTransactionId;
+
 					_emulator.SendInMessage(new ResetMessage());
 					SendOutMessage(new ConnectMessage());
 					return;
@@ -92,6 +103,7 @@
 					return;
 			}
 
+			ProcessedMessageCount++;
 			_emulator.SendInMessage(message);
 		}
 	}

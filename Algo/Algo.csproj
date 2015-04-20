@@ -147,7 +147,6 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BasketMessage.cs" />
     <Compile Include="BasketMessageAdapter.cs" />
     <Compile Include="BasketPortfolio.cs" />
     <Compile Include="BasketPosition.cs" />
@@ -393,6 +392,7 @@
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
     <Compile Include="Strategies\TimeFrameStrategy.cs" />
     <Compile Include="Testing\CommissionRuleMessage.cs" />
+    <Compile Include="Testing\GeneratorMarketDataMessage.cs" />
     <Compile Include="TimeQuoteChange.cs" />
     <Compile Include="Storages\TradeList.cs" />
     <Compile Include="Storages\TradeSerializer.cs" />
@@ -425,7 +425,7 @@
     <Compile Include="Testing\HistoryEmulationConnector.cs" />
     <Compile Include="MessageConverterHelper.cs" />
     <Compile Include="Testing\GeneratorMessage.cs" />
-    <Compile Include="Testing\IEmulationConnector.cs" />
+    <Compile Include="Testing\EmulationStates.cs" />
     <Compile Include="Testing\LastMessage.cs" />
     <Compile Include="Testing\MarketDataGenerator.cs" />
     <Compile Include="Testing\MarketDepthGenerator.cs" />

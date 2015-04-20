@@ -29,8 +29,9 @@ namespace SampleHistoryTesting
 	public partial class MainWindow
 	{
 		// вспомогательный класс для настроек тестирования
-		internal sealed class EmulationInfo
+		private sealed class EmulationInfo
 		{
+			public bool UseTicks { get; set; }
 			public bool UseMarketDepth { get; set; }
 			public TimeSpan? UseCandleTimeFrame { get; set; }
 			public Color CurveColor { get; set; }
@@ -109,14 +110,14 @@ namespace SampleHistoryTesting
 					TicksTestingProcess, 
 					TicksParameterGrid,
 					// тест только на тиках
-					new EmulationInfo {CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Str3017}),
+					new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Str3017}),
 
 				Tuple.Create(
 					TicksAndDepthsCheckBox, 
 					TicksAndDepthsTestingProcess, 
 					TicksAndDepthsParameterGrid,
 					// тест на тиках + стаканы
-					new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.Str3018}),
+					new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.Str3018}),
 
 				Tuple.Create(
 					CandlesCheckBox, 
@@ -237,6 +238,10 @@ namespace SampleHistoryTesting
 					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
 				};
 
+				// указываем даты начала и конца тестирования
+				connector.StartDate = startTime;
+				connector.StopDate = stopTime;
+
 				connector.MarketTimeChangedInterval = timeFrame;
 
 				((ILogSource)connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
@@ -280,15 +285,17 @@ namespace SampleHistoryTesting
 							});
 						}
 					}
-					else if (emulationInfo.UseOrderLog)
+
+					if (emulationInfo.UseOrderLog)
 					{
 						connector.RegisterOrderLog(security);
 					}
-				};
 
-				// соединяемся с трейдером и запускаем экспорт,
-				// чтобы инициализировать переданными инструментами и портфелями необходимые свойства коннектора
-				connector.Connect();
+					if (emulationInfo.UseTicks)
+					{
+						connector.RegisterTrades(security);
+					}
+				};
 
 				var candleManager = new CandleManager(connector);
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
@@ -323,12 +330,6 @@ namespace SampleHistoryTesting
 					// что для истории в диапазон от нескольких месяцев излишне
 					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 				};
-
-				// комиссия в 1 копейку за сделку
-				connector.SendInMessage(new CommissionRuleMessage
-				{
-					Rule = new CommissionPerTradeRule { Value = 0.01m }
-				});
 
 				logManager.Sources.Add(strategy);
 
@@ -434,8 +435,15 @@ namespace SampleHistoryTesting
 			// запускаем эмуляцию
 			foreach (var connector in _connectors)
 			{
-				// указываем даты начала и конца тестирования
-				connector.Start(startTime, stopTime);
+				// соединяемся с трейдером и запускаем экспорт,
+				// чтобы инициализировать переданными инструментами и портфелями необходимые свойства коннектора
+				connector.Connect();
+
+				// комиссия в 1 копейку за сделку
+				connector.SendInMessage(new CommissionRuleMessage
+				{
+					Rule = new CommissionPerTradeRule { Value = 0.01m }
+				});
 			}
 
 			TabControl.Items.Cast<TabItem>().First(i => i.Visibility == Visibility.Visible).IsSelected = true;
@@ -457,7 +465,7 @@ namespace SampleHistoryTesting
 		{
 			foreach (var connector in _connectors)
 			{
-				connector.Stop();
+				connector.Disconnect();
 			}
 		}
 
