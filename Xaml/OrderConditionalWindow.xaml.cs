@@ -109,11 +109,11 @@ namespace StockSharp.Xaml
 				Condition.SelectedObject = null;
 			else
 			{
-				var connector = (Connector)Portfolio.Connector;
+				var connector = Connector;
 
 				var adapter = connector.TransactionAdapter;
 
-				var basketAdapter = connector.TransactionAdapter as BasketMessageAdapter;
+				var basketAdapter = adapter as BasketMessageAdapter;
 				if (basketAdapter != null)
 					adapter = basketAdapter.Portfolios.TryGetValue(Portfolio.Name);
 

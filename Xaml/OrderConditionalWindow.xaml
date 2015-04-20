@@ -8,7 +8,7 @@
         xmlns:pg="clr-namespace:StockSharp.Xaml.PropertyGrid"
         Title="{x:Static loc:LocalizedStrings.XamlStr604}"
 		WindowStartupLocation="CenterOwner"
-		Height="300" Width="300" ShowInTaskbar="False">
+		Height="600" Width="350" ShowInTaskbar="False">
 	
 	<Grid Margin="5">
 		<Grid.ColumnDefinitions>
@@ -54,8 +54,7 @@
 		</TextBlock>
 		<xctk:DecimalUpDown x:Name="VolumeCtrl" Grid.Column="1" Grid.Row="4" TextAlignment="Right" ValueChanged="VolumeCtrl_OnValueChanged" />
 
-        <pg:PropertyGridEx x:Name="Condition" Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" Margin="0,3,0,0" ShowAdvancedOptions="False" ShowSearchBox="False" ShowSortOptions="False"
-                           ShowSummary="False" SelectedObjectChanged="Condition_OnSelectedObjectChanged" />
+        <pg:PropertyGridEx x:Name="Condition" Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" Margin="0,3,0,0" SelectedObjectChanged="Condition_OnSelectedObjectChanged" />
 
 		<Button x:Name="Send" Content="{x:Static loc:LocalizedStrings.XamlStr427}" ex:XamlHelper.DialogResult="True" IsEnabled="False" IsDefault="True" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Width="100" Height="22" />
 	</Grid>
