@@ -41005,19 +41005,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Note
-		/// </summary>
-		public const string Str3408Key = "Str3408";
-
-		/// <summary>
-		/// Note
-		/// </summary>
-		public static string Str3408
-		{
-			get { return GetString(Str3408Key); }
-		}
-
-		/// <summary>
 		/// Connection to MICEX.
 		/// </summary>
 		public const string Str3409Key = "Str3409";
@@ -42474,12 +42461,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Use loan
+		/// Use credit
 		/// </summary>
 		public const string Str3526Key = "Str3526";
 
 		/// <summary>
-		/// Use loan
+		/// Use credit
 		/// </summary>
 		public static string Str3526
 		{
@@ -42510,19 +42497,6 @@ namespace StockSharp.Localization
 		public static string Str3529
 		{
 			get { return GetString(Str3529Key); }
-		}
-
-		/// <summary>
-		/// Note.
-		/// </summary>
-		public const string Str3530Key = "Str3530";
-
-		/// <summary>
-		/// Note.
-		/// </summary>
-		public static string Str3530
-		{
-			get { return GetString(Str3530Key); }
 		}
 
 		/// <summary>

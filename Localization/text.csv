@@ -3162,7 +3162,6 @@ Str3403;Order during closing auction.;Заявка в аукцион закры�
 Str3404;Router;Роутер
 Str3406;Good;Хорошая
 Str3407;Maximum;Максимальная
-Str3408;Note;Примечание
 Str3409;Connection to MICEX.;Подключение к ММВБ.
 Str3410;Path to dll;Путь к dll
 Str3411;Path to mtesrl.dll file.;Путь к файлу mtesrl.dll.
@@ -3275,10 +3274,9 @@ Str3522;At market;По рынку
 Str3523;Place a market order(in this case the order price is ignored).;Выставить заявку по рынку(в этом случае цена заявки игнорируется).
 Str3524;Order volume;Объем заявки
 Str3525;Volume (absolute or percentage value).;Объем (абсолютное значение или в процентах).
-Str3526;Use loan;Использовать кредит
+Str3526;Use credit;Использовать кредит
 Str3528;Protection time;Защитное время
 Str3529;Protection time in secs. Protection time allows to prevent orders being filled during market price surges, i.e. in such situations when prices reach the stop price for only a short period of time.;Защитное время, в сек. Защитное время позволяет предотвратить исполнение при проколах на рынке. Т.е. в таких ситуациях, когда цены на рынке лишь кратковременно достигают уровня стопа.
-Str3530;Note.;Примечание.
 Str3531;Activation price, when reached an order will be sent to the stock exchange with a specified price that takes protective spread into account.;Цена активации, при достижении которой будет отправлена заявка на биржу с указанной ценой, с учетом защитного спреда.
 Str3532;Place a market order.;Выставить заявку по рынку.
 Str3533;Volume. Absolute or percentage value.;Объем. Абсолютное значение, или в процентах.
