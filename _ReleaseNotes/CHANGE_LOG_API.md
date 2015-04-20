@@ -1,5 +1,30 @@
 StockSharp API Change log
 ========================
+###v4.3.0:
+* (feature) IMessageChannel. Message thread model refactoring.
+* (feature) IConnector. Removed Start/Stop export.
+* (feature) Connector uses BasketMessageAdapter.
+* (feature) Order.Id is nullable
+* (feature) IMessageSessionHolder removed.
+* (bug) BitStamp market data fixes.
+* (bug) SmartCom transaction fixes.
+* (bug) LMAX fixes.
+* (feature) OrderGrid. Show long and string identifiers.
+* (feature) Rss. Subscribe/unsubscribe support.
+* (feature) Transaq. v 2.10.10
+* (feature) IConnector.NewDataExported removed.
+* (feature) BasketConnector removed.
+* (bug) https://github.com/StockSharp/StockSharp/issues/40
+* (feature) ReConnectionSettings. Moved to Messages.
+* (feature) ReConnectionSettings. Export settings removed.
+* (feature) BasketMessageAdapter refactoring.
+* (feature) OrderCancelMesage.OrderId is nullable.
+* (feature) HeartbeatAdapter.
+* (feature) Order. BrokerCode and ClientCode fields.
+* (bug) https://github.com/StockSharp/StockSharp/issues/49
+* (bug) Micex. Fix 32-bit mode.
+* (bug) Plaza. Anonym deals stream. Fast repl mode.
+
 ###v4.2.75:
 * (feature) FixServer. No longer use QuickFix.
 * (feature) FixServer. Implements IMessageChannel.

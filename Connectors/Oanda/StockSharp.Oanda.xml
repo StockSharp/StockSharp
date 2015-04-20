@@ -6,32 +6,78 @@
   <members>
     <member name="T:StockSharp.Oanda.OandaMessageAdapter">
       <summary>
-            Адаптер сообщений для OANDA.
+            Адаптер сообщений для OANDA через протокол REST.
             </summary>
     </member>
-    <member name="M:StockSharp.Oanda.OandaMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.Oanda.OandaSessionHolder)">
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Создать <see cref="T:StockSharp.Oanda.OandaMessageAdapter" />.
             </summary>
-      <param name="type">Тип адаптера.</param>
-      <param name="sessionHolder">Контейнер для сессии.</param>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="M:StockSharp.Oanda.OandaMessageAdapter.DisposeManaged">
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.CreateOrderCondition">
       <summary>
-            Освободить занятые ресурсы.
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
             </summary>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
-      <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
     </member>
     <member name="M:StockSharp.Oanda.OandaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Отправить сообщение.
             </summary>
       <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Oanda.OandaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.PortfolioLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.PortfolioLookupMessage" /> для получения списка портфелей и позиций.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.OrderStatusRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.OrderStatusMessage" /> для получения списка заявок и собственных сделок.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.SecurityLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativePortfolioLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск портфелей.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.Server">
+      <summary>
+            Сервер.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.Token">
+      <summary>
+            Токен.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames">
+      <summary>
+            Доступные тайм-фреймы.
+            </summary>
     </member>
     <member name="T:StockSharp.Oanda.OandaOrderCondition">
       <summary>
@@ -93,56 +139,6 @@
             Реальный.
             </summary>
     </member>
-    <member name="T:StockSharp.Oanda.OandaSessionHolder">
-      <summary>
-            Контейнер для сессии.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaSessionHolder.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Создать <see cref="T:StockSharp.Oanda.OandaSessionHolder" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaSessionHolder.CreateTransactionAdapter">
-      <summary>
-            Создать транзакционный адаптер.
-            </summary>
-      <returns>Транзакционный адаптер.</returns>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaSessionHolder.CreateMarketDataAdapter">
-      <summary>
-            Создать адаптер маркет-данных.
-            </summary>
-      <returns>Адаптер маркет-данных.</returns>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Oanda.OandaSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="P:StockSharp.Oanda.OandaSessionHolder.Server">
-      <summary>
-            Сервер.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Oanda.OandaSessionHolder.Token">
-      <summary>
-            Токен.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Oanda.OandaSessionHolder.TimeFrames">
-      <summary>
-            Доступные тайм-фреймы.
-            </summary>
-    </member>
     <member name="T:StockSharp.Oanda.OandaTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с брокером OANDA.
@@ -167,12 +163,11 @@
             </summary>
       <param name="series">Серия свечек.</param>
     </member>
-    <member name="M:StockSharp.Oanda.OandaTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+    <member name="M:StockSharp.Oanda.OandaTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.BusinessEntities.MessageDirections)">
       <summary>
             Обработать сообщение, содержащее рыночные данные.
             </summary>
       <param name="message">Сообщение, содержащее рыночные данные.</param>
-      <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
       <param name="direction">Направление сообщения.</param>
     </member>
     <member name="P:StockSharp.Oanda.OandaTrader.Server">

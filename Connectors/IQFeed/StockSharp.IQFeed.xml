@@ -4,106 +4,110 @@
     <name>StockSharp.IQFeed</name>
   </assembly>
   <members>
-    <member name="T:StockSharp.IQFeed.IQFeedSessionHolder">
+    <member name="T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter">
       <summary>
-            Контейнер для сессии.
+            Маркет-дата адаптер сообщений для IQFeed.
             </summary>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.CreateTransactionAdapter">
-      <summary>
-            Создать транзакционный адаптер.
-            </summary>
-      <returns>Транзакционный адаптер.</returns>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.CreateMarketDataAdapter">
-      <summary>
-            Создать адаптер маркет-данных.
-            </summary>
-      <returns>Адаптер маркет-данных.</returns>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Создать <see cref="T:StockSharp.IQFeed.IQFeedSessionHolder" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Загрузить настройки.
             </summary>
       <param name="storage">Хранилище настроек.</param>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Сохранить настройки.
             </summary>
       <param name="storage">Хранилище настроек.</param>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedSessionHolder.ToString">
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.ToString">
       <summary>
             Получить строковое представление контейнера.
             </summary>
       <returns>Строковое представление.</returns>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level1Address">
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Создать <see cref="T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter" />.
+            </summary>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+    </member>
+    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Отправить сообщение.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1Address">
       <summary>
             Адрес для получения данных по Level1.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level2Address">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level2Address">
       <summary>
             Адрес для получения данных по Level2.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.LookupAddress">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.LookupAddress">
       <summary>
             Адрес для получения исторических данных.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.AdminAddress">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.AdminAddress">
       <summary>
             Адрес для получения служебных данных.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.DerivativeAddress">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.DerivativeAddress">
       <summary>
             Адрес для получения производных данных.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level1Columns">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1Columns">
       <summary>
             Все <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />, которые необходимо транслировать.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.SecurityTypesFilter">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecurityTypesFilter">
       <summary>
             Типы инструментов, по которым необходимо получить данные.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.IsDownloadSecurityFromSite">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsDownloadSecurityFromSite">
       <summary>
             Загружать ли инструменты из архива с сайта IQFeed. По-умолчанию выключено.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.SecuritiesFile">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecuritiesFile">
       <summary>
             Путь к файлу со списком инструментов IQFeed, скаченный с сайта.
             Если путь задан, то повторное скачивание с сайта не происходит, и парсится только локальная копия.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.IsValid">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsValid">
       <summary>
             Проверить введенные параметры на валидность.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.Level1ColumnRegistry">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.Level1ColumnRegistry">
       <summary>
             Список всех доступных <see cref="T:StockSharp.IQFeed.IQFeedLevel1Column" />.
             </summary>
     </member>
-    <member name="P:StockSharp.IQFeed.IQFeedSessionHolder.TimeFrames">
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.TimeFrames">
       <summary>
             Доступные тайм-фреймы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SecurityLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
             </summary>
     </member>
     <member name="T:StockSharp.IQFeed.IQFeedAddresses">
@@ -446,39 +450,6 @@
       <param name="name">Имя колонка.</param>
       <returns>Найденная колонка. Если колонка не существует, то будет возвращено null.</returns>
     </member>
-    <member name="T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter">
-      <summary>
-            Маркет-дата адаптер сообщений для IQFeed.
-            </summary>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.#ctor(StockSharp.IQFeed.IQFeedSessionHolder)">
-      <summary>
-            Создать <see cref="T:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter" />.
-            </summary>
-      <param name="sessionHolder">Контейнер для сессии.</param>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.StartMarketTimer">
-      <summary>
-            Запустить таймер генерации с интервалом <see cref="P:StockSharp.Messages.IMessageSessionHolder.MarketTimeChangedInterval" /> сообщений <see cref="T:StockSharp.Messages.TimeMessage" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
-      <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
-            </summary>
-      <param name="message">Сообщение.</param>
-    </member>
-    <member name="M:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
-    </member>
-    <member name="P:StockSharp.IQFeed.IQFeedMarketDataMessageAdapter.IsSupportNativeSecurityLookup">
-      <summary>
-            Поддерживается ли торговой системой поиск инструментов.
-            </summary>
-    </member>
     <member name="T:StockSharp.IQFeed.IQFeedTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с DTN IQFeed для скачивания исторических и реал-тайм маркет-данных (level 1, level 2).
@@ -568,12 +539,11 @@
             </summary>
       <param name="series">Серия свечек.</param>
     </member>
-    <member name="M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+    <member name="M:StockSharp.IQFeed.IQFeedTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.BusinessEntities.MessageDirections)">
       <summary>
             Обработать сообщение, содержащее рыночные данные.
             </summary>
       <param name="message">Сообщение, содержащее рыночные данные.</param>
-      <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
       <param name="direction">Направление сообщения.</param>
     </member>
     <member name="P:StockSharp.IQFeed.IQFeedTrader.Level1ColumnRegistry">

@@ -9,23 +9,11 @@
             Адаптер сообщений для BitStamp.
             </summary>
     </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.BitStamp.BitStampSessionHolder)">
+    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Создать <see cref="T:StockSharp.BitStamp.BitStampMessageAdapter" />.
             </summary>
-      <param name="type">Тип адаптера.</param>
-      <param name="sessionHolder">Контейнер для сессии.</param>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.DisposeManaged">
-      <summary>
-            Освободить занятые ресурсы.
-            </summary>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
-      <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
-            </summary>
-      <param name="message">Сообщение.</param>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
     <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
@@ -33,75 +21,67 @@
             </summary>
       <param name="message">Сообщение.</param>
     </member>
-    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.CanSendTimeMessage">
-      <summary>
-            Нужно ли отправлять в адаптер сообщение типа <see cref="T:StockSharp.Messages.TimeMessage" />.
-            </summary>
-    </member>
-    <member name="T:StockSharp.BitStamp.BitStampSessionHolder">
-      <summary>
-            Контейнер для сессии.
-            </summary>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampSessionHolder.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Создать <see cref="T:StockSharp.BitStamp.BitStampSessionHolder" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampSessionHolder.CreateTransactionAdapter">
-      <summary>
-            Создать транзакционный адаптер.
-            </summary>
-      <returns>Транзакционный адаптер.</returns>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampSessionHolder.CreateMarketDataAdapter">
-      <summary>
-            Создать адаптер маркет-данных.
-            </summary>
-      <returns>Адаптер маркет-данных.</returns>
-    </member>
-    <member name="M:StockSharp.BitStamp.BitStampSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
             Сохранить настройки.
             </summary>
       <param name="storage">Хранилище настроек.</param>
     </member>
-    <member name="M:StockSharp.BitStamp.BitStampSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
+    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
             Загрузить настройки.
             </summary>
       <param name="storage">Хранилище настроек.</param>
     </member>
-    <member name="M:StockSharp.BitStamp.BitStampSessionHolder.ToString">
+    <member name="M:StockSharp.BitStamp.BitStampMessageAdapter.ToString">
       <summary>
             Получить строковое представление контейнера.
             </summary>
       <returns>Строковое представление.</returns>
     </member>
-    <member name="P:StockSharp.BitStamp.BitStampSessionHolder.Key">
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.PortfolioLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.PortfolioLookupMessage" /> для получения списка портфелей и позиций.
+            </summary>
+    </member>
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.OrderStatusRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.OrderStatusMessage" /> для получения списка заявок и собственных сделок.
+            </summary>
+    </member>
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.SecurityLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsSupportNativePortfolioLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск портфелей.
+            </summary>
+    </member>
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.Key">
       <summary>
             Ключ.
             </summary>
     </member>
-    <member name="P:StockSharp.BitStamp.BitStampSessionHolder.Secret">
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.Secret">
       <summary>
             Секрет.
             </summary>
     </member>
-    <member name="P:StockSharp.BitStamp.BitStampSessionHolder.ClientId">
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.ClientId">
       <summary>
             Идентификатор клиента.
             </summary>
     </member>
-    <member name="P:StockSharp.BitStamp.BitStampSessionHolder.IsValid">
+    <member name="P:StockSharp.BitStamp.BitStampMessageAdapter.IsValid">
       <summary>
             Проверить введенные параметры на валидность.
-            </summary>
-    </member>
-    <member name="P:StockSharp.BitStamp.BitStampSessionHolder.JoinInProcessors">
-      <summary>
-            Объединять обработчики входящих сообщений для адаптеров.
             </summary>
     </member>
     <member name="T:StockSharp.BitStamp.BitStampTrader">
