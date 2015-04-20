@@ -135,7 +135,7 @@ namespace StockSharp.Algo
 			if (adapter.IsTransactionEnabled)
 				TransactionAdapter = adapter;
 
-			if (adapter.IsTransactionEnabled)
+			if (adapter.IsMarketDataEnabled)
 				MarketDataAdapter = adapter;
 		}
 

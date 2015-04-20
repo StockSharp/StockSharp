@@ -281,16 +281,17 @@ namespace StockSharp.Algo
 							GetMarketDataAdapters().ForEach(a => a.SendInMessage(mdMsg));
 							break;
 
-						case MarketDataTypes.Level1:
-						case MarketDataTypes.MarketDepth:
-						case MarketDataTypes.Trades:
-						case MarketDataTypes.OrderLog:
-						case MarketDataTypes.CandleTimeFrame:
-						case MarketDataTypes.CandleTick:
-						case MarketDataTypes.CandleVolume:
-						case MarketDataTypes.CandleRange:
-						case MarketDataTypes.CandlePnF:
-						case MarketDataTypes.CandleRenko:
+						//case MarketDataTypes.Level1:
+						//case MarketDataTypes.MarketDepth:
+						//case MarketDataTypes.Trades:
+						//case MarketDataTypes.OrderLog:
+						//case MarketDataTypes.CandleTimeFrame:
+						//case MarketDataTypes.CandleTick:
+						//case MarketDataTypes.CandleVolume:
+						//case MarketDataTypes.CandleRange:
+						//case MarketDataTypes.CandlePnF:
+						//case MarketDataTypes.CandleRenko:
+						default:
 						{
 							var key = Tuple.Create(mdMsg.SecurityId, mdMsg.DataType);
 
@@ -330,9 +331,9 @@ namespace StockSharp.Algo
 							break;
 						}
 
-						default:
-							RaiseMarketDataMessage(null, mdMsg.TransactionId, new InvalidOperationException(LocalizedStrings.Str624Params.Put(mdMsg.DataType)));
-							break;
+						//default:
+						//	RaiseMarketDataMessage(null, mdMsg.TransactionId, new InvalidOperationException(LocalizedStrings.Str624Params.Put(mdMsg.DataType)));
+						//	break;
 					}
 					
 					break;
