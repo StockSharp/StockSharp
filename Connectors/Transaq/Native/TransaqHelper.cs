@@ -70,9 +70,9 @@ namespace StockSharp.Transaq.Native
 			return new NewStopOrderElement
 			{
 				ActivationPrice = cond.StopLossActivationPrice,
-				OrderPrice = cond.StopLossOrderPrice == null ? null : cond.StopLossOrderPrice.ToString(),
+				OrderPrice = cond.StopLossOrderPrice.To<string>(),
 				ByMarket = cond.StopLossByMarket,
-				Quantity = cond.StopLossVolume.ToString(),
+				Quantity = cond.StopLossVolume.To<string>(),
 				UseCredit = cond.StopLossUseCredit,
 				GuardTime = cond.StopLossGuardTime,
 				BrokerRef = cond.StopLossComment
@@ -88,12 +88,12 @@ namespace StockSharp.Transaq.Native
 			{
 				ActivationPrice = cond.TakeProfitActivationPrice,
 				ByMarket = cond.TakeProfitByMarket,
-				Quantity = cond.TakeProfitVolume.ToString(),
+				Quantity = cond.TakeProfitVolume.To<string>(),
 				UseCredit = cond.TakeProfitUseCredit,
 				GuardTime = cond.TakeProfitGuardTime,
 				BrokerRef = cond.TakeProfitComment,
-				Correction = cond.TakeProfitCorrection == null ? null : cond.TakeProfitCorrection.ToString(),
-				Spread = cond.TakeProfitGuardSpread == null ? null : cond.TakeProfitGuardSpread.ToString()
+				Correction = cond.TakeProfitCorrection.To<string>(),
+				Spread = cond.TakeProfitGuardSpread.To<string>()
 			};
 		}
 

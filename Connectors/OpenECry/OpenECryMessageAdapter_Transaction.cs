@@ -138,7 +138,7 @@ namespace StockSharp.OpenECry
 
 			var invalid = draft.GetInvalidParts();
 			if (invalid != OrderParts.None)
-				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid.ToString()));
+				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid));
 
 			var newOrder = _client.SendOrder(draft);
 			_orderTransactions.Add(newOrder, message.TransactionId);
@@ -159,7 +159,7 @@ namespace StockSharp.OpenECry
 
 			var invalid = draft.GetInvalidParts();
 			if (invalid != OrderParts.None)
-				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid.ToString()));
+				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid));
 
 			var newOrder = _client.ModifyOrder(draft);
 			_orderTransactions.Add(newOrder, message.TransactionId);
