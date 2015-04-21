@@ -24,75 +24,76 @@
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Hydra\Core\CorePublic.csproj" />
-<DocumentationSource sourceFile="Comments\project.xml" />
-<DocumentationSource sourceFile="..\Alerts\bin\Debug\StockSharp.Alerts.dll" />
-<DocumentationSource sourceFile="..\Alerts\bin\Debug\StockSharp.Alerts.xml" />
-<DocumentationSource sourceFile="..\Connectors\AlfaDirect\bin\Debug\StockSharp.AlfaDirect.dll" />
-<DocumentationSource sourceFile="..\Connectors\AlfaDirect\bin\Debug\StockSharp.AlfaDirect.xml" />
-<DocumentationSource sourceFile="..\Algo\bin\Debug\StockSharp.Algo.dll" />
-<DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.dll" />
-<DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.xml" />
-<DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.dll" />
-<DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.xml" />
-<DocumentationSource sourceFile="..\Algo\bin\Debug\StockSharp.Algo.xml" />
-<DocumentationSource sourceFile="..\Connectors\BitStamp\StockSharp.BitStamp.dll" />
-<DocumentationSource sourceFile="..\Connectors\BitStamp\StockSharp.BitStamp.xml" />
-<DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.dll" />
-<DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.xml" />
-<DocumentationSource sourceFile="..\Connectors\Btce\bin\Debug\StockSharp.Btce.dll" />
-<DocumentationSource sourceFile="..\Connectors\Btce\bin\Debug\StockSharp.Btce.xml" />
-<DocumentationSource sourceFile="..\BusinessEntities\bin\Debug\StockSharp.BusinessEntities.dll" />
-<DocumentationSource sourceFile="..\BusinessEntities\bin\Debug\StockSharp.BusinessEntities.xml" />
-<DocumentationSource sourceFile="..\Community\bin\Debug\StockSharp.Community.dll" />
-<DocumentationSource sourceFile="..\Community\bin\Debug\StockSharp.Community.xml" />
-<DocumentationSource sourceFile="..\Connectors\CQG\bin\Debug\StockSharp.CQG.dll" />
-<DocumentationSource sourceFile="..\Connectors\CQG\bin\Debug\StockSharp.CQG.xml" />
-<DocumentationSource sourceFile="..\Connectors\ETrade\StockSharp.ETrade.dll" />
-<DocumentationSource sourceFile="..\Connectors\ETrade\StockSharp.ETrade.xml" />
-<DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.dll" />
-<DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.xml" />
-<DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\bin\Debug\StockSharp.InteractiveBrokers.dll" />
-<DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\bin\Debug\StockSharp.InteractiveBrokers.xml" />
-<DocumentationSource sourceFile="..\Connectors\IQFeed\StockSharp.IQFeed.dll" />
-<DocumentationSource sourceFile="..\Connectors\IQFeed\StockSharp.IQFeed.xml" />
-<DocumentationSource sourceFile="..\References\StockSharp.Licensing.dll" />
-<DocumentationSource sourceFile="..\References\StockSharp.Licensing.xml" />
-<DocumentationSource sourceFile="..\Connectors\LMAX\bin\Debug\StockSharp.LMAX.dll" />
-<DocumentationSource sourceFile="..\Connectors\LMAX\bin\Debug\StockSharp.LMAX.xml" />
-<DocumentationSource sourceFile="..\Localization\bin\Debug\StockSharp.Localization.dll" />
-<DocumentationSource sourceFile="..\Localization\bin\Debug\StockSharp.Localization.xml" />
-<DocumentationSource sourceFile="..\Logging\bin\Debug\StockSharp.Logging.dll" />
-<DocumentationSource sourceFile="..\Logging\bin\Debug\StockSharp.Logging.xml" />
-<DocumentationSource sourceFile="..\Connectors\MatLab\bin\Debug\StockSharp.MatLab.dll" />
-<DocumentationSource sourceFile="..\Connectors\MatLab\bin\Debug\StockSharp.MatLab.xml" />
-<DocumentationSource sourceFile="..\Messages\bin\Debug\StockSharp.Messages.dll" />
-<DocumentationSource sourceFile="..\Messages\bin\Debug\StockSharp.Messages.xml" />
-<DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.dll" />
-<DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.xml" />
-<DocumentationSource sourceFile="..\Connectors\Oanda\StockSharp.Oanda.dll" />
-<DocumentationSource sourceFile="..\Connectors\Oanda\StockSharp.Oanda.xml" />
-<DocumentationSource sourceFile="..\Connectors\OpenECry\bin\Debug\StockSharp.OpenECry.dll" />
-<DocumentationSource sourceFile="..\Connectors\OpenECry\bin\Debug\StockSharp.OpenECry.xml" />
-<DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.dll" />
-<DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.xml" />
-<DocumentationSource sourceFile="..\Connectors\Quik\bin\Debug\StockSharp.Quik.dll" />
-<DocumentationSource sourceFile="..\Connectors\Quik\bin\Debug\StockSharp.Quik.xml" />
-<DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.dll" />
-<DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.xml" />
-<DocumentationSource sourceFile="..\Connectors\Rss\bin\Debug\StockSharp.Rss.dll" />
-<DocumentationSource sourceFile="..\Connectors\Rss\bin\Debug\StockSharp.Rss.xml" />
-<DocumentationSource sourceFile="..\Connectors\SmartCom\bin\Debug\StockSharp.SmartCom.dll" />
-<DocumentationSource sourceFile="..\Connectors\SmartCom\bin\Debug\StockSharp.SmartCom.xml" />
-<DocumentationSource sourceFile="..\Connectors\Sterling\bin\Debug\StockSharp.Sterling.dll" />
-<DocumentationSource sourceFile="..\Connectors\Sterling\bin\Debug\StockSharp.Sterling.xml" />
-<DocumentationSource sourceFile="..\Connectors\Transaq\bin\Debug\StockSharp.Transaq.dll" />
-<DocumentationSource sourceFile="..\Connectors\Transaq\bin\Debug\StockSharp.Transaq.xml" />
-<DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.dll" />
-<DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.xml" />
-<DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll" />
-<DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.xml" />
-<DocumentationSource sourceFile="..\Xaml\bin\Debug\StockSharp.Xaml.dll" />
-<DocumentationSource sourceFile="..\Xaml\bin\Debug\StockSharp.Xaml.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="Comments\project.xml" />
+      <DocumentationSource sourceFile="..\Alerts\bin\Debug\StockSharp.Alerts.dll" />
+      <DocumentationSource sourceFile="..\Alerts\bin\Debug\StockSharp.Alerts.xml" />
+      <DocumentationSource sourceFile="..\Connectors\AlfaDirect\bin\Debug\StockSharp.AlfaDirect.dll" />
+      <DocumentationSource sourceFile="..\Connectors\AlfaDirect\bin\Debug\StockSharp.AlfaDirect.xml" />
+      <DocumentationSource sourceFile="..\Algo\bin\Debug\StockSharp.Algo.dll" />
+      <DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.dll" />
+      <DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.xml" />
+      <DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.dll" />
+      <DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.xml" />
+      <DocumentationSource sourceFile="..\Algo\bin\Debug\StockSharp.Algo.xml" />
+      <DocumentationSource sourceFile="..\Connectors\BitStamp\StockSharp.BitStamp.dll" />
+      <DocumentationSource sourceFile="..\Connectors\BitStamp\StockSharp.BitStamp.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Btce\bin\Debug\StockSharp.Btce.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Btce\bin\Debug\StockSharp.Btce.xml" />
+      <DocumentationSource sourceFile="..\BusinessEntities\bin\Debug\StockSharp.BusinessEntities.dll" />
+      <DocumentationSource sourceFile="..\BusinessEntities\bin\Debug\StockSharp.BusinessEntities.xml" />
+      <DocumentationSource sourceFile="..\Community\bin\Debug\StockSharp.Community.dll" />
+      <DocumentationSource sourceFile="..\Community\bin\Debug\StockSharp.Community.xml" />
+      <DocumentationSource sourceFile="..\Connectors\CQG\bin\Debug\StockSharp.CQG.dll" />
+      <DocumentationSource sourceFile="..\Connectors\CQG\bin\Debug\StockSharp.CQG.xml" />
+      <DocumentationSource sourceFile="..\Connectors\ETrade\StockSharp.ETrade.dll" />
+      <DocumentationSource sourceFile="..\Connectors\ETrade\StockSharp.ETrade.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.xml" />
+      <DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\bin\Debug\StockSharp.InteractiveBrokers.dll" />
+      <DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\bin\Debug\StockSharp.InteractiveBrokers.xml" />
+      <DocumentationSource sourceFile="..\Connectors\IQFeed\StockSharp.IQFeed.dll" />
+      <DocumentationSource sourceFile="..\Connectors\IQFeed\StockSharp.IQFeed.xml" />
+      <DocumentationSource sourceFile="..\References\StockSharp.Licensing.dll" />
+      <DocumentationSource sourceFile="..\References\StockSharp.Licensing.xml" />
+      <DocumentationSource sourceFile="..\Connectors\LMAX\bin\Debug\StockSharp.LMAX.dll" />
+      <DocumentationSource sourceFile="..\Connectors\LMAX\bin\Debug\StockSharp.LMAX.xml" />
+      <DocumentationSource sourceFile="..\Localization\bin\Debug\StockSharp.Localization.dll" />
+      <DocumentationSource sourceFile="..\Localization\bin\Debug\StockSharp.Localization.xml" />
+      <DocumentationSource sourceFile="..\Logging\bin\Debug\StockSharp.Logging.dll" />
+      <DocumentationSource sourceFile="..\Logging\bin\Debug\StockSharp.Logging.xml" />
+      <DocumentationSource sourceFile="..\Connectors\MatLab\bin\Debug\StockSharp.MatLab.dll" />
+      <DocumentationSource sourceFile="..\Connectors\MatLab\bin\Debug\StockSharp.MatLab.xml" />
+      <DocumentationSource sourceFile="..\Messages\bin\Debug\StockSharp.Messages.dll" />
+      <DocumentationSource sourceFile="..\Messages\bin\Debug\StockSharp.Messages.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Oanda\StockSharp.Oanda.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Oanda\StockSharp.Oanda.xml" />
+      <DocumentationSource sourceFile="..\Connectors\OpenECry\bin\Debug\StockSharp.OpenECry.dll" />
+      <DocumentationSource sourceFile="..\Connectors\OpenECry\bin\Debug\StockSharp.OpenECry.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Quik\bin\Debug\StockSharp.Quik.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Quik\bin\Debug\StockSharp.Quik.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Rss\bin\Debug\StockSharp.Rss.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Rss\bin\Debug\StockSharp.Rss.xml" />
+      <DocumentationSource sourceFile="..\Connectors\SmartCom\bin\Debug\StockSharp.SmartCom.dll" />
+      <DocumentationSource sourceFile="..\Connectors\SmartCom\bin\Debug\StockSharp.SmartCom.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Sterling\bin\Debug\StockSharp.Sterling.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Sterling\bin\Debug\StockSharp.Sterling.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Transaq\bin\Debug\StockSharp.Transaq.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Transaq\bin\Debug\StockSharp.Transaq.xml" />
+      <DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.dll" />
+      <DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.xml" />
+      <DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll" />
+      <DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.xml" />
+      <DocumentationSource sourceFile="..\Xaml\bin\Debug\StockSharp.Xaml.dll" />
+      <DocumentationSource sourceFile="..\Xaml\bin\Debug\StockSharp.Xaml.xml" />
+    </DocumentationSources>
     <CopyrightHref>http://stocksharp.com</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2015 - StockSharp LLC</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.com</FeedbackEMailAddress>
@@ -171,6 +172,11 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\QuikLua.aml" />
+    <None Include="Topics\RSS.aml" />
+    <None Include="Topics\Rithmic.aml" />
+    <None Include="Topics\MFD.aml" />
+    <None Include="Topics\Title.aml" />
     <None Include="Topics\YahooFinance.aml" />
     <None Include="Topics\Google.aml" />
     <None Include="Topics\TrueFX.aml" />
@@ -1009,6 +1015,74 @@
     <Image Include="Art\LicenseActivate.png">
       <ImageId>LicenseActivate</ImageId>
       <AlternateText>License Activate</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_allor.png">
+      <ImageId>hydra_settings_allor</ImageId>
+      <AlternateText>hydra settings allor</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_bitstamp.png">
+      <ImageId>hydra_settings_bitstamp</ImageId>
+      <AlternateText>hydra settings bitstamp</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_btce.png">
+      <ImageId>hydra_settings_btce</ImageId>
+      <AlternateText>hydra settings btce</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_ducasсopy.png">
+      <ImageId>hydra_settings_ducasсopy</ImageId>
+      <AlternateText>hydra settings ducasсopy</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_finviz.png">
+      <ImageId>hydra_settings_finviz</ImageId>
+      <AlternateText>hydra settings finviz</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_gaincapital.png">
+      <ImageId>hydra_settings_gaincapital</ImageId>
+      <AlternateText>hydra settings gaincapital</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_google.png">
+      <ImageId>hydra_settings_google</ImageId>
+      <AlternateText>hydra settings google</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_mfd.png">
+      <ImageId>hydra_settings_mfd</ImageId>
+      <AlternateText>hydra settings mfd</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_mbtrading.png">
+      <ImageId>hydra_settings_mbtrading</ImageId>
+      <AlternateText>hydra settings mbtrading</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_oanda.png">
+      <ImageId>hydra_settings_oanda</ImageId>
+      <AlternateText>hydra settings oanda</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_quandl.png">
+      <ImageId>hydra_settings_quandl</ImageId>
+      <AlternateText>hydra settings quandl</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_rithmic.png">
+      <ImageId>hydra_settings_rithmic</ImageId>
+      <AlternateText>hydra settings rithmic</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_rss.png">
+      <ImageId>hydra_settings_rss</ImageId>
+      <AlternateText>hydra settings rss</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_sterling.png">
+      <ImageId>hydra_settings_sterling</ImageId>
+      <AlternateText>hydra settings sterling</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_truefx.png">
+      <ImageId>hydra_settings_truefx</ImageId>
+      <AlternateText>hydra settings truefx</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_yahoo.png">
+      <ImageId>hydra_settings_yahoo</ImageId>
+      <AlternateText>hydra settings yahoo</AlternateText>
+    </Image>
+    <Image Include="Art\QuikLua.png">
+      <ImageId>QuikLua</ImageId>
+      <AlternateText>Quik Lua</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
