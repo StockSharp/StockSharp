@@ -3,11 +3,10 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     
     <introduction>
-            <mediaLink>
+      <mediaLink>
         <image placement="left" xlink:href="hydra_settings_bitstamp" />
       </mediaLink>
-      
-		<para><legacyBold>Основные</legacyBold></para>
+	   <para><legacyBold>Основные</legacyBold></para>
 	   <list class="bullet">
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
@@ -37,48 +36,7 @@
           <legacyBold>Поля Level1</legacyBold> - поддерживаемые поля маркет-данных первого уровня.
 		</listItem>
       </list>
-     
-     <para><legacyBold>Режим работы</legacyBold></para> <para><legacyBold>Подключение</legacyBold></para>
- 		<list class="bullet">
-		<listItem>
-          <legacyBold>Время ожидания</legacyBold> - время ожидания успешного подключения/отключения.
-		</listItem>
-		<listItem>
-          <legacyBold>Интервал</legacyBold> - интервал, с которым будут происходить попытки подключения.
-		</listItem>
-		<listItem>
-          <legacyBold>Первоначально</legacyBold> - количество попыток установить первоначальное подключение.
-		</listItem>
-		<listItem>
-          <legacyBold>Переподключение</legacyBold> - количество попыток переподключения, если соединение было разорвано в процессе работы.
-		</listItem>
-      </list>
- 		<list class="bullet">
-		<listItem>
-          <legacyBold>Выходные дни</legacyBold> - выходные дни, выпадающие на будни.
-		</listItem>
-		<listItem>
-          <legacyBold>Периоды</legacyBold> - периоды действия расписания.
-		</listItem>
-		<listItem>
-          <legacyBold>Рабочие дни</legacyBold> - рабочие дни, выпадающие на субботу и воскресенье.
-		</listItem>
-      </list>
-      <para><legacyBold>Экспорт</legacyBold></para>
- 		<list class="bullet">
-		<listItem>
-          <legacyBold>Время ожидания</legacyBold> - время ожидания успешного подключения/отключения.
-		</listItem>
-		<listItem>
-          <legacyBold>Интервал</legacyBold> - интервал, с которым будут происходить попытки подключения.
-		</listItem>
-		<listItem>
-          <legacyBold>Первоначально</legacyBold> - количество попыток установить первоначальное подключение.
-		</listItem>
-		<listItem>
-          <legacyBold>Переподключение</legacyBold> - количество попыток переподключения, если соединение было разорвано в процессе работы.
-		</listItem>
-      </list>
+      <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="2a908a19-0272-48e1-b143-df7ff9e2607c">AlfaDirect</link>) </para>
     </introduction>
   </developerConceptualDocument>
 </topic>

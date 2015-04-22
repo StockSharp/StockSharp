@@ -5,6 +5,7 @@
     <mediaLink>
         <image placement="left" xlink:href="hydra_settings_allor" />
       </mediaLink>
+      <para><legacyBold>Alor (история)</legacyBold></para>
       <list class="bullet">
         <listItem>
           <legacyBold>Начальная дата</legacyBold> - с какой даты начать загружать данные.
@@ -15,6 +16,12 @@
 		<listItem>
           <legacyBold>Выходные</legacyBold> - игнорировать выходные и праздничные дни (не загружать данные).
 		</listItem>
+		<listItem>
+          <legacyBold>Временные файлы</legacyBold> - режим использования временных файлов: использовать/не использовать/использовать и удалять.
+		</listItem>
+		</list>
+	<para><legacyBold>Основные</legacyBold></para>
+	<list class="bullet">
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
 		</listItem>

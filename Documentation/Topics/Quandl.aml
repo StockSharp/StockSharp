@@ -5,8 +5,10 @@
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_quandl" />
       </mediaLink>
+      
+       <para><legacyBold>Quandl</legacyBold></para>
       <list class="bullet">
-        <listItem>
+      	<listItem>
           <legacyBold>Токен</legacyBold> - идентификатор пользователя Quandl.
 		</listItem>
         <listItem>
@@ -21,6 +23,9 @@
 		<listItem>
           <legacyBold>Временные файлы</legacyBold> - режим использования временных файлов: использовать/не использовать/использовать и удалять.
 		</listItem>
+		</list>
+		<para><legacyBold>Основные</legacyBold></para>
+	   <list class="bullet">
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
 		</listItem>
@@ -46,6 +51,7 @@
           <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
 		</listItem>
       </list>
+     
     </introduction>
   </developerConceptualDocument>
 </topic>
