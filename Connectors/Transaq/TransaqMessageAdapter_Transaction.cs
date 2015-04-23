@@ -22,10 +22,10 @@ namespace StockSharp.Transaq
 		{
 			DateTime? expDate;
 
-			if (regMsg.TillDate == DateTimeOffset.MaxValue)
+			if (regMsg.TillDate == null || regMsg.TillDate == DateTimeOffset.MaxValue)
 				expDate = null;
 			else
-				expDate = regMsg.TillDate.ToLocalTime(TimeHelper.Moscow);
+				expDate = regMsg.TillDate.Value.ToLocalTime(TimeHelper.Moscow);
 
 			BaseCommandMessage command;
 
@@ -306,7 +306,7 @@ namespace StockSharp.Transaq
 					Side = order.BuySell.FromTransaq(),
 					OriginalTransactionId = stockSharpTransactionId,
 					PortfolioName = order.Client,
-					ExpiryDate = order.ExpDate == null ? DateTimeOffset.MaxValue : order.ExpDate.Value.ApplyTimeZone(TimeHelper.Moscow),
+					ExpiryDate = order.ExpDate == null ? (DateTimeOffset?)null : order.ExpDate.Value.ApplyTimeZone(TimeHelper.Moscow),
 					ExecutionType = ExecutionTypes.Order,
 				};
 

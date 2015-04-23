@@ -31,8 +31,8 @@
 				Side = regMsg.Side.ToSterlingSide()
 			};
 
-			if (regMsg.TillDate != DateTime.MaxValue)
-				order.EndTime = regMsg.TillDate.ToString("yyyyMMdd");
+			if (regMsg.TillDate != null && regMsg.TillDate != DateTimeOffset.MaxValue)
+				order.EndTime = regMsg.TillDate.Value.ToString("yyyyMMdd");
 
 			if (regMsg.Currency != null)
 				order.Currency = regMsg.Currency.ToString();
@@ -91,8 +91,8 @@
 				User = replaceMsg.Comment
 			};
 
-			if (replaceMsg.TillDate != DateTime.MaxValue)
-				replaceOrder.EndTime = replaceMsg.TillDate.ToString("yyyyMMdd");
+			if (replaceMsg.TillDate != null && replaceMsg.TillDate != DateTimeOffset.MaxValue)
+				replaceOrder.EndTime = replaceMsg.TillDate.Value.ToString("yyyyMMdd");
 
 			if (replaceMsg.Currency != null)
 				replaceOrder.Currency = replaceMsg.Currency.ToString();

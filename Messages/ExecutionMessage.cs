@@ -270,18 +270,17 @@ namespace StockSharp.Messages
 		public bool? IsSystem { get; set; }
 
 		/// <summary>
-		/// Время экспирации заявки.
+		/// Время экспирации заявки. По-умолчанию равно <see langword="null"/>, что означает действие заявки до отмены (GTC).
 		/// </summary>
 		/// <remarks>
-		/// Если значение равно <see cref="DateTime.Today"/>, то заявка выставляется сроком на текущую сессию.
-		/// Если значение равно <see cref="DateTime.MaxValue"/>, то заявка выставляется до отмены (GTC).
+		/// Если значение равно <see langword="null"/> или <see cref="DateTimeOffset.MaxValue"/>, то заявка выставляется до отмены (GTC).
 		/// Иначе, указывается конкретный срок.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
 		[DescriptionLoc(LocalizedStrings.Str142Key)]
 		[MainCategory]
-		public DateTimeOffset ExpiryDate { get; set; }
+		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <summary>
 		/// Условие исполнения лимитированной заявки.

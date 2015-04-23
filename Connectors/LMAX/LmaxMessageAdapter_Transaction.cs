@@ -30,7 +30,7 @@ namespace StockSharp.LMAX
 			{
 				case TimeInForce.PutInQueue:
 				case null:
-					tif = message.TillDate == DateTimeOffset.MaxValue ? LmaxTimeInForce.GoodTilCancelled : LmaxTimeInForce.GoodForDay;
+					tif = message.TillDate == null || message.TillDate == DateTimeOffset.MaxValue ? LmaxTimeInForce.GoodTilCancelled : LmaxTimeInForce.GoodForDay;
 					break;
 				case TimeInForce.MatchOrCancel:
 					tif = LmaxTimeInForce.FillOrKill;
@@ -149,7 +149,7 @@ namespace StockSharp.LMAX
 					throw new ArgumentOutOfRangeException();
 			}
 
-			var expiryDate = DateTimeOffset.MaxValue;
+			DateTimeOffset? expiryDate = null;
 			var tif = StockSharpTimeInForce.PutInQueue;
 
 			switch (lmaxOrder.TimeInForce)

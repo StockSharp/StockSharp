@@ -148,7 +148,7 @@ namespace StockSharp.Xaml
 					{
 						case null:
 						case TimeInForce.PutInQueue:
-							return expiryDate.Ticks;
+							return expiryDate == null ? long.MaxValue : expiryDate.Value.Ticks;
 						case TimeInForce.MatchOrCancel:
 							return 0;
 						case TimeInForce.CancelBalance:
@@ -344,19 +344,19 @@ namespace StockSharp.Xaml
 		object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
 			var tif = (TimeInForce?)values[0];
-			var expiryDate = (DateTimeOffset)values[1];
+			var expiryDate = (DateTimeOffset?)values[1];
 
 			switch (tif)
 			{
 				case null:
 				case TimeInForce.PutInQueue:
 				{
-					if (expiryDate == DateTimeOffset.MaxValue)
+					if (expiryDate == null || expiryDate == DateTimeOffset.MaxValue)
 						return "GTC";
 					else if (expiryDate == DateTimeOffset.Now.Date)
 						return "GTD";
 					else
-						return expiryDate.LocalDateTime.ToString("d");
+						return expiryDate.Value.LocalDateTime.ToString("d");
 				}
 				case TimeInForce.MatchOrCancel:
 					return "FOK";

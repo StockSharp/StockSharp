@@ -95,6 +95,9 @@ namespace StockSharp.BusinessEntities
 				if (_id == value)
 					return;
 
+				//if (_id != null)
+				//	throw new Exception();
+
 				_id = value;
 				NotifyChanged("Id");
 			}
@@ -114,6 +117,9 @@ namespace StockSharp.BusinessEntities
 			get { return _stringId; }
 			set
 			{
+				//if (!_stringId.IsEmpty() && !_stringId.CompareIgnoreCase(value))
+				//	throw new Exception();
+
 				_stringId = value;
 				NotifyChanged("StringId");
 			}
@@ -407,21 +413,20 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public OrderTypes Type { get; set; }
 
-		private DateTimeOffset _expiryDate = DateTimeOffset.MaxValue;
+		private DateTimeOffset? _expiryDate;
 
 		/// <summary>
-		/// Время экспирации заявки. По-умолчанию равно <see cref="DateTime.MaxValue"/>, что означает действие заявки до отмены (GTC).
+		/// Время экспирации заявки. По-умолчанию равно <see langword="null"/>, что означает действие заявки до отмены (GTC).
 		/// </summary>
 		/// <remarks>
-		/// Если значение равно <see cref="DateTime.Today"/>, то заявка выставляется сроком на текущую сессию.
-		/// Если значение равно <see cref="DateTime.MaxValue"/>, то заявка выставляется до отмены.
+		/// Если значение равно <see cref="DateTimeOffset.MaxValue"/>, то заявка выставляется до отмены.
 		/// Иначе, указывается конкретный срок.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
 		[DescriptionLoc(LocalizedStrings.Str142Key)]
 		[MainCategory]
-		public DateTimeOffset ExpiryDate
+		public DateTimeOffset? ExpiryDate
 		{
 			get { return _expiryDate; }
 			set

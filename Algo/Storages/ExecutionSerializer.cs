@@ -312,7 +312,7 @@ namespace StockSharp.Algo.Storages
 						writer.Write(msg.IsSystem.Value);
 				}
 
-				writer.WriteLong(msg.ExpiryDate.Ticks);
+				writer.WriteLong(msg.ExpiryDate != null ? msg.ExpiryDate.Value.Ticks : 0L);
 
 				WriteCommission(writer, metaInfo, msg.Commission);
 
@@ -432,7 +432,7 @@ namespace StockSharp.Algo.Storages
 				OrderStatus = status,
 				TimeInForce = timeInForce,
 				IsSystem = isSystem,
-				ExpiryDate = expDate.To<DateTimeOffset>(),
+				ExpiryDate = expDate == 0 ? (DateTimeOffset?)null : expDate.To<DateTimeOffset>(),
 				Commission = commission,
 				PortfolioName = portfolio,
 				UserOrderId = userOrderId,

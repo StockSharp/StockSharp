@@ -7,7 +7,6 @@ namespace StockSharp.Quik
 	using Ecng.Common;
 	using Ecng.Collections;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -863,14 +862,14 @@ namespace StockSharp.Quik
 		/// </summary>
 		/// <param name="time">Значение.</param>
 		/// <returns>Транзакция.</returns>
-		public Transaction SetExpiryDate(DateTimeOffset time)
+		public Transaction SetExpiryDate(DateTimeOffset? time)
 		{
-			if (time == DateTimeOffset.MaxValue)
+			if (time == null || time == DateTimeOffset.MaxValue)
 				return SetInstruction(ExpiryDate, "GTC");
-			else if (time.Date == DateTimeOffset.Now.Date)
+			else if (time.Value.Date == DateTimeOffset.Now.Date)
 				return SetInstruction(ExpiryDate, "TODAY");
 			else
-				return SetInstruction(ExpiryDate, time.ToLocalTime(TimeHelper.Moscow));
+				return SetInstruction(ExpiryDate, time.Value.ToLocalTime(TimeHelper.Moscow));
 		}
 
 		/// <summary>

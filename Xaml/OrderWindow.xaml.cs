@@ -197,7 +197,6 @@ namespace StockSharp.Xaml
 						break;
 					case OrderWindowTif.Gtc:
 						_order.TimeInForce = TimeInForce.PutInQueue;
-						_order.ExpiryDate = DateTimeOffset.MaxValue;
 						break;
 					case OrderWindowTif.Today:
 						_order.TimeInForce = TimeInForce.PutInQueue;
@@ -251,14 +250,14 @@ namespace StockSharp.Xaml
 				{
 					case TimeInForce.PutInQueue:
 					{
-						if (value.ExpiryDate == DateTimeOffset.MaxValue)
+						if (value.ExpiryDate == null || value.ExpiryDate == DateTimeOffset.MaxValue)
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
 						else if (value.ExpiryDate == DateTimeOffset.Now.Date.ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo))
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Today;
 						else
 						{
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtd;
-							ExpiryDate.Value = value.ExpiryDate == DateTimeOffset.MaxValue ? (DateTime?)null : value.ExpiryDate.Date;
+							ExpiryDate.Value = value.ExpiryDate == DateTimeOffset.MaxValue ? (DateTime?)null : value.ExpiryDate.Value.Date;
 							//throw new ArgumentOutOfRangeException("value", value.ExpiryDate, LocalizedStrings.Str1541);
 						}
 

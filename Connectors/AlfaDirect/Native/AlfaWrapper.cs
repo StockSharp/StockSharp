@@ -10,7 +10,6 @@ namespace StockSharp.AlfaDirect.Native
 
 	using Ecng.Common;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -229,9 +228,9 @@ namespace StockSharp.AlfaDirect.Native
 			var secCode = message.SecurityId.SecurityCode;
 			var account = message.PortfolioName.AccountFromPortfolioName(); // Портфель
 			var placeCode = _adapter.SecurityClassInfo.GetSecurityClass(message.SecurityType, message.SecurityId.BoardCode);
-			var endDate = (message.TillDate != DateTimeOffset.MaxValue
+			var endDate = (message.TillDate == null || message.TillDate == DateTimeOffset.MaxValue
 				? marketTime.Date.AddTicks(new TimeSpan(23, 55, 00).Ticks)
-				: message.TillDate).ToLocalTime(TimeHelper.Moscow); // Срок действия поручения.
+				: message.TillDate.Value).ToLocalTime(TimeHelper.Moscow); // Срок действия поручения.
 			var maxEndDate = DateTime.Now + TimeSpan.FromDays(365);
 			if (endDate > maxEndDate)
 				endDate = maxEndDate;

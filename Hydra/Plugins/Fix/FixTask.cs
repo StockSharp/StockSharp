@@ -100,6 +100,7 @@ namespace StockSharp.Hydra.Fix
 			return new MarketDataConnector<FixTrader>(EntityRegistry.Securities, this, () =>
 			{
 				var trader = new FixTrader();
+#warning TODO
 				trader.MarketDataAdapter.Load(_settings.MarketDataSession.Save());
 				return trader;
 			});

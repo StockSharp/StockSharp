@@ -135,10 +135,10 @@ namespace StockSharp.InteractiveBrokers
 					else
 						socket.Send(condition.GoodAfterTime, IBSocketHelper.TimeFormat);
 
-					if (message.TillDate == DateTimeOffset.MaxValue || socket.ServerVersion < ServerVersions.V12)
+					if (message.TillDate == null || message.TillDate == DateTimeOffset.MaxValue || socket.ServerVersion < ServerVersions.V12)
 						socket.Send(string.Empty);
 					else
-						socket.Send(message.TillDate, IBSocketHelper.TimeFormat);
+						socket.Send(message.TillDate.Value, IBSocketHelper.TimeFormat);
 
 					if (socket.ServerVersion >= ServerVersions.V13)
 					{
@@ -1083,7 +1083,7 @@ namespace StockSharp.InteractiveBrokers
 				Volume = volume,
 				Price = price,
 				Condition = ibCon,
-				ExpiryDate = orderExpiryDate ?? DateTimeOffset.MaxValue,
+				ExpiryDate = orderExpiryDate,
 				VisibleVolume = visibleVolume,
 				PortfolioName = portfolio,
 				Comment = comment,
@@ -1100,7 +1100,7 @@ namespace StockSharp.InteractiveBrokers
 					orderMsg.TimeInForce = TimeInForce.PutInQueue;
 					break;
 				case "GTC":
-					orderMsg.ExpiryDate = DateTimeOffset.MaxValue;
+					//orderMsg.ExpiryDate = DateTimeOffset.MaxValue;
 					break;
 				case "IOC":
 					orderMsg.TimeInForce = TimeInForce.CancelBalance;

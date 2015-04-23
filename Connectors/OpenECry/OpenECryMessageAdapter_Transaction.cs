@@ -119,18 +119,26 @@ namespace StockSharp.OpenECry
 			draft.Start = OEC.API.Version.MinimumStart;
 			draft.End = OEC.API.Version.MaximumEnd;
 
-			if (message.TimeInForce == TimeInForce.MatchOrCancel)
+			switch (message.TimeInForce)
 			{
-				draft.Flags = OrderFlags.FOK; // fill or kill
-			}
-			else if (message.ExpiryDate == DateTimeOffset.MaxValue)
-			{
-				draft.Flags = OrderFlags.GTC; // good till canceled
-			}
-			else if (message.ExpiryDate != DateTime.Today)
-			{
-				if (message.ExpiryDate != null)
-					draft.End = message.ExpiryDate.Value.UtcDateTime;
+				case null:
+				case TimeInForce.PutInQueue:
+				{
+					draft.Flags = OrderFlags.GTC;
+
+					if (message.ExpiryDate != null && message.ExpiryDate != DateTime.Today)
+						draft.End = message.ExpiryDate.Value.UtcDateTime;
+
+					break;
+				}
+				case TimeInForce.MatchOrCancel:
+					draft.Flags = OrderFlags.FOK;
+					break;
+				case TimeInForce.CancelBalance:
+					draft.Flags = OrderFlags.IOC;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 
 			if (message.VisibleVolume != null && message.VisibleVolume < message.Volume)
@@ -306,14 +314,17 @@ namespace StockSharp.OpenECry
 				case OrderFlags.FOK:
 					execMsg.TimeInForce = TimeInForce.MatchOrCancel;
 					break;
-				case OrderFlags.GTC:
-					execMsg.ExpiryDate = DateTimeOffset.MaxValue;
+				case OrderFlags.IOC:
+					execMsg.TimeInForce = TimeInForce.CancelBalance;
 					break;
-				default:
-					if (currVersion.End != OEC.API.Version.MaximumEnd)
-						execMsg.ExpiryDate = currVersion.End;
+				case OrderFlags.GTC:
+					execMsg.TimeInForce = TimeInForce.PutInQueue;
+					//execMsg.ExpiryDate = DateTimeOffset.MaxValue;
 					break;
 			}
+
+			if (currVersion.End != OEC.API.Version.MaximumEnd)
+				execMsg.ExpiryDate = currVersion.End.ApplyTimeZone(TimeHelper.Est);
 
 			if (execMsg.OrderType == OrderTypes.Conditional)
 			{

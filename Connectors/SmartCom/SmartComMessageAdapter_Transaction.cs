@@ -28,7 +28,7 @@ namespace StockSharp.SmartCom
 
 			_wrapper.RegisterOrder(
 				regMsg.PortfolioName, (string)regMsg.SecurityId.Native, regMsg.Side == Sides.Buy ? SmartOrderAction.Buy : SmartOrderAction.Sell,
-				regMsg.GetSmartOrderType(), regMsg.TillDate == DateTimeOffset.MaxValue ? SmartOrderValidity.Gtc : SmartOrderValidity.Day,
+				regMsg.GetSmartOrderType(), regMsg.TillDate == null || regMsg.TillDate == DateTimeOffset.MaxValue ? SmartOrderValidity.Gtc : SmartOrderValidity.Day,
 				(double)regMsg.Price, (int)regMsg.Volume, condition != null ? (double)condition.StopPrice : 0, (int)regMsg.TransactionId);
 		}
 
@@ -307,7 +307,7 @@ namespace StockSharp.SmartCom
 				OrderStatus = orderStatus,
 				OriginalTransactionId = transactionId,
 				OrderStringId = smartOrderId,
-				ExpiryDate = isOneDay ? DateTimeOffset.Now.Date.ApplyTimeZone(TimeHelper.Moscow) : DateTimeOffset.MaxValue,
+				ExpiryDate = isOneDay ? DateTimeOffset.Now.Date.ApplyTimeZone(TimeHelper.Moscow) : (DateTimeOffset?)null,
 				Condition = orderType == OrderTypes.Conditional ? new SmartComOrderCondition { StopPrice = stop } : null,
 				ExecutionType = ExecutionTypes.Order,
 			});

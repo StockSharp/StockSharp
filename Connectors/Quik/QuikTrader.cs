@@ -73,7 +73,8 @@ namespace StockSharp.Quik
 				Version = FixVersions.Fix44,
 				RequestAllSecurities = true,
 				MarketData = FixMarketData.MarketData,
-				UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+				UtcOffset = TimeHelper.Moscow.BaseUtcOffset,
+				IsTransactionEnabled = false,
 			};
 
 			IsDde = false;
