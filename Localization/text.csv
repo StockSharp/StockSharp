@@ -212,8 +212,8 @@ Str226;Stop-orders;Стоп-заявки
 Str227;Cancel stop-orders or normal.;Снимать стоп-заявки или обычные.
 Str228;Direction, for which orders have to be cancelled.;Направление, для которого необходимо снять заявки.
 Str229;Portfolio name, for which an order must be placed/cancelled.;Название портфеля, по которому необходимо выставить/снять заявку.
-Str231;Lifetime;Время жизни
-Str232;Limit order lifetime.;Время жизни лимитной заявки.
+Str231;Time in force;Время жизни
+Str232;Limit order time in force.;Время жизни лимитной заявки.
 Str233;REPO\REPO-M information;Информация РЕПО\РЕПО-М
 Str234;Information for REPO\REPO-M orders.;Информация для РЕПО\РЕПО-М заявок.
 Str235;Negotiate Trades Mode information;Информация РПС

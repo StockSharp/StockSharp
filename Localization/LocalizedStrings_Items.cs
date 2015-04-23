@@ -2785,12 +2785,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Lifetime
+		/// Time in force
 		/// </summary>
 		public const string Str231Key = "Str231";
 
 		/// <summary>
-		/// Lifetime
+		/// Time in force
 		/// </summary>
 		public static string Str231
 		{
@@ -2798,12 +2798,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Limit order lifetime.
+		/// Limit order time in force.
 		/// </summary>
 		public const string Str232Key = "Str232";
 
 		/// <summary>
-		/// Limit order lifetime.
+		/// Limit order time in force.
 		/// </summary>
 		public static string Str232
 		{
