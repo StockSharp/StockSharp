@@ -5,10 +5,21 @@
       <mediaLink>
         <image placement="left" xlink:href="hydra_settings_IB" />
       </mediaLink>
+      
+       <para><legacyBold>Interactive Brockers</legacyBold></para>
       <list class="bullet">
 		<listItem>
 			<legacyBold>Адрес</legacyBold> - адрес TWS.
 		</listItem>      
+		<listItem>
+          <legacyBold>Идентификатор</legacyBold> - уникальный идентификатор. Используется в случае подключения нескольких клиентов к одному терминалу или gateway.
+		</listItem>
+		<listItem>
+          <legacyBold>Уровень логирования</legacyBold> - уровень логирования сообщений сервера.
+		</listItem>
+		</list>
+		<para><legacyBold>Основные</legacyBold></para>
+	   <list class="bullet">
         <listItem>
           <legacyBold>Работать с</legacyBold> - время начала работы источника.
 		</listItem>
@@ -21,13 +32,27 @@
         <listItem>
           <legacyBold>Директория с данными</legacyBold> - директория с данными, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.
 		</listItem>
-        <listItem>
-          <legacyBold>Игнорировать ошибки</legacyBold> - игнорировать ошибки при сохранении данных. При наборе критического количества ошибок, источник не будет остановлен.
+		<listItem>
+          <legacyBold>Формат</legacyBold> - формат данных: BIN/CSV.
 		</listItem>
-        <listItem>
-          <legacyBold>Типы изменений</legacyBold> - типы изменений инструментов, которые будут сохраняться из данного источника.
-		</listItem>		
+		<listItem>
+          <legacyBold>Макс. ошибок</legacyBold> - максимальное количество ошибок по достижению которого задача будет остановлена. По умолчанию 0 - количество ошибок игнорируются.
+		</listItem>
+		<listItem>
+          <legacyBold>Зависимость</legacyBold> - задача, которая должна быть выполнена перед запуском текущей.
+		</listItem>
+		<listItem>
+          <legacyBold>Новости</legacyBold> - скачивать новости.
+		</listItem>
+		<listItem>
+          <legacyBold>Уровень логирования</legacyBold> - уровень логирования.
+		</listItem>
+		<listItem>
+          <legacyBold>Поля Level1</legacyBold> - поддерживаемые поля маркет-данных первого уровня.
+		</listItem>
       </list>
+      <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="2a908a19-0272-48e1-b143-df7ff9e2607c">AlfaDirect</link>) </para>
+    
     </introduction>
   </developerConceptualDocument>
 </topic>

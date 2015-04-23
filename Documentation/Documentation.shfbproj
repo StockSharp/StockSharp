@@ -568,10 +568,6 @@
       <ImageId>hydra_settings_server</ImageId>
       <AlternateText>hydra settings server</AlternateText>
     </Image>
-    <Image Include="Art\hydra_settings_ux.png">
-      <ImageId>hydra_settings_ux</ImageId>
-      <AlternateText>hydra settings ux</AlternateText>
-    </Image>
     <Image Include="Art\hydra_source_on_off.png">
       <ImageId>hydra_source_on_off</ImageId>
       <AlternateText>hydra source on off</AlternateText>
@@ -1028,10 +1024,6 @@
       <ImageId>hydra_settings_btce</ImageId>
       <AlternateText>hydra settings btce</AlternateText>
     </Image>
-    <Image Include="Art\hydra_settings_ducasсopy.png">
-      <ImageId>hydra_settings_ducasсopy</ImageId>
-      <AlternateText>hydra settings ducasсopy</AlternateText>
-    </Image>
     <Image Include="Art\hydra_settings_finviz.png">
       <ImageId>hydra_settings_finviz</ImageId>
       <AlternateText>hydra settings finviz</AlternateText>
@@ -1083,6 +1075,18 @@
     <Image Include="Art\QuikLua.png">
       <ImageId>QuikLua</ImageId>
       <AlternateText>Quik Lua</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_ux_ftp.png">
+      <ImageId>hydra_settings_ux_ftp</ImageId>
+      <AlternateText>hydra settings ux ftp</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_ux_site.png">
+      <ImageId>hydra_settings_ux_site</ImageId>
+      <AlternateText>hydra settings ux site</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_ducascopy.png">
+      <ImageId>hydra_settings_ducascopy</ImageId>
+      <AlternateText>hydra settings ducascopy</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
