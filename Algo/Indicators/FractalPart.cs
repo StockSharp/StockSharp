@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Часть <see cref="Fractals"/>.
 	/// </summary>
-	public class FractalPart : BaseIndicator<ShiftedIndicatorValue>
+	public class FractalPart : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="FractalPart"/>.

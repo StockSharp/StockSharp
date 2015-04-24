@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>

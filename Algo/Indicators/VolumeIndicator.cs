@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -11,13 +10,12 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("Volume")]
 	[DescriptionLoc(LocalizedStrings.Str756Key)]
-	public class VolumeIndicator : BaseIndicator<IIndicatorValue>
+	public class VolumeIndicator : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="VolumeIndicator"/>.
 		/// </summary>
 		public VolumeIndicator()
-			: base(typeof(Candle))
 		{
 		}
 

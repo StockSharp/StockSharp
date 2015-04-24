@@ -7,7 +7,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -15,7 +14,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("VolumeProfile")]
 	[DescriptionLoc(LocalizedStrings.Str729Key)]
-	public class VolumeProfileIndicator : BaseIndicator<IIndicatorValue>
+	public class VolumeProfileIndicator : BaseIndicator
 	{
 		private readonly Dictionary<decimal, decimal> _levels = new Dictionary<decimal, decimal>();
 
@@ -23,7 +22,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="StockSharp.Algo.Indicators.VolumeProfileIndicator"/>.
 		/// </summary>
 		public VolumeProfileIndicator()
-			: base(typeof(Candle))
 		{
 			Step = 1;
 		}

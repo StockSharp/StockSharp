@@ -128,7 +128,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="JurikMovingAverage"/>.
 		/// </summary>
 		public JurikMovingAverage()
-			: base(typeof(decimal))
 		{
 			Initialize();
 		}

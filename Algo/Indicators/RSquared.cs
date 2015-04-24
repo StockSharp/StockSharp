@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="RSquared"/>.
 		/// </summary>
 		public RSquared()
-			: base(typeof(decimal))
 		{
 			Length = 10;
 		}

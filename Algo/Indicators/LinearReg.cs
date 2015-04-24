@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="LinearReg"/>.
 		/// </summary>
 		public LinearReg()
-			: base(typeof(decimal))
 		{
 			Length = 11;
 		}

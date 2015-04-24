@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -14,7 +13,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("MFI")]
 	[DescriptionLoc(LocalizedStrings.Str853Key)]
-	public class MarketFacilitationIndex : BaseIndicator<decimal>
+	public class MarketFacilitationIndex : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="MarketFacilitationIndex"/>.

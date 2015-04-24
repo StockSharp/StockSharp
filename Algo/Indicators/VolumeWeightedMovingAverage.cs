@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -27,7 +26,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать индикатор <see cref="VolumeWeightedMovingAverage"/>.
 		/// </summary>
 		public VolumeWeightedMovingAverage()
-			: base(typeof(Candle))
 		{
 			Length = 32;
 		}

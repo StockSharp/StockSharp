@@ -77,7 +77,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="NickRypockTrailingReverse"/>.
 		/// </summary>
 		public NickRypockTrailingReverse()
-			: base(typeof(decimal))
 		{
 			Мultiple = 100;
 			Length = 50;

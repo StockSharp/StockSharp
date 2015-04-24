@@ -5,11 +5,9 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Candles;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Индикатор Замедления / Ускорения.
@@ -19,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("A/D")]
 	[DescriptionLoc(LocalizedStrings.Str835Key)]
-	public class Acceleration : BaseIndicator<decimal>
+	public class Acceleration : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="Acceleration"/>.
@@ -35,7 +33,6 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="ao">Чудесный осцилятор.</param>
 		/// <param name="sma">Cкользящая средняя.</param>
 		public Acceleration(AwesomeOscillator ao, SimpleMovingAverage sma)
-			: base(typeof(Candle))
 		{
 			if (ao == null)
 				throw new ArgumentNullException("ao");

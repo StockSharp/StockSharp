@@ -3,7 +3,9 @@ namespace StockSharp.Algo.Indicators
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
+
 	using Ecng.Collections;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -19,7 +21,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="WeightedMovingAverage"/>.
 		/// </summary>
 		public WeightedMovingAverage()
-			: base(typeof(decimal))
 		{
 			Length = 32;
 		}

@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("PeakBar")]
 	[DescriptionLoc(LocalizedStrings.Str817Key)]
-	public class PeakBar : BaseIndicator<decimal>
+	public class PeakBar : BaseIndicator
 	{
 		private decimal _currentMaximum = decimal.MinValue;
 
@@ -29,7 +29,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="PeakBar"/>.
 		/// </summary>
 		public PeakBar()
-			: base(typeof(Candle))
 		{
 		}
 

@@ -6,9 +6,9 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Индекса направленного движения Welles Wilder.

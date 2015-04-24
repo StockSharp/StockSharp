@@ -16,7 +16,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="QStick"/>.
 		/// </summary>
 		public QStick()
-			: base(typeof(Candle))
 		{
 			_sma = new SimpleMovingAverage();
 			Length = 15;

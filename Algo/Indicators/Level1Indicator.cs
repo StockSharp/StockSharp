@@ -4,7 +4,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -12,7 +11,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.SecurityKey)]
 	[DescriptionLoc(LocalizedStrings.Str747Key)]
-	public class Level1Indicator : BaseIndicator<decimal>
+	public class Level1Indicator : BaseIndicator
 	{
 		/// <summary>
 		/// Поле маркет-данных первого уровня, которое используется как значение индикатора.

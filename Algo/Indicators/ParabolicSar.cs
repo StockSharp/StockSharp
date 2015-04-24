@@ -8,7 +8,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -19,7 +18,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Parabolic SAR")]
 	[DescriptionLoc(LocalizedStrings.Str809Key)]
-	public class ParabolicSar : BaseIndicator<decimal>
+	public class ParabolicSar : BaseIndicator
 	{
 		private decimal _prevValue;
 		private readonly List<Candle> _candles = new List<Candle>();
@@ -37,7 +36,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="ParabolicSar"/>.
 		/// </summary>
 		public ParabolicSar()
-			: base(typeof(Candle))
 		{
 			Acceleration = 0.02M;
 			AccelerationStep = 0.02M;

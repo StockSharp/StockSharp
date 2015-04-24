@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System;
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -71,16 +72,6 @@ namespace StockSharp.Algo.Indicators
 			TrueRange.Reset();
 		}
 
-		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return TrueRange.CanProcess(input) && MovingAverage.CanProcess(input);
-		}
-		
 		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>

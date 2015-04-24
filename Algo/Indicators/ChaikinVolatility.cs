@@ -5,10 +5,9 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Волатильность Чайкина.
@@ -19,7 +18,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("Chaikin's Volatility")]
 	[DescriptionLoc(LocalizedStrings.Str730Key)]
-	public class ChaikinVolatility : BaseIndicator<IIndicatorValue>
+	public class ChaikinVolatility : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="ChaikinVolatility"/>.

@@ -17,7 +17,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="WilderMovingAverage"/>.
 		/// </summary>
 		public WilderMovingAverage()
-			: base(typeof(decimal))
 		{
 			Length = 32;
 		}

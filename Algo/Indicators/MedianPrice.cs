@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -11,13 +10,12 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("MedianPrice")]
 	[DescriptionLoc(LocalizedStrings.Str745Key)]
-	public class MedianPrice : BaseIndicator<decimal>
+	public class MedianPrice : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="MedianPrice"/>.
 		/// </summary>
 		public MedianPrice()
-			: base(typeof(Candle))
 		{
 		}
 

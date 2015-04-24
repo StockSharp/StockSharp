@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -45,16 +44,6 @@ namespace StockSharp.Algo.Indicators
 		{
 			_high.Length = _low.Length = Length;
 			base.Reset();
-		}
-
-		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return _low.CanProcess(input);
 		}
 
 		/// <summary>

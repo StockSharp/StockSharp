@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("TroughBar")]
 	[DescriptionLoc(LocalizedStrings.Str822Key)]
-	public class TroughBar : BaseIndicator<decimal>
+	public class TroughBar : BaseIndicator
 	{
 		private decimal _currentMinimum = decimal.MaxValue;
 		private int _currentBarCount;
@@ -27,7 +27,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="TroughBar"/>.
 		/// </summary>
 		public TroughBar()
-			: base(typeof(Candle))
 		{
 		}
 

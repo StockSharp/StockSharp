@@ -326,7 +326,6 @@
     <Compile Include="IndexSecurity.cs" />
     <Compile Include="Indicators\BaseComplexIndicator.cs" />
     <Compile Include="Indicators\BaseIndicator.cs" />
-    <Compile Include="Indicators\ComplexIndicatorValue.cs" />
     <Compile Include="Indicators\IComplexIndicator.cs" />
     <Compile Include="Indicators\IIndicator.cs" />
     <Compile Include="Indicators\IIndicatorContainer.cs" />

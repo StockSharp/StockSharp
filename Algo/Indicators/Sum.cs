@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 	using System.Linq;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -15,7 +16,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="Sum"/>.
 		/// </summary>
 		public Sum()
-			: base(typeof(decimal))
 		{
 			Length = 15;
 		}

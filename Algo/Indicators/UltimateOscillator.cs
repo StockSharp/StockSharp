@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -15,7 +14,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("UltimateOsc")]
 	[DescriptionLoc(LocalizedStrings.Str776Key)]
-	public class UltimateOscillator : BaseIndicator<decimal>
+	public class UltimateOscillator : BaseIndicator
 	{
 		private const decimal _stoProcentov = 100m;
 
@@ -41,7 +40,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать индикатор<see cref="UltimateOscillator"/>.
 		/// </summary>		
 		public UltimateOscillator()
-			: base(typeof(Candle))
 		{
 			_period7BpSum = new Sum { Length = _period7 };
 			_period14BpSum = new Sum { Length = _period14 };

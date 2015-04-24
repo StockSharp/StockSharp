@@ -6,34 +6,19 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
+
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Базовый индикатор.
 	/// </summary>
-	/// <typeparam name="TResult">Тип результирующего значение, которое возвращается через метод <see cref="OnProcess"/>.</typeparam>
-	public abstract class BaseIndicator<TResult> : Cloneable<IIndicator>, IIndicator
+	public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	{
-		private readonly Type _valueType;
-
 		/// <summary>
-		/// Инициализировать <see cref="BaseIndicator{TResult}"/>, который работает с данными типа <see cref="decimal"/>.
+		/// Инициализировать <see cref="BaseIndicator"/>, который работает с данными типа <see cref="decimal"/>.
 		/// </summary>
 		protected BaseIndicator()
-			: this(typeof(decimal))
 		{
-		}
-
-		/// <summary>
-		/// Инициализировать <see cref="BaseIndicator{TResult}"/>.
-		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		protected BaseIndicator(Type valueType)
-		{
-			if (valueType == null)
-				throw new ArgumentNullException("valueType");
-
-			_valueType = valueType;
 			_name = GetType().GetDisplayName();
 		}
 
@@ -126,19 +111,6 @@ namespace StockSharp.Algo.Indicators
 		public event Action Reseted;
 
 		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public virtual bool CanProcess(IIndicatorValue input)
-		{
-			if (_valueType == null)
-				throw new InvalidOperationException(LocalizedStrings.Str909);
-
-			return input.IsSupport(_valueType);
-		}
-
-		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>
 		/// <param name="input">Входное значение.</param>
@@ -152,12 +124,7 @@ namespace StockSharp.Algo.Indicators
 
 			if (input.IsFinal)
 			{
-				if (result is ComplexIndicatorValue)
-					((ComplexIndicatorValue)result).IsFinal = input.IsFinal;
-
-				if (result is SingleIndicatorValue<TResult>)
-					((SingleIndicatorValue<TResult>)result).IsFinal = input.IsFinal;
-
+				result.IsFinal = input.IsFinal;
 				Container.AddValue(input, result);
 			}
 

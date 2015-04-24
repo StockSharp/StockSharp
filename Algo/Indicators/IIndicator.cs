@@ -41,13 +41,6 @@
 		event Action Reseted;
 
 		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		bool CanProcess(IIndicatorValue input);
-
-		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>
 		/// <param name="input">Входное значение.</param>

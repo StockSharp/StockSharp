@@ -7,7 +7,7 @@
 	/// <summary>
 	/// Гистограмма осцилятора <see cref="GatorOscillator"/>.
 	/// </summary>
-	public class GatorHistogram : BaseIndicator<decimal>
+	public class GatorHistogram : BaseIndicator
 	{
 		private readonly AlligatorLine _line1;
 		private readonly AlligatorLine _line2;

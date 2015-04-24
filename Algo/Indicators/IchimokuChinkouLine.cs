@@ -11,7 +11,6 @@
 		/// Создать <see cref="IchimokuChinkouLine"/>.
 		/// </summary>
 		public IchimokuChinkouLine()
-			: base(typeof(Candle))
 		{
 		}
 

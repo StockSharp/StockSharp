@@ -21,7 +21,6 @@
 		/// </summary>
 		/// <param name="kijun">Линия Kijun.</param>
 		public IchimokuSenkouBLine(IchimokuLine kijun)
-			: base(typeof(Candle))
 		{
 			if (kijun == null)
 				throw new ArgumentNullException("kijun");

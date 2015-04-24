@@ -5,16 +5,16 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Схождение/расхождение скользящих средних.
 	/// </summary>
 	[DisplayName("MACD")]
 	[DescriptionLoc(LocalizedStrings.Str797Key)]
-	public class MovingAverageConvergenceDivergence : BaseIndicator<decimal>
+	public class MovingAverageConvergenceDivergence : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="MovingAverageConvergenceDivergence"/>.

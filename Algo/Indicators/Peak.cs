@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -34,7 +35,7 @@ namespace StockSharp.Algo.Indicators
 					return value;
 				}
 
-				var lastValue = this.GetCurrentValue();
+				var lastValue = this.GetCurrentValue<ShiftedIndicatorValue>();
 				IsFormed = !lastValue.IsEmpty;
 				return IsFormed ? new ShiftedIndicatorValue(this, lastValue.Shift + 1, lastValue.Value) : lastValue;
 			}

@@ -7,7 +7,7 @@
 	/// <summary>
 	/// Полоса Боллинджера.
 	/// </summary>
-	public class BollingerBand : BaseIndicator<decimal>
+	public class BollingerBand : BaseIndicator
 	{
 		private readonly LengthIndicator<decimal> _ma;
 		private readonly StandardDeviation _dev;

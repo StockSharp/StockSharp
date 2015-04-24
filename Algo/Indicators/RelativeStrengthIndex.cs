@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -19,7 +20,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="RelativeStrengthIndex"/>.
 		/// </summary>
 		public RelativeStrengthIndex()
-			: base(typeof(decimal))
 		{
 			_gain = new SmoothedMovingAverage();
 			_loss = new SmoothedMovingAverage();

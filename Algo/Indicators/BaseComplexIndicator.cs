@@ -28,7 +28,7 @@
 	/// <summary>
 	/// Базовый индикатор, который строится ввиде комбинации нескольких индикаторов.
 	/// </summary>
-	public abstract class BaseComplexIndicator : BaseIndicator<ComplexIndicatorValue>, IComplexIndicator
+	public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="BaseComplexIndicator"/>.
@@ -70,16 +70,6 @@
 		public override bool IsFormed
 		{
 			get { return InnerIndicators.All(i => i.IsFormed); }
-		}
-
-		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return InnerIndicators.All(i => i.CanProcess(input));
 		}
 
 		/// <summary>

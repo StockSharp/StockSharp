@@ -3,8 +3,6 @@
 	using System;
 	using System.ComponentModel;
 
-	using StockSharp.Algo.Candles;
-
 	/// <summary>
 	/// Линия Senkou Span A.
 	/// </summary>
@@ -16,7 +14,6 @@
 		/// <param name="tenkan">Линия Tenkan.</param>
 		/// <param name="kijun">Линия Kijun.</param>
 		public IchimokuSenkouALine(IchimokuLine tenkan, IchimokuLine kijun)
-			: base(typeof(Candle))
 		{
 			if (tenkan == null)
 				throw new ArgumentNullException("tenkan");
@@ -61,7 +58,7 @@
 			if (Tenkan.IsFormed && Kijun.IsFormed)
 			{
 				if (input.IsFinal)
-					Buffer.Add((Tenkan.GetCurrentValue() + Kijun.GetCurrentValue())/2);
+					Buffer.Add((Tenkan.GetCurrentValue() + Kijun.GetCurrentValue()) / 2);
 
 				if (IsFormed)
 					result = Buffer[0];
