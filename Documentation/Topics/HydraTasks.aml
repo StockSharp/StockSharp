@@ -3,22 +3,27 @@
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     	<para>Задача - повторяющееся действие в определенное время.</para>
-    	<para>Для того чтобы просмотреть список задач, необходимо в левой панели выбрать соответсвующий пунк. 
+    	<para>Для того чтобы просмотреть список задач, необходимо в левой панели выбрать пункт <mediaLinkInline>
+<image xlink:href="hydra_tasks_option"/></mediaLinkInline>. 
     	Работа с задачами идет точно также как и с источниками - задачу можно добавит, удалить, редактировать, включить/выключить.</para>
-    	<para>На теущий момент в <token>hydra</token>  доступны следующие задачи:</para>
+    	<mediaLink>
+        <image placement="left" xlink:href="hydra_tasks" />
+      </mediaLink>
+    	<para>На теущий момент в <token>hydra</token> существуют два класса задач:</para>
     	
       <list class="bullet">
         <listItem>
           <para>
-            Экспорт свечек - задача предназначена для экспорта свечек в txt формат.
+            <link xlink:href="272eef99-c7e4-4245-ae83-7efa4d2345bc"><legacyBold>Конвертер</legacyBold></link> - задача предназначена для конвертации биржевых данных в тики, свечи или стаканы.
           </para>
         </listItem>
         <listItem>
           <para>
-            ОрдерЛог в свечки - задача предназначена для конвертации ОрдерЛога в ТФ свечки.
+            <link xlink:href="9e075b32-abb2-4fad-bfb2-b822dd7d9f30"><legacyBold>Экспорт (авто)</legacyBold></link> - задача предназначена для экспорта свечей в различные форматы.
           </para>
         </listItem>
       </list> 
     </introduction>
   </developerWalkthroughDocument>
 </topic>
+

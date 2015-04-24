@@ -172,20 +172,26 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraSettingsBtce.aml" />
+    <None Include="Topics\HydraSettingsOanda.aml" />
+    <None Include="Topics\HydraSettingsSterling.aml" />
+    <None Include="Topics\HydraSettingsBitStamp.aml" />
+    <None Include="Topics\HydraTasksExport.aml" />
+    <None Include="Topics\HydraTasksConverter.aml" />
     <None Include="Topics\QuikLua.aml" />
-    <None Include="Topics\RSS.aml" />
-    <None Include="Topics\Rithmic.aml" />
-    <None Include="Topics\MFD.aml" />
+    <None Include="Topics\HydraSettingsRSS.aml" />
+    <None Include="Topics\HydraSettingsRithmic.aml" />
+    <None Include="Topics\HydraSettingsMFD.aml" />
     <None Include="Topics\Title.aml" />
-    <None Include="Topics\YahooFinance.aml" />
-    <None Include="Topics\Google.aml" />
-    <None Include="Topics\TrueFX.aml" />
-    <None Include="Topics\MBTrading.aml" />
-    <None Include="Topics\GainCapital.aml" />
-    <None Include="Topics\DukasCopy.aml" />
-    <None Include="Topics\Alor.aml" />
-    <None Include="Topics\Quandl.aml" />
-    <None Include="Topics\FinViz.aml" />
+    <None Include="Topics\HydraSettingsYahoo.aml" />
+    <None Include="Topics\HydraSettingsGoogle.aml" />
+    <None Include="Topics\HydraSettingsTrueFX.aml" />
+    <None Include="Topics\HydraSettingsMBTrading.aml" />
+    <None Include="Topics\HydraSettingsGainCapital.aml" />
+    <None Include="Topics\HydraSettingsDukas.aml" />
+    <None Include="Topics\HydraSettingsAlor.aml" />
+    <None Include="Topics\HydraSettingsQuandl.aml" />
+    <None Include="Topics\HydraSettingsFinViz.aml" />
     <None Include="Topics\Fix.aml" />
     <None Include="Topics\BitStamp.aml" />
     <None Include="Topics\Btce.aml" />
@@ -1087,6 +1093,26 @@
     <Image Include="Art\hydra_settings_ducascopy.png">
       <ImageId>hydra_settings_ducascopy</ImageId>
       <AlternateText>hydra settings ducascopy</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks.png">
+      <ImageId>hydra_tasks</ImageId>
+      <AlternateText>hydra tasks</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_option.png">
+      <ImageId>hydra_tasks_option</ImageId>
+      <AlternateText>hydra tasks option</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_converter.png">
+      <ImageId>hydra_tasks_converter</ImageId>
+      <AlternateText>hydra tasks converter</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_export.png">
+      <ImageId>hydra_tasks_export</ImageId>
+      <AlternateText>hydra tasks export</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_connstring.png">
+      <ImageId>hydra_tasks_connstring</ImageId>
+      <AlternateText>hydra tasks connstring</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
