@@ -32,7 +32,7 @@ namespace StockSharp.Algo.Indicators
 
 			var retVal = message.Changes.TryGetValue(Field);
 
-			if (!IsFormed && retVal != null)
+			if (!IsFormed && retVal != null && input.IsFinal)
 				IsFormed = true;
 
 			return retVal == null ? new DecimalIndicatorValue(this) : new DecimalIndicatorValue(this, (decimal)retVal);

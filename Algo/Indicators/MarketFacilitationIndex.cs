@@ -29,11 +29,13 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>Результирующее значение.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			IsFormed = true;
 			var candle = input.GetValue<Candle>();
 
 			if (candle.TotalVolume == 0)
 				return new DecimalIndicatorValue(this);
+
+			if (input.IsFinal)
+				IsFormed = true;
 
 			return new DecimalIndicatorValue(this, (candle.HighPrice - candle.LowPrice) / candle.TotalVolume);
 		}

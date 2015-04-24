@@ -104,7 +104,8 @@ namespace StockSharp.Algo.Indicators
 			if (_afIncreased && _prevBar != _candles.Count)
 				_afIncreased = false;
 
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
 
 			var value = _prevValue;
 

@@ -20,20 +20,15 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
-		/// </summary>
-		public override bool IsFormed
-		{
-			get { return true; }
-		}
-
-		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>
 		/// <param name="input">Входное значение.</param>
 		/// <returns>Результирующее значение.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return new CandleIndicatorValue(this, input.GetValue<Candle>(), c => c.TotalVolume);
 		}
 	}

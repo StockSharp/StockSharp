@@ -21,7 +21,9 @@
 		/// <returns>Результирующее значение.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return input.To<ShiftedIndicatorValue>();
 		}
 	}

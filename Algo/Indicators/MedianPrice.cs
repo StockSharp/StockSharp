@@ -20,14 +20,6 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
-		/// </summary>
-		public override bool IsFormed
-		{
-			get { return true; }
-		}
-
-		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>
 		/// <param name="input">Входное значение.</param>
@@ -35,6 +27,10 @@ namespace StockSharp.Algo.Indicators
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
+
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return new DecimalIndicatorValue(this, (candle.HighPrice + candle.LowPrice) / 2);
 		}
 	}

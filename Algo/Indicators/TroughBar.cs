@@ -70,7 +70,9 @@ namespace StockSharp.Algo.Indicators
 				}
 				else if (candle.HighPrice >= _currentMinimum + ReversalAmount.Value)
 				{
-					IsFormed = true;
+					if (input.IsFinal)
+						IsFormed = true;
+
 					return new DecimalIndicatorValue(this, _valueBarCount);
 				}
 

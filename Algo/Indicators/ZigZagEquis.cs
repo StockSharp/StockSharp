@@ -199,7 +199,9 @@ namespace StockSharp.Algo.Indicators
 			if (valuesCount != 2)
 				return Container.Count > 1 ? this.GetCurrentValue<ShiftedIndicatorValue>() : new ShiftedIndicatorValue(this);
 
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
+
 			CurrentValue = last;
 
 			return new ShiftedIndicatorValue(this, valueId - 1, input.SetValue(this, lastButOne));

@@ -380,7 +380,9 @@ namespace StockSharp.Algo.Indicators
 			if (valuesCount != 2)
 				return new DecimalIndicatorValue(this);
 
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
+
 			LastValueShift = valueId - 1;
 
 			CurrentValue = _currentValue(_buffer[0]);

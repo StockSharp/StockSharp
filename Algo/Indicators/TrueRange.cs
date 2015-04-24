@@ -59,7 +59,8 @@ namespace StockSharp.Algo.Indicators
 
 			if (_prevCandle != null)
 			{
-				IsFormed = true;
+				if (input.IsFinal)
+					IsFormed = true;
 
 				var priceMovements = GetPriceMovements(candle, _prevCandle);
 

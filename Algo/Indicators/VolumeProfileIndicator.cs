@@ -27,14 +27,6 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сформирован ли индикатор.
-		/// </summary>
-		public override bool IsFormed
-		{
-			get { return true; }
-		}
-
-		/// <summary>
 		/// Шаг группировки.
 		/// </summary>
 		public decimal Step { get; set; }
@@ -55,6 +47,8 @@ namespace StockSharp.Algo.Indicators
 
 			if (!input.IsFinal)
 				return result;
+
+			IsFormed = true;
 
 			var candle = input.GetValue<Candle>();
 
