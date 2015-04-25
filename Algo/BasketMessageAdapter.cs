@@ -95,7 +95,7 @@ namespace StockSharp.Algo
 
 		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter> _subscriptions = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter>();
-		private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
+		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly CachedSynchronizedList<IMessageAdapter> _connectedAdapters = new CachedSynchronizedList<IMessageAdapter>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _enabledAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 
@@ -192,7 +192,7 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					_adapterStates.Clear();
+					//_adapterStates.Clear();
 					_connectedAdapters.Clear();
 					_enabledAdapters.Clear();
 					_subscriptionQueue.Clear();
@@ -212,7 +212,7 @@ namespace StockSharp.Algo
 					break;
 
 				case MessageTypes.Disconnect:
-					_adapterStates.Clear();
+					//_adapterStates.Clear();
 					_connectedAdapters.Cache.ForEach(a => a.SendInMessage(message));
 					break;
 
@@ -435,34 +435,35 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				this.AddErrorLog(LocalizedStrings.Str625Params, innerAdapter.GetType().Name, message.Error);
 
-			var error = message.Error;
-			bool canProcess;
+			//var error = message.Error;
+			//bool canProcess;
 
-			var isConnected = error == null;
+			//var isConnected = error == null;
 
 			_connectedAdapters.Add(_enabledAdapters[innerAdapter]);
 
-			lock (_adapterStates.SyncRoot)
-			{
-				_adapterStates[innerAdapter] = RefTuple.Create(isConnected, message.Error);
+			//lock (_adapterStates.SyncRoot)
+			//{
+			//	_adapterStates[innerAdapter] = RefTuple.Create(isConnected, message.Error);
 
-				if (_adapterStates.Count == _enabledAdapters.Count)
-				{
-					canProcess = true;
+			//	if (_adapterStates.Count == _enabledAdapters.Count)
+			//	{
+			//		canProcess = true;
 
-					var errors = _adapterStates.Values.Select(p => p.Second).Where(e => e != null).ToArray();
+			//		var errors = _adapterStates.Values.Select(p => p.Second).Where(e => e != null).ToArray();
 
-					if (errors.Length > 0)
-						error = new AggregateException(LocalizedStrings.Str626, errors);
-				}
-				else
-				{
-					canProcess = isConnected;
-				}
-			}
+			//		if (errors.Length > 0)
+			//			error = new AggregateException(LocalizedStrings.Str626, errors);
+			//	}
+			//	else
+			//	{
+			//		canProcess = isConnected;
+			//	}
+			//}
 
-			if (canProcess)
-				SendOutMessage(new ConnectMessage { Error = error, Adapter = innerAdapter, LocalTime = message.LocalTime });
+			//if (canProcess)
+			message.Adapter = innerAdapter;
+			SendOutMessage(message);
 		}
 
 		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
@@ -470,26 +471,27 @@ namespace StockSharp.Algo
 			if (message.Error != null)
 				this.AddErrorLog(LocalizedStrings.Str627Params, innerAdapter.GetType().Name, message.Error);
 
-			var error = message.Error;
-			var canProcess = false;
+			//var error = message.Error;
+			//var canProcess = false;
 
-			lock (_adapterStates.SyncRoot)
-			{
-				_adapterStates[innerAdapter] = RefTuple.Create(false, message.Error);
+			//lock (_adapterStates.SyncRoot)
+			//{
+			//	_adapterStates[innerAdapter] = RefTuple.Create(false, message.Error);
 
-				if (_adapterStates.Count == _connectedAdapters.Cache.Length)
-				{
-					var errors = _adapterStates.Values.Select(p => p.Second).Where(e => e != null).ToArray();
+			//	if (_adapterStates.Count == _connectedAdapters.Cache.Length)
+			//	{
+			//		var errors = _adapterStates.Values.Select(p => p.Second).Where(e => e != null).ToArray();
 
-					if (errors.Length > 0)
-						error = new AggregateException(LocalizedStrings.Str628, errors);
+			//		if (errors.Length > 0)
+			//			error = new AggregateException(LocalizedStrings.Str628, errors);
 
-					canProcess = true;
-				}
-			}
+			//		canProcess = true;
+			//	}
+			//}
 
-			if (canProcess)
-				SendOutMessage(new DisconnectMessage { Error = error, Adapter = innerAdapter, LocalTime = message.LocalTime });
+			//if (canProcess)
+			message.Adapter = innerAdapter;
+			SendOutMessage(message);
 		}
 
 		private void ProcessSubscriptionAction(IEnumerator<IMessageAdapter> enumerator, MarketDataMessage message)
