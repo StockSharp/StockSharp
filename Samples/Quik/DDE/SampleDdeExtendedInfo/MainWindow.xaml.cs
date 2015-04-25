@@ -81,7 +81,7 @@ namespace SampleDdeExtendedInfo
 
 						Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 
-						Trader.ProcessDataError += error => System.Diagnostics.Debug.WriteLine(error);
+						Trader.Error += error => System.Diagnostics.Debug.WriteLine(error);
 
 						// добавляем на экспорт необходимые колонки
 						Trader.SecuritiesTable.Columns.Add(DdeSecurityColumns.ImpliedVolatility);

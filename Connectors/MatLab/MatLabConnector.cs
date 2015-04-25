@@ -38,7 +38,7 @@
 			RealConnector.Connected += RealTraderOnConnected;
 			RealConnector.ConnectionError += RealTraderOnConnectionError;
 			RealConnector.Disconnected += RealTraderOnDisconnected;
-			RealConnector.ProcessDataError += RealTraderOnProcessDataError;
+			RealConnector.Error += RealTraderOnError;
 			RealConnector.MarketTimeChanged += RealTraderOnMarketTimeChanged;
 			RealConnector.NewSecurities += RealTraderOnNewSecurities;
 			RealConnector.SecuritiesChanged += RealTraderOnSecuritiesChanged;
@@ -86,7 +86,7 @@
 		/// <summary>
 		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
 		/// </summary>
-		public event EventHandler<ErrorEventArgs> ProcessDataError;
+		public event EventHandler<ErrorEventArgs> Error;
 
 		/// <summary>
 		/// Событие, сигнализирующее об изменении текущего времени на площадках <see cref="IConnector.ExchangeBoards"/>.
@@ -194,9 +194,9 @@
 			NewMyTrades.SafeInvoke(this, new MyTradesEventArgs(trades));
 		}
 
-		private void RealTraderOnProcessDataError(Exception exception)
+		private void RealTraderOnError(Exception exception)
 		{
-			ProcessDataError.SafeInvoke(this, new ErrorEventArgs(exception));
+			Error.SafeInvoke(this, new ErrorEventArgs(exception));
 		}
 
 		private void RealTraderOnStopOrdersCancelFailed(IEnumerable<OrderFail> fails)
@@ -317,7 +317,7 @@
 			RealConnector.Connected -= RealTraderOnConnected;
 			RealConnector.ConnectionError -= RealTraderOnConnectionError;
 			RealConnector.Disconnected -= RealTraderOnDisconnected;
-			RealConnector.ProcessDataError -= RealTraderOnProcessDataError;
+			RealConnector.Error -= RealTraderOnError;
 			RealConnector.MarketTimeChanged -= RealTraderOnMarketTimeChanged;
 			RealConnector.NewSecurities -= RealTraderOnNewSecurities;
 			RealConnector.SecuritiesChanged -= RealTraderOnSecuritiesChanged;

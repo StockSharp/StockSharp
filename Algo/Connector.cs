@@ -211,7 +211,7 @@ namespace StockSharp.Algo
 			_securityProvider = new ConnectorSecurityProvider(this);
 			SlippageManager = new SlippageManager();
 
-			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseProcessDataError);
+			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
 
 			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
 			Adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
@@ -483,9 +483,9 @@ namespace StockSharp.Algo
 		public bool UpdateSecurityByLevel1 { get; set; }
 
 		/// <summary>
-		/// Число ошибок, переданное через событие <see cref="ProcessDataError"/>.
+		/// Число ошибок, переданное через событие <see cref="Error"/>.
 		/// </summary>
-		public int DataErrorCount { get; private set; }
+		public int ErrorCount { get; private set; }
 
 		///// <summary>
 		///// Временной сдвиг от текущего времени. Используется в случае, если сервер брокера самостоятельно

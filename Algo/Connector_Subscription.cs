@@ -538,7 +538,7 @@ namespace StockSharp.Algo
 			//	}
 			//	catch (Exception ex)
 			//	{
-			//		_connector.RaiseProcessDataError(ex);
+			//		_connector.RaiseError(ex);
 			//	}
 
 			//	RegisteredSecurities.ForEach(s => _connector.OnRegisterSecurity(s));

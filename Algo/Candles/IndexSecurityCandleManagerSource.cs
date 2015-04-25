@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Candles
 
 		public event Action<CandleSeries, Candle> Processing;
 		public event Action<CandleSeries> Stopped;
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
 		IEnumerable<Range<DateTimeOffset>> ICandleSource<Candle>.GetSupportedRanges(CandleSeries series)
 		{

@@ -102,7 +102,7 @@ namespace StockSharp.Quik.Verifier
 			connector.ConnectionError += error => this.GuiSync(() => OnConnect(connector, error));
 
 			if (connector.MarketDataAdapter != null)
-				connector.ProcessDataError += error => _settingErrors.Add(new SettingsError(LocalizedStrings.Str3030Params.Put(error.Message), true));	
+				connector.Error += error => _settingErrors.Add(new SettingsError(LocalizedStrings.Str3030Params.Put(error.Message), true));	
 
 			connector.Connect();
 		}

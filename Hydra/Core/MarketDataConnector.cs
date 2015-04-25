@@ -129,7 +129,7 @@ namespace StockSharp.Hydra.Core
 		{
 			_connector.DoIf<IConnector, Connector>(bt => bt.EntityFactory = new MarketDataEntityFactory(_securityProvider));
 
-			_connector.ProcessDataError += OnError;
+			_connector.Error += OnError;
 			_connector.Connected += OnConnected;
 			_connector.ConnectionError += OnConnectionError;
 			_connector.NewTrades += OnNewTrades;
@@ -164,7 +164,7 @@ namespace StockSharp.Hydra.Core
 			if (source != null)
 				source.NewCandles -= OnNewCandles;
 
-			_connector.ProcessDataError -= OnError;
+			_connector.Error -= OnError;
 			_connector.Connected -= OnConnected;
 			_connector.ConnectionError -= OnConnectionError;
 			_connector.NewTrades -= OnNewTrades;

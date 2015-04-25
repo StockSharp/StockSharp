@@ -64,7 +64,7 @@ namespace SampleRss
 
 			_trader.NewNews += news => NewsPanel.NewsGrid.News.Add(news);
 
-			_trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+			_trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			_trader.Connect();
 			_isConnected = true;

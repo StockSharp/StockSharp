@@ -29,7 +29,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// —обытие ошибки транслировани€ данных.
 		/// </summary>
-		event Action<Exception> ProcessDataError;
+		event Action<Exception> Error;
 
 		/// <summary>
 		/// ѕолучить временные диапазоны, дл€ которых у данного источниках дл€ передаваемой серии свечек есть данные.

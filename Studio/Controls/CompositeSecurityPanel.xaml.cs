@@ -33,17 +33,15 @@ namespace StockSharp.Studio.Controls
 
 	public partial class CompositeSecurityPanel
 	{
-		public class CandlePartIndicator : BaseIndicator<IIndicatorValue>
+		public class CandlePartIndicator : BaseIndicator
 		{
 			private readonly Security _security;
 
 			public CandlePartIndicator()
-				: base(typeof(Candle))
 			{
 			}
 
 			public CandlePartIndicator(Security security)
-				: base(typeof(Candle))
 			{
 				_security = security;
 			}

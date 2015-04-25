@@ -137,7 +137,7 @@ namespace SampleSMA
 							if (_isTodaySmaDrawn && candle.State == CandleStates.Finished)
 								ProcessCandle(candle);
 						};
-						//_trader.ProcessDataError += ex => this.Sync(() => MessageBox.Show(this, ex.ToString()));
+						//_trader.Error += ex => this.GuiAsync(() => MessageBox.Show(this, ex.ToString()));
 						_trader.ConnectionError += ex =>
 						{
 							if (ex != null)

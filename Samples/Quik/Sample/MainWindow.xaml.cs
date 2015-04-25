@@ -147,7 +147,7 @@ namespace Sample
 					Trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					//Trader.ProcessDataError += error =>
+					//Trader.Error += error =>
 					//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 					// подписываемся на ошибку подписки маркет-данных

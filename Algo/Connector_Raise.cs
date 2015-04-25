@@ -146,7 +146,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
 		/// </summary>
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
 		/// <summary>
 		/// Событие, передающее результат поиска, запущенного через метод <see cref="IConnector.LookupSecurities(StockSharp.BusinessEntities.Security)"/>.
@@ -428,18 +428,18 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ProcessDataError"/>.
+		/// Вызвать событие <see cref="Error"/>.
 		/// </summary>
 		/// <param name="exception">Ошибка обработки данных.</param>
-		private void RaiseProcessDataError(Exception exception)
+		private void RaiseError(Exception exception)
 		{
 			if (exception == null)
 				throw new ArgumentNullException("exception");
 
-			DataErrorCount++;
+			ErrorCount++;
 
 			this.AddErrorLog(exception);
-			ProcessDataError.SafeInvoke(exception);
+			Error.SafeInvoke(exception);
 		}
 
 		/// <summary>

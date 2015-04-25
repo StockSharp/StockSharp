@@ -141,7 +141,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
 		/// </summary>
-		event Action<Exception> ProcessDataError;
+		event Action<Exception> Error;
 
 		/// <summary>
 		/// Событие, сигнализирующее об изменении текущего времени на биржевых площадках <see cref="ExchangeBoards"/>.

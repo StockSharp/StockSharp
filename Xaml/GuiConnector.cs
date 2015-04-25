@@ -66,7 +66,7 @@ namespace StockSharp.Xaml
 				Connector.Connected += ConnectedHandler;
 				Connector.Disconnected += DisconnectedHandler;
 				Connector.ConnectionError += ConnectionErrorHandler;
-				Connector.ProcessDataError += ProcessDataErrorHandler;
+				Connector.Error += ErrorHandler;
 				Connector.MarketTimeChanged += MarketTimeChangedHandler;
 				Connector.LookupSecuritiesResult += LookupSecuritiesResultHandler;
 				Connector.LookupPortfoliosResult += LookupPortfoliosResultHandler;
@@ -427,16 +427,16 @@ namespace StockSharp.Xaml
 
 		#endregion
 
-		#region ProcessDataError
+		#region Error
 
 		/// <summary>
 		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
 		/// </summary>
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
-		private void ProcessDataErrorHandler(Exception exception)
+		private void ErrorHandler(Exception exception)
 		{
-			AddGuiAction(() => ProcessDataError.SafeInvoke(exception));
+			AddGuiAction(() => Error.SafeInvoke(exception));
 		}
 
 		#endregion
@@ -1071,7 +1071,7 @@ namespace StockSharp.Xaml
 			Connector.Connected -= ConnectedHandler;
 			Connector.Disconnected -= DisconnectedHandler;
 			Connector.ConnectionError -= ConnectionErrorHandler;
-			Connector.ProcessDataError -= ProcessDataErrorHandler;
+			Connector.Error -= ErrorHandler;
 			Connector.MarketTimeChanged -= MarketTimeChangedHandler;
 			Connector.LookupSecuritiesResult -= LookupSecuritiesResultHandler;
 			Connector.LookupPortfoliosResult -= LookupPortfoliosResultHandler;

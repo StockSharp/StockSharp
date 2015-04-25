@@ -35,8 +35,8 @@ namespace SampleFewQuiks
 				{
 					// подписываемся на событие ошибок обработки данных и разрыва соединения
 					//
-					quikTrader1.ProcessDataError += OnError;
-					quikTrader2.ProcessDataError += OnError;
+					quikTrader1.Error += OnError;
+					quikTrader2.Error += OnError;
 
 					quikTrader1.ConnectionError += OnError;
 					quikTrader2.ConnectionError += OnError;

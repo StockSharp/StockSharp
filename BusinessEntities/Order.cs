@@ -95,9 +95,6 @@ namespace StockSharp.BusinessEntities
 				if (_id == value)
 					return;
 
-				//if (_id != null)
-				//	throw new Exception();
-
 				_id = value;
 				NotifyChanged("Id");
 			}
@@ -117,9 +114,6 @@ namespace StockSharp.BusinessEntities
 			get { return _stringId; }
 			set
 			{
-				//if (!_stringId.IsEmpty() && !_stringId.CompareIgnoreCase(value))
-				//	throw new Exception();
-
 				_stringId = value;
 				NotifyChanged("StringId");
 			}

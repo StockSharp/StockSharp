@@ -6,6 +6,8 @@ StockSharp API Change log
 * (feature) Connector uses BasketMessageAdapter.
 * (feature) Order.Id is nullable
 * (feature) IMessageSessionHolder removed.
+* (feature) Order.ExpiryDate is nullable.
+* (feature) IConnector. ProcessDataError -> Error.
 * (bug) BitStamp market data fixes.
 * (bug) SmartCom transaction fixes.
 * (bug) LMAX fixes.
@@ -24,6 +26,11 @@ StockSharp API Change log
 * (bug) https://github.com/StockSharp/StockSharp/issues/49
 * (bug) Micex. Fix 32-bit mode.
 * (bug) Plaza. Anonym deals stream. Fast repl mode.
+* (bug) OrderGrid. Sort ordering fixes.
+* (feature) MyTradeGrid. Multi ids.
+* (feature) Indicators. IsFormed initialized only by IsFinal value.
+* (feature) Indicators refactoring. Removed IIndicator.CanProcess.
+* (bug) Connector. Fix Connect/Disconnect messages for a few adapters.
 
 ###v4.2.75:
 * (feature) FixServer. No longer use QuickFix.

@@ -164,7 +164,7 @@ namespace SampleSmartSMA
 					_trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					//_trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+					//_trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 					// подписываемся на ошибку подписки маркет-данных
 					_trader.MarketDataSubscriptionFailed += (security, type, error) =>

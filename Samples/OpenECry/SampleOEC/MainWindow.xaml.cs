@@ -124,7 +124,7 @@ namespace SampleOEC
 
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-					Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+					Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);

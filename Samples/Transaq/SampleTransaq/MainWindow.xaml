@@ -19,10 +19,10 @@
 
 		<StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
 			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Login}" />:</TextBlock>
-			<TextBox x:Name="Login" Text="TCONN0091" Width="70" />
+			<TextBox x:Name="Login" Text="" Width="70" />
 
 			<TextBlock HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
-			<PasswordBox x:Name="Password" Password="hWbFMwY" Width="100" />
+			<PasswordBox x:Name="Password" Password="" Width="100" />
 
 			<Label Content="{x:Static loc:LocalizedStrings.XamlStr651}" HorizontalAlignment="Right" />
 			<TextBox Name="Address" Width="120"/>

@@ -225,7 +225,7 @@ namespace StockSharp.Algo
 						if (mdMsg.SecurityId.IsDefault())
 						{
 							if (mdMsg.Error != null)
-								RaiseProcessDataError(mdMsg.Error);
+								RaiseError(mdMsg.Error);
 
 							break;
 						}
@@ -243,7 +243,7 @@ namespace StockSharp.Algo
 
 					case MessageTypes.Error:
 						var mdErrorMsg = (ErrorMessage)message;
-						RaiseProcessDataError(mdErrorMsg.Error);
+						RaiseError(mdErrorMsg.Error);
 						break;
 
 					case MessageTypes.Connect:
@@ -273,7 +273,7 @@ namespace StockSharp.Algo
 			}
 			catch (Exception ex)
 			{
-				RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
+				RaiseError(new InvalidOperationException(LocalizedStrings.Str681Params.Put(message), ex));
 			}
 
 			//if (message.Type != MessageTypes.Time && direction == MessageDirections.Out && adapter == MarketDataAdapter)
@@ -399,7 +399,7 @@ namespace StockSharp.Algo
 									RaiseTimeOut();
 							}
 							else
-								RaiseProcessDataError(message.Error);
+								RaiseError(message.Error);
 						}
 					}
 					else
@@ -410,7 +410,7 @@ namespace StockSharp.Algo
 						if (ConnectionState == ConnectionStates.Connecting)
 							RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
 						else
-							RaiseProcessDataError(message.Error);
+							RaiseError(message.Error);
 					}
 
 					return;
@@ -427,7 +427,7 @@ namespace StockSharp.Algo
 						if (ConnectionState == ConnectionStates.Disconnecting)
 							RaiseConnectionError(error);
 						else
-							RaiseProcessDataError(error);
+							RaiseError(error);
 					}
 					else
 					{
@@ -449,7 +449,7 @@ namespace StockSharp.Algo
 							if (ConnectionState == ConnectionStates.Disconnecting)
 								RaiseConnectionError(message.Error);
 							else
-								RaiseProcessDataError(message.Error);
+								RaiseError(message.Error);
 						}
 					}
 
@@ -476,8 +476,8 @@ namespace StockSharp.Algo
 					throw new ArgumentOutOfRangeException();
 			}
 
-			// так как соединение установлено, то выдаем ошибку через ProcessDataError, чтобы не сбрасывать состояние
-			RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error));
+			// так как соединение установлено, то выдаем ошибку через Error, чтобы не сбрасывать состояние
+			RaiseError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error));
 		}
 
 		private void ProcessSessionMessage(SessionMessage message)
@@ -695,7 +695,7 @@ namespace StockSharp.Algo
 		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
 		{
 			if (message.Error != null)
-				RaiseProcessDataError(message.Error);
+				RaiseError(message.Error);
 
 			var result = _lookupResult.CopyAndClear();
 
@@ -739,7 +739,7 @@ namespace StockSharp.Algo
 		private void ProcessPortfolioLookupResultMessage(PortfolioLookupResultMessage message)
 		{
 			if (message.Error != null)
-				RaiseProcessDataError(message.Error);
+				RaiseError(message.Error);
 
 			var criteria = _portfolioLookups.TryGetValue(message.OriginalTransactionId);
 
@@ -1006,7 +1006,7 @@ namespace StockSharp.Algo
 				{
 					// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
 					// а только выводим сообщение в лог
-					RaiseProcessDataError(ex);
+					RaiseError(ex);
 				}
 			}
 
@@ -1324,7 +1324,7 @@ namespace StockSharp.Algo
 				}
 				catch (Exception error)
 				{
-					RaiseProcessDataError(error);
+					RaiseError(error);
 				}
 			}
 		}

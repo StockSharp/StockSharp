@@ -12,7 +12,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using StockSharp.Logging;
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -101,13 +100,13 @@ namespace StockSharp.Algo.Candles.Compression
 			private void Subscribe(ICandleBuilderSource source)
 			{
 				//source.NewValues += _builder.OnNewValues;
-				source.ProcessDataError += _builder.RaiseProcessDataError;
+				source.Error += _builder.RaiseError;
 			}
 
 			private void UnSubscribe(ICandleBuilderSource source)
 			{
 				//source.NewValues -= _builder.OnNewValues;
-				source.ProcessDataError -= _builder.RaiseProcessDataError;
+				source.Error -= _builder.RaiseError;
 				source.Dispose();
 			}
 		}
@@ -192,7 +191,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Событие ошибки формирования свечек.
 		/// </summary>
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
 		#region ICandleSource members
 
@@ -480,17 +479,17 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 			catch (Exception ex)
 			{
-				RaiseProcessDataError(ex);
+				RaiseError(ex);
 			}
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ProcessDataError"/>.
+		/// Вызвать событие <see cref="Error"/>.
 		/// </summary>
 		/// <param name="error">Информация об ошибке.</param>
-		protected virtual void RaiseProcessDataError(Exception error)
+		protected virtual void RaiseError(Exception error)
 		{
-			ProcessDataError.SafeInvoke(error);
+			Error.SafeInvoke(error);
 			this.AddErrorLog(error);
 		}
 

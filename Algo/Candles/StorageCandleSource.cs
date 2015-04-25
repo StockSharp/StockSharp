@@ -183,7 +183,7 @@ namespace StockSharp.Algo.Candles
 			}
 			catch (Exception ex)
 			{
-				RaiseProcessDataError(ex);
+				RaiseError(ex);
 				_series.CopyAndClear().ForEach(p => RaiseStopped(p.Key));
 			}
 		}

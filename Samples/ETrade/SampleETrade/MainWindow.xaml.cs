@@ -154,7 +154,7 @@ namespace SampleETrade
 					Trader.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					Trader.ProcessDataError += error =>
+					Trader.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// подписываемся на ошибку подписки маркет-данных
