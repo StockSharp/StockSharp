@@ -31,6 +31,9 @@ StockSharp API Change log
 * (feature) Indicators. IsFormed initialized only by IsFinal value.
 * (feature) Indicators refactoring. Removed IIndicator.CanProcess.
 * (bug) Connector. Fix Connect/Disconnect messages for a few adapters.
+* (bug) Quik lua. Commission fill fix.
+* (bug) FixServer. Close session fix.
+* (feature) Fix http://stocksharp.com/forum/yaf_postst5622_Logh-soobshchieniia-MarketDataSnapshotFullRefresh.aspx
 
 ###v4.2.75:
 * (feature) FixServer. No longer use QuickFix.
