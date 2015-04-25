@@ -378,7 +378,11 @@ namespace StockSharp.Algo
 								SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
 							if (Adapter.OrderStatusRequired)
-								SendInMessage(new OrderStatusMessage { TransactionId = TransactionIdGenerator.GetNextId() });
+							{
+								var transactionId = TransactionIdGenerator.GetNextId();
+								_entityCache.AddOrderStatusTransactionId(transactionId);
+								SendInMessage(new OrderStatusMessage { TransactionId = transactionId });
+							}
 
 							if (Adapter.SecurityLookupRequired)
 								SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });

@@ -222,6 +222,7 @@ namespace StockSharp.Algo
 
 		private readonly CachedSynchronizedDictionary<string, Portfolio> _portfolios = new CachedSynchronizedDictionary<string, Portfolio>();
 		private readonly Cache _cache = new Cache();
+		private readonly HashSet<long> _orderStatusTransactions = new HashSet<long>();
 
 		private IEntityFactory _entityFactory = Algo.EntityFactory.Instance;
 
@@ -303,6 +304,12 @@ namespace StockSharp.Algo
 		public void Clear()
 		{
 			_cache.Clear();
+			_orderStatusTransactions.Clear();
+		}
+
+		public void AddOrderStatusTransactionId(long transactionId)
+		{
+			_orderStatusTransactions.Add(transactionId);
 		}
 
 		public IEnumerable<Order> GetOrders(Security security, OrderStates state)
@@ -358,10 +365,11 @@ namespace StockSharp.Algo
 
 			var transactionId = message.TransactionId;
 
-			// ExecMsg.TransactionId is not null when orders info requested by OrderStatMsg
-			// (in that case ExecMsg.OriginalTransactionId == OrderStatMsg.TransactionId)
 			if (transactionId == 0)
-				transactionId = message.OriginalTransactionId;
+			{
+				// ExecMsg.OriginalTransactionId == OrderStatMsg.TransactionId when orders info requested by OrderStatMsg
+				transactionId = _orderStatusTransactions.Contains(message.OriginalTransactionId) ? 0 : message.OriginalTransactionId;
+			}
 
 			var securityData = _cache.GetData(security);
 
@@ -570,17 +578,20 @@ namespace StockSharp.Algo
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			if (message.OriginalTransactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
-				throw new ArgumentOutOfRangeException("message", message.OriginalTransactionId, LocalizedStrings.Str715);
+			var originalTransactionId = _orderStatusTransactions.Contains(message.OriginalTransactionId)
+				? 0 : message.OriginalTransactionId;
+
+			if (originalTransactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())
+				throw new ArgumentOutOfRangeException("message", originalTransactionId, LocalizedStrings.Str715);
 
 			var securityData = _cache.GetData(security);
 
-			var myTrade = securityData.MyTrades.TryGetValue(Tuple.Create(message.OriginalTransactionId, message.TradeId ?? 0));
+			var myTrade = securityData.MyTrades.TryGetValue(Tuple.Create(originalTransactionId, message.TradeId ?? 0));
 
 			if (myTrade != null)
 				return Tuple.Create(myTrade, false);
 
-			var order = GetOrder(security, message.OriginalTransactionId, message.OrderId, message.OrderStringId);
+			var order = GetOrder(security, originalTransactionId, message.OrderId, message.OrderStringId);
 
 			if (order == null)
 				return null;
