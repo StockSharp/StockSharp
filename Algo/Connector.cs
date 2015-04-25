@@ -538,6 +538,11 @@ namespace StockSharp.Algo
 
 				ConnectionState = ConnectionStates.Connecting;
 
+				foreach (var adapter in Adapter.InnerAdapters.SortedAdapters)
+				{
+					_adapterStates[adapter] = ConnectionStates.Connecting;
+				}
+
 				TryOpenChannel();
 
 				StartMarketTimer();
@@ -571,6 +576,11 @@ namespace StockSharp.Algo
 			}
 
 			ConnectionState = ConnectionStates.Disconnecting;
+
+			foreach (var adapter in Adapter.InnerAdapters.SortedAdapters)
+			{
+				_adapterStates[adapter] = ConnectionStates.Disconnecting;
+			}
 
 			_subscriptionManager.Stop();
 
@@ -1481,6 +1491,8 @@ namespace StockSharp.Algo
 			_orderRegisterFails.Clear();
 
 			ConnectionState = ConnectionStates.Disconnected;
+
+			_adapterStates.Clear();
 
 			_suspendedSecurityMessages.Clear();
 

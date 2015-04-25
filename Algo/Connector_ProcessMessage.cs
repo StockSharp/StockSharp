@@ -15,21 +15,7 @@ namespace StockSharp.Algo
 	partial class Connector
 	{
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
-
-		//private bool _isDisposing;
-
-		//private bool IsDisposeAdapters(Message message)
-		//{
-		//	if (!_isDisposing)
-		//		return false;
-
-		//	if (message.Type == MessageTypes.Disconnect)
-		//		return true;
-		//	else if (message.Type == MessageTypes.Connect && ((ConnectMessage)message).Error != null)
-		//		return true;
-
-		//	return false;
-		//}
+		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
 
 		private void AdapterOnNewOutMessage(Message message)
 		{
@@ -134,6 +120,8 @@ namespace StockSharp.Algo
 
 			if (MarketDataAdapter == adapter)
 				MarketDataAdapter = null;
+
+			_adapterStates.Remove(adapter);
 		}
 
 		private void InnerAdaptersOnCleared()
@@ -368,10 +356,11 @@ namespace StockSharp.Algo
 			if (direction != MessageDirections.Out)
 				throw new ArgumentOutOfRangeException("direction");
 
-			//ProcessConnectMessage(message, ConnectionState, _prevConnectionState, RaiseConnected, RaiseDisconnected, RaiseConnectionError, ReConnectionSettings.ConnectionSettings);
 			var isConnect = message is ConnectMessage;
 
-			switch (ConnectionState)
+			var state = _adapterStates[message.Adapter];
+
+			switch (state)
 			{
 				case ConnectionStates.Connecting:
 				{
@@ -379,7 +368,11 @@ namespace StockSharp.Algo
 					{
 						if (message.Error == null)
 						{
-							RaiseConnected();
+							_adapterStates[message.Adapter] = ConnectionStates.Connected;
+
+							// raise Connected event only one time
+							if (ConnectionState == ConnectionStates.Connecting)
+								RaiseConnected();
 
 							if (Adapter.PortfolioLookupRequired)
 								SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
@@ -395,15 +388,29 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							RaiseConnectionError(message.Error);
+							_adapterStates[message.Adapter] = ConnectionStates.Failed;
 
-							if (message.Error is TimeoutException)
-								RaiseTimeOut();
+							// raise ConnectionError only one time
+							if (ConnectionState == ConnectionStates.Connecting)
+							{
+								RaiseConnectionError(message.Error);
+
+								if (message.Error is TimeoutException)
+									RaiseTimeOut();
+							}
+							else
+								RaiseProcessDataError(message.Error);
 						}
 					}
 					else
 					{
-						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
+						_adapterStates[message.Adapter] = ConnectionStates.Failed;
+
+						// raise ConnectionError only one time
+						if (ConnectionState == ConnectionStates.Connecting)
+							RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
+						else
+							RaiseProcessDataError(message.Error);
 					}
 
 					return;
@@ -412,14 +419,38 @@ namespace StockSharp.Algo
 				{
 					if (isConnect)
 					{
-						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str684, message.Error));
+						_adapterStates[message.Adapter] = ConnectionStates.Failed;
+
+						var error = new InvalidOperationException(LocalizedStrings.Str684, message.Error);
+
+						// raise ConnectionError only one time
+						if (ConnectionState == ConnectionStates.Disconnecting)
+							RaiseConnectionError(error);
+						else
+							RaiseProcessDataError(error);
 					}
 					else
 					{
 						if (message.Error == null)
-							RaiseDisconnected();
+						{
+							_adapterStates[message.Adapter] = ConnectionStates.Disconnected;
+
+							var isLast = _adapterStates.CachedValues.All(v => v != ConnectionStates.Disconnecting);
+
+							// raise Disconnected only one time for the last adapter
+							if (isLast)
+								RaiseDisconnected();
+						}
 						else
-							RaiseConnectionError(message.Error);
+						{
+							_adapterStates[message.Adapter] = ConnectionStates.Failed;
+
+							// raise ConnectionError only one time
+							if (ConnectionState == ConnectionStates.Disconnecting)
+								RaiseConnectionError(message.Error);
+							else
+								RaiseProcessDataError(message.Error);
+						}
 					}
 
 					return;
@@ -428,6 +459,7 @@ namespace StockSharp.Algo
 				{
 					if (isConnect && message.Error != null)
 					{
+						_adapterStates[message.Adapter] = ConnectionStates.Failed;
 						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
 						return;
 					}
@@ -445,7 +477,7 @@ namespace StockSharp.Algo
 			}
 
 			// так как соединение установлено, то выдаем ошибку через ProcessDataError, чтобы не сбрасывать состояние
-			RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(ConnectionState, message.GetType().Name), message.Error));
+			RaiseProcessDataError(new InvalidOperationException(LocalizedStrings.Str685Params.Put(state, message.GetType().Name), message.Error));
 		}
 
 		private void ProcessSessionMessage(SessionMessage message)
