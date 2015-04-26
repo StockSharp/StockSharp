@@ -229,8 +229,8 @@ namespace StockSharp.Messages
 		/// Получить серверное время сообщения.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
-		/// <returns>Серверное время сообщения.</returns>
-		public static DateTimeOffset GetServerTime(this Message message)
+		/// <returns>Серверное время сообщения. Если значение равно <see langword="null"/>, то сообщение не содержит серверное время.</returns>
+		public static DateTimeOffset? GetServerTime(this Message message)
 		{
 			switch (message.Type)
 			{
@@ -245,7 +245,7 @@ namespace StockSharp.Messages
 				default:
 				{
 					var candleMsg = message as CandleMessage;
-					return candleMsg == null ? message.LocalTime : candleMsg.OpenTime;
+					return candleMsg == null ? (DateTimeOffset?)null : candleMsg.OpenTime;
 				}
 			}
 		}
