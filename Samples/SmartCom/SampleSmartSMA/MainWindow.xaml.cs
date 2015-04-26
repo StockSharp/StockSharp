@@ -313,10 +313,10 @@ namespace SampleSmartSMA
 		private void ReportClick(object sender, RoutedEventArgs e)
 		{
 			// сгерерировать отчет по прошедшему тестированию
-			new ExcelStrategyReport(_strategy, "sma.xls").Generate();
+			new ExcelStrategyReport(_strategy, "sma.xlsx").Generate();
 
 			// открыть отчет
-			Process.Start("sma.xls");
+			Process.Start("sma.xlsx");
 		}
 	}
 }

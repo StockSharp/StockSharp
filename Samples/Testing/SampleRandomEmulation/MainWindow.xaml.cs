@@ -203,10 +203,10 @@ namespace SampleRandomEmulation
 			// generate report for backtested strategy
 			// Warning! For the huge order or trade count,
 			// generation will be extremely slow
-			new ExcelStrategyReport(_strategy, "sma.xls").Generate();
+			new ExcelStrategyReport(_strategy, "sma.xlsx").Generate();
 
 			// order excel file
-			Process.Start("sma.xls");
+			Process.Start("sma.xlsx");
 		}
 	}
 }
