@@ -76,30 +76,46 @@
 		public int ProcessedMessageCount { get; private set; }
 
 		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public override bool PortfolioLookupRequired
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
 		protected override void OnSendInMessage(Message message)
 		{
-			_currentTime = message.GetServerTime();
+			var localTime = message.LocalTime;
+
+			if (!localTime.IsDefault())
+				_currentTime = localTime;
 
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
+					SendOutMessage(new ConnectMessage());
+					return;
+
+				case ExtendedMessageTypes.Reset:
 					ProcessedMessageCount = 0;
 
 					var incGen = TransactionIdGenerator as IncrementalIdGenerator;
 					if (incGen != null)
 						incGen.Current = Emulator.Settings.InitialTransactionId;
 
-					_emulator.SendInMessage(new ResetMessage());
-					SendOutMessage(new ConnectMessage());
-					return;
+					_currentTime = default(DateTimeOffset);
+					break;
+
 				case MessageTypes.Disconnect:
 					SendOutMessage(new DisconnectMessage());
 					return;
+
 				case ExtendedMessageTypes.EmulationState:
-					SendOutMessage(message.Clone());
+					//SendOutMessage(message.Clone());
 					return;
 			}
 

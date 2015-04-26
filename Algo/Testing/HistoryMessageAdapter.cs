@@ -9,6 +9,8 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
+	using MoreLinq;
+
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -189,6 +191,14 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// </summary>
+		public override bool SecurityLookupRequired
+		{
+			get { return true; }
+		}
+
+		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -196,37 +206,78 @@ namespace StockSharp.Algo.Testing
 		{
 			switch (message.Type)
 			{
+				case ExtendedMessageTypes.Reset:
+				{
+					LoadedMessageCount = 0;
+					_disconnecting = _loadingThread != null;
+					_loadingThread = null;
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_loadingThread != null)
 						throw new InvalidOperationException(LocalizedStrings.Str1116);
 
-					LoadedMessageCount = 0;
-					_disconnecting = false;
-
-					_loadingThread = ThreadingHelper
-						.Thread(OnLoad)
-						.Name("HistoryMessageAdapter")
-						.Launch();
-
+					SendOutMessage(new ConnectMessage { LocalTime = StartDate.LocalDateTime });
 					return;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					if (_loadingThread == null)
-						throw new InvalidOperationException();
-
 					_disconnecting = true;
+					return;
+				}
+
+				case MessageTypes.SecurityLookup:
+				{
+					var lookupMsg = (SecurityLookupMessage)message;
+					SecurityProvider.LookupAll().ForEach(security =>
+					{
+						SendOutMessage(security.Board.ToMessage());
+
+						var secMsg = security.ToMessage();
+						secMsg.OriginalTransactionId = lookupMsg.TransactionId;
+						SendOutMessage(secMsg);
+
+						//SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
+						//	.Add(Level1Fields.StepPrice, security.StepPrice)
+						//	.Add(Level1Fields.MinPrice, security.MinPrice)
+						//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
+						//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
+						//	.Add(Level1Fields.MarginSell, security.MarginSell));
+					});
+					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
 					return;
 				}
 
 				case MessageTypes.MarketData:
 					ProcessMarketDataMessage((MarketDataMessage)message);
 					return;
+
+				case ExtendedMessageTypes.EmulationState:
+					var stateMsg = (EmulationStateMessage)message;
+
+					switch (stateMsg.State)
+					{
+						case EmulationStates.Starting:
+							if (_loadingThread != null)
+								break;
+
+							_loadingThread = ThreadingHelper
+								.Thread(OnLoad)
+								.Name("HistoryMessageAdapter")
+								.Launch();
+
+							break;
+					}
+
+					SendOutMessage(message);
+					return;
 			}
 
-			SendOutMessage(message);
+			//SendOutMessage(message);
 		}
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
@@ -351,14 +402,7 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.OrderLog:
 				{
 					if (message.IsSubscribe)
-					{
-						//var msg = "OrderLog".ValidateLicense();
-
-						//if (msg == null)
 						BasketStorage.InnerStorages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetOrderLogStorage(security, Drive, StorageFormat));
-						//else
-						//	SessionHolder.AddErrorLog(msg);	
-					}
 					else
 						RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, message.Arg);
 
@@ -470,8 +514,6 @@ namespace StockSharp.Algo.Testing
 		{
 			try
 			{
-				SendOutMessage(new ConnectMessage { LocalTime = StartDate.LocalDateTime });
-
 				var loadDate = StartDate;
 
 				EnqueueGenerators(_tradeGenerators.CachedPairs, MarketDataTypes.Trades);
@@ -511,6 +553,7 @@ namespace StockSharp.Algo.Testing
 			if (_disconnecting)
 				SendOutMessage(new DisconnectMessage());
 
+			_disconnecting = false;
 			_loadingThread = null;
 		}
 
@@ -521,8 +564,12 @@ namespace StockSharp.Algo.Testing
 		public override void SendOutMessage(Message message)
 		{
 			LoadedMessageCount++;
+			
+			var serverTime = message.GetServerTime();
 
-			_currentTime = message.GetServerTime();
+			if (serverTime != null)
+				_currentTime = serverTime.Value;
+
 			base.SendOutMessage(message);
 		}
 
@@ -535,7 +582,12 @@ namespace StockSharp.Algo.Testing
 			{
 				var msg = enumerator.Current;
 
-				msg.LocalTime = msg.GetServerTime().LocalDateTime;
+				var serverTime = msg.GetServerTime();
+
+				if (serverTime == null)
+					throw new InvalidOperationException();
+
+				msg.LocalTime = serverTime.Value.LocalDateTime;
 
 				if (checkFromTime)
 				{
@@ -556,12 +608,6 @@ namespace StockSharp.Algo.Testing
 				}
 
 				SendOutMessage(msg);
-
-				//lock (_syncRoot)
-				//{
-				//	if (OutMessageProcessor.MessageCount > MaxMessageCount)
-				//		_syncRoot.Wait();
-				//}
 			}
 		}
 

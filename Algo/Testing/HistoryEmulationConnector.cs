@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class HistoryEmulationConnector : BaseEmulationConnector, IExternalCandleSource
 	{
-		private sealed class EmulationEntityFactory : EntityFactory
+		private class EmulationEntityFactory : EntityFactory
 		{
 			private readonly ISecurityProvider _securityProvider;
 			private readonly IDictionary<string, Portfolio> _portfolios;
@@ -41,6 +41,22 @@ namespace StockSharp.Algo.Testing
 			public override Portfolio CreatePortfolio(string name)
 			{
 				return _portfolios.TryGetValue(name) ?? base.CreatePortfolio(name);
+			}
+		}
+
+		private class HistoryBasketMessageAdapter : BasketMessageAdapter
+		{
+			private readonly HistoryEmulationConnector _parent;
+
+			public HistoryBasketMessageAdapter(HistoryEmulationConnector parent)
+				: base(parent.TransactionIdGenerator)
+			{
+				_parent = parent;
+			}
+
+			public override DateTimeOffset CurrentTime
+			{
+				get { return _parent.CurrentTime; }
 			}
 		}
 
@@ -98,12 +114,12 @@ namespace StockSharp.Algo.Testing
 
 			OutMessageChannel = new PassThroughMessageChannel();
 
-			Adapter.InnerAdapters.Clear();
-			Adapter.InnerAdapters.Add(_emulationAdapter = new EmulationMessageAdapter(TransactionIdGenerator));
-
+			_emulationAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
 			_historyAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
-
 			_historyChannel = new InMemoryMessageChannel("History", SendOutError);
+
+			Adapter = new HistoryBasketMessageAdapter(this);
+			Adapter.InnerAdapters.Add(_emulationAdapter);
 			Adapter.InnerAdapters.Add(new ChannelMessageAdapter(_historyAdapter, new PassThroughMessageChannel(), _historyChannel));
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
@@ -277,18 +293,30 @@ namespace StockSharp.Algo.Testing
 		public bool UseExternalCandleSource { get; set; }
 
 		/// <summary>
-		/// Подключиться к торговой системе.
+		/// Очистить кэш данных.
 		/// </summary>
-		protected override void OnConnect()
+		public override void ClearCache()
 		{
-			//SendInMessage(new TimeMessage { LocalTime = StartDate.LocalDateTime });
-
-			ClearCache();
+			base.ClearCache();
 			IsFinished = false;
-
-			SendInMessage(new ConnectMessage { LocalTime = StartDate.LocalDateTime });
-			SendEmulationState(EmulationStates.Starting);
 		}
+
+		/// <summary>
+		/// Вызывать событие <see cref="Connector.Connected"/> при установке подключения первого адаптера в <see cref="Connector.Adapter"/>.
+		/// </summary>
+		protected override bool RaiseConnectedOnFirstAdapter
+		{
+			get { return false; }
+		}
+
+		///// <summary>
+		///// Подключиться к торговой системе.
+		///// </summary>
+		//protected override void OnConnect()
+		//{
+		//	//SendInMessage(new TimeMessage { LocalTime = StartDate.LocalDateTime });
+		//	SendInMessage(new ConnectMessage { LocalTime = StartDate.LocalDateTime });
+		//}
 
 		/// <summary>
 		/// Отключиться от торговой системы.
@@ -300,19 +328,19 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Запустить эмуляцию.
+		/// </summary>
+		public void Start()
+		{
+			SendEmulationState(EmulationStates.Starting);
+		}
+
+		/// <summary>
 		/// Приостановить эмуляцию.
 		/// </summary>
 		public void Suspend()
 		{
 			SendEmulationState(EmulationStates.Suspending);
-		}
-
-		/// <summary>
-		/// Возобновить эмуляцию.
-		/// </summary>
-		public void Resume()
-		{
-			SendEmulationState(EmulationStates.Starting);
 		}
 
 		private void SendEmulationState(EmulationStates state)
@@ -336,10 +364,7 @@ namespace StockSharp.Algo.Testing
 						base.OnProcessMessage(message, direction);
 
 						if (message.Adapter == TransactionAdapter)
-						{
-							_historyAdapter.SecurityProvider.LookupAll().ForEach(SendSecurity);
-							_initialMoney.ForEach(p => SendPortfolio(p.Key));	
-						}
+							_initialMoney.ForEach(p => SendPortfolio(p.Key));
 
 						break;
 					}
@@ -401,8 +426,6 @@ namespace StockSharp.Algo.Testing
 		{
 			this.AddInfoLog(LocalizedStrings.Str1121Params, State, newState);
 
-			//var prevState = State;
-
 			State = newState;
 
 			switch (newState)
@@ -420,53 +443,26 @@ namespace StockSharp.Algo.Testing
 
 				case EmulationStates.Starting:
 				{
-					//if (prevState == EmulationStates.Stopped)
-					//{
-						
-
-					//	// подписчики StateChanged запускают стратегии, которые интересуются MarketTime в OnRunning
-					//	SendInMessage(new ConnectMessage());
-
-						
-					//}
-
 					SendEmulationState(EmulationStates.Started);
-
 					break;
 				}
 
 				case EmulationStates.Started:
 				{
-					//if (State == EmulationStates.Starting)
-					//{
-					//	State = newState;
-					//	//MarketDataAdapter.SendInMessage(new ConnectMessage());
-					//}
-
 					_suspendLock.PulseAll();
-
 					break;
 				}
 
 				case EmulationStates.Suspending:
 				{
-					//if (State == EmulationStates.Started)
-					//{
-					//	State = newState;
 					SendEmulationState(EmulationStates.Suspended);
-					//}
-
 					break;
 				}
 
 				case EmulationStates.Suspended:
 				{
-					//if (State == EmulationStates.Suspending)
-					//{
-						State = newState;
-						_suspendLock.Wait();
-					//}
-
+					State = newState;
+					_suspendLock.Wait();
 					break;
 				}
 
@@ -501,19 +497,6 @@ namespace StockSharp.Algo.Testing
 						.Add(PositionChangeTypes.BlockedValue, 0m));
 		}
 
-		private void SendSecurity(Security security)
-		{
-			SendOutMessage(security.Board.ToMessage());
-			SendOutMessage(security.ToMessage());
-
-			//MarketDataAdapter.SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
-			//	.Add(Level1Fields.StepPrice, security.StepPrice)
-			//	.Add(Level1Fields.MinPrice, security.MinPrice)
-			//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
-			//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
-			//	.Add(Level1Fields.MarginSell, security.MarginSell));
-		}
-
 		//private void InitOrderLogBuilders(DateTime loadDate)
 		//{
 		//	if (StorageRegistry == null || !MarketEmulator.Settings.UseMarketDepth)
@@ -544,22 +527,35 @@ namespace StockSharp.Algo.Testing
 		//	}
 		//}
 
-		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
-		public override IEnumerable<Security> Lookup(Security criteria)
+		///// <summary>
+		///// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		///// </summary>
+		///// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+		///// <returns>Найденные инструменты.</returns>
+		//public override IEnumerable<Security> Lookup(Security criteria)
+		//{
+		//	var securities = _historyAdapter.SecurityProvider.Lookup(criteria);
+
+		//	if (State == EmulationStates.Started)
+		//	{
+		//		foreach (var security in securities)
+		//			SendSecurity(security);	
+		//	}
+
+		//	return securities;
+		//}
+
+		private void SendInGeneratorMessage(MarketDataGenerator generator, bool isSubscribe)
 		{
-			var securities = _historyAdapter.SecurityProvider.Lookup(criteria);
+			if (generator == null)
+				throw new ArgumentNullException("generator");
 
-			if (State == EmulationStates.Started)
+			SendInMessage(new GeneratorMarketDataMessage
 			{
-				foreach (var security in securities)
-					SendSecurity(security);	
-			}
-
-			return securities;
+				IsSubscribe = true,
+				SecurityId = generator.SecurityId,
+				Generator = generator,
+			});
 		}
 
 		/// <summary>
@@ -568,15 +564,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="generator">Генератор сделок.</param>
 		public void RegisterTrades(TradeGenerator generator)
 		{
-			if (generator == null)
-				throw new ArgumentNullException("generator");
-
-			SendInMessage(new GeneratorMarketDataMessage
-			{
-				IsSubscribe = true,
-				SecurityId = generator.SecurityId,
-				Generator = generator,
-			});
+			SendInGeneratorMessage(generator, true);
 		}
 
 		/// <summary>
@@ -585,15 +573,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="generator">Генератор сделок.</param>
 		public void UnRegisterTrades(TradeGenerator generator)
 		{
-			if (generator == null)
-				throw new ArgumentNullException("generator");
-
-			SendInMessage(new GeneratorMarketDataMessage
-			{
-				IsSubscribe = false,
-				SecurityId = generator.SecurityId,
-				Generator = generator,
-			});
+			SendInGeneratorMessage(generator, false);
 		}
 
 		/// <summary>
@@ -602,15 +582,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="generator">Генератор стаканов.</param>
 		public void RegisterMarketDepth(MarketDepthGenerator generator)
 		{
-			if (generator == null)
-				throw new ArgumentNullException("generator");
-
-			SendInMessage(new GeneratorMarketDataMessage
-			{
-				IsSubscribe = true,
-				SecurityId = generator.SecurityId,
-				Generator = generator,
-			});
+			SendInGeneratorMessage(generator, true);
 		}
 
 		/// <summary>
@@ -619,15 +591,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="generator">Генератор стаканов.</param>
 		public void UnRegisterMarketDepth(MarketDepthGenerator generator)
 		{
-			if (generator == null)
-				throw new ArgumentNullException("generator");
-
-			SendInMessage(new GeneratorMarketDataMessage
-			{
-				IsSubscribe = false,
-				SecurityId = generator.SecurityId,
-				Generator = generator,
-			});
+			SendInGeneratorMessage(generator, false);
 		}
 
 		/// <summary>
@@ -636,15 +600,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="generator">Генератор лога заявок.</param>
 		public void RegisterOrderLog(OrderLogGenerator generator)
 		{
-			if (generator == null)
-				throw new ArgumentNullException("generator");
-
-			SendInMessage(new GeneratorMarketDataMessage
-			{
-				IsSubscribe = true,
-				SecurityId = generator.SecurityId,
-				Generator = generator,
-			});
+			SendInGeneratorMessage(generator, true);
 		}
 
 		/// <summary>
@@ -653,15 +609,7 @@ namespace StockSharp.Algo.Testing
 		/// <param name="generator">Генератор лога заявок.</param>
 		public void UnRegisterOrderLog(OrderLogGenerator generator)
 		{
-			if (generator == null)
-				throw new ArgumentNullException("generator");
-
-			SendInMessage(new GeneratorMarketDataMessage
-			{
-				IsSubscribe = false,
-				SecurityId = generator.SecurityId,
-				Generator = generator,
-			});
+			SendInGeneratorMessage(generator, false);
 		}
 
 		/// <summary>
