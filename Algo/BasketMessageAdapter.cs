@@ -191,6 +191,10 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
+				case ExtendedMessageTypes.Reset:
+					_enabledAdapters.Values.ForEach(a => a.SendInMessage(message));
+					break;
+
 				case MessageTypes.Connect:
 					//_adapterStates.Clear();
 					_connectedAdapters.Clear();
