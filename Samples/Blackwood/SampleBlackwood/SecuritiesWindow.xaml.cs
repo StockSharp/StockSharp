@@ -105,7 +105,7 @@ namespace SampleBlackwood
 		{
 			var window = _level1Windows.SafeAdd(SecurityPicker.SelectedSecurity.Code, security =>
 			{
-				// создаем окно с level1
+				// create level1 window
 				var wnd = new Level1Window { Title = security + LocalizedStrings.Str3693 };
 				wnd.MakeHideable();
 				return wnd;
@@ -137,7 +137,7 @@ namespace SampleBlackwood
 		{
 			ShowLevel1();
 
-			// начинаем получать котировки стакана
+			// subscribe on order book flow
 			MainWindow.Instance.Trader.RegisterMarketDepth(SecurityPicker.SelectedSecurity);
 		}
 
@@ -148,13 +148,13 @@ namespace SampleBlackwood
 			var security = SecurityPicker.SelectedSecurity;
 			var trader = MainWindow.Instance.Trader;
 
-			// начинаем получать обновления по инструменту
+			// subscribe on level1 and tick data flow
 			trader.RegisterSecurity(security);
 			trader.RegisterTrades(security);
 
 			//if (_bidAskSecurities.Contains(security))
 			//{
-			//	// останавливаем обновления по инструменту
+			//	// unsubscribe from level1 and tick data flow
 			//	trader.UnRegisterSecurity(security);
 			//	trader.UnRegisterTrades(security);
 
@@ -162,7 +162,7 @@ namespace SampleBlackwood
 			//}
 			//else
 			//{
-			//	// начинаем получать обновления по инструменту
+			//	// subscribe on level1 and tick data flow
 			//	trader.RegisterSecurity(security);
 			//	trader.RegisterTrades(security);
 
@@ -199,7 +199,7 @@ namespace SampleBlackwood
 
 			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
 			{
-				// создаем окно со стаканом
+				// create order book window
 				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;

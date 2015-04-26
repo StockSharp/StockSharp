@@ -42,7 +42,7 @@ namespace SampleRandomEmulation
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
-			// если процесс был запущен, то его останавливаем
+			// if process was already started, will stop it now
 			if (_connector != null)
 			{
 				_strategy.Stop();
@@ -53,7 +53,7 @@ namespace SampleRandomEmulation
 				return;
 			}
 
-			// создаем тестовый инструмент, на котором будет производится тестирование
+			// create test security
 			var security = new Security
 			{
 				Id = "RIU9@FORTS",
@@ -77,7 +77,7 @@ namespace SampleRandomEmulation
 			.TryAdd(Level1Fields.MarginBuy, 10000m)
 			.TryAdd(Level1Fields.MarginSell, 10000m);
 
-			// тестовый портфель
+			// test portfolio
 			var portfolio = new Portfolio
 			{
 				Name = "test account",
@@ -86,7 +86,7 @@ namespace SampleRandomEmulation
 
 			var timeFrame = TimeSpan.FromMinutes(5);
 
-			// создаем подключение для эмуляции
+			// create backtesting connector
 			_connector = new HistoryEmulationConnector(
 				new[] { security },
 				new[] { portfolio })
@@ -99,22 +99,24 @@ namespace SampleRandomEmulation
 				if (securities.All(s => s != security))
 					return;
 
-				// отправляем данные Level1 для инструмента
+				// fill level1 values
 				_connector.SendOutMessage(level1Info);
 
 				_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
 				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+
+				// start historical data loading when connection established successfully and all data subscribed
+				_connector.Start();
 			};
 
-			// указываем даты начала и конца тестирования
 			_connector.StartDate = startTime;
 			_connector.StopDate = stopTime;
 
 			var candleManager = new CandleManager(_connector);
 
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-			
-			// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
+
+			// create strategy based on 80 5-min и 10 5-min
 			_strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 			{
 				Volume = 1,
@@ -123,7 +125,7 @@ namespace SampleRandomEmulation
 				Connector = _connector,
 			};
 
-			// копируем параметры на визуальную панель
+			// fill parameters panel
 			ParameterGrid.Parameters.Clear();
 			ParameterGrid.Parameters.AddRange(_strategy.StatisticManager.Parameters);
 
@@ -140,14 +142,14 @@ namespace SampleRandomEmulation
 
 			_logManager.Sources.Add(_strategy);
 
-			// задаем шаг ProgressBar
+			// ProgressBar refresh step
 			var progressStep = ((stopTime - startTime).Ticks / 100).To<TimeSpan>();
 			var nextTime = startTime + progressStep;
 
 			TestingProcess.Maximum = 100;
 			TestingProcess.Value = 0;
 
-			// и подписываемся на событие изменения времени, чтобы обновить ProgressBar
+			// handle historical time for update ProgressBar
 			_connector.MarketTimeChanged += diff =>
 			{
 				if (_connector.CurrentTime < nextTime && _connector.CurrentTime < stopTime)
@@ -177,7 +179,7 @@ namespace SampleRandomEmulation
 				}
 				else if (_connector.State == EmulationStates.Started)
 				{
-					// запускаем стратегию когда эмулятор запустился
+					// start strategy when emulation started
 					_strategy.Start();
 					candleManager.Start(series);
 				}
@@ -192,19 +194,18 @@ namespace SampleRandomEmulation
 
 			_startEmulationTime = DateTime.Now;
 
-			// соединяемся с трейдером и запускаем экспорт,
-			// чтобы инициализировать переданными инструментами и портфелями необходимые свойства коннектора
+			// raise NewSecurities and NewPortfolio for full fill strategy properties
 			_connector.Connect();
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)
 		{
-			// сгерерировать отчет по прошедшему тестированию
-			// Внимание! сделок и заявок может быть большое количество,
-			// поэтому Excel отчет может тормозить
+			// generate report for backtested strategy
+			// Warning! For the huge order or trade count,
+			// generation will be extremely slow
 			new ExcelStrategyReport(_strategy, "sma.xls").Generate();
 
-			// открыть отчет
+			// order excel file
 			Process.Start("sma.xls");
 		}
 	}

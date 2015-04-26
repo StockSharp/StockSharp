@@ -79,10 +79,10 @@ namespace SampleIQFeed
 
 			var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
 			{
-				// начинаем получать котировки стакана
+				// subscribe on order book flow
 				trader.RegisterMarketDepth(security);
 
-				// создаем окно со стаканом
+				// create order book window
 				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;
@@ -102,10 +102,10 @@ namespace SampleIQFeed
 
 			var window = _level1Windows.SafeAdd(SelectedSecurity, security =>
 			{
-				// создаем окно со сделками
+				// create level1 window
 				var wnd = new Level1Window { Title = security.Code + " level1" };
 
-				// начинаем получать сделки
+				// subscribe on level1
 				MainWindow.Instance.Trader.RegisterSecurity(security);
 
 				wnd.MakeHideable();
@@ -165,7 +165,7 @@ namespace SampleIQFeed
 		{
 			var window = _historyLevel1Windows.SafeAdd(SelectedSecurity, security =>
 			{
-				// создаем окно для отображения истории сделок
+				// create historical level1 window
 				var wnd = new HistoryLevel1Window(SelectedSecurity);
 				wnd.MakeHideable();
 				return wnd;
@@ -181,7 +181,7 @@ namespace SampleIQFeed
 		{
 			var window = _historyCandlesWindows.SafeAdd(SelectedSecurity, security =>
 			{
-				// создаем окно для отображения истории свечек
+				// create historical candles window
 				var wnd = new HistoryCandlesWindow(SelectedSecurity);
 				wnd.MakeHideable();
 				return wnd;

@@ -8,6 +8,7 @@
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
@@ -71,10 +72,10 @@
 
 			var window = _tradesWindows.SafeAdd(SelectedSecurity, security =>
 			{
-				// создаем окно со сделками
+				// create tick trades window
 				var wnd = new TradesWindow { Title = security.Code + " сделки" };
 
-				// начинаем получать сделки
+				// subscribe on tick trades flow
 				MainWindow.Instance.Trader.RegisterTrades(security);
 
 				wnd.MakeHideable();
@@ -95,11 +96,11 @@
 
 			var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
 			{
-				// начинаем получать котировки стакана
+				// subscribe on order book flow
 				trader.RegisterMarketDepth(security);
 
-				// создаем окно со стаканом
-				var wnd = new QuotesWindow { Title = security.Id + " стакан" };
+				// create order book window
+				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;
 			});

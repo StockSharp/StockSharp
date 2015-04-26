@@ -72,7 +72,7 @@ namespace SampleRealTimeEmulation
 						return;
 					}
 					
-					// создаем подключение
+					// create real-time emu connector
 					_connector = new RealTimeEmulationTrader<Connector>(new SmartTrader
 					{
 						Login = Login.Text,
@@ -80,7 +80,7 @@ namespace SampleRealTimeEmulation
 						Address = Address.SelectedAddress
 					});
 
-					//_trader = new RealTimeEmulationTrader<Connector>(new StockSharp.Plaza.PlazaTrader
+					//_connector = new RealTimeEmulationTrader<Connector>(new PlazaTrader
 					//{
 					//	IsCGate = true,
 					//}, portfolio);
@@ -89,16 +89,16 @@ namespace SampleRealTimeEmulation
 
 					_logManager.Sources.Add(_connector);
 					
-					// очищаем из текстового поля в целях безопасности
+					// clear password for security reason
 					//Password.Clear();
 
-					// подписываемся на событие успешного соединения
+					// subscribe on connection successfully event
 					_connector.Connected += () =>
 					{
-						// возводим флаг, что соединение установлено
+						// set flag (connection is established)
 						_isConnected = true;
 
-						// разблокируем кнопку Экспорт
+						// update gui labels
 						this.GuiAsync(() => ChangeConnectStatus(true));
 
 						_candleManager = new CandleManager(_connector);
@@ -124,20 +124,20 @@ namespace SampleRealTimeEmulation
 						});
 					};
 
-					// подписываемся на событие разрыва соединения
+					// subscribe on connection error event
 					_connector.ConnectionError += error => this.GuiAsync(() =>
 					{
-						// заблокируем кнопку Экспорт (так как соединение было потеряно)
+						// update gui labels
 						ChangeConnectStatus(false);
 
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 					});
 
-					// подписываемся на ошибку обработки данных (транзакций и маркет)
+					// subscribe on error event
 					_connector.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-					// подписываемся на ошибку подписки маркет-данных
+					// subscribe on error of market data subscription event
 					_connector.MarketDataSubscriptionFailed += (security, type, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 				}

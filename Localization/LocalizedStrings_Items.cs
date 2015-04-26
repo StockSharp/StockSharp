@@ -51590,12 +51590,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Candles and market depths
+		/// Candles and depths
 		/// </summary>
 		public const string XamlStr635Key = "XamlStr635";
 
 		/// <summary>
-		/// Candles and market depths
+		/// Candles and depths
 		/// </summary>
 		public static string XamlStr635
 		{
