@@ -101,6 +101,36 @@ namespace StockSharp.Transaq
 
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_isInitialized = false;
+
+					_registeredSecurityIds.Clear();
+					_candleTransactions.Clear();
+					_quotes.Clear();
+
+					_orders.Clear();
+					_ordersTypes.Clear();
+
+					if (_client != null)
+					{
+						try
+						{
+							_client.Dispose();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_client = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 					Connect();
 					break;
@@ -153,15 +183,6 @@ namespace StockSharp.Transaq
 		{
 			if (_client != null)
 				throw new InvalidOperationException(LocalizedStrings.Str1619);
-
-			_isInitialized = false;
-
-			_registeredSecurityIds.Clear();
-			_candleTransactions.Clear();
-			_quotes.Clear();
-
-			_orders.Clear();
-			_ordersTypes.Clear();
 
 			_client = new ApiClient(OnCallback,
 					DllPath,

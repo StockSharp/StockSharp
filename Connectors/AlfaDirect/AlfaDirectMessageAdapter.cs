@@ -88,6 +88,32 @@ namespace StockSharp.AlfaDirect
 			get { return true; }
 		}
 
+		private void DisposeWrapper()
+		{
+			_wrapper.StopExportOrders();
+			_wrapper.StopExportPortfolios();
+			_wrapper.StopExportMyTrades();
+
+			_wrapper.Connected -= OnWrapperConnected;
+			_wrapper.Disconnected -= OnWrapperDisconnected;
+			_wrapper.ConnectionError -= OnConnectionError;
+
+			_wrapper.ProcessOrder -= OnProcessOrders;
+			_wrapper.ProcessOrderConfirmed -= OnProcessOrderConfirmed;
+			_wrapper.ProcessOrderFailed -= OnProcessOrderFailed;
+			_wrapper.ProcessPositions -= OnProcessPositions;
+			_wrapper.ProcessMyTrades -= OnProcessMyTrades;
+
+			_wrapper.ProcessNews -= OnProcessNews;
+			_wrapper.ProcessSecurities += OnProcessSecurities;
+			_wrapper.ProcessLevel1 -= OnProcessLevel1;
+			_wrapper.ProcessQuotes -= OnProcessQuotes;
+			_wrapper.ProcessTrades -= OnProcessTrades;
+			_wrapper.ProcessCandles -= OnProcessCandles;
+
+			_wrapper.Dispose();
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -96,11 +122,32 @@ namespace StockSharp.AlfaDirect
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
+				case MessageTypes.Reset:
 				{
 					_alfaIds.Clear();
 					_localIds.Clear();
 
+					if (_wrapper != null)
+					{
+						try
+						{
+							DisposeWrapper();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_wrapper = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
+				case MessageTypes.Connect:
+				{
 					if (_wrapper != null)
 						throw new InvalidOperationException(LocalizedStrings.Str1619);
 
@@ -137,28 +184,7 @@ namespace StockSharp.AlfaDirect
 					if (_wrapper == null)
 						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
-					_wrapper.StopExportOrders();
-					_wrapper.StopExportPortfolios();
-					_wrapper.StopExportMyTrades();
-
-					_wrapper.Connected -= OnWrapperConnected;
-					_wrapper.Disconnected -= OnWrapperDisconnected;
-					_wrapper.ConnectionError -= OnConnectionError;
-
-					_wrapper.ProcessOrder -= OnProcessOrders;
-					_wrapper.ProcessOrderConfirmed -= OnProcessOrderConfirmed;
-					_wrapper.ProcessOrderFailed -= OnProcessOrderFailed;
-					_wrapper.ProcessPositions -= OnProcessPositions;
-					_wrapper.ProcessMyTrades -= OnProcessMyTrades;
-
-					_wrapper.ProcessNews -= OnProcessNews;
-					_wrapper.ProcessSecurities += OnProcessSecurities;
-					_wrapper.ProcessLevel1 -= OnProcessLevel1;
-					_wrapper.ProcessQuotes -= OnProcessQuotes;
-					_wrapper.ProcessTrades -= OnProcessTrades;
-					_wrapper.ProcessCandles -= OnProcessCandles;
-
-					_wrapper.Dispose();
+					DisposeWrapper();
 					_wrapper = null;
 					
 					SendOutMessage(new DisconnectMessage());

@@ -65,6 +65,26 @@
 			get { return true; }
 		}
 
+		private void DisposeClient()
+		{
+			_client.OnStiOrderConfirm -= SessionOnStiOrderConfirm;
+			_client.OnStiOrderReject -= SessionOnStiOrderReject;
+			_client.OnStiOrderUpdate -= SessionOnStiOrderUpdate;
+			_client.OnStiTradeUpdate -= SessionOnStiTradeUpdate;
+			_client.OnStiAcctUpdate -= SessionOnStiAcctUpdate;
+			_client.OnStiPositionUpdate -= SessionOnStiPositionUpdate;
+
+			_client.OnStiQuoteUpdate -= SessionOnStiQuoteUpdate;
+			_client.OnStiQuoteSnap -= SessionOnStiQuoteSnap;
+			_client.OnStiQuoteRqst -= SessionOnStiQuoteRqst;
+			_client.OnStil2Update -= SessionOnStil2Update;
+			_client.OnStil2Reply -= SessionOnStil2Reply;
+			_client.OnStiGreeksUpdate -= SessionOnStiGreeksUpdate;
+			_client.OnStiNewsUpdate -= SessionOnStiNewsUpdate;
+
+			_client.OnStiShutdown -= SessionOnOnStiShutdown;
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -73,6 +93,27 @@
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					if (_client != null)
+					{
+						try
+						{
+							DisposeClient();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_client = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_client != null)
@@ -107,22 +148,7 @@
 					if (_client == null)
 						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
-					_client.OnStiOrderConfirm -= SessionOnStiOrderConfirm;
-					_client.OnStiOrderReject -= SessionOnStiOrderReject;
-					_client.OnStiOrderUpdate -= SessionOnStiOrderUpdate;
-					_client.OnStiTradeUpdate -= SessionOnStiTradeUpdate;
-					_client.OnStiAcctUpdate -= SessionOnStiAcctUpdate;
-					_client.OnStiPositionUpdate -= SessionOnStiPositionUpdate;
-
-					_client.OnStiQuoteUpdate -= SessionOnStiQuoteUpdate;
-					_client.OnStiQuoteSnap -= SessionOnStiQuoteSnap;
-					_client.OnStiQuoteRqst -= SessionOnStiQuoteRqst;
-					_client.OnStil2Update -= SessionOnStil2Update;
-					_client.OnStil2Reply -= SessionOnStil2Reply;
-					_client.OnStiGreeksUpdate -= SessionOnStiGreeksUpdate;
-					_client.OnStiNewsUpdate -= SessionOnStiNewsUpdate;
-
-					_client.OnStiShutdown -= SessionOnOnStiShutdown;
+					DisposeClient();
 					_client = null;
 
 					SendOutMessage(new DisconnectMessage());

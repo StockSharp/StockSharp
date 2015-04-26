@@ -1,7 +1,5 @@
-﻿namespace StockSharp.Algo.Testing
+﻿namespace StockSharp.Messages
 {
-	using StockSharp.Messages;
-
 	/// <summary>
 	/// Сообщение, информирующее о сбросе состояния эмулятора.
 	/// </summary>
@@ -11,7 +9,7 @@
 		/// Создать <see cref="ResetMessage"/>.
 		/// </summary>
 		public ResetMessage()
-			: base(ExtendedMessageTypes.Reset)
+			: base(MessageTypes.Reset)
 		{
 		}
 	}

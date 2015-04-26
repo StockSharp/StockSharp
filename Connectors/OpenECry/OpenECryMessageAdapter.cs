@@ -119,60 +119,6 @@ namespace StockSharp.OpenECry
 			{
 				Error = new InvalidOperationException(reason.GetDescription())
 			});
-
-			_client.OnLoginComplete -= SessionOnLoginComplete;
-			_client.OnLoginFailed -= SessionOnLoginFailed;
-			_client.OnDisconnected -= SessionOnDisconnected;
-			_client.OnBeginEvents -= SessionOnBeginEvents;
-			_client.OnEndEvents -= SessionOnEndEvents;
-			_client.OnError -= SessionOnError;
-
-			_client.OnAccountRiskLimitChanged -= SessionOnAccountRiskLimitChanged;
-			_client.OnAccountSummaryChanged -= SessionOnAccountSummaryChanged;
-			_client.OnAllocationBlocksChanged -= SessionOnAllocationBlocksChanged;
-			_client.OnAvgPositionChanged -= SessionOnAvgPositionChanged;
-			_client.OnBalanceChanged -= SessionOnBalanceChanged;
-			_client.OnCommandUpdated -= SessionOnCommandUpdated;
-			_client.OnCompoundPositionGroupChanged -= SessionOnCompoundPositionGroupChanged;
-			_client.OnOrderConfirmed -= SessionOnOrderConfirmed;
-			_client.OnOrderFilled -= SessionOnOrderFilled;
-			_client.OnOrderStateChanged -= SessionOnOrderStateChanged;
-			_client.OnDetailedPositionChanged -= SessionOnDetailedPositionChanged;
-			_client.OnMarginCalculationCompleted -= SessionOnMarginCalculationCompleted;
-			_client.OnPortfolioMarginChanged -= SessionOnPortfolioMarginChanged;
-			_client.OnPostAllocation -= SessionOnPostAllocation;
-			_client.OnRiskLimitDetailsReceived -= SessionOnRiskLimitDetailsReceived;
-
-			_client.OnBarsReceived -= SessionOnBarsReceived;
-			_client.OnContinuousContractRuleChanged -= SessionOnContinuousContractRuleChanged;
-			_client.OnContractChanged -= SessionOnContractChanged;
-			_client.OnContractCreated -= SessionOnContractCreated;
-			_client.OnContractRiskLimitChanged -= SessionOnContractRiskLimitChanged;
-			_client.OnContractsChanged -= SessionOnContractsChanged;
-			_client.OnCurrencyPriceChanged -= SessionOnCurrencyPriceChanged;
-			_client.OnDOMChanged -= SessionOnDomChanged;
-			_client.OnDealQuoteUpdated -= SessionOnDealQuoteUpdated;
-			_client.OnHistogramReceived -= SessionOnHistogramReceived;
-			_client.OnHistoryReceived -= SessionOnHistoryReceived;
-			_client.OnIndexComponentsReceived -= SessionOnIndexComponentsReceived;
-			_client.OnLoggedUserClientsChanged -= SessionOnLoggedUserClientsChanged;
-			_client.OnNewsMessage -= SessionOnNewsMessage;
-			_client.OnOsmAlgoListLoaded -= SessionOnOsmAlgoListLoaded;
-			_client.OnOsmAlgoListUpdated -= SessionOnOsmAlgoListUpdated;
-			_client.OnPitGroupsChanged -= SessionOnPitGroupsChanged;
-			_client.OnPriceChanged -= SessionOnPriceChanged;
-			_client.OnPriceTick -= SessionOnPriceTick;
-			_client.OnProductCalendarUpdated -= SessionOnProductCalendarUpdated;
-			_client.OnQuoteDetailsChanged -= SessionOnQuoteDetailsChanged;
-			_client.OnRelationsChanged -= SessionOnRelationsChanged;
-			_client.OnSymbolLookupReceived -= SessionOnSymbolLookupReceived;
-			_client.OnTicksReceived -= SessionOnTicksReceived;
-			_client.OnTradersChanged -= SessionOnTradersChanged;
-			_client.OnUserMessage -= SessionOnUserMessage;
-			_client.OnUserStatusChanged -= SessionOnUserStatusChanged;
-
-			_client.Dispose();
-			_client = null;
 		}
 
 		private void SessionOnDisconnected(bool unexpected)
@@ -237,6 +183,62 @@ namespace StockSharp.OpenECry
 			get { return true; }
 		}
 
+		private void DisposeClient()
+		{
+			_client.OnLoginComplete -= SessionOnLoginComplete;
+			_client.OnLoginFailed -= SessionOnLoginFailed;
+			_client.OnDisconnected -= SessionOnDisconnected;
+			_client.OnBeginEvents -= SessionOnBeginEvents;
+			_client.OnEndEvents -= SessionOnEndEvents;
+			_client.OnError -= SessionOnError;
+
+			_client.OnAccountRiskLimitChanged -= SessionOnAccountRiskLimitChanged;
+			_client.OnAccountSummaryChanged -= SessionOnAccountSummaryChanged;
+			_client.OnAllocationBlocksChanged -= SessionOnAllocationBlocksChanged;
+			_client.OnAvgPositionChanged -= SessionOnAvgPositionChanged;
+			_client.OnBalanceChanged -= SessionOnBalanceChanged;
+			_client.OnCommandUpdated -= SessionOnCommandUpdated;
+			_client.OnCompoundPositionGroupChanged -= SessionOnCompoundPositionGroupChanged;
+			_client.OnOrderConfirmed -= SessionOnOrderConfirmed;
+			_client.OnOrderFilled -= SessionOnOrderFilled;
+			_client.OnOrderStateChanged -= SessionOnOrderStateChanged;
+			_client.OnDetailedPositionChanged -= SessionOnDetailedPositionChanged;
+			_client.OnMarginCalculationCompleted -= SessionOnMarginCalculationCompleted;
+			_client.OnPortfolioMarginChanged -= SessionOnPortfolioMarginChanged;
+			_client.OnPostAllocation -= SessionOnPostAllocation;
+			_client.OnRiskLimitDetailsReceived -= SessionOnRiskLimitDetailsReceived;
+
+			_client.OnBarsReceived -= SessionOnBarsReceived;
+			_client.OnContinuousContractRuleChanged -= SessionOnContinuousContractRuleChanged;
+			_client.OnContractChanged -= SessionOnContractChanged;
+			_client.OnContractCreated -= SessionOnContractCreated;
+			_client.OnContractRiskLimitChanged -= SessionOnContractRiskLimitChanged;
+			_client.OnContractsChanged -= SessionOnContractsChanged;
+			_client.OnCurrencyPriceChanged -= SessionOnCurrencyPriceChanged;
+			_client.OnDOMChanged -= SessionOnDomChanged;
+			_client.OnDealQuoteUpdated -= SessionOnDealQuoteUpdated;
+			_client.OnHistogramReceived -= SessionOnHistogramReceived;
+			_client.OnHistoryReceived -= SessionOnHistoryReceived;
+			_client.OnIndexComponentsReceived -= SessionOnIndexComponentsReceived;
+			_client.OnLoggedUserClientsChanged -= SessionOnLoggedUserClientsChanged;
+			_client.OnNewsMessage -= SessionOnNewsMessage;
+			_client.OnOsmAlgoListLoaded -= SessionOnOsmAlgoListLoaded;
+			_client.OnOsmAlgoListUpdated -= SessionOnOsmAlgoListUpdated;
+			_client.OnPitGroupsChanged -= SessionOnPitGroupsChanged;
+			_client.OnPriceChanged -= SessionOnPriceChanged;
+			_client.OnPriceTick -= SessionOnPriceTick;
+			_client.OnProductCalendarUpdated -= SessionOnProductCalendarUpdated;
+			_client.OnQuoteDetailsChanged -= SessionOnQuoteDetailsChanged;
+			_client.OnRelationsChanged -= SessionOnRelationsChanged;
+			_client.OnSymbolLookupReceived -= SessionOnSymbolLookupReceived;
+			_client.OnTicksReceived -= SessionOnTicksReceived;
+			_client.OnTradersChanged -= SessionOnTradersChanged;
+			_client.OnUserMessage -= SessionOnUserMessage;
+			_client.OnUserStatusChanged -= SessionOnUserStatusChanged;
+
+			_client.Dispose();
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -245,6 +247,29 @@ namespace StockSharp.OpenECry
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_subscriptions.Clear();
+
+					if (_client != null)
+					{
+						try
+						{
+							DisposeClient();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_client = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_client != null)
@@ -348,6 +373,7 @@ namespace StockSharp.OpenECry
 					if (_client == null)
 						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
+					DisposeClient();
 					_client.Disconnect();
 					break;
 				}

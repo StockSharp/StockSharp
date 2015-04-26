@@ -100,7 +100,7 @@
 					SendOutMessage(new ConnectMessage());
 					return;
 
-				case ExtendedMessageTypes.Reset:
+				case MessageTypes.Reset:
 					ProcessedMessageCount = 0;
 
 					var incGen = TransactionIdGenerator as IncrementalIdGenerator;

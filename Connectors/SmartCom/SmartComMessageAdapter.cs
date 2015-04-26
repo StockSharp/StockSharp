@@ -87,11 +87,8 @@ namespace StockSharp.SmartCom
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
+				case MessageTypes.Reset:
 				{
-					if (_wrapper != null)
-						throw new InvalidOperationException(LocalizedStrings.Str1619);
-
 					_tempDepths.Clear();
 					_candleTransactions.Clear();
 					_bestQuotes.Clear();
@@ -101,6 +98,39 @@ namespace StockSharp.SmartCom
 
 					//_smartOrderIds.Clear();
 					//_smartIdOrders.Clear();
+
+					if (_wrapper != null)
+					{
+						try
+						{
+							DisposeWrapper();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						try
+						{
+							_wrapper.Disconnect();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_wrapper = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
+				case MessageTypes.Connect:
+				{
+					if (_wrapper != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
 
 					switch (Version)
 					{
@@ -202,6 +232,15 @@ namespace StockSharp.SmartCom
 
 		private void OnDisconnected(Exception error)
 		{
+			DisposeWrapper();
+
+			SendOutMessage(new DisconnectMessage { Error = error });
+
+			_wrapper = null;
+		}
+
+		private void DisposeWrapper()
+		{
 			_wrapper.NewPortfolio -= OnNewPortfolio;
 			_wrapper.PortfolioChanged -= OnPortfolioChanged;
 			_wrapper.PositionChanged -= OnPositionChanged;
@@ -222,10 +261,6 @@ namespace StockSharp.SmartCom
 
 			_wrapper.Connected -= OnConnected;
 			_wrapper.Disconnected -= OnDisconnected;
-
-			SendOutMessage(new DisconnectMessage { Error = error });
-
-			_wrapper = null;
 		}
 	}
 }

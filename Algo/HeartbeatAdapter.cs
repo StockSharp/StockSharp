@@ -41,6 +41,8 @@
 
 		private ReConnectionSettings _reConnectionSettings;
 
+		private bool _isFirstTimeConnect = true;
+
 		/// <summary>
 		/// Создать <see cref="HeartbeatAdapter"/>.
 		/// </summary>
@@ -122,8 +124,13 @@
 		{
 			switch (message.Type)
 			{
-				//case MessageTypes.Connect:
-				//{
+				case MessageTypes.Connect:
+				{
+					if (_isFirstTimeConnect)
+						_isFirstTimeConnect = false;
+					else
+						_adapter.SendInMessage(new ResetMessage());
+
 				//	lock (_timeSync)
 				//	{
 				//		_currState = ConnectionStates.Connecting;
@@ -137,8 +144,8 @@
 				//	else
 				//		_connectionTimeOut = _reConnectionSettings.Interval;
 
-				//	break;
-				//}
+					break;
+				}
 				case MessageTypes.Disconnect:
 				{
 					//lock (_timeSync)

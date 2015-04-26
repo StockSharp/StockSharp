@@ -206,11 +206,14 @@ namespace StockSharp.Algo.Testing
 		{
 			switch (message.Type)
 			{
-				case ExtendedMessageTypes.Reset:
+				case MessageTypes.Reset:
 				{
 					LoadedMessageCount = 0;
 					_disconnecting = _loadingThread != null;
 					_loadingThread = null;
+
+					if (!_disconnecting)
+						SendOutMessage(new ResetMessage());
 
 					break;
 				}
@@ -554,6 +557,10 @@ namespace StockSharp.Algo.Testing
 				SendOutMessage(new DisconnectMessage());
 
 			_disconnecting = false;
+
+			if (_loadingThread == null)
+				SendOutMessage(new ResetMessage());
+
 			_loadingThread = null;
 		}
 

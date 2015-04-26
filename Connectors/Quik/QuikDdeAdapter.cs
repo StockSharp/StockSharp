@@ -586,10 +586,26 @@ namespace StockSharp.Quik
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
+				case MessageTypes.Reset:
 				{
 					_prevSecurityChanges.Clear();
 
+					try
+					{
+						DisposeDdeServer();
+					}
+					catch (Exception ex)
+					{
+						SendOutError(ex);
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
+				case MessageTypes.Connect:
+				{
 					StartDdeServer();
 
 					var terminal = GetTerminal();

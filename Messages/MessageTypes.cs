@@ -187,5 +187,10 @@
 		/// Свеча (ренко).
 		/// </summary>
 		CandleRenko,
+
+		/// <summary>
+		/// Сброс состояния.
+		/// </summary>
+		Reset
 	}
 }

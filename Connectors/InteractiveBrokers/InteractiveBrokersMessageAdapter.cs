@@ -142,13 +142,34 @@ namespace StockSharp.InteractiveBrokers
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_depths.Clear();
+					_secIdByTradeIds.Clear();
+
+					if (_socket != null)
+					{
+						try
+						{
+							_socket.Dispose();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_socket = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_socket != null)
 						throw new InvalidOperationException(LocalizedStrings.Str1619);
-
-					_depths.Clear();
-					_secIdByTradeIds.Clear();
 
 					_socket = new IBSocket { Parent = this };
 					_socket.ProcessResponse += OnProcessResponse;

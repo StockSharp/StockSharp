@@ -49,6 +49,34 @@ namespace StockSharp.CQG
 			SendOutMessage(new ConnectMessage());
 		}
 
+		private void DisposeSession()
+		{
+			_session.AccountChanged -= SessionOnAccountChanged;
+			_session.AlgorithmicOrderPlaced -= SessionOnAlgorithmicOrderPlaced;
+			_session.AlgorithmicOrderRegistrationComplete -= SessionOnAlgorithmicOrderRegistrationComplete;
+			_session.OrderChanged -= SessionOnOrderChanged;
+			_session.PositionsStatementResolved -= SessionOnPositionsStatementResolved;
+
+			_session.InstrumentDOMChanged -= SessionOnInstrumentDomChanged;
+			_session.InstrumentChanged -= SessionOnInstrumentChanged;
+			_session.TicksAdded -= SessionOnTicksAdded;
+			_session.IncorrectSymbol -= SessionOnIncorrectSymbol;
+			_session.InstrumentSubscribed -= SessionOnInstrumentSubscribed;
+			_session.ConstantVolumeBarsAdded -= SessionOnConstantVolumeBarsAdded;
+			_session.ConstantVolumeBarsUpdated -= SessionOnConstantVolumeBarsUpdated;
+			_session.PointAndFigureBarsAdded -= SessionOnPointAndFigureBarsAdded;
+			_session.PointAndFigureBarsUpdated -= SessionOnPointAndFigureBarsUpdated;
+			_session.TimedBarsAdded -= SessionOnTimedBarsAdded;
+			_session.TimedBarsUpdated -= SessionOnTimedBarsUpdated;
+			_session.TFlowBarsAdded -= SessionOnFlowBarsAdded;
+			_session.TFlowBarsUpdated -= SessionOnFlowBarsUpdated;
+
+			_session.DataError -= SessionOnDataError;
+			_session.CELStarted -= SessionOnCelStarted;
+
+			_session.Shutdown();
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -57,6 +85,27 @@ namespace StockSharp.CQG
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					if (_session != null)
+					{
+						try
+						{
+							DisposeSession();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_session = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_session != null)
@@ -96,30 +145,7 @@ namespace StockSharp.CQG
 					if (_session == null)
 						throw new InvalidOperationException(LocalizedStrings.Str1856);
 
-					_session.AccountChanged -= SessionOnAccountChanged;
-					_session.AlgorithmicOrderPlaced -= SessionOnAlgorithmicOrderPlaced;
-					_session.AlgorithmicOrderRegistrationComplete -= SessionOnAlgorithmicOrderRegistrationComplete;
-					_session.OrderChanged -= SessionOnOrderChanged;
-					_session.PositionsStatementResolved -= SessionOnPositionsStatementResolved;
-
-					_session.InstrumentDOMChanged -= SessionOnInstrumentDomChanged;
-					_session.InstrumentChanged -= SessionOnInstrumentChanged;
-					_session.TicksAdded -= SessionOnTicksAdded;
-					_session.IncorrectSymbol -= SessionOnIncorrectSymbol;
-					_session.InstrumentSubscribed -= SessionOnInstrumentSubscribed;
-					_session.ConstantVolumeBarsAdded -= SessionOnConstantVolumeBarsAdded;
-					_session.ConstantVolumeBarsUpdated -= SessionOnConstantVolumeBarsUpdated;
-					_session.PointAndFigureBarsAdded -= SessionOnPointAndFigureBarsAdded;
-					_session.PointAndFigureBarsUpdated -= SessionOnPointAndFigureBarsUpdated;
-					_session.TimedBarsAdded -= SessionOnTimedBarsAdded;
-					_session.TimedBarsUpdated -= SessionOnTimedBarsUpdated;
-					_session.TFlowBarsAdded -= SessionOnFlowBarsAdded;
-					_session.TFlowBarsUpdated -= SessionOnFlowBarsUpdated;
-
-					_session.DataError -= SessionOnDataError;
-					_session.CELStarted -= SessionOnCelStarted;
-
-					_session.Shutdown();
+					DisposeSession();
 					_session = null;
 
 					SendOutMessage(new DisconnectMessage());

@@ -191,7 +191,7 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
-				case ExtendedMessageTypes.Reset:
+				case MessageTypes.Reset:
 					_enabledAdapters.Values.ForEach(a => a.SendInMessage(message));
 					break;
 
@@ -375,6 +375,8 @@ namespace StockSharp.Algo
 				return;
 			}
 
+			message.Adapter = innerAdapter;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
@@ -466,7 +468,6 @@ namespace StockSharp.Algo
 			//}
 
 			//if (canProcess)
-			message.Adapter = innerAdapter;
 			SendOutMessage(message);
 		}
 
@@ -494,7 +495,6 @@ namespace StockSharp.Algo
 			//}
 
 			//if (canProcess)
-			message.Adapter = innerAdapter;
 			SendOutMessage(message);
 		}
 

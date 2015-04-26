@@ -99,6 +99,7 @@
     <Compile Include="IMessageAdapter.cs" />
     <Compile Include="InMemoryMessageChannel.cs" />
     <Compile Include="ReConnectionSettings.cs" />
+    <Compile Include="ResetMessage.cs" />
     <Compile Include="TargetPlatformAttribute.cs" />
     <Compile Include="IMessageChannel.cs" />
     <Compile Include="MainCategoryAttribute.cs" />

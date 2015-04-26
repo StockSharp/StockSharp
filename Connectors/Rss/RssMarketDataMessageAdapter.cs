@@ -36,13 +36,19 @@ namespace StockSharp.Rss
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_isSubscribed = false;
+					SendOutMessage(new ResetMessage());
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					var error = Address == null
 						? new InvalidOperationException(LocalizedStrings.Str3503)
 						: null;
 
-					_isSubscribed = false;
 					SendOutMessage(new ConnectMessage { Error = error });
 					break;
 				}

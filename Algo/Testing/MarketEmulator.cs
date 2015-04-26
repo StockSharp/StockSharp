@@ -1478,7 +1478,7 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case ExtendedMessageTypes.Reset:
+				case MessageTypes.Reset:
 				{
 					_securityEmulators.Clear();
 					_securityEmulatorsByBoard.Clear();
@@ -1496,6 +1496,8 @@ namespace StockSharp.Algo.Testing
 
 					_bufferPrevFlush = default(DateTime);
 					_portfoliosPrevRecalc = default(DateTime);
+
+					retVal.Add(new ResetMessage());
 					break;
 				}
 

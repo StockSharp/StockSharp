@@ -169,6 +169,37 @@ namespace StockSharp.Quik
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					if (_api != null)
+					{
+						try
+						{
+							if (_api.IsConnected)
+								_api.Disconnect();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						try
+						{
+							_api.Dispose();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_api = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					var terminal = GetTerminal();

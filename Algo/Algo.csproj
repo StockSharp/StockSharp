@@ -439,7 +439,6 @@
     <Compile Include="Testing\OrderLogGenerator.cs" />
     <Compile Include="Testing\IMarketEmulator.cs" />
     <Compile Include="Testing\RealTimeEmulationTrader.cs" />
-    <Compile Include="Testing\ResetMessage.cs" />
     <Compile Include="Testing\TradeGenerator.cs" />
     <Compile Include="TraderHelper.cs" />
   </ItemGroup>

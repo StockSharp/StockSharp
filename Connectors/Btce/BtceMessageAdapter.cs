@@ -74,11 +74,8 @@ namespace StockSharp.Btce
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
+				case MessageTypes.Reset:
 				{
-					if (_client != null)
-						throw new InvalidOperationException(LocalizedStrings.Str1619);
-
 					_subscribedLevel1.Clear();
 					_subscribedDepths.Clear();
 					_subscribedTicks.Clear();
@@ -91,6 +88,30 @@ namespace StockSharp.Btce
 					_hasActiveOrders = false;
 					_hasMyTrades = false;
 					_requestOrderFirst = false;
+
+					if (_client != null)
+					{
+						try
+						{
+							_client.Dispose();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_client = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
+				case MessageTypes.Connect:
+				{
+					if (_client != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
 
 					_client = new BtceClient(Key, Secret);
 

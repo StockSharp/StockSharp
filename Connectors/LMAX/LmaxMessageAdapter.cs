@@ -45,6 +45,30 @@ namespace StockSharp.LMAX
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_isHistoricalSubscribed = false;
+
+					if (_session != null)
+					{
+						try
+						{
+							_session.Stop();
+							_session.Logout(OnLogoutSuccess, OnLogoutFailure);
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_session = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					if (_session != null)
@@ -54,7 +78,6 @@ namespace StockSharp.LMAX
 						throw new InvalidOperationException(LocalizedStrings.Str3378);
 
 					_isDownloadSecurityFromSite = IsDownloadSecurityFromSite;
-					_isHistoricalSubscribed = false;
 
 					_api = new LmaxApi(IsDemo ? "https://web-order.london-demo.lmax.com" : "https://api.lmaxtrader.com");
 					_api.Login(new LoginRequest(Login, Password.To<string>(), IsDemo ? ProductType.CFD_DEMO : ProductType.CFD_LIVE), OnLoginOk, OnLoginFailure);
@@ -69,6 +92,7 @@ namespace StockSharp.LMAX
 
 					_session.Stop();
 					_session.Logout(OnLogoutSuccess, OnLogoutFailure);
+					_session = null;
 
 					break;
 				}
