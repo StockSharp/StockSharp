@@ -112,7 +112,7 @@ namespace StockSharp.Hydra.LMAX
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<LmaxTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<LmaxTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new LmaxSettings(settings);
 
@@ -124,22 +124,13 @@ namespace StockSharp.Hydra.LMAX
 				_settings.IsDownloadSecurityFromSite = false;
 			}
 
-			return new MarketDataConnector<LmaxTrader>(EntityRegistry.Securities, this, CreateConnector);
-		}
-
-		private LmaxTrader CreateConnector()
-		{
-			var trader = new LmaxTrader
+			return new MarketDataConnector<LmaxTrader>(EntityRegistry.Securities, this, () => new LmaxTrader
 			{
 				Login = _settings.Login,
 				Password = _settings.Password.To<string>(),
 				IsDemo = _settings.IsDemo,
 				IsDownloadSecurityFromSite = _settings.IsDownloadSecurityFromSite
-			};
-
-			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
-
-			return trader;
+			});
 		}
 	}
 }

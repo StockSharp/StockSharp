@@ -171,7 +171,7 @@ namespace StockSharp.Hydra.Plaza
 			Connector.Connector.StreamManager.RevisionManager.SaveRevisions();
 		}
 
-		protected override MarketDataConnector<PlazaTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<PlazaTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new PlazaSettings(settings);
 
@@ -221,8 +221,6 @@ namespace StockSharp.Hydra.Plaza
 				CGateKey = _settings.CGateKey,
 				OnlySystemTrades = _settings.OnlySystemTrades,
 			};
-
-			connector.Adapter.InnerAdapters.Remove(connector.TransactionAdapter);
 
 			connector.TableRegistry.StreamRegistry.IsFastRepl = _settings.IsFastRepl;
 

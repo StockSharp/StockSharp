@@ -99,7 +99,7 @@ namespace StockSharp.Hydra.Oanda
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<OandaTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<OandaTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new OandaSettings(settings);
 

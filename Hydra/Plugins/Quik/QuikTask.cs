@@ -309,7 +309,7 @@ namespace StockSharp.Hydra.Quik
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<QuikTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<QuikTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new QuikSettings(settings);
 
@@ -337,8 +337,6 @@ namespace StockSharp.Hydra.Quik
 
 			if (_settings.IsDownloadSecurityChangesHistory)
 				connector.DdeTables = connector.DdeTables.Concat(new[] { connector.SecuritiesChangeTable });
-
-			connector.Adapter.InnerAdapters.Remove(connector.TransactionAdapter);
 
 			//Добавление выбранных колонок в экспорт
 			if (!_settings.IsDownloadSecurityChangesHistory)

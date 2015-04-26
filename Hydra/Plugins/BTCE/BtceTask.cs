@@ -2,7 +2,7 @@ namespace StockSharp.Hydra.Btce
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
+	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -27,6 +27,32 @@ namespace StockSharp.Hydra.Btce
 				: base(settings)
 			{
 			}
+
+			/// <summary>
+			/// Ключ.
+			/// </summary>
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str3304Key)]
+			[DescriptionLoc(LocalizedStrings.Str3304Key, true)]
+			[PropertyOrder(1)]
+			public SecureString Key
+			{
+				get { return ExtensionInfo["Key"].To<SecureString>(); }
+				set { ExtensionInfo["Key"] = value; }
+			}
+
+			/// <summary>
+			/// Секрет.
+			/// </summary>
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str3306Key)]
+			[DescriptionLoc(LocalizedStrings.Str3307Key)]
+			[PropertyOrder(2)]
+			public SecureString Secret
+			{
+				get { return ExtensionInfo["Secret"].To<SecureString>(); }
+				set { ExtensionInfo["Secret"] = value; }
+			}
 		}
 
 		private BtceSettings _settings;
@@ -46,18 +72,21 @@ namespace StockSharp.Hydra.Btce
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<BtceTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<BtceTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new BtceSettings(settings);
 
-			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, CreateConnector);
-		}
+			if (_settings.IsDefault)
+			{
+				_settings.Key = new SecureString();
+				_settings.Secret = new SecureString();
+			}
 
-		private static BtceTrader CreateConnector()
-		{
-			var trader = new BtceTrader();
-			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
-			return trader;
+			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, () => new BtceTrader
+			{
+				Key = _settings.Key.To<string>(),
+				Secret = _settings.Secret.To<string>(),
+			});
 		}
 	}
 }

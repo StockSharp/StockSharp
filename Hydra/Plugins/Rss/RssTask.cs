@@ -96,7 +96,7 @@ namespace StockSharp.Hydra.Rss
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<RssTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<RssTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new RssSettings(settings);
 

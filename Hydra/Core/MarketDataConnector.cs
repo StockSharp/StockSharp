@@ -24,7 +24,7 @@ namespace StockSharp.Hydra.Core
 	/// </summary>
 	/// <typeparam name="TConnector">Тип подключения.</typeparam>
 	public class MarketDataConnector<TConnector> : Disposable, ISecurityDownloader
-		where TConnector : class, IConnector
+		where TConnector : Connector
 	{
 		private sealed class MarketDataEntityFactory : Algo.EntityFactory
 		{
@@ -461,6 +461,14 @@ namespace StockSharp.Hydra.Core
 		public void Start()
 		{
 			Connector = _createConnector();
+
+			if (!_task.IsExecLogEnabled() && Connector.TransactionAdapter != null)
+			{
+				if (Connector.TransactionAdapter != Connector.MarketDataAdapter)
+					Connector.Adapter.InnerAdapters.Remove(Connector.TransactionAdapter);
+				else
+					Connector.TransactionAdapter.IsTransactionEnabled = false;
+			}
 
 			Connector.DoIf<IConnector, Connector>(t =>
 			{

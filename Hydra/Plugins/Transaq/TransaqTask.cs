@@ -182,7 +182,7 @@ namespace StockSharp.Hydra.Transaq
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<TransaqTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<TransaqTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new TransaqSettings(settings);
 
@@ -212,8 +212,6 @@ namespace StockSharp.Hydra.Transaq
 					IsHFT = _settings.IsHFT,
 					MarketDataInterval = _settings.MarketDataInterval
 				};
-
-				trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
 
 				if (_settings.UseProxy)
 				{

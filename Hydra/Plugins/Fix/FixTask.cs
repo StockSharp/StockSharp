@@ -90,7 +90,7 @@ namespace StockSharp.Hydra.Fix
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<FixTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<FixTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new FixSettings(settings);
 
@@ -102,6 +102,10 @@ namespace StockSharp.Hydra.Fix
 				var trader = new FixTrader();
 #warning TODO
 				trader.MarketDataAdapter.Load(_settings.MarketDataSession.Save());
+
+				if (!this.IsExecLogEnabled())
+					trader.Adapter.InnerAdapters.Remove(trader.TransactionAdapter);
+
 				return trader;
 			});
 		}

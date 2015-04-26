@@ -95,7 +95,7 @@ namespace StockSharp.Hydra.AlfaDirect
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<AlfaTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<AlfaTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new AlfaSettings(settings);
 
@@ -109,7 +109,7 @@ namespace StockSharp.Hydra.AlfaDirect
 			return new MarketDataConnector<AlfaTrader>(EntityRegistry.Securities, this, () => new AlfaTrader
 			{
 				Login = _settings.Login,
-				Password = _settings.Password.To<string>(),
+				Password = _settings.Password.To<string>()
 			});
 		}
 	}

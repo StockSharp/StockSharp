@@ -49,6 +49,19 @@
 		}
 
 		/// <summary>
+		/// Включено ли у задачи закачка лога собственной торговли.
+		/// </summary>
+		/// <param name="task">Задача.</param>
+		/// <returns>Включено ли у задачи закачка лога собственной торговли.</returns>
+		public static bool IsExecLogEnabled(this IHydraTask task)
+		{
+			if (task == null)
+				throw new ArgumentNullException("task");
+
+			return task.Settings.Securities.Any(s => s.MarketDataTypesSet.Contains(typeof(ExecutionMessage)));
+		}
+
+		/// <summary>
 		/// Проверить, является ли инструмент "Все инструменты".
 		/// </summary>
 		/// <param name="security">Инструмент.</param>

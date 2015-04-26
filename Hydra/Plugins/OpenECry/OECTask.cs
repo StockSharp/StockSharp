@@ -115,7 +115,7 @@ namespace StockSharp.Hydra.OpenECry
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<OECTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<OECTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new OECSettings(settings);
 
@@ -129,22 +129,13 @@ namespace StockSharp.Hydra.OpenECry
 				_settings.SupportedLevel1Fields = Enumerator.GetValues<Level1Fields>();
 			}
 
-			return new MarketDataConnector<OECTrader>(EntityRegistry.Securities, this, CreateConnector);
-		}
-
-		private OECTrader CreateConnector()
-		{
-			var trader = new OECTrader
+			return new MarketDataConnector<OECTrader>(EntityRegistry.Securities, this, () => new OECTrader
 			{
 				Uuid = _settings.Uuid,
 				Login = _settings.Login,
 				Password = _settings.Password.To<string>(),
 				Address = _settings.Address
-			};
-
-			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
-
-			return trader;
+			});
 		}
 	}
 }

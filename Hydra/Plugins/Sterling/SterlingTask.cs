@@ -2,7 +2,6 @@ namespace StockSharp.Hydra.Sterling
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -50,7 +49,7 @@ namespace StockSharp.Hydra.Sterling
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<SterlingTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<SterlingTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new SterlingSettings(settings);
 
@@ -58,14 +57,7 @@ namespace StockSharp.Hydra.Sterling
 			{
 			}
 
-			return new MarketDataConnector<SterlingTrader>(EntityRegistry.Securities, this, CreateConnector);
-		}
-
-		private static SterlingTrader CreateConnector()
-		{
-			var trader = new SterlingTrader();
-			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
-			return trader;
+			return new MarketDataConnector<SterlingTrader>(EntityRegistry.Securities, this, () => new SterlingTrader());
 		}
 	}
 }

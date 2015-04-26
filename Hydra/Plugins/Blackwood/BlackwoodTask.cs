@@ -122,7 +122,7 @@ namespace StockSharp.Hydra.Blackwood
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<BlackwoodTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<BlackwoodTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new BlackwoodSettings(settings);
 
@@ -137,22 +137,13 @@ namespace StockSharp.Hydra.Blackwood
 				_settings.MarketDataAddress = new IPEndPoint(BlackwoodAddresses.WetBush, BlackwoodAddresses.MarketDataPort);
 			}
 
-			return new MarketDataConnector<BlackwoodTrader>(EntityRegistry.Securities, this, CreateConnector);
-		}
-
-		private BlackwoodTrader CreateConnector()
-		{
-			var trader = new BlackwoodTrader
+			return new MarketDataConnector<BlackwoodTrader>(EntityRegistry.Securities, this, () => new BlackwoodTrader
 			{
 				HistoricalDataAddress = _settings.HistoricalDataAddress,
 				MarketDataAddress = _settings.MarketDataAddress,
 				Login = _settings.Login,
 				Password = _settings.Password.To<string>(),
-			};
-
-			trader.Adapter.InnerAdapters.Remove(trader.TransactionAdapter);
-
-			return trader;
+			});
 		}
 	}
 }

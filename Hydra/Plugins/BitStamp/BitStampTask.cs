@@ -2,7 +2,7 @@ namespace StockSharp.Hydra.BitStamp
 {
 	using System;
 	using System.ComponentModel;
-	using System.Linq;
+	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Xaml;
@@ -27,6 +27,32 @@ namespace StockSharp.Hydra.BitStamp
 				: base(settings)
 			{
 			}
+
+			/// <summary>
+			/// Ключ.
+			/// </summary>
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str3304Key)]
+			[DescriptionLoc(LocalizedStrings.Str3304Key, true)]
+			[PropertyOrder(1)]
+			public SecureString Key
+			{
+				get { return ExtensionInfo["Key"].To<SecureString>(); }
+				set { ExtensionInfo["Key"] = value; }
+			}
+
+			/// <summary>
+			/// Секрет.
+			/// </summary>
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str3306Key)]
+			[DescriptionLoc(LocalizedStrings.Str3307Key)]
+			[PropertyOrder(2)]
+			public SecureString Secret
+			{
+				get { return ExtensionInfo["Secret"].To<SecureString>(); }
+				set { ExtensionInfo["Secret"] = value; }
+			}
 		}
 
 		private BitStampSettings _settings;
@@ -46,18 +72,21 @@ namespace StockSharp.Hydra.BitStamp
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<BitStampTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<BitStampTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new BitStampSettings(settings);
 
-			return new MarketDataConnector<BitStampTrader>(EntityRegistry.Securities, this, CreateConnector);
-		}
+			if (_settings.IsDefault)
+			{
+				_settings.Key = new SecureString();
+				_settings.Secret = new SecureString();
+			}
 
-		private static BitStampTrader CreateConnector()
-		{
-			var trader = new BitStampTrader();
-			trader.Adapter.InnerAdapters.First().IsTransactionEnabled = false;
-			return trader;
+			return new MarketDataConnector<BitStampTrader>(EntityRegistry.Securities, this, () => new BitStampTrader
+			{
+				Key = _settings.Key.To<string>(),
+				Secret = _settings.Secret.To<string>(),
+			});
 		}
 	}
 }

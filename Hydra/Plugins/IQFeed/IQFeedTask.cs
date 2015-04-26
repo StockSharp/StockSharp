@@ -205,7 +205,7 @@ namespace StockSharp.Hydra.IQFeed
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<IQFeedTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<IQFeedTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new IQFeedSettings(settings);
 
