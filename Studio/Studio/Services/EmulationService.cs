@@ -156,7 +156,7 @@ namespace StockSharp.Studio.Services
 		{
 			if (EmulationConnector.State == EmulationStates.Suspended)
 			{
-				EmulationConnector.Resume();
+				EmulationConnector.Start();
 			}
 			else
 			{
