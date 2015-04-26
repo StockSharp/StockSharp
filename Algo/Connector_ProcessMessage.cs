@@ -22,6 +22,14 @@ namespace StockSharp.Algo
 			OutMessageChannel.SendInMessage(message);
 		}
 
+		/// <summary>
+		/// Вызывать событие <see cref="Connected"/> при установке подключения первого адаптера в <see cref="Adapter"/>.
+		/// </summary>
+		protected virtual bool RaiseConnectedOnFirstAdapter
+		{
+			get { return true; }
+		}
+
 		private IMessageChannel _outMessageChannel;
 
 		/// <summary>
@@ -61,16 +69,37 @@ namespace StockSharp.Algo
 		public BasketMessageAdapter Adapter
 		{
 			get { return _adapter; }
-			private set
+			protected set
 			{
-				if (value == null)
+				if (!_isDisposing && value == null)
 					throw new ArgumentNullException("value");
+
+				if (_adapter == value)
+					return;
+
+				if (_adapter != null)
+				{
+					_adapter.InnerAdapters.Added -= InnerAdaptersOnAdded;
+					_adapter.InnerAdapters.Removed -= InnerAdaptersOnRemoved;
+					_adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
+					_adapter.NewOutMessage -= AdapterOnNewOutMessage;
+
+					_inAdapter.Dispose();
+				}
 
 				_adapter = value;
 				_inAdapter = _adapter;
 
-				if (CalculateMessages)
-					_inAdapter = new ManagedMessageAdapter(_inAdapter);
+				if (_adapter != null)
+				{
+					if (CalculateMessages)
+						_inAdapter = new ManagedMessageAdapter(_inAdapter);
+
+					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
+					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
+					_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
+					_adapter.NewOutMessage += AdapterOnNewOutMessage;	
+				}
 			}
 		}
 
@@ -357,8 +386,8 @@ namespace StockSharp.Algo
 				throw new ArgumentOutOfRangeException("direction");
 
 			var isConnect = message is ConnectMessage;
-
-			var state = _adapterStates[message.Adapter];
+			var adapter = message.Adapter;
+			var state = _adapterStates[adapter];
 
 			switch (state)
 			{
@@ -368,23 +397,36 @@ namespace StockSharp.Algo
 					{
 						if (message.Error == null)
 						{
-							_adapterStates[message.Adapter] = ConnectionStates.Connected;
+							_adapterStates[adapter] = ConnectionStates.Connected;
 
-							// raise Connected event only one time
 							if (ConnectionState == ConnectionStates.Connecting)
-								RaiseConnected();
+							{
+								if (RaiseConnectedOnFirstAdapter)
+								{
+									// raise Connected event only one time for the first adapter
+									RaiseConnected();
+								}
+								else
+								{
+									var isAllConnected = _adapterStates.CachedValues.All(v => v == ConnectionStates.Connected);
 
-							if (Adapter.PortfolioLookupRequired)
+									// raise Connected event only one time when the last adapter connection successfully
+									if (isAllConnected)
+										RaiseConnected();
+								}
+							}
+
+							if (adapter.PortfolioLookupRequired)
 								SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
-							if (Adapter.OrderStatusRequired)
+							if (adapter.OrderStatusRequired)
 							{
 								var transactionId = TransactionIdGenerator.GetNextId();
 								_entityCache.AddOrderStatusTransactionId(transactionId);
 								SendInMessage(new OrderStatusMessage { TransactionId = transactionId });
 							}
 
-							if (Adapter.SecurityLookupRequired)
+							if (adapter.SecurityLookupRequired)
 								SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
 
 							if (message is RestoredConnectMessage)
@@ -392,7 +434,7 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							_adapterStates[message.Adapter] = ConnectionStates.Failed;
+							_adapterStates[adapter] = ConnectionStates.Failed;
 
 							// raise ConnectionError only one time
 							if (ConnectionState == ConnectionStates.Connecting)
@@ -408,7 +450,7 @@ namespace StockSharp.Algo
 					}
 					else
 					{
-						_adapterStates[message.Adapter] = ConnectionStates.Failed;
+						_adapterStates[adapter] = ConnectionStates.Failed;
 
 						// raise ConnectionError only one time
 						if (ConnectionState == ConnectionStates.Connecting)
@@ -423,7 +465,7 @@ namespace StockSharp.Algo
 				{
 					if (isConnect)
 					{
-						_adapterStates[message.Adapter] = ConnectionStates.Failed;
+						_adapterStates[adapter] = ConnectionStates.Failed;
 
 						var error = new InvalidOperationException(LocalizedStrings.Str684, message.Error);
 
@@ -437,7 +479,7 @@ namespace StockSharp.Algo
 					{
 						if (message.Error == null)
 						{
-							_adapterStates[message.Adapter] = ConnectionStates.Disconnected;
+							_adapterStates[adapter] = ConnectionStates.Disconnected;
 
 							var isLast = _adapterStates.CachedValues.All(v => v != ConnectionStates.Disconnecting);
 
@@ -447,7 +489,7 @@ namespace StockSharp.Algo
 						}
 						else
 						{
-							_adapterStates[message.Adapter] = ConnectionStates.Failed;
+							_adapterStates[adapter] = ConnectionStates.Failed;
 
 							// raise ConnectionError only one time
 							if (ConnectionState == ConnectionStates.Disconnecting)
@@ -463,7 +505,7 @@ namespace StockSharp.Algo
 				{
 					if (isConnect && message.Error != null)
 					{
-						_adapterStates[message.Adapter] = ConnectionStates.Failed;
+						_adapterStates[adapter] = ConnectionStates.Failed;
 						RaiseConnectionError(new InvalidOperationException(LocalizedStrings.Str683, message.Error));
 						return;
 					}

@@ -15,6 +15,7 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Algo.Slippage;
+	using StockSharp.Algo.Testing;
 	using StockSharp.Localization;
 
 	using Wintellect.PowerCollections;
@@ -195,6 +196,8 @@ namespace StockSharp.Algo
 		private readonly TimeMessage _marketTimeMessage = new TimeMessage();
 		private bool _isMarketTimeHandled;
 
+		private bool _isDisposing;
+
 		/// <summary>
 		/// Создать <see cref="Connector"/>.
 		/// </summary>
@@ -214,10 +217,6 @@ namespace StockSharp.Algo
 			OutMessageChannel = new InMemoryMessageChannel("Connector Out", RaiseError);
 
 			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator());
-			Adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
-			Adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
-			Adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
-			Adapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
 
 		/// <summary>
@@ -1462,7 +1461,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Очистить кэш данных.
 		/// </summary>
-		protected void ClearCache()
+		public virtual void ClearCache()
 		{
 			_entityCache.Clear();
 			_prevTime = default(DateTimeOffset);
@@ -1502,6 +1501,8 @@ namespace StockSharp.Algo
 			_sessionStates.Clear();
 			_filteredMarketDepths.Clear();
 			_olBuilders.Clear();
+
+			SendInMessage(new ResetMessage());
 		}
 
 		/// <summary>
@@ -1551,7 +1552,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			//_isDisposing = true;
+			_isDisposing = true;
 
 			if (ConnectionState == ConnectionStates.Connected)
 			{
@@ -1575,11 +1576,7 @@ namespace StockSharp.Algo
 			//if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
 			//	MarketDataAdapter = null;
 
-			Adapter.InnerAdapters.Added -= InnerAdaptersOnAdded;
-			Adapter.InnerAdapters.Removed -= InnerAdaptersOnRemoved;
-			Adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
-
-			Adapter.Dispose();
+			Adapter = null;
 		}
 
 		/// <summary>
