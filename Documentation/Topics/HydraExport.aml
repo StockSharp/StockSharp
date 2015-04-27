@@ -12,14 +12,51 @@
 	  </para>
 
       <para>
-		  Для этого в главном окне на панели инструметов необходимо нажать на одну из кнопок -
-		  <link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Сделки</link>, 
-		  <link xlink:href="6126cb15-de8b-4bcc-8b81-7354e8894239">Стаканы</link>,
-		  <link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">Свечки</link>, 
-		  <link xlink:href="fe4f5992-a496-45bb-82e6-d353b42df894">Ордер Лог</link>, 
-		  <link xlink:href="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99">Изменения</link>. 
-		  Или выбрать соответсвующий пункт меню в главном меню "Экспорт". 
+		  Для этого в главном окне на панели инструметов необходимо нажать на одну из следующих кнопок -
 	  </para>
+	  
+	  	
+      <list class="bullet">
+        <listItem>
+          <para>
+          	<link xlink:href="3a20fcda-25ba-4794-ac91-dfa227380530">Сделки</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	<link xlink:href="6126cb15-de8b-4bcc-8b81-7354e8894239">Стаканы</link>
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	<link xlink:href="621927b7-839f-4492-8dbb-162e63d57769">Свечи</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="fe4f5992-a496-45bb-82e6-d353b42df894">Лог заявок</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99">Level 1</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="243486c1-b9d4-47af-889e-61aaaa670644">Новости</link> 
+          </para>
+        </listItem>
+        <listItem>
+          <para>
+          	 <link xlink:href="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677">Executions</link> 
+          </para>
+        </listItem>
+       
+      </list> 
+      
+      <para>Или выбрать соответсвующий пункт меню в главном меню "Экспорт".</para>
+	  
 	  
 	  <mediaLink>
 		  <image placement="center" xlink:href="hydra_main_start" />
