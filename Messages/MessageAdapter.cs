@@ -227,6 +227,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Поддерживаемые типы сообщений, который может обработать адаптер.
 		/// </summary>
+		[Browsable(false)]
 		public virtual MessageTypes[] SupportedMessages
 		{
 			get { return _supportedMessages; }
@@ -327,6 +328,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
 		/// </summary>
+		[Browsable(false)]
 		public virtual bool SecurityLookupRequired
 		{
 			get { return SupportedMessages.Contains(MessageTypes.SecurityLookup); }
@@ -335,6 +337,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
 		/// </summary>
+		[Browsable(false)]
 		public virtual bool PortfolioLookupRequired
 		{
 			get { return SupportedMessages.Contains(MessageTypes.PortfolioLookup); }
@@ -343,6 +346,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
 		/// </summary>
+		[Browsable(false)]
 		public virtual bool OrderStatusRequired
 		{
 			get { return SupportedMessages.Contains(MessageTypes.OrderStatus); }
@@ -367,6 +371,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Разрядность процесса, в котором может работать адаптер. По-умолчанию равно <see cref="Platforms.AnyCPU"/>.
 		/// </summary>
+		[Browsable(false)]
 		public Platforms Platform { get; protected set; }
 
 		/// <summary>
@@ -426,6 +431,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Генератор идентификаторов транзакций.
 		/// </summary>
+		[Browsable(false)]
 		public IdGenerator TransactionIdGenerator
 		{
 			get { return _transactionIdGenerator; }
@@ -444,6 +450,7 @@ namespace StockSharp.Messages
 		/// <remarks>
 		/// Значение по умолчанию равно 10 секундам.
 		/// </remarks>
+		[Browsable(false)]
 		public TimeSpan LookupTimeOut
 		{
 			get { return _secLookupTimeOut.TimeOut; }
