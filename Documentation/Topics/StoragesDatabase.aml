@@ -4,7 +4,7 @@
 
 	<introduction>
 		<para>Работа с базой данных ведется с использованием SQLite. База данных создается при первом запуске <token>hydra</token>
-		и сохраняется(по умолчанию) в</para>
+		и сохраняется (по умолчанию) в</para>
 		
 		<para><legacyBold>Мои Документы\StockSharp\Hydra\</legacyBold></para>
 		

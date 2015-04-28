@@ -172,6 +172,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraExportExecution.aml" />
+    <None Include="Topics\HydraExportNews.aml" />
+    <None Include="Topics\HydraExportCandles.aml" />
     <None Include="Topics\HydraSettingsBtce.aml" />
     <None Include="Topics\HydraSettingsOanda.aml" />
     <None Include="Topics\HydraSettingsSterling.aml" />
@@ -529,10 +532,6 @@
     <Image Include="Art\hydra_export_order_log.png">
       <ImageId>hydra_export_order_log</ImageId>
       <AlternateText>hydra export order log</AlternateText>
-    </Image>
-    <Image Include="Art\hydra_export_security_change.png">
-      <ImageId>hydra_export_security_change</ImageId>
-      <AlternateText>hydra export security change</AlternateText>
     </Image>
     <Image Include="Art\hydra_export_trades.png">
       <ImageId>hydra_export_trades</ImageId>
@@ -1113,6 +1112,26 @@
     <Image Include="Art\hydra_tasks_connstring.png">
       <ImageId>hydra_tasks_connstring</ImageId>
       <AlternateText>hydra tasks connstring</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export.png">
+      <ImageId>hydra_export</ImageId>
+      <AlternateText>hydra export</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_context.png">
+      <ImageId>hydra_export_context</ImageId>
+      <AlternateText>hydra export context</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_level1.png">
+      <ImageId>hydra_export_level1</ImageId>
+      <AlternateText>hydra export level 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_news.png">
+      <ImageId>hydra_export_news</ImageId>
+      <AlternateText>hydra export news</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_executions.png">
+      <ImageId>hydra_export_executions</ImageId>
+      <AlternateText>hydra export executions</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

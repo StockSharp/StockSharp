@@ -193,7 +193,7 @@
   </Topic>
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка и работа" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
       <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
       <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Alor" />
       <Topic id="7a11d9ff-17c9-406b-ab88-c4b9c080912d" visible="True" title="BitStamp" />
@@ -226,14 +226,17 @@
       <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
       <Topic id="a92bca75-1a0c-4581-a75a-6f13afd7975e" visible="True" title="TrueFX" />
       <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
-      <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" isSelected="true" title="Yahoo Finance" />
+      <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
     </Topic>
     <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Список инструментов" />
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экпорт">
+    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" isExpanded="true" title="Просмотр и экпорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />
       <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Стаканы" />
+      <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Свечи" />
       <Topic id="fe4f5992-a496-45bb-82e6-d353b42df894" visible="True" title="Заявки" />
-      <Topic id="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99" visible="True" title="Изменения" />
+      <Topic id="f3ff535d-84d8-4fa5-8d3a-e123a5c57e99" visible="True" title="Level 1 " />
+      <Topic id="243486c1-b9d4-47af-889e-61aaaa670644" visible="True" title="Новости" />
+      <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" isSelected="true" title="Executions" />
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Генерация свечек" />
     <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Настройки (дополнительные)" />
