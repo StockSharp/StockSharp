@@ -468,7 +468,7 @@ Str530;Last change local time;Локальное время последнего
 Str531;Last trade change local time (Cancellation, Fill).;Локальное время последнего изменения заявки (Снятие, Сведение).
 Str532;Linked order;Связанная заявка
 Str533;Order created by a stop-order during condition activation (empty value, if stop-condition has not been activated).;Биржевая заявка, которая была создана стоп-заявкой при активации условия (пустое значение, если стоп-условие еще не было активировано).
-Str534Params;{0}/{1} {2} Price={3} Volume={4} State={5} Score={6};{0}/{1} {2} Цена={3} Объем={4} Сост={5} Бал={6}
+Str534Params;{0}/{1} {2} Price={3} Volume={4} State={5} Bal={6};{0}/{1} {2} Цена={3} Объем={4} Сост={5} Бал={6}
 Str535;Orders log item.;Строка лога заявок.
 Str536Params;{0} orders {1};{0} заявки {1}
 Str537;Cancellation;Снятие

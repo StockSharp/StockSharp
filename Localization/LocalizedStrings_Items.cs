@@ -6113,12 +6113,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// {0}/{1} {2} Price={3} Volume={4} State={5} Score={6}
+		/// {0}/{1} {2} Price={3} Volume={4} State={5} Bal={6}
 		/// </summary>
 		public const string Str534ParamsKey = "Str534Params";
 
 		/// <summary>
-		/// {0}/{1} {2} Price={3} Volume={4} State={5} Score={6}
+		/// {0}/{1} {2} Price={3} Volume={4} State={5} Bal={6}
 		/// </summary>
 		public static string Str534Params
 		{
@@ -15967,12 +15967,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// cancelled
+		/// Cancelled
 		/// </summary>
 		public const string Str1329Key = "Str1329";
 
 		/// <summary>
-		/// cancelled
+		/// Cancelled
 		/// </summary>
 		public static string Str1329
 		{
