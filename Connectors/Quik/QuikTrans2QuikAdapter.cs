@@ -99,7 +99,9 @@ namespace StockSharp.Quik
 			IsAsyncMode = true;
 			Platform = Platforms.x86;
 			//SessionHolder.TerminalChanged += ResetApi;
-			IsMarketDataEnabled = false;
+			this.AddTransactionalSupport();
+			this.RemoveSupportedMessage(MessageTypes.OrderStatus);
+			this.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
 		}
 
 		private const string _category = "TRANS2QUIK";

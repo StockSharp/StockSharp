@@ -39,21 +39,6 @@
             </summary>
       <param name="storage">Хранилище настроек.</param>
     </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.PortfolioLookupRequired">
-      <summary>
-            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.PortfolioLookupMessage" /> для получения списка портфелей и позиций.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.OrderStatusRequired">
-      <summary>
-            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.OrderStatusMessage" /> для получения списка заявок и собственных сделок.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Oanda.OandaMessageAdapter.SecurityLookupRequired">
-      <summary>
-            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
-            </summary>
-    </member>
     <member name="P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativeSecurityLookup">
       <summary>
             Поддерживается ли торговой системой поиск инструментов.

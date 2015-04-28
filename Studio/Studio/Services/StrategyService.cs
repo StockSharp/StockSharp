@@ -79,7 +79,9 @@ namespace StockSharp.Studio.Services
 					StorageRegistry = storageRegistry
 				});
 				//_historyMessageAdapter.UpdateCurrentTime(startDate);
-				Adapter.InnerAdapters.Add(new PassThroughMessageAdapter(TransactionIdGenerator) { IsMarketDataEnabled = false });
+				var transactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator);
+				transactionAdapter.AddTransactionalSupport();
+				Adapter.InnerAdapters.Add(transactionAdapter);
 
 				_historyMessageAdapter.MarketTimeChangedInterval = useCandlesTimeFrame;
 

@@ -22,6 +22,10 @@
 			: base(transactionIdGenerator)
 		{
 			CreateAssociatedSecurity = true;
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+			this.RemoveSupportedMessage(MessageTypes.SecurityLookup);
 		}
 
 		/// <summary>
@@ -39,22 +43,6 @@
 			{
 				Error = new Exception("Sterling is shutdown.")
 			});
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
-		/// </summary>
-		public override bool PortfolioLookupRequired
-		{
-			get { return IsTransactionEnabled; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
-		/// </summary>
-		public override bool OrderStatusRequired
-		{
-			get { return IsTransactionEnabled; }
 		}
 
 		/// <summary>

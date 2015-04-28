@@ -157,16 +157,10 @@
 			get { return _adapter.TransactionIdGenerator; }
 		}
 
-		bool IMessageAdapter.IsMarketDataEnabled
+		MessageTypes[] IMessageAdapter.SupportedMessages
 		{
-			get { return _adapter.IsMarketDataEnabled; }
-			set { _adapter.IsMarketDataEnabled = value; }
-		}
-
-		bool IMessageAdapter.IsTransactionEnabled
-		{
-			get { return _adapter.IsTransactionEnabled; }
-			set { _adapter.IsTransactionEnabled = value; }
+			get { return _adapter.SupportedMessages; }
+			set { _adapter.SupportedMessages = value; }
 		}
 
 		bool IMessageAdapter.IsValid

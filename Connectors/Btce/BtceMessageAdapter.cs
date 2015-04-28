@@ -27,30 +27,6 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
-		/// </summary>
-		public override bool PortfolioLookupRequired
-		{
-			get { return IsTransactionEnabled; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
-		/// </summary>
-		public override bool OrderStatusRequired
-		{
-			get { return IsTransactionEnabled; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
-		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return IsMarketDataEnabled; }
-		}
-
-		/// <summary>
 		/// Поддерживается ли торговой системой поиск инструментов.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup

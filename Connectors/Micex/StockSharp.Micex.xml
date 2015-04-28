@@ -72,21 +72,6 @@
             </summary>
       <returns>Строковое представление.</returns>
     </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.PortfolioLookupRequired">
-      <summary>
-            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.PortfolioLookupMessage" /> для получения списка портфелей и позиций.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.OrderStatusRequired">
-      <summary>
-            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.OrderStatusMessage" /> для получения списка заявок и собственных сделок.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.SecurityLookupRequired">
-      <summary>
-            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
-            </summary>
-    </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportNativePortfolioLookup">
       <summary>
             Поддерживается ли торговой системой поиск портфелей.

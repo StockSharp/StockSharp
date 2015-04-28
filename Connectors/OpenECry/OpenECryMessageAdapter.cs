@@ -97,6 +97,8 @@ namespace StockSharp.OpenECry
 		public OpenECryMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
 		}
 
 		/// <summary>
@@ -152,19 +154,11 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
 		/// </summary>
-		public override bool PortfolioLookupRequired
+		public override bool SecurityLookupRequired
 		{
-			get { return IsTransactionEnabled; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
-		/// </summary>
-		public override bool OrderStatusRequired
-		{
-			get { return IsTransactionEnabled; }
+			get { return false; }
 		}
 
 		/// <summary>

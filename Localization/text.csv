@@ -544,12 +544,11 @@ PercentagesConvert;Percentage can only be converted to percentage.;Процен�
 UnitHandlerNotSet;Typed value handler has not been set.;Не установлен обработчик получения типизированного значения.
 ;Price step cost is equal to zero.;Значение стоимости шага цены равно нулю.
 Str623Params;Adapter for work with portfolio {0} not found.;Адаптер для работы с портфелем {0} не найден.
-Str624Params;Adapter does not support obtaining data for {0}.;Адаптер не поддерживает получение данных для {0}.
 Str625Params;Connection error for {0}: {1};Ошибка подключения для {0}: {1}
 Str626;Failed to connect of some connections.;Не удалось установить некоторые подключения.
 Str627Params;Error disconnecting for {0}: {1};Ошибка отключения для {0}: {1}
 Str628;Errors occured during shutdown.;В процессе отключения возникли ошибки.
-Str629Params;No suitable adapter found for security {0}.;Не найден подходящий адаптер для инструмента {0}.
+Str629Params;No suitable adapter found for {0}.;Не найден подходящий адаптер для {0}.
 Str630Params;Security's {0} corresponding adapter is {1}.;Инструменту {0} соответствует адаптер {1}.
 Str631Params;Adapter {0} does not support security {1} for {2}: {3};Адаптер {0} не поддерживает инструмент {1} для {2}: {3}
 SubscriptionProcessCancelled;Subscription process cancelled by user.;Процесс подписки отменен пользователем.

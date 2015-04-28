@@ -58,6 +58,12 @@ namespace StockSharp.Transaq
 			AddHandler<ServerStatusResponse>(OnServerStatusResponse);
 			AddHandler<ConnectorVersionResponse>(OnConnectorVersionResponse);
 			AddHandler<CurrentServerResponse>(OnCurrentServerResponse);
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+			this.RemoveSupportedMessage(MessageTypes.SecurityLookup);
+			this.RemoveSupportedMessage(MessageTypes.OrderStatus);
+			this.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
 		}
 
 		/// <summary>

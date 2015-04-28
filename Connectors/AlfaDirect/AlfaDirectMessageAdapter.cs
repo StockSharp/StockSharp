@@ -27,6 +27,9 @@ namespace StockSharp.AlfaDirect
 		{
 			Platform = Platforms.x86;
 
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+
 			SecurityClassInfo.Add("FORTS", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("INDEX", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Micex.Code));
 			SecurityClassInfo.Add("INDEX2", RefTuple.Create(SecurityTypes.Index, "INDEX"));
@@ -46,30 +49,6 @@ namespace StockSharp.AlfaDirect
 		private AlfaWrapper Wrapper
 		{
 			get { return _wrapper; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
-		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return IsMarketDataEnabled; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
-		/// </summary>
-		public override bool PortfolioLookupRequired
-		{
-			get { return IsTransactionEnabled; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
-		/// </summary>
-		public override bool OrderStatusRequired
-		{
-			get { return IsTransactionEnabled; }
 		}
 
 		/// <summary>

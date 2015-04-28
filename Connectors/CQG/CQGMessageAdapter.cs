@@ -28,6 +28,9 @@ namespace StockSharp.CQG
 			: base(transactionIdGenerator)
 		{
 			CreateAssociatedSecurity = true;
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
 		}
 
 		/// <summary>

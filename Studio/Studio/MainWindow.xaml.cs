@@ -1164,7 +1164,7 @@ namespace StockSharp.Studio
 						return;
 				}
 
-				var mdAdapters = innerAdapters.SortedAdapters.Where(s => s.IsMarketDataEnabled).ToArray();
+				var mdAdapters = innerAdapters.SortedAdapters.ToArray();
 
 				if (mdAdapters.IsEmpty())
 				{

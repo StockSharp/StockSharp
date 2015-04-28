@@ -29,7 +29,10 @@
 			: base(transactionIdGenerator)
 		{
 			Emulator = emulator;
-			IsMarketDataEnabled = false;
+
+			this.AddTransactionalSupport();
+			this.AddSupportedMessage(ExtendedMessageTypes.CommissionRule);
+			this.AddSupportedMessage(ExtendedMessageTypes.Clearing);
 		}
 
 		private IMarketEmulator _emulator;
@@ -76,14 +79,6 @@
 		public int ProcessedMessageCount { get; private set; }
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
-		/// </summary>
-		public override bool PortfolioLookupRequired
-		{
-			get { return true; }
-		}
-
-		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -114,9 +109,9 @@
 					SendOutMessage(new DisconnectMessage());
 					return;
 
-				case ExtendedMessageTypes.EmulationState:
-					//SendOutMessage(message.Clone());
-					return;
+				//case ExtendedMessageTypes.EmulationState:
+				//	//SendOutMessage(message.Clone());
+				//	return;
 			}
 
 			ProcessedMessageCount++;

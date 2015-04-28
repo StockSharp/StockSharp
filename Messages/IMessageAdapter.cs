@@ -19,14 +19,9 @@
 		IdGenerator TransactionIdGenerator { get; }
 
 		/// <summary>
-		/// <see langword="true"/>, если адаптер используется для получения маркет-данных, иначе, <see langword="false"/>.
+		/// Поддерживаемые типы сообщений, который может обработать адаптер.
 		/// </summary>
-		bool IsMarketDataEnabled { get; set; }
-
-		/// <summary>
-		/// <see langword="true"/>, если адаптер используется для отправки транзакций, иначе, <see langword="false"/>.
-		/// </summary>
-		bool IsTransactionEnabled { get; set; }
+		MessageTypes[] SupportedMessages { get; set; }
 
 		/// <summary>
 		/// Проверить введенные параметры на валидность.

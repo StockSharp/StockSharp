@@ -26,6 +26,9 @@ namespace StockSharp.LMAX
 			: base(transactionIdGenerator)
 		{
 			HeartbeatInterval = TimeSpan.FromMinutes(10);
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
 		}
 
 		/// <summary>
@@ -142,28 +145,12 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
 		/// </summary>
-		public override bool PortfolioLookupRequired
+		public override bool SecurityLookupRequired
 		{
-			get { return IsTransactionEnabled; }
+			get { return false; }
 		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
-		/// </summary>
-		public override bool OrderStatusRequired
-		{
-			get { return IsTransactionEnabled; }
-		}
-
-		///// <summary>
-		///// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
-		///// </summary>
-		//public override bool SecurityLookupRequired
-		//{
-		//	get { return IsMarketDataEnabled; }
-		//}
 
 		/// <summary>
 		/// Привести инструкцию к идентификатору транзакции.

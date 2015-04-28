@@ -160,7 +160,7 @@ namespace StockSharp.Quik
 
 			CreateTables();
 
-			IsTransactionEnabled = false;
+			this.AddSupportedMessage(MessageTypes.MarketData);
 		}
 
 		private void CreateTables()

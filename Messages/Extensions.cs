@@ -4,6 +4,8 @@ namespace StockSharp.Messages
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using MoreLinq;
+
 	/// <summary>
 	/// Вспомогательный класс.
 	/// </summary>
@@ -248,6 +250,59 @@ namespace StockSharp.Messages
 					return candleMsg == null ? (DateTimeOffset?)null : candleMsg.OpenTime;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Заполнить <see cref="IMessageAdapter.SupportedMessages"/> типами сообщений, относящихся к транзакционным.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		public static void AddTransactionalSupport(this IMessageAdapter adapter)
+		{
+			adapter.AddSupportedMessage(MessageTypes.OrderCancel);
+			adapter.AddSupportedMessage(MessageTypes.OrderGroupCancel);
+			adapter.AddSupportedMessage(MessageTypes.OrderPairReplace);
+			adapter.AddSupportedMessage(MessageTypes.OrderRegister);
+			adapter.AddSupportedMessage(MessageTypes.OrderReplace);
+			adapter.AddSupportedMessage(MessageTypes.OrderStatus);
+			adapter.AddSupportedMessage(MessageTypes.Portfolio);
+			adapter.AddSupportedMessage(MessageTypes.PortfolioLookup);
+			adapter.AddSupportedMessage(MessageTypes.Position);
+		}
+
+		/// <summary>
+		/// Заполнить <see cref="IMessageAdapter.SupportedMessages"/> типами сообщений, относящихся к маркет-данным.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		public static void AddMarketDataSupport(this IMessageAdapter adapter)
+		{
+			adapter.AddSupportedMessage(MessageTypes.MarketData);
+			adapter.AddSupportedMessage(MessageTypes.SecurityLookup);
+		}
+
+		/// <summary>
+		/// Добавить тип сообщения в <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		/// <param name="type">Тип сообщения.</param>
+		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
+
+			adapter.SupportedMessages = adapter.SupportedMessages.Concat(type).ToArray();
+		}
+
+		/// <summary>
+		/// Удалить тип сообщения из <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		/// <param name="type">Тип сообщения.</param>
+		public static void RemoveSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
+
+			adapter.SupportedMessages = adapter.SupportedMessages.Except(new[] { type }).ToArray();
 		}
 	}
 }

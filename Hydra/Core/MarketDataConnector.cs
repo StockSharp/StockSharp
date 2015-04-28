@@ -467,7 +467,19 @@ namespace StockSharp.Hydra.Core
 				if (Connector.TransactionAdapter != Connector.MarketDataAdapter)
 					Connector.Adapter.InnerAdapters.Remove(Connector.TransactionAdapter);
 				else
-					Connector.TransactionAdapter.IsTransactionEnabled = false;
+				{
+					var adapter = Connector.TransactionAdapter;
+
+					adapter.RemoveSupportedMessage(MessageTypes.OrderCancel);
+					adapter.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
+					adapter.RemoveSupportedMessage(MessageTypes.OrderPairReplace);
+					adapter.RemoveSupportedMessage(MessageTypes.OrderRegister);
+					adapter.RemoveSupportedMessage(MessageTypes.OrderReplace);
+					adapter.RemoveSupportedMessage(MessageTypes.OrderStatus);
+					adapter.RemoveSupportedMessage(MessageTypes.Portfolio);
+					adapter.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
+					adapter.RemoveSupportedMessage(MessageTypes.Position);
+				}
 			}
 
 			Connector.DoIf<IConnector, Connector>(t =>

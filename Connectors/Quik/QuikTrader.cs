@@ -74,8 +74,9 @@ namespace StockSharp.Quik
 				RequestAllSecurities = true,
 				MarketData = FixMarketData.MarketData,
 				UtcOffset = TimeHelper.Moscow.BaseUtcOffset,
-				IsTransactionEnabled = false,
 			};
+
+			_luaMarketDataAdapter.AddMarketDataSupport();
 
 			IsDde = false;
 		}

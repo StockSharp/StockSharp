@@ -39,6 +39,10 @@ namespace StockSharp.SmartCom
 			};
 
 			UpdatePlatform();
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+			this.RemoveSupportedMessage(MessageTypes.OrderStatus);
 		}
 
 		/// <summary>
@@ -53,22 +57,6 @@ namespace StockSharp.SmartCom
 		private void UpdatePlatform()
 		{
 			Platform = Version == SmartComVersions.V3 ? Platforms.AnyCPU : Platforms.x86;
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
-		/// </summary>
-		public override bool PortfolioLookupRequired
-		{
-			get { return IsTransactionEnabled; }
-		}
-
-		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
-		/// </summary>
-		public override bool SecurityLookupRequired
-		{
-			get { return IsMarketDataEnabled; }
 		}
 
 		/// <summary>

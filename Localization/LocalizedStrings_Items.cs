@@ -7036,19 +7036,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Adapter does not support obtaining data for {0}.
-		/// </summary>
-		public const string Str624ParamsKey = "Str624Params";
-
-		/// <summary>
-		/// Adapter does not support obtaining data for {0}.
-		/// </summary>
-		public static string Str624Params
-		{
-			get { return GetString(Str624ParamsKey); }
-		}
-
-		/// <summary>
 		/// Connection error for {0}: {1}
 		/// </summary>
 		public const string Str625ParamsKey = "Str625Params";
@@ -7101,12 +7088,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// No suitable adapter found for security {0}.
+		/// No suitable adapter found for {0}.
 		/// </summary>
 		public const string Str629ParamsKey = "Str629Params";
 
 		/// <summary>
-		/// No suitable adapter found for security {0}.
+		/// No suitable adapter found for {0}.
 		/// </summary>
 		public static string Str629Params
 		{

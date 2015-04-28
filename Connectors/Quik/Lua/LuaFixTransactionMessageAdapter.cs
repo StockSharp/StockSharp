@@ -20,7 +20,7 @@
 		public LuaFixTransactionMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			IsMarketDataEnabled = false;
+			this.AddTransactionalSupport();
 		}
 
 		/// <summary>

@@ -25,7 +25,8 @@ namespace StockSharp.Rss
 			: base(transactionIdGenerator)
 		{
 			HeartbeatInterval = TimeSpan.FromMinutes(5);
-			IsTransactionEnabled = false;
+			
+			this.AddSupportedMessage(MessageTypes.MarketData);
 		}
 
 		/// <summary>

@@ -125,6 +125,11 @@
             Поддерживается ли торговой системой поиск инструментов.
             </summary>
     </member>
+    <member name="P:StockSharp.ETrade.ETradeMessageAdapter.SecurityLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
+            </summary>
+    </member>
     <member name="P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerKey">
       <summary>
             Ключ.

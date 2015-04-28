@@ -157,7 +157,10 @@ namespace StockSharp.Algo.Testing
 			: this(transactionIdGenerator)
 		{
 			SecurityProvider = securityProvider;
-			IsTransactionEnabled = false;
+			
+			this.AddMarketDataSupport();
+			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>

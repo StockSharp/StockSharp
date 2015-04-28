@@ -219,26 +219,43 @@ namespace StockSharp.Messages
 
 			CreateDepthFromLevel1 = true;
 
-			IsMarketDataEnabled = IsTransactionEnabled = true;
+			//IsMarketDataEnabled = IsTransactionEnabled = true;
 		}
 
-		/// <summary>
-		/// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		[DisplayNameLoc(LocalizedStrings.MarketDataKey)]
-		[DescriptionLoc(LocalizedStrings.UseMarketDataSessionKey)]
-		[PropertyOrder(1)]
-		public bool IsMarketDataEnabled { get; set; }
+		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
 
 		/// <summary>
-		/// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		/// Поддерживаемые типы сообщений, который может обработать адаптер.
 		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str186Key)]
-		[DisplayNameLoc(LocalizedStrings.TransactionsKey)]
-		[DescriptionLoc(LocalizedStrings.UseTransactionalSessionKey)]
-		[PropertyOrder(2)]
-		public bool IsTransactionEnabled { get; set; }
+		public virtual MessageTypes[] SupportedMessages
+		{
+			get { return _supportedMessages; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				_supportedMessages = value;
+			}
+		}
+
+		///// <summary>
+		///// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
+		///// </summary>
+		//[CategoryLoc(LocalizedStrings.Str186Key)]
+		//[DisplayNameLoc(LocalizedStrings.MarketDataKey)]
+		//[DescriptionLoc(LocalizedStrings.UseMarketDataSessionKey)]
+		//[PropertyOrder(1)]
+		//public bool IsMarketDataEnabled { get; set; }
+
+		///// <summary>
+		///// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
+		///// </summary>
+		//[CategoryLoc(LocalizedStrings.Str186Key)]
+		//[DisplayNameLoc(LocalizedStrings.TransactionsKey)]
+		//[DescriptionLoc(LocalizedStrings.UseTransactionalSessionKey)]
+		//[PropertyOrder(2)]
+		//public bool IsTransactionEnabled { get; set; }
 
 		/// <summary>
 		/// Проверить введенные параметры на валидность.
@@ -308,19 +325,19 @@ namespace StockSharp.Messages
 		public bool CreateDepthFromLevel1 { get; set; }
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
-		/// </summary>
-		public virtual bool PortfolioLookupRequired
-		{
-			get { return false; }
-		}
-
-		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
 		/// </summary>
 		public virtual bool SecurityLookupRequired
 		{
-			get { return false; }
+			get { return SupportedMessages.Contains(MessageTypes.SecurityLookup); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public virtual bool PortfolioLookupRequired
+		{
+			get { return SupportedMessages.Contains(MessageTypes.PortfolioLookup); }
 		}
 
 		/// <summary>
@@ -328,7 +345,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		public virtual bool OrderStatusRequired
 		{
-			get { return false; }
+			get { return SupportedMessages.Contains(MessageTypes.OrderStatus); }
 		}
 
 		/// <summary>
@@ -880,9 +897,7 @@ namespace StockSharp.Messages
 		public override void Load(SettingsStorage storage)
 		{
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
-
-			IsMarketDataEnabled = storage.GetValue<bool>("IsMarketDataEnabled");
-			IsTransactionEnabled = storage.GetValue<bool>("IsTransactionEnabled");
+			SupportedMessages = storage.GetValue<int[]>("SupportedMessages").Select(i => (MessageTypes)i).ToArray();
 
 			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
 			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
@@ -898,9 +913,7 @@ namespace StockSharp.Messages
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
-
-			storage.SetValue("IsMarketDataEnabled", IsMarketDataEnabled);
-			storage.SetValue("IsTransactionEnabled", IsTransactionEnabled);
+			storage.SetValue("SupportedMessages", SupportedMessages.Select(t => (int)t).ToArray());
 
 			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
 			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
@@ -922,7 +935,6 @@ namespace StockSharp.Messages
 		public PassThroughMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			IsMarketDataEnabled = false;
 		}
 
 		/// <summary>

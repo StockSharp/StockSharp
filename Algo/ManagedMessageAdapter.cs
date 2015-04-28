@@ -127,16 +127,10 @@ namespace StockSharp.Algo
 			set { _innerAdapter.AssociatedBoardCode = value; }
 		}
 
-		bool IMessageAdapter.IsMarketDataEnabled
+		MessageTypes[] IMessageAdapter.SupportedMessages
 		{
-			get { return _innerAdapter.IsMarketDataEnabled; }
-			set { _innerAdapter.IsMarketDataEnabled = value; }
-		}
-
-		bool IMessageAdapter.IsTransactionEnabled
-		{
-			get { return _innerAdapter.IsTransactionEnabled; }
-			set { _innerAdapter.IsTransactionEnabled = value; }
+			get { return _innerAdapter.SupportedMessages; }
+			set { _innerAdapter.SupportedMessages = value; }
 		}
 
 		bool IMessageAdapter.IsValid

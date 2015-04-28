@@ -3,6 +3,7 @@ namespace StockSharp.Xaml
 	using System;
 	using System.Windows;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
@@ -117,7 +118,7 @@ namespace StockSharp.Xaml
 				return false;
 			}
 
-			if (_editableAdapter.IsMarketDataEnabled == false && _editableAdapter.IsTransactionEnabled == false)
+			if (_editableAdapter.SupportedMessages.IsEmpty())
 			{
 				new MessageBoxBuilder()
 					.Text(LocalizedStrings.Str1563)
