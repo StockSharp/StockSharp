@@ -310,13 +310,14 @@ namespace StockSharp.Xaml
 		}
 	}
 
-	class OrderStateConverter : IValueConverter
+	class OrderStateConverter : IMultiValueConverter
 	{
-		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			var order = (Order)value;
+			var state = (OrderStates)values[0];
+			var order = (Order)values[1];
 
-			switch (order.State)
+			switch (state)
 			{
 				case OrderStates.None:
 					return "--";
@@ -329,11 +330,11 @@ namespace StockSharp.Xaml
 				case OrderStates.Done:
 					return order.IsMatched() ? LocalizedStrings.Str1328 : LocalizedStrings.Str1329;
 				default:
-					throw new ArgumentOutOfRangeException("value", order.State, LocalizedStrings.Str1597Params.Put(order));
+					throw new ArgumentOutOfRangeException("values", state, LocalizedStrings.Str1597Params.Put(order));
 			}
 		}
 
-		object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
 		{
 			throw new NotSupportedException();
 		}
