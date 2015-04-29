@@ -201,7 +201,8 @@ namespace StockSharp.Hydra.Plaza
 						registry.Index,
 						registry.Volatility,
 						registry.Aggregation5Future,
-						registry.Aggregation5Option
+						registry.Aggregation5Option,
+						registry.AnonymousDeal
 					}.Select(t => t.Id);
 				}
 			}
