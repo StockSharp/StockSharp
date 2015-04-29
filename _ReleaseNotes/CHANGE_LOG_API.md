@@ -34,6 +34,10 @@ StockSharp API Change log
 * (bug) Quik lua. Commission fill fix.
 * (bug) FixServer. Close session fix.
 * (feature) Fix http://stocksharp.com/forum/yaf_postst5622_Logh-soobshchieniia-MarketDataSnapshotFullRefresh.aspx
+* (feature) Plaza. Schema update.
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/36
+* (feature) FixServer. Logout fixes.
+* (bug) FIX connector. Request portfolios support.
 
 ###v4.2.75:
 * (feature) FixServer. No longer use QuickFix.
