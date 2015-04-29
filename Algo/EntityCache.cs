@@ -774,10 +774,15 @@ namespace StockSharp.Algo
 
 			if (transactionId == 0)
 			{
-				if (orderStringId.IsEmpty())
-					throw new ArgumentOutOfRangeException("transactionId");
+				info = orders.First(p =>
+				{
+					var order = p.Value.Order;
 
-				info = orders.First(p => p.Value.Order.StringId.CompareIgnoreCase(orderStringId)).Value;
+					if (orderId != null)
+						return order.Id == orderId;
+					else
+						return order.StringId.CompareIgnoreCase(orderStringId);
+				}).Value;
 			}
 			else
 			{
