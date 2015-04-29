@@ -97,13 +97,13 @@ namespace StockSharp.Quik
 
 				if (value)
 				{
-					Adapter.InnerAdapters.Add(_trans2QuikAdapter.ToChannel(this));
-					Adapter.InnerAdapters.Add(_ddeAdapter.ToChannel(this));
+					Adapter.InnerAdapters.Add(_trans2QuikAdapter.ToChannel(this, "Quik. Trans2Quik"));
+					Adapter.InnerAdapters.Add(_ddeAdapter.ToChannel(this, "Quik. DDE"));
 				}
 				else
 				{
-					Adapter.InnerAdapters.Add(_luaTransactionAdapter.ToChannel(this));
-					Adapter.InnerAdapters.Add(_luaMarketDataAdapter.ToChannel(this));
+					Adapter.InnerAdapters.Add(_luaTransactionAdapter.ToChannel(this, "Quik. FIX (TS)"));
+					Adapter.InnerAdapters.Add(_luaMarketDataAdapter.ToChannel(this, "Quik. FIX (MD)"));
 				}
 			}
 		}
