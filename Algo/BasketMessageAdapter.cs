@@ -98,7 +98,7 @@ namespace StockSharp.Algo
 		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _connectedAdapters = new CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
-
+		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
 
 		/// <summary>
@@ -191,6 +191,20 @@ namespace StockSharp.Algo
 			throw new NotSupportedException();
 		}
 
+		private void ProcessReset(Message message)
+		{
+			_hearbeatAdapters.Values.ForEach(a =>
+			{
+				a.SendInMessage(message);
+				a.Dispose();
+			});
+
+			_connectedAdapters.Clear();
+			_hearbeatAdapters.Clear();
+			_subscriptionQueue.Clear();
+			_subscriptions.Clear();
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -200,15 +214,15 @@ namespace StockSharp.Algo
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					_hearbeatAdapters.Values.ForEach(a => a.SendInMessage(message));
-
-					_connectedAdapters.Clear();
-					_hearbeatAdapters.Clear();
-					_subscriptionQueue.Clear();
-					_subscriptions.Clear();
+					ProcessReset(message);
 					break;
 
 				case MessageTypes.Connect:
+					if (_isFirstConnect)
+						_isFirstConnect = false;
+					else
+						ProcessReset(new ResetMessage());
+
 					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
 					{
 						var hearbeatAdapter = (IMessageAdapter)new HeartbeatAdapter(a);

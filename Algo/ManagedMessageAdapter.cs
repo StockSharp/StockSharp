@@ -60,7 +60,8 @@ namespace StockSharp.Algo
 
 		void IDisposable.Dispose()
 		{
-			_innerAdapter.Dispose();
+			_innerAdapter.NewOutMessage -= ProcessOutMessage;
+			//_innerAdapter.Dispose();
 		}
 
 		ReConnectionSettings IMessageAdapter.ReConnectionSettings

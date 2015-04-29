@@ -295,7 +295,7 @@
 		void IDisposable.Dispose()
 		{
 			_adapter.NewOutMessage -= AdapterOnNewOutMessage;
-			_adapter.Dispose();
+			//_adapter.Dispose();
 		}
 
 		void IMessageChannel.Open()

@@ -41,6 +41,16 @@
 			_adapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
 
+		/// <summary>
+		/// Контролировать время жизни входящего канала входящих сообщений.
+		/// </summary>
+		public bool OwnInputChannel { get; set; }
+
+		/// <summary>
+		/// Контролировать время жизни входящего канала исходящих сообщений.
+		/// </summary>
+		public bool OwnOutputChannel { get; set; }
+
 		private void OutputChannelOnNewOutMessage(Message message)
 		{
 			_newMessage.SafeInvoke(message);
@@ -63,6 +73,12 @@
 		{
 			_inputChannel.NewOutMessage -= InputChannelOnNewOutMessage;
 			_outputChannel.NewOutMessage -= OutputChannelOnNewOutMessage;
+
+			if (OwnInputChannel)
+				_inputChannel.Dispose();
+
+			if (OwnOutputChannel)
+				_outputChannel.Dispose();
 
 			_adapter.NewOutMessage -= AdapterOnNewOutMessage;
 			//_adapter.Dispose();

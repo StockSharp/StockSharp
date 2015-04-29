@@ -85,6 +85,7 @@ namespace StockSharp.Algo
 					_adapter.NewOutMessage -= AdapterOnNewOutMessage;
 
 					_inAdapter.Dispose();
+					_adapter.Dispose();
 				}
 
 				_adapter = value;
