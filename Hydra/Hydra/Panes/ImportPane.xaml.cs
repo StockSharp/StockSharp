@@ -309,14 +309,7 @@ namespace StockSharp.Hydra.Panes
 				if (storage.ContainsKey("Drive"))
 					Drive = DriveCache.Instance.GetDrive(storage.GetValue<string>("Drive"));
 
-				try
-				{
-					TimeZone = TimeZoneInfo.FindSystemTimeZoneById(storage.GetValue<string>("TimeZone"));
-				}
-				catch
-				{
-					// TODO remove in next versions
-				}
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(storage.GetValue<string>("TimeZone"));
 
 				CandleSettings = storage.GetValue("CandleSettings", CandleSettings);
 			}
@@ -339,7 +332,7 @@ namespace StockSharp.Hydra.Panes
 		}
 
 		private readonly ObservableCollection<FieldMapping> _fields = new ObservableCollection<FieldMapping>();
-		private readonly Settings _settings = new Settings();
+		private readonly Settings _settings;
 		private readonly BackgroundWorker _worker;
 		private readonly HydraEntityRegistry _entityRegistry;
 		private readonly LogManager _logManager = ConfigManager.GetService<LogManager>();
@@ -758,49 +751,15 @@ namespace StockSharp.Hydra.Panes
 
 						if (secMsg == null)
 						{
-							var news = instance as NewsMessage;
+							var execMsg = instance as ExecutionMessage;
 
-							if (news == null)
-							{
-								var execMsg = instance as ExecutionMessage;
+							if (execMsg != null)
+								execMsg.ExecutionType = ExecutionType;
 
-								if (execMsg != null)
-									execMsg.ExecutionType = ExecutionType;
+							buffer.Add(instance);
 
-								buffer.Add(instance);
-
-								if (buffer.Count > 1000)
-								{
-									FlushBuffer(buffer, drive);
-									buffer.Clear();
-								}
-							}
-							else
-							{
-								var ne = new News
-								{
-									Headline = news.Headline,
-									Source = news.Source,
-									Story = news.Story,
-									Url = news.Url,
-									Id = news.Id,
-									ServerTime = news.ServerTime,
-									LocalTime = news.LocalTime,
-								};
-
-								if (news.BoardCode.IsEmpty())
-								{
-									ne.Board = ExchangeBoard.GetOrCreateBoard(news.BoardCode);
-								}
-
-								if (news.SecurityId != null)
-								{
-									ne.Security = InitSecurity(news.SecurityId.Value);
-									_entityRegistry.Securities.Save(ne.Security);
-								}
-
-								_entityRegistry.News.Add(ne);
-							}
+							if (buffer.Count > 1000)
+								FlushBuffer(buffer, drive);
 						}
 						else
 						{
@@ -852,79 +811,88 @@ namespace StockSharp.Hydra.Panes
 			return security;
 		}
 
-		private void FlushBuffer(IEnumerable<dynamic> buffer, IMarketDataDrive drive)
+		private void FlushBuffer(List<dynamic> buffer, IMarketDataDrive drive)
 		{
 			var registry = ConfigManager.GetService<IStorageRegistry>();
 
-			foreach (var typeGroup in buffer.GroupBy(i => i.GetType()))
+			if (DataType == typeof(NewsMessage))
 			{
-				var dataType = (Type)typeGroup.Key;
-
-				foreach (var secGroup in typeGroup.GroupBy(i => (SecurityId)i.SecurityId))
+				registry.GetNewsMessageStorage(drive, _settings.Format).Save(buffer);
+			}
+			else
+			{
+				foreach (var typeGroup in buffer.GroupBy(i => i.GetType()))
 				{
-					var secId = secGroup.Key;
-					var security = InitSecurity(secGroup.Key);
+					var dataType = (Type)typeGroup.Key;
 
-					if (dataType.IsSubclassOf(typeof(CandleMessage)))
+					foreach (var secGroup in typeGroup.GroupBy(i => (SecurityId)i.SecurityId))
 					{
-						var timeFrame = (TimeSpan)_settings.CandleSettings.Arg;
-						var candles = secGroup.Cast<CandleMessage>().ToArray();
+						var secId = secGroup.Key;
+						var security = InitSecurity(secGroup.Key);
 
-						foreach (var candle in candles)
+						if (dataType.IsSubclassOf(typeof(CandleMessage)))
 						{
-							if (candle.CloseTime < candle.OpenTime)
+							var timeFrame = (TimeSpan)_settings.CandleSettings.Arg;
+							var candles = secGroup.Cast<CandleMessage>().ToArray();
+
+							foreach (var candle in candles)
 							{
-								// если в файле время закрытия отсутствует
-								if (candle.CloseTime.Date == candle.CloseTime)
-									candle.CloseTime = default(DateTimeOffset);
-							}
-							else if (candle.CloseTime > candle.OpenTime)
-							{
-								// если в файле время открытия отсутствует
-								if (candle.OpenTime.Date == candle.OpenTime)
+								if (candle.CloseTime < candle.OpenTime)
 								{
-									candle.OpenTime = candle.CloseTime;
+									// если в файле время закрытия отсутствует
+									if (candle.CloseTime.Date == candle.CloseTime)
+										candle.CloseTime = default(DateTimeOffset);
+								}
+								else if (candle.CloseTime > candle.OpenTime)
+								{
+									// если в файле время открытия отсутствует
+									if (candle.OpenTime.Date == candle.OpenTime)
+									{
+										candle.OpenTime = candle.CloseTime;
 
-									//var tfCandle = candle as TimeFrameCandle;
+										//var tfCandle = candle as TimeFrameCandle;
 
-									//if (tfCandle != null)
-									candle.CloseTime += timeFrame;
+										//if (tfCandle != null)
+										candle.CloseTime += timeFrame;
+									}
 								}
 							}
+
+							registry
+								.GetCandleMessageStorage(dataType, security, timeFrame, drive, _settings.Format)
+								.Save(candles.OrderBy(c => c.OpenTime));
 						}
-
-						registry
-							.GetCandleMessageStorage(dataType, security, timeFrame, drive, _settings.Format)
-							.Save(candles.OrderBy(c => c.OpenTime));
-					}
-					else if (dataType == typeof(TimeQuoteChange))
-					{
-						registry
-							.GetQuoteMessageStorage(security, drive, _settings.Format)
-							.Save(secGroup
-								.GroupBy(i => i.Time)
-								.Select(g => new QuoteChangeMessage
-								{
-									SecurityId = secId,
-									ServerTime = g.Key,
-									Bids = g.Cast<QuoteChange>().Where(q => q.Side == Sides.Buy).ToArray(),
-									Asks = g.Cast<QuoteChange>().Where(q => q.Side == Sides.Sell).ToArray(),
-								})
-								.OrderBy(md => md.ServerTime));
-					}
-					else
-					{
-						var storage = registry.GetStorage(security, dataType, ExecutionType, drive, _settings.Format);
-
-						if (dataType == typeof(ExecutionMessage))
-							((IMarketDataStorage<ExecutionMessage>)storage).Save(secGroup.Cast<ExecutionMessage>().OrderBy(m => m.ServerTime));
-						else if (dataType == typeof(Level1ChangeMessage))
-							((IMarketDataStorage<Level1ChangeMessage>)storage).Save(secGroup.Cast<Level1ChangeMessage>().OrderBy(m => m.ServerTime));
+						else if (dataType == typeof(TimeQuoteChange))
+						{
+							registry
+								.GetQuoteMessageStorage(security, drive, _settings.Format)
+								.Save(secGroup
+									.GroupBy(i => i.Time)
+									.Select(g => new QuoteChangeMessage
+									{
+										SecurityId = secId,
+										ServerTime = g.Key,
+										Bids = g.Cast<QuoteChange>().Where(q => q.Side == Sides.Buy).ToArray(),
+										Asks = g.Cast<QuoteChange>().Where(q => q.Side == Sides.Sell).ToArray(),
+									})
+									.OrderBy(md => md.ServerTime));
+						}
 						else
-							throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.Name));
+						{
+							var storage = registry.GetStorage(security, dataType, ExecutionType, drive, _settings.Format);
+
+							if (dataType == typeof(ExecutionMessage))
+								((IMarketDataStorage<ExecutionMessage>)storage).Save(secGroup.Cast<ExecutionMessage>().OrderBy(m => m.ServerTime));
+							else if (dataType == typeof(Level1ChangeMessage))
+								((IMarketDataStorage<Level1ChangeMessage>)storage).Save(secGroup.Cast<Level1ChangeMessage>().OrderBy(m => m.ServerTime));
+							else
+								throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.Name));
+						}
 					}
 				}
 			}
+
+			buffer.Clear();
 		}
 
 		void IDisposable.Dispose()

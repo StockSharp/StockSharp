@@ -340,6 +340,7 @@
     <Compile Include="Storages\Level1Serializer.cs" />
     <Compile Include="Storages\NewsList.cs" />
     <Compile Include="Storages\ExecutionSerializer.cs" />
+    <Compile Include="Storages\NewsSerializer.cs" />
     <Compile Include="Storages\QuoteSerializer.cs" />
     <Compile Include="OrderLogHelper.cs" />
     <Compile Include="OrderLogMarketDepthBuilder.cs" />

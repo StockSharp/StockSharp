@@ -26,9 +26,8 @@ namespace StockSharp.Algo.Storages
 	{
 		private sealed class LocalMarketDataStorageDrive : IMarketDataStorageDrive
 		{
-			private readonly LocalMarketDataDrive _parent;
-			private readonly SecurityId _securityId;
 			private readonly string _fileName;
+			private readonly string _path;
 			private readonly StorageFormats _format;
 			private readonly string _fileNameWithExtension;
 
@@ -37,23 +36,19 @@ namespace StockSharp.Algo.Storages
 			private static readonly Version _dateVersion = new Version(1, 0);
 			private const string _dateFormat = "yyyy_MM_dd";
 
-			public LocalMarketDataStorageDrive(LocalMarketDataDrive parent, SecurityId securityId, string fileName, StorageFormats format, IMarketDataDrive drive)
+			public LocalMarketDataStorageDrive(string fileName, string path, StorageFormats format, IMarketDataDrive drive)
 			{
-				if (parent == null)
-					throw new ArgumentNullException("parent");
-
-				if (securityId.IsDefault())
-					throw new ArgumentNullException("securityId");
-
 				if (drive == null)
 					throw new ArgumentNullException("drive");
 
 				if (fileName.IsEmpty())
 					throw new ArgumentNullException("fileName");
 
-				_parent = parent;
-				_securityId = securityId;
+				if (path.IsEmpty())
+					throw new ArgumentNullException("path");
+
 				_fileName = fileName;
+				_path = path;
 				_format = format;
 				_drive = drive;
 				_fileNameWithExtension = _fileName + GetExtension(_format);
@@ -71,10 +66,8 @@ namespace StockSharp.Algo.Storages
 					}
 					else
 					{
-						var rootDir = Path;
-
 						var dates = InteropHelper
-							.GetDirectories(rootDir)
+							.GetDirectories(_path)
 							.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
 							.Select(dir => IOPath.GetFileName(dir).ToDateTime(_dateFormat));
 
@@ -86,14 +79,6 @@ namespace StockSharp.Algo.Storages
 
 					return retVal;
 				}).Track();
-			}
-
-			private string Path
-			{
-				get
-				{
-					return _parent.GetSecurityPath(_securityId);
-				}
 			}
 
 			private readonly IMarketDataDrive _drive;
@@ -117,7 +102,7 @@ namespace StockSharp.Algo.Storages
 
 			public void ClearDatesCache()
 			{
-				if (Directory.Exists(Path))
+				if (Directory.Exists(_path))
 				{
 					lock (_cacheSync)
 						File.Delete(GetDatesCachePath());
@@ -184,7 +169,7 @@ namespace StockSharp.Algo.Storages
 
 			private string GetDatesCachePath()
 			{
-				return IOPath.Combine(Path, GetDatesCacheFileName());
+				return IOPath.Combine(_path, GetDatesCacheFileName());
 			}
 
 			private IEnumerable<DateTime> LoadDates()
@@ -222,12 +207,12 @@ namespace StockSharp.Algo.Storages
 			{
 				try
 				{
-					if (!Directory.Exists(Path))
+					if (!Directory.Exists(_path))
 					{
 						if (dates.IsEmpty())
 							return;
 
-						Directory.CreateDirectory(Path);
+						Directory.CreateDirectory(_path);
 					}
 					
 					var stream = new MemoryStream();
@@ -253,7 +238,7 @@ namespace StockSharp.Algo.Storages
 
 			private string GetDataPath(DateTime date)
 			{
-				return IOPath.Combine(Path, date.ToString(_dateFormat));
+				return IOPath.Combine(_path, date.ToString(_dateFormat));
 			}
 
 			private int _counter;
@@ -404,8 +389,11 @@ namespace StockSharp.Algo.Storages
 		/// <returns>Хранилище для <see cref="IMarketDataStorage"/>.</returns>
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
 		{
+			if (securityId.IsDefault())
+				throw new ArgumentNullException("securityId");
+
 			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
-				key => new LocalMarketDataStorageDrive(this, securityId, CreateFileName(dataType, arg), format, this));
+				key => new LocalMarketDataStorageDrive(CreateFileName(dataType, arg), GetSecurityPath(securityId), format, this));
 		}
 
 		/// <summary>
@@ -419,42 +407,53 @@ namespace StockSharp.Algo.Storages
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
 
+			if (dataType == typeof(Trade))
+			{
+				dataType = typeof(ExecutionMessage);
+				arg = ExecutionTypes.Tick;
+			}
+			else if (dataType == typeof(OrderLogItem))
+			{
+				dataType = typeof(ExecutionMessage);
+				arg = ExecutionTypes.OrderLog;
+			}
+			else if (dataType == typeof(Order))
+			{
+				dataType = typeof(ExecutionMessage);
+				arg = ExecutionTypes.Order;
+			}
+			else if (dataType == typeof(MyTrade))
+			{
+				dataType = typeof(ExecutionMessage);
+				arg = ExecutionTypes.Trade;
+			}
+			else if (dataType.IsSubclassOf(typeof(Candle)))
+				dataType = dataType.ToCandleMessageType();
+			else if (dataType == typeof(MarketDepth))
+				dataType = typeof(QuoteChangeMessage);
+
 			if (dataType == typeof(ExecutionMessage))
 			{
-				var execType = (ExecutionTypes)arg;
-
-				switch (execType)
+				switch ((ExecutionTypes)arg)
 				{
 					case ExecutionTypes.Tick:
-						dataType = typeof(Trade);
-						break;
+						return "trades";
 					case ExecutionTypes.Order:
 					case ExecutionTypes.Trade:
-						dataType = typeof(Order);
-						break;
+						return "execution";
 					case ExecutionTypes.OrderLog:
-						dataType = typeof(OrderLogItem);
-						break;
+						return "orderLog";
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
 			}
-			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
-				dataType = dataType.ToCandleType();
 			else if (dataType == typeof(QuoteChangeMessage))
-				dataType = typeof(MarketDepth);
-
-			if (dataType == typeof(Trade))
-				return "trades";
-			else if (dataType == typeof(MarketDepth))
 				return "quotes";
-			else if (dataType == typeof(OrderLogItem))
-				return "orderLog";
 			else if (dataType == typeof(Level1ChangeMessage))
 				return "security";
-			else if (dataType == typeof(Order))
-				return "execution";
-			else if (dataType.IsSubclassOf(typeof(Candle)))
+			else if (dataType == typeof(NewsMessage))
+				return "news";
+			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
 				return "candles_{0}_{1}".Put(dataType.Name, TraderHelper.CandleArgToFolderName(arg));
 			else
 				throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));

@@ -234,6 +234,7 @@ namespace StockSharp.Hydra.Core
 						catch (Exception ex)
 						{
 							HandleError(ex);
+							WaitIfNecessary(TimeSpan.FromSeconds(5));
 						}
 					}
 				}
@@ -592,12 +593,15 @@ namespace StockSharp.Hydra.Core
 		/// <param name="news">Новости.</param>
 		protected void SaveNews(IEnumerable<News> news)
 		{
-			news.ForEach(EntityRegistry.News.Save);
-
 			var count = news.Count();
 
 			if (count > 0)
+			{
+				var storage = StorageRegistry.GetNewsStorage(Settings.Drive, Settings.StorageFormat);
+				storage.Save(news);
+
 				RaiseDataLoaded(null, typeof(NewsMessage), null, news.Last().ServerTime, count);
+			}
 		}
 
 		/// <summary>

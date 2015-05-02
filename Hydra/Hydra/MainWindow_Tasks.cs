@@ -207,7 +207,7 @@ namespace StockSharp.Hydra
 
 			task.DataLoaded += (security, dataType, arg, time, count) =>
 			{
-				if (dataType == typeof(News))
+				if (dataType == typeof(NewsMessage))
 				{
 					LoadedNews += count;
 					return;

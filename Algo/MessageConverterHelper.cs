@@ -788,6 +788,9 @@ namespace StockSharp.Algo
 					case MessageTypes.QuoteChange:
 						return message.To<QuoteChangeMessage>().ToMarketDepth(_security).To<TEntity>();
 
+					case MessageTypes.News:
+						return message.To<NewsMessage>().ToNews().To<TEntity>();
+
 					default:
 					{
 						var candleMsg = message as CandleMessage;
@@ -1163,9 +1166,11 @@ namespace StockSharp.Algo
 				ServerTime = news.ServerTime,
 				Id = news.Id,
 				Story = news.Story,
+				Source = news.Source,
 				Headline = news.Headline,
 				SecurityId = news.Security == null ? (SecurityId?)null : news.Security.ToSecurityId(),
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
+				Url = news.Url,
 			};
 		}
 
@@ -1339,6 +1344,10 @@ namespace StockSharp.Algo
 				Headline = message.Headline,
 				Board = message.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(message.BoardCode),
 				LocalTime = message.LocalTime,
+				Security = message.SecurityId == null ? null : new Security
+				{
+					Id = message.SecurityId.Value.SecurityCode
+				}
 			};
 		}
 
