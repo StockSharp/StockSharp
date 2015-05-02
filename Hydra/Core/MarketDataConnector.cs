@@ -196,9 +196,14 @@ namespace StockSharp.Hydra.Core
 		public Exception LastError { get; set; }
 
 		/// <summary>
-		/// Событие запуска экспорта маркет-данных. Вызвается только после первого запуска экспорта.
+		/// Событие успешного подключения.
 		/// </summary>
-		public event Action ExportStarted;
+		public event Action Connected;
+
+		/// <summary>
+		/// Событие ошибки подключения.
+		/// </summary>
+		public event Action ConnectionError;
 
 		/// <summary>
 		/// Получить накопленные стаканы.
@@ -288,7 +293,7 @@ namespace StockSharp.Hydra.Core
 					return;
 
 				_exportStarted = true;
-				ExportStarted.SafeInvoke();
+				Connected.SafeInvoke();
 
 				var connectorSettings = _task.Settings as ConnectorHydraTaskSettings;
 
@@ -308,6 +313,8 @@ namespace StockSharp.Hydra.Core
 			Stop();
 
 			_task.AddErrorLog(error);
+
+			ConnectionError.SafeInvoke();
 		}
 
 		private void OnNewTrades(IEnumerable<Trade> trades)

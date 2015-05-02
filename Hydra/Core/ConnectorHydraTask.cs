@@ -80,13 +80,15 @@
 				}
 			};
 
-			Connector.ExportStarted += () =>
+			Connector.Connected += () =>
 			{
 				if (_allSecurity == null)
 					_securityMap.Keys.ForEach(SubscribeSecurity);
 
 				RaiseStarted();
 			};
+
+			Connector.ConnectionError += Stop;
 		}
 
 		/// <summary>
