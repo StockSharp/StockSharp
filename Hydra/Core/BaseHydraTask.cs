@@ -421,12 +421,15 @@ namespace StockSharp.Hydra.Core
 				values = (dict.TryGetValue(string.Empty) ?? Enumerable.Empty<T>()).ToArray();
 			}
 
-			if (!values.Any())
+			var count = values.Count();
+
+			if (count == 0)
 				return;
 
 			try
 			{
 				getStorage(security, Settings.Drive, Settings.StorageFormat).Save(values);
+				RaiseDataLoaded(security, messageType, arg, getTime(values.Last()), count);
 			}
 			catch (Exception ex)
 			{
@@ -435,9 +438,6 @@ namespace StockSharp.Hydra.Core
 				if (Settings.MaxErrorCount > 0)
 					throw;
 			}
-
-			var count = values.Count();
-			RaiseDataLoaded(security, messageType, arg, getTime(values.Last()), count);
 		}
 
 		private static Func<T, string> CreateErrorCheck<T>(Func<T, bool> check, string message)
