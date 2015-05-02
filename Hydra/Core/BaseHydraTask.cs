@@ -611,7 +611,10 @@ namespace StockSharp.Hydra.Core
 		/// <param name="executions">Исполнения.</param>
 		protected void SaveExecutions(Security security, IEnumerable<ExecutionMessage> executions)
 		{
-			SafeSave(security, typeof(ExecutionMessage), ExecutionTypes.Order, executions, t => t.ServerTime, Enumerable.Empty<Func<ExecutionMessage, string>>());
+			foreach (var group in executions.GroupBy(e => e.ExecutionType))
+			{
+				SafeSave(security, typeof(ExecutionMessage), group.Key, group, t => t.ServerTime, Enumerable.Empty<Func<ExecutionMessage, string>>());
+			}
 		}
 
 		/// <summary>

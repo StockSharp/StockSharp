@@ -240,6 +240,7 @@ namespace StockSharp.Hydra
 							break;
 						}
 						case ExecutionTypes.Order:
+						case ExecutionTypes.Trade:
 						{
 							info = taskSecurity == null ? null : taskSecurity.ExecutionInfo;
 							allInfo = allSecurity == null ? null : allSecurity.ExecutionInfo;
