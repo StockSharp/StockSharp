@@ -28,6 +28,11 @@ namespace StockSharp.Quik
 		private readonly FixMessageAdapter _luaMarketDataAdapter;
 
 		/// <summary>
+		/// Адрес по-умолчанию к LUA FIX серверу. Равен localhost:5001
+		/// </summary>
+		public static readonly EndPoint DefaultLuaAddress = "localhost:5001".To<EndPoint>();
+
+		/// <summary>
 		/// Создать <see cref="QuikTrader"/>.
 		/// </summary>
 		public QuikTrader()
@@ -52,7 +57,7 @@ namespace StockSharp.Quik
 			{
 				Login = "quik",
 				Password = "quik".To<SecureString>(),
-				Address = "localhost:5001".To<EndPoint>(),
+				Address = DefaultLuaAddress,
 				TargetCompId = "StockSharpTS",
 				SenderCompId = "quik",
 				ExchangeBoard = ExchangeBoard.Forts,
@@ -66,7 +71,7 @@ namespace StockSharp.Quik
 			{
 				Login = "quik",
 				Password = "quik".To<SecureString>(),
-				Address = "localhost:5001".To<EndPoint>(),
+				Address = DefaultLuaAddress,
 				TargetCompId = "StockSharpMD",
 				SenderCompId = "quik",
 				ExchangeBoard = ExchangeBoard.Forts,
