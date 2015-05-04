@@ -193,7 +193,7 @@
   </Topic>
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
     <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка и работа" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
       <Topic id="bad33f32-1a13-4ba7-a335-326e6249d1be" visible="True" title="Finam" />
       <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
       <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Alor" />
@@ -201,7 +201,7 @@
       <Topic id="cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49" visible="True" title="Micex" />
       <Topic id="53930a42-ae5a-45fc-b9cf-8295584bf8fc" visible="True" title="Plaza II" />
       <Topic id="54a1e95e-ea39-4322-9613-e74859a3a596" visible="True" title="Quik" />
-      <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" isSelected="true" title="RTS" />
+      <Topic id="0da19c49-1f11-455e-bbd5-c20e428e5149" visible="True" title="RTS" />
       <Topic id="1cca5a33-e5ab-434e-bfed-287389fea2eb" visible="True" title="SmartCom" />
       <Topic id="065a9dec-12d0-49d0-be8c-9f9b48f6a899" visible="True" title="Transaq" />
       <Topic id="184da0f9-29db-4397-8497-1ed4c8f7ea0d" visible="True" title="UX" />
@@ -229,7 +229,7 @@
       <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
     </Topic>
     <Topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" visible="True" title="Список инструментов" />
-    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" isExpanded="true" title="Просмотр и экпорт">
+    <Topic id="fdba9886-25e8-4462-86e6-79ad5f40d9a9" visible="True" title="Просмотр и экпорт">
       <Topic id="3a20fcda-25ba-4794-ac91-dfa227380530" visible="True" title="Сделки" />
       <Topic id="6126cb15-de8b-4bcc-8b81-7354e8894239" visible="True" title="Стаканы" />
       <Topic id="0adb23fa-a295-43e0-9e75-9060b1d03388" visible="True" title="Свечи" />
@@ -246,6 +246,10 @@
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" title="Задачи">
       <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Конвертер" />
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Экспорт (авто)" />
+    </Topic>
+    <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" isExpanded="true" title="Аналитика">
+      <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Работа со сриптами" />
+      <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" isSelected="true" title="Отображение результатов анализа" />
     </Topic>
   </Topic>
   <Topic id="49ba804f-908b-473a-a31f-76540d8a79d7" visible="True" title="S#.Studio">
