@@ -24,6 +24,9 @@ namespace StockSharp.Btce
 			: base(transactionIdGenerator)
 		{
 			HeartbeatInterval = TimeSpan.FromSeconds(1);
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
 		}
 
 		/// <summary>

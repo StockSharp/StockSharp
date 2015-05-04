@@ -81,7 +81,7 @@ namespace StockSharp.Quik
 				UtcOffset = TimeHelper.Moscow.BaseUtcOffset,
 			};
 
-			_luaMarketDataAdapter.AddMarketDataSupport();
+			_luaMarketDataAdapter.RemoveTransactionalSupport();
 
 			IsDde = false;
 		}

@@ -270,6 +270,23 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Удалить из <see cref="IMessageAdapter.SupportedMessages"/> типы сообщений, относящихся к транзакционным.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		public static void RemoveTransactionalSupport(this IMessageAdapter adapter)
+		{
+			adapter.RemoveSupportedMessage(MessageTypes.OrderCancel);
+			adapter.RemoveSupportedMessage(MessageTypes.OrderGroupCancel);
+			adapter.RemoveSupportedMessage(MessageTypes.OrderPairReplace);
+			adapter.RemoveSupportedMessage(MessageTypes.OrderRegister);
+			adapter.RemoveSupportedMessage(MessageTypes.OrderReplace);
+			adapter.RemoveSupportedMessage(MessageTypes.OrderStatus);
+			adapter.RemoveSupportedMessage(MessageTypes.Portfolio);
+			adapter.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
+			adapter.RemoveSupportedMessage(MessageTypes.Position);
+		}
+
+		/// <summary>
 		/// Заполнить <see cref="IMessageAdapter.SupportedMessages"/> типами сообщений, относящихся к маркет-данным.
 		/// </summary>
 		/// <param name="adapter">Адаптер.</param>
@@ -277,6 +294,16 @@ namespace StockSharp.Messages
 		{
 			adapter.AddSupportedMessage(MessageTypes.MarketData);
 			adapter.AddSupportedMessage(MessageTypes.SecurityLookup);
+		}
+
+		/// <summary>
+		/// Удалить из <see cref="IMessageAdapter.SupportedMessages"/> типы сообщений, относящихся к маркет-данным.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		public static void RemoveMarketDataSupport(this IMessageAdapter adapter)
+		{
+			adapter.RemoveSupportedMessage(MessageTypes.MarketData);
+			adapter.RemoveSupportedMessage(MessageTypes.SecurityLookup);
 		}
 
 		/// <summary>
