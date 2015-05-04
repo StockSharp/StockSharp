@@ -1,5 +1,14 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.1:
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5619_Oshibka-nie-udalos--naiti-chast--puti.aspx
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/62
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/63
+* (feature) Quik plugin. Lua settings.
+* (feature) Plaza. Spectra 4 (ASTS).
+* (bug) Fix CSV storage
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5562_Nie-eksportiruietsia-data-pri-eksportie-sdielok-v-txt-excel.aspx
+
 ###v4.2.71:
 * (bug) Fix Sterling plugin
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5556_S--Api.aspx
