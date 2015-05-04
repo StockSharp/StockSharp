@@ -172,6 +172,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraAnalyticsShow.aml" />
+    <None Include="Topics\HydraAnalyticsScripts.aml" />
+    <None Include="Topics\HydraAnalytics.aml" />
     <None Include="Topics\HydraExportExecution.aml" />
     <None Include="Topics\HydraExportNews.aml" />
     <None Include="Topics\HydraExportCandles.aml" />
@@ -1132,6 +1135,42 @@
     <Image Include="Art\hydra_export_executions.png">
       <ImageId>hydra_export_executions</ImageId>
       <AlternateText>hydra export executions</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_main.png">
+      <ImageId>hydra_analitics_main</ImageId>
+      <AlternateText>hydra analitics main</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_folder.png">
+      <ImageId>hydra_analitics_folder</ImageId>
+      <AlternateText>hydra analitics folder</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_compile.png">
+      <ImageId>hydra_analitics_compile</ImageId>
+      <AlternateText>hydra analitics compile</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_references.png">
+      <ImageId>hydra_analitics_references</ImageId>
+      <AlternateText>hydra analitics references</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_toolbar.png">
+      <ImageId>hydra_analitics_toolbar</ImageId>
+      <AlternateText>hydra analitics toolbar</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_parameters.png">
+      <ImageId>hydra_analitics_parameters</ImageId>
+      <AlternateText>hydra analitics parameters</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_run.png">
+      <ImageId>hydra_analitics_run</ImageId>
+      <AlternateText>hydra analitics run</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_chart.png">
+      <ImageId>hydra_analitics_chart</ImageId>
+      <AlternateText>hydra analitics chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_table.png">
+      <ImageId>hydra_analitics_table</ImageId>
+      <AlternateText>hydra analitics table</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
