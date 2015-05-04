@@ -683,8 +683,8 @@ namespace StockSharp.Hydra.Panes
 	{
 		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var sec = (decimal)value;
-			return sec == 0 ? Visibility.Visible : Visibility.Collapsed;
+			var sec = (decimal?)value;
+			return sec == null ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
