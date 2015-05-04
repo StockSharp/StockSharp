@@ -306,7 +306,7 @@ namespace StockSharp.AlfaDirect
 		private void OnProcessQuotes(string where, string[] quotes)
 		{
 			// paper_no нужно парсить из условия where, так как в поле paper_no передается всегда 0
-			var paperNo = where.Split(new[] { '=' })[1].Trim().To<int>();
+			var paperNo = where.Split('=')[1].Trim().To<int>();
 			var f = Wrapper.FieldsDepth;
 
 			var bids = new List<QuoteChange>();

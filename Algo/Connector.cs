@@ -15,7 +15,6 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Algo.Slippage;
-	using StockSharp.Algo.Testing;
 	using StockSharp.Localization;
 
 	using Wintellect.PowerCollections;

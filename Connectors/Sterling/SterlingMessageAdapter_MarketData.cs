@@ -9,7 +9,6 @@ namespace StockSharp.Sterling
 	using SterlingLib;
 
 	using StockSharp.Algo;
-	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	partial class SterlingMessageAdapter

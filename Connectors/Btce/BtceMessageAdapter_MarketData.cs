@@ -1,6 +1,5 @@
 namespace StockSharp.Btce
 {
-	using System;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -8,7 +7,6 @@ namespace StockSharp.Btce
 
 	using StockSharp.Algo;
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 
 	partial class BtceMessageAdapter
 	{

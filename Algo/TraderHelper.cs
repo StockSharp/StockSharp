@@ -3286,6 +3286,9 @@ namespace StockSharp.Algo
 		/// <returns>Код площадки.</returns>
 		public static string GetBoardCode(this IMessageAdapter adapter, string secClass)
 		{
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
+
 			return adapter.SecurityClassInfo.GetSecurityClassInfo(secClass).Item2;
 		}
 
