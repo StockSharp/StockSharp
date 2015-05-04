@@ -37,6 +37,9 @@ namespace StockSharp.Btce
 				// кол-во знаков после запятой 2, но цены содержат 5 знаков
 				if (secId.SecurityCode.CompareIgnoreCase("btc/cnh"))
 					info.DecimalDigits = 5;
+
+				if (secId.SecurityCode.CompareIgnoreCase("btc/usd"))
+					info.DecimalDigits = 5;
 				
 				SendOutMessage(new SecurityMessage
 				{
