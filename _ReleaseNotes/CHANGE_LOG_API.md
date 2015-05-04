@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###v4.3.2:
+* (bug) BTCE. Security decimals fix.
+
 ###v4.3.1:
 * (feature) BitStamp, IQFeed, ETrade and Oanda source code.
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5619_Oshibka-nie-udalos--naiti-chast--puti.aspx

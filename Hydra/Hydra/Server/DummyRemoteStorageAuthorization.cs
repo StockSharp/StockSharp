@@ -5,7 +5,6 @@ namespace StockSharp.Hydra.Server
 	using Ecng.Security;
 
 	using StockSharp.Algo.History.Hydra;
-
 	using StockSharp.Localization;
 
 	class DummyRemoteStorageAuthorization : IRemoteStorageAuthorization

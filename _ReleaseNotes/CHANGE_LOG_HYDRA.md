@@ -1,5 +1,10 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.2:
+* (bug) Hydra. Btce and BitStamp anonymous access fix.
+* (bug) Hydra. Ref xNet fix.
+* (bug) Hydra. Price step icon fix.
+
 ###v4.3.1:
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5619_Oshibka-nie-udalos--naiti-chast--puti.aspx
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/62
