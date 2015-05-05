@@ -1172,6 +1172,14 @@
       <ImageId>hydra_analitics_table</ImageId>
       <AlternateText>hydra analitics table</AlternateText>
     </Image>
+    <Image Include="Art\hydra_candles_ind_chart.png">
+      <ImageId>hydra_candles_ind_chart</ImageId>
+      <AlternateText>hydra candles ind chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_newarea.png">
+      <ImageId>hydra_candles_newarea</ImageId>
+      <AlternateText>hydra candles newarea</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
