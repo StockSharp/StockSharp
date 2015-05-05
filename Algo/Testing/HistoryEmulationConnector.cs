@@ -398,6 +398,26 @@ namespace StockSharp.Algo.Testing
 						ProcessEmulationStateMessage(((EmulationStateMessage)message).State);
 						break;
 
+					case MessageTypes.Security:
+					case MessageTypes.Board:
+					case MessageTypes.Level1Change:
+					case MessageTypes.QuoteChange:
+					case MessageTypes.Time:
+					case MessageTypes.CandlePnF:
+					case MessageTypes.CandleRange:
+					case MessageTypes.CandleRenko:
+					case MessageTypes.CandleTick:
+					case MessageTypes.CandleTimeFrame:
+					case MessageTypes.CandleVolume:
+					case MessageTypes.Execution:
+					{
+						if (message.Adapter == MarketDataAdapter)
+							TransactionAdapter.SendInMessage(message);
+
+						base.OnProcessMessage(message, direction);
+						break;
+					}
+
 					default:
 					{
 						var candleMsg = message as CandleMessage;

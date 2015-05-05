@@ -765,6 +765,7 @@ namespace StockSharp.Algo.Testing
 
 				switch (order.TimeInForce)
 				{
+					case null:
 					case TimeInForce.PutInQueue:
 					{
 						order.Balance = leftBalance;
