@@ -238,7 +238,7 @@
       <Topic id="243486c1-b9d4-47af-889e-61aaaa670644" visible="True" title="Новости" />
       <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Executions" />
     </Topic>
-    <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Генерация свечек" />
+    <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" isSelected="true" title="Генерация свечек" />
     <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Настройки (дополнительные)" />
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Создание источника" />
     <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Склеивание данных" />
@@ -249,7 +249,7 @@
     </Topic>
     <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" isExpanded="true" title="Аналитика">
       <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Работа со сриптами" />
-      <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" isSelected="true" title="Отображение результатов анализа" />
+      <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Отображение результатов анализа" />
     </Topic>
   </Topic>
   <Topic id="49ba804f-908b-473a-a31f-76540d8a79d7" visible="True" title="S#.Studio">
