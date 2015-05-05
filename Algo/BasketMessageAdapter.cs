@@ -238,7 +238,11 @@ namespace StockSharp.Algo
 					break;
 
 				case MessageTypes.Disconnect:
-					_connectedAdapters.CachedValues.ForEach(с => с.Cache.ForEach(a => a.SendInMessage(message)));
+					_connectedAdapters
+						.CachedValues
+						.SelectMany(c => c.Cache)
+						.Distinct()
+						.ForEach(a => a.SendInMessage(message));
 					break;
 
 				case MessageTypes.Portfolio:
