@@ -36,7 +36,7 @@ namespace StockSharp.Quik
 				if (_api != null)
 					return _api;
 
-				if (!File.Exists(DllName))
+				if (OverrideDll || !File.Exists(DllName))
 				{
 					var version = GetTerminal().Version;
 
@@ -132,18 +132,39 @@ namespace StockSharp.Quik
 			}
 		}
 
+		private bool _isAsyncMode = true;
+
 		/// <summary>
 		/// Асинхронный режим. Если true, то все транзакции, такие как <see cref="OrderRegisterMessage"/>
 		/// или <see cref="OrderCancelMessage"/> будут отправляться в асинхронном режиме.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию true.
+		/// По-умолчанию используется асинхронный режим.
 		/// </remarks>
 		[Category(_category)]
 		[DisplayNameLoc(LocalizedStrings.Str1781Key)]
 		[DescriptionLoc(LocalizedStrings.Str1782Key)]
 		[PropertyOrder(2)]
-		public bool IsAsyncMode { get; set; }
+		public bool IsAsyncMode
+		{
+			get { return _isAsyncMode; }
+			set { _isAsyncMode = value; }
+		}
+
+		private bool _overrideDll = true;
+
+		/// <summary>
+		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[DisplayNameLoc(LocalizedStrings.OverrideKey)]
+		[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
+		[PropertyOrder(3)]
+		public bool OverrideDll
+		{
+			get { return _overrideDll; }
+			set { _overrideDll = value; }
+		}
 
 		/// <summary>
 		/// Проверить введенные параметры на валидность.
@@ -580,6 +601,7 @@ namespace StockSharp.Quik
 		{
 			storage.SetValue("DllName", DllName);
 			storage.SetValue("IsAsyncMode", IsAsyncMode);
+			storage.SetValue("OverrideDll", OverrideDll);
 
 			base.Save(storage);
 		}
@@ -592,6 +614,7 @@ namespace StockSharp.Quik
 		{
 			DllName = storage.GetValue<string>("DllName");
 			IsAsyncMode = storage.GetValue<bool>("IsAsyncMode");
+			OverrideDll = storage.GetValue<bool>("OverrideDll");
 
 			base.Load(storage);
 		}

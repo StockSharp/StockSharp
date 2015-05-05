@@ -116,6 +116,15 @@ namespace StockSharp.Transaq
 		}
 
 		/// <summary>
+		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+		/// </summary>
+		public bool OverrideDll
+		{
+			get { return _adapter.OverrideDll; }
+			set { _adapter.OverrideDll = value; }
+		}
+
+		/// <summary>
 		/// Версия коннектора.
 		/// </summary>
 		public string ConnectorVersion

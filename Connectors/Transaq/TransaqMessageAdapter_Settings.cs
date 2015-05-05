@@ -172,6 +172,21 @@ namespace StockSharp.Transaq
 			set { _apiLogsPath = value; }
 		}
 
+		private bool _overrideDll = true;
+
+		/// <summary>
+		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[DisplayNameLoc(LocalizedStrings.OverrideKey)]
+		[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
+		[PropertyOrder(8)]
+		public bool OverrideDll
+		{
+			get { return _overrideDll; }
+			set { _overrideDll = value; }
+		}
+
 		/// <summary>
 		/// Проверить введенные параметры на валидность.
 		/// </summary>
@@ -228,6 +243,7 @@ namespace StockSharp.Transaq
 			//storage.SetValue("ChangePasswordOnConnect", ShowChangePasswordWindowOnConnect);
 
 			storage.SetValue("MicexRegisters", MicexRegisters);
+			storage.SetValue("OverrideDll", OverrideDll);
 
 			base.Save(storage);
 		}
@@ -261,6 +277,7 @@ namespace StockSharp.Transaq
 			//ShowChangePasswordWindowOnConnect = storage.GetValue<bool>("ChangePasswordOnConnect");
 
 			MicexRegisters = storage.GetValue("MicexRegisters", true);
+			OverrideDll = storage.GetValue<bool>("OverrideDll");
 
 			base.Load(storage);
 		}

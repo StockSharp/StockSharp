@@ -192,6 +192,7 @@ namespace StockSharp.Transaq
 
 			_client = new ApiClient(OnCallback,
 					DllPath,
+					OverrideDll,
 					IsHFT,
 					ApiLogsPath,
 					ApiLogLevel);

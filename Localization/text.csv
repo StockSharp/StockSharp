@@ -4168,3 +4168,5 @@ AllDepths;All depths;Все стаканы
 RequestAllDepths;Request depths for all securities.;Запрашиваемое стаканы по всем инструментам.
 ExportSchema;Export schema to container;Экспортировать схему в контейнер
 IsControlConnectionLost;Control connection lost.;Контролировать потерю соединения с роутером.
+Override;Override.;Перезаписать.
+OverrideDll;Override dll file from resources. Turned on by default.;Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.

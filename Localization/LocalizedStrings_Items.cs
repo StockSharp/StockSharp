@@ -53837,5 +53837,31 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(IsControlConnectionLostKey); }
 		}
+
+		/// <summary>
+		/// Override.
+		/// </summary>
+		public const string OverrideKey = "Override";
+
+		/// <summary>
+		/// Override.
+		/// </summary>
+		public static string Override
+		{
+			get { return GetString(OverrideKey); }
+		}
+
+		/// <summary>
+		/// Override dll file from resources. Turned on by default.
+		/// </summary>
+		public const string OverrideDllKey = "OverrideDll";
+
+		/// <summary>
+		/// Override dll file from resources. Turned on by default.
+		/// </summary>
+		public static string OverrideDll
+		{
+			get { return GetString(OverrideDllKey); }
+		}
 	}
 }

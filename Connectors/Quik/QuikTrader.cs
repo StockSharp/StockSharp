@@ -410,6 +410,15 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
+		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+		/// </summary>
+		public bool OverrideDll
+		{
+			get { return _trans2QuikAdapter.OverrideDll; }
+			set { _trans2QuikAdapter.OverrideDll = value; }
+		}
+
+		/// <summary>
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>

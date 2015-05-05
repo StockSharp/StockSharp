@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Transaq.Native
 {
 	using System;
+	using System.IO;
 	using System.Text;
 
 	using Ecng.Common;
@@ -15,19 +16,18 @@
 		private readonly Action<string> _callback;
 		private static readonly Encoding _encoding = Encoding.UTF8;
 
-		public ApiClient(Action<string> callback, string dllPath, bool isHft, string path, ApiLogLevels logLevel)
+		public ApiClient(Action<string> callback, string dllPath, bool overrideDll, bool isHft, string path, ApiLogLevels logLevel)
 		{
 			if (callback == null)
 				throw new ArgumentNullException("callback");
 
 			_callback = callback;
 
-			//esper: если сначала запускаем 32 битную, а потом 64, то коннектор не работает.
-			//if (!File.Exists(dllPath))
-			//{
-			dllPath.CreateDirIfNotExists();
-			(Environment.Is64BitProcess ? (isHft ? Resources.txcn64 : Resources.txmlconnector64) : (isHft ? Resources.txcn : Resources.txmlconnector)).Save(dllPath);
-			//}
+			if (overrideDll || !File.Exists(dllPath))
+			{
+				dllPath.CreateDirIfNotExists();
+				(Environment.Is64BitProcess ? (isHft ? Resources.txcn64 : Resources.txmlconnector64) : (isHft ? Resources.txcn : Resources.txmlconnector)).Save(dllPath);
+			}
 
 			_api = new Api(dllPath, OnCallback);
 
