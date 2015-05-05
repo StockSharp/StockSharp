@@ -234,10 +234,10 @@ namespace StockSharp.Algo.Testing
 				{
 					var lookupMsg = (SecurityLookupMessage)message;
 
-					ThreadingHelper.Thread(() =>
-					{
-						try
-						{
+					//ThreadingHelper.Thread(() =>
+					//{
+					//	try
+					//	{
 							SecurityProvider.LookupAll().ForEach(security =>
 							{
 								SendOutMessage(security.Board.ToMessage());
@@ -255,12 +255,12 @@ namespace StockSharp.Algo.Testing
 							});
 
 							SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
-						}
-						catch (Exception ex)
-						{
-							SendOutError(ex);
-						}
-					}).Name("History sec lookup").Start();
+					//	}
+					//	catch (Exception ex)
+					//	{
+					//		SendOutError(ex);
+					//	}
+					//}).Name("History sec lookup").Start();
 					return;
 				}
 

@@ -18,7 +18,6 @@
 		public EmulationMessageAdapter(IdGenerator transactionIdGenerator)
 			: this(new MarketEmulator(), transactionIdGenerator)
 		{
-			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>
@@ -32,8 +31,11 @@
 			Emulator = emulator;
 
 			this.AddTransactionalSupport();
+			this.AddSupportedMessage(MessageTypes.PortfolioChange);
+			this.AddSupportedMessage(MessageTypes.PositionChange);
 			this.AddSupportedMessage(ExtendedMessageTypes.CommissionRule);
 			this.AddSupportedMessage(ExtendedMessageTypes.Clearing);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		private IMarketEmulator _emulator;

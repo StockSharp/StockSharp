@@ -116,11 +116,11 @@ namespace StockSharp.Algo.Testing
 
 			_emulationAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
 			_historyAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
-			_historyChannel = new InMemoryMessageChannel("History", SendOutError);
+			_historyChannel = new InMemoryMessageChannel("History Out", SendOutError);
 
 			Adapter = new HistoryBasketMessageAdapter(this);
 			Adapter.InnerAdapters.Add(_emulationAdapter);
-			Adapter.InnerAdapters.Add(new ChannelMessageAdapter(_historyAdapter, new PassThroughMessageChannel(), _historyChannel));
+			Adapter.InnerAdapters.Add(new ChannelMessageAdapter(_historyAdapter, new InMemoryMessageChannel("History In", SendOutError), _historyChannel));
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
 			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
@@ -485,11 +485,11 @@ namespace StockSharp.Algo.Testing
 
 		private void SendPortfolio(Portfolio portfolio)
 		{
-			SendOutMessage(portfolio.ToMessage());
+			SendInMessage(portfolio.ToMessage());
 
 			var money = _initialMoney[portfolio];
 
-			SendOutMessage(
+			SendInMessage(
 				_emulationAdapter
 					.CreatePortfolioChangeMessage(portfolio.Name)
 						.Add(PositionChangeTypes.BeginValue, money)
