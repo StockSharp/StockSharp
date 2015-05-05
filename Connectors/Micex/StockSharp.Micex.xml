@@ -171,6 +171,11 @@
             Запрашиваемое стаканы по всем инструментам.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+            </summary>
+    </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.IsValid">
       <summary>
             Проверить введенные параметры на валидность.
@@ -3560,6 +3565,11 @@
             Запрашиваемое стаканы по всем инструментам.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexTrader.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.MicexPtrReader">
       <summary>
             Читательн данных из указателя на неуправляемую память.
@@ -3612,11 +3622,12 @@
             Клиент для прямого доступа к API.
             </summary>
     </member>
-    <member name="M:StockSharp.Micex.Native.MicexClient.#ctor(System.String,StockSharp.Micex.ConnectionTypes,System.Collections.Generic.IEnumerable{System.Net.EndPoint},System.Net.EndPoint,System.String,System.String,System.Security.SecureString,System.String,System.String,StockSharp.Micex.CompressionLevels,System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
+    <member name="M:StockSharp.Micex.Native.MicexClient.#ctor(System.String,System.Boolean,StockSharp.Micex.ConnectionTypes,System.Collections.Generic.IEnumerable{System.Net.EndPoint},System.Net.EndPoint,System.String,System.String,System.Security.SecureString,System.String,System.String,StockSharp.Micex.CompressionLevels,System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
       <summary>
             Создать <see cref="T:StockSharp.Micex.Native.MicexClient" />.
             </summary>
       <param name="dllPath">Путь к библиотеке.</param>
+      <param name="overrideDll">Перезаписать файл библиотеки из ресурсов.</param>
       <param name="connectionType">Тип подключения.</param>
       <param name="addresses">писок адресов и портов серверов доступа.</param>
       <param name="preferredAddress">Адрес предпочитаемого сервера доступа.</param>
@@ -5047,6 +5058,11 @@
     <member name="P:StockSharp.Micex.Native.MicexClient.DllPath">
       <summary>
             Путь к библиотеке.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.MicexClient.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.MicexClient.ConnectionType">

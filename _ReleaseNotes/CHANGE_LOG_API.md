@@ -1,5 +1,11 @@
 StockSharp API Change log
 ========================
+###v4.3.3:
+* (feature) OverrideDll option.
+* (bug) BasketMessageAdapter. Disconnect fix.
+* (feature) Transaq. UTC
+* (bug) Back testing. Fixes.
+
 ###v4.3.2:
 * (bug) BTCE. Security decimals fix.
 
