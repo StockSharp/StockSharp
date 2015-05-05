@@ -209,9 +209,9 @@ namespace StockSharp.Transaq
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3518Key)]
 		[DescriptionLoc(LocalizedStrings.Str3519Key)]
-		public DateTime? ValidFor
+		public DateTimeOffset? ValidFor
 		{
-			get { return (DateTime?)Parameters.TryGetValue("ValidFor"); }
+			get { return (DateTimeOffset?)Parameters.TryGetValue("ValidFor"); }
 			set { Parameters["ValidFor"] = value; }
 		}
 
@@ -478,9 +478,9 @@ namespace StockSharp.Transaq
 		[CategoryLoc(LocalizedStrings.Str2490Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3556Key)]
 		[DescriptionLoc(LocalizedStrings.Str3557Key)]
-		public DateTime? AlgoValidAfter
+		public DateTimeOffset? AlgoValidAfter
 		{
-			get { return (DateTime?)Parameters.TryGetValue("AlgoValidAfter"); }
+			get { return (DateTimeOffset?)Parameters.TryGetValue("AlgoValidAfter"); }
 			set { Parameters["AlgoValidAfter"] = value; }
 		}
 
@@ -505,9 +505,9 @@ namespace StockSharp.Transaq
 		[CategoryLoc(LocalizedStrings.Str2490Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3518Key)]
 		[DescriptionLoc(LocalizedStrings.Str3519Key)]
-		public DateTime? AlgoValidBefore
+		public DateTimeOffset? AlgoValidBefore
 		{
-			get { return (DateTime?)Parameters.TryGetValue("AlgoValidBefore"); }
+			get { return (DateTimeOffset?)Parameters.TryGetValue("AlgoValidBefore"); }
 			set { Parameters["AlgoValidBefore"] = value; }
 		}
 

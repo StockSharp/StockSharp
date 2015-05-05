@@ -67,9 +67,9 @@ namespace StockSharp.Transaq
 							CondType = cond.AlgoType ?? TransaqAlgoOrderConditionTypes.None,
 							CondValue = cond.AlgoValue ?? 0m,
 							ValidAfterType = cond.AlgoValidAfterType ?? TransaqAlgoOrderValidTypes.TillCancelled,
-							ValidAfter = cond.AlgoValidAfter,
+							ValidAfter = cond.AlgoValidAfter.ToDt(),
 							ValidBeforeType = cond.AlgoValidBeforeType ?? TransaqAlgoOrderValidTypes.TillCancelled,
-							ValidBefore = cond.AlgoValidBefore,
+							ValidBefore = cond.AlgoValidBefore.ToDt(),
 							ExpDate = expDate,
 							BrokerRef = regMsg.Comment,
 							Hidden = (int)(regMsg.Volume - (regMsg.VisibleVolume ?? regMsg.Volume)),
@@ -87,7 +87,7 @@ namespace StockSharp.Transaq
 							BuySell = regMsg.Side.ToTransaq(),
 							LinkedOrderNo = cond.LinkedOrderId.To<string>(),
 							ExpDate = expDate,
-							ValidFor = expDate,
+							ValidFor = expDate == null ? (DateTime?)null : expDate.Value.ToUniversalTime(),
 						};
 
 						switch (cond.Type)
@@ -316,7 +316,7 @@ namespace StockSharp.Transaq
 				{
 					execMsg.OrderId = usualOrder.OrderNo;
 					execMsg.Balance = usualOrder.Balance;
-					execMsg.ServerTime = usualOrder.WithdrawTime ?? usualOrder.Time ?? usualOrder.AcceptTime ?? DateTimeOffset.MinValue;
+					execMsg.ServerTime = (usualOrder.WithdrawTime ?? usualOrder.Time ?? usualOrder.AcceptTime ?? DateTime.MinValue).ToDto();
 					execMsg.Comment = usualOrder.BrokerRef;
 					execMsg.SystemComment = usualOrder.Result;
 					execMsg.Price = usualOrder.Price;
@@ -333,8 +333,8 @@ namespace StockSharp.Transaq
 							AlgoType = usualOrder.ConditionType,
 							AlgoValue = usualOrder.ConditionValue.To<decimal>(),
 
-							AlgoValidAfter = usualOrder.ValidAfter,
-							AlgoValidBefore = usualOrder.ValidBefore,
+							AlgoValidAfter = usualOrder.ValidAfter.ToDto(),
+							AlgoValidBefore = usualOrder.ValidBefore.ToDto(),
 						};
 					}
 				}
@@ -346,12 +346,12 @@ namespace StockSharp.Transaq
 					execMsg.OrderType = OrderTypes.Conditional;
 					execMsg.ServerTime = stopOrder.AcceptTime == null
 						? DateTimeOffset.MinValue
-						: stopOrder.AcceptTime.Value.ApplyTimeZone(TimeHelper.Moscow);
+						: stopOrder.AcceptTime.Value.ToDto();
 
 					var stopCond = new TransaqOrderCondition
 					{
 						Type = stopOrder.StopLoss != null && stopOrder.TakeProfit != null ? TransaqOrderConditionTypes.TakeProfitStopLoss : (stopOrder.StopLoss != null ? TransaqOrderConditionTypes.StopLoss : TransaqOrderConditionTypes.TakeProfit),
-						ValidFor = stopOrder.ValidBefore,
+						ValidFor = stopOrder.ValidBefore.ToDto(),
 						LinkedOrderId = stopOrder.LinkedOrderNo,
 					};
 
@@ -473,7 +473,7 @@ namespace StockSharp.Transaq
 					TradeId = trade.TradeNo,
 					TradePrice = trade.Price,
 					Side = trade.BuySell.FromTransaq(),
-					ServerTime = trade.Time,
+					ServerTime = trade.Time.ToDto(),
 					Comment = trade.BrokerRef,
 					Volume = trade.Quantity,
 					PortfolioName = trade.Client,

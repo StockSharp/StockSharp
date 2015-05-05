@@ -1,4 +1,4 @@
-namespace StockSharp.Transaq.Native
+namespace StockSharp.Transaq
 {
 	using System;
 
@@ -12,6 +12,24 @@ namespace StockSharp.Transaq.Native
 
 	static class TransaqHelper
 	{
+		public static DateTime? ToDt(this DateTimeOffset? time)
+		{
+			return time == null ? (DateTime?)null : time.Value.UtcDateTime;
+		}
+
+		public static DateTimeOffset? ToDto(this DateTime? utc)
+		{
+			return utc == null ? (DateTimeOffset?)null : utc.Value.ToDto();
+		}
+
+		public static DateTimeOffset ToDto(this DateTime utc)
+		{
+			if (utc == DateTime.MinValue)
+				return DateTimeOffset.MinValue;
+
+			return new DateTimeOffset(utc.ChangeKind(DateTimeKind.Utc)).Convert(TimeHelper.Moscow);
+		}
+
 		public static NewOrderUnfilleds ToTransaq(this TimeInForce? cond)
 		{
 			switch (cond)

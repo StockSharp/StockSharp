@@ -22,6 +22,8 @@ namespace StockSharp.Transaq
 		private readonly SynchronizedDictionary<Type, Action<BaseResponse>> _handlerBunch = new SynchronizedDictionary<Type, Action<BaseResponse>>();
 		private ApiClient _client;
 		private bool _isInitialized;
+		private readonly SyncObject _connectingLock = new SyncObject();
+		private bool _connecting;
 
 		/// <summary>
 		/// Создать <see cref="TransaqMessageAdapter"/>.
@@ -118,6 +120,8 @@ namespace StockSharp.Transaq
 					_orders.Clear();
 					_ordersTypes.Clear();
 
+					_connecting = false;
+
 					if (_client != null)
 					{
 						try
@@ -197,6 +201,8 @@ namespace StockSharp.Transaq
 					ApiLogsPath,
 					ApiLogLevel);
 
+			_connecting = true;
+
 			SendCommand(new Native.Commands.ConnectMessage
 			{
 				Login = Login,
@@ -206,7 +212,21 @@ namespace StockSharp.Transaq
 				MicexRegisters = MicexRegisters,
 				RqDelay = MarketDataInterval == null ? (int?)null : (int)MarketDataInterval.Value.TotalMilliseconds,
 				Milliseconds = true,
+				Utc = true,
 			}, false);
+		}
+
+		private void TryRaiseConnect()
+		{
+			lock (_connectingLock)
+			{
+				if (!_connecting)
+					return;
+
+				_connecting = false;
+			}
+
+			SendOutMessage(new Messages.ConnectMessage());
 		}
 
 		private void OnCallback(string data)
@@ -220,6 +240,9 @@ namespace StockSharp.Transaq
 					SendOutError(response.Exception);
 					return;
 				}
+
+				if (!(response is ServerStatusResponse))
+					TryRaiseConnect();
 
 				var type = response.GetType();
 
@@ -275,7 +298,6 @@ namespace StockSharp.Transaq
 		private void OnServerStatusResponse(ServerStatusResponse response)
 		{
 			var error = response.Connected == "error";
-			var isConnected = response.Connected == "true";
 
 			if (error)
 			{
@@ -283,9 +305,11 @@ namespace StockSharp.Transaq
 				return;
 			}
 
+			var isConnected = response.Connected == "true";
+
 			if (isConnected)
 			{
-				SendOutMessage(new Messages.ConnectMessage());
+				TryRaiseConnect();
 			}
 			else
 			{

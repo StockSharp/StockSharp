@@ -164,7 +164,7 @@
     </Compile>
     <Compile Include="TransaqAddresses.cs" />
     <Compile Include="TransaqTrader.cs" />
-    <Compile Include="Native\TransaqHelper.cs">
+    <Compile Include="TransaqHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Native\XmlSerializeHelper.cs" />
