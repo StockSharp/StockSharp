@@ -18,6 +18,7 @@
 		public EmulationMessageAdapter(IdGenerator transactionIdGenerator)
 			: this(new MarketEmulator(), transactionIdGenerator)
 		{
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>

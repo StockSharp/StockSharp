@@ -425,6 +425,8 @@ namespace SampleHistoryTesting
 				}
 
 				_connectors.Add(connector);
+
+				progressBar.Value = 0;
 			}
 
 			_startEmulationTime = DateTime.Now;

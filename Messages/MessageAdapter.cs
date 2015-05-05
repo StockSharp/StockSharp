@@ -501,14 +501,6 @@ namespace StockSharp.Messages
 				}
 			}
 
-#warning force
-			//месседжи с заявками могут складываться из потока обработки
-			var force = message.Type == MessageTypes.OrderRegister ||
-			            message.Type == MessageTypes.OrderReplace ||
-			            message.Type == MessageTypes.OrderPairReplace ||
-			            message.Type == MessageTypes.OrderCancel ||
-			            message.Type == MessageTypes.OrderGroupCancel;
-
 			InitMessageLocalTime(message);
 
 			// при отключенном состоянии пропускаем только TimeMessage

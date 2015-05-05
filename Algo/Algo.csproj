@@ -392,7 +392,6 @@
     <Compile Include="Strategies\Testing\EmulationSettings.cs" />
     <Compile Include="Strategies\TimeFrameStrategy.cs" />
     <Compile Include="Testing\CommissionRuleMessage.cs" />
-    <Compile Include="Testing\GeneratorMarketDataMessage.cs" />
     <Compile Include="TimeQuoteChange.cs" />
     <Compile Include="Storages\TradeList.cs" />
     <Compile Include="Storages\TradeSerializer.cs" />

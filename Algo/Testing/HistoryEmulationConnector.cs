@@ -550,9 +550,9 @@ namespace StockSharp.Algo.Testing
 			if (generator == null)
 				throw new ArgumentNullException("generator");
 
-			SendInMessage(new GeneratorMarketDataMessage
+			SendInMessage(new GeneratorMessage
 			{
-				IsSubscribe = true,
+				IsSubscribe = isSubscribe,
 				SecurityId = generator.SecurityId,
 				Generator = generator,
 			});

@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Testing
 	using System.Linq;
 	using System.Threading;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 
@@ -22,10 +21,6 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public class HistoryMessageAdapter : MessageAdapter
 	{
-		private readonly CachedSynchronizedDictionary<SecurityId, MarketDepthGenerator> _depthGenerators = new CachedSynchronizedDictionary<SecurityId, MarketDepthGenerator>();
-		private readonly CachedSynchronizedDictionary<SecurityId, TradeGenerator> _tradeGenerators = new CachedSynchronizedDictionary<SecurityId, TradeGenerator>();
-		private readonly CachedSynchronizedDictionary<SecurityId, OrderLogGenerator> _orderLogGenerators = new CachedSynchronizedDictionary<SecurityId, OrderLogGenerator>();
-
 		private Thread _loadingThread;
 		private bool _disconnecting;
 
@@ -160,7 +155,6 @@ namespace StockSharp.Algo.Testing
 			
 			this.AddMarketDataSupport();
 			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
-			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		/// <summary>
@@ -239,22 +233,34 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.SecurityLookup:
 				{
 					var lookupMsg = (SecurityLookupMessage)message;
-					SecurityProvider.LookupAll().ForEach(security =>
+
+					ThreadingHelper.Thread(() =>
 					{
-						SendOutMessage(security.Board.ToMessage());
+						try
+						{
+							SecurityProvider.LookupAll().ForEach(security =>
+							{
+								SendOutMessage(security.Board.ToMessage());
 
-						var secMsg = security.ToMessage();
-						secMsg.OriginalTransactionId = lookupMsg.TransactionId;
-						SendOutMessage(secMsg);
+								var secMsg = security.ToMessage();
+								secMsg.OriginalTransactionId = lookupMsg.TransactionId;
+								SendOutMessage(secMsg);
 
-						//SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
-						//	.Add(Level1Fields.StepPrice, security.StepPrice)
-						//	.Add(Level1Fields.MinPrice, security.MinPrice)
-						//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
-						//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
-						//	.Add(Level1Fields.MarginSell, security.MarginSell));
-					});
-					SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+								//SendOutMessage(new Level1ChangeMessage { SecurityId = security.ToSecurityId() }
+								//	.Add(Level1Fields.StepPrice, security.StepPrice)
+								//	.Add(Level1Fields.MinPrice, security.MinPrice)
+								//	.Add(Level1Fields.MaxPrice, security.MaxPrice)
+								//	.Add(Level1Fields.MarginBuy, security.MarginBuy)
+								//	.Add(Level1Fields.MarginSell, security.MarginSell));
+							});
+
+							SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = lookupMsg.TransactionId });
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+					}).Name("History sec lookup").Start();
 					return;
 				}
 
@@ -288,65 +294,11 @@ namespace StockSharp.Algo.Testing
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			var generatorMessage = message as GeneratorMarketDataMessage;
-
-			if (generatorMessage != null)
-			{
-				if (generatorMessage.Generator == null)
-					throw new ArgumentException("message");
-
-				var tradeGen = generatorMessage.Generator as TradeGenerator;
-
-				if (tradeGen != null)
-				{
-					if (generatorMessage.IsSubscribe)
-						_tradeGenerators.Add(generatorMessage.SecurityId, tradeGen);
-					else
-						_tradeGenerators.Remove(generatorMessage.SecurityId);
-				}
-				else
-				{
-					var depthGen = generatorMessage.Generator as MarketDepthGenerator;
-
-					if (depthGen != null)
-					{
-						if (generatorMessage.IsSubscribe)
-							_depthGenerators.Add(generatorMessage.SecurityId, depthGen);
-						else
-							_depthGenerators.Remove(generatorMessage.SecurityId);
-					}
-					else
-					{
-						var olGen = generatorMessage.Generator as OrderLogGenerator;
-
-						if (olGen != null)
-						{
-							if (generatorMessage.IsSubscribe)
-								_orderLogGenerators.Add(generatorMessage.SecurityId, olGen);
-							else
-								_orderLogGenerators.Remove(generatorMessage.SecurityId);
-						}
-						else
-						{
-							throw new InvalidOperationException();
-						}
-					}
-				}
-
-				return;
-			}
-
 			var security = SecurityProvider.LookupById(message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode);
 
 			if (security == null)
 			{
 				RaiseMarketDataMessage(message,  new InvalidOperationException(LocalizedStrings.Str704Params.Put(message.SecurityId)));
-				return;
-			}
-
-			if (TryGetGenerator(message) != null)
-			{
-				RaiseMarketDataMessage(message, null);
 				return;
 			}
 
@@ -490,24 +442,6 @@ namespace StockSharp.Algo.Testing
 			});
 		}
 
-		private MarketDataGenerator TryGetGenerator(MarketDataMessage message)
-		{
-			switch (message.DataType)
-			{
-				case MarketDataTypes.Trades:
-					return _tradeGenerators.TryGetValue(message.SecurityId);
-
-				case MarketDataTypes.MarketDepth:
-					return _depthGenerators.TryGetValue(message.SecurityId);
-
-				case MarketDataTypes.OrderLog:
-					return _orderLogGenerators.TryGetValue(message.SecurityId);
-
-				default:
-					return null;
-			}
-		}
-
 		private void RaiseMarketDataMessage(MarketDataMessage message, Exception error)
 		{
 			var reply = (MarketDataMessage)message.Clone();
@@ -521,10 +455,6 @@ namespace StockSharp.Algo.Testing
 			try
 			{
 				var loadDate = StartDate;
-
-				EnqueueGenerators(_tradeGenerators.CachedPairs, MarketDataTypes.Trades);
-				EnqueueGenerators(_depthGenerators.CachedPairs, MarketDataTypes.MarketDepth);
-				EnqueueGenerators(_orderLogGenerators.CachedPairs, MarketDataTypes.OrderLog);
 
 				var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
 
@@ -621,21 +551,21 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private void EnqueueGenerators<TGenerator>(IEnumerable<KeyValuePair<SecurityId, TGenerator>> generators, MarketDataTypes type)
-			where TGenerator : MarketDataGenerator
-		{
-			foreach (var pair in generators)
-			{
-				SendOutMessage(new GeneratorMessage
-				{
-					SecurityId = pair.Key,
-					Generator = pair.Value,
-					IsSubscribe = true,
-					TransactionId = TransactionIdGenerator.GetNextId(),
-					DataType = type,
-				});
-			}
-		}
+		//private void EnqueueGenerators<TGenerator>(IEnumerable<KeyValuePair<SecurityId, TGenerator>> generators, MarketDataTypes type)
+		//	where TGenerator : MarketDataGenerator
+		//{
+		//	foreach (var pair in generators)
+		//	{
+		//		SendOutMessage(new GeneratorMessage
+		//		{
+		//			SecurityId = pair.Key,
+		//			Generator = pair.Value,
+		//			IsSubscribe = true,
+		//			TransactionId = TransactionIdGenerator.GetNextId(),
+		//			DataType = type,
+		//		});
+		//	}
+		//}
 
 		private IEnumerable<Tuple<ExchangeBoard, Range<TimeSpan>>> GetOrderedRanges(DateTimeOffset date)
 		{
