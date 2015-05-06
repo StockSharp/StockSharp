@@ -90,27 +90,17 @@ namespace SampleRandomEmulation
 			_connector = new HistoryEmulationConnector(
 				new[] { security },
 				new[] { portfolio })
-			{ MarketTimeChangedInterval = timeFrame };
-
-			_logManager.Sources.Add(_connector);
-
-			_connector.NewSecurities += securities =>
 			{
-				if (securities.All(s => s != security))
-					return;
+				// set history range
+				StartDate = startTime,
+				StopDate = stopTime,
 
-				// fill level1 values
-				_connector.SendOutMessage(level1Info);
-
-				_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
-				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
-
-				// start historical data loading when connection established successfully and all data subscribed
-				_connector.Start();
+				// set market time freq as time frame
+				MarketTimeChangedInterval = timeFrame,
 			};
 
-			_connector.StartDate = startTime;
-			_connector.StopDate = stopTime;
+
+			_logManager.Sources.Add(_connector);
 
 			var candleManager = new CandleManager(_connector);
 
@@ -123,6 +113,25 @@ namespace SampleRandomEmulation
 				Security = security,
 				Portfolio = portfolio,
 				Connector = _connector,
+			};
+
+			_connector.NewSecurities += securities =>
+			{
+				if (securities.All(s => s != security))
+					return;
+
+				// fill level1 values
+				_connector.SendOutMessage(level1Info);
+
+				_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
+				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+
+				// start strategy before emulation started
+				_strategy.Start();
+				candleManager.Start(series);
+
+				// start historical data loading when connection established successfully and all data subscribed
+				_connector.Start();
 			};
 
 			// fill parameters panel
@@ -176,12 +185,6 @@ namespace SampleRandomEmulation
 						else
 							MessageBox.Show(this, LocalizedStrings.cancelled);
 					});
-				}
-				else if (_connector.State == EmulationStates.Started)
-				{
-					// start strategy when emulation started
-					_strategy.Start();
-					candleManager.Start(series);
 				}
 			};
 

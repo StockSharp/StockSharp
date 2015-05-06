@@ -216,13 +216,12 @@ namespace SampleHistoryTesting
 					new[] { portfolio })
 				{
 					StorageRegistry = storageRegistry,
-
 					MarketEmulator =
 					{
 						Settings =
 						{
 							// set time frame is backtesting on candles
-							UseCandlesTimeFrame =  emulationInfo.UseCandleTimeFrame,
+							UseCandlesTimeFrame = emulationInfo.UseCandleTimeFrame,
 
 							// match order if historical price touched our limit order price. 
 							// It is terned off, and price should go through limit order price level
@@ -234,16 +233,54 @@ namespace SampleHistoryTesting
 					//UseExternalCandleSource = true,
 					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
 					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
+
+					// set history range
+					StartDate = startTime,
+					StopDate = stopTime,
+
+					// set market time freq as time frame
+					MarketTimeChangedInterval = timeFrame,
 				};
-
-				connector.StartDate = startTime;
-				connector.StopDate = stopTime;
-
-				connector.MarketTimeChangedInterval = timeFrame;
 
 				((ILogSource)connector).LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info;
 
 				logManager.Sources.Add(connector);
+
+				var candleManager = new CandleManager(connector);
+				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+
+				_shortMa = new SimpleMovingAverage { Length = 10 };
+				_shortElem = new ChartIndicatorElement
+				{
+					Color = Colors.Coral,
+					ShowAxisMarker = false,
+					FullTitle = _shortMa.ToString()
+				};
+				_bufferedChart.AddElement(_area, _shortElem);
+
+				_longMa = new SimpleMovingAverage { Length = 80 };
+				_longElem = new ChartIndicatorElement
+				{
+					ShowAxisMarker = false,
+					FullTitle = _longMa.ToString()
+				};
+				_bufferedChart.AddElement(_area, _longElem);
+
+				// create strategy based on 80 5-min и 10 5-min
+				var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, series)
+				{
+					Volume = 1,
+					Portfolio = portfolio,
+					Security = security,
+					Connector = connector,
+					LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info,
+
+					// by default interval is 1 min,
+					// it is excessively for time range with several months
+					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
+				};
+
+				logManager.Sources.Add(strategy);
 
 				connector.NewSecurities += securities =>
 				{
@@ -290,45 +327,13 @@ namespace SampleHistoryTesting
 						connector.RegisterTrades(security);
 					}
 
+					// start strategy before emulation started
+					strategy.Start();
+					candleManager.Start(series);
+
 					// start historical data loading when connection established successfully and all data subscribed
 					connector.Start();
 				};
-
-				var candleManager = new CandleManager(connector);
-				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-
-				_shortMa = new SimpleMovingAverage { Length = 10 };
-				_shortElem = new ChartIndicatorElement
-				{
-					Color = Colors.Coral,
-					ShowAxisMarker = false,
-					FullTitle = _shortMa.ToString()
-				};
-				_bufferedChart.AddElement(_area, _shortElem);
-
-				_longMa = new SimpleMovingAverage { Length = 80 };
-				_longElem = new ChartIndicatorElement
-				{
-					ShowAxisMarker = false,
-					FullTitle = _longMa.ToString()
-				};
-				_bufferedChart.AddElement(_area, _longElem);
-
-				// create strategy based on 80 5-min и 10 5-min
-				var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, series)
-				{
-					Volume = 1,
-					Portfolio = portfolio,
-					Security = security,
-					Connector = connector,
-					LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info,
-
-					// by default interval is 1 min,
-					// it is excessively for time range with several months
-					UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
-				};
-
-				logManager.Sources.Add(strategy);
 
 				// fill parameters panel
 				statistic.Parameters.Clear();
@@ -404,10 +409,6 @@ namespace SampleHistoryTesting
 					else if (connector.State == EmulationStates.Started)
 					{
 						SetIsEnabled(true);
-
-						// start strategy when emulation started
-						strategy.Start();
-						candleManager.Start(series);
 					}
 				};
 
