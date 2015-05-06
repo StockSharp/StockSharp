@@ -105,7 +105,7 @@ namespace SpeedTest
 
 				if (_connector.Adapter.InnerAdapters.Count == 0)
 				{
-					MessageBox.Show(LocalizedStrings.Str2971);
+					MessageBox.Show(this, LocalizedStrings.Str2971);
 					return;
 				}
 
@@ -139,9 +139,9 @@ namespace SpeedTest
 				_connector = null;
 
 			}
-			catch (Exception exception)
+			catch (Exception ex)
 			{
-				MessageBox.Show(exception.ToString());
+				MessageBox.Show(this, ex.ToString());
 			}
 		}
 
@@ -164,16 +164,16 @@ namespace SpeedTest
 					SelectedStrategy.Start();
 				}
 			}
-			catch (Exception exception)
+			catch (Exception ex)
 			{
-				MessageBox.Show(exception.ToString());
+				MessageBox.Show(this, ex.ToString());
 			}
 		}
 
 		private void NewOrderTestClick(object sender, RoutedEventArgs e)
 		{
 			if (_connector == null)
-				MessageBox.Show(LocalizedStrings.Str2972);
+				MessageBox.Show(this, LocalizedStrings.Str2972);
 			else
 			{
 				var window = new NewOrderTest(_connector, _securityProvider);

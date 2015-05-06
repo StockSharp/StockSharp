@@ -45,9 +45,9 @@
 				MainWindow.Strategies.Add(sp);
 				Close();
 			}
-			catch (Exception exception)
+			catch (Exception ex)
 			{
-				MessageBox.Show(exception.ToString());
+				MessageBox.Show(this, ex.ToString());
 			}
 		}
 	}

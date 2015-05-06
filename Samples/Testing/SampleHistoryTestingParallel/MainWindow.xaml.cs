@@ -142,10 +142,10 @@ namespace SampleHistoryTestingParallel
 					if (batchEmulation.IsFinished)
 					{
 						TestingProcess.Value = TestingProcess.Maximum;
-						MessageBox.Show(LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+						MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
 					}
 					else
-						MessageBox.Show(LocalizedStrings.cancelled);
+						MessageBox.Show(this, LocalizedStrings.cancelled);
 				});
 			};
 
