@@ -369,8 +369,8 @@ namespace StockSharp.Algo.Storages
 				.Select(fileName =>
 				{
 					var parts = fileName.Split('_');
-					var type = "{0}.{1}, {2}".Put(typeof(Candle).Namespace, parts[1], typeof(Candle).Assembly.FullName).To<Type>();
-					var value = type.ToCandleMessageType().ToCandleArg(parts[2]);
+					var type = "{0}.{1}Message, {2}".Put(typeof(CandleMessage).Namespace, parts[1], typeof(CandleMessage).Assembly.FullName).To<Type>();
+					var value = type.ToCandleArg(parts[2]);
 
 					return Tuple.Create(type, value);
 				})
@@ -454,7 +454,7 @@ namespace StockSharp.Algo.Storages
 			else if (dataType == typeof(NewsMessage))
 				return "news";
 			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
-				return "candles_{0}_{1}".Put(dataType.Name, TraderHelper.CandleArgToFolderName(arg));
+				return "candles_{0}_{1}".Put(dataType.Name.Replace("Message", string.Empty), TraderHelper.CandleArgToFolderName(arg));
 			else
 				throw new NotSupportedException(LocalizedStrings.Str2872Params.Put(dataType.FullName));
 		}
