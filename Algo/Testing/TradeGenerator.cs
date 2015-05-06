@@ -24,6 +24,14 @@
 		}
 
 		/// <summary>
+		/// Тип маркет-данных.
+		/// </summary>
+		public override MarketDataTypes DataType
+		{
+			get { return MarketDataTypes.Trades; }
+		}
+
+		/// <summary>
 		/// Генерировать значение для <see cref="Trade.OrderDirection"/>. По-умолчанию отключено.
 		/// </summary>
 		public bool GenerateDirection { get; set; }

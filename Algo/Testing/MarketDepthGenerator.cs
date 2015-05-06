@@ -29,6 +29,14 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Тип маркет-данных.
+		/// </summary>
+		public override MarketDataTypes DataType
+		{
+			get { return MarketDataTypes.MarketDepth; }
+		}
+
+		/// <summary>
 		/// Использовать для генерации лучших котировок в стакане объем исторических сделок.
 		/// </summary>
 		/// <remarks>

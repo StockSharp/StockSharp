@@ -27,6 +27,11 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
+		/// Тип маркет-данных.
+		/// </summary>
+		public abstract MarketDataTypes DataType { get; }
+
+		/// <summary>
 		/// Длина массива предварительно сгенерированных случайных чисел. По умолчанию 100.
 		/// </summary>
 		public int RandomArrayLength { get; set; }
