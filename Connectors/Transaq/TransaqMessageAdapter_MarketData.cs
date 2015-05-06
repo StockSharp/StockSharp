@@ -241,6 +241,8 @@ namespace StockSharp.Transaq
 					break;
 			}
 
+			var index = 0;
+
 			foreach (var candle in response.Candles)
 			{
 				var time = candle.Date.ToDto();
@@ -257,7 +259,7 @@ namespace StockSharp.Transaq
 					OpenTime = time,
 					CloseTime = time + _candlePeriods[response.Period],
 					OpenInterest = candle.Oi,
-					IsFinished = isFinished,
+					IsFinished = isFinished && ++index == response.Candles.Length,
 					State = CandleStates.Finished,
 				});
 			}
