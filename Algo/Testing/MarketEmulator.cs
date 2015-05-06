@@ -1139,7 +1139,7 @@ namespace StockSharp.Algo.Testing
 
 			public decimal? GetBestPrice(Sides side)
 			{
-				var quotes = side == Sides.Buy ? _asks : _bids;
+				var quotes = GetQuotes(side.Invert());
 				var pair = quotes.FirstOr();
 
 				if (pair == null)

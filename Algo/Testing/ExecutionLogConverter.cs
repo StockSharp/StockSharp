@@ -165,6 +165,7 @@ namespace StockSharp.Algo.Testing
 
 			var tradePrice = message.GetTradePrice();
 			var volume = message.GetVolume();
+			var time = message.LocalTime;
 
 			if (bestBid.Value != null && tradePrice <= bestBid.Key)
 			{
@@ -174,8 +175,7 @@ namespace StockSharp.Algo.Testing
 				ProcessMarketOrder(retVal, _bids, message, Sides.Sell);
 
 				// подтягиваем противоположные котировки и снимаем лишние заявки
-				TryCreateOppositeOrder(retVal, _asks, message.LocalTime, tradePrice, volume, Sides.Buy);
-				CancelWorstQuotes(retVal, message.LocalTime);
+				TryCreateOppositeOrder(retVal, _asks, time, tradePrice, volume, Sides.Buy);
 			}
 			else if (bestAsk.Value != null && tradePrice >= bestAsk.Key)
 			{
@@ -184,8 +184,7 @@ namespace StockSharp.Algo.Testing
 
 				ProcessMarketOrder(retVal, _asks, message, Sides.Buy);
 
-				TryCreateOppositeOrder(retVal, _bids, message.LocalTime, tradePrice, volume, Sides.Sell);
-				CancelWorstQuotes(retVal, message.LocalTime);
+				TryCreateOppositeOrder(retVal, _bids, time, tradePrice, volume, Sides.Sell);
 			}
 			else if (bestBid.Value != null && bestAsk.Value != null && bestBid.Key < tradePrice && tradePrice < bestAsk.Key)
 			{
@@ -196,7 +195,7 @@ namespace StockSharp.Algo.Testing
 
 				var originSide = GetOrderSide(message);
 
-				retVal.Add(CreateMessage(message.LocalTime, originSide, tradePrice, volume + (_securityDefinition.VolumeStep ?? 1 * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
+				retVal.Add(CreateMessage(time, originSide, tradePrice, volume + (_securityDefinition.VolumeStep ?? 1 * _settings.VolumeMultiplier), tif: TimeInForce.MatchOrCancel));
 
 				var spreadStep = _settings.SpreadSize * GetPriceStep();
 
@@ -204,13 +203,14 @@ namespace StockSharp.Algo.Testing
 
 				var newBestPrice = tradePrice + spreadStep;
 
-				while (true)
+				var depth = _settings.MaxDepth;
+				while (--depth > 0)
 				{
 					var diff = bestAsk.Key - newBestPrice;
 
 					if (diff > 0)
 					{
-						retVal.Add(CreateMessage(message.LocalTime, Sides.Sell, newBestPrice, 0));
+						retVal.Add(CreateMessage(time, Sides.Sell, newBestPrice, 0));
 						newBestPrice += spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 					}
 					else
@@ -219,22 +219,21 @@ namespace StockSharp.Algo.Testing
 
 				newBestPrice = tradePrice - spreadStep;
 
-				while (true)
+				depth = _settings.MaxDepth;
+				while (--depth > 0)
 				{
 					var diff = newBestPrice - bestBid.Key;
 
 					if (diff > 0)
 					{
-						retVal.Add(CreateMessage(message.LocalTime, Sides.Buy, newBestPrice, 0));
+						retVal.Add(CreateMessage(time, Sides.Buy, newBestPrice, 0));
 						newBestPrice -= spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
 					}
 					else
 						break;
 				}
 
-				retVal.Add(CreateMessage(message.LocalTime, originSide.Invert(), tradePrice, volume, tif: TimeInForce.MatchOrCancel));
-
-				CancelWorstQuotes(retVal, message.LocalTime);
+				retVal.Add(CreateMessage(time, originSide.Invert(), tradePrice, volume, tif: TimeInForce.MatchOrCancel));
 			}
 			else
 			{
@@ -257,7 +256,7 @@ namespace StockSharp.Algo.Testing
 					hasOpposite = false;
 				}
 
-				retVal.Add(CreateMessage(message.LocalTime, originSide, tradePrice, volume));
+				retVal.Add(CreateMessage(time, originSide, tradePrice, volume));
 
 				// если стакан был полностью пустой, то формируем сразу уровень с противоположной стороны
 				if (!hasOpposite)
@@ -265,8 +264,15 @@ namespace StockSharp.Algo.Testing
 					var oppositePrice = tradePrice + _settings.SpreadSize * GetPriceStep() * (originSide == Sides.Buy ? 1 : -1);
 
 					if (oppositePrice > 0)
-						retVal.Add(CreateMessage(message.LocalTime, originSide.Invert(), oppositePrice, volume));
+						retVal.Add(CreateMessage(time, originSide.Invert(), oppositePrice, volume));
 				}
+			}
+
+			if (!HasDepth(time))
+			{
+				// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
+				CancelWorstQuote(retVal, time, Sides.Buy, _bids);
+				CancelWorstQuote(retVal, time, Sides.Sell, _asks);	
 			}
 
 			_prevTickPrice = tradePrice;
@@ -457,16 +463,6 @@ namespace StockSharp.Algo.Testing
 				return;
 
 			retVal.Add(CreateMessage(time, side, worst.Key, volume, true));
-		}
-
-		private void CancelWorstQuotes(List<ExecutionMessage> retVal, DateTime time)
-		{
-			if (HasDepth(time))
-				return;
-
-			// если стакан слишком разросся, то удаляем его хвосты (не удаляя пользовательские заявки)
-			CancelWorstQuote(retVal, time, Sides.Buy, _bids);
-			CancelWorstQuote(retVal, time, Sides.Sell, _asks);
 		}
 
 		private ExecutionMessage CreateMessage(DateTime time, Sides side, decimal price, decimal volume, bool isCancelling = false, TimeInForce tif = TimeInForce.PutInQueue)
