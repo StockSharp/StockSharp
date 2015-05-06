@@ -295,7 +295,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 				while (true)
 				{
-					var candle = ProcessValue(series, (TCandle)info.CurrentCandle, value);
+					var currCandle = info.CurrentCandle;
+
+					var candle = ProcessValue(series, (TCandle)currCandle, value);
 
 					if (candle == null)
 					{
@@ -304,7 +306,7 @@ namespace StockSharp.Algo.Candles.Compression
 						//throw new InvalidOperationException("Фабрика вернула пустую свечу.");
 					}
 
-					if (candle == info.CurrentCandle)
+					if (candle == currCandle)
 					{
 						if (!valueAdded)
 							Container.AddValue(series, candle, value);
@@ -316,10 +318,12 @@ namespace StockSharp.Algo.Candles.Compression
 					}
 					else
 					{
-						if (info.CurrentCandle != null)
+						if (currCandle != null)
 						{
-							info.CurrentCandle.State = CandleStates.Finished;
-							RaiseProcessing(series, info.CurrentCandle);
+							info.CurrentCandle = null;
+
+							currCandle.State = CandleStates.Finished;
+							RaiseProcessing(series, currCandle);
 						}
 
 						info.CurrentCandle = candle;

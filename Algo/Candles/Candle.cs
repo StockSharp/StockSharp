@@ -299,29 +299,69 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public abstract object Arg { get; set; }
 
-		/// <summary>
-		/// Состояние.
-		/// </summary>
-		[DataMember]
-		public CandleStates State { get; set; }
+		private int _totalTicks;
 
 		/// <summary>
 		/// Количество тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int TotalTicks { get; set; }
+		public int TotalTicks
+		{
+			get { return _totalTicks; }
+			set
+			{
+				ThrowIfFinished();
+				_totalTicks = value;
+			}
+		}
+
+		private int _upTicks;
 
 		/// <summary>
 		/// Количество восходящих тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int UpTicks { get; set; }
+		public int UpTicks
+		{
+			get { return _upTicks; }
+			set
+			{
+				ThrowIfFinished();
+				_upTicks = value;
+			}
+		}
+
+		private int _downTicks;
 
 		/// <summary>
 		/// Количество нисходящих тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int DownTicks { get; set; }
+		public int DownTicks
+		{
+			get { return _downTicks; }
+			set
+			{
+				ThrowIfFinished();
+				_downTicks = value;
+			}
+		}
+
+		private CandleStates _state;
+
+		/// <summary>
+		/// Состояние.
+		/// </summary>
+		[DataMember]
+		public CandleStates State
+		{
+			get { return _state; }
+			set
+			{
+				ThrowIfFinished();
+				_state = value;
+			}
+		}
 
 		[field: NonSerialized]
 		private readonly VolumeProfile _volumeProfileInfo = new VolumeProfile();
