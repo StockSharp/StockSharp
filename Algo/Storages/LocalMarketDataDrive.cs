@@ -14,9 +14,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Serialization;
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -384,7 +382,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="securityId">Идентификатор инструмента.</param>
 		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="CandleMessage.Arg"/>.</param>
 		/// <param name="format">Тип формата.</param>
 		/// <returns>Хранилище для <see cref="IMarketDataStorage"/>.</returns>
 		public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format)
@@ -400,37 +398,12 @@ namespace StockSharp.Algo.Storages
 		/// Получить название файла по типу данных.
 		/// </summary>
 		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="CandleMessage.Arg"/>.</param>
 		/// <returns>Название файла.</returns>
 		public static string CreateFileName(Type dataType, object arg)
 		{
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
-
-			if (dataType == typeof(Trade))
-			{
-				dataType = typeof(ExecutionMessage);
-				arg = ExecutionTypes.Tick;
-			}
-			else if (dataType == typeof(OrderLogItem))
-			{
-				dataType = typeof(ExecutionMessage);
-				arg = ExecutionTypes.OrderLog;
-			}
-			else if (dataType == typeof(Order))
-			{
-				dataType = typeof(ExecutionMessage);
-				arg = ExecutionTypes.Order;
-			}
-			else if (dataType == typeof(MyTrade))
-			{
-				dataType = typeof(ExecutionMessage);
-				arg = ExecutionTypes.Trade;
-			}
-			else if (dataType.IsSubclassOf(typeof(Candle)))
-				dataType = dataType.ToCandleMessageType();
-			else if (dataType == typeof(MarketDepth))
-				dataType = typeof(QuoteChangeMessage);
 
 			if (dataType == typeof(ExecutionMessage))
 			{

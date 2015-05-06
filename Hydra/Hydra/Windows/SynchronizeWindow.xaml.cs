@@ -189,7 +189,16 @@ namespace StockSharp.Hydra.Windows
 				if (_token.IsCancellationRequested)
 					return;
 
-				var dataTypes = new[] { typeof(Trade), typeof(MarketDepth), typeof(Level1ChangeMessage), typeof(OrderLogItem) };
+				var dataTypes = new Dictionary<Type, object>
+				{
+					{ typeof(ExecutionMessage), ExecutionTypes.Tick },
+					{ typeof(ExecutionMessage), ExecutionTypes.OrderLog },
+					{ typeof(ExecutionMessage), ExecutionTypes.Order },
+					{ typeof(ExecutionMessage), ExecutionTypes.Trade },
+					{ typeof(QuoteChangeMessage), null },
+					{ typeof(Level1ChangeMessage), null },
+					{ typeof(NewsMessage), null }
+				};
 
 				var formats = Enumerator.GetValues<StorageFormats>();
 
@@ -204,7 +213,7 @@ namespace StockSharp.Hydra.Windows
 								if (_token.IsCancellationRequested)
 									break;
 
-								drive.GetStorageDrive(security.ToSecurityId(), dataType, null, format).ClearDatesCache();
+								drive.GetStorageDrive(security.ToSecurityId(), dataType.Key, dataType.Value, format).ClearDatesCache();
 							}
 						}
 
