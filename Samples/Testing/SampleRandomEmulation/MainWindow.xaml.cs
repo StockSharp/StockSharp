@@ -121,7 +121,7 @@ namespace SampleRandomEmulation
 					return;
 
 				// fill level1 values
-				_connector.SendOutMessage(level1Info);
+				_connector.SendInMessage(level1Info);
 
 				_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
 				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });

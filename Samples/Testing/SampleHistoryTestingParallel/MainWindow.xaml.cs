@@ -160,7 +160,7 @@ namespace SampleHistoryTestingParallel
 					return;
 
 				// fill level1 values
-				connector.SendOutMessage(level1Info);
+				connector.SendInMessage(level1Info);
 
 				connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
 				{

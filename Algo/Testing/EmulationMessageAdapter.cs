@@ -31,6 +31,9 @@
 			Emulator = emulator;
 
 			this.AddTransactionalSupport();
+			this.AddSupportedMessage(MessageTypes.Security);
+			this.AddSupportedMessage(MessageTypes.Board);
+			this.AddSupportedMessage(MessageTypes.Level1Change);
 			this.AddSupportedMessage(MessageTypes.PortfolioChange);
 			this.AddSupportedMessage(MessageTypes.PositionChange);
 			this.AddSupportedMessage(ExtendedMessageTypes.CommissionRule);

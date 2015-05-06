@@ -288,7 +288,7 @@ namespace SampleHistoryTesting
 						return;
 
 					// fill level1 values
-					connector.SendOutMessage(level1Info);
+					connector.SendInMessage(level1Info);
 
 					if (emulationInfo.UseMarketDepth)
 					{
