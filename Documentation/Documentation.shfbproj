@@ -172,6 +172,15 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraImportExecutions.aml" />
+    <None Include="Topics\HydraImportNews.aml" />
+    <None Include="Topics\HydraImportLevel1.aml" />
+    <None Include="Topics\HydraImportOrderlog.aml" />
+    <None Include="Topics\HydraImportCandles.aml" />
+    <None Include="Topics\HydraImportDepths.aml" />
+    <None Include="Topics\HydraImportTrades.aml" />
+    <None Include="Topics\HydraImportSecurities.aml" />
+    <None Include="Topics\HydraImport.aml" />
     <None Include="Topics\HydraAnalyticsShow.aml" />
     <None Include="Topics\HydraAnalyticsScripts.aml" />
     <None Include="Topics\HydraAnalytics.aml" />
@@ -1179,6 +1188,42 @@
     <Image Include="Art\hydra_candles_newarea.png">
       <ImageId>hydra_candles_newarea</ImageId>
       <AlternateText>hydra candles newarea</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_securities.png">
+      <ImageId>hydra_import_securities</ImageId>
+      <AlternateText>hydra import securities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_association.png">
+      <ImageId>hydra_import_association</ImageId>
+      <AlternateText>hydra import association</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_trades.png">
+      <ImageId>hydra_import_trades</ImageId>
+      <AlternateText>hydra import trades</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_depths.png">
+      <ImageId>hydra_import_depths</ImageId>
+      <AlternateText>hydra import depths</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_candles.png">
+      <ImageId>hydra_import_candles</ImageId>
+      <AlternateText>hydra import candles</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_orderlog.png">
+      <ImageId>hydra_import_orderlog</ImageId>
+      <AlternateText>hydra import orderlog</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_level1.png">
+      <ImageId>hydra_import_level1</ImageId>
+      <AlternateText>hydra import level 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_news.png">
+      <ImageId>hydra_import_news</ImageId>
+      <AlternateText>hydra import news</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_executions.png">
+      <ImageId>hydra_import_executions</ImageId>
+      <AlternateText>hydra import executions</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
