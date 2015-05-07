@@ -8,6 +8,7 @@ namespace StockSharp.BitStamp
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.BitStamp.Native;
 	using StockSharp.Messages;
 
@@ -15,6 +16,8 @@ namespace StockSharp.BitStamp
 	{
 		private readonly CachedSynchronizedDictionary<SecurityId, int> _subscribedDepths = new CachedSynchronizedDictionary<SecurityId, int>();
 		private readonly CachedSynchronizedSet<SecurityId> _subscribedTicks = new CachedSynchronizedSet<SecurityId>();
+		private DateTimeOffset _prevLevel1Time;
+		private static readonly TimeSpan _level1Interval = TimeSpan.FromSeconds(10);
 
 		private void SessionOnNewTrade(Trade trade)
 		{
@@ -136,6 +139,47 @@ namespace StockSharp.BitStamp
 			});
 
 			SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = message.TransactionId });
+		}
+
+		private void ProcessLevel1()
+		{
+			var currTime = CurrentTime;
+
+			if ((currTime - _prevLevel1Time) < _level1Interval)
+				return;
+
+			_prevLevel1Time = currTime;
+
+			var btcUsd = _httpClient.RequestBtcUsd();
+
+			if (btcUsd != null)
+			{
+				SendOutMessage(new Level1ChangeMessage
+				{
+					SecurityId = _btcUsd,
+					ServerTime = btcUsd.Time.ApplyTimeZone(TimeZoneInfo.Utc)
+				}
+				.TryAdd(Level1Fields.HighBidPrice, (decimal)btcUsd.High)
+				.TryAdd(Level1Fields.LowAskPrice, (decimal)btcUsd.Low)
+				.TryAdd(Level1Fields.VWAP, (decimal)btcUsd.VWAP)
+				.TryAdd(Level1Fields.LastTradePrice, (decimal)btcUsd.Last)
+				.TryAdd(Level1Fields.Volume, (decimal)btcUsd.Volume)
+				.TryAdd(Level1Fields.BestBidPrice, (decimal)btcUsd.Bid)
+				.TryAdd(Level1Fields.BestAskPrice, (decimal)btcUsd.Ask));
+			}
+
+			var eurUsd = _httpClient.RequestEurUsd();
+
+			if (eurUsd != null)
+			{
+				SendOutMessage(new Level1ChangeMessage
+				{
+					SecurityId = _eurUsd,
+					ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
+				}
+				.TryAdd(Level1Fields.BestBidPrice, (decimal)eurUsd.Buy)
+				.TryAdd(Level1Fields.BestAskPrice, (decimal)eurUsd.Sell));
+			}
 		}
 	}
 }
