@@ -240,24 +240,6 @@ namespace StockSharp.Messages
 			}
 		}
 
-		///// <summary>
-		///// <see langword="true"/>, если сессия используется для получения маркет-данных, иначе, <see langword="false"/>.
-		///// </summary>
-		//[CategoryLoc(LocalizedStrings.Str186Key)]
-		//[DisplayNameLoc(LocalizedStrings.MarketDataKey)]
-		//[DescriptionLoc(LocalizedStrings.UseMarketDataSessionKey)]
-		//[PropertyOrder(1)]
-		//public bool IsMarketDataEnabled { get; set; }
-
-		///// <summary>
-		///// <see langword="true"/>, если сессия используется для отправки транзакций, иначе, <see langword="false"/>.
-		///// </summary>
-		//[CategoryLoc(LocalizedStrings.Str186Key)]
-		//[DisplayNameLoc(LocalizedStrings.TransactionsKey)]
-		//[DescriptionLoc(LocalizedStrings.UseTransactionalSessionKey)]
-		//[PropertyOrder(2)]
-		//public bool IsTransactionEnabled { get; set; }
-
 		/// <summary>
 		/// Проверить введенные параметры на валидность.
 		/// </summary>

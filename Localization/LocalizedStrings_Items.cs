@@ -2330,12 +2330,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Control interval
+		/// Heart beat
 		/// </summary>
 		public const string Str192Key = "Str192";
 
 		/// <summary>
-		/// Control interval
+		/// Heart beat
 		/// </summary>
 		public static string Str192
 		{
@@ -20309,12 +20309,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Transactional session.
+		/// Transactional session
 		/// </summary>
 		public const string TransactionalSessionKey = "TransactionalSession";
 
 		/// <summary>
-		/// Transactional session.
+		/// Transactional session
 		/// </summary>
 		public static string TransactionalSession
 		{
@@ -20322,12 +20322,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Market data session.
+		/// Market data session
 		/// </summary>
 		public const string MarketDataSessionKey = "MarketDataSession";
 
 		/// <summary>
-		/// Market data session.
+		/// Market data session
 		/// </summary>
 		public static string MarketDataSession
 		{
@@ -48352,19 +48352,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Market data session
-		/// </summary>
-		public const string XamlStr299Key = "XamlStr299";
-
-		/// <summary>
-		/// Market data session
-		/// </summary>
-		public static string XamlStr299
-		{
-			get { return GetString(XamlStr299Key); }
-		}
-
-		/// <summary>
 		/// Scale:
 		/// </summary>
 		public const string XamlStr300Key = "XamlStr300";
@@ -52692,19 +52679,6 @@ namespace StockSharp.Localization
 		public static string OnlyPublic
 		{
 			get { return GetString(OnlyPublicKey); }
-		}
-
-		/// <summary>
-		/// Transactional session
-		/// </summary>
-		public const string XamlStr774Key = "XamlStr774";
-
-		/// <summary>
-		/// Transactional session
-		/// </summary>
-		public static string XamlStr774
-		{
-			get { return GetString(XamlStr774Key); }
 		}
 
 		/// <summary>

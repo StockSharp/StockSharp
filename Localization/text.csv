@@ -177,7 +177,7 @@ MarketData;Market data;Маркет-данные
 UseMarketDataSession;Use session to receive market-data.;Использовать сессию для получения маркет-данных.
 Transactions;Transactions;Транзакции
 UseTransactionalSession;Use session to send transactions.;Использовать сессию для отправки транзакций.
-Str192;Control interval;Интервал контроля
+Str192;Heart beat;Интервал контроля
 Str193;Server notification interval that the connection is still alive. By default equal to 1 minute.;Интервал оповещения сервера о том, что подключение еще живое. По-умолчанию равно 1 минуте.
 TimeInterval;Time interval;Интервал времени
 Str195;TimeMessage message generation interval. By default equal to 10 milliseconds.;Интервал генерации сообщения TimeMessage. По-умолчанию равно 10 миллисекундам.
@@ -1565,8 +1565,8 @@ EncodingDesc;Encoding used in data transfer.;Кодировка, использ�
 Counter;Counter;Счетчик
 ResetCounter;Reset counter.;Нужно ли сбрасывать счетчик идентификаторов.
 Str1679;Connection to broker or stock exchange through FIX protocol.;Подключение к брокеру или бирже через FIX протокол.
-TransactionalSession;Transactional session.;Транзакционная сессия.
-MarketDataSession;Market data session.;Маркет-дата сессия.
+TransactionalSession;Transactional session;Транзакционная сессия
+MarketDataSession;Market data session;Маркет-дата сессия
 Str1683;Transactions (copy);Транзакции (копия)
 Str1684;Transactional session (copy, used with MICEX to receive orders and trades, registered for connections).;Транзакционная сессия (копия, используется в случае ММВБ для получение заявок и сделок, зарегистрированных под подключения).
 Str1685Params;Transaction = {0} Market-data = {1};Транзакции = {0} Маркет-дата = {1}
@@ -3727,7 +3727,6 @@ XamlStr291;Max depth order book generation;Максимальная глубин
 XamlStr292;Max;Максимальное
 XamlStr293;Max quote volume in generated depth;Максимальный объем котировки генерируемого стакана
 XamlStr297;MarginCall;МаржКол
-XamlStr299;Market data session;Маркет-дата сессия
 XamlStr300;Scale:;Масштаб:
 XamlStr301;Melody;Мелодия
 XamlStr302;Menu;Меню
@@ -4062,7 +4061,6 @@ XamlStr763;Type (option);Тип (опцион)
 XamlStr765;Strategy type:;Тип стратегии:
 BorderWidth;Border width;Толщина рамки
 OnlyPublic;Only public;Только публичные
-XamlStr774;Transactional session;Транзакционная сессия
 XamlStr776;Trader;Трейдер
 XamlStr780;Events;Уведомления
 XamlStr781;Data deletion;Удаление данных
