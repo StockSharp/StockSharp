@@ -129,7 +129,7 @@ namespace StockSharp.Algo.Strategies
 
 			protected override bool OnRemoving(Strategy item)
 			{
-				item.Parent = null;
+				//item.Parent = null;
 
 				item.OrderRegistering -= _parent.OnOrderRegistering;
 				item.OrderRegistered -= _parent.ProcessOrder;

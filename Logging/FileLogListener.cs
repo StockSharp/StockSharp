@@ -398,7 +398,7 @@ namespace StockSharp.Logging
 
 			var name = source.Name;
 
-			if (WriteChildDataToRootFile && source.Parent != null)
+			if (!source.IsRoot && WriteChildDataToRootFile && source.Parent != null)
 				name = GetSourceName(source.Parent);
 
 			return name;

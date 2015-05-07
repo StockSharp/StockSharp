@@ -166,6 +166,11 @@ namespace StockSharp.Algo
 			get { return _innerAdapter.CurrentTime; }
 		}
 
+		bool ILogSource.IsRoot
+		{
+			get { return _innerAdapter.IsRoot; }
+		}
+
 		event Action<LogMessage> ILogSource.Log
 		{
 			add { _innerAdapter.Log += value; }

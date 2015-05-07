@@ -40,6 +40,11 @@ namespace StockSharp.Logging
 		DateTimeOffset CurrentTime { get; }
 
 		/// <summary>
+		/// Является ли источник корнем (даже при <see cref="Parent"/> не равным <see langword="null"/>).
+		/// </summary>
+		bool IsRoot { get; }
+
+		/// <summary>
 		/// Событие нового отладочного сообщения.
 		/// </summary>
 		event Action<LogMessage> Log;
@@ -135,6 +140,11 @@ namespace StockSharp.Logging
 			get { return TimeHelper.Now; }
 		}
 
+		/// <summary>
+		/// Является ли источник корнем (даже при <see cref="ILogSource.Parent"/> не равным <see langword="null"/>).
+		/// </summary>
+		public bool IsRoot { get; set; }
+
 		private Action<LogMessage> _log;
 
 		/// <summary>
@@ -178,14 +188,14 @@ namespace StockSharp.Logging
 			return Name;
 		}
 
-		/// <summary>
-		/// Освободить занятые ресурсы.
-		/// </summary>
-		protected override void DisposeManaged()
-		{
-			Parent = null;
-			base.DisposeManaged();
-		}
+		///// <summary>
+		///// Освободить занятые ресурсы.
+		///// </summary>
+		//protected override void DisposeManaged()
+		//{
+		//	Parent = null;
+		//	base.DisposeManaged();
+		//}
 
 		/// <summary>
 		/// Загрузить настройки.

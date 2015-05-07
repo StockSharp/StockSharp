@@ -2432,6 +2432,11 @@ namespace StockSharp.Algo
 				get { return Container.CurrentTime; }
 			}
 
+			bool ILogSource.IsRoot
+			{
+				get { return Container.IsRoot; }
+			}
+
 			#endregion
 
 			void ILogReceiver.AddLog(LogMessage message)

@@ -353,6 +353,11 @@
 			get { return _adapter.CurrentTime; }
 		}
 
+		bool ILogSource.IsRoot
+		{
+			get { return _adapter.IsRoot; }
+		}
+
 		event Action<LogMessage> ILogSource.Log
 		{
 			add { _adapter.Log += value; }
