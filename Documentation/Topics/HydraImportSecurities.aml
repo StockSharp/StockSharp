@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2a830015-5cfb-4468-8538-4e94820b3659" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Для импорта инструментов нужно выбрать пункт <legacyBold>Импорт => Инструменты</legacyBold> из главного меню приложения.</para>
+      
+       <mediaLink>
+		  		<image placement="left" xlink:href="hydra_import_securities" />
+	   </mediaLink>
+	   
+	   <procedure>
+      <title>Процесс импорта инструментов</title>
+      <steps class="ordered">
+        <step>
+          <content>
+          	<para> Выполнить <legacyBold>Настройки импорта из CSV</legacyBold>.</para>
+			<list class="bullet">
+  				<listItem>
+  					<para><legacyBold>Директория с данными</legacyBold> - папка, куда будут сохраняться конечные файлы в формате <token>stocksharp</token>.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Отступ с начала</legacyBold> - количество строчек с начала файла, которые нужно пропустить (если они несут метаинформацию).</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Путь</legacyBold> - полный путь к CSV файлу.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Разделитель колонок</legacyBold> - разделитель колонок. Табуляция обозначается TAB.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Формат</legacyBold> - формат хранилища, а которое необходимо импортировать данные.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Часовой пояс</legacyBold> - часовой пояс.</para>
+  				</listItem>
+			</list>
+
+          </content>
+        </step>
+        <step>
+          <content>
+          	<para>Настроить параметры импорта для полей <token>stocksharp</token>.</para>
+          	<list class="bullet">
+  				<listItem>
+  					<para><legacyBold>Порядковый номер</legacyBold> - указать порядковый номер колонки в файле CSV. Если поле не используется, или если полю присвоено значение по умолчанию, то оставить значение (-1).</para>
+					<alert class="note">
+  						<para>Нумерация начинается с 0.</para>
+					</alert>
+
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Ассоциации</legacyBold> - задать соответствие значения колонки в файле типу в stocksharp (если это необходимо). Например, на следующем рисунке показано, как установить соответсвие между значениями колонки "тип инструмента" и соответствующим перечислением в stocksharp.</para>
+  					 <mediaLink>
+		  				<image placement="left" xlink:href="hydra_import_association" />
+	   				</mediaLink>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>По-умолчанию</legacyBold> - значение поля по умолчанию. Например, можно использовать для повторяющихся значений полей (<legacyBold>Инструмент</legacyBold>, или <legacyBold>Площадка</legacyBold> при импорте сделок, стаканов и т.п., см. <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Сделки</link> ), если соответствующей информации нет в файле с данными.</para>
+  				</listItem>
+  				<listItem>
+  					<para><legacyBold>Формат</legacyBold> - формат данных. Обычно используется при импорте значений даты и времени (см. <link xlink:href="1e18851f-69f7-4fa0-a5ea-c059c7694990">Сделки</link>).</para>
+  				</listItem>
+			</list>
+          </content>
+        </step>
+        <step>
+          <content>
+          	<para>Нажать кнопку <legacyBold>Импорт</legacyBold>.</para>
+          </content>
+        </step>
+      </steps>
+    </procedure>	
+	   
+    </introduction>
+  </developerConceptualDocument>
+</topic>
