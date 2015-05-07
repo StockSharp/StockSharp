@@ -382,7 +382,7 @@ namespace StockSharp.Hydra.Panes
 
 				if (value == typeof(SecurityMessage))
 				{
-					_title = LocalizedStrings.Str2854;
+					_title = LocalizedStrings.Securities.ToLowerInvariant();
 
 					_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
@@ -398,7 +398,7 @@ namespace StockSharp.Hydra.Panes
 					{
 						case ExecutionTypes.Tick:
 						{
-							_title = LocalizedStrings.Str2855;
+							_title = LocalizedStrings.Str985.ToLowerInvariant();
 
 							_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
@@ -627,7 +627,7 @@ namespace StockSharp.Hydra.Panes
 
 		string IPane.Title
 		{
-			get { return LocalizedStrings.Str2864 + " " + _title; }
+			get { return LocalizedStrings.Str2864 + " '{0}'".Put(_title); }
 		}
 
 		Uri IPane.Icon

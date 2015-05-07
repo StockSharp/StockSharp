@@ -1546,7 +1546,6 @@ Str1657Params;For message with transaction ID {0} the original transaction ID wa
 Str1658;None;Отсутствует
 Str1659;Quotes;Котировки
 Str1660;Depth;Глубина
-Str1661;Session.;Сессия.
 Str1662;Version;Версия
 Str1663;Version FIX protocol.;Версия FIX протокола.
 FixFormat;FIX protocol format.;Формат FIX протокола.
@@ -2652,8 +2651,6 @@ Str2850;Security code. Must be completed, if the data file does not contain the 
 Str2851;Board code. Must be completed, if the data file does not contain the board code.;Код площадки. Необходимо заполнить, если файл с данными не содержит кода площадки.
 Str2852;Date. Column can contain just a date or date with time.;Дата. Колонка может содержать как просто дату, так и дату со временем.
 Str2853;Time. This column is optional and is only necessary in case the date and time are separate in file being exported.;Время. Колонка является необязательно и необходима только в том случае, если дата и время в экспортируемом файле разделены.
-Str2854;securities;инструментов
-Str2855;trades;сделок
 Str2856;Number (line);Номер (строка)
 Str2857;Date;Дата
 Str2858;orders log;лога заявок

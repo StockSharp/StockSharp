@@ -20062,19 +20062,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Session.
-		/// </summary>
-		public const string Str1661Key = "Str1661";
-
-		/// <summary>
-		/// Session.
-		/// </summary>
-		public static string Str1661
-		{
-			get { return GetString(Str1661Key); }
-		}
-
-		/// <summary>
 		/// Version
 		/// </summary>
 		public const string Str1662Key = "Str1662";
@@ -34411,32 +34398,6 @@ namespace StockSharp.Localization
 		public static string Str2853
 		{
 			get { return GetString(Str2853Key); }
-		}
-
-		/// <summary>
-		/// securities
-		/// </summary>
-		public const string Str2854Key = "Str2854";
-
-		/// <summary>
-		/// securities
-		/// </summary>
-		public static string Str2854
-		{
-			get { return GetString(Str2854Key); }
-		}
-
-		/// <summary>
-		/// trades
-		/// </summary>
-		public const string Str2855Key = "Str2855";
-
-		/// <summary>
-		/// trades
-		/// </summary>
-		public static string Str2855
-		{
-			get { return GetString(Str2855Key); }
 		}
 
 		/// <summary>
