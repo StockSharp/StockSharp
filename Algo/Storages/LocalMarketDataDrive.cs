@@ -239,16 +239,9 @@ namespace StockSharp.Algo.Storages
 				return IOPath.Combine(_path, date.ToString(_dateFormat));
 			}
 
-			private int _counter;
-
 			private string GetPath(DateTime date, bool isLoad)
 			{
 				var result = IOPath.Combine(GetDataPath(date), _fileNameWithExtension);
-
-				_counter += isLoad ? 1 : -1;
-
-				if (_counter > 1 || _counter < -1)
-					Console.WriteLine();
 
 				System.Diagnostics.Trace.WriteLine("FileAccess ({0}): {1}".Put(isLoad ? "Load" : "Save", result));
 				return result;
