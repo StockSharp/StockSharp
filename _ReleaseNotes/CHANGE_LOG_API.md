@@ -1,5 +1,14 @@
 StockSharp API Change log
 ========================
+###v4.3.4:
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/46
+* (feature) OEC 3.5.14
+* (feature) ILogSource.IsRoot
+* (bug) Back testings. Generated data fixes.
+* (bug) Emulator. Prevent big order book generation.
+* (feature) Storage. Replace entity by messages.
+* (feature) BitStamp. Level1 refresh interval is 10 sec.
+
 ###v4.3.3:
 * (feature) OverrideDll option.
 * (bug) BasketMessageAdapter. Disconnect fix.

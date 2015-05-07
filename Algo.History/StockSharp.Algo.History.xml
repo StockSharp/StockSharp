@@ -630,7 +630,7 @@
             </summary>
       <param name="securityId">Идентификатор инструмента.</param>
       <param name="dataType">Тип маркет-данных.</param>
-      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
       <param name="format">Тип формата.</param>
       <returns>Обертка для доступа к удаленным маркет-данным.</returns>
     </member>
@@ -1255,7 +1255,7 @@
             </summary>
       <param name="securityId">Идентификатор инструмента.</param>
       <param name="dataType">Тип маркет-данных.</param>
-      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Algo.Candles.Candle.Arg" />.</param>
+      <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType" />. Например, <see cref="P:StockSharp.Messages.CandleMessage.Arg" />.</param>
       <param name="format">Тип формата.</param>
       <returns>Хранилище для <see cref="T:StockSharp.Algo.Storages.IMarketDataStorage" />.</returns>
     </member>

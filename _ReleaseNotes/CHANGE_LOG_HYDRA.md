@@ -1,5 +1,11 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.4:
+* (bug) UX lookup fix.
+* (feature) Micex sec cache update.
+* (feature) BitStamp. Level1 refresh interval is 10 sec.
+* (feature) Transaq. UTC
+
 ###v4.3.2:
 * (bug) Hydra. Btce and BitStamp anonymous access fix.
 * (bug) Hydra. Ref xNet fix.
