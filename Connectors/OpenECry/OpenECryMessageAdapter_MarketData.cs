@@ -249,7 +249,7 @@ namespace StockSharp.OpenECry
 				UnderlyingSecurityCode = contract.BaseSymbol,
 				Currency = contract.Currency.Name.ToCurrency(),
 				Strike = contract.Strike.SafeCast(),
-				ExpiryDate = contract.HasExpiration ? (contract.ExpirationDate + contract.ExpirationTime.TimeOfDay).ApplyTimeZone(TimeHelper.Est) : (DateTimeOffset?)null,
+				ExpiryDate = contract.HasExpiration ? contract.ExpirationDate.ApplyTimeZone(TimeHelper.Est) : (DateTimeOffset?)null,
 				PriceStep = contract.TickSize.SafeCast(),
 				Decimals = contract.PriceFormat > 0 ? contract.PriceFormat : (int?)null,
 				OptionType = contract.IsOption ? (contract.Put ? OptionTypes.Put : OptionTypes.Call) : (OptionTypes?)null,

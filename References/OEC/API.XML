@@ -14,7 +14,7 @@
             </summary>
             <exclude />
         </member>
-        <member name="M:OEC.API.AdministratorExtenstion.RequestCashAdjustment(OEC.API.Account,OEC.API.Currency,System.Double)">
+        <member name="M:OEC.API.AdministratorExtenstion.RequestCashAdjustment(OEC.API.Account,OEC.API.Currency,System.Double,OEC.Data.CashChangeReason,System.String,System.Nullable{System.DateTime})">
             <summary>
                 Requests adjustment for an account cash balance.
             </summary>
@@ -24,6 +24,9 @@
             <param name="account">Account to adjust</param>
             <param name="currency">Currency</param>
             <param name="amount">Relative amount to change (could be negative)</param>
+            <param name="changeReason"></param>
+            <param name="comment"></param>
+            <param name="revertDateTime"></param>
         </member>
         <member name="M:OEC.API.AdministratorExtenstion.LockUnlockAccounts(System.Collections.Generic.IEnumerable{OEC.API.Account},System.Boolean,System.Boolean,System.String,System.Boolean)">
             <summary>
@@ -171,7 +174,7 @@
         </member>
         <member name="M:OEC.API.Core.CheckEvents">
             <summary>
-                check for delayed price event and raise if necesssary
+                check for delayed price event and raise if necessary
             </summary>
         </member>
         <member name="M:OEC.API.Core.AddPriceEvent(OEC.API.Contract,OEC.API.Price,OEC.API.Price)">
@@ -5704,6 +5707,25 @@
             <seealso cref="T:OEC.API.Command"/>
             <param name="command">Pending command</param>
             <param name="comments">Broker commens</param>
+        </member>
+        <member name="M:OEC.API.OECClient.AddFill(OEC.API.Order,System.Int32,System.Double,System.String,System.DateTime)">
+            <summary>
+                Adds a new <see cref="T:OEC.API.Fill"/> to a working <see cref="T:OEC.API.Order"/>
+            </summary>
+            <remarks>
+                This command is intended for broker interface and will be ignored for trader logins.
+                New fill reports will be added to the <see cref="P:OEC.API.Order.Fills"/> list. If operation is failed,
+                fill could be added with cancelled (<see cref="P:OEC.API.Fill.Active"/> = false) or just not be added at all.
+            
+                createTime.Kind should be DateTimeKind.Utc or it will be converted to UTC
+            </remarks>
+            <seealso cref="T:OEC.API.Fill"/>
+            <seealso cref="T:OEC.API.Order"/>
+            <param name="order">Order to fill</param>
+            <param name="quantity">Filled quantity</param>
+            <param name="price">Fill Price</param>
+            <param name="comments">Fill comments</param>
+            <param name="createTime">Time when a fill occurred</param>
         </member>
         <member name="M:OEC.API.OECClient.AddFill(OEC.API.Order,System.Int32,System.Double,System.String)">
             <summary>

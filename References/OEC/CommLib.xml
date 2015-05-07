@@ -123,11 +123,6 @@
             </summary>
             <exclude />
         </member>
-        <member name="T:OEC.Data.Monitoring.MonitoringData">
-            <summary>
-            </summary>
-            <exclude />
-        </member>
         <member name="T:OEC.Data.Monitoring.FailedOperation">
             <summary>
             </summary>
@@ -798,7 +793,7 @@
         </member>
         <member name="F:OEC.Data.OrderState.Cancelled">
             <summary>
-            Order was cancelled
+            Order was canceled
             </summary>
         </member>
         <member name="F:OEC.Data.OrderState.Rejected">
@@ -1465,52 +1460,52 @@
         <member name="T:OEC.Data.IRestraint`1">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.IPriceRestraint">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.RestraintType">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.GroupType">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.PriceRestraintRec">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.PriceRestraint">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.TypedPriceRestraint">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.PriceRestraints`1">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.StartEndRestraint">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.StartInFutureRestraint">
             <summary>
             </summary>
-            <exclude/>
+            <exclude />
         </member>
         <member name="T:OEC.Data.LimitType">
             <summary>
@@ -1937,7 +1932,7 @@
         </member>
         <member name="P:OEC.CommLib.InvokeControl.InvokeRequired">
             <summary>
-            Indicates if caller is diffrent than control creator thread
+            Indicates if caller is different than control creator thread
             </summary>
         </member>
         <member name="T:OEC.MathExt">
@@ -2798,11 +2793,6 @@
             <exclude/>
             </summary>
         </member>
-        <member name="T:OEC.Protocol.SymbolLookupResponse">
-            <summary>
-            <exclude/>
-            </summary>
-        </member>
         <member name="T:OEC.Protocol.InfoResponse">
             <summary>
             <exclude/>
@@ -2818,20 +2808,10 @@
             <exclude />
             </summary>
         </member>
-        <member name="T:OEC.Protocol.CreateContractRequest">
-            <summary>
-            <exclude />
-            </summary>
-        </member>
         <member name="T:OEC.Protocol.UpdateContinuousContractRuleResponse">
             <summary>
             </summary>
             <exclude />
-        </member>
-        <member name="T:OEC.Protocol.CreateContractResponse">
-            <summary>
-            <exclude />
-            </summary>
         </member>
         <member name="T:OEC.Protocol.ClientSyncRequest">
             <summary>
@@ -2854,9 +2834,37 @@
             </summary>
             <exclude/>
         </member>
-        <member name="T:OEC.Protocol.ContractData">
+        <member name="T:OEC.Protocol.ContractMessage">
             <summary>
             </summary>
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.ContractData">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.ValidateCustomCompound">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.AcceptedCustomCompound">
+            <summary />
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.CreateContractRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.CreateContractResponse">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.SymbolLookup">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.ContractMessage.SymbolLookupResponse">
+            <summary/>
             <exclude/>
         </member>
         <member name="T:OEC.Protocol.ProviderContractMapping">
@@ -2914,37 +2922,43 @@
             </summary>
             <exclude/>
         </member>
+        <member name="T:OEC.Protocol.RiskMessage">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.ProviderRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.AdminRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.DetailRequest">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.MonitoringData">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.FrozenRiskAccountList">
+            <summary/>
+            <exclude />
+        </member>
+        <member name="T:OEC.Protocol.RiskMessage.DataSnapshot">
+            <summary/>
+            <exclude />
+        </member>
         <member name="T:OEC.Protocol.RiskRequest">
-            <summary>
+            <summary/>
             <exclude />
-            </summary>
-        </member>
-        <member name="T:OEC.Protocol.FrozenRiskAccountList">
-            <summary>
-            <exclude />
-            </summary>
-        </member>
-        <member name="T:OEC.Protocol.RiskDetailRequest">
-            <summary>
-            <exclude />
-            </summary>
-        </member>
-        <member name="T:OEC.Protocol.RiskDetailRequestType">
-            <summary>
-            <exclude />
-            </summary>
-        </member>
-        <member name="T:OEC.Protocol.RiskProviderRequest">
-            <summary>
-            <exclude />
-            </summary>
         </member>
         <member name="T:OEC.Protocol.RiskResponse">
-            <summary>
+            <summary/>
             <exclude />
-            </summary>
         </member>
-        <member name="T:OEC.Protocol.RiskAdminRequest">
+        <member name="T:OEC.Protocol.RiskDetailRequestType">
             <summary>
             <exclude />
             </summary>
@@ -2967,16 +2981,16 @@
         <member name="T:OEC.Protocol.ServerStrategyMessage">
             <exclude/>
         </member>
+        <member name="T:OEC.Protocol.ServerStrategyMessage.StrategyRequest">
+            <exclude/>
+        </member>
+        <member name="T:OEC.Protocol.ServerStrategyMessage.StrategyResponse">
+            <exclude/>
+        </member>
         <member name="T:OEC.Protocol.ServerStrategyRequestAction">
             <exclude/>
         </member>
-        <member name="T:OEC.Protocol.ServerStrategyRequest">
-            <exclude/>
-        </member>
         <member name="T:OEC.Protocol.ServerStrategyResponseAction">
-            <exclude/>
-        </member>
-        <member name="T:OEC.Protocol.ServerStrategyResponse">
             <exclude/>
         </member>
         <member name="T:OEC.Protocol.ServerStrategyData">
