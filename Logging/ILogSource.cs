@@ -143,6 +143,7 @@ namespace StockSharp.Logging
 		/// <summary>
 		/// Является ли источник корнем (даже при <see cref="ILogSource.Parent"/> не равным <see langword="null"/>).
 		/// </summary>
+		[Browsable(false)]
 		public bool IsRoot { get; set; }
 
 		private Action<LogMessage> _log;
