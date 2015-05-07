@@ -81,6 +81,9 @@
 				if (getNow == null)
 					throw new ArgumentNullException("getNow");
 
+				if (value == "0")
+					return null;
+
 				return value.ToDate(getNow()).To<T>();
 			}
 

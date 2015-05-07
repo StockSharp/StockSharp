@@ -110,6 +110,12 @@ namespace SampleTransaq
 
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
+
+						foreach (var portfolio in Trader.Portfolios)
+						{
+							// регистрирует портфели на обновление данных
+							Trader.RegisterPortfolio(portfolio);
+						}
 					};
 
 					// подписываемся на событие разрыва соединения
@@ -138,15 +144,7 @@ namespace SampleTransaq
 					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 					Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
 					
-					Trader.NewPortfolios += portfolios =>
-					{
-						foreach (var portfolio in portfolios)
-						{
-							// регистрирует портфели на обновление данных
-							Trader.RegisterPortfolio(portfolio);
-							_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-						}
-					};
+					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
 					// подписываемся на событие о неудачной регистрации заявок
