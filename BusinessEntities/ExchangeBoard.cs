@@ -197,13 +197,17 @@ namespace StockSharp.BusinessEntities
 				// http://www.rts.ru/s355
 				new DateTime(2011, 3, 5),
 				
-				// http://rts.micex.ru/a254
+				// http://moex.com/a254
 				new DateTime(2012, 3, 11),
 				new DateTime(2012, 4, 28),
 				new DateTime(2012, 5, 5),
 				new DateTime(2012, 5, 12),
 				new DateTime(2012, 6, 9),
-				new DateTime(2012, 12, 29)
+
+				// http://moex.com/a1343
+				// http://moex.com/a2973
+				// http://moex.com/s223
+				// 2013/2014/2015 - рабочих выходных нет
 			};
 
 			var russianSpecialHolidays = new[]
@@ -382,7 +386,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2011, 6, 13),
 				new DateTime(2011, 11, 4),
 
-				// http://rts.micex.ru/a254
+				// http://moex.com/a254
 				new DateTime(2012, 1, 2),
 				new DateTime(2012, 2, 23),
 				new DateTime(2012, 3, 8),
@@ -395,7 +399,7 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2012, 11, 5),
 				new DateTime(2012, 12, 31),
 
-				// http://rts.micex.ru/s690
+				// http://moex.com/a1343
 				new DateTime(2013, 1, 1),
 				new DateTime(2013, 1, 2),
 				new DateTime(2013, 1, 3),
@@ -405,7 +409,34 @@ namespace StockSharp.BusinessEntities
 				new DateTime(2013, 5, 1),
 				new DateTime(2013, 5, 9),
 				new DateTime(2013, 5, 10),
-				new DateTime(2013, 6, 12)
+				new DateTime(2013, 6, 12),
+				new DateTime(2013, 11, 4),
+				new DateTime(2013, 12, 31),
+
+				// http://moex.com/a2973
+				new DateTime(2014, 1, 1),
+				new DateTime(2014, 1, 2),
+				new DateTime(2014, 1, 3),
+				new DateTime(2014, 1, 7),
+				new DateTime(2014, 3, 10),
+				new DateTime(2014, 5, 1),
+				new DateTime(2014, 5, 9),
+				new DateTime(2014, 6, 12),
+				new DateTime(2014, 11, 4),
+				new DateTime(2014, 12, 31),
+
+				// http://moex.com/s223
+				new DateTime(2015, 1, 1),
+				new DateTime(2015, 1, 2),
+				new DateTime(2015, 1, 7),
+				new DateTime(2015, 2, 23),
+				new DateTime(2015, 3, 9),
+				new DateTime(2015, 5, 1),
+				new DateTime(2015, 5, 4),
+				new DateTime(2015, 5, 11),
+				new DateTime(2015, 6, 12),
+				new DateTime(2015, 11, 4),
+				new DateTime(2015, 12, 31),
 			};
 
 			//russianSpecialHolidays =
