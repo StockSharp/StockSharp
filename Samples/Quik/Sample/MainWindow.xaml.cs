@@ -16,6 +16,7 @@ namespace Sample
 	using StockSharp.BusinessEntities;
 	using StockSharp.Quik;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	public partial class MainWindow
 	{
@@ -27,6 +28,8 @@ namespace Sample
 		private readonly OrdersWindow _ordersWindow = new OrdersWindow();
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly StopOrderWindow _stopOrderWindow = new StopOrderWindow();
+
+		private readonly LogManager _logManager = new LogManager();
 
 		public MainWindow()
 		{
@@ -42,6 +45,8 @@ namespace Sample
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
 			Path.Text = QuikTerminal.GetDefaultPath();
+
+			_logManager.Listeners.Add(new FileLogListener("quik_logs.txt"));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -129,6 +134,10 @@ namespace Sample
 							LuaPassword = Password.Password.To<SecureString>()
 						}
 						: new QuikTrader(Path.Text) { IsDde = true };
+
+					Trader.LogLevel = LogLevels.Debug;
+
+					_logManager.Sources.Add(Trader);
 
 					// отключение автоматического запроса всех инструментов.
 					Trader.RequestAllSecurities = AllSecurities.IsChecked == true;
