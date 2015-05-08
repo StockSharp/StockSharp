@@ -660,6 +660,11 @@ namespace StockSharp.Algo
 
 			bool isWorkingDay;
 
+            // Наличие SpecialWorkingDays говорит о том, что сб и вс нерабочие
+            // Зачем вообще передавать эту информацию снаружи, а не держать её в WorkingTime?
+            if (workingTime.SpecialWorkingDays.Length > 0)
+                checkHolidays = true;
+
 			if (checkHolidays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday))
 				isWorkingDay = workingTime.SpecialWorkingDays.Contains(date.Date);
 			else

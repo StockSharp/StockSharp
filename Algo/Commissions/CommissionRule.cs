@@ -585,6 +585,9 @@ namespace StockSharp.Algo.Commissions
 			get { return _turnOver; }
 			set
 			{
+				if (value <= 0)
+					throw new ArgumentOutOfRangeException("value", "TurnOver must be > 0");
+
 				_turnOver = value;
 				Title = value.To<string>();
 			}
@@ -609,12 +612,19 @@ namespace StockSharp.Algo.Commissions
 			if (message.ExecutionType != ExecutionTypes.Trade)
 				return null;
 
+			if (TurnOver <= 0m)
+				throw new Exception("TurnOver must be > 0");
+
 			_currentTurnOver += message.GetTradePrice() * message.GetVolume();
 
-			if (_currentTurnOver < TurnOver)
+			var n = Math.Floor(_currentTurnOver / TurnOver);
+
+			if (n == 0m)
 				return null;
 
-			return (decimal)Value;
+			_currentTurnOver -= n * TurnOver;
+
+			return (decimal)Value * n;
 		}
 
 		/// <summary>
