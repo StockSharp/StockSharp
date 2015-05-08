@@ -22,8 +22,7 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Скачать Hydra.zip:</para>
-		  				<mediaLink><image placement="center" xlink:href="hydra_setup2" /></mediaLink>
+		  				<para>Скачать дистрибутив <token>hydra</token></para>
 				  </content>
 			  </step>
 			  <step>
