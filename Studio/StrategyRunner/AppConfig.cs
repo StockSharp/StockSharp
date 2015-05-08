@@ -10,6 +10,7 @@ namespace StockSharp.Studio.StrategyRunner
 
 	using StockSharp.Logging;
 	using StockSharp.Studio.StrategyRunner.Configuration;
+	using StockSharp.Studio.Configuration;
 	using StockSharp.Xaml;
 
 	public class AppConfig
