@@ -18,7 +18,6 @@ namespace StockSharp.Xaml
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Testing;
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -100,7 +99,8 @@ namespace StockSharp.Xaml
 
 				mi.Click += (sender, args) =>
 				{
-					var adapter = item.AdapterType.CreateInstanceArgs<IMessageAdapter>(new object[] { _parent.Adapter.TransactionIdGenerator });
+					// TODO
+					var adapter = item.TransactionAdapterType.CreateInstanceArgs<IMessageAdapter>(new object[] { _parent.Adapter.TransactionIdGenerator });
 
 					var wnd = new MessageAdapterWindow
 					{
@@ -265,7 +265,7 @@ namespace StockSharp.Xaml
 			if (adapter == null)
 				throw new ArgumentNullException("adapter");
 
-			var info = ConnectorsInfo.FirstOrDefault(i => i.AdapterType.IsInstanceOfType(adapter));
+			var info = ConnectorsInfo.FirstOrDefault(i => i.TransactionAdapterType.IsInstanceOfType(adapter) || i.MarketDataAdapterType.IsInstanceOfType(adapter));
 
 			if (info == null)
 				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(adapter.GetType()), "adapter");
@@ -369,27 +369,17 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Название подключения.
 		/// </summary>
-		public string Name { get; set; }
+		public string Name { get; private set; }
 
 		/// <summary>
 		/// Описание подключения.
 		/// </summary>
-		public string Description { get; set; }
+		public string Description { get; private set; }
 
 		/// <summary>
 		/// Описание подключения.
 		/// </summary>
-		public string Category { get; set; }
-
-		/// <summary>
-		/// Тип адаптера.
-		/// </summary>
-		public Type AdapterType { get; private set; }
-
-		/// <summary>
-		/// Уровень логирования.
-		/// </summary>
-		public LogLevels LogLevel { get; private set; }
+		public string Category { get; private set; }
 
 		/// <summary>
 		/// Целевая аудитория.
@@ -402,23 +392,36 @@ namespace StockSharp.Xaml
 		public Platforms Platform { get; private set; }
 
 		/// <summary>
+		/// Тип транзакционного адаптера.
+		/// </summary>
+		public Type TransactionAdapterType { get; set; }
+
+		/// <summary>
+		/// Тип маркет-дата адаптера.
+		/// </summary>
+		public Type MarketDataAdapterType { get; set; }
+
+		/// <summary>
 		/// Создать <see cref="ConnectorInfo"/>.
 		/// </summary>
-		/// <param name="adapterType">Тип адаптера.</param>
-		/// <param name="logLevel">Уровень логирования.</param>
-		public ConnectorInfo(Type adapterType, LogLevels logLevel = LogLevels.Inherit)
+		/// <param name="transactionAdapterType">Тип транзакционного адаптера.</param>
+		/// <param name="marketDataAdapterType">Тип маркет-дата адаптера.</param>
+		public ConnectorInfo(Type transactionAdapterType, Type marketDataAdapterType)
 		{
-			if (adapterType == null)
-				throw new ArgumentNullException("adapterType");
+			if (transactionAdapterType == null && marketDataAdapterType == null)
+				throw new ArgumentNullException("transactionAdapterType");
 
-			if (!typeof(IMessageAdapter).IsAssignableFrom(adapterType))
-				throw new ArgumentException("adapterType");
+			if (transactionAdapterType != null && !typeof(IMessageAdapter).IsAssignableFrom(transactionAdapterType))
+				throw new ArgumentException("transactionAdapterType");
+
+			if (marketDataAdapterType != null && !typeof(IMessageAdapter).IsAssignableFrom(marketDataAdapterType))
+				throw new ArgumentException("marketDataAdapterType");
+
+			var adapterType = transactionAdapterType ?? marketDataAdapterType;
 
 			Name = adapterType.GetDisplayName();
 			Description = adapterType.GetDescription();
 			Category = adapterType.GetCategory(LocalizedStrings.Str1559);
-			AdapterType = adapterType;
-			LogLevel = logLevel;
 
 			var targetPlatform = adapterType.GetAttribute<TargetPlatformAttribute>();
 			if (targetPlatform != null)

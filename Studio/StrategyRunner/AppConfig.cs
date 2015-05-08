@@ -28,7 +28,7 @@ namespace StockSharp.Studio.StrategyRunner
 		{
 			var section = ConfigManager.GetSection<StockSharpSection>();
 
-			SafeAdd<ConnectionElement>(section.Connections, elem => _connections.Add(new ConnectorInfo(elem.SessionHolder.To<Type>(), elem.LogLevel)));
+			SafeAdd<ConnectionElement>(section.Connections, elem => _connections.Add(new ConnectorInfo(elem.TransactionAdapter == null ? null : elem.TransactionAdapter.To<Type>(), elem.MarketDataAdapter == null ? null : elem.MarketDataAdapter.To<Type>())));
 			SafeAdd<DiagramElement>(section.DiagramElements, elem => _diagramElements.Add(elem.Type.To<Type>()));
 		}
 

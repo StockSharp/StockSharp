@@ -2,26 +2,24 @@
 {
 	using System.Configuration;
 
-	using StockSharp.Logging;
-
 	class ConnectionElement : ConfigurationElement
 	{
-		private const string _adapterKey = "adapter";
+		private const string _transactionAdapterKey = "transactionAdapter";
 
-		[ConfigurationProperty(_adapterKey, IsRequired = true, IsKey = true)]
-		public string Adapter
+		[ConfigurationProperty(_transactionAdapterKey)]
+		public string TransactionAdapter
 		{
-			get { return (string)this[_adapterKey]; }
-			set { this[_adapterKey] = value; }
+			get { return (string)this[_transactionAdapterKey]; }
+			set { this[_transactionAdapterKey] = value; }
 		}
 
-		private const string _logLevelKey = "logLevel";
+		private const string _marketDataAdapterKey = "marketDataAdapter";
 
-		[ConfigurationProperty(_logLevelKey, DefaultValue = LogLevels.Inherit)]
-		public LogLevels LogLevel
+		[ConfigurationProperty(_marketDataAdapterKey)]
+		public string MarketDataAdapter
 		{
-			get { return (LogLevels)this[_logLevelKey]; }
-			set { this[_logLevelKey] = value; }
+			get { return (string)this[_marketDataAdapterKey]; }
+			set { this[_marketDataAdapterKey] = value; }
 		}
 	}
 }

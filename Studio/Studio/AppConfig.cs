@@ -42,7 +42,7 @@
 
 			FixServerAddresss = section.FixServerAddress;
 
-			SafeAdd<ConnectionElement>(section.Connections, elem => _connections.Add(new ConnectorInfo(elem.Adapter.To<Type>(), elem.LogLevel)));
+			SafeAdd<ConnectionElement>(section.Connections, elem => _connections.Add(new ConnectorInfo(elem.TransactionAdapter == null ? null : elem.TransactionAdapter.To<Type>(), elem.MarketDataAdapter == null ? null : elem.MarketDataAdapter.To<Type>())));
 			SafeAdd<CandleElement>(section.Candles, elem => _candles.Add(elem.Type.To<Type>()));
 			SafeAdd<IndicatorElement>(section.Indicators, elem => _indicators.Add(new IndicatorType(elem.Type.To<Type>(), elem.Painter.IsEmpty() ? null : elem.Painter.To<Type>())));
 

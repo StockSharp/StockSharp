@@ -2,26 +2,24 @@ namespace StockSharp.Studio.StrategyRunner.Configuration
 {
 	using System.Configuration;
 
-	using StockSharp.Logging;
-
 	class ConnectionElement : ConfigurationElement
 	{
-		private const string _sessionHolderKey = "sessionHolder";
+		private const string _transactionAdapterKey = "transactionAdapter";
 
-		[ConfigurationProperty(_sessionHolderKey, IsRequired = true, IsKey = true)]
-		public string SessionHolder
+		[ConfigurationProperty(_transactionAdapterKey)]
+		public string TransactionAdapter
 		{
-			get { return (string)this[_sessionHolderKey]; }
-			set { this[_sessionHolderKey] = value; }
+			get { return (string)this[_transactionAdapterKey]; }
+			set { this[_transactionAdapterKey] = value; }
 		}
 
-		private const string _logLevelKey = "logLevel";
+		private const string _marketDataAdapterKey = "marketDataAdapter";
 
-		[ConfigurationProperty(_logLevelKey, DefaultValue = LogLevels.Inherit)]
-		public LogLevels LogLevel
+		[ConfigurationProperty(_marketDataAdapterKey)]
+		public string MarketDataAdapter
 		{
-			get { return (LogLevels)this[_logLevelKey]; }
-			set { this[_logLevelKey] = value; }
+			get { return (string)this[_marketDataAdapterKey]; }
+			set { this[_marketDataAdapterKey] = value; }
 		}
 	}
 }
