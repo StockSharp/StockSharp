@@ -8,6 +8,8 @@ StockSharp API Change log
 * (bug) Emulator. Prevent big order book generation.
 * (feature) Storage. Replace entity by messages.
 * (feature) BitStamp. Level1 refresh interval is 10 sec.
+* (feature) FIX. Check sum is uint.
+* (bug) FixServer. Sync writers.
 
 ###v4.3.3:
 * (feature) OverrideDll option.
