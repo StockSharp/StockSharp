@@ -2,6 +2,8 @@
 {
 	using System.Configuration;
 
+	using StockSharp.Studio.Configuration;
+
 	class StockSharpSection : ConfigurationSection
 	{
 		private const string _connectionsKey = "connections";
