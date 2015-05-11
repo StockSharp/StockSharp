@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>Для резервного копирования (бэкапа) скачанных данных можно использовать функционал <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспорта данных</link>, т.к. экспорт позволяет скопировать данные в другую директорию в нужном формате (в частности в формате BIN). Резервное копирование можно выполнить в <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9"><legacyItalic>ручном</legacyItalic></link> режиме, но предпочтительнее использовать задачу <link xlink:href="9e075b32-abb2-4fad-bfb2-b822dd7d9f30">Экспорт (авто)</link>, что позволяет скопировать целый каталог с данными в автоматическом режиме.</para>
+    </introduction>
+  </developerConceptualDocument>
+</topic>
+

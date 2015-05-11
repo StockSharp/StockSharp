@@ -172,6 +172,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraBoards.aml" />
+    <None Include="Topics\HydraBackup.aml" />
+    <None Include="Topics\HydraAdditional.aml" />
     <None Include="Topics\HydraImportExecutions.aml" />
     <None Include="Topics\HydraImportNews.aml" />
     <None Include="Topics\HydraImportLevel1.aml" />
@@ -1224,6 +1227,22 @@
     <Image Include="Art\hydra_import_executions.png">
       <ImageId>hydra_import_executions</ImageId>
       <AlternateText>hydra import executions</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_data_delete.png">
+      <ImageId>hydra_data_delete</ImageId>
+      <AlternateText>hydra data delete</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_sync.png">
+      <ImageId>hydra_sync</ImageId>
+      <AlternateText>hydra sync</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_boards.png">
+      <ImageId>hydra_boards</ImageId>
+      <AlternateText>hydra boards</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_proxy_settings.png">
+      <ImageId>hydra_proxy_settings</ImageId>
+      <AlternateText>hydra proxy settings</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

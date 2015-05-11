@@ -2,7 +2,7 @@
 <topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Задача выполняет конвертацию биржевых сущностей. Например, из ОрдерЛог в тики или тиков в свечи и т.п.</para>
+      <para>Задача выполняет экспорт биржевых данных в различные форматы: Excel, xml, sql, bin или txt.</para>
 	<table>
 	  <row>
     	<entry>
