@@ -336,7 +336,7 @@ namespace StockSharp.AlfaDirect.Native
 			var timeFrame = (AlfaTimeFrames)(TimeSpan)message.Arg;
 			//to = timeFrame.GetCandleBounds(series.Security).Min;
 
-			var data = _ad.GetArchiveFinInfoFromDB(placeCode, message.SecurityId.SecurityCode, timeFrame.Interval, message.From.Convert(TimeHelper.Moscow), message.To.Convert(TimeHelper.Moscow));
+			var data = _ad.GetArchiveFinInfoFromDB(placeCode, message.SecurityId.SecurityCode, timeFrame.Interval, message.From.Convert(TimeHelper.Moscow).DateTime, message.To.Convert(TimeHelper.Moscow).DateTime);
 
 			if (_ad.LastResult != StateCodes.stcSuccess)
 				ThrowInError((tagStateCodes)_ad.LastResult);
