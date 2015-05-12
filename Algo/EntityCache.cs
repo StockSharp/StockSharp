@@ -774,15 +774,18 @@ namespace StockSharp.Algo
 
 			if (transactionId == 0)
 			{
-				info = orders.First(p =>
+				info = orders.CachedValues.FirstOrDefault(i =>
 				{
-					var order = p.Value.Order;
+					var order = i.Order;
 
 					if (orderId != null)
 						return order.Id == orderId;
 					else
 						return order.StringId.CompareIgnoreCase(orderStringId);
-				}).Value;
+				});
+
+				if (info == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1156Params.Put(orderId.To<string>() ?? orderStringId));
 			}
 			else
 			{

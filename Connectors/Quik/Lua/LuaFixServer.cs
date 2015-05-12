@@ -654,5 +654,16 @@ namespace StockSharp.Quik.Lua
 			_requests.TryDequeue(out request);
 			return request;
 		}
+
+		private readonly IncrementalIdGenerator _idGenerator = new IncrementalIdGenerator();
+
+		/// <summary>
+		/// Получить номер транзакции для ручной заявки. Начинается с 1.
+		/// </summary>
+		/// <returns>Номер транзакции.</returns>
+		public long GetNextTransactionId()
+		{
+			return _idGenerator.GetNextId();
+		}
 	}
 }
