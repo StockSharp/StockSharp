@@ -101,7 +101,7 @@ namespace SampleAlfaCandles
 			var timeFrame = (TimeSpan)HistoryInterval.SelectedItem;
 
 			var from = From.Value.Value;
-			var to = To.Value.Value;
+			var to = RealTime.IsChecked.Value ? DateTimeOffset.MaxValue : To.Value.Value;
 
 			if (from > to)
 			{
@@ -136,6 +136,11 @@ namespace SampleAlfaCandles
 		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ShowChart.IsEnabled = SelectedSecurity != null;
+		}
+
+		private void RealTime_Checked(object sender, RoutedEventArgs e)
+		{
+			To.IsEnabled = !(sender as CheckBox).IsChecked.Value;
 		}
 	}
 }
