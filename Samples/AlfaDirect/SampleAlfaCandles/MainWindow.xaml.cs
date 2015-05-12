@@ -74,6 +74,11 @@ namespace SampleAlfaCandles
 				this.GuiAsync(() => ConnectBtn.IsEnabled = false);
 			};
 
+			_trader.ConnectionError += error =>
+			{
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959));
+			};
+
 			_trader.Connect();
 		}
 
@@ -100,8 +105,8 @@ namespace SampleAlfaCandles
 
 			var timeFrame = (TimeSpan)HistoryInterval.SelectedItem;
 
-			var from = From.Value.Value;
-			var to = RealTime.IsChecked.Value ? DateTimeOffset.MaxValue : To.Value.Value;
+			var from = From.Value ?? DateTimeOffset.MinValue;
+			var to = RealTime.IsChecked == true ? DateTimeOffset.MaxValue : To.Value ?? DateTimeOffset.MaxValue;
 
 			if (from > to)
 			{
@@ -140,7 +145,7 @@ namespace SampleAlfaCandles
 
 		private void RealTime_Checked(object sender, RoutedEventArgs e)
 		{
-			To.IsEnabled = !(sender as CheckBox).IsChecked.Value;
+			To.IsEnabled = RealTime.IsChecked == false;
 		}
 	}
 }

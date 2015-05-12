@@ -30124,12 +30124,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Should real time or 'frozen' on broker server data be used.
+		/// Should real-time or 'frozen' on broker server data be used.
 		/// </summary>
 		public const string Str2520Key = "Str2520";
 
 		/// <summary>
-		/// Should real time or 'frozen' on broker server data be used.
+		/// Should real-time or 'frozen' on broker server data be used.
 		/// </summary>
 		public static string Str2520
 		{
@@ -30332,12 +30332,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Load realtime or history data.
+		/// Load real-time or history data.
 		/// </summary>
 		public const string Str2536Key = "Str2536";
 
 		/// <summary>
-		/// Load realtime or history data.
+		/// Load real-time or history data.
 		/// </summary>
 		public static string Str2536
 		{
@@ -51512,12 +51512,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Candles (real time)
+		/// Candles (real-time)
 		/// </summary>
 		public const string XamlStr634Key = "XamlStr634";
 
 		/// <summary>
-		/// Candles (real time)
+		/// Candles (real-time)
 		/// </summary>
 		public static string XamlStr634
 		{

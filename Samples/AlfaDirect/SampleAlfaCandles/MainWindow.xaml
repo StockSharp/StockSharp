@@ -44,7 +44,10 @@
 		<Label Content="{x:Static loc:LocalizedStrings.XamlStr254}" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 		<xctk:DateTimePicker x:Name="To" Grid.Column="1" Grid.Row="6" Margin="5"/>
 
-		<CheckBox x:Name="RealTime" Content="RealTime candles" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Width="120" Margin="5,5,0,5" Checked="RealTime_Checked" Unchecked="RealTime_Checked"/>
+		<TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Right">
+			<Run Text="{x:Static loc:LocalizedStrings.Str2519}" />:
+		</TextBlock>
+		<CheckBox x:Name="RealTime" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Margin="5,0,0,0" Checked="RealTime_Checked" Unchecked="RealTime_Checked"/>
 
 		<Button x:Name="ShowChart" Grid.Column="1" Width="100" Grid.Row="8" Content="{x:Static loc:LocalizedStrings.Str3200}" IsEnabled="False" Click="ShowChartClick" />
 	</Grid>

@@ -2321,7 +2321,7 @@ Str2515Params;Unknown order {0} duration time.;Неизвестное время
 Str2516;Connection to Interactive Brokers broker.;Подключение к брокеру Interactive Brokers.
 Str2518;Unique ID. Used when several clients are connected to one terminal or gateway.;Уникальный идентификатор. Используется в случае подключения нескольких клиентов к одному терминалу или gateway.
 Str2519;Real-time;Реал-тайм
-Str2520;Should real time or 'frozen' on broker server data be used.;Использовать ли данные реального времени или 'замороженные' на сервере брокера.
+Str2520;Should real-time or 'frozen' on broker server data be used.;Использовать ли данные реального времени или 'замороженные' на сервере брокера.
 Str2521;Server messages logging level.;Уровень логирования сообщений сервера.
 Str2522;Market data fields;Поля маркет-данных
 Str2523;Market data fields, which will be received with subscribed to Level1 messages.;Поля маркет-данных, которые будут получаться при подписке на Level1 сообщения.
@@ -2337,7 +2337,7 @@ Str2532;TWS address.;Адрес TWS.
 Str2533;IQFeed (history);IQFeed (история)
 Str2534;IQFeed (connection);IQFeed (подключение)
 Str2535;Real-time data;Реалтайм данные
-Str2536;Load realtime or history data.;Загружать данные в режиме реалтайм или историю.
+Str2536;Load real-time or history data.;Загружать данные в режиме реалтайм или историю.
 Str2537;Load securities from IQFeed website;Загружать инструменты с сайта IQFeed
 Str2538;Should the whole set of securities be loaded from IQFeed website archive. If switched off, securities have to be searched through Search.;Загружать ли весь набор инструментов из архива с сайта IQFeed. Если выключено, то инструменты необходимо искать через поиск.
 Str2539;Securities types;Типы инструментов
@@ -3971,7 +3971,7 @@ XamlStr628;Reset current date modification;Сбросить модифициро
 XamlStr629;Reset price modification;Сбросить модифицированную цену
 XamlStr631;Candles;Свечек
 XamlStr633;Candles (history);Свечи (история)
-XamlStr634;Candles (real time);Свечи (реал-тайм)
+XamlStr634;Candles (real-time);Свечи (реал-тайм)
 XamlStr635;Candles and depths;Свечи и стаканы
 XamlStr636;Candles...;Свечи...
 XamlStr639;Security parameters;Свойства инструмента
