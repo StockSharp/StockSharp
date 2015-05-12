@@ -260,9 +260,10 @@
       <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Отображение результатов анализа" />
     </Topic>
     <Topic id="99f9b236-13bd-4a8c-b616-f04e3ff84785" visible="True" isExpanded="true" title="Дополнительно">
-      <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" isSelected="true" title="Площадки" />
+      <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" title="Площадки" />
       <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Настройки" />
       <Topic id="38595e78-cff6-44ed-b525-2be13e6c17e4" visible="True" title="База данных" />
+      <Topic id="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20" visible="True" isSelected="true" title="Аварийное восстановление" />
       <Topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" visible="True" title="Бэкап данных" />
     </Topic>
   </Topic>
