@@ -11,21 +11,24 @@
           <legacyBold>DDE</legacyBold> - использовать старое подключение через DDE.
 		</listItem>
 	 </list>
+	  <para><legacyBold>LUA</legacyBold></para>
+      <list class="bullet">
+        <listItem>
+          	<legacyBold>Адрес</legacyBold> - адрес.
+		</listItem>		
+		<listItem>
+         	<legacyBold>Логин</legacyBold> - логин.
+		</listItem>
+		<listItem>
+          <legacyBold>Пароль</legacyBold> - пароль.
+		</listItem>
+	 </list>
       <para><legacyBold>DDE</legacyBold></para>
       <list class="bullet">
         <listItem>
-          <legacyBold>Путь</legacyBold> - путь к директории, где установлен <token>quik</token>.
-		</listItem>
-        <listItem>
-          <legacyBold>DDE сервер</legacyBold> - название DDE сервера. По умолчанию равно hydra.
-		</listItem>
-        <listItem>
-          <legacyBold>Доп. колонки</legacyBold> - список дополнительных колонок для экспорта из таблицы Инструменты.
-		</listItem>	
-        <listItem>
           <legacyBold>История изменений</legacyBold> - загружать историю изменений по инструментам.
 		</listItem>		
-		</list>
+	 </list>
 		<para><legacyBold>Основные</legacyBold></para>
 		<list class="bullet">
         <listItem>

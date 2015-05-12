@@ -28,6 +28,7 @@
   			<mediaLink>
         		<image placement="left" xlink:href="hydra_sync" />
 			</mediaLink>
+			<para>Позволяет восстановить инструменты по скаченным файлам. См. <link xlink:href="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20">Аварийное восстановление.</link> </para>
   		</listItem>
   		<listItem>
   			<para><legacyBold>Настройки сети</legacyBold></para>
@@ -41,6 +42,9 @@
   		</listItem>
   		<listItem>
   			<para><legacyBold><link xlink:href="38595e78-cff6-44ed-b525-2be13e6c17e4">База данных</link></legacyBold></para>
+  		</listItem>
+  		<listItem>
+  			<para><legacyBold><link xlink:href="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20">Аварийное восстановление</link></legacyBold></para>
   		</listItem>
   		<listItem>
   			<para><legacyBold><link xlink:href="5a056352-64c7-41ea-87a8-2e112935e3b9">Бэкап данных</link></legacyBold></para>
