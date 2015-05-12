@@ -7,14 +7,14 @@
     </summary>
     -->
     <introduction>
-      <para>Задача выполняет конвертацию биржевых сущностей. Например, из ОрдерЛог в тики или тиков в свечи и т.п.</para>
+      <para>Задача выполняет конвертацию биржевых данных. Например, из ОрдерЛог в тики или тиков в свечи и т.п.</para>
       <mediaLink>
         <image placement="left" xlink:href="hydra_tasks_converter" />
       </mediaLink>
       <para><legacyBold>Конвертер</legacyBold></para>
       <list class="bullet">
         <listItem>
-			<legacyBold>Направление</legacyBold> - направление конвертации.
+			<legacyBold>Конвертер</legacyBold> - конвертер.
 			</listItem>
 			<listItem>
  		    <legacyBold>Начальная дата</legacyBold> - с какой даты начать конвертацию данных.

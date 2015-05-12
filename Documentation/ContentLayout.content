@@ -239,20 +239,18 @@
       <Topic id="8ba0e23b-1cf3-400e-96a0-5dfb11d3e677" visible="True" title="Executions" />
     </Topic>
     <Topic id="621927b7-839f-4492-8dbb-162e63d57769" visible="True" title="Генерация свечек" />
-    <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" isExpanded="true" title="Импорт данных">
+    <Topic id="4edabdad-84d9-4dfa-9940-0559642b1ca2" visible="True" title="Импорт данных">
       <Topic id="2a830015-5cfb-4468-8538-4e94820b3659" visible="True" title="Инструменты" />
       <Topic id="1e18851f-69f7-4fa0-a5ea-c059c7694990" visible="True" title="Сделки" />
       <Topic id="6465c049-fca8-4bb4-b00a-d3495299267d" visible="True" title="Стаканы" />
       <Topic id="9e13ea27-629d-4403-adfa-d76bc8648c7e" visible="True" title="Свечи" />
       <Topic id="b0088f47-8c93-46ed-a53e-820b7c66e65b" visible="True" title="Лог заявок" />
-      <Topic id="eac5ea13-e8a5-4133-82bd-4442a4df3aca" visible="True" isSelected="true" title="Level 1" />
+      <Topic id="eac5ea13-e8a5-4133-82bd-4442a4df3aca" visible="True" title="Level 1" />
       <Topic id="649dd276-171b-483a-9cf1-8f77e4e1b577" visible="True" title="Новости" />
       <Topic id="cd5f6850-ae11-42c2-b5c8-e1b2af1c3380" visible="True" title="Свои транзакции" />
     </Topic>
-    <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Настройки (дополнительные)" />
     <Topic id="d1058e35-8539-4297-9dbf-c0f4fec5d5eb" visible="True" title="Создание источника" />
     <Topic id="2a78aa1d-c8b6-4679-9d3e-4ab8e909df54" visible="True" title="Склеивание данных" />
-    <Topic id="38595e78-cff6-44ed-b525-2be13e6c17e4" visible="True" title="База данных" />
     <Topic id="c27c3ca2-7032-4b91-a9ce-a5ce7becae0c" visible="True" title="Задачи">
       <Topic id="272eef99-c7e4-4245-ae83-7efa4d2345bc" visible="True" title="Конвертер" />
       <Topic id="9e075b32-abb2-4fad-bfb2-b822dd7d9f30" visible="True" title="Экспорт (авто)" />
@@ -260,6 +258,12 @@
     <Topic id="7749ebdf-8bd5-4fae-a35c-d7e38f496c4a" visible="True" title="Аналитика">
       <Topic id="83e7f4bb-733d-4463-a2c9-923ccc486d36" visible="True" title="Работа со сриптами" />
       <Topic id="46348bb0-292f-4c53-b075-793ecf8b3d08" visible="True" title="Отображение результатов анализа" />
+    </Topic>
+    <Topic id="99f9b236-13bd-4a8c-b616-f04e3ff84785" visible="True" isExpanded="true" title="Дополнительно">
+      <Topic id="4caa035e-a420-4193-92a5-d667a4d65ee1" visible="True" isSelected="true" title="Площадки" />
+      <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Настройки" />
+      <Topic id="38595e78-cff6-44ed-b525-2be13e6c17e4" visible="True" title="База данных" />
+      <Topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" visible="True" title="Бэкап данных" />
     </Topic>
   </Topic>
   <Topic id="49ba804f-908b-473a-a31f-76540d8a79d7" visible="True" title="S#.Studio">
