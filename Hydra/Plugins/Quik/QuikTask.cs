@@ -117,7 +117,7 @@ namespace StockSharp.Hydra.Quik
 			[DescriptionLoc(LocalizedStrings.Str2807Key)]
 			[PropertyOrder(2)]
 			[Editor(typeof(DdeSecurityColumnsEditor), typeof(DdeSecurityColumnsEditor))]
-			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", false)]
+			//[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", false)]
 			[DynamicPropertyFilter("IsDde", true)]
 			public List<string> ExtendedColumns
 			{
@@ -130,7 +130,7 @@ namespace StockSharp.Hydra.Quik
 			[DescriptionLoc(LocalizedStrings.Str2809Key)]
 			[PropertyOrder(3)]
 			[Editor(typeof(DdeSecurityChangesColumnsEditor), typeof(DdeSecurityChangesColumnsEditor))]
-			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", true)]
+			//[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", true)]
 			[DynamicPropertyFilter("IsDde", true)]
 			public List<string> ExtendedColumnsHistory
 			{
@@ -142,7 +142,7 @@ namespace StockSharp.Hydra.Quik
 			[DisplayNameLoc(LocalizedStrings.Str2810Key)]
 			[DescriptionLoc(LocalizedStrings.Str1786Key)]
 			[PropertyOrder(4)]
-			[Auxiliary]
+			[DynamicPropertyFilter("IsDde", true)]
 			public bool IsDownloadSecurityChangesHistory
 			{
 				get { return (bool)ExtensionInfo["IsDownloadSecurityChangesHistory"]; }
