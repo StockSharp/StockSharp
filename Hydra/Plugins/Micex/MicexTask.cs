@@ -34,6 +34,7 @@ namespace StockSharp.Hydra.Micex
 				ExtensionInfo.TryAdd("OrderBookDepth", null);
 				ExtensionInfo.TryAdd("RequestAllDepths", true);
 				ExtensionInfo.TryAdd("MicexLogLevel", null);
+				ExtensionInfo.TryAdd("OverrideDll", true);
 			}
 
 			[TaskCategory(_sourceName)]
@@ -115,6 +116,16 @@ namespace StockSharp.Hydra.Micex
 				get { return (string)ExtensionInfo["MicexLogLevel"]; }
 				set { ExtensionInfo["MicexLogLevel"] = value; }
 			}
+
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.OverrideKey)]
+			[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
+			[PropertyOrder(8)]
+			public bool OverrideDll
+			{
+				get { return (bool)ExtensionInfo["OverrideDll"]; }
+				set { ExtensionInfo["OverrideDll"] = value; }
+			}
 		}
 
 		private MicexSettings _settings;
@@ -134,7 +145,7 @@ namespace StockSharp.Hydra.Micex
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<MicexTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<MicexTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new MicexSettings(settings);
 
@@ -148,6 +159,7 @@ namespace StockSharp.Hydra.Micex
 				_settings.OrderBookDepth = null;
 				_settings.RequestAllDepths = true;
 				_settings.MicexLogLevel = null;
+				_settings.OverrideDll = true;
 			}
 
 			return new MarketDataConnector<MicexTrader>(EntityRegistry.Securities, this, () => new MicexTrader
@@ -159,7 +171,8 @@ namespace StockSharp.Hydra.Micex
 				Addresses = new[] { _settings.Address },
 				OrderBookDepth = _settings.OrderBookDepth,
 				RequestAllDepths = _settings.RequestAllDepths,
-				MicexLogLevel = _settings.MicexLogLevel
+				MicexLogLevel = _settings.MicexLogLevel,
+				OverrideDll = _settings.OverrideDll
 			});
 		}
 	}

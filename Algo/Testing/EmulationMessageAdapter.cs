@@ -9,14 +9,14 @@
 	/// <summary>
 	/// Адаптер, исполняющий сообщения в <see cref="IMarketEmulator"/>.
 	/// </summary>
-	public class EmulationMessageAdapter : MessageAdapter<IMessageSessionHolder>
+	public class EmulationMessageAdapter : MessageAdapter
 	{
 		/// <summary>
 		/// Создать <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public EmulationMessageAdapter(IMessageSessionHolder sessionHolder)
-			: this(new MarketEmulator(), sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public EmulationMessageAdapter(IdGenerator transactionIdGenerator)
+			: this(new MarketEmulator(), transactionIdGenerator)
 		{
 		}
 
@@ -24,11 +24,21 @@
 		/// Создать <see cref="EmulationMessageAdapter"/>.
 		/// </summary>
 		/// <param name="emulator">Эмулятор торгов.</param>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public EmulationMessageAdapter(IMarketEmulator emulator, IMessageSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public EmulationMessageAdapter(IMarketEmulator emulator, IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
 			Emulator = emulator;
+
+			this.AddTransactionalSupport();
+			this.AddSupportedMessage(MessageTypes.Security);
+			this.AddSupportedMessage(MessageTypes.Board);
+			this.AddSupportedMessage(MessageTypes.Level1Change);
+			this.AddSupportedMessage(MessageTypes.PortfolioChange);
+			this.AddSupportedMessage(MessageTypes.PositionChange);
+			this.AddSupportedMessage(ExtendedMessageTypes.CommissionRule);
+			this.AddSupportedMessage(ExtendedMessageTypes.Clearing);
+			this.AddSupportedMessage(ExtendedMessageTypes.Generator);
 		}
 
 		private IMarketEmulator _emulator;
@@ -54,17 +64,25 @@
 				}
 
 				_emulator = value;
-				_emulator.Parent = SessionHolder;
+				_emulator.Parent = this;
 				_emulator.NewOutMessage += SendOutMessage;
 			}
 		}
 
+		private DateTimeOffset _currentTime;
+
 		/// <summary>
-		/// Запустить таймер генерации с интервалом <see cref="MessageSessionHolder.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
+		/// Текущее время.
 		/// </summary>
-		protected override void StartMarketTimer()
+		public override DateTimeOffset CurrentTime
 		{
+			get { return _currentTime; }
 		}
+
+		/// <summary>
+		/// Число обработанных сообщений.
+		/// </summary>
+		public int ProcessedMessageCount { get; private set; }
 
 		/// <summary>
 		/// Отправить сообщение.
@@ -72,22 +90,37 @@
 		/// <param name="message">Сообщение.</param>
 		protected override void OnSendInMessage(Message message)
 		{
-			SessionHolder.DoIf<IMessageSessionHolder, HistorySessionHolder>(s => s.UpdateCurrentTime(message.GetServerTime()));
+			var localTime = message.LocalTime;
+
+			if (!localTime.IsDefault())
+				_currentTime = localTime;
 
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					_emulator.SendInMessage(new ResetMessage());
 					SendOutMessage(new ConnectMessage());
 					return;
+
+				case MessageTypes.Reset:
+					ProcessedMessageCount = 0;
+
+					var incGen = TransactionIdGenerator as IncrementalIdGenerator;
+					if (incGen != null)
+						incGen.Current = Emulator.Settings.InitialTransactionId;
+
+					_currentTime = default(DateTimeOffset);
+					break;
+
 				case MessageTypes.Disconnect:
 					SendOutMessage(new DisconnectMessage());
 					return;
-				case ExtendedMessageTypes.EmulationState:
-					SendOutMessage(message.Clone());
-					return;
+
+				//case ExtendedMessageTypes.EmulationState:
+				//	//SendOutMessage(message.Clone());
+				//	return;
 			}
 
+			ProcessedMessageCount++;
 			_emulator.SendInMessage(message);
 		}
 	}

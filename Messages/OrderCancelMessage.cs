@@ -16,7 +16,7 @@
 		/// Идентификатор отменяемой заявки.
 		/// </summary>
 		[DataMember]
-		public long OrderId { get; set; }
+		public long? OrderId { get; set; }
 
 		/// <summary>
 		/// Идентификатор отменяемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
@@ -25,13 +25,13 @@
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции отмены.
+		/// Идентификатор транзакции отмены.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции отменяемой заявки.
+		/// Идентификатор транзакции отменяемой заявки.
 		/// </summary>
 		[DataMember]
 		public long OrderTransactionId { get; set; }

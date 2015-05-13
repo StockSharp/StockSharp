@@ -7,7 +7,7 @@
 	/// <summary>
 	/// Гистограмма осцилятора <see cref="GatorOscillator"/>.
 	/// </summary>
-	public class GatorHistogram : BaseIndicator<decimal>
+	public class GatorHistogram : BaseIndicator
 	{
 		private readonly AlligatorLine _line1;
 		private readonly AlligatorLine _line2;
@@ -33,7 +33,9 @@
 		/// <returns>Результирующее значение.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return new DecimalIndicatorValue(this, (_isNegative ? -1 : 1) * Math.Abs(_line1.GetCurrentValue() - _line2.GetCurrentValue()));
 		}
 

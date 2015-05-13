@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -61,16 +62,6 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return _ema1.CanProcess(input) && _ema2.CanProcess(input) && _ema3.CanProcess(input) && _roc.CanProcess(input);
-		}
-
-		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>
 		/// <param name="input">Входное значение.</param>
@@ -79,22 +70,17 @@ namespace StockSharp.Algo.Indicators
 		{
 			var ema1Value = _ema1.Process(input);
 
-			if (_ema1.IsFormed)
-			{
-				var ema2Value = _ema2.Process(ema1Value);
+			if (!_ema1.IsFormed)
+				return input;
 
-				if (_ema2.IsFormed)
-				{
-					var ema3Value = _ema3.Process(ema2Value);
+			var ema2Value = _ema2.Process(ema1Value);
 
-					if (_ema3.IsFormed)
-					{
-						return _roc.Process(ema3Value);
-					}
-				}
-			}
+			if (!_ema2.IsFormed)
+				return input;
 
-			return input;
+			var ema3Value = _ema3.Process(ema2Value);
+
+			return _ema3.IsFormed ? _roc.Process(ema3Value) : input;
 		}
 	}
 }

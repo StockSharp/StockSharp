@@ -88,7 +88,7 @@ namespace StockSharp.Algo
 			/// <returns>Строковое представление.</returns>
 			public override string ToString()
 			{
-				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == 0 ? Order.StringId : Order.Id.To<string>()));
+				return "{0} {2}/{3} (0x{1:X})".Put(Name, GetHashCode(), Order.TransactionId, (Order.Id == null ? Order.StringId : Order.Id.To<string>()));
 			}
 		}
 
@@ -788,7 +788,7 @@ namespace StockSharp.Algo
 
 				var basket = sec as BasketSecurity;
 
-				if (Connector is IEmulationConnector)
+				if (Connector is HistoryEmulationConnector)
 				{
 					// в рилтайме сделки приходят гарантированно по одной. см. BaseTrader.GetTrade
 					// в эмуляции сделки приходят кучками, но все для одного и того же интсрумента. см. EmuTrader.Message
@@ -2430,6 +2430,11 @@ namespace StockSharp.Algo
 			DateTimeOffset ILogSource.CurrentTime
 			{
 				get { return Container.CurrentTime; }
+			}
+
+			bool ILogSource.IsRoot
+			{
+				get { return Container.IsRoot; }
 			}
 
 			#endregion

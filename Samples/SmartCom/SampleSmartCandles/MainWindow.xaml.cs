@@ -73,7 +73,7 @@ namespace SampleSmartCandles
 			//Password.Clear();
 
 			// подписываемся на ошибку обработки данных (транзакций и маркет)
-			_trader.ProcessDataError += error =>
+			_trader.Error += error =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// подписываемся на ошибку подписки маркет-данных
@@ -90,9 +90,6 @@ namespace SampleSmartCandles
 				// начинаем получать текущие сделки (для построения свечек в реальном времени)
 				securities.ForEach(_trader.RegisterTrades);
 			};
-
-			// запускаем экспорт в случае успешного подключения
-			_trader.Connected += _trader.StartExport;
 
 			_candleManager = new CandleManager(_trader);
 

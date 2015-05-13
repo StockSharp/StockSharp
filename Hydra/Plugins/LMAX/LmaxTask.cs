@@ -76,7 +76,7 @@ namespace StockSharp.Hydra.LMAX
 
 		public LmaxTask()
 		{
-			_supportedCandleSeries = LmaxSessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = LmaxMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
@@ -112,7 +112,7 @@ namespace StockSharp.Hydra.LMAX
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<LmaxTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<LmaxTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new LmaxSettings(settings);
 

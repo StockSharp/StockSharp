@@ -47,8 +47,8 @@
 											<ColumnDefinition />
 											<ColumnDefinition />
 										</Grid.ColumnDefinitions>
-										<TextBlock x:Name="Off" Foreground="#FF7A7A7A" FontWeight="Bold" Text="x32" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
-										<TextBlock x:Name="On" Foreground="#FF7A7A7A" FontWeight="Bold" Text="x64" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										<TextBlock x:Name="Off" Foreground="#FF7A7A7A" FontWeight="Bold" Text="32" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+										<TextBlock x:Name="On" Foreground="#FF7A7A7A" FontWeight="Bold" Text="64" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
 									</Grid>
 								</Border>
 								<Border BorderBrush="#FF939393" HorizontalAlignment="Left" x:Name="slider" Width="80" Height="20" BorderThickness="1" CornerRadius="3" RenderTransformOrigin="0.5,0.5" Margin="0">

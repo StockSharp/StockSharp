@@ -66,11 +66,7 @@ namespace StockSharp.Xaml
 				Connector.Connected += ConnectedHandler;
 				Connector.Disconnected += DisconnectedHandler;
 				Connector.ConnectionError += ConnectionErrorHandler;
-				Connector.ExportStarted += ExportStartedHandler;
-				Connector.ExportStopped += ExportStoppedHandler;
-				Connector.ExportError += ExportErrorHandler;
-				Connector.NewDataExported += NewDataExportedHandler;
-				Connector.ProcessDataError += ProcessDataErrorHandler;
+				Connector.Error += ErrorHandler;
 				Connector.MarketTimeChanged += MarketTimeChangedHandler;
 				Connector.LookupSecuritiesResult += LookupSecuritiesResultHandler;
 				Connector.LookupPortfoliosResult += LookupPortfoliosResultHandler;
@@ -431,30 +427,16 @@ namespace StockSharp.Xaml
 
 		#endregion
 
-		#region NewDataExported
-
-		/// <summary>
-		/// Событие, сигнализирующее о новых экспортируемых данных.
-		/// </summary>
-		public event Action NewDataExported;
-
-		private void NewDataExportedHandler()
-		{
-			AddGuiAction(() => NewDataExported.SafeInvoke());
-		}
-
-		#endregion
-
-		#region ProcessDataError
+		#region Error
 
 		/// <summary>
 		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
 		/// </summary>
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
-		private void ProcessDataErrorHandler(Exception exception)
+		private void ErrorHandler(Exception exception)
 		{
-			AddGuiAction(() => ProcessDataError.SafeInvoke(exception));
+			AddGuiAction(() => Error.SafeInvoke(exception));
 		}
 
 		#endregion
@@ -526,48 +508,6 @@ namespace StockSharp.Xaml
 		private void MarketDataSubscriptionFailedHandler(Security security, MarketDataTypes type, Exception error)
 		{
 			AddGuiAction(() => MarketDataSubscriptionFailed.SafeInvoke(security, type, error));
-		}
-
-		#endregion
-
-		#region ExportStarted
-
-		/// <summary>
-		/// Событие успешного запуска экспорта.
-		/// </summary>
-		public event Action ExportStarted;
-
-		private void ExportStartedHandler()
-		{
-			AddGuiAction(() => ExportStarted.SafeInvoke());
-		}
-
-		#endregion
-
-		#region ExportStopped
-
-		/// <summary>
-		/// Событие успешной остановки экспорта.
-		/// </summary>
-		public event Action ExportStopped;
-
-		private void ExportStoppedHandler()
-		{
-			AddGuiAction(() => ExportStopped.SafeInvoke());
-		}
-
-		#endregion
-
-		#region ExportError
-
-		/// <summary>
-		/// Событие ошибки экспорта (например, соединения было разорвано).
-		/// </summary>
-		public event Action<Exception> ExportError;
-
-		private void ExportErrorHandler(Exception exception)
-		{
-			AddGuiAction(() => ExportError.SafeInvoke(exception));
 		}
 
 		#endregion
@@ -699,14 +639,6 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Состояние экспорта.
-		/// </summary>
-		public ConnectionStates ExportState
-		{
-			get { return Connector.ExportState; }
-		}
-
-		/// <summary>
 		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
 		/// в виде одной транзакции.
 		/// </summary>
@@ -753,6 +685,22 @@ namespace StockSharp.Xaml
 		public IEnumerable<Portfolio> RegisteredPortfolios
 		{
 			get { return Connector.RegisteredPortfolios; }
+		}
+
+		/// <summary>
+		/// Адаптер для транзакций.
+		/// </summary>
+		public IMessageAdapter TransactionAdapter
+		{
+			get { return Connector.TransactionAdapter; }
+		}
+
+		/// <summary>
+		/// Адаптер для маркет-данных.
+		/// </summary>
+		public IMessageAdapter MarketDataAdapter
+		{
+			get { return Connector.MarketDataAdapter; }
 		}
 
 		/// <summary>
@@ -1044,22 +992,6 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		public void StartExport()
-		{
-			Connector.StartExport();
-		}
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="IConnector.StartExport"/>.
-		/// </summary>
-		public void StopExport()
-		{
-			Connector.StopExport();
-		}
-
-		/// <summary>
 		/// Событие изменения инструмента.
 		/// </summary>
 		public event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
@@ -1139,11 +1071,7 @@ namespace StockSharp.Xaml
 			Connector.Connected -= ConnectedHandler;
 			Connector.Disconnected -= DisconnectedHandler;
 			Connector.ConnectionError -= ConnectionErrorHandler;
-			Connector.ExportStarted -= ExportStartedHandler;
-			Connector.ExportStopped -= ExportStoppedHandler;
-			Connector.ExportError -= ExportErrorHandler;
-			Connector.NewDataExported -= NewDataExportedHandler;
-			Connector.ProcessDataError -= ProcessDataErrorHandler;
+			Connector.Error -= ErrorHandler;
 			Connector.MarketTimeChanged -= MarketTimeChangedHandler;
 			Connector.LookupSecuritiesResult -= LookupSecuritiesResultHandler;
 			Connector.LookupPortfoliosResult -= LookupPortfoliosResultHandler;

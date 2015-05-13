@@ -12,7 +12,6 @@ namespace StockSharp.Algo.Candles.Compression
 
 	using StockSharp.Logging;
 	using StockSharp.Algo.Storages;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -101,13 +100,13 @@ namespace StockSharp.Algo.Candles.Compression
 			private void Subscribe(ICandleBuilderSource source)
 			{
 				//source.NewValues += _builder.OnNewValues;
-				source.ProcessDataError += _builder.RaiseProcessDataError;
+				source.Error += _builder.RaiseError;
 			}
 
 			private void UnSubscribe(ICandleBuilderSource source)
 			{
 				//source.NewValues -= _builder.OnNewValues;
-				source.ProcessDataError -= _builder.RaiseProcessDataError;
+				source.Error -= _builder.RaiseError;
 				source.Dispose();
 			}
 		}
@@ -192,7 +191,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <summary>
 		/// Событие ошибки формирования свечек.
 		/// </summary>
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
 		#region ICandleSource members
 
@@ -296,7 +295,9 @@ namespace StockSharp.Algo.Candles.Compression
 
 				while (true)
 				{
-					var candle = ProcessValue(series, (TCandle)info.CurrentCandle, value);
+					var currCandle = info.CurrentCandle;
+
+					var candle = ProcessValue(series, (TCandle)currCandle, value);
 
 					if (candle == null)
 					{
@@ -305,7 +306,7 @@ namespace StockSharp.Algo.Candles.Compression
 						//throw new InvalidOperationException("Фабрика вернула пустую свечу.");
 					}
 
-					if (candle == info.CurrentCandle)
+					if (candle == currCandle)
 					{
 						if (!valueAdded)
 							Container.AddValue(series, candle, value);
@@ -317,10 +318,12 @@ namespace StockSharp.Algo.Candles.Compression
 					}
 					else
 					{
-						if (info.CurrentCandle != null)
+						if (currCandle != null)
 						{
-							info.CurrentCandle.State = CandleStates.Finished;
-							RaiseProcessing(series, info.CurrentCandle);
+							info.CurrentCandle = null;
+
+							currCandle.State = CandleStates.Finished;
+							RaiseProcessing(series, currCandle);
 						}
 
 						info.CurrentCandle = candle;
@@ -417,7 +420,7 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 
 			candle.ClosePrice = value.Price;
-			candle.TotalPrice += value.Price;
+			candle.TotalPrice += value.Price * value.Volume;
 
 			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
 			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
@@ -480,17 +483,17 @@ namespace StockSharp.Algo.Candles.Compression
 			}
 			catch (Exception ex)
 			{
-				RaiseProcessDataError(ex);
+				RaiseError(ex);
 			}
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ProcessDataError"/>.
+		/// Вызвать событие <see cref="Error"/>.
 		/// </summary>
 		/// <param name="error">Информация об ошибке.</param>
-		protected virtual void RaiseProcessDataError(Exception error)
+		protected virtual void RaiseError(Exception error)
 		{
-			ProcessDataError.SafeInvoke(error);
+			Error.SafeInvoke(error);
 			this.AddErrorLog(error);
 		}
 
@@ -1085,7 +1088,7 @@ namespace StockSharp.Algo.Candles.Compression
 				HighVolume = value.Volume,
 				TotalVolume = value.Volume,
 
-				TotalPrice = value.Price,
+				TotalPrice = value.Price * value.Volume,
 
 				Type = pnfCandle == null ? PnFTypes.X : (pnfCandle.Type == PnFTypes.X ? PnFTypes.O : PnFTypes.X),
 			};
@@ -1159,7 +1162,7 @@ namespace StockSharp.Algo.Candles.Compression
 			else
 				candle.LowPrice = candle.ClosePrice;
 
-			candle.TotalPrice += value.Price;
+			candle.TotalPrice += value.Price * value.Volume;
 
 			candle.LowVolume = (candle.LowVolume ?? 0m).Min(value.Volume);
 			candle.HighVolume = (candle.HighVolume ?? 0m).Max(value.Volume);
@@ -1269,7 +1272,7 @@ namespace StockSharp.Algo.Candles.Compression
 				ClosePrice = closePrice,
 				HighPrice = Math.Max(openPrice, closePrice),
 				LowPrice = Math.Min(openPrice, closePrice),
-				TotalPrice = openPrice + closePrice,
+				TotalPrice = openPrice * value.Volume,
 				OpenVolume = value.Volume,
 				CloseVolume = value.Volume,
 				HighVolume = value.Volume,
@@ -1295,7 +1298,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			candle.CloseVolume = value.Volume;
 
-			candle.TotalPrice += value.Price;
+			candle.TotalPrice += value.Price * value.Volume;
 			candle.TotalVolume += value.Volume;
 
 			if (value.OrderDirection != null)

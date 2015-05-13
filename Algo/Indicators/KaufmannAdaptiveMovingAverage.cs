@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Collections;
 	using Ecng.Serialization;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -23,7 +24,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="KaufmannAdaptiveMovingAverage"/>.
 		/// </summary>
 		public KaufmannAdaptiveMovingAverage()
-			: base(typeof(decimal))
 		{
 			FastSCPeriod = 2;
 			SlowSCPeriod = 30;

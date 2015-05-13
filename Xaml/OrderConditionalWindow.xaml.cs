@@ -109,15 +109,15 @@ namespace StockSharp.Xaml
 				Condition.SelectedObject = null;
 			else
 			{
-				var connector = (Connector)Portfolio.Connector;
+				var connector = Connector;
 
-				var session = connector.TransactionAdapter.SessionHolder;
+				var adapter = connector.TransactionAdapter;
 
-				var basketSession = session as BasketSessionHolder;
-				if (basketSession != null)
-					session = basketSession.Portfolios.TryGetValue(Portfolio.Name);
+				var basketAdapter = adapter as BasketMessageAdapter;
+				if (basketAdapter != null)
+					adapter = basketAdapter.Portfolios.TryGetValue(Portfolio.Name);
 
-				Condition.SelectedObject = session == null ? null : session.CreateOrderCondition();
+				Condition.SelectedObject = adapter == null ? null : adapter.CreateOrderCondition();
 			}
 		}
 

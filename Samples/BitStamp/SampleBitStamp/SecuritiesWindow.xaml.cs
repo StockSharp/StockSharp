@@ -75,7 +75,7 @@ namespace SampleBitStamp
 
 			var window = _quotesWindows.SafeAdd(security, key =>
 			{
-				// создаем окно со стаканом
+				// create order book window
 				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;
@@ -83,14 +83,14 @@ namespace SampleBitStamp
 
 			if (window.Visibility == Visibility.Visible)
 			{
-				// останавливаем получение стакана
+				// unsubscribe from order book flow
 				trader.UnRegisterMarketDepth(security);
 
 				window.Hide();
 			}
 			else
 			{
-				// начинаем получать стакан
+				// subscribe on order book flow
 				trader.RegisterMarketDepth(security);
 
 				window.Show();

@@ -104,9 +104,6 @@ namespace SampleSmartConsole
 
 						Console.WriteLine(LocalizedStrings.Str2989Params.Put(account));
 
-						// запускаем экспорт по инструментам и портфелям
-						trader.StartExport();
-
 						// дожидаемся появления портфеля и инструмента
 						waitHandle.WaitOne();
 
@@ -161,9 +158,6 @@ namespace SampleSmartConsole
 							// ждем 1 секунду
 							Thread.Sleep(1000);
 						}
-
-						// останавливаем экспорт
-						trader.StopExport();
 					}
 				}
 			}

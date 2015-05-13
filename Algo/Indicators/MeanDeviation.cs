@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Indicators
 	using System;
 	using System.ComponentModel;
 	using System.Linq;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -16,7 +17,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="MeanDeviation"/>.
 		/// </summary>
 		public MeanDeviation()
-			: base(typeof(decimal))
 		{
 			Sma = new SimpleMovingAverage();
 			Length = 5;

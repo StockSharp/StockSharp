@@ -46,16 +46,6 @@
 		}
 
 		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return _movingAverage.CanProcess(input) && _averageTrueRange.CanProcess(input);
-		}
-
-		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>
 		/// <param name="input">Входное значение.</param>
@@ -73,7 +63,7 @@
 
 			if (_lastCandle != null)
 			{
-				var trValue = _averageTrueRange.GetCurrentValue<decimal>();
+				var trValue = _averageTrueRange.GetCurrentValue();
 
 				// не вносить в тернарный оператор! 
 				var maValue = _movingAverage.Process(new DecimalIndicatorValue(this, GetValue(candle, _lastCandle)) { IsFinal = input.IsFinal });

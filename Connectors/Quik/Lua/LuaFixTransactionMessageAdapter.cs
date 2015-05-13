@@ -1,20 +1,33 @@
 ﻿namespace StockSharp.Quik.Lua
 {
-	using System.ComponentModel;
 	using System.Linq;
+
+	using Ecng.Common;
 
 	using StockSharp.Fix;
 	using StockSharp.Fix.Native;
 	using StockSharp.Messages;
 
-	[DisplayName("LuaFixTransactionMessageAdapter")]
-	class LuaFixTransactionMessageAdapter : FixMessageAdapter
+	/// <summary>
+	/// Адаптер сообщений для Quik LUA FIX.
+	/// </summary>
+	public class LuaFixTransactionMessageAdapter : FixMessageAdapter
 	{
-		public LuaFixTransactionMessageAdapter(FixSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder, sessionHolder.TransactionSession)
+		/// <summary>
+		/// Создать <see cref="LuaFixTransactionMessageAdapter"/>.
+		/// </summary>
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public LuaFixTransactionMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			this.RemoveMarketDataSupport();
 		}
 
+		/// <summary>
+		/// Записать данные по условию заявки.
+		/// </summary>
+		/// <param name="writer">Писатель FIX данных.</param>
+		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
 		protected override void WriteFixOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
 			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition);
@@ -34,8 +47,8 @@
 				{
 					var condition = new QuikOrderCondition();
 
-					var executions = reader.ReadExecutionMessage(Session, SessionHolder.UtcOffset,
-						tag => reader.ReadOrderCondition(tag, SessionHolder.UtcOffset, condition));
+					var executions = reader.ReadExecutionMessage(this,
+						tag => reader.ReadOrderCondition(tag, UtcOffset, condition));
 
 					if (executions == null)
 						return null;

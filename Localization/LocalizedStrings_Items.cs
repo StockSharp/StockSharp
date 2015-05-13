@@ -1979,12 +1979,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number (extra)
+		/// ID (user)
 		/// </summary>
 		public const string Str165Key = "Str165";
 
 		/// <summary>
-		/// Number (extra)
+		/// ID (user)
 		/// </summary>
 		public static string Str165
 		{
@@ -2330,12 +2330,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Control interval
+		/// Heart beat
 		/// </summary>
 		public const string Str192Key = "Str192";
 
 		/// <summary>
-		/// Control interval
+		/// Heart beat
 		/// </summary>
 		public static string Str192
 		{
@@ -2785,12 +2785,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Lifetime
+		/// Time in force
 		/// </summary>
 		public const string Str231Key = "Str231";
 
 		/// <summary>
-		/// Lifetime
+		/// Time in force
 		/// </summary>
 		public static string Str231
 		{
@@ -2798,12 +2798,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Limit order lifetime.
+		/// Limit order time in force.
 		/// </summary>
 		public const string Str232Key = "Str232";
 
 		/// <summary>
-		/// Limit order lifetime.
+		/// Limit order time in force.
 		/// </summary>
 		public static string Str232
 		{
@@ -6113,12 +6113,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// {0}/{1} {2} Price={3} Volume={4} State={5} Score={6}
+		/// {0}/{1} {2} Price={3} Volume={4} State={5} Bal={6}
 		/// </summary>
 		public const string Str534ParamsKey = "Str534Params";
 
 		/// <summary>
-		/// {0}/{1} {2} Price={3} Volume={4} State={5} Score={6}
+		/// {0}/{1} {2} Price={3} Volume={4} State={5} Bal={6}
 		/// </summary>
 		public static string Str534Params
 		{
@@ -7036,19 +7036,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Adapter does not support obtaining data for {0}.
-		/// </summary>
-		public const string Str624ParamsKey = "Str624Params";
-
-		/// <summary>
-		/// Adapter does not support obtaining data for {0}.
-		/// </summary>
-		public static string Str624Params
-		{
-			get { return GetString(Str624ParamsKey); }
-		}
-
-		/// <summary>
 		/// Connection error for {0}: {1}
 		/// </summary>
 		public const string Str625ParamsKey = "Str625Params";
@@ -7062,12 +7049,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Failed to connect to any connection.
+		/// Failed to connect of some connections.
 		/// </summary>
 		public const string Str626Key = "Str626";
 
 		/// <summary>
-		/// Failed to connect to any connection.
+		/// Failed to connect of some connections.
 		/// </summary>
 		public static string Str626
 		{
@@ -7101,12 +7088,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// No suitable adapter found for security {0}.
+		/// No suitable adapter found for {0}.
 		/// </summary>
 		public const string Str629ParamsKey = "Str629Params";
 
 		/// <summary>
-		/// No suitable adapter found for security {0}.
+		/// No suitable adapter found for {0}.
 		/// </summary>
 		public static string Str629Params
 		{
@@ -8167,12 +8154,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Transaction number must be different from zero.
+		/// Transaction ID must be different from zero.
 		/// </summary>
 		public const string Str715Key = "Str715";
 
 		/// <summary>
-		/// Transaction number must be different from zero.
+		/// Transaction ID must be different from zero.
 		/// </summary>
 		public static string Str715
 		{
@@ -8206,12 +8193,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Transaction number is incorrectly set.
+		/// Transaction ID is incorrectly set.
 		/// </summary>
 		public const string Str718Key = "Str718";
 
 		/// <summary>
-		/// Transaction number is incorrectly set.
+		/// Transaction ID is incorrectly set.
 		/// </summary>
 		public static string Str718
 		{
@@ -8271,12 +8258,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number (trade)
+		/// ID (trade)
 		/// </summary>
 		public const string Str723Key = "Str723";
 
 		/// <summary>
-		/// Number (trade)
+		/// ID (trade)
 		/// </summary>
 		public static string Str723
 		{
@@ -10507,12 +10494,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order already has a number '{0}'. Possibly, it was already registered.
+		/// Order already has a ID '{0}'. Possibly, it was already registered.
 		/// </summary>
 		public const string Str896ParamsKey = "Str896Params";
 
 		/// <summary>
-		/// Order already has a number '{0}'. Possibly, it was already registered.
+		/// Order already has a ID '{0}'. Possibly, it was already registered.
 		/// </summary>
 		public static string Str896Params
 		{
@@ -10520,12 +10507,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order already has a transaction number '{0}'. Possibly, it was already registered.
+		/// Order already has a transaction ID '{0}'. Possibly, it was already registered.
 		/// </summary>
 		public const string Str897ParamsKey = "Str897Params";
 
 		/// <summary>
-		/// Order already has a transaction number '{0}'. Possibly, it was already registered.
+		/// Order already has a transaction ID '{0}'. Possibly, it was already registered.
 		/// </summary>
 		public static string Str897Params
 		{
@@ -10546,12 +10533,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order has neither identifier nor trasaction number. Possibly, it was not registered.
+		/// Order has neither identifier nor trasaction ID. Possibly, it was not registered.
 		/// </summary>
 		public const string Str899Key = "Str899";
 
 		/// <summary>
-		/// Order has neither identifier nor trasaction number. Possibly, it was not registered.
+		/// Order has neither identifier nor trasaction ID. Possibly, it was not registered.
 		/// </summary>
 		public static string Str899
 		{
@@ -10871,12 +10858,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Wrong order number.
+		/// Wrong order ID.
 		/// </summary>
 		public const string Str925Key = "Str925";
 
 		/// <summary>
-		/// Wrong order number.
+		/// Wrong order ID.
 		/// </summary>
 		public static string Str925
 		{
@@ -10910,12 +10897,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Wrong number of trade transaction {0}.
+		/// Wrong ID of trade transaction {0}.
 		/// </summary>
 		public const string Str928ParamsKey = "Str928Params";
 
 		/// <summary>
-		/// Wrong number of trade transaction {0}.
+		/// Wrong ID of trade transaction {0}.
 		/// </summary>
 		public static string Str928Params
 		{
@@ -11976,12 +11963,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Wrong number of trade order {0}.
+		/// Wrong ID of trade order {0}.
 		/// </summary>
 		public const string Str1012ParamsKey = "Str1012Params";
 
 		/// <summary>
-		/// Wrong number of trade order {0}.
+		/// Wrong ID of trade order {0}.
 		/// </summary>
 		public static string Str1012Params
 		{
@@ -12067,12 +12054,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Wrong trade number.
+		/// Wrong trade ID.
 		/// </summary>
 		public const string Str1020Key = "Str1020";
 
 		/// <summary>
-		/// Wrong trade number.
+		/// Wrong trade ID.
 		/// </summary>
 		public static string Str1020
 		{
@@ -14212,12 +14199,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order number
+		/// Order ID
 		/// </summary>
 		public const string Str1190Key = "Str1190";
 
 		/// <summary>
-		/// Order number
+		/// Order ID
 		/// </summary>
 		public static string Str1190
 		{
@@ -14225,12 +14212,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number, starting from which the emulator will generate orders numbers.
+		/// Number, starting from which the emulator will generate orders IDs.
 		/// </summary>
 		public const string Str1191Key = "Str1191";
 
 		/// <summary>
-		/// Number, starting from which the emulator will generate orders numbers.
+		/// Number, starting from which the emulator will generate orders IDs.
 		/// </summary>
 		public static string Str1191
 		{
@@ -14238,12 +14225,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Trade number
+		/// Trade ID
 		/// </summary>
 		public const string Str1192Key = "Str1192";
 
 		/// <summary>
-		/// Trade number
+		/// Trade ID
 		/// </summary>
 		public static string Str1192
 		{
@@ -14251,12 +14238,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number, starting with which the emulator will generate trades numbers.
+		/// Number, starting with which the emulator will generate trades IDs.
 		/// </summary>
 		public const string Str1193Key = "Str1193";
 
 		/// <summary>
-		/// Number, starting with which the emulator will generate trades numbers.
+		/// Number, starting with which the emulator will generate trades IDs.
 		/// </summary>
 		public static string Str1193
 		{
@@ -14264,12 +14251,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number, starting with which the emulator will generate orders transactions numbers.
+		/// Number, starting with which the emulator will generate orders transactions IDs.
 		/// </summary>
 		public const string Str1194Key = "Str1194";
 
 		/// <summary>
-		/// Number, starting with which the emulator will generate orders transactions numbers.
+		/// Number, starting with which the emulator will generate orders transactions IDs.
 		/// </summary>
 		public static string Str1194
 		{
@@ -14303,12 +14290,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Depth
+		/// Depth of book
 		/// </summary>
 		public const string Str1197Key = "Str1197";
 
 		/// <summary>
-		/// Depth
+		/// Depth of book
 		/// </summary>
 		public static string Str1197
 		{
@@ -15278,12 +15265,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order {0} registered with number {1} in {2}.
+		/// Order {0} registered with ID {1} in {2}.
 		/// </summary>
 		public const string Str1275ParamsKey = "Str1275Params";
 
 		/// <summary>
-		/// Order {0} registered with number {1} in {2}.
+		/// Order {0} registered with ID {1} in {2}.
 		/// </summary>
 		public static string Str1275Params
 		{
@@ -15980,12 +15967,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// cancelled
+		/// Cancelled
 		/// </summary>
 		public const string Str1329Key = "Str1329";
 
 		/// <summary>
-		/// cancelled
+		/// Cancelled
 		/// </summary>
 		public static string Str1329
 		{
@@ -16175,12 +16162,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Derivative order number
+		/// Derivative order ID
 		/// </summary>
 		public const string Str1352Key = "Str1352";
 
 		/// <summary>
-		/// Derivative order number
+		/// Derivative order ID
 		/// </summary>
 		public static string Str1352
 		{
@@ -19711,12 +19698,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// For message with transaction number {0} the server transaction number was not found.
+		/// For message with transaction ID {0} the server transaction ID was not found.
 		/// </summary>
 		public const string Str1633ParamsKey = "Str1633Params";
 
 		/// <summary>
-		/// For message with transaction number {0} the server transaction number was not found.
+		/// For message with transaction ID {0} the server transaction ID was not found.
 		/// </summary>
 		public static string Str1633Params
 		{
@@ -19724,12 +19711,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Stock exchange identifier and transaction number are not specified.
+		/// Stock exchange identifier and transaction ID are not specified.
 		/// </summary>
 		public const string Str1634Key = "Str1634";
 
 		/// <summary>
-		/// Stock exchange identifier and transaction number are not specified.
+		/// Stock exchange identifier and transaction ID are not specified.
 		/// </summary>
 		public static string Str1634
 		{
@@ -20023,12 +20010,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// For message with transaction number {0} the original transaction number was not found.
+		/// For message with transaction ID {0} the original transaction ID was not found.
 		/// </summary>
 		public const string Str1657ParamsKey = "Str1657Params";
 
 		/// <summary>
-		/// For message with transaction number {0} the original transaction number was not found.
+		/// For message with transaction ID {0} the original transaction ID was not found.
 		/// </summary>
 		public static string Str1657Params
 		{
@@ -20072,19 +20059,6 @@ namespace StockSharp.Localization
 		public static string Str1660
 		{
 			get { return GetString(Str1660Key); }
-		}
-
-		/// <summary>
-		/// Session.
-		/// </summary>
-		public const string Str1661Key = "Str1661";
-
-		/// <summary>
-		/// Session.
-		/// </summary>
-		public static string Str1661
-		{
-			get { return GetString(Str1661Key); }
 		}
 
 		/// <summary>
@@ -20322,12 +20296,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Transactional session.
+		/// Transactional session
 		/// </summary>
 		public const string TransactionalSessionKey = "TransactionalSession";
 
 		/// <summary>
-		/// Transactional session.
+		/// Transactional session
 		/// </summary>
 		public static string TransactionalSession
 		{
@@ -20335,12 +20309,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Market data session.
+		/// Market data session
 		/// </summary>
 		public const string MarketDataSessionKey = "MarketDataSession";
 
 		/// <summary>
-		/// Market data session.
+		/// Market data session
 		/// </summary>
 		public static string MarketDataSession
 		{
@@ -20556,12 +20530,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Transaction number {0} is out of range.
+		/// Transaction ID {0} is out of range.
 		/// </summary>
 		public const string Str1700ParamsKey = "Str1700Params";
 
 		/// <summary>
-		/// Transaction number {0} is out of range.
+		/// Transaction ID {0} is out of range.
 		/// </summary>
 		public static string Str1700Params
 		{
@@ -22675,12 +22649,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Unknown error reason in order registration with transaction number {0}.
+		/// Unknown error reason in order registration with transaction ID {0}.
 		/// </summary>
 		public const string Str1870ParamsKey = "Str1870Params";
 
 		/// <summary>
-		/// Unknown error reason in order registration with transaction number {0}.
+		/// Unknown error reason in order registration with transaction ID {0}.
 		/// </summary>
 		public static string Str1870Params
 		{
@@ -22727,12 +22701,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// No transaction with SmartCOM number {0} found.
+		/// No transaction with SmartCOM ID {0} found.
 		/// </summary>
 		public const string Str1874ParamsKey = "Str1874Params";
 
 		/// <summary>
-		/// No transaction with SmartCOM number {0} found.
+		/// No transaction with SmartCOM ID {0} found.
 		/// </summary>
 		public static string Str1874Params
 		{
@@ -23195,12 +23169,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number
+		/// ID
 		/// </summary>
 		public const string Str1916Key = "Str1916";
 
 		/// <summary>
-		/// Number
+		/// ID
 		/// </summary>
 		public static string Str1916
 		{
@@ -25587,12 +25561,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Wrong trade number {0}.
+		/// Wrong trade ID {0}.
 		/// </summary>
 		public const string Str2114ParamsKey = "Str2114Params";
 
 		/// <summary>
-		/// Wrong trade number {0}.
+		/// Wrong trade ID {0}.
 		/// </summary>
 		public static string Str2114Params
 		{
@@ -27030,12 +27004,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order {0} does not have a stock exchange number.
+		/// Order {0} does not have a stock exchange ID.
 		/// </summary>
 		public const string Str2252ParamsKey = "Str2252Params";
 
 		/// <summary>
-		/// Order {0} does not have a stock exchange number.
+		/// Order {0} does not have a stock exchange ID.
 		/// </summary>
 		public static string Str2252Params
 		{
@@ -27095,12 +27069,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Error registering order with transaction number {0}. {1}
+		/// Error registering order with transaction ID {0}. {1}
 		/// </summary>
 		public const string Str2258ParamsKey = "Str2258Params";
 
 		/// <summary>
-		/// Error registering order with transaction number {0}. {1}
+		/// Error registering order with transaction ID {0}. {1}
 		/// </summary>
 		public static string Str2258Params
 		{
@@ -27108,12 +27082,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Trade with number {0} has zero number of initialized order
+		/// Trade with ID {0} has zero number of initialized order
 		/// </summary>
 		public const string Str2259ParamsKey = "Str2259Params";
 
 		/// <summary>
-		/// Trade with number {0} has zero number of initialized order
+		/// Trade with ID {0} has zero number of initialized order
 		/// </summary>
 		public static string Str2259Params
 		{
@@ -30150,12 +30124,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Should real time or 'frozen' on broker server data be used.
+		/// Should real-time or 'frozen' on broker server data be used.
 		/// </summary>
 		public const string Str2520Key = "Str2520";
 
 		/// <summary>
-		/// Should real time or 'frozen' on broker server data be used.
+		/// Should real-time or 'frozen' on broker server data be used.
 		/// </summary>
 		public static string Str2520
 		{
@@ -30358,12 +30332,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Load realtime or history data.
+		/// Load real-time or history data.
 		/// </summary>
 		public const string Str2536Key = "Str2536";
 
 		/// <summary>
-		/// Load realtime or history data.
+		/// Load real-time or history data.
 		/// </summary>
 		public static string Str2536
 		{
@@ -34427,32 +34401,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// securities
-		/// </summary>
-		public const string Str2854Key = "Str2854";
-
-		/// <summary>
-		/// securities
-		/// </summary>
-		public static string Str2854
-		{
-			get { return GetString(Str2854Key); }
-		}
-
-		/// <summary>
-		/// trades
-		/// </summary>
-		public const string Str2855Key = "Str2855";
-
-		/// <summary>
-		/// trades
-		/// </summary>
-		public static string Str2855
-		{
-			get { return GetString(Str2855Key); }
-		}
-
-		/// <summary>
 		/// Number (row)
 		/// </summary>
 		public const string Str2856Key = "Str2856";
@@ -34596,12 +34544,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Field {0} is obligatory. It must be given a default value or an odinal number.
+		/// Field {0} is obligatory. It must be given a default value or an ordinal number.
 		/// </summary>
 		public const string Str2867ParamsKey = "Str2867Params";
 
 		/// <summary>
-		/// Field {0} is obligatory. It must be given a default value or an odinal number.
+		/// Field {0} is obligatory. It must be given a default value or an ordinal number.
 		/// </summary>
 		public static string Str2867Params
 		{
@@ -40589,12 +40537,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Error cancelling order with number {0}. {1}
+		/// Error cancelling order with ID {0}. {1}
 		/// </summary>
 		public const string Str3373ParamsKey = "Str3373Params";
 
 		/// <summary>
-		/// Error cancelling order with number {0}. {1}
+		/// Error cancelling order with ID {0}. {1}
 		/// </summary>
 		public static string Str3373Params
 		{
@@ -41002,19 +40950,6 @@ namespace StockSharp.Localization
 		public static string Str3407
 		{
 			get { return GetString(Str3407Key); }
-		}
-
-		/// <summary>
-		/// Note
-		/// </summary>
-		public const string Str3408Key = "Str3408";
-
-		/// <summary>
-		/// Note
-		/// </summary>
-		public static string Str3408
-		{
-			get { return GetString(Str3408Key); }
 		}
 
 		/// <summary>
@@ -42474,12 +42409,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Use loan
+		/// Use credit
 		/// </summary>
 		public const string Str3526Key = "Str3526";
 
 		/// <summary>
-		/// Use loan
+		/// Use credit
 		/// </summary>
 		public static string Str3526
 		{
@@ -42510,19 +42445,6 @@ namespace StockSharp.Localization
 		public static string Str3529
 		{
 			get { return GetString(Str3529Key); }
-		}
-
-		/// <summary>
-		/// Note.
-		/// </summary>
-		public const string Str3530Key = "Str3530";
-
-		/// <summary>
-		/// Note.
-		/// </summary>
-		public static string Str3530
-		{
-			get { return GetString(Str3530Key); }
 		}
 
 		/// <summary>
@@ -44905,12 +44827,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Long numbers
+		/// Long IDs
 		/// </summary>
 		public const string Str3723Key = "Str3723";
 
 		/// <summary>
-		/// Long numbers
+		/// Long IDs
 		/// </summary>
 		public static string Str3723
 		{
@@ -44918,12 +44840,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Use long transaction numbers. Does not work for real connections.
+		/// Use long transaction IDs. Does not work for real connections.
 		/// </summary>
 		public const string Str3724Key = "Str3724";
 
 		/// <summary>
-		/// Use long transaction numbers. Does not work for real connections.
+		/// Use long transaction IDs. Does not work for real connections.
 		/// </summary>
 		public static string Str3724
 		{
@@ -46323,12 +46245,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// in x64 mode
+		/// in 64-bit mode
 		/// </summary>
 		public const string XamlStr47Key = "XamlStr47";
 
 		/// <summary>
-		/// in x64 mode
+		/// in 64-bit mode
 		/// </summary>
 		public static string XamlStr47
 		{
@@ -46336,12 +46258,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// in x86 mode
+		/// in 32-bit mode
 		/// </summary>
 		public const string XamlStr48Key = "XamlStr48";
 
 		/// <summary>
-		/// in x86 mode
+		/// in 32-bit mode
 		/// </summary>
 		public static string XamlStr48
 		{
@@ -47507,12 +47429,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Launch are available in x86 or x64 modes.
+		/// Launch are available in 32- or 64- bit modes.
 		/// </summary>
 		public const string XamlStr178Key = "XamlStr178";
 
 		/// <summary>
-		/// Launch are available in x86 or x64 modes.
+		/// Launch are available in 32- or 64- bit modes.
 		/// </summary>
 		public static string XamlStr178
 		{
@@ -48388,19 +48310,6 @@ namespace StockSharp.Localization
 		public static string XamlStr297
 		{
 			get { return GetString(XamlStr297Key); }
-		}
-
-		/// <summary>
-		/// Market data session
-		/// </summary>
-		public const string XamlStr299Key = "XamlStr299";
-
-		/// <summary>
-		/// Market data session
-		/// </summary>
-		public static string XamlStr299
-		{
-			get { return GetString(XamlStr299Key); }
 		}
 
 		/// <summary>
@@ -51603,12 +51512,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Candles (real time)
+		/// Candles (real-time)
 		/// </summary>
 		public const string XamlStr634Key = "XamlStr634";
 
 		/// <summary>
-		/// Candles (real time)
+		/// Candles (real-time)
 		/// </summary>
 		public static string XamlStr634
 		{
@@ -51616,12 +51525,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Candles and market depths
+		/// Candles and depths
 		/// </summary>
 		public const string XamlStr635Key = "XamlStr635";
 
 		/// <summary>
-		/// Candles and market depths
+		/// Candles and depths
 		/// </summary>
 		public static string XamlStr635
 		{
@@ -52731,19 +52640,6 @@ namespace StockSharp.Localization
 		public static string OnlyPublic
 		{
 			get { return GetString(OnlyPublicKey); }
-		}
-
-		/// <summary>
-		/// Transactional session
-		/// </summary>
-		public const string XamlStr774Key = "XamlStr774";
-
-		/// <summary>
-		/// Transactional session
-		/// </summary>
-		public static string XamlStr774
-		{
-			get { return GetString(XamlStr774Key); }
 		}
 
 		/// <summary>
@@ -53875,6 +53771,32 @@ namespace StockSharp.Localization
 		public static string IsControlConnectionLost
 		{
 			get { return GetString(IsControlConnectionLostKey); }
+		}
+
+		/// <summary>
+		/// Override.
+		/// </summary>
+		public const string OverrideKey = "Override";
+
+		/// <summary>
+		/// Override.
+		/// </summary>
+		public static string Override
+		{
+			get { return GetString(OverrideKey); }
+		}
+
+		/// <summary>
+		/// Override dll file from resources. Turned on by default.
+		/// </summary>
+		public const string OverrideDllKey = "OverrideDll";
+
+		/// <summary>
+		/// Override dll file from resources. Turned on by default.
+		/// </summary>
+		public static string OverrideDll
+		{
+			get { return GetString(OverrideDllKey); }
 		}
 	}
 }

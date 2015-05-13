@@ -7,7 +7,6 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	///<summary>
@@ -20,7 +19,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("ZigZag Metastock")]
 	[DescriptionLoc(LocalizedStrings.Str826Key)]
-	public class ZigZagEquis : BaseIndicator<ShiftedIndicatorValue>
+	public class ZigZagEquis : BaseIndicator
 	{
 		private readonly IList<decimal> _buffer = new List<decimal>();
 		private readonly List<decimal> _zigZagBuffer = new List<decimal>();
@@ -198,9 +197,11 @@ namespace StockSharp.Algo.Indicators
 			_needAdd = input.IsFinal;
 
 			if (valuesCount != 2)
-				return Container.Count > 1 ? this.GetCurrentValue() : new ShiftedIndicatorValue(this);
+				return Container.Count > 1 ? this.GetCurrentValue<ShiftedIndicatorValue>() : new ShiftedIndicatorValue(this);
 
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
+
 			CurrentValue = last;
 
 			return new ShiftedIndicatorValue(this, valueId - 1, input.SetValue(this, lastButOne));

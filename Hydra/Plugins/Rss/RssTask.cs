@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.Rss
 	using Ecng.Common;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo.Storages;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Rss;
@@ -65,13 +64,6 @@ namespace StockSharp.Hydra.Rss
 				get { return Enumerable.Empty<Level1Fields>(); }
 				set { }
 			}
-
-			[Browsable(false)]
-			public override IMarketDataDrive Drive
-			{
-				get { return base.Drive; }
-				set { base.Drive = value; }
-			}
 		}
 
 		private RssSettings _settings;
@@ -96,7 +88,7 @@ namespace StockSharp.Hydra.Rss
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<RssTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<RssTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new RssSettings(settings);
 
@@ -104,7 +96,6 @@ namespace StockSharp.Hydra.Rss
 			{
 				_settings.Address = null;
 				_settings.IsDownloadNews = true;
-				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.CustomDateFormat = string.Empty;
 			}
 

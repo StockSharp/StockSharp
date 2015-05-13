@@ -6,26 +6,24 @@ namespace StockSharp.Algo.Indicators
 	using Ecng.Serialization;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с исдникеаторами.
+	/// Вспомогательный класс для работы с индикаторами.
 	/// </summary>
 	public static class IndicatorHelper
 	{
 		/// <summary>
 		/// Получить текущее значение индикатора.
 		/// </summary>
-		/// <typeparam name="T">Тип значения.</typeparam>
 		/// <param name="indicator">Индикатор.</param>
 		/// <returns>Текущее значение.</returns>
-		public static T GetCurrentValue<T>(this BaseIndicator<T> indicator)
+		public static decimal GetCurrentValue(this IIndicator indicator)
 		{
 			if (indicator == null)
 				throw new ArgumentNullException("indicator");
 
-			return ((IIndicator)indicator).GetCurrentValue<T>();
+			return indicator.GetCurrentValue<decimal>();
 		}
 
 		/// <summary>
@@ -45,16 +43,15 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Получить значение индикатора по индексу (0 - последнее значение).
 		/// </summary>
-		/// <typeparam name="T">Тип значения.</typeparam>
 		/// <param name="indicator">Индикатор.</param>
 		/// <param name="index">Индекс значения.</param>
 		/// <returns>Значение индикатора.</returns>
-		public static T GetValue<T>(this BaseIndicator<T> indicator, int index)
+		public static decimal GetValue(this IIndicator indicator, int index)
 		{
 			if (indicator == null)
 				throw new ArgumentNullException("indicator");
 
-			return ((IIndicator)indicator).GetValue<T>(index);
+			return indicator.GetValue<decimal>(index);
 		}
 
 		/// <summary>

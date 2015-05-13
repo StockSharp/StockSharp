@@ -24,21 +24,17 @@
 		
 		private readonly SynchronizedPairSet<long, CandleSeries> _series = new SynchronizedPairSet<long, CandleSeries>();
 		private readonly CachedSynchronizedSet<CandleSeries> _realTimeSeries = new CachedSynchronizedSet<CandleSeries>();
-		
+
+		private readonly AlfaDirectMessageAdapter _adapter;
+
 		/// <summary>
 		/// Создать <see cref="AlfaTrader"/>.
 		/// </summary>
 		public AlfaTrader()
 		{
-			base.SessionHolder = new AlfaDirectSessionHolder(TransactionIdGenerator);
+			_adapter = new AlfaDirectMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new AlfaDirectSessionHolder SessionHolder
-		{
-			get { return (AlfaDirectSessionHolder)base.SessionHolder; }
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -55,8 +51,8 @@
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -64,8 +60,8 @@
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);
@@ -84,16 +80,15 @@
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, MessageDirections direction)
 		{
-			if (direction == MessageDirections.Out && adapterType == MessageAdapterTypes.MarketData)
+			if (direction == MessageDirections.Out)
 			{
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
-						if (((ConnectMessage) message).Error == null)
+						if (((ConnectMessage)message).Error == null)
 						{
 							_candlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
 								(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range.Min, range.Max, _series.TryGetKey(series)), TimeSpan.FromSeconds(3));
@@ -102,8 +97,11 @@
 						break;
 
 					case MessageTypes.Disconnect:
-						if (((DisconnectMessage)message).Error == null)
+						if (((DisconnectMessage)message).Error == null && _candlesTimer != null)
+						{
 							_candlesTimer.Dispose();
+							_candlesTimer = null;
+						}
 
 						break;
 
@@ -127,7 +125,7 @@
 				}
 			}
 
-			base.OnProcessMessage(message, adapterType, direction);
+			base.OnProcessMessage(message, direction);
 		}
 
 		/// <summary>
@@ -162,14 +160,16 @@
 			var transactionId = TransactionIdGenerator.GetNextId();
 
 			_series[transactionId] = series;
-			_realTimeSeries.Add(series);
 
 			RequestCandles(series.Security, timeFrame, from, to, transactionId);
+
+			if (to == DateTimeOffset.MaxValue)
+				_realTimeSeries.Add(series);
 		}
 
 		private void RequestCandles(Security security, TimeSpan timeFrame, DateTimeOffset from, DateTimeOffset to, long transactionId)
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				From = from,
 				To = to,

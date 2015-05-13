@@ -1,5 +1,68 @@
 StockSharp API Change log
 ========================
+###v4.3.4:
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/46
+* (feature) OEC 3.5.14
+* (feature) ILogSource.IsRoot
+* (bug) Back testings. Generated data fixes.
+* (bug) Emulator. Prevent big order book generation.
+* (feature) Storage. Replace entity by messages.
+* (feature) BitStamp. Level1 refresh interval is 10 sec.
+* (feature) FIX. Check sum is uint.
+* (bug) FixServer. Sync writers.
+
+###v4.3.3:
+* (feature) OverrideDll option.
+* (bug) BasketMessageAdapter. Disconnect fix.
+* (feature) Transaq. UTC
+* (bug) Back testing. Fixes.
+
+###v4.3.2:
+* (bug) BTCE. Security decimals fix.
+
+###v4.3.1:
+* (feature) BitStamp, IQFeed, ETrade and Oanda source code.
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5619_Oshibka-nie-udalos--naiti-chast--puti.aspx
+
+###v4.3.0:
+* (feature) IMessageChannel. Message thread model refactoring.
+* (feature) IConnector. Removed Start/Stop export.
+* (feature) Connector uses BasketMessageAdapter.
+* (feature) Order.Id is nullable
+* (feature) IMessageSessionHolder removed.
+* (feature) Order.ExpiryDate is nullable.
+* (feature) IConnector. ProcessDataError -> Error.
+* (bug) BitStamp market data fixes.
+* (bug) SmartCom transaction fixes.
+* (bug) LMAX fixes.
+* (feature) OrderGrid. Show long and string identifiers.
+* (feature) Rss. Subscribe/unsubscribe support.
+* (feature) Transaq. v 2.10.10
+* (feature) IConnector.NewDataExported removed.
+* (feature) BasketConnector removed.
+* (bug) https://github.com/StockSharp/StockSharp/issues/40
+* (feature) ReConnectionSettings. Moved to Messages.
+* (feature) ReConnectionSettings. Export settings removed.
+* (feature) BasketMessageAdapter refactoring.
+* (feature) OrderCancelMesage.OrderId is nullable.
+* (feature) HeartbeatAdapter.
+* (feature) Order. BrokerCode and ClientCode fields.
+* (bug) https://github.com/StockSharp/StockSharp/issues/49
+* (bug) Micex. Fix 32-bit mode.
+* (bug) Plaza. Anonym deals stream. Fast repl mode.
+* (bug) OrderGrid. Sort ordering fixes.
+* (feature) MyTradeGrid. Multi ids.
+* (feature) Indicators. IsFormed initialized only by IsFinal value.
+* (feature) Indicators refactoring. Removed IIndicator.CanProcess.
+* (bug) Connector. Fix Connect/Disconnect messages for a few adapters.
+* (bug) Quik lua. Commission fill fix.
+* (bug) FixServer. Close session fix.
+* (feature) Fix http://stocksharp.com/forum/yaf_postst5622_Logh-soobshchieniia-MarketDataSnapshotFullRefresh.aspx
+* (feature) Plaza. Schema update.
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/36
+* (feature) FixServer. Logout fixes.
+* (bug) FIX connector. Request portfolios support.
+
 ###v4.2.75:
 * (feature) FixServer. No longer use QuickFix.
 * (feature) FixServer. Implements IMessageChannel.

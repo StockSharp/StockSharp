@@ -71,7 +71,7 @@ namespace StockSharp.InteractiveBrokers.Native
 			_outgoing = _client.GetStream();
 		}
 
-		internal event Func<IBSocket, bool> ProcessResponse;
+		public event Func<IBSocket, bool> ProcessResponse;
 
 		public void StartListening(Action<Exception> processError)
 		{

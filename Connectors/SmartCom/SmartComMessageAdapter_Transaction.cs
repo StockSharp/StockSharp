@@ -2,7 +2,6 @@ namespace StockSharp.SmartCom
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -15,8 +14,6 @@ namespace StockSharp.SmartCom
 
 	partial class SmartComMessageAdapter
 	{
-		private readonly SynchronizedMultiDictionary<string, long> _smartIdOrders = new SynchronizedMultiDictionary<string, long>();
-
 		/// <summary>
 		/// Ассоциация площадок и их кодами, для заполнения <see cref="PortfolioMessage.BoardCode"/>.
 		/// </summary>
@@ -29,39 +26,30 @@ namespace StockSharp.SmartCom
 
 			var condition = (SmartComOrderCondition)regMsg.Condition;
 
-			Session.RegisterOrder(
+			_wrapper.RegisterOrder(
 				regMsg.PortfolioName, (string)regMsg.SecurityId.Native, regMsg.Side == Sides.Buy ? SmartOrderAction.Buy : SmartOrderAction.Sell,
-				regMsg.GetSmartOrderType(), regMsg.TillDate == DateTimeOffset.MaxValue ? SmartOrderValidity.Gtc : SmartOrderValidity.Day,
+				regMsg.GetSmartOrderType(), regMsg.TillDate == null || regMsg.TillDate == DateTimeOffset.MaxValue ? SmartOrderValidity.Gtc : SmartOrderValidity.Day,
 				(double)regMsg.Price, (int)regMsg.Volume, condition != null ? (double)condition.StopPrice : 0, (int)regMsg.TransactionId);
 		}
 
 		private void ProcessCancelMessage(OrderCancelMessage cancelMsg)
 		{
-			Session.CancelOrder(cancelMsg.PortfolioName, (string)cancelMsg.SecurityId.Native, cancelMsg.OrderStringId);
+			_wrapper.CancelOrder(cancelMsg.PortfolioName, (string)cancelMsg.SecurityId.Native, cancelMsg.OrderStringId);
 		}
 
 		private void ProcessReplaceMessage(OrderReplaceMessage replaceMsg)
 		{
-			_smartIdOrders.SyncDo(d =>
-			{
-				AssociateSmartOrderId(replaceMsg.TransactionId, replaceMsg.OldOrderStringId);
-
-				// если заявка была первоначально зарегистрирована не через SmartTrader
-				if (!d.Contains(replaceMsg.OldOrderStringId, replaceMsg.OldTransactionId))
-					d.Add(replaceMsg.OldOrderStringId, replaceMsg.OldTransactionId);
-			});
-
 			//this.AddOrderInfoLog(newOrder, "ReRegisterOrder", () => "ReRegisterOrder(FORTS), old tid={0}, id={1}, sid={2}".Put(oldOrder.TransactionId, oldOrder.Id, oldOrder.GetSmartId()));
 
-			Session.ReRegisterOrder(replaceMsg.PortfolioName, (double)replaceMsg.Price, replaceMsg.OldOrderStringId);
+			_wrapper.ReRegisterOrder(replaceMsg.PortfolioName, (double)replaceMsg.Price, replaceMsg.OldOrderStringId);
 		}
 
 		private void ProcessPortfolioMessage(PortfolioMessage pfMsg)
 		{
 			if (pfMsg.IsSubscribe)
-				Session.SubscribePortfolio(pfMsg.PortfolioName);
+				_wrapper.SubscribePortfolio(pfMsg.PortfolioName);
 			else
-				Session.UnSubscribePortfolio(pfMsg.PortfolioName);
+				_wrapper.UnSubscribePortfolio(pfMsg.PortfolioName);
 		}
 
 		private void ProcessPortolioLookupMessage(PortfolioLookupMessage pfMsg)
@@ -69,7 +57,7 @@ namespace StockSharp.SmartCom
 			if (_lookupPortfoliosId == 0)
 			{
 				_lookupPortfoliosId = pfMsg.TransactionId;
-				Session.LookupPortfolios();
+				_wrapper.LookupPortfolios();
 			}
 			else
 				SendOutError(LocalizedStrings.Str1868);
@@ -77,22 +65,20 @@ namespace StockSharp.SmartCom
 
 		private void OnOrderReRegisterFailed(string smartOrderId)
 		{
-			SessionHolder.AddErrorLog(() => "MoveFailed, smartOrderId={0}".Put(smartOrderId));
+			this.AddErrorLog(() => "MoveFailed, smartOrderId={0}".Put(smartOrderId));
 
-			var transactionId = GetTransactionBySmartId(smartOrderId);
 			SendOutMessage(new ExecutionMessage
 			{
 				ExecutionType = ExecutionTypes.Order,
-				OriginalTransactionId = transactionId,
 				OrderStringId = smartOrderId,
 				OrderState = OrderStates.Failed,
-				Error = new InvalidOperationException(LocalizedStrings.Str1869Params.Put(transactionId))
+				Error = new InvalidOperationException(LocalizedStrings.Str1869Params.Put(smartOrderId))
 			});
 		}
 
 		private void OnOrderReRegistered(string smartOrderId)
 		{
-			SessionHolder.AddInfoLog(() => "MoveSucc, smartOrderId={0}".Put(smartOrderId));
+			this.AddInfoLog(() => "MoveSucc, smartOrderId={0}".Put(smartOrderId));
 		}
 
 		private void OnNewPortfolio(int row, int rowCount, string portfolioName, string exchange, SmartPortfolioStatus status)
@@ -107,11 +93,12 @@ namespace StockSharp.SmartCom
 				}
 			});
 
-			SendInMessage(new PortfolioMessage
-			{
-				PortfolioName = portfolioName,
-				IsSubscribe = true,
-			});
+			// надо использовать из клиентского кода явную подписку
+			//SendInMessage(new PortfolioMessage
+			//{
+			//	PortfolioName = portfolioName,
+			//	IsSubscribe = true,
+			//});
 
 			if ((row + 1) < rowCount)
 				return;
@@ -123,7 +110,7 @@ namespace StockSharp.SmartCom
 		private void OnPortfolioChanged(string portfolioName, decimal cash, decimal leverage, decimal commission, decimal saldo)
 		{
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePortfolioChangeMessage(portfolioName)
 						.Add(PositionChangeTypes.Leverage, leverage)
 						.Add(PositionChangeTypes.Commission, commission)
@@ -134,22 +121,23 @@ namespace StockSharp.SmartCom
 		private void OnPositionChanged(string portfolioName, string smartId, decimal avPrice, decimal amount, decimal planned)
 		{
 			SendOutMessage(
-				SessionHolder.CreatePositionChangeMessage(portfolioName, new SecurityId { Native = smartId })
-				.Add(PositionChangeTypes.BlockedValue, planned)
-				.Add(PositionChangeTypes.AveragePrice, avPrice)
-				.Add(PositionChangeTypes.CurrentValueInLots, amount));
+				this
+					.CreatePositionChangeMessage(portfolioName, new SecurityId { Native = smartId })
+						.Add(PositionChangeTypes.BlockedValue, planned)
+						.Add(PositionChangeTypes.AveragePrice, avPrice)
+						.Add(PositionChangeTypes.CurrentValueInLots, amount));
 		}
 
 		private void OnNewMyTrade(string portfolio, string smartId, long orderId, decimal price, decimal volume, DateTime time, long tradeId)
 		{
-			SessionHolder.AddInfoLog("SmartTrader.AddTrade: tradeId {0} orderId {1} price {2} volume {3} time {4} security {5}",
+			this.AddInfoLog("SmartTrader.AddTrade: tradeId {0} orderId {1} price {2} volume {3} time {4} security {5}",
 				tradeId, orderId, price, volume, time, smartId);
 
 			SendOutMessage(new ExecutionMessage
 			{
 				ExecutionType = ExecutionTypes.Trade,
 				SecurityId = new SecurityId { Native = smartId },
-				OrderId = orderId,
+				OrderId = orderId == 0 ? (long?)null : orderId,
 				TradeId = tradeId,
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				Volume = volume,
@@ -159,13 +147,12 @@ namespace StockSharp.SmartCom
 
 		private void OnNewOrder(int transactionId, string smartOrderId)
 		{
-			AssociateSmartOrderId(transactionId, smartOrderId);
-
 			SendOutMessage(new ExecutionMessage
 			{
 				ExecutionType = ExecutionTypes.Order,
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Active,
+				OrderStringId = smartOrderId,
 			});
 		}
 
@@ -173,37 +160,34 @@ namespace StockSharp.SmartCom
 		{
 			//this.AddOrderErrorLog(order, "OnOrderFailed", () => "sid={0}, reason={1}".Put(smartOrderId, reason));
 
-			AssociateSmartOrderId(transactionId, smartOrderId);
-
 			SendOutMessage(new ExecutionMessage
 			{
 				ExecutionType = ExecutionTypes.Order,
 				OriginalTransactionId = transactionId,
 				OrderState = OrderStates.Failed,
+				OrderStringId = smartOrderId,
 				Error = new InvalidOperationException(reason ?? LocalizedStrings.Str1870Params.Put(transactionId))
 			});
 		}
 
 		private void OnOrderCancelFailed(string smartOrderId)
 		{
-			var transactionId = GetTransactionBySmartId(smartOrderId);
-
 			//this.AddOrderErrorLog(order, "CancelFailed", () => "sid=" + smartOrderId);
 
 			SendOutMessage(new ExecutionMessage
 			{
 				ExecutionType = ExecutionTypes.Order,
-				OriginalTransactionId = transactionId,
+				//OriginalTransactionId = transactionId,
 				OrderStringId = smartOrderId,
 				OrderState = OrderStates.Failed,
-				Error = new InvalidOperationException(LocalizedStrings.Str1871Params.Put(transactionId))
+				Error = new InvalidOperationException(LocalizedStrings.Str1871Params.Put(smartOrderId))
 			});
 		}
 
 		private void OnOrderChanged(string portfolioName, string secSmartId, SmartOrderState state, SmartOrderAction action, SmartOrderType smartType, bool isOneDay,
 			decimal price, int volume, decimal stop, int balance, DateTime time, string smartOrderId, long orderId, int status, int transactionId)
 		{
-			SessionHolder.AddInfoLog(() => "SmartTrader.UpdateOrder: id {0} smartId {1} type {2} direction {3} price {4} volume {5} balance {6} time {7} security {8} state {9}"
+			this.AddInfoLog(() => "SmartTrader.UpdateOrder: id {0} smartId {1} type {2} direction {3} price {4} volume {5} balance {6} time {7} security {8} state {9}"
 				.Put(orderId, smartOrderId, smartType, action, price, volume, balance, time, secSmartId, state));
 
 			var side = action.ToSide();
@@ -218,59 +202,29 @@ namespace StockSharp.SmartCom
 			if (state.IsReject())
 			{
 				// заявка была ранее зарегистрирована через SmartTrader
-				if (_smartIdOrders.ContainsKey(smartOrderId))
-				{
-					// замечены SystemCancel приходящие в процессе Move после которых приходит Active
-					if (state != SmartOrderState.SystemCancel)
-					{
-						//var trId = GetTransactionBySmartId(smartOrderId);
-
-						SendOutMessage(new ExecutionMessage
-						{
-							ExecutionType = ExecutionTypes.Order,
-							OriginalTransactionId = transactionId,
-							OrderStringId = smartOrderId,
-							ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
-							OrderState = OrderStates.Failed,
-							Error = new InvalidOperationException(LocalizedStrings.Str1873Params.Put(transactionId)),
-						});
-					}
-				}
-
-				return;
-			}
-
-			var orderType = smartType.ToOrderType();
-
-			var realOrderId = orderType == OrderTypes.Conditional ? smartOrderId.To<long>() : orderId;
-
-			if (realOrderId == 0)
-			{
-				//var orders = _smartIdOrders[smartOrderId];
-
-				//// заявка не принята биржей, но принята сервером SmartCOM
-				//if (orders.Count > 0)
+				//if (_smartIdOrders.ContainsKey(smartOrderId))
 				//{
-				//	orders.ForEach(o =>
-				//	{
-				//		o.Status = OrderStatus.ReceiveByServer;
-				//		//o.State = OrderStates.Done;
-				//		//o.CancelTime = time;
+				// замечены SystemCancel приходящие в процессе Move после которых приходит Active
+				if (state != SmartOrderState.SystemCancel)
+				{
+					//var trId = GetTransactionBySmartId(smartOrderId);
 
-				//		o.SetSmartStatus(status);
-				//		o.RaiseExtensionInfoChanged();
-				//	});
-
-				//	// http://stocksharp.com/forum/yaf_postst679_-3-0-14--Pierierieghistratsiia-zaiavok-Smart.aspx
-				//	// OrdersChanged вызывается до NewOrders
-				//	//RaiseOrdersChanged(orders);
+					SendOutMessage(new ExecutionMessage
+					{
+						ExecutionType = ExecutionTypes.Order,
+						OriginalTransactionId = transactionId,
+						OrderStringId = smartOrderId,
+						ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
+						OrderState = OrderStates.Failed,
+						Error = new InvalidOperationException(LocalizedStrings.Str1873Params.Put(transactionId)),
+					});
+				}
 				//}
 
 				return;
 			}
 
-			//if (state == SmartOrderState.Cancel && Orders.All(o => o.Id != realOrderId))
-			//	return;
+			var orderType = smartType.ToOrderType();
 
 			var orderState = OrderStates.Active;
 			var orderStatus = OrderStatus.Accepted;
@@ -347,36 +301,16 @@ namespace StockSharp.SmartCom
 				Volume = volume,
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				Balance = balance,
-				OrderId = realOrderId,
+				OrderId = orderId == 0 ? (long?)null : orderId,
 				OrderType = orderType,
 				OrderState = orderState,
 				OrderStatus = orderStatus,
 				OriginalTransactionId = transactionId,
 				OrderStringId = smartOrderId,
-				OrderBoardId = orderId.To<string>(),
-				ExpiryDate = isOneDay ? DateTimeOffset.Now.Date.ApplyTimeZone(TimeHelper.Moscow) : DateTimeOffset.MaxValue,
+				ExpiryDate = isOneDay ? DateTimeOffset.Now.Date.ApplyTimeZone(TimeHelper.Moscow) : (DateTimeOffset?)null,
 				Condition = orderType == OrderTypes.Conditional ? new SmartComOrderCondition { StopPrice = stop } : null,
 				ExecutionType = ExecutionTypes.Order,
 			});
-		}
-
-		private void AssociateSmartOrderId(long transactionId, string smartOrderId)
-		{
-			_smartIdOrders.Add(smartOrderId, transactionId);
-			//_smartOrderIds.Add(transactionId, smartOrderId);
-		}
-
-		private long GetTransactionBySmartId(string smartOrderId)
-		{
-			lock (_smartIdOrders.SyncRoot)
-			{
-				var orders = _smartIdOrders[smartOrderId];
-
-				if (orders == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1874Params.Put(smartOrderId));
-
-				return orders.Last();	
-			}
 		}
 	}
 }

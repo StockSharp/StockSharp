@@ -7,6 +7,7 @@ namespace StockSharp.Quik
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -451,12 +452,12 @@ namespace StockSharp.Quik
 			return dateTime.ApplyTimeZone(TimeHelper.Moscow);
 		}
 
-		public static string GetSecurityClass(this IMessageSessionHolder sessionHolder, SecurityId securityId)
+		public static string GetSecurityClass(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, SecurityId securityId)
 		{
-			if (sessionHolder == null)
-				throw new ArgumentNullException("sessionHolder");
+			if (securityClassInfo == null)
+				throw new ArgumentNullException("securityClassInfo");
 
-			var pairs = sessionHolder.SecurityClassInfo
+			var pairs = securityClassInfo
 				.Where(p =>
 					(securityId.SecurityType == null || p.Value.First == securityId.SecurityType) &&
 					p.Value.Second.CompareIgnoreCase(securityId.BoardCode)
@@ -471,6 +472,24 @@ namespace StockSharp.Quik
 				default:
 					return pairs[0].Key;
 			}
+		}
+
+		public static void FillDefault(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo)
+		{
+			securityClassInfo.Add("SPBOPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			securityClassInfo.Add("SPBFUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
+
+			// http://stocksharp.com/forum/yaf_postsm11628_Pozitsii-po-dierivativam.aspx#post11628
+			securityClassInfo.Add("OPTUX", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Ux.Code));
+			securityClassInfo.Add("FUTUX", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Ux.Code));
+			//securityClassInfo.Add("GTS", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.UxStock.Code));
+
+			// http://groups.google.ru/group/stocksharp/msg/28518b814c925521
+			securityClassInfo.Add("RTSST", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.Forts.Code));
+
+			securityClassInfo.Add("QJSIM", RefTuple.Create(SecurityTypes.Stock, ExchangeBoard.MicexJunior.Code));
+
+			securityClassInfo.Add("RTSIDX", RefTuple.Create(SecurityTypes.Index, ExchangeBoard.Forts.Code));
 		}
 	}
 }

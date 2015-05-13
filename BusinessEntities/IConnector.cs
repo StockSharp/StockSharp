@@ -9,37 +9,6 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Состояния подключений.
-	/// </summary>
-	public enum ConnectionStates
-	{
-		/// <summary>
-		/// Не активно.
-		/// </summary>
-		Disconnected,
-
-		/// <summary>
-		/// В процессе отключения.
-		/// </summary>
-		Disconnecting,
-
-		/// <summary>
-		/// В процессе подключения.
-		/// </summary>
-		Connecting,
-
-		/// <summary>
-		/// Подключение активно.
-		/// </summary>
-		Connected,
-
-		/// <summary>
-		/// Ошибка подключения.
-		/// </summary>
-		Failed,
-	}
-
-	/// <summary>
 	/// Основной интерфейс, предоставляющий подключение с торговыми системами.
 	/// </summary>
 	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider
@@ -170,29 +139,9 @@ namespace StockSharp.BusinessEntities
 		event Action<Exception> ConnectionError;
 
 		/// <summary>
-		/// Событие успешного запуска экспорта.
-		/// </summary>
-		event Action ExportStarted;
-
-		/// <summary>
-		/// Событие успешной остановки экспорта.
-		/// </summary>
-		event Action ExportStopped;
-
-		/// <summary>
-		/// Событие ошибки экспорта (например, соединения было разорвано).
-		/// </summary>
-		event Action<Exception> ExportError;
-
-		/// <summary>
 		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
 		/// </summary>
-		event Action<Exception> ProcessDataError;
-
-		/// <summary>
-		/// Событие, сигнализирующее о новых экспортируемых данных.
-		/// </summary>
-		event Action NewDataExported;
+		event Action<Exception> Error;
 
 		/// <summary>
 		/// Событие, сигнализирующее об изменении текущего времени на биржевых площадках <see cref="ExchangeBoards"/>.
@@ -294,11 +243,6 @@ namespace StockSharp.BusinessEntities
 		ConnectionStates ConnectionState { get; }
 
 		/// <summary>
-		/// Состояние экспорта.
-		/// </summary>
-		ConnectionStates ExportState { get; }
-
-		/// <summary>
 		/// Поддерживается ли перерегистрация заявок через метод <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
 		/// в виде одной транзакции.
 		/// </summary>
@@ -330,6 +274,16 @@ namespace StockSharp.BusinessEntities
 		IEnumerable<Portfolio> RegisteredPortfolios { get; }
 
 		/// <summary>
+		/// Адаптер для транзакций.
+		/// </summary>
+		IMessageAdapter TransactionAdapter { get; }
+
+		/// <summary>
+		/// Адаптер для маркет-данных.
+		/// </summary>
+		IMessageAdapter MarketDataAdapter { get; }
+
+		/// <summary>
 		/// Подключиться к торговой системе.
 		/// </summary>
 		void Connect();
@@ -338,16 +292,6 @@ namespace StockSharp.BusinessEntities
 		/// Отключиться от торговой системы.
 		/// </summary>
 		void Disconnect();
-
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		void StartExport();
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="StartExport"/>.
-		/// </summary>
-		void StopExport();
 
 		/// <summary>
 		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.

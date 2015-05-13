@@ -49,7 +49,7 @@ namespace StockSharp.Hydra.Sterling
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<SterlingTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<SterlingTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new SterlingSettings(settings);
 
@@ -57,11 +57,7 @@ namespace StockSharp.Hydra.Sterling
 			{
 			}
 
-			return new MarketDataConnector<SterlingTrader>(EntityRegistry.Securities, this, () =>
-			{
-				var trader = new SterlingTrader();
-				return trader;
-			});
+			return new MarketDataConnector<SterlingTrader>(EntityRegistry.Securities, this, () => new SterlingTrader());
 		}
 	}
 }

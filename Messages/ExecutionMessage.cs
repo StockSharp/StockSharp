@@ -84,7 +84,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Номер транзакции.
+		/// Идентификатор транзакции.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -93,7 +93,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Номер первоначальной транзакции, для которой данное сообщение является ответом.
+		/// Идентификатор первоначальной транзакции, для которой данное сообщение является ответом.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OriginalTrasactionKey)]
@@ -140,7 +140,7 @@ namespace StockSharp.Messages
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Идентификатор заявки электронной площадки. Используется, если <see cref="OrderId"/> или <see cref="OrderStringId"/> содержит идентификатор брокерской системы.
+		/// Идентификатор заявки электронной площадки. Используется, если <see cref="OrderId"/> или <see cref="OrderStringId"/> содержат идентификаторы брокерской системы.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str117Key)]
@@ -270,18 +270,17 @@ namespace StockSharp.Messages
 		public bool? IsSystem { get; set; }
 
 		/// <summary>
-		/// Время экспирации заявки.
+		/// Время экспирации заявки. По-умолчанию равно <see langword="null"/>, что означает действие заявки до отмены (GTC).
 		/// </summary>
 		/// <remarks>
-		/// Если значение равно <see cref="DateTime.Today"/>, то заявка выставляется сроком на текущую сессию.
-		/// Если значение равно <see cref="DateTime.MaxValue"/>, то заявка выставляется до отмены (GTC).
+		/// Если значение равно <see langword="null"/> или <see cref="DateTimeOffset.MaxValue"/>, то заявка выставляется до отмены (GTC).
 		/// Иначе, указывается конкретный срок.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
 		[DescriptionLoc(LocalizedStrings.Str142Key)]
 		[MainCategory]
-		public DateTimeOffset ExpiryDate { get; set; }
+		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <summary>
 		/// Условие исполнения лимитированной заявки.
@@ -443,7 +442,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта.
+		/// Создать копию объекта <see cref="ExecutionMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

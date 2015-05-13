@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("PeakBar")]
 	[DescriptionLoc(LocalizedStrings.Str817Key)]
-	public class PeakBar : BaseIndicator<decimal>
+	public class PeakBar : BaseIndicator
 	{
 		private decimal _currentMaximum = decimal.MinValue;
 
@@ -29,7 +29,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="PeakBar"/>.
 		/// </summary>
 		public PeakBar()
-			: base(typeof(Candle))
 		{
 		}
 
@@ -73,7 +72,9 @@ namespace StockSharp.Algo.Indicators
 				}
 				else if (candle.LowPrice <= _currentMaximum - ReversalAmount)
 				{
-					IsFormed = true;
+					if (input.IsFinal)
+						IsFormed = true;
+
 					return new DecimalIndicatorValue(this, _valueBarCount);
 				}
 
@@ -81,7 +82,7 @@ namespace StockSharp.Algo.Indicators
 			}
 			finally
 			{
-				if(input.IsFinal)
+				if (input.IsFinal)
 					_currentBarCount++;
 			}
 		}

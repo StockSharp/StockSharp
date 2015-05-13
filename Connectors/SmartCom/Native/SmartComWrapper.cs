@@ -243,7 +243,7 @@ namespace StockSharp.SmartCom.Native
 		/// <description>Код ЦБ из таблицы котировок SmartTrade.</description>
 		/// </item>
 		/// <item>
-		/// <description>Номер заявки на сервере котировок.</description>
+		/// <description>Идентификатор заявки на сервере котировок.</description>
 		/// </item>
 		/// <item>
 		/// <description>Цена сделки.</description>
@@ -373,7 +373,7 @@ namespace StockSharp.SmartCom.Native
 		/// Передаваемые параметры:
 		/// <list type="number">
 		/// <item>
-		/// <description>Уникальный номер заявки.</description>
+		/// <description>Идентификатор заявки.</description>
 		/// </item>
 		/// <item>
 		/// <description>Id заявки на сервере котировок.</description>
@@ -425,13 +425,13 @@ namespace StockSharp.SmartCom.Native
 		/// <description>Id приказа на сервере котировок.</description>
 		/// </item>
 		/// <item>
-		/// <description>Номер приказа на сервере котировок.</description>
+		/// <description>Идентификатор приказа на сервере котировок.</description>
 		/// </item>
 		/// <item>
 		/// <description>Системный статус.</description>
 		/// </item>
 		/// <item>
-		/// <description>Номер транзакции.</description>
+		/// <description>Идентификатор транзакции.</description>
 		/// </item>
 		/// </list>
 		/// </remarks>
@@ -444,7 +444,7 @@ namespace StockSharp.SmartCom.Native
 		/// Передаваемые параметры:
 		/// <list type="number">
 		/// <item>
-		/// <description>Уникальный номер заявки.</description>
+		/// <description>Идентификатор заявки.</description>
 		/// </item>
 		/// <item>
 		/// <description>Id заявки на сервере котировок.</description>
@@ -648,7 +648,7 @@ namespace StockSharp.SmartCom.Native
 		/// <param name="price">Цена.</param>
 		/// <param name="volume">Объем.</param>
 		/// <param name="stopPrice">Стоп цена (если регистрируется стоп-заявка).</param>
-		/// <param name="transactionId">Уникальный номер транзакции.</param>
+		/// <param name="transactionId">Идентификатор транзакции.</param>
 		public abstract void RegisterOrder(string portfolioName, string securityId, SmartOrderAction action, SmartOrderType type, SmartOrderValidity validity, double price, int volume, double stopPrice, int transactionId);
 
 		/// <summary>

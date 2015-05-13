@@ -20,13 +20,13 @@
 		}
 
 		/// <summary>
-		/// Номер запроса.
+		/// Идентификатор запроса.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Номер первоначального сообщения <see cref="ChangePasswordMessage.TransactionId"/>,
+		/// Идентификатор первоначального сообщения <see cref="ChangePasswordMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
 		[DataMember]

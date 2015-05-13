@@ -428,7 +428,7 @@
       <Project>{aaa445e0-aa85-4b49-ad45-edd1b4839137}</Project>
       <Name>AlfaDirect</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\BitStamp\BitStamp.csproj">
+    <ProjectReference Include="..\..\Connectors\BitStamp\BitStamp.csproj">
       <Project>{90b93af4-3168-4415-b916-9e078f192696}</Project>
       <Name>BitStamp</Name>
     </ProjectReference>
@@ -440,7 +440,11 @@
       <Project>{af225452-1cf1-48a2-b381-c02bebe643d7}</Project>
       <Name>Btce</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\ETrade\ETrade.csproj">
+    <ProjectReference Include="..\..\Connectors\CQG\CQG.csproj">
+      <Project>{34984b57-9200-47b9-ac78-0d93fdfa437a}</Project>
+      <Name>CQG</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Connectors\ETrade\ETrade.csproj">
       <Project>{480539a8-ca30-4b87-b038-6ad854da0c6a}</Project>
       <Name>ETrade</Name>
     </ProjectReference>
@@ -452,7 +456,7 @@
       <Project>{f17d780e-6f82-40fd-84e1-c4eb09853bbd}</Project>
       <Name>InteractiveBrokers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\IQFeed\IQFeed.csproj">
+    <ProjectReference Include="..\..\Connectors\IQFeed\IQFeed.csproj">
       <Project>{f3068408-9764-432e-8fb4-596b308edb4f}</Project>
       <Name>IQFeed</Name>
     </ProjectReference>
@@ -464,7 +468,7 @@
       <Project>{e0c3bdd6-e75f-48c9-bf8c-05efece3e0b2}</Project>
       <Name>Micex</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Oanda\Oanda.csproj">
+    <ProjectReference Include="..\..\Connectors\Oanda\Oanda.csproj">
       <Project>{9188d051-7faa-4cf7-9d93-6d59e2faedd0}</Project>
       <Name>Oanda</Name>
     </ProjectReference>
@@ -491,6 +495,10 @@
     <ProjectReference Include="..\..\Connectors\Quik\Quik.csproj">
       <Project>{1b798a4e-2271-46f9-9c2d-4e563114e268}</Project>
       <Name>Quik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Connectors\Sterling\Sterling.csproj">
+      <Project>{9add140b-1c43-4077-b32e-0eba81648c4d}</Project>
+      <Name>Sterling</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Connectors\Transaq\Transaq.csproj">
       <Project>{a00e5a4b-cb24-474a-8f2b-06a2e370c4f6}</Project>

@@ -2,56 +2,26 @@ namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
-	using System.Threading;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Interop;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
 	using StockSharp.Logging;
 	using StockSharp.Localization;
 
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+
 	/// <summary>
-	/// Базовый адаптер сообщений.
+	/// Базовый адаптер, конвертирующий сообщения <see cref="Message"/> в команды торговой системы и обратно.
 	/// </summary>
-	/// <typeparam name="TSessionHolder">Тип контейнера сессии.</typeparam>
-	public abstract class MessageAdapter<TSessionHolder> : Disposable, IMessageAdapter
-		where TSessionHolder : class, IMessageSessionHolder
+	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
-		/// <summary>
-		/// Состояния подключений.
-		/// </summary>
-		private enum ConnectionStates
-		{
-			/// <summary>
-			/// Не активно.
-			/// </summary>
-			Disconnected,
-
-			/// <summary>
-			/// В процессе отключения.
-			/// </summary>
-			Disconnecting,
-
-			/// <summary>
-			/// В процессе подключения.
-			/// </summary>
-			Connecting,
-
-			/// <summary>
-			/// Подключение активно.
-			/// </summary>
-			Connected,
-
-			/// <summary>
-			/// Ошибка подключения.
-			/// </summary>
-			Failed,
-		}
-
 		/// <summary>
 		/// Ожидание выполнения некоего действия, связанного с ключом.
 		/// </summary>
@@ -209,11 +179,11 @@ namespace StockSharp.Messages
 				var bidVolume = message.Changes.TryGetValue(Level1Fields.BestBidVolume);
 				var askVolume = message.Changes.TryGetValue(Level1Fields.BestAskVolume);
 
-				_bid.Price = bidPrice == null ? 0 : (decimal)bidPrice;
-				_bid.Volume = bidVolume == null ? 0 : (decimal)bidVolume;
+				_bid.Price = (decimal?)bidPrice ?? 0m;
+				_bid.Volume = (decimal?)bidVolume ?? 0m;
 
-				_ask.Price = askPrice == null ? 0 : (decimal)askPrice;
-				_ask.Volume = askVolume == null ? 0 : (decimal)askVolume;
+				_ask.Price = (decimal?)askPrice ?? 0m;
+				_ask.Volume = (decimal?)askVolume ?? 0m;
 
 				_localTime = message.LocalTime;
 				_serverTime = message.ServerTime;
@@ -227,63 +197,141 @@ namespace StockSharp.Messages
 
 		//private readonly bool _checkLicense;
 
-		private Timer _marketTimeChangedTimer;
-		private DateTime _heartbeatPrevTime;
 		private DateTime _prevTime;
-
-		// дополнительные состояния для ConnectionStates
-		private const ConnectionStates _none = (ConnectionStates)0 - 1;
-		private const ConnectionStates _reConnecting = (ConnectionStates)10;
-		//private const ConnectionStates _reStartingExport = (ConnectionStates)11;
-
-		private ConnectionStates _currState = _none;
-		private ConnectionStates _prevState = _none;
-
-		private int _connectingAttemptCount;
-		private TimeSpan _connectionTimeOut;
 
 		private readonly CodeTimeOut<long> _secLookupTimeOut = new CodeTimeOut<long>();
 		private readonly CodeTimeOut<long> _pfLookupTimeOut = new CodeTimeOut<long>();
 
-		private readonly SyncObject _timeSync = new SyncObject();
-		private bool _canSendTimeIn;
-
 		/// <summary>
-		/// Инициализировать <see cref="MessageAdapter{TSessionHolder}"/>.
+		/// Инициализировать <see cref="MessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		///// <param name="checkLicense">Проверять наличие лицензии.</param>
-		protected MessageAdapter(MessageAdapterTypes type, TSessionHolder sessionHolder/*, bool checkLicense = true*/)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		protected MessageAdapter(IdGenerator transactionIdGenerator/*, bool checkLicense = true*/)
 		{
+			if (transactionIdGenerator == null)
+				throw new ArgumentNullException("transactionIdGenerator");
+
 			Platform = Platforms.AnyCPU;
 			//_checkLicense = checkLicense;
 
-			Type = type;
-			TransactionIdGenerator = sessionHolder.TransactionIdGenerator;
-			SessionHolder = sessionHolder;
+			TransactionIdGenerator = transactionIdGenerator;
+			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
+
+			CreateDepthFromLevel1 = true;
+
+			//IsMarketDataEnabled = IsTransactionEnabled = true;
 		}
 
-		private TSessionHolder _sessionHolder;
+		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
 
 		/// <summary>
-		/// Контейнер для сессии.
+		/// Поддерживаемые типы сообщений, который может обработать адаптер.
 		/// </summary>
-		public TSessionHolder SessionHolder
+		[Browsable(false)]
+		public virtual MessageTypes[] SupportedMessages
 		{
-			get { return _sessionHolder; }
+			get { return _supportedMessages; }
 			set
 			{
 				if (value == null)
-					throw new ArgumentNullException();
-				
-				_sessionHolder = value;
+					throw new ArgumentNullException("value");
+
+				_supportedMessages = value;
 			}
 		}
 
-		IMessageSessionHolder IMessageAdapter.SessionHolder
+		/// <summary>
+		/// Проверить введенные параметры на валидность.
+		/// </summary>
+		[Browsable(false)]
+		public virtual bool IsValid { get { return true; } }
+
+		/// <summary>
+		/// Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.
+		/// </summary>
+		[Browsable(false)]
+		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; private set; }
+
+		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
+
+		/// <summary>
+		/// Интервал оповещения сервера о том, что подключение еще живое.
+		/// Значение <see cref="TimeSpan.Zero"/> означает выключенное оповещение.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str186Key)]
+		[DisplayNameLoc(LocalizedStrings.Str192Key)]
+		[DescriptionLoc(LocalizedStrings.Str193Key)]
+		public TimeSpan HeartbeatInterval
 		{
-			get { return SessionHolder; }
+			get { return _heartbeatInterval; }
+			set
+			{
+				if (value < TimeSpan.Zero)
+					throw new ArgumentOutOfRangeException();
+
+				_heartbeatInterval = value;
+			}
+		}
+
+		/// <summary>
+		/// Создавать объединенный инструмент для инструментов с разных торговых площадок.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.SecuritiesKey)]
+		[DisplayNameLoc(LocalizedStrings.Str197Key)]
+		[DescriptionLoc(LocalizedStrings.Str198Key)]
+		[PropertyOrder(1)]
+		public bool CreateAssociatedSecurity { get; set; }
+
+		private string _associatedBoardCode = "ALL";
+
+		/// <summary>
+		/// Код площадки для объединенного инструмента.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.SecuritiesKey)]
+		[DisplayNameLoc(LocalizedStrings.Str197Key)]
+		[DescriptionLoc(LocalizedStrings.Str199Key)]
+		[PropertyOrder(10)]
+		public string AssociatedBoardCode
+		{
+			get { return _associatedBoardCode; }
+			set { _associatedBoardCode = value; }
+		}
+
+		/// <summary>
+		/// Обновлять стакан для инструмента при появлении сообщения <see cref="Level1ChangeMessage"/>.
+		/// По умолчанию включено.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.SecuritiesKey)]
+		[DisplayNameLoc(LocalizedStrings.Str200Key)]
+		[DescriptionLoc(LocalizedStrings.Str201Key)]
+		[PropertyOrder(20)]
+		public bool CreateDepthFromLevel1 { get; set; }
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// </summary>
+		[Browsable(false)]
+		public virtual bool SecurityLookupRequired
+		{
+			get { return SupportedMessages.Contains(MessageTypes.SecurityLookup); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		[Browsable(false)]
+		public virtual bool PortfolioLookupRequired
+		{
+			get { return SupportedMessages.Contains(MessageTypes.PortfolioLookup); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// </summary>
+		[Browsable(false)]
+		public virtual bool OrderStatusRequired
+		{
+			get { return SupportedMessages.Contains(MessageTypes.OrderStatus); }
 		}
 
 		/// <summary>
@@ -305,72 +353,142 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Разрядность процесса, в котором может работать адаптер. По-умолчанию равно <see cref="Platforms.AnyCPU"/>.
 		/// </summary>
+		[Browsable(false)]
 		public Platforms Platform { get; protected set; }
 
-		private IMessageProcessor _inMessageProcessor;
+		/// <summary>
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// </summary>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public virtual OrderCondition CreateOrderCondition()
+		{
+			return null;
+		}
+
+		private readonly ReConnectionSettings _reConnectionSettings = new ReConnectionSettings();
 
 		/// <summary>
-		/// Обработчик входящих сообщений.
+		/// Настройки механизма отслеживания соединений <see cref="IMessageAdapter"/> с торговом системой.
 		/// </summary>
-		public IMessageProcessor InMessageProcessor
+		public ReConnectionSettings ReConnectionSettings
 		{
-			get { return _inMessageProcessor; }
+			get { return _reConnectionSettings; }
+		}
+
+		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
+		{
+			if (!CreateAssociatedSecurity)
+				return;
+
+			if (quoteMsg.SecurityId.IsDefault())
+				return;
+
+			var builder = _quoteChangeDepthBuilders
+				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
+
+			NewOutMessage.SafeInvoke(builder.Process(quoteMsg));
+		}
+
+		private SecurityId CloneSecurityId(SecurityId securityId)
+		{
+			return new SecurityId
+			{
+				SecurityCode = securityId.SecurityCode,
+				BoardCode = AssociatedBoardCode,
+				SecurityType = securityId.SecurityType,
+				Bloomberg = securityId.Bloomberg,
+				Cusip = securityId.Cusip,
+				IQFeed = securityId.IQFeed,
+				InteractiveBrokers = securityId.InteractiveBrokers,
+				Isin = securityId.Isin,
+				Native = securityId.Native,
+				Plaza = securityId.Plaza,
+				Ric = securityId.Ric,
+				Sedol = securityId.Sedol,
+			};
+		}
+
+		private IdGenerator _transactionIdGenerator;
+
+		/// <summary>
+		/// Генератор идентификаторов транзакций.
+		/// </summary>
+		[Browsable(false)]
+		public IdGenerator TransactionIdGenerator
+		{
+			get { return _transactionIdGenerator; }
 			set
 			{
-				if (_inMessageProcessor == value)
-					return;
+				if (value == null)
+					throw new ArgumentNullException("value");
 
-				if (_inMessageProcessor != null)
-					_inMessageProcessor.NewMessage -= OnInMessageProcessor;
-
-				_inMessageProcessor = value;
-
-				if (_inMessageProcessor == null)
-					return;
-
-				_inMessageProcessor.NewMessage += OnInMessageProcessor;
+				_transactionIdGenerator = value;
 			}
 		}
 
-		private IMessageProcessor _outMessageProcessor;
-
 		/// <summary>
-		/// Обработчик исходящих сообщений.
+		/// Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей.
 		/// </summary>
-		public IMessageProcessor OutMessageProcessor
+		/// <remarks>
+		/// Значение по умолчанию равно 10 секундам.
+		/// </remarks>
+		[Browsable(false)]
+		public TimeSpan LookupTimeOut
 		{
-			get { return _outMessageProcessor; }
+			get { return _secLookupTimeOut.TimeOut; }
 			set
 			{
-				if (_outMessageProcessor == value)
-					return;
-
-				if (_outMessageProcessor != null)
-					_outMessageProcessor.NewMessage -= OnOutMessageProcessor;
-
-				_outMessageProcessor = value;
-
-				if (_outMessageProcessor == null)
-					return;
-
-				_outMessageProcessor.NewMessage += OnOutMessageProcessor;
+				_secLookupTimeOut.TimeOut = value;
+				_pfLookupTimeOut.TimeOut = value;
 			}
 		}
 
 		/// <summary>
-		/// Метод для обработки входящих сообщений для <see cref="InMessageProcessor"/>.
+		/// Событие получения исходящего сообщения.
+		/// </summary>
+		public event Action<Message> NewOutMessage;
+
+		bool IMessageChannel.IsOpened
+		{
+			get { return true; }
+		}
+
+		void IMessageChannel.Open()
+		{
+		}
+
+		void IMessageChannel.Close()
+		{
+		}
+
+		/// <summary>
+		/// Отправить входящее сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер.</param>
-		protected virtual void OnInMessageProcessor(Message message, IMessageAdapter adapter)
+		public void SendInMessage(Message message)
 		{
-			if (this != adapter)
-				return;
+			//if (!CheckLicense(message))
+			//	return;
+
+			if (message.Type == MessageTypes.Connect)
+			{
+				if (!Platform.IsCompatible())
+				{
+					SendOutMessage(new ConnectMessage
+					{
+						Error = new InvalidOperationException(LocalizedStrings.Str169Params.Put(GetType().Name, Platform))
+					});
+
+					return;
+				}
+			}
+
+			InitMessageLocalTime(message);
 
 			// при отключенном состоянии пропускаем только TimeMessage
 			// остальные типы сообщений могут использоваться (например, в эмуляторе)
-			if ((_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected) && message.Type == MessageTypes.Time)
-				return;
+			//if ((_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected) && message.Type == MessageTypes.Time)
+			//	return;
 
 			switch (message.Type)
 			{
@@ -388,45 +506,6 @@ namespace StockSharp.Messages
 
 					break;
 				}
-				case MessageTypes.Connect:
-				{
-					lock (_timeSync)
-					{
-						_canSendTimeIn = true;
-						_currState = ConnectionStates.Connecting;	
-					}
-
-					if (_prevState == _none)
-					{
-						_connectionTimeOut = SessionHolder.ReConnectionSettings.TimeOutInterval;
-						_connectingAttemptCount = SessionHolder.ReConnectionSettings.AttemptCount;
-					}
-					else
-						_connectionTimeOut = SessionHolder.ReConnectionSettings.Interval;
-
-					break;
-				}
-				case MessageTypes.Disconnect:
-				{
-					lock (_timeSync)
-						_currState = ConnectionStates.Disconnecting;
-
-					_connectionTimeOut = SessionHolder.ReConnectionSettings.TimeOutInterval;
-
-					break;
-				}
-				case MessageTypes.Time:
-				{
-					lock (_timeSync)
-						_canSendTimeIn = true;
-
-					break;
-				}
-				case MessageTypes.ClearMessageQueue:
-				{
-					InMessageProcessor.Clear((ClearMessageQueueMessage)message);
-					return;
-				}
 			}
 
 			try
@@ -435,7 +514,7 @@ namespace StockSharp.Messages
 			}
 			catch (Exception ex)
 			{
-				SessionHolder.AddErrorLog(ex);
+				this.AddErrorLog(ex);
 
 				switch (message.Type)
 				{
@@ -542,214 +621,14 @@ namespace StockSharp.Messages
 
 				SendOutError(ex);
 			}
-		}
 
-		/// <summary>
-		/// Метод обработки исходящих сообщений для <see cref="OutMessageProcessor"/>.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <param name="adapter">Адаптер.</param>
-		protected virtual void OnOutMessageProcessor(Message message, IMessageAdapter adapter)
-		{
-			if (this != adapter)
-				return;
-
-			switch (message.Type)
+			if (message.IsBack)
 			{
-				case MessageTypes.ClearMessageQueue:
-					OutMessageProcessor.Clear((ClearMessageQueueMessage)message);
-					return;
+				message.IsBack = false;
 
-				case MessageTypes.Security:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					if (!SessionHolder.CreateAssociatedSecurity)
-						break;
-
-					var clone = (SecurityMessage)message.Clone();
-					clone.SecurityId = CloneSecurityId(clone.SecurityId);
-					NewOutMessage.SafeInvoke(clone);
-
-					break;
-				}
-
-				case MessageTypes.Level1Change:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					var l1Msg = (Level1ChangeMessage)message;
-
-					if (l1Msg.SecurityId.IsDefault())
-						break;
-
-					if (SessionHolder.CreateAssociatedSecurity)
-					{
-						// обновление BestXXX для ALL из конкретных тикеров
-						var clone = (Level1ChangeMessage)l1Msg.Clone();
-						clone.SecurityId = CloneSecurityId(clone.SecurityId);
-						NewOutMessage.SafeInvoke(clone);
-					}
-
-					if (SessionHolder.CreateDepthFromLevel1)
-					{
-						// генерация стакана из Level1
-						var builder = _level1DepthBuilders.SafeAdd(l1Msg.SecurityId, c => new Level1DepthBuilder(c));
-
-						if (builder.Process(l1Msg))
-						{
-							var quoteMsg = builder.QuoteChange;
-
-							NewOutMessage.SafeInvoke(quoteMsg);
-							CreateAssociatedSecurityQuotes(quoteMsg);
-						}
-					}
-					
-					break;
-				}
-
-				case MessageTypes.QuoteChange:
-				{
-					var quoteMsg = (QuoteChangeMessage)message;
-
-					NewOutMessage.SafeInvoke(quoteMsg);
-
-					if (SessionHolder.CreateDepthFromLevel1)
-						_level1DepthBuilders.SafeAdd(quoteMsg.SecurityId, c => new Level1DepthBuilder(c)).HasDepth = true;
-
-					CreateAssociatedSecurityQuotes(quoteMsg);
-					break;
-				}
-
-				case MessageTypes.Execution:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					if (!SessionHolder.CreateAssociatedSecurity)
-						break;
-
-					var execMsg = (ExecutionMessage)message;
-
-					if (execMsg.SecurityId.IsDefault())
-						break;
-
-					switch (execMsg.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-						case ExecutionTypes.OrderLog:
-						{
-							var clone = (ExecutionMessage)message.Clone();
-							clone.SecurityId = CloneSecurityId(clone.SecurityId);
-							NewOutMessage.SafeInvoke(clone);
-							break;
-						}
-					}
-
-					break;
-				}
-
-				default:
-					NewOutMessage.SafeInvoke(message);
-					break;
+				// time msg should be return back
+				SendOutMessage(message);
 			}
-		}
-
-		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
-		{
-			if (!SessionHolder.CreateAssociatedSecurity)
-				return;
-
-			if (quoteMsg.SecurityId.IsDefault())
-				return;
-
-			var builder = _quoteChangeDepthBuilders
-				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, SessionHolder.AssociatedBoardCode));
-
-			NewOutMessage.SafeInvoke(builder.Process(quoteMsg));
-		}
-
-		private SecurityId CloneSecurityId(SecurityId securityId)
-		{
-			return new SecurityId
-			{
-				SecurityCode = securityId.SecurityCode,
-				BoardCode = SessionHolder.AssociatedBoardCode,
-				SecurityType = securityId.SecurityType,
-				Bloomberg = securityId.Bloomberg,
-				Cusip = securityId.Cusip,
-				IQFeed = securityId.IQFeed,
-				InteractiveBrokers = securityId.InteractiveBrokers,
-				Isin = securityId.Isin,
-				Native = securityId.Native,
-				Plaza = securityId.Plaza,
-				Ric = securityId.Ric,
-				Sedol = securityId.Sedol,
-			};
-		}
-
-		/// <summary>
-		/// Генератор идентификаторов транзакций.
-		/// </summary>
-		public IdGenerator TransactionIdGenerator { get; private set; }
-
-		/// <summary>
-		/// Тип адаптера.
-		/// </summary>
-		public MessageAdapterTypes Type { get; private set; }
-
-		/// <summary>
-		/// Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей.
-		/// </summary>
-		/// <remarks>
-		/// Значение по умолчанию равно 10 секундам.
-		/// </remarks>
-		public TimeSpan LookupTimeOut
-		{
-			get { return _secLookupTimeOut.TimeOut; }
-			set
-			{
-				_secLookupTimeOut.TimeOut = value;
-				_pfLookupTimeOut.TimeOut = value;
-			}
-		}
-
-		/// <summary>
-		/// Событие получения исходящего сообщения.
-		/// </summary>
-		public event Action<Message> NewOutMessage;
-
-		/// <summary>
-		/// Отправить входящее сообщение.
-		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		public virtual void SendInMessage(Message message)
-		{
-			//if (!CheckLicense(message))
-			//	return;
-
-			if (message.Type == MessageTypes.Connect)
-			{
-				if (!Platform.IsCompatible())
-				{
-					SendOutMessage(new ConnectMessage
-					{
-						Error = new InvalidOperationException(LocalizedStrings.Str169Params.Put(GetType().Name, Platform))
-					});
-
-					return;
-				}
-			}
-
-			//месседжи с заявками могут складываться из потока обработки
-			var force = message.Type == MessageTypes.OrderRegister ||
-			            message.Type == MessageTypes.OrderReplace ||
-			            message.Type == MessageTypes.OrderPairReplace ||
-			            message.Type == MessageTypes.OrderCancel ||
-			            message.Type == MessageTypes.OrderGroupCancel;
-
-			InitMessageLocalTime(message);
-
-			_inMessageProcessor.EnqueueMessage(message, this, force);
 		}
 
 		//private bool CheckLicense(Message message)
@@ -807,56 +686,117 @@ namespace StockSharp.Messages
 		protected abstract void OnSendInMessage(Message message);
 
 		/// <summary>
-		/// Добавить <see cref="Message"/> в исходящую очередь <see cref="IMessageAdapter"/>.
+		/// Отправить исходящее сообщение, вызвав событие <see cref="NewOutMessage"/>.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
 		public virtual void SendOutMessage(Message message)
 		{
 			InitMessageLocalTime(message);
 
-			_outMessageProcessor.EnqueueMessage(message, this, false);
-
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
+				case MessageTypes.Security:
 				{
-					if (((ConnectMessage)message).Error == null)
-					{
-						lock (_timeSync)
-							_prevState = _currState = ConnectionStates.Connected;
+					NewOutMessage.SafeInvoke(message);
 
-						StartMarketTimer();
-					}
-					else
+					if (!CreateAssociatedSecurity)
+						break;
+
+					var clone = (SecurityMessage)message.Clone();
+					clone.SecurityId = CloneSecurityId(clone.SecurityId);
+					NewOutMessage.SafeInvoke(clone);
+
+					break;
+				}
+
+				case MessageTypes.Level1Change:
+				{
+					NewOutMessage.SafeInvoke(message);
+
+					var l1Msg = (Level1ChangeMessage)message;
+
+					if (l1Msg.SecurityId.IsDefault())
+						break;
+
+					if (CreateAssociatedSecurity)
 					{
-						lock (_timeSync)
-							_prevState = _currState = ConnectionStates.Failed;
+						// обновление BestXXX для ALL из конкретных тикеров
+						var clone = (Level1ChangeMessage)l1Msg.Clone();
+						clone.SecurityId = CloneSecurityId(clone.SecurityId);
+						NewOutMessage.SafeInvoke(clone);
+					}
+
+					if (CreateDepthFromLevel1)
+					{
+						// генерация стакана из Level1
+						var builder = _level1DepthBuilders.SafeAdd(l1Msg.SecurityId, c => new Level1DepthBuilder(c));
+
+						if (builder.Process(l1Msg))
+						{
+							var quoteMsg = builder.QuoteChange;
+
+							NewOutMessage.SafeInvoke(quoteMsg);
+							CreateAssociatedSecurityQuotes(quoteMsg);
+						}
 					}
 
 					break;
 				}
-				case MessageTypes.Disconnect:
-				{
-					lock (_timeSync)
-						_prevState = _currState = ConnectionStates.Disconnected;
 
-					StopMarketTimer();
+				case MessageTypes.QuoteChange:
+				{
+					var quoteMsg = (QuoteChangeMessage)message;
+
+					NewOutMessage.SafeInvoke(quoteMsg);
+
+					if (CreateDepthFromLevel1)
+						_level1DepthBuilders.SafeAdd(quoteMsg.SecurityId, c => new Level1DepthBuilder(c)).HasDepth = true;
+
+					CreateAssociatedSecurityQuotes(quoteMsg);
 					break;
 				}
+
+				case MessageTypes.Execution:
+				{
+					NewOutMessage.SafeInvoke(message);
+
+					if (!CreateAssociatedSecurity)
+						break;
+
+					var execMsg = (ExecutionMessage)message;
+
+					if (execMsg.SecurityId.IsDefault())
+						break;
+
+					switch (execMsg.ExecutionType)
+					{
+						case ExecutionTypes.Tick:
+						case ExecutionTypes.OrderLog:
+						{
+							var clone = (ExecutionMessage)message.Clone();
+							clone.SecurityId = CloneSecurityId(clone.SecurityId);
+							NewOutMessage.SafeInvoke(clone);
+							break;
+						}
+					}
+
+					break;
+				}
+
 				default:
 				{
 					if (_prevTime != DateTime.MinValue)
 					{
 						var diff = message.LocalTime - _prevTime;
 
-						if (message.Type != MessageTypes.Time && diff >= SessionHolder.MarketTimeChangedInterval)
-						{
-							SendOutMessage(new TimeMessage
-							{
-								LocalTime = message.LocalTime,
-								ServerTime = message.GetServerTime(),
-							});
-						}
+						//if (message.Type != MessageTypes.Time && diff >= MarketTimeChangedInterval)
+						//{
+						//	SendOutMessage(new TimeMessage
+						//	{
+						//		LocalTime = message.LocalTime,
+						//		ServerTime = message.GetServerTime(),
+						//	});
+						//}
 
 						_secLookupTimeOut
 							.ProcessTime(diff)
@@ -866,10 +806,11 @@ namespace StockSharp.Messages
 							.ProcessTime(diff)
 							.ForEach(id => SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = id }));
 
-						ProcessReconnection(diff);
+						//ProcessReconnection(diff);
 					}
 
 					_prevTime = message.LocalTime;
+					NewOutMessage.SafeInvoke(message);
 					break;
 				}
 			}
@@ -882,7 +823,7 @@ namespace StockSharp.Messages
 		private void InitMessageLocalTime(Message message)
 		{
 			if (message.LocalTime.IsDefault())
-				message.LocalTime = SessionHolder.CurrentTime.LocalDateTime;
+				message.LocalTime = CurrentTime.LocalDateTime;
 		}
 
 		/// <summary>
@@ -913,198 +854,67 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Нужно ли отправлять в адаптер сообщение типа <see cref="TimeMessage"/>.
+		/// Создать сообщение <see cref="SecurityMessage"/> и передать его в метод <see cref="SendOutMessage"/>.
 		/// </summary>
-		protected virtual bool CanSendTimeMessage
+		/// <param name="originalTransactionId">Идентификатор первоначального сообщения, для которого данное сообщение является ответом..</param>
+		protected void SendOutMarketDataNotSupported(long originalTransactionId)
 		{
-			get { return false; }
+			SendOutMessage(new MarketDataMessage { OriginalTransactionId = originalTransactionId, IsNotSupported = true });
 		}
 
 		/// <summary>
-		/// Запустить таймер генерации с интервалом <see cref="IMessageSessionHolder.MarketTimeChangedInterval"/> сообщений <see cref="TimeMessage"/>.
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
 		/// </summary>
-		protected virtual void StartMarketTimer()
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		public virtual bool IsConnectionAlive()
 		{
-			if (null != _marketTimeChangedTimer)
-				return;
-
-			_marketTimeChangedTimer = ThreadingHelper
-				.Timer(() =>
-				{
-					var time = SessionHolder.CurrentTime;
-
-					if (Type == MessageAdapterTypes.MarketData)
-					{
-						// TimeMsg нужен для оповещения внешнего кода о живом адаптере (или для изменения текущего времени)
-						// Поэтому когда в очереди есть другие сообщения нет смысла добавлять еще и TimeMsg
-						if (_outMessageProcessor.MessageCount == 0)
-							SendOutMessage(new TimeMessage());
-					}
-
-					TimeMessage timeMsg;
-
-					lock (_timeSync)
-					{
-						if (_currState != ConnectionStates.Connected)
-							return;
-
-						if (CanSendTimeMessage)
-						{
-							// TimeMsg нужно отправлять в очередь, если предыдущее сообщение было обработано.
-							// Иначе, из-за медленной обработки, кол-во TimeMsg может вырасти до большого значения.
-						
-							if (!_canSendTimeIn)
-								return;
-
-							_canSendTimeIn = false;
-
-							timeMsg = new TimeMessage();
-						}
-						else
-						{
-							if (_heartbeatPrevTime.IsDefault())
-							{
-								_heartbeatPrevTime = time.LocalDateTime;
-								return;
-							}
-							
-							if ((time - _heartbeatPrevTime) < SessionHolder.HeartbeatInterval)
-								return;
-
-							timeMsg = new TimeMessage { TransactionId = TransactionIdGenerator.GetNextId().To<string>() };
-
-							_heartbeatPrevTime = time.LocalDateTime;
-						}
-					}
-
-					SendInMessage(timeMsg);
-				})
-				.Interval(SessionHolder.MarketTimeChangedInterval);
-		}
-
-		/// <summary>
-		/// Остановить таймер, запущенный ранее через <see cref="StartMarketTimer"/>.
-		/// </summary>
-		protected void StopMarketTimer()
-		{
-			if (null == _marketTimeChangedTimer)
-				return;
-
-			_marketTimeChangedTimer.Dispose();
-			_marketTimeChangedTimer = null;
-		}
-
-		private void ProcessReconnection(TimeSpan diff)
-		{
-			switch (_currState)
-			{
-				case ConnectionStates.Disconnecting:
-				case ConnectionStates.Connecting:
-				{
-					_connectionTimeOut -= diff;
-
-					if (_connectionTimeOut <= TimeSpan.Zero)
-					{
-						SessionHolder.AddWarningLog("RCM: Connecting Timeout Left {0}.", _connectionTimeOut);
-
-						switch (_currState)
-						{
-							case ConnectionStates.Connecting:
-								SendOutMessage(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.Str170) });
-								break;
-							case ConnectionStates.Disconnecting:
-								SendOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.Str171) });
-								break;
-						}
-
-						if (_prevState != _none)
-						{
-							SessionHolder.AddInfoLog("RCM: Connecting AttemptError.");
-
-							//ReConnectionSettings.RaiseAttemptError(new TimeoutException(message));
-							lock (_timeSync)
-								_currState = _prevState;
-						}
-						else
-						{
-							//ReConnectionSettings.RaiseTimeOut();
-
-							if (_currState == ConnectionStates.Connecting && _connectingAttemptCount > 0)
-							{
-								lock (_timeSync)
-									_currState = _reConnecting;
-
-								SessionHolder.AddInfoLog("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
-							}
-							else
-							{
-								lock (_timeSync)
-									_currState = _none;
-							}
-						}
-					}
-
-					break;
-				}
-				case _reConnecting:
-				{
-					if (_connectingAttemptCount == 0)
-					{
-						SessionHolder.AddWarningLog("RCM: Reconnecting attemts {0} PrevState {1}.", _connectingAttemptCount, _prevState);
-
-						lock (_timeSync)
-							_currState = _none;
-
-						break;
-					}
-
-					_connectionTimeOut -= diff;
-
-					if (_connectionTimeOut > TimeSpan.Zero)
-						break;
-
-					if (IsTradeTime())
-					{
-						SessionHolder.AddInfoLog("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", _currState, _prevState, _connectingAttemptCount);
-
-						if (_connectingAttemptCount != -1)
-							_connectingAttemptCount--;
-
-						_connectionTimeOut = SessionHolder.ReConnectionSettings.Interval;
-
-						_prevState = _currState;
-						SendInMessage(new ConnectMessage());
-					}
-					else
-					{
-						SessionHolder.AddWarningLog("RCM: Out of trade time. CurrState {0}.", _currState);
-						_connectionTimeOut = TimeSpan.FromMinutes(1);
-					}
-
-					break;
-				}
-			}
-		}
-
-		private bool IsTradeTime()
-		{
-			// TODO
 			return true;
-			//return SessionHolder.ReConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now);
+		}
+
+		/// <summary>
+		/// Загрузить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Load(SettingsStorage storage)
+		{
+			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
+			SupportedMessages = storage.GetValue<int[]>("SupportedMessages").Select(i => (MessageTypes)i).ToArray();
+
+			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
+			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
+			CreateDepthFromLevel1 = storage.GetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
+
+			base.Load(storage);
+		}
+
+		/// <summary>
+		/// Сохранить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Save(SettingsStorage storage)
+		{
+			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
+			storage.SetValue("SupportedMessages", SupportedMessages.Select(t => (int)t).ToArray());
+
+			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
+			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
+			storage.SetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
+
+			base.Save(storage);
 		}
 	}
 
 	/// <summary>
 	/// Специальный адаптер, который передает сразу на выход все входящие сообщения.
 	/// </summary>
-	public class PassThroughMessageAdapter : MessageAdapter<IMessageSessionHolder>
+	public class PassThroughMessageAdapter : MessageAdapter
 	{
 		/// <summary>
 		/// Создать <see cref="PassThroughMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public PassThroughMessageAdapter(IMessageSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public PassThroughMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
 		}
 
@@ -1115,6 +925,22 @@ namespace StockSharp.Messages
 		protected override void OnSendInMessage(Message message)
 		{
 			SendOutMessage(message);
+			//switch (message.Type)
+			//{
+			//	case MessageTypes.Connect:
+			//		SendOutMessage(new ConnectMessage());
+			//		break;
+
+			//	case MessageTypes.Disconnect:
+			//		SendOutMessage(new DisconnectMessage());
+			//		break;
+
+			//	case MessageTypes.Time: // обработка heartbeat
+			//		break;
+
+			//	default:
+			//		throw new NotSupportedException(LocalizedStrings.Str2143Params.Put(message.Type));
+			//}
 		}
 	}
 }

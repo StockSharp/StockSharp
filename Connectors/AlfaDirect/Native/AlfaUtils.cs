@@ -1,9 +1,12 @@
 ﻿namespace StockSharp.AlfaDirect.Native
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	static class AlfaUtils
@@ -42,6 +45,22 @@
 				case "OPM": return OptionTypes.Put;
 			}
 			throw new ArgumentOutOfRangeException("atCode");
+		}
+
+		public static string GetSecurityClass(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, SecurityTypes? secType, string boardName)
+		{
+			if (secType == null)
+				return null;
+
+			if (boardName == ExchangeBoard.Forts.Code)
+				return secType == SecurityTypes.Stock ? "RTS_STANDARD" : "FORTS";
+
+			var kv = securityClassInfo.FirstOrDefault(kv2 => kv2.Value.First == secType && kv2.Value.Second == boardName);
+
+			if (!kv.IsDefault())
+				return kv.Key;
+
+			return null;
 		}
 	}
 }

@@ -2,63 +2,24 @@ namespace StockSharp.Rss
 {
 	using System;
 
-	using Ecng.Common;
-
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с RSS фидами.
 	/// </summary>
 	public class RssTrader : Connector
     {
-		private sealed class RssTransactionMessageAdapter : MessageAdapter<IMessageSessionHolder>
-		{
-			public RssTransactionMessageAdapter(IMessageSessionHolder sessionHolder)
-				: base(MessageAdapterTypes.Transaction, sessionHolder)
-			{
-			}
-
-			protected override void OnSendInMessage(Message message)
-			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-						SendOutMessage(new ConnectMessage());
-						break;
-
-					case MessageTypes.Disconnect:
-						SendOutMessage(new DisconnectMessage());
-						break;
-
-					case MessageTypes.Time: // обработка heartbeat
-						break;
-
-					default:
-						throw new NotSupportedException(LocalizedStrings.Str2143Params.Put(message.Type));
-				}
-			}
-		}
+		private readonly RssMarketDataMessageAdapter _adapter;
 
 		/// <summary>
 		/// Создать <see cref="RssTrader"/>.
 		/// </summary>
 		public RssTrader()
 		{
-			base.SessionHolder = new RssSessionHolder(TransactionIdGenerator);
+			_adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
 
-			TransactionAdapter = new RssTransactionMessageAdapter(SessionHolder);
-
-			ApplyMessageProcessor(MessageDirections.In, true, false);
-			ApplyMessageProcessor(MessageDirections.In, false, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new RssSessionHolder SessionHolder
-		{
-			get { return (RssSessionHolder)base.SessionHolder; }
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -66,8 +27,8 @@ namespace StockSharp.Rss
 		/// </summary>
 		public Uri Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		/// <summary>
@@ -75,8 +36,8 @@ namespace StockSharp.Rss
 		/// </summary>
 		public string CustomDateFormat
 		{
-			get { return SessionHolder.CustomDateFormat; }
-			set { SessionHolder.CustomDateFormat = value; }
+			get { return _adapter.CustomDateFormat; }
+			set { _adapter.CustomDateFormat = value; }
 		}
     }
 }

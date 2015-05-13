@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -14,7 +13,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("MFI")]
 	[DescriptionLoc(LocalizedStrings.Str853Key)]
-	public class MarketFacilitationIndex : BaseIndicator<decimal>
+	public class MarketFacilitationIndex : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="MarketFacilitationIndex"/>.
@@ -30,11 +29,13 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>Результирующее значение.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			IsFormed = true;
 			var candle = input.GetValue<Candle>();
 
 			if (candle.TotalVolume == 0)
 				return new DecimalIndicatorValue(this);
+
+			if (input.IsFinal)
+				IsFormed = true;
 
 			return new DecimalIndicatorValue(this, (candle.HighPrice - candle.LowPrice) / candle.TotalVolume);
 		}

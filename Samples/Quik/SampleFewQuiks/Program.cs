@@ -35,8 +35,8 @@ namespace SampleFewQuiks
 				{
 					// подписываемся на событие ошибок обработки данных и разрыва соединения
 					//
-					quikTrader1.ProcessDataError += OnError;
-					quikTrader2.ProcessDataError += OnError;
+					quikTrader1.Error += OnError;
+					quikTrader2.Error += OnError;
 
 					quikTrader1.ConnectionError += OnError;
 					quikTrader2.ConnectionError += OnError;
@@ -90,12 +90,10 @@ namespace SampleFewQuiks
 					quikTrader1.Connected += () =>
 					{
 						Console.WriteLine(LocalizedStrings.Str2994Params.Put(quikTrader1.LuaFixServerAddress));
-						quikTrader1.StartExport();
 					};
 					quikTrader2.Connected += () =>
 					{
 						Console.WriteLine(LocalizedStrings.Str2994Params.Put(quikTrader2.LuaFixServerAddress));
-						quikTrader2.StartExport();
 					};
 
 					// производим подключение каждого из QuikTrader-а

@@ -135,10 +135,10 @@ namespace StockSharp.InteractiveBrokers
 					else
 						socket.Send(condition.GoodAfterTime, IBSocketHelper.TimeFormat);
 
-					if (message.TillDate == DateTimeOffset.MaxValue || socket.ServerVersion < ServerVersions.V12)
+					if (message.TillDate == null || message.TillDate == DateTimeOffset.MaxValue || socket.ServerVersion < ServerVersions.V12)
 						socket.Send(string.Empty);
 					else
-						socket.Send(message.TillDate, IBSocketHelper.TimeFormat);
+						socket.Send(message.TillDate.Value, IBSocketHelper.TimeFormat);
 
 					if (socket.ServerVersion >= ServerVersions.V13)
 					{
@@ -573,7 +573,7 @@ namespace StockSharp.InteractiveBrokers
 			if (port == null || currency == "BASE")
 				return;
 
-			var pfMsg = SessionHolder.CreatePortfolioChangeMessage(port);
+			var pfMsg = this.CreatePortfolioChangeMessage(port);
 
 			switch (name)
 			{
@@ -675,7 +675,7 @@ namespace StockSharp.InteractiveBrokers
 				return;
 
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePositionChangeMessage(portfolio, secId)
 						.Add(PositionChangeTypes.CurrentValue, (decimal)position)
 						.Add(PositionChangeTypes.CurrentPrice, marketPrice)
@@ -1083,7 +1083,7 @@ namespace StockSharp.InteractiveBrokers
 				Volume = volume,
 				Price = price,
 				Condition = ibCon,
-				ExpiryDate = orderExpiryDate ?? DateTimeOffset.MaxValue,
+				ExpiryDate = orderExpiryDate,
 				VisibleVolume = visibleVolume,
 				PortfolioName = portfolio,
 				Comment = comment,
@@ -1100,7 +1100,7 @@ namespace StockSharp.InteractiveBrokers
 					orderMsg.TimeInForce = TimeInForce.PutInQueue;
 					break;
 				case "GTC":
-					orderMsg.ExpiryDate = DateTimeOffset.MaxValue;
+					//orderMsg.ExpiryDate = DateTimeOffset.MaxValue;
 					break;
 				case "IOC":
 					orderMsg.TimeInForce = TimeInForce.CancelBalance;
@@ -1323,7 +1323,7 @@ namespace StockSharp.InteractiveBrokers
 				Class = secClass
 			});
 
-			SendOutMessage(SessionHolder
+			SendOutMessage(this
 				.CreatePositionChangeMessage(account, secId)
 					.Add(PositionChangeTypes.CurrentValue, (decimal)pos)
 					.Add(PositionChangeTypes.AveragePrice, avgCost));
@@ -1343,7 +1343,7 @@ namespace StockSharp.InteractiveBrokers
 			var value = socket.ReadStr();
 			var currency = socket.ReadCurrency();
 
-			var msg = SessionHolder.CreatePortfolioChangeMessage(account);
+			var msg = this.CreatePortfolioChangeMessage(account);
 
 			msg.Add(PositionChangeTypes.Currency, currency);
 
@@ -1369,7 +1369,7 @@ namespace StockSharp.InteractiveBrokers
 			SendOutMessage(msg);
 		}
 
-		private void OnProcessTransactionResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
+		private bool ProcessTransactionResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
 		{
 			switch (message)
 			{
@@ -1377,89 +1377,91 @@ namespace StockSharp.InteractiveBrokers
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/orderstatus.htm
 					ReadOrderStatus(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.Portfolio:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updateaccountvalue.htm
 					ReadPortfolio(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.PortfolioPosition:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updateportfolio.htm
 					ReadPortfolioPosition(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.PortfolioUpdateTime:
 				{
 					ReadPortfolioUpdateTime(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.OpenOrder:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/openorder.htm
 					ReadOpenOrder(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.NextOrderId:
 				{
 					ReadNextOrderId(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.MyTrade:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/execdetails.htm
 					ReadMyTrade(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.ManagedAccounts:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/managedaccounts.htm
 					ReadManagedAccounts(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.OpenOrderEnd:
 				{
 					//openOrderEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.AccountDownloadEnd:
 				{
 					ReadPortfolioName(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.MyTradeEnd:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/execdetailsend.htm
 					ReadMyTradeEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.CommissionReport:
 				{
 					ReadCommissionReport(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.Position:
 				{
 					ReadPosition(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.PositionEnd:
 				{
 					ReadPositionEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.AccountSummary:
 				{
 					ReadAccountSummary(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.AccountSummaryEnd:
 				{
 					ReadAccountSummaryEnd(socket);
-					break;
+					return true;
 				}
+				default:
+					return false;
 			}
 		}
 

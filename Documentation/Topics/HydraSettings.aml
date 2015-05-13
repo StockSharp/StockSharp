@@ -3,29 +3,30 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     	<para>
-    		Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать "Дополнительно" и в выпадающем меню выбрать "Настройки".
+    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режимме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
     	</para>
 		<mediaLink>
         	<image placement="center" xlink:href="hydra_settings" />
 		</mediaLink>
       
+       	<para> <legacyBold>S#.Data Server</legacyBold></para>
+      
       <list class="bullet">
         <listItem>
-          <legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим(одна <token>hydra</token> качает данные, другие качают с нее).
+          <legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим.
 		</listItem>
         <listItem>
-          <legacyBold>Анонимно</legacyBold> - анонимно, настройка для HydraServer.
+          <legacyBold>Авторизация</legacyBold> - метод авторизациии для получения доступа к <token>hydra</token>: Анонимно/Windows/Пользовательский/StockSharp.
 		</listItem>  
-        <listItem>
-          <legacyBold>Биржевая площадка</legacyBold> - показывать колонку "Лот".
+		<listItem>
+          <legacyBold>Количество инструментов</legacyBold> - максимальное количество инструментов, которое можно запрашивать с сервера.
 		</listItem>	
-        <listItem>
-          <legacyBold>Лот</legacyBold> - показывать колонку "Лот".
-		</listItem>	
-        <listItem>
-          <legacyBold>Шаг цены</legacyBold> - показывать колонку "Шаг цены".
-		</listItem>			
-        <listItem>
+
+	  </list>			
+		
+	<para> <legacyBold>Основные</legacyBold></para>
+	<list class="bullet">
+	    <listItem>
           <legacyBold>Автостарт</legacyBold> - автостарт скачивания котировок при запуске.
 		</listItem>
         <listItem>
@@ -36,6 +37,12 @@
 		</listItem>		
         <listItem>
           <legacyBold>Время для Авто-стоп</legacyBold> - время для Авто-стоп.
+		</listItem>	
+        <listItem>
+          <legacyBold>Ошибки (кол-во)</legacyBold> - количество ошибок, после которого будет отправлено письмо на почту с сообщением об ошибке. Значение 0 означает выключенный режим.
+		</listItem>	
+        <listItem>
+          <legacyBold>Ошибки (email)</legacyBold> - адрес почты, куда будет отправлено сообщение о превышении максимально допустимого количества ошибок.
 		</listItem>	
       </list>		
 	</introduction>

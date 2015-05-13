@@ -40,7 +40,7 @@ namespace SampleSmart
 			_stopOrdersWindow.MakeHideable();
 			_portfoliosWindow.MakeHideable();
 
-			MainWindow.Instance = this;
+			Instance = this;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -91,7 +91,7 @@ namespace SampleSmart
 
 					// инициализируем механизм переподключения
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);
@@ -106,8 +106,6 @@ namespace SampleSmart
 
 						// разблокируем кнопку Подключиться
 						this.GuiAsync(() => ChangeConnectStatus(true));
-
-						Trader.StartExport();
 					};
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
@@ -121,7 +119,7 @@ namespace SampleSmart
 					});
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					Trader.ProcessDataError += error =>
+					Trader.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// подписываемся на ошибку подписки маркет-данных
@@ -133,7 +131,11 @@ namespace SampleSmart
 					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
 					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 					Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
-					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+					Trader.NewPortfolios += portfolios =>
+					{
+						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
+						portfolios.ForEach(Trader.RegisterPortfolio);
+					};
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
 					// подписываемся на событие о неудачной регистрации заявок

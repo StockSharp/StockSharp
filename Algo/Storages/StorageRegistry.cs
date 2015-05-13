@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Storages
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Reflection;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
@@ -509,10 +510,29 @@ namespace StockSharp.Algo.Storages
 			#endregion
 		}
 
+		private sealed class NewsStorage : ConvertableStorage<NewsMessage, News, VoidType>
+		{
+			public NewsStorage(Security security, IMarketDataSerializer<NewsMessage> serializer, IMarketDataStorageDrive drive)
+				: base(security, null, m => m.ServerTime, m => default(SecurityId), m => null, serializer, drive)
+			{
+			}
+
+			public override DateTimeOffset GetTime(News data)
+			{
+				return data.ServerTime;
+			}
+
+			protected override NewsMessage ToMessage(News entity)
+			{
+				return entity.ToMessage();
+			}
+		}
+
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>> _depthStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<QuoteChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>> _level1Storages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<Level1ChangeMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>> _candleStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>> _executionStorages = new SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>>();
+		private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>> _newsStorages = new SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>>();
 
 		/// <summary>
 		/// Создать <see cref="StorageRegistry"/>.
@@ -975,6 +995,8 @@ namespace StockSharp.Algo.Storages
 				return GetLevel1MessageStorage(security, drive, format);
 			else if (dataType == typeof(QuoteChangeMessage))
 				return GetQuoteMessageStorage(security, drive, format);
+			else if (dataType == typeof(NewsMessage))
+				return GetNewsMessageStorage(drive, format);
 			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
 				return GetCandleMessageStorage(dataType, security, arg, drive, format);
 			else
@@ -989,6 +1011,47 @@ namespace StockSharp.Algo.Storages
 				Code = securityId.SecurityCode,
 				Board = ExchangeBoard.GetOrCreateBoard(securityId.BoardCode)
 			};
+		}
+
+		/// <summary>
+		/// Получить хранилище новостей.
+		/// </summary>
+		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
+		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
+		/// <returns>Хранилище новостей.</returns>
+		public IMarketDataStorage<News> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			return (IMarketDataStorage<News>)GetNewsMessageStorage(drive, format);
+		}
+
+		private static readonly Security _newsSecurity = new Security { Id = "NEWS@NEWS" };
+
+		/// <summary>
+		/// Получить хранилище новостей.
+		/// </summary>
+		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
+		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
+		/// <returns>Хранилище новостей.</returns>
+		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			return _newsStorages.SafeAdd((drive ?? DefaultDrive).GetStorageDrive(_newsSecurity.ToSecurityId(), typeof(NewsMessage), null, format), key =>
+			{
+				IMarketDataSerializer<NewsMessage> serializer;
+
+				switch (format)
+				{
+					case StorageFormats.Binary:
+						serializer = new NewsSerializer();
+						break;
+					case StorageFormats.Csv:
+						serializer = new CsvMarketDataSerializer<NewsMessage>();
+						break;
+					default:
+						throw new ArgumentOutOfRangeException("format");
+				}
+
+				return new NewsStorage(_newsSecurity, serializer, key);
+			});
 		}
 	}
 }

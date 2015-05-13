@@ -1,6 +1,7 @@
 namespace StockSharp.Quik
 {
 	using System;
+	using System.ComponentModel;
 	using System.IO;
 	using System.Text.RegularExpressions;
 
@@ -8,12 +9,15 @@ namespace StockSharp.Quik
 	using Ecng.Common;
 	using Ecng.Interop;
 	using Ecng.Serialization;
+	using Ecng.Xaml;
 
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Quik.Native;
 	using StockSharp.Quik.Properties;
 	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Транзакционный адаптер сообщений для Quik, работающий через библиотеку Trans2Quik.dll.
@@ -32,7 +36,7 @@ namespace StockSharp.Quik
 				if (_api != null)
 					return _api;
 
-				if (!File.Exists(SessionHolder.DllName))
+				if (OverrideDll || !File.Exists(DllName))
 				{
 					var version = GetTerminal().Version;
 
@@ -40,12 +44,12 @@ namespace StockSharp.Quik
 						? Resources.TRANS2QUIK_12
 						: (version >= "5.15.0.0".To<Version>() ? Resources.TRANS2QUIK_11 : Resources.TRANS2QUIK_10);
 
-					SessionHolder.DllName.CreateDirIfNotExists();
+					DllName.CreateDirIfNotExists();
 
-					trans2Quik.Save(SessionHolder.DllName);
+					trans2Quik.Save(DllName);
 				}
 
-				_api = new ApiWrapper(SessionHolder.DllName);
+				_api = new ApiWrapper(DllName);
 				_api.ConnectionChanged += OnConnectionChanged;
 				_api.OrderReply += OnOrderReply;
 				_api.TradeReply += OnTradeReply;
@@ -72,9 +76,13 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Проверить, установлено ли еще соединение.
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
 		/// </summary>
-		public bool IsConnectionAlive { get { return Api.IsConnected; } }
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		public override bool IsConnectionAlive()
+		{
+			return Api.IsConnected;
+		}
 
 		/// <summary>
 		/// Отформатировать транзакцию (добавить, удалить или заменить параметры) перед тем, как она будет отправлена в Quik.
@@ -84,13 +92,96 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Создать <see cref="QuikTrans2QuikAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public QuikTrans2QuikAdapter(QuikSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public QuikTrans2QuikAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			IsAsyncMode = true;
 			Platform = Platforms.x86;
-			SessionHolder.DllNameChanged += ResetApi;
-			SessionHolder.TerminalChanged += ResetApi;
+			//SessionHolder.TerminalChanged += ResetApi;
+			this.AddTransactionalSupport();
+			this.RemoveSupportedMessage(MessageTypes.OrderStatus);
+			this.RemoveSupportedMessage(MessageTypes.PortfolioLookup);
+		}
+
+		private const string _category = "TRANS2QUIK";
+
+		private string _dllName = "TRANS2QUIK.DLL";
+
+		/// <summary>
+		/// Имя dll-файла, содержащее Quik API. По-умолчанию равно TRANS2QUIK.DLL.
+		/// </summary>
+		[Category(_category)]
+		[DisplayNameLoc(LocalizedStrings.Str1777Key)]
+		[DescriptionLoc(LocalizedStrings.Str1778Key)]
+		[PropertyOrder(0)]
+		[Editor(typeof(FileBrowserEditor), typeof(FileBrowserEditor))]
+		public string DllName
+		{
+			get { return _dllName; }
+			set
+			{
+				if (value.IsEmpty())
+					throw new ArgumentNullException("value");
+
+				if (value == _dllName)
+					return;
+
+				_dllName = value;
+				ResetApi();
+			}
+		}
+
+		private bool _isAsyncMode = true;
+
+		/// <summary>
+		/// Асинхронный режим. Если true, то все транзакции, такие как <see cref="OrderRegisterMessage"/>
+		/// или <see cref="OrderCancelMessage"/> будут отправляться в асинхронном режиме.
+		/// </summary>
+		/// <remarks>
+		/// По-умолчанию используется асинхронный режим.
+		/// </remarks>
+		[Category(_category)]
+		[DisplayNameLoc(LocalizedStrings.Str1781Key)]
+		[DescriptionLoc(LocalizedStrings.Str1782Key)]
+		[PropertyOrder(2)]
+		public bool IsAsyncMode
+		{
+			get { return _isAsyncMode; }
+			set { _isAsyncMode = value; }
+		}
+
+		private bool _overrideDll = true;
+
+		/// <summary>
+		/// Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.GeneralKey)]
+		[DisplayNameLoc(LocalizedStrings.OverrideKey)]
+		[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
+		[PropertyOrder(3)]
+		public bool OverrideDll
+		{
+			get { return _overrideDll; }
+			set { _overrideDll = value; }
+		}
+
+		/// <summary>
+		/// Проверить введенные параметры на валидность.
+		/// </summary>
+		[Browsable(false)]
+		public override bool IsValid
+		{
+			get { return !DllName.IsEmpty(); }
+		}
+
+		/// <summary>
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// </summary>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public override OrderCondition CreateOrderCondition()
+		{
+			return new QuikOrderCondition();
 		}
 
 		/// <summary>
@@ -101,6 +192,37 @@ namespace StockSharp.Quik
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					if (_api != null)
+					{
+						try
+						{
+							if (_api.IsConnected)
+								_api.Disconnect();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						try
+						{
+							_api.Dispose();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_api = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
 					var terminal = GetTerminal();
@@ -119,19 +241,19 @@ namespace StockSharp.Quik
 
 				case MessageTypes.OrderRegister:
 					var regMsg = (OrderRegisterMessage)message;
-					RegisterTransaction(SessionHolder.CreateRegisterTransaction(regMsg, regMsg.GetValue<string>(PositionChangeTypes.DepoName)));
+					RegisterTransaction(regMsg.CreateRegisterTransaction(regMsg.GetValue<string>(PositionChangeTypes.DepoName), SecurityClassInfo));
 					break;
 
 				case MessageTypes.OrderReplace:
-					RegisterTransaction(SessionHolder.CreateMoveTransaction((OrderReplaceMessage)message));
+					RegisterTransaction(((OrderReplaceMessage)message).CreateMoveTransaction(SecurityClassInfo));
 					break;
 
 				case MessageTypes.OrderCancel:
-					RegisterTransaction(SessionHolder.CreateCancelTransaction((OrderCancelMessage)message));
+					RegisterTransaction(((OrderCancelMessage)message).CreateCancelTransaction(SecurityClassInfo));
 					break;
 
 				case MessageTypes.OrderGroupCancel:
-					RegisterTransaction(SessionHolder.CreateCancelFuturesTransaction((OrderGroupCancelMessage)message));
+					RegisterTransaction(((OrderGroupCancelMessage)message).CreateCancelFuturesTransaction(SecurityClassInfo));
 					break;
 			}
 		}
@@ -160,7 +282,7 @@ namespace StockSharp.Quik
 
 			_transactions.Add(transactionId, transaction);
 
-			if (SessionHolder.IsAsyncMode)
+			if (IsAsyncMode)
 				Api.SendAsyncTransaction(transaction.ToString());
 			else
 			{
@@ -250,7 +372,16 @@ namespace StockSharp.Quik
 						case Codes.QuikConnected:
 							try
 							{
-								var isAlive = IsConnectionAlive;
+								bool isAlive;
+
+								try
+								{
+									isAlive = IsConnectionAlive();
+								}
+								catch
+								{
+									isAlive = false;
+								}
 
 								GetTerminal().AssignProcess();
 
@@ -293,19 +424,19 @@ namespace StockSharp.Quik
 
 		private void OnOrderReply(Modes mode, uint transId, long orderId, string classCode, string secCode, double price, int balance, int volume, Sides side, OrderStates state)
 		{
-			SessionHolder.AddDebugLog("Order: Mode {0} transId {1} orderId {2} classCode {3} secCode {4} price {5} balance {6} volume {7} side {8} state {9}", mode, transId, orderId, classCode, secCode, price, balance, volume, side, state);
+			this.AddDebugLog("Order: Mode {0} transId {1} orderId {2} classCode {3} secCode {4} price {5} balance {6} volume {7} side {8} state {9}", mode, transId, orderId, classCode, secCode, price, balance, volume, side, state);
 		}
 
 		private void OnTradeReply(Modes mode, long tradeId, long orderId, string classCode, string secCode, double price, int balance, int volume, Sides side)
 		{
-			SessionHolder.AddDebugLog("Trade: Mode {0} tradeId {1} orderId {2} classCode {3} secCode {4} price {5} balance {6} volume {7} side {8}", mode, tradeId, orderId, classCode, secCode, price, balance, volume, side);
+			this.AddDebugLog("Trade: Mode {0} tradeId {1} orderId {2} classCode {3} secCode {4} price {5} balance {6} volume {7} side {8}", mode, tradeId, orderId, classCode, secCode, price, balance, volume, side);
 		}
 
 		private void OnTransactionReply(uint transactionId, Codes replyCode, Codes extendedCode, OrderStatus status, long orderId, string message)
 		{
-			SessionHolder.AddDebugLog("Order: transId {0} replyCode {1} extendedCode {2} status {3} orderId {4} message {5}", transactionId, replyCode, extendedCode, status, orderId, message);
+			this.AddDebugLog("Order: transId {0} replyCode {1} extendedCode {2} status {3} orderId {4} message {5}", transactionId, replyCode, extendedCode, status, orderId, message);
 
-			if (!SessionHolder.IsAsyncMode)
+			if (!IsAsyncMode)
 				return;
 
 			try
@@ -463,12 +594,37 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
+		/// Сохранить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Save(SettingsStorage storage)
+		{
+			storage.SetValue("DllName", DllName);
+			storage.SetValue("IsAsyncMode", IsAsyncMode);
+			storage.SetValue("OverrideDll", OverrideDll);
+
+			base.Save(storage);
+		}
+
+		/// <summary>
+		/// Загрузить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Load(SettingsStorage storage)
+		{
+			DllName = storage.GetValue<string>("DllName");
+			IsAsyncMode = storage.GetValue<bool>("IsAsyncMode");
+			OverrideDll = storage.GetValue<bool>("OverrideDll");
+
+			base.Load(storage);
+		}
+
+		/// <summary>
 		/// Освободить занятые ресурсы.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
-			SessionHolder.DllNameChanged -= ResetApi;
-			SessionHolder.TerminalChanged -= ResetApi;
+			//SessionHolder.TerminalChanged -= ResetApi;
 
 			ResetApi();
 

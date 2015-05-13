@@ -18,7 +18,6 @@
 		/// Создать <see cref="IchimokuLine"/>.
 		/// </summary>
 		public IchimokuLine()
-			: base(typeof(Candle))
 		{
 		}
 

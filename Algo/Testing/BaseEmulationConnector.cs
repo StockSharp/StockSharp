@@ -8,14 +8,13 @@ namespace StockSharp.Algo.Testing
 	/// </summary>
 	public abstract class BaseEmulationConnector : Connector
 	{
-		private readonly EmulationMessageAdapter _adapter;
-
 		/// <summary>
 		/// Инициализировать <see cref="BaseEmulationConnector"/>.
 		/// </summary>
 		protected BaseEmulationConnector()
 		{
-			TransactionAdapter = _adapter = new EmulationMessageAdapter(new MarketEmulator(), new PassThroughSessionHolder(TransactionIdGenerator));
+			var adapter = new EmulationMessageAdapter(new MarketEmulator(), TransactionIdGenerator);
+			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -32,50 +31,56 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public IMarketEmulator MarketEmulator
 		{
-			get { return _adapter.Emulator; }
-			set { _adapter.Emulator = value; }
+			get { return ((EmulationMessageAdapter)TransactionAdapter).Emulator; }
+			set { ((EmulationMessageAdapter)TransactionAdapter).Emulator = value; }
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// Запустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="Connector.MarketTimeChangedInterval"/>.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void StartMarketTimer()
 		{
-			if (adapterType == MessageAdapterTypes.MarketData && direction == MessageDirections.Out)
-			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-					case MessageTypes.Disconnect:
-					case MessageTypes.MarketData:
-					case MessageTypes.Error:
-					case MessageTypes.SecurityLookupResult:
-					case MessageTypes.PortfolioLookupResult:
-						base.OnProcessMessage(message, adapterType, direction);
-						break;
-
-					case MessageTypes.Execution:
-					{
-						var execMsg = (ExecutionMessage)message;
-
-						if (execMsg.ExecutionType != ExecutionTypes.Trade)
-							TransactionAdapter.SendInMessage(message);
-						else
-							base.OnProcessMessage(message, adapterType, direction);
-
-						break;
-					}
-
-					default:
-						TransactionAdapter.SendInMessage(message);
-						break;
-				}
-			}
-			else
-				base.OnProcessMessage(message, adapterType, direction);
 		}
+
+		///// <summary>
+		///// Обработать сообщение, содержащее рыночные данные.
+		///// </summary>
+		///// <param name="message">Сообщение, содержащее рыночные данные.</param>
+		///// <param name="direction">Направление сообщения.</param>
+		//protected override void OnProcessMessage(Message message, MessageDirections direction)
+		//{
+		//	if (adapter == MarketDataAdapter && direction == MessageDirections.Out)
+		//	{
+		//		switch (message.Type)
+		//		{
+		//			case MessageTypes.Connect:
+		//			case MessageTypes.Disconnect:
+		//			case MessageTypes.MarketData:
+		//			case MessageTypes.Error:
+		//			case MessageTypes.SecurityLookupResult:
+		//			case MessageTypes.PortfolioLookupResult:
+		//				base.OnProcessMessage(message, direction);
+		//				break;
+
+		//			case MessageTypes.Execution:
+		//			{
+		//				var execMsg = (ExecutionMessage)message;
+
+		//				if (execMsg.ExecutionType != ExecutionTypes.Trade)
+		//					SendInMessage(message);
+		//				else
+		//					base.OnProcessMessage(message, direction);
+
+		//				break;
+		//			}
+
+		//			default:
+		//				SendInMessage(message);
+		//				break;
+		//		}
+		//	}
+		//	else
+		//		base.OnProcessMessage(message, direction);
+		//}
 	}
 }

@@ -101,7 +101,7 @@ namespace SampleBlackwood
 					if (Trader != null)
 						Trader.Dispose();
 
-					// создаем подключение
+					// create connector
 					Trader = new BlackwoodTrader
 					{ 
 						//LogLevel = LogLevels.Debug,
@@ -109,28 +109,22 @@ namespace SampleBlackwood
 					
 					_logManager.Sources.Add(Trader);
 
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
-						// разблокируем кнопку Экспорт (соединение было восстановлено)
+						// update gui labes
 						ChangeConnectStatus(true);
 						MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
 
-					// подписываемся на событие успешного соединения
+					// subscribe on connection successfully event
 					Trader.Connected += () =>
 					{
-						// возводим флаг, что соединение установлено
+						// set flag (connection is established)
 						_isConnected = true;
 
-						Trader.StartExport();
-
-						// разблокируем кнопку Экспорт
+						// update gui labes
 						this.GuiAsync(() => ChangeConnectStatus(true));
-					};
 
-					// подписываемся на событие запуска экспорта
-					Trader.ExportStarted += () =>
-					{
 						// запускаем подписку на новости
 						Trader.RegisterNews();
 
@@ -141,23 +135,22 @@ namespace SampleBlackwood
 						Trader.RequestPreMarketIndications();
 					};
 
-					// подписываемся на событие успешного отключения
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-					// подписываемся на событие разрыва соединения
+					// subscribe on connection error event
 					Trader.ConnectionError += error => this.GuiAsync(() =>
 					{
-						// заблокируем кнопку Экспорт (так как соединение было потеряно)
+						// update gui labes
 						ChangeConnectStatus(false);
 
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
 					});
 
-					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					Trader.ProcessDataError += error =>
+					// subscribe on error event
+					Trader.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-					// подписываемся на ошибку подписки маркет-данных
+					// subscribe on error of market data subscription event
 					Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
@@ -169,26 +162,26 @@ namespace SampleBlackwood
 					
 					Trader.NewPortfolios += portfolios =>
 					{
-						// регистрирует портфели на обновление данных
+						// subscribe on portfolio updates
 						portfolios.ForEach(Trader.RegisterPortfolio);
 
 						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 					};
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
-					// подписываемся на событие о неудачной регистрации заявок
+					// subscribe on error of order registration event
 					Trader.OrdersRegisterFailed += OrdersFailed;
-					// подписываемся на событие о неудачном снятии заявок
+					// subscribe on error of order cancelling event
 					Trader.OrdersCancelFailed += OrdersFailed;
 
-					// подписываемся на событие о неудачной регистрации стоп-заявок
+					// subscribe on error of stop-order registration event
 					Trader.StopOrdersRegisterFailed += OrdersFailed;
-					// подписываемся на событие о неудачном снятии стоп-заявок
+					// subscribe on error of stop-order cancelling event
 					Trader.StopOrdersCancelFailed += OrdersFailed;
 
 					Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
-					// устанавливаем поставщик маркет-данных
+					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled = ShowNews.IsEnabled =
@@ -204,7 +197,7 @@ namespace SampleBlackwood
 				Trader.MarketDataAddress = new IPEndPoint(address, BlackwoodAddresses.MarketDataPort);
 				Trader.HistoricalDataAddress = new IPEndPoint(address, BlackwoodAddresses.HistoricalDataPort);
 
-				// очищаем из текстового поля в целях безопасности
+				// clear password box for security reason
 				//Password.Clear();
 
 				Trader.Connect();
@@ -214,7 +207,6 @@ namespace SampleBlackwood
 				Trader.SubscribeHighLow(false);
 
 				Trader.UnRegisterNews();
-				Trader.StopExport();
 
 				Trader.Disconnect();
 			}

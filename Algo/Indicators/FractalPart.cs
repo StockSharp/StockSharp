@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Часть <see cref="Fractals"/>.
 	/// </summary>
-	public class FractalPart : BaseIndicator<ShiftedIndicatorValue>
+	public class FractalPart : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="FractalPart"/>.
@@ -21,7 +21,9 @@
 		/// <returns>Результирующее значение.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return input.To<ShiftedIndicatorValue>();
 		}
 	}

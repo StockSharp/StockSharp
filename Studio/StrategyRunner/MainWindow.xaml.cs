@@ -21,6 +21,7 @@
 
 	using Ookii.Dialogs.Wpf;
 
+	using StockSharp.Messages;
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Strategies;
@@ -119,7 +120,6 @@
 				{
 					case ConnectionStates.Connected:
 						ConnectBtn.Background = _startedBg;
-						_connector.StartExport();
 						break;
 					case ConnectionStates.Disconnected:
 						ConnectBtn.Background = _stoppedBg;
@@ -146,12 +146,12 @@
 			var connectionSettings = _settings.GetValue<SettingsStorage>("Connection");
 
 			if (connectionSettings != null)
-				_connector.BasketSessionHolder.Load(connectionSettings);
+				_connector.Load(connectionSettings);
 		}
 
 		private void SaveSettings()
 		{
-			_settings.SetValue("Connection", _connector.BasketSessionHolder.Save());
+			_settings.SetValue("Connection", _connector.Save());
 			//_settings.SetValue("LogManager", _logManager.Save());
 			_settings.SetValue("Layout", DockSite.SaveLayout());
 
@@ -199,7 +199,6 @@
 			switch (_connector.ConnectionState)
 			{
 				case ConnectionStates.Connected:
-					_connector.StopExport();
 					_connector.Disconnect();
 					break;
 
@@ -216,10 +215,10 @@
 
 		private void ExecutedConnectionSettings(object sender, ExecutedRoutedEventArgs e)
 		{
-			var wnd = new SessionHoldersWindow();
+			var wnd = new MessageAdaptersWindow();
 			wnd.CheckConnectionState += () => _connector.ConnectionState;
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.SessionHolder = _connector.BasketSessionHolder;
+			wnd.Adapter = _connector.Adapter;
 
 			if (wnd.ShowModal(this))
 			{

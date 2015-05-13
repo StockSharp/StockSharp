@@ -208,22 +208,17 @@
 	public class IBTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();
-		private readonly SynchronizedDictionary<long, object> _states = new SynchronizedDictionary<long, object>(); 
+		private readonly SynchronizedDictionary<long, object> _states = new SynchronizedDictionary<long, object>();
+		private readonly InteractiveBrokersMessageAdapter _adapter;
 
 		/// <summary>
 		/// Создать <see cref="IBTrader"/>.
 		/// </summary>
 		public IBTrader()
 		{
-			base.SessionHolder = new InteractiveBrokersSessionHolder(TransactionIdGenerator);
+			_adapter = new InteractiveBrokersMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new InteractiveBrokersSessionHolder SessionHolder
-		{
-			get { return (InteractiveBrokersSessionHolder)base.SessionHolder; }
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -231,8 +226,8 @@
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		///// <summary>
@@ -249,7 +244,7 @@
 		///// </summary>
 		//public DateTimeOffset ConnectedTime
 		//{
-		//	get { return SessionHolder.CurrentTime; }
+		//	get { return _adapter.CurrentTime; }
 		//}
 
 		/// <summary>
@@ -257,8 +252,8 @@
 		/// </summary>
 		public int ClientId
 		{
-			get { return SessionHolder.ClientId; }
-			set { SessionHolder.ClientId = value; }
+			get { return _adapter.ClientId; }
+			set { _adapter.ClientId = value; }
 		}
 
 		/// <summary>
@@ -266,8 +261,8 @@
 		/// </summary>
 		public ServerLogLevels ServerLogLevel
 		{
-			get { return SessionHolder.ServerLogLevel; }
-			set { SessionHolder.ServerLogLevel = value; }
+			get { return _adapter.ServerLogLevel; }
+			set { _adapter.ServerLogLevel = value; }
 		}
 
 		/// <summary>
@@ -275,8 +270,8 @@
 		/// </summary>
 		public bool IsRealTimeMarketData
 		{
-			get { return SessionHolder.IsRealTimeMarketData; }
-			set { SessionHolder.IsRealTimeMarketData = value; }
+			get { return _adapter.IsRealTimeMarketData; }
+			set { _adapter.IsRealTimeMarketData = value; }
 		}
 
 		/// <summary>
@@ -343,7 +338,7 @@
 
 			_states.Add(transactionId, filter);
 
-			MarketDataAdapter.SendInMessage(new ScannerMarketDataMessage(filter)
+			SendInMessage(new ScannerMarketDataMessage(filter)
 			{
 				TransactionId = transactionId,
 				IsSubscribe = isSubscribe
@@ -363,7 +358,7 @@
 
 			_states.Add(transactionId, Tuple.Create(security, report));
 
-			MarketDataAdapter.SendInMessage(new FundamentalReportMarketDataMessage(report)
+			SendInMessage(new FundamentalReportMarketDataMessage(report)
 			{
 				//SecurityId = GetSecurityId(security),
 				TransactionId = transactionId,
@@ -384,7 +379,7 @@
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
 
-			MarketDataAdapter.SendInMessage(new OptionCalcMarketDataMessage(impliedVolatility, optionPrice, assetPrice)
+			SendInMessage(new OptionCalcMarketDataMessage(impliedVolatility, optionPrice, assetPrice)
 			{
 				//SecurityId = GetSecurityId(security),
 				TransactionId = transactionId,
@@ -419,7 +414,7 @@
 
 			_candleSeries.Add(transactionId, series);
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = transactionId,
 				DataType = MarketDataTypes.CandleTimeFrame,
@@ -437,7 +432,7 @@
 		/// <param name="series">Серия свечек.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.CandleTimeFrame,
@@ -451,9 +446,8 @@
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, MessageDirections direction)
 		{
 			if (direction == MessageDirections.Out)
 			{
@@ -509,7 +503,7 @@
 				}
 			}
 
-			base.OnProcessMessage(message, adapterType, direction);
+			base.OnProcessMessage(message, direction);
 		}
 	}
 }

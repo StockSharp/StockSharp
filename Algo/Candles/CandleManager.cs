@@ -38,7 +38,7 @@ namespace StockSharp.Algo.Candles
 					_manager = manager;
 
 					_source.Processing += OnProcessing;
-					_source.ProcessDataError += _manager.RaiseProcessDataError;
+					_source.Error += _manager.RaiseError;
 					_source.CandleManager = _manager;
 				}
 
@@ -58,7 +58,7 @@ namespace StockSharp.Algo.Candles
 					base.DisposeManaged();
 
 					_source.Processing -= OnProcessing;
-					_source.ProcessDataError -= _manager.RaiseProcessDataError;
+					_source.Error -= _manager.RaiseError;
 					_source.Dispose();
 				}
 			}
@@ -142,7 +142,7 @@ namespace StockSharp.Algo.Candles
 				remove { }
 			}
 
-			event Action<Exception> ICandleSource<Candle>.ProcessDataError
+			event Action<Exception> ICandleSource<Candle>.Error
 			{
 				add { }
 				remove { }
@@ -305,7 +305,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Событие ошибки формирования свечек.
 		/// </summary>
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
 		/// <summary>
 		/// Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
@@ -378,12 +378,12 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ProcessDataError"/>.
+		/// Вызвать событие <see cref="Error"/>.
 		/// </summary>
 		/// <param name="error">Информация об ошибке.</param>
-		protected virtual void RaiseProcessDataError(Exception error)
+		protected virtual void RaiseError(Exception error)
 		{
-			ProcessDataError.SafeInvoke(error);
+			Error.SafeInvoke(error);
 			this.AddErrorLog(error);
 		}
 

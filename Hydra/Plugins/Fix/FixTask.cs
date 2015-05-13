@@ -27,18 +27,19 @@ namespace StockSharp.Hydra.Fix
 			{
 			}
 
-			private FixSession _marketDataSession;
+			private FixMessageAdapter _marketDataSession;
 
 			[TaskCategory(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.SessionKey)]
 			[DescriptionLoc(LocalizedStrings.Str3746Key)]
 			[PropertyOrder(0)]
-			public FixSession MarketDataSession
+			[ExpandableObject]
+			public FixMessageAdapter MarketDataSession
 			{
 				get
 				{
 					if (_marketDataSession == null)
-						_marketDataSession = new FixSession();
+						_marketDataSession = new FixMessageAdapter(new IncrementalIdGenerator());
 
 					_marketDataSession.Load((SettingsStorage)ExtensionInfo["MarketDataSession"]);
 
@@ -61,10 +62,6 @@ namespace StockSharp.Hydra.Fix
 				set { base.IsDownloadNews = value; }
 			}
 
-			/// <summary>
-			/// Применить изменения, сделанные в копии настроек.
-			/// </summary>
-			/// <param name="settingsCopy">Копия.</param>
 			public override void ApplyChanges(HydraTaskSettings settingsCopy)
 			{
 				((FixSettings)settingsCopy).MarketDataSession = ((FixSettings)settingsCopy)._marketDataSession;
@@ -90,17 +87,22 @@ namespace StockSharp.Hydra.Fix
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<FixTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<FixTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new FixSettings(settings);
 
 			if (settings.IsDefault)
-				_settings.MarketDataSession = new FixSession();
+				_settings.MarketDataSession = new FixMessageAdapter(new IncrementalIdGenerator());
 
 			return new MarketDataConnector<FixTrader>(EntityRegistry.Securities, this, () =>
 			{
 				var trader = new FixTrader();
-				trader.MarketDataSession.Load(_settings.MarketDataSession.Save());
+
+				trader.MarketDataAdapter.Load(_settings.MarketDataSession.Save());
+
+				if (!this.IsExecLogEnabled())
+					trader.Adapter.InnerAdapters.Remove(trader.TransactionAdapter);
+
 				return trader;
 			});
 		}

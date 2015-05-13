@@ -59,16 +59,6 @@ namespace StockSharp.Algo.Indicators
 		public override bool IsFormed { get { return Buffer.Count > Shift; } }
 
 		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return _medianPrice.CanProcess(input);
-		}
-
-		/// <summary>
 		/// Обработать входное значение.
 		/// </summary>
 		/// <param name="input">Входное значение.</param>

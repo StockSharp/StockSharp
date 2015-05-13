@@ -111,12 +111,6 @@
             Номер, начиная с которого <see cref="T:StockSharp.Fix.FixServer" /> будет генерировать номера транзакций.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixServer.IncrementalDepthUpdates">
-      <summary>
-            Отправлять изменения по стакану. Если выключено, отправляется стакан целиком.
-            По умолчанию, включено.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.FixServer.TransactionSession">
       <summary>
             Транзакционная сессия.
@@ -155,6 +149,69 @@
     <member name="E:StockSharp.Fix.FixServer.UserFinding">
       <summary>
             Событие поиска клиента по его логину.
+            </summary>
+    </member>
+    <member name="T:StockSharp.Fix.FixSession">
+      <summary>
+            Настройки сессии.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.#ctor">
+      <summary>
+            Создать <see cref="T:StockSharp.Fix.FixSession" />.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixSession.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Address">
+      <summary>
+            Адрес сервера.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.TargetCompId">
+      <summary>
+            Идентификатор получателя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.SenderCompId">
+      <summary>
+            Идентификатор отправителя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Version">
+      <summary>
+            Версия FIX протокола.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Format">
+      <summary>
+            Формат FIX протокола.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.HeartBeat">
+      <summary>
+            Интервал проверки доступности соединения. По-умолчанию равно 1 минуте.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.Encoding">
+      <summary>
+            Кодировка, использующая при передаче данных. По-умолчанию значение равно <see cref="P:System.Text.Encoding.UTF8" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.IncrementalDepthUpdates">
+      <summary>
+            Отправлять изменения по стакану. Если выключено, отправляется стакан целиком.
+            По умолчанию, включено.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.BaseFixReader">
@@ -2753,13 +2810,12 @@
       <param name="handler">Обработчик.</param>
       <returns>Сообщение <see cref="T:StockSharp.Messages.OrderRegisterMessage" />.</returns>
     </member>
-    <member name="M:StockSharp.Fix.Native.PubExtensions.ReadExecutionMessage(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixSession,System.TimeSpan,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
+    <member name="M:StockSharp.Fix.Native.PubExtensions.ReadExecutionMessage(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
       <summary>
             Прочитать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.ExecutionReport" /> в <see cref="T:StockSharp.Messages.ExecutionMessage" />.
             </summary>
       <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
-      <param name="session">Сессия.</param>
-      <param name="dateTimeOffset">Смещение времени относительно UTC для серверного времени данных.</param>
+      <param name="adapter">Адаптер сообщений для FIX.</param>
       <param name="handler">Обработчик.</param>
       <returns>Сообщения об исполнениях.</returns>
     </member>
@@ -3150,18 +3206,25 @@
       <param name="currency">Валюта.</param>
       <param name="changes">Список изменений.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.#ctor(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.FixSession,Ecng.Common.IncrementalIdGenerator)">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.#ctor(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.FixVersions,StockSharp.Fix.FixFormats,Ecng.Common.IncrementalIdGenerator,System.String,System.String)">
       <summary>
             Создать <see cref="T:StockSharp.Fix.Native.FixMessageWriter" />.
             </summary>
       <param name="writer">Писать FIX протокола.</param>
-      <param name="session">Сессия.</param>
+      <param name="version">Версия FIX протокола.</param>
+      <param name="format">Формат FIX протокола.</param>
       <param name="idGenerator">Генератор транзакций.</param>
+      <param name="senderCompId">Идентификатор отправителя.</param>
+      <param name="targetCompId">Идентификатор получателя.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteLogonRequest">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteLogonRequest(System.TimeSpan,System.Boolean,System.String,System.String)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.Logon" /> (запрос).
             </summary>
+      <param name="heartBeat">Интервал проверки доступности соединения.</param>
+      <param name="isResetCounter">Нужно ли сбрасывать счетчик номеров.</param>
+      <param name="userName">Логин.</param>
+      <param name="password">Пароль.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteLogonResponse">
       <summary>
@@ -3173,43 +3236,45 @@
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.Logout" /> (запрос).
             </summary>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteHeartbeat(StockSharp.Messages.TimeMessage)">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteHeartbeat(System.String)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.Heartbeat" />.
             </summary>
-      <param name="message">Временное сообщение.</param>
+      <param name="requestId">Идентификатор запроса.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteTestRequest(StockSharp.Messages.TimeMessage)">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteTestRequest(System.String)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.TestRequest" />.
             </summary>
-      <param name="message">Временное сообщение.</param>
+      <param name="requestId">Идентификатор запроса.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteSequenceReset(System.Boolean,System.Int64)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.SequenceReset" />.
             </summary>
       <param name="gapFill">Заполнять ли пробелы.</param>
-      <param name="number">Номер первоначального сообщения.</param>
+      <param name="number">Идентификатор первоначального сообщения.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteResendRequest(System.Int32,System.Int32)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.ResendRequest" />.
             </summary>
-      <param name="begin">Номер первоначального сообщения.</param>
-      <param name="end">Номер последнего сообщения.</param>
+      <param name="begin">Идентификатор первоначального сообщения.</param>
+      <param name="end">Идентификатор последнего сообщения.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteChangePasswordRequest(StockSharp.Messages.ChangePasswordMessage)">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteChangePasswordRequest(StockSharp.Messages.ChangePasswordMessage,System.String,System.String)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.UserRequest" />.
             </summary>
       <param name="message">Сообщение изменения пароля.</param>
+      <param name="userName">Логин.</param>
+      <param name="password">Пароль.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteUserResponse(System.String,System.String,StockSharp.Fix.Native.UserStatus,System.String)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.UserResponse" />.
             </summary>
-      <param name="requestId">Номер запроса.</param>
+      <param name="requestId">Идентификатор запроса.</param>
       <param name="userName">Имя пользователя.</param>
       <param name="status">Статус.</param>
       <param name="text">Текстовое сообщение.</param>
@@ -3768,25 +3833,41 @@
       <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
       <returns>Успешно ли обработаны данные.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.Fix.FixSessionHolder,StockSharp.Fix.FixSession)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Создать <see cref="T:StockSharp.Fix.FixMessageAdapter" />.
             </summary>
-      <param name="type">Тип адаптера.</param>
-      <param name="sessionHolder">Контейнер для сессии.</param>
-      <param name="session">Сессия.</param>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.CreateOrderCondition">
       <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
             </summary>
-      <param name="message">Сообщение.</param>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
             Отправить сообщение.
             </summary>
       <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.ToString">
+      <summary>
+            Получить строковое представление.
+            </summary>
+      <returns>Строковое представление.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.ProcessTransactionMessage(System.String,StockSharp.Fix.Native.IFixReader)">
       <summary>
@@ -3803,14 +3884,94 @@
       <param name="writer">Писатель FIX данных.</param>
       <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.Session">
-      <summary>
-            Сессия.
-            </summary>
-    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsSupportNativeSecurityLookup">
       <summary>
             Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.OrderStatusRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.OrderStatusMessage" /> для получения списка заявок и собственных сделок.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.SecurityLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Version">
+      <summary>
+            Версия FIX протокола. По-умолчанию равно <see cref="F:StockSharp.Fix.FixVersions.Fix44" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.SenderCompId">
+      <summary>
+            Идентификатор отправителя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TargetCompId">
+      <summary>
+            Идентификатор получателя.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Login">
+      <summary>
+            Логин.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Password">
+      <summary>
+            Пароль.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Address">
+      <summary>
+            Адрес сервера.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.MarketData">
+      <summary>
+            Тип маркет-данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.ExchangeBoard">
+      <summary>
+            Площадка, на которой торгуются инструменты.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.RequestAllPortfolios">
+      <summary>
+            Запрашивать все портфели при старте.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities">
+      <summary>
+            Запрашивать все инструменты при подключении.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Encoding">
+      <summary>
+            Кодировка, использующая при передаче данных. По-умолчанию значение равно <see cref="P:System.Text.Encoding.UTF8" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsResetCounter">
+      <summary>
+            Нужно ли сбрасывать счетчик номеров. По-умолчанию включено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.Format">
+      <summary>
+            Формат FIX протокола.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.UtcOffset">
+      <summary>
+            Смещение времени относительно UTC для серверного времени данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">
+      <summary>
+            Проверить введенные параметры на валидность.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.TextFixReader">
@@ -3909,104 +4070,6 @@
             Административное подключение.
             </summary>
     </member>
-    <member name="T:StockSharp.Fix.FixSession">
-      <summary>
-            Сессия.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixSession.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.Fix.FixSession" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixSession.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixSession.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixSession.ToString">
-      <summary>
-            Получить строковое представление.
-            </summary>
-      <returns>Строковое представление.</returns>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.Version">
-      <summary>
-            Версия FIX протокола. По-умолчанию равно <see cref="F:StockSharp.Fix.FixVersions.Fix44" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.SenderCompId">
-      <summary>
-            Идентификатор отправителя.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.TargetCompId">
-      <summary>
-            Идентификатор получателя.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.Login">
-      <summary>
-            Логин.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.Password">
-      <summary>
-            Пароль.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.Address">
-      <summary>
-            Адрес сервера.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.HeartBeat">
-      <summary>
-            Интервал проверки доступности соединения. По-умолчанию равно 1 минуте.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.MarketData">
-      <summary>
-            Тип маркет-данных.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.ExchangeBoard">
-      <summary>
-            Площадка, на которой торгуются инструменты.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.RequestAllPortfolios">
-      <summary>
-            Запрашивать все портфели при старте.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.RequestAllSecurities">
-      <summary>
-            Запрашивать все инструменты при подключении.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.Encoding">
-      <summary>
-            Кодировка, использующая при передаче данных. По-умолчанию значение равно <see cref="P:System.Text.Encoding.UTF8" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.IsResetCounter">
-      <summary>
-            Нужно ли сбрасывать счетчик номеров. По-умолчанию включено.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSession.Format">
-      <summary>
-            Формат FIX протокола.
-            </summary>
-    </member>
     <member name="T:StockSharp.Fix.FixMarketData">
       <summary>
             Типы маркет-данных.
@@ -4082,88 +4145,6 @@
             FIX 5.0 SP2.
             </summary>
     </member>
-    <member name="T:StockSharp.Fix.FixSessionHolder">
-      <summary>
-            Контейнер для сессии.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.FixSessionHolder.CreateTransactionAdapter">
-      <summary>
-            Создать транзакционный адаптер.
-            </summary>
-      <returns>Транзакционный адаптер.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixSessionHolder.CreateMarketDataAdapter">
-      <summary>
-            Создать адаптер маркет-данных.
-            </summary>
-      <returns>Адаптер маркет-данных.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixSessionHolder.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Создать <see cref="T:StockSharp.Fix.FixSessionHolder" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixSessionHolder.CreateOrderCondition">
-      <summary>
-            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
-            </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.FixSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Fix.FixSessionHolder.ToString">
-      <summary>
-            Получить строковое представление контейнера.
-            </summary>
-      <returns>Строковое представление.</returns>
-    </member>
-    <member name="P:StockSharp.Fix.FixSessionHolder.TransactionSession">
-      <summary>
-            Транзакционная сессия.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSessionHolder.MarketDataSession">
-      <summary>
-            Маркет-дата сессия.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSessionHolder.TransactionCopySession">
-      <summary>
-            Транзакционная сессия (копия, используется в случае ММВБ для получение заявок и сделок, зарегистрированных под подключения).
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSessionHolder.UtcOffset">
-      <summary>
-            Смещение времени относительно UTC для серверного времени данных.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSessionHolder.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSessionHolder.JoinInProcessors">
-      <summary>
-            Объединять обработчики входящих сообщений для адаптеров.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixSessionHolder.IsAdaptersIndependent">
-      <summary>
-            Являются ли подключения адаптеров независимыми друг от друга.
-            </summary>
-    </member>
     <member name="T:StockSharp.Fix.FixTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с биржей или брокерской системой через протокол FIX.
@@ -4186,32 +4167,20 @@
       <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
       <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixTrader.ChangePassword(StockSharp.Messages.MessageAdapterTypes,System.String)">
+    <member name="M:StockSharp.Fix.FixTrader.ChangePassword(System.String)">
       <summary>
             Сменить пароль.
             </summary>
-      <param name="adapterType">Тип адаптера, в который необходимо отправить сообщение о смене пароля.</param>
       <param name="newPassword">Новый пароль.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+    <member name="M:StockSharp.Fix.FixTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.BusinessEntities.MessageDirections)">
       <summary>
             Обработать сообщение, содержащее рыночные данные.
             </summary>
       <param name="message">Сообщение, содержащее рыночные данные.</param>
-      <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
       <param name="direction">Направление сообщения.</param>
     </member>
-    <member name="P:StockSharp.Fix.FixTrader.TransactionSession">
-      <summary>
-            Транзакционная сессия.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixTrader.MarketDataSession">
-      <summary>
-            Маркет-дата сессия.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Fix.FixTrader.TransactionCopySession">
+    <member name="P:StockSharp.Fix.FixTrader.TransactionCopyAdapter">
       <summary>
             Транзакционная сессия (копия, используется в случае ММВБ для получение заявок и сделок, зарегистрированных под подключения).
             </summary>

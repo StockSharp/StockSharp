@@ -114,7 +114,7 @@ namespace StockSharp.Hydra.SmartCom
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<SmartTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<SmartTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new SmartComSettings(settings);
 
@@ -126,17 +126,12 @@ namespace StockSharp.Hydra.SmartCom
 				_settings.IsVersion3 = true;
 			}
 
-			return new MarketDataConnector<SmartTrader>(EntityRegistry.Securities, this, () =>
+			return new MarketDataConnector<SmartTrader>(EntityRegistry.Securities, this, () => new SmartTrader
 			{
-				var trader = new SmartTrader
-				{
-					Login = _settings.Login,
-					Password = _settings.Password.To<string>(),
-					Address = _settings.Address,
-					Version = _settings.IsVersion3 ? SmartComVersions.V3 : SmartComVersions.V2
-				};
-
-				return trader;
+				Login = _settings.Login,
+				Password = _settings.Password.To<string>(),
+				Address = _settings.Address,
+				Version = _settings.IsVersion3 ? SmartComVersions.V3 : SmartComVersions.V2
 			});
 		}
 	}

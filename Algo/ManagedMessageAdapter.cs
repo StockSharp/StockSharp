@@ -1,9 +1,11 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.Collections.Generic;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Serialization;
 
 	using StockSharp.Algo.Latency;
 	using StockSharp.Algo.Commissions;
@@ -58,17 +60,141 @@ namespace StockSharp.Algo
 
 		void IDisposable.Dispose()
 		{
-			_innerAdapter.Dispose();
+			_innerAdapter.NewOutMessage -= ProcessOutMessage;
+			//_innerAdapter.Dispose();
 		}
 
-		MessageAdapterTypes IMessageAdapter.Type
+		ReConnectionSettings IMessageAdapter.ReConnectionSettings
 		{
-			get { return _innerAdapter.Type; }
+			get { return _innerAdapter.ReConnectionSettings; }
 		}
 
-		IMessageSessionHolder IMessageAdapter.SessionHolder
+		IdGenerator IMessageAdapter.TransactionIdGenerator
 		{
-			get { return _innerAdapter.SessionHolder; }
+			get { return _innerAdapter.TransactionIdGenerator; }
+		}
+
+		bool IMessageAdapter.PortfolioLookupRequired
+		{
+			get { return _innerAdapter.PortfolioLookupRequired; }
+		}
+
+		bool IMessageAdapter.OrderStatusRequired
+		{
+			get { return _innerAdapter.OrderStatusRequired; }
+		}
+
+		bool IMessageAdapter.SecurityLookupRequired
+		{
+			get { return _innerAdapter.SecurityLookupRequired; }
+		}
+
+		OrderCondition IMessageAdapter.CreateOrderCondition()
+		{
+			return _innerAdapter.CreateOrderCondition();
+		}
+
+		bool IMessageAdapter.IsConnectionAlive()
+		{
+			return _innerAdapter.IsConnectionAlive();
+		}
+
+		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo
+		{
+			get { return _innerAdapter.SecurityClassInfo; }
+		}
+
+		TimeSpan IMessageAdapter.HeartbeatInterval
+		{
+			get { return _innerAdapter.HeartbeatInterval; }
+			set { _innerAdapter.HeartbeatInterval = value; }
+		}
+
+		bool IMessageAdapter.CreateAssociatedSecurity
+		{
+			get { return _innerAdapter.CreateAssociatedSecurity; }
+			set { _innerAdapter.CreateAssociatedSecurity = value; }
+		}
+
+		bool IMessageAdapter.CreateDepthFromLevel1
+		{
+			get { return _innerAdapter.CreateDepthFromLevel1; }
+			set { _innerAdapter.CreateDepthFromLevel1 = value; }
+		}
+
+		string IMessageAdapter.AssociatedBoardCode
+		{
+			get { return _innerAdapter.AssociatedBoardCode; }
+			set { _innerAdapter.AssociatedBoardCode = value; }
+		}
+
+		MessageTypes[] IMessageAdapter.SupportedMessages
+		{
+			get { return _innerAdapter.SupportedMessages; }
+			set { _innerAdapter.SupportedMessages = value; }
+		}
+
+		bool IMessageAdapter.IsValid
+		{
+			get { return _innerAdapter.IsValid; }
+		}
+
+		Guid ILogSource.Id
+		{
+			get { return _innerAdapter.Id; }
+		}
+
+		string ILogSource.Name
+		{
+			get { return _innerAdapter.Name; }
+		}
+
+		ILogSource ILogSource.Parent
+		{
+			get { return _innerAdapter.Parent; }
+			set { _innerAdapter.Parent = value; }
+		}
+
+		LogLevels ILogSource.LogLevel
+		{
+			get { return _innerAdapter.LogLevel; }
+			set { _innerAdapter.LogLevel = value; }
+		}
+
+		DateTimeOffset ILogSource.CurrentTime
+		{
+			get { return _innerAdapter.CurrentTime; }
+		}
+
+		bool ILogSource.IsRoot
+		{
+			get { return _innerAdapter.IsRoot; }
+		}
+
+		event Action<LogMessage> ILogSource.Log
+		{
+			add { _innerAdapter.Log += value; }
+			remove { _innerAdapter.Log -= value; }
+		}
+
+		void ILogReceiver.AddLog(LogMessage message)
+		{
+			_innerAdapter.AddLog(message);
+		}
+
+		void IPersistable.Load(SettingsStorage storage)
+		{
+			_innerAdapter.Load(storage);
+		}
+
+		void IPersistable.Save(SettingsStorage storage)
+		{
+			_innerAdapter.Save(storage);
+		}
+
+		bool IMessageChannel.IsOpened
+		{
+			get { return _innerAdapter.IsOpened; }
 		}
 
 		private Action<Message> _newOutMessage;
@@ -82,7 +208,7 @@ namespace StockSharp.Algo
 		void IMessageChannel.SendInMessage(Message message)
 		{
 			if (message.LocalTime.IsDefault())
-				message.LocalTime = _innerAdapter.SessionHolder.CurrentTime.LocalDateTime;
+				message.LocalTime = _innerAdapter.CurrentTime.LocalDateTime;
 
 			if (message.Type == MessageTypes.Connect)
 			{
@@ -99,25 +225,23 @@ namespace StockSharp.Algo
 			_innerAdapter.SendInMessage(message);
 		}
 
-		void IMessageAdapter.SendOutMessage(Message message)
+		void IMessageChannel.Open()
 		{
-			if (message.LocalTime.IsDefault())
-				message.LocalTime = _innerAdapter.SessionHolder.CurrentTime.LocalDateTime;
-
-			_innerAdapter.SendOutMessage(message);
+			_innerAdapter.Open();
 		}
 
-		IMessageProcessor IMessageAdapter.InMessageProcessor
+		void IMessageChannel.Close()
 		{
-			get { return _innerAdapter.InMessageProcessor; }
-			set { _innerAdapter.InMessageProcessor = value; }
+			_innerAdapter.Close();
 		}
 
-		IMessageProcessor IMessageAdapter.OutMessageProcessor
-		{
-			get { return _innerAdapter.OutMessageProcessor; }
-			set { _innerAdapter.OutMessageProcessor = value; }
-		}
+		//void IMessageAdapter.SendOutMessage(Message message)
+		//{
+		//	if (message.LocalTime.IsDefault())
+		//		message.LocalTime = _innerAdapter.CurrentTime.LocalDateTime;
+
+		//	_innerAdapter.SendOutMessage(message);
+		//}
 
 		private void ProcessOutMessage(Message message)
 		{
@@ -147,7 +271,7 @@ namespace StockSharp.Algo
 		{
 			foreach (var rule in RiskManager.ProcessRules(message))
 			{
-				_innerAdapter.SessionHolder.AddWarningLog(LocalizedStrings.Str855Params,
+				_innerAdapter.AddWarningLog(LocalizedStrings.Str855Params,
 					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
 				
 				switch (rule.Action)
@@ -160,7 +284,7 @@ namespace StockSharp.Algo
 						_innerAdapter.SendInMessage(new DisconnectMessage());
 						break;
 					case RiskActions.CancelOrders:
-						_innerAdapter.SendInMessage(new OrderGroupCancelMessage { TransactionId = _innerAdapter.SessionHolder.TransactionIdGenerator.GetNextId() });
+						_innerAdapter.SendInMessage(new OrderGroupCancelMessage { TransactionId = _innerAdapter.TransactionIdGenerator.GetNextId() });
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();

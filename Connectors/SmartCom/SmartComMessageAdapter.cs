@@ -14,21 +14,22 @@ namespace StockSharp.SmartCom
 	/// <summary>
 	/// Адаптер сообщений для SmartCOM.
 	/// </summary>
-	public partial class SmartComMessageAdapter : MessageAdapter<SmartComSessionHolder>
+	public partial class SmartComMessageAdapter : MessageAdapter
 	{
-		private bool _isSessionOwner;
+		private ISmartComWrapper _wrapper;
 
 		/// <summary>
 		/// Создать <see cref="SmartComMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		/// <param name="type">Тип адаптера.</param>
-		public SmartComMessageAdapter(MessageAdapterTypes type, SmartComSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public SmartComMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
-			SessionHolder.Initialize += OnSessionInitialize;
-			SessionHolder.UnInitialize += OnSessionUnInitialize;
-			SessionHolder.VersionChanged += OnSessionVersionChanged;
+			Version = SmartComVersions.V3;
+
+			SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
+			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
 
 			PortfolioBoardCodes = new Dictionary<string, string>
 			{
@@ -37,141 +38,33 @@ namespace StockSharp.SmartCom
 			    { "RTS_FUT", ExchangeBoard.Forts.Code },
 			};
 
-			OnSessionVersionChanged();
+			UpdatePlatform();
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+			this.RemoveSupportedMessage(MessageTypes.OrderStatus);
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		protected override void DisposeManaged()
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public override OrderCondition CreateOrderCondition()
 		{
-			SessionHolder.Initialize -= OnSessionInitialize;
-			SessionHolder.UnInitialize -= OnSessionUnInitialize;
-			SessionHolder.VersionChanged -= OnSessionVersionChanged;
-
-			base.DisposeManaged();
+			return new SmartComOrderCondition();
 		}
 
-		private void OnSessionInitialize()
+		private void UpdatePlatform()
 		{
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					Session.NewPortfolio += OnNewPortfolio;
-					Session.PortfolioChanged += OnPortfolioChanged;
-					Session.PositionChanged += OnPositionChanged;
-					Session.NewMyTrade += OnNewMyTrade;
-					Session.NewOrder += OnNewOrder;
-					Session.OrderFailed += OnOrderFailed;
-					Session.OrderCancelFailed += OnOrderCancelFailed;
-					Session.OrderChanged += OnOrderChanged;
-					Session.OrderReRegisterFailed += OnOrderReRegisterFailed;
-					Session.OrderReRegistered += OnOrderReRegistered;
-
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					Session.NewSecurity += OnNewSecurity;
-					Session.SecurityChanged += OnSecurityChanged;
-					Session.QuoteChanged += OnQuoteChanged;
-					Session.NewTrade += OnNewTrade;
-					Session.NewHistoryTrade += OnNewHistoryTrade;
-					Session.NewBar += OnNewBar;
-
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		private void OnSessionUnInitialize()
-		{
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					Session.NewPortfolio -= OnNewPortfolio;
-					Session.PortfolioChanged -= OnPortfolioChanged;
-					Session.PositionChanged -= OnPositionChanged;
-					Session.NewMyTrade -= OnNewMyTrade;
-					Session.NewOrder -= OnNewOrder;
-					Session.OrderFailed -= OnOrderFailed;
-					Session.OrderCancelFailed -= OnOrderCancelFailed;
-					Session.OrderChanged -= OnOrderChanged;
-					Session.OrderReRegisterFailed -= OnOrderReRegisterFailed;
-					Session.OrderReRegistered -= OnOrderReRegistered;
-
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					Session.NewSecurity -= OnNewSecurity;
-					Session.SecurityChanged -= OnSecurityChanged;
-					Session.QuoteChanged -= OnQuoteChanged;
-					Session.NewTrade -= OnNewTrade;
-					Session.NewHistoryTrade -= OnNewHistoryTrade;
-					Session.NewBar -= OnNewBar;
-
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		private void OnSessionVersionChanged()
-		{
-			Platform = SessionHolder.Version == SmartComVersions.V3 ? Platforms.AnyCPU : Platforms.x86;
-		}
-
-		private ISmartComWrapper Session
-		{
-			get
-			{
-				if (SessionHolder.Session == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1856);
-
-				return SessionHolder.Session;
-			}
-			set
-			{
-				if (SessionHolder.Session != null)
-					throw new InvalidOperationException(LocalizedStrings.Str1619);
-
-				SessionHolder.Session = value;
-
-				Session.Connected += OnConnected;
-				Session.Disconnected += OnDisconnected;
-			}
+			Platform = Version == SmartComVersions.V3 ? Platforms.AnyCPU : Platforms.x86;
 		}
 
 		/// <summary>
-		/// Добавить <see cref="StockSharp.Messages.Message"/> в выходную очередь <see cref="IMessageAdapter"/>.
+		/// Поддерживается ли торговой системой поиск портфелей.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		public override void SendOutMessage(Message message)
+		protected override bool IsSupportNativePortfolioLookup
 		{
-			base.SendOutMessage(message);
-
-			var connectMsg = message as ConnectMessage;
-
-			if (connectMsg != null && connectMsg.Error == null)
-			{
-				switch (Type)
-				{
-					case MessageAdapterTypes.Transaction:
-						SendInMessage(new PortfolioLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						break;
-					case MessageAdapterTypes.MarketData:
-						SendInMessage(new SecurityLookupMessage { TransactionId = TransactionIdGenerator.GetNextId() });
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
+			get { return true; }
 		}
 
 		/// <summary>
@@ -182,7 +75,7 @@ namespace StockSharp.SmartCom
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
+				case MessageTypes.Reset:
 				{
 					_tempDepths.Clear();
 					_candleTransactions.Clear();
@@ -194,47 +87,94 @@ namespace StockSharp.SmartCom
 					//_smartOrderIds.Clear();
 					//_smartIdOrders.Clear();
 
-					if (SessionHolder.Session == null)
+					if (_wrapper != null)
 					{
-						_isSessionOwner = true;
-
-						switch (SessionHolder.Version)
+						try
 						{
-							case SmartComVersions.V2:
-								Session = new SmartCom2Wrapper();
-								break;
-							case SmartComVersions.V3:
-								Session = (Environment.Is64BitProcess
-									? (ISmartComWrapper)new SmartCom3Wrapper64
-									{
-										ClientSettings = SessionHolder.ClientSettings,
-										ServerSettings = SessionHolder.ServerSettings,
-									}
-									: new SmartCom3Wrapper32
-									{
-										ClientSettings = SessionHolder.ClientSettings,
-										ServerSettings = SessionHolder.ServerSettings,
-									});
-
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
+							DisposeWrapper();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
 						}
 
-						Session.Connect(SessionHolder.Address.GetHost(), (short)SessionHolder.Address.GetPort(), SessionHolder.Login, SessionHolder.Password.To<string>());
+						try
+						{
+							_wrapper.Disconnect();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_wrapper = null;
 					}
-					else
-						SendOutMessage(new ConnectMessage());
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
+				case MessageTypes.Connect:
+				{
+					if (_wrapper != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
+
+					switch (Version)
+					{
+						case SmartComVersions.V2:
+							_wrapper = new SmartCom2Wrapper();
+							break;
+						case SmartComVersions.V3:
+							_wrapper = (Environment.Is64BitProcess
+								? (ISmartComWrapper)new SmartCom3Wrapper64
+								{
+									ClientSettings = ClientSettings,
+									ServerSettings = ServerSettings,
+								}
+								: new SmartCom3Wrapper32
+								{
+									ClientSettings = ClientSettings,
+									ServerSettings = ServerSettings,
+								});
+
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+
+					_wrapper.NewPortfolio += OnNewPortfolio;
+					_wrapper.PortfolioChanged += OnPortfolioChanged;
+					_wrapper.PositionChanged += OnPositionChanged;
+					_wrapper.NewMyTrade += OnNewMyTrade;
+					_wrapper.NewOrder += OnNewOrder;
+					_wrapper.OrderFailed += OnOrderFailed;
+					_wrapper.OrderCancelFailed += OnOrderCancelFailed;
+					_wrapper.OrderChanged += OnOrderChanged;
+					_wrapper.OrderReRegisterFailed += OnOrderReRegisterFailed;
+					_wrapper.OrderReRegistered += OnOrderReRegistered;
+
+					_wrapper.NewSecurity += OnNewSecurity;
+					_wrapper.SecurityChanged += OnSecurityChanged;
+					_wrapper.QuoteChanged += OnQuoteChanged;
+					_wrapper.NewTrade += OnNewTrade;
+					_wrapper.NewHistoryTrade += OnNewHistoryTrade;
+					_wrapper.NewBar += OnNewBar;
+
+					_wrapper.Connected += OnConnected;
+					_wrapper.Disconnected += OnDisconnected;
+
+					_wrapper.Connect(Address.GetHost(), (short)Address.GetPort(), Login, Password.To<string>());
 
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					if (_isSessionOwner)
-						Session.Disconnect();
-					else
-						SendOutMessage(new DisconnectMessage());
+					if (_wrapper == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1856);
+
+					_wrapper.Disconnect();
 
 					break;
 				}
@@ -248,7 +188,7 @@ namespace StockSharp.SmartCom
 					break;
 
 				case MessageTypes.OrderGroupCancel:
-					Session.CancelAllOrders();
+					_wrapper.CancelAllOrders();
 					break;
 
 				case MessageTypes.OrderReplace:
@@ -280,13 +220,35 @@ namespace StockSharp.SmartCom
 
 		private void OnDisconnected(Exception error)
 		{
+			DisposeWrapper();
+
 			SendOutMessage(new DisconnectMessage { Error = error });
 
-			Session.Connected -= OnConnected;
-			Session.Disconnected -= OnDisconnected;
+			_wrapper = null;
+		}
 
-			SessionHolder.Session = null;
-			_isSessionOwner = false;
+		private void DisposeWrapper()
+		{
+			_wrapper.NewPortfolio -= OnNewPortfolio;
+			_wrapper.PortfolioChanged -= OnPortfolioChanged;
+			_wrapper.PositionChanged -= OnPositionChanged;
+			_wrapper.NewMyTrade -= OnNewMyTrade;
+			_wrapper.NewOrder -= OnNewOrder;
+			_wrapper.OrderFailed -= OnOrderFailed;
+			_wrapper.OrderCancelFailed -= OnOrderCancelFailed;
+			_wrapper.OrderChanged -= OnOrderChanged;
+			_wrapper.OrderReRegisterFailed -= OnOrderReRegisterFailed;
+			_wrapper.OrderReRegistered -= OnOrderReRegistered;
+
+			_wrapper.NewSecurity -= OnNewSecurity;
+			_wrapper.SecurityChanged -= OnSecurityChanged;
+			_wrapper.QuoteChanged -= OnQuoteChanged;
+			_wrapper.NewTrade -= OnNewTrade;
+			_wrapper.NewHistoryTrade -= OnNewHistoryTrade;
+			_wrapper.NewBar -= OnNewBar;
+
+			_wrapper.Connected -= OnConnected;
+			_wrapper.Disconnected -= OnDisconnected;
 		}
 	}
 }

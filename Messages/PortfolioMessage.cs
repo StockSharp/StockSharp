@@ -73,14 +73,14 @@ namespace StockSharp.Messages
 		public PortfolioStates? State { get; set; }
 
 		/// <summary>
-		/// Номер первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
+		/// Идентификатор первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции подписки или отписки на изменения портфеля.
+		/// Идентификатор транзакции подписки или отписки на изменения портфеля.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]

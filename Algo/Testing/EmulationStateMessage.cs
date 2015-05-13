@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Testing
 {
-	using System;
-
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -9,15 +7,15 @@
 	/// </summary>
 	class EmulationStateMessage : Message
 	{
-		/// <summary>
-		/// Дата в истории, с которой необходимо начать эмуляцию.
-		/// </summary>
-		public DateTimeOffset StartDate { get; set; }
+		///// <summary>
+		///// Дата в истории, с которой необходимо начать эмуляцию.
+		///// </summary>
+		//public DateTimeOffset StartDate { get; set; }
 
-		/// <summary>
-		/// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
-		/// </summary>
-		public DateTimeOffset StopDate { get; set; }
+		///// <summary>
+		///// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
+		///// </summary>
+		//public DateTimeOffset StopDate { get; set; }
 
 		///// <summary>
 		///// Предыдущее состояние.
@@ -25,9 +23,9 @@
 		//public EmulationStates OldState { get; set; }
 
 		/// <summary>
-		/// Текущее состояние.
+		/// Передаваемое состояние.
 		/// </summary>
-		public EmulationStates NewState { get; set; }
+		public EmulationStates State { get; set; }
 
 		/// <summary>
 		/// Создать <see cref="EmulationStateMessage"/>.
@@ -46,9 +44,9 @@
 			return new EmulationStateMessage
 			{
 				//OldState = OldState,
-				NewState = NewState,
-				StartDate = StartDate,
-				StopDate = StopDate,
+				State = State,
+				//StartDate = StartDate,
+				//StopDate = StopDate,
 			};
 		}
 	}

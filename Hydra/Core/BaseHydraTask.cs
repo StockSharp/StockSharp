@@ -234,6 +234,7 @@ namespace StockSharp.Hydra.Core
 						catch (Exception ex)
 						{
 							HandleError(ex);
+							WaitIfNecessary(TimeSpan.FromSeconds(5));
 						}
 					}
 				}
@@ -420,12 +421,15 @@ namespace StockSharp.Hydra.Core
 				values = (dict.TryGetValue(string.Empty) ?? Enumerable.Empty<T>()).ToArray();
 			}
 
-			if (!values.Any())
+			var count = values.Count();
+
+			if (count == 0)
 				return;
 
 			try
 			{
 				getStorage(security, Settings.Drive, Settings.StorageFormat).Save(values);
+				RaiseDataLoaded(security, messageType, arg, getTime(values.Last()), count);
 			}
 			catch (Exception ex)
 			{
@@ -434,9 +438,6 @@ namespace StockSharp.Hydra.Core
 				if (Settings.MaxErrorCount > 0)
 					throw;
 			}
-
-			var count = values.Count();
-			RaiseDataLoaded(security, messageType, arg, getTime(values.Last()), count);
 		}
 
 		private static Func<T, string> CreateErrorCheck<T>(Func<T, bool> check, string message)
@@ -592,12 +593,15 @@ namespace StockSharp.Hydra.Core
 		/// <param name="news">Новости.</param>
 		protected void SaveNews(IEnumerable<News> news)
 		{
-			news.ForEach(EntityRegistry.News.Save);
-
 			var count = news.Count();
 
 			if (count > 0)
+			{
+				var storage = StorageRegistry.GetNewsStorage(Settings.Drive, Settings.StorageFormat);
+				storage.Save(news);
+
 				RaiseDataLoaded(null, typeof(NewsMessage), null, news.Last().ServerTime, count);
+			}
 		}
 
 		/// <summary>
@@ -607,7 +611,10 @@ namespace StockSharp.Hydra.Core
 		/// <param name="executions">Исполнения.</param>
 		protected void SaveExecutions(Security security, IEnumerable<ExecutionMessage> executions)
 		{
-			SafeSave(security, typeof(ExecutionMessage), ExecutionTypes.Order, executions, t => t.ServerTime, Enumerable.Empty<Func<ExecutionMessage, string>>());
+			foreach (var group in executions.GroupBy(e => e.ExecutionType))
+			{
+				SafeSave(security, typeof(ExecutionMessage), group.Key, group, t => t.ServerTime, Enumerable.Empty<Func<ExecutionMessage, string>>());
+			}
 		}
 
 		/// <summary>

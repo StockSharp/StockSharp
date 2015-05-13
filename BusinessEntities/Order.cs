@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		private long _id;
+		private long? _id;
 
 		/// <summary>
 		/// Идентификатор заявки.
@@ -87,7 +87,7 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str361Key)]
 		[DescriptionLoc(LocalizedStrings.OrderIdStringKey, true)]
 		[MainCategory]
-		public long Id
+		public long? Id
 		{
 			get { return _id; }
 			set
@@ -122,7 +122,7 @@ namespace StockSharp.BusinessEntities
 		private string _boardId;
 
 		/// <summary>
-		/// Идентификатор заявки электронной площадки. Используется, если <see cref="Id"/> или <see cref="StringId"/> содержит идентификатор брокерской системы.
+		/// Идентификатор заявки электронной площадки. Используется, если <see cref="Id"/> или <see cref="StringId"/> содержат идентификаторы брокерской системы.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str117Key)]
@@ -164,7 +164,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Номер транзакции. Автоматически устанавливается при вызове метода <see cref="IConnector.RegisterOrder" />.
+		/// Идентификатор транзакции. Автоматически устанавливается при вызове метода <see cref="IConnector.RegisterOrder" />.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -407,21 +407,20 @@ namespace StockSharp.BusinessEntities
 		[MainCategory]
 		public OrderTypes Type { get; set; }
 
-		private DateTimeOffset _expiryDate = DateTimeOffset.MaxValue;
+		private DateTimeOffset? _expiryDate;
 
 		/// <summary>
-		/// Время экспирации заявки. По-умолчанию равно <see cref="DateTime.MaxValue"/>, что означает действие заявки до отмены (GTC).
+		/// Время экспирации заявки. По-умолчанию равно <see langword="null"/>, что означает действие заявки до отмены (GTC).
 		/// </summary>
 		/// <remarks>
-		/// Если значение равно <see cref="DateTime.Today"/>, то заявка выставляется сроком на текущую сессию.
-		/// Если значение равно <see cref="DateTime.MaxValue"/>, то заявка выставляется до отмены.
+		/// Если значение равно <see cref="DateTimeOffset.MaxValue"/>, то заявка выставляется до отмены.
 		/// Иначе, указывается конкретный срок.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
 		[DescriptionLoc(LocalizedStrings.Str142Key)]
 		[MainCategory]
-		public DateTimeOffset ExpiryDate
+		public DateTimeOffset? ExpiryDate
 		{
 			get { return _expiryDate; }
 			set
@@ -505,7 +504,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <remarks>
 		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с заявкой.
-		/// Например, время активации, доходность для обычных заявок, или номер заявки-условия для стоп-заявки.
+		/// Например, время активации, доходность для обычных заявок, или идентификатор заявки-условия для стоп-заявки.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -565,13 +564,31 @@ namespace StockSharp.BusinessEntities
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Код брокерской фирмы.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.BrokerKey)]
+		[DescriptionLoc(LocalizedStrings.Str2619Key)]
+		public string BrokerCode { get; set; }
+
+		/// <summary>
+		/// Код клиента, присвоенный брокером.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.Str3425Key)]
+		[DescriptionLoc(LocalizedStrings.Str3426Key)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// Получить строковое представление.
 		/// </summary>
 		/// <returns>Строковое представление.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str534Params
-				.Put(TransactionId, Id == 0 ? StringId : Id.To<string>(), Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance);
+				.Put(TransactionId, Id == null ? StringId : Id.To<string>(), Direction == Sides.Buy ? LocalizedStrings.Str403 : LocalizedStrings.Str404, Price, Volume, State, Balance);
 		}
 	}
 }

@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="StandardDeviation"/>.
 		/// </summary>
 		public StandardDeviation()
-			: base(typeof(decimal))
 		{
 			_sma = new SimpleMovingAverage();
 			Length = 10;

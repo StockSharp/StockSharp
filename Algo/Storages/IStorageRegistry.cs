@@ -17,6 +17,22 @@
 		IMarketDataDrive DefaultDrive { get; }
 
 		/// <summary>
+		/// Получить хранилище новостей.
+		/// </summary>
+		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
+		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
+		/// <returns>Хранилище новостей.</returns>
+		IMarketDataStorage<News> GetNewsStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+
+		/// <summary>
+		/// Получить хранилище новостей.
+		/// </summary>
+		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
+		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
+		/// <returns>Хранилище новостей.</returns>
+		IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+
+		/// <summary>
 		/// Получить хранилище тиковых сделок для заданного инструмента.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>

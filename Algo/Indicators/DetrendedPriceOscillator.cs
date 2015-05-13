@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -10,7 +11,7 @@ namespace StockSharp.Algo.Indicators
 	[DescriptionLoc(LocalizedStrings.Str761Key)]
 	public class DetrendedPriceOscillator : LengthIndicator<decimal>
 	{
-		private readonly SimpleMovingAverage _sma = new SimpleMovingAverage();
+		private readonly SimpleMovingAverage _sma;
 
 		/// <summary>
 		/// Создать <see cref="DetrendedPriceOscillator"/>.

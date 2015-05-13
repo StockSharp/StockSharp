@@ -2,6 +2,8 @@
 {
     using System;
     using System.Runtime.Serialization;
+
+    using Ecng.Common;
     using Ecng.Serialization;
 
 	/// <summary>
@@ -9,7 +11,7 @@
     /// </summary>
     [Serializable]
     [System.Runtime.Serialization.DataContract]
-	public class RpsOrderInfo
+	public class RpsOrderInfo : Cloneable<RpsOrderInfo>
     {
         /// <summary>
         /// Создать <see cref="RpsOrderInfo"/>.
@@ -57,5 +59,22 @@
 		/// </summary>
 		[DataMember]
 		public CurrencyTypes CurrencyType { get; set; }
+
+		/// <summary>
+		/// Создать копию объекта <see cref="RpsOrderInfo"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override RpsOrderInfo Clone()
+		{
+			return new RpsOrderInfo
+			{
+				CurrencyType = CurrencyType,
+				ForAccount = ForAccount,
+				MatchRef = MatchRef,
+				Partner = Partner,
+				SettleCode = SettleCode,
+				SettleDate = SettleDate
+			};
+		}
     }
 }

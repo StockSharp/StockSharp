@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -11,22 +10,13 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("MedianPrice")]
 	[DescriptionLoc(LocalizedStrings.Str745Key)]
-	public class MedianPrice : BaseIndicator<decimal>
+	public class MedianPrice : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="MedianPrice"/>.
 		/// </summary>
 		public MedianPrice()
-			: base(typeof(Candle))
 		{
-		}
-
-		/// <summary>
-		/// Сформирован ли индикатор.
-		/// </summary>
-		public override bool IsFormed
-		{
-			get { return true; }
 		}
 
 		/// <summary>
@@ -37,6 +27,10 @@ namespace StockSharp.Algo.Indicators
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
 			var candle = input.GetValue<Candle>();
+
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return new DecimalIndicatorValue(this, (candle.HighPrice + candle.LowPrice) / 2);
 		}
 	}

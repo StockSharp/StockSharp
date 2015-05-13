@@ -19,13 +19,13 @@
 		</Grid.RowDefinitions>
 
 		<StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" Orientation="Horizontal">
-			<xctk:DropDownButton Content="{x:Static loc:LocalizedStrings.XamlStr774}">
+			<xctk:DropDownButton Content="{x:Static loc:LocalizedStrings.TransactionalSession}">
 				<xctk:DropDownButton.DropDownContent>
 					<propertyGrid:PropertyGridEx x:Name="TransactionSessionSettings" />
 				</xctk:DropDownButton.DropDownContent>
 			</xctk:DropDownButton>
 
-			<xctk:DropDownButton Content="{x:Static loc:LocalizedStrings.XamlStr299}">
+			<xctk:DropDownButton Content="{x:Static loc:LocalizedStrings.MarketDataSession}">
 				<xctk:DropDownButton.DropDownContent>
 					<propertyGrid:PropertyGridEx x:Name="MarketDataSessionSettings" />
 				</xctk:DropDownButton.DropDownContent>

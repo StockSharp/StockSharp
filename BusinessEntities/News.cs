@@ -20,7 +20,7 @@ namespace StockSharp.BusinessEntities
 	public class News : IExtendableEntity
 	{
 		/// <summary>
-		/// Номер новости.
+		/// Идентификатор новости.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.IdKey)]

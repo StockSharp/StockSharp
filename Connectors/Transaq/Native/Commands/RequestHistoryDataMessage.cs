@@ -6,8 +6,8 @@
 		{
 		}
 
-		public string Board { get; set; }
-		public string SecCode { get; set; }
+		//public string Board { get; set; }
+		//public string SecCode { get; set; }
 		public int SecId { get; set; }
 		public int Period { get; set; }
 		public long Count { get; set; }

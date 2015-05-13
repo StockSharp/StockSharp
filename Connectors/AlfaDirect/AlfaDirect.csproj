@@ -91,7 +91,7 @@
     <Compile Include="AlfaDirectMessageAdapter.cs" />
     <Compile Include="AlfaDirectMessageAdapter_MarketData.cs" />
     <Compile Include="AlfaDirectMessageAdapter_Transaction.cs" />
-    <Compile Include="AlfaDirectSessionHolder.cs" />
+    <Compile Include="AlfaDirectMessageAdapter_Settings.cs" />
     <Compile Include="AlfaException.cs" />
     <Compile Include="AlfaOrderCondition.cs" />
     <Compile Include="Native\AlfaTable.cs" />

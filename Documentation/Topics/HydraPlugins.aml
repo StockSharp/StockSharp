@@ -14,39 +14,48 @@
 		  стандартно.
 	  </para>
 		<alert class="note">
-			Все источники и сама программа <token>hydra</token> доступна в исходниках, и находится в дистрибутиве <token>stocksharp</token> в папке Hydra.
+			Все источники и сама программа <token>hydra</token> доступна в исходниках, и находится в репозитории <externalLink>
+			<linkText>StockSharp</linkText>
+				<linkAlternateText>Optional alternate text</linkAlternateText>
+					<linkUri>https://github.com/StockSharp/StockSharp/releases</linkUri>
+					<linkTarget>_blank</linkTarget>
+			</externalLink> на GitHub.
 		</alert>
     </introduction>
-
-	  <procedure>
-		  <title>Этапы создание источника</title>
-		  <steps class="ordered">
-			  <step>
-				  <content>
-					  <para>
-						  Каждый источник должен реализовать интерфейс <codeEntityReference>T:StockSharp.Hydra.Core.IMarketDataSource</codeEntityReference>
-						  (или отнаследоваться от классов <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.BaseMarketDataSource</codeEntityReference> или
-						  <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.TraderMarketDataSource`1</codeEntityReference>):
-					  </para>
-<code language="C#">
+	<procedure>
+		<title>Этапы создание источника</title>
+		<steps class="ordered">
+			<step>
+				<content>
+					<para>
+						Каждый источник должен реализовать интерфейс <codeEntityReference>T:StockSharp.Hydra.Core.IHydraTask</codeEntityReference>
+						(или наследоваться от классов <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.BaseHydraTask</codeEntityReference> или
+						<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.ConnectorHydraTask</codeEntityReference>):
+					</para>
+					<code language="C#">
 <![CDATA[
-	class RtsSource : BaseMarketDataSource
+	class RtsTask : BaseHydraTask
 	{
 		private RtsSettings _settings;
-		private RtsHistorySource _source;
-
-		protected override void ApplySettings(MarketDataSourceSettings settings, bool isNew)
+		
+		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new RtsSettings(settings);
 
-			_source = new RtsHistorySource(SecurityStorage) { DumpFolder = GetTempPath() };
-
-			if (isNew)
+			if (settings.IsDefault)
 			{
-				_settings.Offset = 3;
-				_settings.StartFrom = _source.MinAvaliableTime;
+				_settings.DayOffset = 3;
+				_settings.StartFrom = RtsHistorySource.RtsMinAvaliableTime;
+				_settings.UsdRurStartFrom = FortsDailyData.UsdRateMinAvailableTime;
 				_settings.IsDownloadUsdRate = true;
-				_settings.UsdRateLastDate = FortsDailyData.UsdRateMinAvailableTime;
+				//_settings.UsdRateLastDate = FortsDailyData.UsdRateMinAvailableTime;
+				_settings.IsSystemOnly = true;
+				_settings.LoadEveningSession = false;
+				_settings.SaveRtsStdTrades = false;
+				_settings.SaveRtsStdCombinedOnly = false;
+				_settings.Interval = TimeSpan.FromDays(1);
+				_settings.IgnoreWeekends = true;
+				_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 			}
 		}
 
@@ -55,255 +64,305 @@
 			get { return "rts_logo.png".GetResourceUrl(GetType()); }
 		}
 
-		public override MarketDataSourceSettings Settings
+		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
 		}
 
-		public override bool IsSupportHistoricalData { get { return true; } }
-
-		public override void SaveSettings()
+		public override TaskTypes Type
 		{
-			base.SaveSettings();
-
-			if (_source != null)
-				_source.DumpFolder = GetTempPath();
-		}
-
-		private string GetTempPath()
-		{
-			var tempPath = Path.Combine(_settings.StorageFolder, "TemporaryFiles");
-
-			if (!Directory.Exists(tempPath))
-				Directory.CreateDirectory(tempPath);
-
-			return tempPath;
-		}
-
-		public override string Name
-		{
-			get { return "RTS"; }
+			get { return TaskTypes.Source; }
 		}
 
 		public override string Description
 		{
-			get { return "Источник предназначен для получения рыночных данных c FTP-сервера биржи ММВБ-РТС."; }
+			get { return "Источник получения с биржи ММВБ-РТС рыночных данных c FTP-сервера"; }
+		}
+
+		private Security GetUsdRur(string secId)
+		{
+			var usdRur = EntityRegistry.Securities.ReadById(secId);
+
+			if (usdRur != null)
+				return usdRur;
+
+			usdRur = new Security
+			{
+				Id = secId,
+				Code = "USD/RUR",
+				Name = "Курс USD-RUR",
+				Type = SecurityTypes.Index,
+				ExtensionInfo = new Dictionary<object, object>(),
+				Board = ExchangeBoard.Forts,
+				PriceStep = 0.0001m,
+			};
+
+			SaveSecurity(usdRur);
+
+			return usdRur;
 		}
 	}
 ]]>
-</code>
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-					  <para>
-						  Свойство <codeEntityReference qualifyHint="true">P:StockSharp.Hydra.Core.IMarketDataSource.Settings</codeEntityReference> используется
-						  для хранения настроек источника. Класс, возращаемый из данного свойства, должен быть наследником
-						  <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.MarketDataSourceSettings</codeEntityReference>:
-					  </para>
-					  <code language="C#">
-					  <![CDATA[
-[DisplayName("Настройки источника Rts")]
-private sealed class RtsSettings : MarketDataSourceSettings
+					</code>
+				</content>
+			</step>
+			
+			<step>
+		  		<content>
+			  		<para>
+				  		Свойство <codeEntityReference qualifyHint="true">P:StockSharp.Hydra.Core.IHydraTask.Settings</codeEntityReference> используется
+				  		для хранения настроек источника. Класс, возращаемый из данного свойства, должен быть наследником
+				  		<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.HydraTaskSettings</codeEntityReference>:
+			  		</para>
+			  		<code language="C#">
+<![CDATA[
+[TaskSettingsDisplayName("РТС")]
+[CategoryOrder("РТС", 0)]
+private sealed class RtsSettings : HydraTaskSettings
 {
-	public RtsSettings(MarketDataSourceSettings settings)
+	private const string _rtsStndard = "RTS Standard";
+	private const string _usdRur = "USD/RUR";
+
+	public RtsSettings(HydraTaskSettings settings)
 		: base(settings)
 	{
+		ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 	}
 
-	[Category("РТС")]
-	[DisplayName("Временной отступ")]
-	[Description("Временной отступ в днях от текущей даты, который необходим для предотвращения скачивания неполных данных за текущую торговую сессию.")]
-	[PropertyOrder(1)]
-	public int Offset
-	{
-		get { return ExtensionInfo["RtsOffset"].To<int>(); }
-		set { ExtensionInfo["RtsOffset"] = value; }
-	}
-
-	[Category("РТС")]
-	[DisplayName("Начальная дата")]
-	[Description("С какой даты начать скачивать данные.")]
+	[TaskCategory("РТС")]
+	[DisplayNameLoc("Начальная дата")]
+	[DescriptionLoc("С какой даты начать скачивать данные.")]
 	[PropertyOrder(0)]
 	public DateTime StartFrom
 	{
 		get { return ExtensionInfo["StartFrom"].To<DateTime>(); }
-		set { ExtensionInfo["StartFrom"] = value; }
+		set { ExtensionInfo["StartFrom"] = value.Ticks; }
 	}
 
-	[Category("РТС")]
-	[DisplayName("USD-RUR")]
-	[Description("Закачивать ли индикативный курс доллара США к российскому рублю.")]
-	[PropertyOrder(2)]
-	public bool IsDownloadUsdRate
+	[TaskCategory("РТС")]
+	[DisplayNameLoc("Временной отступ")]
+	[DescriptionLoc("Временной отступ в днях от текущей даты, который необходим для предотвращения скачивания неполных данных за текущую торговую сессию.")]
+	[PropertyOrder(1)]
+	public int DayOffset
 	{
-		get { return (bool)ExtensionInfo["IsDownloadUsdRate"]; }
-		set { ExtensionInfo["IsDownloadUsdRate"] = value; }
+		get { return ExtensionInfo["DayOffset"].To<int>(); }
+		set { ExtensionInfo["DayOffset"] = value; }
 	}
 
-	[Category("РТС")]
-	[DisplayName("Системные сделки")]
-	[Description("Закачивать ли только системные сделки.")]
+	[TaskCategory("РТС")]
+	[DisplayNameLoc("Системные сделки")]
+	[DescriptionLoc("Передавать только системные сделки. По-умолчанию значение равно true.")]
 	[PropertyOrder(3)]
 	public bool IsSystemOnly
 	{
 		get { return (bool)ExtensionInfo["IsSystemOnly"]; }
 		set { ExtensionInfo["IsSystemOnly"] = value; }
 	}
-
-	[Browsable(true)]
-	public override bool AutoIntervalChange
+	
+	[TaskCategory("РТС")]
+	[DisplayNameLoc("Вечерняя сессия")]
+	[DescriptionLoc("Скачивать данные вечерней сессии.")]
+	[PropertyOrder(4)]
+	public bool LoadEveningSession
 	{
-		get { return base.AutoIntervalChange; }
-		set { base.AutoIntervalChange = value; }
+		get { return (bool)ExtensionInfo["LoadEveningSession"]; }
+		set { ExtensionInfo["LoadEveningSession"] = value; }
+	}
+
+	[TaskCategory("РТС")]
+	[DisplayNameLoc("Выходные")]
+	[DescriptionLoc("Игнорировать выходные и праздничные дни (не скачивать данные).")]
+	[PropertyOrder(5)]
+	public bool IgnoreWeekends
+	{
+		get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
+		set { ExtensionInfo["IgnoreWeekends"] = value; }
+	}
+
+	[TaskCategory("РТС")]
+	[DisplayNameLoc("Временные файлы")]
+	[DescriptionLoc("Временные файлы", true)]
+	[PropertyOrder(6)]
+	public TempFiles UseTemporaryFiles
+	{
+		get { return ExtensionInfo["UseTemporaryFiles"].To<TempFiles>(); }
+		set { ExtensionInfo["UseTemporaryFiles"] = value.To<string>(); }
+	}
+
+	[Category(_usdRur)]
+	[DisplayNameLoc("Скачать")]
+	[DescriptionLoc("Закачивать ли индикативный курс USD/RUR.")]
+	[PropertyOrder(0)]
+	public bool IsDownloadUsdRate
+	{
+		get { return (bool)ExtensionInfo["IsDownloadUsdRate"]; }
+		set { ExtensionInfo["IsDownloadUsdRate"] = value; }
+	}
+
+	[Category(_usdRur)]
+	[DisplayNameLoc("Начальная дата")]
+	[DescriptionLoc("С какой даты начать скачивать данные для USD/RUR.")]
+	[PropertyOrder(1)]
+	public DateTime UsdRurStartFrom
+	{
+		get { return (DateTime)ExtensionInfo["UsdRurStartFrom"]; }
+		set { ExtensionInfo["UsdRurStartFrom"] = value; }
+	}
+
+	[Category(_rtsStndard)]
+	[DisplayNameLoc("Скачать")]
+	[DescriptionLoc("Скачивать данные для инструментов РТС Стандарт.")]
+	[PropertyOrder(5)]
+	public bool SaveRtsStdTrades
+	{
+		get { return (bool)ExtensionInfo["SaveRtsStdTrades"]; }
+		set { ExtensionInfo["SaveRtsStdTrades"] = value; }
+	}
+
+	[Category(_rtsStndard)]
+	[DisplayNameLoc("Склеивать")]
+	[DescriptionLoc("Склеивать сделки для инструментов РТС Стандарт (сделки для T+N не разбиваются по папкам).")]
+	[PropertyOrder(5)]
+	public bool SaveRtsStdCombinedOnly
+	{
+		get { return (bool)ExtensionInfo["SaveRtsStdCombinedOnly"]; }
+		set { ExtensionInfo["SaveRtsStdCombinedOnly"] = value; }
 	}
 }
-				]]>
-				</code>
+]]>
+					</code>
 				</content>
-			  </step>
-			   <step>
-				  <content>
-					  <para>
-						  Завершающим этапом необходимо реализовать метод <codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseMarketDataSource.Load</codeEntityReference>,
-						  в котором реализуется логика скачивания маркет-данных. В случае с RtsTradeSource, вся логика находится в самом <token>stocksharp</token>
-						  и используется класс <codeEntityReference>T:StockSharp.Algo.History.Rts.RtsHistorySource</codeEntityReference>:
-					  </para>
-					  <code language="C#">
-					  <![CDATA[
-protected override void Load()
+			</step>
+	    	<step>
+				<content>
+					<para>
+					  Завершающим этапом необходимо реализовать метод <codeEntityReference qualifyHint="true">M:StockSharp.Hydra.Core.BaseHydraTask.OnProcess</codeEntityReference>,
+					  в котором реализуется логика скачивания маркет-данных. В случае с RtsTask, вся логика находится в самом <token>stocksharp</token>
+					  и используется класс <codeEntityReference>T:StockSharp.Algo.History.Rts.RtsHistorySource</codeEntityReference>:
+					</para>
+					<code language="C#">
+<![CDATA[
+protected override TimeSpan OnProcess()
 {
+	var source = new RtsHistorySource
+	{
+		IsSystemOnly = _settings.IsSystemOnly,
+		LoadEveningSession = _settings.LoadEveningSession,
+		SaveRtsStdTrades = _settings.SaveRtsStdTrades,
+		SaveRtsStdCombinedOnly = _settings.SaveRtsStdCombinedOnly
+	};
+	
+	if (_settings.UseTemporaryFiles != TempFiles.NotUse)
+		source.DumpFolder = GetTempPath();
+
 	// если фильтр по инструментам выключен (выбран инструмент все инструменты)
 	var allSecurity = this.GetAllSecurity();
+	var usdRur = GetUsdRur(source.SecurityIdGenerator.GenerateId("USD/RUR", ExchangeBoard.Forts));
 
-	var offset = TimeSpan.FromDays(_settings.Offset);
+	var startDate = _settings.StartFrom;
+	var endDate = DateTime.Today - TimeSpan.FromDays(_settings.DayOffset);
 
-	if ((_settings.StartFrom + offset) < DateTime.Today)
+	var allDates = startDate.Range(endDate, TimeSpan.FromDays(1)).ToArray();
+
+	var secMap = new HashSet<Security>();
+
+	if (allSecurity == null)
+		secMap.AddRange(Settings.Securities.Select(s => s.Security));
+
+	foreach (var date in allDates)
 	{
-		this.AddInfoLog("Старт с {0}.", _settings.StartFrom.ToShortDateString());
+		if (!CanProcess())
+			break;
 
-		IDictionary<Security, IList<Trade>> trades = new Dictionary<Security, IList<Trade>>();
-		_source.LoadTrades(_settings.StartFrom, trades);
-
-		if (allSecurity == null)
-			trades = trades.Where(p => Securities.Contains(p.Key)).ToDictionary();
-
-		if (IsSupportHistoricalData && RedownloadMode)
-			DeleteTrades(trades.Select(t => t.Key).Distinct(), _settings.StartFrom);
-
-		SaveTrades(trades.ToDictionary(kv => kv.Key, kv => (IEnumerable<Trade>)kv.Value));
-
-		_settings.StartFrom += TimeSpan.FromDays(1);
-		SaveSettings();
-	}
-	else
-	{
-		this.AddInfoLog("Дата {0} вне диапазона.", _settings.StartFrom.ToShortDateString());
-
-		TryIncreaseInterval();
-	}
-
-	if (_settings.IsDownloadUsdRate && (_settings.UsdRateLastDate + offset) < DateTime.Today)
-	{
-		var secId = _source.SecurityIdGenerator.GenerateId("USDRUR", ExchangeBoard.Forts);
-		var usdRur = SecurityStorage.LoadBy("Id", secId);
-
-		if (usdRur == null)
+		if (_settings.IgnoreWeekends && !ExchangeBoard.Forts.WorkingTime.IsTradeDate(date, true))
 		{
-			usdRur = new Security
-			{
-				Id = secId,
-				Code = "USDRUR",
-				Name = "Курс USD-RUR",
-				Type = SecurityTypes.Index,
-				Class = string.Empty,
-				ExtensionInfo = new Dictionary<object, object>(),
-				Exchange = Exchange.Rts,
-				MinStepSize = 0.0001m,
-			};
-
-			SecurityStorage.Save(usdRur);
-
-			this.AddInfoLog("Создан USDRUR.");
+			this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
+			continue;
 		}
 
-		this.AddInfoLog("Старт с {0} для {1}.", _settings.StartFrom.ToShortDateString(), usdRur.Id);
+		this.AddInfoLog(LocalizedStrings.Str2823Params, date);
 
-		var rate = FortsDailyData.GetUsdRate(_settings.UsdRateLastDate, DateTime.Today - offset);
+		var trades = source.LoadTrades(EntityRegistry.Securities, date);
 
-		SaveTrades(usdRur, rate.Select(p => new Trade
+		if (trades.Count == 0)
 		{
-			Security = usdRur,
-			Price = p.Value,
-			Time = p.Key,
-		}).OrderBy(t => t.Time));
+			this.AddDebugLog(LocalizedStrings.NoData);
+		}
+		else
+		{
+			if (allSecurity == null)
+				trades = trades.Where(p => secMap.Contains(p.Key)).ToDictionary();
 
-		_settings.UsdRateLastDate = DateTime.Today - offset;
+			foreach (var pair in trades)
+			{
+				SaveSecurity(pair.Key);
+				SaveTrades(pair.Key, pair.Value);
+			}
+		}
+
+		if (_settings.UseTemporaryFiles == TempFiles.UseAndDelete)
+		{
+			var dir = source.GetDumpFile(null, date, date, typeof(Trade), null);
+			
+			if (Directory.Exists(dir))
+				Directory.Delete(dir, true);
+		}
+				
+		_settings.StartFrom = date.AddDays(1);
 		SaveSettings();
 	}
+
+	if (_settings.IsDownloadUsdRate)
+	{
+		var usdRurStorage = StorageRegistry.GetTradeStorage(usdRur, _settings.Drive, _settings.StorageFormat);
+
+		foreach (var date in _settings.UsdRurStartFrom
+			.Range(endDate, TimeSpan.FromDays(1))
+			.Except(usdRurStorage.Dates))
+		{
+			if (!CanProcess())
+				break;
+
+			if (_settings.IgnoreWeekends && !usdRur.Board.WorkingTime.IsTradeDate(date, true))
+			{
+				this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
+				continue;
+			}
+
+			this.AddInfoLog(LocalizedStrings.Str2294Params, date, usdRur.Id);
+			
+			var rate = FortsDailyData.GetRate(usdRur, date, date.Add(TimeSpan.FromDays(1)));
+
+			if (rate.Count == 0)
+			{
+				this.AddDebugLog(LocalizedStrings.NoData);
+			}
+			else
+			{
+				SaveTrades(usdRur, rate.Select(p => new Trade
+				{
+					Security = usdRur,
+					Price = p.Value,
+					Time = p.Key,
+				}).OrderBy(t => t.Time));	
+			}
+
+			_settings.UsdRurStartFrom = date.AddDays(1);
+			SaveSettings();
+		}	
+	}
+
+	if (CanProcess())
+		this.AddInfoLog(LocalizedStrings.Str2300);
+
+	return base.OnProcess();
 }
-
-				]]>
-				</code>
+]]>
+					</code>
 				</content>
-			  </step>
-		  </steps>
-	  </procedure>
-
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-        
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
+			</step>
+	  </steps>
+	</procedure>
 
   </developerConceptualDocument>
 </topic>

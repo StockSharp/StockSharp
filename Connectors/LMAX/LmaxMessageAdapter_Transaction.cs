@@ -30,7 +30,7 @@ namespace StockSharp.LMAX
 			{
 				case TimeInForce.PutInQueue:
 				case null:
-					tif = message.TillDate == DateTimeOffset.MaxValue ? LmaxTimeInForce.GoodTilCancelled : LmaxTimeInForce.GoodForDay;
+					tif = message.TillDate == null || message.TillDate == DateTimeOffset.MaxValue ? LmaxTimeInForce.GoodTilCancelled : LmaxTimeInForce.GoodForDay;
 					break;
 				case TimeInForce.MatchOrCancel:
 					tif = LmaxTimeInForce.FillOrKill;
@@ -50,14 +50,14 @@ namespace StockSharp.LMAX
 			switch (message.OrderType)
 			{
 				case OrderTypes.Limit:
-					Session.PlaceLimitOrder(new LimitOrderSpecification(transactionId, lmaxSecId, message.Price, volume, tif), id => { }, CreateErrorHandler("PlaceLimitOrder"));
+					_session.PlaceLimitOrder(new LimitOrderSpecification(transactionId, lmaxSecId, message.Price, volume, tif), id => { }, CreateErrorHandler("PlaceLimitOrder"));
 					break;
 				case OrderTypes.Market:
-					Session.PlaceMarketOrder(new MarketOrderSpecification(transactionId, lmaxSecId, volume, tif), id => { }, CreateErrorHandler("PlaceMarketOrder"));
+					_session.PlaceMarketOrder(new MarketOrderSpecification(transactionId, lmaxSecId, volume, tif), id => { }, CreateErrorHandler("PlaceMarketOrder"));
 					break;
 				case OrderTypes.Conditional:
 					var condition = (LmaxOrderCondition)message.Condition;
-					Session.PlaceStopOrder(new StopOrderSpecification(transactionId, lmaxSecId, message.Price, volume, tif, condition.StopLossOffset, condition.TakeProfitOffset), id => { }, CreateErrorHandler("PlaceStopOrder"));
+					_session.PlaceStopOrder(new StopOrderSpecification(transactionId, lmaxSecId, message.Price, volume, tif, condition.StopLossOffset, condition.TakeProfitOffset), id => { }, CreateErrorHandler("PlaceStopOrder"));
 					break;
 				case OrderTypes.Repo:
 				case OrderTypes.ExtRepo:
@@ -69,9 +69,26 @@ namespace StockSharp.LMAX
 			}
 		}
 
+		private void ProcessOrderCancelMessage(OrderCancelMessage cancelMsg)
+		{
+			_session.CancelOrder(new CancelOrderRequest(cancelMsg.TransactionId.To<string>(), (long)cancelMsg.SecurityId.Native, cancelMsg.OrderTransactionId.To<string>()), id => { }, CreateErrorHandler("CancelOrder"));
+		}
+
+		private void ProcessOrderStatusMessage()
+		{
+			_session.Subscribe(new ExecutionSubscriptionRequest(), () => { }, CreateErrorHandler("ExecutionSubscriptionRequest"));
+			_session.Subscribe(new OrderSubscriptionRequest(), () => { }, CreateErrorHandler("OrderSubscriptionRequest"));
+		}
+
+		private void ProcessPortfolioLookupMessage()
+		{
+			_session.Subscribe(new AccountSubscriptionRequest(), () => { }, CreateErrorHandler("AccountSubscriptionRequest"));
+			_session.Subscribe(new PositionSubscriptionRequest(), () => { }, CreateErrorHandler("PositionSubscriptionRequest"));
+		}
+
 		private void OnSessionPositionChanged(PositionEvent lmaxPos)
 		{
-			SendOutMessage(SessionHolder
+			SendOutMessage(this
 				.CreatePositionChangeMessage(
 						lmaxPos.AccountId.To<string>(),
 						new SecurityId { Native = lmaxPos.InstrumentId }
@@ -132,7 +149,7 @@ namespace StockSharp.LMAX
 					throw new ArgumentOutOfRangeException();
 			}
 
-			var expiryDate = DateTimeOffset.MaxValue;
+			DateTimeOffset? expiryDate = null;
 			var tif = StockSharpTimeInForce.PutInQueue;
 
 			switch (lmaxOrder.TimeInForce)
@@ -170,7 +187,7 @@ namespace StockSharp.LMAX
 				OrderStringId = lmaxOrder.OrderId,
 				ExecutionType = ExecutionTypes.Order,
 				Commission = lmaxOrder.Commission,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
 			};
 
 			msg.OrderState = lmaxOrder.CancelledQuantity > 0
@@ -201,14 +218,14 @@ namespace StockSharp.LMAX
 				ExecutionType = ExecutionTypes.Trade,
 				Side = execution.Order.Quantity > 0 ? Sides.Buy : Sides.Sell,
 				Commission = execution.Order.Commission,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
 			});
 		}
 
 		private void OnSessionAccountStateUpdated(AccountStateEvent accountState)
 		{
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePortfolioChangeMessage(accountState.AccountId.To<string>())
 						.Add(PositionChangeTypes.CurrentPrice, accountState.Balance)
 						.Add(PositionChangeTypes.VariationMargin, accountState.Margin)
@@ -230,7 +247,7 @@ namespace StockSharp.LMAX
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(evt.Reason),
 				PortfolioName = evt.AccountId.To<string>(),
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc)
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc)
 			});
 		}
 	}

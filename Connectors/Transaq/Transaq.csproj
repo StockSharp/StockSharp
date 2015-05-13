@@ -84,13 +84,12 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ApiLogLevels.cs" />
-    <Compile Include="InitMessage.cs" />
     <Compile Include="Native\Responses\MaxBuySellTPlusResponse.cs" />
     <Compile Include="Native\Responses\PortfolioMctResponse.cs" />
     <Compile Include="TransaqMessageAdapter_MarketData.cs" />
     <Compile Include="TransaqMessageAdapter.cs" />
     <Compile Include="TransaqOrderCondition.cs" />
-    <Compile Include="TransaqSessionHolder.cs" />
+    <Compile Include="TransaqMessageAdapter_Settings.cs" />
     <Compile Include="TransaqMessageAdapter_Transaction.cs" />
     <Compile Include="Native\Commands\CancelNegDealMessage.cs" />
     <Compile Include="Native\Commands\CancelReportMessage.cs" />
@@ -123,7 +122,6 @@
     <Compile Include="Native\Commands\ServerStatusMessage.cs" />
     <Compile Include="Native\Commands\SubscribeMessage.cs" />
     <Compile Include="Native\Commands\SubscribeTicksMessage.cs" />
-    <Compile Include="TransaqAlgoOrderCondition.cs" />
     <Compile Include="Native\Commands\UnsubscribeMessage.cs" />
     <Compile Include="Native\Responses\AllTradesResponse.cs" />
     <Compile Include="Native\Responses\BoardsResponse.cs" />
@@ -166,7 +164,7 @@
     </Compile>
     <Compile Include="TransaqAddresses.cs" />
     <Compile Include="TransaqTrader.cs" />
-    <Compile Include="Native\TransaqHelper.cs">
+    <Compile Include="TransaqHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Native\XmlSerializeHelper.cs" />

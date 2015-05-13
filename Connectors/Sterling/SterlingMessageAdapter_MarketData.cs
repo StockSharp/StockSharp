@@ -1,14 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using SterlingLib;
-using StockSharp.Algo;
-using StockSharp.Localization;
-using StockSharp.Messages;
-using Ecng.Collections;
-
 namespace StockSharp.Sterling
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
+	using Ecng.Collections;
+
+	using SterlingLib;
+
+	using StockSharp.Algo;
+	using StockSharp.Messages;
+
 	partial class SterlingMessageAdapter
 	{
 		private readonly CachedSynchronizedSet<string> _subscribedSecuritiesToTrade = new CachedSynchronizedSet<string>(); 
@@ -23,9 +25,9 @@ namespace StockSharp.Sterling
 				case MarketDataTypes.Level1:
 				{
 					if (mdMsg.IsSubscribe)
-						SessionHolder.Session.SubscribeQuote(secCode, boardCode);
+						_client.SubscribeQuote(secCode, boardCode);
 					else
-						SessionHolder.Session.UnsubsribeQuote(secCode, boardCode);
+						_client.UnsubsribeQuote(secCode, boardCode);
 
 					break;
 				}
@@ -33,9 +35,10 @@ namespace StockSharp.Sterling
 				case MarketDataTypes.MarketDepth:
 				{
 					if (mdMsg.IsSubscribe)
-						SessionHolder.Session.SubscribeLevel2(secCode, boardCode);
+						_client.SubscribeLevel2(secCode, boardCode);
 					else
-						SessionHolder.Session.UnsubsribeLevel2(secCode, boardCode);
+						_client.UnsubsribeLevel2(secCode, boardCode);
+
 					break;
 				}
 
@@ -44,42 +47,37 @@ namespace StockSharp.Sterling
 					if (mdMsg.IsSubscribe)
 					{
 						_subscribedSecuritiesToTrade.Add(secCode);
-						SessionHolder.Session.SubscribeQuote(secCode, boardCode);
+						_client.SubscribeQuote(secCode, boardCode);
 					}
 					else
 					{
 						_subscribedSecuritiesToTrade.Remove(secCode);
-						SessionHolder.Session.UnsubsribeQuote(secCode, boardCode);
+						_client.UnsubsribeQuote(secCode, boardCode);
 					}
+
 					break;
 				}
 				
 				case MarketDataTypes.News:
 				{
 					if (mdMsg.IsSubscribe)
-						SessionHolder.Session.SubscribeNews();
+						_client.SubscribeNews();
 					else
-						SessionHolder.Session.UnsubscribeNews();
+						_client.UnsubscribeNews();
+
 					break;
 				}
 
 				default:
-					throw new ArgumentOutOfRangeException("message", mdMsg.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
 			}
 
 			var reply = (MarketDataMessage)mdMsg.Clone();
 			reply.OriginalTransactionId = mdMsg.TransactionId;
 			SendOutMessage(reply);
-		}
-
-		private void ProcessBoardMessage(BoardMessage boardMsg)
-		{
-			SendOutMessage(boardMsg);
-		}
-
-		private void ProcessSecurityMessage(SecurityMessage securityMsg)
-		{
-			SendOutMessage(securityMsg);
 		}
 
 		private void SessionOnStiQuoteUpdate(ref structSTIQuoteUpdate structQuoteUpdate)
@@ -314,7 +312,7 @@ namespace StockSharp.Sterling
 					SecurityCode = structGreeksUpdate.bstrSymbol,
 					//BoardCode = structGreeksUpdate.bstrExch,
 				},
-				ServerTime = SessionHolder.CurrentTime,
+				ServerTime = CurrentTime,
 			};
 
 			message.TryAdd(Level1Fields.Delta, (decimal)structGreeksUpdate.fDelta);

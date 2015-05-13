@@ -11,23 +11,12 @@ namespace StockSharp.Algo.Indicators
 	/// <summary>
 	/// Базовый класс для индикаторов с одним результирующим значением и основанных на периоде.
 	/// </summary>
-	/// <typeparam name="TResult">Тип результирующего значение, которое возвращается через метод <see cref="BaseIndicator{TResult}.OnProcess"/>.</typeparam>
-	public abstract class LengthIndicator<TResult> : BaseIndicator<TResult>
+	public abstract class LengthIndicator<TResult> : BaseIndicator
 	{
 		/// <summary>
 		/// Инициализировать <see cref="LengthIndicator{TResult}"/>.
 		/// </summary>
 		protected LengthIndicator()
-		{
-			Buffer = new List<TResult>();
-		}
-
-		/// <summary>
-		/// Инициализировать <see cref="LengthIndicator{TResult}"/>.
-		/// </summary>
-		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
-		protected LengthIndicator(Type valueType)
-			: base(valueType)
 		{
 			Buffer = new List<TResult>();
 		}

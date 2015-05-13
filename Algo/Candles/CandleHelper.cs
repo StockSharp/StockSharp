@@ -1059,7 +1059,7 @@
 
 			return ThreadingHelper.Timer(() =>
 			{
-				if (connector.ConnectionState != ConnectionStates.Connected || connector.ExportState != ConnectionStates.Connected)
+				if (connector.ConnectionState != ConnectionStates.Connected)
 					return;
 
 				lock (registeredSeries.SyncRoot)

@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -11,22 +10,13 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("Volume")]
 	[DescriptionLoc(LocalizedStrings.Str756Key)]
-	public class VolumeIndicator : BaseIndicator<IIndicatorValue>
+	public class VolumeIndicator : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="VolumeIndicator"/>.
 		/// </summary>
 		public VolumeIndicator()
-			: base(typeof(Candle))
 		{
-		}
-
-		/// <summary>
-		/// Сформирован ли индикатор.
-		/// </summary>
-		public override bool IsFormed
-		{
-			get { return true; }
 		}
 
 		/// <summary>
@@ -36,6 +26,9 @@ namespace StockSharp.Algo.Indicators
 		/// <returns>Результирующее значение.</returns>
 		protected override IIndicatorValue OnProcess(IIndicatorValue input)
 		{
+			if (input.IsFinal)
+				IsFormed = true;
+
 			return new CandleIndicatorValue(this, input.GetValue<Candle>(), c => c.TotalVolume);
 		}
 	}

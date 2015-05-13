@@ -49,7 +49,7 @@ namespace SampleAlfaCandles
 			_logManager.Sources.Add(_trader);
 
 			// подписываемся на ошибку обработки данных (транзакций и маркет)
-			_trader.ProcessDataError += error =>
+			_trader.Error += error =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			// подписываемся на ошибку подписки маркет-данных
@@ -71,8 +71,12 @@ namespace SampleAlfaCandles
 
 			_trader.Connected += () =>
 			{
-				_trader.StartExport();
 				this.GuiAsync(() => ConnectBtn.IsEnabled = false);
+			};
+
+			_trader.ConnectionError += error =>
+			{
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959));
 			};
 
 			_trader.Connect();
@@ -101,8 +105,8 @@ namespace SampleAlfaCandles
 
 			var timeFrame = (TimeSpan)HistoryInterval.SelectedItem;
 
-			var from = From.Value.Value;
-			var to = To.Value.Value;
+			var from = From.Value ?? DateTimeOffset.MinValue;
+			var to = RealTime.IsChecked == true ? DateTimeOffset.MaxValue : To.Value ?? DateTimeOffset.MaxValue;
 
 			if (from > to)
 			{
@@ -137,6 +141,11 @@ namespace SampleAlfaCandles
 		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ShowChart.IsEnabled = SelectedSecurity != null;
+		}
+
+		private void RealTime_Checked(object sender, RoutedEventArgs e)
+		{
+			To.IsEnabled = RealTime.IsChecked == false;
 		}
 	}
 }

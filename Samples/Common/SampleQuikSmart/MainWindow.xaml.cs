@@ -3,6 +3,7 @@ namespace SampleQuikSmart
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Net;
 	using System.Security;
 	using System.Windows;
 
@@ -13,11 +14,12 @@ namespace SampleQuikSmart
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
-	using StockSharp.Messages;
 	using StockSharp.Quik;
 	using StockSharp.SmartCom;
 	using StockSharp.Algo;
+	using StockSharp.Fix;
 	using StockSharp.Localization;
+	using StockSharp.Quik.Lua;
 
 	public partial class MainWindow
 	{
@@ -31,7 +33,7 @@ namespace SampleQuikSmart
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
@@ -71,7 +73,7 @@ namespace SampleQuikSmart
 		{
 			// инициализируем механизм переподключения
 			trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-			trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+			trader.Restored += () => this.GuiAsync(() =>
 			{
 				// разблокируем кнопку Экспорт (соединение было восстановлено)
 				ChangeConnectStatus(true);
@@ -110,37 +112,43 @@ namespace SampleQuikSmart
 					// создаем агрегирующее подключение (+ сразу инициализируем настройки переподключения)
 					Connector = InitReconnectionSettings(new Connector());
 
-					var session = new BasketSessionHolder(Connector.TransactionIdGenerator);
-
-					Connector.MarketDataAdapter = new BasketMessageAdapter(MessageAdapterTypes.MarketData, session);
-					Connector.TransactionAdapter = new BasketMessageAdapter(MessageAdapterTypes.Transaction, session);
-
-					Connector.ApplyMessageProcessor(MessageDirections.In, true, false);
-					Connector.ApplyMessageProcessor(MessageDirections.In, false, true);
-					Connector.ApplyMessageProcessor(MessageDirections.Out, true, true);
-
 					// добавляем подключения к SmartCOM и Quik
-					session.InnerSessions.Add(new QuikSessionHolder(Connector.TransactionIdGenerator)
+					var quikTs = new LuaFixTransactionMessageAdapter(Connector.TransactionIdGenerator)
 					{
-						IsDde = isDde,
-						Path = QuikPath.Text,
-						IsTransactionEnabled = true,
-						IsMarketDataEnabled = true,
-					}, 1);
-					//session.InnerSessions.Add(new PlazaSessionHolder(Connector.TransactionIdGenerator)
-					//{
-					//	IsCGate = true,
-					//	IsTransactionEnabled = true,
-					//	IsMarketDataEnabled = true,
-					//}, 0);
-					session.InnerSessions.Add(new SmartComSessionHolder(Connector.TransactionIdGenerator)
+						Login = "quik",
+						Password = "quik".To<SecureString>(),
+						Address = "localhost:5001".To<EndPoint>(),
+						TargetCompId = "StockSharpTS",
+						SenderCompId = "quik",
+						ExchangeBoard = ExchangeBoard.Forts,
+						Version = FixVersions.Fix44,
+						RequestAllPortfolios = true,
+						MarketData = FixMarketData.None,
+						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+					};
+					var quikMd = new FixMessageAdapter(Connector.TransactionIdGenerator)
+					{
+						Login = "quik",
+						Password = "quik".To<SecureString>(),
+						Address = "localhost:5001".To<EndPoint>(),
+						TargetCompId = "StockSharpMD",
+						SenderCompId = "quik",
+						ExchangeBoard = ExchangeBoard.Forts,
+						Version = FixVersions.Fix44,
+						RequestAllSecurities = true,
+						MarketData = FixMarketData.MarketData,
+						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
+					};
+					Connector.Adapter.InnerAdapters[quikMd] = 1;
+					Connector.Adapter.InnerAdapters[quikTs] = 1;
+
+					var smartCom = new SmartComMessageAdapter(Connector.TransactionIdGenerator)
 					{
 						Login = SmartLogin.Text,
 						Password = SmartPassword.Password.To<SecureString>(),
 						Address = SmartAddress.SelectedAddress,
-						IsTransactionEnabled = true,
-						IsMarketDataEnabled = true,
-					}, 0);
+					};
+					Connector.Adapter.InnerAdapters[smartCom] = 0;
 
 					// очищаем из текстового поля в целях безопасности
 					//SmartPassword.Clear();
@@ -169,7 +177,7 @@ namespace SampleQuikSmart
 					});
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					Connector.ProcessDataError += error =>
+					Connector.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// подписываемся на ошибку подписки маркет-данных
@@ -216,7 +224,6 @@ namespace SampleQuikSmart
 		{
 			_isConnected = isConnected;
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
-			Export.IsEnabled = isConnected;
 		}
 
 		private void ShowSecuritiesClick(object sender, RoutedEventArgs e)
@@ -238,11 +245,6 @@ namespace SampleQuikSmart
 				window.Hide();
 			else
 				window.Show();
-		}
-
-		private void ExportClick(object sender, RoutedEventArgs e)
-		{
-			Connector.StartExport();
 		}
 	}
 }

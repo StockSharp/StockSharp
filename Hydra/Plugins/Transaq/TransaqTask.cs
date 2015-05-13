@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Transaq
 	using System.Net;
 	using System.Security;
 
+	using Ecng.Collections;
 	using Ecng.Localization;
 	using Ecng.Xaml;
 	using Ecng.Common;
@@ -33,6 +34,7 @@ namespace StockSharp.Hydra.Transaq
 			public TransaqSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("OverrideDll", true);
 			}
 
 			[TaskCategory(_sourceName)]
@@ -136,6 +138,16 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["MarketDataInterval"] = value; }
 			}
 
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.OverrideKey)]
+			[DescriptionLoc(LocalizedStrings.OverrideDllKey)]
+			[PropertyOrder(10)]
+			public bool OverrideDll
+			{
+				get { return (bool)ExtensionInfo["OverrideDll"]; }
+				set { ExtensionInfo["OverrideDll"] = value; }
+			}
+
 			[Browsable(true)]
 			public override bool IsDownloadNews
 			{
@@ -182,7 +194,7 @@ namespace StockSharp.Hydra.Transaq
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<TransaqTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<TransaqTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new TransaqSettings(settings);
 
@@ -194,6 +206,7 @@ namespace StockSharp.Hydra.Transaq
 				_settings.IsHFT = false;
 				_settings.MarketDataInterval = null;
 				_settings.IsDownloadNews = true;
+				_settings.OverrideDll = true;
 
 				_settings.UseProxy = false;
 				_settings.ProxyType = ProxyTypes.Http.To<string>();
@@ -210,7 +223,8 @@ namespace StockSharp.Hydra.Transaq
 					Password = _settings.Password.To<string>(), 
 					Address = _settings.Address,
 					IsHFT = _settings.IsHFT,
-					MarketDataInterval = _settings.MarketDataInterval
+					MarketDataInterval = _settings.MarketDataInterval,
+					OverrideDll = _settings.OverrideDll,
 				};
 
 				if (_settings.UseProxy)

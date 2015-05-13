@@ -161,7 +161,7 @@
 		/// <summary>
 		/// Очистить очередь сообщений.
 		/// </summary>
-		ClearMessageQueue,
+		ClearQueue,
 
 		/// <summary>
 		/// Свеча (тиковая).
@@ -187,5 +187,10 @@
 		/// Свеча (ренко).
 		/// </summary>
 		CandleRenko,
+
+		/// <summary>
+		/// Сброс состояния.
+		/// </summary>
+		Reset
 	}
 }

@@ -277,7 +277,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PortfolioSessionHoldersWindow.xaml">
+    <Page Include="PortfolioMessageAdaptersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -309,15 +309,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SessionHoldersPanel.xaml">
+    <Page Include="MessageAdaptersPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SessionHoldersWindow.xaml">
+    <Page Include="MessageAdaptersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SessionHolderWindow.xaml">
+    <Page Include="MessageAdapterWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -552,8 +552,8 @@
     <Compile Include="OrderWindow.xaml.cs">
       <DependentUpon>OrderWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PortfolioSessionHoldersWindow.xaml.cs">
-      <DependentUpon>PortfolioSessionHoldersWindow.xaml</DependentUpon>
+    <Compile Include="PortfolioMessageAdaptersWindow.xaml.cs">
+      <DependentUpon>PortfolioMessageAdaptersWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -601,14 +601,14 @@
     <Compile Include="StorageFormatComboBox.cs" />
     <Compile Include="SecurityTypeComboBox.cs" />
     <Compile Include="SecurityTypesComboBox.cs" />
-    <Compile Include="SessionHoldersPanel.xaml.cs">
-      <DependentUpon>SessionHoldersPanel.xaml</DependentUpon>
+    <Compile Include="MessageAdaptersPanel.xaml.cs">
+      <DependentUpon>MessageAdaptersPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SessionHoldersWindow.xaml.cs">
-      <DependentUpon>SessionHoldersWindow.xaml</DependentUpon>
+    <Compile Include="MessageAdaptersWindow.xaml.cs">
+      <DependentUpon>MessageAdaptersWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SessionHolderWindow.xaml.cs">
-      <DependentUpon>SessionHolderWindow.xaml</DependentUpon>
+    <Compile Include="MessageAdapterWindow.xaml.cs">
+      <DependentUpon>MessageAdapterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatisticParameterGrid.xaml.cs">
       <DependentUpon>StatisticParameterGrid.xaml</DependentUpon>

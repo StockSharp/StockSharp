@@ -72,7 +72,6 @@
     <Compile Include="..\..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="HydraQuikTrader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuikTask.cs" />
   </ItemGroup>

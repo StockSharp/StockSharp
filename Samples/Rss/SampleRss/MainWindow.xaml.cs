@@ -6,7 +6,6 @@ namespace SampleRss
 	using Ecng.Xaml;
 
 	using StockSharp.Rss;
-
 	using StockSharp.Localization;
 
 	public partial class MainWindow
@@ -32,7 +31,7 @@ namespace SampleRss
 			if (_isConnected)
 			{
 				_trader.UnRegisterNews();
-				_trader.StopExport();
+				_trader.Disconnect();
 
 				_trader.Dispose();
 				_isConnected = false;
@@ -49,22 +48,23 @@ namespace SampleRss
 
 			_trader = new RssTrader { Address = address };
 
-			_trader.Disconnected += () => ChangeConnectStatus(false);
-			_trader.ExportStopped += () => _trader = null;
+			_trader.Disconnected += () =>
+			{
+				ChangeConnectStatus(false);
+				_trader = null;
+			};
 
 			_trader.Connected += () =>
 			{
 				ChangeConnectStatus(true);
 
-				_trader.StartExport();
+				// запускаем подписку на новости
+				_trader.RegisterNews();
 			};
-
-			// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-			_trader.ExportStarted += _trader.RegisterNews;
 
 			_trader.NewNews += news => NewsPanel.NewsGrid.News.Add(news);
 
-			_trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+			_trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 			_trader.Connect();
 			_isConnected = true;

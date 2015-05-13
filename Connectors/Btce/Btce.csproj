@@ -76,7 +76,7 @@
     <Compile Include="BtceMessageAdapter.cs" />
     <Compile Include="BtceMessageAdapter_MarketData.cs" />
     <Compile Include="BtceMessageAdapter_Transaction.cs" />
-    <Compile Include="BtceSessionHolder.cs" />
+    <Compile Include="BtceMessageAdapter_Settings.cs" />
     <Compile Include="BtceTrader.cs" />
     <Compile Include="Native\BtceClient.cs" />
     <Compile Include="Extensions.cs" />

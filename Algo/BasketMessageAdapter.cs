@@ -16,7 +16,7 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Интерфейс, описывающий список адаптеров к торговым системам, с которыми оперирует агрегатор.
 	/// </summary>
-	public interface IInnerAdapterList : ISynchronizedCollection<IMessageAdapter>
+	public interface IInnerAdapterList : ISynchronizedCollection<IMessageAdapter>, INotifyList<IMessageAdapter>
 	{
 		/// <summary>
 		/// Внутренние адаптеры, отсортированные по скорости работы.
@@ -34,20 +34,11 @@ namespace StockSharp.Algo
 	/// <summary>
 	/// Адаптер-агрегатор, позволяющий оперировать одновременно несколькими адаптерами, подключенных к разным торговым системам.
 	/// </summary>
-	public class BasketMessageAdapter : MessageAdapter<BasketSessionHolder>
+	public class BasketMessageAdapter : MessageAdapter
 	{
 		private sealed class InnerAdapterList : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 		{
 			private readonly Dictionary<IMessageAdapter, int> _enables = new Dictionary<IMessageAdapter, int>();
-			private readonly BasketMessageAdapter _parent;
-
-			public InnerAdapterList(BasketMessageAdapter parent)
-			{
-				if (parent == null)
-					throw new ArgumentNullException("parent");
-
-				_parent = parent;
-			}
 
 			public IEnumerable<IMessageAdapter> SortedAdapters
 			{
@@ -56,50 +47,26 @@ namespace StockSharp.Algo
 
 			protected override bool OnAdding(IMessageAdapter item)
 			{
-				Subscribe(item);
+				_enables.Add(item, 0);
 				return base.OnAdding(item);
 			}
 
 			protected override bool OnInserting(int index, IMessageAdapter item)
 			{
-				Subscribe(item);
+				_enables.Add(item, 0);
 				return base.OnInserting(index, item);
 			}
 
 			protected override bool OnRemoving(IMessageAdapter item)
 			{
-				UnSubscribe(item);
+				_enables.Remove(item);
 				return base.OnRemoving(item);
 			}
 
 			protected override bool OnClearing()
 			{
-				lock (SyncRoot)
-					ForEach(UnSubscribe);
-
+				_enables.Clear();
 				return base.OnClearing();
-			}
-
-			private void Subscribe(IMessageAdapter adapter, int priority = 0)
-			{
-				if (adapter == null)
-					throw new ArgumentNullException("adapter");
-
-				//adapter.DoIf<IMessageAdapter, BaseLogSource>(bt => bt.Parent = _parent);
-
-				adapter.NewOutMessage += message => _parent.OnInnerAdapterNewMessage(adapter, message);
-
-				_enables.Add(adapter, priority);
-			}
-
-			public void UnSubscribe(IMessageAdapter adapter)
-			{
-				if (adapter == null)
-					throw new ArgumentNullException("adapter");
-
-				_enables.Remove(adapter);
-
-				//adapter.Parent = null;
 			}
 
 			public int this[IMessageAdapter adapter]
@@ -126,9 +93,12 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, RefPair<IEnumerator<IMessageAdapter>, bool>> _subscriptionQueue = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, RefPair<IEnumerator<IMessageAdapter>, bool>>();
-		private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
-
+		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter> _subscriptions = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter>();
+		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
+		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
+		private readonly CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _connectedAdapters = new CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
+		private bool _isFirstConnect;
 		private readonly InnerAdapterList _innerAdapters;
 
 		/// <summary>
@@ -140,15 +110,99 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
+		/// Портфели, которые используются для отправки транзакций.
+		/// </summary>
+		public IDictionary<string, IMessageAdapter> Portfolios { get; private set; }
+
+		/// <summary>
 		/// Создать <see cref="BasketMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public BasketMessageAdapter(MessageAdapterTypes type, BasketSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public BasketMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
-			_innerAdapters = new InnerAdapterList(this);
-			//SessionHolder.SetChilds(_innerAdapters);
+			_innerAdapters = new InnerAdapterList();
+			Portfolios = new SynchronizedDictionary<string, IMessageAdapter>(StringComparer.InvariantCultureIgnoreCase);
+		}
+
+		/// <summary>
+		/// Поддерживаемые типы сообщений, который может обработать адаптер.
+		/// </summary>
+		public override MessageTypes[] SupportedMessages
+		{
+			get { return GetSortedAdapters().SelectMany(a => a.SupportedMessages).ToArray(); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// </summary>
+		public override bool PortfolioLookupRequired
+		{
+			get { return GetSortedAdapters().Any(a => a.PortfolioLookupRequired); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// </summary>
+		public override bool OrderStatusRequired
+		{
+			get { return GetSortedAdapters().Any(a => a.OrderStatusRequired); }
+		}
+
+		/// <summary>
+		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// </summary>
+		public override bool SecurityLookupRequired
+		{
+			get { return GetSortedAdapters().Any(a => a.SecurityLookupRequired); }
+		}
+
+		/// <summary>
+		/// Поддерживается ли торговой системой поиск портфелей.
+		/// </summary>
+		protected override bool IsSupportNativePortfolioLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Поддерживается ли торговой системой поиск инструментов.
+		/// </summary>
+		protected override bool IsSupportNativeSecurityLookup
+		{
+			get { return true; }
+		}
+
+		/// <summary>
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// </summary>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public override OrderCondition CreateOrderCondition()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// </summary>
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		public override bool IsConnectionAlive()
+		{
+			throw new NotSupportedException();
+		}
+
+		private void ProcessReset(Message message)
+		{
+			_hearbeatAdapters.Values.ForEach(a =>
+			{
+				a.SendInMessage(message);
+				a.Dispose();
+			});
+
+			_connectedAdapters.Clear();
+			_hearbeatAdapters.Clear();
+			_subscriptionQueue.Clear();
+			_subscriptions.Clear();
 		}
 
 		/// <summary>
@@ -159,80 +213,140 @@ namespace StockSharp.Algo
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+					ProcessReset(message);
+					break;
+
 				case MessageTypes.Connect:
-					CreateInnerAdapters();
-					GetSortedAdapters().ForEach(a => a.SendInMessage(message.Clone()));
+					if (_isFirstConnect)
+						_isFirstConnect = false;
+					else
+						ProcessReset(new ResetMessage());
+
+					_hearbeatAdapters.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
+					{
+						var hearbeatAdapter = (IMessageAdapter)new HeartbeatAdapter(a);
+						hearbeatAdapter.Parent = this;
+						hearbeatAdapter.NewOutMessage += m => OnInnerAdapterNewMessage(a, m);
+						return hearbeatAdapter;
+					}));
+
+					if (_hearbeatAdapters.Count == 0)
+						throw new InvalidOperationException(LocalizedStrings.Str3650);
+
+					_hearbeatAdapters.Values.ForEach(a => a.SendInMessage(message));
 					break;
 
 				case MessageTypes.Disconnect:
-				case MessageTypes.SecurityLookup:
-				case MessageTypes.PortfolioLookup:
-					GetConnectedAdapters().ForEach(a => a.SendInMessage(message.Clone()));
+					_connectedAdapters
+						.CachedValues
+						.SelectMany(c => c.Cache)
+						.Distinct()
+						.ForEach(a => a.SendInMessage(message));
 					break;
+
+				case MessageTypes.Portfolio:
+				{
+					var pfMsg = (PortfolioMessage)message;
+					ProcessPortfolioMessage(pfMsg.PortfolioName, pfMsg);
+					break;
+				}
 
 				case MessageTypes.OrderRegister:
 				case MessageTypes.OrderReplace:
-				case MessageTypes.OrderPairReplace:
 				case MessageTypes.OrderCancel:
 				case MessageTypes.OrderGroupCancel:
 				{
-					var orderMessage = (OrderMessage)message;
-					var sessionHolder = SessionHolder.Portfolios.TryGetValue(orderMessage.PortfolioName);
+					var ordMsg = (OrderMessage)message;
+					ProcessPortfolioMessage(ordMsg.PortfolioName, ordMsg);
+					break;
+				}
 
-					var adapter = InnerAdapters.FirstOrDefault(a => a.SessionHolder == sessionHolder);
-
-					if (adapter != null)
-					{
-						adapter.SendInMessage(orderMessage);
-					}
-					else
-					{
-						var orderError = orderMessage.ToExecutionMessage();
-						orderError.Error = new InvalidOperationException(LocalizedStrings.Str623Params.Put(orderMessage.PortfolioName));
-						orderError.OrderState = OrderStates.Failed;
-						SendOutMessage(orderError);
-					}
-
+				case MessageTypes.OrderPairReplace:
+				{
+					var ordMsg = (OrderPairReplaceMessage)message;
+					ProcessPortfolioMessage(ordMsg.Message1.PortfolioName, ordMsg);
 					break;
 				}
 
 				case MessageTypes.MarketData:
 				{
+					var adapters = _connectedAdapters.TryGetValue(message.Type);
+
+					if (adapters == null)
+						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
+
 					var mdMsg = (MarketDataMessage)message;
 					
 					switch (mdMsg.DataType)
 					{
 						case MarketDataTypes.News:
-							GetSortedAdapters().ForEach(a => a.SendInMessage(mdMsg.Clone()));
+							adapters.Cache.ForEach(a => a.SendInMessage(mdMsg));
 							break;
 
-						case MarketDataTypes.Level1:
-						case MarketDataTypes.MarketDepth:
-						case MarketDataTypes.Trades:
-						case MarketDataTypes.OrderLog:
-						case MarketDataTypes.CandleTimeFrame:
-						case MarketDataTypes.CandleTick:
-						case MarketDataTypes.CandleVolume:
-						case MarketDataTypes.CandleRange:
-						case MarketDataTypes.CandlePnF:
-						case MarketDataTypes.CandleRenko:
+						default:
 						{
+							var key = Tuple.Create(mdMsg.SecurityId, mdMsg.DataType);
+
 							if (mdMsg.IsSubscribe)
-								ProcessSubscribeAction(mdMsg);
+							{
+								if (_subscriptionQueue.ContainsKey(key))
+									return;
+
+								var enumerator = adapters.Cache.Cast<IMessageAdapter>().GetEnumerator();
+
+								_subscriptionQueue.Add(key, enumerator);
+
+								ProcessSubscriptionAction(enumerator, mdMsg);
+							}
 							else
-								ProcessUnSubscribeAction(mdMsg);
+							{
+								var adapter = _subscriptions.TryGetValue(key);
+
+								if (adapter != null)
+								{
+									_subscriptions.Remove(key);
+									adapter.SendInMessage(message);
+								}
+							}
 
 							break;
 						}
-
-						default:
-							RaiseMarketDataMessage(mdMsg, new InvalidOperationException(LocalizedStrings.Str624Params.Put(mdMsg.DataType)));
-							break;
 					}
 					
 					break;
 				}
+
+				default:
+				{
+					var adapters = _connectedAdapters.TryGetValue(message.Type);
+
+					if (adapters == null)
+						throw new InvalidOperationException(LocalizedStrings.Str629Params.Put(message.Type));
+
+					adapters.Cache.ForEach(a => a.SendInMessage(message));
+					break;
+				}
 			}
+		}
+
+		private void ProcessPortfolioMessage(string portfolioName, Message message)
+		{
+			var adapter = Portfolios.TryGetValue(portfolioName);
+
+			if (adapter == null)
+			{
+				var adapters = _connectedAdapters.TryGetValue(message.Type);
+
+				if (adapters == null || adapters.Count != 1)
+					throw new InvalidOperationException(LocalizedStrings.Str623Params.Put(portfolioName));
+
+				adapter = adapters.Cache.First();
+			}
+			else
+				adapter = _hearbeatAdapters[adapter];
+
+			adapter.SendInMessage(message);
 		}
 
 		/// <summary>
@@ -242,314 +356,138 @@ namespace StockSharp.Algo
 		/// <param name="message">Сообщение.</param>
 		protected virtual void OnInnerAdapterNewMessage(IMessageAdapter innerAdapter, Message message)
 		{
+			if (message.IsBack)
+			{
+				message.IsBack = false;
+				innerAdapter.SendInMessage(message);
+				return;
+			}
+
+			message.Adapter = innerAdapter;
+
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					ProcessInnerAdapterConnectMessage(innerAdapter, (ConnectMessage)message);
+					ProcessConnectMessage(innerAdapter, (ConnectMessage)message);
 					return;
 
 				case MessageTypes.Disconnect:
-					ProcessInnerAdapterDisconnectMessage(innerAdapter, (DisconnectMessage)message);
+					ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message);
 					return;
 
 				case MessageTypes.MarketData:
-					ProcessInnerAdapterMarketDataMessage(innerAdapter, (MarketDataMessage)message);
+					ProcessMarketDataMessage(innerAdapter, (MarketDataMessage)message);
 					return;
-
-				case MessageTypes.Portfolio:
-					SetPortfolioSessionHolder(((PortfolioMessage)message).PortfolioName, innerAdapter.SessionHolder);
-					break;
-
-				case MessageTypes.PortfolioChange:
-					SetPortfolioSessionHolder(((PortfolioChangeMessage)message).PortfolioName, innerAdapter.SessionHolder);
-					break;
 			}
 
 			SendOutMessage(message);
 		}
 
-		private void SetPortfolioSessionHolder(string portfolio, IMessageSessionHolder sessionHolder)
-		{
-			if (!SessionHolder.Portfolios.ContainsKey(portfolio))
-				SessionHolder.Portfolios[portfolio] = sessionHolder;
-		}
-
-		#region Connect/disconnect
-
-		private bool _canRaiseConnected = true;
-		private bool _canRaiseDisconnected;
-		
-		private void ProcessInnerAdapterConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
-		{
-			if(message.Error != null)
-				SessionHolder.AddErrorLog(LocalizedStrings.Str625Params, innerAdapter.GetType().Name, message.Error);
-
-			Exception error = null;
-
-			var canProcess = _innerAdapters.SyncGet(c =>
-			{
-				var connected = message.Error == null;
-
-				_adapterStates[innerAdapter] = RefTuple.Create(connected, message.Error);
-
-				if (_canRaiseConnected && connected)
-				{
-					_canRaiseConnected = false;
-					_canRaiseDisconnected = true;
-
-					ResetConnectionErrors();
-
-					return true;
-				}
-
-				if (_adapterStates.Count == c.Count)
-				{
-					// произошла ошибка и нет ни одного подключенного коннектора
-					if (_adapterStates.Values.All(p => !p.First))
-					{
-						error = new AggregateException(LocalizedStrings.Str626, _adapterStates.Values.Select(p => p.Second));
-						return true;
-					}
-
-					ResetConnectionErrors();
-				}				
-
-				return false;
-			});
-
-			if (canProcess)
-				SendOutMessage(new ConnectMessage { Error = error });
-		}
-
-		private void ProcessInnerAdapterDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
+		private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message)
 		{
 			if (message.Error != null)
-				SessionHolder.AddErrorLog(LocalizedStrings.Str627Params, innerAdapter.GetType().Name, message.Error);
+				this.AddErrorLog(LocalizedStrings.Str625Params, innerAdapter.GetType().Name, message.Error);
 
-			Exception error = null;
+			var adapter = _hearbeatAdapters[innerAdapter];
 
-			var canProcess = _innerAdapters.SyncGet(c =>
+			foreach (var supportedMessage in adapter.SupportedMessages)
 			{
-				_adapterStates[innerAdapter] = RefTuple.Create(false, message.Error);
-
-				if (_canRaiseDisconnected && _adapterStates.Values.All(p => !p.First))
-				{
-					_canRaiseConnected = true;
-					_canRaiseDisconnected = false;
-
-					var errors = _adapterStates.Values.Where(p => p.Second != null).Select(p => p.Second).ToArray();
-
-					if (errors.Length != 0)
-					{
-						error = new AggregateException(LocalizedStrings.Str628, errors);
-						ResetConnectionErrors();
-					}
-
-					DisposeInnerAdapters();
-
-					return true;
-				}
-
-				return false;
-			});
-
-			if (canProcess)
-				SendOutMessage(new DisconnectMessage { Error = error });
-		}
-
-		private void ResetConnectionErrors()
-		{
-			// сбрасываем возможные ошибки отключения/отключения
-			foreach (var state in _adapterStates.Values)
-				state.Second = null;
-		}
-
-		#endregion
-
-		#region Subscribe/UnSubscribe data
-
-		private void ProcessSubscribeAction(MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException("message");
-
-			var key = Tuple.Create(message.SecurityId, message.DataType);
-
-			if (_subscriptionQueue.ContainsKey(key))
-				return;
-
-			var enumerator = GetConnectedAdapters().ToArray().Cast<IMessageAdapter>().GetEnumerator();
-
-			_subscriptionQueue.Add(key, RefTuple.Create(enumerator, false));
-
-			ProcessSubscriptionAction(enumerator, message);
-		}
-
-		private void ProcessUnSubscribeAction(MarketDataMessage message)
-		{
-			if (message == null)
-				throw new ArgumentNullException("message");
-
-			lock (_subscriptionQueue.SyncRoot)
-			{
-				var tuple = _subscriptionQueue.TryGetValue(Tuple.Create(message.SecurityId, message.DataType));
-				if (tuple != null)
-				{
-					tuple.Second = true;
-					return;
-				}
+				_connectedAdapters.SafeAdd(supportedMessage).Add(adapter);
 			}
 
-			GetSortedAdapters().ForEach(a => a.SendInMessage(message.Clone()));
+			SendOutMessage(message);
+		}
+
+		private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message)
+		{
+			if (message.Error != null)
+				this.AddErrorLog(LocalizedStrings.Str627Params, innerAdapter.GetType().Name, message.Error);
+
+			SendOutMessage(message);
 		}
 
 		private void ProcessSubscriptionAction(IEnumerator<IMessageAdapter> enumerator, MarketDataMessage message)
 		{
 			if (enumerator.MoveNext())
-				enumerator.Current.SendInMessage(message.Clone());
+				enumerator.Current.SendInMessage(message);
 			else
-				RaiseSubscriptionFailed(message, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId), "message"));
+			{
+				_subscriptionQueue.RemoveByValue(enumerator);
+				RaiseSubscriptionFailed(null, message.TransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId + " " + message.DataType), "message"));
+			}
 		}
 
-		private void ProcessInnerAdapterMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
+		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
 		{
 			var key = Tuple.Create(message.SecurityId, message.DataType);
 			
-			var tuple = _subscriptionQueue.TryGetValue(key);
-			var cancel = tuple != null && tuple.Second;
+			var enumerator = _subscriptionQueue.TryGetValue(key);
+			//var cancel = tuple != null && tuple.Second;
 
 			if (message.Error == null)
 			{
-				SessionHolder.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
+				if (message.IsNotSupported)
+				{
+					if (enumerator != null)
+						ProcessSubscriptionAction(enumerator, message);
+					else
+						RaiseSubscriptionFailed(adapter, 0, new InvalidOperationException(LocalizedStrings.Str633Params.Put(message.SecurityId, message.DataType)));
+				}
+				else
+				{
+					this.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
+					_subscriptionQueue.Remove(key);
+					RaiseMarketDataMessage(adapter, 0, null);
+				}
 
-				_subscriptionQueue.Remove(key);
+				//if (!cancel)
+				//	return;
 
-				RaiseMarketDataMessage(message, null);
-
-				if (!cancel)
-					return;
-
-				//в процессе подписки пользователь отменил ее - надо отписаться от получения данных
-				var cancelMessage = (MarketDataMessage)message.Clone();
-				cancelMessage.IsSubscribe = false;
-				SendInMessage(cancelMessage);
+				////в процессе подписки пользователь отменил ее - надо отписаться от получения данных
+				//var cancelMessage = (MarketDataMessage)message.Clone();
+				//cancelMessage.IsSubscribe = false;
+				//adapter.SendInMessage(cancelMessage);
 			}
 			else
 			{
-				SessionHolder.AddDebugLog(LocalizedStrings.Str631Params, adapter, message.SecurityId, message.DataType, message.Error);
-
-				if (cancel)
-					RaiseSubscriptionFailed(message, new InvalidOperationException(LocalizedStrings.SubscriptionProcessCancelled));
-				else if (tuple != null)
-					ProcessSubscriptionAction(tuple.First, message);
-				else
-					RaiseSubscriptionFailed(message, new InvalidOperationException(LocalizedStrings.Str633Params.Put(message.SecurityId, message.DataType)));
+				//this.AddDebugLog(LocalizedStrings.Str631Params, adapter, message.SecurityId, message.DataType, message.Error);
+				_subscriptionQueue.Remove(key);
+				RaiseSubscriptionFailed(adapter, 0, message.Error);
 			}
 		}
 
-		private void RaiseMarketDataMessage(MarketDataMessage request, Exception error)
+		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error)
 		{
-			var reply = (MarketDataMessage)request.Clone();
-			reply.OriginalTransactionId = request.TransactionId;
-			reply.Error = error;
-			SendOutMessage(reply);
+			SendOutMessage(new MarketDataMessage
+			{
+				OriginalTransactionId = originalTransactionId,
+				Error = error,
+				Adapter = adapter,
+			});
 		}
 
-		private void RaiseSubscriptionFailed(MarketDataMessage message, Exception error)
+		private void RaiseSubscriptionFailed(IMessageAdapter adapter, long originalTransactionId, Exception error)
 		{
-			_subscriptionQueue.Remove(Tuple.Create(message.SecurityId, message.DataType));
-
-			SessionHolder.AddDebugLog(LocalizedStrings.Str634Params, message.SecurityId, message.DataType, error);
-
-			RaiseMarketDataMessage(message, error);
+			//_subscriptionQueue.Remove(Tuple.Create(message.SecurityId, message.DataType));
+			//this.AddDebugLog(LocalizedStrings.Str634Params, message.SecurityId, message.DataType, error);
+			RaiseMarketDataMessage(adapter, originalTransactionId, error);
 		}
 
-		#endregion
+		//private void SendOutMessage(Message message)
+		//{
+		//	//if (message.LocalTime.IsDefault())
+		//	//	message.LocalTime = adapter.CurrentTime.LocalDateTime;
+
+		//	SendOutMessage(message);
+		//}
 
 		/// <summary>
 		/// Получить адаптеры <see cref="IInnerAdapterList.SortedAdapters"/>, отсортированные в зависимости от заданного приоритета. По-умолчанию сортировка отсутствует.
 		/// </summary>
 		/// <returns>Отсортированные адаптеры.</returns>
-		protected virtual IEnumerable<IMessageAdapter> GetSortedAdapters()
+		protected IEnumerable<IMessageAdapter> GetSortedAdapters()
 		{
 			return _innerAdapters.SortedAdapters;
-		}
-
-		private IEnumerable<IMessageAdapter> GetConnectedAdapters()
-		{
-			return _innerAdapters
-				.SortedAdapters
-				.Where(a =>
-				{
-					var pair = _adapterStates.TryGetValue(a);
-					return pair != null && pair.First;
-				});
-		}
-
-		/// <summary>
-		/// Создать адаптеры для <see cref="MessageAdapter{TSessionHolder}.SessionHolder"/>.
-		/// </summary>
-		protected virtual void CreateInnerAdapters()
-		{
-			foreach (var session in SessionHolder.InnerSessions)
-			{
-				var adapterHolder = SessionHolder.Adapters.TryGetValue(session) 
-					?? new AdaptersHolder(session, SessionHolder.AddErrorLog);
-
-				if (session.IsMarketDataEnabled && Type == MessageAdapterTypes.MarketData)
-					AddInnerAdapter(adapterHolder.MarketDataAdapter, SessionHolder.InnerSessions[session]);
-
-				if (session.IsTransactionEnabled && Type == MessageAdapterTypes.Transaction)
-					AddInnerAdapter(adapterHolder.TransactionAdapter, SessionHolder.InnerSessions[session]);
-
-				SessionHolder.Adapters[session] = adapterHolder;
-			}
-		}
-
-		/// <summary>
-		/// Добавить адаптер.
-		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
-		/// <param name="priority">Приоритет.</param>
-		protected void AddInnerAdapter(IMessageAdapter adapter, int priority)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException("adapter");
-
-			InnerAdapters.Add(adapter);
-			InnerAdapters[adapter] = priority;
-		}
-
-		/// <summary>
-		/// Удалить адаптеры.
-		/// </summary>
-		protected virtual void DisposeInnerAdapters()
-		{
-			foreach (var adapter in _innerAdapters.Cache)
-			{
-				lock (_innerAdapters.SyncRoot)
-					_innerAdapters.UnSubscribe(adapter);
-
-				var holder = SessionHolder.Adapters.TryGetValue(adapter.SessionHolder);
-
-				if (holder != null && holder.TryDispose(Type == MessageAdapterTypes.Transaction))
-					SessionHolder.Adapters.Remove(adapter.SessionHolder);
-
-				adapter.Dispose();
-			}
-
-			_innerAdapters.Clear();
-			_adapterStates.Clear();
-		}
-
-		/// <summary>
-		/// Освободить ресурсы.
-		/// </summary>
-		protected override void DisposeManaged()
-		{
-			DisposeInnerAdapters();
-
-			base.DisposeManaged();
 		}
 	}
 }

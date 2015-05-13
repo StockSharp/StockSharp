@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Testing
 		private long _initialOrderId;
 
 		/// <summary>
-		/// Номер, начиная с которого эмулятор будет генерировать номера для заявок <see cref="Order.Id"/>.
+		/// Число, начиная с которого эмулятор будет генерировать идентификаторы для заявок <see cref="Order.Id"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(70)]
@@ -210,7 +210,7 @@ namespace StockSharp.Algo.Testing
 		private long _initialTradeId;
 
 		/// <summary>
-		/// Номер, начиная с которого эмулятор будет генерировать номера для сделок <see cref="Trade.Id"/>.
+		/// Число, начиная с которого эмулятор будет генерировать идентификаторы для сделок <see cref="Trade.Id"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
 		[PropertyOrder(80)]

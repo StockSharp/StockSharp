@@ -13,15 +13,20 @@ namespace StockSharp.Rss
 	/// <summary>
 	/// Маркет-дата адаптер сообщений для Rss.
 	/// </summary>
-	public class RssMarketDataMessageAdapter : MessageAdapter<RssSessionHolder>
+	public partial class RssMarketDataMessageAdapter : MessageAdapter
 	{
+		private bool _isSubscribed;
+
 		/// <summary>
 		/// Создать <see cref="RssMarketDataMessageAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public RssMarketDataMessageAdapter(RssSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.MarketData, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public RssMarketDataMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			HeartbeatInterval = TimeSpan.FromMinutes(5);
+			
+			this.AddSupportedMessage(MessageTypes.MarketData);
 		}
 
 		/// <summary>
@@ -32,16 +37,20 @@ namespace StockSharp.Rss
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					_isSubscribed = false;
+					SendOutMessage(new ResetMessage());
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
-					var error = SessionHolder.Address == null
+					var error = Address == null
 						? new InvalidOperationException(LocalizedStrings.Str3503)
 						: null;
 
 					SendOutMessage(new ConnectMessage { Error = error });
-
-					if (error == null)
-						SendInMessage(new TimeMessage());
 					break;
 				}
 
@@ -49,27 +58,61 @@ namespace StockSharp.Rss
 					SendOutMessage(new DisconnectMessage());
 					break;
 
-				case MessageTypes.Time: // обработка heartbeat
+				case MessageTypes.MarketData:
 				{
-					using (var reader = new XmlReaderEx(SessionHolder.Address.To<string>()) { CustomDateFormat = SessionHolder.CustomDateFormat })
-					{
-						var feed = SyndicationFeed.Load(reader);
+					var mdMsg = (MarketDataMessage)message;
 
-						foreach (var item in feed.Items)
+					switch (mdMsg.DataType)
+					{
+						case MarketDataTypes.News:
 						{
-							SendOutMessage(new NewsMessage
-							{
-								Id = item.Id,
-								Source = feed.Authors.Select(a => a.Name).Join(","),
-								ServerTime = item.PublishDate.DateTime,
-								Headline = item.Title.Text,
-								Story = item.Summary == null ? string.Empty : item.Summary.Text,
-								Url = item.Links.Any() ? item.Links[0].Uri : null
-							});
+							_isSubscribed = mdMsg.IsSubscribe;
+							break;
+						}
+						default:
+						{
+							SendOutMarketDataNotSupported(mdMsg.TransactionId);
+							return;
 						}
 					}
 
+					var reply = (MarketDataMessage)mdMsg.Clone();
+					reply.OriginalTransactionId = mdMsg.TransactionId;
+					SendOutMessage(reply);
+
+					if (_isSubscribed)
+						ProcessRss();
+
 					break;
+				}
+
+				case MessageTypes.Time: // heartbeat handling
+				{
+					if (_isSubscribed)
+						ProcessRss();
+
+					break;
+				}
+			}
+		}
+
+		private void ProcessRss()
+		{
+			using (var reader = new XmlReaderEx(Address.To<string>()) { CustomDateFormat = CustomDateFormat })
+			{
+				var feed = SyndicationFeed.Load(reader);
+
+				foreach (var item in feed.Items)
+				{
+					SendOutMessage(new NewsMessage
+					{
+						Id = item.Id,
+						Source = feed.Authors.Select(a => a.Name).Join(","),
+						ServerTime = item.PublishDate.DateTime,
+						Headline = item.Title.Text,
+						Story = item.Summary == null ? string.Empty : item.Summary.Text,
+						Url = item.Links.Any() ? item.Links[0].Uri : null
+					});
 				}
 			}
 		}

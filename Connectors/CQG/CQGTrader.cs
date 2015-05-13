@@ -2,7 +2,6 @@
 {
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
 
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с системой CQG.
@@ -14,10 +13,9 @@
 		/// </summary>
 		public CQGTrader()
 		{
-			SessionHolder = new CQGSessionHolder(TransactionIdGenerator);
+			var adapter = new CQGMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
+			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
 		}
     }
 }

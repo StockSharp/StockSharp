@@ -21,21 +21,16 @@ namespace StockSharp.LMAX
 	public class LmaxTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _series = new SynchronizedDictionary<long, CandleSeries>();
+		private readonly LmaxMessageAdapter _adapter;
 
 		/// <summary>
 		/// Создать <see cref="LmaxTrader"/>.
 		/// </summary>
 		public LmaxTrader()
 		{
-			base.SessionHolder = new LmaxSessionHolder(TransactionIdGenerator);
+			_adapter = new LmaxMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new LmaxSessionHolder SessionHolder
-		{
-			get { return (LmaxSessionHolder)base.SessionHolder; }
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
@@ -52,8 +47,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -61,8 +56,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -70,8 +65,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public bool IsDemo
 		{
-			get { return SessionHolder.IsDemo; }
-			set { SessionHolder.IsDemo = value; }
+			get { return _adapter.IsDemo; }
+			set { _adapter.IsDemo = value; }
 		}
 
 		/// <summary>
@@ -79,8 +74,8 @@ namespace StockSharp.LMAX
 		/// </summary>
 		public bool IsDownloadSecurityFromSite
 		{
-			get { return SessionHolder.IsDownloadSecurityFromSite; }
-			set { SessionHolder.IsDownloadSecurityFromSite = value; }
+			get { return _adapter.IsDownloadSecurityFromSite; }
+			set { _adapter.IsDownloadSecurityFromSite = value; }
 		}
 
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
@@ -90,7 +85,7 @@ namespace StockSharp.LMAX
 
 			var tf = (TimeSpan)series.Arg;
 
-			if (LmaxSessionHolder.TimeFrames.Contains(tf))
+			if (LmaxMessageAdapter.TimeFrames.Contains(tf))
 				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, CurrentTime);
 		}
 
@@ -120,7 +115,7 @@ namespace StockSharp.LMAX
 
 			_series.Add(transactionId, series);
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = transactionId,
 				DataType = MarketDataTypes.CandleTimeFrame,
@@ -144,15 +139,14 @@ namespace StockSharp.LMAX
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, MessageDirections direction)
 		{
 			var candleMsg = message as CandleMessage;
 
 			if (candleMsg == null)
 			{
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, direction);
 				return;
 			}
 

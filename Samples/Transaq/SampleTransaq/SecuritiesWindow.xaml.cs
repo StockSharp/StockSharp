@@ -7,7 +7,6 @@ namespace SampleTransaq
 	using System.Windows.Controls;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -15,7 +14,6 @@ namespace SampleTransaq
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Transaq;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
 
@@ -30,18 +28,18 @@ namespace SampleTransaq
 
 			Loaded += (sender, args) =>
 			{
-				var mdAdapter = (TransaqMessageAdapter)MainWindow.Instance.Trader.MarketDataAdapter;
+				var trader = MainWindow.Instance.Trader;
 
 				Action initialize = () => this.GuiAsync(() =>
 				{
-					CandlesPeriods.ItemsSource = mdAdapter.CandleTimeFrames;
+					CandlesPeriods.ItemsSource = trader.CandleTimeFrames;
 					CandlesPeriods.SelectedIndex = 0;
 				});
 
-				if (mdAdapter.CandleTimeFrames.Any())
+				if (trader.CandleTimeFrames.Any())
 					initialize();
 				else
-					mdAdapter.CandleTimeFramesInitialized += initialize;
+					trader.CandleTimeFramesInitialized += initialize;
 			};
 		}
 
@@ -73,7 +71,7 @@ namespace SampleTransaq
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Quotes.IsEnabled = NewStopOrder.IsEnabled = NewAlgoOrder.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
+			Quotes.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = Depth.IsEnabled = security != null;
 
 			TryEnableCandles();
 		}
@@ -104,19 +102,6 @@ namespace SampleTransaq
 
 			if (newOrder.ShowModal(this))
 				MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
-		}
-
-		private void NewAlgoOrderClick(object sender, RoutedEventArgs e)
-		{
-			var security = SecurityPicker.SelectedSecurity;
-
-			var newOrder = new NewAlgoOrderWindow
-			{
-				Title = LocalizedStrings.Str3678Params.Put(security.Code),
-				Security = security,
-			};
-
-			newOrder.ShowModal(this);
 		}
 
 		private void DepthClick(object sender, RoutedEventArgs e)

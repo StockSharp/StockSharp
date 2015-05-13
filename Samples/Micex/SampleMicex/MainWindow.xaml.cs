@@ -31,7 +31,7 @@ namespace SampleMicex
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
@@ -75,7 +75,7 @@ namespace SampleMicex
 					Trader.Addresses = new[] { Address.Text.To<EndPoint>() };
 					Trader.Server = Server.Text;
 					Trader.Login = Login.Text;
-					Trader.CompressionLevel = (CompressionLevels)Compression.Text.To<int>();
+					Trader.CompressionLevel = (CompressionLevels)Compression.SelectedValue;
 					Trader.Interface = Interface.Text;
 					Trader.OrderBookDepth = Depth.Text.To<int>();
 
@@ -88,17 +88,16 @@ namespace SampleMicex
 
 						// инициализируем механизм переподключения
 						Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Micex.WorkingTime;
-						Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+						Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
 						// подписываемся на событие успешного соединения
 						Trader.Connected += () =>
 						{
 							this.GuiAsync(() => ChangeConnectStatus(true));
-							Trader.StartExport();
-						};
 
-						// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-						Trader.ExportStarted += Trader.RegisterNews;
+							// запускаем подписку на новости
+							Trader.RegisterNews();
+						};
 
 						// подписываемся на событие разрыва соединения
 						Trader.ConnectionError += error => this.GuiAsync(() =>
@@ -111,7 +110,7 @@ namespace SampleMicex
 						Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 						// подписываемся на ошибку обработки данных (транзакций и маркет)
-						Trader.ProcessDataError += error =>
+						Trader.Error += error =>
 							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 						// подписываемся на ошибку подписки маркет-данных
@@ -156,7 +155,6 @@ namespace SampleMicex
 				else
 				{
 					Trader.UnRegisterNews();
-					Trader.StopExport();
 
 					Trader.Disconnect();
 				}

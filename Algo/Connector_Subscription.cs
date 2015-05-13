@@ -10,7 +10,6 @@ namespace StockSharp.Algo
 	using MoreLinq;
 
 	using StockSharp.BusinessEntities;
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -125,11 +124,11 @@ namespace StockSharp.Algo
 				if (security == null)
 				{
 					message.Error = new ArgumentException(LocalizedStrings.Str692Params.Put(message.SecurityId, _connector.Name));
-					_connector.MarketDataAdapter.SendOutMessage(message);
+					_connector.SendOutMessage(message);
 				}
 				else
 				{
-					_connector.MarketDataAdapter.SendInMessage(message);
+					_connector.SendInMessage(message);
 				}
 			}
 
@@ -464,7 +463,7 @@ namespace StockSharp.Algo
 
 				if (subscribed == true)
 				{
-					_connector.MarketDataAdapter.SendOutMessage(new MarketDataMessage
+					_connector.SendOutMessage(new MarketDataMessage
 					{
 						DataType = type,
 						IsSubscribe = true,
@@ -521,7 +520,7 @@ namespace StockSharp.Algo
 
 				msg.FillSecurityInfo(_connector, subscriber);
 
-				_connector.MarketDataAdapter.SendInMessage(msg);
+				_connector.SendInMessage(msg);
 			}
 
 			//public void ReStart()
@@ -539,7 +538,7 @@ namespace StockSharp.Algo
 			//	}
 			//	catch (Exception ex)
 			//	{
-			//		_connector.RaiseProcessDataError(ex);
+			//		_connector.RaiseError(ex);
 			//	}
 
 			//	RegisteredSecurities.ForEach(s => _connector.OnRegisterSecurity(s));
@@ -712,7 +711,7 @@ namespace StockSharp.Algo
 		{
 			// при подписке на отфильтрованный стакан необходимо заполнить его
 			// первоначальное состояние в пототке обработки всех остальных сообщений
-			MarketDataAdapter.SendOutMessage(new MarketDataMessage
+			SendOutMessage(new MarketDataMessage
 			{
 				IsSubscribe = true,
 				DataType = _filteredMarketDepth
@@ -730,7 +729,7 @@ namespace StockSharp.Algo
 
 		private void OnUnRegisterFilteredMarketDepth(Security security)
 		{
-			MarketDataAdapter.SendOutMessage(new MarketDataMessage
+			SendOutMessage(new MarketDataMessage
 			{
 				IsSubscribe = false,
 				DataType = _filteredMarketDepth
@@ -790,7 +789,7 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Портфель, по которому необходимо начать получать новую информацию.</param>
 		protected virtual void OnRegisterPortfolio(Portfolio portfolio)
 		{
-			TransactionAdapter.SendInMessage(new PortfolioMessage
+			SendInMessage(new PortfolioMessage
 			{
 				PortfolioName = portfolio.Name,
 				TransactionId = TransactionIdGenerator.GetNextId(),
@@ -813,7 +812,7 @@ namespace StockSharp.Algo
 		/// <param name="portfolio">Портфель, по которому необходимо остановить получение новой информации.</param>
 		protected virtual void OnUnRegisterPortfolio(Portfolio portfolio)
 		{
-			TransactionAdapter.SendInMessage(new PortfolioMessage
+			SendInMessage(new PortfolioMessage
 			{
 				PortfolioName = portfolio.Name,
 				TransactionId = TransactionIdGenerator.GetNextId(),
@@ -870,7 +869,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnRegisterNews()
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.News,
@@ -895,7 +894,7 @@ namespace StockSharp.Algo
 			if (news == null)
 				throw new ArgumentNullException("news");
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.News,
@@ -909,73 +908,12 @@ namespace StockSharp.Algo
 		/// </summary>
 		protected virtual void OnUnRegisterNews()
 		{
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = TransactionIdGenerator.GetNextId(),
 				DataType = MarketDataTypes.News,
 				IsSubscribe = false
 			});
 		}
-
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		public void StartExport()
-		{
-			this.AddInfoLog("StartExport");
-
-			if (ExportState != ConnectionStates.Disconnected && ExportState != ConnectionStates.Failed)
-			{
-				this.AddWarningLog(LocalizedStrings.Str693Params, ExportState);
-				return;
-			}
-
-			ExportState = ConnectionStates.Connecting;
-			RaiseNewDataExported();
-
-			_prevTime = default(DateTimeOffset);
-
-			OnStartExport();
-		}
-
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		protected virtual void OnStartExport()
-		{
-			MarketDataAdapter.SendInMessage(new ConnectMessage());
-		}
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="IConnector.StartExport"/>.
-		/// </summary>
-		public void StopExport()
-		{
-			this.AddInfoLog("StopExport");
-
-			if (ExportState != ConnectionStates.Connected)
-			{
-				this.AddWarningLog(LocalizedStrings.Str694Params, ExportState);
-				return;
-			}
-
-			ExportState = ConnectionStates.Disconnecting;
-
-			_subscriptionManager.Stop();
-			OnStopExport();
-		}
-
-		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу.
-		/// </summary>
-		protected virtual void OnStopExport()
-		{
-			MarketDataAdapter.SendInMessage(new DisconnectMessage());
-		}
-
-		//internal void ReStartExport()
-		//{
-		//	_subscriptionManager.ReStart();
-		//}
 	}
 }

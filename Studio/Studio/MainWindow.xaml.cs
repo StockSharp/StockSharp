@@ -1103,7 +1103,10 @@ namespace StockSharp.Studio
 				var sessionSettings = _persistableService.GetStudioSession();
 
 				if (sessionSettings != null)
-					_algoService.Connector.BasketSessionHolder.Load(sessionSettings);
+				{
+					_algoService.Connector.TransactionAdapter.Load(sessionSettings.GetValue<SettingsStorage>("TransactionAdapter"));
+					_algoService.Connector.MarketDataAdapter.Load(sessionSettings.GetValue<SettingsStorage>("MarketDataAdapter"));
+				}
 				else
 					_algoService.Connector.AddStockSharpFixConnection(AppConfig.Instance.FixServerAddresss);
 			}
@@ -1123,7 +1126,6 @@ namespace StockSharp.Studio
 			connector.Connected += Trader_Connected;
 			connector.Disconnected += Trader_Disconnected;
 			connector.ConnectionError += Trader_ConnectionError;
-			connector.ExportError += Trader_ConnectionError;
 		}
 
 		private MarketDataSettingsCache CreateMarketDataSettingsCache()
@@ -1148,9 +1150,9 @@ namespace StockSharp.Studio
 
 			try
 			{
-				var innerSessions = connector.BasketSessionHolder.InnerSessions;
+				var innerAdapters = ((BasketMessageAdapter)connector.MarketDataAdapter).InnerAdapters;
 
-				if (innerSessions.IsEmpty())
+				if (innerAdapters.IsEmpty())
 				{
 					new MessageBoxBuilder()
 						.Owner(this)
@@ -1162,9 +1164,9 @@ namespace StockSharp.Studio
 						return;
 				}
 
-				var mdSessions = innerSessions.SortedSessionHolders.Where(s => s.IsMarketDataEnabled).ToArray();
+				var mdAdapters = innerAdapters.SortedAdapters.ToArray();
 
-				if (mdSessions.IsEmpty())
+				if (mdAdapters.IsEmpty())
 				{
 					new MessageBoxBuilder()
 						.Owner(this)
@@ -1213,7 +1215,6 @@ namespace StockSharp.Studio
 			{
 				ConnectBtn.IsEnabled = false;
 
-				connector.StopExport();
 				connector.Disconnect();
 			}
 			catch (Exception ex)
@@ -1264,7 +1265,6 @@ namespace StockSharp.Studio
 			connector.Connected -= Trader_Connected;
 			connector.Disconnected -= Trader_Disconnected;
 			connector.ConnectionError -= Trader_ConnectionError;
-			connector.ExportError -= Trader_ConnectionError;
 
 			// временное решение для сохранения аннотаций на графике,
 			// т.к. нет способа определить изменение положения или параметров аннотаций.
@@ -1323,15 +1323,6 @@ namespace StockSharp.Studio
 			ChangeConnectionControls();
 
 			_showConnectionErrors = true;
-
-			try
-			{
-				_algoService.Connector.StartExport();
-			}
-			catch (Exception ex)
-			{
-				_algoService.Connector.AddErrorLog(ex);
-			}
 		}
 
 		private void Trader_Disconnected()
@@ -1412,18 +1403,23 @@ namespace StockSharp.Studio
 
 		private bool ProcessConnectionSettings()
 		{
-			var wnd = new SessionHoldersWindow();
+			var wnd = new MessageAdaptersWindow();
 
 			wnd.CheckConnectionState += () => _algoService.Connector.ConnectionState;
 			wnd.AutoConnect = _persistableService.GetAutoConnect();
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
-			wnd.SessionHolder = _algoService.Connector.BasketSessionHolder;
+			wnd.Adapter = _algoService.Connector.Adapter;
 
 			var retVal = wnd.ShowModal(this);
 
 			if (retVal)
 			{
-				_persistableService.SetStudioSession(_algoService.Connector.BasketSessionHolder.Save());
+				var settings = new SettingsStorage
+				{
+					{ "TransactionAdapter", _algoService.Connector.TransactionAdapter.Save() },
+					{ "MarketDataAdapter", _algoService.Connector.MarketDataAdapter.Save() }
+				};
+				_persistableService.SetStudioSession(settings);
 				_persistableService.SetAutoConnect(wnd.AutoConnect);
 			}
 
@@ -1469,11 +1465,11 @@ namespace StockSharp.Studio
 
 		private void ExecutedPortfolioSettings(object sender, ExecutedRoutedEventArgs e)
 		{
-			var sessionHolder = _algoService.Connector.BasketSessionHolder;
+			var adapter = _algoService.Connector.TransactionAdapter;
 
-			new PortfolioSessionHoldersWindow { SessionHolder = sessionHolder }.ShowModal(this);
+			new PortfolioMessageAdaptersWindow { Adapter = (BasketMessageAdapter)adapter }.ShowModal(this);
 
-			_persistableService.SetStudioSession(sessionHolder.Save());
+			_persistableService.SetStudioSession(adapter.Save());
 		}
 
 		private void ExecutedNewPortfolioCommand(object sender, ExecutedRoutedEventArgs e)

@@ -232,7 +232,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\IQFeed\IQFeed.csproj">
+    <ProjectReference Include="..\..\..\Connectors\IQFeed\IQFeed.csproj">
       <Project>{f3068408-9764-432e-8fb4-596b308edb4f}</Project>
       <Name>IQFeed</Name>
     </ProjectReference>

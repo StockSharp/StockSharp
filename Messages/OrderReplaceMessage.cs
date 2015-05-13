@@ -16,7 +16,7 @@
 		/// Идентификатор перерегистрируемой заявки.
 		/// </summary>
 		[DataMember]
-		public long OldOrderId { get; set; }
+		public long? OldOrderId { get; set; }
 
 		/// <summary>
 		/// Идентификатор перерегистрируемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
@@ -25,7 +25,7 @@
 		public string OldOrderStringId { get; set; }
 
 		/// <summary>
-		/// Номер транзакции перерегистрируемой заявки.
+		/// Идентификатор транзакции перерегистрируемой заявки.
 		/// </summary>
 		[DataMember]
 		public long OldTransactionId { get; set; }
@@ -63,7 +63,9 @@
 				OldOrderId = OldOrderId,
 				OldOrderStringId = OldOrderStringId,
 				OldTransactionId = OldTransactionId,
-				UserOrderId = UserOrderId
+				UserOrderId = UserOrderId,
+				ClientCode = ClientCode,
+				BrokerCode = BrokerCode,
 			};
 
 			CopyTo(clone);

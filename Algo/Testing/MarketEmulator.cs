@@ -575,8 +575,8 @@ namespace StockSharp.Algo.Testing
 						{
 							_activeOrders.Add(replyMsg.TransactionId, replyMsg);
 
-							if (replyMsg.ExpiryDate != DateTimeOffset.MinValue && replyMsg.ExpiryDate != DateTimeOffset.MaxValue)
-								_expirableOrders.Add(replyMsg, replyMsg.ExpiryDate.EndOfDay() - replyMsg.LocalTime);
+							if (replyMsg.ExpiryDate != null && replyMsg.ExpiryDate != DateTimeOffset.MaxValue)
+								_expirableOrders.Add(replyMsg, replyMsg.ExpiryDate.Value.EndOfDay() - replyMsg.LocalTime);
 
 							// изменяем текущие котировки, добавляя туда наши цену и объем
 							UpdateQuote(replyMsg, true);
@@ -765,6 +765,7 @@ namespace StockSharp.Algo.Testing
 
 				switch (order.TimeInForce)
 				{
+					case null:
 					case TimeInForce.PutInQueue:
 					{
 						order.Balance = leftBalance;
@@ -1138,7 +1139,7 @@ namespace StockSharp.Algo.Testing
 
 			public decimal? GetBestPrice(Sides side)
 			{
-				var quotes = side == Sides.Buy ? _asks : _bids;
+				var quotes = GetQuotes(side.Invert());
 				var pair = quotes.FirstOr();
 
 				if (pair == null)
@@ -1414,7 +1415,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Генератор номеров для заявок.
+		/// Генератор идентификаторов для заявок.
 		/// </summary>
 		public IncrementalIdGenerator OrderIdGenerator
 		{
@@ -1423,7 +1424,7 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Генератор номеров для сделок.
+		/// Генератор идентификаторов для сделок.
 		/// </summary>
 		public IncrementalIdGenerator TradeIdGenerator
 		{
@@ -1478,7 +1479,7 @@ namespace StockSharp.Algo.Testing
 					break;
 				}
 
-				case ExtendedMessageTypes.Reset:
+				case MessageTypes.Reset:
 				{
 					_securityEmulators.Clear();
 					_securityEmulatorsByBoard.Clear();
@@ -1496,6 +1497,8 @@ namespace StockSharp.Algo.Testing
 
 					_bufferPrevFlush = default(DateTime);
 					_portfoliosPrevRecalc = default(DateTime);
+
+					retVal.Add(new ResetMessage());
 					break;
 				}
 
@@ -1770,6 +1773,19 @@ namespace StockSharp.Algo.Testing
 				messages.Add(emulator.CreateChangeMessage(time));
 
 			_portfoliosPrevRecalc = time;
+		}
+
+		bool IMessageChannel.IsOpened
+		{
+			get { return true; }
+		}
+
+		void IMessageChannel.Open()
+		{
+		}
+
+		void IMessageChannel.Close()
+		{
 		}
 	}
 }

@@ -60,11 +60,6 @@ namespace StockSharp.Rss.Xaml
 		public static readonly Uri MarketWatch = "http://feeds.marketwatch.com/marketwatch/bulletins?format=xml".To<Uri>();
 
 		/// <summary>
-		/// True-Flipper.
-		/// </summary>
-		public static readonly Uri TrueFlipper = "http://true-flipper.livejournal.com/data/rss".To<Uri>();
-
-		/// <summary>
 		/// Smart-Lab.
 		/// </summary>
 		public static readonly Uri SmartLab = "http://smart-lab.ru/allsignals/rss/".To<Uri>();

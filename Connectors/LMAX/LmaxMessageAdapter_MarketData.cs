@@ -35,6 +35,9 @@ namespace StockSharp.LMAX
 			"NDX"
 		};
 
+		private bool _isDownloadSecurityFromSite;
+		private bool _isHistoricalSubscribed;
+
 		/// <summary>
 		/// Поддерживается ли торговой системой поиск инструментов.
 		/// </summary>
@@ -45,7 +48,7 @@ namespace StockSharp.LMAX
 
 		private void ProcessSecurityLookupMessage(SecurityLookupMessage lookupMsg)
 		{
-			if (lookupMsg.GetValue<bool>("FromSite"))
+			if (_isDownloadSecurityFromSite)
 			{
 				using (var client = new WebClient())
 				{
@@ -103,6 +106,8 @@ namespace StockSharp.LMAX
 						});
 					}
 				}
+
+				_isDownloadSecurityFromSite = false;
 			}
 			else
 				SearchSecurities(lookupMsg.SecurityId.SecurityCode, lookupMsg.TransactionId, new List<Instrument>(), true);
@@ -160,13 +165,13 @@ namespace StockSharp.LMAX
 					new Level1ChangeMessage
 					{
 						SecurityId = securityId,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+						ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
 					}
 					.TryAdd(Level1Fields.StepPrice, instrument.Contract.UnitPrice));
 			}
 
 			if (hasMoreResults)
-				Session.SearchInstruments(new SearchRequest(secCode, instruments.Count), (i, h) => SearchSecurities(secCode, transactionId, i, h), CreateErrorHandler("SearchInstruments"));
+				_session.SearchInstruments(new SearchRequest(secCode, instruments.Count), (i, h) => SearchSecurities(secCode, transactionId, i, h), CreateErrorHandler("SearchInstruments"));
 			else
 				SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = transactionId });
 		}
@@ -185,12 +190,12 @@ namespace StockSharp.LMAX
 			{
 				case MarketDataTypes.Level1:
 				{
-					Session.Subscribe(new OrderBookStatusSubscriptionRequest(lmaxId), () => { }, CreateErrorHandler("OrderBookStatusSubscriptionRequest"));
+					_session.Subscribe(new OrderBookStatusSubscriptionRequest(lmaxId), () => { }, CreateErrorHandler("OrderBookStatusSubscriptionRequest"));
 					break;
 				}
 				case MarketDataTypes.MarketDepth:
 				{
-					Session.Subscribe(new OrderBookSubscriptionRequest(lmaxId), () => { }, CreateErrorHandler("OrderBookSubscriptionRequest"));
+					_session.Subscribe(new OrderBookSubscriptionRequest(lmaxId), () => { }, CreateErrorHandler("OrderBookSubscriptionRequest"));
 					break;
 				}
 				case MarketDataTypes.CandleTimeFrame:
@@ -215,13 +220,22 @@ namespace StockSharp.LMAX
 						request = new AggregateHistoricMarketDataRequest(mdMsg.TransactionId, lmaxId, mdMsg.From.UtcDateTime, mdMsg.To.UtcDateTime, resolution, Format.Csv, Option.Bid, Option.Ask);
 					}
 
-					Session.RequestHistoricMarketData(request, () => { }, CreateErrorHandler("RequestHistoricMarketData"));
+					if (!_isHistoricalSubscribed)
+					{
+						_session.Subscribe(new HistoricMarketDataSubscriptionRequest(), () => { }, CreateErrorHandler("HistoricMarketDataSubscriptionRequest"));
+						_isHistoricalSubscribed = true;
+					}
+
+					_session.RequestHistoricMarketData(request, () => { }, CreateErrorHandler("RequestHistoricMarketData"));
 					break;
 				}
 				case MarketDataTypes.Trades:
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("mdMsg", mdMsg.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
 			}
 
 			var result = (MarketDataMessage)mdMsg.Clone();
@@ -253,7 +267,7 @@ namespace StockSharp.LMAX
 				new Level1ChangeMessage
 				{
 					SecurityId = new SecurityId { Native = orderBookStatusEvent.InstrumentId },
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+					ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
 				}
 				.Add(Level1Fields.State, state));
 		}
@@ -303,7 +317,7 @@ namespace StockSharp.LMAX
 
 			foreach (var uri in uris)
 			{
-				Session.OpenUri(uri, (u, reader) =>
+				_session.OpenUri(uri, (u, reader) =>
 				{
 					using (var stream = new StreamReader(new GZipStream(reader.BaseStream, CompressionMode.Decompress), Encoding.UTF8))
 					{

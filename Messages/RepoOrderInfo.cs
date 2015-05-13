@@ -2,6 +2,8 @@
 {
     using System;
     using System.Runtime.Serialization;
+
+    using Ecng.Common;
     using Ecng.Serialization;
 
 	/// <summary>
@@ -9,7 +11,7 @@
     /// </summary>
     [Serializable]
     [System.Runtime.Serialization.DataContract]
-	public class RepoOrderInfo
+	public class RepoOrderInfo : Cloneable<RepoOrderInfo>
     {
         /// <summary>
         /// Создать <see cref="RepoOrderInfo"/>.
@@ -108,5 +110,29 @@
 		[DataMember]
 		[Nullable]
 		public decimal? Value { get; set; }
+
+		/// <summary>
+		/// Создать копию объекта <see cref="RepoOrderInfo"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override RepoOrderInfo Clone()
+		{
+			return new RepoOrderInfo
+			{
+				MatchRef = MatchRef,
+				Partner = Partner,
+				SettleCode = SettleCode,
+				SettleDate = SettleDate,
+				Value = Value,
+				BlockSecurities = BlockSecurities,
+				LowerDiscount = LowerDiscount,
+				Rate = Rate,
+				RefundRate = RefundRate,
+				SecondPrice = SecondPrice,
+				StartDiscount = StartDiscount,
+				Term = Term,
+				UpperDiscount = UpperDiscount
+			};
+		}
     }
 }

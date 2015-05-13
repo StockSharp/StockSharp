@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -47,16 +48,6 @@ namespace StockSharp.Algo.Indicators
 		{
 			_ema3.Length = _ema2.Length = _ema1.Length = Length;
 			base.Reset();
-		}
-
-		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return _ema1.CanProcess(input) && _ema2.CanProcess(input) && _ema3.CanProcess(input);
 		}
 
 		/// <summary>

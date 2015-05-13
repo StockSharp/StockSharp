@@ -10,7 +10,6 @@ namespace StockSharp.Transaq
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-	using StockSharp.Transaq.Native;
 	using StockSharp.Transaq.Native.Commands;
 	using StockSharp.Transaq.Native.Responses;
 	using StockSharp.Localization;
@@ -135,24 +134,37 @@ namespace StockSharp.Transaq
 					if (mdMsg.IsSubscribe)
 					{
 						var periodId = _candlePeriods.GetKeys((TimeSpan)mdMsg.Arg).First();
+						var secId = (int)mdMsg.SecurityId.Native;
+						var key = Tuple.Create(secId, periodId);
 
-						_candleTransactions.Add(Tuple.Create((int)mdMsg.SecurityId.Native, periodId), mdMsg.TransactionId);
+						_candleTransactions.Add(key, mdMsg.TransactionId);
 
 						var command = new RequestHistoryDataMessage
 						{
-							SecId = (int)mdMsg.SecurityId.Native,
+							SecId = secId,
 							Period = periodId,
 							Count = mdMsg.Count,
 							Reset = mdMsg.To == DateTimeOffset.MaxValue,
 						};
 
-						SendCommand(command);
+						try
+						{
+							SendCommand(command);
+						}
+						catch (Exception)
+						{
+							_candleTransactions.Remove(key);
+							throw;
+						}
 					}
 
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException("mdMsg", mdMsg.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
 			}
 
 			var reply = (MarketDataMessage)mdMsg.Clone();
@@ -185,7 +197,7 @@ namespace StockSharp.Transaq
 				SendOutMessage(new ExecutionMessage
 				{
 					TradeId = tick.TradeNo,
-					ServerTime = tick.TradeTime.ApplyTimeZone(TimeHelper.Moscow),
+					ServerTime = tick.TradeTime.ToDto(),
 					SecurityId = new SecurityId { Native = tick.SecId },
 					TradePrice = tick.Price,
 					Volume = tick.Quantity,
@@ -229,9 +241,11 @@ namespace StockSharp.Transaq
 					break;
 			}
 
+			var index = 0;
+
 			foreach (var candle in response.Candles)
 			{
-				var time = candle.Date.ApplyTimeZone(TimeHelper.Moscow);
+				var time = candle.Date.ToDto();
 
 				SendOutMessage(new TimeFrameCandleMessage
 				{
@@ -242,10 +256,10 @@ namespace StockSharp.Transaq
 					LowPrice = candle.Low,
 					ClosePrice = candle.Close,
 					TotalVolume = candle.Volume,
-					OpenTime = time - _candlePeriods[response.Period],
-					CloseTime = time,
+					OpenTime = time,
+					CloseTime = time + _candlePeriods[response.Period],
 					OpenInterest = candle.Oi,
-					IsFinished = isFinished,
+					IsFinished = isFinished && ++index == response.Candles.Length,
 					State = CandleStates.Finished,
 				});
 			}
@@ -277,7 +291,7 @@ namespace StockSharp.Transaq
 			{
 				Id = response.Id.To<string>(),
 				Story = response.Text,
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow)
+				ServerTime = CurrentTime.Convert(TimeHelper.Moscow)
 			});
 		}
 
@@ -290,8 +304,8 @@ namespace StockSharp.Transaq
 				Id = response.Id.To<string>(),
 				Story = response.Text,
 				ServerTime = response.TimeStamp == null
-					? SessionHolder.CurrentTime.Convert(TimeHelper.Moscow)
-					: response.TimeStamp.Value.ApplyTimeZone(TimeHelper.Moscow),
+					? CurrentTime.Convert(TimeHelper.Moscow)
+					: response.TimeStamp.Value.ToDto(),
 			});
 		}
 
@@ -302,7 +316,7 @@ namespace StockSharp.Transaq
 				var message = new Level1ChangeMessage
 				{
 					SecurityId = new SecurityId { Native = quote.SecId },
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+					ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 				};
 
 				message.TryAdd(Level1Fields.AccruedCouponIncome, quote.AccruedIntValue);
@@ -337,7 +351,7 @@ namespace StockSharp.Transaq
 				message.TryAdd(Level1Fields.LastTradeVolume, (decimal?)quote.LastTradeVolume);
 
 				if (quote.LastTradeTime != null)
-					message.Add(Level1Fields.LastTradeTime, quote.LastTradeTime.Value.ApplyTimeZone(TimeHelper.Moscow));
+					message.Add(Level1Fields.LastTradeTime, quote.LastTradeTime.Value.ToDto());
 
 				message.TryAdd(Level1Fields.BestBidPrice, quote.BestBidPrice);
 				message.TryAdd(Level1Fields.BestBidVolume, (decimal?)quote.BestBidVolume);
@@ -382,7 +396,7 @@ namespace StockSharp.Transaq
 					SecurityId = new SecurityId { Native = group.Key },
 					Bids = tuple.Item1.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
 					Asks = tuple.Item2.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+					ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 				});
 			}
 		}
@@ -406,7 +420,7 @@ namespace StockSharp.Transaq
 			var l1Msg = new Level1ChangeMessage
 			{
 				SecurityId = new SecurityId { Native = response.SecId },
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+				ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 			};
 
 			l1Msg.TryAdd(Level1Fields.MinPrice, response.MinPrice);
@@ -454,7 +468,7 @@ namespace StockSharp.Transaq
 					new Level1ChangeMessage
 					{
 						SecurityId = securityId,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+						ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 					}
 					.Add(Level1Fields.State, security.Active ? SecurityStates.Trading : SecurityStates.Stoped)
 					.TryAdd(Level1Fields.StepPrice, security.PointCost));
@@ -468,7 +482,7 @@ namespace StockSharp.Transaq
 				SendOutMessage(new ExecutionMessage
 				{
 					TradeId = tick.TradeNo,
-					ServerTime = tick.TradeTime.ApplyTimeZone(TimeHelper.Moscow),
+					ServerTime = tick.TradeTime.ToDto(),
 					SecurityId = new SecurityId { Native = tick.SecId },
 					TradePrice = tick.Price,
 					Volume = tick.Quantity,
@@ -522,8 +536,8 @@ namespace StockSharp.Transaq
 					Headline = message.Text,
 					Story = message.Text,
 					ServerTime = message.Date == null
-						? SessionHolder.CurrentTime.Convert(TimeHelper.Moscow)
-						: message.Date.Value.ApplyTimeZone(TimeHelper.Moscow),
+						? CurrentTime.Convert(TimeHelper.Moscow)
+						: message.Date.Value.ToDto(),
 				});
 			}
 		}

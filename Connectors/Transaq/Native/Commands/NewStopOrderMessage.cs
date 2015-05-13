@@ -24,7 +24,7 @@
 		public bool? ByMarket { get; set; }
 		public string Quantity { get; set; }
 		//public bool IsQuantityInPercents { get; set; }
-		public string UseCredit { get; set; }
+		public bool? UseCredit { get; set; }
 		public int? GuardTime { get; set; }
 		public string BrokerRef { get; set; }
 		public string Correction { get; set; }

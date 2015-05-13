@@ -1,6 +1,7 @@
 namespace StockSharp.Algo
 {
 	using Ecng.ComponentModel;
+
 	using StockSharp.Localization;
 
 	/// <summary>

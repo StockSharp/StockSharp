@@ -92,7 +92,7 @@ namespace SampleTransaq
 
 					// инициализируем механизм переподключения
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);
@@ -105,14 +105,18 @@ namespace SampleTransaq
 						// возводим флаг, что соединение установлено
 						_isConnected = true;
 
-						Trader.StartExport();
+						// запускаем подписку на новости
+						Trader.RegisterNews();
 
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
-					};
 
-					// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-					Trader.ExportStarted += Trader.RegisterNews;
+						foreach (var portfolio in Trader.Portfolios)
+						{
+							// регистрирует портфели на обновление данных
+							Trader.RegisterPortfolio(portfolio);
+						}
+					};
 
 					// подписываемся на событие разрыва соединения
 					Trader.ConnectionError += error => this.GuiAsync(() =>
@@ -127,7 +131,7 @@ namespace SampleTransaq
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					Trader.ProcessDataError += error =>
+					Trader.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// подписываемся на ошибку подписки маркет-данных
@@ -140,15 +144,7 @@ namespace SampleTransaq
 					Trader.NewOrders += orders => _ordersWindow.OrderGrid.Orders.AddRange(orders);
 					Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
 					
-					Trader.NewPortfolios += portfolios =>
-					{
-						foreach (var portfolio in portfolios)
-						{
-							// регистрирует портфели на обновление данных
-							Trader.RegisterPortfolio(portfolio);
-							_portfoliosWindow.PortfolioGrid.Portfolios.Add(portfolio);
-						}
-					};
+					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
 					// подписываемся на событие о неудачной регистрации заявок
@@ -184,7 +180,6 @@ namespace SampleTransaq
 			else
 			{
 				Trader.UnRegisterNews();
-				Trader.StopExport();
 
 				Trader.Disconnect();
 			}

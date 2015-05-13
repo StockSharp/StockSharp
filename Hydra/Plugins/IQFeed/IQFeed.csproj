@@ -88,7 +88,7 @@
       <Project>{dce69db8-53ca-4b7f-9368-02f175a31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\IQFeed\IQFeed.csproj">
+    <ProjectReference Include="..\..\..\Connectors\IQFeed\IQFeed.csproj">
       <Project>{F3068408-9764-432E-8FB4-596B308EDB4F}</Project>
       <Name>IQFeed</Name>
     </ProjectReference>

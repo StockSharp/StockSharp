@@ -20,7 +20,6 @@
 		<Button x:Name="FindPath" Grid.Column="3" Grid.Row="0" Content="..." Width="25" HorizontalAlignment="Left" Click="FindPathClick" />
 		
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-		<Button x:Name="ExportDde" Background="LightPink" Grid.Column="1" Grid.Row="1" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr850}" Click="ExportDdeClick" />
 		<Button x:Name="ShowSecurities" Grid.Column="2" Grid.Row="1" IsEnabled="False" Width="100" HorizontalAlignment="Left" Content="{x:Static loc:LocalizedStrings.Securities}" Click="ShowSecuritiesClick" />
 	</Grid>
 </Window>

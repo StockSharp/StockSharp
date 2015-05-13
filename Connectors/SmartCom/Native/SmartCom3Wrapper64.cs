@@ -100,7 +100,7 @@
 		/// <param name="price">Цена.</param>
 		/// <param name="volume">Объем.</param>
 		/// <param name="stopPrice">Стоп цена (если регистрируется стоп-заявка).</param>
-		/// <param name="transactionId">Уникальный номер транзакции.</param>
+		/// <param name="transactionId">Идентификатор транзакции.</param>
 		public override void RegisterOrder(string portfolioName, string securityId, SmartOrderAction action, SmartOrderType type, SmartOrderValidity validity, double price, int volume, double stopPrice, int transactionId)
 		{
 			StOrder_Action smartAction;

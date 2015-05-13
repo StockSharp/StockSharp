@@ -40,7 +40,7 @@ namespace SampleOEC
 			_portfoliosWindow.MakeHideable();
 			_newsWindow.MakeHideable();
 
-			MainWindow.Instance = this;
+			Instance = this;
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -86,36 +86,37 @@ namespace SampleOEC
 
 				if (Trader == null)
 				{
-					// создаем подключение
+					// create connector
 					Trader = new OECTrader
 					{
 						//UseNativeReconnect = false,
 						EnableOECLogging = true
 					};
 
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
-						// разблокируем кнопку Экспорт (соединение было восстановлено)
+						// update gui labes
 						ChangeConnectStatus(true);
 						MessageBox.Show(this, LocalizedStrings.Str2958);
 					});
 
-					// подписываемся на событие успешного соединения
+					// subscribe on connection successfully event
 					Trader.Connected += () =>
 					{
-						// возводим флаг, что соединение установлено
+						// set flag (connection is established)
 						_isConnected = true;
 
-						// разблокируем кнопку Экспорт
+						// update gui labes
 						this.GuiAsync(() => ChangeConnectStatus(true));
 
-						Trader.StartExport();
+						// subscribe on news
+						Trader.RegisterNews();
 					};
 
-					// подписываемся на событие разрыва соединения
+					// subscribe on connection error event
 					Trader.ConnectionError += error => this.GuiAsync(() =>
 					{
-						// заблокируем кнопку Экспорт (так как соединение было потеряно)
+						// update gui labes
 						ChangeConnectStatus(false);
 
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);	
@@ -123,10 +124,8 @@ namespace SampleOEC
 
 					Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-					// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-					Trader.ExportStarted += Trader.RegisterNews;
-
-					Trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+					// subscribe on error event
+					Trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 					Trader.NewMyTrades += trades => _myTradesWindow.TradeGrid.Trades.AddRange(trades);
@@ -135,26 +134,26 @@ namespace SampleOEC
 					Trader.NewStopOrders += orders => _stopOrdersWindow.OrderGrid.Orders.AddRange(orders);
 					Trader.NewPortfolios += portfolios =>
 					{
-						// регистрирует портфели на обновление данных
+						// subscribe on portfolio updates
 						portfolios.ForEach(Trader.RegisterPortfolio);
 
 						_portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 					};
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
-					// подписываемся на событие о неудачной регистрации заявок
+					// subscribe on error of order registration event
 					Trader.OrdersRegisterFailed += OrdersFailed;
-					// подписываемся на событие о неудачном снятии заявок
+					// subscribe on error of order cancelling event
 					Trader.OrdersCancelFailed += OrdersFailed;
 
-					// подписываемся на событие о неудачной регистрации стоп-заявок
+					// subscribe on error of stop-order registration event
 					Trader.StopOrdersRegisterFailed += OrdersFailed;
-					// подписываемся на событие о неудачном снятии стоп-заявок
+					// subscribe on error of stop-order cancelling event
 					Trader.StopOrdersCancelFailed += OrdersFailed;
 
 					Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
-					// устанавливаем поставщик маркет-данных
+					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
 					ShowSecurities.IsEnabled = ShowTrades.IsEnabled =
@@ -166,7 +165,7 @@ namespace SampleOEC
 				Trader.Password = Password.Password;
 				Trader.Address = Address.SelectedAddress;
 
-				// очищаем из текстового поля в целях безопасности
+				// clear password box for security reason
 				//Password.Clear();
 
 				Trader.Connect();
@@ -174,7 +173,6 @@ namespace SampleOEC
 			else
 			{
 				Trader.UnRegisterNews();
-				Trader.StopExport();
 
 				Trader.Disconnect();
 			}

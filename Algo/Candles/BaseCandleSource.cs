@@ -37,7 +37,7 @@ namespace StockSharp.Algo.Candles
 		/// <summary>
 		/// Событие ошибки транслирования данных.
 		/// </summary>
-		public event Action<Exception> ProcessDataError;
+		public event Action<Exception> Error;
 
 		/// <summary>
 		/// Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
@@ -71,12 +71,12 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ProcessDataError"/>.
+		/// Вызвать событие <see cref="Error"/>.
 		/// </summary>
 		/// <param name="error">Описание ошибки.</param>
-		protected void RaiseProcessDataError(Exception error)
+		protected void RaiseError(Exception error)
 		{
-			ProcessDataError.SafeInvoke(error);
+			Error.SafeInvoke(error);
 		}
 
 		/// <summary>

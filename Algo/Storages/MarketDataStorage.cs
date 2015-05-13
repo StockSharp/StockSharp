@@ -47,10 +47,7 @@ namespace StockSharp.Algo.Storages
 
 		protected MarketDataStorage(SecurityId securityId, object arg, Func<TData, DateTimeOffset> getTime, Func<TData, SecurityId> getSecurityId, Func<TData, TId> getId, IMarketDataSerializer<TData> serializer, IMarketDataStorageDrive drive)
 		{
-			if (securityId == null)
-				throw new ArgumentNullException("securityId");
-
-			if (securityId == default(SecurityId))
+			if (securityId.IsDefault())
 				throw new ArgumentException(LocalizedStrings.Str1025, "securityId");
 
 			if (getTime == null)
@@ -132,7 +129,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var security = _getSecurityId(d);
 
-				if (security.SecurityCode != SecurityId.SecurityCode || security.BoardCode != SecurityId.BoardCode)
+				if (!security.IsDefault() && (security.SecurityCode != SecurityId.SecurityCode || security.BoardCode != SecurityId.BoardCode))
 					throw new ArgumentException(LocalizedStrings.Str1026Params.Put(typeof(TData).Name, security, SecurityId));
 
 				var time = _getTime(d);
@@ -194,10 +191,8 @@ namespace StockSharp.Algo.Storages
 			{
 				var time = GetTruncatedTime(data[0]);
 
-				var security = Security.CheckPriceStep();
-
-				metaInfo.PriceStep = security.PriceStep ?? 0.01m;
-				metaInfo.VolumeStep = security.VolumeStep ?? 1m;
+				metaInfo.PriceStep = Security.PriceStep ?? 0.01m;
+				metaInfo.VolumeStep = Security.VolumeStep ?? 1m;
 				metaInfo.LastTime = time;
 				metaInfo.FirstTime = time;
 			}

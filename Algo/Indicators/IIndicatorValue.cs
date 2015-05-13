@@ -1,6 +1,8 @@
 namespace StockSharp.Algo.Indicators
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Ecng.Common;
 
@@ -27,7 +29,7 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
 		/// </summary>
-		bool IsFinal { get; }
+		bool IsFinal { get; set; }
 
 		/// <summary>
 		/// Сформирован ли индикатор.
@@ -64,42 +66,22 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
-	/// Базовое значение индикатора, работающее с один типом данных.
+	/// Базовый класс для значения индикатора.
 	/// </summary>
-	/// <typeparam name="TValue">Тип значения.</typeparam>
-	public class SingleIndicatorValue<TValue> : IIndicatorValue
+	public abstract class BaseIndicatorValue : IIndicatorValue
 	{
 		/// <summary>
-		/// Создать <see cref="SingleIndicatorValue{TValue}"/>.
+		/// Инициализировать <see cref="BaseIndicatorValue"/>.
 		/// </summary>
 		/// <param name="indicator">Индикатор.</param>
-		/// <param name="value">Значение.</param>
-		public SingleIndicatorValue(IIndicator indicator, TValue value)
-			: this(indicator)
-		{
-			Value = value;
-			IsEmpty = value.IsNull();
-			IsFormed = indicator.IsFormed;
-		}
-
-		/// <summary>
-		/// Создать <see cref="SingleIndicatorValue{TValue}"/>.
-		/// </summary>
-		/// <param name="indicator">Индикатор.</param>
-		public SingleIndicatorValue(IIndicator indicator)
+		protected BaseIndicatorValue(IIndicator indicator)
 		{
 			if (indicator == null)
 				throw new ArgumentNullException("indicator");
 
 			Indicator = indicator;
-			IsEmpty = true;
 			IsFormed = indicator.IsFormed;
 		}
-
-		/// <summary>
-		/// Значение.
-		/// </summary>
-		public TValue Value { get; private set; }
 
 		/// <summary>
 		/// Индикатор.
@@ -109,12 +91,12 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Значение индикатора отсутствует.
 		/// </summary>
-		public bool IsEmpty { get; private set; }
+		public abstract bool IsEmpty { get; set; }
 
 		/// <summary>
 		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
 		/// </summary>
-		public bool IsFinal { get; set; }
+		public abstract bool IsFinal { get; set; }
 
 		/// <summary>
 		/// Сформирован ли индикатор.
@@ -124,14 +106,108 @@ namespace StockSharp.Algo.Indicators
 		/// <summary>
 		/// Входное значение.
 		/// </summary>
-		public IIndicatorValue InputValue { get; set; }
+		public abstract IIndicatorValue InputValue { get; set; }
 
 		/// <summary>
 		/// Поддерживает ли значение необходимый для индикатора тип данных.
 		/// </summary>
 		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
 		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
-		public virtual bool IsSupport(Type valueType)
+		public abstract bool IsSupport(Type valueType);
+
+		/// <summary>
+		/// Получить значение по типу данных.
+		/// </summary>
+		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
+		/// <returns>Значение.</returns>
+		public abstract T GetValue<T>();
+
+		/// <summary>
+		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// </summary>
+		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
+		/// <param name="indicator">Индикатор.</param>
+		/// <param name="value">Значение.</param>
+		/// <returns>Новый объект, содержащий входное значение.</returns>
+		public abstract IIndicatorValue SetValue<T>(IIndicator indicator, T value);
+
+		/// <summary>
+		/// Сравнить с другим значением индикатора.
+		/// </summary>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns>Код сравнения.</returns>
+		public abstract int CompareTo(IIndicatorValue other);
+
+		/// <summary>
+		/// Сравнить с другим значением индикатора.
+		/// </summary>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns>Код сравнения.</returns>
+		int IComparable.CompareTo(object other)
+		{
+			var value = other as IIndicatorValue;
+
+			if (other == null)
+				throw new ArgumentException(LocalizedStrings.Str911, "other");
+
+			return CompareTo(value);
+		}
+	}
+
+	/// <summary>
+	/// Базовое значение индикатора, работающее с один типом данных.
+	/// </summary>
+	/// <typeparam name="TValue">Тип значения.</typeparam>
+	public class SingleIndicatorValue<TValue> : BaseIndicatorValue
+	{
+		/// <summary>
+		/// Создать <see cref="SingleIndicatorValue{TValue}"/>.
+		/// </summary>
+		/// <param name="indicator">Индикатор.</param>
+		/// <param name="value">Значение.</param>
+		public SingleIndicatorValue(IIndicator indicator, TValue value)
+			: base(indicator)
+		{
+			Value = value;
+			IsEmpty = value.IsNull();
+		}
+
+		/// <summary>
+		/// Создать <see cref="SingleIndicatorValue{TValue}"/>.
+		/// </summary>
+		/// <param name="indicator">Индикатор.</param>
+		public SingleIndicatorValue(IIndicator indicator)
+			: base(indicator)
+		{
+			IsEmpty = true;
+		}
+
+		/// <summary>
+		/// Значение.
+		/// </summary>
+		public TValue Value { get; private set; }
+
+		/// <summary>
+		/// Значение индикатора отсутствует.
+		/// </summary>
+		public override bool IsEmpty { get; set; }
+
+		/// <summary>
+		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
+		/// </summary>
+		public override bool IsFinal { get; set; }
+
+		/// <summary>
+		/// Входное значение.
+		/// </summary>
+		public override IIndicatorValue InputValue { get; set; }
+
+		/// <summary>
+		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// </summary>
+		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
+		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		public override bool IsSupport(Type valueType)
 		{
 			return valueType == typeof(TValue);
 		}
@@ -141,7 +217,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
 		/// <returns>Значение.</returns>
-		public virtual T GetValue<T>()
+		public override T GetValue<T>()
 		{
 			ThrowIfEmpty();
 			return Value.To<T>();
@@ -154,7 +230,7 @@ namespace StockSharp.Algo.Indicators
 		/// <param name="indicator">Индикатор.</param>
 		/// <param name="value">Значение.</param>
 		/// <returns>Новый объект, содержащий входное значение.</returns>
-		public virtual IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
 		{
 			return new SingleIndicatorValue<T>(indicator, value) { IsFinal = IsFinal, InputValue = this };
 		}
@@ -170,24 +246,9 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
 		/// <returns>Код сравнения.</returns>
-		public virtual int CompareTo(IIndicatorValue other)
+		public override int CompareTo(IIndicatorValue other)
 		{
 			return Value.Compare(other.GetValue<TValue>());
-		}
-
-		/// <summary>
-		/// Сравнить с другим значением индикатора.
-		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Код сравнения.</returns>
-		public int CompareTo(object other)
-		{
-			var value = other as IIndicatorValue;
-
-			if(other == null)
-				throw new ArgumentException(LocalizedStrings.Str911, "other");
-
-			return CompareTo(value);
 		}
 
 		/// <summary>
@@ -443,6 +504,84 @@ namespace StockSharp.Algo.Indicators
 				IsFinal = IsFinal,
 				InputValue = this
 			};
+		}
+	}
+
+	/// <summary>
+	/// Комплексное значение индикатора <see cref="IComplexIndicator"/>, которое получается в результате вычисления.
+	/// </summary>
+	public class ComplexIndicatorValue : BaseIndicatorValue
+	{
+		/// <summary>
+		/// Создать <see cref="ComplexIndicatorValue"/>.
+		/// </summary>
+		/// <param name="indicator">Индикатор.</param>
+		public ComplexIndicatorValue(IIndicator indicator)
+			: base(indicator)
+		{
+			InnerValues = new Dictionary<IIndicator, IIndicatorValue>();
+		}
+
+		/// <summary>
+		/// Значение индикатора отсутствует.
+		/// </summary>
+		public override bool IsEmpty { get; set; }
+
+		/// <summary>
+		/// Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени).
+		/// </summary>
+		public override bool IsFinal { get; set; }
+
+		/// <summary>
+		/// Входное значение.
+		/// </summary>
+		public override IIndicatorValue InputValue { get; set; }
+
+		/// <summary>
+		/// Вложенные значения.
+		/// </summary>
+		public IDictionary<IIndicator, IIndicatorValue> InnerValues { get; private set; }
+
+		/// <summary>
+		/// Поддерживает ли значение необходимый для индикатора тип данных.
+		/// </summary>
+		/// <param name="valueType">Тип данных, которым оперирует индикатор.</param>
+		/// <returns><see langword="true"/>, если тип данных поддерживается, иначе, <see langword="false"/>.</returns>
+		public override bool IsSupport(Type valueType)
+		{
+			return InnerValues.Any(v => v.Value.IsSupport(valueType));
+		}
+
+		/// <summary>
+		/// Получить значение по типу данных.
+		/// </summary>
+		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
+		/// <returns>Значение.</returns>
+		public override T GetValue<T>()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// </summary>
+		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
+		/// <param name="indicator">Индикатор.</param>
+		/// <param name="value">Значение.</param>
+		/// <returns>Измененная копия входного значения.</returns>
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Сравнить с другим значением индикатора.
+		/// </summary>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns>Код сравнения.</returns>
+		public override int CompareTo(IIndicatorValue other)
+		{
+			throw new NotSupportedException();
 		}
 	}
 }

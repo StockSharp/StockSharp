@@ -92,9 +92,9 @@ Depo;Depositary;Депозитарий
 DepoName;Depositary name where the security is physically held.;Название депозитария, где физически находится ценная бумага.
 ServerTime;Server time;Серверное время
 Transaction;Transaction;Транзакция
-TransactionId;Transaction ID;Номер транзакции
+TransactionId;Transaction ID;Идентификатор транзакции
 OriginalTrasaction;Original transaction;Первоначальная транзакция
-OriginalTrasactionId;ID of original transaction, for which this message is the answer.;Номер первоначальной транзакции, для которой данное сообщение является ответом.
+OriginalTrasactionId;ID of original transaction, for which this message is the answer.;Идентификатор первоначальной транзакции, для которой данное сообщение является ответом.
 DataType;Data type;Тип данных
 Str110;Data type, information about which is contained in the message.;Тип данных, информация о которых содержится в сообщении.
 Cancel;Cancel;Отмена
@@ -150,7 +150,7 @@ Str161;Latency;Задержка
 Str162;Netework latency.;Сетевая задержка.
 Str163;Slippage;Проскальзывание
 Str164;Slippage in trade price.;Проскальзывание в цене сделки.
-Str165;Number (extra);Номер (доп.)
+Str165;ID (user);Идентификатор (пользоват.)
 Str166;User's order ID.;Пользовательский идентификатор заявки.
 General;General;Основные
 Str168;Change server time.;Серверное время изменения.
@@ -177,7 +177,7 @@ MarketData;Market data;Маркет-данные
 UseMarketDataSession;Use session to receive market-data.;Использовать сессию для получения маркет-данных.
 Transactions;Transactions;Транзакции
 UseTransactionalSession;Use session to send transactions.;Использовать сессию для отправки транзакций.
-Str192;Control interval;Интервал контроля
+Str192;Heart beat;Интервал контроля
 Str193;Server notification interval that the connection is still alive. By default equal to 1 minute.;Интервал оповещения сервера о том, что подключение еще живое. По-умолчанию равно 1 минуте.
 TimeInterval;Time interval;Интервал времени
 Str195;TimeMessage message generation interval. By default equal to 10 milliseconds.;Интервал генерации сообщения TimeMessage. По-умолчанию равно 10 миллисекундам.
@@ -191,8 +191,8 @@ Messages;Messages;Сообщения
 Str203;Local time;Локальное время
 Str204;Local time label when a message was received/created.;Метка локального времени, когда сообщение было получено/создано.
 ExtendedInfo;Extended information;Расширенная информация
-Id;ID;Номер
-NewsId;News ID.;Номер новости.
+Id;ID;Идентификатор
+NewsId;News ID.;Идентификатор новости.
 Board;Board;Площадка
 Security;Security;Инструмент
 Str212;Security ID, for which news have been published.;Идентификатор инструмента, для которого опубликована новость.
@@ -212,8 +212,8 @@ Str226;Stop-orders;Стоп-заявки
 Str227;Cancel stop-orders or normal.;Снимать стоп-заявки или обычные.
 Str228;Direction, for which orders have to be cancelled.;Направление, для которого необходимо снять заявки.
 Str229;Portfolio name, for which an order must be placed/cancelled.;Название портфеля, по которому необходимо выставить/снять заявку.
-Str231;Lifetime;Время жизни
-Str232;Limit order lifetime.;Время жизни лимитной заявки.
+Str231;Time in force;Время жизни
+Str232;Limit order time in force.;Время жизни лимитной заявки.
 Str233;REPO\REPO-M information;Информация РЕПО\РЕПО-М
 Str234;Information for REPO\REPO-M orders.;Информация для РЕПО\РЕПО-М заявок.
 Str235;Negotiate Trades Mode information;Информация РПС
@@ -468,7 +468,7 @@ Str530;Last change local time;Локальное время последнего
 Str531;Last trade change local time (Cancellation, Fill).;Локальное время последнего изменения заявки (Снятие, Сведение).
 Str532;Linked order;Связанная заявка
 Str533;Order created by a stop-order during condition activation (empty value, if stop-condition has not been activated).;Биржевая заявка, которая была создана стоп-заявкой при активации условия (пустое значение, если стоп-условие еще не было активировано).
-Str534Params;{0}/{1} {2} Price={3} Volume={4} State={5} Score={6};{0}/{1} {2} Цена={3} Объем={4} Сост={5} Бал={6}
+Str534Params;{0}/{1} {2} Price={3} Volume={4} State={5} Bal={6};{0}/{1} {2} Цена={3} Объем={4} Сост={5} Бал={6}
 Str535;Orders log item.;Строка лога заявок.
 Str536Params;{0} orders {1};{0} заявки {1}
 Str537;Cancellation;Снятие
@@ -544,12 +544,11 @@ PercentagesConvert;Percentage can only be converted to percentage.;Процен�
 UnitHandlerNotSet;Typed value handler has not been set.;Не установлен обработчик получения типизированного значения.
 ;Price step cost is equal to zero.;Значение стоимости шага цены равно нулю.
 Str623Params;Adapter for work with portfolio {0} not found.;Адаптер для работы с портфелем {0} не найден.
-Str624Params;Adapter does not support obtaining data for {0}.;Адаптер не поддерживает получение данных для {0}.
 Str625Params;Connection error for {0}: {1};Ошибка подключения для {0}: {1}
-Str626;Failed to connect to any connection.;Не удалось установить ни одно подключение.
+Str626;Failed to connect of some connections.;Не удалось установить некоторые подключения.
 Str627Params;Error disconnecting for {0}: {1};Ошибка отключения для {0}: {1}
 Str628;Errors occured during shutdown.;В процессе отключения возникли ошибки.
-Str629Params;No suitable adapter found for security {0}.;Не найден подходящий адаптер для инструмента {0}.
+Str629Params;No suitable adapter found for {0}.;Не найден подходящий адаптер для {0}.
 Str630Params;Security's {0} corresponding adapter is {1}.;Инструменту {0} соответствует адаптер {1}.
 Str631Params;Adapter {0} does not support security {1} for {2}: {3};Адаптер {0} не поддерживает инструмент {1} для {2}: {3}
 SubscriptionProcessCancelled;Subscription process cancelled by user.;Процесс подписки отменен пользователем.
@@ -631,15 +630,15 @@ Str710Params;Expiration time for {0} has passed. Current date {1}.;Время э
 Str711;Standard deviation has an unacceptable value.;Стандартное отклонение имеет недопустимое значение.
 Str712;Security does not have information about the expiration date.;Инструмент не имеет информации о дате истечения.
 Str714Params;Message has state {OrderState} and information about error '{Error.Message}'.;Сообщение имеет состояние {OrderState} и имеет информацию об ошибке '{Error.Message}'.
-Str715;Transaction number must be different from zero.;Номер транзакции должен быть отличен от нуля.
+Str715;Transaction number must be different from zero.;Идентификатор транзакции должен быть отличен от нуля.
 Str716;Error cancelling.;Ошибка снятия.
 Str717;Error registering.;Ошибка регистрации.
-Str718;Transaction number is incorrectly set.;Номер транзакции задан неверно.
+Str718;Transaction number is incorrectly set.;Идентификатор транзакции задан неверно.
 Str719;None of the possible order IDs is specified.;Не указан ни один из возможных идентификаторов заявки.
 Str720Params;Order for transaction {0} was not created.;Заявка для транзакции {0} не была создана.
 Str721;Wrong type of market-data.;Неправильный тип маркет-данных.
 Str722;Action;Действие
-Str723;Number (trade);Номер (сделка)
+Str723;ID (trade);Идентификатор (сделка)
 Str724;Price (trade);Цена (сделка)
 Str725;OI (trade);ОИ (сделка)
 Str726;Beginning time;Время начала
@@ -811,10 +810,10 @@ Str892;Order price must be positive.;Цена заявки должна быть
 Str893;Limit order price can not be equal 0.;Цена лимитной заявки не может быть равной 0.
 Str894;Order volume can not be zero.;Объем заявки не может быть нулевым.
 Str895;Order volume can not be negative.;Объем заявки не может быть отрицательным.
-Str896Params;Order already has a number '{0}'. Possibly, it was already registered.;Заявка уже имеет номер '{0}'. Возможно, она уже была зарегистрирована.
-Str897Params;Order already has a transaction number '{0}'. Possibly, it was already registered.;Заявка уже имеет номер транзакции '{0}'. Возможно, она уже была зарегистрирована.
+Str896Params;Order already has a ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор '{0}'. Возможно, она уже была зарегистрирована.
+Str897Params;Order already has a transaction ID '{0}'. Possibly, it was already registered.;Заявка уже имеет идентификатор транзакции '{0}'. Возможно, она уже была зарегистрирована.
 Str898Params;Order already has state '{0}'. Possibly, it was already registered.;Заявка уже имеет состояние '{0}'. Возможно, она уже была зарегистрирована.
-Str899;Order has neither identifier nor trasaction number. Possibly, it was not registered.;Заявка не имеет ни идентификатор ни номер транзакции. Возможно, она не была зарегистрирована.
+Str899;Order has neither identifier nor trasaction ID. Possibly, it was not registered.;Заявка не имеет ни идентификатор ни идентификатор транзакции. Возможно, она не была зарегистрирована.
 Str900Params;Wrong type {0} of security.;Неправильный тип {0} инструмента.
 Str901Params;Option {0} does not have information about expiration date.;Дата экспирации опциона {0} отсутствует.
 Str902Params;Information about the underlying security {0} is missing.;Информация о базовом инструменте {0} отсутствует.
@@ -839,10 +838,10 @@ Str921Params;time of last {0};время последнего {0}
 Str922;Unknown security change.;Неизвестное изменение инструмента.
 Str923Params;Unknown security change {0}.;Неизвестное изменение {0} инструмента.
 Str924;Wrong type of message.;Неправильный тип сообщения.
-Str925;Wrong order number.;Неправильный номер заявки.
+Str925;Wrong order ID.;Неправильный идентификатор заявки.
 Str926Params;Wrong price of order {0}.;Неправильная цена заявки {0}.
 Str927Params;Wrong volume of order {0}.;Неправильный объем заявки {0}.
-Str928Params;Wrong number of trade transaction {0}.;Неправильный номер сделки транзакции {0}.
+Str928Params;Wrong ID of trade transaction {0}.;Неправильный идентификатор сделки транзакции {0}.
 Str929Params;Wrong price of trade {0} order {1}.;Неправильная цена сделки {0} заявки {1}.
 Str930;filling;исполнения
 Str931;All transferred changes are empty.;Все переданные изменения являются пустыми.
@@ -924,14 +923,14 @@ Str1008Params;Cannot cast to integer value. Price {0}, previous price {1}, step 
 Str1009Params;Attempting to write unordered {0}. Last written time equal to {1:yyyy/MM/dd HH:mm:ss.fff}, new {2:yyyy/MM/dd HH:mm:ss.fff}.;Попытка записать неупорядоченные {0}. Последнее записанное время равно {1:yyyy/MM/dd HH:mm:ss.fff}, новое {2:yyyy/MM/dd HH:mm:ss.fff}.
 Str1010Params;Fractional volume {0} is not supported.;Дробный объем {0} не поддерживается.
 Str1011;Fractional volume is not supported.;Дробный объем не поддерживается.
-Str1012Params;Wrong number of trade order {0}.;Неправильный номер сделки заявки {0}.
+Str1012Params;Wrong number of trade order {0}.;Неправильный идентификатор сделки заявки {0}.
 Str1013;orders;заявки
 Str1014;To value can not be less than From value.;Значение to не может быть меньше значения from.
 Str1016Params;Wrong parameter of candle {0}. Candle parameter is equal {1}, storage accepts {2}.;Неправильный параметр свечи {0}. Параметр свечи равен {1}, хранилище принимает {2}.
 WrongCandleType;Wrong type of candle.;Неправильный тип свечи.
 Str1018;Unknown type of market-data.;Неизвестный тип маркет-данных.
 Str1019Params;Wrong type of data of trade {0}.;Неправильный тип данных сделки {0}.
-Str1020;Wrong trade number.;Неправильный номер сделки.
+Str1020;Wrong trade ID.;Неправильный идентификатор сделки.
 Str1021Params;Wrong price of trade {0}.;Неправильная цена сделки {0}.
 Str1022Params;Wrong volume of trade {0}.;Неправильный объем сделки {0}.
 Str1024;trades (local);сделки (локальное)
@@ -1096,14 +1095,14 @@ Str1186;Buffering period;Период буферизации
 Str1187;Send replies in whole packages via an interval. Network latency and buffered work of stock exchange core are emuated.;Отправлять ответы интервально целым пакетом. Эмулируется сетевая задержка и буферизированная работа биржевого ядра.
 Str1188;Use candles with specified timeframe.;Использовать свечи с заданным тайм-фреймом.
 Str1189;Time-frame can not be negative or zero.;Тайм-фрейм не может быть отрицательным или нулевым.
-Str1190;Order number;Номер заявки
-Str1191;Number, starting from which the emulator will generate orders numbers.;Номер, начиная с которого эмулятор будет генерировать номера для заявок.
-Str1192;Trade number;Номер сделки
-Str1193;Number, starting with which the emulator will generate trades numbers.;Номер, начиная с которого эмулятор будет генерировать номера для сделок.
-Str1194;Number, starting with which the emulator will generate orders transactions numbers.;Номер, начиная с которого эмулятор будет генерировать номера для транзакций заявок.
+Str1190;Order ID;Идентификатор заявки
+Str1191;Number, starting from which the emulator will generate orders identifiers.;Число, начиная с которого эмулятор будет генерировать идентификаторы для заявок.
+Str1192;Trade ID;Идентификатор сделки
+Str1193;Number, starting with which the emulator will generate trades identifiers.;Число, начиная с которого эмулятор будет генерировать идентификаторы для сделок.
+Str1194;Number, starting with which the emulator will generate orders transactions identifiers.;Число, начиная с которого эмулятор будет генерировать идентификаторы для транзакций заявок.
 Str1195;Spread size;Размер спреда
 Str1196;Spread size in price steps. Used in determining spread when generating market depths from ticks.;Размер спреда в шагах цены. Используется при определение спреда для генерации стакана из тиковых сделок.
-Str1197;Depth;Глубина стакана
+Str1197;Depth of book;Глубина стакана
 Str1198;Maximum depth of a market depth, which will be generated from ticks.;Максимальная глубина стакана, который будет генерироваться из тиков.
 Str1199;Number of volume steps;Количество шагов объема
 Str1200;Number of volume steps of an order exceeding those of a tick trade. Used in testing with ticks.;Количество шагов объема, на которое заявка больше тиковой сделки. Используется при тестировании на тиковых сделках.
@@ -1178,7 +1177,7 @@ Str1269Params;Strategy for the underlying asset {0} found.;Найдена стр
 Str1270;Underlying asset position specified.;Позиция для базового актива задана.
 Str1271Params;Strike strategy {0} found.;Найдена страйк стратегия {0}.
 Str1272Params;Order {0} {1} in {2}.;Заявка {0} {1} в {2}.
-Str1275Params;Order {0} registered with number {1} in {2}.;Заявка {0} зарегистрирована под номером {1} в {2}.
+Str1275Params;Order {0} registered with ID {1} in {2}.;Заявка {0} зарегистрирована под идентификатором {1} в {2}.
 Str1276Params;Error registering order {0}. Error description {1}.;Ошибка регистрации заявки {0}. Описание ошибки {1}.
 Str1277Params;Rehdging with order {0} {1} volume {2} with price {3}.;Рехеджирование заявкой {0} {1} объемом {2} с ценой {3}.
 Str1278Params;For security {0} no daughter strategies were created.;Для инструмента {0} не создано дочерней стратегии.
@@ -1247,7 +1246,7 @@ Str1346;Registered;Зарегистрирована
 Str1347;Changed;Изменена
 Str1348;Duration;Продолжительность
 Str1351;Stop-Orders;Стоп-Заявки
-Str1352;Derivative order number;Номер производной заявки
+Str1352;Derivative order ID;Идентификатор производной заявки
 Str1353;Limit;Лимитная
 Str1354;OTC;Внебиржевая
 Str1355;Strategies;Стратегии
@@ -1519,8 +1518,8 @@ Str1629;Regular;Обычное
 Str1630;Admin;Админ
 Str1631;Server port is out of range.;Серверный порт вне диапазона.
 Str1632;Server was not stopped from previous time.;Сервер не был остановлен с предыдущего раза.
-Str1633Params;For message with transaction number {0} the server transaction number was not found.;Для сообщения с номером транзакции {0} не найден серверный номер транзакции.
-Str1634;Stock exchange identifier and transaction number are not specified.;Биржевой идентификатор и номер транзакции не заданы.
+Str1633Params;For message with transaction ID {0} the server transaction ID was not found.;Для сообщения с идентификатором транзакции {0} не найден серверный идентификатор транзакции.
+Str1634;Stock exchange identifier and transaction ID are not specified.;Биржевой идентификатор и идентификатор транзакции не заданы.
 Str1635Params;Unknown type {0} market-data.;Неизвестный тип {0} маркет-данных.
 Str1636;Cannot process the request.;Невозможно обработать запрос.
 Str1637Params;User {0} not found.;Пользователь {0} не найден.
@@ -1543,11 +1542,10 @@ Str1653Params;For client {0} no session was created earlier.;Для клиент
 Str1654Params;Client {0} was disconnected earlier.;Клиент {0} был ранее отключен.
 Str1655;Wrong type of data.;Неправильный тип данных.
 Str1656Params;Security {0} found.;Найден инструмент {0}.
-Str1657Params;For message with transaction number {0} the original transaction number was not found.;Для сообщения с номером транзакции {0} не найден исходный номер транзакции.
+Str1657Params;For message with transaction ID {0} the original transaction ID was not found.;Для сообщения с идентификатором транзакции {0} не найден исходный идентификатор транзакции.
 Str1658;None;Отсутствует
 Str1659;Quotes;Котировки
 Str1660;Depth;Глубина
-Str1661;Session.;Сессия.
 Str1662;Version;Версия
 Str1663;Version FIX protocol.;Версия FIX протокола.
 FixFormat;FIX protocol format.;Формат FIX протокола.
@@ -1564,10 +1562,10 @@ RequestAllSecurities;Request all securities on connection.;Запрашиват�
 Encoding;Encoding;Кодировка
 EncodingDesc;Encoding used in data transfer.;Кодировка, использующая при передаче данных.
 Counter;Counter;Счетчик
-ResetCounter;Reset counter.;Нужно ли сбрасывать счетчик номеров.
+ResetCounter;Reset counter.;Нужно ли сбрасывать счетчик идентификаторов.
 Str1679;Connection to broker or stock exchange through FIX protocol.;Подключение к брокеру или бирже через FIX протокол.
-TransactionalSession;Transactional session.;Транзакционная сессия.
-MarketDataSession;Market data session.;Маркет-дата сессия.
+TransactionalSession;Transactional session;Транзакционная сессия
+MarketDataSession;Market data session;Маркет-дата сессия
 Str1683;Transactions (copy);Транзакции (копия)
 Str1684;Transactional session (copy, used with MICEX to receive orders and trades, registered for connections).;Транзакционная сессия (копия, используется в случае ММВБ для получение заявок и сделок, зарегистрированных под подключения).
 Str1685Params;Transaction = {0} Market-data = {1};Транзакции = {0} Маркет-дата = {1}
@@ -1584,7 +1582,7 @@ Str1696Params;Error cancelling order {0}. Text '{1}'.;Ошибка снятия 
 Str1697Params;Mass orders cancellation was not processed. Result '{0}'. Reason '{1}'.;Массовое снятие заявок не было обработано. Результат '{0}'. Причина '{1}'.
 Str1698Params;Receiveing positions for {0} was rejected. Error code {1}, error text {2}.;Получение позиций для {0} было отвергнуто. Код ошибки {1}, текст ошибки {2}.
 Str1699Params;Receiveing positions for {0} was rejected. Error code {1}.;Получение позиций для {0} было отвергнуто. Код ошибки {1}.
-Str1700Params;Transaction number {0} is out of range.;Номер транзакции {0} вне допустимого диапазона.
+Str1700Params;Transaction ID {0} is out of range.;Идентификатор транзакции {0} вне допустимого диапазона.
 Str1701Params;Error code {0} Message {1};Код ошибки {0} Сообщение {1}
 Str1702Params;For type {0} no information was found.;Для типа {0} не было найдено информации.
 Str1703Params;Data for table '{0}' was exported in a smaller format. Value for column '{1}' was not found. The number of columns is equal to '{2}', column index '{3}'.;Данные для таблицы '{0}' экспортировались в меньшем формате. Не было найдено значение для колонки '{1}'. Количество колонок равно '{2}', индекс колонки '{3}'.
@@ -1747,11 +1745,11 @@ Str1866Params;Login = {0} Address = {1};Логин = {0} Адрес = {1}
 Str1867Params;SmartCOM does not support execution condition {0}.;SmartCOM не поддерживает условие исполнения {0}.
 Str1868;SmartCOM does not support simultaneous search of portfolios on multiple queries.;SmartCOM не поддерживает одновременный поиск портфелей по нескольким запросам.
 Str1869Params;Error moving order {0}.;Ошибка при перемещении заявки {0}.
-Str1870Params;Unknown error reason in order registration with transaction number {0}.;Неизвестная причина ошибки регистрации заявки с номером транзакции {0}.
+Str1870Params;Unknown error reason in order registration with transaction ID {0}.;Неизвестная причина ошибки регистрации заявки с идентификатором транзакции {0}.
 Str1871Params;Failed to cancel order {0}.;Не удалось снять заявку {0}.
 Str1872Params;Wrong direction {0} orders {0}/{1}.;Неправильное направление {0} заявки {0}/{1}.
 Str1873Params;Order {0} was not accepted by the system.;Заявка {0} не была принята системой.
-Str1874Params;No transaction with SmartCOM number {0} found.;Не найдена ни одна транзакция с номером SmartCOM {0}.
+Str1874Params;No transaction with SmartCOM ID {0} found.;Не найдена ни одна транзакция с идентификатором SmartCOM {0}.
 Str1875;Connection to SmartCOM is not initialized.;Подключение к SmartCOM не инициализировано.
 Str1876;SmartCOM connection timeout.;Время установления связи со SmartCOM вышло.
 NetworkError;Network error.;Сетевая ошибка.
@@ -1971,7 +1969,7 @@ Str2110Params;Security {0} has an unacceptable price step {1}. Underlying asset 
 Str2111Params;Period starting date {0} is greater than ending date {1}.;Дата начала периода {0} больше даты конца {1}.
 Str2112;Failed to get data.;Не удалось получить данные.
 Str2113Params;Wrong name of file {0}.;Неправильное название у файла {0}.
-Str2114Params;Wrong trade number {0}.;Неправильный номер сделки {0}.
+Str2114Params;Wrong trade number {0}.;Неправильный идентификатор сделки {0}.
 Str2115Params;List {0} was not found in file {1}.;Лист {0} не был найден в файле {1}.
 Str2116;Default value is not specified.;Не указано значение по-умолчанию.
 Str2117;Wrong type of security.;Неправильный тип инструмента.
@@ -2082,13 +2080,13 @@ Str2248;Task header.;Заголовок задачи.
 Str2249;Connection control settings.;Настройки контроля подключения.
 News;News;Новости
 Str2251;Download news.;Скачивать новости.
-Str2252Params;Order {0} does not have a stock exchange number.;Заявка {0} не имеет биржевого номера.
+Str2252Params;Order {0} does not have a stock exchange ID.;Заявка {0} не имеет биржевого идентификатора.
 Str2253Params;Security {0} does not have an AlfaDirect ID.;Инструмент {0} не имеет идентификатора AlfaDirect.
 Str2254;Connection with Alfa-Direct is broken;Подключение с Альфа-Директ разорвано
 Str2255;Connection with Alfa-Direct established;Подключение с Альфа-Директ установлено
 Str2257Params;Non-empty line in the news table, which could not be parsed: {0};Непустая строка в таблице новостей, которую не удалось распарсить: {0}
-Str2258Params;Error registering order with transaction number {0}. {1};Ошибка регистрации заявки с номером транзакции {0}. {1}
-Str2259Params;Trade with number {0} has zero number of initialized order;Сделка с номером {0} имеет нулевой номер иниц. заявки
+Str2258Params;Error registering order with transaction ID {0}. {1};Ошибка регистрации заявки с идентификатором транзакции {0}. {1}
+Str2259Params;Trade with ID {0} has zero ID of initialized order;Сделка с идентификатором {0} имеет нулевой идентификатор иниц. заявки
 Str2260;Connection to AlfaDirect broker.;Подключение к брокеру AlfaDirect.
 Str2261;Alfa-Direct terminal user name.;Имя пользователя в терминале Альфа-Директ.
 Str2262;Password to enter the terminal.;Пароль для входа в терминал.
@@ -2323,7 +2321,7 @@ Str2515Params;Unknown order {0} duration time.;Неизвестное время
 Str2516;Connection to Interactive Brokers broker.;Подключение к брокеру Interactive Brokers.
 Str2518;Unique ID. Used when several clients are connected to one terminal or gateway.;Уникальный идентификатор. Используется в случае подключения нескольких клиентов к одному терминалу или gateway.
 Str2519;Real-time;Реал-тайм
-Str2520;Should real time or 'frozen' on broker server data be used.;Использовать ли данные реального времени или 'замороженные' на сервере брокера.
+Str2520;Should real-time or 'frozen' on broker server data be used.;Использовать ли данные реального времени или 'замороженные' на сервере брокера.
 Str2521;Server messages logging level.;Уровень логирования сообщений сервера.
 Str2522;Market data fields;Поля маркет-данных
 Str2523;Market data fields, which will be received with subscribed to Level1 messages.;Поля маркет-данных, которые будут получаться при подписке на Level1 сообщения.
@@ -2339,7 +2337,7 @@ Str2532;TWS address.;Адрес TWS.
 Str2533;IQFeed (history);IQFeed (история)
 Str2534;IQFeed (connection);IQFeed (подключение)
 Str2535;Real-time data;Реалтайм данные
-Str2536;Load realtime or history data.;Загружать данные в режиме реалтайм или историю.
+Str2536;Load real-time or history data.;Загружать данные в режиме реалтайм или историю.
 Str2537;Load securities from IQFeed website;Загружать инструменты с сайта IQFeed
 Str2538;Should the whole set of securities be loaded from IQFeed website archive. If switched off, securities have to be searched through Search.;Загружать ли весь набор инструментов из архива с сайта IQFeed. Если выключено, то инструменты необходимо искать через поиск.
 Str2539;Securities types;Типы инструментов
@@ -2653,8 +2651,6 @@ Str2850;Security code. Must be completed, if the data file does not contain the 
 Str2851;Board code. Must be completed, if the data file does not contain the board code.;Код площадки. Необходимо заполнить, если файл с данными не содержит кода площадки.
 Str2852;Date. Column can contain just a date or date with time.;Дата. Колонка может содержать как просто дату, так и дату со временем.
 Str2853;Time. This column is optional and is only necessary in case the date and time are separate in file being exported.;Время. Колонка является необязательно и необходима только в том случае, если дата и время в экспортируемом файле разделены.
-Str2854;securities;инструментов
-Str2855;trades;сделок
 Str2856;Number (line);Номер (строка)
 Str2857;Date;Дата
 Str2858;orders log;лога заявок
@@ -2666,7 +2662,7 @@ Str2863;news;новостей
 Str2864;Import;Импорт
 Str2865;File path not specified.;Путь к файлу не указан.
 Str2866Params;File {0} does not exist.;Файл {0} не существует.
-Str2867Params;Field {0} is obligatory. It must be given a default value or an odinal number.;Поле {0} является обязательным. Для него необходимо задать или значение по-умолчанию, или порядковый номер.
+Str2867Params;Field {0} is obligatory. It must be given a default value or an ordinal number.;Поле {0} является обязательным. Для него необходимо задать или значение по-умолчанию, или порядковый номер.
 Str2868Params;Field {0} is an enumeration. You have to set up corresponding values for it.;Поле {0} является перечисление. Для него необходимо задать значения соответствий.
 Str2869Params;Field '{0}' has index {1}, which is greater than length {2} of values array.;Поле '{0}' имеет индекс {1}, которое больше длины {2} массива значений.
 Str2870Params;Import '{0}' of type '{1}'.;Импорт '{0}' типа '{1}'.
@@ -3130,7 +3126,7 @@ Str3369;Demo mode.;Демо режим.
 Str3370;Verification code;Код верификации
 Str3371;Verification code, received by user in browser, after confirming program's permission to work.;Код верификации, полученный пользователем в браузере после подтверждения разрешения на работу приложения.
 Str3372;Incorrect serialized data type.;Неверный формат сериализованных данных.
-Str3373Params;Error cancelling order with number {0}. {1};Ошибка отмены заявки с номером {0}. {1}
+Str3373Params;Error cancelling order with ID {0}. {1};Ошибка отмены заявки с идентификатором {0}. {1}
 Str3374Params;Unsupported type of price '{0}';Неподдерживаемый тип цены priceType '{0}'
 Str3375;Portfolios update caused an error.;Обновление портфелей завершилось с ошибкой.
 Str3376;Positions update caused an error.;Обновление позиций завершилось с ошибкой.
@@ -3162,7 +3158,6 @@ Str3403;Order during closing auction.;Заявка в аукцион закры�
 Str3404;Router;Роутер
 Str3406;Good;Хорошая
 Str3407;Maximum;Максимальная
-Str3408;Note;Примечание
 Str3409;Connection to MICEX.;Подключение к ММВБ.
 Str3410;Path to dll;Путь к dll
 Str3411;Path to mtesrl.dll file.;Путь к файлу mtesrl.dll.
@@ -3275,10 +3270,9 @@ Str3522;At market;По рынку
 Str3523;Place a market order(in this case the order price is ignored).;Выставить заявку по рынку(в этом случае цена заявки игнорируется).
 Str3524;Order volume;Объем заявки
 Str3525;Volume (absolute or percentage value).;Объем (абсолютное значение или в процентах).
-Str3526;Use loan;Использовать кредит
+Str3526;Use credit;Использовать кредит
 Str3528;Protection time;Защитное время
 Str3529;Protection time in secs. Protection time allows to prevent orders being filled during market price surges, i.e. in such situations when prices reach the stop price for only a short period of time.;Защитное время, в сек. Защитное время позволяет предотвратить исполнение при проколах на рынке. Т.е. в таких ситуациях, когда цены на рынке лишь кратковременно достигают уровня стопа.
-Str3530;Note.;Примечание.
 Str3531;Activation price, when reached an order will be sent to the stock exchange with a specified price that takes protective spread into account.;Цена активации, при достижении которой будет отправлена заявка на биржу с указанной ценой, с учетом защитного спреда.
 Str3532;Place a market order.;Выставить заявку по рынку.
 Str3533;Volume. Absolute or percentage value.;Объем. Абсолютное значение, или в процентах.
@@ -3462,8 +3456,8 @@ Str3719;Stop-order replacing is not supported.;Замена стоп-заяво�
 Str3720;Port;Порт
 Str3721;FIX listening port.;Слушающий порт FIX.
 Str3722;Authorization for server access.;Авторизация для получения доступа к серверу.
-Str3723;Long numbers;Длинные номера
-Str3724;Use long transaction numbers. Does not work for real connections.;Использовать длинные номера транзакций. Не работает для реальных подключений.
+Str3723;Long IDs;Длинные идентификаторы
+Str3724;Use long transaction IDs. Does not work for real connections.;Использовать длинные идентификаторы транзакций. Не работает для реальных подключений.
 Str3725;User;Пользователь
 Str3726;Role;Роль
 Str3727;Role of user in system.;Роль пользователя в системе.
@@ -3571,8 +3565,8 @@ XamlStr40;Bid-Ask;Бид-Оффер
 BrokerLicense;Broker license;Брокерская лицензия
 XamlStr45;In source;В источнике
 XamlStr46;It might be necessary to enter your username and password on E*TRADE website in the process of verification code obtaining. In this case it is necessary after successful authentication to press the button above once more to obtain verification code.;В процессе получения кода верификации может потребоваться ввести имя пользователя и пароль на сайте E*TRADE. В этом случае после успешной аутентификации на сайте E*TRADE необходимо нажать кнопку выше повторно для получения кода верификации.
-XamlStr47;in x64 mode;в режиме x64
-XamlStr48;in x86 mode;в режиме x86
+XamlStr47;in 64-bit mode;в 64-ех битном режиме
+XamlStr48;in 32-bit mode;в 32-ух битном режиме
 Online;Online;В сети
 ToCompositeElem;To composite element;В составной элемент
 InStorage;In storage;В хранилище
@@ -3662,7 +3656,7 @@ XamlStr174;Change order;Заменить заявку
 XamlStr175;Sign up for the next algotrading course;Записаться на ближайшие курсы по алготрейдингу
 XamlStr176;Remember choice (start selected configuration automatically);Запомнить выбор (запускать выбранную конфигурацию автоматически)
 XamlStr177;Request all securities;Запрашивать все инструменты
-XamlStr178;Launch are available in x86 or x64 modes.;Запуск возможен в режимах x86 и x64.
+XamlStr178;Launch are available in 32- or 64- bit modes.;Запуск возможен в режимах 32-ух и 64-ех бит.
 XamlStr180;Runned Quiks:;Запущенные Quik:
 XamlStr182;Order fail;Заявка-Ошибка
 XamlStr186;Value (S#);Значение (S#)
@@ -3730,7 +3724,6 @@ XamlStr291;Max depth order book generation;Максимальная глубин
 XamlStr292;Max;Максимальное
 XamlStr293;Max quote volume in generated depth;Максимальный объем котировки генерируемого стакана
 XamlStr297;MarginCall;МаржКол
-XamlStr299;Market data session;Маркет-дата сессия
 XamlStr300;Scale:;Масштаб:
 XamlStr301;Melody;Мелодия
 XamlStr302;Menu;Меню
@@ -3771,7 +3764,7 @@ XamlStr357;New:;Новое:
 XamlStr360;New password;Новый пароль
 XamlStr361;New test;Новый тест
 IsRegistered;Not registered?;Новый юзер?
-XamlStr365;Id (board);Номер (площадка)
+XamlStr365;Id (board);Идентификатор (площадка)
 XamlStr368;Margin is higher than specified.;Обеспеченность выше заданной.
 XamlStr369;Margin is lower than specified.;Обеспеченность ниже заданной.
 XamlStr370;Overview:;Обзор:
@@ -3881,7 +3874,7 @@ XamlStr517;Last candle;Послед. свеча
 XamlStr518;Last trade;Послед. сделка
 XamlStr519;Last trade (time);Послед. сделка (время)
 XamlStr520;Last trade (origin);Послед. сделка (инициатор)
-XamlStr521;Last trade (id);Послед. сделка (номер)
+XamlStr521;Last trade (id);Послед. сделка (идентификатор)
 XamlStr522;Last trade (volume);Послед. сделка (объем)
 XamlStr523;Last trade (trend);Послед. сделка (тренд)
 XamlStr524;Last trade (price);Послед. сделка (цена)
@@ -3978,8 +3971,8 @@ XamlStr628;Reset current date modification;Сбросить модифициро
 XamlStr629;Reset price modification;Сбросить модифицированную цену
 XamlStr631;Candles;Свечек
 XamlStr633;Candles (history);Свечи (история)
-XamlStr634;Candles (real time);Свечи (реал-тайм)
-XamlStr635;Candles and market depths;Свечи и стаканы
+XamlStr634;Candles (real-time);Свечи (реал-тайм)
+XamlStr635;Candles and depths;Свечи и стаканы
 XamlStr636;Candles...;Свечи...
 XamlStr639;Security parameters;Свойства инструмента
 XamlStr641;Trade on the market with specified price or higher.;Сделка на рынке по заданной цене или выше.
@@ -4065,7 +4058,6 @@ XamlStr763;Type (option);Тип (опцион)
 XamlStr765;Strategy type:;Тип стратегии:
 BorderWidth;Border width;Толщина рамки
 OnlyPublic;Only public;Только публичные
-XamlStr774;Transactional session;Транзакционная сессия
 XamlStr776;Trader;Трейдер
 XamlStr780;Events;Уведомления
 XamlStr781;Data deletion;Удаление данных
@@ -4171,3 +4163,5 @@ AllDepths;All depths;Все стаканы
 RequestAllDepths;Request depths for all securities.;Запрашиваемое стаканы по всем инструментам.
 ExportSchema;Export schema to container;Экспортировать схему в контейнер
 IsControlConnectionLost;Control connection lost.;Контролировать потерю соединения с роутером.
+Override;Override.;Перезаписать.
+OverrideDll;Override dll file from resources. Turned on by default.;Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.

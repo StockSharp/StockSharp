@@ -9,6 +9,7 @@ namespace SampleIQFeed
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
+	using StockSharp.Messages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.IQFeed;
 	using StockSharp.Logging;
@@ -74,45 +75,45 @@ namespace SampleIQFeed
 			{
 				_isInitialized = true;
 
-				// подписываемся на событие успешного экспорта
-				Trader.ExportStarted += () =>
+				// subscribe on connection successfully event
+				Trader.Connected += () =>
 				{
 					Trader.RegisterNews();
 
-					// меняем надпись на Отключиться
+					// update gui labes
 					this.GuiAsync(() => ChangeConnectStatus(true));
 				};
-				Trader.ExportStopped += () => this.GuiAsync(() => ChangeConnectStatus(false));
+				Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-				// подписываемся на событие разрыва соединения
-				Trader.ExportError += error => this.GuiAsync(() =>
+				// subscribe on connection error event
+				Trader.ConnectionError += error => this.GuiAsync(() =>
 				{
-					// меняем надпись на Подключиться
+					// update gui labes
 					this.GuiAsync(() => ChangeConnectStatus(false));
 
 					MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 				});
 
-				// подписываемся на ошибку обработки данных (транзакций и маркет)
-				Trader.ProcessDataError += error =>
+				// subscribe on error event
+				Trader.Error += error =>
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-				// подписываемся на ошибку подписки маркет-данных
+				// subscribe on error of market data subscription event
 				Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
 				Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
 				Trader.NewNews += news => _newsWindow.NewsGrid.News.Add(news);
 
-				// устанавливаем поставщик маркет-данных
+				// set market data provider
 				_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 
 				ShowNews.IsEnabled = ShowSecurities.IsEnabled = true;
 			}
 
-			if (Trader.ExportState == ConnectionStates.Disconnected || Trader.ExportState == ConnectionStates.Failed)
+			if (Trader.ConnectionState == ConnectionStates.Disconnected || Trader.ConnectionState == ConnectionStates.Failed)
 			{
-				//устанавливаем настройки для подключения
+				// set connection settings
 				Trader.Level1Address = Level1AddressCtrl.Text.To<EndPoint>();
 				Trader.Level2Address = Level2AddressCtrl.Text.To<EndPoint>();
 				Trader.LookupAddress = LookupAddressCtrl.Text.To<EndPoint>();
@@ -120,10 +121,10 @@ namespace SampleIQFeed
 
 				Trader.IsDownloadSecurityFromSite = DownloadSecurityFromSiteCtrl.IsChecked == true;
 
-				Trader.StartExport();	
+				Trader.Connect();	
 			}
 			else
-				Trader.StopExport();
+				Trader.Disconnect();
 		}
 
 		private void ChangeConnectStatus(bool isConnected)

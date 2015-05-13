@@ -24,7 +24,6 @@
 			AddAddress(RssAddresses.DailyFX, "DailyFX");
 			AddAddress(RssAddresses.TradingFloor, "TradingFloor");
 			AddAddress(RssAddresses.MarketWatch, "MarketWatch");
-			AddAddress(RssAddresses.TrueFlipper, "True-Flipper");
 			AddAddress(RssAddresses.SmartLab, "Smart-Lab");
 			AddAddress(RssAddresses.H2T, "H2T");
 

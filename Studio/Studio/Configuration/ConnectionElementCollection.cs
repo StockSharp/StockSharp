@@ -12,7 +12,7 @@
 		protected override object GetElementKey(ConfigurationElement element)
 		{
 			var elem = (ConnectionElement)element;
-			return elem.SessionHolder;
+			return elem.TransactionAdapter ?? elem.MarketDataAdapter;
 		}
 	}
 }

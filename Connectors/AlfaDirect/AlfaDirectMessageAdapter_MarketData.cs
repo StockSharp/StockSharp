@@ -87,7 +87,10 @@ namespace StockSharp.AlfaDirect
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException("message", message.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(message.TransactionId);
+					return;
+				}
 			}
 
 			var reply = (MarketDataMessage)message.Clone();
@@ -120,7 +123,7 @@ namespace StockSharp.AlfaDirect
 				{
 					Native = paperNo,
 					SecurityCode = code,
-					BoardCode = SessionHolder.GetBoardCode(f.PlaceCode.GetValue(cols))
+					BoardCode = this.GetBoardCode(f.PlaceCode.GetValue(cols))
 				};
 
 				var msg = new SecurityMessage
@@ -274,7 +277,7 @@ namespace StockSharp.AlfaDirect
 				}
 				else
 				{
-					SessionHolder.AddWarningLog(LocalizedStrings.Str2257Params, line);
+					this.AddWarningLog(LocalizedStrings.Str2257Params, line);
 				}
 			}
 		}
@@ -303,7 +306,7 @@ namespace StockSharp.AlfaDirect
 		private void OnProcessQuotes(string where, string[] quotes)
 		{
 			// paper_no нужно парсить из условия where, так как в поле paper_no передается всегда 0
-			var paperNo = where.Split(new[] { '=' })[1].Trim().To<int>();
+			var paperNo = where.Split('=')[1].Trim().To<int>();
 			var f = Wrapper.FieldsDepth;
 
 			var bids = new List<QuoteChange>();
@@ -346,7 +349,7 @@ namespace StockSharp.AlfaDirect
 					Asks = asks,
 					SecurityId = new SecurityId { Native = paperNo },
 					IsSorted = true,
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+					ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 				});	
 			}
 		}

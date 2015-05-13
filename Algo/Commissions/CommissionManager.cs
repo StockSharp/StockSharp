@@ -8,7 +8,6 @@ namespace StockSharp.Algo.Commissions
 
 	using MoreLinq;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -54,6 +53,9 @@ namespace StockSharp.Algo.Commissions
 		/// <returns>Комиссия. Если комиссию рассчитать невозможно, то будет возвращено <see langword="null"/>.</returns>
 		public virtual decimal? ProcessExecution(ExecutionMessage message)
 		{
+			if (_rules.Count == 0)
+				return null;
+
 			var commission = _rules.Cache.Sum(rule => rule.ProcessExecution(message));
 
 			if (commission != null)

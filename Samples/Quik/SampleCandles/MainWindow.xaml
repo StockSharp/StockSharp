@@ -2,8 +2,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-	xmlns:EcngTradingXaml="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" Title="{x:Static loc:LocalizedStrings.XamlStr568}" Height="300" Width="500">
+	xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+	Title="{x:Static loc:LocalizedStrings.XamlStr568}" Height="220" Width="500">
     <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -16,11 +17,9 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5">
+		<Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="30" />
 				<ColumnDefinition Width="Auto" />
@@ -57,17 +56,14 @@
 		</Grid>
 
 		<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-		<Button x:Name="ExportDde" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="2" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.Export}" Click="ExportDdeClick" />
 		
-		<ComboBox x:Name="CandleType" Grid.Column="0" Grid.Row="3" SelectionChanged="CandleTypesSelectionChanged">
-		</ComboBox>
-		<ComboBox x:Name="Security" DisplayMemberPath="Code" Grid.Column="1" Grid.Row="3" SelectionChanged="SecuritySelectionChanged"  />
+		<ComboBox x:Name="CandleType" Grid.Column="0" Grid.Row="2" SelectionChanged="CandleTypesSelectionChanged" />
+		<ComboBox x:Name="Security" DisplayMemberPath="Code" Grid.Column="1" Grid.Row="2" SelectionChanged="SecuritySelectionChanged"  />
 		
-		<xctk:TimePicker x:Name="TimeFrame" Grid.Column="0" Grid.Row="4" IsEnabled="False" />
-		<EcngTradingXaml:UnitEditor x:Name="PriceRange" Grid.Column="1" Grid.Row="4" Width="100" IsEnabled="False" />
+		<xctk:TimePicker x:Name="TimeFrame" Grid.Column="0" Grid.Row="3" IsEnabled="False" />
+		<sx:UnitEditor x:Name="PriceRange" Grid.Column="1" Grid.Row="3" Width="100" IsEnabled="False" />
 		
-		<TextBox x:Name="VolumeCtrl" Grid.Column="0" Grid.Row="5" IsEnabled="False" Text="0" TextAlignment="Right"  />
-		
-		<Button x:Name="ShowChart" Grid.Column="1" Width="100" Grid.Row="5" Content="{x:Static loc:LocalizedStrings.Str3200}" IsEnabled="False" Click="ShowChartClick" />
+		<TextBox x:Name="VolumeCtrl" Grid.Column="0" Grid.Row="4" IsEnabled="False" Text="0" TextAlignment="Right"  />
+		<Button x:Name="ShowChart" Grid.Column="1" Width="100" Grid.Row="4" Content="{x:Static loc:LocalizedStrings.Str3200}" IsEnabled="False" Click="ShowChartClick" />
 	</Grid>
 </Window>

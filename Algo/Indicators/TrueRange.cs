@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Indicators
 	using System.Linq;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -13,7 +12,7 @@ namespace StockSharp.Algo.Indicators
 	/// </summary>
 	[DisplayName("TR")]
 	[DescriptionLoc(LocalizedStrings.Str775Key)]
-	public class TrueRange : BaseIndicator<decimal>
+	public class TrueRange : BaseIndicator
 	{
 		private Candle _prevCandle;
 
@@ -21,7 +20,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="TrueRange"/>.
 		/// </summary>
 		public TrueRange()
-			: base(typeof(Candle))
 		{
 		}
 
@@ -61,11 +59,12 @@ namespace StockSharp.Algo.Indicators
 
 			if (_prevCandle != null)
 			{
-				IsFormed = true;
+				if (input.IsFinal)
+					IsFormed = true;
 
 				var priceMovements = GetPriceMovements(candle, _prevCandle);
 
-				if(input.IsFinal)
+				if (input.IsFinal)
 					_prevCandle = candle;
 
 				return new DecimalIndicatorValue(this, priceMovements.Max());

@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 	using System;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -16,7 +17,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="Highest"/>.
 		/// </summary>
 		public Highest()
-			: base(typeof(decimal))
 		{
 			Length = 5;
 		}

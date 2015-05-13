@@ -28,35 +28,30 @@ namespace StockSharp.SmartCom
 
 		private Timer _realTimeCandlesTimer;
 
+		private readonly SmartComMessageAdapter _adapter;
+
 		/// <summary>
 		/// Создать <see cref="SmartTrader"/>.
 		/// </summary>
 		public SmartTrader()
 		{
-			base.SessionHolder = new SmartComSessionHolder(TransactionIdGenerator);
+			_adapter = new SmartComMessageAdapter(TransactionIdGenerator);
 
-			ApplyMessageProcessor(MessageDirections.In, true, true);
-			ApplyMessageProcessor(MessageDirections.Out, true, true);
-		}
-
-		private new SmartComSessionHolder SessionHolder
-		{
-			get { return (SmartComSessionHolder)base.SessionHolder; }
+			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
 		}
 
 		/// <summary>
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
 		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+		protected override void OnProcessMessage(Message message, MessageDirections direction)
 		{
 			var candleMsg = message as CandleMessage;
 
 			if (candleMsg == null)
 			{
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, direction);
 				return;
 			}
 
@@ -69,8 +64,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public SmartComVersions Version
 		{
-			get { return SessionHolder.Version; }
-			set { SessionHolder.Version = value; }
+			get { return _adapter.Version; }
+			set { _adapter.Version = value; }
 		}
 
 		/// <summary>
@@ -78,8 +73,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string Login
 		{
-			get { return SessionHolder.Login; }
-			set { SessionHolder.Login = value; }
+			get { return _adapter.Login; }
+			set { _adapter.Login = value; }
 		}
 
 		/// <summary>
@@ -87,8 +82,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string Password
 		{
-			get { return SessionHolder.Password.To<string>(); }
-			set { SessionHolder.Password = value.To<SecureString>(); }
+			get { return _adapter.Password.To<string>(); }
+			set { _adapter.Password = value.To<SecureString>(); }
 		}
 
 		/// <summary>
@@ -96,8 +91,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public EndPoint Address
 		{
-			get { return SessionHolder.Address; }
-			set { SessionHolder.Address = value; }
+			get { return _adapter.Address; }
+			set { _adapter.Address = value; }
 		}
 
 		/// <summary>
@@ -105,8 +100,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string ClientSettings
 		{
-			get { return SessionHolder.ClientSettings; }
-			set { SessionHolder.ClientSettings = value; }
+			get { return _adapter.ClientSettings; }
+			set { _adapter.ClientSettings = value; }
 		}
 
 		/// <summary>
@@ -114,8 +109,8 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public string ServerSettings
 		{
-			get { return SessionHolder.ServerSettings; }
-			set { SessionHolder.ServerSettings = value; }
+			get { return _adapter.ServerSettings; }
+			set { _adapter.ServerSettings = value; }
 		}
 
 		private TimeSpan _realTimeCandleOffset = TimeSpan.FromSeconds(5);
@@ -283,7 +278,7 @@ namespace StockSharp.SmartCom
 			var scope = Scope<CandleSeries>.Current;
 			_series.Add(transactionId, scope == null ? new CandleSeries(typeof(TimeFrameCandle), security, tf) : scope.Value);
 
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			SendInMessage(new MarketDataMessage
 			{
 				TransactionId = transactionId,
 				//SecurityId = GetSecurityId(security),
@@ -321,30 +316,22 @@ namespace StockSharp.SmartCom
 			}
 			catch (Exception ex)
 			{
-				TransactionAdapter.SendOutMessage(new ErrorMessage { Error = ex });
+				SendOutError(ex);
 			}
 
 			base.OnConnect();
-		}
-
-		/// <summary>
-		/// Запустить экспорт данных из торговой системы в программу (получение портфелей, инструментов, заявок и т.д.).
-		/// </summary>
-		protected override void OnStartExport()
-		{
-			base.OnStartExport();
 
 			_realTimeCandlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
 				(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range), TimeSpan.FromSeconds(1));
 		}
 
 		/// <summary>
-		/// Остановить экспорт данных из торговой системы в программу, запущенный через <see cref="IConnector.StartExport"/>.
+		/// Отключиться от торговой системы.
 		/// </summary>
-		protected override void OnStopExport()
+		protected override void OnDisconnect()
 		{
 			_realTimeCandlesTimer.Dispose();
-			base.OnStopExport();
+			base.OnDisconnect();
 		}
 
 		/// <summary>
@@ -358,7 +345,7 @@ namespace StockSharp.SmartCom
 			    && oldOrder.Security.Board.IsSupportAtomicReRegister
 			    // http://www.itinvest.ru/forum/index.php?showtopic=63720&view=findpost&p=262059
 			    && oldOrder.Balance == newOrder.Volume)
-				TransactionAdapter.SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
+				SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
 			else
 				base.OnReRegisterOrder(oldOrder, newOrder);
 		}

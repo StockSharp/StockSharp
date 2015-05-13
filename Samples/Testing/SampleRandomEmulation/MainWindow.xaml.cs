@@ -42,18 +42,18 @@ namespace SampleRandomEmulation
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
-			// если процесс был запущен, то его останавливаем
+			// if process was already started, will stop it now
 			if (_connector != null)
 			{
 				_strategy.Stop();
-				_connector.Stop();
+				_connector.Disconnect();
 				_logManager.Sources.Clear();
 
 				_connector = null;
 				return;
 			}
 
-			// создаем тестовый инструмент, на котором будет производится тестирование
+			// create test security
 			var security = new Security
 			{
 				Id = "RIU9@FORTS",
@@ -77,7 +77,7 @@ namespace SampleRandomEmulation
 			.TryAdd(Level1Fields.MarginBuy, 10000m)
 			.TryAdd(Level1Fields.MarginSell, 10000m);
 
-			// тестовый портфель
+			// test portfolio
 			var portfolio = new Portfolio
 			{
 				Name = "test account",
@@ -86,37 +86,27 @@ namespace SampleRandomEmulation
 
 			var timeFrame = TimeSpan.FromMinutes(5);
 
-			// создаем подключение для эмуляции
+			// create backtesting connector
 			_connector = new HistoryEmulationConnector(
 				new[] { security },
-				new[] { portfolio });
-
-			_connector.MarketDataAdapter.SessionHolder.MarketTimeChangedInterval = timeFrame;
-
-			_logManager.Sources.Add(_connector);
-
-			_connector.NewSecurities += securities =>
+				new[] { portfolio })
 			{
-				if (securities.All(s => s != security))
-					return;
+				// set history range
+				StartDate = startTime,
+				StopDate = stopTime,
 
-				// отправляем данные Level1 для инструмента
-				_connector.MarketDataAdapter.SendOutMessage(level1Info);
-
-				_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
-				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+				// set market time freq as time frame
+				MarketTimeChangedInterval = timeFrame,
 			};
 
-			// соединяемся с трейдером и запускаем экспорт,
-			// чтобы инициализировать переданными инструментами и портфелями необходимые свойства EmulationTrader
-			_connector.Connect();
-			_connector.StartExport();
+
+			_logManager.Sources.Add(_connector);
 
 			var candleManager = new CandleManager(_connector);
 
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-			
-			// создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
+
+			// create strategy based on 80 5-min и 10 5-min
 			_strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
 			{
 				Volume = 1,
@@ -125,7 +115,26 @@ namespace SampleRandomEmulation
 				Connector = _connector,
 			};
 
-			// копируем параметры на визуальную панель
+			_connector.NewSecurities += securities =>
+			{
+				if (securities.All(s => s != security))
+					return;
+
+				// fill level1 values
+				_connector.SendInMessage(level1Info);
+
+				_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
+				_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+
+				// start strategy before emulation started
+				_strategy.Start();
+				candleManager.Start(series);
+
+				// start historical data loading when connection established successfully and all data subscribed
+				_connector.Start();
+			};
+
+			// fill parameters panel
 			ParameterGrid.Parameters.Clear();
 			ParameterGrid.Parameters.AddRange(_strategy.StatisticManager.Parameters);
 
@@ -142,14 +151,14 @@ namespace SampleRandomEmulation
 
 			_logManager.Sources.Add(_strategy);
 
-			// задаем шаг ProgressBar
+			// ProgressBar refresh step
 			var progressStep = ((stopTime - startTime).Ticks / 100).To<TimeSpan>();
 			var nextTime = startTime + progressStep;
 
 			TestingProcess.Maximum = 100;
 			TestingProcess.Value = 0;
 
-			// и подписываемся на событие изменения времени, чтобы обновить ProgressBar
+			// handle historical time for update ProgressBar
 			_connector.MarketTimeChanged += diff =>
 			{
 				if (_connector.CurrentTime < nextTime && _connector.CurrentTime < stopTime)
@@ -171,17 +180,11 @@ namespace SampleRandomEmulation
 						if (_connector.IsFinished)
 						{
 							TestingProcess.Value = TestingProcess.Maximum;
-							MessageBox.Show(LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+							MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
 						}
 						else
-							MessageBox.Show(LocalizedStrings.cancelled);
+							MessageBox.Show(this, LocalizedStrings.cancelled);
 					});
-				}
-				else if (_connector.State == EmulationStates.Started)
-				{
-					// запускаем стратегию когда эмулятор запустился
-					_strategy.Start();
-					candleManager.Start(series);
 				}
 			};
 
@@ -194,19 +197,19 @@ namespace SampleRandomEmulation
 
 			_startEmulationTime = DateTime.Now;
 
-			// запускаем эмуляцию
-			_connector.Start(new DateTime(2009, 6, 1), new DateTime(2009, 9, 1));
+			// raise NewSecurities and NewPortfolio for full fill strategy properties
+			_connector.Connect();
 		}
 
 		private void ReportClick(object sender, RoutedEventArgs e)
 		{
-			// сгерерировать отчет по прошедшему тестированию
-			// Внимание! сделок и заявок может быть большое количество,
-			// поэтому Excel отчет может тормозить
-			new ExcelStrategyReport(_strategy, "sma.xls").Generate();
+			// generate report for backtested strategy
+			// Warning! For the huge order or trade count,
+			// generation will be extremely slow
+			new ExcelStrategyReport(_strategy, "sma.xlsx").Generate();
 
-			// открыть отчет
-			Process.Start("sma.xls");
+			// order excel file
+			Process.Start("sma.xlsx");
 		}
 	}
 }

@@ -5,22 +5,21 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Range Action Verification Index.
 	/// </summary>
 	[DisplayName("RAVI")]
 	[Description("Range Action Verification Index.")]
-	public class RangeActionVerificationIndex : BaseIndicator<decimal>
+	public class RangeActionVerificationIndex : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="RangeActionVerificationIndex"/>.
 		/// </summary>
 		public RangeActionVerificationIndex()
-			: base(typeof(decimal))
 		{
 			ShortSma = new SimpleMovingAverage();
 			LongSma = new SimpleMovingAverage();

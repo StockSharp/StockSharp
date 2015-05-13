@@ -4,10 +4,12 @@
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 			xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
-			xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml">
+			xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+			xmlns:xaml="clr-namespace:StockSharp.Xaml">
 	<ug:UniversalGrid.Resources>
 		<converters:FormattingConverter x:Key="ValueConverter" />
 		<converters:EnumDisplayNameConverter x:Key="EnumConverter" />
+		<xaml:MultiIdConverter x:Key="MultiIdConverter" />
 
 		<DataTemplate x:Key="DirectionColumnTemplate">
 			<TextBlock x:Name="DirectionCtrl" Text="{Binding Path=Order.Direction, Converter={StaticResource EnumConverter}}" TextAlignment="Center" />
@@ -24,7 +26,23 @@
 
 	<ug:UniversalGrid.Columns>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="70" Binding="{Binding Path=Trade.Security.Id}" SortMemberPath="Trade.Security.Id"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Id}" Width="70" Binding="{Binding Path=Trade.Id}" SortMemberPath="Trade.Id"/>
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Id}" Width="70" SortMemberPath="Trade.Id">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<TextBlock>
+						<TextBlock.Text>
+							<MultiBinding Converter="{StaticResource MultiIdConverter}">
+								<Binding Path="Trade.Id"/>
+								<Binding Path="Trade.StringId"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Width="120" Binding="{Binding Path=Trade.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Trade.Time"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Trade.LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Trade.LocalTime"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Trade.Volume}" SortMemberPath="Trade.Volume"/>
@@ -34,7 +52,23 @@
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
 			</DataGridTemplateColumn.CellStyle>
 		</DataGridTemplateColumn>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str504}" Width="60" Binding="{Binding Path=Order.Id}" SortMemberPath="Order.Id"/>
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str504}" Width="60" SortMemberPath="Order.Id">
+			<DataGridTemplateColumn.CellTemplate>
+				<DataTemplate>
+					<TextBlock>
+						<TextBlock.Text>
+							<MultiBinding Converter="{StaticResource MultiIdConverter}">
+								<Binding Path="Order.Id"/>
+								<Binding Path="Order.StringId"/>
+							</MultiBinding>
+						</TextBlock.Text>
+					</TextBlock>
+				</DataTemplate>
+			</DataGridTemplateColumn.CellTemplate>
+			<DataGridTemplateColumn.CellStyle>
+				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
+			</DataGridTemplateColumn.CellStyle>
+		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str161}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Latency}" SortMemberPath="Latency"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str159}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Commission}" SortMemberPath="Commission"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Portfolio}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Order.Portfolio.Name}" SortMemberPath="Order.Portfolio.Name"/>

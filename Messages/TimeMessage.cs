@@ -27,7 +27,7 @@
 		public string TransactionId { get; set; }
 
 		/// <summary>
-		/// Номер первоначального сообщения <see cref="TimeMessage.TransactionId"/>,
+		/// Идентификатор первоначального сообщения <see cref="TimeMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
 		[DataMember]

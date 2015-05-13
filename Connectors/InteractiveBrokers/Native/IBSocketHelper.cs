@@ -240,7 +240,7 @@ namespace StockSharp.InteractiveBrokers.Native
 					case TimeInForce.PutInQueue:
 					case null:
 					{
-						if (msg.TillDate == DateTimeOffset.MaxValue)
+						if (msg.TillDate == null || msg.TillDate == DateTimeOffset.MaxValue)
 							return socket.Send("GTC");
 						else if (msg.TillDate != DateTimeOffset.Now.Date)
 							return socket.Send("GTD");

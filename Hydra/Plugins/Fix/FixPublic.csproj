@@ -91,6 +91,10 @@
       <Project>{C4476ADD-A3D5-41BB-9D43-55D865863B78}</Project>
       <Name>Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Messages\Messages.csproj">
+      <Project>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</Project>
+      <Name>Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\CorePublic.csproj">
       <Project>{95ca16e0-0a47-43a3-aab7-7e0803e817ca}</Project>
       <Name>CorePublic</Name>

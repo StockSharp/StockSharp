@@ -411,10 +411,10 @@ namespace StockSharp.Algo.Strategies
 					}
 				};
 
-				connector.Connect();
-				connector.StartExport();
+				connector.UnderlyingConnector.StartDate = from;
+				connector.UnderlyingConnector.StopDate = to;
 
-				connector.UnderlyingConnector.Start(from, to);
+				connector.Connect();
 
 				lock (waitHandle)
 				{

@@ -2,9 +2,9 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Аллигатор.

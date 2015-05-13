@@ -4,9 +4,9 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Полный класс линейной регрессии, считает одновременно LinearReg, LinearRegSlope, RSquared и StandardError.

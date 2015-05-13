@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("TroughBar")]
 	[DescriptionLoc(LocalizedStrings.Str822Key)]
-	public class TroughBar : BaseIndicator<decimal>
+	public class TroughBar : BaseIndicator
 	{
 		private decimal _currentMinimum = decimal.MaxValue;
 		private int _currentBarCount;
@@ -27,7 +27,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="TroughBar"/>.
 		/// </summary>
 		public TroughBar()
-			: base(typeof(Candle))
 		{
 		}
 
@@ -71,7 +70,9 @@ namespace StockSharp.Algo.Indicators
 				}
 				else if (candle.HighPrice >= _currentMinimum + ReversalAmount.Value)
 				{
-					IsFormed = true;
+					if (input.IsFinal)
+						IsFormed = true;
+
 					return new DecimalIndicatorValue(this, _valueBarCount);
 				}
 

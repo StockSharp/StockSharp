@@ -131,7 +131,7 @@
 
 							// данных в хранилище нет больше последней даты
 							if (hasValues)
-								_enumerators.Enqueue(((Message)enu.Current).GetServerTime(), Tuple.Create(enu, storage));
+								_enumerators.Enqueue(GetServerTime(enu), Tuple.Create(enu, storage));
 							else
 								enu.DoDispose();
 
@@ -162,11 +162,21 @@
 				Current = (T)enumerator.Current;
 
 				if (enumerator.MoveNext())
-					_enumerators.Enqueue(((Message)enumerator.Current).GetServerTime(), pair.Value);
+					_enumerators.Enqueue(GetServerTime(enumerator), pair.Value);
 				else
 					enumerator.DoDispose();
 
 				return true;
+			}
+
+			private DateTimeOffset GetServerTime(IEnumerator enumerator)
+			{
+				var serverTime = ((Message)enumerator.Current).GetServerTime();
+
+				if (serverTime == null)
+					throw new InvalidOperationException();
+
+				return serverTime.Value;
 			}
 
 			object IEnumerator.Current

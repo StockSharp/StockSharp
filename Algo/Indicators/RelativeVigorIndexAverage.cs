@@ -15,7 +15,6 @@
 		/// Создать <see cref="RelativeVigorIndexAverage"/>.
 		/// </summary>
 		public RelativeVigorIndexAverage()
-			: base(typeof(Candle))
 		{
 			Length = 4;
 		}

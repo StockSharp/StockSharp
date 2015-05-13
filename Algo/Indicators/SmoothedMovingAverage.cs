@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Indicators
 {
 	using System.ComponentModel;
 	using System.Linq;
+
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -17,7 +18,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="SmoothedMovingAverage"/>.
 		/// </summary>
 		public SmoothedMovingAverage()
-			: base(typeof(decimal))
 		{
 			Length = 32;
 		}

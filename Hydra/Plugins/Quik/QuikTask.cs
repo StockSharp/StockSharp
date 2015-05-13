@@ -3,6 +3,9 @@ namespace StockSharp.Hydra.Quik
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Linq;
+	using System.Net;
+	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -27,72 +30,60 @@ namespace StockSharp.Hydra.Quik
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
-		[CategoryOrder(_ddeCategory, 1)]
+		[CategoryOrder(_luaCategory, 1)]
+		[CategoryOrder(_ddeCategory, 2)]
 		private sealed class QuikSettings : ConnectorHydraTaskSettings, ICustomTypeDescriptor
 		{
 			/// <summary>
 			/// Атрибут для поддержки динамически показываемых свойств
 			/// </summary>
-			[AttributeUsage(AttributeTargets.Property, Inherited = true)]
+			[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
 			private sealed class DynamicPropertyFilterAttribute : Attribute
 			{
-				private readonly string _propertyName;
-
 				/// <summary>
 				/// Название свойства, от которого будет зависить видимость  
 				/// </summary>
-				public string PropertyName
-				{
-					get { return _propertyName; }
-				}
-
-				private readonly string _showOn;
+				public string PropertyName { get; private set; }
 
 				/// <summary>
 				/// Значения свойства от которого зависит видимость 
 				/// (через запятую, если несколько), при котором свойство, к
 				/// которому применен атрибут, будет видимо. 
 				/// </summary>
-				public string ShowOn
-				{
-					get { return _showOn; }
-				}
+				public object ShowOn { get; private set; }
 
 				/// <summary>
 				/// Конструктор  
 				/// </summary>
 				/// <param name="propName">Название свойства, от которого будет зависить видимость</param>
-				/// <param name="value">Значения свойства, через запятую, если несколько, при котором свойство, к
+				/// <param name="showOn">Значения свойства, через запятую, если несколько, при котором свойство, к
 				/// которому применен атрибут, будет видимо.</param>
-				public DynamicPropertyFilterAttribute(string propName, string value)
+				public DynamicPropertyFilterAttribute(string propName, object showOn)
 				{
-					_propertyName = propName;
-					_showOn = value;
+					if (propName.IsEmpty())
+						throw new ArgumentNullException("propName");
+
+					PropertyName = propName;
+					ShowOn = showOn;
 				}
 			}
 
 			private const string _ddeCategory = "DDE";
+			private const string _luaCategory = "LUA";
 
 			public QuikSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				if (!ExtensionInfo.ContainsKey("ExtendedColumns"))
-					ExtendedColumns = new List<string>();
-
-				if (!ExtensionInfo.ContainsKey("ExtendedColumnsHistory"))
-					ExtendedColumnsHistory = new List<string>();
-
-				if (!ExtensionInfo.ContainsKey("IsDownloadSecurityChangesHistory"))
-					IsDownloadSecurityChangesHistory = false;
-
-				if (!ExtensionInfo.ContainsKey("IsDde"))
-					IsDde = false;
+				ExtensionInfo.TryAdd("LuaAddress", QuikTrader.DefaultLuaAddress.To<string>());
+				ExtensionInfo.TryAdd("LuaLogin", string.Empty);
+				ExtensionInfo.TryAdd("LuaPassword", new SecureString());
 			}
 
 			[TaskCategory(_sourceName)]
 			[DisplayName("DDE")]
 			[DescriptionLoc(LocalizedStrings.Str2803Key)]
 			[PropertyOrder(0)]
+			[Auxiliary]
 			public bool IsDde
 			{
 				get { return (bool)ExtensionInfo["IsDde"]; }
@@ -103,6 +94,7 @@ namespace StockSharp.Hydra.Quik
 			[DisplayNameLoc(LocalizedStrings.Str2804Key)]
 			[DescriptionLoc(LocalizedStrings.Str2805Key)]
 			[PropertyOrder(0)]
+			[DynamicPropertyFilter("IsDde", true)]
 			public string Path
 			{
 				get { return (string)ExtensionInfo["Path"]; }
@@ -113,6 +105,7 @@ namespace StockSharp.Hydra.Quik
 			[DisplayNameLoc(LocalizedStrings.Str1779Key)]
 			[DescriptionLoc(LocalizedStrings.Str1780Key)]
 			[PropertyOrder(1)]
+			[DynamicPropertyFilter("IsDde", true)]
 			public string DdeServer
 			{
 				get { return (string)ExtensionInfo["DdeServer"]; }
@@ -124,11 +117,12 @@ namespace StockSharp.Hydra.Quik
 			[DescriptionLoc(LocalizedStrings.Str2807Key)]
 			[PropertyOrder(2)]
 			[Editor(typeof(DdeSecurityColumnsEditor), typeof(DdeSecurityColumnsEditor))]
-			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", "False")]
+			//[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", false)]
+			[DynamicPropertyFilter("IsDde", true)]
 			public List<string> ExtendedColumns
 			{
 				get { return (List<string>)ExtensionInfo["ExtendedColumns"]; }
-				private set { ExtensionInfo["ExtendedColumns"] = value; }
+				set { ExtensionInfo["ExtendedColumns"] = value; }
 			}
 
 			[Category(_ddeCategory)]
@@ -136,22 +130,56 @@ namespace StockSharp.Hydra.Quik
 			[DescriptionLoc(LocalizedStrings.Str2809Key)]
 			[PropertyOrder(3)]
 			[Editor(typeof(DdeSecurityChangesColumnsEditor), typeof(DdeSecurityChangesColumnsEditor))]
-			[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", "True")]
+			//[DynamicPropertyFilter("IsDownloadSecurityChangesHistory", true)]
+			[DynamicPropertyFilter("IsDde", true)]
 			public List<string> ExtendedColumnsHistory
 			{
 				get { return (List<string>)ExtensionInfo["ExtendedColumnsHistory"]; }
-				private set { ExtensionInfo["ExtendedColumnsHistory"] = value; }
+				set { ExtensionInfo["ExtendedColumnsHistory"] = value; }
 			}
 
 			[Category(_ddeCategory)]
 			[DisplayNameLoc(LocalizedStrings.Str2810Key)]
 			[DescriptionLoc(LocalizedStrings.Str1786Key)]
 			[PropertyOrder(4)]
-			[Auxiliary]
+			[DynamicPropertyFilter("IsDde", true)]
 			public bool IsDownloadSecurityChangesHistory
 			{
 				get { return (bool)ExtensionInfo["IsDownloadSecurityChangesHistory"]; }
 				set { ExtensionInfo["IsDownloadSecurityChangesHistory"] = value; }
+			}
+
+			[TaskCategory(_luaCategory)]
+			[DisplayNameLoc(LocalizedStrings.AddressKey)]
+			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
+			[PropertyOrder(0)]
+			[DynamicPropertyFilter("IsDde", false)]
+			public EndPoint LuaAddress
+			{
+				get { return ExtensionInfo["LuaAddress"].To<EndPoint>(); }
+				set { ExtensionInfo["LuaAddress"] = value.To<string>(); }
+			}
+
+			[TaskCategory(_luaCategory)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
+			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
+			[PropertyOrder(1)]
+			[DynamicPropertyFilter("IsDde", false)]
+			public string LuaLogin
+			{
+				get { return (string)ExtensionInfo["LuaLogin"]; }
+				set { ExtensionInfo["LuaLogin"] = value; }
+			}
+
+			[TaskCategory(_luaCategory)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
+			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
+			[PropertyOrder(2)]
+			[DynamicPropertyFilter("IsDde", false)]
+			public SecureString LuaPassword
+			{
+				get { return ExtensionInfo["LuaPassword"].To<SecureString>(); }
+				set { ExtensionInfo["LuaPassword"] = value; }
 			}
 
 			//--------------------
@@ -163,26 +191,19 @@ namespace StockSharp.Hydra.Quik
 
 				foreach (PropertyDescriptor pd in pdc)
 				{
-					var include = false;
-					var dynamic = false;
+					var show = true;
 
-					foreach (Attribute a in pd.Attributes)
+					foreach (var attr in pd.Attributes.OfType<DynamicPropertyFilterAttribute>())
 					{
-						var dpf = a as DynamicPropertyFilterAttribute;
-						if (dpf == null)
-							continue;
+						var value = pdc[attr.PropertyName].GetValue(this);
 
-						dynamic = true;
-
-						var temp = pdc[dpf.PropertyName].GetValue(this);
-
-						if (dpf.ShowOn.ContainsIgnoreCase(temp.ToString()))
+						if (!Equals(attr.ShowOn, value))
 						{
-							include = true;
+							show = false;
 						}
 					}
 
-					if (!dynamic || include)
+					if (show)
 						finalProps.Add(pd);
 				}
 
@@ -308,7 +329,7 @@ namespace StockSharp.Hydra.Quik
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<QuikTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<QuikTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new QuikSettings(settings);
 
@@ -318,51 +339,36 @@ namespace StockSharp.Hydra.Quik
 				_settings.DdeServer = "hydra";
 				_settings.IsDownloadSecurityChangesHistory = false;
 				_settings.IsDde = false;
+				_settings.ExtendedColumns = new List<string>();
+				_settings.ExtendedColumnsHistory = new List<string>();
+				_settings.LuaAddress = QuikTrader.DefaultLuaAddress;
+				_settings.LuaLogin = "quik";
+				_settings.LuaPassword = new SecureString();
 			}
 
 			return new QuikMarketDataConnector(EntityRegistry.Securities, this, CreateHydraQuikTrader, _settings);
 		}
 
-		private sealed class HydraQuikTransactionAdapter : MessageAdapter<MessageSessionHolder>
+		private QuikTrader CreateHydraQuikTrader()
 		{
-			public HydraQuikTransactionAdapter(MessageSessionHolder sessionHolder)
-				: base(MessageAdapterTypes.Transaction, sessionHolder)
-			{
-			}
-
-			protected override void OnSendInMessage(Message message)
-			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-						SendOutMessage(new ConnectMessage());
-						break;
-
-					case MessageTypes.Disconnect:
-						SendOutMessage(new DisconnectMessage());
-						break;
-
-					case MessageTypes.Time: // обработка heartbeat
-						break;
-
-					default:
-						throw new NotSupportedException(LocalizedStrings.Str2811Params.Put(message.Type));
-				}
-			}
-		}
-
-		private HydraQuikTrader CreateHydraQuikTrader()
-		{
-			var connector = new HydraQuikTrader
+			var connector = new QuikTrader
 			{
 				IsDde = _settings.IsDde,
 				Path = _settings.Path,
 				DdeServer = _settings.DdeServer,
-				IsDownloadSecurityChangesHistory = _settings.IsDownloadSecurityChangesHistory,
+				LuaFixServerAddress = _settings.LuaAddress,
 			};
 
-			if (_settings.IsDde)
-				connector.TransactionAdapter = new HydraQuikTransactionAdapter((MessageSessionHolder)connector.TransactionAdapter.SessionHolder);
+			if (!_settings.LuaLogin.IsEmpty())
+				connector.LuaLogin = _settings.LuaLogin;
+
+			if (!_settings.LuaPassword.IsEmpty())
+				connector.LuaPassword = _settings.LuaPassword;
+
+			connector.DdeTables = new[] { connector.SecuritiesTable, connector.TradesTable, connector.OrdersTable, connector.StopOrdersTable, connector.MyTradesTable };
+
+			if (_settings.IsDownloadSecurityChangesHistory)
+				connector.DdeTables = connector.DdeTables.Concat(new[] { connector.SecuritiesChangeTable });
 
 			//Добавление выбранных колонок в экспорт
 			if (!_settings.IsDownloadSecurityChangesHistory)

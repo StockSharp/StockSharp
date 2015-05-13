@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="HullMovingAverage"/>.
 		/// </summary>
 		public HullMovingAverage()
-			: base(typeof(decimal))
 		{
 			Length = 10;
 			SqrtPeriod = 0;

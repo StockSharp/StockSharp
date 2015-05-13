@@ -22,7 +22,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="StochasticK"/>.
 		/// </summary>
 		public StochasticK()
-			: base(typeof(Candle))
 		{
 			Length = 14;
 		}

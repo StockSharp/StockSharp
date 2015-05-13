@@ -3,7 +3,6 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -19,7 +18,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="CommodityChannelIndex"/>.
 		/// </summary>
 		public CommodityChannelIndex()
-			: base(typeof(Candle))
 		{
 			Length = 15;
 		}

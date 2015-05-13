@@ -89,32 +89,29 @@ namespace SampleIB
 					{
 						_initialized = true;
 
-						// подписываемся на событие успешного соединения
+						// subscribe on connection successfully event
 						Trader.Connected += () =>
 						{
 							this.GuiAsync(() => ChangeConnectStatus(true));
 
-							Trader.StartExport();
+							// subscribe on news
+							Trader.RegisterNews();
 						};
 
-						// подписываемся на событие запуска экспорта, и запускаем подписку на новости
-						Trader.ExportStarted += Trader.RegisterNews;
-
-						// подписываемся на событие разрыва соединения
+						// subscribe on connection error event
 						Trader.ConnectionError += error => this.GuiAsync(() =>
 						{
 							ChangeConnectStatus(false);
 							MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 						});
 
-						// подписываемся на событие успешного отключения
 						Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
-						// подписываемся на ошибку обработки данных (транзакций и маркет)
-						Trader.ProcessDataError += error =>
+						// subscribe on error event
+						Trader.Error += error =>
 							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
-						// подписываемся на ошибку подписки маркет-данных
+						// subscribe on error of market data subscription event
 						Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 							this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
@@ -132,15 +129,14 @@ namespace SampleIB
 						};
 						Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
 
-						// подписываемся на событие о неудачной регистрации заявок
+						// subscribe on error of order registration event
 						Trader.OrdersRegisterFailed += OrdersFailed;
-
-						// подписываемся на событие о неудачном снятии заявок
+						// subscribe on error of order cancelling event
 						Trader.OrdersCancelFailed += OrdersFailed;
 
 						Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
 
-						// устанавливаем поставщик маркет-данных
+						// set market data provider
 						_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;
 					}
 
@@ -150,7 +146,6 @@ namespace SampleIB
 				else
 				{
 					Trader.UnRegisterNews();
-					Trader.StopExport();
 
 					Trader.Disconnect();
 				}
@@ -230,8 +225,8 @@ namespace SampleIB
 		private void OnAddrTypeChecked(object sender, RoutedEventArgs e)
 		{
 			Address.Text = (Tws.IsChecked == true
-				? InteractiveBrokersSessionHolder.DefaultAddress
-				: InteractiveBrokersSessionHolder.DefaultGatewayAddress).To<string>();
+				? InteractiveBrokersMessageAdapter.DefaultAddress
+				: InteractiveBrokersMessageAdapter.DefaultGatewayAddress).To<string>();
 		}
 	}
 }

@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Transaq.Native.Responses
 {
 	using System;
-	using System.Collections.Generic;
 
 	internal class CandlesResponse : BaseResponse
 	{
@@ -11,7 +10,7 @@
 		public int Period { get; set; }
 		public CandleResponseStatus Status { get; set; }
 
-		public IEnumerable<TransaqCandle> Candles { get; internal set; }
+		public TransaqCandle[] Candles { get; internal set; }
 	}
 
 	enum CandleResponseStatus

@@ -89,7 +89,7 @@ namespace SampleBtce
 
 					_logManager.Sources.Add(Trader);
 
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() =>
+					Trader.Restored += () => this.GuiAsync(() =>
 					{
 						// разблокируем кнопку Экспорт (соединение было восстановлено)
 						ChangeConnectStatus(true);
@@ -101,8 +101,6 @@ namespace SampleBtce
 					{
 						// возводим флаг, что соединение установлено
 						_isConnected = true;
-
-						Trader.StartExport();
 
 						// разблокируем кнопку Экспорт
 						this.GuiAsync(() => ChangeConnectStatus(true));
@@ -119,7 +117,7 @@ namespace SampleBtce
 					});
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					Trader.ProcessDataError += error =>
+					Trader.Error += error =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
 
 					// подписываемся на ошибку подписки маркет-данных

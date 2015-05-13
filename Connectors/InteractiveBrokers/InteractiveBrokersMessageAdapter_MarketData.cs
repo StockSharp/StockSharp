@@ -18,6 +18,144 @@ namespace StockSharp.InteractiveBrokers
 	{
 		private readonly Dictionary<SecurityId, Tuple<SortedDictionary<decimal, decimal>, SortedDictionary<decimal, decimal>>> _depths = new Dictionary<SecurityId, Tuple<SortedDictionary<decimal, decimal>, SortedDictionary<decimal, decimal>>>();
 
+		private void ProcessMarketDataMessage(MarketDataMessage mdMsg)
+		{
+			switch (mdMsg.DataType)
+			{
+				case MarketDataTypes.Level1:
+				{
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)null);
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeMarketData(mdMsg, Fields, false, false);
+					}
+					else
+						UnSubscribeMarketData(_requestIds[key]);
+
+					break;
+				}
+				case MarketDataTypes.MarketDepth:
+				{
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)null);
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeMarketDepth(mdMsg);
+					}
+					else
+						UnSubscriveMarketDepth(_requestIds[key]);
+
+					break;
+				}
+				case MarketDataTypes.Trades:
+					break;
+				case MarketDataTypes.News:
+				{
+					if (mdMsg.IsSubscribe)
+						SubscribeNewsBulletins(true);
+					else
+						UnSubscribeNewsBulletins();
+
+					break;
+				}
+				case MarketDataTypes.CandleTimeFrame:
+				{
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)Tuple.Create(mdMsg.Arg, mdMsg.To == DateTimeOffset.MaxValue));
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+
+						if (mdMsg.To == DateTimeOffset.MaxValue)
+							SubscribeRealTimeCandles(mdMsg);
+						else
+							SubscribeHistoricalCandles(mdMsg, CandleDataTypes.Trades);
+					}
+					else
+					{
+						var requestId = _requestIds[key];
+
+						if (mdMsg.To == DateTimeOffset.MaxValue)
+							UnSubscribeRealTimeCandles(mdMsg, requestId);
+						else
+						{
+							ProcessRequest(RequestMessages.UnSubscribeHistoricalData, 0, ServerVersions.V1,
+								socket => socket.Send(requestId));
+						}
+					}
+
+					break;
+				}
+				case ExtendedMarketDataTypes.Scanner:
+				{
+					var scannerMsg = (ScannerMarketDataMessage)mdMsg;
+
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)scannerMsg.Filter);
+
+					if (mdMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeScanner(scannerMsg);
+					}
+					else
+						UnSubscribeScanner(_requestIds[key]);
+
+					break;
+				}
+				case ExtendedMarketDataTypes.FundamentalReport:
+				{
+					var reportMsg = (FundamentalReportMarketDataMessage)mdMsg;
+
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)reportMsg.Report);
+
+					if (reportMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+						SubscribeFundamentalReport(reportMsg);
+					}
+					else
+						UnSubscribeFundamentalReport(_requestIds[key]);
+
+					break;
+				}
+				case ExtendedMarketDataTypes.OptionCalc:
+				{
+					var optionMsg = (OptionCalcMarketDataMessage)mdMsg;
+
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)Tuple.Create(optionMsg.OptionPrice, optionMsg.ImpliedVolatility, optionMsg.AssetPrice));
+
+					if (optionMsg.IsSubscribe)
+					{
+						_requestIds.Add(key, mdMsg.TransactionId);
+
+						SubscribeCalculateOptionPrice(optionMsg);
+						SubscribeCalculateImpliedVolatility(optionMsg);
+					}
+					else
+					{
+						var requestId = _requestIds[key];
+
+						UnSubscribeCalculateOptionPrice(requestId);
+						UnSubscribeCalculateImpliedVolatility(requestId);
+					}
+
+					break;
+				}
+				default:
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
+			}
+
+			var reply = (MarketDataMessage)mdMsg.Clone();
+			reply.OriginalTransactionId = mdMsg.OriginalTransactionId;
+			SendOutMessage(reply);
+		}
+
 		/// <summary>
 		/// Запустить сканер инструментов на основе заданных параметров.
 		/// </summary>
@@ -619,7 +757,7 @@ namespace StockSharp.InteractiveBrokers
 		private void SetMarketDataType()
 		{
 			ProcessRequest(RequestMessages.SetMarketDataType, ServerVersions.V55, ServerVersions.V1,
-				socket => socket.Send(SessionHolder.IsRealTimeMarketData ? 1 : 2));
+				socket => socket.Send(IsRealTimeMarketData ? 1 : 2));
 		}
 
 		///// <summary>
@@ -683,7 +821,7 @@ namespace StockSharp.InteractiveBrokers
 			return new Level1ChangeMessage
 			{
 				SecurityId = GetSecurityId(requestId),
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+				ServerTime = CurrentTime.Convert(TimeZoneInfo.Utc),
 			};
 		}
 
@@ -1211,7 +1349,7 @@ namespace StockSharp.InteractiveBrokers
 
 			var quotes = side == Sides.Buy ? prevQuotes.Item1 : prevQuotes.Item2;
 
-			SessionHolder.AddDebugLog("MD {0} {1} POS {2} PRICE {3} VOL {4}", secId, operation, pos, price, volume);
+			this.AddDebugLog("MD {0} {1} POS {2} PRICE {3} VOL {4}", secId, operation, pos, price, volume);
 
 			switch (operation)
 			{
@@ -1269,7 +1407,7 @@ namespace StockSharp.InteractiveBrokers
 				SecurityId = secId,
 				Bids = prevQuotes.Item1.Select(p => new QuoteChange(Sides.Buy, p.Key, p.Value)).ToArray(),
 				Asks = prevQuotes.Item2.Select(p => new QuoteChange(Sides.Sell, p.Key, p.Value)).ToArray(),
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeZoneInfo.Utc),
+				ServerTime = this.CurrentTime.Convert(TimeZoneInfo.Utc),
 			});
 		}
 
@@ -1286,7 +1424,7 @@ namespace StockSharp.InteractiveBrokers
 				BoardCode = originatingExch,
 				Headline = newsMessage,
 				ExtensionInfo = new Dictionary<object, object> { { "Type", newsType } },
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Est)
+				ServerTime = this.CurrentTime.Convert(TimeHelper.Est)
 			});
 		}
 
@@ -1422,7 +1560,7 @@ namespace StockSharp.InteractiveBrokers
 			/* requestId */
 			socket.ReadInt();
 
-			SessionHolder.IsRealTimeMarketData = socket.ReadBool();
+			IsRealTimeMarketData = socket.ReadBool();
 
 			//marketDataType(reqId, mdt);
 		}
@@ -1439,7 +1577,7 @@ namespace StockSharp.InteractiveBrokers
 			});
 		}
 
-		private void OnProcessMarketDataResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
+		private bool ProcessMarketDataResponse(IBSocket socket, ResponseMessages message, ServerVersions version)
 		{
 			switch (message)
 			{
@@ -1447,53 +1585,53 @@ namespace StockSharp.InteractiveBrokers
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickprice.htm
 					ReadTickPrice(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickVolume:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/ticksize.htm
 					ReadTickVolume(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickOptionComputation:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickoptioncomputation.htm
 					ReadTickOptionComputation(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickGeneric:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickgeneric.htm
 					ReadTickGeneric(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickString:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickstring.htm
 					ReadTickString(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickEfp:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/tickefp.htm
 					ReadTickEfp(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.ScannerData:
 				{
 					ReadScannerData(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.SecurityInfo:
 				{
 					ReadSecurityInfo(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.BondInfo:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/bondcontractdetails.htm
 					ReadBondInfo(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.MarketDepth:
 				case ResponseMessages.MarketDepthL2:
@@ -1501,65 +1639,67 @@ namespace StockSharp.InteractiveBrokers
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updatemktdepth.htm
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updatemktdepthl2.htm
 					ReadMarketDepth(socket, message);
-					break;
+					return true;
 				}
 				case ResponseMessages.NewsBulletins:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/updatenewsbulletin.htm
 					ReadNewsBulletins(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.FinancialAdvice:
 				{
 					ReadFinancialAdvice(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.HistoricalData:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/historicaldata.htm
 					ReadHistoricalData(socket, version);
-					break;
+					return true;
 				}
 				case ResponseMessages.ScannerParameters:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/scannerparameters.htm
 					ReadScannerParameters(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.RealTimeBars:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/realtimebar.htm
 					ReadRealTimeBars(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.FundamentalData:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/fundamentaldata.htm
 					ReadFundamentalData(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.SecurityInfoEnd:
 				{
 					ReadSecurityInfoEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.DeltaNuetralValidation:
 				{
 					ReadDeltaNuetralValidation(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.TickSnapshotEnd:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/ticksnapshotend.htm
 					ReadTickSnapshotEnd(socket);
-					break;
+					return true;
 				}
 				case ResponseMessages.MarketDataType:
 				{
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/marketdatatype.htm
 					ReadMarketDataType(socket);
-					break;
+					return true;
 				}
+				default:
+					return false;
 			}
 		}
 

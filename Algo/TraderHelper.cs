@@ -9,6 +9,7 @@ namespace StockSharp.Algo
 	using Ecng.Net;
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
@@ -1491,7 +1492,15 @@ namespace StockSharp.Algo
 		/// <returns>Сделки.</returns>
 		public static IEnumerable<MyTrade> GetTrades(this Order order)
 		{
-			return order.CheckTrader().MyTrades.Filter(order);
+			if (order == null)
+				throw new ArgumentNullException("order");
+
+			var connector = order.Connector;
+
+			if (connector == null)
+				throw new ArgumentException(LocalizedStrings.Str904Params.Put(order.TransactionId), "order");
+
+			return connector.MyTrades.Filter(order);
 		}
 
 		/// <summary>
@@ -3257,27 +3266,30 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Получить описание инструмента по классу из <see cref="IMessageSessionHolder.SecurityClassInfo"/>.
+		/// Получить описание инструмента по классу.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
+		/// <param name="securityClassInfo">Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.</param>
 		/// <param name="secClass">Класс инструмента.</param>
-		/// <returns>Описание инструмента. Если класс не найден в <see cref="IMessageSessionHolder.SecurityClassInfo"/>,
+		/// <returns>Описание инструмента. Если класс не найден,
 		/// то будет возвращено значение <see langword="null"/> в качестве типа инструмента.</returns>
-		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IMessageSessionHolder sessionHolder, string secClass)
+		public static Tuple<SecurityTypes?, string> GetSecurityClassInfo(this IDictionary<string, RefPair<SecurityTypes, string>> securityClassInfo, string secClass)
 		{
-			var pair = sessionHolder.SecurityClassInfo.TryGetValue(secClass);
+			var pair = securityClassInfo.TryGetValue(secClass);
 			return Tuple.Create(pair == null ? (SecurityTypes?)null : pair.First, pair == null ? secClass : pair.Second);
 		}
 
 		/// <summary>
 		/// Получить код площадки для класса инструмента.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
+		/// <param name="adapter">Адаптер к торговой системе.</param>
 		/// <param name="secClass">Класс инструмента.</param>
 		/// <returns>Код площадки.</returns>
-		public static string GetBoardCode(this IMessageSessionHolder sessionHolder, string secClass)
+		public static string GetBoardCode(this IMessageAdapter adapter, string secClass)
 		{
-			return sessionHolder.GetSecurityClassInfo(secClass).Item2;
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
+
+			return adapter.SecurityClassInfo.GetSecurityClassInfo(secClass).Item2;
 		}
 
 		/// <summary>
@@ -3470,6 +3482,22 @@ namespace StockSharp.Algo
 				return managedAdapter.InnerAdapter.To<T>();
 
 			throw new InvalidCastException(LocalizedStrings.Str3843.Put(adapter.GetType(), typeof(T)));
+		}
+
+		/// <summary>
+		/// Преобразовать адаптер в <see cref="ChannelMessageAdapter"/>.
+		/// </summary>
+		/// <param name="adapter">Адаптер.</param>
+		/// <param name="connector">Подключение. Используется для определения имени канала.</param>
+		/// <param name="name">Имя канала.</param>
+		/// <returns>Адаптер сообщений, пересылающий сообщения через транспортный канал <see cref="IMessageChannel"/>.</returns>
+		public static ChannelMessageAdapter ToChannel(this IMessageAdapter adapter, Connector connector, string name = null)
+		{
+			name = name ?? connector.GetType().GetDisplayName();
+			return new ChannelMessageAdapter(adapter, new InMemoryMessageChannel(name, connector.SendOutError), new PassThroughMessageChannel())
+			{
+				OwnInputChannel = true
+			};
 		}
 	}
 }

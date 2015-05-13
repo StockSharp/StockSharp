@@ -58,6 +58,16 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Следует ли отправлять сообщение обратно отправителю.
+		/// </summary>
+		public bool IsBack { get; set; }
+
+		/// <summary>
+		/// Адаптер, отправивший сообщение. Может быть <see langword="null"/>.
+		/// </summary>
+		public IMessageAdapter Adapter { get; set; }
+
+		/// <summary>
 		/// Инициализировать <see cref="Message"/>.
 		/// </summary>
 		/// <param name="type">Тип сообщения.</param>

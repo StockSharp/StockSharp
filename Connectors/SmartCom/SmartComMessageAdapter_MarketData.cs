@@ -47,18 +47,18 @@ namespace StockSharp.SmartCom
 				case MarketDataTypes.Level1:
 				{
 					if (mdMsg.IsSubscribe)
-						Session.SubscribeSecurity(smartId);
+						_wrapper.SubscribeSecurity(smartId);
 					else
-						Session.UnSubscribeSecurity(smartId);
+						_wrapper.UnSubscribeSecurity(smartId);
 
 					break;
 				}
 				case MarketDataTypes.MarketDepth:
 				{
 					if (mdMsg.IsSubscribe)
-						Session.SubscribeMarketDepth(smartId);
+						_wrapper.SubscribeMarketDepth(smartId);
 					else
-						Session.UnSubscribeMarketDepth(smartId);
+						_wrapper.UnSubscribeMarketDepth(smartId);
 
 					break;
 				}
@@ -67,15 +67,15 @@ namespace StockSharp.SmartCom
 					if (mdMsg.From.IsDefault())
 					{
 						if (mdMsg.IsSubscribe)
-							Session.SubscribeTrades(smartId);
+							_wrapper.SubscribeTrades(smartId);
 						else
-							Session.UnSubscribeTrades(smartId);
+							_wrapper.UnSubscribeTrades(smartId);
 					}
 					else
 					{
 						const int maxTradeCount = 1000000;
-						SessionHolder.AddDebugLog("RequestHistoryTrades SecId = {0} From {1} Count = {2}", smartId, mdMsg.From, maxTradeCount);
-						Session.RequestHistoryTrades(smartId, mdMsg.From.ToLocalTime(TimeHelper.Moscow), maxTradeCount);
+						this.AddDebugLog("RequestHistoryTrades SecId = {0} From {1} Count = {2}", smartId, mdMsg.From, maxTradeCount);
+						_wrapper.RequestHistoryTrades(smartId, mdMsg.From.ToLocalTime(TimeHelper.Moscow), maxTradeCount);
 					}
 
 					break;
@@ -92,13 +92,16 @@ namespace StockSharp.SmartCom
 
 					_candleTransactions.SafeAdd(smartId)[tf] = Tuple.Create(mdMsg.TransactionId, new List<CandleMessage>());
 
-					SessionHolder.AddDebugLog("RequestHistoryBars SecId {0} TF {1} From {2} Count {3}", smartId, tf, mdMsg.From, count);
-					Session.RequestHistoryBars(smartId, tf, mdMsg.From.ToLocalTime(TimeHelper.Moscow), (int)count);
+					this.AddDebugLog("RequestHistoryBars SecId {0} TF {1} From {2} Count {3}", smartId, tf, mdMsg.From, count);
+					_wrapper.RequestHistoryBars(smartId, tf, mdMsg.From.ToLocalTime(TimeHelper.Moscow), (int)count);
 
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException("mdMsg", mdMsg.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
 			}
 
 			var reply = (MarketDataMessage)mdMsg.Clone();
@@ -111,7 +114,7 @@ namespace StockSharp.SmartCom
 			if (_lookupSecuritiesId == 0)
 			{
 				_lookupSecuritiesId = message.TransactionId;
-				Session.LookupSecurities();
+				_wrapper.LookupSecurities();
 			}
 			else
 				SendOutError(LocalizedStrings.Str1854);
@@ -133,7 +136,7 @@ namespace StockSharp.SmartCom
 
 		private void OnNewHistoryTrade(int row, int rowCount, string smartId, DateTime time, decimal price, decimal volume, long tradeId, SmartOrderAction action)
 		{
-			SessionHolder.AddDebugLog("OnNewHistoryTrade row = {0} rowCount = {1} securityId = {2} time = {3} price = {4} volume = {5} id = {6} action = {7}",
+			this.AddDebugLog("OnNewHistoryTrade row = {0} rowCount = {1} securityId = {2} time = {3} price = {4} volume = {5} id = {6} action = {7}",
 				row, rowCount, smartId, time, price, volume, tradeId, action);
 
 			var msg = CreateTrade(smartId, time, price, volume, tradeId, action);
@@ -143,7 +146,7 @@ namespace StockSharp.SmartCom
 
 		private void OnNewBar(int row, int rowCount, string smartId, SmartComTimeFrames timeFrame, DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume, decimal openInt)
 		{
-			SessionHolder.AddDebugLog("OnNewHistoryTrade row = {0} rowCount = {1} securityId = {2} timeFrame = {3} time = {4} open = {5} high = {6} low = {7} close = {8} volume = {9} openInt = {10}",
+			this.AddDebugLog("OnNewHistoryTrade row = {0} rowCount = {1} securityId = {2} timeFrame = {3} time = {4} open = {5} high = {6} low = {7} close = {8} volume = {9} openInt = {10}",
 				row, rowCount, smartId, timeFrame, time, open, high, low, close, volume, openInt);
 
 			var infos = _candleTransactions.TryGetValue(smartId);
@@ -152,7 +155,7 @@ namespace StockSharp.SmartCom
 			Tuple<long, List<CandleMessage>> transactionInfo;
 			if (infos == null || !infos.TryGetValue(timeFrameKey, out transactionInfo))
 			{
-				SessionHolder.AddErrorLog(LocalizedStrings.Str1855Params, smartId, timeFrame);
+				this.AddErrorLog(LocalizedStrings.Str1855Params, smartId, timeFrame);
 				return;
 			}
 
@@ -233,7 +236,7 @@ namespace StockSharp.SmartCom
 			}
 			else
 			{
-				var info = SessionHolder.GetSecurityClassInfo(secClass);
+				var info = SecurityClassInfo.GetSecurityClassInfo(secClass);
 
 				secMsg.SecurityType = info.Item1;
 				securityId.BoardCode = info.Item2;
@@ -279,7 +282,7 @@ namespace StockSharp.SmartCom
 					new Level1ChangeMessage
 					{
 						SecurityId = securityId,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+						ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 					}
 					.Add(Level1Fields.StepPrice, stepPrice));
 			}
@@ -304,7 +307,7 @@ namespace StockSharp.SmartCom
 					{ SmartComExtensionInfoHelper.SecurityOptionsMargin, goBase.Item1 },
 					{ SmartComExtensionInfoHelper.SecurityOptionsSyntheticMargin, goBase.Item2 }
 				},
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+				ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 			};
 
 			message.TryAdd(Level1Fields.LastTradePrice, lastTrade.Item1);
@@ -390,7 +393,7 @@ namespace StockSharp.SmartCom
 						Bids = tempDepth.Item1.ToArray(),
 						Asks = tempDepth.Item2.ToArray(),
 						SecurityId = secId,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+						ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 					});
 
 					tempDepth.Item1.Clear();

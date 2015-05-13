@@ -70,29 +70,25 @@ namespace StockSharp.Studio.Services
 
 				_securityProvider = new StudioSecurityProvider();
 
-				var session = new HistorySessionHolder(TransactionIdGenerator, _securityProvider)
+				var storageRegistry = new StudioStorageRegistry { MarketDataSettings = strategy.MarketDataSettings };
+
+				Adapter.InnerAdapters.Add(_historyMessageAdapter = new HistoryMessageAdapter(TransactionIdGenerator, _securityProvider)
 				{
 					StartDate = startDate,
 					StopDate = stopDate,
-				};
-				session.UpdateCurrentTime(startDate);
-
-				var storageRegistry = new StudioStorageRegistry { MarketDataSettings = strategy.MarketDataSettings };
-
-				MarketDataAdapter = _historyMessageAdapter = new HistoryMessageAdapter(session)
-				{
 					StorageRegistry = storageRegistry
-				};
-				TransactionAdapter = new PassThroughMessageAdapter(session);
+				});
+				//_historyMessageAdapter.UpdateCurrentTime(startDate);
+				var transactionAdapter = new PassThroughMessageAdapter(TransactionIdGenerator);
+				transactionAdapter.AddTransactionalSupport();
+				Adapter.InnerAdapters.Add(transactionAdapter);
 
-				_historyMessageAdapter.SessionHolder.MarketTimeChangedInterval = useCandlesTimeFrame;
+				_historyMessageAdapter.MarketTimeChangedInterval = useCandlesTimeFrame;
+
 				// при инициализации по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
-				_historyMessageAdapter.SessionHolder.ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
+				ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 				_historyMessageAdapter.BasketStorage.InnerStorages.AddRange(GetExecutionStorages());
-
-				ApplyMessageProcessor(MessageDirections.In, true, true);
-				ApplyMessageProcessor(MessageDirections.Out, true, true);
 
 				this.LookupById(strategy.Security.Id);
 
@@ -126,7 +122,7 @@ namespace StockSharp.Studio.Services
 				}
 
 				if (!_isHistory)
-					MarketDataAdapter.SendOutMessage(message);
+					SendOutMessage(message);
 			}
 
 			private void ProcessTime(DateTimeOffset time, string boardCode)
@@ -146,15 +142,15 @@ namespace StockSharp.Studio.Services
 				_strategy.SetIsInitialization(false);
 			}
 
-			protected override void OnProcessMessage(Message message, MessageAdapterTypes adapterType, MessageDirections direction)
+			protected override void OnProcessMessage(Message message, MessageDirections direction)
 			{
-				_historyMessageAdapter.SessionHolder.UpdateCurrentTime(message.LocalTime);
+				//_historyMessageAdapter.UpdateCurrentTime(message.LocalTime);
 
 				switch (message.Type)
 				{
 					case MessageTypes.Connect:
 					{
-						if (adapterType == MessageAdapterTypes.MarketData)
+						if (message.Adapter == MarketDataAdapter)
 							break;
 
 						_isHistory = true;
@@ -163,10 +159,9 @@ namespace StockSharp.Studio.Services
 						_strategy.SetIsInitialization(true);
 
 						_historyMessageAdapter
-							.SessionHolder
 							.SecurityProvider
 							.LookupAll()
-							.ForEach(s => MarketDataAdapter.SendOutMessage(s.ToMessage()));
+							.ForEach(s => SendOutMessage(s.ToMessage()));
 
 						break;
 					}
@@ -179,14 +174,14 @@ namespace StockSharp.Studio.Services
 
 						if (_onlyInitialize)
 						{
-							if (adapterType == MessageAdapterTypes.MarketData)
+							if (message.Adapter == MarketDataAdapter)
 								new StopStrategyCommand(_strategy).Process(this);
 
 							return;
 						}
 
-						_historyMessageAdapter.SessionHolder.StopDate = DateTimeOffset.MaxValue;
-						_historyMessageAdapter.SessionHolder.MarketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
+						_historyMessageAdapter.StopDate = DateTimeOffset.MaxValue;
+						_historyMessageAdapter.MarketTimeChangedInterval = TimeSpan.FromMilliseconds(10);
 
 						var messages = new List<Message>();
 
@@ -196,7 +191,7 @@ namespace StockSharp.Studio.Services
 						messages.AddRange(_realConnector.OrderCancelFails.Select(o => o.ToMessage()));
 						messages.AddRange(_realConnector.MyTrades.Select(t => t.ToMessage()));
 
-						messages.ForEach(m => MarketDataAdapter.SendOutMessage(m));
+						messages.ForEach(SendOutMessage);
 
 						_isHistory = false;
 
@@ -235,26 +230,26 @@ namespace StockSharp.Studio.Services
 						var trades = candleMsg.ToTrades(volumeStep, decimals);
 
 						foreach (var executionMessage in trades)
-							base.OnProcessMessage(executionMessage, adapterType, direction);
+							base.OnProcessMessage(executionMessage, direction);
 
 						return;
 					}
 				}
 
-				base.OnProcessMessage(message, adapterType, direction);
+				base.OnProcessMessage(message, direction);
 			}
 
 			public override void SubscribeMarketData(Security security, MarketDataTypes type)
 			{
 				if (_isHistory && type == MarketDataTypes.Trades)
 				{
-					_historyMessageAdapter.SendInMessage(new MarketDataMessage
+					SendInMessage(new MarketDataMessage
 					{
 						//SecurityId = GetSecurityId(security),
 						DataType = MarketDataTypes.CandleTimeFrame,
 						IsSubscribe = true,
-						From = _historyMessageAdapter.SessionHolder.StartDate,
-						To = _historyMessageAdapter.SessionHolder.StopDate,
+						From = _historyMessageAdapter.StartDate,
+						To = _historyMessageAdapter.StopDate,
 						Arg = _useCandlesTimeFrame
 					}.FillSecurityInfo(this, security));
 				}
@@ -296,7 +291,7 @@ namespace StockSharp.Studio.Services
 				if (depoName != null)
 					regMsg.AddValue(PositionChangeTypes.DepoName, depoName);
 
-				_realConnector.TransactionAdapter.SendInMessage(regMsg);
+				_realConnector.SendInMessage(regMsg);
 			}
 
 			/// <summary>
@@ -307,7 +302,7 @@ namespace StockSharp.Studio.Services
 			protected override void OnReRegisterOrder(Order oldOrder, Order newOrder)
 			{
 				if (IsSupportAtomicReRegister && oldOrder.Security.Board.IsSupportAtomicReRegister)
-					_realConnector.TransactionAdapter.SendInMessage(oldOrder.CreateReplaceMessage(newOrder, _realConnector.GetSecurityId(newOrder.Security)));
+					_realConnector.SendInMessage(oldOrder.CreateReplaceMessage(newOrder, _realConnector.GetSecurityId(newOrder.Security)));
 				else
 					base.OnReRegisterOrder(oldOrder, newOrder);
 			}
@@ -322,7 +317,7 @@ namespace StockSharp.Studio.Services
 			protected override void OnReRegisterOrderPair(Order oldOrder1, Order newOrder1, Order oldOrder2, Order newOrder2)
 			{
 				if (IsSupportAtomicReRegister && oldOrder1.Security.Board.IsSupportAtomicReRegister)
-					_realConnector.TransactionAdapter.SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, _realConnector.GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, _realConnector.GetSecurityId(newOrder2.Security)));
+					_realConnector.SendInMessage(oldOrder1.CreateReplaceMessage(newOrder1, _realConnector.GetSecurityId(newOrder1.Security), oldOrder2, newOrder2, _realConnector.GetSecurityId(newOrder2.Security)));
 				else
 					base.OnReRegisterOrderPair(oldOrder1, newOrder1, oldOrder2, newOrder2);
 			}
@@ -334,7 +329,7 @@ namespace StockSharp.Studio.Services
 			/// <param name="transactionId">Идентификатор транзакции отмены.</param>
 			protected override void OnCancelOrder(Order order, long transactionId)
 			{
-				_realConnector.TransactionAdapter.SendInMessage(order.CreateCancelMessage(_realConnector.GetSecurityId(order.Security), transactionId));
+				_realConnector.SendInMessage(order.CreateCancelMessage(_realConnector.GetSecurityId(order.Security), transactionId));
 			}
 
 			#endregion
@@ -520,8 +515,6 @@ namespace StockSharp.Studio.Services
 			strategy.Connector = strategyConnector;
 			strategy.SetCandleManager(CreateCandleManager(strategyConnector, TimeSpan.FromDays((strategy.HistoryDaysCount + 1) * 2)));
 			strategy.SetIsEmulation(false);
-
-			strategyConnector.Connected += strategyConnector.StartExport;
 
 			strategy.Start();
 			strategyConnector.Connect();

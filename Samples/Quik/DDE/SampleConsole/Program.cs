@@ -58,6 +58,9 @@ namespace SampleConsole
 
 						Console.WriteLine(LocalizedStrings.Str2170);
 
+						trader.DdeTables = new[] { trader.SecuritiesTable, trader.MyTradesTable, trader.EquityPositionsTable,
+						                   trader.EquityPortfoliosTable, trader.OrdersTable };
+
 						trader.Connect();
 
 						// дожидаемся события об успешном соединении
@@ -133,10 +136,6 @@ namespace SampleConsole
 
 						Console.WriteLine(LocalizedStrings.Str2989Params.Put(account));
 
-						// запускаем экспорт по DDE
-						trader.StartExport(new[]{ trader.SecuritiesTable, trader.MyTradesTable, trader.EquityPositionsTable,
-						                   trader.EquityPortfoliosTable, trader.OrdersTable });
-
 						// дожидаемся появления портфеля и инструмента
 						waitHandle.WaitOne();
 
@@ -179,9 +178,8 @@ namespace SampleConsole
 							Thread.Sleep(1000);
 						}
 
-						// останавливаем экспорт по DDE
-						trader.StopExport(new[]{ trader.SecuritiesTable, trader.MyTradesTable, trader.EquityPositionsTable,
-						                   trader.EquityPortfoliosTable, trader.OrdersTable });
+						// останавливаем подключение
+						trader.Disconnect();
 					}
 				}
 			}

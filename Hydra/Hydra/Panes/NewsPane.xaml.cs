@@ -1,14 +1,12 @@
 namespace StockSharp.Hydra.Panes
 {
 	using System;
-	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Configuration;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
@@ -46,12 +44,10 @@ namespace StockSharp.Hydra.Panes
 
 		private IEnumerableEx<NewsMessage> GetNews()
 		{
-			// TODO
-			var news = ConfigManager.GetService<IEntityRegistry>().News;
-			return news
-				.Where(n => n.ServerTime >= From && n.ServerTime <= To + TimeHelper.LessOneDay)
-				.Select(n => n.ToMessage())
-				.ToEx(news.Count);
+			return ConfigManager
+				.GetService<IStorageRegistry>()
+				.GetNewsMessageStorage(Drive, StorageFormat)
+				.Load(From, To + TimeHelper.LessOneDay);
 		}
 
 		private void Find_OnClick(object sender, RoutedEventArgs e)

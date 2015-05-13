@@ -192,7 +192,7 @@
 		</Style>
 	</ug:UniversalGrid.RowStyle>
 	<ug:UniversalGrid.Columns>
-		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Id}" Width="100" SortMemberPath="Order.Id">
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Id}" Width="100" SortMemberPath="OrderId">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
 					<TextBlock>
@@ -226,13 +226,13 @@
 			</DataGridTemplateColumn.CellStyle>
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Type}" Width="40" Binding="{Binding Path=Order.Type, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Order.Type" />
-		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str1324}" Width="60" CellTemplate="{StaticResource StateColumnTemplate}" SortMemberPath="Order.State">
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str1324}" Width="60" CellTemplate="{StaticResource StateColumnTemplate}" SortMemberPath="OrderState">
 			<DataGridTemplateColumn.CellStyle>
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
 			</DataGridTemplateColumn.CellStyle>
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Width="60" Binding="{Binding Path=Order.LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Order.LocalTime"/>
-		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str231}" Visibility="Collapsed" Width="60" SortMemberPath="Order.TimeInForce">
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str231}" Visibility="Collapsed" Width="60" SortMemberPath="OrderTif">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
 					<TextBlock TextAlignment="Center">

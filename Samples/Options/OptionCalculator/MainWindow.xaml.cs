@@ -236,6 +236,8 @@ namespace OptionCalculator
 						columns.Add(DdeSecurityColumns.TheorPrice);
 						columns.Add(DdeSecurityColumns.OptionType);
 						columns.Add(DdeSecurityColumns.ExpiryDate);
+
+						trader.DdeTables = new[] { trader.SecuritiesTable, trader.TradesTable };
 					}
 
 					_connector = trader;
@@ -321,18 +323,6 @@ namespace OptionCalculator
 					if (asset.LastTrade != null)
 						LastPrice.Text = asset.LastTrade.Price.To<string>();
 				});
-
-				_connector.Connected += () =>
-				{
-					var trader = _connector as QuikTrader;
-					if (trader != null && trader.IsDde)
-					{
-						var quikTrader = trader;
-						quikTrader.StartExport(new[] { quikTrader.SecuritiesTable, quikTrader.TradesTable });
-					}
-					else
-						_connector.StartExport();
-				};
 			}
 
 			if (_connector.ConnectionState == ConnectionStates.Connected)

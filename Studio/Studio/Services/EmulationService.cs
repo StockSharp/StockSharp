@@ -86,15 +86,15 @@ namespace StockSharp.Studio.Services
 			}
 		}
 
-		private int _dataErrorCount;
+		private int _errorCount;
 
-		public int DataErrorCount
+		public int ErrorCount
 		{
-			get { return _dataErrorCount; }
+			get { return _errorCount; }
 			set
 			{
-				_dataErrorCount = value;
-				NotifyPropertyChanged("DataErrorCount");
+				_errorCount = value;
+				NotifyPropertyChanged("ErrorCount");
 			}
 		}
 
@@ -156,7 +156,7 @@ namespace StockSharp.Studio.Services
 		{
 			if (EmulationConnector.State == EmulationStates.Suspended)
 			{
-				EmulationConnector.Resume();
+				EmulationConnector.Start();
 			}
 			else
 			{
@@ -286,7 +286,7 @@ namespace StockSharp.Studio.Services
 				}
 
 				MarketTime = Exchange.Test.ToExchangeTime(EmulationConnector.CurrentTime);
-				DataErrorCount = EmulationConnector.DataErrorCount;
+				ErrorCount = EmulationConnector.ErrorCount;
 
 				_emulDuration += timeElapsed;
 
@@ -305,7 +305,7 @@ namespace StockSharp.Studio.Services
 		//private void ResetStatistics()
 		//{
 		//	MarketTime = DateTime.MinValue;
-		//	DataErrorCount = 0;
+		//	ErrorCount = 0;
 		//	Duration = TimeSpan.Zero;
 		//	Remaining = TimeSpan.Zero;
 		//	//EmulationSettings.MessagesLeft = 0;

@@ -87,11 +87,11 @@ namespace SampleIB
 		{
 			if (Depth.IsChecked == true)
 			{
-				// создаем окно со стаканом
+				// create order book window
 				var wnd = new QuotesWindow { Title = SelectedSecurity.Id + " " + LocalizedStrings.MarketDepth };
 				_quotesWindows.Add(SelectedSecurity, wnd);
 
-				// начинаем получать котировки стакана
+				// subscribe on order book flow
 				Trader.RegisterMarketDepth(SelectedSecurity);
 
 				wnd.Show();

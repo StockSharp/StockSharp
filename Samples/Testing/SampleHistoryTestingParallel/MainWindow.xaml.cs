@@ -67,7 +67,7 @@ namespace SampleHistoryTestingParallel
 			var fileLogListener = new FileLogListener("sample.log");
 			logManager.Listeners.Add(fileLogListener);
 
-			// создаем длины скользящих средник
+			// SMA periods
 			var periods = new[]
 			{
 				new Tuple<int, int, Color>(80, 10, Colors.DarkGreen),
@@ -75,19 +75,19 @@ namespace SampleHistoryTestingParallel
 				new Tuple<int, int, Color>(60, 6, Colors.DarkBlue)
 			};
 
-			// хранилище, через которое будет производиться доступ к тиковой и котировочной базе
+			// storage to historical data
 			var storageRegistry = new StorageRegistry
 			{
-				// изменяем путь, используемый по умолчанию
+				// set historical path
 				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Text)
 			};
 
 			var timeFrame = TimeSpan.FromMinutes(5);
 
-			// создаем тестовый инструмент, на котором будет производится тестирование
+			// create test security
 			var security = new Security
 			{
-				Id = "RIZ2@FORTS", // по идентификатору инструмента будет искаться папка с историческими маркет данными
+				Id = "RIZ2@FORTS", // sec id has the same name as folder with historical data
 				Code = "RIZ2",
 				Name = "RTS-12.12",
 				Board = ExchangeBoard.Forts,
@@ -108,29 +108,28 @@ namespace SampleHistoryTestingParallel
 			.TryAdd(Level1Fields.MarginBuy, 10000m)
 			.TryAdd(Level1Fields.MarginSell, 10000m);
 
-			// тестовый портфель
+			// test portfolio
 			var portfolio = new Portfolio
 			{
 				Name = "test account",
 				BeginValue = 1000000,
 			};
 
-			// создаем подключение для эмуляции
+			// create backtesting connector
 			var batchEmulation = new BatchEmulation(new[] { security }, new[] { portfolio }, storageRegistry)
 			{
-				// инициализируем настройки (инструмент в истории обновляется раз в секунду)
 				EmulationSettings =
 				{
 					MarketTimeChangedInterval = timeFrame,
 					StartTime = startTime,
 					StopTime = stopTime,
 
-					// кол-во одновременно тестируемых стратегий
+					// count of parallel testing strategies
 					BatchSize = periods.Length,
 				}
 			};
 
-			// и подписываемся на событие изменения прогресса тестирования, чтобы обновить ProgressBar
+			// handle historical time for update ProgressBar
 			batchEmulation.ProgressChanged += (curr, total) => this.GuiAsync(() => TestingProcess.Value = total);
 
 			batchEmulation.StateChanged += (oldState, newState) =>
@@ -143,10 +142,10 @@ namespace SampleHistoryTestingParallel
 					if (batchEmulation.IsFinished)
 					{
 						TestingProcess.Value = TestingProcess.Maximum;
-						MessageBox.Show(LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
+						MessageBox.Show(this, LocalizedStrings.Str3024.Put(DateTime.Now - _startEmulationTime));
 					}
 					else
-						MessageBox.Show(LocalizedStrings.cancelled);
+						MessageBox.Show(this, LocalizedStrings.cancelled);
 				});
 			};
 
@@ -155,18 +154,17 @@ namespace SampleHistoryTestingParallel
 
 			logManager.Sources.Add(connector);
 
-			// подписываемся на получение данных после получения инструмента
 			connector.NewSecurities += securities =>
 			{
 				if (securities.All(s => s != security))
 					return;
 
-				// отправляем данные Level1 для инструмента
-				connector.MarketDataAdapter.SendOutMessage(level1Info);
+				// fill level1 values
+				connector.SendInMessage(level1Info);
 
 				connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
 				{
-					// стакан для инструмента в истории обновляется раз в секунду
+					// order book freq refresh is 1 sec
 					Interval = TimeSpan.FromSeconds(1),
 				});
 			};
@@ -181,7 +179,7 @@ namespace SampleHistoryTestingParallel
 				{
 					var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
-					// создаем торговую стратегию
+					// create strategy based SMA
 					var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.Item1 }, new SimpleMovingAverage { Length = period.Item2 })
 					{
 						Volume = 1,
@@ -189,8 +187,8 @@ namespace SampleHistoryTestingParallel
 						Portfolio = portfolio,
 						Connector = connector,
 
-						// по-умолчанию интервал равен 1 минут,
-						// что для истории в диапазон от нескольких месяцев излишне
+						// by default interval is 1 min,
+						// it is excessively for time range with several months
 						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 					};
 
@@ -214,7 +212,7 @@ namespace SampleHistoryTestingParallel
 				})
 				.ToEx(periods.Length);
 
-			// запускаем эмуляцию
+			// start emulation
 			batchEmulation.Start(strategies);
 		}
 	}

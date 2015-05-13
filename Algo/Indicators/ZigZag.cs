@@ -20,7 +20,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("ZigZag")]
 	[DescriptionLoc(LocalizedStrings.Str826Key)]
-	public class ZigZag : BaseIndicator<decimal>
+	public class ZigZag : BaseIndicator
 	{
 		private readonly IList<Candle> _buffer = new List<Candle>();
 		private readonly List<decimal> _lowBuffer = new List<decimal>();
@@ -380,7 +380,9 @@ namespace StockSharp.Algo.Indicators
 			if (valuesCount != 2)
 				return new DecimalIndicatorValue(this);
 
-			IsFormed = true;
+			if (input.IsFinal)
+				IsFormed = true;
+
 			LastValueShift = valueId - 1;
 
 			CurrentValue = _currentValue(_buffer[0]);

@@ -1,5 +1,25 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.4:
+* (bug) UX lookup fix.
+* (feature) Micex sec cache update.
+* (feature) BitStamp. Level1 refresh interval is 10 sec.
+* (feature) Transaq. UTC
+
+###v4.3.2:
+* (bug) Hydra. Btce and BitStamp anonymous access fix.
+* (bug) Hydra. Ref xNet fix.
+* (bug) Hydra. Price step icon fix.
+
+###v4.3.1:
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5619_Oshibka-nie-udalos--naiti-chast--puti.aspx
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/62
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/63
+* (feature) Quik plugin. Lua settings.
+* (feature) Plaza. Spectra 4 (ASTS).
+* (bug) Fix CSV storage
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5562_Nie-eksportiruietsia-data-pri-eksportie-sdielok-v-txt-excel.aspx
+
 ###v4.2.71:
 * (bug) Fix Sterling plugin
 * (bug) Fix http://stocksharp.com/forum/yaf_postst5556_S--Api.aspx

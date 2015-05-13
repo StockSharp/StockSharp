@@ -5,9 +5,9 @@ namespace StockSharp.Algo.Indicators
 
 	using Ecng.Serialization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	using StockSharp.Localization;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Чудесный осцилятор.
@@ -17,7 +17,7 @@ namespace StockSharp.Algo.Indicators
 	/// </remarks>
 	[DisplayName("AO")]
 	[DescriptionLoc(LocalizedStrings.Str836Key)]
-	public class AwesomeOscillator : BaseIndicator<decimal>
+	public class AwesomeOscillator : BaseIndicator
 	{
 		/// <summary>
 		/// Создать <see cref="AwesomeOscillator"/>.
@@ -76,16 +76,6 @@ namespace StockSharp.Algo.Indicators
 		/// Сформирован ли индикатор.
 		/// </summary>
 		public override bool IsFormed { get { return LongMa.IsFormed; } }
-
-		/// <summary>
-		/// Возможно ли обработать входное значение.
-		/// </summary>
-		/// <param name="input">Входное значение.</param>
-		/// <returns><see langword="true"/>, если возможно, иначе, <see langword="false"/>.</returns>
-		public override bool CanProcess(IIndicatorValue input)
-		{
-			return MedianPrice.CanProcess(input);
-		}
 
 		/// <summary>
 		/// Обработать входное значение.

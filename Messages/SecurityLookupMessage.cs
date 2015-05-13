@@ -17,7 +17,7 @@ namespace StockSharp.Messages
 	public class SecurityLookupMessage : SecurityMessage, IEquatable<SecurityLookupMessage>
 	{
 		/// <summary>
-		/// Номер транзакции.
+		/// Идентификатор транзакции.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]

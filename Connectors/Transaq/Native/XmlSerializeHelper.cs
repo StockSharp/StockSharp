@@ -214,16 +214,16 @@
 				new XAttribute("count", message.Count),
 				new XAttribute("reset", message.Reset.ToMyString()));
 
-			if (message.SecId != 0)
-			{
+			//if (message.SecId != null)
+			//{
 				rootElement.Add(new XAttribute("secid", message.SecId));
-			}
-			else
-			{
-				rootElement.Add(new XElement("security",
-					new XElement("seccode", message.SecCode),
-					new XElement("board", message.Board)));
-			}
+			//}
+			//else
+			//{
+			//	rootElement.Add(new XElement("security",
+			//		new XElement("seccode", message.SecCode),
+			//		new XElement("board", message.Board)));
+			//}
 		}
 
 		private static void SerializeSubscribe(SubscribeMessage message, XElement rootElement)
@@ -264,14 +264,14 @@
 
 		private static void SerializeNewOrder(NewOrderMessage message, XElement rootElement)
 		{
-			if (message.SecId != 0)
+			//if (message.SecId != null)
 				rootElement.Add(new XElement("secid", message.SecId));
-			else
-			{
-				rootElement.Add(new XElement("security",
-					new XElement("seccode", message.SecCode),
-					new XElement("board", message.Board)));	
-			}
+			//else
+			//{
+			//	rootElement.Add(new XElement("security",
+			//		new XElement("seccode", message.SecCode),
+			//		new XElement("board", message.Board)));	
+			//}
 
 			rootElement.Add(new XElement("client", message.Client));
 			rootElement.Add(new XElement("price", message.Price));
@@ -297,14 +297,14 @@
 
 		private static void SerializeNewCondOrder(NewCondOrderMessage message, XElement rootElement)
 		{
-			if (message.SecId != 0)
+			//if (message.SecId != null)
 				rootElement.Add(new XElement("secid", message.SecId));
-			else
-			{
-				rootElement.Add(new XElement("security",
-					new XElement("seccode", message.SecCode),
-					new XElement("board", message.Board)));
-			}
+			//else
+			//{
+			//	rootElement.Add(new XElement("security",
+			//		new XElement("seccode", message.SecCode),
+			//		new XElement("board", message.Board)));
+			//}
 
 			rootElement.Add(new XElement("client", message.Client));
 			rootElement.Add(new XElement("price", message.Price));
@@ -343,14 +343,14 @@
 
 		private static void SerializeNewStopOrder(NewStopOrderMessage message, XElement rootElement)
 		{
-			if (message.SecId != 0)
+			//if (message.SecId != null)
 				rootElement.Add(new XElement("secid", message.SecId));
-			else
-			{
-				rootElement.Add(new XElement("security",
-					new XElement("seccode", message.SecCode),
-					new XElement("board", message.Board)));
-			}
+			//else
+			//{
+			//	rootElement.Add(new XElement("security",
+			//		new XElement("seccode", message.SecCode),
+			//		new XElement("board", message.Board)));
+			//}
 
 			rootElement.Add(new XElement("client", message.Client));
 			rootElement.Add(new XElement("buysell", message.BuySell));
@@ -402,14 +402,14 @@
 
 		private static void SerializeNewRpsOrder(NewRpsOrderMessage message, XElement rootElement)
 		{
-			if (message.SecId != 0)
+			//if (message.SecId != null)
 				rootElement.Add(new XElement("secid", message.SecId));
-			else
-			{
-				rootElement.Add(new XElement("security",
-					new XElement("seccode", message.SecCode),
-					new XElement("board", message.Board)));
-			}
+			//else
+			//{
+			//	rootElement.Add(new XElement("security",
+			//		new XElement("seccode", message.SecCode),
+			//		new XElement("board", message.Board)));
+			//}
 
 			rootElement.Add(new XElement("client", message.Client));
 			rootElement.Add(new XElement("buysell", message.BuySell));
@@ -495,33 +495,33 @@
 
 		private static void SerializeSubscribeTicks(SubscribeTicksMessage message, XElement rootElement)
 		{
-			var isAttr = false;
+			//var isAttr = false;
 
 			foreach (var item in message.Items)
 			{
-				if (item.SecId != 0)
-				{
-					isAttr = true;
+				//if (item.SecId != null)
+				//{
+					//isAttr = true;
 
 					rootElement.Add(
 						new XElement("security",
 							new XAttribute("secid", item.SecId),
 							new XAttribute("tradeno", item.TradeNo)));
-				}
-				else
-				{
-					rootElement.Add(
-						new XElement("security",
-							new XElement("seccode", item.SecCode),
-							new XElement("board", item.Board),
-							new XElement("tradeno", item.TradeNo)));
-				}
+				//}
+				//else
+				//{
+				//	rootElement.Add(
+				//		new XElement("security",
+				//			new XElement("seccode", item.SecCode),
+				//			new XElement("board", item.Board),
+				//			new XElement("tradeno", item.TradeNo)));
+				//}
 			}
 
-			if (isAttr)
+			//if (isAttr)
 				rootElement.Add(new XAttribute("filter", message.Filter.ToMyString()));
-			else
-				rootElement.Add(new XElement("filter", message.Filter.ToMyString()));
+			//else
+			//	rootElement.Add(new XElement("filter", message.Filter.ToMyString()));
 		}
 
 		private static void SerializeRequestSecuritiesInfo(RequestSecuritiesInfoMessage message, XElement rootElement)

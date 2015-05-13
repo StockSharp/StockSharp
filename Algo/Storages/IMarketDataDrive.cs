@@ -7,7 +7,6 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -74,7 +73,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="securityId">Идентификатор инструмента.</param>
 		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="CandleMessage.Arg"/>.</param>
 		/// <param name="format">Тип формата.</param>
 		/// <returns>Хранилище для <see cref="IMarketDataStorage"/>.</returns>
 		IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format);
@@ -110,7 +109,7 @@ namespace StockSharp.Algo.Storages
 		/// </summary>
 		/// <param name="securityId">Идентификатор инструмента.</param>
 		/// <param name="dataType">Тип маркет-данных.</param>
-		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="CandleMessage.Arg"/>.</param>
 		/// <param name="format">Тип формата.</param>
 		/// <returns>Хранилище для <see cref="IMarketDataStorage"/>.</returns>
 		public abstract IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, Type dataType, object arg, StorageFormats format);

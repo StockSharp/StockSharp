@@ -3,6 +3,7 @@ namespace StockSharp.Algo.Indicators
 	using System.ComponentModel;
 	using System.Linq;
 	using System;
+
 	using StockSharp.Localization;
 
 	/// <summary>

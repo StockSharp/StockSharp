@@ -20,7 +20,7 @@
 	/// </summary>
 	/// <typeparam name="TConnector">Тип подключения.</typeparam>
 	public abstract class ConnectorHydraTask<TConnector> : BaseHydraTask, ISecurityDownloader
-		where TConnector : class, IConnector
+		where TConnector : Connector
 	{
 		private HydraTaskSecurity _allSecurity;
 		private readonly SynchronizedDictionary<Security, HydraTaskSecurity> _securityMap = new SynchronizedDictionary<Security, HydraTaskSecurity>();
@@ -68,7 +68,7 @@
 		/// <param name="settings">Настройки.</param>
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
-			Connector = CreateTrader(settings);
+			Connector = CreateConnector(settings);
 			Connector.NewSecurities += securities =>
 			{
 				foreach (var security in securities)
@@ -80,13 +80,15 @@
 				}
 			};
 
-			Connector.ExportStarted += () =>
+			Connector.Connected += () =>
 			{
 				if (_allSecurity == null)
 					_securityMap.Keys.ForEach(SubscribeSecurity);
 
 				RaiseStarted();
 			};
+
+			Connector.ConnectionError += Stop;
 		}
 
 		/// <summary>
@@ -226,7 +228,7 @@
 		/// </summary>
 		/// <param name="settings">Настройки.</param>
 		/// <returns>Подключение к торговой системе.</returns>
-		protected abstract MarketDataConnector<TConnector> CreateTrader(HydraTaskSettings settings);
+		protected abstract MarketDataConnector<TConnector> CreateConnector(HydraTaskSettings settings);
 
 		internal void InitTrader(Connector connector)
 		{

@@ -31,7 +31,7 @@ namespace SampleRandomEmulation
 				.Do(ProcessCandle)
 				.Apply(this);
 
-			// запоминаем текущее положение относительно друг друга
+			// store current values for short and long
 			_isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 
 			base.OnStarted();
@@ -39,10 +39,9 @@ namespace SampleRandomEmulation
 
 		private void ProcessCandle(Candle candle)
 		{
-			// если наша стратегия в процессе остановки
+			// strategy are stopping
 			if (ProcessState == ProcessStates.Stopping)
 			{
-				// отменяем активные заявки
 				CancelActiveOrders();
 				return;
 			}
@@ -51,26 +50,26 @@ namespace SampleRandomEmulation
 			LongSma.Process(candle);
 			ShortSma.Process(candle);
 
-			// вычисляем новое положение относительно друг друга
+			// calc new values for short and long
 			var isShortLessThenLong = ShortSma.GetCurrentValue() < LongSma.GetCurrentValue();
 
-			// если произошло пересечение
+			// crossing happened
 			if (_isShortLessThenLong != isShortLessThenLong)
 			{
-				// если короткая меньше чем длинная, то продажа, иначе, покупка.
+				// if short less than long, the sale, otherwise buy
 				var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
 
-				// вычисляем размер для открытия или переворота позы
+				// calc size for open position or revert
 				var volume = Position == 0 ? Volume : Position.Abs() * 2;
 
-				// регистрируем заявку (обычным способом - лимитированной заявкой)
+				// register order (limit order)
 				RegisterOrder(this.CreateOrder(direction, (decimal)(Security.GetCurrentPrice(this, direction) ?? 0), volume));
 
-				// переворачиваем позицию через котирование
+				// or revert position via market quoting
 				//var strategy = new MarketQuotingStrategy(direction, volume);
 				//ChildStrategies.Add(strategy);
 
-				// запоминаем текущее положение относительно друг друга
+				// store current values for short and long
 				_isShortLessThenLong = isShortLessThenLong;
 			}
 		}

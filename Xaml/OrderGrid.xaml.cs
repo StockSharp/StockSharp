@@ -2,6 +2,7 @@ namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Globalization;
 	using System.Linq;
 	using System.Windows.Controls;
@@ -52,7 +53,17 @@ namespace StockSharp.Xaml
 				get { return _order; }
 				set
 				{
+					if (_order == value)
+						return;
+
+					if (_order != null)
+						_order.PropertyChanged -= OrderOnPropertyChanged;
+
 					_order = value;
+
+					if (_order != null)
+						_order.PropertyChanged += OrderOnPropertyChanged;
+
 					NotifyChanged("Order");
 				}
 			}
@@ -79,6 +90,85 @@ namespace StockSharp.Xaml
 					_condition = value;
 					NotifyChanged("Condition");
 				}
+			}
+
+			public string OrderId
+			{
+				get
+				{
+					var order = Order;
+
+					if (order == null)
+						return null;
+
+					return order.Id.To<string>() ?? order.StringId;
+				}
+			}
+
+			public int OrderState
+			{
+				get
+				{
+					var order = Order;
+
+					if (order == null)
+						return -1;
+
+					switch (order.State)
+					{
+						case OrderStates.None:
+							return 0;
+						case OrderStates.Pending:
+							return 1;
+						case OrderStates.Failed:
+							return 2;
+						case OrderStates.Active:
+							return 3;
+						case OrderStates.Done:
+							return order.IsMatched() ? 4 : 5;
+						default:
+							throw new InvalidOperationException(LocalizedStrings.Str1596Params.Put(order.State, order));
+					}
+				}
+			}
+
+			public long OrderTif
+			{
+				get
+				{
+					var order = Order;
+
+					if (order == null)
+						return -1;
+
+					var tif = order.TimeInForce;
+					var expiryDate = order.ExpiryDate;
+
+					switch (tif)
+					{
+						case null:
+						case TimeInForce.PutInQueue:
+							return expiryDate == null ? long.MaxValue : expiryDate.Value.Ticks;
+						case TimeInForce.MatchOrCancel:
+							return 0;
+						case TimeInForce.CancelBalance:
+							return 1;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				}
+			}
+
+			private void OrderOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+			{
+				if (e.PropertyName == "Id" || e.PropertyName == "StringId")
+					NotifyChanged("OrderId");
+
+				if (e.PropertyName == "Balance" || e.PropertyName == "State")
+					NotifyChanged("OrderState");
+
+				if (e.PropertyName == "TimeInForce" || e.PropertyName == "ExpiryDate")
+					NotifyChanged("OrderTif");
 			}
 		}
 
@@ -239,9 +329,9 @@ namespace StockSharp.Xaml
 					return LocalizedStrings.Str238;
 				case OrderStates.Done:
 					return order.IsMatched() ? LocalizedStrings.Str1328 : LocalizedStrings.Str1329;
+				default:
+					throw new ArgumentOutOfRangeException("values", state, LocalizedStrings.Str1597Params.Put(order));
 			}
-
-			return state;
 		}
 
 		object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -254,19 +344,20 @@ namespace StockSharp.Xaml
 	{
 		object IMultiValueConverter.Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
 		{
-			var tif = (TimeInForce)values[0];
-			var expiryDate = (DateTimeOffset)values[1];
+			var tif = (TimeInForce?)values[0];
+			var expiryDate = (DateTimeOffset?)values[1];
 
 			switch (tif)
 			{
+				case null:
 				case TimeInForce.PutInQueue:
 				{
-					if (expiryDate == DateTimeOffset.MaxValue)
+					if (expiryDate == null || expiryDate == DateTimeOffset.MaxValue)
 						return "GTC";
 					else if (expiryDate == DateTimeOffset.Now.Date)
 						return "GTD";
 					else
-						return expiryDate.LocalDateTime.ToString("d");
+						return expiryDate.Value.LocalDateTime.ToString("d");
 				}
 				case TimeInForce.MatchOrCancel:
 					return "FOK";

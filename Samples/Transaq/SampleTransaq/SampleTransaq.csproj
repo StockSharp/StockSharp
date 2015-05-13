@@ -123,9 +123,6 @@
     <Compile Include="MyTradesWindow.xaml.cs">
       <DependentUpon>MyTradesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NewAlgoOrderWindow.xaml.cs">
-      <DependentUpon>NewAlgoOrderWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="NewsWindow.xaml.cs">
       <DependentUpon>NewsWindow.xaml</DependentUpon>
     </Compile>
@@ -185,10 +182,6 @@
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="NewAlgoOrderWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="NewsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

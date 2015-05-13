@@ -146,8 +146,6 @@ namespace SampleSmartSMA
 								ProcessCandle(candle);
 						};
 
-						_trader.StartExport();
-
 						this.GuiAsync(() =>
 						{
 							ConnectBtn.IsEnabled = false;
@@ -166,7 +164,7 @@ namespace SampleSmartSMA
 					_trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					//_trader.ProcessDataError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
+					//_trader.Error += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 					// подписываемся на ошибку подписки маркет-данных
 					_trader.MarketDataSubscriptionFailed += (security, type, error) =>
@@ -315,10 +313,10 @@ namespace SampleSmartSMA
 		private void ReportClick(object sender, RoutedEventArgs e)
 		{
 			// сгерерировать отчет по прошедшему тестированию
-			new ExcelStrategyReport(_strategy, "sma.xls").Generate();
+			new ExcelStrategyReport(_strategy, "sma.xlsx").Generate();
 
 			// открыть отчет
-			Process.Start("sma.xls");
+			Process.Start("sma.xlsx");
 		}
 	}
 }

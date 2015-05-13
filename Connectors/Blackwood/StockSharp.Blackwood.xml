@@ -98,12 +98,17 @@
             Адаптер сообщений для Blackwood (или Fusion) DMA.
             </summary>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.Blackwood.BlackwoodSessionHolder)">
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Создать <see cref="T:StockSharp.Blackwood.BlackwoodMessageAdapter" />.
             </summary>
-      <param name="type">Тип адаптера.</param>
-      <param name="sessionHolder">Контейнер для сессии.</param>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition">
+      <summary>
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
+            </summary>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
@@ -111,11 +116,75 @@
             </summary>
       <param name="message">Сообщение.</param>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive">
       <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
+            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
             </summary>
-      <param name="message">Сообщение.</param>
+      <returns>
+        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.ToString">
+      <summary>
+            Получить строковое представление контейнера.
+            </summary>
+      <returns>Строковое представление.</returns>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired">
+      <summary>
+            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Login">
+      <summary>
+            Логин.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Password">
+      <summary>
+            Пароль.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.MarketDataAddress">
+      <summary>
+            Адрес сервера рыночных данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.HistoricalDataAddress">
+      <summary>
+            Адрес сервера исторических данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.ExecutionAddress">
+      <summary>
+            Адрес сервера исполнения транзакций.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.LogPath">
+      <summary>
+            Путь к директории, где будет создан файл BWOrders.log.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsValid">
+      <summary>
+            Проверить введенные параметры на валидность.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
+      <summary>
+            Доступные тайм-фреймы.
+            </summary>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodOrderConditionTypes">
       <summary>
@@ -291,103 +360,6 @@
             Тип стоп-заявки.
             </summary>
     </member>
-    <member name="T:StockSharp.Blackwood.BlackwoodSessionHolder">
-      <summary>
-            Контейнер для сессии.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodSessionHolder.CreateTransactionAdapter">
-      <summary>
-            Создать транзакционный адаптер.
-            </summary>
-      <returns>Транзакционный адаптер.</returns>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodSessionHolder.CreateMarketDataAdapter">
-      <summary>
-            Создать адаптер маркет-данных.
-            </summary>
-      <returns>Адаптер маркет-данных.</returns>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodSessionHolder.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Создать <see cref="T:StockSharp.Blackwood.BlackwoodSessionHolder" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodSessionHolder.CreateOrderCondition">
-      <summary>
-            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
-            </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodSessionHolder.ToString">
-      <summary>
-            Получить строковое представление контейнера.
-            </summary>
-      <returns>Строковое представление.</returns>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.Login">
-      <summary>
-            Логин.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.Password">
-      <summary>
-            Пароль.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.MarketDataAddress">
-      <summary>
-            Адрес сервера рыночных данных.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.HistoricalDataAddress">
-      <summary>
-            Адрес сервера исторических данных.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.ExecutionAddress">
-      <summary>
-            Адрес сервера исполнения транзакций.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.LogPath">
-      <summary>
-            Путь к директории, где будет создан файл BWOrders.log.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.JoinInProcessors">
-      <summary>
-            Объединять обработчики входящих сообщений для адаптеров.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.IsAdaptersIndependent">
-      <summary>
-            Являются ли подключения адаптеров независимыми друг от друга.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Blackwood.BlackwoodSessionHolder.TimeFrames">
-      <summary>
-            Доступные тайм-фреймы.
-            </summary>
-    </member>
     <member name="T:StockSharp.Blackwood.BlackwoodTrader">
       <summary>
             Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с системой Blackwood (или Fusion) DMA.
@@ -397,20 +369,6 @@
       <summary>
             Создать <see cref="T:StockSharp.Blackwood.BlackwoodTrader" />.
             </summary>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.IsConnectionAlive">
-      <summary>
-            Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="M:StockSharp.BusinessEntities.IConnector.Connect" />.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
-    </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.IsExportAlive">
-      <summary>
-            Проверить, установлено ли еще соединение для экспорта. Проверяется только в том случае, если <see cref="P:StockSharp.Algo.Connector.ExportState" /> равен <see cref="F:StockSharp.BusinessEntities.ConnectionStates.Connected" />.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, false, если торговая система разорвала подключение и экспорт не активен.</returns>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCrossLock">
       <summary>
@@ -462,12 +420,11 @@
             </summary>
       <param name="news">Новость.</param>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.Messages.MessageAdapterTypes,StockSharp.Messages.MessageDirections)">
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.BusinessEntities.MessageDirections)">
       <summary>
             Обработать сообщение, содержащее рыночные данные.
             </summary>
       <param name="message">Сообщение, содержащее рыночные данные.</param>
-      <param name="adapterType">Тип адаптера, от которого пришло сообщение.</param>
       <param name="direction">Направление сообщения.</param>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.Login">

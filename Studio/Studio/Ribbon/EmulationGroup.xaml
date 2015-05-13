@@ -60,7 +60,7 @@
 				<TextBlock Grid.Row="1" Grid.Column="2">
 					<Run Text="{x:Static loc:LocalizedStrings.XamlStr443}"/><Run Text=": "/>
 				</TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding EmulationService.DataErrorCount}"/>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding EmulationService.ErrorCount}"/>
             </Grid>
         </Grid>
     </Grid>

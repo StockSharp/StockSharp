@@ -25,7 +25,7 @@ namespace StockSharp.OpenECry
 
 		private void ProcessPortfolioLookupMessage(PortfolioLookupMessage message)
 		{
-			foreach (var account in SessionHolder.Session.Accounts)
+			foreach (var account in _client.Accounts)
 			{
 				ProcessAccount(account, null);
 
@@ -41,12 +41,12 @@ namespace StockSharp.OpenECry
 
 		private void ProcessOrderRegister(OrderRegisterMessage message)
 		{
-			var draft = SessionHolder.Session.CreateDraft();
+			var draft = _client.CreateDraft();
 
 			draft.Comments = message.Comment;
-			draft.Account = SessionHolder.Session.Accounts[message.PortfolioName];
-			draft.Contract = SessionHolder.Session.Contracts[message.SecurityId.SecurityCode];
-			draft.Route = SessionHolder.Session.Routes[message.SecurityId.BoardCode];
+			draft.Account = _client.Accounts[message.PortfolioName];
+			draft.Contract = _client.Contracts[message.SecurityId.SecurityCode];
+			draft.Route = _client.Routes[message.SecurityId.BoardCode];
 			draft.Side = message.Side.ToOec();
 			draft.Quantity = (int)message.Volume;
 
@@ -119,18 +119,26 @@ namespace StockSharp.OpenECry
 			draft.Start = OEC.API.Version.MinimumStart;
 			draft.End = OEC.API.Version.MaximumEnd;
 
-			if (message.TimeInForce == TimeInForce.MatchOrCancel)
+			switch (message.TimeInForce)
 			{
-				draft.Flags = OrderFlags.FOK; // fill or kill
-			}
-			else if (message.ExpiryDate == DateTimeOffset.MaxValue)
-			{
-				draft.Flags = OrderFlags.GTC; // good till canceled
-			}
-			else if (message.ExpiryDate != DateTime.Today)
-			{
-				if (message.ExpiryDate != null)
-					draft.End = message.ExpiryDate.Value.UtcDateTime;
+				case null:
+				case TimeInForce.PutInQueue:
+				{
+					draft.Flags = OrderFlags.GTC;
+
+					if (message.ExpiryDate != null && message.ExpiryDate != DateTime.Today)
+						draft.End = message.ExpiryDate.Value.UtcDateTime;
+
+					break;
+				}
+				case TimeInForce.MatchOrCancel:
+					draft.Flags = OrderFlags.FOK;
+					break;
+				case TimeInForce.CancelBalance:
+					draft.Flags = OrderFlags.IOC;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 
 			if (message.VisibleVolume != null && message.VisibleVolume < message.Volume)
@@ -138,30 +146,30 @@ namespace StockSharp.OpenECry
 
 			var invalid = draft.GetInvalidParts();
 			if (invalid != OrderParts.None)
-				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid.ToString()));
+				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid));
 
-			var newOrder = SessionHolder.Session.SendOrder(draft);
+			var newOrder = _client.SendOrder(draft);
 			_orderTransactions.Add(newOrder, message.TransactionId);
 			ProcessOrder(newOrder, message.TransactionId);
 		}
 
 		private void ProcessOrderCancel(OrderCancelMessage message)
 		{
-			SessionHolder.Session.CancelOrder(_orderTransactions[message.OrderTransactionId]);
+			_client.CancelOrder(_orderTransactions[message.OrderTransactionId]);
 		}
 
 		private void ProcessOrderReplace(OrderReplaceMessage message)
 		{
-			var draft = SessionHolder.Session.CreateDraft(_orderTransactions[message.OldTransactionId]);
+			var draft = _client.CreateDraft(_orderTransactions[message.OldTransactionId]);
 
 			draft.Price = (double)message.Price;
 			draft.Quantity = (int)message.Volume;
 
 			var invalid = draft.GetInvalidParts();
 			if (invalid != OrderParts.None)
-				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid.ToString()));
+				throw new OpenECryException(LocalizedStrings.Str2556Params.Put(invalid));
 
-			var newOrder = SessionHolder.Session.ModifyOrder(draft);
+			var newOrder = _client.ModifyOrder(draft);
 			_orderTransactions.Add(newOrder, message.TransactionId);
 			ProcessOrder(newOrder, message.TransactionId);
 		}
@@ -181,7 +189,7 @@ namespace StockSharp.OpenECry
 			if (position == null)
 				throw new ArgumentNullException("position");
 
-			SendOutMessage(SessionHolder
+			SendOutMessage(this
 				.CreatePositionChangeMessage(
 					position.Account.Name,
 					new SecurityId
@@ -221,7 +229,7 @@ namespace StockSharp.OpenECry
 				.Where(pos => balance == account.TotalBalance || pos.Contract.Currency.ID == balance.Currency.ID)
 				.Sum(pos => pos.RealizedCommissions.SafeCast() + pos.OpenCommissions.SafeCast());
 
-			var msg = SessionHolder.CreatePortfolioChangeMessage(account.Name)
+			var msg = this.CreatePortfolioChangeMessage(account.Name)
 				.TryAdd(PositionChangeTypes.BeginValue, balance.Cash.SafeCast())
 				.TryAdd(PositionChangeTypes.RealizedPnL, balance.RealizedPnL.SafeCast())
 				.TryAdd(PositionChangeTypes.UnrealizedPnL, balance.OpenPnL.SafeCast())
@@ -306,14 +314,17 @@ namespace StockSharp.OpenECry
 				case OrderFlags.FOK:
 					execMsg.TimeInForce = TimeInForce.MatchOrCancel;
 					break;
-				case OrderFlags.GTC:
-					execMsg.ExpiryDate = DateTimeOffset.MaxValue;
+				case OrderFlags.IOC:
+					execMsg.TimeInForce = TimeInForce.CancelBalance;
 					break;
-				default:
-					if (currVersion.End != OEC.API.Version.MaximumEnd)
-						execMsg.ExpiryDate = currVersion.End;
+				case OrderFlags.GTC:
+					execMsg.TimeInForce = TimeInForce.PutInQueue;
+					//execMsg.ExpiryDate = DateTimeOffset.MaxValue;
 					break;
 			}
+
+			if (currVersion.End != OEC.API.Version.MaximumEnd)
+				execMsg.ExpiryDate = currVersion.End.ApplyTimeZone(TimeHelper.Est);
 
 			if (execMsg.OrderType == OrderTypes.Conditional)
 			{
@@ -585,7 +596,7 @@ namespace StockSharp.OpenECry
 
 		private void ProcessOrderStatusMessage()
 		{
-			foreach (var order in SessionHolder.Session.Orders)
+			foreach (var order in _client.Orders)
 			{
 				var trId = TransactionIdGenerator.GetNextId();
 				_orderTransactions.Add(order, trId);

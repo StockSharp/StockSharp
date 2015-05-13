@@ -55,7 +55,7 @@ namespace StockSharp.Hydra.Oanda
 
 		public OandaTask()
 		{
-			_supportedCandleSeries = OandaSessionHolder.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = OandaMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
@@ -99,7 +99,7 @@ namespace StockSharp.Hydra.Oanda
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<OandaTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<OandaTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new OandaSettings(settings);
 

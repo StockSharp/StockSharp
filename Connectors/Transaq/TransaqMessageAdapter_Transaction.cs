@@ -22,10 +22,10 @@ namespace StockSharp.Transaq
 		{
 			DateTime? expDate;
 
-			if (regMsg.TillDate == DateTimeOffset.MaxValue)
+			if (regMsg.TillDate == null || regMsg.TillDate == DateTimeOffset.MaxValue)
 				expDate = null;
 			else
-				expDate = regMsg.TillDate.ToLocalTime(TimeHelper.Moscow);
+				expDate = regMsg.TillDate.Value.ToLocalTime(TimeHelper.Moscow);
 
 			BaseCommandMessage command;
 
@@ -52,10 +52,10 @@ namespace StockSharp.Transaq
 				}
 				case OrderTypes.Conditional:
 				{
-					if (regMsg.Condition is TransaqAlgoOrderCondition)
-					{
-						var cond = (TransaqAlgoOrderCondition)regMsg.Condition;
+					var cond = (TransaqOrderCondition)regMsg.Condition;
 
+					if (cond.Type == TransaqOrderConditionTypes.Algo)
+					{
 						command = new NewCondOrderMessage
 						{
 							ByMarket = regMsg.OrderType == OrderTypes.Market,
@@ -64,21 +64,19 @@ namespace StockSharp.Transaq
 							BuySell = regMsg.Side.ToTransaq(),
 							Price = regMsg.Price,
 							SecId = (int)regMsg.SecurityId.Native,
-							CondType = cond.Type,
-							CondValue = cond.Value,
-							ValidAfterType = cond.ValidAfterType,
-							ValidAfter = cond.ValidAfter,
-							ValidBeforeType = cond.ValidBeforeType,
-							ValidBefore = cond.ValidBefore,
+							CondType = cond.AlgoType ?? TransaqAlgoOrderConditionTypes.None,
+							CondValue = cond.AlgoValue ?? 0m,
+							ValidAfterType = cond.AlgoValidAfterType ?? TransaqAlgoOrderValidTypes.TillCancelled,
+							ValidAfter = cond.AlgoValidAfter.ToDt(),
+							ValidBeforeType = cond.AlgoValidBeforeType ?? TransaqAlgoOrderValidTypes.TillCancelled,
+							ValidBefore = cond.AlgoValidBefore.ToDt(),
 							ExpDate = expDate,
 							BrokerRef = regMsg.Comment,
 							Hidden = (int)(regMsg.Volume - (regMsg.VisibleVolume ?? regMsg.Volume)),
 						};
 					}
-					else if (regMsg.Condition is TransaqOrderCondition)
+					else// if (regMsg.Condition is TransaqOrderCondition)
 					{
-						var cond = (TransaqOrderCondition)regMsg.Condition;
-
 						if (!cond.CheckConditionUnitType())
 							throw new InvalidOperationException(LocalizedStrings.Str3549);
 
@@ -89,7 +87,7 @@ namespace StockSharp.Transaq
 							BuySell = regMsg.Side.ToTransaq(),
 							LinkedOrderNo = cond.LinkedOrderId.To<string>(),
 							ExpDate = expDate,
-							ValidFor = expDate,
+							ValidFor = expDate == null ? (DateTime?)null : expDate.Value.ToUniversalTime(),
 						};
 
 						switch (cond.Type)
@@ -110,8 +108,8 @@ namespace StockSharp.Transaq
 
 						command = stopOrder;
 					}
-					else
-						throw new InvalidOperationException(LocalizedStrings.Str3550Params.Put(regMsg.Condition, regMsg.TransactionId));
+					//else
+					//	throw new InvalidOperationException(LocalizedStrings.Str3550Params.Put(regMsg.Condition, regMsg.TransactionId));
 
 					break;
 				}
@@ -262,7 +260,7 @@ namespace StockSharp.Transaq
 			if (response.MlIntraDay != null)
 			{
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(response.Id)
 							.Add(PositionChangeTypes.Leverage, response.MlIntraDay.Value));	
 			}
@@ -276,7 +274,7 @@ namespace StockSharp.Transaq
 			if (response.LeverageFact != null)
 			{
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(response.Client)
 							.Add(PositionChangeTypes.Leverage, response.LeverageFact.Value));	
 			}
@@ -296,7 +294,7 @@ namespace StockSharp.Transaq
 				{
 					stockSharpTransactionId = order.TransactionId;
 
-					// если заявка пришла от терминала, то просто номер транзакции ассоциируем как стокшарповский
+					// если заявка пришла от терминала, то просто идентификатор транзакции ассоциируем как стокшарповский
 					_orders.Add(order.TransactionId, order.TransactionId);
 
 					_ordersTypes.Add(order.TransactionId, order is TransaqStopOrder ? OrderTypes.Conditional : OrderTypes.Limit);
@@ -308,7 +306,7 @@ namespace StockSharp.Transaq
 					Side = order.BuySell.FromTransaq(),
 					OriginalTransactionId = stockSharpTransactionId,
 					PortfolioName = order.Client,
-					ExpiryDate = order.ExpDate == null ? DateTimeOffset.MaxValue : order.ExpDate.Value.ApplyTimeZone(TimeHelper.Moscow),
+					ExpiryDate = order.ExpDate == null ? (DateTimeOffset?)null : order.ExpDate.Value.ApplyTimeZone(TimeHelper.Moscow),
 					ExecutionType = ExecutionTypes.Order,
 				};
 
@@ -318,7 +316,7 @@ namespace StockSharp.Transaq
 				{
 					execMsg.OrderId = usualOrder.OrderNo;
 					execMsg.Balance = usualOrder.Balance;
-					execMsg.ServerTime = usualOrder.WithdrawTime ?? usualOrder.Time ?? usualOrder.AcceptTime ?? DateTimeOffset.MinValue;
+					execMsg.ServerTime = (usualOrder.WithdrawTime ?? usualOrder.Time ?? usualOrder.AcceptTime ?? DateTime.MinValue).ToDto();
 					execMsg.Comment = usualOrder.BrokerRef;
 					execMsg.SystemComment = usualOrder.Result;
 					execMsg.Price = usualOrder.Price;
@@ -330,13 +328,13 @@ namespace StockSharp.Transaq
 					{
 						execMsg.OrderType = OrderTypes.Conditional;
 
-						execMsg.Condition = new TransaqAlgoOrderCondition
+						execMsg.Condition = new TransaqOrderCondition
 						{
-							Type = usualOrder.ConditionType,
-							Value = usualOrder.ConditionValue.To<decimal>(),
+							AlgoType = usualOrder.ConditionType,
+							AlgoValue = usualOrder.ConditionValue.To<decimal>(),
 
-							ValidAfter = usualOrder.ValidAfter,
-							ValidBefore = usualOrder.ValidBefore,
+							AlgoValidAfter = usualOrder.ValidAfter.ToDto(),
+							AlgoValidBefore = usualOrder.ValidBefore.ToDto(),
 						};
 					}
 				}
@@ -348,12 +346,12 @@ namespace StockSharp.Transaq
 					execMsg.OrderType = OrderTypes.Conditional;
 					execMsg.ServerTime = stopOrder.AcceptTime == null
 						? DateTimeOffset.MinValue
-						: stopOrder.AcceptTime.Value.ApplyTimeZone(TimeHelper.Moscow);
+						: stopOrder.AcceptTime.Value.ToDto();
 
 					var stopCond = new TransaqOrderCondition
 					{
 						Type = stopOrder.StopLoss != null && stopOrder.TakeProfit != null ? TransaqOrderConditionTypes.TakeProfitStopLoss : (stopOrder.StopLoss != null ? TransaqOrderConditionTypes.StopLoss : TransaqOrderConditionTypes.TakeProfit),
-						ValidFor = stopOrder.ValidBefore,
+						ValidFor = stopOrder.ValidBefore.ToDto(),
 						LinkedOrderId = stopOrder.LinkedOrderNo,
 					};
 
@@ -366,7 +364,7 @@ namespace StockSharp.Transaq
 						//stopCond.StopLossUseCredit = stopOrder.StopLoss.UseCredit.To<bool>();
 						
 						if (stopOrder.StopLoss.GuardTime != null)
-							stopCond.StopLossGuardTime = (int)stopOrder.StopLoss.GuardTime.Value.TimeOfDay.TotalMinutes;
+							stopCond.StopLossProtectionTime = (int)stopOrder.StopLoss.GuardTime.Value.TimeOfDay.TotalMinutes;
 						
 						stopCond.StopLossComment = stopOrder.StopLoss.BrokerRef;
 					}
@@ -379,11 +377,11 @@ namespace StockSharp.Transaq
 						//stopCond.TakeProfitUseCredit = stopOrder.TakeProfit.UseCredit.To<bool>();
 						
 						if (stopOrder.TakeProfit.GuardTime != null)
-							stopCond.TakeProfitGuardTime = (int)stopOrder.TakeProfit.GuardTime.Value.TimeOfDay.TotalMinutes;
+							stopCond.TakeProfitProtectionTime = (int)stopOrder.TakeProfit.GuardTime.Value.TimeOfDay.TotalMinutes;
 						
 						stopCond.TakeProfitComment = stopOrder.TakeProfit.BrokerRef;
 						stopCond.TakeProfitCorrection = stopOrder.TakeProfit.Correction;
-						stopCond.TakeProfitGuardSpread = stopOrder.TakeProfit.GuardSpread;
+						stopCond.TakeProfitProtectionSpread = stopOrder.TakeProfit.GuardSpread;
 					}
 				}
 
@@ -412,7 +410,7 @@ namespace StockSharp.Transaq
 			foreach (var pos in response.MoneyPositions.GroupBy(p => p.Client))
 			{
 				SendOutMessage(
-					SessionHolder.CreatePortfolioChangeMessage(pos.Key)
+					this.CreatePortfolioChangeMessage(pos.Key)
 						.Add(PositionChangeTypes.BeginValue, pos.Sum(p => p.SaldoIn))
 						.Add(PositionChangeTypes.CurrentValue, pos.Sum(p => p.Saldo))
 						.Add(PositionChangeTypes.Commission, pos.Sum(p => p.Commission)));
@@ -426,7 +424,7 @@ namespace StockSharp.Transaq
 						PortfolioName = pos.Client,
 						SecurityId = new SecurityId { Native = pos.SecId },
 						DepoName = pos.Register,
-						ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+						ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 					}
 					.Add(PositionChangeTypes.BeginValue, pos.SaldoIn)
 					.Add(PositionChangeTypes.CurrentValue, pos.Saldo)
@@ -436,7 +434,7 @@ namespace StockSharp.Transaq
 			foreach (var fortsMoney in response.FortsMoneys)
 			{
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(fortsMoney.Client)
 							.Add(PositionChangeTypes.BeginValue, fortsMoney.Free)
 							.Add(PositionChangeTypes.CurrentValue, fortsMoney.Current)
@@ -446,7 +444,7 @@ namespace StockSharp.Transaq
 
 			foreach (var pos in response.FortsPositions)
 			{
-				SendOutMessage(SessionHolder
+				SendOutMessage(this
 					.CreatePositionChangeMessage(pos.Client, new SecurityId { Native = pos.SecId })
 						.Add(PositionChangeTypes.BeginValue, (decimal)pos.StartNet)
 						.Add(PositionChangeTypes.CurrentValue, (decimal)pos.TotalNet)
@@ -475,7 +473,7 @@ namespace StockSharp.Transaq
 					TradeId = trade.TradeNo,
 					TradePrice = trade.Price,
 					Side = trade.BuySell.FromTransaq(),
-					ServerTime = trade.Time,
+					ServerTime = trade.Time.ToDto(),
 					Comment = trade.BrokerRef,
 					Volume = trade.Quantity,
 					PortfolioName = trade.Client,
@@ -488,7 +486,7 @@ namespace StockSharp.Transaq
 		private void OnPortfolioTPlusResponse(PortfolioTPlusResponse response)
 		{
 			SendOutMessage(
-				SessionHolder
+				this
 					.CreatePortfolioChangeMessage(response.Client)
 						.Add(PositionChangeTypes.RealizedPnL, response.PnLIntraday)
 						.Add(PositionChangeTypes.UnrealizedPnL, response.PnLIncome)
@@ -498,7 +496,7 @@ namespace StockSharp.Transaq
 
 			foreach (var security in response.Securities)
 			{
-				SendOutMessage(SessionHolder
+				SendOutMessage(this
 					.CreatePositionChangeMessage(response.Client, new SecurityId { Native = security.SecId })
 						.Add(PositionChangeTypes.CurrentPrice, security.Price)
 						.Add(PositionChangeTypes.CurrentValue, (decimal)security.OpenBalance)

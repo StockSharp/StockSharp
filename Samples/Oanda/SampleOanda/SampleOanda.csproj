@@ -247,7 +247,7 @@
       <Project>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</Project>
       <Name>BusinessEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Connectors\Oanda\Oanda.csproj">
+    <ProjectReference Include="..\..\..\Connectors\Oanda\Oanda.csproj">
       <Project>{9188d051-7faa-4cf7-9d93-6d59e2faedd0}</Project>
       <Name>Oanda</Name>
     </ProjectReference>

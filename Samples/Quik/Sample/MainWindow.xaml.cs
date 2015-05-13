@@ -16,6 +16,7 @@ namespace Sample
 	using StockSharp.BusinessEntities;
 	using StockSharp.Quik;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	public partial class MainWindow
 	{
@@ -28,10 +29,12 @@ namespace Sample
 		private readonly PortfoliosWindow _portfoliosWindow = new PortfoliosWindow();
 		private readonly StopOrderWindow _stopOrderWindow = new StopOrderWindow();
 
+		private readonly LogManager _logManager = new LogManager();
+
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
@@ -42,6 +45,8 @@ namespace Sample
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
 			Path.Text = QuikTerminal.GetDefaultPath();
+
+			_logManager.Listeners.Add(new FileLogListener("quik_logs.txt"));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -130,6 +135,10 @@ namespace Sample
 						}
 						: new QuikTrader(Path.Text) { IsDde = true };
 
+					Trader.LogLevel = LogLevels.Debug;
+
+					_logManager.Sources.Add(Trader);
+
 					// отключение автоматического запроса всех инструментов.
 					Trader.RequestAllSecurities = AllSecurities.IsChecked == true;
 
@@ -141,13 +150,13 @@ namespace Sample
 					Trader.ReConnectionSettings.WorkingTime = ExchangeBoard.Forts.WorkingTime;
 
 					// подписываемся на событие об успешном восстановлении соединения
-					Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+					Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
 					// подписываемся на событие разрыва соединения
 					Trader.ConnectionError += error => this.GuiAsync(() => MessageBox.Show(this, error.ToString()));
 
 					// подписываемся на ошибку обработки данных (транзакций и маркет)
-					//Trader.ProcessDataError += error =>
+					//Trader.Error += error =>
 					//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 					// подписываемся на ошибку подписки маркет-данных
@@ -165,7 +174,6 @@ namespace Sample
 					Trader.StopOrdersCancelFailed += fails => fails.ForEach(fail => this.GuiAsync(() => MessageBox.Show(this, fail.Error.Message, LocalizedStrings.Str2981)));
 					Trader.NewPortfolios += portfolios => _portfoliosWindow.PortfolioGrid.Portfolios.AddRange(portfolios);
 					Trader.NewPositions += positions => _portfoliosWindow.PortfolioGrid.Positions.AddRange(positions);
-					Trader.Connected += Trader.StartExport;
 
 					// устанавливаем поставщик маркет-данных
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;

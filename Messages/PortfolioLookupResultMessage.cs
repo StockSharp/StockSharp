@@ -13,7 +13,7 @@
 	public class PortfolioLookupResultMessage : Message
 	{
 		/// <summary>
-		/// Номер первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
+		/// Идентификатор первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
 		/// для которого данное сообщение является ответом.
 		/// </summary>
 		[DataMember]
@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Message"/>.
+		/// Создать копию объекта <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

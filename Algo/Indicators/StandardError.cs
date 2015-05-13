@@ -23,7 +23,6 @@ namespace StockSharp.Algo.Indicators
 		/// Создать <see cref="StandardError"/>.
 		/// </summary>
 		public StandardError()
-			: base(typeof(decimal))
 		{
 			Length = 10;
 		}

@@ -2,6 +2,7 @@ namespace StockSharp.Quik
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Linq;
 	using System.Threading;
 
@@ -9,6 +10,7 @@ namespace StockSharp.Quik
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Interop.Dde;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
@@ -16,12 +18,17 @@ namespace StockSharp.Quik
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Quik.Xaml;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
 	/// Маркет-дата адаптер сообщений для Quik, работающий через протокол DDE.
 	/// </summary>
 	public class QuikDdeAdapter : QuikMessageAdapter
 	{
+		private const string _ddeCategory = "DDE";
+
 		private readonly SynchronizedDictionary<Tuple<string, string>, SynchronizedDictionary<DdeTableColumn, object>> _prevSecurityChanges = new SynchronizedDictionary<Tuple<string, string>, SynchronizedDictionary<DdeTableColumn, object>>();
 
 		private readonly List<string> _eveningClasses = new List<string>();
@@ -40,22 +47,10 @@ namespace StockSharp.Quik
 				lock (_quikDdeServerLock)
 				{
 					if (_quikDdeServer == null)
-						_quikDdeServer = new XlsDdeServer(SessionHolder.DdeServer, OnPoke, SendOutError);
+						_quikDdeServer = new XlsDdeServer(DdeServer, OnPoke, SendOutError);
 				}
 
 				return _quikDdeServer;
-			}
-		}
-
-		/// <summary>
-		/// Проверить, установлено ли еще соединение.
-		/// </summary>
-		public bool IsConnectionAlive
-		{
-			get
-			{
-				var terminal = SessionHolder.Terminal;
-				return terminal != null && terminal.IsExportStarted;
 			}
 		}
 
@@ -146,9 +141,9 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Создать <see cref="QuikDdeAdapter"/>.
 		/// </summary>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public QuikDdeAdapter(QuikSessionHolder sessionHolder)
-			: base(MessageAdapterTypes.Transaction, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public QuikDdeAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
 			// http://stocksharp.com/forum/yaf_postst1166_Probliema-s-pierienosom-zaiavok-s-viechierniei-siessii.aspx
 			_eveningClasses.Add("FUTEVN");
@@ -161,13 +156,426 @@ namespace StockSharp.Quik
 			if (Interlocked.Increment(ref _counter) > 1)
 				ddeServer += _counter;
 
-			SessionHolder.DdeServer = ddeServer;
-			SessionHolder.DdeServerChanged += SessionHolderOnDdeServerChanged;
+			DdeServer = ddeServer;
+
+			CreateTables();
+
+			this.AddSupportedMessage(MessageTypes.MarketData);
 		}
 
-		private void SessionHolderOnDdeServerChanged()
+		private void CreateTables()
 		{
-			DisposeDdeServer();
+			SecuritiesTable = new DdeTable(DdeTableTypes.Security, "инструменты", "InfoMDITable", new[]
+			{
+				DdeSecurityColumns.Name,
+				DdeSecurityColumns.Code,
+				DdeSecurityColumns.Class,
+				DdeSecurityColumns.Status,
+				DdeSecurityColumns.LotVolume,
+				DdeSecurityColumns.PriceStep
+			});
+
+			SecuritiesChangeTable = new DdeTable(DdeTableTypes.Security, "инструменты (изменения)", "InfoMDIChanges", new[]
+			{
+				DdeSecurityColumns.LastChangeTime,
+				DdeSecurityColumns.Code,
+				DdeSecurityColumns.Class
+			});
+
+			TradesTable = new DdeTable(DdeTableTypes.Trade, "все сделки", "InfoMDIAllTrades", new[]
+			{
+				DdeTradeColumns.Id,
+				DdeTradeColumns.Time,
+				DdeTradeColumns.SecurityCode,
+				DdeTradeColumns.SecurityClass,
+				DdeTradeColumns.Price,
+				DdeTradeColumns.Volume,
+				DdeTradeColumns.OrderDirection,
+				DdeTradeColumns.Date
+			});
+
+			OrdersTable = new DdeTable(DdeTableTypes.Order, "заявки", "InfoMDIOrders", new[]
+			{
+				DdeOrderColumns.Id,
+				DdeOrderColumns.SecurityCode,
+				DdeOrderColumns.SecurityClass,
+				DdeOrderColumns.Price,
+				DdeOrderColumns.Volume,
+				DdeOrderColumns.Balance,
+				DdeOrderColumns.Direction,
+				DdeOrderColumns.State,
+				DdeOrderColumns.Time,
+				DdeOrderColumns.CancelTime,
+				DdeOrderColumns.Account,
+				DdeOrderColumns.Type,
+				DdeOrderColumns.ExpiryDate,
+				DdeOrderColumns.Comment,
+				DdeOrderColumns.TransactionId,
+				DdeOrderColumns.Date,
+				DdeOrderColumns.ClientCode
+			});
+
+			StopOrdersTable = new DdeTable(DdeTableTypes.StopOrder, "стоп-заявки", "InfoMDIStopOrders", new[]
+			{
+				DdeStopOrderColumns.Id,
+				DdeStopOrderColumns.TypeCode,
+				DdeStopOrderColumns.SecurityCode,
+				DdeStopOrderColumns.SecurityClass,
+				DdeStopOrderColumns.Price,
+				DdeStopOrderColumns.Volume,
+				DdeStopOrderColumns.Balance,
+				DdeStopOrderColumns.Direction,
+				DdeStopOrderColumns.Time,
+				DdeStopOrderColumns.State,
+				DdeStopOrderColumns.Account,
+				DdeStopOrderColumns.DerivedOrderId,
+				DdeStopOrderColumns.StopPrice,
+				DdeStopOrderColumns.OtherSecurityCode,
+				DdeStopOrderColumns.OtherSecurityClass,
+				DdeStopOrderColumns.StopPriceCondition,
+				DdeStopOrderColumns.ExpiryDate,
+				DdeStopOrderColumns.LinkedOrderId,
+				DdeStopOrderColumns.LinkedOrderPrice,
+				DdeStopOrderColumns.OffsetValue,
+				DdeStopOrderColumns.OffsetType,
+				DdeStopOrderColumns.SpreadValue,
+				DdeStopOrderColumns.SpreadType,
+				DdeStopOrderColumns.ActiveTime,
+				DdeStopOrderColumns.ActiveFrom,
+				DdeStopOrderColumns.ActiveTo,
+				DdeStopOrderColumns.CancelTime,
+				DdeStopOrderColumns.Comment,
+				DdeStopOrderColumns.StopLimitMarket,
+				DdeStopOrderColumns.StopLimitPrice,
+				DdeStopOrderColumns.StopLimitCondition,
+				DdeStopOrderColumns.TakeProfitMarket,
+				DdeStopOrderColumns.ConditionOrderId,
+				DdeStopOrderColumns.Type,
+				DdeStopOrderColumns.TransactionId,
+				DdeStopOrderColumns.Date,
+				DdeStopOrderColumns.ClientCode,
+				DdeStopOrderColumns.Result
+			});
+
+			MyTradesTable = new DdeTable(DdeTableTypes.MyTrade, "мои сделки", "InfoMDITrades", new[]
+			{
+				DdeMyTradeColumns.Id,
+				DdeMyTradeColumns.Time,
+				DdeMyTradeColumns.SecurityCode,
+				DdeMyTradeColumns.SecurityClass,
+				DdeMyTradeColumns.Price,
+				DdeMyTradeColumns.Volume,
+				DdeMyTradeColumns.OrderId,
+				DdeMyTradeColumns.Date
+			});
+
+			QuotesTable = new DdeTable(DdeTableTypes.Quote, "стакан", "InfoPriceTable", new[]
+			{
+				DdeQuoteColumns.AskVolume,
+				DdeQuoteColumns.Price,
+				DdeQuoteColumns.BidVolume
+			});
+
+			EquityPortfoliosTable = new DdeTable(DdeTableTypes.EquityPortfolio, "портфель по бумагам", "InfoMDIMoneyLimits", new[]
+			{
+			    DdeEquityPortfolioColumns.ClientCode,
+				DdeEquityPortfolioColumns.BeginCurrency,
+				DdeEquityPortfolioColumns.CurrentCurrency,
+				DdeEquityPortfolioColumns.CurrentLeverage,
+				DdeEquityPortfolioColumns.LimitType
+			});
+
+			DerivativePortfoliosTable = new DdeTable(DdeTableTypes.DerivativePortfolio, "портфель по деривативам", "InfoMDIFuturesClientLimits", new[]
+			{
+			    DdeDerivativePortfolioColumns.Account,
+				DdeDerivativePortfolioColumns.CurrentLimitPositionsPrice,
+				DdeDerivativePortfolioColumns.CurrentLimitPositionsOrdersPrice,
+				DdeDerivativePortfolioColumns.Margin,
+				DdeDerivativePortfolioColumns.LimitType
+			});
+
+			EquityPositionsTable = new DdeTable(DdeTableTypes.EquityPosition, "позиции по бумагам", "InfoMDIDepoLimits", new[]
+			{
+				DdeEquityPositionColumns.ClientCode,
+				DdeEquityPositionColumns.Account,
+				DdeEquityPositionColumns.SecurityCode,
+				DdeEquityPositionColumns.BeginPosition,
+				DdeEquityPositionColumns.CurrentPosition,
+				DdeEquityPositionColumns.BlockedPosition,
+				DdeEquityPositionColumns.LimitType
+			});
+
+			DerivativePositionsTable = new DdeTable(DdeTableTypes.DerivativePosition, "позиции по деривативам", "InfoMDIFuturesClientHoldings", new[]
+			{
+				DdeDerivativePositionColumns.Account,
+				DdeDerivativePositionColumns.SecurityCode,
+				DdeDerivativePositionColumns.BeginPosition,
+				DdeDerivativePositionColumns.CurrentPosition,
+				DdeDerivativePositionColumns.CurrentBidsVolume,
+				DdeDerivativePositionColumns.CurrentAsksVolume
+			});
+
+			CurrencyPortfoliosTable = new DdeTable(DdeTableTypes.CurrencyPortfolio, "валюты портфелей", "", new[]
+			{
+			    DdeCurrencyPortfolioColumns.ClientCode,
+				DdeCurrencyPortfolioColumns.FirmId,
+				DdeCurrencyPortfolioColumns.Currency
+			});
+
+			_allTables = new[]
+			{
+				SecuritiesTable,
+				TradesTable,
+				OrdersTable,
+				StopOrdersTable,
+				MyTradesTable,
+				EquityPortfoliosTable,
+				DerivativePortfoliosTable,
+				EquityPositionsTable,
+				DerivativePositionsTable,
+				SecuritiesChangeTable,
+				CurrencyPortfoliosTable
+			};
+		}
+
+		/// <summary>
+		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// </summary>
+		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		public override bool IsConnectionAlive()
+		{
+			return GetTerminal().IsExportStarted;
+		}
+
+		/// <summary>
+		/// Использовать в экспорте таблицу <see cref="CurrencyPortfoliosTable"/>. По-умолчанию не используется.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1783Key)]
+		[DescriptionLoc(LocalizedStrings.Str1784Key)]
+		[PropertyOrder(3)]
+		public bool UseCurrencyPortfolios { get; set; }
+
+		/// <summary>
+		/// Использовать в экспорте таблицу <see cref="SecuritiesChangeTable"/>. По-умолчанию не используется.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1785Key)]
+		[DescriptionLoc(LocalizedStrings.Str1786Key)]
+		[PropertyOrder(4)]
+		public bool UseSecuritiesChange { get; set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Инструменты.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.SecuritiesKey)]
+		[DescriptionLoc(LocalizedStrings.Str1787Key)]
+		[PropertyOrder(5)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable SecuritiesTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Инструменты (изменения).
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1788Key)]
+		[DescriptionLoc(LocalizedStrings.Str1789Key)]
+		[PropertyOrder(6)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable SecuritiesChangeTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Сделки.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str985Key)]
+		[DescriptionLoc(LocalizedStrings.Str1790Key)]
+		[PropertyOrder(7)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable TradesTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Мои Сделки.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1791Key)]
+		[DescriptionLoc(LocalizedStrings.Str1792Key)]
+		[PropertyOrder(8)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable MyTradesTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Заявки.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.OrdersKey)]
+		[DescriptionLoc(LocalizedStrings.Str1793Key)]
+		[PropertyOrder(9)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable OrdersTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Стоп-Заявки.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1351Key)]
+		[DescriptionLoc(LocalizedStrings.Str1794Key)]
+		[PropertyOrder(10)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable StopOrdersTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы со стаканом.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.MarketDepthKey)]
+		[DescriptionLoc(LocalizedStrings.Str1796Key)]
+		[PropertyOrder(11)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable QuotesTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Портфель по бумагам.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1797Key)]
+		[DescriptionLoc(LocalizedStrings.Str1798Key)]
+		[PropertyOrder(12)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable EquityPortfoliosTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Портфель по деривативам.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1799Key)]
+		[DescriptionLoc(LocalizedStrings.Str1800Key)]
+		[PropertyOrder(13)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable DerivativePortfoliosTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Позиции по бумагам.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1801Key)]
+		[DescriptionLoc(LocalizedStrings.Str1802Key)]
+		[PropertyOrder(14)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable EquityPositionsTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Позиции по деривативам.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1803Key)]
+		[DescriptionLoc(LocalizedStrings.Str1804Key)]
+		[PropertyOrder(15)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable DerivativePositionsTable { get; private set; }
+
+		/// <summary>
+		/// Настройки DDE таблицы Валюты портфелей.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1805Key)]
+		[DescriptionLoc(LocalizedStrings.Str1806Key)]
+		[PropertyOrder(16)]
+		[Editor(typeof(DdeTableColumnsEditor), typeof(DdeTableColumnsEditor))]
+		public DdeTable CurrencyPortfoliosTable { get; private set; }
+
+		private string _ddeServer = "STOCKSHARP";
+
+		/// <summary>
+		/// Название DDE сервера. По-умолчанию равно STOCKSHARP.
+		/// </summary>
+		[Category(_ddeCategory)]
+		[DisplayNameLoc(LocalizedStrings.Str1779Key)]
+		[DescriptionLoc(LocalizedStrings.Str1780Key)]
+		[PropertyOrder(1)]
+		public string DdeServer
+		{
+			get { return _ddeServer; }
+			set
+			{
+				if (value.IsEmpty())
+					throw new ArgumentNullException("value");
+
+				if (DdeServer == value)
+					return;
+
+				_ddeServer = value;
+				DisposeDdeServer();
+			}
+		}
+
+		/// <summary>
+		/// Загружать заявки, поданные вручную через Quik.
+		/// </summary>
+		/// <remarks>
+		/// Значение по умолчанию false.
+		/// </remarks>
+		[CategoryLoc(LocalizedStrings.Str1771Key)]
+		[DisplayNameLoc(LocalizedStrings.Str1775Key)]
+		[DescriptionLoc(LocalizedStrings.Str1776Key)]
+		[PropertyOrder(1)]
+		public bool SupportManualOrders { get; set; }
+
+		/// <summary>
+		/// Проверить введенные параметры на валидность.
+		/// </summary>
+		[Browsable(false)]
+		public override bool IsValid
+		{
+			get { return !DdeServer.IsEmpty(); }
+		}
+
+		private DdeTable[] _allTables;
+
+		internal DdeTable[] AllTables
+		{
+			get
+			{
+				if (_allTables == null)
+					throw new InvalidOperationException(LocalizedStrings.Str1817);
+
+				return _allTables;
+			}
+		}
+
+		private IEnumerable<DdeTable> _tables;
+
+		/// <summary>
+		/// Таблицы, для которых будет запущен экспорт данных.
+		/// </summary>
+		public IEnumerable<DdeTable> Tables
+		{
+			get
+			{
+				if (_tables != null)
+					return _tables;
+
+				var except = new List<DdeTable>();
+
+				if (!UseCurrencyPortfolios)
+					except.Add(CurrencyPortfoliosTable);
+
+				if (!UseSecuritiesChange)
+					except.Add(SecuritiesChangeTable);
+
+				return except.Count == 0 ? AllTables : AllTables.Except(except);
+			}
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				if (value.IsEmpty())
+					throw new ArgumentOutOfRangeException("value");
+
+				_tables = value.ToArray();
+			}
 		}
 
 		/// <summary>
@@ -178,38 +586,30 @@ namespace StockSharp.Quik
 		{
 			switch (message.Type)
 			{
-				case MessageTypes.Connect:
+				case MessageTypes.Reset:
 				{
 					_prevSecurityChanges.Clear();
 
+					try
+					{
+						DisposeDdeServer();
+					}
+					catch (Exception ex)
+					{
+						SendOutError(ex);
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
+				case MessageTypes.Connect:
+				{
 					StartDdeServer();
 
 					var terminal = GetTerminal();
-
-					var customTablesMessage = message as CustomExportMessage;
-					if (customTablesMessage != null)
-					{
-						switch (customTablesMessage.ExportType)
-						{
-							case CustomExportType.Table:
-								terminal.StartDde(customTablesMessage.Table);
-								break;
-
-							case CustomExportType.Tables:
-								terminal.StartDde(customTablesMessage.Tables);
-								break;
-
-							case CustomExportType.Caption:
-								terminal.StartDde(customTablesMessage.Caption);
-								break;
-
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-					else
-						terminal.StartDde();
-
+					terminal.StartDde(Tables);
 					SendOutMessage(new ConnectMessage());
 					break;
 				}
@@ -217,31 +617,7 @@ namespace StockSharp.Quik
 				case MessageTypes.Disconnect:
 				{
 					var terminal = GetTerminal();
-
-					var customTablesMessage = message as CustomExportMessage;
-					if (customTablesMessage != null)
-					{
-						switch (customTablesMessage.ExportType)
-						{
-							case CustomExportType.Table:
-								terminal.StopDde(customTablesMessage.Table);
-								break;
-
-							case CustomExportType.Tables:
-								terminal.StopDde(customTablesMessage.Tables);
-								break;
-
-							case CustomExportType.Caption:
-								terminal.StopDde(customTablesMessage.Caption);
-								break;
-
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-					else
-						terminal.StopDde();
-
+					terminal.StopDde(Tables);
 					SendOutMessage(new DisconnectMessage());
 					break;
 				}
@@ -258,22 +634,69 @@ namespace StockSharp.Quik
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			switch (message.DataType)
+			var customTablesMessage = message as CustomExportMessage;
+			if (customTablesMessage != null)
 			{
-				case MarketDataTypes.Level1:
-					SubscribeSecurity(message);
-					break;
+				var terminal = GetTerminal();
 
-				case MarketDataTypes.MarketDepth:
-					SubscribeMarketDepth(message);
-					break;
+				switch (customTablesMessage.ExportType)
+				{
+					case CustomExportType.Table:
+					{
+						if (message.IsSubscribe)
+							terminal.StartDde(customTablesMessage.Table);
+						else
+							terminal.StopDde(customTablesMessage.Table);
 
-				case MarketDataTypes.Trades:
-					SubscribeTrades(message);
-					break;
+						break;
+					}
 
-				default:
-					throw new ArgumentOutOfRangeException("message", message.DataType, LocalizedStrings.Str1618);
+					case CustomExportType.Tables:
+					{
+						if (message.IsSubscribe)
+							terminal.StartDde(customTablesMessage.Tables);
+						else
+							terminal.StopDde(customTablesMessage.Tables);
+
+						break;
+					}
+
+					case CustomExportType.Caption:
+					{
+						if (message.IsSubscribe)
+							terminal.StartDde(customTablesMessage.Caption);
+						else
+							terminal.StopDde(customTablesMessage.Caption);
+
+						break;
+					}
+
+					default:
+						throw new ArgumentOutOfRangeException("message", customTablesMessage.ExportType, LocalizedStrings.Str1618);
+				}
+			}
+			else
+			{
+				switch (message.DataType)
+				{
+					case MarketDataTypes.Level1:
+						SubscribeSecurity(message);
+						break;
+
+					case MarketDataTypes.MarketDepth:
+						SubscribeMarketDepth(message);
+						break;
+
+					case MarketDataTypes.Trades:
+						SubscribeTrades(message);
+						break;
+
+					default:
+					{
+						SendOutMarketDataNotSupported(message.TransactionId);
+						return;
+					}
+				}
 			}
 
 			var result = (MarketDataMessage)message.Clone();
@@ -402,51 +825,51 @@ namespace StockSharp.Quik
 				SendOutError(ex);
 			}
 
-			if (categoryLow.CompareIgnoreCase(SessionHolder.MyTradesTable.Caption))
+			if (categoryLow.CompareIgnoreCase(MyTradesTable.Caption))
 			{
 				DeserializeMyTradesTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.TradesTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(TradesTable.Caption))
 			{
 				DeserializeTradesTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.SecuritiesTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(SecuritiesTable.Caption))
 			{
 				DeserializeSecuritiesTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.OrdersTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(OrdersTable.Caption))
 			{
 				DeserializeOrdersTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.StopOrdersTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(StopOrdersTable.Caption))
 			{
 				DeserializeStopOrdersTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.EquityPortfoliosTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(EquityPortfoliosTable.Caption))
 			{
 				DeserializeEquityPortfoliosTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.DerivativePortfoliosTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(DerivativePortfoliosTable.Caption))
 			{
 				DeserializeDerivativePortfoliosTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.EquityPositionsTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(EquityPositionsTable.Caption))
 			{
 				DeserializeEquityPositionsTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.DerivativePositionsTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(DerivativePositionsTable.Caption))
 			{
 				DeserializeDerivativePositionsTable(rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.CurrencyPortfoliosTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(CurrencyPortfoliosTable.Caption))
 			{
 				DeserializeCurrencyPortfoliosTable(rows);
 			}
-			else if (categoryLow.ContainsIgnoreCase(SessionHolder.QuotesTable.Caption))
+			else if (categoryLow.ContainsIgnoreCase(QuotesTable.Caption))
 			{
 				DeserializeQuotesTable(category, rows, wellKnownDdeData);
 			}
-			else if (categoryLow.CompareIgnoreCase(SessionHolder.SecuritiesChangeTable.Caption))
+			else if (categoryLow.CompareIgnoreCase(SecuritiesChangeTable.Caption))
 			{
 				DeserializeSecuritiesChangeTable(rows);
 			}
@@ -474,7 +897,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeMyTradesTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			SessionHolder.MyTradesTable.Deserialize(rows, (row, func) =>
+			MyTradesTable.Deserialize(rows, (row, func) =>
 			{
 				if (IsEveningClass(func, DdeMyTradeColumns.SecurityClass))
 					return;
@@ -488,7 +911,7 @@ namespace StockSharp.Quik
 						SecurityCode = func.Get<string>(DdeMyTradeColumns.SecurityCode),
 						BoardCode = func.Get<string>(DdeMyTradeColumns.SecurityClass),
 					},
-					ServerTime = func.GetTime(SessionHolder.MyTradesTable, DdeMyTradeColumns.Date, DdeMyTradeColumns.Time, DdeMyTradeColumns.TimeMcs),
+					ServerTime = func.GetTime(MyTradesTable, DdeMyTradeColumns.Date, DdeMyTradeColumns.Time, DdeMyTradeColumns.TimeMcs),
 					OrderId = orderId,
 					TradeId = func.Get<long>(DdeMyTradeColumns.Id),
 					TradePrice = func.Get<decimal>(DdeMyTradeColumns.Price),
@@ -496,7 +919,7 @@ namespace StockSharp.Quik
 					ExecutionType = ExecutionTypes.Trade,
 				};
 
-				ExportExtendedProperties(SessionHolder.MyTradesTable, trade, row, func);
+				ExportExtendedProperties(MyTradesTable, trade, row, func);
 				AddWellKnownDdeData(wellKnownDdeData, trade, row, trade.TradeId);
 
 				SendOutMessage(trade);
@@ -505,9 +928,9 @@ namespace StockSharp.Quik
 
 		private void DeserializeTradesTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			var hasDirection = SessionHolder.TradesTable.Columns.Contains(DdeTradeColumns.OrderDirection);
+			var hasDirection = TradesTable.Columns.Contains(DdeTradeColumns.OrderDirection);
 
-			SessionHolder.TradesTable.Deserialize(rows, (row, func) =>
+			TradesTable.Deserialize(rows, (row, func) =>
 			{
 				if (IsEveningClass(func, DdeTradeColumns.SecurityClass))
 					return;
@@ -519,7 +942,7 @@ namespace StockSharp.Quik
 						SecurityCode = func.Get<string>(DdeTradeColumns.SecurityCode),
 						BoardCode = func.Get<string>(DdeTradeColumns.SecurityClass),
 					},
-					ServerTime = func.GetTime(SessionHolder.TradesTable, DdeTradeColumns.Date, DdeTradeColumns.Time, DdeTradeColumns.TimeMcs),
+					ServerTime = func.GetTime(TradesTable, DdeTradeColumns.Date, DdeTradeColumns.Time, DdeTradeColumns.TimeMcs),
 					TradeId = func.Get<long>(DdeTradeColumns.Id),
 					TradePrice = func.Get<decimal>(DdeTradeColumns.Price),
 					Volume = func.Get<decimal>(DdeTradeColumns.Volume),
@@ -534,7 +957,7 @@ namespace StockSharp.Quik
 						tradeMessage.OriginSide = ((string)value).Substring(0, 1).ToSide();
 				}
 
-				ExportExtendedProperties(SessionHolder.TradesTable, tradeMessage, row, func);
+				ExportExtendedProperties(TradesTable, tradeMessage, row, func);
 				AddWellKnownDdeData(wellKnownDdeData, tradeMessage, row, tradeMessage.OrderId);
 
 				SendOutMessage(tradeMessage);
@@ -563,17 +986,17 @@ namespace StockSharp.Quik
 
 		private void DeserializeSecuritiesTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			SessionHolder.SecuritiesTable.Deserialize(rows, (row, func) =>
+			SecuritiesTable.Deserialize(rows, (row, func) =>
 			{
 				if (IsEveningClass(func, DdeSecurityColumns.Class))
 					return;
 
-				var columns = SessionHolder.SecuritiesTable.Columns;
+				var columns = SecuritiesTable.Columns;
 
 				var code = func.Get<string>(DdeSecurityColumns.Code);
 				var secClass = func.Get<string>(DdeSecurityColumns.Class);
 
-				var info = SessionHolder.GetSecurityClassInfo(secClass);
+				var info = SecurityClassInfo.GetSecurityClassInfo(secClass);
 				var boardCode = info.Item2;
 
 				var secId = new SecurityId
@@ -627,7 +1050,7 @@ namespace StockSharp.Quik
 				if (columns.Contains(DdeSecurityColumns.ISIN))
 					secId.Isin = func.Get<string>(DdeSecurityColumns.ISIN);
 
-				var l1Msg = new Level1ChangeMessage { ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow) };
+				var l1Msg = new Level1ChangeMessage { ServerTime = CurrentTime.Convert(TimeHelper.Moscow) };
 
 				l1Msg.Add(Level1Fields.State, func.GetSecurityState());
 
@@ -729,7 +1152,7 @@ namespace StockSharp.Quik
 				if (columns.Contains(DdeSecurityColumns.AsksVolume))
 					l1Msg.TryAdd(Level1Fields.AsksVolume, func.GetNullable<decimal>(DdeSecurityColumns.AsksVolume));
 
-				ExportExtendedProperties(SessionHolder.SecuritiesTable, sec, row, func);
+				ExportExtendedProperties(SecuritiesTable, sec, row, func);
 				AddWellKnownDdeData(wellKnownDdeData, sec, row, sec.SecurityId);
 
 				sec.SecurityId = l1Msg.SecurityId = secId;
@@ -741,7 +1164,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeOrdersTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			SessionHolder.OrdersTable.Deserialize(rows, (row, func) =>
+			OrdersTable.Deserialize(rows, (row, func) =>
 			{
 				if (IsEveningClass(func, DdeOrderColumns.SecurityClass))
 					return;
@@ -754,7 +1177,7 @@ namespace StockSharp.Quik
 
 				if (transactionId == 0)
 				{
-					if (SessionHolder.SupportManualOrders)
+					if (SupportManualOrders)
 						transactionId = TransactionIdGenerator.GetNextId();
 					else
 						return;
@@ -769,7 +1192,7 @@ namespace StockSharp.Quik
 					},
 
 					OrderId = func.Get<long>(DdeOrderColumns.Id),
-					ServerTime = func.GetTime(SessionHolder.OrdersTable, DdeOrderColumns.Date, DdeOrderColumns.Time, DdeOrderColumns.TimeMcs),
+					ServerTime = func.GetTime(OrdersTable, DdeOrderColumns.Date, DdeOrderColumns.Time, DdeOrderColumns.TimeMcs),
 
 					Price = func.Get<decimal>(DdeOrderColumns.Price),
 					Volume = func.Get<decimal>(DdeOrderColumns.Volume),
@@ -804,7 +1227,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeCurrencyPortfoliosTable(IList<IList<object>> rows)
 		{
-			SessionHolder.CurrencyPortfoliosTable.Deserialize(rows, (row, func) =>
+			CurrencyPortfoliosTable.Deserialize(rows, (row, func) =>
 			{
 				var currency = func.Get<string>(DdeCurrencyPortfolioColumns.Currency).FromMicexCurrencyName();
 
@@ -812,7 +1235,7 @@ namespace StockSharp.Quik
 					return;
 
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(func.Get<string>(DdeCurrencyPortfolioColumns.ClientCode))
 							.Add(PositionChangeTypes.Currency, currency.Value));
 			}, SendOutError, true);
@@ -831,7 +1254,7 @@ namespace StockSharp.Quik
 			//var securityId = new SecurityId(CreateSecurityId(parts[0], parts[1]));
 			var quotes = new List<QuoteChange>();
 
-			SessionHolder.QuotesTable.Deserialize(rows, (row, func) =>
+			QuotesTable.Deserialize(rows, (row, func) =>
 			{
 				var askVolume = func.GetNullable2<decimal>(DdeQuoteColumns.AskVolume);
 				var bidVolume = func.GetNullable2<decimal>(DdeQuoteColumns.BidVolume);
@@ -847,7 +1270,7 @@ namespace StockSharp.Quik
 
 					quotes.Add(quote);
 
-					ExportExtendedProperties(SessionHolder.QuotesTable, quote, row, func);
+					ExportExtendedProperties(QuotesTable, quote, row, func);
 					wellKnownDdeData.Add(quote, row);
 				}
 			}, ex => { throw new InvalidOperationException(LocalizedStrings.Str1726Params.Put(parts[0]), ex); }, false);
@@ -861,15 +1284,15 @@ namespace StockSharp.Quik
 				},
 				Bids = quotes.Where(q => q.Side == Sides.Buy),
 				Asks = quotes.Where(q => q.Side == Sides.Sell),
-				ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+				ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 			});
 		}
 
 		private void DeserializeSecuritiesChangeTable(IList<IList<object>> rows)
 		{
-			SessionHolder.SecuritiesChangeTable.Deserialize(rows, (row, func) =>
+			SecuritiesChangeTable.Deserialize(rows, (row, func) =>
 			{
-				if (IsEveningClass(func, DdeSecurityColumns.Class) || SessionHolder.SecuritiesChangeTable.Columns.NonMandatoryColumns.Count == 0)
+				if (IsEveningClass(func, DdeSecurityColumns.Class) || SecuritiesChangeTable.Columns.NonMandatoryColumns.Count == 0)
 					return;
 
 				var time = func.GetNullable(DdeSecurityColumns.LastChangeTime, DateTime.MinValue);
@@ -879,7 +1302,7 @@ namespace StockSharp.Quik
 				if (time == DateTime.MinValue)
 					return;
 
-				var columns = SessionHolder.SecuritiesChangeTable.Columns.NonMandatoryColumns;
+				var columns = SecuritiesChangeTable.Columns.NonMandatoryColumns;
 
 				var message = new HistoryLevel1ChangeMessage
 				{
@@ -919,7 +1342,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeDerivativePositionsTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			SessionHolder.DerivativePositionsTable.Deserialize(rows, (row, func) =>
+			DerivativePositionsTable.Deserialize(rows, (row, func) =>
 			{
 				var secCode = func.Get<string>(DdeDerivativePositionColumns.SecurityCode);
 
@@ -944,16 +1367,16 @@ namespace StockSharp.Quik
 					SecurityId = new SecurityId { SecurityCode = newSecCode, BoardCode = ExchangeBoard.Forts.Code }
 				};
 
-				ExportExtendedProperties(SessionHolder.DerivativePositionsTable, msg, row, func);
+				ExportExtendedProperties(DerivativePositionsTable, msg, row, func);
 				AddWellKnownDdeData(wellKnownDdeData, msg, row, msg.SecurityId + " " + msg.PortfolioName);
 
-				var changes = SessionHolder.CreatePositionChangeMessage(account, msg.SecurityId);
+				var changes = this.CreatePositionChangeMessage(account, msg.SecurityId);
 
 				changes.Add(PositionChangeTypes.BeginValue, func.Get<decimal>(DdeDerivativePositionColumns.BeginPosition));
 				changes.Add(PositionChangeTypes.CurrentValue, func.Get<decimal>(DdeDerivativePositionColumns.CurrentPosition));
 				changes.Add(PositionChangeTypes.BlockedValue, func.Get<decimal>(DdeDerivativePositionColumns.CurrentBidsVolume) + func.Get<decimal>(DdeDerivativePositionColumns.CurrentAsksVolume));
 
-				if (SessionHolder.DerivativePositionsTable.Columns.Contains(DdeDerivativePositionColumns.EffectivePrice))
+				if (this.DerivativePositionsTable.Columns.Contains(DdeDerivativePositionColumns.EffectivePrice))
 					changes.Add(PositionChangeTypes.AveragePrice, func.Get<decimal>(DdeDerivativePositionColumns.EffectivePrice));
 
 				SendOutMessage(msg);
@@ -963,7 +1386,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeEquityPositionsTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			SessionHolder.EquityPositionsTable.Deserialize(rows, (row, func) =>
+			EquityPositionsTable.Deserialize(rows, (row, func) =>
 			{
 				var secCode = func.Get<string>(DdeEquityPositionColumns.SecurityCode);
 
@@ -974,7 +1397,7 @@ namespace StockSharp.Quik
 				// вначале надо получить портфель, чтобы обновить в случае чего счет ДЕПО у него.
 				// если получать сначала инструменты, то можно получить сообщение об ошибке, и счет ДЕПО не инициализируется
 				SendOutMessage(
-					SessionHolder
+					this
 						.CreatePortfolioChangeMessage(clientCode)
 							.Add(PositionChangeTypes.DepoName, depoName));
 
@@ -986,7 +1409,7 @@ namespace StockSharp.Quik
 					LimitType = func.GetTNLimitType(DdeEquityPositionColumns.LimitType),
 				};
 
-				ExportExtendedProperties(SessionHolder.EquityPositionsTable, position, row, func);
+				ExportExtendedProperties(EquityPositionsTable, position, row, func);
 				AddWellKnownDdeData(wellKnownDdeData, position, row, position.SecurityId + " " + position.PortfolioName + position.LimitType);
 
 				var changes = new PositionChangeMessage
@@ -995,14 +1418,14 @@ namespace StockSharp.Quik
 					SecurityId = position.SecurityId,
 					DepoName = depoName,
 					LimitType = position.LimitType,
-					ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+					ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 				};
 
 				changes.Add(PositionChangeTypes.BeginValue, func.Get<decimal>(DdeEquityPositionColumns.BeginPosition));
 				changes.Add(PositionChangeTypes.CurrentValue, func.Get<decimal>(DdeEquityPositionColumns.CurrentPosition));
 				changes.Add(PositionChangeTypes.BlockedValue, func.Get<decimal>(DdeEquityPositionColumns.BlockedPosition));
 
-				if (SessionHolder.EquityPositionsTable.Columns.Contains(DdeEquityPositionColumns.BuyPrice))
+				if (EquityPositionsTable.Columns.Contains(DdeEquityPositionColumns.BuyPrice))
 					changes.Add(PositionChangeTypes.AveragePrice, func.Get<decimal>(DdeEquityPositionColumns.BuyPrice));
 
 				SendOutMessage(position);
@@ -1012,7 +1435,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeDerivativePortfoliosTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			SessionHolder.DerivativePortfoliosTable.Deserialize(rows, (row, func) =>
+			DerivativePortfoliosTable.Deserialize(rows, (row, func) =>
 			{
 				var type = func.GetLimitType();
 
@@ -1028,17 +1451,17 @@ namespace StockSharp.Quik
 					BoardCode = ExchangeBoard.Forts.Code
 				};
 
-				ExportExtendedProperties(SessionHolder.DerivativePortfoliosTable, msg, row, func);
+				ExportExtendedProperties(DerivativePortfoliosTable, msg, row, func);
 				AddWellKnownDdeData(wellKnownDdeData, msg, row, msg.PortfolioName);
 
-				var portfolioChanges = SessionHolder.CreatePortfolioChangeMessage(account);
+				var portfolioChanges = this.CreatePortfolioChangeMessage(account);
 
 				portfolioChanges.Add(PositionChangeTypes.BeginValue, func.Get<decimal>(DdeDerivativePortfolioColumns.CurrentLimitPositionsPrice));
 				portfolioChanges.Add(PositionChangeTypes.CurrentValue, func.Get<decimal>(DdeDerivativePortfolioColumns.CurrentLimitPositionsOrdersPrice));
 				portfolioChanges.Add(PositionChangeTypes.Leverage, 0m);
 				portfolioChanges.Add(PositionChangeTypes.VariationMargin, margin);
 
-				var columns = SessionHolder.DerivativePortfoliosTable.Columns;
+				var columns = DerivativePortfoliosTable.Columns;
 				if (columns.Contains(DdeDerivativePortfolioColumns.ACI))
 					portfolioChanges.Add(PositionChangeTypes.VariationMargin, margin + func.Get<decimal>(DdeDerivativePortfolioColumns.ACI));
 
@@ -1052,7 +1475,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeEquityPortfoliosTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			var table = SessionHolder.EquityPortfoliosTable;
+			var table = EquityPortfoliosTable;
 
 			table.Deserialize(rows, (row, func) =>
 			{
@@ -1076,7 +1499,7 @@ namespace StockSharp.Quik
 				SendOutMessage(portfolio);
 
 				SendOutMessage(
-					SessionHolder.CreatePortfolioChangeMessage(clientCode)
+					this.CreatePortfolioChangeMessage(clientCode)
 					.Add(PositionChangeTypes.BeginValue, func.Get<decimal>(DdeEquityPortfolioColumns.BeginCurrency))
 					.Add(PositionChangeTypes.CurrentValue, func.Get<decimal>(DdeEquityPortfolioColumns.CurrentCurrency))
 					.Add(PositionChangeTypes.Leverage, func.Get<decimal>(DdeEquityPortfolioColumns.CurrentLeverage)));
@@ -1086,7 +1509,7 @@ namespace StockSharp.Quik
 
 		private void DeserializeStopOrdersTable(IList<IList<object>> rows, Dictionary<object, IList<object>> wellKnownDdeData)
 		{
-			SessionHolder.StopOrdersTable.Deserialize(rows, (row, func) =>
+			StopOrdersTable.Deserialize(rows, (row, func) =>
 			{
 				if (IsEveningClass(func, DdeStopOrderColumns.SecurityClass))
 					return;
@@ -1226,7 +1649,7 @@ namespace StockSharp.Quik
 
 			CheckStopResult(message, func.GetStopResult());
 
-			ExportExtendedProperties(SessionHolder.StopOrdersTable, message, row, func);
+			ExportExtendedProperties(StopOrdersTable, message, row, func);
 		}
 
 		private static void CheckStopResult(ExecutionMessage orderMessage, QuikOrderConditionResults? result)
@@ -1256,7 +1679,7 @@ namespace StockSharp.Quik
 			if (row == null)
 				throw new ArgumentNullException("row");
 
-			var cancelTime = func.GetNullableTime(SessionHolder.OrdersTable, DdeOrderColumns.Date, DdeOrderColumns.CancelTime, DdeOrderColumns.CancelTimeMcs);
+			var cancelTime = func.GetNullableTime(OrdersTable, DdeOrderColumns.Date, DdeOrderColumns.CancelTime, DdeOrderColumns.CancelTimeMcs);
 			if (cancelTime.HasValue)
 				message.ServerTime = cancelTime.Value;
 
@@ -1287,7 +1710,7 @@ namespace StockSharp.Quik
 				}
 			}
 
-			ExportExtendedProperties(SessionHolder.OrdersTable, message, row, func);
+			ExportExtendedProperties(OrdersTable, message, row, func);
 		}
 
 		private static void ExportExtendedProperties(DdeTable table, IExtendableEntity entity, IList<object> row, Func<DdeTableColumn, object> func)
@@ -1320,6 +1743,60 @@ namespace StockSharp.Quik
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Сохранить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Save(SettingsStorage storage)
+		{
+			storage.SetValue("SecuritiesTable", SecuritiesTable);
+			storage.SetValue("TradesTable", TradesTable);
+			storage.SetValue("OrdersTable", OrdersTable);
+			storage.SetValue("StopOrdersTable", StopOrdersTable);
+			storage.SetValue("MyTradesTable", MyTradesTable);
+			storage.SetValue("QuotesTable", QuotesTable);
+			storage.SetValue("EquityPortfoliosTable", EquityPortfoliosTable);
+			storage.SetValue("EquityPositionsTable", EquityPositionsTable);
+			storage.SetValue("DerivativePortfoliosTable", DerivativePortfoliosTable);
+			storage.SetValue("DerivativePositionsTable", DerivativePositionsTable);
+			storage.SetValue("CurrencyPortfoliosTable", CurrencyPortfoliosTable);
+
+			storage.SetValue("UseCurrencyPortfolios", UseCurrencyPortfolios);
+			storage.SetValue("UseSecuritiesChange", UseSecuritiesChange);
+
+			storage.SetValue("DdeServer", DdeServer);
+			storage.SetValue("SupportManualOrders", SupportManualOrders);
+
+			base.Save(storage);
+		}
+
+		/// <summary>
+		/// Загрузить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Load(SettingsStorage storage)
+		{
+			SecuritiesTable = storage.GetValue<DdeTable>("SecuritiesTable");
+			TradesTable = storage.GetValue<DdeTable>("TradesTable");
+			OrdersTable = storage.GetValue<DdeTable>("OrdersTable");
+			StopOrdersTable = storage.GetValue<DdeTable>("StopOrdersTable");
+			MyTradesTable = storage.GetValue<DdeTable>("MyTradesTable");
+			QuotesTable = storage.GetValue<DdeTable>("QuotesTable");
+			EquityPortfoliosTable = storage.GetValue<DdeTable>("EquityPortfoliosTable");
+			EquityPositionsTable = storage.GetValue<DdeTable>("EquityPositionsTable");
+			DerivativePortfoliosTable = storage.GetValue<DdeTable>("DerivativePortfoliosTable");
+			DerivativePositionsTable = storage.GetValue<DdeTable>("DerivativePositionsTable");
+			CurrencyPortfoliosTable = storage.GetValue<DdeTable>("CurrencyPortfoliosTable");
+
+			UseCurrencyPortfolios = storage.GetValue<bool>("UseCurrencyPortfolios");
+			UseSecuritiesChange = storage.GetValue<bool>("UseSecuritiesChange");
+
+			DdeServer = storage.GetValue<string>("DdeServer");
+			SupportManualOrders = storage.GetValue<bool>("SupportManualOrders");
+
+			base.Load(storage);
+		}
 		
 		/// <summary>
 		/// Освободить занятые ресурсы.
@@ -1327,7 +1804,6 @@ namespace StockSharp.Quik
 		protected override void DisposeManaged()
 		{
 			Interlocked.Decrement(ref _counter);
-			SessionHolder.DdeServerChanged -= SessionHolderOnDdeServerChanged;
 
 			try
 			{

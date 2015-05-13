@@ -344,7 +344,9 @@ namespace StockSharp.Algo
 				RepoInfo = order.RepoInfo,
 				RpsInfo = order.RpsInfo,
 				//IsSystem = order.IsSystem,
-				UserOrderId = order.UserOrderId
+				UserOrderId = order.UserOrderId,
+				BrokerCode = order.BrokerCode,
+				ClientCode = order.ClientCode,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);
@@ -373,7 +375,9 @@ namespace StockSharp.Algo
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
 				Volume = order.Balance,
-				UserOrderId = order.UserOrderId
+				UserOrderId = order.UserOrderId,
+				BrokerCode = order.BrokerCode,
+				ClientCode = order.ClientCode,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);
@@ -417,7 +421,10 @@ namespace StockSharp.Algo
 				OldOrderStringId = oldOrder.StringId,
 				OldTransactionId = oldOrder.TransactionId,
 
-				UserOrderId = oldOrder.UserOrderId
+				UserOrderId = oldOrder.UserOrderId,
+
+				BrokerCode = oldOrder.BrokerCode,
+				ClientCode = oldOrder.ClientCode,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg);
@@ -781,6 +788,9 @@ namespace StockSharp.Algo
 					case MessageTypes.QuoteChange:
 						return message.To<QuoteChangeMessage>().ToMarketDepth(_security).To<TEntity>();
 
+					case MessageTypes.News:
+						return message.To<NewsMessage>().ToNews().To<TEntity>();
+
 					default:
 					{
 						var candleMsg = message as CandleMessage;
@@ -977,7 +987,7 @@ namespace StockSharp.Algo
 			if (order == null)
 				throw new ArgumentNullException("order");
 
-			order.Id = message.OrderId ?? 0;
+			order.Id = message.OrderId;
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
@@ -1105,7 +1115,7 @@ namespace StockSharp.Algo
 
 			order.Portfolio = Portfolio.AnonymousPortfolio;
 
-			order.Id = message.OrderId ?? 0;
+			order.Id = message.OrderId;
 			order.StringId = message.OrderStringId;
 			order.TransactionId = message.TransactionId;
 			order.Price = message.Price;
@@ -1156,9 +1166,11 @@ namespace StockSharp.Algo
 				ServerTime = news.ServerTime,
 				Id = news.Id,
 				Story = news.Story,
+				Source = news.Source,
 				Headline = news.Headline,
 				SecurityId = news.Security == null ? (SecurityId?)null : news.Security.ToSecurityId(),
 				BoardCode = news.Board == null ? string.Empty : news.Board.Code,
+				Url = news.Url,
 			};
 		}
 
@@ -1332,6 +1344,10 @@ namespace StockSharp.Algo
 				Headline = message.Headline,
 				Board = message.BoardCode.IsEmpty() ? null : ExchangeBoard.GetOrCreateBoard(message.BoardCode),
 				LocalTime = message.LocalTime,
+				Security = message.SecurityId == null ? null : new Security
+				{
+					Id = message.SecurityId.Value.SecurityCode
+				}
 			};
 		}
 

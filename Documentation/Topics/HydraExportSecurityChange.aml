@@ -4,18 +4,20 @@
     <introduction>
       <para>В появившимся окне выбрать интересуемый диапазон времени, выбрать инструмент и нажать кнопку <mediaLinkInline><image xlink:href="hydra_find" /></mediaLinkInline>:</para>
       <mediaLink>
-        <image placement="center" xlink:href="hydra_export_security_change" />
+        <image placement="center" xlink:href="hydra_export_level1" />
       </mediaLink>
       <para>
-      	Также можно выбрать какие именно типы изменений должны экспортироваться. Для этого надо нажать на кнопку "Доступные типы изменений" и в выпадающем окне выбрать нужные:
+      	Также можно выбрать какие именно типы изменений должны экспортироваться. Это делается при помощи раскрывающегося списка, показанного ниже:
       </para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_export_security_change_selected" />
-      </mediaLink>      
-      <para>
-			Найденные изменения можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Последний формат конфигурируется через файл 
-			<legacyItalic>txt_export_securitychanges.st</legacyItalic>. Данный файл с помощью специального преобразования трансформирует сделки в txt формат.
-		</para>
+      </mediaLink>
+      
+    <para>Найденные изменения можно экспортировать в форматы <token>excel</token>, xml, sql, bin или txt. Это делается при помощи раскрывающегося списка:</para>
+    	<mediaLink>
+    		<image placement="center" xlink:href="hydra_export" />
+    	</mediaLink>
+      
     </introduction>
   </developerWalkthroughDocument>
 </topic>

@@ -43,6 +43,14 @@
 		}
 
 		/// <summary>
+		/// Тип маркет-данных.
+		/// </summary>
+		public override MarketDataTypes DataType
+		{
+			get { return MarketDataTypes.OrderLog; }
+		}
+
+		/// <summary>
 		/// Генератор тиковых сделок случайным методом.
 		/// </summary>
 		public TradeGenerator TradeGenerator { get; private set; }
@@ -50,7 +58,7 @@
 		private IdGenerator _idGenerator;
 
 		/// <summary>
-		/// Генератор номера заявки <see cref="Order.Id"/>.
+		/// Генератор идентификатора заявки <see cref="Order.Id"/>.
 		/// </summary>
 		public IdGenerator IdGenerator
 		{

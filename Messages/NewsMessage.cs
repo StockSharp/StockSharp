@@ -16,7 +16,7 @@ namespace StockSharp.Messages
 	public class NewsMessage : Message
 	{
 		/// <summary>
-		/// Номер новости.
+		/// Идентификатор новости.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.IdKey)]

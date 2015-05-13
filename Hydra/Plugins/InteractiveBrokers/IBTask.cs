@@ -105,13 +105,13 @@ namespace StockSharp.Hydra.InteractiveBrokers
 			get { return _supportedCandleSeries; }
 		}
 
-		protected override MarketDataConnector<IBTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<IBTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new IBSettings(settings);
 
 			if (settings.IsDefault)
 			{
-				_settings.Address = InteractiveBrokersSessionHolder.DefaultAddress;
+				_settings.Address = InteractiveBrokersMessageAdapter.DefaultAddress;
 				_settings.IsDownloadNews = true;
 				_settings.ClientId = 0;
 				_settings.ServerLogLevel = ServerLogLevels.System;

@@ -24,7 +24,7 @@ namespace StockSharp.Hydra.Core
 	/// </summary>
 	/// <typeparam name="TConnector">Тип подключения.</typeparam>
 	public class MarketDataConnector<TConnector> : Disposable, ISecurityDownloader
-		where TConnector : class, IConnector
+		where TConnector : Connector
 	{
 		private sealed class MarketDataEntityFactory : Algo.EntityFactory
 		{
@@ -129,11 +129,9 @@ namespace StockSharp.Hydra.Core
 		{
 			_connector.DoIf<IConnector, Connector>(bt => bt.EntityFactory = new MarketDataEntityFactory(_securityProvider));
 
-			_connector.ProcessDataError += OnError;
+			_connector.Error += OnError;
 			_connector.Connected += OnConnected;
 			_connector.ConnectionError += OnConnectionError;
-			_connector.ExportStarted += OnExportStarted;
-			_connector.ExportError += OnExportError;
 			_connector.NewTrades += OnNewTrades;
 			_connector.MarketDepthsChanged += OnMarketDepthsChanged;
 			_connector.NewOrderLogItems += OnNewOrderLogItems;
@@ -166,11 +164,9 @@ namespace StockSharp.Hydra.Core
 			if (source != null)
 				source.NewCandles -= OnNewCandles;
 
-			_connector.ProcessDataError -= OnError;
+			_connector.Error -= OnError;
 			_connector.Connected -= OnConnected;
 			_connector.ConnectionError -= OnConnectionError;
-			_connector.ExportStarted -= OnExportStarted;
-			_connector.ExportError -= OnExportError;
 			_connector.NewTrades -= OnNewTrades;
 			_connector.MarketDepthsChanged -= OnMarketDepthsChanged;
 			_connector.NewOrderLogItems -= OnNewOrderLogItems;
@@ -200,9 +196,14 @@ namespace StockSharp.Hydra.Core
 		public Exception LastError { get; set; }
 
 		/// <summary>
-		/// Событие запуска экспорта маркет-данных. Вызвается только после первого запуска экспорта.
+		/// Событие успешного подключения.
 		/// </summary>
-		public event Action ExportStarted;
+		public event Action Connected;
+
+		/// <summary>
+		/// Событие ошибки подключения.
+		/// </summary>
+		public event Action ConnectionError;
 
 		/// <summary>
 		/// Получить накопленные стаканы.
@@ -286,18 +287,13 @@ namespace StockSharp.Hydra.Core
 
 		private void OnConnected()
 		{
-			Connector.StartExport();
-		}
-
-		private void OnExportStarted()
-		{
 			if (_criteria == null)
 			{
 				if (_exportStarted)
 					return;
 
 				_exportStarted = true;
-				ExportStarted.SafeInvoke();
+				Connected.SafeInvoke();
 
 				var connectorSettings = _task.Settings as ConnectorHydraTaskSettings;
 
@@ -312,16 +308,13 @@ namespace StockSharp.Hydra.Core
 			}
 		}
 
-		private void OnExportError(Exception error)
-		{
-			OnConnectionError(error);
-		}
-
 		private void OnConnectionError(Exception error)
 		{
 			Stop();
 
 			_task.AddErrorLog(error);
+
+			ConnectionError.SafeInvoke();
 		}
 
 		private void OnNewTrades(IEnumerable<Trade> trades)
@@ -476,6 +469,14 @@ namespace StockSharp.Hydra.Core
 		{
 			Connector = _createConnector();
 
+			if (!_task.IsExecLogEnabled() && Connector.TransactionAdapter != null)
+			{
+				if (Connector.TransactionAdapter != Connector.MarketDataAdapter)
+					Connector.Adapter.InnerAdapters.Remove(Connector.TransactionAdapter);
+				else
+					Connector.TransactionAdapter.RemoveTransactionalSupport();
+			}
+
 			Connector.DoIf<IConnector, Connector>(t =>
 			{
 				var connectorSettings = _task.Settings as ConnectorHydraTaskSettings;
@@ -484,11 +485,8 @@ namespace StockSharp.Hydra.Core
 
 				if (connectorSettings == null)
 				{
-					settings.ConnectionSettings.AttemptCount = -1;
-					settings.ConnectionSettings.ReAttemptCount = -1;
-
-					settings.ExportSettings.AttemptCount = -1;
-					settings.ExportSettings.ReAttemptCount = -1;
+					settings.AttemptCount = -1;
+					settings.ReAttemptCount = -1;
 				}
 				else
 				{

@@ -22,7 +22,7 @@ namespace StockSharp.Quik.Lua
 		public MessageTypes MessageType { get; set; }
 
 		/// <summary>
-		/// Номер транзакции.
+		/// Идентификатор транзакции.
 		/// </summary>
 		public long TransactionId { get; set; }
 

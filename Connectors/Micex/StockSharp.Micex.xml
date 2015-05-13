@@ -29,18 +29,24 @@
             Адаптер сообщений для Micex Bridge.
             </summary>
     </member>
-    <member name="M:StockSharp.Micex.MicexMessageAdapter.#ctor(StockSharp.Messages.MessageAdapterTypes,StockSharp.Micex.MicexSessionHolder)">
+    <member name="M:StockSharp.Micex.MicexMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
             Создать <see cref="T:StockSharp.Micex.MicexMessageAdapter" />.
             </summary>
-      <param name="type">Тип адаптера.</param>
-      <param name="sessionHolder">Контейнер для сессии.</param>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
     </member>
-    <member name="M:StockSharp.Micex.MicexMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+    <member name="M:StockSharp.Micex.MicexMessageAdapter.IsConnectionAlive">
       <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
+            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
             </summary>
-      <param name="message">Сообщение.</param>
+      <returns>
+        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
+    </member>
+    <member name="M:StockSharp.Micex.MicexMessageAdapter.CreateOrderCondition">
+      <summary>
+            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
+            </summary>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
     </member>
     <member name="M:StockSharp.Micex.MicexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
@@ -48,9 +54,131 @@
             </summary>
       <param name="message">Сообщение.</param>
     </member>
-    <member name="P:StockSharp.Micex.MicexMessageAdapter.CanSendTimeMessage">
+    <member name="M:StockSharp.Micex.MicexMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Нужно ли отправлять в адаптер сообщение типа <see cref="T:StockSharp.Messages.TimeMessage" />.
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Micex.MicexMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Micex.MicexMessageAdapter.ToString">
+      <summary>
+            Получить строковое представление контейнера.
+            </summary>
+      <returns>Строковое представление.</returns>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportNativePortfolioLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск портфелей.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsSupportNativeSecurityLookup">
+      <summary>
+            Поддерживается ли торговой системой поиск инструментов.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.DllPath">
+      <summary>
+            Путь к файлу mtesrl.dll.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.ConnectionType">
+      <summary>
+            Тип подключения.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Addresses">
+      <summary>
+            Список адресов и портов серверов доступа.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Server">
+      <summary>
+            Идентификатор сервера доступа, например “EQ_TEST”.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Interface">
+      <summary>
+            Идентификатор интерфейса торговой системы ММВБ.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Login">
+      <summary>
+            Идентификатор пользователя в торговой системе ММВБ.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Password">
+      <summary>
+            Пароль пользователя в торговой системе ММВБ.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.MicexLogLevel">
+      <summary>
+            Строка в формате “N,M”, где первое число N – уровень логирования вызовов API MTESRL.
+            Второе число M – уровень сбора статистики по соединению.
+            Максимальный уровень логирования равен "5,2". Минимальный (выключен) "0,0".
+            По-умолчанию значение равно null.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.CompressionLevel">
+      <summary>
+            Параметр компрессии данных. По-умолчанию равен <see cref="F:StockSharp.Micex.CompressionLevels.BZip" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.ClientCode">
+      <summary>
+            Код клиента, присвоенный брокером.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Boards">
+      <summary>
+            Список площадок, с которыми будет вестись работа.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Service">
+      <summary>
+            Имя сервиса торговой системы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.Language">
+      <summary>
+            Язык для сообщений об ошибках. Допустимые значения: “English”, “Russian”, “Ukrainian”.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.PreferredAddress">
+      <summary>
+            Адрес предпочитаемого сервера доступа.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.CommentField">
+      <summary>
+            Поле, в которое нужно записывать пользовательский комментарий транзакции.
+            По-умолчанию равно <see cref="F:StockSharp.Micex.MicexCommentFields.BrokerRef" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.OrderBookDepth">
+      <summary>
+            Запрашиваемое количество лучших котировок на покупку/продажу по инструменту. Для получения всех котировок значение не указывается.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.RequestAllDepths">
+      <summary>
+            Запрашиваемое стаканы по всем инструментам.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.MicexMessageAdapter.IsValid">
+      <summary>
+            Проверить введенные параметры на валидность.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.ConnectionTypes">
@@ -106,147 +234,6 @@
     <member name="F:StockSharp.Micex.MicexCommentFields.ExtRef">
       <summary>
             Код внешнего пользователя.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Micex.MicexSessionHolder">
-      <summary>
-            Контейнер для сессии.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Micex.MicexSessionHolder.CreateTransactionAdapter">
-      <summary>
-            Создать транзакционный адаптер.
-            </summary>
-      <returns>Транзакционный адаптер.</returns>
-    </member>
-    <member name="M:StockSharp.Micex.MicexSessionHolder.CreateMarketDataAdapter">
-      <summary>
-            Создать адаптер маркет-данных.
-            </summary>
-      <returns>Адаптер маркет-данных.</returns>
-    </member>
-    <member name="M:StockSharp.Micex.MicexSessionHolder.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Создать <see cref="T:StockSharp.Micex.MicexSessionHolder" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.Micex.MicexSessionHolder.CreateOrderCondition">
-      <summary>
-            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
-            </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
-    </member>
-    <member name="M:StockSharp.Micex.MicexSessionHolder.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Micex.MicexSessionHolder.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Micex.MicexSessionHolder.ToString">
-      <summary>
-            Получить строковое представление контейнера.
-            </summary>
-      <returns>Строковое представление.</returns>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.DllPath">
-      <summary>
-            Путь к файлу mtesrl.dll.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.ConnectionType">
-      <summary>
-            Тип подключения.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Addresses">
-      <summary>
-            Список адресов и портов серверов доступа.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Server">
-      <summary>
-            Идентификатор сервера доступа, например “EQ_TEST”.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Interface">
-      <summary>
-            Идентификатор интерфейса торговой системы ММВБ.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Login">
-      <summary>
-            Идентификатор пользователя в торговой системе ММВБ.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Password">
-      <summary>
-            Пароль пользователя в торговой системе ММВБ.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.MicexLogLevel">
-      <summary>
-            Строка в формате “N,M”, где первое число N – уровень логирования вызовов API MTESRL.
-            Второе число M – уровень сбора статистики по соединению.
-            Максимальный уровень логирования равен "5,2". Минимальный (выключен) "0,0".
-            По-умолчанию значение равно null.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.CompressionLevel">
-      <summary>
-            Параметр компрессии данных. По-умолчанию равен <see cref="F:StockSharp.Micex.CompressionLevels.BZip" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.ClientCode">
-      <summary>
-            Код клиента, присвоенный брокером.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Boards">
-      <summary>
-            Список площадок, с которыми будет вестись работа.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Service">
-      <summary>
-            Имя сервиса торговой системы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.Language">
-      <summary>
-            Язык для сообщений об ошибках. Допустимые значения: “English”, “Russian”, “Ukrainian”.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.PreferredAddress">
-      <summary>
-            Адрес предпочитаемого сервера доступа.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.CommentField">
-      <summary>
-            Поле, в которое нужно записывать пользовательский комментарий транзакции.
-            По-умолчанию равно <see cref="F:StockSharp.Micex.MicexCommentFields.BrokerRef" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.OrderBookDepth">
-      <summary>
-            Запрашиваемое количество лучших котировок на покупку/продажу по инструменту. Для получения всех котировок значение не указывается.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.RequestAllDepths">
-      <summary>
-            Запрашиваемое стаканы по всем инструментам.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Micex.MicexSessionHolder.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
             </summary>
     </member>
     <member name="T:StockSharp.Micex.Native.ApiErrorCodes">
@@ -3483,20 +3470,6 @@
             Создать <see cref="T:StockSharp.Micex.MicexTrader" />.
             </summary>
     </member>
-    <member name="M:StockSharp.Micex.MicexTrader.IsConnectionAlive">
-      <summary>
-            Проверить, установлено ли еще соединение. Проверяется только в том случае, если был вызван метод <see cref="M:StockSharp.BusinessEntities.IConnector.Connect" />.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, false, если торговая система разорвала подключение.</returns>
-    </member>
-    <member name="M:StockSharp.Micex.MicexTrader.IsExportAlive">
-      <summary>
-            Проверить, установлено ли еще соединение для экспорта. Проверяется только в том случае, если <see cref="P:StockSharp.Algo.Connector.ExportState" /> равен <see cref="F:StockSharp.BusinessEntities.ConnectionStates.Connected" />.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, false, если торговая система разорвала подключение и экспорт не активен.</returns>
-    </member>
     <member name="P:StockSharp.Micex.MicexTrader.NativeClient">
       <summary>
             Клиент для прямого доступа к API. Инициализируется после подключения.
@@ -3592,6 +3565,11 @@
             Запрашиваемое стаканы по всем инструментам.
             </summary>
     </member>
+    <member name="P:StockSharp.Micex.MicexTrader.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+            </summary>
+    </member>
     <member name="T:StockSharp.Micex.Native.MicexPtrReader">
       <summary>
             Читательн данных из указателя на неуправляемую память.
@@ -3644,11 +3622,12 @@
             Клиент для прямого доступа к API.
             </summary>
     </member>
-    <member name="M:StockSharp.Micex.Native.MicexClient.#ctor(System.String,StockSharp.Micex.ConnectionTypes,System.Collections.Generic.IEnumerable{System.Net.EndPoint},System.Net.EndPoint,System.String,System.String,System.Security.SecureString,System.String,System.String,StockSharp.Micex.CompressionLevels,System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
+    <member name="M:StockSharp.Micex.Native.MicexClient.#ctor(System.String,System.Boolean,StockSharp.Micex.ConnectionTypes,System.Collections.Generic.IEnumerable{System.Net.EndPoint},System.Net.EndPoint,System.String,System.String,System.Security.SecureString,System.String,System.String,StockSharp.Micex.CompressionLevels,System.Collections.Generic.IEnumerable{System.String},System.String,System.String)">
       <summary>
             Создать <see cref="T:StockSharp.Micex.Native.MicexClient" />.
             </summary>
       <param name="dllPath">Путь к библиотеке.</param>
+      <param name="overrideDll">Перезаписать файл библиотеки из ресурсов.</param>
       <param name="connectionType">Тип подключения.</param>
       <param name="addresses">писок адресов и портов серверов доступа.</param>
       <param name="preferredAddress">Адрес предпочитаемого сервера доступа.</param>
@@ -5079,6 +5058,11 @@
     <member name="P:StockSharp.Micex.Native.MicexClient.DllPath">
       <summary>
             Путь к библиотеке.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Micex.Native.MicexClient.OverrideDll">
+      <summary>
+            Перезаписать файл библиотеки из ресурсов.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.Native.MicexClient.ConnectionType">

@@ -1,6 +1,5 @@
 namespace StockSharp.Btce
 {
-	using System;
 	using System.Linq;
 
 	using Ecng.Collections;
@@ -8,7 +7,6 @@ namespace StockSharp.Btce
 
 	using StockSharp.Algo;
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 
 	partial class BtceMessageAdapter
 	{
@@ -20,7 +18,7 @@ namespace StockSharp.Btce
 
 		private void ProcessSecurityLookup(SecurityLookupMessage lookupMsg)
 		{
-			var reply = Session.GetInstruments();
+			var reply = _client.GetInstruments();
 
 			foreach (var info in reply.Items.Values)
 			{
@@ -38,6 +36,9 @@ namespace StockSharp.Btce
 				// NOTE сейчас BTCE транслирует для данного тикера
 				// кол-во знаков после запятой 2, но цены содержат 5 знаков
 				if (secId.SecurityCode.CompareIgnoreCase("btc/cnh"))
+					info.DecimalDigits = 5;
+
+				if (secId.SecurityCode.CompareIgnoreCase("btc/usd"))
 					info.DecimalDigits = 5;
 				
 				SendOutMessage(new SecurityMessage
@@ -94,7 +95,10 @@ namespace StockSharp.Btce
 					break;
 				}
 				default:
-					throw new ArgumentOutOfRangeException("mdMsg", mdMsg.DataType, LocalizedStrings.Str1618);
+				{
+					SendOutMarketDataNotSupported(mdMsg.TransactionId);
+					return;
+				}
 			}
 
 			var reply = (MarketDataMessage)mdMsg.Clone();
@@ -106,7 +110,7 @@ namespace StockSharp.Btce
 		{
 			if (_subscribedLevel1.Count > 0)
 			{
-				var tickerReply = Session.GetTickers(_subscribedLevel1.Cache.Select(id => id.SecurityCode.ToBtceCode()));
+				var tickerReply = _client.GetTickers(_subscribedLevel1.Cache.Select(id => id.SecurityCode.ToBtceCode()));
 
 				foreach (var ticker in tickerReply.Items.Values)
 				{
@@ -138,7 +142,7 @@ namespace StockSharp.Btce
 			{
 				foreach (var group in _subscribedDepths.CachedPairs.GroupBy(p => p.Value))
 				{
-					var depthReply = Session.GetDepths(group.Key, group.Select(p => p.Key).Select(id => id.SecurityCode.ToBtceCode()));
+					var depthReply = _client.GetDepths(group.Key, group.Select(p => p.Key).Select(id => id.SecurityCode.ToBtceCode()));
 
 					foreach (var pair in depthReply.Items)
 					{
@@ -151,7 +155,7 @@ namespace StockSharp.Btce
 							},
 							Bids = pair.Value.Bids.Select(vp => vp.ToStockSharp(Sides.Buy)).ToArray(),
 							Asks = pair.Value.Asks.Select(vp => vp.ToStockSharp(Sides.Sell)).ToArray(),
-							ServerTime = SessionHolder.CurrentTime.Convert(TimeHelper.Moscow),
+							ServerTime = CurrentTime.Convert(TimeHelper.Moscow),
 						});
 					}
 				}
@@ -159,7 +163,7 @@ namespace StockSharp.Btce
 
 			if (_subscribedTicks.Count > 0)
 			{
-				var tradeReply = Session.GetTrades(_tickCount, _subscribedTicks.Cache.Select(id => id.SecurityCode.ToBtceCode()));
+				var tradeReply = _client.GetTrades(_tickCount, _subscribedTicks.Cache.Select(id => id.SecurityCode.ToBtceCode()));
 
 				// меняем на глубину 50
 				_tickCount = 50;

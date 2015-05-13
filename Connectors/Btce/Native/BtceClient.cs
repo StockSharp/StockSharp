@@ -15,7 +15,6 @@ namespace StockSharp.Btce.Native
 	using Ecng.Common;
 
 	using StockSharp.Logging;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -56,6 +55,8 @@ namespace StockSharp.Btce.Native
 			// если никто не менял, то установим в наше значение
 			//if (ServicePointManager.DefaultConnectionLimit == ServicePointManager.DefaultPersistentConnectionLimit)
 			//	ServicePointManager.DefaultConnectionLimit = 7;
+
+			_nonce = (int)(DateTime.UtcNow - TimeHelper.GregorianStart).TotalSeconds;
 		}
 
 		// после обфускации название типа нечитаемо
@@ -86,12 +87,12 @@ namespace StockSharp.Btce.Native
 
 		// проверил, BTCE значения больше 4294967295 не принимает
 		// если равен -1, значит еще не запрашивали у биржи
-		private long _nonce = -1;
+		private long _nonce;
 
 		// отдает следующий nonce
 		private long NextNonce()
 		{
-			return (uint)Interlocked.Add(ref _nonce, 1);
+			return (uint)Interlocked.Increment(ref _nonce);
 		}
 
 		private long _nonceProblems;
@@ -170,7 +171,7 @@ namespace StockSharp.Btce.Native
 		/// <summary>
 		/// Возвращает свои сделки на счете месяц по всем инструментам c определенной даты.
 		/// </summary>
-		/// <param name="fromId">Номер сделки, с которой нужны новые сделки.</param>
+		/// <param name="fromId">Идентификатор сделки, с которой нужны новые сделки.</param>
 		public MyTradesReply GetMyTrades(long fromId)
 		{
 			//var unixtime = (long)(since - Converter.GregorianStart).TotalSeconds;

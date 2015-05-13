@@ -2,14 +2,16 @@ namespace StockSharp.Hydra.Btce
 {
 	using System;
 	using System.ComponentModel;
+	using System.Security;
 
+	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
 	using StockSharp.Btce;
-	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -26,6 +28,34 @@ namespace StockSharp.Hydra.Btce
 			public BtceSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("Key", new SecureString());
+				ExtensionInfo.TryAdd("Secret", new SecureString());
+			}
+
+			/// <summary>
+			/// Ключ.
+			/// </summary>
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str3304Key)]
+			[DescriptionLoc(LocalizedStrings.Str3304Key, true)]
+			[PropertyOrder(1)]
+			public SecureString Key
+			{
+				get { return (SecureString)ExtensionInfo["Key"]; }
+				set { ExtensionInfo["Key"] = value; }
+			}
+
+			/// <summary>
+			/// Секрет.
+			/// </summary>
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.Str3306Key)]
+			[DescriptionLoc(LocalizedStrings.Str3307Key)]
+			[PropertyOrder(2)]
+			public SecureString Secret
+			{
+				get { return (SecureString)ExtensionInfo["Secret"]; }
+				set { ExtensionInfo["Secret"] = value; }
 			}
 		}
 
@@ -46,13 +76,28 @@ namespace StockSharp.Hydra.Btce
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<BtceTrader> CreateTrader(HydraTaskSettings settings)
+		protected override MarketDataConnector<BtceTrader> CreateConnector(HydraTaskSettings settings)
 		{
 			_settings = new BtceSettings(settings);
 
-			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, () => new BtceTrader
+			if (_settings.IsDefault)
 			{
-				TransactionAdapter = new PassThroughMessageAdapter(new PassThroughSessionHolder(new IncrementalIdGenerator()))
+				_settings.Key = new SecureString();
+				_settings.Secret = new SecureString();
+			}
+
+			return new MarketDataConnector<BtceTrader>(EntityRegistry.Securities, this, () =>
+			{
+				var trader = new BtceTrader
+				{
+					Key = _settings.Key.To<string>(),
+					Secret = _settings.Secret.To<string>(),
+				};
+
+				if (trader.Key.IsEmpty())
+					trader.TransactionAdapter.RemoveTransactionalSupport();
+
+				return trader;
 			});
 		}
 	}

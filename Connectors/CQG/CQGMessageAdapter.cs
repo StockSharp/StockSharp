@@ -13,103 +13,33 @@ namespace StockSharp.CQG
 	/// <summary>
 	/// Адаптер сообщений для CQG.
 	/// </summary>
-	public partial class CQGMessageAdapter : MessageAdapter<CQGSessionHolder>
+	public partial class CQGMessageAdapter : MessageAdapter
 	{
 		private readonly SynchronizedDictionary<long, CQGOrder> _orders = new SynchronizedDictionary<long, CQGOrder>();
 		private readonly SynchronizedDictionary<string, CQGAccount> _accounts = new SynchronizedDictionary<string, CQGAccount>();
-		private bool _isSessionOwner;
+		private readonly SynchronizedDictionary<string, CQGInstrument> _instruments = new SynchronizedDictionary<string, CQGInstrument>();
+		private CQGCEL _session;
 
 		/// <summary>
 		/// Создать <see cref="CQGMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		public CQGMessageAdapter(MessageAdapterTypes type, CQGSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		public CQGMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
-			SessionHolder.Initialize += OnSessionInitialize;
-			SessionHolder.UnInitialize += OnSessionUnInitialize;
+			CreateAssociatedSecurity = true;
+
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		protected override void DisposeManaged()
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public override OrderCondition CreateOrderCondition()
 		{
-			base.DisposeManaged();
-
-			SessionHolder.Initialize -= OnSessionInitialize;
-			SessionHolder.UnInitialize -= OnSessionUnInitialize;
-		}
-
-		private void OnSessionInitialize()
-		{
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					SessionHolder.Session.AccountChanged += SessionOnAccountChanged;
-					SessionHolder.Session.AlgorithmicOrderPlaced += SessionOnAlgorithmicOrderPlaced;
-					SessionHolder.Session.AlgorithmicOrderRegistrationComplete += SessionOnAlgorithmicOrderRegistrationComplete;
-					SessionHolder.Session.OrderChanged += SessionOnOrderChanged;
-					SessionHolder.Session.PositionsStatementResolved += SessionOnPositionsStatementResolved;
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					SessionHolder.Session.InstrumentDOMChanged += SessionOnInstrumentDomChanged;
-					SessionHolder.Session.InstrumentChanged += SessionOnInstrumentChanged;
-					SessionHolder.Session.TicksAdded += SessionOnTicksAdded;
-					SessionHolder.Session.IncorrectSymbol += SessionOnIncorrectSymbol;
-					SessionHolder.Session.InstrumentSubscribed += SessionOnInstrumentSubscribed;
-					SessionHolder.Session.ConstantVolumeBarsAdded += SessionOnConstantVolumeBarsAdded;
-					SessionHolder.Session.ConstantVolumeBarsUpdated += SessionOnConstantVolumeBarsUpdated;
-					SessionHolder.Session.PointAndFigureBarsAdded += SessionOnPointAndFigureBarsAdded;
-					SessionHolder.Session.PointAndFigureBarsUpdated += SessionOnPointAndFigureBarsUpdated;
-					SessionHolder.Session.TimedBarsAdded += SessionOnTimedBarsAdded;
-					SessionHolder.Session.TimedBarsUpdated += SessionOnTimedBarsUpdated;
-					SessionHolder.Session.TFlowBarsAdded += SessionOnFlowBarsAdded;
-					SessionHolder.Session.TFlowBarsUpdated += SessionOnFlowBarsUpdated;
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		private void OnSessionUnInitialize()
-		{
-			switch (Type)
-			{
-				case MessageAdapterTypes.Transaction:
-				{
-					SessionHolder.Session.AccountChanged -= SessionOnAccountChanged;
-					SessionHolder.Session.AlgorithmicOrderPlaced -= SessionOnAlgorithmicOrderPlaced;
-					SessionHolder.Session.AlgorithmicOrderRegistrationComplete -= SessionOnAlgorithmicOrderRegistrationComplete;
-					SessionHolder.Session.OrderChanged -= SessionOnOrderChanged;
-					SessionHolder.Session.PositionsStatementResolved -= SessionOnPositionsStatementResolved;
-					break;
-				}
-				case MessageAdapterTypes.MarketData:
-				{
-					SessionHolder.Session.InstrumentDOMChanged -= SessionOnInstrumentDomChanged;
-					SessionHolder.Session.InstrumentChanged -= SessionOnInstrumentChanged;
-					SessionHolder.Session.TicksAdded -= SessionOnTicksAdded;
-					SessionHolder.Session.IncorrectSymbol -= SessionOnIncorrectSymbol;
-					SessionHolder.Session.InstrumentSubscribed -= SessionOnInstrumentSubscribed;
-					SessionHolder.Session.ConstantVolumeBarsAdded -= SessionOnConstantVolumeBarsAdded;
-					SessionHolder.Session.ConstantVolumeBarsUpdated -= SessionOnConstantVolumeBarsUpdated;
-					SessionHolder.Session.PointAndFigureBarsAdded -= SessionOnPointAndFigureBarsAdded;
-					SessionHolder.Session.PointAndFigureBarsUpdated -= SessionOnPointAndFigureBarsUpdated;
-					SessionHolder.Session.TimedBarsAdded -= SessionOnTimedBarsAdded;
-					SessionHolder.Session.TimedBarsUpdated -= SessionOnTimedBarsUpdated;
-					SessionHolder.Session.TFlowBarsAdded -= SessionOnFlowBarsAdded;
-					SessionHolder.Session.TFlowBarsUpdated -= SessionOnFlowBarsUpdated;
-					break;
-				}
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			return new CQGOrderCondition();
 		}
 
 		private void SessionOnDataError(object cqgError, string errorDescription)
@@ -122,6 +52,34 @@ namespace StockSharp.CQG
 			SendOutMessage(new ConnectMessage());
 		}
 
+		private void DisposeSession()
+		{
+			_session.AccountChanged -= SessionOnAccountChanged;
+			_session.AlgorithmicOrderPlaced -= SessionOnAlgorithmicOrderPlaced;
+			_session.AlgorithmicOrderRegistrationComplete -= SessionOnAlgorithmicOrderRegistrationComplete;
+			_session.OrderChanged -= SessionOnOrderChanged;
+			_session.PositionsStatementResolved -= SessionOnPositionsStatementResolved;
+
+			_session.InstrumentDOMChanged -= SessionOnInstrumentDomChanged;
+			_session.InstrumentChanged -= SessionOnInstrumentChanged;
+			_session.TicksAdded -= SessionOnTicksAdded;
+			_session.IncorrectSymbol -= SessionOnIncorrectSymbol;
+			_session.InstrumentSubscribed -= SessionOnInstrumentSubscribed;
+			_session.ConstantVolumeBarsAdded -= SessionOnConstantVolumeBarsAdded;
+			_session.ConstantVolumeBarsUpdated -= SessionOnConstantVolumeBarsUpdated;
+			_session.PointAndFigureBarsAdded -= SessionOnPointAndFigureBarsAdded;
+			_session.PointAndFigureBarsUpdated -= SessionOnPointAndFigureBarsUpdated;
+			_session.TimedBarsAdded -= SessionOnTimedBarsAdded;
+			_session.TimedBarsUpdated -= SessionOnTimedBarsUpdated;
+			_session.TFlowBarsAdded -= SessionOnFlowBarsAdded;
+			_session.TFlowBarsUpdated -= SessionOnFlowBarsUpdated;
+
+			_session.DataError -= SessionOnDataError;
+			_session.CELStarted -= SessionOnCelStarted;
+
+			_session.Shutdown();
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -130,36 +88,70 @@ namespace StockSharp.CQG
 		{
 			switch (message.Type)
 			{
+				case MessageTypes.Reset:
+				{
+					if (_session != null)
+					{
+						try
+						{
+							DisposeSession();
+						}
+						catch (Exception ex)
+						{
+							SendOutError(ex);
+						}
+
+						_session = null;
+					}
+
+					SendOutMessage(new ResetMessage());
+
+					break;
+				}
+
 				case MessageTypes.Connect:
 				{
-					if (SessionHolder.Session == null)
-					{
-						_isSessionOwner = true;
+					if (_session != null)
+						throw new InvalidOperationException(LocalizedStrings.Str1619);
 
-						SessionHolder.Session = new CQGCELClass();
-						SessionHolder.Session.CELStarted += SessionOnCelStarted;
-						SessionHolder.Session.DataError += SessionOnDataError;
-						SessionHolder.Session.Startup();
-					}
-					else
-					{
-						SendOutMessage(new ConnectMessage());
-					}
+					_session = new CQGCELClass();
+					_session.CELStarted += SessionOnCelStarted;
+					_session.DataError += SessionOnDataError;
+
+					_session.AccountChanged += SessionOnAccountChanged;
+					_session.AlgorithmicOrderPlaced += SessionOnAlgorithmicOrderPlaced;
+					_session.AlgorithmicOrderRegistrationComplete += SessionOnAlgorithmicOrderRegistrationComplete;
+					_session.OrderChanged += SessionOnOrderChanged;
+					_session.PositionsStatementResolved += SessionOnPositionsStatementResolved;
+
+					_session.InstrumentDOMChanged += SessionOnInstrumentDomChanged;
+					_session.InstrumentChanged += SessionOnInstrumentChanged;
+					_session.TicksAdded += SessionOnTicksAdded;
+					_session.IncorrectSymbol += SessionOnIncorrectSymbol;
+					_session.InstrumentSubscribed += SessionOnInstrumentSubscribed;
+					_session.ConstantVolumeBarsAdded += SessionOnConstantVolumeBarsAdded;
+					_session.ConstantVolumeBarsUpdated += SessionOnConstantVolumeBarsUpdated;
+					_session.PointAndFigureBarsAdded += SessionOnPointAndFigureBarsAdded;
+					_session.PointAndFigureBarsUpdated += SessionOnPointAndFigureBarsUpdated;
+					_session.TimedBarsAdded += SessionOnTimedBarsAdded;
+					_session.TimedBarsUpdated += SessionOnTimedBarsUpdated;
+					_session.TFlowBarsAdded += SessionOnFlowBarsAdded;
+					_session.TFlowBarsUpdated += SessionOnFlowBarsUpdated;
+
+					_session.Startup();
 
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					if (_isSessionOwner)
-					{
-						SessionHolder.Session.Shutdown();
-						SessionHolder.Session.DataError -= SessionOnDataError;
-						SessionHolder.Session.CELStarted -= SessionOnCelStarted;
-						SessionHolder.Session = null;
-					}
-					else
-						SendOutMessage(new DisconnectMessage());
+					if (_session == null)
+						throw new InvalidOperationException(LocalizedStrings.Str1856);
+
+					DisposeSession();
+					_session = null;
+
+					SendOutMessage(new DisconnectMessage());
 
 					break;
 				}
@@ -172,7 +164,7 @@ namespace StockSharp.CQG
 					{
 						case MarketDataTypes.Level1:
 						{
-							var instrument = SessionHolder.Instruments.TryGetValue(mdMsg.SecurityId.SecurityCode);
+							var instrument = _instruments.TryGetValue(mdMsg.SecurityId.SecurityCode);
 							//SessionHolder.Session.CreateInstrumentRequest().;
 
 							break;
@@ -186,7 +178,10 @@ namespace StockSharp.CQG
 						case MarketDataTypes.CandleTimeFrame:
 							break;
 						default:
-							throw new ArgumentOutOfRangeException("message", mdMsg.DataType, LocalizedStrings.Str1618);
+						{
+							SendOutMarketDataNotSupported(mdMsg.TransactionId);
+							return;
+						}
 					}
 
 					var reply = (MarketDataMessage)mdMsg.Clone();
@@ -199,7 +194,7 @@ namespace StockSharp.CQG
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
-					var instrument = SessionHolder.Instruments.TryGetValue(regMsg.SecurityId.SecurityCode);
+					var instrument = _instruments.TryGetValue(regMsg.SecurityId.SecurityCode);
 
 					if (instrument == null)
 						throw new InvalidOperationException(LocalizedStrings.Str3792Params.Put(regMsg.SecurityId.SecurityCode));
@@ -213,7 +208,7 @@ namespace StockSharp.CQG
 						? ((CQGOrderCondition)regMsg.Condition).StopPrice
 						: null;
 
-					var order = SessionHolder.Session.CreateOrder(regMsg.OrderType.ToCQG(stopPrice), instrument, account, (int)regMsg.Volume, regMsg.Side.ToCQG(), (double)regMsg.Price, (double)(stopPrice ?? 0));
+					var order = _session.CreateOrder(regMsg.OrderType.ToCQG(stopPrice), instrument, account, (int)regMsg.Volume, regMsg.Side.ToCQG(), (double)regMsg.Price, (double)(stopPrice ?? 0));
 					_orders.Add(regMsg.TransactionId, order);
 					order.Place();
 					break;

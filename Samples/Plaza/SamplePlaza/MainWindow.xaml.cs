@@ -36,7 +36,7 @@ namespace SamplePlaza
 		public MainWindow()
 		{
 			InitializeComponent();
-			MainWindow.Instance = this;
+			Instance = this;
 
 			_ordersWindow.MakeHideable();
 			_ordersLogWindow.MakeHideable();
@@ -111,21 +111,20 @@ namespace SamplePlaza
 						revisionManager.Tables.Add(Trader.TableRegistry.TradeOption);
 
 						Trader.Tables.Clear();
-						Trader.SyncTables(Tables.SelectedTables);
+						Trader.TableRegistry.SyncTables(Tables.SelectedTables);
 
 						if (Trader.Tables.Contains(Trader.TableRegistry.AnonymousOrdersLog))
 						{
 							Trader.CreateDepthFromOrdersLog = true;
 						}
 
-						Trader.ReConnectionSettings.ConnectionSettings.AttemptCount = -1;
-						Trader.ReConnectionSettings.ConnectionSettings.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
+						Trader.ReConnectionSettings.AttemptCount = -1;
+						Trader.Restored += () => this.GuiAsync(() => MessageBox.Show(this, LocalizedStrings.Str2958));
 
 						// подписываемся на событие успешного соединения
 						Trader.Connected += () =>
 						{
 							this.GuiAsync(() => ChangeConnectStatus(true));
-							Trader.StartExport();
 						};
 
 						// подписываемся на событие разрыва соединения
@@ -139,7 +138,7 @@ namespace SamplePlaza
 						Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 
 						// подписываемся на ошибку обработки данных (транзакций и маркет)
-						//Trader.ProcessDataError += error =>
+						//Trader.Error += error =>
 						//	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 						// подписываемся на ошибку подписки маркет-данных
@@ -169,7 +168,6 @@ namespace SamplePlaza
 				}
 				else
 				{
-					Trader.StopExport();
 					Trader.Disconnect();
 				}
 			}

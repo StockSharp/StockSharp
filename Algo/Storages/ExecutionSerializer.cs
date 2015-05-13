@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Storages
 		public ExecutionSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version53;
+			Version = MarketDataVersions.Version54;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)
@@ -213,7 +213,7 @@ namespace StockSharp.Algo.Storages
 
 				if (isTrade)
 				{
-					if (msg.TradeId == null || msg.TradeId <= 0)
+					if ((msg.TradeId == null && msg.TradeStringId.IsEmpty()) || msg.TradeId <= 0)
 						throw new ArgumentOutOfRangeException("messages", msg.TradeId, LocalizedStrings.Str928Params.Put(msg.TransactionId));
 
 					if (msg.TradePrice == null || msg.TradePrice <= 0)
@@ -277,8 +277,24 @@ namespace StockSharp.Algo.Storages
 				writer.WritePriceEx(!isTrade ? msg.Price : msg.GetTradePrice(), metaInfo, SecurityId);
 
 				writer.WriteVolume(volume, metaInfo, SecurityId);
-				writer.WriteVolume(msg.VisibleVolume ?? 0, metaInfo, SecurityId);
-				writer.WriteVolume(msg.GetBalance(), metaInfo, SecurityId);
+
+				if (metaInfo.Version < MarketDataVersions.Version54)
+				{
+					writer.WriteVolume(msg.VisibleVolume ?? 0, metaInfo, SecurityId);
+					writer.WriteVolume(msg.Balance ?? 0, metaInfo, SecurityId);
+				}
+				else
+				{
+					writer.Write(msg.VisibleVolume != null);
+
+					if (msg.VisibleVolume != null)
+						writer.WriteVolume(msg.VisibleVolume.Value, metaInfo, SecurityId);
+
+					writer.Write(msg.Balance != null);
+
+					if (msg.Balance != null)
+						writer.WriteVolume(msg.Balance.Value, metaInfo, SecurityId);
+				}
 
 				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset);
 
@@ -312,7 +328,7 @@ namespace StockSharp.Algo.Storages
 						writer.Write(msg.IsSystem.Value);
 				}
 
-				writer.WriteLong(msg.ExpiryDate.Ticks);
+				writer.WriteLong(msg.ExpiryDate != null ? msg.ExpiryDate.Value.Ticks : 0L);
 
 				WriteCommission(writer, metaInfo, msg.Commission);
 
@@ -376,8 +392,12 @@ namespace StockSharp.Algo.Storages
 
 			var price = reader.ReadPriceEx(metaInfo);
 			var volume = reader.ReadVolume(metaInfo);
-			var visibleVolume = reader.ReadVolume(metaInfo);
-			var balance = reader.ReadVolume(metaInfo);
+
+			var visibleVolume = (metaInfo.Version < MarketDataVersions.Version54 || reader.Read())
+				? reader.ReadVolume(metaInfo) : (decimal?)null;
+
+			var balance = (metaInfo.Version < MarketDataVersions.Version54 || reader.Read())
+				? reader.ReadVolume(metaInfo) : (decimal?)null;
 
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version51;
@@ -432,7 +452,7 @@ namespace StockSharp.Algo.Storages
 				OrderStatus = status,
 				TimeInForce = timeInForce,
 				IsSystem = isSystem,
-				ExpiryDate = expDate.To<DateTimeOffset>(),
+				ExpiryDate = expDate == 0 ? (DateTimeOffset?)null : expDate.To<DateTimeOffset>(),
 				Commission = commission,
 				PortfolioName = portfolio,
 				UserOrderId = userOrderId,

@@ -2,32 +2,37 @@ namespace StockSharp.Quik
 {
 	using System;
 
+	using Ecng.Common;
+	using Ecng.Localization;
+
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Базовый адаптер сообщений для Quik.
 	/// </summary>
-	public abstract class QuikMessageAdapter : MessageAdapter<QuikSessionHolder>
+	[TargetPlatform(Languages.Russian)]
+	public abstract class QuikMessageAdapter : MessageAdapter
 	{
 		/// <summary>
 		/// Инициализировать <see cref="QuikMessageAdapter"/>.
 		/// </summary>
-		/// <param name="type">Тип адаптера.</param>
-		/// <param name="sessionHolder">Контейнер для сессии.</param>
-		protected QuikMessageAdapter(MessageAdapterTypes type, QuikSessionHolder sessionHolder)
-			: base(type, sessionHolder)
+		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		protected QuikMessageAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
 		{
+			SecurityClassInfo.FillDefault();
 		}
 
-		internal QuikTerminal GetTerminal()
-		{
-			var terminal = SessionHolder.Terminal;
+		internal Func<QuikTerminal> GetTerminal;
 
-			if (terminal == null)
-				throw new InvalidOperationException(LocalizedStrings.Str1710);
+		//internal QuikTerminal GetTerminal()
+		//{
+		//	var terminal = SessionHolder.Terminal;
 
-			return terminal;
-		}
+		//	if (terminal == null)
+		//		throw new InvalidOperationException(LocalizedStrings.Str1710);
+
+		//	return terminal;
+		//}
 	}
 }

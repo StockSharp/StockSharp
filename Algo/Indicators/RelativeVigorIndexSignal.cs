@@ -9,7 +9,6 @@
 		/// Создать <see cref="RelativeVigorIndexSignal"/>.
 		/// </summary>
 		public RelativeVigorIndexSignal()
-			: base(typeof(decimal))
 		{
 			Length = 4;
 		}
