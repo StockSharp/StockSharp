@@ -1245,6 +1245,14 @@
       <ImageId>hydra_proxy_settings</ImageId>
       <AlternateText>hydra proxy settings</AlternateText>
     </Image>
+    <Image Include="Art\hydra_delete.png">
+      <ImageId>hydra_delete</ImageId>
+      <AlternateText>hydra delete</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_zero.png">
+      <ImageId>hydra_zero</ImageId>
+      <AlternateText>hydra zero</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
