@@ -1,5 +1,15 @@
 StockSharp API Change log
 ========================
+###v4.3.5:
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/87
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/83
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/70
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/79
+* (feature) FIX connector. Check sum is uint.
+* (feature) https://github.com/StockSharp/StockSharp/pull/74
+* (bug) https://github.com/StockSharp/StockSharp/pull/81
+* (bug) Fix http://stocksharp.com/forum/yaf_postsm35263_FixServer-System-ArgumentOutOfRangeException.aspx#post35263
+
 ###v4.3.4:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/46
 * (feature) OEC 3.5.14
