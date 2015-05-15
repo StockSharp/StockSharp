@@ -1,4 +1,14 @@
-# StockSharp
+![Logo](https://avatars0.githubusercontent.com/u/10113234?v=3&s=100)
+# StockSharp - trading platform #
+
+[StockSharp Home][1] | [Documentation][2] | [Download Zip][3]
+----------
+
+## Introduction ##
+
+StockSharp (shortly S#) – are free programs for trading at any markets of the world (American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
+
+**Available connections**: FIX/FAST, LMAX, Rithmic, Fusion/Blackwood, Interactive Brokers, OpenECry, Sterling, IQFeed, E*Trade, BTCE, BitStamp and many other. Any broker or [partner broker (benefits)][6].
 
 ## S#.Studio
 
@@ -20,7 +30,7 @@ S#.API is a free C# library for programmers who use Visual Studio. S#.API lets y
 
 ## Support
 
-Free support on [the forum](http://stocksharp.com/forum/). Commercial support in our [education courses](http://edu.stocksharp.com).
+Free support on [the forum][5]. Commercial support in our [Algotrading courses][4].
 
 ## Development stage
 
@@ -30,3 +40,10 @@ Release notes - [RELEASE_NOTES.md](../master/_ReleaseNotes/CHANGE_LOG_API.md).
 ## License
 
 StockSharp codes is licensed under the [LGPL 3.0 license](../master/LICENSE).
+
+  [1]: http://stocksharp.com
+  [2]: http://stocksharp.com/doc
+  [3]: https://github.com/StockSharp/StockSharp/releases
+  [4]: http://edu.stocksharp.com
+  [5]: http://stocksharp.com/forum
+  [6]: http://stocksharp.com/broker
