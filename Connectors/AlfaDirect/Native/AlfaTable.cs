@@ -168,7 +168,7 @@
 			var res = _ad.GetLocalDBData(Name, _strFields, where);
 			Log("GetLocalDbData {0}: {1}", where, res);
 			// сразу после старта терминала АД может вернуть null (баг в терминале)
-			return res == null ? ArrayHelper.Empty<string>() : res.ToRows();
+			return res.ToRows();
 		}
 
 		private void ThrowInError(tagStateCodes code, string message = null)

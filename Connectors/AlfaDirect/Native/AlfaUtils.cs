@@ -18,7 +18,7 @@
 
 		public static string[] ToRows(this string data)
 		{
-			return StringHelper.Split(data);
+			return data == null ? ArrayHelper.Empty<string>() : StringHelper.Split(data);
 		}
 
 		public static string[] ToColumns(this string row)
