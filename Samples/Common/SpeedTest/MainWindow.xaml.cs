@@ -3,7 +3,6 @@ namespace SpeedTest
 	using System;
 	using System.Collections.ObjectModel;
 	using System.Linq;
-	using System.Net;
 	using System.Security;
 	using System.Windows;
 	using System.Windows.Media;
@@ -17,6 +16,7 @@ namespace SpeedTest
 	using StockSharp.Plaza;
 	using StockSharp.SmartCom;	
 	using StockSharp.Localization;
+	using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 
 	public partial class MainWindow
@@ -46,11 +46,11 @@ namespace SpeedTest
 					{
 						Login = "quik",
 						Password = "quik".To<SecureString>(),
-						Address = "localhost:5001".To<EndPoint>(),
+						Address = QuikTrader.DefaultLuaAddress,
 						TargetCompId = "StockSharpTS",
 						SenderCompId = "quik",
 						ExchangeBoard = ExchangeBoard.Forts,
-						Version = FixVersions.Fix44,
+						Version = FixVersions.Fix44_Lua,
 						RequestAllPortfolios = true,
 						MarketData = FixMarketData.None,
 						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
@@ -59,11 +59,11 @@ namespace SpeedTest
 					{
 						Login = "quik",
 						Password = "quik".To<SecureString>(),
-						Address = "localhost:5001".To<EndPoint>(),
+						Address = QuikTrader.DefaultLuaAddress,
 						TargetCompId = "StockSharpMD",
 						SenderCompId = "quik",
 						ExchangeBoard = ExchangeBoard.Forts,
-						Version = FixVersions.Fix44,
+						Version = FixVersions.Fix44_Lua,
 						RequestAllSecurities = true,
 						MarketData = FixMarketData.MarketData,
 						UtcOffset = TimeHelper.Moscow.BaseUtcOffset

@@ -359,14 +359,6 @@
             <param name="featureName">Название функциональности.</param>
             <returns>Описание ошибки, если лицензия не поддерживает функциональность.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.Type,System.String)">
-            <summary>
-            Проверить лицензию по подключению и номеру счета.
-            </summary>
-            <param name="connectorType">Тип подключения, через который идет регистрация заявки.</param>
-            <param name="portfolioName">Номер портфеля, который будет использоваться для проверки.</param>
-            <returns>Описание ошибки, если лицензия не поддерживает функциональность.</returns>
-        </member>
         <member name="M:StockSharp.Licensing.LicenseHelper.Save(StockSharp.Licensing.License)">
             <summary>
             Сохранить лицензию на диске.
