@@ -251,7 +251,7 @@ namespace StockSharp.Xaml
 		public event Action ConnectorsChanged;
 
 		/// <summary>
-		/// Событие проверки состояния соединения
+		/// Событие проверки состояния соединения.
 		/// </summary>
 		public event Func<ConnectionStates> CheckConnectionState;
 

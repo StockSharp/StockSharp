@@ -376,20 +376,7 @@ namespace StockSharp.Quik
 
 		public static TPlusLimits GetTNLimitType(this Func<DdeTableColumn, object> func, DdeTableColumn column)
 		{
-			var value = func.Get<string>(column);
-			switch (value)
-			{
-				case "T0":
-					return TPlusLimits.T0;
-				case "T1":
-					return TPlusLimits.T1;
-				case "T2":
-					return TPlusLimits.T2;
-				case "Tx":
-					return TPlusLimits.Tx;
-				default:
-					throw new ArgumentOutOfRangeException(LocalizedStrings.Str1720Params.Put(value));
-			}
+			return func.Get<string>(column).To<TPlusLimits>();
 		}
 
 		private static SynchronizedDictionary<DdeTableColumn, Func<object, KeyValuePair<Level1Fields, object>>> _ddeColumnValueToSecurityChangeConverters;

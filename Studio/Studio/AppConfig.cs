@@ -23,12 +23,6 @@
 		private readonly CachedSynchronizedList<Type> _candles = new CachedSynchronizedList<Type>();
 		private readonly CachedSynchronizedList<Type> _diagramElements = new CachedSynchronizedList<Type>();
 
-		//static AppConfig()
-		//{
-		//    // а эксепшены кто ловить будет?
-		//    // Instance = new AppConfig();
-		//}
-
 		private static AppConfig _instance;
 
 		public static AppConfig Instance

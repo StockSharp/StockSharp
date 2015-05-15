@@ -15,10 +15,9 @@ namespace StockSharp.Studio.Services
 	using StockSharp.Logging;
 	using StockSharp.Studio.Core;
 	using StockSharp.Studio.Core.Commands;
+	using StockSharp.Localization;
 
 	using CommandTuple = System.Tuple<System.Action<Core.Commands.IStudioCommand>, System.Func<Core.Commands.IStudioCommand, bool>, bool>;
-
-	using StockSharp.Localization;
 
 	class StudioCommandService : IStudioCommandService
 	{
