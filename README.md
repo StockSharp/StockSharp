@@ -1,7 +1,6 @@
 ![Logo](https://avatars0.githubusercontent.com/u/10113234?v=3&s=100)
 # StockSharp - trading platform
 =========
-
 [StockSharp Home Page][1] | [Documentation][2] | [Download Zip][3]
 ----------
 
