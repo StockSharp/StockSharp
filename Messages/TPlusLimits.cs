@@ -31,6 +31,13 @@
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("T+2")]
-		T2
+		T2,
+		
+		/// <summary>
+		/// Т+x.
+		/// </summary>
+		[EnumMember]
+		[EnumDisplayName("T+x")]
+		Tx,
 	}
 }

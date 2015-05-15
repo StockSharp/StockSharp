@@ -385,6 +385,8 @@ namespace StockSharp.Quik
 					return TPlusLimits.T1;
 				case "T2":
 					return TPlusLimits.T2;
+				case "Tx":
+					return TPlusLimits.Tx;
 				default:
 					throw new ArgumentOutOfRangeException(LocalizedStrings.Str1720Params.Put(value));
 			}
