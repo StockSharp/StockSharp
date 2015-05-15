@@ -3,7 +3,6 @@ namespace SampleQuikSmart
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Net;
 	using System.Security;
 	using System.Windows;
 
@@ -117,11 +116,11 @@ namespace SampleQuikSmart
 					{
 						Login = "quik",
 						Password = "quik".To<SecureString>(),
-						Address = "localhost:5001".To<EndPoint>(),
+						Address = QuikTrader.DefaultLuaAddress,
 						TargetCompId = "StockSharpTS",
 						SenderCompId = "quik",
 						ExchangeBoard = ExchangeBoard.Forts,
-						Version = FixVersions.Fix44,
+						Version = FixVersions.Fix44_Lua,
 						RequestAllPortfolios = true,
 						MarketData = FixMarketData.None,
 						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
@@ -130,11 +129,11 @@ namespace SampleQuikSmart
 					{
 						Login = "quik",
 						Password = "quik".To<SecureString>(),
-						Address = "localhost:5001".To<EndPoint>(),
+						Address = QuikTrader.DefaultLuaAddress,
 						TargetCompId = "StockSharpMD",
 						SenderCompId = "quik",
 						ExchangeBoard = ExchangeBoard.Forts,
-						Version = FixVersions.Fix44,
+						Version = FixVersions.Fix44_Lua,
 						RequestAllSecurities = true,
 						MarketData = FixMarketData.MarketData,
 						UtcOffset = TimeHelper.Moscow.BaseUtcOffset

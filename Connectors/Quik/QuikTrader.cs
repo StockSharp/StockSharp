@@ -61,7 +61,7 @@ namespace StockSharp.Quik
 				TargetCompId = "StockSharpTS",
 				SenderCompId = "quik",
 				ExchangeBoard = ExchangeBoard.Forts,
-				Version = FixVersions.Fix44,
+				Version = FixVersions.Fix44_Lua,
 				RequestAllPortfolios = true,
 				MarketData = FixMarketData.None,
 				UtcOffset = TimeHelper.Moscow.BaseUtcOffset
@@ -75,7 +75,7 @@ namespace StockSharp.Quik
 				TargetCompId = "StockSharpMD",
 				SenderCompId = "quik",
 				ExchangeBoard = ExchangeBoard.Forts,
-				Version = FixVersions.Fix44,
+				Version = FixVersions.Fix44_Lua,
 				RequestAllSecurities = true,
 				MarketData = FixMarketData.MarketData,
 				UtcOffset = TimeHelper.Moscow.BaseUtcOffset,

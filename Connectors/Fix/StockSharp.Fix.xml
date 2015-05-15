@@ -4130,6 +4130,11 @@
             FIX 4.4 (Micex).
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.FixVersions.Fix44_Lua">
+      <summary>
+            FIX 4.4 (LUA).
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.FixVersions.Fix50">
       <summary>
             FIX 5.0.
