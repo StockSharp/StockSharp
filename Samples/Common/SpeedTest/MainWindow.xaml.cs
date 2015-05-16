@@ -16,6 +16,7 @@ namespace SpeedTest
 	using StockSharp.Plaza;
 	using StockSharp.SmartCom;	
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 	using StockSharp.Quik;
 	using StockSharp.Quik.Lua;
 
@@ -68,6 +69,8 @@ namespace SpeedTest
 						MarketData = FixMarketData.MarketData,
 						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
 					};
+					quikMd.RemoveTransactionalSupport();
+
 					_connector.Adapter.InnerAdapters[quikMd.ToChannel(_connector, "Quik MD")] = 1;
 					_connector.Adapter.InnerAdapters[quikTs.ToChannel(_connector, "Quik TS")] = 1;
 				}

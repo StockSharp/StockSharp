@@ -18,6 +18,7 @@ namespace SampleQuikSmart
 	using StockSharp.Algo;
 	using StockSharp.Fix;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 	using StockSharp.Quik.Lua;
 
 	public partial class MainWindow
@@ -138,6 +139,8 @@ namespace SampleQuikSmart
 						MarketData = FixMarketData.MarketData,
 						UtcOffset = TimeHelper.Moscow.BaseUtcOffset
 					};
+					quikMd.RemoveTransactionalSupport();
+
 					Connector.Adapter.InnerAdapters[quikMd] = 1;
 					Connector.Adapter.InnerAdapters[quikTs] = 1;
 
