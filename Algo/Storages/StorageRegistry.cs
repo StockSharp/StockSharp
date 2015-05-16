@@ -885,7 +885,7 @@ namespace StockSharp.Algo.Storages
 							serializer = typeof(CandleSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg);
 							break;
 						case StorageFormats.Csv:
-							serializer = typeof(CsvMarketDataSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), null);
+							serializer = typeof(CsvMarketDataSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), null, null);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException("format");
