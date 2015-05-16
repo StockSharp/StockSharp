@@ -45152,32 +45152,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Certificates (*.pk12)|*.pk12 file
-		/// </summary>
-		public const string Str3752Key = "Str3752";
-
-		/// <summary>
-		/// Certificates (*.pk12)|*.pk12 file
-		/// </summary>
-		public static string Str3752
-		{
-			get { return GetString(Str3752Key); }
-		}
-
-		/// <summary>
-		/// Select Rithmic API certificate
-		/// </summary>
-		public const string Str3753Key = "Str3753";
-
-		/// <summary>
-		/// Select Rithmic API certificate
-		/// </summary>
-		public static string Str3753
-		{
-			get { return GetString(Str3753Key); }
-		}
-
-		/// <summary>
 		/// Export (auto)
 		/// </summary>
 		public const string Str3754Key = "Str3754";

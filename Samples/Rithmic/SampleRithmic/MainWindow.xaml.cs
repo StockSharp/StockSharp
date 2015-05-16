@@ -233,8 +233,7 @@ namespace SampleRithmic
 		{
 			var dialog = new VistaOpenFileDialog
 			{
-				Filter = LocalizedStrings.Str3752,
-				Title = LocalizedStrings.Str3753,
+				Filter = @"Certificates files (*.pk12)|*.pk12|All files (*.*)|*.*",
 				CheckFileExists = true,
 				Multiselect = false,
 			};

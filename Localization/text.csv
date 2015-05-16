@@ -3481,8 +3481,6 @@ Str3748;Time period for which the data has to be received is not specified.;Не
 Str3749; trades history; история сделок
 Str3750;Date for which data has to be received is not specified.;Не указана дата за которую необходимо получить данные.
 Str3751;User name is not specified.;Не указано имя пользователя.
-Str3752;Certificates (*.pk12)|*.pk12 file;Файлы сертификатов (*.pk12)|*.pk12
-Str3753;Select Rithmic API certificate;Выберите сертификат Rithmic API
 Str3754;Export (auto);Экспорт (авто)
 Str3755;Database;База данных
 Str3756;Export type (format).;Тип экспорта (формат).
