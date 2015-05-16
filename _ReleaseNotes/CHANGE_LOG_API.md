@@ -1,5 +1,11 @@
 StockSharp API Change log
 ========================
+###v4.3.6:
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/90
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/93
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/92
+* (feature) https://github.com/StockSharp/StockSharp/commit/62a19979280ab678679aee7660f73c9b9614de93
+
 ###v4.3.5:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/87
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/83
