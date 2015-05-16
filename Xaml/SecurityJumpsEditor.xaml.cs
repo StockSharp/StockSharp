@@ -140,7 +140,7 @@ namespace StockSharp.Xaml
 			if (_jumps.Any(j => j.Security is BasketSecurity))
 				return LocalizedStrings.Str1451;
 
-			if (_jumps.Any(j => j.Date == null))
+			if (_jumps.Any(j => j.Date.IsDefault()))
 				return LocalizedStrings.Str1452;
 
 			if (_jumps.GroupBy(j => j.Security).Any(g => g.Count() > 1))

@@ -50,40 +50,34 @@ namespace StockSharp.Hydra.Panes
 
 		private void CreateContinuousSecurity_OnClick(object sender, RoutedEventArgs e)
 		{
-			ContinuousSecurity.Content = string.Empty;
-			
 			_continuousSecurityWindow = new ContinuousSecurityWindow
 			{
-				SecurityProvider = _entityRegistry.Securities
+				SecurityProvider = _entityRegistry.Securities,
+				ContinuousSecurity = new ContinuousSecurity { Board = ExchangeBoard.Associated }
 			};
-			_continuousSecurity = new ContinuousSecurity { Board = ExchangeBoard.Associated };
-			_continuousSecurityWindow.ContinuousSecurity = _continuousSecurity;
 
-			if (_continuousSecurityWindow.ShowModal(this))
+			if (!_continuousSecurityWindow.ShowModal(this))
+				return;
+
+			_continuousSecurity = _continuousSecurityWindow.ContinuousSecurity;
+			ContinuousSecurity.Content = _continuousSecurity.Id;
+
+			var first = _continuousSecurity.InnerSecurities.First();
+
+			var gluingSecurity = new Security
 			{
-				ContinuousSecurity.Content = _continuousSecurity.Id;
+				Id = _continuousSecurity.Id,
+				Code = _continuousSecurity.Code,
+				Board = ExchangeBoard.Associated,
+				Type = _continuousSecurity.Type,
+				VolumeStep = first.VolumeStep,
+				PriceStep = first.PriceStep,
+				ExtensionInfo = new Dictionary<object, object> { { "GluingSecurity", true } }
+			};
 
-				var first = _continuousSecurity.InnerSecurities.First();
-
-				var gluingSecurity = new Security
-				{
-					Id = _continuousSecurity.Id,
-					Code = _continuousSecurity.Code,
-					Board = ExchangeBoard.Associated,
-					Type = _continuousSecurity.Type,
-					VolumeStep = first.VolumeStep,
-					PriceStep = first.PriceStep,
-					ExtensionInfo = new Dictionary<object, object> { { "GluingSecurity", true } }
-				};
-
-				if (_entityRegistry.Securities.ReadById(gluingSecurity.Id) == null)
-				{
-					_entityRegistry.Securities.Save(gluingSecurity);
-				}
-			}
-			else
+			if (_entityRegistry.Securities.ReadById(gluingSecurity.Id) == null)
 			{
-				ContinuousSecurity.Content = string.Empty;
+				_entityRegistry.Securities.Save(gluingSecurity);
 			}
 		}
 
@@ -164,6 +158,7 @@ namespace StockSharp.Hydra.Panes
 
 			EnableControls(false);
 
+			ProgressBar.Value = 0;
 			ProgressBar.Maximum = dates.Length;
 			ProgressBar.Visibility = Visibility.Visible;
 
@@ -187,7 +182,7 @@ namespace StockSharp.Hydra.Panes
 								destinationStorage.Drive.SaveStream(date, sourceStream);	
 						}
 
-						this.GuiAsync(() => ProgressBar.Value++);
+						this.GuiSync(() => ProgressBar.Value++);
 					}
 				})
 				.ContinueWithExceptionHandling(this.GetWindow(), res =>
