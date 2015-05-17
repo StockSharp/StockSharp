@@ -71,7 +71,12 @@ namespace StockSharp.Algo
 			if (candleType == null)
 				throw new ArgumentNullException("candleType");
 
-			return _candleTypes.GetValue(candleType);
+			var messageType = _candleTypes.TryGetValue(candleType);
+
+			if (messageType == null)
+				throw new ArgumentOutOfRangeException("candleType", candleType, LocalizedStrings.WrongCandleType);
+
+			return messageType;
 		}
 
 		/// <summary>
@@ -84,7 +89,12 @@ namespace StockSharp.Algo
 			if (messageType == null)
 				throw new ArgumentNullException("messageType");
 
-			return _candleTypes.GetKey(messageType);
+			var candleType = _candleTypes.TryGetKey(messageType);
+
+			if (candleType == null)
+				throw new ArgumentOutOfRangeException("messageType", messageType, LocalizedStrings.WrongCandleType);
+
+			return candleType;
 		}
 
 		/// <summary>

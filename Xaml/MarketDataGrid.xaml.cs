@@ -19,10 +19,9 @@ namespace StockSharp.Xaml
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
 
 	using Query = System.Tuple<Algo.Storages.IStorageRegistry, BusinessEntities.Security, Algo.Storages.StorageFormats, Algo.Storages.IMarketDataDrive>;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Таблица доступных рыночных данных.
@@ -287,25 +286,25 @@ namespace StockSharp.Xaml
 			{
 				foreach (var arg in tuple.Item2)
 				{
-					var key = tuple.Item1.Name.Replace("Candle", string.Empty) + " " + arg;
+					var key = tuple.Item1.Name.Replace("CandleMessage", string.Empty) + " " + arg;
 					candles.Add(key, Tuple.Create(tuple.Item1, arg));
 				}
 			}
 
-			var candleKeys = candles.Keys.ToArray();
+			var candleNames = candles.Keys.ToArray();
 
-			if (candleKeys.Length > 0)
+			if (candleNames.Length > 0)
 			{
 				this.GuiSync(() =>
 				{
-					foreach (var candle in candleKeys)
+					foreach (var candleName in candleNames)
 					{
 						var column = new DataGridTextColumn
 						{
-							Header = candle,
+							Header = candleName,
 							Binding = new Binding
 							{
-								Path = new PropertyPath("Candles[{0}]".Put(candle)),
+								Path = new PropertyPath("Candles[{0}]".Put(candleName)),
 								Converter = new BoolToCheckMarkConverter()
 							}
 						};
@@ -329,7 +328,7 @@ namespace StockSharp.Xaml
 						//cbElement.SetValue(HorizontalAlignmentProperty, HorizontalAlignment.Center);
 
 						Columns.Add(column);
-						_candleColumns.Add(candle, column);
+						_candleColumns.Add(candleName, column);
 
 						//ApplyFormatRules(column);
 					}
@@ -338,21 +337,23 @@ namespace StockSharp.Xaml
 				});
 			}
 
-			Add(dict, storageRegistry.GetTradeStorage(security, drive, format), candleKeys, e => e.IsTick = true);
-			Add(dict, storageRegistry.GetMarketDepthStorage(security, drive, format), candleKeys, e => e.IsDepth = true);
-			Add(dict, storageRegistry.GetLevel1MessageStorage(security, drive, format), candleKeys, e => e.IsLevel1 = true);
-			Add(dict, storageRegistry.GetOrderLogStorage(security, drive, format), candleKeys, e => e.IsOrderLog = true);
+			Add(dict, storageRegistry.GetTickMessageStorage(security, drive, format), candleNames, e => e.IsTick = true);
+			Add(dict, storageRegistry.GetQuoteMessageStorage(security, drive, format), candleNames, e => e.IsDepth = true);
+			Add(dict, storageRegistry.GetLevel1MessageStorage(security, drive, format), candleNames, e => e.IsLevel1 = true);
+			Add(dict, storageRegistry.GetOrderLogMessageStorage(security, drive, format), candleNames, e => e.IsOrderLog = true);
 
-			foreach (var candle in candleKeys)
+			foreach (var c in candleNames)
 			{
+				var candleName = c;
+
 				lock (_syncObject)
 				{
 					if (_isChanged)
 						return;
 				}
 
-				var tuple = candles[candle];
-				Add(dict, storageRegistry.GetCandleStorage(tuple.Item1, security, tuple.Item2, drive, format), candleKeys, e => e.Candles[candle] = true);
+				var tuple = candles[candleName];
+				Add(dict, storageRegistry.GetCandleMessageStorage(tuple.Item1, security, tuple.Item2, drive, format), candleNames, e => e.Candles[candleName] = true);
 			}
 
 			if (dict.Count > 0)
@@ -369,7 +370,7 @@ namespace StockSharp.Xaml
 							return;
 					}
 
-					TryAddEntries(dict, batch, candleKeys, e => {});
+					TryAddEntries(dict, batch, candleNames, e => { });
 				}
 			}
 
