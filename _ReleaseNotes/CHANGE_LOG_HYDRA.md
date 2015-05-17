@@ -1,5 +1,14 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.6:
+* (bug) Hydra. Continuous security fixes.
+* (bug) CSV candle storage fix.
+* (bug) Rithmic plugin fix.
+
+###v4.3.5:
+* (bug) Quik plugin fix.
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/79
+
 ###v4.3.4:
 * (bug) UX lookup fix.
 * (feature) Micex sec cache update.
