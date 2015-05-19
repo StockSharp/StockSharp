@@ -741,10 +741,6 @@
       <ImageId>HydraGluingWindow</ImageId>
       <AlternateText>Hydra Gluing Window</AlternateText>
     </Image>
-    <Image Include="Art\HydraGluingpPreparing.png">
-      <ImageId>HydraGluingpPreparing</ImageId>
-      <AlternateText>Hydra Gluingp Preparing</AlternateText>
-    </Image>
     <Image Include="Art\quik_mks_mytrades.jpg">
       <ImageId>quik_mks_mytrades</ImageId>
       <AlternateText>quik mks mytrades</AlternateText>
@@ -1252,6 +1248,10 @@
     <Image Include="Art\hydra_zero.png">
       <ImageId>hydra_zero</ImageId>
       <AlternateText>hydra zero</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_add.png">
+      <ImageId>hydra_add</ImageId>
+      <AlternateText>hydra add</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
