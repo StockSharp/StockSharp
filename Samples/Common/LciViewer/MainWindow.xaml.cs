@@ -200,7 +200,8 @@
 			var values = _candles
 				.Select(candle =>
 				{
-					candle.State = CandleStates.Finished;
+					if (candle.State != CandleStates.Finished)
+						candle.State = CandleStates.Finished;
 
 					return new RefPair<DateTimeOffset, IDictionary<IChartElement, object>>(candle.OpenTime, new Dictionary<IChartElement, object>
 					{
@@ -579,7 +580,8 @@
 					var chartValues = _candles
 						.Select(c =>
 						{
-							c.State = CandleStates.Finished;
+							if (c.State != CandleStates.Finished)
+								c.State = CandleStates.Finished;
 
 							pnlQueue.ProcessLevel1(new Level1ChangeMessage
 							{
