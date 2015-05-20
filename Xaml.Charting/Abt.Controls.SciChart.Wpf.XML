@@ -211,27 +211,6 @@
             </summary>
             <remarks></remarks>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ApiElementBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
-            <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ApiElementBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
-            <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ApiElementBase.OnAnnotationCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
-            <summary>
-            Called when the AnnotationCollection changes. Override in a derived class to get notification of this event 
-            </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.ApiElementBase.OnDetached">
             <summary>
             Called immediately before the element is detached from the Chart Surface
@@ -347,6 +326,21 @@
             Instantly stops any inertia that can be associated with this modifier.
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnXAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnYAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Called when the AnnotationCollection changes
+            </summary>
+        </member>
         <member name="P:Abt.Controls.SciChart.ChartModifiers.IChartModifier.ParentSurface">
             <summary>
             Gets or sets the parent <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/> to perform operations on 
@@ -385,6 +379,18 @@
         <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase"/> class.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnAttached">
+            <summary>
+            Called when the element is attached to the Chart Surface
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnDetached">
+            <summary>
+            Called immediately before the element is detached from the Chart Surface
             </summary>
             <remarks></remarks>
         </member>
@@ -466,19 +472,20 @@
             <param name="relativeTo"></param>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnXAxesCollectionChanged">
             <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes.
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnYAxesCollectionChanged">
             <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes.
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Called when the AnnotationCollection changes. Overridden in derived classes.
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnParentSurfaceResized(Abt.Controls.SciChart.SciChartResizedMessage)">
             <summary>
@@ -566,6 +573,21 @@
             Instantly stops any inertia that can be associated with this modifier.
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnXAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnYAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Called when the AnnotationCollection changes
+            </summary>
+        </member>
         <member name="P:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.IsEnabled">
             <summary>
             Gets or sets a value indicating whether this element is enabled in the user interface (UI).
@@ -575,7 +597,7 @@
         <member name="P:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.ExecuteOn">
             <summary>
             Determines when the <see cref="T:Abt.Controls.SciChart.ChartModifiers.ZoomExtentsModifier"/> executes, 
-            e.g. <see cref="F:Abt.Controls.SciChart.ChartModifiers.ExecuteOn.MouseDoubleClick"/> will cause a zoom extents on mouse double 
+            args.g. <see cref="F:Abt.Controls.SciChart.ChartModifiers.ExecuteOn.MouseDoubleClick"/> will cause a zoom extents on mouse double 
             click of the parent <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/>
             </summary>
         </member>
@@ -645,12 +667,15 @@
             Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.ChartModifiers.ZoomPanModifierBase"/> class.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ZoomPanModifierBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ZoomPanModifierBase.OnAttached">
             <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
+            Called when the element is attached to the Chart Surface
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ZoomPanModifierBase.OnXAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.ZoomPanModifierBase.OnModifierMouseDown(Abt.Controls.SciChart.ChartModifiers.ModifierMouseArgs)">
             <summary>
@@ -1123,19 +1148,15 @@
             <param name="hitTestInfo"></param>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnXAxesCollectionChanged">
             <summary>
             Called when [X axes collection changed].
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnYAxesCollectionChanged">
             <summary>
             Called when [Y axes collection changed].
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.UpdateAxesOverlay(System.Windows.Point)">
             <summary>
@@ -1334,6 +1355,21 @@
             Gets or sets delay for showing of tooltips in miliseconds
             </summary>
         </member>
+        <member name="F:Abt.Controls.SciChart.ChartModifiers.VerticalSliceModifier.IncludeSeriesProperty">
+            <summary>
+            Defined IncludeSeries Attached Property
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.VerticalSliceModifier.GetIncludeSeries(System.Windows.DependencyObject)">
+            <summary>
+            Gets the include Series or not
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.VerticalSliceModifier.SetIncludeSeries(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            Sets the include Series or not
+            </summary>
+        </member>
         <member name="F:Abt.Controls.SciChart.ChartModifiers.VerticalSliceModifier.VerticalLinesProperty">
             <summary>
              Defines the VerticalLines DependencyProperty
@@ -1488,12 +1524,10 @@
             Called when the Chart Modifier is attached to the Chart Surface
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.SeriesValueModifier.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.SeriesValueModifier.OnXAxesCollectionChanged">
             <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.SeriesValueModifier.OnDetached">
             <summary>
@@ -3050,6 +3084,14 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange)">
             <summary>
             Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
             </summary>
         </member>
         <member name="E:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderableSeries.SelectionChanged">
@@ -3811,6 +3853,11 @@
             </summary>
             <value>The minimum distance between Min and Max of the VisibleRange</value>
         </member>
+        <member name="P:Abt.Controls.SciChart.Visuals.Axes.IAxis.IsLabelCullingEnabled">
+            <summary>
+            Gets or sets a value indicating whether Label Culling is enabled (when labels overlap) on this AxisPanel instance
+            </summary>
+        </member>
         <member name="T:Abt.Controls.SciChart.PropertyChangedEventArgsWithValues">
             <summary>
              Provides data for the System.ComponentModel.INotifyPropertyChanged.PropertyChanged event.
@@ -3832,6 +3879,336 @@
         <member name="P:Abt.Controls.SciChart.PropertyChangedEventArgsWithValues.NewValue">
             <summary>
             Gets a new value of property that changed
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListDecimalDataDistributionCalculator" -->
+        <member name="T:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1">
+            <summary>
+            Defines the interface to a DataDistributionCalculator
+            </summary>
+            <typeparam name="TX"></typeparam>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.OnAppendXValue(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},`0,System.Boolean)">
+            <summary>
+            Called when X Values are appended. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.OnAppendXValues(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,System.Collections.Generic.IEnumerable{`0},System.Boolean)">
+            <summary>
+            Called when X Values are appended. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.OnInsertXValue(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,`0,System.Boolean)">
+            <summary>
+            Called when X Values are inserted. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.OnInsertXValues(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,System.Int32,System.Collections.Generic.IEnumerable{`0},System.Boolean)">
+            <summary>
+            Called when X Values are inserted. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.UpdateDataDistributionFlagsWhenRemovedXValues">
+            <summary>
+            Updates the data distribution flags when x values removed.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.Clear">
+            <summary>
+            Clears the DataDistributionCalculator flags
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.DataIsSortedAscending">
+            <summary>
+            Gets whether this DataSeries contains Sorted data in the X-direction. 
+            Note: Sorted data will result in far faster indexing operations. If at all possible, try to keep your data sorted in the X-direction
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.DataIsEvenlySpaced">
+            <summary>
+            Gets whether the data is evenly paced
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.UpdateDataDistributionFlagsWhenRemovedXValues">
+            <summary>
+            Updates the data distribution flags when x values removed.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.OnAppendXValue(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},`0,System.Boolean)">
+            <summary>
+            Called when X Values are appended. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.OnAppendXValues(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,System.Collections.Generic.IEnumerable{`0},System.Boolean)">
+            <summary>
+            Called when X Values are appended. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="countBeforeAppending"></param>
+            <param name="newXValues"></param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.OnInsertXValues(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,System.Int32,System.Collections.Generic.IEnumerable{`0},System.Boolean)">
+            <summary>
+            Called when X Values are inserted. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="indexWhereInserted"></param>
+            <param name="insertedCount"></param>
+            <param name="newXValues"></param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.OnInsertXValue(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,`0,System.Boolean)">
+            <summary>
+            Called when X Values are inserted. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="indexWhereInserted"></param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.Clear">
+            <summary>
+            Clears the DataDistributionCalculator flags
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.DataIsSortedAscending">
+            <summary>
+            Gets whether this DataSeries contains Sorted data in the X-direction.
+            Note: Sorted data will result in far faster indexing operations. If at all possible, try to keep your data sorted in the X-direction
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.BaseDataDistributionCalculator`1.DataIsEvenlySpaced">
+            <summary>
+            Gets whether the data is evenly paced
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListDecimalDataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListDecimalDataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.DecimalDataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListDoubleDataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListDoubleDataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListDoubleDataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.DoubleDataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListSingleDataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListSingleDataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListSingleDataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.SingleDataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListInt32DataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListInt32DataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListInt32DataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.Int32DataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListUInt32DataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListUInt32DataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListUInt32DataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.UInt32DataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListInt64DataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListInt64DataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListInt64DataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.Int64DataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListUInt64DataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListUInt64DataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListUInt64DataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.UInt64DataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListInt16DataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListInt16DataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListInt16DataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.Int16DataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListUInt16DataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListUInt16DataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListUInt16DataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.UInt16DataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListByteDataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListByteDataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListByteDataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ByteDataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListSByteDataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListSByteDataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListSByteDataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.SByteDataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListDateTimeDataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListDateTimeDataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListDateTimeDataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.DateTimeDataDistributionCalculator" -->
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.ListTimeSpanDataDistributionCalculator" -->
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListTimeSpanDataDistributionCalculator.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.ListTimeSpanDataDistributionCalculator.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Abt.Controls.SciChart.Model.DataSeries.TimeSpanDataDistributionCalculator" -->
+        <member name="T:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1">
+            <summary>
+            Allows user provided flags for IsSortedAscending and IsEvenlySpaced, flags which are used to determine the correct algorithm for sorting, searching and data-compression in SciChart. 
+            Overridding these flags allows for faster operation where the data distribution is known in advance
+            </summary>
+            <typeparam name="TX">The type of the x-data.</typeparam>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1.OnAppendXValue(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},`0,System.Boolean)">
+            <summary>
+            Called when X Values are appended. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1.OnAppendXValues(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,System.Collections.Generic.IEnumerable{`0},System.Boolean)">
+            <summary>
+            Called when X Values are appended. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="countBeforeAppending"></param>
+            <param name="newXValues"></param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1.OnInsertXValue(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,`0,System.Boolean)">
+            <summary>
+            Called when X Values are inserted. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="indexWhereInserted"></param>
+            <param name="newXValue">The new x value.</param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1.OnInsertXValues(Abt.Controls.SciChart.Model.DataSeries.ISeriesColumn{`0},System.Int32,System.Int32,System.Collections.Generic.IEnumerable{`0},System.Boolean)">
+            <summary>
+            Called when X Values are inserted. Should update the Data Distribution flags
+            </summary>
+            <param name="xValues">The x values.</param>
+            <param name="indexWhereInserted"></param>
+            <param name="insertedCount"></param>
+            <param name="newXValues"></param>
+            <param name="acceptsUnsortedData">if set to <c>true</c> the series accepts unsorted data.</param>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1.IsSortedAscending">
+            <summary>
+            Gets or sets if the data is sorted
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.UserDefinedDistributionCalculator`1.IsEvenlySpaced">
+            <summary>
+            Gets or sets if the data is evenly spaced, within a visual epsilon (typically 1.0/8000.0 of the default spacing)
             </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Model.DataSeries.Array2DPointSeries`2">
@@ -4000,7 +4377,6 @@
             <typeparam name="TX">The type of the X-data</typeparam>
             <typeparam name="TY">Tye type of the Y-data</typeparam>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2"/>
-            <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.UnsortedXyDataSeries`2"/>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries`2"/>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.IXyDataSeries`2"/>
@@ -4376,6 +4752,12 @@
             Gets a synchronization object used to lock this data-series. Also locked on append, update, remove or clear
             </summary>
         </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.IDataSeries.AcceptsUnsortedData">
+            <summary>
+            New to v3.3: when AcceptsUnsortedData is false, the DataSeries with throw an InvalidOperationException if unsorted data is appended. Unintentional unsorted data can result in much slower performance. 
+            To disable this check, set AcceptsUnsortedData = true. 
+            </summary>        
+        </member>
         <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataSeries`2.Append(`0,`1[])">
             <summary>
             Appends an X, Y point to the series
@@ -4740,6 +5122,14 @@
             Synchronization object (per instance) 
             </summary>
         </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2.DataDistributionCalculator">
+            <summary>
+            Gets or Sets the DataDistrutionCalculator instance for this DataSeries. Used when resampling data to determine the correct algorithm 
+            </summary>
+            <remarks>By default, SciChart provides a DataDistributionCalculator which calculates if data is sorted appending, or evenly spaced as you append data. 
+            However, this process takes approximately 30% of the time to append data (or more if appending in blocks). If you know in advance what the distribution of your data will be, 
+            you can set the DataDistributionCalculator = new UserDefinedDistributionCalculator and set the flags yourself </remarks>
+        </member>
         <member name="P:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2.ParentSurface">
             <summary>
             Gets or sets the parent <see cref="T:Abt.Controls.SciChart.Visuals.ISciChartSurface"/> which this <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> instance is attached to
@@ -4807,6 +5197,12 @@
             Gets the number of points in this data series
             </summary>
             <remarks></remarks>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2.AcceptsUnsortedData">
+            <summary>
+            New to v3.3: when AcceptsUnsortedData is false, the DataSeries with throw an InvalidOperationException if unsorted data is appended. Unintentional unsorted data can result in much slower performance. 
+            To disable this check, set AcceptsUnsortedData = true. 
+            </summary>        
         </member>
         <member name="P:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2.SeriesName">
             <summary>
@@ -4886,11 +5282,6 @@
         <member name="P:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2.IsSuspended">
             <summary>
             Gets a value indicating whether updates for the target are currently suspended
-            </summary>
-        </member>
-        <member name="P:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2.DataDistributionCalculator">
-            <summary>
-            Gets the DataDistrutionCalculator instance for this DataSeries. Used when resampling data to determine the correct algorithm 
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Model.DataSeries.BoxPlotDataSeries`2.#ctor">
@@ -5123,28 +5514,6 @@
         <member name="P:Abt.Controls.SciChart.Model.DataSeries.BoxSeriesPoint.UpperQuartile">
             <summary>
             Gets the Upper Quartile value of this <see cref="T:Abt.Controls.SciChart.Model.DataSeries.ISeriesPoint`1"/>. 
-            </summary>
-        </member>
-        <member name="T:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1">
-            <summary>
-            Defines the interface to a DataDistributionCalculator
-            </summary>
-            <typeparam name="TX"></typeparam>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.ClearDataDistributionFlags">
-            <summary>
-            Clears the DataDistributionCalculator flags
-            </summary>
-        </member>
-        <member name="P:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.DataIsSortedAscending">
-            <summary>
-            Gets whether this DataSeries contains Sorted data in the X-direction. 
-            Note: Sorted data will result in far faster indexing operations. If at all possible, try to keep your data sorted in the X-direction
-            </summary>
-        </member>
-        <member name="P:Abt.Controls.SciChart.Model.DataSeries.IDataDistributionCalculator`1.DataIsEvenlySpaced">
-            <summary>
-            Gets whether the data is evenly paced
             </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Model.DataSeries.DoubleToColorMappingSettings">
@@ -5483,21 +5852,6 @@
         <member name="P:Abt.Controls.SciChart.Model.DataSeries.HlcSeriesPoint.YErrorLow">
             <summary>
             Gets the Y-Low value of this <see cref="T:Abt.Controls.SciChart.Model.DataSeries.ISeriesPoint`1"/>. 
-            </summary>
-        </member>
-        <member name="T:Abt.Controls.SciChart.Model.DataSeries.IStackedDataSeries">
-            <summary>
-            Defines the base interface to a DataSeries which can be stacked. Provides a data-source for all stacked renderable series types
-            </summary>
-        </member>
-        <member name="P:Abt.Controls.SciChart.Model.DataSeries.IStackedDataSeries.UnderlyingDataSeries">
-            <summary>
-            Gets underlying stacked data series component
-            </summary>
-        </member>
-        <member name="P:Abt.Controls.SciChart.Model.DataSeries.IStackedDataSeries.PreviousDataSeriesInSameGroup">
-            <summary>
-            Gets other data series from the same stacking group
             </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Model.DataSeries.IXyzDataSeries">
@@ -6879,6 +7233,21 @@
             Add to a <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/> and set IsEnabled to true to enable this behaviour
             </summary>
         </member>
+        <member name="F:Abt.Controls.SciChart.ChartModifiers.TooltipModifier.IncludeSeriesProperty">
+            <summary>
+            Defined IncludeSeries Attached Property
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifier.GetIncludeSeries(System.Windows.DependencyObject)">
+            <summary>
+            Gets the include Series or not
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifier.SetIncludeSeries(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            Sets the include Series or not
+            </summary>
+        </member>
         <member name="F:Abt.Controls.SciChart.ChartModifiers.TooltipModifier.TooltipLabelDataContextSelectorProperty">
             <summary>
             Defines the TooltipLabelDataContext DependencyProperty
@@ -7131,6 +7500,16 @@
             Given an absolute Axis Min and Max, returns a TickRange instance containing sensible MinorDelta and MajorDelta values
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.Numerics.NiceLongScale.NiceNum(System.Int64,System.Boolean)">
+            <summary>
+            Returns a "nice" number approximately equal to the range bounds. 
+            Rounds the number if round = true. 
+            Takes the ceiling if round = false
+            </summary>
+            <param name="range"></param>
+            <param name="round"></param>
+            <returns></returns>
+        </member>
         <member name="M:Abt.Controls.SciChart.Numerics.PolarDeltaCalculator.GetDeltaFromRange(System.Double,System.Double,System.Int32,System.UInt32)">
             <summary>
             Given an absolute Axis Min and Max, returns a TickRange instance containing sensible MinorDelta and MajorDelta values
@@ -7171,7 +7550,27 @@
             <param name="min">T.MaxValue if there are no elements in input. This is required for joining ranges of dataseries</param>
             <param name="max">T.MinValue if there are no elements in input. This is required for joining ranges of dataseries</param>
         </member>
-        <member name="T:Abt.Controls.SciChart.Numerics.GenericMath.ArrayOperations.IMinMaxHelper`1">
+        <member name="M:Abt.Controls.SciChart.Numerics.GenericMath.ArrayOperations.IsSortedAscending``1(``0[],System.Int32,System.Int32)">
+            <summary>
+            Fast generic computation of whether an array is sorted
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Numerics.GenericMath.ArrayOperations.IsSortedAscending``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Fast generic computation of whether a list is sorted
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Numerics.GenericMath.ArrayOperations.IsEvenlySpaced``1(``0[],System.Int32,System.Int32,System.Double,System.Double@)">
+            <summary>
+            Fast generic computation of whether an array is evenly spaced
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Numerics.GenericMath.ArrayOperations.IsEvenlySpaced``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32,System.Double,System.Double@)">
+            <summary>
+            Fast generic computation of whether an array is evenly spaced
+            </summary>
+        </member>
+        <member name="T:Abt.Controls.SciChart.Numerics.GenericMath.ArrayOperations.IGenericArrayHelper`1">
             <summary>Interface to fast autogenerated generic Min Max helpers</summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Common.Extensions.DependencyObjectExtensions">
@@ -10651,7 +11050,6 @@
             May be used as a DataSource for <seealso cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.FastBandRenderableSeries"/> as well as standard XY renderable series types
             </summary>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.DataSeries`2"/>
-            <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.UnsortedXyDataSeries`2"/>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries`2"/>
             <seealso cref="T:Abt.Controls.SciChart.Model.DataSeries.IXyDataSeries`2"/>
@@ -11017,6 +11415,21 @@
             Add to a <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/> and set IsEnabled to true to enable this behaviour
             </summary>
         </member>
+        <member name="F:Abt.Controls.SciChart.ChartModifiers.CursorModifier.IncludeSeriesProperty">
+            <summary>
+            Defined IncludeSeries Attached Property
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.CursorModifier.GetIncludeSeries(System.Windows.DependencyObject)">
+            <summary>
+            Gets the include Series or not
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.CursorModifier.SetIncludeSeries(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            Sets the include Series or not
+            </summary>
+        </member>
         <member name="F:Abt.Controls.SciChart.ChartModifiers.CursorModifier.ShowTooltipProperty">
             <summary>
             Defines the ShowTooltip DependencyProperty
@@ -11199,6 +11612,21 @@
             Called immediately before the Chart Modifier is detached from the Chart Surface
             </summary>
             <remarks></remarks>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnXAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnYAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Called when the AnnotationCollection changes
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnIsEnabledChanged">
             <summary>
@@ -11469,6 +11897,21 @@
             <summary>
             The <see cref="T:Abt.Controls.SciChart.ChartModifiers.RolloverModifier"/> provides a mouse-over hit-test to a chart, plus a collection of <see cref="T:Abt.Controls.SciChart.SeriesInfo"/> objects to bind to which updates as the mouse moves.
             Add to a <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/> and set IsEnabled to true to enable this behaviour
+            </summary>
+        </member>
+        <member name="F:Abt.Controls.SciChart.ChartModifiers.RolloverModifier.IncludeSeriesProperty">
+            <summary>
+            Defined IncludeSeries Attached Property
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.RolloverModifier.GetIncludeSeries(System.Windows.DependencyObject)">
+            <summary>
+            Gets the include Series or not
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.RolloverModifier.SetIncludeSeries(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            Sets the include Series or not
             </summary>
         </member>
         <member name="F:Abt.Controls.SciChart.ChartModifiers.RolloverModifier.DrawVerticalLineProperty">
@@ -11944,12 +12387,15 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.XAxisDragModifier.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.XAxisDragModifier.OnAttached">
             <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
+            Called when the element is attached to the Chart Surface
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.XAxisDragModifier.OnXAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.XAxisDragModifier.OnModifierMouseDown(Abt.Controls.SciChart.ChartModifiers.ModifierMouseArgs)">
             <summary>
@@ -12044,12 +12490,15 @@
             The output <see cref="T:Abt.Controls.SciChart.IRange"/>
             </returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.YAxisDragModifier.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.YAxisDragModifier.OnAttached">
             <summary>
-            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes to get notification of this event
+            Called when the Chart Modifier is attached to the Chart Surface
             </summary>
-            <param name="sender">The sender.</param>
-            <param name="e">The <see cref="T:System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.YAxisDragModifier.OnXAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.ChartModifiers.YAxisDragModifier.OnModifierMouseDown(Abt.Controls.SciChart.ChartModifiers.ModifierMouseArgs)">
             <summary>
@@ -12346,6 +12795,16 @@
             Given an absolute Axis Min and Max, returns a TickRange instance containing sensible MinorDelta and MajorDelta values
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.Numerics.NiceDoubleScale.NiceNum(System.Double,System.Boolean)">
+            <summary>
+            Returns a "nice" number approximately equal to the range bounds. 
+            Rounds the number if round = true. 
+            Takes the ceiling if round = false
+            </summary>
+            <param name="range"></param>
+            <param name="round"></param>
+            <returns></returns>
+        </member>
         <member name="M:Abt.Controls.SciChart.Numerics.IPointResampler_Old.RequiresReduction(Abt.Controls.SciChart.IndexRange,System.Int32)">
             <summary>
             Returns true if a dataset with the specified index range requires point reduction on the given viewport size
@@ -12438,26 +12897,6 @@
             <summary>
             Auto-detect the most suitable resampling algorithm (Fastest, plus most accurate) for the type of data appended
             </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Numerics.NiceLongScale.NiceNum(System.Int64,System.Boolean)">
-            <summary>
-            Returns a "nice" number approximately equal to the range bounds. 
-            Rounds the number if round = true. 
-            Takes the ceiling if round = false
-            </summary>
-            <param name="range"></param>
-            <param name="round"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Numerics.NiceDoubleScale.NiceNum(System.Double,System.Boolean)">
-            <summary>
-            Returns a "nice" number approximately equal to the range bounds. 
-            Rounds the number if round = true. 
-            Takes the ceiling if round = false
-            </summary>
-            <param name="range"></param>
-            <param name="round"></param>
-            <returns></returns>
         </member>
         <member name="T:Abt.Controls.SciChart.Numerics.IPointResampler">
             <summary>
@@ -13195,13 +13634,14 @@
             <param name="startY">The start Y coordinate (pixel coord)</param>
             <returns>The <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/> to continue the line</returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double)">
+        <member name="M:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double,System.Double)">
             <summary>
             Begins a filled Polygon segment, returning the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/>. This is the fastest way to draw polygon and simply a proxy to <see cref="M:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D.FillArea(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Collections.Generic.IEnumerable{System.Tuple{System.Windows.Point,System.Windows.Point}},System.Boolean,System.Double)"/> method. 
             </summary>
             <param name="brush">The brush for the polygon fill</param>
             <param name="startX">The start X coordinate (pixel coord)</param>
             <param name="startY">The start Y coordinate (pixel coord)</param>
+            <param name="gradientRotationAngle">The angle which the <param name="brush"></param> is rotated by</param>
             <returns>The <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/> to continue the polygon</returns>
         </member>
         <member name="P:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D.Layers">
@@ -13551,13 +13991,14 @@
             The <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/> to continue the line
             </returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Rendering.Common.RenderContextBase.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double)">
+        <member name="M:Abt.Controls.SciChart.Rendering.Common.RenderContextBase.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double,System.Double)">
             <summary>
             Begins a filled Polygon segment, returning the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/>. This is the fastest way to draw polygon and simply a proxy to <see cref="M:Abt.Controls.SciChart.Rendering.Common.RenderContextBase.FillArea(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Collections.Generic.IEnumerable{System.Tuple{System.Windows.Point,System.Windows.Point}},System.Boolean,System.Double)"/> method.
             </summary>
             <param name="brush">The brush for the polygon fill</param>
             <param name="startX">The start X coordinate (pixel coord)</param>
             <param name="startY">The start Y coordinate (pixel coord)</param>
+            <param name="gradientRotationAngle">The angle which the <param name="brush"></param> is rotated by</param>
             <returns>
             The <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/> to continue the polygon
             </returns>
@@ -14009,7 +14450,7 @@
             The <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/> to continue the line
             </returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Rendering.HighQualityRasterizer.HqRenderContext.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double)">
+        <member name="M:Abt.Controls.SciChart.Rendering.HighQualityRasterizer.HqRenderContext.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double,System.Double)">
             <summary>
             Begins a filled Polygon segment, returning the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/>. This is the fastest way to draw polygon and simply a proxy to <see cref="M:Abt.Controls.SciChart.Rendering.HighQualityRasterizer.HqRenderContext.FillArea(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Collections.Generic.IEnumerable{System.Tuple{System.Windows.Point,System.Windows.Point}},System.Boolean,System.Double)"/> method.
             </summary>
@@ -14028,6 +14469,11 @@
             <seealso cref="T:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HighSpeedRenderSurface"/>
             <seealso cref="T:Abt.Controls.SciChart.Rendering.Common.RenderSurfaceBase"/>
             <seealso cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Rendering.HighQualityRasterizer.HighQualityRenderSurface.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Rendering.HighQualityRasterizer.HighQualityRenderSurface"/> class.
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Rendering.HighQualityRasterizer.HighQualityRenderSurface.RecreateSurface">
             <summary>
@@ -17107,6 +17553,29 @@
             Gets a value indicating whether updates for the target are currently suspended
             </summary>
         </member>
+        <member name="T:Abt.Controls.SciChart.Themes.IAxisPanel">
+            <summary>
+            Provides drawing capabilities for labels and ticks on an Axis within SciChart
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Themes.IAxisPanel.ClearLabels">
+            <summary>
+            Removes all the labels from an axis.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Themes.IAxisPanel.DrawTicks(Abt.Controls.SciChart.Numerics.TickCoordinateProviders.TickCoordinates,System.Single)">
+            <summary>
+            Draws ticks on an axis at the given coordinates.
+            </summary>
+            <param name="tickCoords"></param>
+            <param name="offset"></param>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Themes.IAxisPanel.DrawTickLabels(System.Action{Abt.Controls.SciChart.Themes.AxisCanvas})">
+            <summary>
+            Draws labels on an axis using 
+            </summary>
+            <param name="draw"></param>
+        </member>
         <member name="T:Abt.Controls.SciChart.Themes.AxisPanel">
             <summary>
             A panel providing a Bitmap and Labels Canvas for use on Axis within SciChart
@@ -17142,9 +17611,14 @@
             The axis alignment property
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.#ctor">
+        <member name="F:Abt.Controls.SciChart.Themes.AxisPanel.AxisLabelToTickIndentProperty">
             <summary>
-            Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Themes.AxisPanel"/> class.
+            The AxisLabelToTickIndent property
+            </summary>
+        </member>
+        <member name="F:Abt.Controls.SciChart.Themes.AxisPanel.IsLabelCullingEnabledProperty">
+            <summary>
+            The IsLabelCullingEnabled DependencyProperty
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.DrawTickLabels(System.Action{Abt.Controls.SciChart.Themes.AxisCanvas})">
@@ -17188,12 +17662,7 @@
             If direction is <see cref="F:Abt.Controls.SciChart.XyDirection.XDirection"/>, the coodinate is an X-coordinate, else it is a Y-coordinate
             </remarks>
         </member>
-        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.OnApplyTemplate">
-            <summary>
-            When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate" />.
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.Clear">
+        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.ClearLabels">
             <summary>
             Clears the <see cref="T:Abt.Controls.SciChart.Themes.AxisPanel"/>
             </summary>
@@ -17213,6 +17682,11 @@
         <member name="E:Abt.Controls.SciChart.Themes.AxisPanel.PropertyChanged">
             <summary>
             Occurs when a property value changes.
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Themes.AxisPanel.IsLabelCullingEnabled">
+            <summary>
+            Gets or sets a value indicating whether Label Culling is enabled (when labels overlap) on this AxisPanel instance
             </summary>
         </member>
         <member name="P:Abt.Controls.SciChart.Themes.AxisPanel.AxisAlignment">
@@ -17271,11 +17745,6 @@
         <member name="T:Abt.Controls.SciChart.Themes.PolarAxisPanel">
             <summary>
             A panel providing a Bitmap and Labels Canvas for use on <see cref="T:Abt.Controls.SciChart.Visuals.Axes.PolarXAxis"/> within SciChart
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Themes.PolarAxisPanel.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Themes.PolarAxisPanel"/> class.
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Themes.PolarAxisPanel.DrawTicks(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,System.Windows.Style,System.Double,System.Single[],System.Single)">
@@ -17439,6 +17908,9 @@
             A canvas which overlays an axis and is used to place Tick Labels
             </summary>
         </member>
+        <member name="F:Abt.Controls.SciChart.Themes.TickLabelAxisCanvas.IsLabelCullingEnabledProperty">
+            <summary>Defines the IsLabelCullingEnabled DependendencyProperty</summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Themes.TickLabelAxisCanvas.MeasureOverride(System.Windows.Size)">
             <summary>
             Measures all the children and returns their size.
@@ -17453,6 +17925,11 @@
             <param name="arrangeSize">The size to arrange element's within.
             </param>
             <returns>The size that element's were arranged in.</returns>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Themes.TickLabelAxisCanvas.IsLabelCullingEnabled">
+            <summary>
+            Gets or sets whether Label Culling is enabled on this Axis Canvas
+            </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Visuals.Annotations.SeriesValueAxisMarkerAnnotation">
             <summary>
@@ -17609,6 +18086,46 @@
         <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.Refresh">
             <summary>
             Refreshes the annnotation position on the parent <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/>, without causing a full redraw of the chart
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnDragStarted">
+            <summary>
+            Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragStarted"/> event, called when a drag operation starts
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnDragEnded">
+            <summary>
+            Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragEnded"/> event, called when a drag operation ends
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnDragDelta">
+            <summary>
+            Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragDelta"/> event, called when a drag operation is in progress and each time the X1 Y1 X2 Y2 points update in the annotation
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnXAxesCollectionChanged">
+            <summary>
+            Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> changes.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnYAxesCollectionChanged">
+            <summary>
+            Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> changes.
+            </summary>
+        </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.DragStarted">
+            <summary>
+            Occurs when a Drag or move operation starts
+            </summary>
+        </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.DragEnded">
+            <summary>
+            Occurs when a Drag or move operation ends
+            </summary>
+        </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.DragDelta">
+            <summary>
+            Occurs when current <see cref="T:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase"/> is dragged or moved
             </summary>
         </member>
         <member name="E:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.Selected">
@@ -17800,16 +18317,29 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnDragStarted">
             <summary>
-            Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> changes.
-            Override <see cref="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnXAxesCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)"/> to receive notifications
+            Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragStarted"/> event, called when a drag operation starts
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnDragEnded">
+            <summary>
+            Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragEnded"/> event, called when a drag operation ends
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnDragDelta">
+            <summary>
+            Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragDelta"/> event, called when a drag operation is in progress and each time the X1 Y1 X2 Y2 points update in the annotation
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.Abt#Controls#SciChart#Visuals#Annotations#IAnnotation#OnXAxesCollectionChanged">
+            <summary>
+            Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> changes.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.Abt#Controls#SciChart#Visuals#Annotations#IAnnotation#OnYAxesCollectionChanged">
             <summary>
             Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> changes.
-            Override <see cref="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnYAxesCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)"/> to receive notifications
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnAxisAlignmentChanged(Abt.Controls.SciChart.Visuals.Axes.IAxis,Abt.Controls.SciChart.Visuals.Axes.AxisAlignment)">
@@ -17819,12 +18349,12 @@
             <param name="axis"></param>
             <param name="oldAlignment"></param>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnXAxesCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnXAxesCollectionChanged">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> has changed
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnYAxesCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnYAxesCollectionChanged">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> has changed
             </summary>
@@ -17854,6 +18384,13 @@
             Called when the Annotation is attached to parent surface
             </summary>
             <remarks></remarks>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnAnnotationLoaded(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Gets called as soon as the Loaded event occurs.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.AttachInteractionHandlersTo(System.Windows.FrameworkElement)">
             <summary>
@@ -18234,9 +18771,19 @@
             Occurs when <see cref="T:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation"/> becomes unselected. 
             </summary>
         </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragStarted">
+            <summary>
+            Occurs when a Drag or move operation starts
+            </summary>
+        </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragEnded">
+            <summary>
+            Occurs when a Drag or move operation ends
+            </summary>
+        </member>
         <member name="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragDelta">
             <summary>
-            Occurs when current <see cref="T:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase"/> becomes selected and receives mouse capture.
+            Occurs when current <see cref="T:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase"/> is dragged or moved
             </summary>
         </member>
         <member name="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.IsHiddenChanged">
@@ -18953,15 +19500,16 @@
             <param name="tickDelta">The Deltas, e.g. MinorDelta and MajorDelta</param>
             <returns>The Major ticks (data values) as double</returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Axes.NumericTickProvider.CalculateMinorTicks(Abt.Controls.SciChart.IRange{System.Double},Abt.Controls.SciChart.IAxisDelta{System.Double})">
+        <member name="M:Abt.Controls.SciChart.Visuals.Axes.NumericTickProvider.CalculateMinorTicks(Abt.Controls.SciChart.IRange{System.Double},Abt.Controls.SciChart.IAxisDelta{System.Double},System.Double[])">
             <summary>
             Calculates the Minor Ticks for the axis given a VisibleRange and Delta
             </summary>
             <param name="tickRange">The VisibleRange</param>
             <param name="tickDelta">The Deltas, e.g. MinorDelta and MajorDelta</param>
-            <returns>The Major ticks (data values) as double</returns>
+            <param name="majorTicks">The previously calculated Major Ticks</param>
+            <returns>The Minor Ticks (data values) as double</returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Axes.NumericTickProvider.CalculateMinorTicks(Abt.Controls.SciChart.IRange{System.Double},Abt.Controls.SciChart.IAxisDelta{System.Double},System.Double[])">
+        <member name="M:Abt.Controls.SciChart.Visuals.Axes.NumericTickProvider.CalculateMinorTicks(Abt.Controls.SciChart.IRange{System.Double},Abt.Controls.SciChart.IAxisDelta{System.Double})">
             <summary>
             Calculates the Minor Ticks for the axis given a VisibleRange and Delta
             </summary>
@@ -19373,10 +19921,15 @@
             Defines the Axis ScrollBar
             </summary>
         </member>
+        <member name="F:Abt.Controls.SciChart.Visuals.Axes.AxisBase.IsLabelCullingEnabledProperty">
+            <summary>
+            The IsLabelCullingEnabled DependencyProperty
+            </summary>
+        </member>
         <member name="F:Abt.Controls.SciChart.Visuals.Axes.AxisBase._currentCoordinateCalculator">
             <summary>
             The current CoordinateCalculator for this render pass
-            </summary>
+            </summary>        
         </member>
         <member name="F:Abt.Controls.SciChart.Visuals.Axes.AxisBase._currentInteractivityHelper">
             <summary>
@@ -19926,6 +20479,11 @@
         <member name="P:Abt.Controls.SciChart.Visuals.Axes.AxisBase.IsAxisFlipped">
             <summary>
             Gets whether the current axis is flipped (e.g. YAxis on the bottom or top, or XAxis on the left or right)
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Visuals.Axes.AxisBase.IsLabelCullingEnabled">
+            <summary>
+            Gets or sets a value indicating whether Label Culling is enabled (when labels overlap) on this AxisPanel instance
             </summary>
         </member>
         <member name="P:Abt.Controls.SciChart.Visuals.Axes.AxisBase.IsCenterAxis">
@@ -20946,7 +21504,7 @@
             Defines common properties to stacked series wrappers, such as <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnsWrapper"/> and <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainsWrapper"/>
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedSeriesWrapperBase`1.GetIsOneHundredPercent(System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedSeriesWrapperBase`1.IsOneHundredPercentGroup(System.String)">
             <summary>
             Gets a value indicating whether all the series within the StackedGroup are 100% stacked.
             </summary>
@@ -20982,7 +21540,7 @@
             Removes the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> from the internal collection.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String,System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String)">
             <summary>
             Called internally to move series from one StackedGroup to another.
             </summary>
@@ -20997,11 +21555,9 @@
             Returns amount of the series being stacked.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.AccumulateYValueAtX(`0,System.Int32,System.Boolean)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.GetStackedSeriesCount">
             <summary>
-            Accumulate Y value at <see cref="!:index"/> for stacked series in PointSeries or in DataSeries accordint to <see cref="!:inPointSeries"/>
-            Item1 - represents Top Accumulated value
-            Item2 - represents Bottom Accumulated value
+            Gets count if StackedSeriesCollection count
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.CalculateYRange(`0,Abt.Controls.SciChart.IndexRange)">
@@ -21009,9 +21565,21 @@
             Calculates YRange for passed in <see cref="!:series"/>
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.GetIsOneHundredPercent(System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.AccumulateYValueAtX(`0,System.Int32,System.Boolean)">
+            <summary>
+            Accumulate Y value at <see cref="!:index"/> for stacked series in PointSeries or in DataSeries accordint to <see cref="!:inPointSeries"/>
+            Item1 - represents Top Accumulated value
+            Item2 - represents Bottom Accumulated value
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.IsOneHundredPercentGroup(System.String)">
             <summary>
             Gets a value whether all stacked series with the same StackedGroupId will appear 100% stacked
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.ShiftHitTestInfo(System.Windows.Point,Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo,System.Double,`0)">
+            <summary>
+            Returns shifted <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo"/> for horizontally / vertically stacked <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries"/>
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.AddSeries(`0)">
@@ -21019,14 +21587,14 @@
             Add <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> to wrappers internal collection
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.RemoveSeries(`0)">
-            <summary>
-            Remove <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> from wrappers internal collection
-            </summary>
-        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.AddSeriesToGroups(`0,System.String)">
             <summary>
             Uses internally to add <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> to internal _seriesGroups dictionary
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.RemoveSeries(`0)">
+            <summary>
+            Remove <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> from wrappers internal collection
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.RemoveSeriesFromGroups(`0,System.String)">
@@ -21034,7 +21602,7 @@
             Uses internally to remove <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> from internal _seriesGroups dictionary
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String,System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String)">
             <summary>
             Uses internally to move sSeries from old group to new one (according to passed id's
             </summary>
@@ -21042,16 +21610,6 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.GetStackedSeriesFromSameGroup(System.String)">
             <summary>
             Returns all <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> with the same groupId 
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.GetStackedSeriesCount">
-            <summary>
-            Gets count if StackedSeriesCollection count
-            </summary>
-        </member>
-        <member name="P:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.StackedSeriesCollection">
-            <summary>
-            Used internally for unit testing
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnsWrapper.GetDataPointWidthFraction">
@@ -21189,10 +21747,20 @@
             Defines the interface to <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries"/>
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedMountainRenderableSeries.DrawMountain(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,System.Boolean)">
+            <summary>
+            Draws the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries"/> using <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/>, <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/>.
+            </summary>
+        </member>
         <member name="P:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedMountainRenderableSeries.Wrapper">
             <summary>
             Gets the instance of <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnsWrapper"/> used internally for
             stacked series composition and rendering.
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedMountainRenderableSeries.IsDigitalLine">
+            <summary>
+            Gets or sets a value indicating whether this line series is a digital (step) line.
             </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Visuals.RenderableSeries.LinesPathContextFactory">
@@ -21364,6 +21932,11 @@
             <seealso cref="T:Abt.Controls.SciChart.Rendering.HighQualityRasterizer.HighQualityRenderSurface"/>
             <seealso cref="T:Abt.Controls.SciChart.Rendering.Common.RenderSurfaceBase"/>
             <seealso cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HighSpeedRenderSurface.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HighSpeedRenderSurface"/> class.
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HighSpeedRenderSurface.GetRenderContext">
             <summary>
@@ -22641,27 +23214,32 @@
             The <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/> to continue the line
             </returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HsRenderContext.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double)">
+        <member name="M:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HsRenderContext.BeginPolygon(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Double,System.Double,System.Double)">
             <summary>
             Begins a filled Polygon segment, returning the <see cref="!:IFillDrawingContext"/>. This is the fastest way to draw polygon and simply a proxy to <see cref="M:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HsRenderContext.FillArea(Abt.Controls.SciChart.Rendering.Common.IBrush2D,System.Collections.Generic.IEnumerable{System.Tuple{System.Windows.Point,System.Windows.Point}},System.Boolean,System.Double)"/> method.
             </summary>
             <param name="brush">The brush for the polygon fill</param>
             <param name="startX">The start X coordinate (pixel coord)</param>
             <param name="startY">The start Y coordinate (pixel coord)</param>
+            /// <param name="gradientRotationAngle">The angle which the <param name="brush"></param> is rotated by</param>
             <returns>
             The <see cref="T:Abt.Controls.SciChart.Rendering.Common.IPathDrawingContext"/> to continue the polygon
             </returns>
-        </member>
-        <member name="P:Abt.Controls.SciChart.Rendering.HighSpeedRasterizer.HsRenderContext.WbxPolygonDrawingContext.GradientRotationAngle">
-            <summary>
-            TODO: This needs to be set when drawing the polygon
-            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Rendering.TextureBrush.GetIntTexture(System.Windows.Size)">
             <returns>int32 array for WriteableBitmap renderer</returns>
         </member>
         <member name="M:Abt.Controls.SciChart.Rendering.TextureBrush.GetByteTexture(System.Windows.Size)">
             <returns>BGRA byte array for AggSharp renderer</returns>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Rendering.TextureBrush.GetIntOffsetNotConsideringMappingMode(System.Int32,System.Int32,System.Double)">
+            <summary>
+            Used for the mountain area filling.
+            </summary>
+            <param name="screenX"></param>
+            <param name="screenY"></param>
+            <param name="gradiendRotationAngle"></param>
+            <returns></returns>
         </member>
         <member name="T:Abt.Controls.SciChart.RenderPassInfo">
             <summary>
@@ -23646,6 +24224,16 @@
             Provides helper methods for manipulations with points
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.Utility.PointUtil.LineSegmentsIntersection2D(Abt.Controls.SciChart.Utility.PointUtil.Line,Abt.Controls.SciChart.Utility.PointUtil.Line,System.Windows.Point@)">
+            <summary>
+            Looks for the intersection point for the two lines passed in
+            </summary>
+            <param name="firstLine">The first line</param>
+            <param name="secondLine">The second line</param>
+            <param name="intersectionPoint">If the lines intersect, holds the intersection point</param>
+            <returns>The value indicating whether an intersection occurs</returns>
+            <remarks>See http://paulbourke.net/geometry/lineline2d/Helpers.cs </remarks>
+        </member>
         <member name="M:Abt.Controls.SciChart.Utility.PointUtil.LineIntersection2D(Abt.Controls.SciChart.Utility.PointUtil.Line,Abt.Controls.SciChart.Utility.PointUtil.Line,System.Windows.Point@)">
             <summary>
             Looks for the intersection point for the two lines passed in
@@ -24276,6 +24864,13 @@
             <param name="oldContent">The old value of the <see cref="P:System.Windows.Controls.ContentControl.Content" /> property.</param>
             <param name="newContent">The new value of the <see cref="P:System.Windows.Controls.ContentControl.Content" /> property.</param>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.CustomAnnotation.OnContentTemplateChanged(System.Windows.DataTemplate,System.Windows.DataTemplate)">
+            <summary>
+            Called when the <see cref="P:System.Windows.Controls.ContentControl.ContentTemplate" /> property changes.
+            </summary>
+            <param name="oldContentTemplate">The old value of the <see cref="P:System.Windows.Controls.ContentControl.ContentTemplate" /> property.</param>
+            <param name="newContentTemplate">The new value of the <see cref="P:System.Windows.Controls.ContentControl.ContentTemplate" /> property.</param>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.Annotations.CustomAnnotation.IsPointWithinBounds(System.Windows.Point)">
             <summary>
             Returns true if the Point is within the bounds of the current <see cref="T:Abt.Controls.SciChart.Visuals.IHitTestable"/> element
@@ -24431,17 +25026,15 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnXAxesCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnXAxesCollectionChanged">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> has changed
             </summary>
-            <param name="e"></param>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnYAxesCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnYAxesCollectionChanged">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> has changed
             </summary>
-            <param name="e"></param>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnYAxisIdChanged">
             <summary>
@@ -24928,6 +25521,16 @@
             </summary>
             <param name="annotationBase">Annotation <see cref="T:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation"/> for selection</param>
             <returns></returns>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationCollection.OnXAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationCollection.OnYAxesCollectionChanged">
+            <summary>
+            Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
+            </summary>
         </member>
         <member name="P:Abt.Controls.SciChart.Visuals.Annotations.AnnotationCollection.ParentSurface">
             <summary>
@@ -26461,6 +27064,21 @@
             Event raised when alignment of any axis changed
             </summary>
         </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.ISciChartSurface.AnnotationsCollectionNewCollectionAssigned">
+            <summary>
+            Event raised when Annotations DependencyProperty is changed
+            </summary>
+        </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.ISciChartSurface.YAxesCollectionNewCollectionAssigned">
+            <summary>
+            Event raised when YAxes DependnecyProperty is changed
+            </summary>
+        </member>
+        <member name="E:Abt.Controls.SciChart.Visuals.ISciChartSurface.XAxesCollectionNewCollectionAssigned">
+            <summary>
+            Event raised when XAxes DependnecyProperty is changed
+            </summary>
+        </member>
         <member name="P:Abt.Controls.SciChart.Visuals.ISciChartSurface.ChartModifier">
             <summary>
             Gets or sets the current ChartModifier, which alters the behaviour of the chart
@@ -26680,6 +27298,11 @@
             </summary>
             <remarks></remarks>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetPointMarker">
             <summary>
             Returns the PointMarker used by this series
@@ -26841,6 +27464,19 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetXRange">
             <summary>
             Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on X direction
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetSeriesBodyWidth(Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo)">
@@ -27140,21 +27776,6 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainsWrapper.DrawStackedSeries(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D)">
             <summary>
             Draws the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedMountainRenderableSeries"/> using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/> passed in
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainsWrapper.DrawMountain(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries,System.Boolean)">
-            <summary>
-            Draws the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries"/> using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/>, <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/> and renderable series itself passed in
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainsWrapper.FillWithPoint2DSeries(Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries,System.Boolean,Abt.Controls.SciChart.Model.DataSeries.IPointSeries@)">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainsWrapper.ShiftHitTestInfo(System.Windows.Point,Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo,System.Double,Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedMountainRenderableSeries)">
-            <summary>
-            Returns shifted <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo"/> for horizontally / vertically stacked <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries"/>
             </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Visuals.SciChartLegend">
@@ -27609,6 +28230,11 @@
             The <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo"/> result
             </returns>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastBandRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastBandRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
             <summary>
             Draws the series using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/> and the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/> passed in
@@ -27748,6 +28374,11 @@
             <param name="hitTestInfo"></param>
             <returns></returns>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastBoxPlotRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastBoxPlotRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
             <summary>
             Draws the series using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/> and the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/> passed in
@@ -27877,6 +28508,11 @@
             </summary>
             <remarks></remarks>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastErrorBarsRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastErrorBarsRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
             <summary>
             Draws the series using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/> and the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/> passed in
@@ -27987,6 +28623,18 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastImpulseRenderableSeries.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.FastImpulseRenderableSeries"/> class.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastImpulseRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastImpulseRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastImpulseRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
@@ -28140,6 +28788,11 @@
             Called when resampling mode changes
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastCandlestickRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastCandlestickRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
             <summary>
             Draws the series using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/> and the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/> passed in
@@ -28199,6 +28852,18 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastColumnRenderableSeries.#ctor">
             <summary>
             Initializes a new instance of the <seealso cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.FastColumnRenderableSeries"/> class.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastColumnRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastColumnRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastColumnRenderableSeries.GetColumnWidth(Abt.Controls.SciChart.Model.DataSeries.IPointSeries,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
@@ -28275,6 +28940,11 @@
             Called when the <see cref="P:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.SeriesColor"/> dependency property changes. Allows derived types to do caching 
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastLineRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastLineRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
             <summary>
             Draws the series using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/> and the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/> passed in
@@ -28323,6 +28993,11 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastMountainRenderableSeries.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.FastMountainRenderableSeries"/> class.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastMountainRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastMountainRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
@@ -28379,6 +29054,11 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastOhlcRenderableSeries.OnResamplingModeChanged">
             <summary>
             Called when the resampling mode changes
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastOhlcRenderableSeries.GetIsValidForDrawing">
+            <summary>
+            Gets a value indicating whether this <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries"/> is valid for drawing.
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.FastOhlcRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
@@ -29268,7 +29948,7 @@
         </member>
         <member name="E:Abt.Controls.SciChart.Visuals.SciChartSurface.AnnotationsCollectionNewCollectionAssigned">
             <summary>
-            Eveent raised when Annotations DependencyProperty is changed
+            Event raised when Annotations DependencyProperty is changed
             </summary>
         </member>
         <member name="P:Abt.Controls.SciChart.Visuals.SciChartSurface.LicenseDaysRemaining">
@@ -29681,9 +30361,11 @@
             Computes the full X data range which current <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries"/> occupies.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
             <summary>
-            Computes the full Y data range which current <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries"/> occupies.
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries.InternalDraw(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData)">
@@ -29802,6 +30484,18 @@
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries"/> class.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries.Abt#Controls#SciChart#Visuals#RenderableSeries#IStackedMountainRenderableSeries#DrawMountain(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,System.Boolean)">
+            <summary>
+            Draws the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries"/> using the <see cref="T:Abt.Controls.SciChart.Rendering.Common.IRenderContext2D"/>, <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IRenderPassData"/> and renderable series itself passed in
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedMountainRenderableSeries.IsHitTest(System.Windows.Point,Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo,System.Double,System.Windows.Point,System.Windows.Point)">
@@ -29960,6 +30654,11 @@
         <member name="P:Abt.Controls.SciChart.IChildPane.Title">
             <summary>
             Gets or sets the Title of this Child Pane
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.IChildPane.ClosePaneCommand">
+            <summary>
+            A command which when invoked, closes the child pane
             </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.ItemPane">
