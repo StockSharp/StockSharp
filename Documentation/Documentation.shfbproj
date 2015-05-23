@@ -35,8 +35,8 @@
       <DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.dll" />
       <DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.xml" />
       <DocumentationSource sourceFile="..\Algo\bin\Debug\StockSharp.Algo.xml" />
-      <DocumentationSource sourceFile="..\Connectors\BitStamp\StockSharp.BitStamp.dll" />
-      <DocumentationSource sourceFile="..\Connectors\BitStamp\StockSharp.BitStamp.xml" />
+      <DocumentationSource sourceFile="..\Connectors\BitStamp\bin\Debug\StockSharp.BitStamp.dll" />
+      <DocumentationSource sourceFile="..\Connectors\BitStamp\bin\Debug\StockSharp.BitStamp.xml" />
       <DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.dll" />
       <DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.xml" />
       <DocumentationSource sourceFile="..\Connectors\Btce\bin\Debug\StockSharp.Btce.dll" />
@@ -47,14 +47,14 @@
       <DocumentationSource sourceFile="..\Community\bin\Debug\StockSharp.Community.xml" />
       <DocumentationSource sourceFile="..\Connectors\CQG\bin\Debug\StockSharp.CQG.dll" />
       <DocumentationSource sourceFile="..\Connectors\CQG\bin\Debug\StockSharp.CQG.xml" />
-      <DocumentationSource sourceFile="..\Connectors\ETrade\StockSharp.ETrade.dll" />
-      <DocumentationSource sourceFile="..\Connectors\ETrade\StockSharp.ETrade.xml" />
+      <DocumentationSource sourceFile="..\Connectors\ETrade\bin\Debug\StockSharp.ETrade.dll" />
+      <DocumentationSource sourceFile="..\Connectors\ETrade\bin\Debug\StockSharp.ETrade.xml" />
       <DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.dll" />
       <DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.xml" />
       <DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\bin\Debug\StockSharp.InteractiveBrokers.dll" />
       <DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\bin\Debug\StockSharp.InteractiveBrokers.xml" />
-      <DocumentationSource sourceFile="..\Connectors\IQFeed\StockSharp.IQFeed.dll" />
-      <DocumentationSource sourceFile="..\Connectors\IQFeed\StockSharp.IQFeed.xml" />
+      <DocumentationSource sourceFile="..\Connectors\IQFeed\bin\Debug\StockSharp.IQFeed.dll" />
+      <DocumentationSource sourceFile="..\Connectors\IQFeed\bin\Debug\StockSharp.IQFeed.xml" />
       <DocumentationSource sourceFile="..\References\StockSharp.Licensing.dll" />
       <DocumentationSource sourceFile="..\References\StockSharp.Licensing.xml" />
       <DocumentationSource sourceFile="..\Connectors\LMAX\bin\Debug\StockSharp.LMAX.dll" />
@@ -69,8 +69,8 @@
       <DocumentationSource sourceFile="..\Messages\bin\Debug\StockSharp.Messages.xml" />
       <DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.dll" />
       <DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.xml" />
-      <DocumentationSource sourceFile="..\Connectors\Oanda\StockSharp.Oanda.dll" />
-      <DocumentationSource sourceFile="..\Connectors\Oanda\StockSharp.Oanda.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Oanda\bin\Debug\StockSharp.Oanda.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Oanda\bin\Debug\StockSharp.Oanda.xml" />
       <DocumentationSource sourceFile="..\Connectors\OpenECry\bin\Debug\StockSharp.OpenECry.dll" />
       <DocumentationSource sourceFile="..\Connectors\OpenECry\bin\Debug\StockSharp.OpenECry.xml" />
       <DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.dll" />
@@ -141,6 +141,7 @@
     <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
+    <BuildLogFile>F:\GitHub\StockSharp\Documentation\doc_log.log</BuildLogFile>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
@@ -756,10 +757,6 @@
     <Image Include="Art\hydra_setup1.png">
       <ImageId>hydra_setup1</ImageId>
       <AlternateText>hydra setup 1</AlternateText>
-    </Image>
-    <Image Include="Art\hydra_setup2.png">
-      <ImageId>hydra_setup2</ImageId>
-      <AlternateText>hydra setup 2</AlternateText>
     </Image>
     <Image Include="Art\hydra_setup3.png">
       <ImageId>hydra_setup3</ImageId>
