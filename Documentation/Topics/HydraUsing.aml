@@ -6,16 +6,14 @@
 			  <step>
 				  <content>
 		  				<para>
-							Для установки <token>hydra</token> необходимо перейти в
-							<ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-								<ddue:linkText>раздел скачивания</ddue:linkText>
-								<ddue:linkUri>http://www.stocksharp.com/products/download/</ddue:linkUri>
-							</ddue:externalLink>			  
-							на сайте 
-							<ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-								<ddue:linkText>http://www.stocksharp.com/</ddue:linkText>
-								<ddue:linkUri>http://www.stocksharp.com/</ddue:linkUri>
-							</ddue:externalLink>:	
+							Для установки <token>hydra</token> необходимо на сайте <token>StockSharp</token>
+ 							перейти в <externalLink>
+							<linkText>раздел скачивания</linkText>
+								<linkAlternateText>stocksharp.com/products/download</linkAlternateText>
+								<linkUri>http://stocksharp.com/products/download/</linkUri>
+								<linkTarget>_blank</linkTarget>
+							</externalLink>
+.
 		  				</para>
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup1" /></mediaLink>	
 				  </content>
