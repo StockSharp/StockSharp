@@ -35,7 +35,7 @@
           <legacyBold>Поля Level1</legacyBold> - поддерживаемые поля маркет-данных первого уровня.
 		</listItem>
       </list>
-      <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="2a908a19-0272-48e1-b143-df7ff9e2607c">AlfaDirect</link>) </para>
+      <para><legacyBold>Подключение</legacyBold> - свойства подключения (см. <link xlink:href="01a85a46-7510-4385-b81c-348ffb3dfc46">Параметры подключения.</link>) </para>
     </introduction>
   </developerConceptualDocument>
 </topic>
