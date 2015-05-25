@@ -336,15 +336,6 @@
 				.ToEx(metaInfo.Count);
 		}
 
-		public IEnumerableEx<TData> Deserialize(IDataStorageReader<TData> reader)
-		{
-			var data = new MemoryStream();
-			reader.Stream.CopyTo(data);
-
-			return new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(data), (TMetaInfo)reader.MetaInfo))
-				.ToEx(reader.MetaInfo.Count);
-		}
-
 		protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);
 		public abstract TData MoveNext(MarketDataEnumerator enumerator);
 	}

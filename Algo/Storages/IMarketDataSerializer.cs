@@ -57,12 +57,5 @@ namespace StockSharp.Algo.Storages
 		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
 		/// <returns>Данные.</returns>
 		new IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
-
-		/// <summary>
-		/// Загрузить данные из потока.
-		/// </summary>
-		/// <param name="reader">Считыватель данных.</param>
-		/// <returns>Данные.</returns>
-		IEnumerableEx<TData> Deserialize(IDataStorageReader<TData> reader);
 	}
 }

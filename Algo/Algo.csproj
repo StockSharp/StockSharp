@@ -317,7 +317,6 @@
     <Compile Include="Storages\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
     <Compile Include="Storages\CsvMarketDataSerializer.cs" />
-    <Compile Include="Storages\DataStorageReader.cs" />
     <Compile Include="Storages\ExchangeInfoProvider.cs" />
     <Compile Include="Storages\ExchangeList.cs" />
     <Compile Include="Helper.cs" />

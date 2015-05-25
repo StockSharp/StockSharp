@@ -195,11 +195,6 @@ namespace StockSharp.Algo.Storages
 			throw new NotImplementedException();
 		}
 
-		public IDataStorageReader<T> GetReader(DateTime date)
-		{
-			throw new NotImplementedException();
-		}
-
 		private Security GetParent(Security security)
 		{
 			var parent = GetParent(_security, security);

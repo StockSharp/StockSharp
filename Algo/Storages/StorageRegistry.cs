@@ -172,12 +172,6 @@ namespace StockSharp.Algo.Storages
 				return Load(date).ToEntities<TMessage, TEntity>(Security);
 			}
 
-			IDataStorageReader<TEntity> IMarketDataStorage<TEntity>.GetReader(DateTime date)
-			{
-				return new ConvertableDataStorageReader<TEntity, TMessage>(GetReader(date),
-					messages => messages.ToEntities<TMessage, TEntity>(Security));
-			}
-
 			public abstract DateTimeOffset GetTime(TEntity data);
 
 			protected abstract TMessage ToMessage(TEntity entity);
@@ -296,12 +290,6 @@ namespace StockSharp.Algo.Storages
 				return Load(date);
 			}
 
-			IDataStorageReader<CandleMessage> IMarketDataStorage<CandleMessage>.GetReader(DateTime date)
-			{
-				return new ConvertableDataStorageReader<CandleMessage, TCandleMessage>(GetReader(date),
-					messages => messages.Cast<CandleMessage>().ToEx(messages.Count));
-			}
-
 			IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer
 			{
 				get { throw new NotSupportedException(); }
@@ -354,11 +342,6 @@ namespace StockSharp.Algo.Storages
 					.ToEx(messages.Count);
 			}
 
-			IDataStorageReader<TCandle> IMarketDataStorage<TCandle>.GetReader(DateTime date)
-			{
-				throw new NotSupportedException();
-			}
-
 			IMarketDataSerializer<TCandle> IMarketDataStorage<TCandle>.Serializer
 			{
 				get { throw new NotSupportedException(); }
@@ -386,12 +369,6 @@ namespace StockSharp.Algo.Storages
 			public CandleStorage(Security security, object arg, IMarketDataStorageDrive drive, IMarketDataSerializer<TCandleMessage> serializer)
 				: base(security, arg, drive, serializer)
 			{
-			}
-
-			IDataStorageReader<Candle> IMarketDataStorage<Candle>.GetReader(DateTime date)
-			{
-				return new ConvertableDataStorageReader<Candle, TCandleMessage>(GetReader(date),
-					messages => messages.ToCandles<Candle>(Security, typeof(TCandleMessage).ToCandleType()).ToEx(messages.Count));
 			}
 
 			IMarketDataSerializer<Candle> IMarketDataStorage<Candle>.Serializer
@@ -463,11 +440,6 @@ namespace StockSharp.Algo.Storages
 				throw new NotSupportedException();
 			}
 
-			IDataStorageReader<Order> IMarketDataStorage<Order>.GetReader(DateTime date)
-			{
-				throw new NotSupportedException();
-			}
-
 			DateTimeOffset IMarketDataStorageInfo<Order>.GetTime(Order data)
 			{
 				return data.Time;
@@ -493,11 +465,6 @@ namespace StockSharp.Algo.Storages
 			}
 
 			IEnumerableEx<MyTrade> IMarketDataStorage<MyTrade>.Load(DateTime date)
-			{
-				throw new NotSupportedException();
-			}
-
-			IDataStorageReader<MyTrade> IMarketDataStorage<MyTrade>.GetReader(DateTime date)
 			{
 				throw new NotSupportedException();
 			}

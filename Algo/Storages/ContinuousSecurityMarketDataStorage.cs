@@ -171,16 +171,6 @@ namespace StockSharp.Algo.Storages
 			return GetStorage(date).Load(date);
 		}
 
-		/// <summary>
-		/// Получить считыватель данных за указанную дату.
-		/// </summary>
-		/// <param name="date">Дата, для которой необходимо загрузить данные.</param>
-		/// <returns>Считыватель данных.</returns>
-		public IDataStorageReader<T> GetReader(DateTime date)
-		{
-			return GetStorage(date).GetReader(date);
-		}
-
 		private IMarketDataStorage<T> GetStorage(DateTime date)
 		{
 			return _getStorage(_security.GetSecurity(date), Drive.Drive);
@@ -256,11 +246,6 @@ namespace StockSharp.Algo.Storages
 				return Load(date).ToEntities<TMessage, TEntity>(_security.GetSecurity(date));
 		}
 
-		IDataStorageReader<TEntity> IMarketDataStorage<TEntity>.GetReader(DateTime date)
-		{
-			throw new NotImplementedException();
-		}
-
 		IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer
 		{
 			get { throw new NotSupportedException(); }
@@ -307,11 +292,6 @@ namespace StockSharp.Algo.Storages
 				.ToCandles<TCandle>(_security.GetSecurity(date))
 				.Cast<Candle>()
 				.ToEx(messages.Count);
-		}
-
-		IDataStorageReader<Candle> IMarketDataStorage<Candle>.GetReader(DateTime date)
-		{
-			throw new NotImplementedException();
 		}
 
 		IMarketDataSerializer<Candle> IMarketDataStorage<Candle>.Serializer

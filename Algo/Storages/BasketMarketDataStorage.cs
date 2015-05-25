@@ -311,11 +311,6 @@
 			get { throw new NotSupportedException(); }
 		}
 
-		IDataStorageReader<T> IMarketDataStorage<T>.GetReader(DateTime date)
-		{
-			throw new NotImplementedException();
-		}
-
 		/// <summary>
 		/// Создать <see cref="InMemoryMarketDataStorage{T}"/>.
 		/// </summary>

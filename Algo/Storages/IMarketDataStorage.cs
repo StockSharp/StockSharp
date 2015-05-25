@@ -108,13 +108,6 @@
 		new IEnumerableEx<TData> Load(DateTime date);
 
 		/// <summary>
-		/// Получить считыватель данных за указанную дату.
-		/// </summary>
-		/// <param name="date">Дата, для которой необходимо загрузить данные.</param>
-		/// <returns>Считыватель данных.</returns>
-		IDataStorageReader<TData> GetReader(DateTime date);
-
-		/// <summary>
 		/// Сериализатор.
 		/// </summary>
 		new IMarketDataSerializer<TData> Serializer { get; }

@@ -385,16 +385,6 @@ namespace StockSharp.Algo.Storages
 				.ToEx(metaInfo.Count);
 		}
 
-		public IEnumerableEx<TData> Deserialize(IDataStorageReader<TData> reader)
-		{
-			var stream = reader.Stream;
-			var metaInfo = reader.MetaInfo;
-
-			return new SimpleEnumerable<TData>(() =>
-				new CsvReader(stream, _encoding, SecurityId, metaInfo.Date.Date, _executionType, _members))
-				.ToEx(metaInfo.Count);
-		}
-
 		private static DateTimeOffset ParseTime(string str, DateTime date)
 		{
 			var dto = str.ToDateTimeOffset(_timeFormat);

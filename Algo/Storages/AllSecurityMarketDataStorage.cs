@@ -154,11 +154,6 @@ namespace StockSharp.Algo.Storages
 			return Load(date);
 		}
 
-		IDataStorageReader<T> IMarketDataStorage<T>.GetReader(DateTime date)
-		{
-			throw new NotImplementedException();
-		}
-
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
 		{
 			return _basket.InnerStorages.First().GetMetaInfo(date);
@@ -231,11 +226,6 @@ namespace StockSharp.Algo.Storages
 				.ToEx(messages.Count)
 				.ToCandles<TEntity>(_security)
 				.ToEx(messages.Count);
-		}
-
-		IDataStorageReader<TEntity> IMarketDataStorage<TEntity>.GetReader(DateTime date)
-		{
-			throw new NotImplementedException();
 		}
 
 		IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer

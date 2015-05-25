@@ -347,17 +347,6 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		public IDataStorageReader<TData> GetReader(DateTime date)
-		{
-			lock (GetSync(date))
-			{
-				var stream = LoadStream(date);
-				var metaInfo = GetInfo(stream, date);
-
-				return new DataStorageReader<TData>(stream, metaInfo, Serializer);
-			}
-		}
-
 		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
 		{
 			lock (GetSync(date))
