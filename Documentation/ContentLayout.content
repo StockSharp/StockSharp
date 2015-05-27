@@ -220,8 +220,8 @@
         <Topic id="f43591c9-c215-4dee-b297-4b9ed34fd465" visible="True" title="Sterling" />
         <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
       </Topic>
-      <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" isExpanded="true" title="ФОРЕКС" tocTitle="ФОРЕКС">
-        <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" isSelected="true" title="Dukascopy" />
+      <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" isExpanded="true" isSelected="true" title="Форекс" tocTitle="Форекс">
+        <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
         <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" title="GainCapital" />
         <Topic id="0b962432-d81d-4646-a818-9fa7093cbe4f" visible="True" title="LMAX" />
         <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" title="MBTrading" />
