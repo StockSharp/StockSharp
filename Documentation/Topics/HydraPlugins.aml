@@ -30,7 +30,7 @@
 					<para>
 						Каждый источник должен реализовать интерфейс <codeEntityReference>T:StockSharp.Hydra.Core.IHydraTask</codeEntityReference>
 						(или наследоваться от классов <codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.BaseHydraTask</codeEntityReference> или
-						<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.ConnectorHydraTask` 1</codeEntityReference>):
+						<codeEntityReference qualifyHint="false">T:StockSharp.Hydra.Core.ConnectorHydraTask`1</codeEntityReference>):
 					</para>
 					<code language="C#">
 <![CDATA[
