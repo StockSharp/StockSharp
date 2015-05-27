@@ -3,7 +3,7 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     	<para>
-    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режимме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
+    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режиме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
     	</para>
 		<mediaLink>
         	<image placement="center" xlink:href="hydra_settings" />
