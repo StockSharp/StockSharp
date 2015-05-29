@@ -4,54 +4,65 @@
 
 	<introduction>
 		<para>
-			Для работы программы, написанной с применением библиотеки <token>stocksharp</token>, неообходимо скачать лицензию.
-		</para>
-		<para>
-			Лицензия <token>stocksharp</token> существует в трех версиях:
+			Большая часть функциональности <token>stocksharp</token> предоставляется бесплатно в рамках лицензии на свободное программное обеспечение <externalLink>
+					<linkText>LGPL-3.0</linkText>
+						<linkAlternateText>Optional alternate text</linkAlternateText>
+							<linkUri>http://www.gnu.org/licenses/lgpl-3.0.en.html</linkUri>
+						<linkTarget>_blank</linkTarget>
+					</externalLink>
+ 			и доступна всем желающим (см. <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.).
 		</para>
 		
-		<list class="bullet">
+		<para><legacyBold>Расширенная лицензия</legacyBold></para>
+		<para>Предоставляется клиентам прошедшим полный курс обучения (<token>stocksharpeducation</token> и ограничена во времени (см. <externalLink>
+		<linkText>Новые подходы к лицензированию</linkText>
+			<linkAlternateText>Optional alternate text</linkAlternateText>
+				<linkUri>http://stocksharp.com/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>
+). Дополнительно к бесплатной функциональности включает:</para>
+		<list class="ordered">
   			<listItem>
-  				<para>
-  					<legacyBold>Базовая</legacyBold> - предоставляется бесплатно всем желающим в негораниченном количестве (штук).
-  					<link xlink:href="e3e9f831-56ac-44a4-840c-3d5969ff1fd7">Инструкция получения лицензии</link>.
-  				</para>
+  				<para>Быстрый FIX коннектор к брокеру (для HFT роботов)</para>
   			</listItem>
   			<listItem>
-  				<para>
-  					<legacyBold>Базовая+</legacyBold> - предоставляется только ученикам, прошедшим обучение (<token>stocksharpeducation</token>).
-  				</para>
+  				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.)</para>
   			</listItem>
   			<listItem>
-  				<para>
-  					<legacyBold>Корпоративная</legacyBold> - предоставляется платно с рядом расширенных возможностей (<externalLink>
-					<linkText>подробнее про корпоративную лицензию</linkText>
-					<linkUri>http://stocksharp.com/products/pricing/</linkUri>
-				</externalLink>):
-  				</para>
-  				<list class="ordered">
-					<listItem>Коннекторы прямого доступа к биржам (CGate, MicexBridge).</listItem>
-					<listItem>FIX коннекторы (в т.ч. прямое подключение к серверу <token>quik</token>).</listItem>
-					<listItem>FIX-сервер для роутинга заявок, эмуляции торгов, сохранения хода торгов для каждого клиента.</listItem>
-					<listItem>Доступ к online репозитарию с обновляемыми исходными кодами.</listItem>
-					<listItem>Сервер исторических данных.</listItem>
-				</list>
+  				<para>Подключение до 3 программ одновременно к одному терминалу (роботов, робот + <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link> и т.д.)</para>
   			</listItem>
-  		</list>
+  			<listItem>
+  				<para>Order Log.</para>
+  			</listItem>
+		</list>
 
+		
+		<para><legacyBold>Корпоративная лицензия</legacyBold></para>
 		<para>
-			У библиотеки <token>stocksharp</token> есть триальный период, в течении которого не требуется наличие полной лицензии.
-			Это сделано для тех, кто хочет попробовать платформу, а также для тех, кому потребуется время разобраться во всех деталях.
-		</para>
-		<para>
-			Триальная лицензия выдается на месяц и автоматически скачивается при первом запуске программы (если в каталоге из которого запускается программа
-		 	или в <legacyBold>Мои документы\StockSharp\</legacyBold> не будет находится файл stocksharp_license.xml).
-		</para>
+  			Корпоративная лицензия предоставляется платно с рядом расширенных возможностей:
+  		</para>
+  		<list class="ordered">
+				<listItem>Коннекторы прямого доступа к биржам (<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">CGate</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">MicexBridge</link>).</listItem>
+				<listItem>FIX коннекторы (в т.ч. прямое подключение к серверу <token>quik</token>).</listItem>
+				<listItem>FIX-сервер для роутинга заявок, эмуляции торгов, сохранения хода торгов для каждого клиента.</listItem>
+				<listItem>Доступ к online репозитарию с обновляемыми исходными кодами.</listItem>
+				<listItem>Сервер исторических данных.</listItem>
+		</list>
 
-		<para>
-			По вопросам приобретения лицензии для <legacyBold>сторонних разработчиков</legacyBold> необходимо обращаться через <token>stocksharpcontacts</token>.
-			Для данной группы пользователей в LicenseTool доступен режим подписи исполняемого файла, отключающего проверку наличия лицензии на компьютерах их пользователей.
-		</para>
 	</introduction>
+	 <relatedTopics>
+     	<externalLink>
+			<linkText>Новые подходы к лиценцизованию</linkText>
+			<linkAlternateText>Лиценцизование</linkAlternateText>
+			<linkUri>http://stocksharp.com/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+		<externalLink>
+			<linkText>Стоимость лицензий StockSharp</linkText>
+			<linkAlternateText>Стоимость лицензий</linkAlternateText>
+			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+     </relatedTopics>
 	</developerWalkthroughDocument>
 </topic>
