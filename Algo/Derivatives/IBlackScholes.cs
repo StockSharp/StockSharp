@@ -30,8 +30,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение.</param>
 		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <returns>Премия опциона.</returns>
-		decimal Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
+		/// <returns>Премия опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
 
 		/// <summary>
 		/// Рассчитать дельту опциона.
@@ -39,8 +39,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение.</param>
 		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <returns>Дельта опциона.</returns>
-		decimal Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
+		/// <returns>Дельта опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
 
 		/// <summary>
 		/// Рассчитать гамму опциона.
@@ -48,8 +48,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение.</param>
 		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <returns>Гамма опциона.</returns>
-		decimal Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
+		/// <returns>Гамма опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
 
 		/// <summary>
 		/// Рассчитать вегу опциона.
@@ -57,8 +57,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение.</param>
 		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <returns>Вега опциона.</returns>
-		decimal Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
+		/// <returns>Вега опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
 
 		/// <summary>
 		/// Рассчитать тету опциона.
@@ -66,8 +66,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение.</param>
 		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <returns>Тета опциона.</returns>
-		decimal Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
+		/// <returns>Тета опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
 
 		/// <summary>
 		/// Рассчитать ро опциона.
@@ -75,15 +75,15 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение.</param>
 		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <returns>Ро опциона.</returns>
-		decimal Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
+		/// <returns>Ро опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null);
 
 		/// <summary>
 		/// Рассчитать подразумеваемую волатильность.
 		/// </summary>
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="premium">Премия по опциону.</param>
-		/// <returns>Подразумеваевая волатильность.</returns>
-		decimal ImpliedVolatility(DateTimeOffset currentTime, decimal premium);
+		/// <returns>Подразумеваевая волатильность. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		decimal? ImpliedVolatility(DateTimeOffset currentTime, decimal premium);
 	}
 }

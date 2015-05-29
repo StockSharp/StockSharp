@@ -5,7 +5,6 @@ namespace StockSharp.Algo.Derivatives
 	using Ecng.Common;
 
 	using StockSharp.BusinessEntities;
-
 	using StockSharp.Localization;
 
 	/// <summary>
@@ -51,8 +50,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
 		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Премия опциона.</returns>
-		public override decimal Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		/// <returns>Премия опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public override decimal? Premium(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Premium(currentTime, deviation, assetPrice);
 		}
@@ -63,8 +62,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
 		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Дельта опциона.</returns>
-		public override decimal Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		/// <returns>Дельта опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public override decimal? Delta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Delta(currentTime, deviation, assetPrice);
 		}
@@ -75,8 +74,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
 		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Гамма опциона.</returns>
-		public override decimal Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		/// <returns>Гамма опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public override decimal? Gamma(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Gamma(currentTime, deviation, assetPrice);
 		}
@@ -87,8 +86,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
 		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Вега опциона.</returns>
-		public override decimal Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		/// <returns>Вега опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public override decimal? Vega(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Vega(currentTime, deviation, assetPrice);
 		}
@@ -99,8 +98,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
 		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Тета опциона.</returns>
-		public override decimal Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		/// <returns>Тета опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public override decimal? Theta(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Theta(currentTime, deviation, assetPrice);
 		}
@@ -111,8 +110,8 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="deviation">Стандартное отклонение. Если оно не указано, то используется <see cref="BlackScholes.DefaultDeviation"/>.</param>
 		/// <param name="assetPrice">Цена базового актива. Если цена не указана, то получается цена последней сделки из <see cref="BlackScholes.UnderlyingAsset"/>.</param>
-		/// <returns>Ро опциона.</returns>
-		public override decimal Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
+		/// <returns>Ро опциона. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public override decimal? Rho(DateTimeOffset currentTime, decimal? deviation = null, decimal? assetPrice = null)
 		{
 			return GetExpRate(currentTime) * base.Rho(currentTime, deviation, assetPrice);
 		}

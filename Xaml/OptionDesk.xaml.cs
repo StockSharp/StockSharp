@@ -349,7 +349,7 @@ namespace StockSharp.Xaml
 		//	Update(item, changes);
 		//}
 
-		private void Update(OptionDeskRow.OptionDeskRowSide side, DateTime now, out decimal? iv, out decimal? hv, out decimal? oi, out decimal? volume)
+		private void Update(OptionDeskRow.OptionDeskRowSide side, DateTimeOffset now, out decimal? iv, out decimal? hv, out decimal? oi, out decimal? volume)
 		{
 			iv = hv = oi = volume = null;
 
@@ -385,16 +385,14 @@ namespace StockSharp.Xaml
 				}
 			}
 
-			const int round = 2;
-
 			var bs = side.Model;
 
-			side.TheorPrice = decimal.Round(bs.Premium(now, assetPrice: AssetPrice), round);
-			side.Delta = decimal.Round(bs.Delta(now, assetPrice: AssetPrice), round);
-			side.Gamma = decimal.Round(bs.Gamma(now, assetPrice: AssetPrice), round);
-			side.Theta = decimal.Round(bs.Theta(now, assetPrice: AssetPrice), round);
-			side.Vega = decimal.Round(bs.Vega(now, assetPrice: AssetPrice), round);
-			side.Rho = decimal.Round(bs.Rho(now, assetPrice: AssetPrice), round);
+			side.TheorPrice = Round(now, bs.Premium);
+			side.Delta = Round(now, bs.Delta);
+			side.Gamma = Round(now, bs.Gamma);
+			side.Theta = Round(now, bs.Theta);
+			side.Vega = Round(now, bs.Vega);
+			side.Rho = Round(now, bs.Rho);
 
 			var assetPrice = bs.GetAssetPrice(AssetPrice);
 
@@ -407,6 +405,14 @@ namespace StockSharp.Xaml
 				if (side.PnL < 0)
 					side.PnL = 0;	
 			}
+		}
+
+		private decimal? Round(DateTimeOffset now, Func<DateTimeOffset, decimal?, decimal?, decimal?> func)
+		{
+			const int round = 2;
+
+			var value = func(now, null, AssetPrice);
+			return value == null ? (decimal?)null : decimal.Round(value.Value, round);
 		}
 
 		/// <summary>

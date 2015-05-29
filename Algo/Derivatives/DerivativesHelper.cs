@@ -615,7 +615,7 @@ namespace StockSharp.Algo.Derivatives
 			Func<Quote, Quote> convert = quote =>
 			{
 				quote = quote.Clone();
-				quote.Price = model.ImpliedVolatility(currentTime, quote.Price);
+				quote.Price = model.ImpliedVolatility(currentTime, quote.Price) ?? 0;
 				return quote;
 			};
 
@@ -822,8 +822,8 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="premium">Премия по опциону.</param>
 		/// <param name="getPremium">Рассчитать премию по волатильности.</param>
-		/// <returns>Подразумеваевая волатильность.</returns>
-		public static decimal ImpliedVolatility(decimal premium, Func<decimal, decimal> getPremium)
+		/// <returns>Подразумеваевая волатильность. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public static decimal? ImpliedVolatility(decimal premium, Func<decimal, decimal?> getPremium)
 		{
 			if (getPremium == null)
 				throw new ArgumentNullException("getPremium");
@@ -834,7 +834,7 @@ namespace StockSharp.Algo.Derivatives
 
 			//Если Премия оказывается меньше чем премия с нулевой волатильностью, то выходим
 			if (premium <= getPremium(deviation))
-				return 0;
+				return null;
 
 			var high = 2m;
 			var low = 0m;
