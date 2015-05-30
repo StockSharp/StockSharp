@@ -10,7 +10,7 @@
       <!-- Uncomment this to generate an outline of the section and sub-section
            titles.  Specify a numeric value as the inner text to limit it to
            a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
+           http://www.mathworks.com  -->
       <!-- <autoOutline /> -->
       <para>
 		  <token>matlab</token> предоставляет возможность использовать в своих скриптах <token>dotnet</token> классы, в том числе и <token>stocksharp</token>.
@@ -34,7 +34,7 @@
         <step>
           <content>
             <para>
-				В качестве демонстрации в дистрибутиве находится скрипт в папке Samples\MatLab, которой показывает, как можно в <token>matlab</token>-е
+				В качестве демонстрации в дистрибутиве находится скрипт в папке Samples\MatLab, которой показывает, как можно в <token>matlab</token>
 				получать данные из терминала <token>quik</token>, а так же отправлять в него заявки, осуществляя тем самым полный цикл автоматической торговли.
 			</para>
           </content>
@@ -175,7 +175,17 @@ RegisterOrder(trader.RealTrader, order);
 		  </step>
       </steps>
     </procedure>
-    <relatedTopics>
-    </relatedTopics>
-  </developerWalkthroughDocument>
+ 	<relatedTopics>
+     	<externalLink>
+			<linkText>Сайт MathWorks</linkText>
+			<linkAlternateText>MathWorks</linkAlternateText>
+			<linkUri>http://www.mathworks.com</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+
+    </relatedTopics>  
+    
+    
+    
+    </developerWalkthroughDocument>
 </topic>

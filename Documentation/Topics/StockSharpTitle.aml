@@ -68,12 +68,26 @@
   			<link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99">S#.WealthLab</link> - интеграция WealthLab с торговыми системами.
   		</listItem>
   		<listItem>
-  			<link xlink:href="#addr">S#.Shell</link> - готовый каркас для торговых стратегий.
+  			<externalLink>
+				<linkText>S#.Shell</linkText>
+				<linkAlternateText>Каркас для торговых стратегий</linkAlternateText>
+				<linkUri>http://stocksharp.com/products/shell/</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>
+ 			- готовый каркас для торговых стратегий.
   		</listItem>
   		<listItem>
-  			<link xlink:href="#addr">ЛЧИ Viewer</link> - графики конкурса ЛЧИ со сделками участников.
+  			<externalLink>
+				<linkText>ЛЧИ</linkText>
+				<linkAlternateText>Графики конкурса ЛЧИ</linkAlternateText>
+				<linkUri>http://stocksharp.com/products/lci/</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>
+ 			- графики конкурса ЛЧИ со сделками участников.
   		</listItem>
 	</list>
+	
+	
 
     </introduction>
         <relatedTopics>
