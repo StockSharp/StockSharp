@@ -53772,5 +53772,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(OverrideDllKey); }
 		}
+
+		/// <summary>
+		/// Time {0} has wrong offset. Expected {1}.
+		/// </summary>
+		public const string WrongTimeOffsetKey = "WrongTimeOffset";
+
+		/// <summary>
+		/// Time {0} has wrong offset. Expected {1}.
+		/// </summary>
+		public static string WrongTimeOffset
+		{
+			get { return GetString(WrongTimeOffsetKey); }
+		}
 	}
 }

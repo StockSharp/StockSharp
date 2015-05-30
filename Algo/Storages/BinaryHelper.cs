@@ -11,7 +11,6 @@ namespace StockSharp.Algo.Storages
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
-
 	using StockSharp.Localization;
 
 	static class BinaryHelper
@@ -147,7 +146,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException("writer");
 
 			if (isUtc && dto.Offset != offset)
-				throw new ArgumentException("Время {0} имеет неправильное смещение. Ожидается {1}.".Put(dto, offset));
+				throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(dto, offset));
 
 			dto = dto.Truncate();
 

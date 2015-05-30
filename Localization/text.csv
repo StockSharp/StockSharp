@@ -4163,3 +4163,4 @@ ExportSchema;Export schema to container;Экспортировать схему 
 IsControlConnectionLost;Control connection lost.;Контролировать потерю соединения с роутером.
 Override;Override.;Перезаписать.
 OverrideDll;Override dll file from resources. Turned on by default.;Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
+WrongTimeOffset;Time {0} has wrong offset. Expected {1}.;Время {0} имеет неправильное смещение. Ожидается {1}.
