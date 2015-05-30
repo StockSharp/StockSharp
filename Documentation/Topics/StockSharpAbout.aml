@@ -3,10 +3,16 @@
 	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 		<summary>
 			<para>
-				<token>stocksharp</token> - это бесплатная платформа для программирования торговых роботов на <token>dotnet</token> (например, на языке
-				<token>csharp</token>). <token>stocksharp</token> максимально скрывает технические детали. Трейдер, программирующий на <token>stocksharp</token>,
-				сосредоточен только на ключевых моментах - самих торговых действиях.
+				<legacyBold>S#.API</legacyBold> - это бесплатная платформа для создания торговых роботов, ориентированная на программирование 
+				на языке <token>csharp</token> в среде Visual Studio. <token>stocksharp</token> максимально скрывает технические детали.
+				Трейдер, программирующий на S#.API, сосредоточен только на ключевых моментах - самих торговых действиях.
 			</para>
+			<para>
+				S#.API является основой всей линейки продуктов <token>stocksharp</token>. 
+				На базе библиотеки созданы такие решения как S#.Studio, <token>hydra</token> и т.д.. 
+				А также наши адаптеры <token>wealthlab</token>, <token>matlab</token>.
+			</para>
+			
 			<!--para>
 				В качестве шлюза к торговой системе используются реализации интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>.
 				Детальное описание схемы работы <token>stocksharp</token> написано в разделе <link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7">Архитектура StockSharp</link>.
@@ -16,63 +22,74 @@
 		<procedure>
 			<title>Преимущества и возможности библиотеки:</title>
 				<steps class="ordered">
+					
 					<step>
 						<content>
-						Используется современная платформа <token>dotnet</token> с мощной и быстрой функциональностью. Нет ограничений, которые
-						присутствуют в скриптовых языках (таких как AFL, QPILE и т.д.), а так же дает значительный прирост в производительности.
+						<legacyBold><link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5">Российский рынок</link></legacyBold> - полная поддержка Московской биржи (ММВБ, РТС), спот-рынка, фьючерсов и опционов.
 						</content>
 					</step>
 					
 					<step>
 						<content>
-						Доступ как к <link xlink:href="804b053f-e5f5-44ca-a381-6b39d6c099d5">российским</link>, так и к
-						<link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">зарубежным</link> биржам.
+						<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Мировые площадки</link></legacyBold> - торговля NASDAQ, NYSE, CME и т.д. через брокеров <token>OpenECry</token>, <token>IB</token>, <token>etrade</token>.
 						</content>
-						<!--content>
-						Быстрая обработка алгоритмов стратегий. Программа компилируется в машинные инструкции (что дает большой прирост в производительности).
-						Нет синтетических секундных задержек при выполнении алгоритма (основное ограничение практически всех встроенных языков в таких
-						программах как WealthLab, AmiBroker и т.д.).
-						</content-->
 					</step>
 					
 					<step>
 						<content>
-						Запуск нескольких сотен одновременно работающих алгоритмов по различным инструментам и тайм-фреймам
-						(скорость зависит только от мощности компьютера, а не от ограничения внешней программы).
+						<legacyBold>Переносимость</legacyBold> - робот не зависит от API брокера или биржи, и может работать с любым подключением. Например, легко перейти с <token>quik</token> на <token>transaq</token>, или c <link xlink:href="b884020d-e4f0-4f7d-8de1-d75d052fe04b">Форекса</link> на фондовую биржу. Подробнее, в разделе <link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7" />.
 						</content>
 					</step>	
 					
 					<step>
 						<content>
-						<link xlink:href="febbcf31-63d1-449d-847e-92fd8424f926">Тестирование</link> стратегий как на свечках, так и на основе тиковых сделок и стаканах для значительно точных результатов.
+						<legacyBold>Универсальность</legacyBold> - ориентирована на частных алготрейдеров, небольшие команды, инвестиционные компании, банки.
 						</content>
 					</step>	
 					
 					<step>
 						<content>
-						Прямой доступ к бирже <token>rts</token> через <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza2</link>
-						с возможностью создавать скальперские или HFT стратегии.
+						<legacyBold>Производительность</legacyBold> - одновременное исполнение сотен стратегий по любым инструментам.
 						</content>
 					</step>	
 					
 					<step>
 						<content>
-					  	<link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780">Переподключение</link> в случае разрыва связи, а также поддержание работоспособности
+						<legacyBold>Скорость</legacyBold> - обработка заявок в S#.API занимает не более нескольких микросекунд.
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+						<legacyBold>Прямое подключение</legacyBold> - торговля через прямое подключение к бирже (<token>plaza</token>, <token>micexbridge</token>), а также поддержка <token>fix</token> протокола.
+						</content>
+					</step>	
+					
+					
+					
+					<step>
+						<content>
+						<legacyBold>Реалистичное тестирование</legacyBold> - максимально точное <link xlink:href="febbcf31-63d1-449d-847e-92fd8424f926">тестирование</link> на тиках и стаканах, определение реального проскальзывания.
+						</content>
+					</step>	
+					
+					<step>
+						<content>
+						<legacyBold>Распространенность</legacyBold> - широко используемый язык <token>csharp</token>, популярная среда программирования Visual Studio.
+						</content>
+					</step>
+					
+					<step>
+						<content>
+					  	<legacyBold><link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780">Переподключение</link></legacyBold> в случае разрыва связи, а также поддержание работоспособности
 					  	программ в случае аварийно неустойчивого соединения.
 						</content>
 					</step>	
 					
 					<step>
 						<content>
-					  	Готовые стратегии. Например, <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link> одновременно множества заявок для покупки-продажи по лучшим
+					  	<legacyBold>Готовые стратегии</legacyBold> - например, <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link> одновременно множества заявок для покупки-продажи по лучшим
 					  	ценам для создания стратегий типа Market Making (ММ).
-						</content>
-					</step>	
-					
-					<step>
-						<content>
-						Переносимость от одной торговой программы к другой без изменения кода. Например, с <token>quik</token> на <token>smartcom</token>, наоборот,
-						с <token>alfa</token> на <token>plaza</token> и т.д.. Подробнее, в разделе <link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7" />.
 						</content>
 					</step>	
 					
@@ -84,11 +101,13 @@
 					
 					<step>
 						<content>
-						Анализ стратегий в среде <link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0">MatLab</link>.
+						Анализ стратегий в среде <token>matlab</token>.
 						</content>
 					</step>
 				</steps>
 		</procedure>
+	
+	
 	
 		<relatedTopics>
 			<link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7">Архитектура StockSharp</link>

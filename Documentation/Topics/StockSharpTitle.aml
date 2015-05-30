@@ -78,18 +78,6 @@
     </introduction>
         <relatedTopics>
      	<link xlink:href="a594740e-58f1-4148-afe7-d41abc4d486b">Справочные материалы</link>
-     	<externalLink>
-			<linkText>Форум StockSharp</linkText>
-			<linkAlternateText>Форум StockSharp</linkAlternateText>
-			<linkUri>http://stocksharp.com/forum/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
-		<externalLink>
-			<linkText>Канал StockSharp на YouTube</linkText>
-			<linkAlternateText>Канал StockSharp на YouTube</linkAlternateText>
-			<linkUri>http://www.youtube.com/user/StockSharp/</linkUri>
-			<linkTarget>_blank</linkTarget>
-		</externalLink>
      </relatedTopics>
   </developerConceptualDocument>
 </topic>

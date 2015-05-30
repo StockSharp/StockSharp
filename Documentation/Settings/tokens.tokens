@@ -58,7 +58,8 @@
 		  <ddue:linkText>.NET</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/.NET_Framework</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="etrade"><ddue:link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">E*TRADE</ddue:link></item>
+  <item id="etrade"><ddue:link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">E*TRADE</ddue:link></item>
   <item id="etrade_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>E*TRADE</ddue:linkText>
     <ddue:linkUri>http://etrade.com</ddue:linkUri>
@@ -72,7 +73,8 @@
 		  <ddue:linkUri>http://rts.ru/ru/forts/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="hydra"><ddue:link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Data</ddue:link></item>
-  <item id="IB"><ddue:link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Interactive Brokers</ddue:link></item>
+  <item id="IB"><ddue:link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Interactive Brokers</ddue:link></item>
   <item id="IB_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Interactive Brokers</ddue:linkText>
     <ddue:linkUri>http://interactivebrokers.com</ddue:linkUri>
@@ -84,6 +86,11 @@
   <item id="IB_TWS"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>TWS</ddue:linkText>
     <ddue:linkUri>http://interactivebrokers.com/en/index.php?f=1537</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="iqfeed"><ddue:link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">IQFeed</ddue:link></item>
+  <item id="iqfeed_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>IQFeed</ddue:linkText>
+    <ddue:linkUri>http://iqfeed.net</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="IV"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>IV</ddue:linkText>
@@ -103,7 +110,7 @@
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/%D0%A1%D0%BA%D0%BE%D0%BB%D1%8C%D0%B7%D1%8F%D1%89%D0%B0%D1%8F_%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D1%8F%D1%8F</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="matlab"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>MatLab</ddue:linkText>
+    <ddue:linkText>S#.MatLab</ddue:linkText>
     <ddue:linkUri>http://www.mathworks.com</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="messagepump"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
@@ -114,7 +121,8 @@
 		  <ddue:linkText>ММВБ</ddue:linkText>
 		  <ddue:linkUri>http://micex.ru</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="micexbridge"><ddue:link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Micex Bridge</ddue:link></item>
+  <item id="micexbridge"><ddue:link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f" xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Micex Bridge</ddue:link></item>
   <item id="micexbridge_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Micex Bridge</ddue:linkText>
     <ddue:linkUri>http://www.micex.ru/services/technicalaccess/bridge</ddue:linkUri>
@@ -190,20 +198,16 @@
 	<ddue:linkUri>http://ru.wikipedia.org/wiki/SQL</ddue:linkUri>
 </ddue:externalLink></item>
   <item id="stocksharp"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></item>
-  <item id="stocksharpblog"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-		  <ddue:linkText>http://stocksharp.blogspot.com/</ddue:linkText>
-		  <ddue:linkUri>http://stocksharp.blogspot.com/</ddue:linkUri>
-		</ddue:externalLink></item>
   <item id="stocksharpcontacts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>http://stocksharp.com/company/contacts/</ddue:linkText>
+    <ddue:linkText>StockSharp Contacts</ddue:linkText>
     <ddue:linkUri>http://stocksharp.com/company/contacts/</ddue:linkUri>
    </ddue:externalLink></item>
   <item id="stocksharpeducation"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-		  <ddue:linkText>http://stocksharp.com/lesson/</ddue:linkText>
-		  <ddue:linkUri>http://stocksharp.com/lesson/</ddue:linkUri>
+		  <ddue:linkText>StockSharp Education</ddue:linkText>
+		  <ddue:linkUri>http://stocksharp.com/edu/#pricing/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpforum"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-		  <ddue:linkText>http://stocksharp.com/forum/</ddue:linkText>
+		  <ddue:linkText>StockSharp Forum</ddue:linkText>
 		  <ddue:linkUri>http://stocksharp.com/forum/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpnotify"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
@@ -215,7 +219,7 @@
     <ddue:linkUri>http://stocksharp.com/profile/</ddue:linkUri>
    </ddue:externalLink></item>
   <item id="stocksharpshell"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>http://stocksharp.com/products/shell/</ddue:linkText>
+    <ddue:linkText>Stocksharp Shell</ddue:linkText>
     <ddue:linkUri>http://stocksharp.com/products/shell/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpsite"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
@@ -223,11 +227,11 @@
 		  <ddue:linkUri>http://stocksharp.com</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="stocksharpsources"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>http://stocksharp.com/products/sources/</ddue:linkText>
-    <ddue:linkUri>http://stocksharp.com/products/sources/</ddue:linkUri>
+    <ddue:linkText>StockSharp Sources</ddue:linkText>
+    <ddue:linkUri>https://github.com/StockSharp/StockSharp/releases/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="stocksharpsupport"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-		  <ddue:linkText>http://stocksharp.com/support/</ddue:linkText>
+		  <ddue:linkText>Stocksharp.Support</ddue:linkText>
 		  <ddue:linkUri>http://stocksharp.com/support/</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
@@ -263,9 +267,28 @@
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="iqfeed"><ddue:link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">IQFeed</ddue:link></item>
-  <item id="iqfeed_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>IQFeed</ddue:linkText>
-    <ddue:linkUri>http://iqfeed.net</ddue:linkUri>
+  <item id="stocksharpgithub"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>https://github.com/StockSharp/</ddue:linkText>
+    <ddue:linkUri>https://github.com/StockSharp/</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="stocksharpnews"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>SstockSharp News</ddue:linkText>
+    <ddue:linkUri>http://stocksharp.com/news/</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="stocksharpyoutube"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+   <ddue:linkText>StockSharp YouTube</ddue:linkText>
+   <ddue:linkUri>http://www.youtube.com/user/StockSharp/</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="stocksharpvk"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>StockSharp VK</ddue:linkText>
+    <ddue:linkUri>https://vk.com/stocksharp</ddue:linkUri>
+  </ddue:externalLink></item>
+  <item id="oanda"><ddue:link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">OANDA</ddue:link></item>
+  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
+  <item id="wealthlab"><ddue:link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Wealthlab</ddue:link></item>
 </content>
