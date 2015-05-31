@@ -3,8 +3,39 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
   
     <introduction>
-     <para>Раздел пока не доступен</para>
-    </introduction>
+     <para>В настоящее время проект <token>stocksharp</token> разрабатывается в рамках Open Source комьюнити. Поэтому все основные компоненты <token>stocksharp</token>, необходимые для разработки торговых роботов, 
+     доступны в виде исходных кодов, размещенных в репозитории <token>stocksharpgithub</token>	на веб-сервисе <token>github</token>.
+ 	</para>
+ 	<para><externalLink>
+	<linkText>Инструкция использования GitHub</linkText>
+	<linkAlternateText>Инструкция использования GitHub</linkAlternateText>
+		<linkUri>http://stocksharp.com/forum/yaf_postst5473_Rukovodstvo-po-GitHub.aspx</linkUri>
+		<linkTarget>_blank</linkTarget>
+	</externalLink>
+</para>
+ 	<para>Кроме того существуют закрытые компоненты:</para>
+	<list class="bullet">
+  		<listItem>
+  			<para>Продукты сторонних разработчиков с ограничениями лицензии выложены без исходных кодов.</para>
+  		</listItem>
+  		<listItem>
+  			<para>Платные компоненты (коннекторы Плаза и ММВБ и ФИКС и др.) - доступны по <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">корпоративной лицензии</link>.</para>
+ 		</listItem>
+	</list>
+
+   </introduction>
     
+    
+    
+    
+    <relatedTopics>
+     	<externalLink>
+			<linkText>Исходный код S# на GitHub</linkText>
+			<linkAlternateText>Optional alternate text</linkAlternateText>
+			<linkUri>http://stocksharp.com/news/10454-ishodnyi-kod-s-na-github</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+    <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>
