@@ -61,7 +61,6 @@ namespace StockSharp.Algo.Testing
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int>();
-		private readonly SyncObject _suspendLock = new SyncObject();
 		
 		private readonly HistoryMessageAdapter _historyAdapter;
 		private readonly EmulationMessageAdapter _emulationAdapter;
@@ -226,7 +225,7 @@ namespace StockSharp.Algo.Testing
 						throwError = (_state != EmulationStates.Started);
 						break;
 					case EmulationStates.Suspended:
-						throwError = (_state != EmulationStates.Suspended);
+						throwError = (_state != EmulationStates.Suspending);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException("value");
@@ -324,7 +323,6 @@ namespace StockSharp.Algo.Testing
 		protected override void OnDisconnect()
 		{
 			SendEmulationState(EmulationStates.Stopping);
-			base.OnDisconnect();
 		}
 
 		/// <summary>
@@ -450,11 +448,6 @@ namespace StockSharp.Algo.Testing
 
 			switch (newState)
 			{
-				case EmulationStates.Stopped:
-				{
-					break;
-				}
-
 				case EmulationStates.Stopping:
 				{
 					SendInMessage(new DisconnectMessage());
@@ -466,28 +459,6 @@ namespace StockSharp.Algo.Testing
 					SendEmulationState(EmulationStates.Started);
 					break;
 				}
-
-				case EmulationStates.Started:
-				{
-					_suspendLock.PulseAll();
-					break;
-				}
-
-				case EmulationStates.Suspending:
-				{
-					SendEmulationState(EmulationStates.Suspended);
-					break;
-				}
-
-				case EmulationStates.Suspended:
-				{
-					State = newState;
-					_suspendLock.Wait();
-					break;
-				}
-
-				default:
-					throw new ArgumentOutOfRangeException();
 			}
 		}
 

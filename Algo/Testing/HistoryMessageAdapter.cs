@@ -23,6 +23,8 @@ namespace StockSharp.Algo.Testing
 	{
 		private Thread _loadingThread;
 		private bool _disconnecting;
+		private bool _isSuspended;
+		private readonly SyncObject _suspendLock = new SyncObject();
 
 		private IEnumerable<ExchangeBoard> Boards
 		{
@@ -195,6 +197,18 @@ namespace StockSharp.Algo.Testing
 			get { return true; }
 		}
 
+		private void TryResume()
+		{
+			lock (_suspendLock)
+			{
+				if (!_isSuspended)
+					return;
+
+				_isSuspended = false;
+				_suspendLock.PulseAll();
+			}
+		}
+
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -205,6 +219,8 @@ namespace StockSharp.Algo.Testing
 			{
 				case MessageTypes.Reset:
 				{
+					TryResume();
+					
 					LoadedMessageCount = 0;
 					_disconnecting = _loadingThread != null;
 					_loadingThread = null;
@@ -227,6 +243,7 @@ namespace StockSharp.Algo.Testing
 				case MessageTypes.Disconnect:
 				{
 					_disconnecting = true;
+					TryResume();
 					return;
 				}
 
@@ -270,12 +287,17 @@ namespace StockSharp.Algo.Testing
 
 				case ExtendedMessageTypes.EmulationState:
 					var stateMsg = (EmulationStateMessage)message;
+					var isSuspended = false;
 
 					switch (stateMsg.State)
 					{
 						case EmulationStates.Starting:
+						{
 							if (_loadingThread != null)
+							{
+								TryResume();
 								break;
+							}
 
 							_loadingThread = ThreadingHelper
 								.Thread(OnLoad)
@@ -283,9 +305,23 @@ namespace StockSharp.Algo.Testing
 								.Launch();
 
 							break;
+						}
+
+						case EmulationStates.Suspending:
+						{
+							lock (_suspendLock)
+								_isSuspended = true;
+
+							isSuspended = true;
+							break;
+						}
 					}
 
 					SendOutMessage(message);
+
+					if (isSuspended)
+						SendOutMessage(new EmulationStateMessage { State = EmulationStates.Suspended });
+
 					return;
 			}
 
@@ -545,6 +581,12 @@ namespace StockSharp.Algo.Testing
 				{
 					if (msg.LocalTime > StopDate)
 						break;
+				}
+
+				lock (_suspendLock)
+				{
+					if (_isSuspended)
+						_suspendLock.Wait();	
 				}
 
 				SendOutMessage(msg);
