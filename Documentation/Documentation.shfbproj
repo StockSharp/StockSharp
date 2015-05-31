@@ -1242,6 +1242,26 @@
       <ImageId>StockSharp_logo</ImageId>
       <AlternateText>Stock Sharp logo</AlternateText>
     </Image>
+    <Image Include="Art\stocksharp_instalation1.png">
+      <ImageId>stocksharp_instalation1</ImageId>
+      <AlternateText>stocksharp instalation 1</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation2.png">
+      <ImageId>stocksharp_instalation2</ImageId>
+      <AlternateText>stocksharp instalation 2</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation3.png">
+      <ImageId>stocksharp_instalation3</ImageId>
+      <AlternateText>stocksharp instalation 3</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation4.png">
+      <ImageId>stocksharp_instalation4</ImageId>
+      <AlternateText>stocksharp instalation 4</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation5.png">
+      <ImageId>stocksharp_instalation5</ImageId>
+      <AlternateText>stocksharp instalation 5</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
