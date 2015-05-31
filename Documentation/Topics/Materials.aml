@@ -7,15 +7,6 @@
     </summary>
     -->
     <introduction>
-      	<para>Для самостоятельного обучения:</para>
-      	<list class="bullet">
-			<listItem>
-				Интерактивный учебник по Visual C# - <token>csharplessons</token>
-			</listItem>
-			<listItem>
-				Бесплатная среда программирования - <token>vsexpress</token>
-			</listItem>
-		</list>
 		
 		<para><legacyBold>Материалы от <token>stocksharp</token>:</legacyBold></para>
       	<list class="bullet">
@@ -33,7 +24,7 @@
 			</listItem>
 		</list>
 		
-		<para>Контактная информация:</para>
+		<para><legacyBold>Контактная информация:</legacyBold></para>
 		<list class="bullet">
 			<listItem>
 				Сайт библиотеки - <token>stocksharpsite</token>
@@ -42,8 +33,15 @@
 				Форум для обсуждения вопросов - <token>stocksharpforum</token>
 			</listItem>
 			<listItem>
-				Блог с новостями - <token>stocksharpblog</token>
+				Новости - <token>stocksharpnews</token>
 			</listItem>
+			<listItem>
+				Канал на YouTube - <token>stocksharpyoutube</token>
+			</listItem>
+			<listItem>
+				Гпуппа ВК "StockSharp - Трейдинг и Торговые роботы" - <token>stocksharpvk</token>
+			</listItem>
+			
 		</list>
     </introduction>
     <!-- Add one or more top-level section elements.  These are collapsible.

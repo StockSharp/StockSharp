@@ -5,6 +5,7 @@
 		<para>На текущий момент <token>stocksharp</token> поддерживает следующие Forex коннекторы:</para>
 		<list class="ordered">
 			<listItem><codeEntityReference>T:StockSharp.LMAX.LmaxTrader</codeEntityReference> для <token>lmax</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.Oanda.OandaTrader</codeEntityReference> для <token>oanda</token></listItem>
 		</list>
 	</introduction>
 	</developerWalkthroughDocument>

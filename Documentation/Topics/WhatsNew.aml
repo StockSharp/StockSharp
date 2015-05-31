@@ -6,6 +6,13 @@
 			
 			<para>
 				<externalLink>
+					<linkText>StockSharp v4.2.0 и старше</linkText>
+					<linkUri>https://github.com/stocksharp/stocksharp/blob/master/_ReleaseNotes/CHANGE_LOG_API.md</linkUri>
+				</externalLink>
+			</para>
+			
+			<para>
+				<externalLink>
 					<linkText>StockSharp 4.1.13</linkText>
 					<linkUri>http://stocksharp.com/forum/yaf_postsm27388_S--API-4-1.aspx#post27388</linkUri>
 				</externalLink>
