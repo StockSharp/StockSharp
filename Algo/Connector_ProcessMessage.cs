@@ -84,8 +84,12 @@ namespace StockSharp.Algo
 					_adapter.InnerAdapters.Cleared -= InnerAdaptersOnCleared;
 					_adapter.NewOutMessage -= AdapterOnNewOutMessage;
 
+					SendInMessage(new ResetMessage());
+
 					_inAdapter.Dispose();
-					_adapter.Dispose();
+
+					if (_inAdapter != _adapter)
+						_adapter.Dispose();
 				}
 
 				_adapter = value;
