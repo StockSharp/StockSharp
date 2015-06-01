@@ -53,8 +53,12 @@
         </step>
       </steps>
     </procedure>	
-		  <procedure>
+	 <procedure>
       <title>Установка при помощи Nuget</title>
+	  <alert class="note">
+          <para>При помощи Nuget можно установить только библиотеку <token>stocksharp</token>. Исходные коды и примеры устанавливаются с GitHub.</para>
+      </alert>
+
       <steps class="ordered">
         <step>
           <content>
