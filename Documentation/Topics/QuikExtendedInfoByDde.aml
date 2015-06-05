@@ -184,8 +184,8 @@ this.Trader.SecuritiesTable.Columns.Insert(4, DdeSecurityColumns.Volatility);</c
 			  <step>
 				<content>
 				  <para>
-					После этого, через события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>
-					  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.SecuritiesChanged</codeEntityReference> будут приходить 
+					После этого, через события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
+					  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> будут приходить 
 					  объекты <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>, содержащие расширенную информацию. Чтобы
 					  ее получить в коде, необходимо воспользоваться свойством <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExtensionInfo</codeEntityReference>:
 					</para>

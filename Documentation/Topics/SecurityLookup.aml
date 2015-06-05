@@ -13,7 +13,7 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>
-      	Некоторые коннекторы (например, <token>OpenECry</token> или <token>ib</token>) не поддерживают при запуске экспорта (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.StartExport</codeEntityReference>)
+      	Некоторые коннекторы (например, <token>OpenECry</token> или <token>ib</token>) не поддерживают при запуске экспорта (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.StartExport</codeEntityReference>)
       	передачу всех имеющихся на сервере инструментов на клиент (как правило, это сделано для уменьшения нагрузки на сервер брокера).
       </para>
       
@@ -37,8 +37,8 @@
 				<para>Желаемое количество результатов запроса.</para>
 			</listItem-->
 		</list>
-		<para>Найденные инструменты будут возвращены через событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>.
-		В случае, если ни одного инструмента по запросу не найдено, будет вызван обработчик события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.ProcessDataError</codeEntityReference>.</para>
+		<para>Найденные инструменты будут возвращены через событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.
+		В случае, если ни одного инструмента по запросу не найдено, будет вызван обработчик события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ProcessDataError</codeEntityReference>.</para>
     </introduction>
     <relatedTopics>
       <!-- One or more of the following:

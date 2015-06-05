@@ -98,10 +98,10 @@ trader.Connect();
 				  <code language="C#">Trader.StartExport();</code>
 				  <para>
 					  Начнут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewOrders</codeEntityReference> и т.д. Для тех данных,
+					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
-					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.OrdersChanged</codeEntityReference>.
+					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>.
 				  </para>
 			  </content>
 		  </step>
@@ -110,7 +110,7 @@ trader.Connect();
 				  <para>
 					  Для просмотра списка инструментов используется окно Инструменты (SecuritiesWindow.xaml).  Чтобы в нем отображались ценные бумаги,
 					  необходимо внутри метода Connect_Click класса MainWindow подписаться на событие 
-					  <codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>.
+					  <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.
 				  </para>
 				  <code language="C#">this.Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));</code>
 			  </content>

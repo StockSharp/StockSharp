@@ -232,8 +232,8 @@ if (emulationInfo.UseMarketDepth									// тест подразумевает 
 trader.StartExport();</code>
 					  <para>
 						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference> инструментов
-						  и портфелей вызывается <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>
-						  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewPortfolios</codeEntityReference>.
+						  и портфелей вызывается <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
+						  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference>.
 					  </para>
 				  </content>
 			  </step>

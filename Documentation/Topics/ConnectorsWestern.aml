@@ -7,8 +7,14 @@
 			<listItem><codeEntityReference>T:StockSharp.OEC.OECTrader</codeEntityReference> для <token>OpenECry</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> для <token>IB</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> для <token>blackwood</token></listItem>
-			<listItem><codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> для <token>iqfeed</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.ETrade.ETradeTrader</codeEntityReference> для <token>etrade</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> для <token>iqfeed</token></listItem>
+			
+			<listItem><codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference> для <token>sterling</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference> для <token>cqg</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.Fix.FixServer</codeEntityReference> для <token>fix</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> для <token>rithmic</token></listItem>
+			
 		</list>
 	</introduction>
 	</developerWalkthroughDocument>

@@ -149,6 +149,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\Alor.aml" />
     <None Include="Topics\SourceCode.aml" />
     <None Include="Topics\StockSharpInstall.aml" />
     <None Include="Topics\Rithmic.aml" />

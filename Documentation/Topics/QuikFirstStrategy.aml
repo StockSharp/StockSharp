@@ -54,9 +54,9 @@ var trader = new QuikTrader(@"Ваш путь к Квик директории")
 			  <content>
 				  <para>
 					  После создания шлюза необходимо подключиться к торговой системе, используя метод
-					  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.Connect</codeEntityReference>. Данный метод асинхронный,
+					  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>. Данный метод асинхронный,
 					  то есть результат его выполнения не гарантирует мгновенное установление соединения. Для точного определения, что соединение было
-					  установлено, необходимо использовать событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.Connected</codeEntityReference>:
+					  установлено, необходимо использовать событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference>:
 				  </para>
 				  <code language="C#">// подписываемся на событие успешного подключения
 // все действия необходимо производить только после подключения
@@ -149,7 +149,7 @@ trader.MarketDepthsChanged += depths =>
 	}
 };]]></code>
 				<para>
-					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference> запускается
+					В обработчике <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference> запускается
 					экспорт стакана для того, чтобы начали обновляться такие поля как
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestBid</codeEntityReference>,
 					<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.BestAsk</codeEntityReference> и
@@ -172,7 +172,7 @@ trader.MarketDepthsChanged += depths =>
 				  <alert class="caution">
 					  <para>
 						  Производить только после успешного соединения с <token>quik</token>. Например, данный код можно прописать
-						  в обработчике события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.Connected</codeEntityReference>.
+						  в обработчике события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference>.
 					  </para>
 				  </alert>
 				  <code language="C#">Console.WriteLine("Дожидаемся появления в программе инструмента Лукойл и портфеля {0}...".Put(account));
@@ -195,14 +195,14 @@ waitHandle.WaitOne();</code>
 				  </alert>
 				  <para>
 					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>, то будут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>,
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewOrders</codeEntityReference> и т.д. Для тех данных,
+					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
-					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.OrdersChanged</codeEntityReference>.
+					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>.
 				  </para>
 				  <para>
 					  Независимо от того, созданы ли данные программно, например, заявки, или же пользователь сам вручную зарегистрировал заявку, для новых
-					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewOrders</codeEntityReference>.
+					  данных в таблице Заявки будет вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference>.
 					  Это очень удобно в случае, когда пользователь отменяет выставленную заявку, и программа продолжает работать с актуальными данными.
 				  </para>
 			  </content>

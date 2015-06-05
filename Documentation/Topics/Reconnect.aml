@@ -34,11 +34,11 @@
 				максимально допустимое для отсутствия новых данных. По умолчанию оно равно TimeSpan.Zero, что означает, что режим отключен.
 			</listItem>
 			<listItem>
-				В процессе установки соединения (или отключения от торгов) событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.Connected</codeEntityReference>
-				не приходит долгое время (или <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.Disconnected</codeEntityReference>, если
+				В процессе установки соединения (или отключения от торгов) событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference>
+				не приходит долгое время (или <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Disconnected</codeEntityReference>, если
 				производится отключение). Через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.ReConnectionSettings.ConnectDisconnectTimeOutInterval</codeEntityReference>
 				задается время, максимально допустимое для отсутствия успешного события. Если по истечению данного времени событие не пришло, вызывается событие
-				<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.ConnectionError</codeEntityReference> с ошибкой об окончании ожидания.
+				<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference> с ошибкой об окончании ожидания.
 			</listItem>
 		</list>
 	  <!--<para>
@@ -119,7 +119,7 @@ Trader.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.T
 			  <content>
 				  <para>
 					  <codeEntityReference>T:StockSharp.Algo.BaseTrader</codeEntityReference> может автоматически при восстановлении соединения
-					  перезапускать экспорт через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.ITrader.ReStartExport</codeEntityReference>.
+					  перезапускать экспорт через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReStartExport</codeEntityReference>.
 					  Это необходимо в тех случаях, когда экспорт данных был остановлен вместе с потерей соединения. Например, программы <token>quik</token>
 					  или <token>smartcom</token> были полностью перезапущены. При этом, перезапускаются только те потоки данных, которые работали на момент
 					  потери соединения. Данная функциональность по умолчанию отключена. Если требуется включить ее, то необходимо использовать свойство
