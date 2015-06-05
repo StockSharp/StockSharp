@@ -7,7 +7,7 @@
 
     <introduction>
 		<para>
-			Для работы одновременно с несколькими <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>, <token>stocksharp</token>
+			Для работы одновременно с несколькими <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>, <token>stocksharp</token>
 			предоставляет класс <codeEntityReference>T:StockSharp.Algo.BasketTrader</codeEntityReference>. Например, когда робот одновременно ведет торговлю через
 			<token>quik</token> и <token>smartcom</token>. Или, с несколькими <token>quik</token>-ами, как показано в разделе <link xlink:href="9fb00dd4-4f0a-42a9-ab0f-9946b7acf6fe"/>.
 		</para>

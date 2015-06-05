@@ -27,7 +27,7 @@
 		<para><legacyBold>Контактная информация:</legacyBold></para>
 		<list class="bullet">
 			<listItem>
-				Сайт библиотеки - <token>stocksharpsite</token>
+				Сайт платформы - <token>stocksharpsite</token>
 			</listItem>
 			<listItem>
 				Форум для обсуждения вопросов - <token>stocksharpforum</token>
@@ -39,7 +39,10 @@
 				Канал на YouTube - <token>stocksharpyoutube</token>
 			</listItem>
 			<listItem>
-				Гпуппа ВК "StockSharp - Трейдинг и Торговые роботы" - <token>stocksharpvk</token>
+				Группа ВК "StockSharp - Трейдинг и Торговые роботы" - <token>stocksharpvk</token>
+			</listItem>
+			<listItem>
+				Twitter - <token>stocksharptwitter</token>
 			</listItem>
 			
 		</list>

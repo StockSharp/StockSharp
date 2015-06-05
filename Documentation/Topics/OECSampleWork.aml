@@ -30,7 +30,7 @@ Trader = new OECTrader {
 
 					<step>
 						<content>
-							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ITrader</codeEntityReference>:</para>
+							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
 // событие восстановления соединения
@@ -125,16 +125,16 @@ private void Export_Click(object sender, RoutedEventArgs e)
 							<para>После запуска экспорта можно ожидать срабатывания событий:</para>
 							<list class="bullet">
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.SecuritiesChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.MarketDepthsChanged</codeEntityReference> – изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewTrades</codeEntityReference> – новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</para>
 								</listItem>
 								<listItem>
-									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.PortfoliosChanged</codeEntityReference> – изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
 								</listItem>
 							</list>
 						</content>
@@ -168,8 +168,8 @@ private void SearchText_PreviewKeyUp(object sender, KeyEventArgs e)
 					<step>
 						<content>
 							<para>Для получения обновлений по выбранному инструменту и тиков необходимо воспользоваться методами 
-							<codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> 
-							и <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:</para>
+							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> 
+							и <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:</para>
             				<code language="C#">
             				<![CDATA[
 private void BidAsk_Click(object sender, RoutedEventArgs e)
@@ -202,7 +202,7 @@ private void BidAsk_Click(object sender, RoutedEventArgs e)
 					<step>
 						<content>
 							<para>Для запроса обновлений по стаканам необходимо воспользоваться методом 
-							<codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
 private void Quotes_Click(object sender, RoutedEventArgs e)
@@ -230,7 +230,7 @@ private void Quotes_Click(object sender, RoutedEventArgs e)
 
 					<step>
 						<content>
-							<para>Для получения обновлений по портфелям используется метод <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>:</para>
+							<para>Для получения обновлений по портфелям используется метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[
 Trader.NewPortfolios += portfolios =>
@@ -247,7 +247,7 @@ Trader.NewPortfolios += portfolios =>
 
 					<step>
 						<content>
-							<para>Для регистрации заявок предусмотрена кнопка «Новая заявка». Метод <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
+							<para>Для регистрации заявок предусмотрена кнопка «Новая заявка». Метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> отправляет заявку на сервер:</para>
             				<code language="C#">
             				<![CDATA[
 private void Send_Click(object sender, RoutedEventArgs e)

@@ -19,7 +19,7 @@
 		</para>
 			<list class="bullet">
 			  <listItem>стратегий (<codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>);</listItem>
-			  <listItem>подключений (<codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>);</listItem>
+			  <listItem>подключений (<codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>);</listItem>
 			  <listItem>собственных реализаций <codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference> (например, главное окно в роботе).</listItem>
 			</list>		
 		

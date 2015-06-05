@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="c0f3f55c-3832-46ed-90da-30129019c8f3" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+  
     <introduction>
 		<para>
 			<codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference> поддерживает работу со "стоп-лимит" заявками.
@@ -54,8 +55,7 @@ catch (Exception ex)
 		<para>
 			Существует несколько типов условий:
 		</para>
-		<para>
-			<list class="bullet">
+		<list class="bullet">
 			  <listItem>
 				  <codeEntityReference>T:StockSharp.AlfaDirect.AlfaLimitOrderCondition</codeEntityReference> - условие лимитной стоп-заявки.
 			  </listItem>
@@ -66,7 +66,6 @@ catch (Exception ex)
 				  <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrailingOrderCondition</codeEntityReference> - заявки "скользящий стоп".
 			  </listItem>
 		  </list>
-		</para>
 		
 	<!--alert class="note">
 	  <para>В дальнейшем планируется добавить поддержку заявок типа "следящий стоп".</para>

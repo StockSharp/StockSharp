@@ -5,7 +5,7 @@
 	  <introduction>
 		<para>
 			  Архитектура <token>stocksharp</token> устроена таким образом, что торговые алгоритмы работают через реализацию специального интерфейса
-			  <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>. Это обеспечивает платформо-независимость, что дает ряд преимуществ:
+			  <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>. Это обеспечивает платформо-независимость, что дает ряд преимуществ:
 	    </para>
 		<list class="ordered">
 			<listItem>
@@ -38,7 +38,7 @@
 		<list class="bullet">
 			<listItem>
 				<codeEntityReference>N:StockSharp.BusinessEntities</codeEntityReference> - основные торговые объекты (инструмент, заявка, сделка и
-				т.д.). В том числе находится и само описание интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>.
+				т.д.). В том числе находится и само описание интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>.
 			</listItem>
 			
 			<listItem>
