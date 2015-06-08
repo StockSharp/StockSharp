@@ -701,18 +701,18 @@ namespace StockSharp.Algo.Strategies
 
 				_processState = value;
 
-				ChildStrategies.SyncDo(c =>
-				{
-					var child = (IEnumerable<Strategy>)c;
-
-					if (ProcessState == ProcessStates.Stopping)
-						child = child.Where(s => s.ProcessState == ProcessStates.Started);
-
-					child.ToArray().ForEach(s => s.ProcessState = ProcessState);
-				});
-
 				try
 				{
+					ChildStrategies.SyncDo(c =>
+					{
+						var child = (IEnumerable<Strategy>)c;
+
+						if (ProcessState == ProcessStates.Stopping)
+							child = child.Where(s => s.ProcessState == ProcessStates.Started);
+
+						child.ToArray().ForEach(s => s.ProcessState = ProcessState);
+					});
+
 					switch (value)
 					{
 						case ProcessStates.Started:
@@ -737,7 +737,14 @@ namespace StockSharp.Algo.Strategies
 							break;
 						}
 					}
+				}
+				catch (Exception error)
+				{
+					OnError(error);
+				}
 
+				try
+				{
 					RaiseProcessStateChanged(this);
 					this.Notify("ProcessState");
 				}
