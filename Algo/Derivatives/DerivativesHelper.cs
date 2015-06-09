@@ -504,7 +504,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <returns><see langword="true"/>, если инструмент закончил свое действие.</returns>
 		public static bool IsExpired(this Security security, DateTime currentTime)
 		{
-			return security.GetExpirationTime() >= currentTime;
+			return security.GetExpirationTime() <= currentTime;
 		}
 
 		/// <summary>
