@@ -120,10 +120,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppConfig.cs" />
-    <Compile Include="Configuration\ConnectionElement.cs" />
-    <Compile Include="Configuration\ConnectionElementCollection.cs" />
-    <Compile Include="Configuration\DiagramElement.cs" />
-    <Compile Include="Configuration\DiagramElementCollection.cs" />
+    <Compile Include="..\Studio\Configuration\ConnectionElement.cs">
+      <Link>Configuration\ConnectionElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Studio\Configuration\ConnectionElementCollection.cs">
+      <Link>Configuration\ConnectionElementCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Studio\Configuration\DiagramElement.cs">
+      <Link>Configuration\DiagramElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Studio\Configuration\DiagramElementCollection.cs">
+      <Link>Configuration\DiagramElementCollection.cs</Link>
+    </Compile>
     <Compile Include="Configuration\StockSharpSection.cs" />
     <Compile Include="DiagramStrategyEx.cs" />
     <Compile Include="SecretWindow.xaml.cs">
