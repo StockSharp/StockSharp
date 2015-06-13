@@ -41,7 +41,7 @@
           <content>
           	<para>На открывшейся странице выберите нужную версию <token>stocksharp</token> и из раздела <legacyBold>Downloads</legacyBold> загрузите необходимые архивы.</para>
 			<alert class="note">
-  				<para>Обратите внимание, что в архивах Source Code (***) содержаться исходные коды, а в архивах StockSharp_*.*.*.zip - файлы библиотеки (референнсы) и исходные коды примеров.</para>
+  				<para>Обратите внимание, что в архивах Source Code содержаться исходные коды, а в архивах StockSharp_#.#.#.zip - файлы библиотеки (референнсы) и исходные коды примеров.</para>
 			</alert>
           	<mediaLink><image placement="left" xlink:href="stocksharp_instalation2"/></mediaLink>
           </content>
@@ -78,7 +78,7 @@
         </step>
         <step>
           <content>
-          	<para>После инсталяции пакета в папке с решением появится папка packages, а в ней папка с последней версией <token>stocksharp</token>.</para>
+          	<para>После инсталяции пакета в папке с решением появится папка packages, а в ней папка StockSharp.#.#.# с последней версией <token>stocksharp</token>.</para>
           	<mediaLink><image placement="left" xlink:href="stocksharp_instalation5"/></mediaLink>
           </content>
         </step>

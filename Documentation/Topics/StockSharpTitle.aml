@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>
-      	<mediaLinkInline><image xlink:href="StockSharp_logo"/></mediaLinkInline> <legacyBold>StockSharp</legacyBold> (<token>stocksharp</token>)
+      	<mediaLinkInline><image xlink:href="StockSharp_logo"/></mediaLinkInline> <legacyBold>StockSharp</legacyBold>  (<token>stocksharp</token>)
       	- комплекс бесплатных программных продуктов, включающий весь необходимый аресенал для автоматизации биржевой торговли.
       </para>
       <para>
@@ -45,7 +45,7 @@
  	  Большинство продуктов <token>stocksharp</token> предоставляется <legacyBold>бесплатно</legacyBold>, а некоторые продукты с расширенными возможностями на платной основе (см. <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">Лицензирование StockSharp</link>.).
  	  </para>
  	  <para>
- 	  Установить <token>stocksharp</token> можно с веб-вервиса GitHub или из Visual Studio при помощи NuGet. Как это сделать смотрите в разделе <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.
+ 	  Установить <token>stocksharp</token> можно с веб-вервиса <token>github</token> или из Visual Studio при помощи NuGet. Как это сделать смотрите в разделе <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>.
 	</para>
 	<para>
 	   <legacyUnderline><legacyBold>Продукты <token>stocksharp</token></legacyBold></legacyUnderline>

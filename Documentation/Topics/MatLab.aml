@@ -45,7 +45,7 @@
 				Необходимо создать шлюз <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> к торговой системе (в данном случае был выбран
 				<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>), и передать его в <codeEntityReference>T:StockSharp.MatLab.MatLabTrader</codeEntityReference>.
 				Последний нужен для того, чтобы подписаться на события получения маркет-данных (напрямую к событиям
-				<codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference> в <token>matlab</token> подписаться невозможно):
+				<codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> в <token>matlab</token> подписаться невозможно):
 			</para>
 			  <code>
 trader = StockSharp.MatLab.MatLabTrader(StockSharp.Quik.QuikTrader);
