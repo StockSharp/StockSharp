@@ -32,11 +32,11 @@ namespace StockSharp.Algo.Strategies
 		/// Заявка не регистрируется, а только создается объект.
 		/// </remarks>
 		/// <param name="strategy">Стратегия.</param>
-		/// <param name="volume">Объем. Если передается значение 0, то используется значение <see cref="Strategy.Volume"/>.</param>
+		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
 		/// <returns>Инициализированный объект заявки.</returns>
-		public static Order BuyAtMarket(this Strategy strategy, decimal volume = 0)
+		public static Order BuyAtMarket(this Strategy strategy, decimal? volume = null)
 		{
-			return strategy.CreateOrder(Sides.Buy, 0, volume);
+			return strategy.CreateOrder(Sides.Buy, null, volume);
 		}
 
 		/// <summary>
@@ -46,11 +46,11 @@ namespace StockSharp.Algo.Strategies
 		/// Заявка не регистрируется, а только создается объект.
 		/// </remarks>
 		/// <param name="strategy">Стратегия.</param>
-		/// <param name="volume">Объем. Если передается значение 0, то используется значение <see cref="Strategy.Volume"/>.</param>
+		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
 		/// <returns>Инициализированный объект заявки.</returns>
-		public static Order SellAtMarket(this Strategy strategy, decimal volume = 0)
+		public static Order SellAtMarket(this Strategy strategy, decimal? volume = null)
 		{
-			return strategy.CreateOrder(Sides.Sell, 0, volume);
+			return strategy.CreateOrder(Sides.Sell, null, volume);
 		}
 
 		/// <summary>
@@ -61,9 +61,9 @@ namespace StockSharp.Algo.Strategies
 		/// </remarks>
 		/// <param name="strategy">Стратегия.</param>
 		/// <param name="price">Цена.</param>
-		/// <param name="volume">Объем. Если передается значение 0, то используется значение <see cref="Strategy.Volume"/>.</param>
+		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
 		/// <returns>Инициализированный объект заявки.</returns>
-		public static Order BuyAtLimit(this Strategy strategy, decimal price, decimal volume = 0)
+		public static Order BuyAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
 		{
 			return strategy.CreateOrder(Sides.Buy, price, volume);
 		}
@@ -76,9 +76,9 @@ namespace StockSharp.Algo.Strategies
 		/// </remarks>
 		/// <param name="strategy">Стратегия.</param>
 		/// <param name="price">Цена.</param>
-		/// <param name="volume">Объем. Если передается значение 0, то используется значение <see cref="Strategy.Volume"/>.</param>
+		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
 		/// <returns>Инициализированный объект заявки.</returns>
-		public static Order SellAtLimit(this Strategy strategy, decimal price, decimal volume = 0)
+		public static Order SellAtLimit(this Strategy strategy, decimal price, decimal? volume = null)
 		{
 			return strategy.CreateOrder(Sides.Sell, price, volume);
 		}
@@ -91,10 +91,10 @@ namespace StockSharp.Algo.Strategies
 		/// </remarks>
 		/// <param name="strategy">Стратегия.</param>
 		/// <param name="direction">Направление заявки.</param>
-		/// <param name="price">Цена. Если передается значение 0, то выставляется заявка по рыночной цене.</param>
-		/// <param name="volume">Объем. Если передается значение 0, то используется значение <see cref="Strategy.Volume"/>.</param>
+		/// <param name="price">Цена. Если передается значение <see langword="null"/>, то выставляется заявка по рыночной цене.</param>
+		/// <param name="volume">Объем. Если передается значение <see langword="null"/>, то используется значение <see cref="Strategy.Volume"/>.</param>
 		/// <returns>Инициализированный объект заявки.</returns>
-		public static Order CreateOrder(this Strategy strategy, Sides direction, decimal price, decimal volume = 0)
+		public static Order CreateOrder(this Strategy strategy, Sides direction, decimal? price, decimal? volume = null)
 		{
 			if (strategy == null)
 				throw new ArgumentNullException("strategy");
@@ -109,18 +109,19 @@ namespace StockSharp.Algo.Strategies
 				Portfolio = strategy.Portfolio,
 				Security = strategy.Security,
 				Direction = direction,
-				Price = price,
-				Volume = volume == 0 ? strategy.Volume : volume,
+				Volume = volume ?? strategy.Volume,
 			};
 
-			if (price != 0)
-				return order;
-
-			if (security.Board.IsSupportMarketOrders)
-				order.Type = OrderTypes.Market;
+			if (price == null)
+			{
+				if (security.Board.IsSupportMarketOrders)
+					order.Type = OrderTypes.Market;
+				else
+					order.Price = strategy.GetMarketPrice(direction) ?? 0;
+			}
 			else
-				order.Price = strategy.GetMarketPrice(direction) ?? 0;
-
+				order.Price = price.Value;
+			
 			return order;
 		}
 
