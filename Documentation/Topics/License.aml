@@ -7,7 +7,7 @@
 			Большая часть функциональности <token>stocksharp</token> предоставляется бесплатно в рамках лицензии на свободное программное обеспечение <externalLink>
 					<linkText>LGPL-3.0</linkText>
 						<linkAlternateText>Optional alternate text</linkAlternateText>
-							<linkUri>http://www.gnu.org/licenses/lgpl-3.0.en.html</linkUri>
+							<linkUri>http://gnu.org/licenses/lgpl-3.0.en.html</linkUri>
 						<linkTarget>_blank</linkTarget>
 					</externalLink>
  			и доступна всем желающим (см. <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>).
@@ -23,13 +23,13 @@
 ). Дополнительно к бесплатной функциональности включает:</para>
 		<list class="ordered">
   			<listItem>
-  				<para>Быстрый FIX коннектор к брокеру (для HFT роботов)</para>
+  				<para>Быстрый FIX коннектор к брокеру (для HFT роботов).</para>
   			</listItem>
   			<listItem>
-  				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.)</para>
+  				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.).</para>
   			</listItem>
   			<listItem>
-  				<para>Подключение до 3 программ одновременно к одному терминалу (роботов, робот + <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link> и т.д.)</para>
+  				<para>Подключение до 3 программ одновременно к одному терминалу (роботов, робот + <link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link> и т.д.).</para>
   			</listItem>
   			<listItem>
   				<para>Order Log.</para>

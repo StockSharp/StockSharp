@@ -7,7 +7,7 @@
 
     <introduction>
 		  <para>
-			  Для написания торговых роботов под <token>smartcom_external</token> необходимо использовать <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>.
+			  Для написания торговых роботов под <token>smartcom_external</token> необходимо использовать <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>.
 			  Механизм взаимодействия показан на данном рисунке:
 		  </para>
 		  <para>
@@ -16,10 +16,10 @@
 			  </mediaLink>
 		  </para>
 		  <para>
-			  В отличие от <token>quik</token>-а, для работы <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference> не нужно устанавливать
+			  В отличие от <token>quik</token>-а, для работы <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> не нужно устанавливать
 			  и запускать торговый терминал, чтобы робот мог торговать. Достаточно скачать и установить <token>smartcom_external</token>. При создании объекта
-			  <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference> будет автоматически запущен процесс SmartCom2.exe, который
-			  регистрируется при установке как <token>ntservice</token>. Все взаимодействие между <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>
+			  <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> будет автоматически запущен процесс SmartCom2.exe, который
+			  регистрируется при установке как <token>ntservice</token>. Все взаимодействие между <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>
 			  и <token>smartcom_external</token> идет через технологию <token>com</token>.
 		  </para>
     </introduction>

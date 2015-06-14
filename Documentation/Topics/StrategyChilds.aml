@@ -32,7 +32,7 @@
       <content>
         <para>
 			Чтобы добавить дочернюю стратегию необходимо использовать свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ChildStrategies</codeEntityReference>.
-			Значения <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Trader</codeEntityReference>,
+			Значения <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Connector</codeEntityReference>,
 			<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Portfolio</codeEntityReference>
 			и <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Security</codeEntityReference> для дочерних стратегий
 			можно не устанавливать, и они автоматически заполнятся при добавлении в родительскую стратегию.

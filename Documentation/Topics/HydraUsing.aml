@@ -20,7 +20,7 @@
 			  </step>
 			  <step>
 				  <content>
-		  				<para>Скачать дистрибутив <token>hydra</token></para>
+		  				<para>Скачать дистрибутив <token>hydra</token>.</para>
 				  </content>
 			  </step>
 			  <step>
@@ -31,7 +31,7 @@
 			  </step>			  
 			  <step>
 				  <content>
-		  				<para>Затем запустить Hydra.Update.exe и нажать кнопку "Установить":</para>
+		  				<para>Затем запустить Hydra.Update.exe и нажать кнопку <legacyBold>Установить</legacyBold>.</para>
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup4" /></mediaLink>
 				  </content>
 			  </step>			  

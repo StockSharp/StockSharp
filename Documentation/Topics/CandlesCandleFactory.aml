@@ -162,7 +162,7 @@ public class TickCandleBuilder : CandleBuilder<TickCandle>
 			<step>
 				<content>
 					<para>Затем, при создании <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, добавить данного построителя свечек в источники,
-					который будет брать тики от <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.ITrader</codeEntityReference>:</para>
+					который будет брать тики от <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
 
 					<alert class="caution"><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.Compression.TickCandleBuilder</codeEntityReference>, 
 					как источник свечек, стандартно присутсвует в <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>. Данный шаг представлен лишь в качестве примера.</alert>

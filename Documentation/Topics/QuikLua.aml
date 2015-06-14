@@ -20,7 +20,7 @@
           	<para>Скачать и установить <externalLink>
 			<linkText>Visual C++ 2013</linkText>
 			<linkAlternateText>Пакет Visual C++ для Visual Studio 2013</linkAlternateText>
-			<linkUri>http://www.microsoft.com/ru-ru/download/details.aspx?id=40784</linkUri>
+			<linkUri>http://microsoft.com/ru-ru/download/details.aspx?id=40784</linkUri>
 			<linkTarget>_blank</linkTarget>
 			</externalLink>
  (необходимо скачать vcredist_x86.exe).</para>

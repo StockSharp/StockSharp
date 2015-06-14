@@ -6,16 +6,16 @@
 		
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.NewOrders</codeEntityReference> - cобытие появления новых заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> - cобытие появления новых заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.OrdersCancelFailed</codeEntityReference> - cобытие об ошибках, связанных со снятием заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersCancelFailed</codeEntityReference> - cобытие об ошибках, связанных со снятием заявок.
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.OrdersChanged</codeEntityReference> - cобытие изменения состояния заявок (снята, удовлетворена).
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference> - cобытие изменения состояния заявок (снята, удовлетворена).
 			</listItem>
 			<listItem>
-				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.OrdersRegisterFailed</codeEntityReference> - cобытие об ошибках, связанных с регистрацией заявок.
+				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.OrdersRegisterFailed</codeEntityReference> - cобытие об ошибках, связанных с регистрацией заявок.
 			</listItem>
 			
 			<listItem>
@@ -47,7 +47,7 @@
 		<alert class="caution">
 			<para>
 				Если при старте приложения из шлюза были переданы ранее зарегистрированные заявки, то они передаются все через события <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference>,
-				независимо от их состояния (кроме состояния <codeEntityReference>F:StockSharp.BusinessEntities.OrderStates.Failed</codeEntityReference>). Это сделано потому, что событие
+				независимо от их состояния (кроме состояния <codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference>). Это сделано потому, что событие
 				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> отражает факт появления новых заявок в программе, а не событие успешной
 				регистрации заявки.
 			</para>

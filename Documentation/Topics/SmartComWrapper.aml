@@ -7,9 +7,9 @@
 
 	  <introduction>
 		  <para>
-			  Для отладки программ, написанных с помощью <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>, можно использовать
-			  <codeEntityReference qualifyHint="true">P:StockSharp.Smart.SmartTrader.Wrapper</codeEntityReference>. Данный класс является основой для
-			  <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>, и реализует минимальное количество логики (корректные названия у
+			  Для отладки программ, написанных с помощью <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, можно использовать
+			  <codeEntityReference qualifyHint="true">P:StockSharp.SmartCom.SmartTrader.Wrapper</codeEntityReference>. Данный класс является основой для
+			  <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, и реализует минимальное количество логики (корректные названия у
 			  аргументов, правильное отключение и подключение к <token>smartcom</token>, использование стиля <token>dotnet</token> и <token>oop</token>
 			  для событий и передаваемых значений в них), поэтому использование его практически ничем не отличается от низкоуровневого доступа через API
 			  <token>smartcom</token>.
@@ -30,8 +30,8 @@
       <steps class="ordered">
           <step>
 			  <content>
-				  <para>В начале необходимо создать объект <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>,
-				  передав в него логин-пароль, с которыми в дальнейшем будет работать <codeEntityReference>T:StockSharp.Smart.Wrapper.ISmartComWrapper</codeEntityReference>:
+				  <para>В начале необходимо создать объект <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>,
+				  передав в него логин-пароль, с которыми в дальнейшем будет работать <codeEntityReference>T:StockSharp.SmartCom.Wrapper.ISmartComWrapper</codeEntityReference>:
 			  </para>
 				  <code language="C#">var smartTrader = new SmartTrader { Login = "Логин", Password = "Пароль" };</code>
 			  </content>
@@ -39,7 +39,7 @@
 		  <step>
 			  <content>
 				  <para>
-					  Затем получить <codeEntityReference>T:StockSharp.Smart.Wrapper.ISmartComWrapper</codeEntityReference>, и подписаться на событие новых инструментов:
+					  Затем получить <codeEntityReference>T:StockSharp.SmartCom.Wrapper.ISmartComWrapper</codeEntityReference>, и подписаться на событие новых инструментов:
 				  </para>
 				  <code language="C#">var wrapper = smartTrader.Wrapper;
 wrapper.NewSecurity += (row, rowCount, securityId, shortName, fullName, type, decimals,

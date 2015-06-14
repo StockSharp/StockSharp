@@ -2,7 +2,7 @@
 <topic id="b5641d6c-cc5c-4692-a5c8-87742590a0a9" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Нажав на кнопку <legacyBold>Добавить</legacyBold> в окне с источником данных, откроется окно для поиска и добавления инструментов:</para>
+      <para>Нажав на кнопку <legacyBold>Добавить</legacyBold> в окне с источником данных, откроется окно для поиска и добавления инструментов.</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_securities" />
       </mediaLink>
@@ -13,7 +13,7 @@
 	  <para>Поиск идет в зависимости от настроек выставленных в фильтре. Если фильтр пустой, то будет выведен список всех доступных инструментов.</para>
 	  <para>Фильтр можно очистить с помошью соответсвующей кнопки <mediaLinkInline><image xlink:href="hydra_security_clear_filter" /></mediaLinkInline>.</para>
       
-      <para>После того как инструменты будут найдены окно примет следующий вид:</para>
+      <para>После того как инструменты будут найдены окно примет следующий вид.</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_security_full_list" />
       </mediaLink>
@@ -52,7 +52,7 @@
         <image placement="center" xlink:href="hydra_security_edit" />
       </mediaLink>
       <para>
-			При необходимости можно отредактировать группу инструментов. Для этого надо выбрать группу инструментов, и нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline>:
+			При необходимости можно отредактировать группу инструментов. Для этого надо выбрать группу инструментов, и нажать на кнопку <mediaLinkInline><image xlink:href="hydra_edit" /></mediaLinkInline>.
 		</para>
       <mediaLink>
         <image placement="center" xlink:href="hydra_securities_edit" />

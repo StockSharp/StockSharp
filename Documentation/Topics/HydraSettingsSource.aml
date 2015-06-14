@@ -8,7 +8,7 @@
       
       <list class="bullet">
         <listItem>
-         	<para><legacyBold>Россия</legacyBold></para>
+         	<para><legacyBold>Россия:</legacyBold></para>
 			<list class="bullet">
         		<listItem>
           			<para><link xlink:href="2a908a19-0272-48e1-b143-df7ff9e2607c">Альфа-Директ</link> - российский терминал.</para>
@@ -49,7 +49,7 @@
 			</list>
         </listItem>
 		<listItem>
-			<para><legacyBold>Америка</legacyBold></para>
+			<para><legacyBold>Америка:</legacyBold></para>
 				<list class="bullet">
 			        <listItem>
         				<para><link xlink:href="89a8b34c-63cf-4623-bbb7-90251d53e8e6">Blackwood(Fusion)</link> - западная торговая платформа.</para>
@@ -84,30 +84,30 @@
 				</list>
       	</listItem>
       	<listItem>
-      		<para><legacyBold>Форекс</legacyBold></para>
+      		<para><legacyBold>Форекс:</legacyBold></para>
 				<list class="bullet">
 					<listItem>
-          				<para><link xlink:href="bba0059b-526b-406c-ba6e-a80d6c9e4ae0">DucasCopy</link></para>
+          				<para><link xlink:href="bba0059b-526b-406c-ba6e-a80d6c9e4ae0">DucasCopy</link>.</para>
 					</listItem>
 			        <listItem>
-        				<para><link xlink:href="c1863414-25cb-4994-818f-3e4fa511f21b">GainCapital</link></para>
+        				<para><link xlink:href="c1863414-25cb-4994-818f-3e4fa511f21b">GainCapital</link>.</para>
         			</listItem>
 			        <listItem>
-        				<para><link xlink:href="0b962432-d81d-4646-a818-9fa7093cbe4f">LMAX</link></para>
+        				<para><link xlink:href="0b962432-d81d-4646-a818-9fa7093cbe4f">LMAX</link>.</para>
         			</listItem>
 			        <listItem>
-          				<para><link xlink:href="c3a78005-7d5d-49e6-8460-66c02109abd5">MBTrading</link></para>
+          				<para><link xlink:href="c3a78005-7d5d-49e6-8460-66c02109abd5">MBTrading</link>.</para>
         			</listItem>
         			<listItem>
-          				<para><link xlink:href="6a99aea5-1142-4b2e-b183-554fcc890fad">OANDA</link></para>
+          				<para><link xlink:href="6a99aea5-1142-4b2e-b183-554fcc890fad">OANDA</link>.</para>
         			</listItem>
  			        <listItem>
-    			      	<para><link xlink:href="a92bca75-1a0c-4581-a75a-6f13afd7975e">TrueFX</link></para>
+    			      	<para><link xlink:href="a92bca75-1a0c-4581-a75a-6f13afd7975e">TrueFX</link>.</para>
  		       		</listItem>
 				</list>
       	</listItem>
       	<listItem>
-      		<para><legacyBold>Крипто-валюта</legacyBold></para>
+      		<para><legacyBold>Крипто-валюта:</legacyBold></para>
       			<list class="bullet">
 			        <listItem>
           				<para><link xlink:href="7a11d9ff-17c9-406b-ab88-c4b9c080912d">BitStamp</link> - криптовалюты.</para>
@@ -118,7 +118,7 @@
       			</list>
       	</listItem>
       	<listItem>
-      		<para><legacyBold>Другие</legacyBold></para>
+      		<para><legacyBold>Другие:</legacyBold></para>
       			<list class="bullet">
 			        <listItem>
         				<para><link xlink:href="e81b1b7f-5c96-488e-a90d-e60cb8675977">FIX</link> - прямое подключение через FIX/FAST.</para>

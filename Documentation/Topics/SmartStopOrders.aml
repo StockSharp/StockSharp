@@ -7,7 +7,7 @@
 
     <introduction>
 		<para>
-			<codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference> поддерживает работу со стоп-заявками вида Стоп и СтопЛимит.
+			<codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> поддерживает работу со стоп-заявками вида Стоп и СтопЛимит.
 			Стоп-заявки регистрируются, заменяются и снимаются через те же методы, что и обычные заявки:
 		</para>
 		<para>
@@ -35,7 +35,7 @@ if (marketOrder != null)
 	// ...
 }</code>
 		<para>
-			Для того, чтобы создать стоп-заявки <token>smartcom</token>-а, необходимо заполнить поля <codeEntityReference>T:StockSharp.Smart.SmartOrderCondition</codeEntityReference>:
+			Для того, чтобы создать стоп-заявки <token>smartcom</token>-а, необходимо заполнить поля <codeEntityReference>T:StockSharp.SmartCom.SmartOrderCondition</codeEntityReference>:
 		</para>
 		<alert class="note">
 			<para>Исходные коды примера лежат в дистрибутиве в папке под названием SampleSmart.</para>

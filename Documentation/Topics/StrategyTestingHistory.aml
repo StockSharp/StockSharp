@@ -9,7 +9,7 @@
 		<para>
 			Тестирование на исторических данных позволяет проводить как анализ рынка для поиска закономерностей, так и
 			<link xlink:href="24a5c734-199f-4090-943d-6324a04f335b">оптимизацию параметров стратегии</link>. Вся работа при этом заключена в классе
-			<codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference>(подробнее про <link xlink:href="9e72851f-2a19-4680-b344-cdc39d1b85e1">настройки тестирования</link>), 
+			<codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>(подробнее про <link xlink:href="9e72851f-2a19-4680-b344-cdc39d1b85e1">настройки тестирования</link>), 
 			который получает сохраненные в локальном хранилище данные через специальный <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>. Тестирование идет
 			по тиковым сделкам (<codeEntityReference>T:StockSharp.BusinessEntities.Trade</codeEntityReference>) и стаканам
 			(<codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>). Если на период в истории нет сохраненных стаканов, то они
@@ -79,7 +79,7 @@ var settings = new[]
 				  <content>
 					  <para>
 						  Далее, создать объект <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>, через который
-						  <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference> будет получать исторические данные:
+						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> будет получать исторические данные:
 					  </para>
 					  <code language="C#">
 // хранилище, через которое будет производиться доступ к тиковой и котировочной базе
