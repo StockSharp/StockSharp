@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <content xml:space="preserve" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <item id="alfa"><ddue:link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" 
-xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Альфа-Директ</ddue:link></item>
+  <item id="alfa"><ddue:link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Альфа-Директ</ddue:link></item>
   <item id="alfa_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
    <ddue:linkText>Альфа-Директ</ddue:linkText>
    <ddue:linkUri>http://alfadirect.ru</ddue:linkUri>
@@ -13,11 +11,9 @@ xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Альфа-Ди�
 	  <ddue:linkUri>http://alfadirect.ru/?page=api</ddue:linkUri>
 	  <ddue:linkTarget>_blank</ddue:linkTarget>
 </ddue:externalLink></item>
-  <item id="alor"><ddue:link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" 
-xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Алор Трейд</ddue:link></item>
-  <item id="blackwood"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" 
-xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
+  <item id="alor"><ddue:link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Алор Трейд</ddue:link></item>
+  <item id="alortrader">Add token content here</item>
+  <item id="blackwood"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
   <item id="blackwood_external"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
   <item id="bs"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Блэка — Шоулза</ddue:linkText>
@@ -36,6 +32,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>COM</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Component_Object_Model</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="cqg"><ddue:link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">CQG</ddue:link></item>
   <item id="csharp"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>C#</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/C_Sharp</ddue:linkUri>
@@ -69,8 +66,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>Excel</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Excel</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" 
-xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
+  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
   <item id="forts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>ФОРТС</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru/ru/forts/</ddue:linkUri>
@@ -102,7 +98,8 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>IV</ddue:linkText>
 		  <ddue:linkUri>http://en.wikipedia.org/wiki/Implied_volatility</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="lmax"><ddue:link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">LMAX</ddue:link></item>
+  <item id="lmax"><ddue:link xlink:href="4f50724b-00de-4ed4-b043-7dacb6277c98" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">LMAX</ddue:link></item>
   <item id="lmax_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>LMAX</ddue:linkText>
     <ddue:linkUri>http://www.lmax.com/</ddue:linkUri>
@@ -183,6 +180,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>репликация</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%BF%D0%BB%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F_(%D0%B2%D1%8B%D1%87%D0%B8%D1%81%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0)</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="rithmic"><ddue:link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Rithmic</ddue:link></item>
   <item id="rts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>РТС</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru</ddue:linkUri>
@@ -200,8 +198,8 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 	<ddue:linkText>SQL</ddue:linkText>
 	<ddue:linkUri>http://ru.wikipedia.org/wiki/SQL</ddue:linkUri>
 </ddue:externalLink></item>
-  <item id="stocksharp"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></item>
+  <item id="sterling"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Sterling</ddue:link></item>
+  <item id="stocksharp"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></item>
   <item id="stocksharpcontacts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Contacts</ddue:linkText>
     <ddue:linkUri>http://stocksharp.com/company/contacts/</ddue:linkUri>
@@ -246,6 +244,10 @@ xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></
 		  <ddue:linkText>StockSharp.Support</ddue:linkText>
 		  <ddue:linkUri>http://stocksharp.com/support/</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="stocksharptwitter"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>StockSharp Twitter</ddue:linkText>
+    <ddue:linkUri>https://twitter.com/stocksharp</ddue:linkUri>
+  </ddue:externalLink></item>
   <item id="stocksharpvk"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp VK</ddue:linkText>
     <ddue:linkUri>https://vk.com/stocksharp</ddue:linkUri>
@@ -254,8 +256,7 @@ xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></
    <ddue:linkText>StockSharp YouTube</ddue:linkText>
    <ddue:linkUri>http://www.youtube.com/user/StockSharp/</ddue:linkUri>
   </ddue:externalLink></item>
-  <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff"
- xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
+  <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
   <item id="transaq_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Transaq</ddue:linkText>
     <ddue:linkUri>http://www.transaq.ru/</ddue:linkUri>
@@ -289,18 +290,8 @@ xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="stocksharptwitter"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
-    <ddue:linkText>StockSharp Twitter</ddue:linkText>
-    <ddue:linkUri>https://twitter.com/stocksharp</ddue:linkUri>
-  </ddue:externalLink></item>
-  <item id="alortrader">Add token content here</item>
-  <item id="sterling"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" 
-xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Sterling</ddue:link></item>
-  <item id="cqg"><ddue:link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391" 
-xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">CQG</ddue:link></item>
-  <item id="rithmic"><ddue:link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522" 
-xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Rithmic</ddue:link></item>
+  <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BitStamp</ddue:link></item>
+  <item id="btce"><ddue:link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BTC-E</ddue:link></item>
 </content>

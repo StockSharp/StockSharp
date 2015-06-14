@@ -37,7 +37,7 @@
 			  <content>
 				  <para>
 					  В самом начале необходимо заменить шлюз с <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
-					  на <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>:
+					  на <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>:
 				  </para>
 				  <code language="C#">
 // создаем шлюз к Smart-у
@@ -47,7 +47,7 @@ var trader = new SmartTrader(login, password);</code>
 		  <step>
 			  <content>
 				  <para>
-					  После создания шлюза необходимо подключиться к торговой системе. В случае с <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>
+					  После создания шлюза необходимо подключиться к торговой системе. В случае с <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>
 					  такой системой выступает <token>smartcom</token>:
 				  </para>
 				  <code language="C#">// подписываемся на событие успешного подключения
@@ -151,7 +151,7 @@ Console.WriteLine("Дожидаемся обновления данных по �
 trader.RegisterSecurity(_lkoh);
 waitHandle.WaitOne();</code>
 				  <para>
-					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference>, то будут вызываться
+					  Когда данные начнут приходить в <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, то будут вызываться
 					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
 					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет

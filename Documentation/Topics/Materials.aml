@@ -11,38 +11,38 @@
 		<para><legacyBold>Материалы от <token>stocksharp</token>:</legacyBold></para>
       	<list class="bullet">
 			<listItem>
-				Обучение C# и S# - <token>stocksharpeducation</token>
+				Обучение C# и S# - <token>stocksharpeducation</token>.
 			</listItem>
 			<listItem>
-				Консультация - <token>stocksharpsupport</token>
+				Консультация - <token>stocksharpsupport</token>.
 			</listItem>
 			<listItem>
-				Исходные коды - <token>stocksharpsources</token>
+				Исходные коды - <token>stocksharpsources</token>.
 			</listItem>
 			<listItem>
-				Каркас готового робота с исходниками - <token>stocksharpshell</token>
+				Каркас готового робота с исходниками - <token>stocksharpshell</token>.
 			</listItem>
 		</list>
 		
 		<para><legacyBold>Контактная информация:</legacyBold></para>
 		<list class="bullet">
 			<listItem>
-				Сайт платформы - <token>stocksharpsite</token>
+				Сайт платформы - <token>stocksharpsite</token>.
 			</listItem>
 			<listItem>
-				Форум для обсуждения вопросов - <token>stocksharpforum</token>
+				Форум для обсуждения вопросов - <token>stocksharpforum</token>.
 			</listItem>
 			<listItem>
-				Новости - <token>stocksharpnews</token>
+				Новости - <token>stocksharpnews</token>.
 			</listItem>
 			<listItem>
-				Канал на YouTube - <token>stocksharpyoutube</token>
+				Канал на YouTube - <token>stocksharpyoutube</token>.
 			</listItem>
 			<listItem>
-				Группа ВК "StockSharp - Трейдинг и Торговые роботы" - <token>stocksharpvk</token>
+				Группа ВК "StockSharp - Трейдинг и Торговые роботы" - <token>stocksharpvk</token>.
 			</listItem>
 			<listItem>
-				Twitter - <token>stocksharptwitter</token>
+				Twitter - <token>stocksharptwitter</token>.
 			</listItem>
 			
 		</list>

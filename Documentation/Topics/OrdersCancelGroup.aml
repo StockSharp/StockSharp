@@ -8,7 +8,7 @@
     <introduction>
       <para>
 		  Для снятия сразу нескольких заявок можно использовать метод
-		  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.BusinessEntities.OrderDirections},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)</codeEntityReference>,
+		  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.OrderDirections},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)</codeEntityReference>,
 		  который по маске переданных параметров снимает активные заявки.
 	  </para>
     </introduction>
@@ -25,7 +25,7 @@
       <title>Примеры снятия группы заявок</title>
 
       <content>
-        <para>Снять все обычные (<codeEntityReference qualifyHint="true">F:StockSharp.BusinessEntities.OrderTypes.Limit</codeEntityReference>) заявки для заданного портфеля и инструмента:</para>
+        <para>Снять все обычные (<codeEntityReference qualifyHint="true">F:StockSharp.Messages.OrderTypes.Limit</codeEntityReference>) заявки для заданного портфеля и инструмента:</para>
 		  <code language="C#">trader.CancelOrders(false, MainWindow.Instance.Portfolio, null, null, security);</code>
 
 		  <para>

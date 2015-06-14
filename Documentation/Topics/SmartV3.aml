@@ -13,8 +13,8 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>
-      	<codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference> поддерживает 2 версии <token>smartcom</token>, 2-ую и 3-ю. По-умолчанию используется подключение
-      	через вторую версию. Чтобы сменить на подключение через третью версию, нужно изменить <codeEntityReference qualifyHint="true">P:StockSharp.Smart.SmartTrader.Wrapper</codeEntityReference>:
+      	<codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> поддерживает 2 версии <token>smartcom</token>, 2-ую и 3-ю. По-умолчанию используется подключение
+      	через вторую версию. Чтобы сменить на подключение через третью версию, нужно изменить <codeEntityReference qualifyHint="true">P:StockSharp.SmartCom.SmartTrader.Wrapper</codeEntityReference>:
       </para>
       <code language="C#">
 // подключение будет производиться через 64-ех битную версию SmartCOM 3
@@ -22,7 +22,7 @@ smartTrader.Wrapper = new SmartCom3Wrapper64();
       </code>
       <para>
       	<token>smartcom</token> третьей версии распространяется в 32-битном и 64-битном режиме. Для автоматического определения разнядности процесса можно использовать метод
-      	<codeEntityReference qualifyHint="true">M:StockSharp.Smart.Wrapper.SmartComWrapperHelper.ApplyWrapper(StockSharp.Smart.SmartTrader,StockSharp.Smart.Wrapper.SmartComVersions)</codeEntityReference>:
+      	<codeEntityReference qualifyHint="true">M:StockSharp.SmartCom.Wrapper.SmartComWrapperHelper.ApplyWrapper(StockSharp.SmartCom.SmartTrader,StockSharp.SmartCom.Wrapper.SmartComVersions)</codeEntityReference>:
       </para>
       <code language="C#">
 // подключение будет производиться через SmartCOM 3

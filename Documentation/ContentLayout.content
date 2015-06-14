@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
   <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" isDefault="true" title="О StockSharp" />
-  <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
+  <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" isSelected="true" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
   <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
@@ -59,7 +59,7 @@
         <Topic id="0010e72b-837f-4c9c-8ec9-8b840a03d9d7" visible="True" title="Алго-заявки" />
       </Topic>
       <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" title="Micex Bridge" />
-      <Topic id="df84be76-8798-4b96-94ea-a1b106266ad5" visible="True" isSelected="true" title="Алор Трейд" />
+      <Topic id="df84be76-8798-4b96-94ea-a1b106266ad5" visible="True" title="Алор Трейд" />
     </Topic>
     <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (Америка)">
       <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" title="OpenECry">
@@ -139,9 +139,9 @@
       <Topic id="ec4c3abe-3779-4a5f-899c-697b049254d4" visible="True" title="Собственный индикатор" />
       <Topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" visible="True" title="Добавление индикатора на график" />
     </Topic>
-    <Topic id="82437493-cd53-41eb-b756-d913af0f4f8e" visible="True" title="Логирование">
+    <Topic id="82437493-cd53-41eb-b756-d913af0f4f8e" visible="True" isExpanded="true" title="Логирование">
       <Topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" visible="True" title="Логирование Strategy" />
-      <Topic id="9619f1db-064f-421f-967e-4c15a5b0aa71" visible="True" title="Логирование ITrader" />
+      <Topic id="9619f1db-064f-421f-967e-4c15a5b0aa71" visible="True" title="Логирование IConnector" />
       <Topic id="1bed8343-9171-49ce-8259-f44007e01a78" visible="True" title="Визуальный мониторинг" />
       <Topic id="a711d06d-9d1d-40b8-89bf-ee62d817a878" visible="True" title="Создание ILogListener" />
     </Topic>

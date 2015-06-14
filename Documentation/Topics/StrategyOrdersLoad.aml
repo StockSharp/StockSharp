@@ -36,8 +36,8 @@
             <para>Для этого, чтобы <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> загрузила свое предыдущее состояние,
             необходимо переопределить <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Boolean)</codeEntityReference>.
 		  	На вход данному методу из <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference>
-		  	поступят все <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.ITrader.Orders</codeEntityReference>
-		  	и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.ITrader.StopOrders</codeEntityReference>, и их необходимо
+		  	поступят все <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.Orders</codeEntityReference>
+		  	и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.StopOrders</codeEntityReference>, и их необходимо
 		  	отфильтровать:</para>
 		  	<code language="C#"><![CDATA[private bool _isOrdersLoaded;
 private bool _isStopOrdersLoaded;
