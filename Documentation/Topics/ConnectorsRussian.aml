@@ -6,7 +6,7 @@
 		<list class="bullet">
 			<listItem><codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference> для <token>quik</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> для <token>quikfix</token></listItem>
-			<listItem><codeEntityReference>T:StockSharp.Smart.SmartTrader</codeEntityReference> для <token>smartcom</token></listItem>
+			<listItem><codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> для <token>smartcom</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrader</codeEntityReference> для <token>alfa</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference> для <token>plaza</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Transaq.TransaqTrader</codeEntityReference> для <token>transaq</token></listItem>
