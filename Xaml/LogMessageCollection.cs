@@ -109,7 +109,12 @@
 		/// </summary>
 		public override void Clear()
 		{
-			ClearCounters();
+			DebugCount = InfoCount = WarningCount = ErrorCount = 0;
+
+			OnPropertyChanged("DebugCount");
+			OnPropertyChanged("InfoCount");
+			OnPropertyChanged("WarningCount");
+			OnPropertyChanged("ErrorCount");
 
 			base.Clear();
 		}
@@ -125,19 +130,6 @@
 		{
 			add { _propertyChanged += value; }
 			remove { _propertyChanged -= value; }
-		}
-
-		/// <summary>
-		/// Обнулись счетчики.
-		/// </summary>
-		public void ClearCounters()
-		{
-			DebugCount = InfoCount = WarningCount = ErrorCount = 0;
-
-			OnPropertyChanged("DebugCount");
-			OnPropertyChanged("InfoCount");
-			OnPropertyChanged("WarningCount");
-			OnPropertyChanged("ErrorCount");
 		}
 	}
 }

@@ -130,7 +130,7 @@ namespace StockSharp.Xaml
 					var isSystem = p.Key == SourcesTree.CoreRootNode.Key || p.Key == SourcesTree.StrategyRootNode.Key;
 
 					if (isSystem)
-						p.Value.Item1.ClearCounters();
+						p.Value.Item1.Clear();
 
 					return !isSystem;
 				})
