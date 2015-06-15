@@ -180,7 +180,7 @@
 			  	  <entry>Fix</entry>
 				  <entry>SampleFix</entry>
 				  <entry>
-					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixServer</codeEntityReference>.
+					  Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference>.
 				  </entry>
 			  </row>
 			  <row>

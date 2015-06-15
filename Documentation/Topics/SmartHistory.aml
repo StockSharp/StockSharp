@@ -133,7 +133,7 @@ _candleManager = new CandleManager(_trader);]]></code>
       <externalLink>
         <linkText>Sandcastle Styles</linkText>
         <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+        <linkUri>http://codeplex.com/SandcastleStyles</linkUri>
       </externalLink>
 
       <externalLink>
