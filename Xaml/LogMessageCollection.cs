@@ -46,32 +46,6 @@
 		/// </summary>
 		public int DebugCount { get; private set; }
 
-		private void AddMessage(LogMessage message, ref bool isDebug, ref bool isInfo, ref bool isWarning, ref bool isError)
-		{
-			switch (message.Level)
-			{
-				case LogLevels.Debug:
-					DebugCount++;
-					isDebug = true;
-					break;
-
-				case LogLevels.Info:
-					InfoCount++;
-					isInfo = true;
-					break;
-
-				case LogLevels.Warning:
-					WarningCount++;
-					isWarning = true;
-					break;
-
-				case LogLevels.Error:
-					ErrorCount++;
-					isError = true;
-					break;
-			}
-		}
-
 		/// <summary>
 		/// Добавить элемент.
 		/// </summary>
@@ -90,7 +64,32 @@
 			base.AddRange(items);
 
 			bool isDebug = false, isInfo = false, isWarning = false, isError = false;
-			items.ForEach(i => AddMessage(i, ref isDebug, ref isInfo, ref isWarning, ref isError));
+
+			items.ForEach(message =>
+			{
+				switch (message.Level)
+				{
+					case LogLevels.Debug:
+						DebugCount++;
+						isDebug = true;
+						break;
+
+					case LogLevels.Info:
+						InfoCount++;
+						isInfo = true;
+						break;
+
+					case LogLevels.Warning:
+						WarningCount++;
+						isWarning = true;
+						break;
+
+					case LogLevels.Error:
+						ErrorCount++;
+						isError = true;
+						break;
+				}
+			});
 
 			if (isDebug)
 				OnPropertyChanged("DebugCount");
@@ -105,6 +104,16 @@
 				OnPropertyChanged("ErrorCount");
 		}
 
+		/// <summary>
+		/// Удалить все элементы.
+		/// </summary>
+		public override void Clear()
+		{
+			ClearCounters();
+
+			base.Clear();
+		}
+
 		private void OnPropertyChanged(string propName)
 		{
 			_propertyChanged.SafeInvoke(this, propName);
@@ -116,6 +125,19 @@
 		{
 			add { _propertyChanged += value; }
 			remove { _propertyChanged -= value; }
+		}
+
+		/// <summary>
+		/// Обнулись счетчики.
+		/// </summary>
+		public void ClearCounters()
+		{
+			DebugCount = InfoCount = WarningCount = ErrorCount = 0;
+
+			OnPropertyChanged("DebugCount");
+			OnPropertyChanged("InfoCount");
+			OnPropertyChanged("WarningCount");
+			OnPropertyChanged("ErrorCount");
 		}
 	}
 }

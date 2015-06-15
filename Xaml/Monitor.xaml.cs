@@ -120,15 +120,33 @@ namespace StockSharp.Xaml
 		public LogControl LogControl { get { return LogCtrl; } }
 
 		/// <summary>
-		/// Записать сообщение.
+		/// Удалить все сообщения.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
-		public void WriteMessage(LogMessage message)
+		public void Clear()
 		{
-			if (message == null)
-				throw new ArgumentNullException("message");
+			var toRemove = _logInfo
+				.Where(p =>
+				{
+					var isSystem = p.Key == SourcesTree.CoreRootNode.Key || p.Key == SourcesTree.StrategyRootNode.Key;
 
-			WriteMessages(message.Source, new[] { message });
+					if (isSystem)
+						p.Value.Item1.ClearCounters();
+
+					return !isSystem;
+				})
+				.ToArray();
+
+			toRemove.ForEach(p =>
+			{
+				_msgStat.Remove(p.Value.Item1.Count);
+				
+				p.Value.Item1.Clear();
+				p.Value.Item2.ParentNode.ChildNodes.Remove(p.Value.Item2);
+
+				_logInfo.Remove(p.Key);
+			});
+
+			SourcesTree.SelectedItem = SourcesTree.CoreRootNode;
 		}
 
 		/// <summary>

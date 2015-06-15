@@ -27,15 +27,11 @@
 		public bool BringToFrontOnError { get; set; }
 
 		/// <summary>
-		/// Записать сообщение.
+		/// Удалить все сообщения.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
-		public virtual void WriteMessage(LogMessage message)
+		public void Clear()
 		{
-			_monitor.WriteMessage(message);
-
-			if (BringToFrontOnError && message.Level == LogLevels.Error)
-				this.BringToFront();
+			_monitor.Clear();
 		}
 
 		void ILogListener.WriteMessages(IEnumerable<LogMessage> messages)
