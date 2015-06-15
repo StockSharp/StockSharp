@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <content xml:space="preserve" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <item id="alfa"><ddue:link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Альфа-Директ</ddue:link></item>
+  <item id="alfa"><ddue:link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Альфа-Директ</ddue:link></item>
   <item id="alfa_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
    <ddue:linkText>Альфа-Директ</ddue:linkText>
    <ddue:linkUri>http://alfadirect.ru</ddue:linkUri>
@@ -11,17 +12,25 @@
 	  <ddue:linkUri>http://alfadirect.ru/?page=api</ddue:linkUri>
 	  <ddue:linkTarget>_blank</ddue:linkTarget>
 </ddue:externalLink></item>
-  <item id="alor"><ddue:link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Алор Трейд</ddue:link></item>
+  <item id="alor"><ddue:link xlink:href="df84be76-8798-4b96-94ea-a1b106266ad5" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Алор Трейд</ddue:link></item>
   <item id="alortrader">Add token content here</item>
-  <item id="blackwood"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
-  <item id="blackwood_external"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
+  <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BitStamp</ddue:link></item>
+  <item id="blackwood"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
+  <item id="blackwood_external"><ddue:link xlink:href="89c3f13d-2602-446a-8c3d-5615b6f901b9"
+ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Blackwood</ddue:link></item>
   <item id="bs"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Блэка — Шоулза</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Модель_Блэка_—_Шоулза</ddue:linkUri>
 		</ddue:externalLink></item>
+  <item id="btce"><ddue:link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BTC-E</ddue:link></item>
   <item id="calendar"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Настройка Google Calendar</ddue:linkText>
-		  <ddue:linkUri>http://www.google.com/support/calendar/bin/answer.py?hl=ru&amp;answer=45351</ddue:linkUri>
+		  <ddue:linkUri>http://google.com/support/calendar/bin/answer.py?hl=ru&amp;answer=45351</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="codeplex"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 	  <ddue:linkText>StockSharp репозитарий</ddue:linkText>
@@ -32,7 +41,8 @@
 		  <ddue:linkText>COM</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Component_Object_Model</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="cqg"><ddue:link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">CQG</ddue:link></item>
+  <item id="cqg"><ddue:link xlink:href="aac980b1-ac5b-415b-811c-a8d128942391" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">CQG</ddue:link></item>
   <item id="csharp"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>C#</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/C_Sharp</ddue:linkUri>
@@ -57,7 +67,8 @@
 		  <ddue:linkText>.NET</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/.NET_Framework</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="etrade"><ddue:link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">E*TRADE</ddue:link></item>
+  <item id="etrade"><ddue:link xlink:href="84d6a0fb-607f-4d87-be8a-e2b58006493e" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">E*TRADE</ddue:link></item>
   <item id="etrade_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>E*TRADE</ddue:linkText>
     <ddue:linkUri>http://etrade.com</ddue:linkUri>
@@ -66,7 +77,8 @@
 		  <ddue:linkText>Excel</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Excel</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
+  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
   <item id="forts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>ФОРТС</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru/ru/forts/</ddue:linkUri>
@@ -75,8 +87,10 @@
     <ddue:linkText>GitHub</ddue:linkText>
     <ddue:linkUri>https://github.com/</ddue:linkUri>
   </ddue:externalLink></item>
-  <item id="hydra"><ddue:link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Data</ddue:link></item>
-  <item id="IB"><ddue:link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Interactive Brokers</ddue:link></item>
+  <item id="hydra"><ddue:link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Data</ddue:link></item>
+  <item id="IB"><ddue:link xlink:href="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Interactive Brokers</ddue:link></item>
   <item id="IB_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Interactive Brokers</ddue:linkText>
     <ddue:linkUri>http://interactivebrokers.com</ddue:linkUri>
@@ -89,7 +103,8 @@
     <ddue:linkText>TWS</ddue:linkText>
     <ddue:linkUri>http://interactivebrokers.com/en/index.php?f=1537</ddue:linkUri>
   </ddue:externalLink></item>
-  <item id="iqfeed"><ddue:link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">IQFeed</ddue:link></item>
+  <item id="iqfeed"><ddue:link xlink:href="c7ff5937-e230-4db3-857f-4cd68583ebfc"
+ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">IQFeed</ddue:link></item>
   <item id="iqfeed_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>IQFeed</ddue:linkText>
     <ddue:linkUri>http://iqfeed.net</ddue:linkUri>
@@ -102,7 +117,7 @@
 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">LMAX</ddue:link></item>
   <item id="lmax_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>LMAX</ddue:linkText>
-    <ddue:linkUri>http://www.lmax.com/</ddue:linkUri>
+    <ddue:linkUri>http://lmax.com/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="log4net"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Log4Net</ddue:linkText>
@@ -112,7 +127,8 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>Cкользящая Cредняя</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/%D0%A1%D0%BA%D0%BE%D0%BB%D1%8C%D0%B7%D1%8F%D1%89%D0%B0%D1%8F_%D1%81%D1%80%D0%B5%D0%B4%D0%BD%D1%8F%D1%8F</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="matlab"><ddue:link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.MatLab</ddue:link></item>
+  <item id="matlab"><ddue:link xlink:href="e3f889a5-ddcd-4c77-a174-2f24385386a0" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.MatLab</ddue:link></item>
   <item id="messagepump"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>http://msdn.microsoft.com/ru-ru/library/ms741870.aspx</ddue:linkText>
 		  <ddue:linkUri>http://msdn.microsoft.com/ru-ru/library/ms741870.aspx</ddue:linkUri>
@@ -121,10 +137,11 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>ММВБ</ddue:linkText>
 		  <ddue:linkUri>http://micex.ru</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="micexbridge"><ddue:link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Micex Bridge</ddue:link></item>
+  <item id="micexbridge"><ddue:link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Micex Bridge</ddue:link></item>
   <item id="micexbridge_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Micex Bridge</ddue:linkText>
-    <ddue:linkUri>http://www.micex.ru/services/technicalaccess/bridge</ddue:linkUri>
+    <ddue:linkUri>http://micex.ru/services/technicalaccess/bridge</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="net"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>NetInvestor</ddue:linkText>
@@ -134,40 +151,45 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>Служба Windows</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Службы_Windows</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="oanda"><ddue:link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">OANDA</ddue:link></item>
+  <item id="oanda"><ddue:link xlink:href="c2162c96-d12f-4107-ac96-0238b793f466" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">OANDA</ddue:link></item>
   <item id="OECApi"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
  <ddue:linkText>OEC API</ddue:linkText>
- <ddue:linkUri>http://www.openecry.com/trading/api/index.cfm</ddue:linkUri>
+ <ddue:linkUri>http://openecry.com/trading/api/index.cfm</ddue:linkUri>
 </ddue:externalLink></item>
   <item id="OECRemoting"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Remoting</ddue:linkText>
-    <ddue:linkUri>http://www.openecry.com/api/OECAPIRemoting.pdf</ddue:linkUri>
+    <ddue:linkUri>http://openecry.com/api/OECAPIRemoting.pdf</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="oop"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 	<ddue:linkText>ООП</ddue:linkText>
 	<ddue:linkUri>http://ru.wikipedia.org/wiki/OOP</ddue:linkUri>
 </ddue:externalLink></item>
-  <item id="OpenECry"><ddue:link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">OpenECry</ddue:link></item>
+  <item id="OpenECry"><ddue:link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">OpenECry</ddue:link></item>
   <item id="OpenECry_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
  <ddue:linkText>OpenECry</ddue:linkText>
- <ddue:linkUri>http://www.openecry.com/</ddue:linkUri>
+ <ddue:linkUri>http://openecry.com/</ddue:linkUri>
 </ddue:externalLink></item>
-  <item id="plaza"><ddue:link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Plaza II</ddue:link></item>
+  <item id="plaza"><ddue:link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Plaza II</ddue:link></item>
   <item id="plaza_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Plaza II</ddue:linkText>
-    <ddue:linkUri>http://www.rts.ru/s123</ddue:linkUri>
+    <ddue:linkUri>http://rts.ru/s123</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="plazadistr"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 	<ddue:linkText>FTP-сервер РТС</ddue:linkText>
 	<ddue:linkAlternateText>Папка с клиентским дистрибутивом шлюза Plaza II на FTP-сервере РТС</ddue:linkAlternateText>
 	<ddue:linkUri>ftp://ftp.rts.ru/pub/forts/Plaza2/</ddue:linkUri>
 </ddue:externalLink></item>
-  <item id="quik"><ddue:link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Quik</ddue:link></item>
+  <item id="quik"><ddue:link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Quik</ddue:link></item>
   <item id="quik_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Quik</ddue:linkText>
     <ddue:linkUri>http://quik.ru</ddue:linkUri>
   </ddue:externalLink></item>
-  <item id="quikfix"><ddue:link xlink:href="b64a1826-58e3-4ac8-8923-099b52992e2e" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Quik Fix</ddue:link></item>
+  <item id="quikfix"><ddue:link xlink:href="b64a1826-58e3-4ac8-8923-099b52992e2e" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Quik Fix</ddue:link></item>
   <item id="quikfix_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Quik Fix</ddue:linkText>
     <ddue:linkUri>http://quik.ru/bank/modules/trade/fix/</ddue:linkUri>
@@ -180,7 +202,8 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>репликация</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%BF%D0%BB%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F_(%D0%B2%D1%8B%D1%87%D0%B8%D1%81%D0%BB%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0)</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="rithmic"><ddue:link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Rithmic</ddue:link></item>
+  <item id="rithmic"><ddue:link xlink:href="777d9208-1146-4d54-b5ae-0315b4186522" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Rithmic</ddue:link></item>
   <item id="rts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>РТС</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru</ddue:linkUri>
@@ -189,17 +212,20 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>РТС Стандарт</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru/ru/standard/</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="smartcom"><ddue:link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">SmartCOM</ddue:link></item>
+  <item id="smartcom"><ddue:link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">SmartCOM</ddue:link></item>
   <item id="smartcom_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>SmartCOM</ddue:linkText>
-    <ddue:linkUri>http://www.itinvest.ru/software/smartcom/</ddue:linkUri>
+    <ddue:linkUri>http://itinvest.ru/software/smartcom/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="sql"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 	<ddue:linkText>SQL</ddue:linkText>
 	<ddue:linkUri>http://ru.wikipedia.org/wiki/SQL</ddue:linkUri>
 </ddue:externalLink></item>
-  <item id="sterling"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Sterling</ddue:link></item>
-  <item id="stocksharp"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></item>
+  <item id="sterling"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Sterling</ddue:link></item>
+  <item id="stocksharp"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></item>
   <item id="stocksharpcontacts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Contacts</ddue:linkText>
     <ddue:linkUri>http://stocksharp.com/company/contacts/</ddue:linkUri>
@@ -254,22 +280,24 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
   </ddue:externalLink></item>
   <item id="stocksharpyoutube"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
    <ddue:linkText>StockSharp YouTube</ddue:linkText>
-   <ddue:linkUri>http://www.youtube.com/user/StockSharp/</ddue:linkUri>
+   <ddue:linkUri>http://youtube.com/user/StockSharp/</ddue:linkUri>
   </ddue:externalLink></item>
-  <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
+  <item id="transaq"><ddue:link xlink:href="a010f9bd-15bb-4858-a067-590101087dff" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Transaq</ddue:link></item>
   <item id="transaq_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Transaq</ddue:linkText>
-    <ddue:linkUri>http://www.transaq.ru/</ddue:linkUri>
+    <ddue:linkUri>http://transaq.ru/</ddue:linkUri>
   </ddue:externalLink></item>
   <item id="ux"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>УркБиржа</ddue:linkText>
-		  <ddue:linkUri>http://www.ux.ua</ddue:linkUri>
+		  <ddue:linkUri>http://ux.ua</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="vsexpress"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Visual Studio Express</ddue:linkText>
-		  <ddue:linkUri>http://www.microsoft.com/express/Windows/</ddue:linkUri>
+		  <ddue:linkUri>http://microsoft.com/express/Windows/</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="wealthlab"><ddue:link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Wealthlab</ddue:link></item>
+  <item id="wealthlab"><ddue:link xlink:href="b65b25d8-871b-4d37-bfd4-c85e02996f99" 
+xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Wealthlab</ddue:link></item>
   <item id="winforms"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>WinForms</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/WinForms</ddue:linkUri>
@@ -290,8 +318,4 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.micro
 		  <ddue:linkText>Xslt</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/XSLT</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="bitstamp"><ddue:link xlink:href="345fa341-661d-4992-a9a6-9c89af399feb" xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BitStamp</ddue:link></item>
-  <item id="btce"><ddue:link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BTC-E</ddue:link></item>
 </content>
