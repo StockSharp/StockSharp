@@ -500,6 +500,13 @@
             <param name="stopLoss">Функция, создающая по сделке стратегию <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.</param>
             <returns>Правило.</returns>
         </member>
+        <member name="M:StockSharp.Algo.Strategies.Extensions.WhenActivated(StockSharp.Algo.Strategies.Protective.ProtectiveStrategy)">
+            <summary>
+            Создать правило на событие <see cref="E:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.Activated"/>.
+            </summary>
+            <param name="strategy">Стратегия, по которой будет отслеживаться событие.</param>
+            <returns>Правило.</returns>
+        </member>
         <member name="T:StockSharp.Algo.Strategies.Protective.IProtectiveStrategy">
             <summary>
             Интерейс защитной стратегии.
@@ -677,6 +684,12 @@
             <summary>
             Обработчик события наступления <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.TimeOut"/>.
             </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.RegisterQuotingOrder(StockSharp.BusinessEntities.Order)">
+            <summary>
+            Зарегистрировать котируемую заявку.
+            </summary>
+            <param name="order">Котируемая заявка.</param>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
             <summary>
