@@ -13,10 +13,6 @@
 	/// </summary>
 	public class ChannelMessageAdapter : IMessageAdapter
 	{
-		private readonly IMessageAdapter _adapter;
-		private readonly IMessageChannel _inputChannel;
-		private readonly IMessageChannel _outputChannel;
-
 		/// <summary>
 		/// Создать <see cref="ChannelMessageAdapter"/>.
 		/// </summary>
@@ -31,15 +27,31 @@
 			if (inputChannel == null)
 				throw new ArgumentNullException("inputChannel");
 
-			_adapter = adapter;
-			_inputChannel = inputChannel;
-			_outputChannel = outputChannel;
+			Adapter = adapter;
 
-			_inputChannel.NewOutMessage += InputChannelOnNewOutMessage;
-			_outputChannel.NewOutMessage += OutputChannelOnNewOutMessage;
+			InputChannel = inputChannel;
+			OutputChannel = outputChannel;
 
-			_adapter.NewOutMessage += AdapterOnNewOutMessage;
+			InputChannel.NewOutMessage += InputChannelOnNewOutMessage;
+			OutputChannel.NewOutMessage += OutputChannelOnNewOutMessage;
+
+			Adapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
+
+		/// <summary>
+		/// Адаптер.
+		/// </summary>
+		public IMessageAdapter Adapter { get; private set; }
+
+		/// <summary>
+		/// Адаптер.
+		/// </summary>
+		public IMessageChannel InputChannel { get; private set; }
+
+		/// <summary>
+		/// Адаптер.
+		/// </summary>
+		public IMessageChannel OutputChannel { get; private set; }
 
 		/// <summary>
 		/// Контролировать время жизни входящего канала входящих сообщений.
@@ -58,53 +70,53 @@
 
 		private void AdapterOnNewOutMessage(Message message)
 		{
-			if (!_outputChannel.IsOpened)
-				_outputChannel.Open();
+			if (!OutputChannel.IsOpened)
+				OutputChannel.Open();
 
-			_outputChannel.SendInMessage(message);
+			OutputChannel.SendInMessage(message);
 		}
 
 		private void InputChannelOnNewOutMessage(Message message)
 		{
-			_adapter.SendInMessage(message);
+			Adapter.SendInMessage(message);
 		}
 
 		void IDisposable.Dispose()
 		{
-			_inputChannel.NewOutMessage -= InputChannelOnNewOutMessage;
-			_outputChannel.NewOutMessage -= OutputChannelOnNewOutMessage;
+			InputChannel.NewOutMessage -= InputChannelOnNewOutMessage;
+			OutputChannel.NewOutMessage -= OutputChannelOnNewOutMessage;
 
 			if (OwnInputChannel)
-				_inputChannel.Dispose();
+				InputChannel.Dispose();
 
 			if (OwnOutputChannel)
-				_outputChannel.Dispose();
+				OutputChannel.Dispose();
 
-			_adapter.NewOutMessage -= AdapterOnNewOutMessage;
-			//_adapter.Dispose();
+			Adapter.NewOutMessage -= AdapterOnNewOutMessage;
+			//Adapter.Dispose();
 		}
 
 		bool IMessageChannel.IsOpened
 		{
-			get { return _adapter.IsOpened; }
+			get { return Adapter.IsOpened; }
 		}
 
 		void IMessageChannel.Open()
 		{
-			_adapter.Open();
+			Adapter.Open();
 		}
 
 		void IMessageChannel.Close()
 		{
-			_adapter.Close();
+			Adapter.Close();
 		}
 
 		void IMessageChannel.SendInMessage(Message message)
 		{
-			if (!_inputChannel.IsOpened)
-				_inputChannel.Open();
+			if (!InputChannel.IsOpened)
+				InputChannel.Open();
 
-			_inputChannel.SendInMessage(message);
+			InputChannel.SendInMessage(message);
 		}
 
 		private Action<Message> _newMessage;
@@ -117,130 +129,130 @@
 
 		void IPersistable.Load(SettingsStorage storage)
 		{
-			_adapter.Load(storage);
+			Adapter.Load(storage);
 		}
 
 		void IPersistable.Save(SettingsStorage storage)
 		{
-			_adapter.Save(storage);
+			Adapter.Save(storage);
 		}
 
 		Guid ILogSource.Id
 		{
-			get { return _adapter.Id; }
+			get { return Adapter.Id; }
 		}
 
 		string ILogSource.Name
 		{
-			get { return _adapter.Name; }
+			get { return Adapter.Name; }
 		}
 
 		ILogSource ILogSource.Parent
 		{
-			get { return _adapter.Parent; }
-			set { _adapter.Parent = value; }
+			get { return Adapter.Parent; }
+			set { Adapter.Parent = value; }
 		}
 
 		LogLevels ILogSource.LogLevel
 		{
-			get { return _adapter.LogLevel; }
-			set { _adapter.LogLevel = value; }
+			get { return Adapter.LogLevel; }
+			set { Adapter.LogLevel = value; }
 		}
 
 		DateTimeOffset ILogSource.CurrentTime
 		{
-			get { return _adapter.CurrentTime; }
+			get { return Adapter.CurrentTime; }
 		}
 
 		bool ILogSource.IsRoot
 		{
-			get { return _adapter.IsRoot; }
+			get { return Adapter.IsRoot; }
 		}
 
 		event Action<LogMessage> ILogSource.Log
 		{
-			add { _adapter.Log += value; }
-			remove { _adapter.Log -= value; }
+			add { Adapter.Log += value; }
+			remove { Adapter.Log -= value; }
 		}
 
 		void ILogReceiver.AddLog(LogMessage message)
 		{
-			_adapter.AddLog(message);
+			Adapter.AddLog(message);
 		}
 
 		ReConnectionSettings IMessageAdapter.ReConnectionSettings
 		{
-			get { return _adapter.ReConnectionSettings; }
+			get { return Adapter.ReConnectionSettings; }
 		}
 
 		IdGenerator IMessageAdapter.TransactionIdGenerator
 		{
-			get { return _adapter.TransactionIdGenerator; }
+			get { return Adapter.TransactionIdGenerator; }
 		}
 
 		MessageTypes[] IMessageAdapter.SupportedMessages
 		{
-			get { return _adapter.SupportedMessages; }
-			set { _adapter.SupportedMessages = value; }
+			get { return Adapter.SupportedMessages; }
+			set { Adapter.SupportedMessages = value; }
 		}
 
 		bool IMessageAdapter.IsValid
 		{
-			get { return _adapter.IsValid; }
+			get { return Adapter.IsValid; }
 		}
 
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo
 		{
-			get { return _adapter.SecurityClassInfo; }
+			get { return Adapter.SecurityClassInfo; }
 		}
 
 		TimeSpan IMessageAdapter.HeartbeatInterval
 		{
-			get { return _adapter.HeartbeatInterval; }
-			set { _adapter.HeartbeatInterval = value; }
+			get { return Adapter.HeartbeatInterval; }
+			set { Adapter.HeartbeatInterval = value; }
 		}
 
 		bool IMessageAdapter.CreateAssociatedSecurity
 		{
-			get { return _adapter.CreateAssociatedSecurity; }
-			set { _adapter.CreateAssociatedSecurity = value; }
+			get { return Adapter.CreateAssociatedSecurity; }
+			set { Adapter.CreateAssociatedSecurity = value; }
 		}
 
 		bool IMessageAdapter.CreateDepthFromLevel1
 		{
-			get { return _adapter.CreateDepthFromLevel1; }
-			set { _adapter.CreateDepthFromLevel1 = value; }
+			get { return Adapter.CreateDepthFromLevel1; }
+			set { Adapter.CreateDepthFromLevel1 = value; }
 		}
 
 		string IMessageAdapter.AssociatedBoardCode
 		{
-			get { return _adapter.AssociatedBoardCode; }
-			set { _adapter.AssociatedBoardCode = value; }
+			get { return Adapter.AssociatedBoardCode; }
+			set { Adapter.AssociatedBoardCode = value; }
 		}
 
 		bool IMessageAdapter.PortfolioLookupRequired
 		{
-			get { return _adapter.PortfolioLookupRequired; }
+			get { return Adapter.PortfolioLookupRequired; }
 		}
 
 		bool IMessageAdapter.SecurityLookupRequired
 		{
-			get { return _adapter.SecurityLookupRequired; }
+			get { return Adapter.SecurityLookupRequired; }
 		}
 
 		bool IMessageAdapter.OrderStatusRequired
 		{
-			get { return _adapter.OrderStatusRequired; }
+			get { return Adapter.OrderStatusRequired; }
 		}
 
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
-			return _adapter.CreateOrderCondition();
+			return Adapter.CreateOrderCondition();
 		}
 
 		bool IMessageAdapter.IsConnectionAlive()
 		{
-			return _adapter.IsConnectionAlive();
+			return Adapter.IsConnectionAlive();
 		}
 	}
 }
