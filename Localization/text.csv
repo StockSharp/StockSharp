@@ -1508,7 +1508,6 @@ Str1619;Connection was not broken from previous time.;Подключение н�
 Str1620;Counter value is unacceptable.;Значение счетчика является недопустимым.
 Str1621Params;Session '{0}'. Received: '{1}';Сессия '{0}'. Получено: '{1}'
 Str1622Params;Message {0} is unacceptable.;Сообщение {0} является недопустимым.
-Str1623;User authorization error.;Ошибка авторизации пользователя.
 Str1624Params;Error receiving state of session {0}. Reason '{1}'.;Ошибка получения состояния сессии {0}. Причина '{1}'.
 Str1625;unknown session;неизвестная сессия
 Str1626;unknown;неизвестна

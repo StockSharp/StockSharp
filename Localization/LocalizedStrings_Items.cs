@@ -19568,19 +19568,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// User authorization error.
-		/// </summary>
-		public const string Str1623Key = "Str1623";
-
-		/// <summary>
-		/// User authorization error.
-		/// </summary>
-		public static string Str1623
-		{
-			get { return GetString(Str1623Key); }
-		}
-
-		/// <summary>
 		/// Error receiving state of session {0}. Reason '{1}'.
 		/// </summary>
 		public const string Str1624ParamsKey = "Str1624Params";
