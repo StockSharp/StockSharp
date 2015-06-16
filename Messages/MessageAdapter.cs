@@ -288,7 +288,7 @@ namespace StockSharp.Messages
 		/// Код площадки для объединенного инструмента.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.SecuritiesKey)]
-		[DisplayNameLoc(LocalizedStrings.Str197Key)]
+		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str199Key)]
 		[PropertyOrder(10)]
 		public string AssociatedBoardCode

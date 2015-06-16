@@ -4164,3 +4164,6 @@ IsControlConnectionLost;Control connection lost.;Контролировать п
 Override;Override.;Перезаписать.
 OverrideDll;Override dll file from resources. Turned on by default.;Перезаписать файл библиотеки из ресурсов. По-умолчанию файл будет перезаписан.
 WrongTimeOffset;Time {0} has wrong offset. Expected {1}.;Время {0} имеет неправильное смещение. Ожидается {1}.
+TimeOffset;Time offset;Смещение времени
+TimeOffsetDescription;UTC based time offset for market data timestamp.;Смещение времени относительно UTC для серверного времени данных.
+AssociatedSecurityBoard;Combined board code;Код объединенной площадки

@@ -53785,5 +53785,44 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(WrongTimeOffsetKey); }
 		}
+
+		/// <summary>
+		/// Time offset
+		/// </summary>
+		public const string TimeOffsetKey = "TimeOffset";
+
+		/// <summary>
+		/// Time offset
+		/// </summary>
+		public static string TimeOffset
+		{
+			get { return GetString(TimeOffsetKey); }
+		}
+
+		/// <summary>
+		/// UTC based time offset for market data timestamp.
+		/// </summary>
+		public const string TimeOffsetDescriptionKey = "TimeOffsetDescription";
+
+		/// <summary>
+		/// UTC based time offset for market data timestamp.
+		/// </summary>
+		public static string TimeOffsetDescription
+		{
+			get { return GetString(TimeOffsetDescriptionKey); }
+		}
+
+		/// <summary>
+		/// Combined board code
+		/// </summary>
+		public const string AssociatedSecurityBoardKey = "AssociatedSecurityBoard";
+
+		/// <summary>
+		/// Combined board code
+		/// </summary>
+		public static string AssociatedSecurityBoard
+		{
+			get { return GetString(AssociatedSecurityBoardKey); }
+		}
 	}
 }
