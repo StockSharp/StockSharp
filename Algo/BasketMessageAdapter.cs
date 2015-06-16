@@ -6,6 +6,7 @@ namespace StockSharp.Algo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using MoreLinq;
 
@@ -488,6 +489,44 @@ namespace StockSharp.Algo
 		protected IEnumerable<IMessageAdapter> GetSortedAdapters()
 		{
 			return _innerAdapters.SortedAdapters;
+		}
+
+		/// <summary>
+		/// Сохранить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Save(SettingsStorage storage)
+		{
+			storage.SetValue("InnerAdapters", _innerAdapters.Cache.Select(a =>
+			{
+				var s = new SettingsStorage();
+
+				s.SetValue("Priority", _innerAdapters[a]);
+				s.SetValue("Adapter", a.Save());
+
+				return s;
+			}).ToArray());
+
+			base.Save(storage);
+		}
+
+		/// <summary>
+		/// Загрузить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public override void Load(SettingsStorage storage)
+		{
+			var index = 0;
+
+			foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>("InnerAdapters"))
+			{
+				var adapter = _innerAdapters.Cache[index++];
+
+				_innerAdapters[adapter] = s.GetValue<int>("Priority");
+				adapter.Load(s.GetValue<SettingsStorage>("Adapter"));
+			}
+
+			base.Load(storage);
 		}
 	}
 }
