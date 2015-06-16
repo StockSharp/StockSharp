@@ -1551,8 +1551,8 @@ Str1663;Version FIX protocol.;Версия FIX протокола.
 FixFormat;FIX protocol format.;Формат FIX протокола.
 Str1664;Sender;Отправитель
 Str1665;Sender ID.;Идентификатор отправителя.
-Str1666;Receiver;Получатель
-Str1667;Receiver ID.;Идентификатор получателя.
+Str1666;Target;Получатель
+Str1667;Target ID.;Идентификатор получателя.
 Str1669;Connection availability checking interval.;Интервал проверки доступности подключения.
 Str1670;Market data type.;Тип маркет-данных.
 Str1671;Board, where securities are traded.;Площадка, на которой торгуются инструменты.

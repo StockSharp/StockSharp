@@ -20127,12 +20127,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Receiver
+		/// Target
 		/// </summary>
 		public const string Str1666Key = "Str1666";
 
 		/// <summary>
-		/// Receiver
+		/// Target
 		/// </summary>
 		public static string Str1666
 		{
@@ -20140,12 +20140,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Receiver ID.
+		/// Target ID.
 		/// </summary>
 		public const string Str1667Key = "Str1667";
 
 		/// <summary>
-		/// Receiver ID.
+		/// Target ID.
 		/// </summary>
 		public static string Str1667
 		{
