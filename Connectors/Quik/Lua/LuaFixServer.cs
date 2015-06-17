@@ -54,31 +54,18 @@ namespace StockSharp.Quik.Lua
 				return base.TryGetRequestId(transactionId);
 			}
 
-			protected override bool? OnProcess(FixSession session, string msgType, IFixReader reader)
+			protected override OrderCondition CreateCondition()
 			{
-				switch (msgType)
-				{
-					case QuikFixMessages.NewStopOrderSingle:
-					{
-						var condition = new QuikOrderCondition();
+				return new QuikOrderCondition();
+			}
 
-						var dto = TimeHelper.Moscow.BaseUtcOffset;
+			protected override void PostInitCondition(char ordType, OrderCondition condition)
+			{
+			}
 
-						var regMsg = reader.ReadOrderRegisterMessage(dto,
-							tag => reader.ReadOrderCondition(tag, dto, condition));
-
-						if (regMsg == null)
-							return null;
-
-						regMsg.TransactionId = CreateTransactionId(session, regMsg.TransactionId.To<string>());
-						regMsg.Condition = condition;
-
-						RaiseNewOutMessage(regMsg);
-						return true;
-					}
-				}
-
-				return base.OnProcess(session, msgType, reader);
+			protected override bool ReadOrderCondition(IFixReader reader, FixTags tag, Func<OrderCondition> getCondition)
+			{
+				return reader.ReadOrderCondition(tag, TimeHelper.Moscow.BaseUtcOffset, () => (QuikOrderCondition)getCondition());
 			}
 
 			protected override void WriterFixOrderCondition(IFixWriter writer, ExecutionMessage message)
@@ -206,6 +193,8 @@ namespace StockSharp.Quik.Lua
 						throw new ArgumentOutOfRangeException();
 				}
 			};
+
+			_fixServer.TransactionSession.UtcOffset = TimeHelper.Moscow.BaseUtcOffset;
 
 			_logManager.Application = new QuikNativeApp();
 

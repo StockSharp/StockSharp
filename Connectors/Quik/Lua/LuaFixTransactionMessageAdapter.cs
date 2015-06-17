@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Quik.Lua
 {
+	using System;
 	using System.Linq;
 
 	using Ecng.Common;
@@ -24,45 +25,43 @@
 		}
 
 		/// <summary>
+		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// </summary>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		public override OrderCondition CreateOrderCondition()
+		{
+			return new QuikOrderCondition();
+		}
+
+		/// <summary>
+		/// Финальная инициализация условие заявки.
+		/// </summary>
+		/// <param name="ordType">Тип заявки.</param>
+		/// <param name="condition">Условие заявки.</param>
+		protected override void PostInitCondition(char ordType, OrderCondition condition)
+		{
+		}
+
+		/// <summary>
 		/// Записать данные по условию заявки.
 		/// </summary>
 		/// <param name="writer">Писатель FIX данных.</param>
 		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
-		protected override void WriteFixOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
+		protected override void WriteOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
 			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition);
 		}
 
 		/// <summary>
-		/// Метод вызывается при обработке полученного сообщения.
+		/// Прочитать условие регистрации заявки <see cref="OrderRegisterMessage.Condition"/>.
 		/// </summary>
-		/// <param name="msgType">Тип FIX сообщения.</param>
-		/// <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
+		/// <param name="reader">Читатель данных.</param>
+		/// <param name="tag">Тэг.</param>
+		/// <param name="getCondition">Функция, возвращающая условие заявки.</param>
 		/// <returns>Успешно ли обработаны данные.</returns>
-		protected override bool? ProcessTransactionMessage(string msgType, IFixReader reader)
+		protected override bool ReadOrderCondition(IFixReader reader, FixTags tag, Func<OrderCondition> getCondition)
 		{
-			switch (msgType)
-			{
-				case QuikFixMessages.StopOrderExecutionReport:
-				{
-					var condition = new QuikOrderCondition();
-
-					var executions = reader.ReadExecutionMessage(this,
-						tag => reader.ReadOrderCondition(tag, UtcOffset, condition));
-
-					if (executions == null)
-						return null;
-
-					var exec = executions.First();
-					exec.Condition = condition;
-
-					SendOutMessage(exec);
-
-					return true;
-				}
-			}
-
-			return base.ProcessTransactionMessage(msgType, reader);
+			return reader.ReadOrderCondition(tag, UtcOffset, () => (QuikOrderCondition)getCondition());
 		}
 	}
 }

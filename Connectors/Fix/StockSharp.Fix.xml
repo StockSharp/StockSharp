@@ -15,6 +15,28 @@
             </summary>
       <param name="message">Сообщение.</param>
     </member>
+    <member name="M:StockSharp.Fix.FixServer.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
+      <summary>
+            Прочитать условие регистрации заявки <see cref="P:StockSharp.Messages.OrderRegisterMessage.Condition" />.
+            </summary>
+      <param name="reader">Читатель данных.</param>
+      <param name="tag">Тэг.</param>
+      <param name="getCondition">Функция, возвращающая условие заявки.</param>
+      <returns>Успешно ли обработаны данные.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.CreateCondition">
+      <summary>
+            Создать условие заявки.
+            </summary>
+      <returns>Условие заявки.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixServer.PostInitCondition(System.Char,StockSharp.Messages.OrderCondition)">
+      <summary>
+            Финальная инициализация условие заявки.
+            </summary>
+      <param name="ordType">Тип заявки.</param>
+      <param name="condition">Условие заявки.</param>
+    </member>
     <member name="M:StockSharp.Fix.FixServer.OnProcess(StockSharp.Fix.FixSession,System.String,StockSharp.Fix.Native.IFixReader)">
       <summary>
             Метод вызывается при обработке полученного сообщения.
@@ -212,6 +234,11 @@
       <summary>
             Отправлять изменения по стакану. Если выключено, отправляется стакан целиком.
             По умолчанию, включено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.UtcOffset">
+      <summary>
+            Смещение времени относительно UTC для серверного времени данных.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.BaseFixReader">
@@ -2796,29 +2823,6 @@
       <summary>
       </summary>
     </member>
-    <member name="T:StockSharp.Fix.Native.PubExtensions">
-      <summary>
-            Вспомогательный класс.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Fix.Native.PubExtensions.ReadOrderRegisterMessage(StockSharp.Fix.Native.IFixReader,System.TimeSpan,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
-      <summary>
-            Прочитать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.NewOrderSingle" /> в <see cref="T:StockSharp.Messages.OrderRegisterMessage" />.
-            </summary>
-      <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
-      <param name="dateTimeOffset">Смещение времени относительно UTC для серверного времени данных.</param>
-      <param name="handler">Обработчик.</param>
-      <returns>Сообщение <see cref="T:StockSharp.Messages.OrderRegisterMessage" />.</returns>
-    </member>
-    <member name="M:StockSharp.Fix.Native.PubExtensions.ReadExecutionMessage(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.FixMessageAdapter,System.Func{StockSharp.Fix.Native.FixTags,System.Boolean})">
-      <summary>
-            Прочитать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.ExecutionReport" /> в <see cref="T:StockSharp.Messages.ExecutionMessage" />.
-            </summary>
-      <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
-      <param name="adapter">Адаптер сообщений для FIX.</param>
-      <param name="handler">Обработчик.</param>
-      <returns>Сообщения об исполнениях.</returns>
-    </member>
     <member name="T:StockSharp.Fix.Native.FixMessages">
       <summary>
             Коды FIX сообщений.
@@ -3869,6 +3873,22 @@
             </summary>
       <returns>Строковое представление.</returns>
     </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})">
+      <summary>
+            Прочитать условие регистрации заявки <see cref="P:StockSharp.Messages.OrderRegisterMessage.Condition" />.
+            </summary>
+      <param name="reader">Читатель данных.</param>
+      <param name="tag">Тэг.</param>
+      <param name="getCondition">Функция, возвращающая условие заявки.</param>
+      <returns>Успешно ли обработаны данные.</returns>
+    </member>
+    <member name="M:StockSharp.Fix.FixMessageAdapter.PostInitCondition(System.Char,StockSharp.Messages.OrderCondition)">
+      <summary>
+            Финальная инициализация условие заявки.
+            </summary>
+      <param name="ordType">Тип заявки.</param>
+      <param name="condition">Условие заявки.</param>
+    </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.ProcessTransactionMessage(System.String,StockSharp.Fix.Native.IFixReader)">
       <summary>
             Метод вызывается при обработке полученного сообщения.
@@ -3877,7 +3897,7 @@
       <param name="reader">Читатель данных, записанных в формате FIX протокола.</param>
       <returns>Успешно ли обработаны данные.</returns>
     </member>
-    <member name="M:StockSharp.Fix.FixMessageAdapter.WriteFixOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)">
+    <member name="M:StockSharp.Fix.FixMessageAdapter.WriteOrderCondition(StockSharp.Fix.Native.IFixWriter,StockSharp.Messages.OrderRegisterMessage)">
       <summary>
             Записать данные по условию заявки.
             </summary>

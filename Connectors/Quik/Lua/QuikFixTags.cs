@@ -30,16 +30,16 @@
 		IsMarketTakeProfit = 5037
 	}
 
-	static class QuikFixMessages
-	{
-		public const string NewStopOrderSingle = "DD";
-		public const string StopOrderExecutionReport = "88";
-	}
-
 	static class QuikFixExtensions
 	{
 		public static void WriteOrderCondition(this IFixWriter writer, QuikOrderCondition condition)
 		{
+			if (writer == null)
+				throw new ArgumentNullException("writer");
+
+			if (condition == null)
+				throw new ArgumentNullException("condition");
+
 			if (condition.Type != null)
 			{
 				writer.Write((FixTags)QuikFixTags.Type);
@@ -146,69 +146,72 @@
 			}
 		}
 
-		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeSpan dateTimeOffset, QuikOrderCondition condition)
+		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeSpan dateTimeOffset, Func<QuikOrderCondition> getCondition)
 		{
+			if (getCondition == null)
+				throw new ArgumentNullException("getCondition");
+
 			switch ((QuikFixTags)tag)
 			{
 				case QuikFixTags.Type:
-					condition.Type = (QuikOrderConditionTypes)reader.ReadInt();
+					getCondition().Type = (QuikOrderConditionTypes)reader.ReadInt();
 					return true;
 				case QuikFixTags.StopPriceCondition:
-					condition.StopPriceCondition = (QuikStopPriceConditions)reader.ReadInt();
+					getCondition().StopPriceCondition = (QuikStopPriceConditions)reader.ReadInt();
 					return true;
 				case QuikFixTags.ConditionOrderSide:
-					condition.ConditionOrderSide = (Sides)reader.ReadInt();
+					getCondition().ConditionOrderSide = (Sides)reader.ReadInt();
 					return true;
 				case QuikFixTags.LinkedOrderCancel:
-					condition.LinkedOrderCancel = reader.ReadBool();
+					getCondition().LinkedOrderCancel = reader.ReadBool();
 					return true;
 				case QuikFixTags.Result:
-					condition.Result = (QuikOrderConditionResults)reader.ReadInt();
+					getCondition().Result = (QuikOrderConditionResults)reader.ReadInt();
 					return true;
 				case QuikFixTags.OtherSecurityCode:
-					condition.OtherSecurityId = new SecurityId { SecurityCode = reader.ReadString() };
+					getCondition().OtherSecurityId = new SecurityId { SecurityCode = reader.ReadString() };
 					return true;
 				case QuikFixTags.StopPrice:
-					condition.StopPrice = reader.ReadDecimal();
+					getCondition().StopPrice = reader.ReadDecimal();
 					return true;
 				case QuikFixTags.StopLimitPrice:
-					condition.StopLimitPrice = reader.ReadDecimal();
+					getCondition().StopLimitPrice = reader.ReadDecimal();
 					return true;
 				case QuikFixTags.IsMarketStopLimit:
-					condition.IsMarketStopLimit = reader.ReadBool();
+					getCondition().IsMarketStopLimit = reader.ReadBool();
 					return true;
 				case QuikFixTags.ActiveTimeFrom:
-					if (condition.ActiveTime == null)
-						condition.ActiveTime = new Range<DateTimeOffset>();
+					if (getCondition().ActiveTime == null)
+						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					condition.ActiveTime.Min = reader.ReadDateTime().ApplyTimeZone(dateTimeOffset);
+					getCondition().ActiveTime.Min = reader.ReadDateTime().ApplyTimeZone(dateTimeOffset);
 					return true;
 				case QuikFixTags.ActiveTimeTo:
-					if (condition.ActiveTime == null)
-						condition.ActiveTime = new Range<DateTimeOffset>();
+					if (getCondition().ActiveTime == null)
+						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					condition.ActiveTime.Max = reader.ReadDateTime().ApplyTimeZone(dateTimeOffset);
+					getCondition().ActiveTime.Max = reader.ReadDateTime().ApplyTimeZone(dateTimeOffset);
 					return true;
 				case QuikFixTags.ConditionOrderId:
-					condition.ConditionOrderId = reader.ReadLong();
+					getCondition().ConditionOrderId = reader.ReadLong();
 					return true;
 				case QuikFixTags.ConditionOrderPartiallyMatched:
-					condition.ConditionOrderPartiallyMatched = reader.ReadBool();
+					getCondition().ConditionOrderPartiallyMatched = reader.ReadBool();
 					return true;
 				case QuikFixTags.ConditionOrderUseMatchedBalance:
-					condition.ConditionOrderUseMatchedBalance = reader.ReadBool();
+					getCondition().ConditionOrderUseMatchedBalance = reader.ReadBool();
 					return true;
 				case QuikFixTags.LinkedOrderPrice:
-					condition.LinkedOrderPrice = reader.ReadDecimal();
+					getCondition().LinkedOrderPrice = reader.ReadDecimal();
 					return true;
 				case QuikFixTags.Offset:
-					condition.Offset = reader.ReadString().ToUnit();
+					getCondition().Offset = reader.ReadString().ToUnit();
 					return true;
 				case QuikFixTags.StopSpread:
-					condition.Spread = reader.ReadString().ToUnit();
+					getCondition().Spread = reader.ReadString().ToUnit();
 					return true;
 				case QuikFixTags.IsMarketTakeProfit:
-					condition.IsMarketTakeProfit = reader.ReadBool();
+					getCondition().IsMarketTakeProfit = reader.ReadBool();
 					return true;
 				default:
 					return false;
