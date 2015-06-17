@@ -1,10 +1,16 @@
 ﻿namespace SampleTransaq
 {
-	using System.Windows;
-	using System.Windows.Controls;
+	using System.Collections.Generic;
 
+	using Ecng.Common;
+	using Ecng.Xaml;
+
+	using MoreLinq;
+
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
+	using StockSharp.Localization;
+	using StockSharp.Xaml;
 
 	public partial class StopOrdersWindow
 	{
@@ -13,20 +19,24 @@
 			InitializeComponent();
 		}
 
-		private Order SelectedOrder
+		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
 		{
-			get { return OrderGrid.SelectedOrder; }
+			orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
 		}
 
-		private void CancelOrderClick(object sender, RoutedEventArgs e)
+		private void OrderGrid_OnOrderReRegistering(Order order)
 		{
-			MainWindow.Instance.Trader.CancelOrder(SelectedOrder);
-		}
+			var window = new OrderWindow
+			{
+				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
+				Connector = MainWindow.Instance.Trader,
+				Order = order.ReRegisterClone(newVolume: order.Balance),
+			};
 
-		private void OrdersDetailsSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var order = SelectedOrder;
-			CancelOrder.IsEnabled = order != null && order.State == OrderStates.Active;
+			if (window.ShowModal(this))
+			{
+				MainWindow.Instance.Trader.ReRegisterOrder(order, window.Order);
+			}
 		}
 	}
 }

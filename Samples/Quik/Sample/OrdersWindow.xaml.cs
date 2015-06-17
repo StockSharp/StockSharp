@@ -24,21 +24,6 @@ namespace Sample
 			orders.ForEach(MainWindow.Instance.Trader.CancelOrder);
 		}
 
-		//private void ExecConditionOrderClick(object sender, RoutedEventArgs e)
-		//{
-		//	var order = OrderGrid.SelectedOrders.FirstOrDefault();
-
-		//	if (order == null)
-		//		return;
-
-		//	var newOrder = new NewStopOrderWindow
-		//	{
-		//		Title = "Новая условная заявка на исполнение заявки '{0}'".Put(order.Id),
-		//		ConditionOrder = order,
-		//	};
-		//	newOrder.ShowModal(this);
-		//}
-
 		private void OrderGrid_OnOrderReRegistering(Order order)
 		{
 			var window = new OrderWindow

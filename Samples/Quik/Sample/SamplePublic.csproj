@@ -144,7 +144,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="StopOrderWindow.xaml">
+    <Page Include="StopOrdersWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
@@ -200,8 +200,8 @@
     <Compile Include="SecuritiesWindow.xaml.cs">
       <DependentUpon>SecuritiesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StopOrderWindow.xaml.cs">
-      <DependentUpon>StopOrderWindow.xaml</DependentUpon>
+    <Compile Include="StopOrdersWindow.xaml.cs">
+      <DependentUpon>StopOrdersWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TradesWindow.xaml.cs">
       <DependentUpon>TradesWindow.xaml</DependentUpon>

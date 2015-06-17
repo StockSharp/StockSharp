@@ -4,13 +4,6 @@
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
     Title="{x:Static loc:LocalizedStrings.Orders}" Height="410" Width="930">
-	<Grid>
-		<!--<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>-->
-		
-		<xaml:OrderGrid x:Name="OrderGrid" x:FieldModifier="public" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
-		<!--<Button x:Name="ExecConditionOrder" Grid.Row="1" Grid.Column="0" Content="Заявка по исполнению" Width="140" HorizontalAlignment="Right" IsEnabled="False" Click="ExecConditionOrderClick" />-->
-	</Grid>
+	
+	<xaml:OrderGrid x:Name="OrderGrid" x:FieldModifier="public" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
 </Window>

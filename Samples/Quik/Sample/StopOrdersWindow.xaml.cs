@@ -1,4 +1,4 @@
-﻿namespace SampleOEC
+﻿namespace Sample
 {
 	using System.Collections.Generic;
 
@@ -12,9 +12,9 @@
 	using StockSharp.Localization;
 	using StockSharp.Xaml;
 
-	public partial class StopOrdersWindow
+	public partial class StopOrderWindow
 	{
-		public StopOrdersWindow()
+		public StopOrderWindow()
 		{
 			InitializeComponent();
 		}
