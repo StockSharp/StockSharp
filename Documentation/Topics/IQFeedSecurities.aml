@@ -14,14 +14,14 @@
   	  			<listItem>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Code</codeEntityReference>, которое задает маску имени инструмента.</listItem>
   	  			<listItem>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Type</codeEntityReference>, которое задает тип инструмента.</listItem>
   	  		</list>
-			Все найденные инструменты будут возвращены через событие <codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>.
+			Все найденные инструменты будут возвращены через событие <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.
 		</listItem>
   	  	<listItem>
   	  		Получение полного списка инструментов с сайта <token>iqfeed</token>. Для того, чтобы получить полный список инструментов, по которым можно получать данные через
   	  		<token>iqfeed</token>, необходимо перед  запуском экспорта данных установить свойство <codeEntityReference qualifyHint="true">P:StockSharp.IQFeed.IQFeedTrader.IsDownloadSecurityFromSite</codeEntityReference>.
   	  		Перед получением списка инструментов также необходимо установить фильтр <codeEntityReference qualifyHint="true">P:StockSharp.IQFeed.IQFeedTrader.SecurityTypesFilter</codeEntityReference>,
   	  		чтобы получить только необходимые типы инструментов. Все инструменты, полученные из архива с сайта <token>iqfeed</token>, будут возвращены через событие
-  	  		<codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>.</listItem>
+  	  		<codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.</listItem>
 	  </list>
     </introduction>
     <relatedTopics>

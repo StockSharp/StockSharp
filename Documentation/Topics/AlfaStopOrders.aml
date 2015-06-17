@@ -20,13 +20,13 @@
 			Для создания стоп-заявки необходимо создать 
 			<codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference> 
 			типа 
-			<codeEntityReference>F:StockSharp.BusinessEntities.OrderTypes.Conditional</codeEntityReference> 
+			<codeEntityReference>F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference> 
 			и заполнить поля 
-			<codeEntityReference>T:StockSharp.AlfaDirect.AlfaLimitOrderCondition</codeEntityReference>:
+			<codeEntityReference>T:StockSharp.AlfaDirect.AlfaOrderCondition</codeEntityReference>:
 		</para>
 		
 		<alert class="note">
-			<para>Исходный код примера доступ в дистрибутиве в папке Samples/AlfaDirect/SampleAlfa.</para>
+			<para>Исходный код примера доступ в дистрибутиве в папке <legacyItalic>Samples/AlfaDirect/SampleAlfa</legacyItalic>.</para>
 		</alert>
 		
 		<code language="C#"><![CDATA[var order = new Order
@@ -57,13 +57,13 @@ catch (Exception ex)
 		</para>
 		<list class="bullet">
 			  <listItem>
-				  <codeEntityReference>T:StockSharp.AlfaDirect.AlfaLimitOrderCondition</codeEntityReference> - условие лимитной стоп-заявки.
+				  <codeEntityReference qualifyHint="true">P:StockSharp.AlfaDirect.AlfaOrderCondition.StopPrice</codeEntityReference> - условие лимитной стоп-заявки.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTargetLimitOrderCondition</codeEntityReference> - условие лимитной стоп-заявки + цель.
+				  <codeEntityReference qualifyHint="true">P:StockSharp.AlfaDirect.AlfaOrderCondition.TargetPrice</codeEntityReference> - условие лимитной стоп-заявки + цель.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference>T:StockSharp.AlfaDirect.AlfaTrailingOrderCondition</codeEntityReference> - заявки "скользящий стоп".
+				  <codeEntityReference qualifyHint="true">P:StockSharp.AlfaDirect.AlfaOrderCondition.Level</codeEntityReference> - заявки "скользящий стоп".
 			  </listItem>
 		  </list>
 		

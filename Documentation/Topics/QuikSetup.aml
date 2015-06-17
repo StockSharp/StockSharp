@@ -275,13 +275,13 @@
 					  заголовки колонок в таблицах, а основывается только на порядковом номере. Описание того, как можно менять порядок колонок в таблицах,
 					  не нарушая механизм работы <token>dde</token>, описан <link xlink:href="4261879e-9bb3-482c-9fc5-27ecb07bdf5e">Экспорт дополнительных колонок</link>.</para>
 				  </alert>
-				  <para>
-					  На картинках показаны также и настройки <token>dde</token>. Если программа используется метод
-					  <codeEntityReference qualifyHint="true">M:StockSharp.Quik.QuikTrader.StartExport</codeEntityReference>,
-					  то настраивать <token>dde</token> не нужно. Данный метод для всех таблиц сам заполняет поля каждый раз при вызове.
-					  Если экспорт <token>dde</token> не работает (данные не поступаю в программу), то рекомендуется для диагностирования ошибки подключится к событию
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.ProcessDataError</codeEntityReference>.
-				  </para>
+				  
+				 <alert class="note">
+  					<para>Если экспорт <token>dde</token> не работает (данные не поступаю в программу), то рекомендуется для диагностирования ошибки подключится к событию
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Error</codeEntityReference>.</para>
+				</alert>
+
+				  
 				<!--<alert class="note">
 						<table>
 							<title>Названия таблиц при DDE экспорте</title>

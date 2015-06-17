@@ -22,15 +22,15 @@
 				таблиц (подробнее в разделе <link xlink:href="32bb7203-202c-44f7-a6c4-79791c690a3a">Verifier</link>).
 			</listItem>
 			<listItem>
-				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.OpenQuotes(StockSharp.BusinessEntities.Security)</codeEntityReference>
+				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.OpenQuotes(StockSharp.Messages.SecurityId)</codeEntityReference>
 				открывает и настраивает окно со стаканом для переданного инструмента.
 			</listItem>
 			<listItem>
 				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.GetAccounts</codeEntityReference> возвращает список счетов.
 			</listItem>
 			<listItem>
-				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> и
-				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.UnRegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> настраивает
+				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.RegisterTrades(string)</codeEntityReference> и
+				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.UnRegisterTrades(string)</codeEntityReference> настраивает
 				фильтр в таблице Все Сделки.
 			</listItem>
 		</list>

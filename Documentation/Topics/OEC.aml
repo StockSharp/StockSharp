@@ -3,12 +3,12 @@
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 
 	<introduction>
-		<para>Для написания торговых роботов для <token>OpenECry_external</token> необходимо использовать <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECTrader</codeEntityReference> (не путать с названием терминала “OEC Trader”). 
+		<para>Для написания торговых роботов для <token>OpenECry_external</token> необходимо использовать <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> (не путать с названием терминала “OEC Trader”). 
 		Механизм взаимодействия показан на данном рисунке:</para>
 		
 		<mediaLink><image placement="center" xlink:href="OECTrader"/></mediaLink>
 		
-		<para>Как видно из рисунка, <codeEntityReference qualifyHint="false">T:StockSharp.OEC.OECTrader</codeEntityReference> взаимодействует с сервером OEC посредством <token>OECApi</token>. 
+		<para>Как видно из рисунка, <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> взаимодействует с сервером OEC посредством <token>OECApi</token>. 
 		Для использования <token>OECApi</token> не требуется наличие работающего терминала OEC Trader.</para>
 	</introduction>
 

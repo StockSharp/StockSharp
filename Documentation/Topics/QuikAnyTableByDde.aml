@@ -37,7 +37,7 @@
 				  </mediaLink>
 				  <alert class="note">
 					  <para>
-						  Исходные коды примера + qpile файл лежат в дистрибутиве в папке под названием <legacyItalic>SampleDdeCustomTable</legacyItalic>.
+						  Исходные коды примера + qpile файл лежат в дистрибутиве по маршруту <legacyItalic>Samples\Quik\DDE\SampleDdeCustomTable</legacyItalic>.
 					  </para>
 				  </alert>
 			  </content>

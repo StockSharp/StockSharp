@@ -67,10 +67,10 @@ Trader.RegisterNews();
 			</code>
  	  		<para>После запуска экспорта и запроса нужных данных можно ожидать срабатывания событий:</para>
  	  		<list class="ordered">
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.ITrader.SecuritiesChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.).</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.ITrader.MarketDepthsChanged</codeEntityReference> – изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewTrades</codeEntityReference> – новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewNews</codeEntityReference> – новые новости.</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.).</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference> – изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> – новые новости.</listItem>
  	  		</list>
  	  	</listItem>
 		<listItem>
@@ -89,8 +89,8 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
 		<listItem>
  	  		<para>
  	  			Для получения обновлений по выбранному инструменту и тиков необходимо воспользоваться методами
- 	  			<codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> и
- 	  			<codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:
+ 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> и
+ 	  			<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:
  	  		</para>
  	  		<code language="C#">
 private void TradesClick(object sender, RoutedEventArgs e)
@@ -118,7 +118,7 @@ private void TradesClick(object sender, RoutedEventArgs e)
 			</code>
 		</listItem>
 		<listItem>
- 	  		<para>Для запроса обновлений по стаканам необходимо воспользоваться методом <codeEntityReference>M:StockSharp.BusinessEntities.ITrader.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+ 	  		<para>Для запроса обновлений по стаканам необходимо воспользоваться методом <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
  	  		<code language="C#">
 private void QuotesClick(object sender, RoutedEventArgs e)
 {
@@ -166,11 +166,11 @@ Trades.AddRange(MainWindow.Instance.Trader.GetTrades(SecurityPicker.SelectedSecu
 			</code>
 		</listItem>
 		<listItem>
- 	  		<para>Для получения истории свечек по инструменту за указанный период необходимо воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>:</para>
+ 	  		<para>Для получения истории свечек по инструменту за указанный период необходимо воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryCandles"/></mediaLink>
   	  		<code language="C#">
 Candles.Clear();
-Candles.AddRange(MainWindow.Instance.Trader.GetCandles(SecurityPicker.SelectedSecurity, (TimeSpan)TimeFramePicker.SelectedValue, (DateTime)DateFromPicker.SelectedDate, (DateTime)DateToPicker.SelectedDate));
+Candles.AddRange(MainWindow.Instance.Trader.GetCandles(SecurityPicker.SelectedSecurity, (TimeSpan)TimeFramePicker.SelectedValue, (DateTimeOffset)DateFromPicker.SelectedDate, (DateTimeOffset)DateToPicker.SelectedDate));
 			</code>
 		</listItem>
       </list>

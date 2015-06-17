@@ -9,7 +9,7 @@
       <para>
 		  <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> может предоставлять исторические данные за предыдущие торговые сессии.
 		  Такие данные поставляются только свечками вида <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference>,
-		  и со строго ограниченными тайм-фреймами <codeEntityReference>T:StockSharp.SmartCom.SmartTimeFrames</codeEntityReference>.
+		  и со строго ограниченными тайм-фреймами <codeEntityReference>T:StockSharp.SmartCom.SmartComTimeFrames</codeEntityReference>.
 	  </para>
     </introduction>
 
@@ -30,7 +30,8 @@
 		  <step>
 			  <content>
 				  <para>
-					  В самом начале необходимо добавить <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> в <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>
+					  В самом начале необходимо добавить <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> 
+					  в <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>
 					  как источник свечек:
 				  </para>
 				  <code language="C#"><![CDATA[// создаем шлюз
@@ -38,12 +39,13 @@ _trader = new SmartTrader(this.Login.Text, this.Password.Password);
 
 _candleManager = new CandleManager(_trader);]]></code>
 
+
 				<alert class="note">
   					<para>
   						Исторические свечки можно получить напрямую из <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, подписавшись на событие
   						<codeEntityReference qualifyHint="true">E:StockSharp.SmartCom.SmartTrader.NewCandles</codeEntityReference>. Для начала получения свечек необходимо вызвать метод
-  						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartTimeFrames,Ecng.ComponentModel.Range{System.DateTime})</codeEntityReference> или
-  						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartTimeFrames,System.DateTime,System.Int64,StockSharp.SmartCom.SmartHistoryDirections)</codeEntityReference>.
+  						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference> или
+  						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,System.DateTimeOffset,long,StockSharp.SmartCom.SmartComHistoryDirections)</codeEntityReference>.
   					</para>
 				</alert>
 			  </content>
@@ -65,9 +67,9 @@ _candleManager = new CandleManager(_trader);]]></code>
 			  <content>
 				  <para>
 					  Если в программе требуется получать свечки постоянно (например, за текущую торговую сессию по мере появления новых сформированных
-					  свечек), то для этого можно использовать метод <codeEntityReference qualifyHint="true">M:StockSharp.SmartCom.SmartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTime,System.DateTime)</codeEntityReference>.
+					  свечек), то для этого можно использовать метод <codeEntityReference qualifyHint="true">M:StockSharp.SmartCom.SmartTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>.
 					  После этого, событие <codeEntityReference qualifyHint="true">E:StockSharp.SmartCom.SmartTrader.NewCandles</codeEntityReference> будет
-					  вызываться постоянно, как только свормируется очередная свечка.
+					  вызываться постоянно, как только сформируется очередная свечка.
 				  </para>
 			  </content>
 		  </step>
@@ -87,66 +89,5 @@ _candleManager = new CandleManager(_trader);]]></code>
 		  </content>
 	  </section-->
 
-	  <!--<nextSteps>
-      <content>
-        <para>Optional next steps after reading this walk-through</para>
-      </content>
-    </nextSteps>-->
-    
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
-    
   </developerWalkthroughDocument>
 </topic>
