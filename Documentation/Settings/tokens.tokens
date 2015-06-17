@@ -163,7 +163,8 @@
 	<ddue:linkAlternateText>Папка с клиентским дистрибутивом шлюза Plaza II на FTP-сервере РТС</ddue:linkAlternateText>
 	<ddue:linkUri>ftp://ftp.rts.ru/pub/forts/Plaza2/</ddue:linkUri>
 </ddue:externalLink></item>
-  <item id="quik"><ddue:link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Quik</ddue:link></item>
+  <item id="quik"><ddue:link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636" xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Quik</ddue:link></item>
   <item id="quik_external"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>Quik</ddue:linkText>
     <ddue:linkUri>http://quik.ru</ddue:linkUri>

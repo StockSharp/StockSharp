@@ -13,7 +13,7 @@
         <step>
           <content>
             <para>
-            	Для того, чтобы получить исторические свечки, необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTime,System.DateTime)</codeEntityReference>:
+            	Для того, чтобы получить исторические свечки, необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
        		</para>
             <code language="C#">
             <![CDATA[

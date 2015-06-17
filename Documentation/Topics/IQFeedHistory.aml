@@ -14,8 +14,10 @@
   	  	<listItem>Недельные данные – 250 недель.</listItem>
   	  	<listItem>Месячные данные – 250 месяцев.</listItem>
 	  </list>
-	  <para>Для получения исторических сделок необходимо воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime)</codeEntityReference>.</para>
-	  <para>Для получения исторических свечек необходимо воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)</codeEntityReference>.</para>
+	  <para>Для получения исторических сделок необходимо воспользоваться методом 
+	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTimeOffset)</codeEntityReference>.</para>
+	  <para>Для получения исторических свечек необходимо воспользоваться методом 
+	  <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>
