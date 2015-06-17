@@ -5,7 +5,9 @@
 	<introduction>
 		<para>
 			 В <token>stocksharp</token> больше не используется понятие <legacyItalic>базовой</legacyItalic> лицензии. Ее функциональность 
-			 (Quik, AlfaDirect, SmartCOM, Transaq, Alor, OpenECry, InteractiveBrokers, ETrade, Lmax, Oanda, Blackwood, IQFeed, Sterling, Rithmic, CQG), 
+			 (<token>quik</token>, <token>alfa</token>, <token>smartcom</token>, <token>transaq</token>, <token>alor</token>, 
+			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
+			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>),
 			 необходимая большинству клиентов, теперь предоставляется без лицензии и доступна всем желающим (см. <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>).
 		</para>
 		<alert class="caution">
@@ -16,10 +18,10 @@
 		<para>Существует два уровня расширенной лицензии. Наполненность по функционалу для каждого уровня идентична и включает все, что есть в базовой версии плюс:</para> 
 		<list class="ordered">
   			<listItem>
-  				<para>Plaza 2 коннектор (режим ClientGate COM).</para>
+  				<para><token>plaza</token> коннектор (режим ClientGate COM).</para>
   			</listItem>
   			<listItem>
-  				<para>FIX коннектор (поддерживается ограниченное количество брокеров).</para>
+  				<para><token>fix</token> коннектор (поддерживается ограниченное количество брокеров).</para>
   			</listItem>
   			<listItem>
   				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.).</para>
@@ -31,8 +33,20 @@
   				<para>Order Log.</para>
   			</listItem>
 		</list>
-		<para><legacyUnderline>Расширенная лицензия+</legacyUnderline> предоставляется клиентам прошедшим полный курс обучения и действует в течение 6 месяцев.</para>
-		<para><legacyUnderline>Расширенная лицензия++</legacyUnderline> предоставляется клиентам прошедшим расширенный курс обучения и действует в течение 12 месяцев.</para> 
+		<para><legacyUnderline>Расширенная лицензия+</legacyUnderline> предоставляется клиентам прошедшим полный <externalLink>
+			<linkText>курс обучения</linkText>
+			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
+			<linkUri>http://stocksharp.com/edu</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>
+ и действует в течение 6 месяцев.</para>
+		<para><legacyUnderline>Расширенная лицензия++</legacyUnderline> предоставляется клиентам прошедшим расширенный <externalLink>
+			<linkText>курс обучения</linkText>
+			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
+			<linkUri>http://stocksharp.com/edu</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>
+ и действует в течение 12 месяцев.</para> 
 		<para>По окончании срока действия лицензии необходимо будет либо ее продлить, либо пользоваться базовым функционалом.</para>
 
 
@@ -41,15 +55,24 @@
   			Корпоративная лицензия предоставляется платно и включает все функциональности базовой и расширенной лицензий, а также:
   		</para>
   		<list class="ordered">
-				<listItem>Коннекторы прямого доступа к биржам (<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">CGate</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">MicexBridge</link>).</listItem>
-				<listItem>FIX коннекторы (прямое подключение к биржам, ряду брокеров, в т.ч. прямое подключение к серверу <token>quik</token>).</listItem>
-				<listItem>FIX-сервер для роутинга заявок, эмуляции торгов, сохранения хода торгов для каждого клиента.</listItem>
-				<listItem>Доступ к online репозиторию с обновляемыми исходными кодами.</listItem>
-				<listItem>Сервер исторических данных.</listItem>
+				<listItem>
+					<para>Коннекторы прямого доступа к биржам (<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">CGate</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">MicexBridge</link>).</para> 
+				</listItem>
+				<listItem>
+					<para><token>fix</token> коннекторы (прямое подключение к биржам, ряду брокеров, в т.ч. прямое подключение к серверу <token>quik</token>).</para>
+				</listItem>
+				<listItem>
+					<para>FIX-сервер для роутинга заявок, эмуляции торгов, сохранения хода торгов для каждого клиента.</para>
+				</listItem>
+				<listItem>
+					<para>Доступ к online репозиторию с обновляемыми исходными кодами.</para>
+				</listItem>
+				<listItem>
+					<para>Сервер исторических данных.</para>
+				</listItem>
 		</list>
 
 	</introduction>
-	
 	
 	 <relatedTopics>
      	<externalLink>

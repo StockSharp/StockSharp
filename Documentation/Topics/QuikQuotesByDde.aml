@@ -6,7 +6,7 @@
   <introduction>
       <para>
 		  Для стратегий, которым необходима информация о стакане по инструменту, в <token>stocksharp</token> предусмотрен метод
-		  <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.GetMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.
+		  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.GetMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.
 		  Данный метод возвращает <codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>, который позволяет получить группированно
 		  по типу котировки (биды и оффера), а так же удобную работу с лучшими котировками и спредом.
 	  </para>
@@ -28,7 +28,7 @@
 		  <step>
 			  <content>
 				  <para>
-					  Для того, чтобы метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.GetMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>
+					  Для того, чтобы метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Connector.GetMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>
 					  работал и в классе <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>, необходимо в начале настроить экспорт стакана в
 					  <token>quik</token>-е, как показано на рисунке:
 				  </para>
@@ -59,7 +59,7 @@
 				  <alert class="caution">
 					  Если код инструмента содержит символ @, то рекомендуется поменять разделитель на другой символ через свойство
 					  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.SecurityIdGenerator.Delimiter</codeEntityReference>
-					  у <codeEntityReference qualifyHint="true">P:StockSharp.Algo.BaseTrader.SecurityIdGenerator</codeEntityReference>.
+					  у <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.SecurityIdGenerator</codeEntityReference>.
 				  </alert>
 			  </content>
 		  </step> 

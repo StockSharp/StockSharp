@@ -16,14 +16,6 @@
 		  </para>
 	  </introduction>
 
-    <!--<prerequisites>
-      <content>
-        <para>Optional information on prerequisites</para>
-      </content>
-    </prerequisites>-->
-    
-    <!-- One or more procedure or section elements -->
-
     <procedure>
       <title>Пример использования ISmartComWrapper</title>
 
@@ -31,7 +23,7 @@
           <step>
 			  <content>
 				  <para>В начале необходимо создать объект <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>,
-				  передав в него логин-пароль, с которыми в дальнейшем будет работать <codeEntityReference>T:StockSharp.SmartCom.Wrapper.ISmartComWrapper</codeEntityReference>:
+				  передав в него логин-пароль, с которыми в дальнейшем будет работать <codeEntityReference>T:StockSharp.StockSharp.SmartCom.Native.ISmartComWrapper</codeEntityReference>:
 			  </para>
 				  <code language="C#">var smartTrader = new SmartTrader { Login = "Логин", Password = "Пароль" };</code>
 			  </content>
@@ -39,7 +31,7 @@
 		  <step>
 			  <content>
 				  <para>
-					  Затем получить <codeEntityReference>T:StockSharp.SmartCom.Wrapper.ISmartComWrapper</codeEntityReference>, и подписаться на событие новых инструментов:
+					  Затем получить <codeEntityReference>T:StockSharp.SmartCom.Native.ISmartComWrapper</codeEntityReference>, и подписаться на событие новых инструментов:
 				  </para>
 				  <code language="C#">var wrapper = smartTrader.Wrapper;
 wrapper.NewSecurity += (row, rowCount, securityId, shortName, fullName, type, decimals,

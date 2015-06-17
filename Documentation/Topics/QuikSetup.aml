@@ -280,7 +280,7 @@
 					  <codeEntityReference qualifyHint="true">M:StockSharp.Quik.QuikTrader.StartExport</codeEntityReference>,
 					  то настраивать <token>dde</token> не нужно. Данный метод для всех таблиц сам заполняет поля каждый раз при вызове.
 					  Если экспорт <token>dde</token> не работает (данные не поступаю в программу), то рекомендуется для диагностирования ошибки подключится к событию
-					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.ProcessDataError</codeEntityReference>.
+					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Error</codeEntityReference>.
 				  </para>
 				<!--<alert class="note">
 						<table>

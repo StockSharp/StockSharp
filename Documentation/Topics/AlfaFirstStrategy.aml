@@ -174,7 +174,7 @@ private void ButtonStopExportClick(object sender, EventArgs e)
 }
 ]]></code>
 		<para>
-		После запуска экспорта формой будут получены события <codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewPortfolios</codeEntityReference> и <codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewSecurities</codeEntityReference>. 
+		После запуска экспорта формой будут получены события <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference> и <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>. 
 		Мы будем использовать обработчики этих событий для инициализации портфеля и иснтрумента (объекты _portfolio и _security нашего класса). Рассмотрим их код:
 		</para>
 		<code language="C#"><![CDATA[void OnNewPortfolios(IEnumerable<Portfolio> portfolios)
@@ -263,7 +263,7 @@ Type: Future
 ]]></code>
 		<para>
 			После регистрации портфеля мы начнем получать события 
-			<codeEntityReference>E:StockSharp.BusinessEntities.ITrader.PortfoliosChanged</codeEntityReference>:
+			<codeEntityReference>E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference>:
 		</para>
 		<code language="Output"><![CDATA[10:02:25 | Debug | TestForm   | PortfoliosChanged()
 10:02:25 | Debug | PrintUtils | ....... 41469 .......
@@ -296,7 +296,7 @@ CurrentAmount: yyyyy,y RUB
 ]]></code>
 		<para>
 			После регистрации на получение сделок мы начнем получать события 
-			<codeEntityReference>E:StockSharp.BusinessEntities.ITrader.NewTrades</codeEntityReference>:
+			<codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>:
 		</para>
 		<code language="Output"><![CDATA[10:11:14 | Debug | AlfaTrader | RegisterTrades:SBER-6.11@FORTS
 10:11:14 | Debug | TestForm   | OnNewTrades()
@@ -330,7 +330,7 @@ CurrentAmount: yyyyy,y RUB
 ]]></code>
 		<para>
 			После регистрации на получение стаканов мы начнем получать события 
-			<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.ITrader.MarketDepthsChanged</codeEntityReference>:
+			<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.MarketDepthsChanged</codeEntityReference>:
 		</para>
 		<code language="Output"><![CDATA[10:13:44 | Debug | TestForm   | ITrader::RegisterQuotes
 10:13:44 | Debug | AlfaTrader | RegisterQuotes:SBER-6.11@FORTS
@@ -393,7 +393,7 @@ CurrentAmount: yyyyy,y RUB
 }
 }]]></code>
 		<para>
-			По мере изменения состояния заявки будут приходить события <codeEntityReference>E:StockSharp.BusinessEntities.ITrader.OrdersChanged</codeEntityReference>:
+			По мере изменения состояния заявки будут приходить события <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>:
 		</para>
 		<code language="Output"><![CDATA[
 10:37:28 | Debug | TestForm   | OrdersChanged()
