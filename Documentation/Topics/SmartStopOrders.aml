@@ -55,8 +55,8 @@ if (marketOrder != null)
 };]]></code>
 		<para>
 			Если значение <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Price</codeEntityReference> равно 0, то будет создана стоп-заявка, при 
-			исполнении которой будет зарегистрирована рыночная заявка (<codeEntityReference qualifyHint="true">F:StockSharp.BusinessEntities.OrderTypes.Market</codeEntityReference>).
-			Если значение не равно 0, то будет зарегистрирована лимитированная заявка (<codeEntityReference qualifyHint="true">F:StockSharp.BusinessEntities.OrderTypes.Limit</codeEntityReference>).
+			исполнении которой будет зарегистрирована рыночная заявка (<codeEntityReference qualifyHint="true">F:StockSharp.Messages.OrderTypes.Market</codeEntityReference>).
+			Если значение не равно 0, то будет зарегистрирована лимитированная заявка (<codeEntityReference qualifyHint="true">F:StockSharp.Messages.OrderTypes.Limit</codeEntityReference>).
 		</para>
     </introduction>
 

@@ -51,9 +51,7 @@
 			<codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference> хранит в себе все транзакции, прошедшие через него в <token>quik</token>.
 			Если в процессе тестирования необходимо получить данную информацию (например, для детального разбора ошибок), то можно использовать метод
 			<codeEntityReference>M:StockSharp.Quik.QuikTrader.GetTransaction(System.Int64)</codeEntityReference>, возвращающий
-			<codeEntityReference>T:StockSharp.Quik.Transaction</codeEntityReference> по номеру. Или схожий метод
-			<codeEntityReference>M:StockSharp.Quik.QuikTrader.GetTransaction(StockSharp.BusinessEntities.Order)</codeEntityReference>, через который
-			возвращаются все транзакции, ассоциированные с заявкой (например, на регистрацию и на снятие).
+			<codeEntityReference>T:StockSharp.Quik.Transaction</codeEntityReference> по номеру.
 		</para>
       </content>
     </section>
