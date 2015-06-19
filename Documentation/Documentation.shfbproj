@@ -19,20 +19,20 @@
     <HtmlHelpName>StockSharp</HtmlHelpName>
     <Language>ru-RU</Language>
     <HelpTitle>StockSharp - платформа для торговых роботов</HelpTitle>
-    <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <NamingMethod>MemberName</NamingMethod>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Alerts\Alerts.csproj" />
 <DocumentationSource sourceFile="..\Connectors\AlfaDirect\AlfaDirect.csproj" />
 <DocumentationSource sourceFile="..\Algo\Algo.csproj" />
-<DocumentationSource sourceFile="..\Connectors\Alor\Alor.csproj" />
 <DocumentationSource sourceFile="..\Connectors\BitStamp\BitStamp.csproj" />
 <DocumentationSource sourceFile="..\Connectors\Btce\Btce.csproj" />
 <DocumentationSource sourceFile="..\BusinessEntities\BusinessEntities.csproj" />
 <DocumentationSource sourceFile="..\Community\Community.csproj" />
 <DocumentationSource sourceFile="..\Hydra\Core\CorePublic.csproj" />
 <DocumentationSource sourceFile="..\Connectors\CQG\CQG.csproj" />
+<DocumentationSource sourceFile="..\References\Ecng\Ecng.Serialization.dll" />
 <DocumentationSource sourceFile="..\Connectors\ETrade\ETrade.csproj" />
 <DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj" />
 <DocumentationSource sourceFile="..\Connectors\IQFeed\IQFeed.csproj" />

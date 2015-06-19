@@ -14,6 +14,7 @@
       <codeEntityReference qualifyHint="false">P:StockSharp.Plaza.PlazaTrader.Tables</codeEntityReference>. Все потоки данных описаны в классе
       <codeEntityReference>T:StockSharp.Plaza.PlazaStreamRegistry</codeEntityReference>.
       </para>
+      <!--
 	  <alert class="caution">
 		<para>
 			Добавлять новые потоки данных можно только, когда не запущен экспорт данных, т.е. 
@@ -22,6 +23,7 @@
       		В противном случае <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference> сгенерит исключение.
 		</para>
 	  </alert>
+	  -->
 	  <code language="C#"><![CDATA[// Добавление таблицы об обязательствах маркетмейкера по фьючерсам
 var Trader = new PlazaTrader();
 Trader.Tables.Add(Trader.TableRegistry.MarketMakingFuture);]]></code>

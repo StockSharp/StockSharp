@@ -148,7 +148,7 @@ MainWindow.Instance.NewOrder(stopOrder);]]></code>
 			Type = QuikOrderConditionTypes.OtherSecurity,
 			StopPriceCondition = this.StopPriceCondition.Text == ">=" ? QuikStopPriceConditions.MoreOrEqual : QuikStopPriceConditions.LessOrEqual,
 			StopPrice = this.StopPrice.Text.To<decimal>(),
-			OtherSecurity = (Security)this.OtherSecurities.SelectedValue,
+			OtherSecurityId = ((Security)this.OtherSecurities.SelectedValue).Id,
 			ActiveTime = this.ActiveTime,
 		},
 	};
@@ -223,8 +223,8 @@ MainWindow.Instance.NewOrder(stopOrder);]]></code>
 			<step>
 				<content>
 					<para>
-						Если необходимо зарегистрировать стоп-заявку "по исполнению", то необходимо присвоить активную заявку
-						свойству <codeEntityReference qualifyHint="true">P:StockSharp.Quik.QuikOrderCondition.ConditionOrder</codeEntityReference>.
+						Если необходимо зарегистрировать стоп-заявку "по исполнению", то необходимо присвоить идентификатор активной заявки
+						свойству <codeEntityReference qualifyHint="true">P:StockSharp.Quik.QuikOrderCondition.ConditionOrderId</codeEntityReference>.
 						Ниже показан выбор типа стоп-заявок "по исполнению", которых <token>quik</token> предоставляет меньше, чем для обычных стоп-заявок:
 					</para>
 					<code language="C#"><![CDATA[switch (this.StopOrderType.SelectedIndex)
@@ -250,7 +250,7 @@ MainWindow.Instance.NewOrder(stopOrder);]]></code>
 {
 	var stopLimit = CreateStopLimit();
 	var condition = (QuikOrderCondition)stopLimit.StopCondition;
-	condition.ConditionOrder = this.ConditionOrder;
+	condition.ConditionOrderId = this.ConditionOrder.Id;
 	condition.ConditionOrderPartiallyMatched = this.PartiallyMatched.IsChecked;
 	condition.ConditionOrderUseMatchedBalance = this.UseMatchedBalance.IsChecked;
 	return stopLimit;
@@ -262,7 +262,8 @@ MainWindow.Instance.NewOrder(stopOrder);]]></code>
 					<alert class="caution">
 						<para>
 							Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Direction</codeEntityReference> для стоп-заявок
-							"по исполнению" игнорируется, так как такая заявка всегда обратна заявке-условию, передающееся через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Quik.QuikOrderCondition.ConditionOrder</codeEntityReference>,
+							"по исполнению" игнорируется, так как такая заявка всегда обратна заявке-условию, передающейся через свойство 
+							<codeEntityReference qualifyHint="true">P:StockSharp.Quik.QuikOrderCondition.ConditionOrderId</codeEntityReference>,
 							и при регистрации автоматически выставляется в правильное значение.
 						</para>
 					</alert>
@@ -275,7 +276,7 @@ MainWindow.Instance.NewOrder(stopOrder);]]></code>
 {
 	var stopLimit = CreateTakeProfit();
 	var condition = (QuikOrderCondition)stopLimit.StopCondition;
-	condition.ConditionOrder = this.ConditionOrder;
+	condition.ConditionOrderId = this.ConditionOrder.Id;
 	condition.ConditionOrderPartiallyMatched = this.PartiallyMatched.IsChecked;
 	condition.ConditionOrderUseMatchedBalance = this.UseMatchedBalance.IsChecked;
 	return stopLimit;
@@ -289,7 +290,7 @@ MainWindow.Instance.NewOrder(stopOrder);]]></code>
 {
 	var stopLimit = CreateTakeProfitAndStopLimit();
 	var condition = (QuikOrderCondition)stopLimit.StopCondition;
-	condition.ConditionOrder = this.ConditionOrder;
+	condition.ConditionOrderId = this.ConditionOrder.Id;
 	condition.ConditionOrderPartiallyMatched = this.PartiallyMatched.IsChecked;
 	condition.ConditionOrderUseMatchedBalance = this.UseMatchedBalance.IsChecked;
 	return stopLimit;

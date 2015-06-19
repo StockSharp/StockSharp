@@ -52,12 +52,6 @@
         присвоить новое значение:
       </para>
       <code language="C#">this.Trader.DefaultFutureDepthTable = this.Trader.TableRegistry.Aggregation20Future;</code>
-      <alert class="caution">
-      		Изменять глубину стакана можно только, когда не запущен экспорт данных, т.е. 
-      		до вызова метода <codeEntityReference>M:StockSharp.Plaza.PlazaTrader.StartExport</codeEntityReference> или после 
-      		вызова метода <codeEntityReference>M:StockSharp.Plaza.PlazaTrader.StopExport</codeEntityReference>.
-      		В противном случае <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference> сгенерит исключение.
-      	</alert>
     </introduction>
     <nextSteps>
       <content>

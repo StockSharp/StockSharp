@@ -35,7 +35,7 @@
 			  <content>
 				  <para>
 					  После этого инициализируем поле RpsInfo, заполняя необходимые для заявки поля 
-					  (часть из полей <codeEntityReference>T:StockSharp.BusinessEntities.RpsOrderInfo</codeEntityReference> являются необязательными):
+					  (часть из полей <codeEntityReference>T:StockSharp.Messages.RpsOrderInfo</codeEntityReference> являются необязательными):
 				  </para>
 				  <code language="C#">order.RpsInfo = new RpsOrderInfo
 {

@@ -45,7 +45,7 @@
 				Стоимость шага цены (пункт). Дополнительно, пример работает с расширенным стаканом, получая информацию о собственных объемах в котировках.
 			  </para>
 			  <alert class="note">
-				<para>Исходные коды примера лежат в дистрибутиве по маршруту <legacyItalic>Samples\Quik\DDE\SampleDdeExtendedInfo</legacyItalic>. Файл настроек для <token>quik</token>
+				<para>Исходные коды примера лежат в папке <legacyItalic>Samples\Quik\DDE\SampleDdeExtendedInfo</legacyItalic>. Файл настроек для <token>quik</token>
 				называется info_extended.wnd.</para>
 			  </alert>
 			</content>

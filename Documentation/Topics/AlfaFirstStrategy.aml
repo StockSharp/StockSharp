@@ -143,7 +143,8 @@ private void ButtonIsConnectedClick(object sender, EventArgs e)
 }
 ]]></code>
 			<para>
-				При нажатии на кнопку Connect автоматически запустится терминал <token>alfa</token>. После входа в терминал будет получено событие успешного подключения <codeEntityReference>E:StockSharp.BusinessEntities.ITrader.Connected</codeEntityReference>. 
+				При нажатии на кнопку Connect автоматически запустится терминал <token>alfa</token>. После входа в терминал будет получено событие успешного подключения
+				<codeEntityReference>E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference>.
 				Так как у нас подключен обработчик на это событие, то в окне Output мы увидим следующие сообщения:
 			</para>
 		  <code language="Output"><![CDATA[09:17:26 | Debug | TestForm   | ITrader::Connect()

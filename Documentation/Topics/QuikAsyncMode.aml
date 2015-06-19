@@ -39,7 +39,7 @@
 				впоследствии не приняты системой):
 			</para>
 			<alert class="note">
-				<para>Исходные коды примера лежат в дистрибутиве в папке под названием SampleAsyncTransactions.</para>
+				<para>Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples\DDE\SampleAsyncTransactions</legacyItalic>.</para>
 			</alert>
 <code language="C#">
 	<![CDATA[private void OrdersFailed(IEnumerable<OrderFail> fails)
