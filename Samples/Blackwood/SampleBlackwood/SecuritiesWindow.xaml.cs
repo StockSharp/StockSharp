@@ -121,16 +121,16 @@ namespace SampleBlackwood
 			}
 		}
 
-		private void TraderOnNewMessage(Message msg, MessageDirections dir)
+		private void TraderOnNewMessage(Message msg)
 		{
-			if (dir == MessageDirections.Out && msg.Type == MessageTypes.Level1Change)
-			{
-				var level1Msg = (Level1ChangeMessage)msg;
-				var wnd = _level1Windows.TryGetValue(level1Msg.SecurityId.SecurityCode);
+			if (msg.Type != MessageTypes.Level1Change)
+				return;
 
-				if (wnd != null)
-					wnd.Level1Grid.Messages.Add(level1Msg);
-			}
+			var level1Msg = (Level1ChangeMessage)msg;
+			var wnd = _level1Windows.TryGetValue(level1Msg.SecurityId.SecurityCode);
+
+			if (wnd != null)
+				wnd.Level1Grid.Messages.Add(level1Msg);
 		}
 
 		private void Level2Click(object sender, RoutedEventArgs e)

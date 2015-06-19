@@ -13,6 +13,8 @@
 		/// </summary>
 		public SterlingTrader()
 		{
+			CreateAssociatedSecurity = true;
+
 			var adapter = new SterlingMessageAdapter(TransactionIdGenerator);
 
 			Adapter.InnerAdapters.Add(adapter.ToChannel(this));

@@ -61,7 +61,7 @@ namespace StockSharp.Algo
 				_connector.NewMessage += OnConnectorNewMessage;
 			}
 
-			private void OnConnectorNewMessage(Message message, MessageDirections direction)
+			private void OnConnectorNewMessage(Message message)
 			{
 				switch (message.Type)
 				{
@@ -633,30 +633,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Начать получать новую информацию (например, <see cref="Security.LastTrade"/> или <see cref="Security.BestBid"/>) по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected virtual bool OnRegisterSecurity(Security security)
-		{
-			return false;
-		}
-
-		/// <summary>
 		/// Остановить получение новой информации.
 		/// </summary>
 		/// <param name="security">Инструмент, по которому необходимо остановить получение новой информации.</param>
 		public void UnRegisterSecurity(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.Level1);
-		}
-
-		/// <summary>
-		/// Остановить получение новой информации.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение новой информации.</param>
-		protected virtual void OnUnRegisterSecurity(Security security)
-		{
 		}
 
 		/// <summary>
@@ -670,31 +652,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Начать получать котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через событие <see cref="MarketDepthsChanged"/>.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected virtual bool OnRegisterMarketDepth(Security security)
-		{
-			return false;
-		}
-
-		/// <summary>
 		/// Остановить получение котировок по инструменту.
 		/// </summary>
 		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
 		public void UnRegisterMarketDepth(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.MarketDepth);
-		}
-
-		/// <summary>
-		/// Остановить получение котировок по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
-		protected virtual void OnUnRegisterMarketDepth(Security security)
-		{
 		}
 
 		/// <summary>
@@ -747,31 +710,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Начать получать сделки (тиковые данные) по инструменту. Новые сделки будут приходить через
-		/// событие <see cref="IConnector.NewTrades"/>.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать сделки.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected virtual bool OnRegisterTrades(Security security)
-		{
-			return false;
-		}
-
-		/// <summary>
 		/// Остановить получение сделок (тиковые данные) по инструменту.
 		/// </summary>
 		/// <param name="security">Инструмент, по которому необходимо остановить получение сделок.</param>
 		public void UnRegisterTrades(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.Trades);
-		}
-
-		/// <summary>
-		/// Остановить получение сделок (тиковые данные) по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение сделок.</param>
-		protected virtual void OnUnRegisterTrades(Security security)
-		{
 		}
 
 		/// <summary>
@@ -830,30 +774,12 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Начать получать лог заявок для инструмента.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать лог заявок.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected virtual bool OnRegisterOrderLog(Security security)
-		{
-			return false;
-		}
-
-		/// <summary>
 		/// Остановить получение лога заявок для инструмента.
 		/// </summary>
 		/// <param name="security">Инструмент, по которому необходимо остановить получение лога заявок.</param>
 		public void UnRegisterOrderLog(Security security)
 		{
 			UnSubscribeMarketData(security, MarketDataTypes.OrderLog);
-		}
-
-		/// <summary>
-		/// Остановить получение лога заявок для инструмента.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение лога заявок.</param>
-		protected virtual void OnUnRegisterOrderLog(Security security)
-		{
 		}
 
 		/// <summary>

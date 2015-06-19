@@ -32,7 +32,6 @@ namespace StockSharp.InteractiveBrokers
 		{
 			Address = DefaultAddress;
 			ServerLogLevel = ServerLogLevels.Detail;
-			CreateAssociatedSecurity = true;
 
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();

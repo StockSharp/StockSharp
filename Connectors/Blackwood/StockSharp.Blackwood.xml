@@ -420,12 +420,11 @@
             </summary>
       <param name="news">Новость.</param>
     </member>
-    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.BusinessEntities.MessageDirections)">
+    <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message)">
       <summary>
-            Обработать сообщение, содержащее рыночные данные.
+            Обработать сообщение.
             </summary>
-      <param name="message">Сообщение, содержащее рыночные данные.</param>
-      <param name="direction">Направление сообщения.</param>
+      <param name="message">Сообщение.</param>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.Login">
       <summary>

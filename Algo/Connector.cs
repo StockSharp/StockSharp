@@ -208,6 +208,8 @@ namespace StockSharp.Algo
 
 			UpdateSecurityLastQuotes = UpdateSecurityByLevel1 = true;
 
+			CreateDepthFromLevel1 = true;
+
 			_connectorStat.Add(this);
 
 			_securityProvider = new ConnectorSecurityProvider(this);
@@ -479,6 +481,34 @@ namespace StockSharp.Algo
 		/// По умолчанию включено.
 		/// </summary>
 		public bool UpdateSecurityByLevel1 { get; set; }
+
+		/// <summary>
+		/// Обновлять стакан для инструмента при появлении сообщения <see cref="Level1ChangeMessage"/>.
+		/// По умолчанию включено.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str200Key)]
+		[DescriptionLoc(LocalizedStrings.Str201Key)]
+		public bool CreateDepthFromLevel1 { get; set; }
+
+		/// <summary>
+		/// Создавать объединенный инструмент для инструментов с разных торговых площадок.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.Str197Key)]
+		[DescriptionLoc(LocalizedStrings.Str198Key)]
+		public bool CreateAssociatedSecurity { get; set; }
+
+		private string _associatedBoardCode = "ALL";
+
+		/// <summary>
+		/// Код площадки для объединенного инструмента. По-умолчанию равно ALL.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
+		[DescriptionLoc(LocalizedStrings.Str199Key)]
+		public string AssociatedBoardCode
+		{
+			get { return _associatedBoardCode; }
+			set { _associatedBoardCode = value; }
+		}
 
 		/// <summary>
 		/// Число ошибок, переданное через событие <see cref="Error"/>.
@@ -1597,8 +1627,12 @@ namespace StockSharp.Algo
 
 			CreateDepthFromOrdersLog = storage.GetValue<bool>("CreateDepthFromOrdersLog");
 			CreateTradesFromOrdersLog = storage.GetValue<bool>("CreateTradesFromOrdersLog");
+			CreateDepthFromLevel1 = storage.GetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
 
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>("MarketTimeChangedInterval");
+
+			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
+			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
 
 			base.Load(storage);
 		}
@@ -1622,8 +1656,12 @@ namespace StockSharp.Algo
 
 			storage.SetValue("CreateDepthFromOrdersLog", CreateDepthFromOrdersLog);
 			storage.SetValue("CreateTradesFromOrdersLog", CreateTradesFromOrdersLog);
+			storage.SetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
 
 			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
+
+			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
+			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
 
 			base.Save(storage);
 		}

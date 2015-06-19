@@ -350,8 +350,7 @@ namespace StockSharp.Algo.Testing
 		/// Обработать сообщение, содержащее рыночные данные.
 		/// </summary>
 		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageDirections direction)
+		protected override void OnProcessMessage(Message message)
 		{
 			try
 			{
@@ -359,7 +358,7 @@ namespace StockSharp.Algo.Testing
 				{
 					case MessageTypes.Connect:
 					{
-						base.OnProcessMessage(message, direction);
+						base.OnProcessMessage(message);
 
 						if (message.Adapter == TransactionAdapter)
 							_initialMoney.ForEach(p => SendPortfolio(p.Key));
@@ -412,7 +411,7 @@ namespace StockSharp.Algo.Testing
 						if (message.Adapter == MarketDataAdapter)
 							TransactionAdapter.SendInMessage(message);
 
-						base.OnProcessMessage(message, direction);
+						base.OnProcessMessage(message);
 						break;
 					}
 
@@ -428,7 +427,7 @@ namespace StockSharp.Algo.Testing
 						if (State == EmulationStates.Stopping && message.Type != MessageTypes.Disconnect)
 							break;
 
-						base.OnProcessMessage(message, direction);
+						base.OnProcessMessage(message);
 						break;
 					}
 				}
@@ -673,59 +672,6 @@ namespace StockSharp.Algo.Testing
 			else
 				base.UnSubscribeMarketData(security, type);
 		}
-
-		/// <summary>
-		/// Начать получать новую информацию (например, <see cref="Security.LastTrade"/> или <see cref="Security.BestBid"/>) по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected override bool OnRegisterSecurity(Security security)
-		{
-			return true;
-		}
-
-		/// <summary>
-		/// Начать получать котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через событие <see cref="IConnector.MarketDepthsChanged"/>.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected override bool OnRegisterMarketDepth(Security security)
-		{
-			return true;
-		}
-
-		/// <summary>
-		/// Начать получать сделки (тиковые данные) по инструменту. Новые сделки будут приходить через
-		/// событие <see cref="IConnector.NewTrades"/>.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать сделки.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected override bool OnRegisterTrades(Security security)
-		{
-			return true;
-		}
-
-		/// <summary>
-		/// Начать получать лог заявок для инструмента.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать лог заявок.</param>
-		/// <returns><see langword="true"/>, если удалось подписаться на получение данных, иначе, <see langword="false"/>.</returns>
-		protected override bool OnRegisterOrderLog(Security security)
-		{
-			return true;
-		}
-
-		///// <summary>
-		///// Освободить занятые ресурсы.
-		///// </summary>
-		//protected override void DisposeManaged()
-		//{
-		//	if (State == EmulationStates.Started || State == EmulationStates.Suspended)
-		//		Disconnect();
-
-		//	base.DisposeManaged();
-		//}
 
 		private readonly SynchronizedDictionary<Security, CandleSeries> _series = new SynchronizedDictionary<Security, CandleSeries>();
 

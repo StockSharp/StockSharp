@@ -109,17 +109,16 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// Обработать сообщение.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageDirections direction)
+		/// <param name="message">Сообщение.</param>
+		protected override void OnProcessMessage(Message message)
 		{
 			var candleMsg = message as CandleMessage;
 
 			if (candleMsg == null)
 			{
-				base.OnProcessMessage(message, direction);
+				base.OnProcessMessage(message);
 				return;
 			}
 

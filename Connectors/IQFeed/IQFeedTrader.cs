@@ -32,6 +32,8 @@ namespace StockSharp.IQFeed
 		/// </summary>
 		public IQFeedTrader()
 		{
+			CreateAssociatedSecurity = true;
+
 			_adapter = new IQFeedMarketDataMessageAdapter(TransactionIdGenerator);
 
 			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
@@ -398,118 +400,81 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// Обработать сообщение.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageDirections direction)
+		/// <param name="message">Сообщение.</param>
+		protected override void OnProcessMessage(Message message)
 		{
-			if (direction == MessageDirections.Out)
+			switch (message.Type)
 			{
-				switch (message.Type)
+				case MessageTypes.Connect:
+				case MessageTypes.Disconnect:
 				{
-					case MessageTypes.Connect:
-					case MessageTypes.Disconnect:
-					{
-						PulseWaiting();
-						break;
-					}
+					PulseWaiting();
+					break;
+				}
 
-					case MessageTypes.MarketData:
-					{
-						var mdMsg = (MarketDataMessage)message;
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
 
-						if (mdMsg.Error != null)
+					if (mdMsg.Error != null)
+					{
+						var candleInfo = _candleInfo.TryGetValue(mdMsg.OriginalTransactionId);
+
+						if (candleInfo != null)
 						{
-							var candleInfo = _candleInfo.TryGetValue(mdMsg.OriginalTransactionId);
-
-							if (candleInfo != null)
+							lock (candleInfo.Second)
 							{
-								lock (candleInfo.Second)
-								{
-									candleInfo.Third = true;
-									candleInfo.Second.Pulse();
-								}
-
-								_candleInfo.Remove(mdMsg.OriginalTransactionId);
+								candleInfo.Third = true;
+								candleInfo.Second.Pulse();
 							}
 
-							var l1Info = _level1Info.TryGetValue(mdMsg.OriginalTransactionId);
-
-							if (l1Info != null)
-							{
-								lock (l1Info.Second)
-								{
-									l1Info.Third = true;
-									l1Info.Second.Pulse();
-								}
-
-								_level1Info.Remove(mdMsg.OriginalTransactionId);
-							}
+							_candleInfo.Remove(mdMsg.OriginalTransactionId);
 						}
 
-						break;
+						var l1Info = _level1Info.TryGetValue(mdMsg.OriginalTransactionId);
+
+						if (l1Info != null)
+						{
+							lock (l1Info.Second)
+							{
+								l1Info.Third = true;
+								l1Info.Second.Pulse();
+							}
+
+							_level1Info.Remove(mdMsg.OriginalTransactionId);
+						}
 					}
 
-					case MessageTypes.CandleRange:
-					case MessageTypes.CandleTick:
-					case MessageTypes.CandleTimeFrame:
-					case MessageTypes.CandleVolume:
-					{
-						var candleMsg = (CandleMessage)message;
+					break;
+				}
 
-						var series = _candleSeries.TryGetValue(candleMsg.OriginalTransactionId);
+				case MessageTypes.CandleRange:
+				case MessageTypes.CandleTick:
+				case MessageTypes.CandleTimeFrame:
+				case MessageTypes.CandleVolume:
+				{
+					var candleMsg = (CandleMessage)message;
 
-						if (series == null)
-							return;
+					var series = _candleSeries.TryGetValue(candleMsg.OriginalTransactionId);
 
-						var candle = candleMsg.ToCandle(series);
-
-						// сообщение с IsFinished = true не содержит данные по свече,
-						// только флаг, что получение исторических данных завершено
-						if (!candleMsg.IsFinished)
-							NewCandles.SafeInvoke(series, new[] { candle });
-
-						var info = _candleInfo.TryGetValue(candleMsg.OriginalTransactionId);
-
-						if (info != null)
-						{
-							if (candleMsg.IsFinished)
-							{
-								lock (info.Second)
-								{
-									info.Third = true;
-									info.Fifth = true;
-									info.Second.Pulse();
-								}
-
-								_candleInfo.Remove(candleMsg.OriginalTransactionId);
-							}
-							else
-								info.First.Add(candle);
-						}
-
-						// DO NOT send historical data to Connector
+					if (series == null)
 						return;
-					}
 
-					case MessageTypes.Level1Change:
+					var candle = candleMsg.ToCandle(series);
+
+					// сообщение с IsFinished = true не содержит данные по свече,
+					// только флаг, что получение исторических данных завершено
+					if (!candleMsg.IsFinished)
+						NewCandles.SafeInvoke(series, new[] { candle });
+
+					var info = _candleInfo.TryGetValue(candleMsg.OriginalTransactionId);
+
+					if (info != null)
 					{
-						var l1Msg = (Level1ChangeMessage)message;
-
-						var transactionId = l1Msg.GetRequestId();
-						var info = _level1Info.TryGetValue(transactionId);
-
-						// IsFinished = true message do not contains any data,
-						// just mark historical data gathering as finished
-						if (l1Msg.GetValue<bool>("IsFinished"))
+						if (candleMsg.IsFinished)
 						{
-							if (info == null)
-							{
-								this.AddWarningLog(LocalizedStrings.Str2149Params.Put(transactionId));
-								return;
-							}
-
 							lock (info.Second)
 							{
 								info.Third = true;
@@ -517,34 +482,67 @@ namespace StockSharp.IQFeed
 								info.Second.Pulse();
 							}
 
-							_level1Info.Remove(transactionId);
+							_candleInfo.Remove(candleMsg.OriginalTransactionId);
 						}
 						else
-						{
-							// streaming l1 message (non historical)
-							if (info == null)
-								break;
+							info.First.Add(candle);
+					}
 
-							info.First.Add((Level1ChangeMessage)l1Msg.Clone());
+					// DO NOT send historical data to Connector
+					return;
+				}
+
+				case MessageTypes.Level1Change:
+				{
+					var l1Msg = (Level1ChangeMessage)message;
+
+					var transactionId = l1Msg.GetRequestId();
+					var info = _level1Info.TryGetValue(transactionId);
+
+					// IsFinished = true message do not contains any data,
+					// just mark historical data gathering as finished
+					if (l1Msg.GetValue<bool>("IsFinished"))
+					{
+						if (info == null)
+						{
+							this.AddWarningLog(LocalizedStrings.Str2149Params.Put(transactionId));
+							return;
 						}
 
-						// DO NOT send historical data to Connector
-						return;
-					}
+						lock (info.Second)
+						{
+							info.Third = true;
+							info.Fifth = true;
+							info.Second.Pulse();
+						}
 
-					case ExtendedMessageTypes.System:
+						_level1Info.Remove(transactionId);
+					}
+					else
 					{
-						var msg = (IQFeedSystemMessage)message;
+						// streaming l1 message (non historical)
+						if (info == null)
+							break;
 
-						if (msg.Feed.Address == _adapter.LookupAddress)
-							PulseWaiting();
-
-						return;
+						info.First.Add((Level1ChangeMessage)l1Msg.Clone());
 					}
+
+					// DO NOT send historical data to Connector
+					return;
+				}
+
+				case ExtendedMessageTypes.System:
+				{
+					var msg = (IQFeedSystemMessage)message;
+
+					if (msg.Feed.Address == _adapter.LookupAddress)
+						PulseWaiting();
+
+					return;
 				}
 			}
 
-			base.OnProcessMessage(message, direction);
+			base.OnProcessMessage(message);
 		}
 
 		private void PulseWaiting()

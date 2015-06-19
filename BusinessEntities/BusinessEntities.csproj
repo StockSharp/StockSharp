@@ -122,7 +122,6 @@
     <Compile Include="ISecurityProvider.cs" />
     <Compile Include="MarketDepth.cs" />
     <Compile Include="MarketDepthPair.cs" />
-    <Compile Include="MessageDirections.cs" />
     <Compile Include="MyTrade.cs" />
     <Compile Include="News.cs" />
     <Compile Include="Order.cs" />

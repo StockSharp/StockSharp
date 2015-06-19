@@ -14,8 +14,119 @@ namespace StockSharp.Algo
 
 	partial class Connector
 	{
+		private sealed class QuoteChangeDepthBuilder
+		{
+			private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = new Dictionary<SecurityId, QuoteChangeMessage>();
+
+			private readonly string _securityCode;
+			private readonly string _boardCode;
+
+			public QuoteChangeDepthBuilder(string securityCode, string boardCode)
+			{
+				_securityCode = securityCode;
+				_boardCode = boardCode;
+			}
+
+			public QuoteChangeMessage Process(QuoteChangeMessage message)
+			{
+				_feeds[message.SecurityId] = message;
+
+				var bids = _feeds.SelectMany(f => f.Value.Bids).ToArray();
+				var asks = _feeds.SelectMany(f => f.Value.Asks).ToArray();
+
+				return new QuoteChangeMessage
+				{
+					SecurityId = new SecurityId
+					{
+						SecurityCode = _securityCode,
+						BoardCode = _boardCode
+					},
+					ServerTime = message.ServerTime,
+					LocalTime = message.LocalTime,
+					Bids = bids,
+					Asks = asks
+				};
+			}
+		}
+
+		private sealed class Level1DepthBuilder
+		{
+			private readonly SecurityId _securityId;
+
+			public bool HasDepth { get; set; }
+
+			public Level1DepthBuilder(SecurityId securityId)
+			{
+				_securityId = securityId;
+			}
+
+			public QuoteChangeMessage Process(Level1ChangeMessage message)
+			{
+				if (HasDepth)
+					return null;
+
+				var bidPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice);
+				var askPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice);
+
+				if (bidPrice == null && askPrice == null)
+					return null;
+
+				var bidVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume);
+				var askVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume);
+
+				return new QuoteChangeMessage
+				{
+					SecurityId = _securityId,
+					ServerTime = message.ServerTime,
+					LocalTime = message.LocalTime,
+					Bids = bidPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, bidPrice.Value, bidVolume ?? 0) },
+					Asks = askPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, askPrice.Value, askVolume ?? 0) },
+				};
+			}
+		}
+
 		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
+		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
+		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>(StringComparer.InvariantCultureIgnoreCase);
+
+		private bool IsAssociated(string boardCode)
+		{
+			return boardCode.IsEmpty() || boardCode.CompareIgnoreCase(AssociatedBoardCode);
+		}
+
+		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
+		{
+			if (!CreateAssociatedSecurity)
+				return;
+
+			if (quoteMsg.SecurityId.IsDefault())
+				return;
+
+			var builder = _quoteChangeDepthBuilders
+				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
+
+			OnProcessMessage(builder.Process(quoteMsg));
+		}
+
+		private SecurityId CloneSecurityId(SecurityId securityId)
+		{
+			return new SecurityId
+			{
+				SecurityCode = securityId.SecurityCode,
+				BoardCode = AssociatedBoardCode,
+				SecurityType = securityId.SecurityType,
+				Bloomberg = securityId.Bloomberg,
+				Cusip = securityId.Cusip,
+				IQFeed = securityId.IQFeed,
+				InteractiveBrokers = securityId.InteractiveBrokers,
+				Isin = securityId.Isin,
+				Native = securityId.Native,
+				Plaza = securityId.Plaza,
+				Ric = securityId.Ric,
+				Sedol = securityId.Sedol,
+			};
+		}
 
 		private void AdapterOnNewOutMessage(Message message)
 		{
@@ -57,7 +168,7 @@ namespace StockSharp.Algo
 
 		private void OutMessageChannelOnNewOutMessage(Message message)
 		{
-			OnProcessMessage(message, MessageDirections.Out);
+			OnProcessMessage(message);
 		}
 
 		private IMessageAdapter _inAdapter;
@@ -178,22 +289,21 @@ namespace StockSharp.Algo
 		/// Обработать сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected virtual void OnProcessMessage(Message message, MessageDirections direction)
+		protected virtual void OnProcessMessage(Message message)
 		{
-			if (!(message.Type == MessageTypes.Time && direction == MessageDirections.Out))
+			if (message.Type != MessageTypes.Time)
 				this.AddDebugLog("BP:{0}", message);
 
 			ProcessTimeInterval(message);
 
-			RaiseNewMessage(message, direction);
+			RaiseNewMessage(message);
 
 			try
 			{
 				switch (message.Type)
 				{
 					case MessageTypes.QuoteChange:
-						ProcessSecurityAction((QuoteChangeMessage)message, m => m.SecurityId, ProcessQuotesMessage, true);
+						ProcessSecurityAction((QuoteChangeMessage)message, m => m.SecurityId, (s, m) => ProcessQuotesMessage(s, m, false), true);
 						break;
 
 					case MessageTypes.Board:
@@ -267,9 +377,23 @@ namespace StockSharp.Algo
 						ProcessSecurityAction(mdMsg, m => m.SecurityId, (s, m) =>
 						{
 							if (m.IsSubscribe)
-								ProcessSubscribeMarketDataMessage(s, m, direction);
+							{
+								if (m.DataType == _filteredMarketDepth)
+								{
+									GetFilteredMarketDepthInfo(s).Init(GetMarketDepth(s), _entityCache.GetOrders(s, OrderStates.Active));
+									return;
+								}
+
+								if (m.Error == null)
+									RaiseMarketDataSubscriptionSucceeded(s, m);
+								else
+									RaiseMarketDataSubscriptionFailed(s, m.DataType, m.Error ?? new NotSupportedException(LocalizedStrings.ConnectionNotSupportSecurity.Put(s.Id)));
+							}
 							else
-								ProcessUnSubscribeMarketDataMessage(s, m, direction);
+							{
+								if (m.DataType == _filteredMarketDepth)
+									_filteredMarketDepths.Remove(s);
+							}
 						});
 
 						break;
@@ -281,11 +405,11 @@ namespace StockSharp.Algo
 						break;
 
 					case MessageTypes.Connect:
-						ProcessConnectMessage((ConnectMessage)message, direction);
+						ProcessConnectMessage((ConnectMessage)message);
 						break;
 
 					case MessageTypes.Disconnect:
-						ProcessConnectMessage((DisconnectMessage)message, direction);
+						ProcessConnectMessage((DisconnectMessage)message);
 						break;
 
 					case MessageTypes.SecurityLookup:
@@ -314,7 +438,7 @@ namespace StockSharp.Algo
 			//	RaiseNewDataExported();
 		}
 
-		private void ProcessSecurityAction<TMessage>(TMessage message, Func<TMessage, SecurityId> getId, Action<Security, TMessage> action, bool ignoreIfNotExist = false, string associatedBoard = null)
+		private void ProcessSecurityAction<TMessage>(TMessage message, Func<TMessage, SecurityId> getId, Action<Security, TMessage> action, bool ignoreIfNotExist = false)
 			where TMessage : Message
 		{
 			if (message == null)
@@ -327,7 +451,10 @@ namespace StockSharp.Algo
 
 			var nativeSecurityId = securityId.Native;
 			var securityCode = securityId.SecurityCode;
-			var boardCode = associatedBoard ?? securityId.BoardCode;
+			var boardCode = securityId.BoardCode;
+
+			if (boardCode.IsEmpty())
+				boardCode = AssociatedBoardCode;
 
 			var isSecurityIdEmpty = securityCode.IsEmpty() || boardCode.IsEmpty();
 			var isNativeIdNull = nativeSecurityId == null;
@@ -385,11 +512,8 @@ namespace StockSharp.Algo
 			action(security, message);
 		}
 
-		private void ProcessConnectMessage(BaseConnectionMessage message, MessageDirections direction)
+		private void ProcessConnectMessage(BaseConnectionMessage message)
 		{
-			if (direction != MessageDirections.Out)
-				throw new ArgumentOutOfRangeException("direction");
-
 			var isConnect = message is ConnectMessage;
 			var adapter = message.Adapter;
 			var state = _adapterStates[adapter];
@@ -551,86 +675,6 @@ namespace StockSharp.Algo
 			});
 		}
 
-		private void ProcessUnSubscribeMarketDataMessage(Security security, MarketDataMessage message, MessageDirections direction)
-		{
-			if (direction != MessageDirections.In)
-			{
-				if (message.DataType != _filteredMarketDepth)
-					return;
-
-				_filteredMarketDepths.Remove(security);
-
-				return;
-			}
-			
-			switch (message.DataType)
-			{
-				case MarketDataTypes.Level1:
-					OnUnRegisterSecurity(security);
-					break;
-
-				case MarketDataTypes.MarketDepth:
-					OnUnRegisterMarketDepth(security);
-					break;
-
-				case MarketDataTypes.Trades:
-					OnUnRegisterTrades(security);
-					break;
-
-				case MarketDataTypes.OrderLog:
-					OnUnRegisterOrderLog(security);
-					break;
-
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		private void ProcessSubscribeMarketDataMessage(Security security, MarketDataMessage message, MessageDirections direction)
-		{
-			bool registered;
-
-			if (direction == MessageDirections.In)
-			{
-				switch (message.DataType)
-				{
-					case MarketDataTypes.Level1:
-						registered = OnRegisterSecurity(security);
-						break;
-
-					case MarketDataTypes.MarketDepth:
-						registered = OnRegisterMarketDepth(security);
-						break;
-
-					case MarketDataTypes.Trades:
-						registered = OnRegisterTrades(security);
-						break;
-
-					case MarketDataTypes.OrderLog:
-						registered = OnRegisterOrderLog(security);
-						break;
-
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			else
-			{
-				if (message.DataType == _filteredMarketDepth)
-				{
-					GetFilteredMarketDepthInfo(security).Init(GetMarketDepth(security), _entityCache.GetOrders(security, OrderStates.Active));
-					return;
-				}
-
-				registered = message.Error == null;
-			}
-
-			if (registered)
-				RaiseMarketDataSubscriptionSucceeded(security, message);
-			else
-				RaiseMarketDataSubscriptionFailed(security, message.DataType, message.Error ?? new NotSupportedException(LocalizedStrings.ConnectionNotSupportSecurity.Put(security.Id)));
-		}
-
 		private void BindNativeSecurityId(SecurityId securityId)
 		{
 			var native = securityId.Native;
@@ -650,9 +694,9 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private void ProcessSecurityMessage(SecurityMessage message, string boardCode = null)
+		private void ProcessSecurityMessage(SecurityMessage message/*, string boardCode = null*/)
 		{
-			var secId = CreateSecurityId(message.SecurityId.SecurityCode, boardCode ?? message.SecurityId.BoardCode);
+			var secId = CreateSecurityId(message.SecurityId.SecurityCode, message.SecurityId.BoardCode);
 
 			var security = GetSecurity(secId, s =>
 			{
@@ -662,7 +706,7 @@ namespace StockSharp.Algo
 				if (message.Currency != null)
 					s.Currency = message.Currency;
 
-				s.Board = ExchangeBoard.GetOrCreateBoard(boardCode ?? message.SecurityId.BoardCode);
+				s.Board = ExchangeBoard.GetOrCreateBoard(message.SecurityId.BoardCode);
 
 				if (message.ExpiryDate != null)
 					s.ExpiryDate = message.ExpiryDate;
@@ -738,9 +782,16 @@ namespace StockSharp.Algo
 			//необходимо обработать отложенные сообщения не только по NativeId, но и по обычным идентификаторам S#
 			var stocksharpId = message.SecurityId.Native == null
 				? message.SecurityId
-				: new SecurityId { SecurityCode = message.SecurityId.SecurityCode, BoardCode = boardCode ?? message.SecurityId.BoardCode };
+				: new SecurityId { SecurityCode = message.SecurityId.SecurityCode, BoardCode = message.SecurityId.BoardCode };
 
 			ProcessSuspendedSecurityMessages(stocksharpId);
+
+			if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
+			{
+				var clone = (SecurityMessage)message.Clone();
+				clone.SecurityId = CloneSecurityId(clone.SecurityId);
+				ProcessSecurityMessage(clone);
+			}
 		}
 
 		private void ProcessSecurityLookupResultMessage(SecurityLookupResultMessage message)
@@ -820,6 +871,31 @@ namespace StockSharp.Algo
 
 			if (CalculateMessages)
 				SlippageManager.ProcessMessage(message);
+
+			if (CreateDepthFromLevel1)
+			{
+				// генерация стакана из Level1
+				var quoteMsg = GetBuilder(message.SecurityId).Process(message);
+
+				if (quoteMsg != null)
+				{
+					ProcessQuotesMessage(security, quoteMsg, true);
+					CreateAssociatedSecurityQuotes(quoteMsg);
+				}
+			}
+
+			if (CreateAssociatedSecurity)
+			{
+				// обновление BestXXX для ALL из конкретных тикеров
+				var clone = (Level1ChangeMessage)message.Clone();
+				clone.SecurityId = CloneSecurityId(clone.SecurityId);
+				OnProcessMessage(clone);
+			}
+		}
+
+		private Level1DepthBuilder GetBuilder(SecurityId securityId)
+		{
+			return _level1DepthBuilders.SafeAdd(securityId, c => new Level1DepthBuilder(c));
 		}
 
 		private void ProcessPortfolioMessage(PortfolioMessage message)
@@ -899,7 +975,7 @@ namespace StockSharp.Algo
 				ProcessSecurityAction(message, m => secId.Value, ProcessNewsMessage);
 		}
 
-		private void ProcessQuotesMessage(Security security, QuoteChangeMessage message)
+		private void ProcessQuotesMessage(Security security, QuoteChangeMessage message, bool fromLevel1)
 		{
 			if (MarketDepthsChanged != null)
 			{
@@ -929,7 +1005,7 @@ namespace StockSharp.Algo
 			var bestBid = message.GetBestBid();
 			var bestAsk = message.GetBestAsk();
 
-			if (bestBid != null || bestAsk != null)
+			if (!fromLevel1 && (bestBid != null || bestAsk != null))
 			{
 				var values = GetSecurityValues(security);
 				var changes = new List<KeyValuePair<Level1Fields, object>>(4);
@@ -966,70 +1042,90 @@ namespace StockSharp.Algo
 
 			if (UpdateSecurityLastQuotes)
 			{
-				security.BestBid = bestBid == null ? null : new Quote(security, bestBid.Price, bestBid.Volume, Sides.Buy);
-				security.BestAsk = bestAsk == null ? null : new Quote(security, bestAsk.Price, bestAsk.Volume, Sides.Sell);
-				security.LocalTime = message.LocalTime;
-				security.LastChangeTime = message.ServerTime;
+				var updated = false;
 
-				RaiseSecurityChanged(security);
-
-				// стаканы по ALL обновляют BestXXX по конкретным инструментам
-				if (security.Board.Code == MarketDataAdapter.AssociatedBoardCode)
+				if (!fromLevel1 || bestBid != null)
 				{
-					var changedSecurities = new Dictionary<Security, RefPair<bool, bool>>();
+					updated = true;
+					security.BestBid = bestBid == null ? null : new Quote(security, bestBid.Price, bestBid.Volume, Sides.Buy);
+				}
 
-					foreach (var bid in message.Bids)
+				if (!fromLevel1 || bestAsk != null)
+				{
+					updated = true;
+					security.BestAsk = bestAsk == null ? null : new Quote(security, bestAsk.Price, bestAsk.Volume, Sides.Sell);
+				}
+
+				if (updated)
+				{
+					security.LocalTime = message.LocalTime;
+					security.LastChangeTime = message.ServerTime;
+
+					RaiseSecurityChanged(security);
+
+					// стаканы по ALL обновляют BestXXX по конкретным инструментам
+					if (security.Board.Code == AssociatedBoardCode)
 					{
-						if (bid.BoardCode.IsEmpty())
-							continue;
+						var changedSecurities = new Dictionary<Security, RefPair<bool, bool>>();
 
-						var innerSecurity = GetSecurity(new SecurityId
+						foreach (var bid in message.Bids)
 						{
-							SecurityCode = security.Code,
-							BoardCode = bid.BoardCode
-						});
+							if (bid.BoardCode.IsEmpty())
+								continue;
 
-						var info = changedSecurities.SafeAdd(innerSecurity);
+							var innerSecurity = GetSecurity(new SecurityId
+							{
+								SecurityCode = security.Code,
+								BoardCode = bid.BoardCode
+							});
 
-						if (info.First)
-							continue;
+							var info = changedSecurities.SafeAdd(innerSecurity);
 
-						info.First = true;
+							if (info.First)
+								continue;
 
-						innerSecurity.BestBid = new Quote(innerSecurity, bid.Price, bid.Volume, Sides.Buy);
-						innerSecurity.LocalTime = message.LocalTime;
-						innerSecurity.LastChangeTime = message.ServerTime;
-					}
+							info.First = true;
 
-					foreach (var ask in message.Asks)
-					{
-						if (ask.BoardCode.IsEmpty())
-							continue;
+							innerSecurity.BestBid = new Quote(innerSecurity, bid.Price, bid.Volume, Sides.Buy);
+							innerSecurity.LocalTime = message.LocalTime;
+							innerSecurity.LastChangeTime = message.ServerTime;
+						}
 
-						var innerSecurity = GetSecurity(new SecurityId
+						foreach (var ask in message.Asks)
 						{
-							SecurityCode = security.Code,
-							BoardCode = ask.BoardCode
-						});
+							if (ask.BoardCode.IsEmpty())
+								continue;
 
-						var info = changedSecurities.SafeAdd(innerSecurity);
+							var innerSecurity = GetSecurity(new SecurityId
+							{
+								SecurityCode = security.Code,
+								BoardCode = ask.BoardCode
+							});
 
-						if (info.Second)
-							continue;
+							var info = changedSecurities.SafeAdd(innerSecurity);
 
-						info.Second = true;
+							if (info.Second)
+								continue;
 
-						innerSecurity.BestAsk = new Quote(innerSecurity, ask.Price, ask.Volume, Sides.Sell);
-						innerSecurity.LocalTime = message.LocalTime;
-						innerSecurity.LastChangeTime = message.ServerTime;
+							info.Second = true;
+
+							innerSecurity.BestAsk = new Quote(innerSecurity, ask.Price, ask.Volume, Sides.Sell);
+							innerSecurity.LocalTime = message.LocalTime;
+							innerSecurity.LastChangeTime = message.ServerTime;
+						}
+
+						RaiseSecuritiesChanged(changedSecurities.Keys);
 					}
-
-					RaiseSecuritiesChanged(changedSecurities.Keys);
 				}
 			}
 
 			if (CalculateMessages)
 				SlippageManager.ProcessMessage(message);
+
+			if (CreateDepthFromLevel1)
+				GetBuilder(message.SecurityId).HasDepth = true;
+
+			CreateAssociatedSecurityQuotes(message);
 		}
 
 		private void ProcessOrderLogMessage(Security security, ExecutionMessage message)
@@ -1051,7 +1147,7 @@ namespace StockSharp.Algo
 					var updated = builder.Update(message);
 					
 					if (updated)
-						ProcessQuotesMessage(security, builder.Depth);
+						ProcessQuotesMessage(security, builder.Depth, false);
 				}
 				catch (Exception ex)
 				{
@@ -1327,9 +1423,19 @@ namespace StockSharp.Algo
 
 				case ExecutionTypes.Tick:
 				case ExecutionTypes.OrderLog:
-				case null:
+				//case null:
+				{
 					ProcessSecurityAction(message, m => m.SecurityId, (s, m) => handler(s));
+
+					if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
+					{
+						var clone = (ExecutionMessage)message.Clone();
+						clone.SecurityId = CloneSecurityId(clone.SecurityId);
+						OnProcessMessage(clone);
+					}
+
 					break;
+				}
 				
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -1370,7 +1476,7 @@ namespace StockSharp.Algo
 			{
 				try
 				{
-					OnProcessMessage(msg, MessageDirections.Out);
+					OnProcessMessage(msg);
 					_messageStat.Remove(msg);
 				}
 				catch (Exception error)

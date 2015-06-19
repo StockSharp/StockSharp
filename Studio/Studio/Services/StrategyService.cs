@@ -112,7 +112,7 @@ namespace StockSharp.Studio.Services
 				return securities.Select(s => executionRegistry.GetExecutionStorage(s, ExecutionTypes.Order));
 			}
 
-			private void RealConnectorNewMessage(Message message, MessageDirections direction)
+			private void RealConnectorNewMessage(Message message)
 			{
 				switch (message.Type)
 				{
@@ -142,7 +142,7 @@ namespace StockSharp.Studio.Services
 				_strategy.SetIsInitialization(false);
 			}
 
-			protected override void OnProcessMessage(Message message, MessageDirections direction)
+			protected override void OnProcessMessage(Message message)
 			{
 				//_historyMessageAdapter.UpdateCurrentTime(message.LocalTime);
 
@@ -230,13 +230,13 @@ namespace StockSharp.Studio.Services
 						var trades = candleMsg.ToTrades(volumeStep, decimals);
 
 						foreach (var executionMessage in trades)
-							base.OnProcessMessage(executionMessage, direction);
+							base.OnProcessMessage(executionMessage);
 
 						return;
 					}
 				}
 
-				base.OnProcessMessage(message, direction);
+				base.OnProcessMessage(message);
 			}
 
 			public override void SubscribeMarketData(Security security, MarketDataTypes type)

@@ -376,11 +376,11 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Событие обработки нового сообщения <see cref="Message"/>.
 		/// </summary>
-		public event Action<Message, MessageDirections> NewMessage;
+		public event Action<Message> NewMessage;
 
-		private void NewMessageHandler(Message message, MessageDirections direction)
+		private void NewMessageHandler(Message message)
 		{
-			AddGuiAction(() => NewMessage.SafeInvoke(message, direction));
+			AddGuiAction(() => NewMessage.SafeInvoke(message));
 		}
 
 		#endregion

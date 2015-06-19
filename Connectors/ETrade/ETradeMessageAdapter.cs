@@ -23,8 +23,6 @@ namespace StockSharp.ETrade
 		public ETradeMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			CreateAssociatedSecurity = true;
-
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
 

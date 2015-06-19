@@ -67,6 +67,8 @@
 		/// </summary>
 		public ETradeTrader()
 		{
+			CreateAssociatedSecurity = true;
+
 			_adapter = new ETradeMessageAdapter(TransactionIdGenerator);
 
 			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));

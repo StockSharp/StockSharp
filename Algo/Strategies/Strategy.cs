@@ -2002,11 +2002,8 @@ namespace StockSharp.Algo.Strategies
 			AssignOrderStrategyId(order);
 		}
 
-		private void OnConnectorNewMessage(Message message, MessageDirections messageDirections)
+		private void OnConnectorNewMessage(Message message)
 		{
-			if (messageDirections != MessageDirections.Out)
-				return;
-
 			switch (message.Type)
 			{
 				case MessageTypes.QuoteChange:

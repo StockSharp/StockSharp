@@ -559,7 +559,7 @@ namespace StockSharp.Studio
 			base.UnSubscribeMarketData(security, type);
 		}
 
-		protected override void OnProcessMessage(Message message, MessageDirections direction)
+		protected override void OnProcessMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -567,7 +567,7 @@ namespace StockSharp.Studio
 				{
 					if (message.Adapter == MarketDataAdapter)
 					{
-						if (direction == MessageDirections.Out && ((ConnectMessage)message).Error == null)
+						if (((ConnectMessage)message).Error == null)
 						{
 							SendPortfoliosToEmulator();
 							TrySubscribeMarketData();	
@@ -595,9 +595,6 @@ namespace StockSharp.Studio
 
 				case MessageTypes.Disconnect:
 				{
-					if (direction != MessageDirections.Out)
-						break;
-
 					if (message.Adapter == MarketDataAdapter)
 						ResetMarketDataSubscriptions();
 					else
@@ -616,7 +613,7 @@ namespace StockSharp.Studio
 					var mdMsg = (MarketDataMessage)message;
 					var securityId = mdMsg.SecurityId;
 
-					if (direction == MessageDirections.Out && mdMsg.Error == null && !securityId.SecurityCode.IsDefault() && !securityId.BoardCode.IsDefault())
+					if (mdMsg.Error == null && !securityId.SecurityCode.IsDefault() && !securityId.BoardCode.IsDefault())
 					{
 						var security = GetSecurity(securityId);
 						var types = _exports.TryGetValue(security);
@@ -642,7 +639,7 @@ namespace StockSharp.Studio
 				}
 			}
 
-			base.OnProcessMessage(message, direction);
+			base.OnProcessMessage(message);
 		}
 	}
 

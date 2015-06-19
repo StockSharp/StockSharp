@@ -21,8 +21,6 @@
 		public SterlingMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			CreateAssociatedSecurity = true;
-
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
 			this.RemoveSupportedMessage(MessageTypes.SecurityLookup);

@@ -121,7 +121,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Событие обработки нового сообщения <see cref="Message"/>.
 		/// </summary>
-		event Action<Message, MessageDirections> NewMessage;
+		event Action<Message> NewMessage;
 
 		/// <summary>
 		/// Событие успешного подключения.

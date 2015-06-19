@@ -39,24 +39,9 @@
 		ReConnectionSettings ReConnectionSettings { get; }
 
 		/// <summary>
-		/// Интервал оповещения сервера о том, что подключение еще живое. По-умолчанию равно 1 минуте.
+		/// Интервал оповещения сервера о том, что подключение еще живое.
 		/// </summary>
 		TimeSpan HeartbeatInterval { get; set; }
-
-		/// <summary>
-		/// Создавать объединенный инструмент для инструментов с разных торговых площадок.
-		/// </summary>
-		bool CreateAssociatedSecurity { get; set; }
-
-		/// <summary>
-		/// Обновлять стакан для инструмента при появлении сообщения <see cref="Level1ChangeMessage"/>.
-		/// </summary>
-		bool CreateDepthFromLevel1 { get; set; }
-
-		/// <summary>
-		/// Код площадки для объединенного инструмента.
-		/// </summary>
-		string AssociatedBoardCode { get; set; }
 
 		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.

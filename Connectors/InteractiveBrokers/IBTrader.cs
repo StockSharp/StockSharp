@@ -216,6 +216,8 @@
 		/// </summary>
 		public IBTrader()
 		{
+			CreateAssociatedSecurity = true;
+
 			_adapter = new InteractiveBrokersMessageAdapter(TransactionIdGenerator);
 
 			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
@@ -443,67 +445,63 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// Обработать сообщение.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageDirections direction)
+		/// <param name="message">Сообщение.</param>
+		protected override void OnProcessMessage(Message message)
 		{
-			if (direction == MessageDirections.Out)
+			switch (message.Type)
 			{
-				switch (message.Type)
+				case ExtendedMessageTypes.Scanner:
 				{
-					case ExtendedMessageTypes.Scanner:
-					{
-						var scannerMsg = (ScannerResultMessage)message;
-						var state = (ScannerFilter)_states[scannerMsg.OriginalTransactionId];
-						NewScannerResults.SafeInvoke(state, scannerMsg.Results);
+					var scannerMsg = (ScannerResultMessage)message;
+					var state = (ScannerFilter)_states[scannerMsg.OriginalTransactionId];
+					NewScannerResults.SafeInvoke(state, scannerMsg.Results);
 
+					break;
+				}
+				case ExtendedMessageTypes.ScannerParameters:
+				{
+					var scannerMsg = (ScannerParametersMessage)message;
+					NewScannerParameters.SafeInvoke(scannerMsg.Parameters);
+
+					break;
+				}
+				case ExtendedMessageTypes.FinancialAdvise:
+				{
+					var adviseMsg = (FinancialAdviseMessage)message;
+					NewFinancialAdvise.SafeInvoke(adviseMsg.AdviseType, adviseMsg.Data);
+
+					break;
+				}
+				case ExtendedMessageTypes.FundamentalReport:
+				{
+					var reportMsg = (FundamentalReportMessage)message;
+					var state = (Tuple<Security, FundamentalReports>)_states[reportMsg.OriginalTransactionId];
+					NewFundamentalReport.SafeInvoke(state.Item1, state.Item2, reportMsg.Data);
+
+					break;
+				}
+				default:
+				{
+					var candleMsg = message as CandleMessage;
+
+					if (candleMsg == null)
 						break;
-					}
-					case ExtendedMessageTypes.ScannerParameters:
+
+					var series = _candleSeries.TryGetValue(candleMsg.OriginalTransactionId);
+
+					if (series != null)
 					{
-						var scannerMsg = (ScannerParametersMessage)message;
-						NewScannerParameters.SafeInvoke(scannerMsg.Parameters);
-
-						break;
+						var candle = candleMsg.ToCandle(series);
+						NewCandles.SafeInvoke(series, new[] { candle });
 					}
-					case ExtendedMessageTypes.FinancialAdvise:
-					{
-						var adviseMsg = (FinancialAdviseMessage)message;
-						NewFinancialAdvise.SafeInvoke(adviseMsg.AdviseType, adviseMsg.Data);
 
-						break;
-					}
-					case ExtendedMessageTypes.FundamentalReport:
-					{
-						var reportMsg = (FundamentalReportMessage)message;
-						var state = (Tuple<Security, FundamentalReports>)_states[reportMsg.OriginalTransactionId];
-						NewFundamentalReport.SafeInvoke(state.Item1, state.Item2, reportMsg.Data);
-
-						break;
-					}
-					default:
-					{
-						var candleMsg = message as CandleMessage;
-
-						if (candleMsg == null)
-							break;
-
-						var series = _candleSeries.TryGetValue(candleMsg.OriginalTransactionId);
-
-						if (series != null)
-						{
-							var candle = candleMsg.ToCandle(series);
-							NewCandles.SafeInvoke(series, new[] { candle });
-						}
-
-						return;
-					}
+					return;
 				}
 			}
 
-			base.OnProcessMessage(message, direction);
+			base.OnProcessMessage(message);
 		}
 	}
 }

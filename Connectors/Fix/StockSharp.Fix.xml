@@ -4198,12 +4198,11 @@
             </summary>
       <param name="newPassword">Новый пароль.</param>
     </member>
-    <member name="M:StockSharp.Fix.FixTrader.OnProcessMessage(StockSharp.Messages.Message,StockSharp.BusinessEntities.MessageDirections)">
+    <member name="M:StockSharp.Fix.FixTrader.OnProcessMessage(StockSharp.Messages.Message)">
       <summary>
-            Обработать сообщение, содержащее рыночные данные.
+            Обработать сообщение.
             </summary>
-      <param name="message">Сообщение, содержащее рыночные данные.</param>
-      <param name="direction">Направление сообщения.</param>
+      <param name="message">Сообщение.</param>
     </member>
     <member name="P:StockSharp.Fix.FixTrader.TransactionCopyAdapter">
       <summary>

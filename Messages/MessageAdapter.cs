@@ -15,8 +15,6 @@ namespace StockSharp.Messages
 	using StockSharp.Logging;
 	using StockSharp.Localization;
 
-	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
 	/// <summary>
 	/// Базовый адаптер, конвертирующий сообщения <see cref="Message"/> в команды торговой системы и обратно.
 	/// </summary>
@@ -92,109 +90,6 @@ namespace StockSharp.Messages
 			}
 		}
 
-		private sealed class QuoteChangeDepthBuilder
-		{
-			private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = new Dictionary<SecurityId, QuoteChangeMessage>();
-
-			private readonly string _securityCode;
-			private readonly string _boardCode;
-
-			public QuoteChangeDepthBuilder(string securityCode, string boardCode)
-			{
-				_securityCode = securityCode;
-				_boardCode = boardCode;
-			}
-
-			public QuoteChangeMessage Process(QuoteChangeMessage message)
-			{
-				_feeds[message.SecurityId] = message;
-
-				var bids = _feeds.SelectMany(f => f.Value.Bids).ToArray();
-				var asks = _feeds.SelectMany(f => f.Value.Asks).ToArray();
-
-				return new QuoteChangeMessage
-				{
-					SecurityId = new SecurityId
-					{
-						SecurityCode = _securityCode,
-						BoardCode = _boardCode
-					},
-					ServerTime = message.ServerTime,
-					LocalTime = message.LocalTime,
-					Bids = bids,
-					Asks = asks
-				};
-			}
-		}
-
-		private sealed class Level1DepthBuilder
-		{
-			private readonly SecurityId _securityId;
-
-			private readonly QuoteChange _bid = new QuoteChange(Sides.Buy, 0, 0);
-			private readonly QuoteChange _ask = new QuoteChange(Sides.Sell, 0, 0);
-
-			private DateTime _localTime;
-			private DateTimeOffset _serverTime;
-
-			public bool HasDepth { get; set; }
-
-			public QuoteChangeMessage QuoteChange
-			{
-				get
-				{
-					var bids = _bid.Price == 0 || _bid.Volume == 0 ? Enumerable.Empty<QuoteChange>() : new[] { _bid.Clone() };
-					var asks = _ask.Price == 0 || _ask.Volume == 0 ? Enumerable.Empty<QuoteChange>() : new[] { _ask.Clone() };
-
-					return new QuoteChangeMessage
-					{
-						SecurityId = _securityId,
-						ServerTime = _serverTime,
-						LocalTime = _localTime,
-						Bids = bids,
-						Asks = asks
-					};
-				}
-			}
-
-			public Level1DepthBuilder(SecurityId securityId)
-			{
-				_securityId = securityId;
-
-				_localTime = DateTime.MinValue;
-				_serverTime = DateTimeOffset.MinValue;
-			}
-
-			public bool Process(Level1ChangeMessage message)
-			{
-				if (HasDepth)
-					return false;
-
-				var bidPrice = message.Changes.TryGetValue(Level1Fields.BestBidPrice);
-				var askPrice = message.Changes.TryGetValue(Level1Fields.BestAskPrice);
-
-				if (bidPrice == null && askPrice == null)
-					return false;
-
-				var bidVolume = message.Changes.TryGetValue(Level1Fields.BestBidVolume);
-				var askVolume = message.Changes.TryGetValue(Level1Fields.BestAskVolume);
-
-				_bid.Price = (decimal?)bidPrice ?? 0m;
-				_bid.Volume = (decimal?)bidVolume ?? 0m;
-
-				_ask.Price = (decimal?)askPrice ?? 0m;
-				_ask.Volume = (decimal?)askVolume ?? 0m;
-
-				_localTime = message.LocalTime;
-				_serverTime = message.ServerTime;
-
-				return true;
-			}
-		}
-
-		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>();
-		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
-
 		//private readonly bool _checkLicense;
 
 		private DateTime _prevTime;
@@ -216,8 +111,6 @@ namespace StockSharp.Messages
 
 			TransactionIdGenerator = transactionIdGenerator;
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
-
-			CreateDepthFromLevel1 = true;
 
 			//IsMarketDataEnabled = IsTransactionEnabled = true;
 		}
@@ -272,40 +165,6 @@ namespace StockSharp.Messages
 				_heartbeatInterval = value;
 			}
 		}
-
-		/// <summary>
-		/// Создавать объединенный инструмент для инструментов с разных торговых площадок.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.SecuritiesKey)]
-		[DisplayNameLoc(LocalizedStrings.Str197Key)]
-		[DescriptionLoc(LocalizedStrings.Str198Key)]
-		[PropertyOrder(1)]
-		public bool CreateAssociatedSecurity { get; set; }
-
-		private string _associatedBoardCode = "ALL";
-
-		/// <summary>
-		/// Код площадки для объединенного инструмента.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.SecuritiesKey)]
-		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
-		[DescriptionLoc(LocalizedStrings.Str199Key)]
-		[PropertyOrder(10)]
-		public string AssociatedBoardCode
-		{
-			get { return _associatedBoardCode; }
-			set { _associatedBoardCode = value; }
-		}
-
-		/// <summary>
-		/// Обновлять стакан для инструмента при появлении сообщения <see cref="Level1ChangeMessage"/>.
-		/// По умолчанию включено.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.SecuritiesKey)]
-		[DisplayNameLoc(LocalizedStrings.Str200Key)]
-		[DescriptionLoc(LocalizedStrings.Str201Key)]
-		[PropertyOrder(20)]
-		public bool CreateDepthFromLevel1 { get; set; }
 
 		/// <summary>
 		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
@@ -373,39 +232,6 @@ namespace StockSharp.Messages
 		public ReConnectionSettings ReConnectionSettings
 		{
 			get { return _reConnectionSettings; }
-		}
-
-		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
-		{
-			if (!CreateAssociatedSecurity)
-				return;
-
-			if (quoteMsg.SecurityId.IsDefault())
-				return;
-
-			var builder = _quoteChangeDepthBuilders
-				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
-
-			NewOutMessage.SafeInvoke(builder.Process(quoteMsg));
-		}
-
-		private SecurityId CloneSecurityId(SecurityId securityId)
-		{
-			return new SecurityId
-			{
-				SecurityCode = securityId.SecurityCode,
-				BoardCode = AssociatedBoardCode,
-				SecurityType = securityId.SecurityType,
-				Bloomberg = securityId.Bloomberg,
-				Cusip = securityId.Cusip,
-				IQFeed = securityId.IQFeed,
-				InteractiveBrokers = securityId.InteractiveBrokers,
-				Isin = securityId.Isin,
-				Native = securityId.Native,
-				Plaza = securityId.Plaza,
-				Ric = securityId.Ric,
-				Sedol = securityId.Sedol,
-			};
 		}
 
 		private IdGenerator _transactionIdGenerator;
@@ -693,127 +519,32 @@ namespace StockSharp.Messages
 		{
 			InitMessageLocalTime(message);
 
-			switch (message.Type)
+			if (_prevTime != DateTime.MinValue)
 			{
-				case MessageTypes.Security:
-				{
-					NewOutMessage.SafeInvoke(message);
+				var diff = message.LocalTime - _prevTime;
 
-					if (!CreateAssociatedSecurity)
-						break;
+				//if (message.Type != MessageTypes.Time && diff >= MarketTimeChangedInterval)
+				//{
+				//	SendOutMessage(new TimeMessage
+				//	{
+				//		LocalTime = message.LocalTime,
+				//		ServerTime = message.GetServerTime(),
+				//	});
+				//}
 
-					var clone = (SecurityMessage)message.Clone();
-					clone.SecurityId = CloneSecurityId(clone.SecurityId);
-					NewOutMessage.SafeInvoke(clone);
+				_secLookupTimeOut
+					.ProcessTime(diff)
+					.ForEach(id => SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = id }));
 
-					break;
-				}
+				_pfLookupTimeOut
+					.ProcessTime(diff)
+					.ForEach(id => SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = id }));
 
-				case MessageTypes.Level1Change:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					var l1Msg = (Level1ChangeMessage)message;
-
-					if (l1Msg.SecurityId.IsDefault())
-						break;
-
-					if (CreateAssociatedSecurity)
-					{
-						// обновление BestXXX для ALL из конкретных тикеров
-						var clone = (Level1ChangeMessage)l1Msg.Clone();
-						clone.SecurityId = CloneSecurityId(clone.SecurityId);
-						NewOutMessage.SafeInvoke(clone);
-					}
-
-					if (CreateDepthFromLevel1)
-					{
-						// генерация стакана из Level1
-						var builder = _level1DepthBuilders.SafeAdd(l1Msg.SecurityId, c => new Level1DepthBuilder(c));
-
-						if (builder.Process(l1Msg))
-						{
-							var quoteMsg = builder.QuoteChange;
-
-							NewOutMessage.SafeInvoke(quoteMsg);
-							CreateAssociatedSecurityQuotes(quoteMsg);
-						}
-					}
-
-					break;
-				}
-
-				case MessageTypes.QuoteChange:
-				{
-					var quoteMsg = (QuoteChangeMessage)message;
-
-					NewOutMessage.SafeInvoke(quoteMsg);
-
-					if (CreateDepthFromLevel1)
-						_level1DepthBuilders.SafeAdd(quoteMsg.SecurityId, c => new Level1DepthBuilder(c)).HasDepth = true;
-
-					CreateAssociatedSecurityQuotes(quoteMsg);
-					break;
-				}
-
-				case MessageTypes.Execution:
-				{
-					NewOutMessage.SafeInvoke(message);
-
-					if (!CreateAssociatedSecurity)
-						break;
-
-					var execMsg = (ExecutionMessage)message;
-
-					if (execMsg.SecurityId.IsDefault())
-						break;
-
-					switch (execMsg.ExecutionType)
-					{
-						case ExecutionTypes.Tick:
-						case ExecutionTypes.OrderLog:
-						{
-							var clone = (ExecutionMessage)message.Clone();
-							clone.SecurityId = CloneSecurityId(clone.SecurityId);
-							NewOutMessage.SafeInvoke(clone);
-							break;
-						}
-					}
-
-					break;
-				}
-
-				default:
-				{
-					if (_prevTime != DateTime.MinValue)
-					{
-						var diff = message.LocalTime - _prevTime;
-
-						//if (message.Type != MessageTypes.Time && diff >= MarketTimeChangedInterval)
-						//{
-						//	SendOutMessage(new TimeMessage
-						//	{
-						//		LocalTime = message.LocalTime,
-						//		ServerTime = message.GetServerTime(),
-						//	});
-						//}
-
-						_secLookupTimeOut
-							.ProcessTime(diff)
-							.ForEach(id => SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = id }));
-
-						_pfLookupTimeOut
-							.ProcessTime(diff)
-							.ForEach(id => SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = id }));
-
-						//ProcessReconnection(diff);
-					}
-
-					_prevTime = message.LocalTime;
-					NewOutMessage.SafeInvoke(message);
-					break;
-				}
+				//ProcessReconnection(diff);
 			}
+
+			_prevTime = message.LocalTime;
+			NewOutMessage.SafeInvoke(message);
 		}
 
 		/// <summary>
@@ -880,10 +611,6 @@ namespace StockSharp.Messages
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
 			SupportedMessages = storage.GetValue<int[]>("SupportedMessages").Select(i => (MessageTypes)i).ToArray();
 
-			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
-			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
-			CreateDepthFromLevel1 = storage.GetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
-
 			base.Load(storage);
 		}
 
@@ -895,10 +622,6 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
 			storage.SetValue("SupportedMessages", SupportedMessages.Select(t => (int)t).ToArray());
-
-			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
-			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
-			storage.SetValue("CreateDepthFromLevel1", CreateDepthFromLevel1);
 
 			base.Save(storage);
 		}

@@ -77,55 +77,51 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// Обработать сообщение.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageDirections direction)
+		/// <param name="message">Сообщение.</param>
+		protected override void OnProcessMessage(Message message)
 		{
-			if (direction == MessageDirections.Out)
+			switch (message.Type)
 			{
-				switch (message.Type)
-				{
-					case MessageTypes.Connect:
-						if (((ConnectMessage)message).Error == null)
-						{
-							_candlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
-								(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range.Min, range.Max, _series.TryGetKey(series)), TimeSpan.FromSeconds(3));
-						}
-						
-						break;
-
-					case MessageTypes.Disconnect:
-						if (((DisconnectMessage)message).Error == null && _candlesTimer != null)
-						{
-							_candlesTimer.Dispose();
-							_candlesTimer = null;
-						}
-
-						break;
-
-					default:
+				case MessageTypes.Connect:
+					if (((ConnectMessage)message).Error == null)
 					{
-						var candleMsg = message as CandleMessage;
-
-						if (candleMsg == null)
-							break;
-
-						var series = _series.TryGetValue(candleMsg.OriginalTransactionId);
-
-						if (series == null)
-							return;
-
-						var candle = candleMsg.ToCandle(series);
-
-						NewCandles.SafeInvoke(series, new[] { candle });
-						return; // base class throws exception
+						_candlesTimer = this.StartRealTime(_realTimeSeries, RealTimeCandleOffset,
+							(series, range) => RequestCandles(series.Security, (TimeSpan)series.Arg, range.Min, range.Max, _series.TryGetKey(series)), TimeSpan.FromSeconds(3));
 					}
+						
+					break;
+
+				case MessageTypes.Disconnect:
+					if (((DisconnectMessage)message).Error == null && _candlesTimer != null)
+					{
+						_candlesTimer.Dispose();
+						_candlesTimer = null;
+					}
+
+					break;
+
+				default:
+				{
+					var candleMsg = message as CandleMessage;
+
+					if (candleMsg == null)
+						break;
+
+					var series = _series.TryGetValue(candleMsg.OriginalTransactionId);
+
+					if (series == null)
+						return;
+
+					var candle = candleMsg.ToCandle(series);
+
+					NewCandles.SafeInvoke(series, new[] { candle });
+					return; // base class throws exception
 				}
 			}
 
-			base.OnProcessMessage(message, direction);
+			base.OnProcessMessage(message);
 		}
 
 		/// <summary>

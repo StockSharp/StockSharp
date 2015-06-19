@@ -27,8 +27,6 @@ namespace StockSharp.CQG
 		public CQGMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
-			CreateAssociatedSecurity = true;
-
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
 		}

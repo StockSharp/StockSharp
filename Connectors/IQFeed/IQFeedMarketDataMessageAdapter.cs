@@ -90,8 +90,6 @@ namespace StockSharp.IQFeed
 				Level1ColumnRegistry.MessageContents
 			};
 
-			CreateAssociatedSecurity = true;
-
 			this.AddMarketDataSupport();
 		}
 

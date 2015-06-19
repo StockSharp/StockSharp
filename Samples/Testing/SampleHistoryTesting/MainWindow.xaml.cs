@@ -416,7 +416,7 @@ namespace SampleHistoryTesting
 				{
 					MarketDepth.UpdateFormat(security);
 
-					connector.NewMessage += (message, dir) =>
+					connector.NewMessage += message =>
 					{
 						var quoteMsg = message as QuoteChangeMessage;
 

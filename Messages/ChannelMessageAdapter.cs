@@ -212,24 +212,6 @@
 			set { Adapter.HeartbeatInterval = value; }
 		}
 
-		bool IMessageAdapter.CreateAssociatedSecurity
-		{
-			get { return Adapter.CreateAssociatedSecurity; }
-			set { Adapter.CreateAssociatedSecurity = value; }
-		}
-
-		bool IMessageAdapter.CreateDepthFromLevel1
-		{
-			get { return Adapter.CreateDepthFromLevel1; }
-			set { Adapter.CreateDepthFromLevel1 = value; }
-		}
-
-		string IMessageAdapter.AssociatedBoardCode
-		{
-			get { return Adapter.AssociatedBoardCode; }
-			set { Adapter.AssociatedBoardCode = value; }
-		}
-
 		bool IMessageAdapter.PortfolioLookupRequired
 		{
 			get { return Adapter.PortfolioLookupRequired; }

@@ -293,7 +293,7 @@ namespace StockSharp.OpenECry
 					SecurityId = new SecurityId
 					{
 						SecurityCode = contract.Symbol,
-						BoardCode = GetBoardCode(ticks.Exchanges[i], contract, AssociatedBoardCode),
+						BoardCode = GetBoardCode(ticks.Exchanges[i], contract, "ALL"),
 					},
 					ServerTime = ticks.Timestamps[i].ApplyTimeZone(TimeHelper.Est)
 				}
@@ -417,7 +417,7 @@ namespace StockSharp.OpenECry
 				SecurityId = new SecurityId
 				{
 					SecurityCode = contract.Symbol,
-					BoardCode = AssociatedBoardCode
+					BoardCode = "ALL"
 				},
 				ServerTime = dom.LastUpdate.ApplyTimeZone(TimeHelper.Est),
 				Bids = bids,

@@ -126,7 +126,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Событие обработки нового сообщения <see cref="Message"/>.
 		/// </summary>
-		public event Action<Message, MessageDirections> NewMessage;
+		public event Action<Message> NewMessage;
 
 		/// <summary>
 		/// Событие успешного подключения.
@@ -491,10 +491,9 @@ namespace StockSharp.Algo
 		/// Вызвать событие <see cref="NewMessage"/>.
 		/// </summary>
 		/// <param name="message">Новое сообщение.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		private void RaiseNewMessage(Message message, MessageDirections direction)
+		private void RaiseNewMessage(Message message)
 		{
-			NewMessage.SafeInvoke(message, direction);
+			NewMessage.SafeInvoke(message);
 		}
 
 		private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTimeOffset serverTime, DateTime localTime)

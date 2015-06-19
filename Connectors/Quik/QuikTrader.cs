@@ -419,11 +419,10 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Обработать сообщение, содержащее рыночные данные.
+		/// Обработать сообщение.
 		/// </summary>
-		/// <param name="message">Сообщение, содержащее рыночные данные.</param>
-		/// <param name="direction">Направление сообщения.</param>
-		protected override void OnProcessMessage(Message message, MessageDirections direction)
+		/// <param name="message">Сообщение.</param>
+		protected override void OnProcessMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -439,7 +438,7 @@ namespace StockSharp.Quik
 				}
 			}
 
-			base.OnProcessMessage(message, direction);
+			base.OnProcessMessage(message);
 		}
 
 		/// <summary>

@@ -110,24 +110,6 @@ namespace StockSharp.Algo
 			set { _innerAdapter.HeartbeatInterval = value; }
 		}
 
-		bool IMessageAdapter.CreateAssociatedSecurity
-		{
-			get { return _innerAdapter.CreateAssociatedSecurity; }
-			set { _innerAdapter.CreateAssociatedSecurity = value; }
-		}
-
-		bool IMessageAdapter.CreateDepthFromLevel1
-		{
-			get { return _innerAdapter.CreateDepthFromLevel1; }
-			set { _innerAdapter.CreateDepthFromLevel1 = value; }
-		}
-
-		string IMessageAdapter.AssociatedBoardCode
-		{
-			get { return _innerAdapter.AssociatedBoardCode; }
-			set { _innerAdapter.AssociatedBoardCode = value; }
-		}
-
 		MessageTypes[] IMessageAdapter.SupportedMessages
 		{
 			get { return _innerAdapter.SupportedMessages; }
