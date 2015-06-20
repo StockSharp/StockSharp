@@ -108,22 +108,7 @@ Trader.StopOrdersCancelFailed += OrdersFailed;
 Trader.Connect();
 							]]>
 							</code>						
-						</content>
-					</step>
-					
-					<step>
-						<content>
-							<para>Следующий этап – запустить экспорт данных:</para>
-            				<code language="C#">
-            				<![CDATA[
-private void Export_Click(object sender, RoutedEventArgs e)
-{
-	Trader.StartExport();
-}
-							]]>
-							</code>
-
-							<para>После запуска экспорта можно ожидать срабатывания событий:</para>
+							<para>После подключения можно ожидать срабатывания событий:</para>
 							<list class="bullet">
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 

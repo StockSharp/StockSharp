@@ -156,7 +156,7 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
 							]]>
 							</code>
 							
-							<para>Если инструментов с заданными критериями не будет найдено, то вернется ошибка через событие <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.ProcessDataError</codeEntityReference>:</para>
+							<para>Если инструментов с заданными критериями не будет найдено, то вернется ошибка через событие <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.Error</codeEntityReference>:</para>
 							<mediaLink><image placement="center" xlink:href="ib_security_not_found"/></mediaLink>
 						</content>
 					</step>

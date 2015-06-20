@@ -84,7 +84,7 @@ private void SendClick(object sender, RoutedEventArgs e)
 					<codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.StopLossVolume</codeEntityReference>.
 				</para>
 				<para>
-					При указании защитного времени(в секундах) - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.StopLossGuardTime</codeEntityReference>, 
+					При указании защитного времени(в секундах) - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.StopLossProtectionTime</codeEntityReference>, 
 					если цена в течении заданного времени успевает вернутся выше(для sell)/ниже(для buy) 
 					<codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.StopLossActivationPrice</codeEntityReference>, то
 					<codeEntityReference qualifyHint="false">F:StockSharp.Transaq.TransaqOrderConditionTypes.StopLoss</codeEntityReference> не активируется.
@@ -96,13 +96,13 @@ private void SendClick(object sender, RoutedEventArgs e)
 					<codeEntityReference qualifyHint="false">F:StockSharp.Transaq.TransaqOrderConditionTypes.TakeProfit</codeEntityReference> –
 					после достижения цены указанной в <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitActivationPrice</codeEntityReference>
 					выставляется или лимитная заявка по цене <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitActivationPrice</codeEntityReference>, 
-					с учетом защитного спреда - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitGuardSpread</codeEntityReference>,
+					с учетом защитного спреда - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitProtectionSpread</codeEntityReference>,
 					или рыночная заявка, в зависимости от
 					<codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitByMarket</codeEntityReference>, с объемом указанным в
 					<codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitVolume</codeEntityReference>.
 				</para>
 				<para>
-					При указании защитного времени(в секундах) - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitGuardTime</codeEntityReference>, 
+					При указании защитного времени(в секундах) - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitProtectionTime</codeEntityReference>, 
 					если цена в течении заданного времени успевает вернутся ниже(для sell)/выше(для buy) 
 					<codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitActivationPrice</codeEntityReference>, то
 					<codeEntityReference qualifyHint="false">F:StockSharp.Transaq.TransaqOrderConditionTypes.TakeProfit</codeEntityReference> не активируется.

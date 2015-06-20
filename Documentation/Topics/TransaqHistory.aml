@@ -13,7 +13,7 @@
 		<para>
 			Для получения исторических свечек необходимо подписаться на событие
 			<codeEntityReference qualifyHint="false">E:StockSharp.Transaq.TransaqTrader.NewCandles</codeEntityReference> и вызвать метод
-			<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries series,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
+			<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Transaq.TransaqTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:
 		</para>
 		
 		<code language="C#">

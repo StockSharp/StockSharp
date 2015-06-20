@@ -8,28 +8,28 @@
 		одновременную работу нескольких приложений через одно соединение с OEC сервером – <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECRemoting</codeEntityReference>. 
 		Подробное описание функциональности <token>OECRemoting</token></para>
 		
-		<para>Поддерживаются следующие режимы <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECRemoting</codeEntityReference>:</para>
+		<para>Поддерживаются следующие режимы <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryRemoting</codeEntityReference>:</para>
 		
 		<list class="bullet">
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.None</codeEntityReference> - 
-				<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECRemoting</codeEntityReference> отключен. Приложение создает собственное соединение с сервером OEC. 
-				Приложение не может выступать как <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Primary</codeEntityReference> для других приложений.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference> - 
+				<codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OpenECryRemoting</codeEntityReference> отключен. Приложение создает собственное соединение с сервером OEC. 
+				Приложение не может выступать как <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> для других приложений.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Auto</codeEntityReference> – 
-				В момент инициализации выполняется поиск локальных приложений, работающих в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Primary</codeEntityReference>.
-				Если такие приложения найдены, то приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Secondary</codeEntityReference>
-				и использует соединение <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Primary</codeEntityReference> приложения.
-				В противном случае приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Primary</codeEntityReference>.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Auto</codeEntityReference> – 
+				В момент инициализации выполняется поиск локальных приложений, работающих в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>.
+				Если такие приложения найдены, то приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Secondary</codeEntityReference>
+				и использует соединение <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> приложения.
+				В противном случае приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Primary</codeEntityReference> – приложение создает собственное соединение с сервером OEC.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference> – приложение создает собственное соединение с сервером OEC.</para>
 			</listItem>
 			<listItem>
-				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Secondary</codeEntityReference> - 
-				В момент инициализации выполняется поиск локальных приложений, работающих в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.Primary</codeEntityReference>.
-				Если такие приложения найдены, используется их соединение с сервером OEC. В противном случае приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OECRemoting.None</codeEntityReference>.</para>
+				<para><codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Secondary</codeEntityReference> - 
+				В момент инициализации выполняется поиск локальных приложений, работающих в режиме <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.Primary</codeEntityReference>.
+				Если такие приложения найдены, используется их соединение с сервером OEC. В противном случае приложение переходит в режим <codeEntityReference qualifyHint="false">F:StockSharp.OpenECry.OpenECryRemoting.None</codeEntityReference>.</para>
 			</listItem>
 		</list>
 		

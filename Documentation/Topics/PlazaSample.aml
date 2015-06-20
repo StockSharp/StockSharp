@@ -73,36 +73,23 @@ this.Trader.Password = this.Password.Password;</code>
 			  <content>
 				  <para>
 					  После создания шлюза необходимо подключиться к торговой системе. В случае с <codeEntityReference>T:StockSharp.Plaza.PlazaTrader</codeEntityReference>
-					  такой системой выступает P2MQRouter.exe. И запустить экспорт данных:
+					  такой системой выступает P2MQRouter.exe.
 				  </para>
-				  <code language="C#">
-// подписываемся на событие успешного соединения
-Trader.Connected += () =>
-{
-	this.GuiAsync(() => ChangeConnectStatus(true));
-	Trader.StartExport();
-};
-
-...
-
-trader.Connect();
-				</code>
-			  </content>
-		  </step>
-
-		  <step>
-			  <content>
 				  <para>
-					  После запуска экспорта данных из предыдущего шага:
-				  </para>
-				  <code language="C#">Trader.StartExport();</code>
-				  <para>
-					  Начнут вызываться
-					  события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
+					  После подключения начнут вызываться события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
 					  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> и т.д. Для тех данных,
 					  которые изменяются, вызывается другое событие. Например, для заявок, у которых изменяются значения Состояние, Остаток и т.д. будет
 					  вызвано событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.OrdersChanged</codeEntityReference>.
 				  </para>
+				  <code language="C#">
+						// подписываемся на событие успешного соединения
+						Trader.Connected += () =>
+						{
+							this.GuiAsync(() => ChangeConnectStatus(true));
+						};
+							...
+						trader.Connect();
+				  </code>
 			  </content>
 		  </step>
 		  <step>

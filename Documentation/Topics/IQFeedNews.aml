@@ -10,11 +10,11 @@
 			Для того чтобы начать получить новости, необходимо подписаться на событие <codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> и вызвать
 			метод <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterNews</codeEntityReference>.
 		</para>
-		<para>
+		<!-- <para>
 			По умолчанию для каждой новости приходит только ее заголовок, чтобы получить полный текст новости необходимо использовать метод <codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetNewsStory(System.Int64)</codeEntityReference>.
 			В качестве параметра необходимо передавать уникальный номер новости <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.News.Id</codeEntityReference>,
 			для которой необходимо получить полный текст.
-		</para>
+		</para>-->
     </introduction>
   </developerConceptualDocument>
 </topic>
