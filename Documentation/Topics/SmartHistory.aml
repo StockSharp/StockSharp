@@ -45,7 +45,7 @@ _candleManager = new CandleManager(_trader);]]></code>
   						Исторические свечки можно получить напрямую из <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>, подписавшись на событие
   						<codeEntityReference qualifyHint="true">E:StockSharp.SmartCom.SmartTrader.NewCandles</codeEntityReference>. Для начала получения свечек необходимо вызвать метод
   						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,Ecng.ComponentModel.Range{System.DateTimeOffset})</codeEntityReference> или
-  						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,System.DateTimeOffset,System.Long,StockSharp.SmartCom.SmartComHistoryDirections)</codeEntityReference>.
+  						<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.SmartCom.SmartTrader.RequestCandles(StockSharp.BusinessEntities.Security,StockSharp.SmartCom.SmartComTimeFrames,System.DateTimeOffset,System.Int64,StockSharp.SmartCom.SmartComHistoryDirections)</codeEntityReference>.
   					</para>
 				</alert>
 			  </content>

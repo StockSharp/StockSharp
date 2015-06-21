@@ -47,8 +47,6 @@ Trader.Connected += () =>
 	// возводим флаг, что соединение установлено
 	_isConnected = true;
 
-	Trader.StartExport();
-
 	// разблокируем кнопку Экспорт
 	this.GuiAsync(() => ChangeConnectStatus(true));
 };
@@ -65,7 +63,6 @@ Trader.ConnectionError += error => this.GuiAsync(() =>
 // событие успешного отключения
 Trader.Disconnected += () =>
 {
-	Trader.StopExport();
 	this.GuiAsync(() => ChangeConnectStatus(false));
 };
 
@@ -118,14 +115,7 @@ Trader.Connect();
 					
 					<step>
 						<content>
-							<para>При успешном подключении в обработчике события будет произведен запуск экспорта данных:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.StartExport();
-							]]>
-							</code>
-
-							<para>После запуска экспорта можно ожидать срабатывания событий:</para>
+							<para>При успешном подключении можно ожидать срабатывания событий:</para>
 							<list class="bullet">
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 

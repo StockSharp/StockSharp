@@ -26,11 +26,9 @@ Trader.Connected += () =>
 {
 	// возводим флаг, что соединение установлено
 	_isConnected = true;
-
-	Trader.StartExport();
 	Trader.RegisterNews();
 
-	// разблокируем кнопку Экспорт
+	// разблокируем кнопки
 	this.GuiAsync(() => ChangeConnectStatus(true));
 };
 
@@ -38,7 +36,7 @@ Trader.Disconnected += () => this.GuiAsync(() => ChangeConnectStatus(false));
 // подписываемся на событие разрыва соединения
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
-	// заблокируем кнопку Экспорт (так как соединение было потеряно)
+	// заблокируем кнопки так как соединение было потеряно)
 	ChangeConnectStatus(false);
 
 	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
@@ -162,7 +160,7 @@ private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
 		
 		<listItem>
  	  		<para>Для получения истории сделок за указанную дату необходимо воспользоваться методом 
- 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime, out System.Boolean)</codeEntityReference>:</para>
+ 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime,System.Boolean@)</codeEntityReference>:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryTrades"/></mediaLink>
   	  		<code language="C#">
 Trades.Clear();
@@ -171,7 +169,7 @@ Trades.AddRange(MainWindow.Instance.Trader.GetTrades(SecurityPicker.SelectedSecu
 		</listItem>
 		<listItem>
  	  		<para>Для получения истории свечек по инструменту за указанный период необходимо воспользоваться методом 
- 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Long,out System.Bool)</codeEntityReference>:</para>
+ 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryCandles"/></mediaLink>
   	  		<code language="C#">
 Candles.Clear();

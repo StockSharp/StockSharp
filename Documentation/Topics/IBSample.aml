@@ -37,7 +37,6 @@ Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() => Mess
 Trader.Connected += () =>
 {
 	this.GuiAsync(() => ChangeConnectStatus(true));
-	Trader.StartExport();
 };
 
 // подписываемся на событие разрыва соединения
@@ -92,14 +91,7 @@ Trader.Connect();
 					
 					<step>
 						<content>
-							<para>При успешном подключении в обработчике события будет произведен запуск экспорта данных:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.StartExport();
-							]]>
-							</code>
-
-							<para>После запуска экспорта можно ожидать срабатывания событий:</para>
+							<para>При успешном подключении можно ожидать срабатывания событий:</para>
 							<list class="bullet">
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 
