@@ -29,8 +29,8 @@
 				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.GetAccounts</codeEntityReference> возвращает список счетов.
 			</listItem>
 			<listItem>
-				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.RegisterTrades(string)</codeEntityReference> и
-				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.UnRegisterTrades(string)</codeEntityReference> настраивает
+				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.RegisterTrades(System.String)</codeEntityReference> и
+				<codeEntityReference>M:StockSharp.Quik.QuikTerminal.UnRegisterTrades(System.String)</codeEntityReference> настраивает
 				фильтр в таблице Все Сделки (нужно включить режим <codeEntityReference>P:StockSharp.Quik.QuikTerminal.EnableFiltering</codeEntityReference> ).
 			</listItem>
 		</list>

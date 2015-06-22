@@ -89,11 +89,12 @@ Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positio
 Trader.OrdersRegisterFailed += OrdersFailed;
 // подписываемся на событие о неудачном снятии заявок
 Trader.OrdersCancelFailed += OrdersFailed;
-
 // подписываемся на событие о неудачной регистрации стоп-заявок
 Trader.StopOrdersRegisterFailed += OrdersFailed;
 // подписываемся на событие о неудачном снятии стоп-заявок
 Trader.StopOrdersCancelFailed += OrdersFailed;
+// загружаем инструменты с сайта, если используется "боевое" подключение
+Trader.IsDownloadSecurityFromSite = !Trader.IsDemo;
 
 							]]>
 							</code>						
@@ -113,23 +114,7 @@ Trader.Connect();
 					
 					<step>
 						<content>
-							<para>При успешном подключении в обработчике события будет произведен запуск экспорта данных и вызван метод 
-							<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.LMAX.LmaxTrader.DownloadSecurities</codeEntityReference> для скачивания списка инструментов:</para>
-            				<code language="C#">
-            				<![CDATA[
-Trader.StartExport();
-
-// скачиваем информацию о всех инструментах с сайта
-Trader.DownloadSecurities();
-							]]>
-							</code>
-
-							<alert class="note">
-  								<para>Метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.LMAX.LmaxTrader.DownloadSecurities</codeEntityReference> 
-  								необходимо вызывать только при подключении к реальному счету.</para>
-							</alert>
-
-							<para>После запуска экспорта можно ожидать срабатывания событий:</para>
+							<para>После подключения можно ожидать срабатывания событий:</para>
 							<list class="bullet">
 								<listItem>
 									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – 

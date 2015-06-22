@@ -35,15 +35,11 @@ private QuikTrader _trader;
 
 _trader.UseSecuritiesChange = true;
 
-...
-
-_trader.StartExport();
-
 		]]>
 		</code>	
 		<para>Или, если используется экспорт конкретных таблиц, то добавить в список экспортируемых <codeEntityReference qualifyHint="false">P:StockSharp.Quik.QuikTrader.SecuritiesChangeTable</codeEntityReference>:</para>
 
-		<code language="C#">
+		<!-- <code language="C#">
 		<![CDATA[
 private QuikTrader _trader;
 	
@@ -52,7 +48,7 @@ private QuikTrader _trader;
 _trader.StartExport(new[] { _trader.SecuritiesChangeTable, _trader.SecuritiesTable, _trader.TradesTable });
 
 		]]>
-		</code>	
+		</code>	-->
 		<para>Новые данные будут приходить через событие <codeEntityReference qualifyHint="true">E:StockSharp.Quik.QuikTrader.NewSecurityChanges</codeEntityReference>.</para>
 	</introduction>
   </developerConceptualDocument>

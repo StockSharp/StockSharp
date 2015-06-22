@@ -35,7 +35,7 @@ if (marketOrder != null)
 	// ...
 }</code>
 		<para>
-			Для того, чтобы создать стоп-заявки <token>smartcom</token>-а, необходимо заполнить поля <codeEntityReference>T:StockSharp.SmartCom.SmartOrderCondition</codeEntityReference>:
+			Для того, чтобы создать стоп-заявки <token>smartcom</token>-а, необходимо заполнить поля <codeEntityReference>T:StockSharp.SmartCom.SmartComOrderCondition</codeEntityReference>:
 		</para>
 		<alert class="note">
 			<para>Исходные коды примера лежат в дистрибутиве в папке под названием SampleSmart.</para>

@@ -14,62 +14,26 @@
       <!-- <autoOutline /> -->
       <para>
       	<codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> поддерживает 2 версии <token>smartcom</token>, 2-ую и 3-ю. По-умолчанию используется подключение
-      	через вторую версию. Чтобы сменить на подключение через третью версию, нужно изменить <codeEntityReference qualifyHint="true">P:StockSharp.SmartCom.SmartTrader.Wrapper</codeEntityReference>:
+      	через третью версию. Чтобы сменить на подключение через вторую версию, нужно изменить значение свойства <codeEntityReference qualifyHint="true">P:StockSharp.SmartCom.SmartTrader.Version</codeEntityReference>:
+      	<!-- trader.Version = StockSharp.SmartCom.Native.SmartComVersions.-->
       </para>
       <code language="C#">
-// подключение будет производиться через 64-ех битную версию SmartCOM 3
-smartTrader.Wrapper = new SmartCom3Wrapper64();
+			// подключение будет производиться через версию SmartCOM 2
+			 trader.Version = StockSharp.SmartCom.Native.SmartComVersions.V2;
       </code>
       <para>
-      	<token>smartcom</token> третьей версии распространяется в 32-битном и 64-битном режиме. Для автоматического определения разнядности процесса можно использовать метод
-      	<codeEntityReference qualifyHint="true">M:StockSharp.SmartCom.Wrapper.SmartComWrapperHelper.ApplyWrapper(StockSharp.SmartCom.SmartTrader,StockSharp.SmartCom.Wrapper.SmartComVersions)</codeEntityReference>:
+      	<token>smartcom</token> 3.x распространяется в 32- и 64-битных сборках. <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference> в зависимости от разрядности процесса автоматически выбирает нужный режим: SmartCom3Wrapper32 или SmartCom3Wrapper64.
+      	<!-- <codeEntityReference qualifyHint="true">M:StockSharp.SmartCom.Wrapper.SmartComWrapperHelper.ApplyWrapper(StockSharp.SmartCom.SmartTrader,StockSharp.SmartCom.Wrapper.SmartComVersions)</codeEntityReference>: -->
       </para>
-      <code language="C#">
-// подключение будет производиться через SmartCOM 3
-// (в зависимости от разрядности процесса будет выбран автоматически SmartCom3Wrapper32 или SmartCom3Wrapper64)
-smartTrader.ApplyWrapper(SmartComVersions.V3);
-      </code>
+      <!--  <code language="C#">
+		// подключение будет производиться через SmartCOM 3
+		// (в зависимости от разрядности процесса будет выбран автоматически SmartCom3Wrapper32 или SmartCom3Wrapper64)
+		smartTrader.ApplyWrapper(SmartComVersions.V3);
+      </code>-->
     </introduction>
-    <!-- Add one or more top-level section elements.  These are collapsible.
-         If using <autoOutline />, add an address attribute to identify it
-         and specify a title so that it can be jumped to with a hyperlink. -->
+    <!-- 
     <relatedTopics>
     	<link xlink:href="535227b6-0338-44c9-9a9b-9baf9bab10b4" />
-      <!-- One or more of the following:
-           - A local link
-           - An external link
-           - A code entity reference
-
-      <link xlink:href="Other Topic's ID"/>
-      <link xlink:href="Other Topic's ID">Link inner text</link>
-
-      <externalLink>
-          <linkText>Link text</linkText>
-          <linkAlternateText>Optional alternate link text</linkAlternateText>
-          <linkUri>URI</linkUri>
-      </externalLink>
-
-      <codeEntityReference>API member ID</codeEntityReference>
-
-      Examples:
-
-      
-      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
-
-      <externalLink>
-          <linkText>SHFB on CodePlex</linkText>
-          <linkAlternateText>Go to CodePlex</linkAlternateText>
-          <linkUri>http://shfb.codeplex.com</linkUri>
-      </externalLink>
-
-      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
-      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
-      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
-      -->
-    </relatedTopics>
+    </relatedTopics> -->
   </developerConceptualDocument>
 </topic>

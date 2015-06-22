@@ -9,7 +9,7 @@
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
     <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
-      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" isSelected="true" title="Quik">
+      <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
         <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
         <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
         <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
@@ -17,7 +17,7 @@
         <Topic id="a616c5a8-227a-4fe9-869c-d32af3e62710" visible="True" title="Управление окном Quik" />
         <Topic id="d92dd6c6-b8d6-4065-b441-091df3425e65" visible="True" title="РЕПО и РПС заявки" />
         <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
-        <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" isExpanded="true" title="Quik DDE (старое подключение)">
+        <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" title="Quik DDE (старое подключение)">
           <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
           <Topic id="b6fea084-f43c-4eb7-ab63-ad3031d748a5" visible="True" title="Создание первого робота" />
           <Topic id="ad145f75-a2d4-4766-af60-79489b84846c" visible="True" title="Экспорт стакана" />
@@ -31,12 +31,11 @@
         </Topic>
       </Topic>
       <Topic id="b64a1826-58e3-4ac8-8923-099b52992e2e" visible="True" title="Quik Fix" />
-      <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" title="SmartCOM">
+      <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" isSelected="true" title="SmartCOM">
         <Topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" visible="True" title="Создание первого робота" />
         <Topic id="2c4aa060-0b11-4e32-b57a-8b8e70d67ced" visible="True" title="SmartCOM 3.X" />
         <Topic id="9d3b0442-0633-4ba5-97e1-22829adcd025" visible="True" title="Исторические данные" />
         <Topic id="cae38969-3e31-4180-9425-89b41b3bd6e9" visible="True" title="Стоп-заявки" />
-        <Topic id="535227b6-0338-44c9-9a9b-9baf9bab10b4" visible="True" title="Прямой доступ к SmartCOM API" />
       </Topic>
       <Topic id="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391" visible="True" title="Альфа-Директ">
         <Topic id="dc7d8d3b-1d25-4f81-a043-dd4ee9f34147" visible="True" title="Настройка терминала" />

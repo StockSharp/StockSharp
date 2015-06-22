@@ -2,9 +2,10 @@
 <topic id="0010e72b-837f-4c9c-8ec9-8b840a03d9d7" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-		<para>Для регистрации алго-заявки используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.BaseTrader.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
+		<para>Для регистрации алго-заявки используется тот же метод 
+		<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 		но с указанием условия 
-		<codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqAlgoOrderCondition</codeEntityReference></para>
+		<codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqOrderCondition</codeEntityReference></para>
     
      <code language="C#">
         <![CDATA[
@@ -19,26 +20,26 @@ pprivate void SendClick(object sender, RoutedEventArgs e)
 		Volume = OrderVolume.Text.To<decimal>()
 	};
 
-	var condition = new TransaqAlgoOrderCondition {Type = _selectedTrigger, Value = OrderPrice.Text.To<decimal>()};
+	var condition = new TransaqAlgoOrderCondition() { AlgoType = _selectedTrigger, AlgoValue = OrderPrice.Text.To<decimal>() } ;
 
 	if (ValidAfterImmediately.IsChecked.Value)
 	{
-		condition.ValidAfterType = TransaqAlgoOrderValidTypes.Immediately;
+		condition.AlgoValidAfterType = TransaqAlgoOrderValidTypes.Immediately;
 	}
 	else
 	{
-		condition.ValidAfterType = TransaqAlgoOrderValidTypes.Date;
-		condition.ValidAfter = ValidAfterDate.Value;
+		condition.AlgoValidAfterType = TransaqAlgoOrderValidTypes.Date;
+		condition.AlgoValidAfter = ValidAfterDate.Value;
 	}
 
 	if (ValidBeforeTillCancelled.IsChecked.Value)
 	{
-		condition.ValidBeforeType = TransaqAlgoOrderValidTypes.TillCancelled;
+		condition.AlgoValidBeforeType = TransaqAlgoOrderValidTypes.TillCancelled;
 	}
 	else
 	{
-		condition.ValidBeforeType = TransaqAlgoOrderValidTypes.Date;
-		condition.ValidBefore = ValidBefore.Value;
+		condition.AlgoValidBeforeType = TransaqAlgoOrderValidTypes.Date;
+		condition.AlgoValidBefore = ValidBefore.Value;
 	}
 
 	algoOrder.Condition = condition;
@@ -52,7 +53,7 @@ pprivate void SendClick(object sender, RoutedEventArgs e)
 		<para>Для работы с условиями алго-заявок адаптер 
 		<codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqTrader</codeEntityReference>
 		предоставляет специальный класс
-		<codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqAlgoOrderCondition</codeEntityReference>. Данным классом поддерживаются следующие типы алго-заявок:</para>
+		<codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqOrderCondition</codeEntityReference>. Данным классом поддерживаются следующие типы алго-заявок:</para>
 
 		<list class="bullet">
 			<listItem>
@@ -111,8 +112,8 @@ pprivate void SendClick(object sender, RoutedEventArgs e)
 		</list>
 		
 		<para>У условия необходимо выставить действительность по времен с - 
-		<codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqAlgoOrderCondition.ValidAfter</codeEntityReference> и
-		по - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqAlgoOrderCondition.ValidBefore</codeEntityReference>.</para>
+		<codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.AlgoValidAfter</codeEntityReference> и
+		по - <codeEntityReference qualifyHint="false">P:StockSharp.Transaq.TransaqOrderCondition.AlgoValidBefore</codeEntityReference>.</para>
     </introduction>
 	</developerWalkthroughDocument>
 </topic>

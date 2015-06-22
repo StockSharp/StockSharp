@@ -13,8 +13,8 @@
 		</para>
 		<alert class="caution">
 			<para>
-				<token>smartcom</token> имеет те же ограничения на разрядность операционной системы, что и <token>quik</token>. Приложение необходимо компилировать
-				под 32 бита. Как это сделать показано в <link xlink:href="b6fea084-f43c-4eb7-ab63-ad3031d748a5"/>.
+				<token>smartcom</token> 2 имеет те же ограничения на разрядность операционной системы, что и <token>quik</token>. Приложение необходимо компилировать
+				под 32 бита. Как это сделать показано в <link xlink:href="b6fea084-f43c-4eb7-ab63-ad3031d748a5"/>. В <token>smartcom</token> 3 режим компиляции выбирается в зависимости от установленной сборки (32- или 64-битной).
 			</para>
 		</alert>
     </introduction>
@@ -128,12 +128,10 @@ trader.NewMyTrades += myTrades =>
 		  <step>
 			  <content>
 				  <para>
-					  Следующий этап - запустить экспорт данных:
+					  Дожидаемся появления портфеля и инструмента и запускаем обновления по инструменту:
 				  </para>
 				  <code language="C#">Console.WriteLine("Дожидаемся появления в программе инструмента Лукойл и портфеля {0}...".Put(account));
 
-// запускаем экспорт по инструментам и портфелям
-trader.StartExport();
 
 // дожидаемся появления портфеля и инструмента
 waitHandle.WaitOne();
@@ -204,27 +202,19 @@ while (true)
 		  </step>
 		  <step>
 			  <content>
-				  <para>Завершение алгоритма и остановка экспорта:</para>
-				  <code language="C#">// останавливаем экспорт
-trader.StopExport();</code>
-			  </content>
-		  </step>
-		  <step>
-			  <content>
 				  <para>Освобождение занятых ресурсов:</para>
-				  <code language="C#">trader.Dispose();</code>
+				  <para>Освобождение ресурсов произойдет автоматически, т.к. код заключен в конструкцию <legacyItalic>using</legacyItalic>.</para>
+				  <code language="C#">
+					using (SmartTrader trader = new SmartTrader { Login = login, Password = password, Address = SmartComAddresses.Demo })
+					{
+					   // ...
+					}
+				  </code>
 			  </content>
 		  </step>
       </steps>
     </procedure>
     
-    <!--<section>
-      <title>Optional section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
 
     <nextSteps>
       <content>
@@ -234,60 +224,6 @@ trader.StopExport();</code>
       </content>
     </nextSteps>
     
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
     
   </developerWalkthroughDocument>
 </topic>

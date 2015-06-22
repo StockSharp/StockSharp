@@ -66,11 +66,8 @@ this.Trader.StopOrdersRegisterFailed += OrdersFailed;
 this.Trader.StopOrdersCancelFailed += OrdersFailed;
 
 this.Trader.Connect();
-
 ...
-
-// запустить экспорт по всем таблицам
-this.Trader.StartExport();]]></code>
+]]></code>
           </content>
         </step>
 		<step>
