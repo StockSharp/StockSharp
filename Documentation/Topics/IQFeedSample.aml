@@ -169,7 +169,7 @@ Trades.AddRange(MainWindow.Instance.Trader.GetTrades(SecurityPicker.SelectedSecu
 		</listItem>
 		<listItem>
  	  		<para>Для получения истории свечек по инструменту за указанный период необходимо воспользоваться методом 
- 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>:</para>
+ 	  		<codeEntityReference qualifyHint="true">M:StockSharp.IQFeed.IQFeedTrader.GetHistoricalCandles(StockSharp.BusinessEntities.Security,System.Type,System.Object,System.Int64,System.Boolean@)</codeEntityReference>:</para>
  	  		<mediaLink><image placement="center" xlink:href="IQFeedHistoryCandles"/></mediaLink>
   	  		<code language="C#">
 Candles.Clear();
