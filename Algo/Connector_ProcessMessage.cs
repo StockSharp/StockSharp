@@ -214,7 +214,9 @@ namespace StockSharp.Algo
 					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
 					_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
-					_adapter.NewOutMessage += AdapterOnNewOutMessage;	
+					_adapter.NewOutMessage += AdapterOnNewOutMessage;
+
+					_adapter.Parent = this;
 				}
 			}
 		}
