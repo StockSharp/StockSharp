@@ -1,5 +1,8 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.7:
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/95
+
 ###v4.3.6:
 * (bug) Hydra. Continuous security fixes.
 * (bug) CSV candle storage fix.

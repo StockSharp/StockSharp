@@ -1,5 +1,27 @@
 StockSharp API Change log
 ========================
+###v4.3.7:
+* (feature) MessageDirections. Removed.
+* (feature) Connector. OnRegisterXXX OnUnRegisterXXX removed.
+* (feature) Micex. Update protocol.
+* (bug) Quik. Stop order fixes.
+* (feature) Samples. StopOrderWindow refactoring.
+* (feature) BasketMessageAdapter. Save Load implementation.
+* (bug) Protective strategies. Fixes.
+* (feature) Plaza. COD. Extended license.
+* (feature) Monitor. Clear method.
+* (bug) https://github.com/StockSharp/StockSharp/issues/113
+* (bug) Security.IsExpired. Bug fix
+* (bug) Micex. Reset fix.
+* (bug) Connector. Dispose fix.
+* (bug) QuotingStrategy. Fix stopping.
+* (feature) Rithmic 8.5.0
+* (bug) Back testing. Fix suspend/resume.
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/101
+* (feature) Storage. Removed DataStorageReader.
+* (feature) Chart update.
+* (feature) WPF Toolkit. 2.4.0
+
 ###v4.3.6:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/90
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/93

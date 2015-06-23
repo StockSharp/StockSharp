@@ -299,22 +299,6 @@
             Неутвержденные лицензии клиентов.
             </summary>
         </member>
-        <member name="T:StockSharp.Licensing.LicenseFeatureAttribute">
-            <summary>
-            Атрибут, указывающий для типа название функциональности.
-            </summary>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseFeatureAttribute.#ctor(System.String)">
-            <summary>
-            Создать <see cref="T:StockSharp.Licensing.LicenseFeatureAttribute"/>.
-            </summary>
-            <param name="featureName">Название функциональности.</param>
-        </member>
-        <member name="P:StockSharp.Licensing.LicenseFeatureAttribute.FeatureName">
-            <summary>
-            Название функциональности.
-            </summary>
-        </member>
         <member name="T:StockSharp.Licensing.LicenseHelper">
             <summary>
             Вспомагательный класс для работы с лицензиями.
@@ -345,18 +329,12 @@
             <param name="license">Лицензия.</param>
             <returns>Оставшееся время действия лицензии. Если лицензия истекла, то будет возвращено значение <see cref="F:System.TimeSpan.Zero"/>.</returns>
         </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.Type)">
-            <summary>
-            Проверить лицензию по типу функциональности.
-            </summary>
-            <param name="featureType">Тип функциональности.</param>
-            <returns>Описание ошибки, если лицензия не поддерживает функциональность.</returns>
-        </member>
-        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String)">
+        <member name="M:StockSharp.Licensing.LicenseHelper.ValidateLicense(System.String,System.String)">
             <summary>
             Проверить лицензию по названию функциональности.
             </summary>
             <param name="featureName">Название функциональности.</param>
+            <param name="portfolioName">Номер портфеля, который будет использоваться для проверки.</param>
             <returns>Описание ошибки, если лицензия не поддерживает функциональность.</returns>
         </member>
         <member name="M:StockSharp.Licensing.LicenseHelper.Save(StockSharp.Licensing.License)">
