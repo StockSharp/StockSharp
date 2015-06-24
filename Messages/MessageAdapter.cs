@@ -90,8 +90,6 @@ namespace StockSharp.Messages
 			}
 		}
 
-		//private readonly bool _checkLicense;
-
 		private DateTime _prevTime;
 
 		private readonly CodeTimeOut<long> _secLookupTimeOut = new CodeTimeOut<long>();
@@ -101,18 +99,15 @@ namespace StockSharp.Messages
 		/// Инициализировать <see cref="MessageAdapter"/>.
 		/// </summary>
 		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-		protected MessageAdapter(IdGenerator transactionIdGenerator/*, bool checkLicense = true*/)
+		protected MessageAdapter(IdGenerator transactionIdGenerator)
 		{
 			if (transactionIdGenerator == null)
 				throw new ArgumentNullException("transactionIdGenerator");
 
 			Platform = Platforms.AnyCPU;
-			//_checkLicense = checkLicense;
 
 			TransactionIdGenerator = transactionIdGenerator;
 			SecurityClassInfo = new Dictionary<string, RefPair<SecurityTypes, string>>();
-
-			//IsMarketDataEnabled = IsTransactionEnabled = true;
 		}
 
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
@@ -128,6 +123,10 @@ namespace StockSharp.Messages
 			{
 				if (value == null)
 					throw new ArgumentNullException("value");
+
+				var dulicate = value.GroupBy(m => m).FirstOrDefault(g => g.Count() > 1);
+				if (dulicate != null)
+					throw new ArgumentException(LocalizedStrings.Str415Params.Put(dulicate.Key), "value");
 
 				_supportedMessages = value;
 			}
@@ -293,9 +292,6 @@ namespace StockSharp.Messages
 		/// <param name="message">Сообщение.</param>
 		public void SendInMessage(Message message)
 		{
-			//if (!CheckLicense(message))
-			//	return;
-
 			if (message.Type == MessageTypes.Connect)
 			{
 				if (!Platform.IsCompatible())
@@ -310,11 +306,6 @@ namespace StockSharp.Messages
 			}
 
 			InitMessageLocalTime(message);
-
-			// при отключенном состоянии пропускаем только TimeMessage
-			// остальные типы сообщений могут использоваться (например, в эмуляторе)
-			//if ((_currState == ConnectionStates.Disconnecting || _currState == ConnectionStates.Disconnected) && message.Type == MessageTypes.Time)
-			//	return;
 
 			switch (message.Type)
 			{
@@ -457,54 +448,6 @@ namespace StockSharp.Messages
 			}
 		}
 
-		//private bool CheckLicense(Message message)
-		//{
-		//	if (!_checkLicense)
-		//		return true;
-
-		//	switch (message.Type)
-		//	{
-		//		case MessageTypes.OrderRegister:
-		//		{
-		//			var regMsg = (OrderRegisterMessage)message;
-
-		//			var msg = LicenseHelper.ValidateLicense(GetType(), regMsg.PortfolioName);
-
-		//			if (msg != null)
-		//			{
-		//				SendOutMessage(new ExecutionMessage
-		//				{
-		//					OriginalTransactionId = regMsg.TransactionId,
-		//					OrderState = OrderStates.Failed,
-		//					ExecutionType = ExecutionTypes.Order,
-		//					Error = new InvalidOperationException(msg)
-		//				});
-
-		//				return false;
-		//			}
-					
-		//			break;
-		//		}
-		//		case MessageTypes.Connect:
-		//		{
-		//			if (_checkLicense)
-		//			{
-		//				var msg = GetType().ValidateLicense();
-
-		//				if (msg != null)
-		//				{
-		//					SendOutMessage(new ConnectMessage { Error = new InvalidOperationException(msg) });
-		//					return false;	
-		//				}
-		//			}
-
-		//			break;
-		//		}
-		//	}
-
-		//	return true;
-		//}
-
 		/// <summary>
 		/// Отправить сообщение.
 		/// </summary>
@@ -523,15 +466,6 @@ namespace StockSharp.Messages
 			{
 				var diff = message.LocalTime - _prevTime;
 
-				//if (message.Type != MessageTypes.Time && diff >= MarketTimeChangedInterval)
-				//{
-				//	SendOutMessage(new TimeMessage
-				//	{
-				//		LocalTime = message.LocalTime,
-				//		ServerTime = message.GetServerTime(),
-				//	});
-				//}
-
 				_secLookupTimeOut
 					.ProcessTime(diff)
 					.ForEach(id => SendOutMessage(new SecurityLookupResultMessage { OriginalTransactionId = id }));
@@ -539,8 +473,6 @@ namespace StockSharp.Messages
 				_pfLookupTimeOut
 					.ProcessTime(diff)
 					.ForEach(id => SendOutMessage(new PortfolioLookupResultMessage { OriginalTransactionId = id }));
-
-				//ProcessReconnection(diff);
 			}
 
 			_prevTime = message.LocalTime;
@@ -609,7 +541,7 @@ namespace StockSharp.Messages
 		public override void Load(SettingsStorage storage)
 		{
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
-			SupportedMessages = storage.GetValue<int[]>("SupportedMessages").Select(i => (MessageTypes)i).ToArray();
+			SupportedMessages = storage.GetValue<string[]>("SupportedMessages").Select(i => i.To<MessageTypes>()).ToArray();
 
 			base.Load(storage);
 		}
@@ -621,7 +553,7 @@ namespace StockSharp.Messages
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
-			storage.SetValue("SupportedMessages", SupportedMessages.Select(t => (int)t).ToArray());
+			storage.SetValue("SupportedMessages", SupportedMessages.Select(t => t.To<string>()).ToArray());
 
 			base.Save(storage);
 		}
@@ -648,22 +580,6 @@ namespace StockSharp.Messages
 		protected override void OnSendInMessage(Message message)
 		{
 			SendOutMessage(message);
-			//switch (message.Type)
-			//{
-			//	case MessageTypes.Connect:
-			//		SendOutMessage(new ConnectMessage());
-			//		break;
-
-			//	case MessageTypes.Disconnect:
-			//		SendOutMessage(new DisconnectMessage());
-			//		break;
-
-			//	case MessageTypes.Time: // обработка heartbeat
-			//		break;
-
-			//	default:
-			//		throw new NotSupportedException(LocalizedStrings.Str2143Params.Put(message.Type));
-			//}
 		}
 	}
 }

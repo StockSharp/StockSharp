@@ -5112,12 +5112,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Value {0} duplicated in dates collection.
+		/// Value {0} has duplicates.
 		/// </summary>
 		public const string Str415ParamsKey = "Str415Params";
 
 		/// <summary>
-		/// Value {0} duplicated in dates collection.
+		/// Value {0} has duplicates.
 		/// </summary>
 		public static string Str415Params
 		{

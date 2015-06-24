@@ -391,7 +391,7 @@ Str411;Working days;Рабочие дни
 Str412;Working days, falling on Saturday and Sunday.;Рабочие дни, выпадающие на субботу и воскресенье.
 Str413;Holidays;Выходные дни
 Str414;Holidays that fall on workdays.;Выходные дни, выпадающие на будни.
-Str415Params;Value {0} duplicated in dates collection.;Значение {0} дублируется в коллекции дат.
+Str415Params;Value {0} has duplicates.;Значение {0} имеет дубликаты.
 Str416;Schedule;Расписание
 Str417;Schedule validity period.;Период действия расписания.
 Str418;End date;Дата окончания
