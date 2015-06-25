@@ -321,6 +321,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IQFeed", "Connectors\IQFeed
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oanda", "Connectors\Oanda\Oanda.csproj", "{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{D925DC9A-592F-49D4-B643-0EF2885DE320}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocViewer", "Documentation\DocViewer\DocViewer.csproj", "{9AC290E0-0F23-4D23-A170-E648D95BC47C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -777,6 +781,10 @@ Global
 		{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC290E0-0F23-4D23-A170-E648D95BC47C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC290E0-0F23-4D23-A170-E648D95BC47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC290E0-0F23-4D23-A170-E648D95BC47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC290E0-0F23-4D23-A170-E648D95BC47C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -914,6 +922,7 @@ Global
 		{480539A8-CA30-4B87-B038-6AD854DA0C6A} = {42B35529-B842-4F17-9277-0618B074AA91}
 		{F3068408-9764-432E-8FB4-596B308EDB4F} = {42B35529-B842-4F17-9277-0618B074AA91}
 		{9188D051-7FAA-4CF7-9D93-6D59E2FAEDD0} = {42B35529-B842-4F17-9277-0618B074AA91}
+		{9AC290E0-0F23-4D23-A170-E648D95BC47C} = {D925DC9A-592F-49D4-B643-0EF2885DE320}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi
