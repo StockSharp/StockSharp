@@ -79,9 +79,6 @@ namespace StockSharp.Quik.Lua
 		private readonly FixServerEx _fixServer;
 		private readonly SynchronizedDictionary<SecurityId, Level1ChangeMessage> _prevLevel1 = new CachedSynchronizedDictionary<SecurityId, Level1ChangeMessage>();
 		
-		private readonly Dictionary<long, long> _transactionsByOrderId = new Dictionary<long, long>();
-
-		private readonly Dictionary<long, List<ExecutionMessage>> _tradesByOrderId = new Dictionary<long, List<ExecutionMessage>>();
 		private readonly Dictionary<string, string> _depoNames = new Dictionary<string, string>();
 		private readonly SynchronizedDictionary<long, Transaction> _transactions = new SynchronizedDictionary<long, Transaction>();
 
@@ -468,78 +465,25 @@ namespace StockSharp.Quik.Lua
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					var isTransaction = false;
-
-					switch (execMsg.ExecutionType)
+					if (execMsg.ExecutionType == ExecutionTypes.Order)
 					{
-						case ExecutionTypes.Order:
-						{
-							isTransaction = true;
-
-							if (execMsg.OrderId != null && execMsg.OriginalTransactionId != 0)
-							{
-								_transactionsByOrderId.SafeAdd(execMsg.OrderId.Value, i => execMsg.OriginalTransactionId);
-
-								var trades = _tradesByOrderId.TryGetValue(execMsg.OrderId.Value);
-
-								if (trades != null)
-								{
-									trades.ForEach(_fixServer.SendInMessage);
-									_tradesByOrderId.Remove(execMsg.OrderId.Value);
-								}
-							}
-
-							break;
-						}
-
-						case ExecutionTypes.Trade:
-						{
-							isTransaction = true;
-
-							if (execMsg.OriginalTransactionId != 0)
-								break;
-
-							var orderId = execMsg.OrderId;
-
-							if (orderId != null)
-							{
-								var origTransactionId = _transactionsByOrderId.TryGetValue2(orderId.Value);
-
-								if (origTransactionId == null)
-								{
-									_tradesByOrderId.SafeAdd(orderId.Value).Add(execMsg);
-									return;
-								}
-
-								execMsg.OriginalTransactionId = origTransactionId.Value;
-							}
-
-							break;
-						}
-					}
-
-					if (isTransaction)
-					{
-						// запоминаем номер исходной транзакции, который будет исопльзоваться в FixServer
-						execMsg.UserOrderId = execMsg.OriginalTransactionId.To<string>();
-
 						var transaction = _transactions.TryGetValue(execMsg.OriginalTransactionId);
 
 						if (transaction != null && execMsg.Error != null)
 						{
 							switch (transaction.TransactionType)
 							{
-								case TransactionTypes.ReRegister:
-								{
-									var replaceMsg = (OrderReplaceMessage)transaction.Message;
+								//case TransactionTypes.ReRegister:
+								//{
+								//	var replaceMsg = (OrderReplaceMessage)transaction.Message;
 
-									// дополнительно отправляем сообщение ошибки снятия заявки
-									var cancelErrMsg = (ExecutionMessage)execMsg.Clone();
-									cancelErrMsg.OrderId = replaceMsg.OldOrderId;
-									cancelErrMsg.IsCancelled = true;
+								//	// дополнительно отправляем сообщение ошибки снятия заявки
+								//	var cancelErrMsg = (ExecutionMessage)execMsg.Clone();
+								//	cancelErrMsg.OrderId = replaceMsg.OldOrderId;
+								//	cancelErrMsg.IsCancelled = true;
 
-									break;
-								}
+								//	break;
+								//}
 
 								case TransactionTypes.Cancel:
 								{
