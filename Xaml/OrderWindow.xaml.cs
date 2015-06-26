@@ -245,6 +245,7 @@ namespace StockSharp.Xaml
 				VolumeCtrl.Value = value.Volume == 0 ? (decimal?)null : value.Volume;
 				VisibleVolumeCtrl.Value = value.VisibleVolume;
 				IsBuyCtrl.IsChecked = value.Direction == Sides.Buy;
+				IsSellCtrl.IsChecked = value.Direction == Sides.Sell;
 
 				switch (value.TimeInForce)
 				{
