@@ -39,7 +39,7 @@ namespace StockSharp.ETrade
 				var secId = new SecurityId
 				{
 					SecurityCode = info.symbol,
-					BoardCode = "EQ",
+					BoardCode = AssociatedBoardCode,
 				};
 
 				var msg = new SecurityMessage

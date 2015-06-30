@@ -90,9 +90,15 @@ namespace StockSharp.Algo
 		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
 		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>(StringComparer.InvariantCultureIgnoreCase);
 
+		private string AssociatedBoardCode
+		{
+			// TODO from adapter
+			get { return "ALL"; }
+		}
+
 		private bool IsAssociated(string boardCode)
 		{
-			return boardCode.IsEmpty() || boardCode.CompareIgnoreCase(AssociatedBoardCode);
+			return /*boardCode.IsEmpty() || */boardCode.CompareIgnoreCase(AssociatedBoardCode);
 		}
 
 		private void CreateAssociatedSecurityQuotes(QuoteChangeMessage quoteMsg)
@@ -455,8 +461,8 @@ namespace StockSharp.Algo
 			var securityCode = securityId.SecurityCode;
 			var boardCode = securityId.BoardCode;
 
-			if (boardCode.IsEmpty())
-				boardCode = AssociatedBoardCode;
+			//if (boardCode.IsEmpty())
+			//	boardCode = AssociatedBoardCode;
 
 			var isSecurityIdEmpty = securityCode.IsEmpty() || boardCode.IsEmpty();
 			var isNativeIdNull = nativeSecurityId == null;
@@ -1455,9 +1461,12 @@ namespace StockSharp.Algo
 				if (msgs != null)
 					_suspendedSecurityMessages.Remove(securityId);
 
-				// одновременно могут быть сообщения по полному идентификатору и по код + тип
+				// find association by code and code + type
 				var pair = _suspendedSecurityMessages
-					.FirstOrDefault(p => p.Key.SecurityCode.CompareIgnoreCase(securityId.SecurityCode) && (securityId.SecurityType == null || p.Key.SecurityType == securityId.SecurityType));
+					.FirstOrDefault(p =>
+						p.Key.SecurityCode.CompareIgnoreCase(securityId.SecurityCode) &&
+						p.Key.BoardCode.IsEmpty() &&
+						(securityId.SecurityType == null || p.Key.SecurityType == securityId.SecurityType));
 
 				if (pair.Value != null)
 					_suspendedSecurityMessages.Remove(pair.Key);

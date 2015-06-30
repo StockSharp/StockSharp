@@ -99,9 +99,9 @@ namespace StockSharp.InteractiveBrokers
 		//	base.SendOutMessage(message);
 		//}
 
-		private static string GetBoardCode(string boardCode)
+		private string GetBoardCode(string boardCode)
 		{
-			return boardCode.IsEmpty() ? "IBRKS" : boardCode;
+			return boardCode.IsEmpty() ? AssociatedBoardCode : boardCode;
 		}
 
 		/// <summary>

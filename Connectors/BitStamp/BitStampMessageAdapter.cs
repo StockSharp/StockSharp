@@ -6,6 +6,7 @@ namespace StockSharp.BitStamp
 	using Ecng.Common;
 
 	using StockSharp.BitStamp.Native;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -17,13 +18,13 @@ namespace StockSharp.BitStamp
 		private static readonly SecurityId _btcUsd = new SecurityId
 		{
 			SecurityCode = "BTC/USD",
-			BoardCode = "BITSTAMP",
+			BoardCode = ExchangeBoard.BitStamp.Code,
 		};
 
 		private static readonly SecurityId _eurUsd = new SecurityId
 		{
 			SecurityCode = "EUR/USD",
-			BoardCode = "BITSTAMP",
+			BoardCode = ExchangeBoard.BitStamp.Code,
 		};
 
 		private long _lastMyTradeId;

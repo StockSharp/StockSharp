@@ -39,7 +39,7 @@ namespace StockSharp.ETrade
 
 			var msg = new ExecutionMessage
 			{
-				SecurityId = new SecurityId { SecurityCode = data.symbol, BoardCode = "EQ" },
+				SecurityId = new SecurityId { SecurityCode = data.symbol, BoardCode = AssociatedBoardCode },
 				PortfolioName = data.accountId.To<string>(),
 				Side = data.orderAction.ETradeActionToSide(),
 				OriginalTransactionId = transId,
@@ -116,8 +116,8 @@ namespace StockSharp.ETrade
 
 				var secId = new SecurityId
 				{
-					SecurityCode = leg.symbolInfo.symbol, 
-					BoardCode = "EQ"
+					SecurityCode = leg.symbolInfo.symbol,
+					BoardCode = AssociatedBoardCode
 				};
 
 				var transId = _ordersByTransactionId.TryGetKey(nativeOrder.orderId);

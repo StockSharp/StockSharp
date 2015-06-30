@@ -5,6 +5,7 @@ namespace StockSharp.Btce
 	using Ecng.Common;
 
 	using StockSharp.Btce.Native;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -13,7 +14,7 @@ namespace StockSharp.Btce
 	/// </summary>
 	public partial class BtceMessageAdapter : MessageAdapter
 	{
-		private const string _boardCode = "BTCE";
+		private static readonly string _boardCode = ExchangeBoard.Btce.Code;
 		private BtceClient _client;
 		
 		/// <summary>

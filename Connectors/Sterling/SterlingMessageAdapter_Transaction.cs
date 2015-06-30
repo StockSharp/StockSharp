@@ -215,7 +215,7 @@
 			var message = new PositionChangeMessage
 			{
 				PortfolioName = msg.bstrAcct,
-				SecurityId = new SecurityId { SecurityCode = msg.bstrSym, BoardCode = "All" },
+				SecurityId = new SecurityId { SecurityCode = msg.bstrSym, BoardCode = AssociatedBoardCode },
 			};
 
 			message.TryAdd(PositionChangeTypes.RealizedPnL, (decimal)msg.fReal);
@@ -247,7 +247,7 @@
 				var m = new PositionMessage
 				{
 					PortfolioName = position.bstrAcct,
-					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
+					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = AssociatedBoardCode, SecurityType = position.bstrInstrument.ToSecurityType() },
 					OriginalTransactionId = message.TransactionId,
 				};
 
@@ -256,7 +256,7 @@
 				var changeMsg = new PositionChangeMessage
 				{
 					PortfolioName = position.bstrAcct,
-					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = "All", SecurityType = position.bstrInstrument.ToSecurityType() },
+					SecurityId = new SecurityId { SecurityCode = position.bstrSym, BoardCode = AssociatedBoardCode, SecurityType = position.bstrInstrument.ToSecurityType() },
 					ServerTime = CurrentTime
 				};
 

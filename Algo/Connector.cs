@@ -497,19 +497,6 @@ namespace StockSharp.Algo
 		[DescriptionLoc(LocalizedStrings.Str198Key)]
 		public bool CreateAssociatedSecurity { get; set; }
 
-		private string _associatedBoardCode = "ALL";
-
-		/// <summary>
-		/// Код площадки для объединенного инструмента. По-умолчанию равно ALL.
-		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
-		[DescriptionLoc(LocalizedStrings.Str199Key)]
-		public string AssociatedBoardCode
-		{
-			get { return _associatedBoardCode; }
-			set { _associatedBoardCode = value; }
-		}
-
 		/// <summary>
 		/// Число ошибок, переданное через событие <see cref="Error"/>.
 		/// </summary>
@@ -1632,7 +1619,6 @@ namespace StockSharp.Algo
 			MarketTimeChangedInterval = storage.GetValue<TimeSpan>("MarketTimeChangedInterval");
 
 			CreateAssociatedSecurity = storage.GetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
-			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
 
 			base.Load(storage);
 		}
@@ -1661,7 +1647,6 @@ namespace StockSharp.Algo
 			storage.SetValue("MarketTimeChangedInterval", MarketTimeChangedInterval);
 
 			storage.SetValue("CreateAssociatedSecurity", CreateAssociatedSecurity);
-			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
 
 			base.Save(storage);
 		}

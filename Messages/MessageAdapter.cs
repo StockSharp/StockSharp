@@ -268,6 +268,19 @@ namespace StockSharp.Messages
 			}
 		}
 
+		private string _associatedBoardCode = "ALL";
+
+		/// <summary>
+		/// Код площадки для объединенного инструмента. По-умолчанию равно ALL.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
+		[DescriptionLoc(LocalizedStrings.Str199Key)]
+		public string AssociatedBoardCode
+		{
+			get { return _associatedBoardCode; }
+			set { _associatedBoardCode = value; }
+		}
+
 		/// <summary>
 		/// Событие получения исходящего сообщения.
 		/// </summary>
@@ -542,6 +555,7 @@ namespace StockSharp.Messages
 		{
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
 			SupportedMessages = storage.GetValue<string[]>("SupportedMessages").Select(i => i.To<MessageTypes>()).ToArray();
+			AssociatedBoardCode = storage.GetValue("AssociatedBoardCode", AssociatedBoardCode);
 
 			base.Load(storage);
 		}
@@ -554,6 +568,7 @@ namespace StockSharp.Messages
 		{
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
 			storage.SetValue("SupportedMessages", SupportedMessages.Select(t => t.To<string>()).ToArray());
+			storage.SetValue("AssociatedBoardCode", AssociatedBoardCode);
 
 			base.Save(storage);
 		}

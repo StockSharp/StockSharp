@@ -293,7 +293,7 @@ namespace StockSharp.Sterling
 				SecurityId = new SecurityId
 				{
 					SecurityCode = quote.bstrSymbol,
-					BoardCode = "All",
+					BoardCode = AssociatedBoardCode,
 				},
 				Asks = asksUpdate,
 				Bids = bidsUpdate,
@@ -310,7 +310,7 @@ namespace StockSharp.Sterling
 				SecurityId = new SecurityId
 				{
 					SecurityCode = structGreeksUpdate.bstrSymbol,
-					//BoardCode = structGreeksUpdate.bstrExch,
+					BoardCode = AssociatedBoardCode,
 				},
 				ServerTime = CurrentTime,
 			};
@@ -330,7 +330,7 @@ namespace StockSharp.Sterling
 		{
 			SendOutMessage(new NewsMessage
 			{
-				SecurityId = new SecurityId { SecurityCode = structNewsUpdate.bstrKeys},
+				SecurityId = new SecurityId { SecurityCode = structNewsUpdate.bstrKeys, BoardCode = AssociatedBoardCode },
 				Headline = structNewsUpdate.bstrHeadline,
 				Story = structNewsUpdate.bstrSeq,
 				Source = structNewsUpdate.bstrService, 
