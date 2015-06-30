@@ -241,6 +241,11 @@
             Смещение времени относительно UTC для серверного времени данных.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixSession.DateTimeFormat">
+      <summary>
+            Формат даты и времени.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.BaseFixReader">
       <summary>
             Базовый класс читателя.
@@ -1169,6 +1174,34 @@
             Кол.
             </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.SecurityResponseType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityResponseType.AcceptSecurityProposalAsIs">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityResponseType.AcceptSecurityProposalWithRevisionsAsIndicatedInTheMessage">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityResponseType.ListOfSecurityTypesReturnedPerRequest">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityResponseType.ListOfSecuritiesReturnedPerRequest">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityResponseType.RejectSecurityProposal">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityResponseType.CannotMatchSelectionCriteria">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.SecurityRequestResult">
       <summary>
       </summary>
@@ -1312,6 +1345,26 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.SecurityListRequestType.MarketidOrMarketidPlusMarketSegmentId">
+      <summary>
+      </summary>
+    </member>
+    <member name="T:StockSharp.Fix.Native.SecurityRequestType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.RequestSecurityIdentityAndSpecifications">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.RequestSecurityIdentityForTheSpecificationsProvided">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.RequestListSecurityTypes">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.SecurityRequestType.RequestListSecurities">
       <summary>
       </summary>
     </member>
@@ -2913,6 +2966,16 @@
             Ответ на <see cref="F:StockSharp.Fix.Native.FixMessages.UserRequest" />.
             </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.SecurityDefinitionRequest">
+      <summary>
+            Запрос на получение инструментов.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixMessages.SecurityDefinition">
+      <summary>
+            Информация об инструменте.
+            </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixMessages.NewOrderSingle">
       <summary>
             Регистрация заявки.
@@ -3089,6 +3152,12 @@
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityListRequest(StockSharp.Messages.SecurityLookupMessage)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.SecurityListRequest" /> (запрос).
+            </summary>
+      <param name="message">Критерий поиска.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityDefinitionRequest(StockSharp.Messages.SecurityLookupMessage)">
+      <summary>
+            Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.SecurityDefinitionRequest" /> (запрос).
             </summary>
       <param name="message">Критерий поиска.</param>
     </member>
@@ -3342,6 +3411,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.HandlInst">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.IDSource">
       <summary>
       </summary>
     </member>
@@ -3617,7 +3690,15 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SecurityRequestType">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SecurityResponseID">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.SecurityResponseType">
       <summary>
       </summary>
     </member>
@@ -3642,6 +3723,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.NoTradingSessions">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TotalNumSecurities">
       <summary>
       </summary>
     </member>
@@ -3987,6 +4072,11 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.UtcOffset">
       <summary>
             Смещение времени относительно UTC для серверного времени данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.DateTimeFormat">
+      <summary>
+            Формат даты и времени.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">

@@ -1,7 +1,6 @@
 ﻿namespace StockSharp.Quik.Lua
 {
 	using System;
-	using System.Linq;
 
 	using Ecng.Common;
 
@@ -61,7 +60,7 @@
 		/// <returns>Успешно ли обработаны данные.</returns>
 		protected override bool ReadOrderCondition(IFixReader reader, FixTags tag, Func<OrderCondition> getCondition)
 		{
-			return reader.ReadOrderCondition(tag, UtcOffset, () => (QuikOrderCondition)getCondition());
+			return reader.ReadOrderCondition(tag, UtcOffset, DateTimeFormat, () => (QuikOrderCondition)getCondition());
 		}
 	}
 }
