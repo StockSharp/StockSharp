@@ -9,7 +9,7 @@
         xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
         ResizeMode="NoResize" Title="{x:Static loc:LocalizedStrings.Str1566}"
 		WindowStartupLocation="CenterOwner"
-		Height="420" Width="350" ShowInTaskbar="False">
+		Height="450" Width="350" ShowInTaskbar="False">
 
 	<Window.Resources>
 		<converters:InverseBooleanConverter x:Key="Invbool"/>
@@ -30,6 +30,8 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="5" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="5" />
 			<RowDefinition Height="Auto" />
@@ -203,6 +205,11 @@
 		</TextBlock>
 		<editors:DateTimeEditBox Grid.Column="1" Grid.Row="15" x:Name="ExpiryDate" CenterSlotHorizontalAlignment="Right" IsEnabled="False" ValueChanged="ExpiryDate_OnValueChanged" />
 
-		<Button x:Name="Send" Content="{x:Static loc:LocalizedStrings.XamlStr427}" ex:XamlHelper.DialogResult="True" IsEnabled="False" IsDefault="True" Grid.Column="0" Grid.Row="17" Grid.ColumnSpan="2" Width="100" Height="22" />
+		<TextBlock Grid.Column="0" Grid.Row="17" HorizontalAlignment="Right" VerticalAlignment="Center">
+			<Run Text="{x:Static loc:LocalizedStrings.Str135}" /><Run Text=":"/>
+		</TextBlock>
+		<TextBox x:Name="CommentCtrl" Grid.Column="1" Grid.Row="17" Height="25" />
+		
+		<Button x:Name="Send" Content="{x:Static loc:LocalizedStrings.XamlStr427}" ex:XamlHelper.DialogResult="True" IsEnabled="False" IsDefault="True" Grid.Column="0" Grid.Row="19" Grid.ColumnSpan="2" Width="100" Height="22" />
 	</Grid>
 </Window>

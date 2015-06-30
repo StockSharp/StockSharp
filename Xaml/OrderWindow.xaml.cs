@@ -186,6 +186,7 @@ namespace StockSharp.Xaml
 				_order.Volume = VolumeCtrl.Value ?? 0;
 				_order.VisibleVolume = VisibleVolumeCtrl.Value;
 				_order.Direction = IsBuyCtrl.IsChecked == true ? Sides.Buy : Sides.Sell;
+				_order.Comment = CommentCtrl.Text;
 
 				switch ((OrderWindowTif?)TimeInForceCtrl.SelectedValue)
 				{
@@ -246,6 +247,7 @@ namespace StockSharp.Xaml
 				VisibleVolumeCtrl.Value = value.VisibleVolume;
 				IsBuyCtrl.IsChecked = value.Direction == Sides.Buy;
 				IsSellCtrl.IsChecked = value.Direction == Sides.Sell;
+				CommentCtrl.Text = value.Comment;
 
 				switch (value.TimeInForce)
 				{
