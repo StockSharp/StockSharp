@@ -69,7 +69,7 @@
         <Topic id="49a7bfef-38e4-41e7-afe5-21bb8ac64258" visible="True" title="Одновременная работа терминала и робота" />
       </Topic>
       <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" isExpanded="true" title="Interactive Brokers">
-        <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" isSelected="true" title="Настройка TWS" />
+        <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS" />
         <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Пример работы с IBTrader" />
         <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Алго-заявки" />
         <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" title="Исторические данные" />
@@ -99,7 +99,10 @@
         <Topic id="35cde593-3105-4903-974e-10d85482ec8f" visible="True" title="Стоп-заявки" />
         <Topic id="6191a437-1a8c-451c-9a43-17daee119bb7" visible="True" title="Новости" />
       </Topic>
-      <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG" />
+      <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" isExpanded="true" title="CQG">
+        <Topic id="436fc377-85ff-4d37-ad62-4846313a8563" visible="True" title="Пример работы с CQGTrader" />
+        <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" isSelected="true" title="Стоп-заявки" />
+      </Topic>
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX" />
       <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" title="Rithmic" />
     </Topic>

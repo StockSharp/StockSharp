@@ -4,11 +4,19 @@
     <introduction>
        <para>
 			Для написания торговых роботов для <token>sterling</token> необходимо использовать 
-			<codeEntityReference qualifyHint="false">T:StockSharp.Sterling.SterlingTrader</codeEntityReference>.
-			Механизм взаимодействия показан на данном рисунке:
+			<codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference>.
+			Авторизация пользователя выполняется при запуске терминала <legacyBold>Sterling Trader Pro</legacyBold>.
 		</para>
+		<mediaLink><image placement="center" xlink:href="Sterling_loging"/></mediaLink>
+		<alert class="note">
+  			<para>Для корректной работы Sterling API нужно запускать Visual Studio от имени администратора.</para>
+		</alert>
 		
-		<mediaLink><image placement="center" xlink:href="ETrade"/></mediaLink>
     </introduction>
+    <relatedTopics>
+    	<link xlink:href="7e828fb2-0b95-41fd-8540-17f6bdc747cf">Пример работы со SterlingTrader</link>
+  		<link xlink:href="35cde593-3105-4903-974e-10d85482ec8f">Стоп-заявки</link>
+  		<link xlink:href="6191a437-1a8c-451c-9a43-17daee119bb7">Новости</link>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

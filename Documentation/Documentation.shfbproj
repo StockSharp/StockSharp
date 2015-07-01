@@ -150,6 +150,8 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\CQGStopOrders.aml" />
+    <None Include="Topics\CQGSample.aml" />
     <None Include="Topics\SterlingNews.aml" />
     <None Include="Topics\SterlingStopOrder.aml" />
     <None Include="Topics\SterlingSample.aml" />
@@ -1279,6 +1281,14 @@
     <Image Include="Art\Sterling_StopOrder.png">
       <ImageId>Sterling_StopOrder</ImageId>
       <AlternateText>Sterling Stop Order</AlternateText>
+    </Image>
+    <Image Include="Art\Sterling_loging.png">
+      <ImageId>Sterling_loging</ImageId>
+      <AlternateText>Sterling loging</AlternateText>
+    </Image>
+    <Image Include="Art\CQGTraderSample.png">
+      <ImageId>CQGTraderSample</ImageId>
+      <AlternateText>CQGTrader Sample</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

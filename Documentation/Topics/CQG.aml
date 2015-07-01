@@ -1,18 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="aac980b1-ac5b-415b-811c-a8d128942391" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
-      <para>Описание временно недоступно.</para>
+      <para>
+			Для написания торговых роботов для <token>cqg</token> необходимо использовать 
+			<codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference>.
+		</para>
     </introduction>
+     <relatedTopics>
+    	<link xlink:href="436fc377-85ff-4d37-ad62-4846313a8563">Пример работы с CQGTrader</link>
+  		<link xlink:href="355f6b70-c920-48b6-b2f1-31584ebb82f3">Стоп-заявки</link>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>
