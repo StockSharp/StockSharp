@@ -11,27 +11,26 @@
     <Topic id="804b053f-e5f5-44ca-a381-6b39d6c099d5" visible="True" isExpanded="true" title="Коннекторы (Россия)">
       <Topic id="769f74c8-6f8e-4312-a867-3dc6e8482636" visible="True" isExpanded="true" title="Quik">
         <Topic id="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf" visible="True" title="Настройка Quik Lua" />
-        <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
         <Topic id="a82865dd-98ed-4579-8f48-dd8f806c39e7" visible="True" title="Стоп-заявки" />
         <Topic id="52cb16e3-0ff0-4e82-8ad5-73a2e6e918a1" visible="True" title="Включение и выключение Quik" />
-        <Topic id="a616c5a8-227a-4fe9-869c-d32af3e62710" visible="True" title="Управление окном Quik" />
         <Topic id="d92dd6c6-b8d6-4065-b441-091df3425e65" visible="True" title="РЕПО и РПС заявки" />
         <Topic id="32bb7203-202c-44f7-a6c4-79791c690a3a" visible="True" title="Verifier" />
         <Topic id="c338d4b4-ba54-4671-9206-976c07ef655e" visible="True" title="Quik DDE (старое подключение)">
           <Topic id="5c13da7b-b6e4-4fd4-958a-66c93c58b941" visible="True" title="Настройка Quik" />
           <Topic id="b6fea084-f43c-4eb7-ab63-ad3031d748a5" visible="True" title="Создание первого робота" />
+          <Topic id="65485c7c-0697-4e00-ac3f-bfaf4f81cc9e" visible="True" title="Портфели в Quik" />
           <Topic id="ad145f75-a2d4-4766-af60-79489b84846c" visible="True" title="Экспорт стакана" />
           <Topic id="4261879e-9bb3-482c-9fc5-27ecb07bdf5e" visible="True" title="Экспорт дополнительных колонок" />
           <Topic id="7d73f7bf-ae8b-4d76-9895-cffb6342203f" visible="True" title="Экспорт произвольных таблиц" />
           <Topic id="0e99b5a9-a20f-4650-93e0-a72ed660270e" visible="True" title="Экспорт микросекунд" />
           <Topic id="4ef16af9-a848-418b-9685-f3de8e4b601e" visible="True" title="Таблица Инструменты (изменения)" />
-          <Topic id="6c09c760-1aee-4bfe-814c-db42d06b31ec" visible="True" title="Асинхронный режим" />
+          <Topic id="a616c5a8-227a-4fe9-869c-d32af3e62710" visible="True" title="Управление окном Quik" />
           <Topic id="0b0bd6e0-7ddf-407d-9e03-a218796163af" visible="True" title="Строка транзакции" />
           <Topic id="9fb00dd4-4f0a-42a9-ab0f-9946b7acf6fe" visible="True" title="Работа с несколькими Quik-ами" />
         </Topic>
       </Topic>
       <Topic id="b64a1826-58e3-4ac8-8923-099b52992e2e" visible="True" title="Quik Fix" />
-      <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" isSelected="true" title="SmartCOM">
+      <Topic id="7f488b0b-0f59-42b4-845b-fd766f5699dc" visible="True" title="SmartCOM">
         <Topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" visible="True" title="Создание первого робота" />
         <Topic id="2c4aa060-0b11-4e32-b57a-8b8e70d67ced" visible="True" title="SmartCOM 3.X" />
         <Topic id="9d3b0442-0633-4ba5-97e1-22829adcd025" visible="True" title="Исторические данные" />
@@ -62,15 +61,15 @@
       <Topic id="61692ace-225e-4ecc-845a-504021d59a8f" visible="True" title="Micex Bridge" />
       <Topic id="df84be76-8798-4b96-94ea-a1b106266ad5" visible="True" title="Алор Трейд" />
     </Topic>
-    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" title="Коннекторы (Америка)">
+    <Topic id="ad178c36-15c8-4314-bc5c-56220f41a67e" visible="True" isExpanded="true" title="Коннекторы (Америка)">
       <Topic id="f8cae46b-57e1-4954-a4cf-832854840981" visible="True" title="OpenECry">
         <Topic id="1dbc72c4-cc59-4094-824a-a2b77f9623d6" visible="True" title="Пример работы с OECTrader" />
         <Topic id="6f3be323-80bb-4823-9d27-8060c238af32" visible="True" title="Стоп-заявки" />
         <Topic id="c56a139b-fb64-4f4f-992f-96a1480233cf" visible="True" title="Подключение нескольких роботов" />
         <Topic id="49a7bfef-38e4-41e7-afe5-21bb8ac64258" visible="True" title="Одновременная работа терминала и робота" />
       </Topic>
-      <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" title="Interactive Brokers">
-        <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS" />
+      <Topic id="bae7b613-dcf6-4abb-b595-6c61fc4e5c46" visible="True" isExpanded="true" title="Interactive Brokers">
+        <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" isSelected="true" title="Настройка TWS" />
         <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Пример работы с IBTrader" />
         <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Алго-заявки" />
         <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" title="Исторические данные" />
@@ -95,7 +94,11 @@
         <Topic id="d315bbb3-5d00-4685-8e75-9e8e3646320a" visible="True" title="Новости" />
         <Topic id="66003162-d1b0-4f5f-8126-508055d15470" visible="True" title="Пример работы с IQFeedTrader" />
       </Topic>
-      <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" title="Sterling" />
+      <Topic id="8a531942-a16c-4348-a4d0-dd4ae999d8f9" visible="True" isExpanded="true" title="Sterling">
+        <Topic id="7e828fb2-0b95-41fd-8540-17f6bdc747cf" visible="True" title="Пример работы со SterlingTrader" />
+        <Topic id="35cde593-3105-4903-974e-10d85482ec8f" visible="True" title="Стоп-заявки" />
+        <Topic id="6191a437-1a8c-451c-9a43-17daee119bb7" visible="True" title="Новости" />
+      </Topic>
       <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" title="CQG" />
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX" />
       <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" title="Rithmic" />
@@ -112,7 +115,7 @@
       <Topic id="5d162089-902a-4a4e-885f-f38ff94fbe58" visible="True" title="BTC-E" />
       <Topic id="345fa341-661d-4992-a9a6-9c89af399feb" visible="True" title="BitStamp" />
     </Topic>
-    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" title="Управление заявками">
+    <Topic id="1c3c9835-b65b-48d5-8abf-70986c666ef4" visible="True" isExpanded="true" title="Управление заявками">
       <Topic id="718fbbc7-efa5-45ed-80ef-e0a32fd4a8e2" visible="True" title="Получение информации по заявкам" />
       <Topic id="41a3b3e7-a7cd-43ba-842f-13f6a7199d26" visible="True" title="Состояния заявок" />
       <Topic id="6267fec7-64e5-4488-ba08-c72cf61fcc9e" visible="True" title="Снятие заявок" />
