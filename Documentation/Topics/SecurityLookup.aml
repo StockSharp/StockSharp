@@ -13,7 +13,7 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>
-      	Некоторые коннекторы (например, <token>OpenECry</token> или <token>ib</token>) не поддерживают при запуске экспорта (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.StartExport</codeEntityReference>)
+      	Некоторые коннекторы (например, <token>OpenECry</token>, <token>ib</token> или <token>sterling</token>) не поддерживают после вызова соединения (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>)
       	передачу всех имеющихся на сервере инструментов на клиент (как правило, это сделано для уменьшения нагрузки на сервер брокера).
       </para>
       
