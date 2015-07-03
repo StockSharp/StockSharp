@@ -32,9 +32,6 @@ namespace SampleSmartCandles
 		public MainWindow()
 		{
 			InitializeComponent();
-			CandleType.SetDataSource<CandleTypes>();
-			CandleType.SetSelectedValue<CandleTypes>(CandleTypes.TimeFrame);
-			TimeFrame.Value = new DateTime(TimeSpan.FromMinutes(5).Ticks);
 
 			HistoryInterval.ItemsSource = SmartComTimeFrames.AllTimeFrames;
 
@@ -121,25 +118,7 @@ namespace SampleSmartCandles
 
 			if (IsRealTime.IsChecked == true)
 			{
-				var type = CandleType.GetSelectedValue<CandleTypes>().Value;
-
-				switch (type)
-				{
-					case CandleTypes.TimeFrame:
-						series = new CandleSeries(typeof(TimeFrameCandle), security, TimeFrame.Value.Value.TimeOfDay);
-						break;
-					case CandleTypes.Tick:
-						series = new CandleSeries(typeof(TickCandle), security, VolumeCtrl.Text.To<int>());
-						break;
-					case CandleTypes.Volume:
-						series = new CandleSeries(typeof(VolumeCandle), security, VolumeCtrl.Text.To<decimal>());
-						break;
-					case CandleTypes.Range:
-						series = new CandleSeries(typeof(RangeCandle), security, PriceRange.Value);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+				series = new CandleSeries(RealTimeSettings.Settings.CandleType, security, RealTimeSettings.Settings.Arg);
 			}
 			else
 			{
@@ -173,15 +152,6 @@ namespace SampleSmartCandles
 		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ShowChart.IsEnabled = SelectedSecurity != null;
-		}
-
-		private void CandleTypesSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var type = CandleType.GetSelectedValue<CandleTypes>().Value;
-
-			TimeFrame.SetVisibility(type == CandleTypes.TimeFrame);
-			PriceRange.SetVisibility(type == CandleTypes.Range);
-			VolumeCtrl.SetVisibility(type == CandleTypes.Tick || type == CandleTypes.Volume);
 		}
 
 		private void OnChartTypeChanged(object sender, RoutedEventArgs e)

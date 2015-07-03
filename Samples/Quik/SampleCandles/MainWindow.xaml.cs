@@ -1,26 +1,23 @@
 namespace SampleCandles
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Net;
+	using System.Security;
 	using System.Windows;
-	using System.Windows.Controls;
+
+	using Ecng.Collections;
+	using Ecng.Common;
+	using Ecng.Xaml;
 
 	using Ookii.Dialogs.Wpf;
 
-	using Ecng.Common;
-	using Ecng.Collections;
-	using Ecng.Xaml;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
-	using StockSharp.Messages;
-	using StockSharp.Quik;
-	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
-	using System.Net;
-	using System.Security;
+	using StockSharp.Quik;
+	using StockSharp.Xaml.Charting;
 
 	partial class MainWindow
 	{
@@ -32,10 +29,6 @@ namespace SampleCandles
 		public MainWindow()
 		{
 			InitializeComponent();
-			CandleType.SetDataSource<CandleTypes>();
-			CandleType.SetSelectedValue<CandleTypes>(CandleTypes.TimeFrame);
-
-			TimeFrame.Value = new DateTime(TimeSpan.FromMinutes(5).Ticks);
 
 			// попробовать сразу найти месторасположение Quik по запущенному процессу
 			Path.Text = QuikTerminal.GetDefaultPath();
@@ -164,11 +157,6 @@ namespace SampleCandles
 			base.OnClosing(e);
 		}
 
-		private CandleTypes SelectedCandleType
-		{
-			get { return CandleType.GetSelectedValue<CandleTypes>().Value; }
-		}
-
 		private Security SelectedSecurity
 		{
 			get { return (Security)Security.SelectedValue; }
@@ -176,34 +164,15 @@ namespace SampleCandles
 
 		private void ShowChartClick(object sender, RoutedEventArgs e)
 		{
-			var type = SelectedCandleType;
 			var security = SelectedSecurity;
 
-			CandleSeries series;
-
-			switch (type)
-			{
-				case CandleTypes.TimeFrame:
-					series = new CandleSeries(typeof(TimeFrameCandle), security, TimeFrame.Value.Value.TimeOfDay);
-					break;
-				case CandleTypes.Tick:
-					series = new CandleSeries(typeof(TickCandle), security, VolumeCtrl.Text.To<int>());
-					break;
-				case CandleTypes.Volume:
-					series = new CandleSeries(typeof(VolumeCandle), security, VolumeCtrl.Text.To<decimal>());
-					break;
-				case CandleTypes.Range:
-					series = new CandleSeries(typeof(RangeCandle), security, PriceRange.Value.Clone().SetSecurity(security));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			var series = new CandleSeries(CandlesSettings.Settings.CandleType, security, CandlesSettings.Settings.Arg);
 
 			_chartWindows.SafeAdd(series, key =>
 			{
 				var wnd = new ChartWindow
 				{
-					Title = "{0} {1} {2}".Put(security.Code, type, series.Arg)
+					Title = "{0} {1} {2}".Put(security.Code, series.CandleType.Name, series.Arg)
 				};
 
 				wnd.MakeHideable();
@@ -218,25 +187,6 @@ namespace SampleCandles
 			}).Show();
 
 			_candleManager.Start(series);
-		}
-
-		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var security = SelectedSecurity;
-
-			if (security != null)
-			{
-				ShowChart.IsEnabled = true;
-				PriceRange.Value = 0.5.Percents();
-			}
-		}
-
-		private void CandleTypesSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var type = SelectedCandleType;
-			TimeFrame.IsEnabled = type == CandleTypes.TimeFrame;
-			PriceRange.IsEnabled = type == CandleTypes.Range;
-			VolumeCtrl.IsEnabled = (!TimeFrame.IsEnabled && !PriceRange.IsEnabled);
 		}
 	}
 }
