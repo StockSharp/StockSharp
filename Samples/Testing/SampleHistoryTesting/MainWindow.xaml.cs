@@ -39,6 +39,7 @@ namespace SampleHistoryTesting
 			public bool UseOrderLog { get; set; }
 		}
 
+		private readonly List<ProgressBar> _progressBars = new List<ProgressBar>();
 		private readonly List<HistoryEmulationConnector> _connectors = new List<HistoryEmulationConnector>();
 		private readonly BufferedChart _bufferedChart;
 		
@@ -61,6 +62,16 @@ namespace SampleHistoryTesting
 
 			From.Value = new DateTime(2012, 10, 1);
 			To.Value = new DateTime(2012, 10, 25);
+
+			_progressBars.AddRange(new[]
+			{
+				TicksTestingProcess,
+				TicksAndDepthsTestingProcess,
+				DepthsTestingProcess,
+				CandlesTestingProcess,
+				CandlesAndDepthsTestingProcess,
+				OrderLogTestingProcess
+			});
 		}
 
 		private void FindPathClick(object sender, RoutedEventArgs e)
@@ -106,39 +117,47 @@ namespace SampleHistoryTesting
 			var settings = new[]
 			{
 				Tuple.Create(
-					TicksCheckBox, 
-					TicksTestingProcess, 
+					TicksCheckBox,
+					TicksTestingProcess,
 					TicksParameterGrid,
 					// ticks
-					new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Str3017}),
+					new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks}),
 
 				Tuple.Create(
-					TicksAndDepthsCheckBox, 
-					TicksAndDepthsTestingProcess, 
+					TicksAndDepthsCheckBox,
+					TicksAndDepthsTestingProcess,
 					TicksAndDepthsParameterGrid,
 					// ticks + order book
-					new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.Str3018}),
+					new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757}),
 
 				Tuple.Create(
-					CandlesCheckBox, 
-					CandlesTestingProcess, 
+					DepthsCheckBox,
+					DepthsTestingProcess,
+					DepthsParameterGrid,
+					// order book
+					new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.Str1414}),
+
+
+				Tuple.Create(
+					CandlesCheckBox,
+					CandlesTestingProcess,
 					CandlesParameterGrid,
 					// candles
-					new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Str3019}),
+					new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Candles}),
 				
 				Tuple.Create(
-					CandlesAndDepthsCheckBox, 
-					CandlesAndDepthsTestingProcess, 
+					CandlesAndDepthsCheckBox,
+					CandlesAndDepthsTestingProcess,
 					CandlesAndDepthsParameterGrid,
 					// candles + orderbook
-					new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.Str3020}),
+					new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635}),
 			
 				Tuple.Create(
-					OrderLogCheckBox, 
-					OrderLogTestingProcess, 
+					OrderLogCheckBox,
+					OrderLogTestingProcess,
 					OrderLogParameterGrid,
 					// order log
-					new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.Str3021})
+					new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog})
 			};
 
 			// storage to historical data
@@ -159,9 +178,12 @@ namespace SampleHistoryTesting
 			var progressStep = ((stopTime - startTime).Ticks / 100).To<TimeSpan>();
 
 			// set ProgressBar bounds
-			TicksTestingProcess.Maximum = TicksAndDepthsTestingProcess.Maximum = CandlesTestingProcess.Maximum = 100;
-			TicksTestingProcess.Value = TicksAndDepthsTestingProcess.Value = CandlesTestingProcess.Value = 0;
-
+			_progressBars.ForEach(p =>
+			{
+				p.Value = 0;
+				p.Maximum = 100;
+			});
+			
 			var logManager = new LogManager();
 			var fileLogListener = new FileLogListener("sample.log");
 			logManager.Listeners.Add(fileLogListener);
@@ -452,6 +474,7 @@ namespace SampleHistoryTesting
 		{
 			var isEnabled = TicksCheckBox.IsChecked == true ||
 			                TicksAndDepthsCheckBox.IsChecked == true ||
+							DepthsCheckBox.IsChecked == true ||
 			                CandlesCheckBox.IsChecked == true ||
 			                CandlesAndDepthsCheckBox.IsChecked == true ||
 			                OrderLogCheckBox.IsChecked == true;

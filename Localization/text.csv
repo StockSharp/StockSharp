@@ -2792,11 +2792,6 @@ Str3013;Waiting for Lukoil security data to update...;Дожидаемся об�
 Str3014;Wrong path.;Неправильный путь.
 Str3015;Already launched.;Уже запущен.
 Str3016;Security ID incorrectly specified.;Идентификатор инструмента задан неверно.
-Str3017;On ticks;На тиках
-Str3018;On ticks&market depths;На тиках & стаканах
-Str3019;On candles;На свечах
-Str3020;On candles&market depths;На свечах&стаканах
-Str3021;On orders log;На логе заявок
 PnLUnreal;P&L (unrealized) ;P&L (нереализ) 
 Str3024;Completed in {0}.;Закончено за {0}.
 cancelled;Cancelled;Отменено
