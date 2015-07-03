@@ -5,6 +5,7 @@ namespace SampleCandles
 	using System.Net;
 	using System.Security;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -160,6 +161,11 @@ namespace SampleCandles
 		private Security SelectedSecurity
 		{
 			get { return (Security)Security.SelectedValue; }
+		}
+
+		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			ShowChart.IsEnabled = SelectedSecurity != null;
 		}
 
 		private void ShowChartClick(object sender, RoutedEventArgs e)
