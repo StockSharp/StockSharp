@@ -3,6 +3,8 @@ namespace StockSharp.SmartCom
 	using System;
 	using System.Runtime.Serialization;
 
+	using Ecng.Collections;
+
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -19,7 +21,6 @@ namespace StockSharp.SmartCom
 		/// </summary>
 		public SmartComOrderCondition()
 		{
-			StopPrice = 0;
 		}
 
 		/// <summary>
@@ -29,9 +30,9 @@ namespace StockSharp.SmartCom
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1885Key)]
 		[DescriptionLoc(LocalizedStrings.Str1886Key)]
-		public decimal StopPrice
+		public decimal? StopPrice
 		{
-			get { return (decimal)Parameters["StopPrice"]; }
+			get { return (decimal?)Parameters.TryGetValue("StopPrice"); }
 			set { Parameters["StopPrice"] = value; }
 		}
 	}

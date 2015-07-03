@@ -10,6 +10,7 @@ namespace StockSharp.OpenECry
 
 	using OEC.Data;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -41,31 +42,15 @@ namespace StockSharp.OpenECry
 			return SecurityTypes.Stock;
 		}
 
-		public static decimal Cast(this OEC.API.Contract contract, double value)
+		public static decimal? Cast(this OEC.API.Contract contract, double value)
 		{
-			var d = value.SafeCast();
+			var d = value.ToDecimal();
 
-			if (d == 0)
-				return 0;
+			if (d == null)
+				return null;
 
 			var priceStep = (decimal)contract.TickSize;
-			return MathHelper.Round((decimal)value, priceStep, priceStep.GetCachedDecimals());
-		}
-
-		public static decimal SafeCast(this double value)
-		{
-			if (value.IsNaN())
-				return 0;
-
-			return (decimal)value;
-		}
-
-		public static decimal SafeCast(this float value)
-		{
-			if (value.IsNaN())
-				return 0;
-
-			return (decimal)value;
+			return MathHelper.Round(d.Value, priceStep, priceStep.GetCachedDecimals());
 		}
 
 		public static CurrencyTypes ToCurrency(this string str)
@@ -166,10 +151,11 @@ namespace StockSharp.OpenECry
 			}
 		}
 
-		public static TriggerType ToOec(this Level1Fields type)
+		public static TriggerType ToOec(this Level1Fields? type)
 		{
 			switch (type)
 			{
+				case null:
 				case Level1Fields.LastTradePrice:
 					return TriggerType.Last;
 				case Level1Fields.BestBidPrice:

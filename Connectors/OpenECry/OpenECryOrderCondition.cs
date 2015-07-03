@@ -2,6 +2,8 @@ namespace StockSharp.OpenECry
 {
 	using System.ComponentModel;
 
+	using Ecng.Collections;
+
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -68,12 +70,12 @@ namespace StockSharp.OpenECry
 		/// </summary>
 		public OpenECryOrderCondition()
 		{
-			AssetType = AssetTypeEnum.Equity;
-			StopType = OpenECryStopType.StopLimit;
-			StopPrice = 0;
-			Delta = 0;
-			IsPercentDelta = false;
-			TriggerType = Level1Fields.LastTrade;
+			//AssetType = AssetTypeEnum.Equity;
+			//StopType = OpenECryStopType.StopLimit;
+			//StopPrice = 0;
+			//Delta = 0;
+			//IsPercentDelta = false;
+			//TriggerType = Level1Fields.LastTrade;
 		}
 
 		///// <summary>
@@ -159,9 +161,9 @@ namespace StockSharp.OpenECry
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2570Key)]
 		[DescriptionLoc(LocalizedStrings.Str2571Key)]
-		public OpenECryStopType StopType
+		public OpenECryStopType? StopType
 		{
-			get { return (OpenECryStopType)Parameters[_keyStopType]; }
+			get { return (OpenECryStopType?)Parameters.TryGetValue(_keyStopType); }
 			set { Parameters[_keyStopType] = value; }
 		}
 
@@ -171,9 +173,9 @@ namespace StockSharp.OpenECry
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.StopPriceKey)]
 		[DescriptionLoc(LocalizedStrings.StopPriceKey, true)]
-		public decimal StopPrice
+		public decimal? StopPrice
 		{
-			get { return (decimal)Parameters[_keyStopPrice]; }
+			get { return (decimal?)Parameters.TryGetValue(_keyStopPrice); }
 			set { Parameters[_keyStopPrice] = value; }
 		}
 
@@ -183,9 +185,9 @@ namespace StockSharp.OpenECry
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayName("Trailing Delta")]
 		[DescriptionLoc(LocalizedStrings.Str2572Key)]
-		public decimal Delta
+		public decimal? Delta
 		{
-			get { return (decimal)Parameters[_keyDelta]; }
+			get { return (decimal?)Parameters.TryGetValue(_keyDelta); }
 			set { Parameters[_keyDelta] = value; }
 		}
 
@@ -195,9 +197,9 @@ namespace StockSharp.OpenECry
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2573Key)]
 		[DescriptionLoc(LocalizedStrings.Str2574Key)]
-		public bool IsPercentDelta
+		public bool? IsPercentDelta
 		{
-			get { return (bool)Parameters[_keyIsPercentDelta]; }
+			get { return (bool?)Parameters.TryGetValue(_keyIsPercentDelta); }
 			set { Parameters[_keyIsPercentDelta] = value; }
 		}
 
@@ -207,9 +209,9 @@ namespace StockSharp.OpenECry
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2575Key)]
 		[DescriptionLoc(LocalizedStrings.Str2576Key)]
-		public Level1Fields TriggerType
+		public Level1Fields? TriggerType
 		{
-			get { return (Level1Fields)Parameters[_keyTriggerType]; }
+			get { return (Level1Fields?)Parameters.TryGetValue(_keyTriggerType); }
 			set { Parameters[_keyTriggerType] = value; }
 		}
 
@@ -219,15 +221,15 @@ namespace StockSharp.OpenECry
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayName("Trailing ReferencePrice")]
 		[DescriptionLoc(LocalizedStrings.Str2577Key)]
-		public decimal ReferencePrice
+		public decimal? ReferencePrice
 		{
-			get { return (decimal)Parameters[_keyReferencePrice]; }
+			get { return (decimal?)Parameters.TryGetValue(_keyReferencePrice); }
 			set { Parameters[_keyReferencePrice] = value; }
 		}
 
-		internal AssetTypeEnum AssetType
+		internal AssetTypeEnum? AssetType
 		{
-			get { return (AssetTypeEnum)Parameters[_keyAssetType]; }
+			get { return (AssetTypeEnum?)Parameters.TryGetValue(_keyAssetType); }
 			set { Parameters[_keyAssetType] = value; }
 		}
 	}

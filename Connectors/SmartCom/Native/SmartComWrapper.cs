@@ -5,6 +5,7 @@ namespace StockSharp.SmartCom.Native
 	using Ecng.Common;
 	using Ecng.Interop;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 
 	using StockSharp.Localization;
@@ -98,7 +99,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<int, int, string, string, string, string, int, int, decimal, decimal, string, string, DateTime?, decimal, decimal> NewSecurity;
+		public event Action<int, int, string, string, string, string, int, int, decimal?, decimal?, string, string, DateTime?, decimal?, decimal?> NewSecurity;
 
 		/// <summary>
 		/// Событие об изменении инструмента.
@@ -153,7 +154,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<string, Tuple<decimal, decimal, DateTime>, decimal, decimal, decimal, decimal, decimal, QuoteChange, QuoteChange, decimal, Tuple<decimal, decimal>, Tuple<decimal, decimal>, Tuple<decimal, decimal>, int, Tuple<decimal, decimal>> SecurityChanged;
+		public event Action<string, Tuple<decimal?, decimal?, DateTime>, decimal?, decimal?, decimal?, decimal?, decimal?, QuoteChange, QuoteChange, decimal?, Tuple<decimal?, decimal?>, Tuple<decimal?, decimal?>, Tuple<decimal?, decimal?>, int, Tuple<decimal?, decimal?>> SecurityChanged;
 
 		/// <summary>
 		/// Событие о появлении портфеля.
@@ -203,7 +204,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<string, decimal, decimal, decimal, decimal> PortfolioChanged;
+		public event Action<string, decimal?, decimal?, decimal?, decimal?> PortfolioChanged;
 
 		/// <summary>
 		/// Событие об изменении позиции.
@@ -228,7 +229,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<string, string, decimal, decimal, decimal> PositionChanged;
+		public event Action<string, string, decimal?, decimal?, decimal?> PositionChanged;
 
 		/// <summary>
 		/// Событие о появлении собственной сделки.
@@ -259,7 +260,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<string, string, long, decimal, decimal, DateTime, long> NewMyTrade;
+		public event Action<string, string, long, decimal?, decimal?, DateTime, long> NewMyTrade;
 
 		/// <summary>
 		/// Событие о появлении тиковой сделки.
@@ -287,7 +288,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<string, DateTime, decimal, decimal, long, SmartOrderAction> NewTrade;
+		public event Action<string, DateTime, decimal?, decimal?, long, SmartOrderAction> NewTrade;
 
 		/// <summary>
 		/// Событие о появлении исторической тиковой сделки.
@@ -321,7 +322,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<int, int, string, DateTime, decimal, decimal, long, SmartOrderAction> NewHistoryTrade;
+		public event Action<int, int, string, DateTime, decimal?, decimal?, long, SmartOrderAction> NewHistoryTrade;
 
 		/// <summary>
 		/// Событие о появлении исторической временной свечи.
@@ -364,7 +365,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<int, int, string, SmartComTimeFrames, DateTime, decimal, decimal, decimal, decimal, decimal, decimal> NewBar;
+		public event Action<int, int, string, SmartComTimeFrames, DateTime, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?> NewBar;
 
 		/// <summary>
 		/// Событие о появлении новой заявки.
@@ -435,7 +436,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<string, string, SmartOrderState, SmartOrderAction, SmartOrderType, bool, decimal, int, decimal, int, DateTime, string, long, int, int> OrderChanged;
+		public event Action<string, string, SmartOrderState, SmartOrderAction, SmartOrderType, bool, decimal?, int, decimal?, int, DateTime, string, long, int, int> OrderChanged;
 
 		/// <summary>
 		/// Событие об ошибке при регистрации заявки.
@@ -537,7 +538,7 @@ namespace StockSharp.SmartCom.Native
 		/// </item>
 		/// </list>
 		/// </remarks>
-		public event Action<string, int, int, decimal, decimal, decimal, decimal> QuoteChanged;
+		public event Action<string, int, int, decimal?, decimal?, decimal?, decimal?> QuoteChanged;
 
 		/// <summary>
 		/// Событие об успешном подсоединении к серверу SmartCOM.
@@ -775,16 +776,11 @@ namespace StockSharp.SmartCom.Native
 			return server;
 		}
 
-		private static decimal SafeCast(double value)
-		{
-			return value.IsNaN() ? 0 : (decimal)value;
-		}
-
 		internal void OnAddSecurity(int row, int rowCount, string securityId, string shortName, string longName, string type, int decimals, int lotSize,
 			double stepPrice, double priceStep, string isin, string board, DateTime expiryDate, double daysBeforeExpiry, double strike)
 		{
-			NewSecurity.SafeInvoke(row, rowCount, securityId, shortName, longName, type, decimals, lotSize, SafeCast(stepPrice), SafeCast(priceStep),
-					isin, board, DateTime.FromOADate(0) == expiryDate ? (DateTime?)null : expiryDate, SafeCast(daysBeforeExpiry), SafeCast(strike));
+			NewSecurity.SafeInvoke(row, rowCount, securityId, shortName, longName, type, decimals, lotSize, stepPrice.ToDecimal(), priceStep.ToDecimal(),
+					isin, board, DateTime.FromOADate(0) == expiryDate ? (DateTime?)null : expiryDate, daysBeforeExpiry.ToDecimal(), strike.ToDecimal());
 		}
 
 		internal void OnUpdateSecurity(string securityId, DateTime time, double open, double high, double low, double close, double lastTradePrice, double volume,
@@ -792,30 +788,30 @@ namespace StockSharp.SmartCom.Native
 			double goBaseBacked, double highLimit, double lowLimit, int tradingStatus, double volat, double theorPrice)
 		{
 			SecurityChanged.SafeInvoke(securityId,
-				Tuple.Create(SafeCast(lastTradePrice), SafeCast(lastTradeVolume), time),
-				SafeCast(open), SafeCast(high), SafeCast(low), SafeCast(close), SafeCast(volume),
-				new QuoteChange(Sides.Buy, SafeCast(bid), SafeCast(bidSize)),
-				new QuoteChange(Sides.Sell, SafeCast(ask), SafeCast(askSize)),
-				SafeCast(openInt),
-				Tuple.Create(SafeCast(goBuy), SafeCast(goSell)),
-				Tuple.Create(SafeCast(goBase), SafeCast(goBaseBacked)),
-				Tuple.Create(SafeCast(lowLimit), SafeCast(highLimit)),
-				tradingStatus, Tuple.Create(SafeCast(volat), SafeCast(theorPrice)));
+				Tuple.Create(lastTradePrice.ToDecimal(), lastTradeVolume.ToDecimal(), time),
+				open.ToDecimal(), high.ToDecimal(), low.ToDecimal(), close.ToDecimal(), volume.ToDecimal(),
+				new QuoteChange(Sides.Buy, bid.ToDecimal() ?? 0, bidSize.ToDecimal() ?? 0),
+				new QuoteChange(Sides.Sell, ask.ToDecimal() ?? 0, askSize.ToDecimal() ?? 0),
+				openInt.ToDecimal(),
+				Tuple.Create(goBuy.ToDecimal(), goSell.ToDecimal()),
+				Tuple.Create(goBase.ToDecimal(), goBaseBacked.ToDecimal()),
+				Tuple.Create(lowLimit.ToDecimal(), highLimit.ToDecimal()),
+				tradingStatus, Tuple.Create(volat.ToDecimal(), theorPrice.ToDecimal()));
 		}
 
 		internal void OnUpdateQuotes(string securityId, int row, int rowCount, double bidPrice, double bidVolume, double askPrice, double askVolume)
 		{
-			QuoteChanged.SafeInvoke(securityId, row, rowCount, SafeCast(bidPrice), SafeCast(bidVolume), SafeCast(askPrice), SafeCast(askVolume));
+			QuoteChanged.SafeInvoke(securityId, row, rowCount, bidPrice.ToDecimal(), bidVolume.ToDecimal(), askPrice.ToDecimal(), askVolume.ToDecimal());
 		}
 
 		internal void OnAddMyTrade(string portfolio, string securityId, string orderId, double price, double amount, DateTime time, string tradeNo)
 		{
-			NewMyTrade.SafeInvoke(portfolio, securityId, orderId.To<long>(), SafeCast(price), SafeCast(amount.Abs()), time, tradeNo.To<long>());
+			NewMyTrade.SafeInvoke(portfolio, securityId, orderId.To<long>(), price.ToDecimal(), amount.Abs().ToDecimal(), time, tradeNo.To<long>());
 		}
 
 		internal void OnAddTrade(string securityId, DateTime time, double price, double volume, string tradeNo, SmartOrderAction action)
 		{
-			NewTrade.SafeInvoke(securityId, time, SafeCast(price), SafeCast(volume), tradeNo.To<long>(), action);
+			NewTrade.SafeInvoke(securityId, time, price.ToDecimal(), volume.ToDecimal(), tradeNo.To<long>(), action);
 		}
 
 		internal void OnAddPortfolio(int row, int rowCount, string name, string exchange, SmartPortfolioStatus status)
@@ -825,22 +821,22 @@ namespace StockSharp.SmartCom.Native
 
 		internal void OnUpdatePortfolio(string name, double cash, double leverage, double commission, double saldo)
 		{
-			PortfolioChanged.SafeInvoke(name, SafeCast(cash), SafeCast(leverage), SafeCast(commission), SafeCast(saldo));
+			PortfolioChanged.SafeInvoke(name, cash.ToDecimal(), leverage.ToDecimal(), commission.ToDecimal(), saldo.ToDecimal());
 		}
 
 		internal void OnUpdatePosition(string portfolioName, string securityId, double avPrice, double amount, double planned)
 		{
-			PositionChanged.SafeInvoke(portfolioName, securityId, SafeCast(avPrice), SafeCast(amount), SafeCast(planned));
+			PositionChanged.SafeInvoke(portfolioName, securityId, avPrice.ToDecimal(), amount.ToDecimal(), planned.ToDecimal());
 		}
 
 		internal void OnAddTradeHistory(int row, int rowCount, string securityId, DateTime time, double price, double volume, string tradeno, SmartOrderAction action)
 		{
-			NewHistoryTrade.SafeInvoke(row, rowCount, securityId, time, SafeCast(price), SafeCast(volume), tradeno.To<long>(), action);
+			NewHistoryTrade.SafeInvoke(row, rowCount, securityId, time, price.ToDecimal(), volume.ToDecimal(), tradeno.To<long>(), action);
 		}
 
 		internal void OnAddBar(int row, int rowCount, string securityId, SmartBarInterval interval, DateTime time, double open, double high, double low, double close, double volume, double openInt)
 		{
-			NewBar.SafeInvoke(row, rowCount, securityId, SmartComTimeFrames.GetTimeFrame(interval), time, SafeCast(open), SafeCast(high), SafeCast(low), SafeCast(close), SafeCast(volume), SafeCast(openInt));
+			NewBar.SafeInvoke(row, rowCount, securityId, SmartComTimeFrames.GetTimeFrame(interval), time, open.ToDecimal(), high.ToDecimal(), low.ToDecimal(), close.ToDecimal(), volume.ToDecimal(), openInt.ToDecimal());
 		}
 
 		internal void OnOrderSucceded(int cookie, string smartOrderId)
@@ -854,8 +850,8 @@ namespace StockSharp.SmartCom.Native
 		{
 			// http://www.itinvest.ru/forum/index.php?showtopic=63063&st=0&p=242023&#entry242023
 			OrderChanged.SafeInvoke(portfolio, securityId, state,
-					action, type, validity == SmartOrderValidity.Day, SafeCast(price), (int)volume,
-					SafeCast(stop), (int)balance, time, smartOrderId, orderIdStr.To<long>(), status, transactionId);
+					action, type, validity == SmartOrderValidity.Day, price.ToDecimal(), (int)volume,
+					stop.ToDecimal(), (int)balance, time, smartOrderId, orderIdStr.To<long>(), status, transactionId);
 		}
 
 		internal void OnOrderFailed(int cookie, string smartOrderId, string reason)

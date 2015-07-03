@@ -29,7 +29,7 @@ namespace StockSharp.SmartCom
 			_wrapper.RegisterOrder(
 				regMsg.PortfolioName, (string)regMsg.SecurityId.Native, regMsg.Side == Sides.Buy ? SmartOrderAction.Buy : SmartOrderAction.Sell,
 				regMsg.GetSmartOrderType(), regMsg.TillDate == null || regMsg.TillDate == DateTimeOffset.MaxValue ? SmartOrderValidity.Gtc : SmartOrderValidity.Day,
-				(double)regMsg.Price, (int)regMsg.Volume, condition != null ? (double)condition.StopPrice : 0, (int)regMsg.TransactionId);
+				(double)regMsg.Price, (int)regMsg.Volume, condition != null ? (double)(condition.StopPrice ?? 0) : 0, (int)regMsg.TransactionId);
 		}
 
 		private void ProcessCancelMessage(OrderCancelMessage cancelMsg)
@@ -107,18 +107,18 @@ namespace StockSharp.SmartCom
 			_lookupPortfoliosId = 0;
 		}
 
-		private void OnPortfolioChanged(string portfolioName, decimal cash, decimal leverage, decimal commission, decimal saldo)
+		private void OnPortfolioChanged(string portfolioName, decimal? cash, decimal? leverage, decimal? commission, decimal? saldo)
 		{
 			SendOutMessage(
 				this
 					.CreatePortfolioChangeMessage(portfolioName)
-						.Add(PositionChangeTypes.Leverage, leverage)
-						.Add(PositionChangeTypes.Commission, commission)
-						.Add(PositionChangeTypes.CurrentValue, cash)
-						.Add(PositionChangeTypes.BeginValue, cash));
+						.TryAdd(PositionChangeTypes.Leverage, leverage)
+						.TryAdd(PositionChangeTypes.Commission, commission)
+						.TryAdd(PositionChangeTypes.CurrentValue, cash)
+						.TryAdd(PositionChangeTypes.BeginValue, cash));
 		}
 
-		private void OnPositionChanged(string portfolioName, string smartId, decimal avPrice, decimal amount, decimal planned)
+		private void OnPositionChanged(string portfolioName, string smartId, decimal? avPrice, decimal? amount, decimal? planned)
 		{
 			SendOutMessage(
 				this
@@ -128,7 +128,7 @@ namespace StockSharp.SmartCom
 						.Add(PositionChangeTypes.CurrentValueInLots, amount));
 		}
 
-		private void OnNewMyTrade(string portfolio, string smartId, long orderId, decimal price, decimal volume, DateTime time, long tradeId)
+		private void OnNewMyTrade(string portfolio, string smartId, long orderId, decimal? price, decimal? volume, DateTime time, long tradeId)
 		{
 			this.AddInfoLog("SmartTrader.AddTrade: tradeId {0} orderId {1} price {2} volume {3} time {4} security {5}",
 				tradeId, orderId, price, volume, time, smartId);
@@ -185,7 +185,7 @@ namespace StockSharp.SmartCom
 		}
 
 		private void OnOrderChanged(string portfolioName, string secSmartId, SmartOrderState state, SmartOrderAction action, SmartOrderType smartType, bool isOneDay,
-			decimal price, int volume, decimal stop, int balance, DateTime time, string smartOrderId, long orderId, int status, int transactionId)
+			decimal? price, int volume, decimal? stop, int balance, DateTime time, string smartOrderId, long orderId, int status, int transactionId)
 		{
 			this.AddInfoLog(() => "SmartTrader.UpdateOrder: id {0} smartId {1} type {2} direction {3} price {4} volume {5} balance {6} time {7} security {8} state {9}"
 				.Put(orderId, smartOrderId, smartType, action, price, volume, balance, time, secSmartId, state));
@@ -297,7 +297,7 @@ namespace StockSharp.SmartCom
 				SecurityId = new SecurityId { Native = secSmartId },
 				PortfolioName = portfolioName,
 				Side = (Sides)side,
-				Price = price,
+				Price = price ?? 0,
 				Volume = volume,
 				ServerTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				Balance = balance,

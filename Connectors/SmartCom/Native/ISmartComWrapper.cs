@@ -339,7 +339,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<int, int, string, string, string, string, int, int, decimal, decimal, string, string, DateTime?, decimal, decimal> NewSecurity;
+		event Action<int, int, string, string, string, string, int, int, decimal?, decimal?, string, string, DateTime?, decimal?, decimal?> NewSecurity;
 
 		/// <summary>
 		/// Событие об изменении инструмента.
@@ -394,7 +394,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<string, Tuple<decimal, decimal, DateTime>, decimal, decimal, decimal, decimal, decimal, QuoteChange, QuoteChange, decimal, Tuple<decimal, decimal>, Tuple<decimal, decimal>, Tuple<decimal, decimal>, int, Tuple<decimal, decimal>> SecurityChanged;
+		event Action<string, Tuple<decimal?, decimal?, DateTime>, decimal?, decimal?, decimal?, decimal?, decimal?, QuoteChange, QuoteChange, decimal?, Tuple<decimal?, decimal?>, Tuple<decimal?, decimal?>, Tuple<decimal?, decimal?>, int, Tuple<decimal?, decimal?>> SecurityChanged;
 
 		/// <summary>
 		/// Событие о появлении портфеля.
@@ -444,7 +444,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<string, decimal, decimal, decimal, decimal> PortfolioChanged;
+		event Action<string, decimal?, decimal?, decimal?, decimal?> PortfolioChanged;
 
 		/// <summary>
 		/// Событие об изменении позиции.
@@ -469,7 +469,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<string, string, decimal, decimal, decimal> PositionChanged;
+		event Action<string, string, decimal?, decimal?, decimal?> PositionChanged;
 
 		/// <summary>
 		/// Событие о появлении собственной сделки.
@@ -500,7 +500,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<string, string, long, decimal, decimal, DateTime, long> NewMyTrade;
+		event Action<string, string, long, decimal?, decimal?, DateTime, long> NewMyTrade;
 
 		/// <summary>
 		/// Событие о появлении тиковой сделки.
@@ -528,7 +528,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<string, DateTime, decimal, decimal, long, SmartOrderAction> NewTrade;
+		event Action<string, DateTime, decimal?, decimal?, long, SmartOrderAction> NewTrade;
 
 		/// <summary>
 		/// Событие о появлении исторической тиковой сделки.
@@ -562,7 +562,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<int, int, string, DateTime, decimal, decimal, long, SmartOrderAction> NewHistoryTrade;
+		event Action<int, int, string, DateTime, decimal?, decimal?, long, SmartOrderAction> NewHistoryTrade;
 
 		/// <summary>
 		/// Событие о появлении исторической временной свечи.
@@ -605,7 +605,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<int, int, string, SmartComTimeFrames, DateTime, decimal, decimal, decimal, decimal, decimal, decimal> NewBar;
+		event Action<int, int, string, SmartComTimeFrames, DateTime, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?> NewBar;
 
 		/// <summary>
 		/// Событие о появлении новой заявки.
@@ -676,7 +676,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<string, string, SmartOrderState, SmartOrderAction, SmartOrderType, bool, decimal, int, decimal, int, DateTime, string, long, int, int> OrderChanged;
+		event Action<string, string, SmartOrderState, SmartOrderAction, SmartOrderType, bool, decimal?, int, decimal?, int, DateTime, string, long, int, int> OrderChanged;
 
 		/// <summary>
 		/// Событие об ошибке при регистрации заявки.
@@ -778,7 +778,7 @@
 		/// </item>
 		/// </list>
 		/// </remarks>
-		event Action<string, int, int, decimal, decimal, decimal, decimal> QuoteChanged;
+		event Action<string, int, int, decimal?, decimal?, decimal?, decimal?> QuoteChanged;
 
 		/// <summary>
 		/// Событие об успешном подсоединении к серверу SmartCOM.

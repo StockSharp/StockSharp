@@ -3499,5 +3499,25 @@ namespace StockSharp.Algo
 				OwnInputChannel = true
 			};
 		}
+
+		/// <summary>
+		/// Перевести <see cref="double"/> в <see cref="decimal"/>. Если исходное значение <see cref="double.IsNaN"/> или <see cref="double.IsInfinity"/>, то будет возвращено <see langword="null"/>.
+		/// </summary>
+		/// <param name="value"><see cref="double"/> значение.</param>
+		/// <returns><see cref="decimal"/> значение.</returns>
+		public static decimal? ToDecimal(this double value)
+		{
+			return value.IsInfinity() || value.IsNaN() ? (decimal?)null : (decimal)value;
+		}
+
+		/// <summary>
+		/// Перевести <see cref="float"/> в <see cref="decimal"/>. Если исходное значение <see cref="float.IsNaN"/> или <see cref="float.IsInfinity"/>, то будет возвращено <see langword="null"/>.
+		/// </summary>
+		/// <param name="value"><see cref="float"/> значение.</param>
+		/// <returns><see cref="decimal"/> значение.</returns>
+		public static decimal? ToDecimal(this float value)
+		{
+			return value.IsInfinity() || value.IsNaN() ? (decimal?)null : (decimal)value;
+		}
 	}
 }

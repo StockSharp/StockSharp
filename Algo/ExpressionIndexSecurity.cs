@@ -6,7 +6,6 @@ namespace StockSharp.Algo
 	using System.Linq;
 
 	using Ecng.Collections;
-	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 
@@ -138,7 +137,7 @@ namespace StockSharp.Algo
 			}
 
 			var value = (double)_expression.Evaluate();
-			return (value.IsInfinity() || value.IsNaN()) ? 0 : value.To<decimal>();
+			return value.ToDecimal();
 		}
 
 		/// <summary>
