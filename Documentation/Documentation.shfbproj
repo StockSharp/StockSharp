@@ -150,6 +150,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\RithmicHistory.aml" />
+    <None Include="Topics\RithmicStopOrders.aml" />
+    <None Include="Topics\RithmicSample.aml" />
     <None Include="Topics\CQGStopOrders.aml" />
     <None Include="Topics\CQGSample.aml" />
     <None Include="Topics\SterlingNews.aml" />
@@ -1289,6 +1292,14 @@
     <Image Include="Art\CQGTraderSample.png">
       <ImageId>CQGTraderSample</ImageId>
       <AlternateText>CQGTrader Sample</AlternateText>
+    </Image>
+    <Image Include="Art\RithmicSample.png">
+      <ImageId>RithmicSample</ImageId>
+      <AlternateText>Rithmic Sample</AlternateText>
+    </Image>
+    <Image Include="Art\RithmicSecurities.png">
+      <ImageId>RithmicSecurities</ImageId>
+      <AlternateText>Rithmic Securities</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

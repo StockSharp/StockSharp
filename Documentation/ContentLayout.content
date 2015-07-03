@@ -72,7 +72,7 @@
         <Topic id="eab815a2-65f7-46e8-9989-4ae52d234703" visible="True" title="Настройка TWS" />
         <Topic id="7c23b480-d472-43df-aabf-f743ad09fded" visible="True" title="Пример работы с IBTrader" />
         <Topic id="3e0f02b3-3e2f-405d-a8a2-6d44a50db166" visible="True" title="Алго-заявки" />
-        <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" title="Исторические данные" />
+        <Topic id="f7074321-9e5c-4bc0-a8a3-b2025c5b7268" visible="True" isSelected="true" title="Исторические данные" />
         <Topic id="9817c52a-fc3e-4fc8-a5f0-d7caf654b440" visible="True" title="Сканер" />
       </Topic>
       <Topic id="89c3f13d-2602-446a-8c3d-5615b6f901b9" visible="True" title="Blackwood (Fusion)">
@@ -101,10 +101,14 @@
       </Topic>
       <Topic id="aac980b1-ac5b-415b-811c-a8d128942391" visible="True" isExpanded="true" title="CQG">
         <Topic id="436fc377-85ff-4d37-ad62-4846313a8563" visible="True" title="Пример работы с CQGTrader" />
-        <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" isSelected="true" title="Стоп-заявки" />
+        <Topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" visible="True" title="Стоп-заявки" />
       </Topic>
       <Topic id="29dfad18-ac49-4cf4-993c-c32d62101fff" visible="True" title="FIX" />
-      <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" title="Rithmic" />
+      <Topic id="777d9208-1146-4d54-b5ae-0315b4186522" visible="True" isExpanded="true" title="Rithmic">
+        <Topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" visible="True" title="Пример работы с RithmicTrader" />
+        <Topic id="36d037d2-fda8-4801-9294-0dcc9891a123" visible="True" title="Стоп-заявки" />
+        <Topic id="beafeb9f-608e-4986-99ae-1bcca1500c4b" visible="True" title="Исторические данные" />
+      </Topic>
     </Topic>
     <Topic id="b884020d-e4f0-4f7d-8de1-d75d052fe04b" visible="True" title="Коннекторы Forex">
       <Topic id="4f50724b-00de-4ed4-b043-7dacb6277c98" visible="True" title="LMAX">
