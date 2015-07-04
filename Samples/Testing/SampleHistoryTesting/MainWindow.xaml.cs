@@ -16,6 +16,7 @@ namespace SampleHistoryTesting
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Candles.Compression;
 	using StockSharp.Algo.Commissions;
 	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
@@ -28,6 +29,22 @@ namespace SampleHistoryTesting
 
 	public partial class MainWindow
 	{
+		private class TradeCandleBuilderSourceEx : TradeCandleBuilderSource
+		{
+			public TradeCandleBuilderSourceEx(IConnector connector)
+				: base(connector)
+			{
+			}
+
+			protected override void RegisterSecurity(Security security)
+			{
+			}
+
+			protected override void UnRegisterSecurity(Security security)
+			{
+			}
+		}
+
 		// emulation settings
 		private sealed class EmulationInfo
 		{
@@ -268,7 +285,8 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(connector);
 
-				var candleManager = new CandleManager(connector);
+				var candleManager = new CandleManager(new TradeCandleBuilderSourceEx(connector));
+
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
 				_shortMa = new SimpleMovingAverage { Length = 10 };
