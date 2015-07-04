@@ -51,20 +51,20 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng\Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng\Ecng.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\..\..\References\Ecng\Ecng.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\..\..\References\Ecng\Ecng.ComponentModel.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng\Ecng.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\..\..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng\Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+    <Reference Include="Ecng.Xaml, Version=1.0.0.0">
+      <HintPath>..\..\..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
