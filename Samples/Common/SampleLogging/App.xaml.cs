@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace SampleLogging
+﻿namespace SampleLogging
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
-	public partial class App : Application
+	using System.Windows;
+	using System.Windows.Threading;
+
+	public partial class App
 	{
+		private void ApplicationDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+		{
+			MessageBox.Show(MainWindow, e.Exception.ToString());
+			e.Handled = true;
+		}
 	}
 }
