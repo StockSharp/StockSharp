@@ -195,7 +195,7 @@ namespace StockSharp.Logging
 			get { return _flushTimer.Interval(); }
 			set
 			{
-				if (value <= TimeSpan.Zero)
+				if (value < TimeSpan.FromMilliseconds(1))
 					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.IntervalMustBePositive);
 
 				_flushTimer.Interval(value);

@@ -102,6 +102,7 @@
     <Compile Include="MemoryStatisticsValue.cs" />
     <Compile Include="SoundLogListener.cs" />
     <Compile Include="SpeechLogListener.cs" />
+    <Compile Include="TraceSource.cs" />
     <Compile Include="UnhandledExceptionSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
