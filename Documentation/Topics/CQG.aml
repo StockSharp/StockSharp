@@ -4,7 +4,7 @@
     <introduction>
       <para>
 			Для написания торговых роботов для <token>cqg</token> необходимо использовать 
-			<codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference>.
+			<codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference>. Авторизация выполняется при запуске терминала <legacyBold>CQG Integrated Client</legacyBold>.  
 		</para>
     </introduction>
      <relatedTopics>

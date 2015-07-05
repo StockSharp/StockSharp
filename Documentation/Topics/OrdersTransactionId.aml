@@ -13,17 +13,17 @@
 		</para>
 		<para>
 			<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.TransactionId</codeEntityReference> генерируется автоматически
-			классом <codeEntityReference>T:StockSharp.Algo.TransactionIdGenerator</codeEntityReference>. Это абстрактный класс, который стандартно
+			классом <codeEntityReference>T:Ecng.Common.IdGenerator</codeEntityReference>. Это абстрактный класс, который стандартно
 			имеет две реализации:
 		</para>
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.IncrementTransactionIdGenerator</codeEntityReference> - установлен по умолчанию. Увеличивает номер на 1.
-				Первоначальное значение выставляется через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.IncrementTransactionIdGenerator.CurrentTransactionId</codeEntityReference>,
+				<codeEntityReference>T:Ecng.Common.IncrementalIdGenerator</codeEntityReference> - установлен по умолчанию. Увеличивает номер на 1.
+				Первоначальное значение выставляется через свойство <codeEntityReference qualifyHint="true">P:Ecng.Common.IncrementalIdGenerator.Current</codeEntityReference>,
 				и по умолчанию равно количеству миллисекунд с начала дня.
 			</listItem>
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.MillisecondTransactionIdGenerator</codeEntityReference>. Генерирует номер транзакции, равный количеству
+				<codeEntityReference>T:Ecng.Common.MillisecondIdGenerator</codeEntityReference>. Генерирует номер транзакции, равный количеству
 				миллисекунд с времени создания генератора.
 			</listItem>
 		</list>	

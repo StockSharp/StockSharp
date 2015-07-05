@@ -1,33 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<topic id="7e828fb2-0b95-41fd-8540-17f6bdc747cf" revisionNumber="1">
+<topic id="3e8732d0-71a5-44ab-be04-c482d5a41d71" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
     <introduction>
-     <para>
-      	Пример работы с <codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference> демонстрирует приложение SampleSterling, показанное на рисунке ниже.
-      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Sterling</legacyItalic>.
+      <para>
+      	Пример работы с <codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> демонстрирует приложение SampleRithmic, показанное на рисунке ниже.
+      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Rithmic</legacyItalic>.
       </para>
-      <mediaLink><image placement="center" xlink:href="SterlingSample"/></mediaLink>
-      
-	<alert class="note">
-  		<para>При работе с примером с подключением к <legacyBold>Sterling Trader Pro</legacyBold> Visual Studio нужно запускать от имени администратора!</para>
-	</alert>
-
+      <mediaLink><image placement="center" xlink:href="RithmicSample"/></mediaLink>
     </introduction>
     <procedure>
 		<steps class="ordered">
 			<step>
 				<content>
 					<para>В самом начале создаем экземпляр класса шлюза 
-					<codeEntityReference qualifyHint="false">T:StockSharp.Sterling.SterlingTrader</codeEntityReference>:</para>
+					<codeEntityReference qualifyHint="false">T:StockSharp.Rithmic.RithmicTrader</codeEntityReference>:</para>
             		<code language="C#">
             				<![CDATA[
 // создаем коннектор
-Trader = new SterlingTrader { LogLevel = LogLevels.Debug };
+Trader = new RithmicTrader { LogLevel = LogLevels.Debug };
+
+// Устанавливаем параметры логин, пароль, адрес сервера и путь к файлу сертификата
+Trader.UserName = settings.Username;
+Trader.Server = settings.Server;
+Trader.Password = pwd;
+Trader.CertFile = settings.CertFile;
+
 							]]>
 					</code>
 				</content>
@@ -41,21 +38,16 @@ Trader = new SterlingTrader { LogLevel = LogLevels.Debug };
 Trader.Connected += () =>
 {
 	this.GuiAsync(() => OnConnectionChanged(true));
-	AddSecurities();
 };
 
 // подписываемся на событие ошибки соединения
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
 	OnConnectionChanged(Trader.ConnectionState == ConnectionStates.Connected);
-	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 });
 
 Trader.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
-
-// подписываемся на событие ошибки коннектора
-Trader.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 // подписываемся на событие ошибки при получение рыночных данных
 Trader.MarketDataSubscriptionFailed += (security, type, error) =>
@@ -90,16 +82,13 @@ Trader.StopOrdersRegisterFailed += OrdersFailed;
 // подписываемся на событие ошибки снятия стоп-заявки
 Trader.StopOrdersCancelFailed += OrdersFailed;
 
-// подписываемся на событие получения новости
-Trader.NewNews += news => _newsWindow.NewsPanel.NewsGrid.News.Add(news);
-
 							]]>
 					</code>						
 				</content>
 			</step>
 			<step>
 				<content>
-					<para>Далее необходимо выполнить подключение к серверу <token>sterling</token>:</para>
+					<para>Далее необходимо выполнить подключение к серверу <token>rithmic</token>:</para>
             		<code language="C#">
             				<![CDATA[
 Trader.Connect();
@@ -119,7 +108,7 @@ Trader.Connect();
 			<step>
 				<content>
 					<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
-					<mediaLink><image placement="center" xlink:href="Sterling_securities"/></mediaLink>
+					<mediaLink><image placement="center" xlink:href="RithmicSecurities"/></mediaLink>
          			<code language="C#">
             				<![CDATA[
 private void Ok_Click(object sender, RoutedEventArgs e)
@@ -140,34 +129,31 @@ private void Ok_Click(object sender, RoutedEventArgs e)
 			</step>
 			<step>
 				<content>
-					<para>Для получения сделок по выбранному инструменту необходимо вызвать метод
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+					<para>Для получения сделок и изменений по выбранному инструменту (кнопка <legacyBold>Бид-Оффер</legacyBold>) необходимо вызвать методы
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> и 
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisteredSecurities(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:</para>
             		<code language="C#">
             				<![CDATA[
-private void TradesClick(object sender, RoutedEventArgs e)
+private void QuotesClick(object sender, RoutedEventArgs e)
 {
-   TryInitialize();
+	var security = SecurityPicker.SelectedSecurity;
+	var trader = MainWindow.Instance.Trader;
 
-   var window = _tradesWindows.SafeAdd(SelectedSecurity, security =>
-   {
-     // create tick trades window
-     var wnd = new TradesWindow { Title = security.Code + " сделки" };
-
-     // subscribe on tick trades flow
-     MainWindow.Instance.Trader.RegisterTrades(security);
-
-     wnd.MakeHideable();
-     return wnd;
-   });
-
-   if (window.Visibility == Visibility.Visible)
-       window.Hide();
-   else
-       window.Show();
+	if (trader.RegisteredSecurities.Contains(security))
+	{
+		trader.UnRegisterSecurity(security);
+		trader.UnRegisterTrades(security);
+	}
+	else
+	{
+		trader.RegisterSecurity(security);
+		trader.RegisterTrades(security);
+	}
 }
 							]]>
 					</code>
-					<para>Сделки будут приходить в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>.</para>
+					<para>Сделки будут приходить в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>, 
+					а изменения в событии <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference>.</para>
 				</content>
 			</step>
 			<step>
@@ -178,11 +164,9 @@ private void TradesClick(object sender, RoutedEventArgs e)
             				<![CDATA[
 private void DepthClick(object sender, RoutedEventArgs e)
 {
-	TryInitialize();
-
 	var trader = MainWindow.Instance.Trader;
 
-	var window = _quotesWindows.SafeAdd(SelectedSecurity, security =>
+	var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
 	{
 		// subscribe on order book flow
 		trader.RegisterMarketDepth(security);
@@ -197,6 +181,13 @@ private void DepthClick(object sender, RoutedEventArgs e)
 		window.Hide();
 	else
 		window.Show();
+
+	if (!_initialized)
+	{
+		TraderOnMarketDepthsChanged(new[] { trader.GetMarketDepth(SecurityPicker.SelectedSecurity) });
+		trader.MarketDepthsChanged += TraderOnMarketDepthsChanged;
+		_initialized = true;
+	}
 }
 							]]>
 					</code>
@@ -231,3 +222,6 @@ private void NewOrderClick(object sender, RoutedEventArgs e)
     </relatedTopics>
   </developerConceptualDocument>
 </topic>
+
+ 
+
