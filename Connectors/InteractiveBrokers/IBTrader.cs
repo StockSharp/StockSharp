@@ -292,6 +292,11 @@
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
+		/// Событие окончания обработки серии.
+		/// </summary>
+		public event Action<CandleSeries> Stopped;
+
+		/// <summary>
 		/// Событие появление нового отчета, полученного по подписке <see cref="SubscribeFundamentalReport"/>.
 		/// </summary>
 		public event Action<Security, FundamentalReports, string> NewFundamentalReport;
@@ -495,6 +500,9 @@
 					{
 						var candle = candleMsg.ToCandle(series);
 						NewCandles.SafeInvoke(series, new[] { candle });
+
+						if (candleMsg.IsFinished)
+							Stopped.SafeInvoke(series);
 					}
 
 					return;

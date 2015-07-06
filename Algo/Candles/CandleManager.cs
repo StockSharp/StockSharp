@@ -127,6 +127,7 @@ namespace StockSharp.Algo.Candles
 
 				_source = source;
 				_source.NewCandles += OnNewCandles;
+				_source.Stopped += OnStopped;
 			}
 
 			public int SpeedPriority
@@ -135,12 +136,7 @@ namespace StockSharp.Algo.Candles
 			}
 
 			public event Action<CandleSeries, Candle> Processing;
-
-			event Action<CandleSeries> ICandleSource<Candle>.Stopped
-			{
-				add { }
-				remove { }
-			}
+			public event Action<CandleSeries> Stopped;
 
 			event Action<Exception> ICandleSource<Candle>.Error
 			{
@@ -175,13 +171,20 @@ namespace StockSharp.Algo.Candles
 				}
 			}
 
+			private void OnStopped(CandleSeries series)
+			{
+				Stopped.SafeInvoke(series);
+			}
+
 			/// <summary>
 			/// Освободить ресурсы.
 			/// </summary>
 			protected override void DisposeManaged()
 			{
-				base.DisposeManaged();
 				_source.NewCandles -= OnNewCandles;
+				_source.Stopped -= OnStopped;
+
+				base.DisposeManaged();
 			}
 
 			ICandleManager ICandleManagerSource.CandleManager { get; set; }

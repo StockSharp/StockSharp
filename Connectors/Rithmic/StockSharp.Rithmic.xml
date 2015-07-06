@@ -253,6 +253,11 @@
             Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.Rithmic.RithmicTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
             </summary>
         </member>
+        <member name="E:StockSharp.Rithmic.RithmicTrader.Stopped">
+            <summary>
+            Событие окончания обработки серии.
+            </summary>
+        </member>
         <member name="T:StockSharp.Rithmic.Xaml.RithmicServerComboBox">
             <summary>
             Выпадающий список для выбора <see cref="T:StockSharp.Rithmic.RithmicServers"/>.

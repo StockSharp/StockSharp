@@ -25,6 +25,11 @@ namespace StockSharp.Algo.Candles
 		event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
+		/// Событие окончания обработки серии.
+		/// </summary>
+		event Action<CandleSeries> Stopped;
+
+		/// <summary>
 		/// Подписаться на получение свечек.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
