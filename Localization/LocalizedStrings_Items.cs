@@ -27095,12 +27095,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Alfa-Direct terminal user name.
+		/// Alfa-Direct terminal login.
 		/// </summary>
 		public const string Str2261Key = "Str2261";
 
 		/// <summary>
-		/// Alfa-Direct terminal user name.
+		/// Alfa-Direct terminal login.
 		/// </summary>
 		public static string Str2261
 		{
@@ -27602,25 +27602,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// User name
-		/// </summary>
-		public const string Str2301Key = "Str2301";
-
-		/// <summary>
-		/// User name
-		/// </summary>
-		public static string Str2301
-		{
-			get { return GetString(Str2301Key); }
-		}
-
-		/// <summary>
-		/// User name. Required if server authorization is on.
+		/// Login. Required if server authorization is on.
 		/// </summary>
 		public const string Str2302Key = "Str2302";
 
 		/// <summary>
-		/// User name. Required if server authorization is on.
+		/// Login. Required if server authorization is on.
 		/// </summary>
 		public static string Str2302
 		{
@@ -27628,12 +27615,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Password. Require when server authorization is enabled..
+		/// Password. Require when server authorization is enabled.
 		/// </summary>
 		public const string Str2303Key = "Str2303";
 
 		/// <summary>
-		/// Password. Require when server authorization is enabled..
+		/// Password. Require when server authorization is enabled.
 		/// </summary>
 		public static string Str2303
 		{
@@ -30670,12 +30657,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// OpenECry user name.
+		/// OpenECry login.
 		/// </summary>
 		public const string Str2563Key = "Str2563";
 
 		/// <summary>
-		/// OpenECry user name.
+		/// OpenECry login.
 		/// </summary>
 		public static string Str2563
 		{
@@ -30683,12 +30670,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// OpenECry user password.
+		/// OpenECry password.
 		/// </summary>
 		public const string Str2564Key = "Str2564";
 
 		/// <summary>
-		/// OpenECry user password.
+		/// OpenECry password.
 		/// </summary>
 		public static string Str2564
 		{
@@ -30943,12 +30930,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Incorrect user name or password.
+		/// Incorrect login or password.
 		/// </summary>
 		public const string Str2585Key = "Str2585";
 
 		/// <summary>
-		/// Incorrect user name or password.
+		/// Incorrect login or password.
 		/// </summary>
 		public static string Str2585
 		{
@@ -41447,12 +41434,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// User name or password missing.
+		/// Login or password missing.
 		/// </summary>
 		public const string Str3456Key = "Str3456";
 
 		/// <summary>
-		/// User name or password missing.
+		/// Login or password missing.
 		/// </summary>
 		public static string Str3456
 		{
@@ -41590,12 +41577,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Additional user name. Used when transaction sending is carried out to a separate server.
+		/// Additional login. Used when transaction sending is carried out to a separate server.
 		/// </summary>
 		public const string Str3468Key = "Str3468";
 
 		/// <summary>
-		/// Additional user name. Used when transaction sending is carried out to a separate server.
+		/// Additional login. Used when transaction sending is carried out to a separate server.
 		/// </summary>
 		public static string Str3468
 		{
@@ -45061,12 +45048,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// User name is not specified.
+		/// Login is not specified.
 		/// </summary>
 		public const string Str3751Key = "Str3751";
 
 		/// <summary>
-		/// User name is not specified.
+		/// Login is not specified.
 		/// </summary>
 		public static string Str3751
 		{

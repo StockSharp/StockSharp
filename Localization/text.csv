@@ -2087,7 +2087,7 @@ Str2257Params;Non-empty line in the news table, which could not be parsed: {0};�
 Str2258Params;Error registering order with transaction ID {0}. {1};Ошибка регистрации заявки с идентификатором транзакции {0}. {1}
 Str2259Params;Trade with ID {0} has zero ID of initialized order;Сделка с идентификатором {0} имеет нулевой идентификатор иниц. заявки
 Str2260;Connection to AlfaDirect broker.;Подключение к брокеру AlfaDirect.
-Str2261;Alfa-Direct terminal user name.;Имя пользователя в терминале Альфа-Директ.
+Str2261;Alfa-Direct terminal login.;Имя пользователя в терминале Альфа-Директ.
 Str2262;Password to enter the terminal.;Пароль для входа в терминал.
 Str2263Params;Login = {0};Логин = {0}
 Str2264;Orders condition for {0};Условие заявок для {0}
@@ -2126,9 +2126,8 @@ Str2297Params;No unsaved days to load {0} candles for {1}.;Нет несохра
 Str2298Params;Start downloading {0} candles for {1:d} date and {2} security.;Старт загрузки {0} свечек за {1:d} для {2}.
 Str2299Params;Error loading {0} candles for {1:d} date and {2} security.;Ошибка загрузки {0} свечек за {1:d} для {2}.
 Str2300;End of iteration.;Окончание итерации.
-Str2301;User name;Имя пользователя
-Str2302;User name. Required if server authorization is on.;Имя пользователя. Требуется при включенной авторизации на сервере.
-Str2303;Password. Require when server authorization is enabled..;Пароль. Требуется при включенной авторизации на сервере.
+Str2302;Login. Required if server authorization is on.;Имя пользователя. Требуется при включенной авторизации на сервере.
+Str2303;Password. Require when server authorization is enabled.;Пароль. Требуется при включенной авторизации на сервере.
 Str2304;From what date to begin reading data.;С какой даты начать считывать данные.
 Str2305;Receiveing new securities.;Получение новых инструментов.
 Str2306Params;Start from {0:d}.;Старт с {0:d}.
@@ -2363,8 +2362,8 @@ Str2559;Automatically;Автоматически
 Str2560;Secondary;Второстепенный
 Str2561;Connection to OpenECry broker.;Подключение к брокеру OpenECry.
 Str2562;OpenECry API server address.;Адрес API сервера OpenECry.
-Str2563;OpenECry user name.;Имя пользователя OpenECry.
-Str2564;OpenECry user password.;Пароль пользователя OpenECry.
+Str2563;OpenECry login.;Имя пользователя OpenECry.
+Str2564;OpenECry password.;Пароль пользователя OpenECry.
 Str2565;Unique software ID.;Уникальный идентификатор программного обеспечения.
 Str2566;Required mode of connection to the terminal.;Требуемый режим подключения к терминалу.
 Str2567;Use «native» reconnection mechanism.;Использовать «родной» механизм восстановления подключения.
@@ -2384,7 +2383,7 @@ Str2581;User blocked.;Пользователь заблокирован.
 Str2582;Session was closed by user.;Сессия была закрыта пользователем.
 Str2583;User account expired.;Срок действия учетной записи истек.
 Str2584;Client version out of date. Update required.;Устаревшая версия клиента. Требуется обновление.
-Str2585;Incorrect user name or password.;Неверное имя пользователя или пароль.
+Str2585;Incorrect login or password.;Неверное имя пользователя или пароль.
 Str2586;User temporarily blocked.;Пользователь временно заблокирован.
 Str2587;Connection is not allowed for current software.;Для данного ПО подключение не разрешено.
 Str2588;User with same name is already connected to server.;Пользователь с таким именем уже подключен к серверу.
@@ -3196,7 +3195,7 @@ Str3451;Token;Токен
 Str3453;No portfolios received.;Не получен ни один портфель.
 Str3454Params;For portfolio {0} OANDA identifier was not received.;Для портфеля {0} не получен идентификатор OANDA.
 Str3455Params;For account ID {0} the portfolio information is missing.;Для идентификатора счета {0} нет информации о портфеле.
-Str3456;User name or password missing.;Имя пользователя или пароль не указаны.
+Str3456;Login or password missing.;Имя пользователя или пароль не указаны.
 Str3457Params;File '{0}' does not exist.;Файл '{0}' не существует.
 Str3458Params;Error connecting: '{0}'.;Ошибка подключения: '{0}'.
 Str3460;Activation price, when reached an order will be placed.;Цена активации, при достижении которой будет выставлена заявка.
@@ -3207,7 +3206,7 @@ Str3464;Connection to broker using Rithmic.;Подключение к броке
 Str3465;Certificate;Сертификат
 Str3466;Path to certificate file, necessary yo connect to Rithmic system.;Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
 Str3467;Login (extra);Логин (дополнительно)
-Str3468;Additional user name. Used when transaction sending is carried out to a separate server.;Дополнительное имя пользователя. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
+Str3468;Additional login. Used when transaction sending is carried out to a separate server.;Дополнительное имя пользователя. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
 Str3469;Password (extra);Пароль (дополнительно)
 Str3470;Additional password. Used when transaction sending is carried out to a separate server.;Дополнительный пароль. Используется в случае, если отправка транзакций осуществляется на отдельный сервер.
 Str3471;File log;Лог файл
@@ -3474,7 +3473,7 @@ Str3747; candles history; история свечек
 Str3748;Time period for which the data has to be received is not specified.;Не указан период за который необходимо получить данные.
 Str3749; trades history; история сделок
 Str3750;Date for which data has to be received is not specified.;Не указана дата за которую необходимо получить данные.
-Str3751;User name is not specified.;Не указано имя пользователя.
+Str3751;Login is not specified.;Не указано имя пользователя.
 Str3754;Export (auto);Экспорт (авто)
 Str3755;Database;База данных
 Str3756;Export type (format).;Тип экспорта (формат).
@@ -4124,7 +4123,7 @@ Provider;Provider;Провайдер
 IntegratedSecurity;Integrated security;Windows
 ConnectionString;Connection string;Подключение
 StringDescription;Database connection string settings.;Настройки строки подключения к базе данных.
-LoginDescription;User name. Not used in anonymous mode.;Логин для доступа к базе данных. Не используется при анонимном доступе.
+LoginDescription;Login. Not used in anonymous mode.;Логин. Не используется при анонимном доступе.
 PasswordDescription;Password. Not used in anonymous mode.;Пароль для доступа к базе данных. Не используется при анонимном доступе.
 ServerDescription;Network address or path to file.;Адрес сервера или путь к базе данных.
 DatabaseDescription;Name of database. Not used in SQLite.;Название базы данных. Не используется для SQLite.

@@ -23,10 +23,10 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Ожидание выполнения некоего действия, связанного с ключом.
 		/// </summary>
-		private class CodeTimeOut<T>
+		private class CodeTimeOut
 			//where T : class
 		{
-			private readonly CachedSynchronizedDictionary<T, TimeSpan> _registeredKeys = new CachedSynchronizedDictionary<T, TimeSpan>();
+			private readonly CachedSynchronizedDictionary<long, TimeSpan> _registeredKeys = new CachedSynchronizedDictionary<long, TimeSpan>();
 
 			private TimeSpan _timeOut = TimeSpan.FromSeconds(10);
 
@@ -52,10 +52,10 @@ namespace StockSharp.Messages
 			/// Запустить ожидание для ключа.
 			/// </summary>
 			/// <param name="key">Ключ.</param>
-			public void StartTimeOut(T key)
+			public void StartTimeOut(long key)
 			{
-				if (key.IsNull(true))
-					throw new ArgumentNullException("key");
+				//if (key == 0)
+				//	throw new ArgumentNullException("key");
 
 				_registeredKeys.SafeAdd(key, s => TimeOut);
 			}
@@ -65,14 +65,14 @@ namespace StockSharp.Messages
 			/// </summary>
 			/// <param name="diff">Изменение рыночного времени.</param>
 			/// <returns>Ключи.</returns>
-			public IEnumerable<T> ProcessTime(TimeSpan diff)
+			public IEnumerable<long> ProcessTime(TimeSpan diff)
 			{
 				if (_registeredKeys.Count == 0)
-					return Enumerable.Empty<T>();
+					return Enumerable.Empty<long>();
 
 				return _registeredKeys.SyncGet(d =>
 				{
-					var timeOutCodes = new List<T>();
+					var timeOutCodes = new List<long>();
 
 					foreach (var pair in d.CachedPairs)
 					{
@@ -92,8 +92,8 @@ namespace StockSharp.Messages
 
 		private DateTime _prevTime;
 
-		private readonly CodeTimeOut<long> _secLookupTimeOut = new CodeTimeOut<long>();
-		private readonly CodeTimeOut<long> _pfLookupTimeOut = new CodeTimeOut<long>();
+		private readonly CodeTimeOut _secLookupTimeOut = new CodeTimeOut();
+		private readonly CodeTimeOut _pfLookupTimeOut = new CodeTimeOut();
 
 		/// <summary>
 		/// Инициализировать <see cref="MessageAdapter"/>.
