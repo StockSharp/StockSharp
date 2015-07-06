@@ -150,6 +150,8 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\BitStampSample .aml" />
+    <None Include="Topics\BtceSample.aml" />
     <None Include="Topics\OandaHistory.aml" />
     <None Include="Topics\OandaStopOrders.aml" />
     <None Include="Topics\OandaSample.aml" />
@@ -1312,6 +1314,18 @@
     <Image Include="Art\OandaSecurities.png">
       <ImageId>OandaSecurities</ImageId>
       <AlternateText>Oanda Securities</AlternateText>
+    </Image>
+    <Image Include="Art\BtceSample.png">
+      <ImageId>BtceSample</ImageId>
+      <AlternateText>Btce Sample</AlternateText>
+    </Image>
+    <Image Include="Art\BtceSecurities.png">
+      <ImageId>BtceSecurities</ImageId>
+      <AlternateText>Btce Securities</AlternateText>
+    </Image>
+    <Image Include="Art\BitStampSample.png">
+      <ImageId>BitStampSample</ImageId>
+      <AlternateText>Bit Stamp Sample</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
