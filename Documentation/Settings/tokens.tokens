@@ -68,7 +68,9 @@
 		  <ddue:linkText>Excel</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Excel</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
+  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" 
+xmlns:xlink="http://www.w3.org/1999/xlink" 
+xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
   <item id="forts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>ФОРТС</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru/ru/forts/</ddue:linkUri>

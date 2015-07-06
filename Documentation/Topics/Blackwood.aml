@@ -10,5 +10,12 @@
 		
 		<mediaLink><image placement="center" xlink:href="blackwood_trader"/></mediaLink>
 	</introduction>
+	<relatedTopics>
+		<link xlink:href="95d01586-b798-4d38-82aa-38d8533586b5">Пример работы с BlackwoodTrader</link>
+		<link xlink:href="b643d681-0558-43ed-87ce-53ee7d3f6538">Стоп-заявки</link>
+		<link xlink:href="3f9473b3-09f2-4a04-b09d-94c9b66fff2e">Исторические данные</link>
+		<link xlink:href="4ef0c89f-cf0d-40b3-8387-aab4057ee961">Новости</link>
+		<link xlink:href="c23146af-3f08-4928-a95a-dd1173b23133">Сканер</link>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

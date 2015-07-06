@@ -4,7 +4,7 @@
     <introduction>
       <para>
       	Пример работы с <codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> демонстрирует приложение SampleIQFeed, показанное на рисунке ниже.
-      	Исходные коды примера лежат в дистрибутиве в папке SampleIQFeed.
+      	Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/IQFeed</legacyItalic>.
       </para>
       <mediaLink><image placement="center" xlink:href="IQFeedSample"/></mediaLink>
  	  <list class="ordered">

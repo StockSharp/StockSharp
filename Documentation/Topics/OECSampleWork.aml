@@ -4,7 +4,7 @@
 
 	<introduction>
 		<para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> демонстрирует приложение SampleOEC, показанное на рисунке ниже. 
-		Исходные коды примера лежат в дистрибутиве по маршруту Samples\OpenECry\SampleOEC.</para>
+		Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/OpenECry</legacyItalic>.</para>
 		
 		<mediaLink><image placement="center" xlink:href="OECTraderMainWindow"/></mediaLink>
 	</introduction>
