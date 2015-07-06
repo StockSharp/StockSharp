@@ -11,6 +11,11 @@
 		<para>Как видно из рисунка, <codeEntityReference qualifyHint="false">T:StockSharp.OpenECry.OECTrader</codeEntityReference> взаимодействует с сервером OEC посредством <token>OECApi</token>. 
 		Для использования <token>OECApi</token> не требуется наличие работающего терминала OEC Trader.</para>
 	</introduction>
-
+	<relatedTopics>
+		<link xlink:href="1dbc72c4-cc59-4094-824a-a2b77f9623d6">Пример работы с OpenECryTrader</link>
+		<link xlink:href="6f3be323-80bb-4823-9d27-8060c238af32">Стоп-заявки</link>
+		<link xlink:href="c56a139b-fb64-4f4f-992f-96a1480233cf">Одновременное подключение нескольких роботов</link>
+		<link xlink:href="49a7bfef-38e4-41e7-afe5-21bb8ac64258">Одновременное подключение терминала и робота</link>
+    </relatedTopics>
 	</developerWalkthroughDocument>
 </topic>

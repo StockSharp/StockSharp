@@ -1,15 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="e5b4af10-0235-4374-9134-a878fc7ecf7f" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
     <introduction>
 		<para>
 			Создание торговых роботов под <token>smartcom</token> практически ничем не отличается от создания под <token>quik</token>. Для демонстрации
 			взят пример из раздела <link xlink:href="b6fea084-f43c-4eb7-ab63-ad3031d748a5"/>, где показано как создавать торговое приложение под <token>quik</token>.
-			Исходные коды примера лежат в дистрибутиве в папке под названием SampleSmartConsole.
+			Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/SmartCom</legacyItalic>.
 		</para>
 		<alert class="caution">
 			<para>

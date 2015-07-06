@@ -150,6 +150,10 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\FixNews.aml" />
+    <None Include="Topics\FixStopOrders.aml" />
+    <None Include="Topics\BitStampSample.aml" />
+    <None Include="Topics\FixSample.aml" />
     <None Include="Topics\BitStampSample .aml" />
     <None Include="Topics\BtceSample.aml" />
     <None Include="Topics\OandaHistory.aml" />
@@ -1326,6 +1330,14 @@
     <Image Include="Art\BitStampSample.png">
       <ImageId>BitStampSample</ImageId>
       <AlternateText>Bit Stamp Sample</AlternateText>
+    </Image>
+    <Image Include="Art\FixSample.png">
+      <ImageId>FixSample</ImageId>
+      <AlternateText>Fix Sample</AlternateText>
+    </Image>
+    <Image Include="Art\FixSecurities.png">
+      <ImageId>FixSecurities</ImageId>
+      <AlternateText>Fix Securities</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
