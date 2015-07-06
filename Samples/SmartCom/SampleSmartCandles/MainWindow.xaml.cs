@@ -8,8 +8,6 @@ namespace SampleSmartCandles
 	using System.Windows;
 	using System.Windows.Controls;
 
-	using MoreLinq;
-
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Xaml;
@@ -83,9 +81,6 @@ namespace SampleSmartCandles
 				securities = securities.Where(s => s.Code == "LKOH" || (s.Type == SecurityTypes.Future && s.Id.Like("RI%FORTS")));
 
 				this.GuiAsync(() => _securitiesSource.AddRange(securities));
-
-				// начинаем получать текущие сделки (для построения свечек в реальном времени)
-				securities.ForEach(_trader.RegisterTrades);
 			};
 
 			_candleManager = new CandleManager(_trader);
@@ -146,7 +141,10 @@ namespace SampleSmartCandles
 				return wnd;
 			}).Show();
 
-			_candleManager.Start(series, (DateTime)From.Value, (DateTime)To.Value);
+			if (IsRealTime.IsChecked == true)
+				_candleManager.Start(series, DateTime.Today, DateTimeOffset.MaxValue);
+			else
+				_candleManager.Start(series, (DateTimeOffset)From.Value, (DateTimeOffset)To.Value);
 		}
 
 		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
