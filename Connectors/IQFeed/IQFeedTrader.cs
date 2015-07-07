@@ -381,6 +381,11 @@ namespace StockSharp.IQFeed
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
+		/// Событие окончания обработки серии.
+		/// </summary>
+		public event Action<CandleSeries> Stopped;
+
+		/// <summary>
 		/// Подписаться на получение свечек.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
@@ -468,6 +473,11 @@ namespace StockSharp.IQFeed
 					// только флаг, что получение исторических данных завершено
 					if (!candleMsg.IsFinished)
 						NewCandles.SafeInvoke(series, new[] { candle });
+					else
+					{
+						if (candleMsg.IsFinished)
+							Stopped.SafeInvoke(series);
+					}
 
 					var info = _candleInfo.TryGetValue(candleMsg.OriginalTransactionId);
 

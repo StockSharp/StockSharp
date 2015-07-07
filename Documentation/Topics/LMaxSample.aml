@@ -3,7 +3,7 @@
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.LMAX.LmaxTrader</codeEntityReference> демонстрирует приложение SampleLMAX,
-        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке SampleLMAX.</para>
+        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/LMAX</legacyItalic>.</para>
 		
 		<mediaLink><image placement="center" xlink:href="lmax_sample_main_window"/></mediaLink>
     </introduction>
@@ -37,7 +37,7 @@ Trader.ReConnectionSettings.Interval = TimeSpan.FromSeconds(10);
 //Trader.ReConnectionSettings.WorkingTime = Exchange.Rts.WorkingTime;
 Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() =>
 {
-	// разблокируем кнопку Экспорт (соединение было восстановлено)
+	// разблокируем кнопку (соединение было восстановлено)
 	ChangeConnectStatus(true);
 	MessageBox.Show(this, "Соединение восстановлено.");
 });
@@ -48,9 +48,7 @@ Trader.Connected += () =>
 	// возводим флаг, что соединение установлено
 	_isConnected = true;
 
-	Trader.StartExport();
-
-	// разблокируем кнопку Экспорт
+	// разблокируем кнопку
 	this.GuiAsync(() => ChangeConnectStatus(true));
 
 	// скачиваем информацию о всех инструментах с сайта
@@ -160,7 +158,7 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
 
 					<step>
 						<content>
-							<para>Для получения обновлений по выбранному инструменту необходимо вызвать методам
+							<para>Для получения обновлений по выбранному инструменту необходимо вызвать метод
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[

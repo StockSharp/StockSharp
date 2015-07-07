@@ -50,7 +50,7 @@ namespace StockSharp.Hydra.HydraServer
 			}
 
 			[TaskCategory(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str2301Key)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.Str2302Key)]
 			[PropertyOrder(1)]
 			public string Login

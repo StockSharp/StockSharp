@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Blackwood.BlackwoodTrader</codeEntityReference> демонстрирует приложение SampleBlackwood,
-        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке SampleBlackwood.</para>
+        показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Blackwood</legacyItalic>.</para>
 		
 		<mediaLink><image placement="center" xlink:href="blackwood_main_window"/></mediaLink>
     </introduction>

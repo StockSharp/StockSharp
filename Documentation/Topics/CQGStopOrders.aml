@@ -2,7 +2,31 @@
 <topic id="355f6b70-c920-48b6-b2f1-31584ebb82f3" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Required introduction</para>
+       <para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
+		но с указанием типа заявки <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>   
+        <code language="C#">
+        <![CDATA[
+void NewStopOrderClick(object sender, RoutedEventArgs e)
+{
+	var newOrder = new OrderConditionalWindow
+	{
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		Connector = MainWindow.Instance.Trader,
+	};
+
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+}
+		]]>
+		</code>
+		
+		<para>Далее будет открыт диалог <legacyBold>Регистрация условной заявки</legacyBold>, где нужно указать тип и параметры такой заявки.</para>
+		<para>За кулисами в коде <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> создаются и настраиваются условия при помощи класса
+		<codeEntityReference>T:StockSharp.CQG.CQGOrderCondition</codeEntityReference>.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>

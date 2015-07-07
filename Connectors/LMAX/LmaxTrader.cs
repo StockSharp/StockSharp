@@ -95,6 +95,11 @@ namespace StockSharp.LMAX
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
+		/// Событие окончания обработки серии.
+		/// </summary>
+		public event Action<CandleSeries> Stopped;
+
+		/// <summary>
 		/// Подписаться на получение свечек.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
@@ -165,6 +170,9 @@ namespace StockSharp.LMAX
 			}
 
 			NewCandles.SafeInvoke(series, new[] { candle });
+
+			if (candleMsg.IsFinished)
+				Stopped.SafeInvoke(series);
 		}
 	}
 }

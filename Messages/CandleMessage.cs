@@ -282,7 +282,7 @@ namespace StockSharp.Messages
 		/// <returns>Строковое представление.</returns>
 		public override string ToString()
 		{
-			return "{0},T={1:yyyy/MM/dd HH:mm:ss.fff},O={2},H={3},L={4},C={5},V={6}".Put(Type, LocalTime, OpenPrice, HighPrice, LowPrice, ClosePrice, TotalVolume);
+			return "{0},T={1:yyyy/MM/dd HH:mm:ss.fff},O={2},H={3},L={4},C={5},V={6}".Put(Type, OpenTime, OpenPrice, HighPrice, LowPrice, ClosePrice, TotalVolume);
 		}
 	}
 

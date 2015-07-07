@@ -48,14 +48,14 @@ Trader.Connected += () =>
 Trader.ConnectionError += error => this.GuiAsync(() =>
 {
 	OnConnectionChanged(Trader.ConnectionState == ConnectionStates.Connected);
-	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+	MessageBox.Show(this, error.ToString(), "Ошибка соединения");
 });
 
 Trader.Disconnected += () => this.GuiAsync(() => OnConnectionChanged(false));
 
 // подписываемся на событие ошибки коннектора
 Trader.Error += error =>
-	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Error connection"));
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибка обработки данных"));
 
 // подписываемся на событие ошибки при получение рыночных данных
 Trader.MarketDataSubscriptionFailed += (security, type, error) =>

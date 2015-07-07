@@ -4,7 +4,7 @@
 	<introduction>
 		<para>
 			Пример работы с <codeEntityReference qualifyHint="false">T:StockSharp.Transaq.TransaqTrader</codeEntityReference> демонстрирует приложение SampleTransaq, показанное на рисунке ниже.
-			Исходные коды примера лежат в дистрибутиве в папке под названием SampleTransaq.
+			Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/Transaq</legacyItalic>.
 		</para>
 		
 		<mediaLink><image placement="center" xlink:href="transaq_sample_main_window"/></mediaLink>

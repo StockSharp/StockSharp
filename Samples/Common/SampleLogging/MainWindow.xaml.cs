@@ -1,38 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace SampleLogging
+﻿namespace SampleLogging
 {
+	using System;
 	using System.Diagnostics;
+	using System.Windows;
 
 	using Ecng.Common;
 
 	using StockSharp.Logging;
 	using StockSharp.Xaml;
 
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow
 	{
 		private class TestSource : BaseLogReceiver
 		{
 		}
 
-		private LogManager _logManager = new LogManager();
-		private TestSource _testSource;
+		private readonly LogManager _logManager = new LogManager();
+		private readonly TestSource _testSource;
 
 		public MainWindow()
 		{

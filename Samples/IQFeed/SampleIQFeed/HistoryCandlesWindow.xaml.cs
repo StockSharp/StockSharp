@@ -3,10 +3,9 @@ namespace SampleIQFeed
 	using System;
 	using System.Windows;
 
-	using Ecng.Common;
-
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.IQFeed;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 
@@ -25,16 +24,7 @@ namespace SampleIQFeed
 			InitializeComponent();
 			Title = _security.Code + LocalizedStrings.Str3747;
 
-			TimeFramePicker.ItemsSource = new[]
-			{
-				TimeSpan.FromMinutes(1),
-				TimeSpan.FromMinutes(5),
-				TimeSpan.FromMinutes(15),
-				TimeSpan.FromMinutes(60),
-				TimeSpan.FromDays(1),
-				TimeSpan.FromDays(7),
-				TimeSpan.FromTicks(TimeHelper.TicksPerMonth)
-			};
+			TimeFramePicker.ItemsSource = IQFeedMarketDataMessageAdapter.TimeFrames;
 			TimeFramePicker.SelectedIndex = 1;
 
 			DateFromPicker.Value = DateTime.Today.AddDays(-7);

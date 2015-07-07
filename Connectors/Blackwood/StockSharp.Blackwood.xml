@@ -476,5 +476,10 @@
             Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
             </summary>
     </member>
+    <member name="E:StockSharp.Blackwood.BlackwoodTrader.Stopped">
+      <summary>
+            Событие окончания обработки серии.
+            </summary>
+    </member>
   </members>
 </doc>

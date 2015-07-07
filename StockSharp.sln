@@ -325,7 +325,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocViewer", "Documentation\DocViewer\DocViewer.csproj", "{9AC290E0-0F23-4D23-A170-E648D95BC47C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLogging", "Samples\Common\SampleLogging\SampleLogging.csproj", "{FE5CE31E-0461-410F-874F-65EDE074C89C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLoggingPublic", "Samples\Common\SampleLogging\SampleLoggingPublic.csproj", "{FE5CE31E-0461-410F-874F-65EDE074C89C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarChart", "Connectors\BarChart\BarChart.csproj", "{99B84E0C-D035-4BD9-8A42-8232ED6BA3F4}"
 EndProject

@@ -171,13 +171,18 @@ namespace StockSharp.SmartCom
 				CloseTime = time.ApplyTimeZone(TimeHelper.Moscow),
 				OpenInterest = openInt,
 				OriginalTransactionId = transactionInfo.Item1,
-				IsFinished = row == (rowCount - 1),
 			});
 
 			if ((row + 1) < rowCount)
 				return;
 
-			transactionInfo.Item2.OrderBy(c => c.OpenTime).ForEach(SendOutMessage);
+			row = 0;
+
+			transactionInfo.Item2.OrderBy(c => c.OpenTime).ForEach(m =>
+			{
+				m.IsFinished = ++row == rowCount;
+				SendOutMessage(m);
+			});
 
 			infos.Remove(timeFrameKey);
 

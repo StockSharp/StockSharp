@@ -68,6 +68,11 @@ namespace StockSharp.Oanda
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
+		/// Событие окончания обработки серии.
+		/// </summary>
+		public event Action<CandleSeries> Stopped;
+
+		/// <summary>
 		/// Подписаться на получение свечек.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
@@ -129,6 +134,9 @@ namespace StockSharp.Oanda
 
 			var candle = candleMsg.ToCandle(series);
 			NewCandles.SafeInvoke(series, new[] { candle });
+
+			if (candleMsg.IsFinished)
+				Stopped.SafeInvoke(series);
 		}
     }
 }

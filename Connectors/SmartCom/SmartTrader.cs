@@ -56,6 +56,9 @@ namespace StockSharp.SmartCom
 
 			var series = _series[candleMsg.OriginalTransactionId];
 			NewCandles.SafeInvoke(series, new[] { candleMsg.ToCandle(series) });
+
+			if (candleMsg.IsFinished)
+				Stopped.SafeInvoke(series);
 		}
 
 		/// <summary>
@@ -179,6 +182,11 @@ namespace StockSharp.SmartCom
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
+		/// Событие окончания обработки серии.
+		/// </summary>
+		public event Action<CandleSeries> Stopped;
+
+		/// <summary>
 		/// Подписаться на получение свечек.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
@@ -197,7 +205,7 @@ namespace StockSharp.SmartCom
 
 			var timeFrame = (TimeSpan)series.Arg;
 
-			using (new Scope<CandleSeries>(series))
+			using (new Scope<CandleSeries>(series, false))
 			{
 				to = timeFrame.GetCandleBounds(series.Security.ToExchangeTime(CurrentTime)).Min;
 

@@ -470,7 +470,12 @@ namespace StockSharp.Algo.Testing
 			var series = _series.TryGetValue(security);
 
 			if (series != null)
+			{
 				_newCandles.SafeInvoke(series, new[] { message.ToCandle(series) });
+
+				if (message.IsFinished)
+					_stopped.SafeInvoke(series);
+			}
 		}
 
 		private void SendPortfolio(Portfolio portfolio)
@@ -689,6 +694,14 @@ namespace StockSharp.Algo.Testing
 		{
 			add { _newCandles += value; }
 			remove { _newCandles -= value; }
+		}
+
+		private Action<CandleSeries> _stopped;
+
+		event Action<CandleSeries> IExternalCandleSource.Stopped
+		{
+			add { _stopped += value; }
+			remove { _stopped -= value; }
 		}
 
 		void IExternalCandleSource.SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)

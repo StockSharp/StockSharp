@@ -3,7 +3,7 @@
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       <para>В качестве примера работы с <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>
-      рассмотрим приложение SampleETrade, показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке под названием SampleETrade.</para>
+      рассмотрим приложение SampleETrade, показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/ETrade</legacyItalic>.</para>
 		
 		<mediaLink><image placement="center" xlink:href="etrade_sample_main_window"/></mediaLink>
     </introduction>
