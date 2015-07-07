@@ -54,7 +54,6 @@
 		</alert>
 	</introduction>
     <relatedTopics>
-      <link xlink:href="6c09c760-1aee-4bfe-814c-db42d06b31ec">Асинхронный режим</link>
       <link xlink:href="cbce846a-dd31-4baa-ba77-2bac3eb38b2f">Номер транзакции</link>
     </relatedTopics>	
     </developerWalkthroughDocument>

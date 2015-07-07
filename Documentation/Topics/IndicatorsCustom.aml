@@ -14,8 +14,8 @@
       <!-- <autoOutline /> -->
       <para>
       	Для того, чтобы создать свой собственный индикатор, необходимо реализовать интерфейс <codeEntityReference>T:StockSharp.Algo.Indicators.IIndicator</codeEntityReference>.
-      	В качестве примера можно взять исходные коды других индикаторов, которые находятся в репозитарии <token>codeplex</token>. Вот как выглядит код
-      	реализации индикатора простой скользящей средней <codeEntityReference>T:StockSharp.Algo.Indicators.Trend.SimpleMovingAverage</codeEntityReference>:
+      	В качестве примера можно взять исходные коды других индикаторов, которые находятся в репозитории <token>stocksharpgithub</token>. Вот как выглядит код
+      	реализации индикатора простой скользящей средней <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>:
       </para>
       <code language="C#"><![CDATA[/// <summary>
 /// Простая скользящая средняя.
@@ -58,13 +58,13 @@ public class SimpleMovingAverage : LengthIndicator<decimal>
 	}
 }]]></code>
 		<para>
-			<codeEntityReference>T:StockSharp.Algo.Indicators.Trend.SimpleMovingAverage</codeEntityReference> наследуется от класса
+			<codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference> наследуется от класса
 			<codeEntityReference>T:StockSharp.Algo.Indicators.LengthIndicator`1</codeEntityReference>, от которого необходимо наследовать все индикаторы,
 			имеющие в качестве параметра длину периода.
 		</para>
 		<para>
 			Некоторые индикаторы являются составными, и используют в своих рассчетах другие индикаторы. Поэтому индикаторы можно переиспользовать друг
-			из друга, как показано в качестве примера реализация индикатора волатильности Чайкина <codeEntityReference>T:StockSharp.Algo.Indicators.Misc.ChaikinVolatility</codeEntityReference>:
+			из друга, как показано в качестве примера реализация индикатора волатильности Чайкина <codeEntityReference>T:StockSharp.Algo.Indicators.ChaikinVolatility</codeEntityReference>:
 		</para>
 		<code language="C#"><![CDATA[/// <summary>
 /// Волатильность Чайкина.
@@ -125,7 +125,7 @@ public class ChaikinVolatility : BaseIndicator<IIndicatorValue>
 }]]></code>
 		<para>
 			Последний вид индикаторов - это те, которые не просто состоят из других индикаторов, но так же графически отображаются несколькими состояниями
-			одновременно (несколькими линиями). Например, <codeEntityReference>T:StockSharp.Algo.Indicators.Oscillator.AverageDirectionalIndex</codeEntityReference>:
+			одновременно (несколькими линиями). Например, <codeEntityReference>T:StockSharp.Algo.Indicators.AverageDirectionalIndex</codeEntityReference>:
 		</para>
 		<code language="C#"><![CDATA[/// <summary>
 /// Индекс среднего направления движения Welles Wilder.

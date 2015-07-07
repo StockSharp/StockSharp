@@ -21,8 +21,7 @@ plazaTrader.IsCGate = true;
 plazaTrader.CGateKey = "XXXXXXXXXX";]]></code>
 		<para>
 			Через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Plaza.PlazaTrader.CGateKey</codeEntityReference> устанавливается идентификатор
-			программного обеспечения. Данный идентификатор получается у РТС после прохождения сертификации, которая была пройдена компанией StockSharp LLC. Для
-			получения идентификатора, обращайте в наш контакт центр <token>stocksharpcontacts</token>.
+			программного обеспечения. Вы можете получить этот идентификатор в компании StockSharp, для чего нужно обратится в наш контактный центр <token>stocksharpcontacts</token>.
 		</para>
 	  <alert class="caution"><codeEntityReference qualifyHint="true">P:StockSharp.Plaza.PlazaTrader.Login</codeEntityReference> для режима CGate не работает.</alert>
 	  <para>Дополнительный модификаций в торговом роботе при использовании CGate делать не требуется.</para>

@@ -2,7 +2,16 @@
 <topic id="c338d4b4-ba54-4671-9206-976c07ef655e" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Следующие разделы относятся к старому подключению к <token>quik</token> при помощи DDE.</para>
+      <para>Следующие разделы относятся к старому подключению к <token>quik</token> при помощи DDE. Механизм взаимодействия показан на данном рисунке:</para>
+	   <para>
+			  <mediaLink> <image placement="center" xlink:href="quiktrader" /> </mediaLink>
+		  </para>
+  	   <para>
+		  На рисунке показана связь по <token>dde</token>. <token>dde</token> - это технология самой быстрой передачи данных,
+		  которую поддерживает <token>quik_external</token>. Преимущество <token>dde</token> в том, что она умеет максимально быстро передавать
+		  большие объемы данных. Например, это полезно при передаче данных из таблицы всех сделок, когда в секунду может появляться до сотни сделок.
+		 </para>
+      
 		<alert class="note">
   				<para>Рекомендуется использовать подключение <link xlink:href="1fdfb45f-9d48-4560-bfc4-8d9b5b20a1cf">Quik Lua</link>.</para>
 		</alert>

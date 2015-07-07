@@ -241,12 +241,8 @@ while (true)
     </section>-->
 
     <nextSteps>
-      <content>
-        <para>
-			<link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link>
-			<link xlink:href="4b427409-9aa9-41d3-bb97-98745d1bba8e">Замена заявок</link>
-		</para>
-      </content>
+			<nextStep><link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link></nextStep>
+			<nextStep><link xlink:href="4b427409-9aa9-41d3-bb97-98745d1bba8e">Замена заявок</link></nextStep>
     </nextSteps>
     
     <relatedTopics>

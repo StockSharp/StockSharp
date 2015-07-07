@@ -30,15 +30,16 @@
 				<para>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Type</codeEntityReference> задает тип инструмента.</para>
 			</listItem>
 			<listItem>
-				<para>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.ExchangeBoard</codeEntityReference> задает, на какой площадке торгуется инструмент
+				<para>Свойство <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Board</codeEntityReference> задает, на какой площадке торгуется инструмент
 				(например, <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.ExchangeBoard.Forts</codeEntityReference> или <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.ExchangeBoard.Nasdaq</codeEntityReference>).</para>
 			</listItem>
 			<!--listItem>
 				<para>Желаемое количество результатов запроса.</para>
 			</listItem-->
 		</list>
-		<para>Найденные инструменты будут возвращены через событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.
-		В случае, если ни одного инструмента по запросу не найдено, будет вызван обработчик события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ProcessDataError</codeEntityReference>.</para>
+		<para>
+			Найденные инструменты будут возвращены через событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>.
+		</para>
     </introduction>
     <relatedTopics>
       <!-- One or more of the following:
