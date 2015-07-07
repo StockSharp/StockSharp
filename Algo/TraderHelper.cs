@@ -3519,5 +3519,164 @@ namespace StockSharp.Algo
 		{
 			return value.IsInfinity() || value.IsNaN() ? (decimal?)null : (decimal)value;
 		}
+
+		/// <summary>
+		/// Получить для инструмента тип в стандарте ISO 10962.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <returns>Тип в стандарте ISO 10962.</returns>
+		public static string GetIso10962(this Security security)
+		{
+			if (security == null)
+				throw new ArgumentNullException("security");
+
+			// https://en.wikipedia.org/wiki/ISO_10962
+
+			switch (security.Type)
+			{
+				case SecurityTypes.Stock:
+					return "ESXXXX";
+				case SecurityTypes.Future:
+					return "FFXXXX";
+				case SecurityTypes.Option:
+				{
+					switch (security.OptionType)
+					{
+						case OptionTypes.Call:
+							return "OCXXXX";
+						case OptionTypes.Put:
+							return "OPXXXX";
+						case null:
+							return "OXXXXX";
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				}
+				case SecurityTypes.Index:
+					return "MRIXXX";
+				case SecurityTypes.Currency:
+					return "MRCXXX";
+				case SecurityTypes.Bond:
+					return "DBXXXX";
+				case SecurityTypes.Warrant:
+					return "RWXXXX";
+				case SecurityTypes.Forward:
+					return "FFMXXX";
+				case SecurityTypes.Swap:
+					return "FFWXXX";
+				case SecurityTypes.Commodity:
+					return "MRTXXX";
+				case SecurityTypes.Cfd:
+					return "MMCXXX";
+				case SecurityTypes.Adr:
+					return "MMAXXX";
+				case SecurityTypes.News:
+					return "MMNXXX";
+				case SecurityTypes.Weather:
+					return "MMWXXX";
+				case SecurityTypes.Fund:
+					return "EUXXXX";
+				case SecurityTypes.CryptoCurrency:
+					return "MMBXXX";
+				case null:
+					return "XXXXXX";
+				default:
+					throw new ArgumentOutOfRangeException("security");
+			}
+		}
+
+		/// <summary>
+		/// Преобразовать тип в стандарте ISO 10962 в <see cref="SecurityTypes"/>.
+		/// </summary>
+		/// <param name="type">Тип в стандарте ISO 10962.</param>
+		/// <returns>Тип инструмента.</returns>
+		public static SecurityTypes? FromIso10962(string type)
+		{
+			if (type.IsEmpty())
+				throw new ArgumentNullException("type");
+
+			if (type.Length != 6)
+				throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.Str2117);
+
+			switch (type[0])
+			{
+				case 'E':
+					return SecurityTypes.Stock;
+
+				case 'D':
+					return SecurityTypes.Bond;
+
+				case 'R':
+					return SecurityTypes.Warrant;
+
+				case 'O':
+					return SecurityTypes.Option;
+
+				case 'F':
+				{
+					switch (type[2])
+					{
+						case 'W':
+							return SecurityTypes.Swap;
+
+						case 'M':
+							return SecurityTypes.Forward;
+
+						default:
+							return SecurityTypes.Future;
+					}
+				}
+
+				case 'M':
+				{
+					switch (type[1])
+					{
+						case 'R':
+						{
+							switch (type[2])
+							{
+								case 'I':
+									return SecurityTypes.Index;
+
+								case 'C':
+									return SecurityTypes.Currency;
+
+								case 'T':
+									return SecurityTypes.Commodity;
+							}
+
+							break;
+						}
+
+						case 'M':
+						{
+							switch (type[2])
+							{
+								case 'B':
+									return SecurityTypes.CryptoCurrency;
+
+								case 'W':
+									return SecurityTypes.Weather;
+
+								case 'A':
+									return SecurityTypes.Adr;
+
+								case 'C':
+									return SecurityTypes.Cfd;
+
+								case 'N':
+									return SecurityTypes.News;
+							}
+
+							break;
+						}
+					}
+
+					break;
+				}
+			}
+
+			return null;
+		}
 	}
 }

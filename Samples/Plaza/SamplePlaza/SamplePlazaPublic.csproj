@@ -66,8 +66,8 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\..\..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Ecng.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Ecng\Ecng.Configuration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL.dll</HintPath>
+    <Reference Include="Ecng.Configuration">
+      <HintPath>..\..\..\References\Ecng\Ecng.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Collections">
       <HintPath>..\..\..\References\Ecng\Ecng.Collections.dll</HintPath>
