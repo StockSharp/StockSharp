@@ -47,7 +47,7 @@
 			<step>
 				<content>
 					<para>В самом начале необходимо создать менеджер свечек <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>,
-					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.ITrader.NewTrades</codeEntityReference>,
+					который, подписываясь на событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference>,
 					будет формировать свечки:</para>
 			
 					<code language="C#">
@@ -62,8 +62,7 @@ _candleManager = new CandleManager(_trader);
 					</code>
 					
 					<alert class="note">
-						<para>Если в качестве источника тиковых сделок используются не шлюз <codeEntityReference>T:StockSharp.BusinessEntities.ITrader</codeEntityReference>,
-						а какой-то другой механизм, то необходимо реализовать интерфейс
+						<para>Если для получения тиковых сделок вместо шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> используется источник с другим механизмом, то необходимо реализовать интерфейс
 						<codeEntityReference qualifyHint="true">T:StockSharp.Algo.Candles.ICandleManagerSource</codeEntityReference>, и передать реализацию в 
 						<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Candles.CandleManager.Sources</codeEntityReference>.</para>
 						

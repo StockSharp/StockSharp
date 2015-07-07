@@ -1,26 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="8b9125ee-9d74-444f-82d6-5dea51266fd4" revisionNumber="1">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--
-    <summary>
-      <para>Optional summary abstract</para>
-    </summary>
-    -->
     <introduction>
-      <!-- Uncomment this to generate an outline of the section and sub-section
-           titles.  Specify a numeric value as the inner text to limit it to
-           a specific number of sub-topics when creating the outline.  Specify
-           zero (0) to limit it to top-level sections only.  -->
-      <!-- <autoOutline /> -->
       <para>
       	<token>stocksharp</token> стандартно предоставляет более 70 индикаторов технического анализа, что позволяет не создавать с нуля необходимый индикатор, а использовать
-      	уже готовый (или создать свой на основе существующих, как показано в разделе <link xlink:href="ec4c3abe-3779-4a5f-899c-697b049254d4">Собственный индикатор</link>). 
-      	Все базовые классы по работе с ииндикаторами находятся в пространстве имен
-      	<codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference>. Также в нем находятся все готовые инидкаторы, которые разделены по нескольким разделам: 
-      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Misc</codeEntityReference>, 
-      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Oscillator</codeEntityReference>,
-      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Trend</codeEntityReference>,
-      	<codeEntityReference qualifyHint="false">N:StockSharp.Algo.Indicators.Williams</codeEntityReference>.
+      	уже готовый (или создать свой на основе существующих, как показано в разделе <link xlink:href="ec4c3abe-3779-4a5f-899c-697b049254d4">Собственный индикатор</link>. 
+      	Все базовые классы для работы с индикаторами, а также сами индикаторы находятся в пространстве имен
+      	<codeEntityReference qualifyHint="true">N:StockSharp.Algo.Indicators</codeEntityReference>. 
       </para>
     </introduction>
     <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->
@@ -41,8 +27,8 @@
 	longSma.Process((DecimalIndicatorValue)candle.ClosePrice);]]></code>
 			<para>
 				Индикатор принимает на вход <codeEntityReference>T:StockSharp.Algo.Indicators.IIndicatorValue</codeEntityReference>. Некоторые из индикаторов
-				оперируют простым числом, как, например, <codeEntityReference>T:StockSharp.Algo.Indicators.Trend.SimpleMovingAverage</codeEntityReference>.
-				Другим требуются полностью свечка, как, например, <codeEntityReference>T:StockSharp.Algo.Indicators.Misc.MedianPrice</codeEntityReference>.
+				оперируют простым числом, как, например, <codeEntityReference>T:StockSharp.Algo.Indicators.SimpleMovingAverage</codeEntityReference>.
+				Другим требуются полностью свечка, как, например, <codeEntityReference>T:StockSharp.Algo.Indicators.MedianPrice</codeEntityReference>.
 				Поэтому входящие значения необходимо приводить или к <codeEntityReference>T:StockSharp.Algo.Indicators.DecimalIndicatorValue</codeEntityReference>
 				или к <codeEntityReference>T:StockSharp.Algo.Indicators.CandleIndicatorValue</codeEntityReference>. Результирующее значение индикатора
 				работает по тем же правилам, что и входящее значение.

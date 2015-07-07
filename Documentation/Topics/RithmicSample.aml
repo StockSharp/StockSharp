@@ -131,7 +131,7 @@ private void Ok_Click(object sender, RoutedEventArgs e)
 				<content>
 					<para>Для получения сделок и изменений по выбранному инструменту (кнопка <legacyBold>Бид-Оффер</legacyBold>) необходимо вызвать методы
 					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> и 
-					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisteredSecurities(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:</para>
+					<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:</para>
             		<code language="C#">
             				<![CDATA[
 private void QuotesClick(object sender, RoutedEventArgs e)
