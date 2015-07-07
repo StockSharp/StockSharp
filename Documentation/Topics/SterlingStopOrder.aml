@@ -31,7 +31,7 @@ private void NewStopOrderClick(object sender, RoutedEventArgs e)
 		</code>
 		
 		<para>Далее открывается диалог <legacyBold>Регистрация условной заявки</legacyBold>, где нужно указать тип 
-		<codeEntityReference>F:StockSharp.Sterling.SterlingExtendedOrderTypes</codeEntityReference> и параметры такой заявки.</para>
+		<codeEntityReference>T:StockSharp.Sterling.SterlingExtendedOrderTypes</codeEntityReference> и параметры такой заявки.</para>
 		<mediaLink><image placement="center" xlink:href="Sterling_StopOrder"/></mediaLink>
 		<para>За кулисами в коде <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> создаются и настраиваются условия при помощи класса
 		<codeEntityReference>T:StockSharp.Sterling.SterlingOrderCondition</codeEntityReference>.</para>
