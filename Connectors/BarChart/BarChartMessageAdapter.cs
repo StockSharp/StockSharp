@@ -23,6 +23,9 @@
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// Маркет-дата адаптер сообщений для BarChart.
+	/// </summary>
 	public class BarChartMessageAdapter : MessageAdapter
 	{
 		private string _streamAddress;

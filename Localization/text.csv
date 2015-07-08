@@ -2332,8 +2332,6 @@ Str2529;System;Системные
 Str2530;In detail;Детально
 Str2531Params;Interactive Brokers does not support timeframe equal {0}.;Interactive Brokers не поддерживает тайм-фрейм, равный {0}.
 Str2532;TWS address.;Адрес TWS.
-Str2533;IQFeed (history);IQFeed (история)
-Str2534;IQFeed (connection);IQFeed (подключение)
 Str2535;Real-time data;Реалтайм данные
 Str2536;Load real-time or history data.;Загружать данные в режиме реалтайм или историю.
 Str2537;Load securities from IQFeed website;Загружать инструменты с сайта IQFeed

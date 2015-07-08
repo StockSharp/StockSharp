@@ -1,12 +1,11 @@
-namespace StockSharp.Hydra.IQFeed
+namespace StockSharp.Hydra.BarChart
 {
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
-	using System.Net;
+	using System.Security;
 
-	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Xaml;
 
@@ -14,36 +13,28 @@ namespace StockSharp.Hydra.IQFeed
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
-	using StockSharp.IQFeed;
+	using StockSharp.BarChart;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
-	using StockSharp.Xaml.PropertyGrid;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
 	[TaskDisplayName(_sourceName)]
-	class IQFeedTask : ConnectorHydraTask<IQFeedTrader>
+	class BarChartTask : ConnectorHydraTask<BarChartTrader>
 	{
-		private const string _sourceName = "IQFeed";
+		private const string _sourceName = "BarChart";
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
-		private sealed class IQFeedSettings : ConnectorHydraTaskSettings
+		private sealed class BarChartSettings : ConnectorHydraTaskSettings
 		{
 			private const string _category = _sourceName;
 
-			public IQFeedSettings(HydraTaskSettings settings)
+			public BarChartSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				// убрать через несколько версий
-				var types = ExtensionInfo.TryGetValue("Types") as IEnumerable<SecurityTypes>;
-
-				if (types != null)
-					Types = types;
-
-				ExtensionInfo.TryAdd("IgnoreWeekends", true);
 			}
 
 			[Category(_category)]
@@ -56,75 +47,24 @@ namespace StockSharp.Hydra.IQFeed
 				set { ExtensionInfo["IsRealTime"] = value; }
 			}
 
-			[Category(_category)]
-			[DisplayNameLoc(LocalizedStrings.Str2537Key)]
-			[DescriptionLoc(LocalizedStrings.Str2538Key)]
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.LoginKey)]
+			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
-			public bool IsDownloadSecurityFromSite
+			public string Login
 			{
-				get { return ExtensionInfo["IsDownloadSecurityFromSite"].To<bool>(); }
-				set { ExtensionInfo["IsDownloadSecurityFromSite"] = value; }
+				get { return (string)ExtensionInfo["Login"]; }
+				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[Category(_category)]
-			[DisplayNameLoc(LocalizedStrings.Str2539Key)]
-			[DescriptionLoc(LocalizedStrings.Str2540Key)]
+			[TaskCategory(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
+			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
-			[Editor(typeof(SecurityTypesComboBoxEditor), typeof(SecurityTypesComboBoxEditor))]
-			public IEnumerable<SecurityTypes> Types
+			public SecureString Password
 			{
-				get
-				{
-					var types = ExtensionInfo.TryGetValue("Types");
-
-					return types == null
-						? Enumerable.Empty<SecurityTypes>()
-						: ((IEnumerable<string>)types).Select(t => t.To<SecurityTypes>()).ToArray();
-				}
-				set
-				{
-					ExtensionInfo["Types"] = value.Select(s => s.To<string>()).ToArray();
-				}
-			}
-
-			[CategoryLoc(LocalizedStrings.Str174Key)]
-			[DisplayNameLoc(LocalizedStrings.Str2541Key)]
-			[DescriptionLoc(LocalizedStrings.Str2542Key)]
-			[PropertyOrder(0)]
-			public EndPoint Level1Address
-			{
-				get { return ExtensionInfo["Level1Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Level1Address"] = value.To<string>(); }
-			}
-
-			[CategoryLoc(LocalizedStrings.Str174Key)]
-			[DisplayNameLoc(LocalizedStrings.Str2543Key)]
-			[DescriptionLoc(LocalizedStrings.Str2544Key)]
-			[PropertyOrder(1)]
-			public EndPoint Level2Address
-			{
-				get { return ExtensionInfo["Level2Address"].To<EndPoint>(); }
-				set { ExtensionInfo["Level2Address"] = value.To<string>(); }
-			}
-
-			[CategoryLoc(LocalizedStrings.Str174Key)]
-			[DisplayNameLoc(LocalizedStrings.Str2545Key)]
-			[DescriptionLoc(LocalizedStrings.Str2546Key)]
-			[PropertyOrder(2)]
-			public EndPoint LookupAddress
-			{
-				get { return ExtensionInfo["LookupAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["LookupAddress"] = value.To<string>(); }
-			}
-
-			[CategoryLoc(LocalizedStrings.Str174Key)]
-			[DisplayNameLoc(LocalizedStrings.Str2547Key)]
-			[DescriptionLoc(LocalizedStrings.Str2548Key)]
-			[PropertyOrder(3)]
-			public EndPoint AdminAddress
-			{
-				get { return ExtensionInfo["AdminAddress"].To<EndPoint>(); }
-				set { ExtensionInfo["AdminAddress"] = value.To<string>(); }
+				get { return ExtensionInfo["Password"].To<SecureString>(); }
+				set { ExtensionInfo["Password"] = value; }
 			}
 
 			[CategoryLoc(LocalizedStrings.HistoryKey)]
@@ -165,11 +105,11 @@ namespace StockSharp.Hydra.IQFeed
 			}
 		}
 
-		private IQFeedSettings _settings;
+		private BarChartSettings _settings;
 
-		public IQFeedTask()
+		public BarChartTask()
 		{
-			_supportedCandleSeries = IQFeedMarketDataMessageAdapter.TimeFrames.Select(tf => new CandleSeries
+			_supportedCandleSeries = BarChartMessageAdapter.TimeFrames.Select(tf => new CandleSeries
 			{
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
@@ -183,7 +123,7 @@ namespace StockSharp.Hydra.IQFeed
 
 		public override Uri Icon
 		{
-			get { return "iqfeed_logo.png".GetResourceUrl(GetType()); }
+			get { return "barchart_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(MarketDepth), typeof(Level1ChangeMessage) };
@@ -205,45 +145,33 @@ namespace StockSharp.Hydra.IQFeed
 			get { return _settings; }
 		}
 
-		protected override MarketDataConnector<IQFeedTrader> CreateConnector(HydraTaskSettings settings)
+		protected override MarketDataConnector<BarChartTrader> CreateConnector(HydraTaskSettings settings)
 		{
-			_settings = new IQFeedSettings(settings);
+			_settings = new BarChartSettings(settings);
 
 			if (settings.IsDefault)
 			{
-				_settings.Level1Address = IQFeedAddresses.DefaultLevel1Address;
-				_settings.Level2Address = IQFeedAddresses.DefaultLevel2Address;
-				_settings.LookupAddress = IQFeedAddresses.DefaultLookupAddress;
-				_settings.AdminAddress = IQFeedAddresses.DefaultAdminAddress;
 				_settings.Offset = 0;
 				_settings.StartFrom = DateTime.Today;
-				_settings.IsDownloadSecurityFromSite = false;
+				_settings.Login = null;
+				_settings.Password = null;
 				_settings.IsDownloadNews = true;
-				_settings.Types = new[] { SecurityTypes.Stock };
 				_settings.IsRealTime = false;
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.IgnoreWeekends = true;
 			}
 
-			return new MarketDataConnector<IQFeedTrader>(EntityRegistry.Securities, this, () => new IQFeedTrader
+			return new MarketDataConnector<BarChartTrader>(EntityRegistry.Securities, this, () => new BarChartTrader
 			{
-				Level1Address = _settings.Level1Address,
-				Level2Address = _settings.Level2Address,
-				LookupAddress = _settings.LookupAddress,
-				AdminAddress = _settings.AdminAddress,
-				IsDownloadSecurityFromSite = _settings.IsDownloadSecurityFromSite,
-				SecurityTypesFilter = _settings.Types
+				Login = _settings.Login,
+				Password = _settings.Password.To<string>()
 			});
 		}
 
 		protected override void SubscribeSecurity(Security security)
 		{
 			if (!_settings.IsRealTime)
-			{
-				// если получаем только исторические данные,
-				// то необходимо получить информацию по инструментам (мин. шаг цены)
 				Connector.Connector.RegisterSecurity(security);
-			}
 			else
 				base.SubscribeSecurity(security);
 		}
@@ -274,7 +202,7 @@ namespace StockSharp.Hydra.IQFeed
 				if (!CanProcess())
 					break;
 
-				if (security.MarketDataTypesSet.Contains(typeof(Level1ChangeMessage)))
+				if (security.MarketDataTypesSet.Contains(typeof(Trade)))
 				{
 					var tradeStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 
@@ -292,12 +220,12 @@ namespace StockSharp.Hydra.IQFeed
 						this.AddInfoLog(LocalizedStrings.Str2294Params, date, security.Security.Id);
 
 						bool isSuccess;
-						var trades = Connector.Connector.GetHistoricalLevel1(security.Security.ToSecurityId(), _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
+						var trades = Connector.Connector.GetHistoricalTicks(security.Security, _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{
 							if (trades.Any())
-								SaveLevel1Changes(security, trades);
+								SaveTrades(security, trades);
 							else
 								this.AddDebugLog(LocalizedStrings.NoData);
 						}

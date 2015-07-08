@@ -30267,32 +30267,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// IQFeed (history)
-		/// </summary>
-		public const string Str2533Key = "Str2533";
-
-		/// <summary>
-		/// IQFeed (history)
-		/// </summary>
-		public static string Str2533
-		{
-			get { return GetString(Str2533Key); }
-		}
-
-		/// <summary>
-		/// IQFeed (connection)
-		/// </summary>
-		public const string Str2534Key = "Str2534";
-
-		/// <summary>
-		/// IQFeed (connection)
-		/// </summary>
-		public static string Str2534
-		{
-			get { return GetString(Str2534Key); }
-		}
-
-		/// <summary>
 		/// Real-time data
 		/// </summary>
 		public const string Str2535Key = "Str2535";

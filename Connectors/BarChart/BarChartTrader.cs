@@ -16,6 +16,9 @@
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с BarChart для скачивания исторических и реал-тайм маркет-данных.
+	/// </summary>
 	public class BarChartTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>> _candleInfo = new SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>>();
