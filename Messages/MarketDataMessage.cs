@@ -153,7 +153,7 @@ namespace StockSharp.Messages
 		public long Count { get; set; }
 
 		/// <summary>
-		/// Максимальная грубина стакана. Используется в случае <see cref="DataType"/> равные <see cref="MarketDataTypes.MarketDepth"/>.
+		/// Максимальная глубина стакана. Используется в случае <see cref="DataType"/> равное <see cref="MarketDataTypes.MarketDepth"/>.
 		/// </summary>
 		[DataMember]
 		public int MaxDepth { get; set; }
@@ -165,7 +165,7 @@ namespace StockSharp.Messages
 		public string NewsId { get; set; }
 
 		/// <summary>
-		/// Максимальная грубина стакана по-умолчанию.
+		/// Максимальная глубина стакана по-умолчанию.
 		/// </summary>
 		public const int DefaultMaxDepth = 50;
 

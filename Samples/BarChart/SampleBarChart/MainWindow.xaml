@@ -27,10 +27,10 @@
 			</Grid.RowDefinitions>
 
 			<TextBlock Grid.Column="0" Grid.Row="0"><Run Text="{x:Static loc:LocalizedStrings.Login}"/>:</TextBlock>
-			<TextBox x:Name="LoginCtrl" Grid.Row="0" Grid.Column="1" Width="Auto" Text="jsankoff" />
+			<TextBox x:Name="LoginCtrl" Grid.Row="0" Grid.Column="1" Width="Auto" Text="" />
 
 			<TextBlock Grid.Column="0" Grid.Row="1"><Run Text="{x:Static loc:LocalizedStrings.Password}"/>:</TextBlock>
-			<PasswordBox x:Name="PasswordCtrl" Grid.Row="1" Grid.Column="1" Width="Auto" Password="devtest" />
+			<PasswordBox x:Name="PasswordCtrl" Grid.Row="1" Grid.Column="1" Width="Auto" Password="" />
 		</Grid>
 
 		<Button x:Name="ConnectBtn" Background="LightPink" Grid.Column="1" Grid.Row="0" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />

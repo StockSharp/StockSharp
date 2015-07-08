@@ -414,7 +414,7 @@ namespace StockSharp.Algo
 			else
 			{
 				_subscriptionQueue.RemoveByValue(enumerator);
-				RaiseSubscriptionFailed(null, message.TransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId + " " + message.DataType), "message"));
+				RaiseMarketDataMessage(null, message.TransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId + " " + message.DataType), "message"));
 			}
 		}
 
@@ -423,7 +423,6 @@ namespace StockSharp.Algo
 			var key = Tuple.Create(message.SecurityId, message.DataType);
 			
 			var enumerator = _subscriptionQueue.TryGetValue(key);
-			//var cancel = tuple != null && tuple.Second;
 
 			if (message.Error == null)
 			{
@@ -432,28 +431,19 @@ namespace StockSharp.Algo
 					if (enumerator != null)
 						ProcessSubscriptionAction(enumerator, message);
 					else
-						RaiseSubscriptionFailed(adapter, 0, new InvalidOperationException(LocalizedStrings.Str633Params.Put(message.SecurityId, message.DataType)));
+						RaiseMarketDataMessage(adapter, message.OriginalTransactionId, new InvalidOperationException(LocalizedStrings.Str633Params.Put(message.SecurityId, message.DataType)));
 				}
 				else
 				{
 					this.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
 					_subscriptionQueue.Remove(key);
-					RaiseMarketDataMessage(adapter, 0, null);
+					RaiseMarketDataMessage(adapter, message.OriginalTransactionId, null);
 				}
-
-				//if (!cancel)
-				//	return;
-
-				////в процессе подписки пользователь отменил ее - надо отписаться от получения данных
-				//var cancelMessage = (MarketDataMessage)message.Clone();
-				//cancelMessage.IsSubscribe = false;
-				//adapter.SendInMessage(cancelMessage);
 			}
 			else
 			{
-				//this.AddDebugLog(LocalizedStrings.Str631Params, adapter, message.SecurityId, message.DataType, message.Error);
 				_subscriptionQueue.Remove(key);
-				RaiseSubscriptionFailed(adapter, 0, message.Error);
+				RaiseMarketDataMessage(adapter, message.OriginalTransactionId, message.Error);
 			}
 		}
 
@@ -466,21 +456,6 @@ namespace StockSharp.Algo
 				Adapter = adapter,
 			});
 		}
-
-		private void RaiseSubscriptionFailed(IMessageAdapter adapter, long originalTransactionId, Exception error)
-		{
-			//_subscriptionQueue.Remove(Tuple.Create(message.SecurityId, message.DataType));
-			//this.AddDebugLog(LocalizedStrings.Str634Params, message.SecurityId, message.DataType, error);
-			RaiseMarketDataMessage(adapter, originalTransactionId, error);
-		}
-
-		//private void SendOutMessage(Message message)
-		//{
-		//	//if (message.LocalTime.IsDefault())
-		//	//	message.LocalTime = adapter.CurrentTime.LocalDateTime;
-
-		//	SendOutMessage(message);
-		//}
 
 		/// <summary>
 		/// Получить адаптеры <see cref="IInnerAdapterList.SortedAdapters"/>, отсортированные в зависимости от заданного приоритета. По-умолчанию сортировка отсутствует.
