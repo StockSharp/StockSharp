@@ -95,6 +95,7 @@ namespace StockSharp.Algo
 		}
 
 		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>>();
+		private readonly SynchronizedDictionary<long, Tuple<SecurityId, MarketDataTypes>> _subscriptionKeys = new SynchronizedDictionary<long, Tuple<SecurityId, MarketDataTypes>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter> _subscriptions = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter>();
 		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
@@ -298,7 +299,10 @@ namespace StockSharp.Algo
 
 								_subscriptionQueue.Add(key, enumerator);
 
-								ProcessSubscriptionAction(enumerator, mdMsg);
+								if (mdMsg.TransactionId != 0)
+									_subscriptionKeys.Add(mdMsg.TransactionId, key);
+
+								ProcessSubscriptionAction(enumerator, mdMsg, mdMsg.TransactionId);
 							}
 							else
 							{
@@ -407,20 +411,23 @@ namespace StockSharp.Algo
 			SendOutMessage(message);
 		}
 
-		private void ProcessSubscriptionAction(IEnumerator<IMessageAdapter> enumerator, MarketDataMessage message)
+		private void ProcessSubscriptionAction(IEnumerator<IMessageAdapter> enumerator, MarketDataMessage message, long originalTransactionId)
 		{
 			if (enumerator.MoveNext())
 				enumerator.Current.SendInMessage(message);
 			else
 			{
 				_subscriptionQueue.RemoveByValue(enumerator);
-				RaiseMarketDataMessage(null, message.TransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId + " " + message.DataType), "message"));
+				_subscriptionKeys.Remove(originalTransactionId);
+
+				RaiseMarketDataMessage(null, originalTransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId + " " + message.DataType), "message"));
 			}
 		}
 
 		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
 		{
-			var key = Tuple.Create(message.SecurityId, message.DataType);
+			var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId)
+				?? Tuple.Create(message.SecurityId, message.DataType);
 			
 			var enumerator = _subscriptionQueue.TryGetValue(key);
 
@@ -429,22 +436,22 @@ namespace StockSharp.Algo
 				if (message.IsNotSupported)
 				{
 					if (enumerator != null)
-						ProcessSubscriptionAction(enumerator, message);
+						ProcessSubscriptionAction(enumerator, message, message.OriginalTransactionId);
 					else
 						RaiseMarketDataMessage(adapter, message.OriginalTransactionId, new InvalidOperationException(LocalizedStrings.Str633Params.Put(message.SecurityId, message.DataType)));
+
+					return;
 				}
 				else
 				{
 					this.AddDebugLog(LocalizedStrings.Str630Params, message.SecurityId, adapter);
-					_subscriptionQueue.Remove(key);
-					RaiseMarketDataMessage(adapter, message.OriginalTransactionId, null);
 				}
 			}
-			else
-			{
-				_subscriptionQueue.Remove(key);
-				RaiseMarketDataMessage(adapter, message.OriginalTransactionId, message.Error);
-			}
+
+			_subscriptionQueue.Remove(key);
+			_subscriptionKeys.Remove(message.OriginalTransactionId);
+
+			RaiseMarketDataMessage(adapter, message.OriginalTransactionId, message.Error);
 		}
 
 		private void RaiseMarketDataMessage(IMessageAdapter adapter, long originalTransactionId, Exception error)
