@@ -109,10 +109,13 @@ namespace StockSharp.Algo
 			if (quoteMsg.SecurityId.IsDefault())
 				return;
 
+			if (IsAssociated(quoteMsg.SecurityId.BoardCode))
+				return;
+
 			var builder = _quoteChangeDepthBuilders
 				.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, AssociatedBoardCode));
 
-			OnProcessMessage(builder.Process(quoteMsg));
+			ProcessSecurityAction(builder.Process(quoteMsg), m => m.SecurityId, (s, m) => ProcessQuotesMessage(s, m, false), true);
 		}
 
 		private SecurityId CreateAssociatedId(SecurityId securityId)
