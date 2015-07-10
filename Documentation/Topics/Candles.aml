@@ -35,7 +35,10 @@
 			</listItem>
 		</list>
 	  
-		<para>В примере SampleCandle показано, как работать со свечками. Для визуальной демонстрации, свечки отображаются на графиках:</para>
+		<para>Как работать со свечками, показано в примере SampleCandle, который расположен в папке <legacyItalic>Samples/Quik/SampleCandles</legacyItalic>.</para>
+		<para>На следующем рисунке представлены графики <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> и 
+		<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>:</para>
+		
 	  
 		<mediaLink><image placement="center" xlink:href="samplecandles" /></mediaLink>
 	</introduction>
@@ -98,7 +101,7 @@ private void DrawCandle(CandleSeries series, Candle candle)
 {
 	 ...
 	 
-	wnd.Chart.ProcessCandle(wnd.Chart.Areas[0].Candles[0], candle);
+	wnd.Chart.Draw((ChartCandleElement)wnd.Chart.Areas[0].Elements[0], candle);
 }
 					]]>
 					</code>
@@ -111,7 +114,8 @@ private void DrawCandle(CandleSeries series, Candle candle)
 		
 			<step>
 				<content>
-					<para>Необходимо объявить, какие именно свечки требуются для робота и запустить получение данных через <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTime,System.DateTime)</codeEntityReference>:</para>
+					<para>Необходимо объявить, какие именно свечки требуются для робота и запустить получение данных через 
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleManager.Start(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)</codeEntityReference>:</para>
 
 					<code language="C#">
 					<![CDATA[

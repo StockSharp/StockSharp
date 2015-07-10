@@ -47,7 +47,8 @@
 		  
 			<list class="bullet">
 				<listItem>
-					<para>Получение времени свечки (время ее создания) через метод <codeEntityReference>Overload:StockSharp.Algo.Candles.CandleHelper.GetCandleTime</codeEntityReference>:</para>
+					<para>Получение времени свечки (время ее создания) через метод 
+					<codeEntityReference>M:StockSharp.Algo.Candles.CandleHelper.GetCandleTime</codeEntityReference>:</para>
 					
 					<code language="C#">
 					<![CDATA[
