@@ -115,7 +115,7 @@ namespace StockSharp.Algo
 			OnProcessMessage(builder.Process(quoteMsg));
 		}
 
-		private SecurityId CloneSecurityId(SecurityId securityId)
+		private SecurityId CreateAssociatedId(SecurityId securityId)
 		{
 			return new SecurityId
 			{
@@ -797,7 +797,7 @@ namespace StockSharp.Algo
 			if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
 			{
 				var clone = (SecurityMessage)message.Clone();
-				clone.SecurityId = CloneSecurityId(clone.SecurityId);
+				clone.SecurityId = CreateAssociatedId(clone.SecurityId);
 				ProcessSecurityMessage(clone);
 			}
 		}
@@ -892,12 +892,12 @@ namespace StockSharp.Algo
 				}
 			}
 
-			if (CreateAssociatedSecurity)
+			if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
 			{
 				// обновление BestXXX для ALL из конкретных тикеров
 				var clone = (Level1ChangeMessage)message.Clone();
-				clone.SecurityId = CloneSecurityId(clone.SecurityId);
-				OnProcessMessage(clone);
+				clone.SecurityId = CreateAssociatedId(clone.SecurityId);
+				ProcessSecurityAction(clone, m => m.SecurityId, ProcessLevel1ChangeMessage, true);
 			}
 		}
 
@@ -1438,8 +1438,8 @@ namespace StockSharp.Algo
 					if (CreateAssociatedSecurity && !IsAssociated(message.SecurityId.BoardCode))
 					{
 						var clone = (ExecutionMessage)message.Clone();
-						clone.SecurityId = CloneSecurityId(clone.SecurityId);
-						OnProcessMessage(clone);
+						clone.SecurityId = CreateAssociatedId(clone.SecurityId);
+						ProcessExecutionMessage(clone);
 					}
 
 					break;
