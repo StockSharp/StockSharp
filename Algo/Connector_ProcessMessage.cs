@@ -92,8 +92,7 @@ namespace StockSharp.Algo
 
 		private string AssociatedBoardCode
 		{
-			// TODO from adapter
-			get { return "ALL"; }
+			get { return Adapter.AssociatedBoardCode; }
 		}
 
 		private bool IsAssociated(string boardCode)

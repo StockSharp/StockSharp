@@ -59,6 +59,11 @@
 		bool OrderStatusRequired { get; }
 
 		/// <summary>
+		/// Код площадки для объединенного инструмента.
+		/// </summary>
+		string AssociatedBoardCode { get; }
+
+		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
 		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>

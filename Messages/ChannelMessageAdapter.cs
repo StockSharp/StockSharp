@@ -227,6 +227,11 @@
 			get { return Adapter.OrderStatusRequired; }
 		}
 
+		string IMessageAdapter.AssociatedBoardCode
+		{
+			get { return Adapter.AssociatedBoardCode; }
+		}
+
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
 			return Adapter.CreateOrderCondition();

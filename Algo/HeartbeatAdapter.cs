@@ -416,6 +416,11 @@
 			get { return _adapter.OrderStatusRequired; }
 		}
 
+		string IMessageAdapter.AssociatedBoardCode
+		{
+			get { return _adapter.AssociatedBoardCode; }
+		}
+
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
 			return _adapter.CreateOrderCondition();

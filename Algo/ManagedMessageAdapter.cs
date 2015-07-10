@@ -89,6 +89,11 @@ namespace StockSharp.Algo
 			get { return _innerAdapter.SecurityLookupRequired; }
 		}
 
+		string IMessageAdapter.AssociatedBoardCode
+		{
+			get { return _innerAdapter.AssociatedBoardCode; }
+		}
+
 		OrderCondition IMessageAdapter.CreateOrderCondition()
 		{
 			return _innerAdapter.CreateOrderCondition();
