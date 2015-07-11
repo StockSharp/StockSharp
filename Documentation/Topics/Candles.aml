@@ -40,7 +40,7 @@
 		<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>:</para>
 		
 	  
-		<mediaLink><image placement="center" xlink:href="samplecandles" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="sample_candles" /></mediaLink>
 	</introduction>
 
     <procedure>

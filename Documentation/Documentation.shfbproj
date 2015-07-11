@@ -1345,6 +1345,10 @@
       <ImageId>sample_candlesсhart</ImageId>
       <AlternateText>sample candlesсhart</AlternateText>
     </Image>
+    <Image Include="Art\sample_candles.png">
+      <ImageId>sample_candles</ImageId>
+      <AlternateText>sample candles</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
@@ -1752,10 +1756,6 @@
     <None Include="Art\sample_connection_error.png">
       <ImageId>sample_connection_error</ImageId>
       <AlternateText>sample connection error</AlternateText>
-    </None>
-    <None Include="Art\sample_candles.png">
-      <ImageId>sample_candles</ImageId>
-      <AlternateText>sample candles</AlternateText>
     </None>
     <None Include="Art\sample_async_error.png">
       <ImageId>sample_async_error</ImageId>

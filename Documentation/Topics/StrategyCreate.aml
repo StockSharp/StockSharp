@@ -186,7 +186,7 @@
 			<alert class-="note">
 			  <para>
 				Если необходимо изменить зарегистрированную заявку, то так же нужно вызывать метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>,
-				а не обращаться напрямую к шлюзу через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder</codeEntityReference>.
+				а не обращаться напрямую к шлюзу через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
 			  </para>
 			</alert>
 			<para>
@@ -364,7 +364,7 @@ else
 			  перехватывает ошибку через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)</codeEntityReference>,
 			  меняется значение <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ErrorState</codeEntityReference>
 			  на <codeEntityReference qualifyHint="true">F:StockSharp.Logging.LogLevels.Error</codeEntityReference>, выводится текст ошибки через событие
-			  <codeEntityReference qualifyHint="false">E:StockSharp.Logging.BaseLogSource`1.Log</codeEntityReference>
+			  <codeEntityReference qualifyHint="true">E:StockSharp.Logging.ILogSource.Log</codeEntityReference> 
 			  и самостоятельно начинается остановка
 			  стратегии.
 			</para>

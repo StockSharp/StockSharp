@@ -13,10 +13,11 @@
 	  <list class="ordered">
 		<listItem>
 		  Найти те заявки, которые необходимо загрузить в стратегию, и вернуть их из метода (например, загрузить идентификаторы заявок, если стратегия записывает каждый
-		  раз при регистрации через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Boolean)</codeEntityReference> из файла).
+		  раз при регистрации через метод 
+		  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference> из файла).
 		</listItem>
 		<listItem>
-		  Объединить полученный результат с базовым методом <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Boolean)</codeEntityReference>.
+		  Объединить полученный результат с базовым методом <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>.
 		</listItem>
 		<listItem>
 		  После того, как заявки будут загружены в стратегию, загрузятся и все совершенные по ним сделки. Это будет сделано автоматически.
@@ -34,7 +35,7 @@
         <step>
           <content>
             <para>Для этого, чтобы <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> загрузила свое предыдущее состояние,
-            необходимо переопределить <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Boolean)</codeEntityReference>.
+            необходимо переопределить <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.ProcessNewOrders(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>.
 		  	На вход данному методу из <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.Strategy.OnStarted</codeEntityReference>
 		  	поступят все <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.Orders</codeEntityReference>
 		  	и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.IConnector.StopOrders</codeEntityReference>, и их необходимо

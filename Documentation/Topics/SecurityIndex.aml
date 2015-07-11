@@ -5,7 +5,7 @@
 	<introduction>
 		<para><codeEntityReference>T:StockSharp.Algo.IndexSecurity</codeEntityReference> - индекс, построенный из инструментов.</para>
 		<para>И его реализация <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - индекс построенный из инструментов с примененим весовых коэффициентов.</para>
-		<para>Например когда требуется построить спред между двумя инструментами GZM2 и LKM2.</para>
+		<para>Например когда требуется построить спред между двумя инструментами GZM5 и LKM5.</para>
 	</introduction>
 
 		<procedure>
@@ -20,8 +20,8 @@ private Security _instr1;
 private Security _instr2;
 private WeightedIndexSecurity _indexInstr;
 
-private const string _secCode1 = "GZM2";
-private const string _secCode2 = "LKM2";
+private const string _secCode1 = "GZM5";
+private const string _secCode2 = "LKM5";
 							]]>
 							</code>
 						</content>

@@ -19,6 +19,9 @@
 		  <image placement="center" xlink:href="strategy" />
 		</mediaLink>
 	  </para>
+	  
+	  
+	  
 	  <para>
 	  	Класс <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> использует подход, <link xlink:href="97cf7a9c-8b3d-4791-9306-275d55d4cf36">основанный на событиях</link>. 
 	  	Такой код получается компактным и оперативно реагирует на рыночные события за счет мгновенного вызова. 
@@ -30,7 +33,7 @@
 	  <para>
 	  	Для использования событийного подхода необходимо использовать свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Rules</codeEntityReference>,
 	  	через которое задается список правил. Каждое из правил хранит в себе условие срабатывания на событие и само действие, обрабатывающее данное событие.
-	  	Ниже приведен код стратегии	<codeEntityReference>T:StockSharp.Algo.Strategies.DeltaHedgeStrategy</codeEntityReference>, которая использует
+	  	Ниже приведен код стратегии	<codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference>, которая использует
 	  	событийную модель:
 	  </para>
 
@@ -134,7 +137,7 @@ Security
 		</code>
 				
 		<para>
-			В <codeEntityReference>T:StockSharp.Algo.Strategies.DeltaHedgeStrategy</codeEntityReference> правила добавляются через вызов метода-расширения
+			В <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy</codeEntityReference> правила добавляются через вызов метода-расширения
 			<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.Apply(StockSharp.Algo.IMarketRule,StockSharp.Algo.IMarketRuleContainer)</codeEntityReference>
 			которое неявно добавляет в список <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Rules</codeEntityReference>
 			новые объекты <codeEntityReference qualifyHint="false">T:StockSharp.Algo.IMarketRule</codeEntityReference>. Это позволяет сократить код и сделать его

@@ -140,7 +140,7 @@ emailListener.Filters.Add(msg => msg.Level == LogLevels.Warning);</code>
 			</steps>
 		</procedure>
 
-		<procedure>
+	<!--	<procedure>
 			<title>Передача Sms через Google Calendar</title>
 
 			<steps class="ordered">
@@ -173,7 +173,7 @@ logManager.Sources.Add(lkohSmaStrategy);</code>
 					</content>
 				</step>
 			</steps>
-		</procedure>
+		</procedure> -->
 
 		<procedure>
 			<title>Логирование в LogWindow</title>
