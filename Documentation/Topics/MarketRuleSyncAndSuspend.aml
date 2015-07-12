@@ -1,13 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="41e6ea41-f8f8-4788-b5ea-c1c12e24007a" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>
+				Иногда требуется установить одновременно несколько правил, чтобы каждое из них было активно только тогда, когда завершено формирование всех этих правил.
+				Для этого используется метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.MarketRuleHelper.SuspendRules(System.Action)</codeEntityReference>.
+		</para>
+    
+    </introduction>
 
-
-	<procedure>
+	<!-- <procedure>
 		<title>Синхронизация правил</title>
 		<steps class="ordered">
 			<step>
-				<content>
+				><content>
 					<para>Для синхронизации правил необходимо создать объект синхронизации:</para>
 			
 					<code language="C#">
@@ -15,7 +21,7 @@
 private readonly object _syncToken = new object();
 					]]>
 					</code>					
-				</content>
+				</content> 
 			</step>
 			
 			<step>
@@ -45,11 +51,11 @@ order
 				</content>
 			</step>			
 		</steps>
-	</procedure>
+	</procedure> -->
 	
 
     <section address="Section2">
-		<title>Приостановка правил</title>
+		<title>Использование приостановки правил</title>
 		<content>
 		
 			<para>

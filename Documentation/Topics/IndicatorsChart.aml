@@ -53,7 +53,7 @@ private void Draw(CandleSeries series, Candle candle)
 {
 	var longValue = candle.State == CandleStates.Finished ? new ChartIndicatorValue(_longMaElem.Indicator, _longMaElem.Indicator.Process(candle)) : null;
 
-	this.GuiAsync(() => _chart.ProcessValues(candle.OpenTime, new Dictionary<IChartElement, object>
+	this.GuiAsync(() => _chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
 	{
 		{ _candlesElem, candle },
 		{ _longMaElem, longValue}

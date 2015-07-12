@@ -9,8 +9,8 @@
       <para>
 		С помощью подхода <link xlink:href="8ea639f6-ce74-4a00-9f13-db59c8c2396f">дочерних стратегий</link> и использования
 		<codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference> в <token>stocksharp</token> реализован механизм
-		автоматической защиты позиции через стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference>
-		и <codeEntityReference>T:StockSharp.Algo.Strategies.StopLossStrategy</codeEntityReference>. Данные стратегии имеют ряд преимуществ перед обычными
+		автоматической защиты позиции через стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
+		и <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>. Данные стратегии имеют ряд преимуществ перед обычными
 		стоп заявками:
 	  </para>
 	  	<list class="ordered">
@@ -31,12 +31,6 @@
 	  		</listItem>
 		</list>
 		
-		<alert class="warning">
-  			<para>Для правильной работы защитных стратегий, при использовании в качестве подключения <token>quik</token>, необходимо добавить доп. колонки
-  			<codeEntityReference qualifyHint="true">P:StockSharp.Quik.DdeSecurityColumns.MaxPrice</codeEntityReference> и 
-  			<codeEntityReference qualifyHint="true">P:StockSharp.Quik.DdeSecurityColumns.MinPrice</codeEntityReference>. И соответствующие колонки в <token>quik</token> таблицу "Инструменты".</para>
-  			<para>Подробнее - <link xlink:href="4261879e-9bb3-482c-9fc5-27ecb07bdf5e">Экспорт дополнительных колонок</link>.</para>
-		</alert>
     </introduction>
 
     <prerequisites>
@@ -86,9 +80,9 @@ public class MyStrategy : Strategy
         <step>
           <content>
           	<para>
-          		Чтобы защитить позицию необходимо использовать стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference>
-				или <codeEntityReference>T:StockSharp.Algo.Strategies.StopLossStrategy</codeEntityReference>. Если требуется одновременная защита с двух
-				сторон, то рекомендуется использовать <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStopLossStrategy</codeEntityReference>.
+          		Чтобы защитить позицию необходимо использовать стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
+				или <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>. Если требуется одновременная защита с двух
+				сторон, то рекомендуется использовать <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy</codeEntityReference>.
 				Данная стратегия автоматически изменяет объем одной из стратегий при частичной активации (например, при касании стоп-лосс уровня закрылась
 				лишь часть позиции, а затем рынок снова вернулся в безубыточную зону):
           	</para>
@@ -118,11 +112,11 @@ public class MyStrategy : Strategy
 
       <content>
         <para>
-        	Стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference> и
-        	<codeEntityReference>T:StockSharp.Algo.Strategies.StopLossStrategy</codeEntityReference> не отслеживают частичное закрытия позиции или ее переворот
+        	Стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference> и
+        	<codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference> не отслеживают частичное закрытия позиции или ее переворот
         	(например, позиция была закрыта руками в терминале и была открыта в противоположную сторону). Для того, чтобы автоматически отслеживать в роботе
-        	подобные ситуации, необходимо использовать <codeEntityReference>T:StockSharp.Algo.Strategies.AutoProtectiveStrategy</codeEntityReference>.
-        	Данная стратегия через поступающие в нее сделки (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})</codeEntityReference>)
+        	подобные ситуации, необходимо использовать <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy</codeEntityReference>.
+        	Данная стратегия через поступающие в нее сделки (<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})</codeEntityReference>)
         	решает, что нужно сделать: защитить их (если идет открытие позиции или ее увеличение) или остановить защитные стратеии (если идет закрытие позиции или ее уменьшение).
         	Также стратегия автоматически переворачивает защитные стратегии в случае переворота позиции (из длинной в короткую или из короткой в длинную).
         </para>
