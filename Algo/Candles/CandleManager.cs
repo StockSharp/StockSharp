@@ -161,8 +161,10 @@ namespace StockSharp.Algo.Candles
 
 			private void OnNewCandles(CandleSeries series, IEnumerable<Candle> candles)
 			{
-				foreach (var candle in candles)
+				foreach (var c in candles)
 				{
+					var candle = c.Clone();
+
 					candle.State = CandleStates.Active;
 					Processing.SafeInvoke(series, candle);
 
