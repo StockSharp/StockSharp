@@ -61,9 +61,8 @@
 				<codeEntityReference>T:StockSharp.Logging.LogListener</codeEntityReference> можно настроить на фильтрацию сообщений через
 				свойство <codeEntityReference>P:StockSharp.Logging.LogListener.Filters</codeEntityReference>. Например, через фильтры
 				можно задать, какой тип сообщений стоит обрабатывать. Это особенно полезно в случаях использования
-				<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference>,
-				<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference> или
-				<codeEntityReference>T:StockSharp.Logging.SmsLogListener</codeEntityReference>, чтобы, к примеру, посылать SMS только 
+				<codeEntityReference>T:StockSharp.Logging.SoundLogListener</codeEntityReference> или
+				<codeEntityReference>T:StockSharp.Logging.EmailLogListener</codeEntityReference>, чтобы, к примеру, посылать e-mail только 
 				в критических ситуациях (ошибка алгоритма торговли), а не на каждое отладочное сообщение.
 			</para>
 		</introduction>
