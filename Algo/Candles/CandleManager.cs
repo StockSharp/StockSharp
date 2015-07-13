@@ -163,7 +163,7 @@ namespace StockSharp.Algo.Candles
 			{
 				foreach (var candle in candles)
 				{
-					candle.State = CandleStates.Started;
+					candle.State = CandleStates.Active;
 					Processing.SafeInvoke(series, candle);
 
 					candle.State = CandleStates.Finished;

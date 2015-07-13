@@ -401,7 +401,7 @@
 				ClosePrice = parts[6].To<decimal>(),
 				TotalVolume = parts[8].To<decimal>(),
 				TotalTicks = parts[9].To<int?>() ?? 0,
-				State = parts[1][1] == 'U' ? CandleStates.Changed : CandleStates.Finished
+				State = parts[1][1] == 'U' ? CandleStates.Active : CandleStates.Finished
 			};
 	}
 }

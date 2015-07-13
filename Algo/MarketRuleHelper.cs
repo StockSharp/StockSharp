@@ -1541,7 +1541,7 @@ namespace StockSharp.Algo
 
 			protected override void OnProcessCandle(Candle candle)
 			{
-				if (candle.State == CandleStates.Changed && _condition(candle))
+				if (candle.State == CandleStates.Active && _condition(candle))
 					Activate(candle);
 			}
 		}
@@ -1561,7 +1561,7 @@ namespace StockSharp.Algo
 
 			protected override void OnProcessCandle(Candle candle)
 			{
-				if ((candle.State == CandleStates.Started || candle.State == CandleStates.Changed) && _condition(candle))
+				if (candle.State == CandleStates.Active && _condition(candle))
 					Activate(candle);
 			}
 		}
@@ -1598,7 +1598,7 @@ namespace StockSharp.Algo
 
 			protected override void OnProcessCandle(Candle candle)
 			{
-				if (candle.State == CandleStates.Changed && Candle == candle && _condition(Candle))
+				if (candle.State == CandleStates.Active && Candle == candle && _condition(Candle))
 					Activate(Candle);
 			}
 		}
@@ -1730,7 +1730,7 @@ namespace StockSharp.Algo
 		/// <returns>Правило.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandlesStarted(this CandleSeries series)
 		{
-			return new CandleStateSeriesRule(series, CandleStates.Started) { Name = LocalizedStrings.Str1072 + " " + series };
+			return new CandleStateSeriesRule(series, CandleStates.Active) { Name = LocalizedStrings.Str1072 + " " + series };
 		}
 
 		/// <summary>
@@ -1760,7 +1760,7 @@ namespace StockSharp.Algo
 		/// <returns>Правило.</returns>
 		public static MarketRule<CandleSeries, Candle> WhenCandles(this CandleSeries series)
 		{
-			return new CandleStateSeriesRule(series, CandleStates.Started, CandleStates.Changed, CandleStates.Finished)
+			return new CandleStateSeriesRule(series, CandleStates.Active, CandleStates.Finished)
 			{
 				Name = LocalizedStrings.Candles + " " + series
 			};

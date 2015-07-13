@@ -311,7 +311,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (!valueAdded)
 							Container.AddValue(series, candle, value);
 
-						candle.State = CandleStates.Changed;
+						//candle.State = CandleStates.Changed;
 						RaiseProcessing(series, candle);
 
 						break;
@@ -331,7 +331,7 @@ namespace StockSharp.Algo.Candles.Compression
 						Container.AddValue(series, candle, value);
 						valueAdded = true;
 
-						candle.State = CandleStates.Started;
+						candle.State = CandleStates.Active;
 						RaiseProcessing(series, candle);
 					}
 				}
@@ -509,16 +509,18 @@ namespace StockSharp.Algo.Candles.Compression
 			if (info == null)
 				return;
 
+			var isNone = candle.State == CandleStates.None;
+
 			// если успела прийти новая свеча
-			if (candle.State == CandleStates.None && info.CurrentCandle != null)
+			if (isNone && info.CurrentCandle != null)
 				return;
 
-			if (candle.State != CandleStates.None && info.CurrentCandle != candle)
+			if (!isNone && info.CurrentCandle != candle)
 				return;
 
-			info.CurrentCandle = candle.State == CandleStates.None ? null : candle;
+			info.CurrentCandle = isNone ? null : candle;
 
-			if (candle.State != CandleStates.None)
+			if (!isNone)
 				candle.State = CandleStates.Finished;
 
 			RaiseProcessing(series, candle);

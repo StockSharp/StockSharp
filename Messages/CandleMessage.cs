@@ -22,16 +22,10 @@ namespace StockSharp.Messages
 		None,
 
 		/// <summary>
-		/// Свеча запущена на формирование.
+		/// Свеча формируется.
 		/// </summary>
 		[EnumMember]
-		Started,
-
-		/// <summary>
-		/// Свеча изменена.
-		/// </summary>
-		[EnumMember]
-		Changed,
+		Active,
 
 		/// <summary>
 		/// Свеча закончена.

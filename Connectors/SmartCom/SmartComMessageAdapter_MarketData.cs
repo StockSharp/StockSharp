@@ -181,6 +181,10 @@ namespace StockSharp.SmartCom
 			transactionInfo.Item2.OrderBy(c => c.OpenTime).ForEach(m =>
 			{
 				m.IsFinished = ++row == rowCount;
+
+				if (!m.IsFinished)
+					m.State = CandleStates.Finished;
+
 				SendOutMessage(m);
 			});
 

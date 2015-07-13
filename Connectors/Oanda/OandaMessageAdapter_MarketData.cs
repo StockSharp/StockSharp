@@ -6,7 +6,6 @@ namespace StockSharp.Oanda
 
 	using StockSharp.Algo;
 	using StockSharp.Messages;
-	using StockSharp.Localization;
 	using StockSharp.Oanda.Native.DataTypes;
 
 	partial class OandaMessageAdapter
@@ -113,7 +112,7 @@ namespace StockSharp.Oanda
 									LowPrice = (decimal)candle.Low,
 									ClosePrice = (decimal)candle.Close,
 									TotalVolume = (decimal)candle.Volume,
-									State = candle.Complete ? CandleStates.Finished : CandleStates.Started
+									State = candle.Complete ? CandleStates.Finished : CandleStates.Active
 								});
 
 								from = time;
