@@ -5,7 +5,7 @@
 	<introduction>
 		<para>Для создания свечек <codeEntityReference>T:StockSharp.Algo.ContinuousSecurity</codeEntityReference> и <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference>
 		используется тот же механизм что и при создании свечек <codeEntityReference>T:StockSharp.BusinessEntities.Security</codeEntityReference>.</para>
-		<para>Например создадим 1мин. свечки для спреда GZM2 - LKM2:</para>
+		<para>Например создадим 1мин. свечки для спреда GZM5 - LKM5:</para>
         <code language="C#">
         <![CDATA[
 private QuikTrader _trader;
@@ -14,8 +14,8 @@ private Security _instr1;
 private Security _instr2;
 private WeightedIndexSecurity _indexInstr;
 
-private const string _secCode1 = "GZM2";
-private const string _secCode2 = "LKM2";
+private const string _secCode1 = "GZM5";
+private const string _secCode2 = "LKM5";
 
 private CandleManager _candleManager;
 private CandleSeries _indexSeries;

@@ -20,15 +20,16 @@
 		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>
 		является класс
 		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.StorageRegistry</codeEntityReference>.
-		Он взаимодействует с данными через низкоуровневый системный интерфейс <legacyBold>IStorage</legacyBold>. Именно данный интерфейс предоставляет прозрачную работу с 
+		Он взаимодействует с данными через низкоуровневый системный интерфейс <codeEntityReference>T:Ecng.Serialization.IStorage</codeEntityReference>. 
+		Именно данный интерфейс предоставляет прозрачную работу с
 		<link xlink:href="38595e78-cff6-44ed-b525-2be13e6c17e4">Базами данных</link>, скрывая особенности.</para>
 		  
 		<para>Работа с маркет-данными, такие как тиковые сделки или стаканы, происходит через отдельный интерфейс
 		<codeEntityReference>T:StockSharp.Algo.Storages.IMarketDataStorage`1</codeEntityReference>,
 		который получается на основе информации об инструменте через методы
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTradeStorage(StockSharp.BusinessEntities.Security)</codeEntityReference>
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetTradeStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>
 		и
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetMarketDepthStorage(StockSharp.BusinessEntities.Security)</codeEntityReference>
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Storages.IStorageRegistry.GetMarketDepthStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>
 		для тиковых сделок и стаканов соответственно.</para>
 		  
 		<para>Если используется
@@ -74,7 +75,7 @@
 					В начале создается инструмент, у которого инициализируются основные свойства -
 					<codeEntityReference>P:StockSharp.BusinessEntities.Security.Id</codeEntityReference>
 					(для определения месторасположения),
-					<codeEntityReference>P:StockSharp.BusinessEntities.Security.MinStepSize</codeEntityReference>
+					<codeEntityReference>P:StockSharp.BusinessEntities.Security.StepPrice</codeEntityReference>
 					и
 					<codeEntityReference>P:StockSharp.BusinessEntities.Security.Decimals</codeEntityReference>
 					(для сжатия цены в файле <legacyItalic>trades.bin</legacyItalic>):</para>
@@ -142,7 +143,7 @@ var storage = new StorageRegistry();
 			<step>
 				<content>
 					<para>Через хранилище торговых объектов получается хранилище маркет-данных. В примере используется хранилище тиковых сделок, которое получается через метод
-					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.StorageRegistry.GetTradeStorage(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
+					<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Storages.StorageRegistry.GetTradeStorage(StockSharp.BusinessEntities.Security,StockSharp.Algo.Storages.IMarketDataDrive,StockSharp.Algo.Storages.StorageFormats)</codeEntityReference>:</para>
 				  
 					<code language="C#">
 					<![CDATA[

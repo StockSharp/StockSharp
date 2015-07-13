@@ -27,12 +27,11 @@
 					<codeEntityReference>T:StockSharp.Algo.Strategies.Reporting.ExcelStrategyReport</codeEntityReference> - генерация отчета в формат <token>excel</token>. 
 					При данной генерации можно использовать файл-шаблон (<codeEntityReference>P:StockSharp.Algo.Strategies.Reporting.ExcelStrategyReport.Template</codeEntityReference>),
 					который уже содержит необходимые формулы и графики, опирающиеся на генерируемые данные. Данные из шаблона перед генерацией копируются в
-					результирующий файл (<codeEntityReference>P:StockSharp.Algo.Strategies.Reporting.ExcelStrategyReport.FileName</codeEntityReference>).
+					результирующий файл, имя которого передается через конструктор.
 				</para>
 				<para>
 					По умолчанию, <codeEntityReference>T:StockSharp.Algo.Strategies.Reporting.ExcelStrategyReport</codeEntityReference> использует лист
-					<token>excel</token> с названием "отчет" (<codeEntityReference>P:StockSharp.Algo.Strategies.Reporting.ExcelStrategyReport.SheetName</codeEntityReference>),
-					куда записывает данные. Если такого листа в файле-шаблоне нет, то он будет автоматически создан.
+					<token>excel</token> с названием "отчет", куда записывает данные. Если такого листа в файле-шаблоне нет, то он будет автоматически создан.
 				</para>
 			</listItem>
 			<listItem>
