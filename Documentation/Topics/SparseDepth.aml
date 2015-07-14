@@ -35,7 +35,7 @@
 var sparseDepth = depth.Sparse();</code>
 					  <para>
 						  Все котировки <codeEntityReference>T:StockSharp.BusinessEntities.Quote</codeEntityReference> в полученном стакане будут иметь нулевой объем,
-						  и они будут созданы с шагом <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.MinStepSize</codeEntityReference>.
+						  и они будут созданы с шагом <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.StepPrice</codeEntityReference>.
 					  </para>
 					  <para>
 						  Чтобы объединить разреженный стакан с первоначальным (соединить реальные котировки и разреженные), необходимо вызвать метод
@@ -47,7 +47,8 @@ var sparseDepth = depth.Sparse();</code>
 			  <step>
 				  <content>
 					  <para>
-						  Группировка стакана по ценовым уровням осуществляется через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.Group(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.Unit)</codeEntityReference>:
+						  Группировка стакана по ценовым уровням осуществляется через метод 
+						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.TraderHelper.Group(StockSharp.BusinessEntities.MarketDepth,StockSharp.Messages.Unit)</codeEntityReference>:
 					  </para>
 					  <code language="C#">MarketDepth depth = ....;
 

@@ -78,11 +78,11 @@ Rho.Text = bs.Rho(volatility).ToString("0.00");
 
 if (option.LastTrade != null)
 	IV.Text = bs.IV(option.LastTrade.Price).ToString("0.00");]]></code>
-					  <para>
+					 <!-- <para>
 						  При расчете "греков" цена базового актива береться изходя из установленного режима в
 						  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Derivatives.BlackScholes.SecurityPriceMode</codeEntityReference>.
 						  По-умолчанию используется цена последней сделки из <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.LastTrade</codeEntityReference>.
-					  </para>
+					  </para> -->
 				  </content>
 			  </step>
 			  <step>

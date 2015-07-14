@@ -8,7 +8,7 @@
 
     <introduction>
       <para>Для определения биржевого времени в <token>stocksharp</token> есть метод
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.BaseTrader.GetMarketTime(StockSharp.BusinessEntities.Exchange)</codeEntityReference>.
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Connector.GetMarketTime(StockSharp.BusinessEntities.Exchange)</codeEntityReference>.
 		Чтобы данный метод возвращал точное время, необходимо синхронизировать локальное время компьютера с атомными часами через вызов
 		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Logging.LoggingHelper.SyncMarketTime(System.Int32)</codeEntityReference>, 
 		разница во времени будет записана в

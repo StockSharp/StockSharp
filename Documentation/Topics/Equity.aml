@@ -56,7 +56,8 @@ _strategy.PnLChanged += () =>
       </para>
       <para>
       	При появлении новых данных, кривая будет отрисовываться на специальном графике <codeEntityReference>T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference>.
-      	Чтобы начать рисовать кривую на данном графике, необходимо вызвать метод <codeEntityReference qualifyHint="true">M:StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve(System.String,System.Windows.Media.Color)</codeEntityReference>.
+      	Чтобы начать рисовать кривую на данном графике, необходимо вызвать метод 
+      	<codeEntityReference qualifyHint="true">Overload: StockSharp.Xaml.Charting.EquityCurveChart.CreateCurve</codeEntityReference>.
       	Полученная коллекция заполняется данными, которые передаются во время обработки события 
       	<codeEntityReference qualifyHint="true">E:StockSharp.Algo.Strategies.Strategy.PnLChanged</codeEntityReference>.
       </para>
@@ -66,8 +67,8 @@ _strategy.PnLChanged += () =>
       </para>
       <para>
       	В разделе <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link> показано использование визуальной панели
-      	<codeEntityReference qualifyHint="false">T:StockSharp.Xaml.StatisticParameterPanel</codeEntityReference>, которая позволяет отображать параметры 
-      	<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.StatisticParameterPanel.Parameters</codeEntityReference>.
+      	<codeEntityReference qualifyHint="false">T:StockSharp.Xaml.StatisticParameterGrid</codeEntityReference>, которая позволяет отображать параметры 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.StatisticParameterGrid.Parameters</codeEntityReference>.
       </para>
     </introduction>
     <!-- <prerequisites><content>Optional prerequisites info</content></prerequisites> -->

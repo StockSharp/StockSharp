@@ -31,9 +31,13 @@ var someSecurity = trader.Securities.First();
 Console.WriteLine(someSecurity.GetSpreadSize());</code>
 			  </content>
 		  </step>-->
+		  
+		  
+		  
 		  <step>
 			  <content>
-				  <para>Очистить стакан от собственных заявок через метод <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetFilteredQuotes</codeEntityReference>
+				  <para>Очистить стакан от собственных заявок через метод 
+				  <codeEntityReference>M:StockSharp.Algo.TraderHelper.GetFilteredQuotes(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Quote},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order},System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.Order})</codeEntityReference>
 				  (чтобы выставлять заявки относительно других участников рынка, и предотвратить борьбу своих роботов друг с другом):</para>
 				  <code language="C#"><![CDATA[// любой инструмент
 var someSecurity = trader.Securities.First();
@@ -57,7 +61,8 @@ trader.GetMarketDepth(someSecurity).Invert(someSecurity.MinStepSize);</code>
 		  <step>
 			  <content>
 				  <para>
-					  Рассчитать рыночную цену по инструменту через метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.OrderDirections)</codeEntityReference>:</para>
+					  Рассчитать рыночную цену по инструменту через метод 
+					  <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketPrice(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IMarketDataProvider,StockSharp.Messages.Sides)</codeEntityReference>:</para>
 				  <code language="C#">// любой инструмент
 var someSecurity = trader.Securities.First();
 Console.WriteLine(someSecurity.GetMarketPrice(OrderDirections.Buy));</code>
@@ -93,17 +98,17 @@ var someSecurity = trader.Securities.First();
 Console.WriteLine(someSecurity.GetPnL(trader.GetMyTrades(someSecurity)));</code>
 			  </content>
 		  </step>
-		  <step>
+		  <!--<step>
 			<content>
 			  <para>
-				  Получить проскальзывание по сделке через <codeEntityReference>Overload:StockSharp.Algo.TraderHelper.GetSlippage</codeEntityReference>:
+				  Получить проскальзывание по сделке через <codeEntityReference>M:StockSharp.Algo.TraderHelper.GetSlippage</codeEntityReference>:
 			  </para>
 			  <code language="C#">// любая сделка
 var someTrade = trader.MyTrades.First();
 
 Console.WriteLine(someTrade.GetSlippage(someTrade.Order.Price));</code>
 			</content>
-		  </step>
+		  </step> -->
 		  <step>
 			  <content>
 				  <para>

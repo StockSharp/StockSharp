@@ -8,8 +8,8 @@
     <introduction>
 		<para>
 			Тестирование на исторических данных позволяет проводить как анализ рынка для поиска закономерностей, так и
-			<link xlink:href="24a5c734-199f-4090-943d-6324a04f335b">оптимизацию параметров стратегии</link>. Вся работа при этом заключена в классе
-			<codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>(подробнее про <link xlink:href="9e72851f-2a19-4680-b344-cdc39d1b85e1">настройки тестирования</link>), 
+			<link xlink:href="24a5c734-199f-4090-943d-6324a04f335b">оптимизацию параметров стратегии</link>. Вся работа при этом заключена в классе 
+			<codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> (подробнее про <link xlink:href="9e72851f-2a19-4680-b344-cdc39d1b85e1">настройки тестирования</link>), 
 			который получает сохраненные в локальном хранилище данные через специальный <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>. Тестирование идет
 			по тиковым сделкам (<codeEntityReference>T:StockSharp.BusinessEntities.Trade</codeEntityReference>) и стаканам
 			(<codeEntityReference>T:StockSharp.BusinessEntities.MarketDepth</codeEntityReference>). Если на период в истории нет сохраненных стаканов, то они
@@ -141,16 +141,17 @@ var security = new Security
 var portfolio = new Portfolio { Name = "test account", BeginValue = 1000000m };</code>
 				  </content>
 			  </step>
+			  
 			  <step>
 				  <content>
 					  <para>
-						  Создание самого <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference>, куда передаются инструменты,
+						  Создание самого <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>, куда передаются инструменты,
 						  портфели, интерфейс хранилища <codeEntityReference>T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>, а также настройки тестирования:
 					  </para>
 					  <code language="C#"><![CDATA[
 // создаем шлюз для эмуляции
 // инициализируем настройки (инструмент в истории обновляется раз в секунду)
-var trader = new EmulationTrader(
+var trader = new HistoryEmulationConnector(
 	new[] { security },
 	new[] { portfolio })
 {
@@ -231,7 +232,7 @@ if (emulationInfo.UseMarketDepth									// тест подразумевает 
 					  <code language="C#">trader.Connect();
 trader.StartExport();</code>
 					  <para>
-						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference> инструментов
+						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> инструментов
 						  и портфелей вызывается <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
 						  и <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewPortfolios</codeEntityReference>.
 					  </para>
@@ -243,7 +244,7 @@ trader.StartExport();</code>
 					  <para>
 						  Создание менеджера свечек <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> (необходимо для
 						  стратегии скользящих средних), в котором в качестве источника указан шлюз 
-						  <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference>
+						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>
 						  и регистрация 5-минутных свечек:
 					  </para>
 					  <code language="C#">
@@ -336,16 +337,16 @@ foreach (var trader in _traders)
       <title>Ускорение работы</title>
       <content>
         <para>
-        	В процессе тестирования <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference> создает несколько потоков загрузки
+        	В процессе тестирования <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> создает несколько потоков загрузки
         	данных. Их количество по-умолчанию равно количеству процессоров (=ядер) минус 1. Если при работе тестирования было замечено, что некоторые
         	процессоры простаивают в работе, и при этом требуется увеличить скорость обработки исторических данных, то можно увеличить значение свойства
-        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.LoadingThreadCount</codeEntityReference>.
+        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.LoadingThreadCount</codeEntityReference>.
         </para>
         <para>
-        	Если тестирование потребляет слишком больше количество памяти, то его можно ограничить свойством <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.DaysInMemory</codeEntityReference>.
+        	Если тестирование потребляет слишком больше количество памяти, то его можно ограничить свойством <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.DaysInMemory</codeEntityReference>.
         	Данное свойство показывает, сколько максимально дней в истории может храниться в очереди для обработки данных (значение параметра напрямую
-        	зависит от <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.LoadingThreadCount</codeEntityReference>). Уменьшив
-        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.DaysInMemory</codeEntityReference>, уменьшится и объем
+        	зависит от <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.LoadingThreadCount</codeEntityReference>). Уменьшив
+        	<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.DaysInMemory</codeEntityReference>, уменьшится и объем
         	занимаемой памяти. <legacyBold>Внимание!</legacyBold> Уменьшение очереди может привести к замедлению работы, и стоит изменять этот параметр
         	только в том случае, если занимаемая память превысила размер физической.
         </para>

@@ -7,7 +7,7 @@
 
     <introduction>
 		<para>
-			Для котирования опционов реализована специальная стратегия <codeEntityReference>T:StockSharp.Algo.Strategies.VolatilityQuotingStrategy</codeEntityReference>,
+			Для котирования опционов реализована специальная стратегия <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference>,
 			которая предусматривает котирование объема по заданным границам волатильности.
 		</para>
     </introduction>
@@ -67,7 +67,7 @@ _trader.Connect();</code>
 			  <step>
 				  <content>
 					  <para>
-						  Настройка стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.VolatilityQuotingStrategy</codeEntityReference> (заполнение
+						  Настройка стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> (заполнение
 						  границ волатильности, а так же создание заявки, через которую указываются требуемый объем и направление котирования):
 					  </para>
 					  <code><![CDATA[// создаем котирование на покупку 20-ти контрактов
@@ -95,9 +95,10 @@ var quoting = new VolatilityQuotingStrategy(
 				  <content>
 					  <para>
 						  Для визуального представления волатильности пример показывает, как можно перевести стандартный стакан с котировками в стакан волатильности
-						  за счет использования метода <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.IV(StockSharp.BusinessEntities.MarketDepth,System.Decimal,System.Decimal)</codeEntityReference>:
+						  за счет использования метода 
+						  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.DerivativesHelper.ImpliedVolatility(StockSharp.BusinessEntities.MarketDepth,StockSharp.BusinessEntities.ISecurityProvider,StockSharp.BusinessEntities.IMarketDataProvider,System.DateTime,System.Decimal,System.Decimal)</codeEntityReference>:
 					  </para>
-					  <code language="C#"><![CDATA[var ivDepth = _depth.IV();
+					  <code language="C#"><![CDATA[var ivDepth = _depth.ImpliedVolatility();
 
 this.GuiAsync(() =>
 {
