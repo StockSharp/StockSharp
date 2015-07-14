@@ -6,7 +6,7 @@
 		<para>Для графического отображения свечек можно использовать специальный компонент <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>,
 		который отрисовывает свечки следующим образом:</para>
       
-		<mediaLink><image placement="center" xlink:href="sample_candlesсhart" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="sample_candleschart" /></mediaLink>
 	  
 		<para>Для отображения, поступающие свечки от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> передаются в метод
 		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Xaml.Charting.ChartHelper.ProcessCandle(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)</codeEntityReference>.</para>

@@ -6,20 +6,21 @@
 	
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference>.<codeEntityReference qualifyHint="false">P:StockSharp.Algo.BaseTrader.MarketTimeChangedInterval</codeEntityReference>
+  				<para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>.<codeEntityReference qualifyHint="false">P:StockSharp.Algo.BaseTrader.MarketTimeChangedInterval</codeEntityReference>
   				- интервал прихода события о смене времени. Если используются генераторы сделок, сделки будут генерироваться с этой периодичностью.</para>
 				<para>По-умолчанию равно 1 минуте.</para>
   			</listItem>
 
   			<listItem>
-  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.UseMarketDepth</codeEntityReference> -
+  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseMarketDepth</codeEntityReference> -
   				загружать стаканы из хранилища в эмулятор. Если зарегистрированы генераторы стаканов, хранилище использовано не будет, а будут использоваться генераторы. 
-				Это не означает что они будут использоваться для эмуляции. Для последнего надо использовать <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseMarketDepth</codeEntityReference>.</para>
+				Это не означает что они будут использоваться для эмуляции. Для последнего надо использовать 
+				<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseMarketDepth</codeEntityReference>.</para>
 				<para>По-умолчанию стаканы не используются.</para>
   			</listItem>
 
   			<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.UseCandlesTimeFrame</codeEntityReference> -
+				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> -
 				Если таймфрейм указан, то будут загружаться свечки указанного таймфрейма (вместо трейдов). Далее по свечкам будут генерироваться набор из
 				5 тиковых сделок O, X, H, L, C (не обязательно в таком порядке), соответствующих точкам в свечке. Точка X выбирается рядом с точкой O,
 				чтобы изменение цены шло по цене X строго внутри диапазона L&lt;X&lt;H (нужно для того чтобы сделки были более реалистичными - по цене близкой к O, а не H или L).</para>
@@ -34,14 +35,14 @@
   			</listItem>
 
   			<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.FillOnTouch</codeEntityReference> -
+				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.MatchOnTouch</codeEntityReference> -
 				удовлетворять заявки, если цена “коснулась” уровня (допущение иногда слишком “оптимистично” и для реалистичного тестирования следует выключить режим).
 				Если режим выключен, то лимитные заявки будут удовлетворяться, если цена “прошла сквозь них” хотя бы на 1 шаг. Опция работает во всех режимах кроме ордер лога.</para>
 				<para>По-умолчанию выключено.</para>
   			</listItem>
   			
   			<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.UseExternalCandleSource</codeEntityReference> -
+				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
 				отправлять свечки c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.EmulationTrader.UseCandlesTimeFrame</codeEntityReference> в 
 				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечек.</para>
 				<para>По-умолчанию выключено.</para>
@@ -56,7 +57,7 @@ trader.RegisterTrades(security);
 		</code>
 		
 		<para>Если для стратегии нужны стаканы, нужно подписываться на стаканы. И включать 
-		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.EmulationTrader.UseMarketDepth</codeEntityReference>:</para>
+		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseMarketDepth</codeEntityReference>:</para>
 		<code language="C#">
 		<![CDATA[
 trader.UseMarketDepth = true;
@@ -74,7 +75,7 @@ trader.RegisterMarketDepth(mdGenerator);
 		
 		<list class="bullet">
   			<listItem>
-				<para>Интервал обновления стакана <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDataGenerator`1.Interval</codeEntityReference>.
+				<para>Интервал обновления стакана <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDataGenerator.Interval</codeEntityReference>.
 				Обновление не может быть чаще, чем приходят тиковые сделки (т.к. стаканы генерируются перед каждой сделкой):</para>
 				<code language="C#">
 				<![CDATA[
@@ -97,7 +98,8 @@ mdGenerator.MaxBidsDepth = 1;
 
   			<listItem>
 				<para>Объемы у <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestBid</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestAsk</codeEntityReference>
-				берутся из объема сделки, по которой идет генерация. Опция <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDepthGenerator.UseTradeVolume</codeEntityReference>
+				берутся из объема сделки, по которой идет генерация. Опция 
+				<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDepthGenerator.UseTradeVolume</codeEntityReference>
 				устанавливает реалистичный объем уровня в стакане:</para>
 				<code language="C#">
 				<![CDATA[
@@ -107,7 +109,7 @@ mdGenerator.UseTradeVolume = true;
  			</listItem>
 
   			<listItem>
-				<para>Объем уровня <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDataGenerator`1.MinVolume</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDataGenerator`1.MaxVolume</codeEntityReference>:</para>
+				<para>Объем уровня <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDataGenerator.MinVolume</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketDataGenerator.MaxVolume</codeEntityReference>:</para>
 				<code language="C#">
 				<![CDATA[
 mdGenerator.MinVolume = 1;
@@ -117,9 +119,9 @@ mdGenerator.MaxVolume = 1;
   			</listItem>
 
   			<listItem>
-				<para>Минимальный генерируемый спред равен <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.MinStepSize</codeEntityReference>.
+				<para>Минимальный генерируемый спред равен <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.PriceStep</codeEntityReference>.
 				Не следует генерировать спрэд между <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestBid</codeEntityReference> и <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.MarketDepth.BestAsk</codeEntityReference>
-				больше чем 5 <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.MinStepSize</codeEntityReference>
+				больше чем 5 <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.PriceStep</codeEntityReference>
 				(чтобы при генерации из свечек не получалось слишком широкого спреда):</para>
 				<code language="C#">
 				<![CDATA[

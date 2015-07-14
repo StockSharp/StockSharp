@@ -47,7 +47,7 @@
 					  <para>
 						  Пример SampleEmulationTesting практически идентичен примеру SampleHistoryTesting (его описание находится в разделе
 						  <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link>) за счет использования единого шлюза
-						  <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference>. Но, в отличие от
+						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>. Но, в отличие от
 						  <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">тестирования на истории</link>, при тестировании на случайных данных
 						  маркет-данные не подгружаются, а генерируются "на лету". Поэтому в пример добавляются два генератора случайных данных: для стакана
 						  и для тиковых сделок. В SampleHistoryTesting добавлен только один генератор - для стакана, так как нет сохраненной истории.

@@ -59,7 +59,7 @@
 				<content>
 					<para>
 						Создание объединенного шлюза <codeEntityReference>T:StockSharp.Algo.BasketTrader</codeEntityReference>, который будет
-						содержать все созданные на следующем шаге <codeEntityReference>T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference>:
+						содержать все созданные на следующем шаге <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
 					</para>
 					<code language="C#">var basketTrader = new BasketTrader
 {

@@ -1341,13 +1341,13 @@
       <ImageId>FixSecurities</ImageId>
       <AlternateText>Fix Securities</AlternateText>
     </Image>
-    <Image Include="Art\sample_candlesсhart.png">
-      <ImageId>sample_candlesсhart</ImageId>
-      <AlternateText>sample candlesсhart</AlternateText>
-    </Image>
     <Image Include="Art\sample_candles.png">
       <ImageId>sample_candles</ImageId>
       <AlternateText>sample candles</AlternateText>
+    </Image>
+    <Image Include="Art\sample_candleschart.png">
+      <ImageId>sample_candleschart</ImageId>
+      <AlternateText>sample candleschart</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
