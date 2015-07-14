@@ -392,12 +392,14 @@ namespace StockSharp.Algo
 		{
 			if (message.Error != null)
 				this.AddErrorLog(LocalizedStrings.Str625Params, innerAdapter.GetType().Name, message.Error);
-
-			var adapter = _hearbeatAdapters[innerAdapter];
-
-			foreach (var supportedMessage in adapter.SupportedMessages)
+			else
 			{
-				_connectedAdapters.SafeAdd(supportedMessage).Add(adapter);
+				var adapter = _hearbeatAdapters[innerAdapter];
+
+				foreach (var supportedMessage in adapter.SupportedMessages)
+				{
+					_connectedAdapters.SafeAdd(supportedMessage).Add(adapter);
+				}
 			}
 
 			SendOutMessage(message);
