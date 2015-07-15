@@ -8,14 +8,14 @@
     <introduction>
 		<para>
 			Для упрощения работы с арифметическими операциями над такими величинами как проценты, пункты или пипсы можно использовать тип
-			данных <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference>. Он позволяет прозрачно оперировать с операциями
-			сложения, вычитания, умножения и деления. <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference> можно
+			данных <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference>. Он позволяет прозрачно оперировать с операциями
+			сложения, вычитания, умножения и деления. <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> можно
 			конвертировать в <codeEntityReference>T:System.Decimal</codeEntityReference> (невозможно только если величина является процентной, то есть
-			тип <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Unit.Type</codeEntityReference> установлен в
-			<codeEntityReference qualifyHint="true">F:StockSharp.BusinessEntities.UnitTypes.Percent</codeEntityReference>) и обратно
+			тип <codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> установлен в
+			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.UnitTypes.Percent</codeEntityReference>) и обратно
 			(в этом случае всегда создается величина с абсолютным значением, то есть тип
-			<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Unit.Type</codeEntityReference> установлен в
-			<codeEntityReference qualifyHint="true">F:StockSharp.BusinessEntities.UnitTypes.Absolute</codeEntityReference>).
+			<codeEntityReference qualifyHint="true">P:StockSharp.Messages.Unit.Type</codeEntityReference> установлен в
+			<codeEntityReference qualifyHint="true">F:StockSharp.Messages.UnitTypes.Absolute</codeEntityReference>).
 		</para>
     </introduction>
 
@@ -33,16 +33,16 @@
 		  <step>
 			  <content>
 				  <para>
-					  Создавать <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference> можно через специальные конструкторы,
-					  или использовать более короткую запись с помощью <codeEntityReference>T:StockSharp.BusinessEntities.UnitHelper</codeEntityReference>:
+					  Создавать <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> можно через специальные конструкторы,
+					  или использовать более короткую запись с помощью <codeEntityReference>T:StockSharp.Messages.UnitHelper</codeEntityReference>:
 				  </para>
 				  <code language="C#">// тестовый инструмент с шагом цены в 1 копейку и стоимостью в 10 рублей
-// (в реальном приложении информацию необходимо получать через ITrader.NewSecurities)
+// (в реальном приложении информацию необходимо получать через IConnector.NewSecurities)
 var security = new Security
 {
 	Name = "Тестовый инструмент",
-	MinStepPrice = 10,
-	MinStepSize = 0.01m,
+	StepPrice = 10,
+	PriceStep = 0.01m,
 };
 			
 var absolute = new Unit(30);
@@ -54,8 +54,8 @@ var point = 30.0.Points(security);</code>
 		  <step>
 			  <content>
 				  <para>
-					  <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference> имеет форматированный вывод. Поэтому приведение
-					  значений к строке в зависимости от типа <codeEntityReference>T:StockSharp.BusinessEntities.UnitTypes</codeEntityReference>:
+					  <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> имеет форматированный вывод. Поэтому приведение
+					  значений к строке в зависимости от типа <codeEntityReference>T:StockSharp.Messages.UnitTypes</codeEntityReference>:
 				  </para>
 				  <code language="C#">Console.WriteLine("absolute = " + absolute);
 Console.WriteLine("percent = " + percent);
@@ -72,7 +72,7 @@ point = 30п</code>
 		  <step>
 			  <content>
 				  <para>
-					  Арифметические операции над <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference> осуществляются так же,
+					  Арифметические операции над <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> осуществляются так же,
 					  как и над обычными числами:
 				  </para>
 				  <code language="C#">// сложение всех величин
@@ -107,8 +107,8 @@ Console.WriteLine();</code>
 		  <step>
 			  <content>
 				  <para>
-					  Результатом арифметических операций <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference> становится
-					  сам <codeEntityReference>T:StockSharp.BusinessEntities.Unit</codeEntityReference>, тип которого равен типу первого операнда.
+					  Результатом арифметических операций <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference> становится
+					  сам <codeEntityReference>T:StockSharp.Messages.Unit</codeEntityReference>, тип которого равен типу первого операнда.
 					  Например, если сложить пипсы и пункты, то результат будет в пипсах:
 				  </para>
 				  <code language="C#">// сложение пипсов и пунктов
@@ -138,14 +138,7 @@ Console.WriteLine("(decimal)(pips + percent) = " + resultPipsPercentsDecimal);</
 		  </step>
       </steps>
     </procedure>
-    
-    <!--<section>
-      <title>Optional section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>-->
+   
 
     <nextSteps>
       <content>
@@ -155,60 +148,6 @@ Console.WriteLine("(decimal)(pips + percent) = " + resultPipsPercentsDecimal);</
       </content>
     </nextSteps>
     
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
     
   </developerWalkthroughDocument>
 </topic>

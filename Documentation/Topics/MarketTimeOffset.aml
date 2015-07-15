@@ -1,30 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="16070956-6e63-4cef-b6a8-6eb42372c424" revisionNumber="0">
   <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
 
     <introduction>
       <para>Для определения биржевого времени в <token>stocksharp</token> есть метод
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Connector.GetMarketTime(StockSharp.BusinessEntities.Exchange)</codeEntityReference>.
-		Чтобы данный метод возвращал точное время, необходимо синхронизировать локальное время компьютера с атомными часами через вызов
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Logging.LoggingHelper.SyncMarketTime(System.Int32)</codeEntityReference>, 
-		разница во времени будет записана в
-		<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LoggingHelper.NowOffset</codeEntityReference>.
-		После этого в <codeEntityReference qualifyHint="true">P:StockSharp.Logging.LoggingHelper.Now</codeEntityReference> будет хранится синхронизированное локальное время с учетом
-		<codeEntityReference qualifyHint="true">P:StockSharp.Logging.LoggingHelper.NowOffset</codeEntityReference>.
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketTime(StockSharp.BusinessEntities.IConnector,StockSharp.BusinessEntities.Security)</codeEntityReference>.
+		Чтобы данный метод возвращал точное время, необходимо синхронизировать локальное время компьютера с атомными часами через вызов метода
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:Ecng.Common.TimeHelper.SyncMarketTime(System.Int32)</codeEntityReference>. Разница во времени будет записана в
+		<codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>.
+		После этого в <codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.Now</codeEntityReference> будет хранится синхронизированное локальное время с учетом
+		<codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>.
 	  </para>
     </introduction>
-
-    <!--<prerequisites>
-      <content>
-        <para>Optional information on prerequisites</para>
-      </content>
-    </prerequisites>-->
-    
-    <!-- One or more procedure or section elements -->
 
     <procedure>
       <title>Пример получения скорректированного времени</title>
@@ -36,90 +23,23 @@
 					var trader = new SmartTrader(login, password);
 					
 					// выводим текущее локальное время
-					Console.WriteLine(LoggingHelper.Now);
+					Console.WriteLine(TimeHelper.Now);
 					
 					// синхронизируем локальное время с атомными часами
-					LoggingHelper.SyncMarketTime(10000);
+					TimeHelper.SyncMarketTime(10000);
 					
 					// выводим синхронизированное текущее локальное время
-					Console.WriteLine(LoggingHelper.Now);
+					Console.WriteLine(TimeHelper.Now);
 					
 					// выводим текущее время московской биржи
-					Console.WriteLine(trader.GetMarketTime(Exchange.Me));
+					Console.WriteLine(trader.GetMarketTime(security));
 			  </code>
           </content>
         </step>
       </steps>
     </procedure>
     
-    <!--<section>
-      <title>Optional section</title>
-
-      <content>
-        <para>Some topic content</para>
-      </content>
-    </section>
-
-    <nextSteps>
-      <content>
-        <para>Optional next steps after reading this walk-through</para>
-      </content>
-    </nextSteps>-->
     
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
     
   </developerWalkthroughDocument>
 </topic>

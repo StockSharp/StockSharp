@@ -6,7 +6,7 @@
     </summary>-->
 
     <introduction>
-      <para>Для работы с мультивалютными алгоритмами необходимо использовать <codeEntityReference>T:StockSharp.BusinessEntities.Currency</codeEntityReference>.
+      <para>Для работы с мультивалютными алгоритмами необходимо использовать <codeEntityReference>T:StockSharp.Messages.Currency</codeEntityReference>.
 	  <token>stocksharp</token> предоставляет механизм перевода валют из одной в другую. В примере SampleCurrency, который находится в дистрибутиве,
 	  представлен калькулятор перевода любых валют.</para>
     </introduction>

@@ -176,15 +176,15 @@
 		  </para>
 		  <list class="bullet">
 				<listItem>
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPnLLess(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Unit)</codeEntityReference>
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPnLLess(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Unit)</codeEntityReference>
 					- правило на событие уменьшения прибыли ниже определенного уровня.
 				</listItem>
 				<listItem>
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPnLMore(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Unit)</codeEntityReference>
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPnLMore(StockSharp.Algo.Strategies.Strategy,StockSharp.Messages.Unit)</codeEntityReference>
 					- правило на событие увеличения прибыли выше определенного уровня.
 				</listItem>
 				<listItem>
-					<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPositionChanged(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.WhenPositionChanged(StockSharp.Algo.Strategies.Strategy)</codeEntityReference>
 					- правило на событие изменения прибыли.
 				</listItem>
 		  </list> 
@@ -278,7 +278,7 @@
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenIntervalElapsed(StockSharp.BusinessEntities.IConnector,System.TimeSpan)</codeEntityReference>
 					- правило на событие изменения 
-					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.GetMarketTime(StockSharp.BusinessEntities.Exchange)</codeEntityReference>
+					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketTime(StockSharp.BusinessEntities.IConnector,StockSharp.BusinessEntities.Security)</codeEntityReference> 
 					на значение, большее или равно параметру.
 				</listItem>
 				<listItem>
@@ -320,15 +320,21 @@
 				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyRuleHelper.OpenPosition(StockSharp.Algo.Strategies.StrategyRule,System.Decimal)</codeEntityReference>
 				  - действие, открывающее позицию.
 			  </listItem>
--->			  
+		  
 			  <listItem>
-			  	  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.TakeProfitStrategy},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.StopLossStrategy})</codeEntityReference>
-				  - действие, защищающее сделки одновременно стратегиями <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference>
-				  и <codeEntityReference>T:StockSharp.Algo.Strategies.StopLossStrategy</codeEntityReference>.
-			  </listItem>
+			  	  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade}},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.TakeProfitStrategy},System.Func{StockSharp.BusinessEntities.MyTrade,StockSharp.Algo.Strategies.Protective.StopLossStrategy})</codeEntityReference>
+				  - действие, защищающее сделки одновременно стратегиями <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
+				  и <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>.
+			  </listItem> 
 				<listItem>
-				 	<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.StrategyHelper.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order},StockSharp.Messages.Unit,StockSharp.Messages.Unit)</codeEntityReference>
-					- действие, защищающее сделки одновременно стратегиями <codeEntityReference>T:StockSharp.Algo.Strategies.TakeProfitStrategy</codeEntityReference>
+				 	<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Strategies.Extensions.Protect(StockSharp.Algo.MarketRule{StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order},StockSharp.Messages.Unit,StockSharp.Messages.Unit)</codeEntityReference>
+					- действие, защищающее сделки одновременно стратегиями <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
+					и <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>.
+				</listItem> -->
+				
+				<listItem>
+				 	<codeEntityReference qualifyHint="false" autoUpgrade="true">Overload: StockSharp.Algo.Strategies.Extensions.Protect</codeEntityReference>
+					- действие, защищающее сделки одновременно стратегиями <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
 					и <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>.
 				</listItem>
 		  </list>

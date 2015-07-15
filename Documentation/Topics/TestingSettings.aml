@@ -2,50 +2,47 @@
 <topic id="9e72851f-2a19-4680-b344-cdc39d1b85e1" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<introduction>
-		<para>Некоторые настройки <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Testing.EmulationTrader</codeEntityReference>.</para>
+		<para>Некоторые настройки <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>.</para>
 	
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference qualifyHint="false">T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>.<codeEntityReference qualifyHint="false">P:StockSharp.Algo.BaseTrader.MarketTimeChangedInterval</codeEntityReference>
-  				- интервал прихода события о смене времени. Если используются генераторы сделок, сделки будут генерироваться с этой периодичностью.</para>
-				<para>По-умолчанию равно 1 минуте.</para>
+  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.MarketTimeChangedInterval</codeEntityReference>
+  				- интервал прихода события о смене времени. Если используются генераторы сделок, сделки будут генерироваться с этой периодичностью. По-умолчанию равно 1 минуте.</para>
   			</listItem>
 
-  			<listItem>
+  		<!--	<listItem>
   				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseMarketDepth</codeEntityReference> -
   				загружать стаканы из хранилища в эмулятор. Если зарегистрированы генераторы стаканов, хранилище использовано не будет, а будут использоваться генераторы. 
 				Это не означает что они будут использоваться для эмуляции. Для последнего надо использовать 
 				<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseMarketDepth</codeEntityReference>.</para>
 				<para>По-умолчанию стаканы не используются.</para>
-  			</listItem>
+  			</listItem> -->
+
 
   			<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> -
 				Если таймфрейм указан, то будут загружаться свечки указанного таймфрейма (вместо трейдов). Далее по свечкам будут генерироваться набор из
 				5 тиковых сделок O, X, H, L, C (не обязательно в таком порядке), соответствующих точкам в свечке. Точка X выбирается рядом с точкой O,
-				чтобы изменение цены шло по цене X строго внутри диапазона L&lt;X&lt;H (нужно для того чтобы сделки были более реалистичными - по цене близкой к O, а не H или L).</para>
-				<para>По-умолчанию свечки не используются.</para>
+				чтобы изменение цены шло по цене X строго внутри диапазона L&lt;X&lt;H (нужно для того чтобы сделки были более реалистичными - по цене близкой к O, а не H или L). 
+				По-умолчанию свечки не используются.</para>
   			</listItem>
 
   			<listItem>
-				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.SyncDepthToTrades</codeEntityReference> -
-				синхронизировать стаканы с приходящими сделкам. Это позволяет избегать ситуации, что в стакане остались уровни, которые полностью “съели” прошедшие сделки.
-				Улучшает реалистичность тестирования, но замедляет его. Параметр имеет смысл только при тестировании на стаканах (на ордер логе другой подход).</para>
-				<para>По-умолчанию выключено.</para>
+				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.Latency</codeEntityReference> -
+				Минимальное значение задержки выставляемых заявок. По-умолчанию равно TimeSpan.Zero, что означает мгновенное принятие биржей выставляемых заявок.
+				</para>
   			</listItem>
 
   			<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.MatchOnTouch</codeEntityReference> -
 				удовлетворять заявки, если цена “коснулась” уровня (допущение иногда слишком “оптимистично” и для реалистичного тестирования следует выключить режим).
-				Если режим выключен, то лимитные заявки будут удовлетворяться, если цена “прошла сквозь них” хотя бы на 1 шаг. Опция работает во всех режимах кроме ордер лога.</para>
-				<para>По-умолчанию выключено.</para>
+				Если режим выключен, то лимитные заявки будут удовлетворяться, если цена “прошла сквозь них” хотя бы на 1 шаг. Опция работает во всех режимах кроме ордер лога.	По-умолчанию выключено.</para>
   			</listItem>
   			
   			<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
-				отправлять свечки c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.EmulationTrader.UseCandlesTimeFrame</codeEntityReference> в 
-				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечек.</para>
-				<para>По-умолчанию выключено.</para>
+				отправлять свечки c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> в 
+				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечек. По-умолчанию выключено.</para>
   			</listItem>  			
   		</list>
 
@@ -56,11 +53,9 @@ trader.RegisterTrades(security);
 		]]>
 		</code>
 		
-		<para>Если для стратегии нужны стаканы, нужно подписываться на стаканы. И включать 
-		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseMarketDepth</codeEntityReference>:</para>
+		<para>Если для стратегии нужны стаканы, нужно подписываться на стаканы:</para>
 		<code language="C#">
 		<![CDATA[
-trader.UseMarketDepth = true;
 trader.RegisterMarketDepth(security);
 		]]>
 		</code>
@@ -68,7 +63,7 @@ trader.RegisterMarketDepth(security);
 		<para>Если стаканов нет, то для проверки работоспособности стратегий, нуждающихся в стаканах, можно включить генерацию:</para>
 		<code language="C#">
 		<![CDATA[
-var mdGenerator = new TrendMarketDepthGenerator(security);
+var mdGenerator = new TrendMarketDepthGenerator(connector.GetSecurityId(security));
 trader.RegisterMarketDepth(mdGenerator);
 		]]>
 		</code>
