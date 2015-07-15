@@ -53707,5 +53707,31 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(AssociatedSecurityBoardKey); }
 		}
+
+		/// <summary>
+		/// Date and time format
+		/// </summary>
+		public const string DateTimeFormatKey = "DateTimeFormat";
+
+		/// <summary>
+		/// Date and time format
+		/// </summary>
+		public static string DateTimeFormat
+		{
+			get { return GetString(DateTimeFormatKey); }
+		}
+
+		/// <summary>
+		/// Time format
+		/// </summary>
+		public const string TimeFormatKey = "TimeFormat";
+
+		/// <summary>
+		/// Time format
+		/// </summary>
+		public static string TimeFormat
+		{
+			get { return GetString(TimeFormatKey); }
+		}
 	}
 }

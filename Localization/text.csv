@@ -4158,3 +4158,5 @@ WrongTimeOffset;Time {0} has wrong offset. Expected {1}.;Время {0} имее
 TimeOffset;Time offset;Смещение времени
 TimeOffsetDescription;UTC based time offset for market data timestamp.;Смещение времени относительно UTC для серверного времени данных.
 AssociatedSecurityBoard;Combined board code;Код объединенной площадки
+DateTimeFormat;Date and time format;Формат даты и времени
+TimeFormat;Time format;Формат времени
