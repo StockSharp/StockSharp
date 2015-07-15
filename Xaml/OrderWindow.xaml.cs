@@ -242,8 +242,8 @@ namespace StockSharp.Xaml
 
 				Security = value.Security;
 				Portfolio = value.Portfolio;
-				PriceCtrl.Value = value.Price == 0 ? (decimal?)null : value.Price;
-				VolumeCtrl.Value = value.Volume == 0 ? (decimal?)null : value.Volume;
+				PriceCtrl.Value = value.Price == 0 ? PriceCtrl.Increment : value.Price;
+				VolumeCtrl.Value = value.Volume == 0 ? VolumeCtrl.Increment : value.Volume;
 				VisibleVolumeCtrl.Value = value.VisibleVolume;
 				IsBuyCtrl.IsChecked = value.Direction == Sides.Buy;
 				IsSellCtrl.IsChecked = value.Direction == Sides.Sell;
