@@ -7,8 +7,8 @@
 
     <introduction>
       <para>
-		  <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> (от которого отнаследованы шлюзы <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
-		  и <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>) реализует внутри себя механизм мониторинга соединений. Такой механизм
+		  Класс <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> (от которого наследуют шлюзы <codeEntityReference>T:StockSharp.Quik.QuikTrader</codeEntityReference>
+		  и <codeEntityReference>T:StockSharp.SmartCom.SmartTrader</codeEntityReference>) реализует в своем коде механизм мониторинга соединений. Такой механизм
 		  настраивается через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.ReConnectionSettings</codeEntityReference> и позволяет
 		  отслеживать следующие сценарии ошибок:
 		  
@@ -20,25 +20,25 @@
 		<list class="ordered">
 			<listItem>
 				Невозможно установить соединение (отсутствует связь, неправильный логин-пароль и т.д.). Через свойство
-				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ConnectingAttemptCount</codeEntityReference> задается количество
+				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.AttemptCount</codeEntityReference> задается количество
 				попыток для установки соединения. По умолчанию оно равно 0, что означает, что режим отключен. -1 означает бесконечное количество попыток.
 			</listItem>
 			<listItem>
 				Соединение было разорвано в процессе работы. Через свойство
-				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ReConnectingAttemptCount</codeEntityReference> задается количество
+				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ReAttemptCount</codeEntityReference> задается количество
 				попыток для переустановки соединения. По умолчанию оно равно 100. -1 означает бесконечное количество попыток. 0 - режим отключен.
 			</listItem>
-			<listItem>
+			<!-- <listItem>
 				Экспорт данных не приходит долгое время. Через свойство
-				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ExportTimeOutInterval</codeEntityReference> задается время,
+				<codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.TimeOutInterval</codeEntityReference> задается время,
 				максимально допустимое для отсутствия новых данных. По умолчанию оно равно TimeSpan.Zero, что означает, что режим отключен.
-			</listItem>
+				Время ожидания успешного подключения/отключения. Если значение равно TimeSpan.Zero, то мониторинг не производится.  По-умолчанию значение равно 30 секундам. 
+			</listItem> -->
 			<listItem>
-				В процессе установки соединения (или отключения от торгов) событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference>
-				не приходит долгое время (или <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Disconnected</codeEntityReference>, если
-				производится отключение). Через свойство <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ConnectDisconnectTimeOutInterval</codeEntityReference>
-				задается время, максимально допустимое для отсутствия успешного события. Если по истечению данного времени событие не пришло, вызывается событие
-				<codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference> с ошибкой об окончании ожидания.
+				В процессе установки или отключения соединения соответствующие события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference> или
+				 <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Disconnected</codeEntityReference> могут не приходить долгое время. Для таких ситуаций можно использовать свойство
+				 <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ConnectDisconnectTimeOutInterval</codeEntityReference>, чтобы задать максимально допустимое время отсутствия успешного события.
+				 Если по истечению данного времени желаемое событие не возникает, то вызывается событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference> с ошибкой окончания ожидания.
 			</listItem>
 		</list>
 	  <!--<para>
@@ -77,10 +77,14 @@ Trader.ReConnectionSettings.ConnectionRestored += () => this.GuiAsync(() => Mess
 
 // подписываемся на событие разрыва соединения
 Trader.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.ToString()));]]></code>
+
           </content>
         </step>
 		<step>
 		  <content>
+        <alert class="note">
+  				<para>Этот и следующие пункты относятся к старому подключению <link xlink:href="c338d4b4-ba54-4671-9206-976c07ef655e">Quik DDE</link>. </para>
+		</alert>
 			<para>Чтобы проверить, как работает механизм, можно, к примеру, зайти в настройки Внешние Транзакции в <token>quik</token>-e и
 			выключить их:
 			</para>
@@ -115,7 +119,7 @@ Trader.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.T
 			</para>
 		  </content>
 		</step>
-		  <step>
+		  <!-- <step>
 			  <content>
 				  <para>
 					  <codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> может автоматически при восстановлении соединения
@@ -127,105 +131,11 @@ Trader.ConnectionError += error => this.Sync(() => MessageBox.Show(this, error.T
 				  </para>
 				  <code language="C#"><![CDATA[Trader.ReConnectionSettings.IsReStartExport = true;]]></code>
 			  </content>
-		  </step>
+		  </step> -->
       </steps>
     </procedure>
 
-	<!--<section>
-      <title>Optional section</title>
-
-      <content>
-        <para>Some topic content</para>
-        <procedure>
-          <title>Required procedure</title>
-
-          <steps class="ordered">
-            <step>
-              <content>
-                <para>The first step of the procedure.</para>
-              </content>
-            </step>
-          </steps>
-        </procedure>
-      </content>
-    </section>
-
-    <codeExample>
-      <code>An optional code example</code>
-    </codeExample>
-
-    <buildInstructions>
-      <content>
-        <para>Optional information on building examples in this topic</para>
-      </content>
-    </buildInstructions>
-
-    <robustProgramming>
-      <content>
-        <para>Optional information about things such as error handling</para>
-      </content>
-    </robustProgramming>
-
-    <security>
-      <content>
-        <para>Optional information about security</para>
-      </content>
-    </security>-->
-
-    <relatedTopics>
-      <!-- Supported Link Types
-    
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
+	
     
   </developerHowToDocument>
 </topic>

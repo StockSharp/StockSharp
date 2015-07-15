@@ -4,7 +4,7 @@
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
-  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" title="S#.API">
+  <Topic id="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" visible="True" isExpanded="true" isSelected="true" title="S#.API">
     <Topic id="87d2cacd-5492-4bca-9140-7d7c3f5218d7" visible="True" title="Архитектура StockSharp" />
     <Topic id="b9f672db-e0c9-4208-9759-179e5de17fd8" visible="True" title="Установка S#.API" />
     <Topic id="0f4f40ab-74a7-4a56-ab8b-6c07271e48e2" visible="True" title="История изменений" />
@@ -181,7 +181,7 @@
     <Topic id="97cf7a9c-8b3d-4791-9306-275d55d4cf36" visible="True" isExpanded="true" title="Событийная модель">
       <Topic id="de6c121a-6a89-4c4b-80d1-804d7b98fda7" visible="True" title="Правило" />
       <Topic id="12ef8365-1bd1-426d-afc5-5eee33d554a6" visible="True" title="Использование правил" />
-      <Topic id="41e6ea41-f8f8-4788-b5ea-c1c12e24007a" visible="True" isSelected="true" title="Приостановка правил" />
+      <Topic id="41e6ea41-f8f8-4788-b5ea-c1c12e24007a" visible="True" title="Приостановка правил" />
       <Topic id="db15f661-eb88-496f-a9f9-0ad4e0043ed3" visible="True" title="Взаимоисключающие правила" />
     </Topic>
     <Topic id="8ab11b62-a6d0-4507-a101-1bd63d9933c0" visible="True" title="Торговые алгоритмы">
@@ -209,7 +209,6 @@
     </Topic>
     <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
     <Topic id="16070956-6e63-4cef-b6a8-6eb42372c424" visible="True" title="Биржевое время" />
-    <Topic id="1cfb4f7c-b9fc-43da-a958-b0e0f881479d" visible="True" title="BasketTrader" />
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Арифметические операции" />
     <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)" />
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
