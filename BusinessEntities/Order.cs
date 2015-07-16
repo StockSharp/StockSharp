@@ -448,7 +448,7 @@ namespace StockSharp.BusinessEntities
 		/// <summary>
 		/// Время жизни лимитной заявки.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str231Key)]
+		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
 		[MainCategory]
 		[Nullable]
@@ -577,8 +577,8 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[MainCategory]
-		[DisplayNameLoc(LocalizedStrings.Str3425Key)]
-		[DescriptionLoc(LocalizedStrings.Str3426Key)]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
 		public string ClientCode { get; set; }
 
 		/// <summary>

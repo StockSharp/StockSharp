@@ -51,8 +51,8 @@ namespace StockSharp.Messages
 		/// Код клиента, присвоенный брокером.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2593Key)]
-		[DisplayNameLoc(LocalizedStrings.Str3425Key)]
-		[DescriptionLoc(LocalizedStrings.Str3426Key)]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
 		public string ClientCode { get; set; }
 
 		/// <summary>

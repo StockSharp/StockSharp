@@ -212,7 +212,7 @@ Str226;Stop-orders;Стоп-заявки
 Str227;Cancel stop-orders or normal.;Снимать стоп-заявки или обычные.
 Str228;Direction, for which orders have to be cancelled.;Направление, для которого необходимо снять заявки.
 Str229;Portfolio name, for which an order must be placed/cancelled.;Название портфеля, по которому необходимо выставить/снять заявку.
-Str231;Time in force;Время жизни
+TimeInForce;Time in force;Время жизни
 Str232;Limit order time in force.;Время жизни лимитной заявки.
 Str233;REPO\REPO-M information;Информация РЕПО\РЕПО-М
 Str234;Information for REPO\REPO-M orders.;Информация для РЕПО\РЕПО-М заявок.
@@ -3165,8 +3165,8 @@ Str3421;MICEX trading system password.;Пароль пользователя в 
 Str3422;Loggin level in N,M format. Maximum logging level is equal to «5,2». Minimum (disabled) is «0,0».;Уровень логирования в формате N,M. Максимальный уровень логирования равен «5,2». Минимальный (выключен) «0,0».
 Str3423;Compression;Компрессия
 Str3424;Data compression parameter. By default equal to BZip.;Параметр компрессии данных. По-умолчанию равен BZip.
-Str3425;Client code;Код клиента
-Str3426;Client code assigned by the broker.;Код клиента, присвоенный брокером.
+ClientCode;Client code;Код клиента
+ClientCodeDesc;Client code assigned by the broker.;Код клиента, присвоенный брокером.
 Str3427;Service;Сервис
 Str3428;Trading system service name.;Имя сервиса торговой системы.
 Str3429;Language;Язык
@@ -3571,7 +3571,6 @@ XamlStr64;Vola (min):;Вола (мин):
 XamlStr66;Have a question?;Вопрос?
 XamlStr67;Uptrend;Восходящий
 XamlStr70;Order registration time.;Время выставления заявки на Биржу.
-XamlStr72;Time in force:;Время жизни:
 XamlStr73;Last trade time;Время посл. сделки
 XamlStr74;Last operation time;Время последней операции
 XamlStr76;Settings OK.;Все настроено правильно.
@@ -4024,7 +4023,7 @@ XamlStr727;Strategy was changed. It is necessary to restart.;Стратегия 
 XamlStr728;Build chart of the initial securities;Строить график исходных инструментов
 Line;Line;Строка
 XamlStr730;Working days with fall to Saturday or Sunday;Субботние и воскресные рабочие дни
-XamlStr731;Amount:;Сумма:
+Amount;Amount;Сумма
 XamlStr732;Current:;Существующие:
 XamlStr738;Title;Текст надписи
 XamlStr739;Current date:;Текущая дата:

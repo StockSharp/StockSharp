@@ -2787,14 +2787,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Time in force
 		/// </summary>
-		public const string Str231Key = "Str231";
+		public const string TimeInForceKey = "TimeInForce";
 
 		/// <summary>
 		/// Time in force
 		/// </summary>
-		public static string Str231
+		public static string TimeInForce
 		{
-			get { return GetString(Str231Key); }
+			get { return GetString(TimeInForceKey); }
 		}
 
 		/// <summary>
@@ -41046,27 +41046,27 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Client code
 		/// </summary>
-		public const string Str3425Key = "Str3425";
+		public const string ClientCodeKey = "ClientCode";
 
 		/// <summary>
 		/// Client code
 		/// </summary>
-		public static string Str3425
+		public static string ClientCode
 		{
-			get { return GetString(Str3425Key); }
+			get { return GetString(ClientCodeKey); }
 		}
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
-		public const string Str3426Key = "Str3426";
+		public const string ClientCodeDescKey = "ClientCodeDesc";
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
-		public static string Str3426
+		public static string ClientCodeDesc
 		{
-			get { return GetString(Str3426Key); }
+			get { return GetString(ClientCodeDescKey); }
 		}
 
 		/// <summary>
@@ -46321,19 +46321,6 @@ namespace StockSharp.Localization
 		public static string XamlStr70
 		{
 			get { return GetString(XamlStr70Key); }
-		}
-
-		/// <summary>
-		/// Time in force:
-		/// </summary>
-		public const string XamlStr72Key = "XamlStr72";
-
-		/// <summary>
-		/// Time in force:
-		/// </summary>
-		public static string XamlStr72
-		{
-			get { return GetString(XamlStr72Key); }
 		}
 
 		/// <summary>
@@ -52201,16 +52188,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Amount:
+		/// Amount
 		/// </summary>
-		public const string XamlStr731Key = "XamlStr731";
+		public const string AmountKey = "Amount";
 
 		/// <summary>
-		/// Amount:
+		/// Amount
 		/// </summary>
-		public static string XamlStr731
+		public static string Amount
 		{
-			get { return GetString(XamlStr731Key); }
+			get { return GetString(AmountKey); }
 		}
 
 		/// <summary>
