@@ -68,7 +68,7 @@
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
 			</DataGridTemplateColumn.CellStyle>
 		</DataGridTemplateColumn>
-		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str231}" Visibility="Collapsed" SortMemberPath="Order.TimeInForce">
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.TimeInForce}" Visibility="Collapsed" SortMemberPath="Order.TimeInForce">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
 					<TextBlock TextAlignment="Center">
