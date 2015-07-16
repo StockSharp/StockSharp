@@ -8,21 +8,87 @@
 
     <introduction>
       <para>В <token>dotnet</token> существует специальная технология для построения графического интерфейса – <token>wpf</token> (до этого была
-	  технология <token>winforms</token>, которая значительно уступает по графическим возможностям). Основное ограничение визуального API под Windows
-	  состоит в том, что нельзя обращаться из другого потока к элементам окна. Это связанно с ограничениями архитектуры Windows (подробнее описано здесь
+	  технология <token>winforms</token>, которая значительно уступает по графическим возможностям). В этой технологии для создания графических элементов 
+	  используется специальный декларативынй язык <externalLink>
+		<linkText>XAML</linkText>
+		<linkAlternateText>eXtensible Application Markup Language</linkAlternateText>
+		<linkUri>https://msdn.microsoft.com/ru-ru/library/hh700354.aspx</linkUri>
+		<linkTarget>_blank</linkTarget>
+		</externalLink>.</para>
+	  <para>Основное ограничение визуального API под Windows состоит в том, что нельзя обращаться из другого потока к элементам окна. Это связанно с ограничениями архитектуры Windows (подробнее описано здесь
 	  <token>messagepump</token>). Реализации шлюза <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> в целях повышения
-	  производительности работают в многопоточном режиме. Поэтому, подписываясь на событие, например, <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
-	  нельзя напрямую выводить полученные данные в окно для пользователя. Для этого нужно провести операцию синхронизации. Вот простой пример, как это делается:</para>
+	  производительности работают в многопоточном режиме. Поэтому, подписываясь на событие, например, 
+	  <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>,
+	  нельзя напрямую выводить полученные данные в окно пользователя. Для этого нужно провести операцию синхронизации при помощи специального объекта
+	  <externalLink>
+		<linkText>Dispatcher</linkText>
+		<linkAlternateText>Dispatcher</linkAlternateText>
+		<linkUri>https://msdn.microsoft.com/ru-ru/library/system.windows.threading.dispatcher(v=vs.110).aspx</linkUri>
+		<linkTarget>_blank</linkTarget>
+		</externalLink>, который управляет очередью рабочих элементов потока. </para>
+	  <para> Вот простой пример, как это делается:</para>
 	  <code language="C#">
 // обязательно нужно вызвать метод BeginInvoke,
 // и уже в его обработчике можно обратиться к элементу окна 'Security' (это выпадающий список)
 _trader.NewSecurities += securities => this.Dispatcher.BeginInvoke((Action)(() => this.Security.ItemsSource = _trader.Securities));</code>
 	  <para>
-		<token>stocksharp</token> уже содержит специальные методы, которые упрощают написание кода:
+		<token>stocksharp</token> уже содержит специальные методы, которые скрывают использование Dispatcher и упрощают написание кода:
 	  </para>
 	  <code language="C#">// обязательно нужно вызвать метод GuiSync, прежде чем обратиться к элементу окна 'Security' (это выпадающий список)
 _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
-	  <para>
+
+<section address="optionalAddress">
+  <title>Графические компоненты S#</title>
+  <content>
+    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, а так же бесплатная библиотека графических компонент для Wpf
+    <externalLink>
+	<linkText>Xceed.Wpf.Toolkit</linkText>
+<linkAlternateText>Optional alternate text</linkAlternateText>
+<linkUri>http://wpftoolkit.codeplex.com/</linkUri>
+<linkTarget>_blank</linkTarget>
+</externalLink>. Собственные графические компоненты размещены в пространствах имен <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
+и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Условно компоненты можно разделить на следующие группы: </para>
+
+
+<list class="bullet">
+  <listItem><para>Для ввода поиска биржевой информации</para></listItem>
+  <listItem><para>Для отображения биржевой информации</para></listItem>
+  <listItem><para>Для построения графиков</para></listItem>
+</list>
+
+<para>
+	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соотвествующих пространств имен. Как это сделать показано в следующем
+	 примере:
+</para>
+	  <code language="C#">// обязательно нужно вызвать метод GuiSync, прежде чем обратиться к элементу окна 'Security' (это выпадающий список)
+_trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
+
+<para>
+	 Ниже приведена таблица с описанием некоторых полезных графических компонент, входящих в состав <token>stocksharp</token>:
+</para>
+
+<table>
+  <tableHeader>
+    <row>
+      <entry><para>Компонент</para></entry>
+      <entry><para>Описание</para></entry>
+    </row>
+  </tableHeader>
+  <row>
+    <entry><para>MonitorWindow</para></entry>
+    <entry><para>Компонент для отображения информации из логов</para></entry>
+  </row>
+</table>
+
+ 
+  </content>
+</section>
+
+
+
+ 
+	  
+	  <!--<para>
 		Для того, чтобы не осложнять процесс разработки торговых программ деталями и ограничениями, <token>stocksharp</token> содержит специальный шлюз
 		<codeEntityReference>T:StockSharp.Xaml.GuiTrader`1</codeEntityReference>. Данный класс синхронизует события в один поток, и нет необходимости делать
 		это в коде. Вышеприведенный код с использованием <codeEntityReference>T:StockSharp.Xaml.GuiTrader`1</codeEntityReference>:
@@ -36,18 +102,10 @@ _trader.NewSecurities += securities => this.Security.ItemsSource = _trader.Secur
 		  необходимо создать <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> и передать в него несинхронизованный шлюз
 		  <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> (можно передавать и <codeEntityReference>T:StockSharp.Xaml.GuiTrader`1</codeEntityReference>,
 		  но в этом случае будет происходить двойная синхронизация).
-	  </para>
+	  </para> -->
     </introduction>
 
-    <!--<prerequisites>
-      <content>
-        <para>Optional information on prerequisites</para>
-      </content>
-    </prerequisites>-->
-    
-    <!-- One or more procedure or section elements -->
-
-    <procedure>
+    <!-- <procedure>
       <title>Пример SampleSync</title>
 
       <steps class="ordered">
@@ -126,68 +184,10 @@ private void ShowChart_Click(object sender, RoutedEventArgs e)
 		  автономным торговых программ с графическим интерфейсом.
 		</para>
       </content>
-    </section>
+    </section> -->
 
-	<!--<nextSteps>
-      <content>
-        <para>Optional next steps after reading this walk-through</para>
-      </content>
-    </nextSteps>-->
     
-    <relatedTopics>
-      <!-- Supported Link Types
     
-         All of the following linking mechanisms may be used in the topic's content 
-         as well as in the related topics section.
-    
-    Linking to API reference documentation: 
-    
-		    <codeEntityReference>API reference ID</codeEntityReference>
-
-    Linking to external resources and custom HTML topics: 
-
-        <externalLink>
-          <linkText>  Required hyperlink text  </linkText>
-          <linkAlternateText>  Optional link title  </linkAlternateText>
-          <linkUri>  Required URI  </linkUri>
-        </externalLink>
-    
-    Linking to other conceptual topics: 
-    
-        <link xlink:href="GUID topic name (without file extension)" />
-                
-    Linking to named references:
-    
-        (Refer to the project's Help\Settings\links.xml file for more information)
-    
-        <link xref="id"> Optional link text </link>
-        <link vref="id or URI"> Optional link text </link>
-        
-    -->
-
-      <!-- Example Usage 
-
-      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
-      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
-      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
-
-      <externalLink>
-        <linkText>Sandcastle Styles</linkText>
-        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
-        <linkUri>http://codeplex.com/SandcastleStyles</linkUri>
-      </externalLink>
-
-      <externalLink>
-        <linkText>Change Log</linkText>
-        <linkUri>ChangeLog.html</linkUri>
-      </externalLink>
-
-      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
-      
-      <link xref="home">Our Home Page</link>
-      <link vref="/controls/design.aspx">Control Architecture</link>
-      -->
-    </relatedTopics>
     
   </developerWalkthroughDocument>
 </topic>
