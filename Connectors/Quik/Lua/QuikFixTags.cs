@@ -32,7 +32,7 @@
 
 	static class QuikFixExtensions
 	{
-		public static void WriteOrderCondition(this IFixWriter writer, QuikOrderCondition condition)
+		public static void WriteOrderCondition(this IFixWriter writer, QuikOrderCondition condition, string dateTimeFormat)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
@@ -97,10 +97,10 @@
 			if (condition.ActiveTime != null)
 			{
 				writer.Write((FixTags)QuikFixTags.ActiveTimeFrom);
-				writer.Write(condition.ActiveTime.Min.UtcDateTime);
+				writer.Write(condition.ActiveTime.Min.UtcDateTime, dateTimeFormat);
 
 				writer.Write((FixTags)QuikFixTags.ActiveTimeTo);
-				writer.Write(condition.ActiveTime.Max.UtcDateTime);
+				writer.Write(condition.ActiveTime.Max.UtcDateTime, dateTimeFormat);
 			}
 
 			if (condition.ConditionOrderId != null)

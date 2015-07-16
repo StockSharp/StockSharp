@@ -48,7 +48,7 @@
 		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
 		protected override void WriteOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
-			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition);
+			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition, DateTimeFormat);
 		}
 
 		/// <summary>
