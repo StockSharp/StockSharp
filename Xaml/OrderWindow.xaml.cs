@@ -182,6 +182,7 @@ namespace StockSharp.Xaml
 				_order.Type = IsMarketCtrl.IsChecked == true ? OrderTypes.Market : OrderTypes.Limit;
 				_order.Security = Security;
 				_order.Portfolio = Portfolio;
+				_order.ClientCode = ClientCodeCtrl.Text;
 				_order.Price = PriceCtrl.Value ?? 0;
 				_order.Volume = VolumeCtrl.Value ?? 0;
 				_order.VisibleVolume = VisibleVolumeCtrl.Value;
@@ -242,6 +243,7 @@ namespace StockSharp.Xaml
 
 				Security = value.Security;
 				Portfolio = value.Portfolio;
+				ClientCodeCtrl.Text = value.ClientCode;
 				PriceCtrl.Value = value.Price == 0 ? PriceCtrl.Increment : value.Price;
 				VolumeCtrl.Value = value.Volume == 0 ? VolumeCtrl.Increment : value.Volume;
 				VisibleVolumeCtrl.Value = value.VisibleVolume;

@@ -216,6 +216,7 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Width="120" Binding="{Binding Path=Order.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Order.Time"/>
         <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="120" Binding="{Binding Path=Order.Security.Id}" SortMemberPath="Order.Security.Id"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Portfolio}" Width="120" Binding="{Binding Path=Order.Portfolio.Name}" SortMemberPath="Order.Portfolio.Name"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.ClientCode}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Order.ClientCode}" SortMemberPath="Order.ClientCode"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Order.Volume}" SortMemberPath="Order.Volume"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.VisibleVolume}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Order.VisibleVolume}" SortMemberPath="Order.VisibleVolume"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1325}" Width="50" Binding="{Binding Path=Order.Balance}" SortMemberPath="Order.Balance"/>
@@ -232,7 +233,7 @@
 			</DataGridTemplateColumn.CellStyle>
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Width="60" Binding="{Binding Path=Order.LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Order.LocalTime"/>
-		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str231}" Visibility="Collapsed" Width="60" SortMemberPath="OrderTif">
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.TimeInForce}" Visibility="Collapsed" Width="60" SortMemberPath="OrderTif">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
 					<TextBlock TextAlignment="Center">
