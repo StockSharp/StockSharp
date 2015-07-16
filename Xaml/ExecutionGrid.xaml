@@ -42,6 +42,7 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="70" Binding="{Binding Path=SecurityId.SecurityCode}" SortMemberPath="SecurityId.SecurityCode"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Board}" Width="70" Binding="{Binding Path=SecurityId.BoardCode}" SortMemberPath="SecurityId.BoardCode"/>
 		<DataGridTextColumn x:Name="PortfolioColumn" Header="{x:Static loc:LocalizedStrings.Portfolio}" Width="120" Binding="{Binding Path=PortfolioName}" SortMemberPath="PortfolioName"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.ClientCode}" Width="120" Binding="{Binding Path=ClientCode}" SortMemberPath="ClientCode"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Depo}" Width="80" Binding="{Binding Path=DepoName}" SortMemberPath="DepoName"/>
 		<DataGridTextColumn x:Name="TransactionColumn" Header="{x:Static loc:LocalizedStrings.Transaction}" Width="100" Binding="{Binding Path=TransactionId}" SortMemberPath="TransactionId"/>
 		<DataGridTemplateColumn x:Name="OrderIdColumn" Header="{x:Static loc:LocalizedStrings.Id}" Width="70" SortMemberPath="OrderId">

@@ -67,6 +67,15 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
+		/// Код клиента, присвоенный брокером.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// Название депозитария, где находится физически ценная бумага.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.DepoKey)]
@@ -452,6 +461,7 @@ namespace StockSharp.Messages
 				Balance = Balance,
 				Comment = Comment,
 				Condition = Condition.CloneNullable(),
+				ClientCode = ClientCode,
 				ServerTime = ServerTime,
 				DepoName = DepoName,
 				Error = Error,

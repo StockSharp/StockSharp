@@ -388,6 +388,7 @@ namespace StockSharp.Algo
 				o.Portfolio = message.PortfolioName.IsEmpty()
 					? _portfolios.FirstOrDefault().Value
 					: ProcessPortfolio(message.PortfolioName).Item1;
+				o.ClientCode = message.ClientCode;
 
 				return o;
 			}, out isNew, true);
