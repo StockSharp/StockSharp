@@ -40,7 +40,13 @@
 		/// Отменяемый объем. Если значение не указано, то отменяется весь активный объем заявки.
 		/// </summary>
 		[DataMember]
-		public decimal Volume { get; set; }
+		public decimal? Volume { get; set; }
+
+		/// <summary>
+		/// Направление заявки.
+		/// </summary>
+		[DataMember]
+		public Sides? Side { get; set; }
 
 		/// <summary>
 		/// Создать <see cref="OrderCancelMessage"/>.
@@ -66,6 +72,7 @@
 				OrderType = OrderType,
 				PortfolioName = PortfolioName,
 				SecurityId = SecurityId,
+				Side = Side,
 			};
 
 			CopyTo(clone);

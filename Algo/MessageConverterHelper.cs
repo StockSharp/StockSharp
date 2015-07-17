@@ -376,8 +376,9 @@ namespace StockSharp.Algo
 		/// <param name="order">Заявка.</param>
 		/// <param name="securityId">Идентификатор инструмента.</param>
 		/// <param name="transactionId">Номер транзакции.</param>
+		/// <param name="volume">Отменяемый объем.</param>
 		/// <returns>Сообщение.</returns>
-		public static OrderCancelMessage CreateCancelMessage(this Order order, SecurityId securityId, long transactionId)
+		public static OrderCancelMessage CreateCancelMessage(this Order order, SecurityId securityId, long transactionId, decimal? volume = null)
 		{
 			if (order == null)
 				throw new ArgumentNullException("order");
@@ -390,10 +391,11 @@ namespace StockSharp.Algo
 				TransactionId = transactionId,
 				OrderId = order.Id,
 				OrderStringId = order.StringId,
-				Volume = order.Balance,
+				Volume = volume,
 				UserOrderId = order.UserOrderId,
 				BrokerCode = order.BrokerCode,
 				ClientCode = order.ClientCode,
+				Side = order.Direction
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);
