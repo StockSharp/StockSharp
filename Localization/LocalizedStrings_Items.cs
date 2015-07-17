@@ -4995,12 +4995,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Immediately or reject
+		/// Fill Or Kill
 		/// </summary>
 		public const string Str406Key = "Str406";
 
 		/// <summary>
-		/// Immediately or reject
+		/// Fill Or Kill
 		/// </summary>
 		public static string Str406
 		{
@@ -5008,12 +5008,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Cancel remainder
+		/// Immediate Or Cancel
 		/// </summary>
 		public const string Str407Key = "Str407";
 
 		/// <summary>
-		/// Cancel remainder
+		/// Immediate Or Cancel
 		/// </summary>
 		public static string Str407
 		{
