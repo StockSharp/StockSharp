@@ -151,6 +151,16 @@ namespace StockSharp.BusinessEntities
 		[PropertyOrder(8)]
 		public bool? IsUpTick { get; set; }
 
+		/// <summary>
+		/// Валюта торгового инструмента.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
+		[DescriptionLoc(LocalizedStrings.Str382Key)]
+		[MainCategory]
+		[Nullable]
+		public CurrencyTypes? Currency { get; set; }
+
 		[field: NonSerialized]
 		private IDictionary<object, object> _extensionInfo;
 
@@ -192,6 +202,7 @@ namespace StockSharp.BusinessEntities
 				Status = Status,
 				OpenInterest = OpenInterest,
 				IsUpTick = IsUpTick,
+				Currency = Currency,
 			};
 		}
 

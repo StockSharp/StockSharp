@@ -73,5 +73,6 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str159}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Commission}" SortMemberPath="Commission"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Portfolio}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Order.Portfolio.Name}" SortMemberPath="Order.Portfolio.Name"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.ClientCode}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Order.ClientCode}" SortMemberPath="Order.ClientCode"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Currency}" Visibility="Collapsed" Width="40" Binding="{Binding Path=Trade.Currency}" SortMemberPath="Trade.Currency"/>
 	</ug:UniversalGrid.Columns>
 </ug:UniversalGrid>

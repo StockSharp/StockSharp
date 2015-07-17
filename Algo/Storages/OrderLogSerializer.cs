@@ -148,7 +148,7 @@ namespace StockSharp.Algo.Storages
 		public OrderLogSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version50;
+			Version = MarketDataVersions.Version51;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> items, OrderLogMetaInfo metaInfo)
@@ -302,6 +302,14 @@ namespace StockSharp.Algo.Storages
 
 				metaInfo.Portfolios.TryAdd(item.PortfolioName);
 				writer.WriteInt(metaInfo.Portfolios.IndexOf(item.PortfolioName));
+
+				if (metaInfo.Version < MarketDataVersions.Version51)
+					continue;
+
+				writer.Write(item.Currency != null);
+
+				if (item.Currency != null)
+					writer.WriteInt((int)item.Currency.Value);
 			}
 		}
 
@@ -418,6 +426,12 @@ namespace StockSharp.Algo.Storages
 
 			//if (order.Portfolio == null)
 			//	order.Portfolio = Portfolio.AnonymousPortfolio;
+
+			if (metaInfo.Version >= MarketDataVersions.Version51)
+			{
+				if (reader.Read())
+					execMsg.Currency = (CurrencyTypes)reader.ReadInt();
+			}
 
 			return execMsg;
 		}

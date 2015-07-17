@@ -160,6 +160,11 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
+		/// Валюта торгового инструмента.
+		/// </summary>
+		public CurrencyTypes? Currency { get; set; }
+
+		/// <summary>
 		/// Лучший бид. Если стакан не содержит бидов, то будет возвращено <see langword="null"/>.
 		/// </summary>
 		public Quote BestBid { get; private set; }
@@ -1026,6 +1031,7 @@ namespace StockSharp.BusinessEntities
 				MaxDepth = MaxDepth,
 				UseAggregatedQuotes = UseAggregatedQuotes,
 				AutoVerify = AutoVerify,
+				Currency = Currency,
 			};
 
 			lock (_syncRoot)

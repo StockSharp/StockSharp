@@ -418,7 +418,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.Str250Key)]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
 		public CurrencyTypes? Currency

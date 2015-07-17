@@ -34,6 +34,7 @@
 		public static readonly Version Version52 = new Version(5, 2);
 		public static readonly Version Version53 = new Version(5, 3);
 		public static readonly Version Version54 = new Version(5, 4);
+		public static readonly Version Version55 = new Version(5, 5);
 	}
 
 	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo<TMetaInfo>

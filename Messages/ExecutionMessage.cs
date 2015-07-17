@@ -432,6 +432,16 @@ namespace StockSharp.Messages
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Валюта торгового инструмента.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
+		[DescriptionLoc(LocalizedStrings.Str382Key)]
+		[MainCategory]
+		[Nullable]
+		public CurrencyTypes? Currency { get; set; }
+
+		/// <summary>
 		/// Создать <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -462,6 +472,7 @@ namespace StockSharp.Messages
 				Comment = Comment,
 				Condition = Condition.CloneNullable(),
 				ClientCode = ClientCode,
+				Currency = Currency,
 				ServerTime = ServerTime,
 				DepoName = DepoName,
 				Error = Error,

@@ -63,6 +63,7 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="120" Binding="{Binding Path=LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="LocalTime"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Width="60" Binding="{Binding Path=Price}" SortMemberPath="Price"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Volume}" SortMemberPath="Volume"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Currency}" Visibility="Collapsed" Width="40" Binding="{Binding Path=Currency}" SortMemberPath="Currency"/>
 		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str329}" Width="60" CellTemplate="{StaticResource OrderDirectionTemplate}" SortMemberPath="OrderDirection">
 			<DataGridTemplateColumn.CellStyle>
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />

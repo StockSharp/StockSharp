@@ -582,6 +582,16 @@ namespace StockSharp.BusinessEntities
 		public string ClientCode { get; set; }
 
 		/// <summary>
+		/// Валюта торгового инструмента.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
+		[DescriptionLoc(LocalizedStrings.Str382Key)]
+		[MainCategory]
+		[Nullable]
+		public CurrencyTypes? Currency { get; set; }
+
+		/// <summary>
 		/// Получить строковое представление.
 		/// </summary>
 		/// <returns>Строковое представление.</returns>

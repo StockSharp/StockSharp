@@ -38,6 +38,7 @@ namespace StockSharp.Algo
 				Asks = depth.Asks.Select(q => q.ToQuoteChange()).ToArray(),
 				ServerTime = depth.LastChangeTime,
 				IsSorted = true,
+				Currency = depth.Currency,
 			};
 		}
 
@@ -193,6 +194,7 @@ namespace StockSharp.Algo
 				ExecutionType = ExecutionTypes.Trade,
 				ServerTime = trade.Trade.Time,
 				OriginSide = trade.Trade.OrderDirection,
+				Currency = trade.Trade.Currency,
 			};
 		}
 
@@ -231,6 +233,7 @@ namespace StockSharp.Algo
 				IsSystem = order.IsSystem,
 				Comment = order.Comment,
 				VisibleVolume = order.VisibleVolume,
+				Currency = order.Currency,
 			};
 
 			return message;
@@ -284,7 +287,8 @@ namespace StockSharp.Algo
 				TradeStatus = trade.Status,
 				OpenInterest = trade.OpenInterest,
 				OriginSide = trade.OrderDirection,
-				ExecutionType = ExecutionTypes.Tick
+				ExecutionType = ExecutionTypes.Tick,
+				Currency = trade.Currency,
 			};
 		}
 
@@ -324,6 +328,7 @@ namespace StockSharp.Algo
 				IsCancelled = (order.State == OrderStates.Done && trade == null),
 				TradeId = trade != null ? trade.Id : (long?)null,
 				TradePrice = trade != null ? trade.Price : (decimal?)null,
+				Currency = order.Currency,
 			};
 		}
 
@@ -357,6 +362,7 @@ namespace StockSharp.Algo
 				UserOrderId = order.UserOrderId,
 				BrokerCode = order.BrokerCode,
 				ClientCode = order.ClientCode,
+				Currency = order.Currency,
 			};
 
 			order.Security.ToMessage(securityId).CopyTo(msg);
@@ -435,6 +441,8 @@ namespace StockSharp.Algo
 
 				BrokerCode = oldOrder.BrokerCode,
 				ClientCode = oldOrder.ClientCode,
+
+				Currency = newOrder.Currency,
 			};
 
 			oldOrder.Security.ToMessage(securityId).CopyTo(msg);
@@ -968,6 +976,7 @@ namespace StockSharp.Algo
 			trade.OpenInterest = message.OpenInterest;
 			trade.OrderDirection = message.OriginSide;
 			trade.IsUpTick = message.IsUpTick;
+			trade.Currency = message.Currency;
 
 			return trade;
 		}
@@ -1017,6 +1026,7 @@ namespace StockSharp.Algo
 			order.UserOrderId = message.UserOrderId;
 			order.Comment = message.Comment;
 			order.Commission = message.Commission;
+			order.Currency = message.Currency;
 
 			if (message.OrderState != null)
 				order.State = (OrderStates)message.OrderState;
@@ -1059,6 +1069,8 @@ namespace StockSharp.Algo
 				message.IsSorted, message.ServerTime);
 
 			depth.LocalTime = message.LocalTime;
+			depth.Currency = message.Currency;
+
 			return depth;
 		}
 
@@ -1139,6 +1151,7 @@ namespace StockSharp.Algo
 			order.Status = message.OrderStatus;
 			order.TimeInForce = message.TimeInForce;
 			order.IsSystem = message.IsSystem;
+			order.Currency = message.Currency;
 
 			if (message.OrderState != null)
 				order.State = message.OrderState.Value;

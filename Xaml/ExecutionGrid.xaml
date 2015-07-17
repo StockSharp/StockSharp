@@ -69,6 +69,7 @@
 		<DataGridTextColumn x:Name="OrderPriceColumn" Header="{x:Static loc:LocalizedStrings.Price}" Width="60" Binding="{Binding Path=Price}" SortMemberPath="Price"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Volume}" SortMemberPath="Volume"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.VisibleVolume}" Width="50" Binding="{Binding Path=VisibleVolume}" SortMemberPath="VisibleVolume"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Currency}" Width="40" Binding="{Binding Path=Currency}" SortMemberPath="Currency"/>
 		<DataGridTextColumn x:Name="BalanceColumn" Header="{x:Static loc:LocalizedStrings.Str1325}" Width="50" Binding="{Binding Path=Balance}" SortMemberPath="Balance"/>
 		<DataGridTemplateColumn x:Name="OrderSideColumn" Header="{x:Static loc:LocalizedStrings.Str128}" Width="60" CellTemplate="{StaticResource SideTemplate}" SortMemberPath="Side">
 			<DataGridTemplateColumn.CellStyle>

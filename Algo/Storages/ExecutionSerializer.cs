@@ -169,7 +169,7 @@ namespace StockSharp.Algo.Storages
 		public ExecutionSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version54;
+			Version = MarketDataVersions.Version55;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)
@@ -336,6 +336,14 @@ namespace StockSharp.Algo.Storages
 				WriteString(writer, metaInfo.StrategyIds, msg.UserOrderId);
 				WriteString(writer, metaInfo.Comments, msg.Comment);
 				WriteString(writer, metaInfo.Errors, msg.Error != null ? msg.Error.Message : null);
+
+				if (metaInfo.Version < MarketDataVersions.Version55)
+					continue;
+
+				writer.Write(msg.Currency != null);
+
+				if (msg.Currency != null)
+					writer.WriteInt((int)msg.Currency.Value);
 			}
 		}
 
@@ -483,6 +491,12 @@ namespace StockSharp.Algo.Storages
 
 			if (!error.IsEmpty())
 				msg.Error = new InvalidOperationException(error);
+
+			if (metaInfo.Version >= MarketDataVersions.Version55)
+			{
+				if (reader.Read())
+					msg.Currency = (CurrencyTypes)reader.ReadInt();
+			}
 
 			return msg;
 		}

@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Storages
 		public QuoteSerializer(SecurityId securityId)
 			: base(securityId, 16 + 20 * 25)
 		{
-			Version = MarketDataVersions.Version50;
+			Version = MarketDataVersions.Version51;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<QuoteChangeMessage> messages, QuoteMetaInfo metaInfo)
@@ -138,6 +138,14 @@ namespace StockSharp.Algo.Storages
 					if (hasLocalTime)
 						metaInfo.LastLocalTime = writer.WriteTime(quoteMsg.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str934, allowNonOrdered, isUtc, metaInfo.LocalOffset);
 				}
+
+				if (metaInfo.Version < MarketDataVersions.Version51)
+					continue;
+
+				writer.Write(quoteMsg.Currency != null);
+
+				if (quoteMsg.Currency != null)
+					writer.WriteInt((int)quoteMsg.Currency.Value);
 			}
 		}
 
@@ -203,6 +211,12 @@ namespace StockSharp.Algo.Storages
 				}
 				//else
 				//	quoteMsg.LocalTime = quoteMsg.Time;
+			}
+
+			if (metaInfo.Version >= MarketDataVersions.Version51)
+			{
+				if (reader.Read())
+					quoteMsg.Currency = (CurrencyTypes)reader.ReadInt();
 			}
 
 			return quoteMsg;

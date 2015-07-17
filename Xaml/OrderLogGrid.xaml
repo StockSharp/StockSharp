@@ -87,6 +87,7 @@
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1324}" Binding="{Binding Order.Status}" Visibility="Collapsed" SortMemberPath="Order.Status" />
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str342}" Width="60" Binding="{Binding Path=Order.IsSystem}" SortMemberPath="Order.IsSystem" Visibility="Collapsed"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Currency}" Width="40" Binding="{Binding Path=Order.Currency}" SortMemberPath="Order.Currency" Visibility="Collapsed"/>
 		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str506}" Width="100" SortMemberPath="Trade.Id">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
