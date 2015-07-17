@@ -2,6 +2,7 @@ namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
 
@@ -34,7 +35,7 @@ namespace StockSharp.Xaml
 			[EnumDisplayNameLoc(LocalizedStrings.SessionKey)]
 			Today,
 
-			[EnumDisplayNameLoc(LocalizedStrings.XamlStr114Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
 			Gtd,
 		}
 
@@ -202,7 +203,7 @@ namespace StockSharp.Xaml
 						break;
 					case OrderWindowTif.Today:
 						_order.TimeInForce = TimeInForce.PutInQueue;
-						_order.ExpiryDate = DateTimeOffset.Now.Date.ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo);
+						_order.ExpiryDate = (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo);
 						break;
 					case OrderWindowTif.Gtd:
 						_order.TimeInForce = TimeInForce.PutInQueue;
@@ -253,29 +254,27 @@ namespace StockSharp.Xaml
 
 				switch (value.TimeInForce)
 				{
+					case null:
 					case TimeInForce.PutInQueue:
 					{
 						if (value.ExpiryDate == null || value.ExpiryDate == DateTimeOffset.MaxValue)
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
-						else if (value.ExpiryDate == DateTimeOffset.Now.Date.ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo))
+						else if (value.ExpiryDate == (DateTimeOffset.Now.Date + TimeHelper.LessOneDay).ApplyTimeZone(Security.Board.Exchange.TimeZoneInfo))
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Today;
 						else
 						{
 							TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtd;
-							ExpiryDate.Value = value.ExpiryDate == DateTimeOffset.MaxValue ? (DateTime?)null : value.ExpiryDate.Value.Date;
+							ExpiryDate.Value = value.ExpiryDate.Value.Date;
 							//throw new ArgumentOutOfRangeException("value", value.ExpiryDate, LocalizedStrings.Str1541);
 						}
 
 						break;
 					}
 					case TimeInForce.MatchOrCancel:
-						TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
+						TimeInForceCtrl.SelectedValue = OrderWindowTif.MatchOrCancel;
 						break;
 					case TimeInForce.CancelBalance:
-						TimeInForceCtrl.SelectedValue = OrderWindowTif.Gtc;
-						break;
-					case null:
-						TimeInForceCtrl.SelectedValue = null;
+						TimeInForceCtrl.SelectedValue = OrderWindowTif.CancelBalance;
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -531,7 +530,9 @@ namespace StockSharp.Xaml
 
 		private void TimeInForceCtrl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			ExpiryDate.IsEnabled = TimeInForceCtrl.SelectedValue as OrderWindowTif? == OrderWindowTif.Gtd;
+			var member = e.AddedItems.Cast<EnumComboBoxHelper.EnumerationMember>().FirstOrDefault();
+
+			ExpiryDate.IsEnabled = member != null && (OrderWindowTif?)member.Value == OrderWindowTif.Gtd;
 			TryEnableSend();
 		}
 
