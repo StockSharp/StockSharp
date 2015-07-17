@@ -23,19 +23,19 @@ namespace StockSharp.Xaml
 	{
 		private enum OrderWindowTif
 		{
-			[EnumDisplayNameLoc(LocalizedStrings.Str1539Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.GTCKey)]
 			Gtc,
 
-			[EnumDisplayNameLoc(LocalizedStrings.Str406Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.FOKKey)]
 			MatchOrCancel,
 
-			[EnumDisplayNameLoc(LocalizedStrings.Str407Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.IOCKey)]
 			CancelBalance,
 
 			[EnumDisplayNameLoc(LocalizedStrings.SessionKey)]
 			Today,
 
-			[EnumDisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
+			[EnumDisplayNameLoc(LocalizedStrings.GTDKey)]
 			Gtd,
 		}
 

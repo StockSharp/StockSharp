@@ -4997,27 +4997,27 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Fill Or Kill
 		/// </summary>
-		public const string Str406Key = "Str406";
+		public const string FOKKey = "Foc";
 
 		/// <summary>
 		/// Fill Or Kill
 		/// </summary>
-		public static string Str406
+		public static string FOK
 		{
-			get { return GetString(Str406Key); }
+			get { return GetString(FOKKey); }
 		}
 
 		/// <summary>
 		/// Immediate Or Cancel
 		/// </summary>
-		public const string Str407Key = "Str407";
+		public const string IOCKey = "IOC";
 
 		/// <summary>
 		/// Immediate Or Cancel
 		/// </summary>
-		public static string Str407
+		public static string IOC
 		{
-			get { return GetString(Str407Key); }
+			get { return GetString(IOCKey); }
 		}
 
 		/// <summary>
@@ -18530,14 +18530,27 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Good til cancelled
 		/// </summary>
-		public const string Str1539Key = "Str1539";
+		public const string GTCKey = "GTC";
 
 		/// <summary>
 		/// Good til cancelled
 		/// </summary>
-		public static string Str1539
+		public static string GTC
 		{
-			get { return GetString(Str1539Key); }
+			get { return GetString(GTCKey); }
+		}
+
+		/// <summary>
+		/// Good til date
+		/// </summary>
+		public const string GTDKey = "GTD";
+
+		/// <summary>
+		/// Good til date
+		/// </summary>
+		public static string GTD
+		{
+			get { return GetString(GTDKey); }
 		}
 
 		/// <summary>
@@ -46685,19 +46698,6 @@ namespace StockSharp.Localization
 		public static string XamlStr113
 		{
 			get { return GetString(XamlStr113Key); }
-		}
-
-		/// <summary>
-		/// Expiration date
-		/// </summary>
-		public const string XamlStr114Key = "XamlStr114";
-
-		/// <summary>
-		/// Expiration date
-		/// </summary>
-		public static string XamlStr114
-		{
-			get { return GetString(XamlStr114Key); }
 		}
 
 		/// <summary>

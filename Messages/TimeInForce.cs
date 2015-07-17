@@ -23,14 +23,14 @@ namespace StockSharp.Messages
 		/// Немедленно или отклонить.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str406Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.FOKKey)]
 		MatchOrCancel,
 
 		/// <summary>
 		/// Снять остаток.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str407Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.IOCKey)]
 		CancelBalance,
 	}
 }

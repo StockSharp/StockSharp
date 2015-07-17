@@ -150,7 +150,7 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// До отмены.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1539Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.GTCKey)]
 		[EnumMember]
 		TillCancelled
 	}
