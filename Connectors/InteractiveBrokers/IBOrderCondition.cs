@@ -1042,7 +1042,7 @@ namespace StockSharp.InteractiveBrokers
 			/// <summary>
 			/// Валюта.
 			/// </summary>
-			[EnumDisplayNameLoc(LocalizedStrings.Str250Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.CurrencyKey)]
 			FX,
 
 			/// <summary>

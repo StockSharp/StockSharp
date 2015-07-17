@@ -152,7 +152,7 @@ namespace StockSharp.Messages
 		/// Валюта торгового инструмента.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str250Key)]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
 		[Nullable]

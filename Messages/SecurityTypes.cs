@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		/// Валюта.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str250Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		Currency,
 
 		/// <summary>

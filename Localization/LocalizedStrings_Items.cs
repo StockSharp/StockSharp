@@ -3021,14 +3021,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Currency
 		/// </summary>
-		public const string Str250Key = "Str250";
+		public const string CurrencyKey = "Currency";
 
 		/// <summary>
 		/// Currency
 		/// </summary>
-		public static string Str250
+		public static string Currency
 		{
-			get { return GetString(Str250Key); }
+			get { return GetString(CurrencyKey); }
 		}
 
 		/// <summary>

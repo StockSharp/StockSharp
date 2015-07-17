@@ -55,7 +55,7 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.State}" Binding="{Binding Path=State, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="State" />
 		<DataGridTextColumn Width="50" Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Path=Type, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Type" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.UnderlyingAsset}" Binding="{Binding Path=UnderlyingSecurityId}" SortMemberPath="UnderlyingSecurityId" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str250}" Binding="{Binding Path=Currency, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Currency" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Currency}" Binding="{Binding Path=Currency, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Currency" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr833}" Binding="{Binding Path=LastTrade.Price}" SortMemberPath="LastTrade.Price" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr382}" Binding="{Binding Path=LastTrade.Volume}" SortMemberPath="LastTrade.Volume" />
