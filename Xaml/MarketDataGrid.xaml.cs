@@ -337,10 +337,10 @@ namespace StockSharp.Xaml
 				});
 			}
 
-			Add(dict, storageRegistry.GetTickMessageStorage(security, drive, format), candleNames, e => e.IsTick = true);
-			Add(dict, storageRegistry.GetQuoteMessageStorage(security, drive, format), candleNames, e => e.IsDepth = true);
-			Add(dict, storageRegistry.GetLevel1MessageStorage(security, drive, format), candleNames, e => e.IsLevel1 = true);
-			Add(dict, storageRegistry.GetOrderLogMessageStorage(security, drive, format), candleNames, e => e.IsOrderLog = true);
+			Add(dict, storageRegistry.GetTickMessageStorage(security, drive, format).Dates, candleNames, e => e.IsTick = true);
+			Add(dict, storageRegistry.GetQuoteMessageStorage(security, drive, format).Dates, candleNames, e => e.IsDepth = true);
+			Add(dict, storageRegistry.GetLevel1MessageStorage(security, drive, format).Dates, candleNames, e => e.IsLevel1 = true);
+			Add(dict, storageRegistry.GetOrderLogMessageStorage(security, drive, format).Dates, candleNames, e => e.IsOrderLog = true);
 
 			foreach (var c in candleNames)
 			{
@@ -353,25 +353,28 @@ namespace StockSharp.Xaml
 				}
 
 				var tuple = candles[candleName];
-				Add(dict, storageRegistry.GetCandleMessageStorage(tuple.Item1, security, tuple.Item2, drive, format), candleNames, e => e.Candles[candleName] = true);
+				Add(dict, storageRegistry.GetCandleMessageStorage(tuple.Item1, security, tuple.Item2, drive, format).Dates, candleNames, e => e.Candles[candleName] = true);
 			}
 
 			if (dict.Count > 0)
 			{
-				// добавляем рабочие дни, которые отсутствуют в данных
+				// add gaps by working days
 				var emptyDays = dict.Keys.Min().Range(dict.Keys.Max(), TimeSpan.FromDays(1))
-					.Where(d => security.Board.WorkingTime.IsTradeDate(d, true) && !dict.ContainsKey(d));
+					.Where(d => !dict.ContainsKey(d)/* && security.Board.WorkingTime.IsTradeDate(d, true)*/)
+					.OrderBy()
+					.ToList();
 
-				foreach (var batch in emptyDays.Batch(10))
+				foreach (var monthGroup in emptyDays.ToArray().GroupBy(d => new DateTime(d.Year, d.Month, 1)))
 				{
-					lock (_syncObject)
-					{
-						if (_isChanged)
-							return;
-					}
+					var firstDay = monthGroup.First();
+					var lastDay = monthGroup.Last();
 
-					TryAddEntries(dict, batch, candleNames, e => { });
+					// whole month do not have any values
+					if (firstDay.Day == 1 && lastDay.Day == monthGroup.Key.DaysInMonth())
+						emptyDays.RemoveRange(monthGroup);
 				}
+
+				Add(dict, emptyDays, candleNames, e => { });
 			}
 
 			lock (_syncObject)
@@ -383,7 +386,7 @@ namespace StockSharp.Xaml
 			this.GuiSync(RefreshSort);
 		}
 
-		private void Add(IDictionary<DateTime, MarketDataEntry> dict, IMarketDataStorage storage, string[] candleKeys, Action<MarketDataEntry> action)
+		private void Add(IDictionary<DateTime, MarketDataEntry> dict, IEnumerable<DateTime> dates, string[] candleKeys, Action<MarketDataEntry> action)
 		{
 			lock (_syncObject)
 			{
@@ -391,7 +394,7 @@ namespace StockSharp.Xaml
 					return;
 			}
 
-			foreach (var batch in storage.Dates.Batch(10))
+			foreach (var batch in dates.Batch(10))
 			{
 				lock (_syncObject)
 				{
