@@ -90,10 +90,11 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IV" Binding="{Binding Path=ImpliedVolatility}" SortMemberPath="ImpliedVolatility" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="HV" Binding="{Binding Path=HistoricalVolatility}" SortMemberPath="HistoricalVolatility" />
 
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str300}" Binding="{Binding Path=Delta}" SortMemberPath="Delta" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str301}" Binding="{Binding Path=Gamma}" SortMemberPath="Gamma" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str302}" Binding="{Binding Path=Vega}" SortMemberPath="Vega" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str303}" Binding="{Binding Path=Theta}" SortMemberPath="Theta" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Delta}" Binding="{Binding Path=Delta}" SortMemberPath="Delta" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Gamma}" Binding="{Binding Path=Gamma}" SortMemberPath="Gamma" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Vega}" Binding="{Binding Path=Vega}" SortMemberPath="Vega" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Theta}" Binding="{Binding Path=Theta}" SortMemberPath="Theta" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Rho}" Binding="{Binding Path=Rho}" SortMemberPath="Rho" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.OI}" Binding="{Binding Path=OpenInterest}" SortMemberPath="OpenInterest" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr491}" Binding="{Binding Path=BidsVolume}" SortMemberPath="BidsVolume" />

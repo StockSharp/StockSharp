@@ -147,28 +147,28 @@ namespace StockSharp.Messages
 		/// Дельта.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str300Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.DeltaKey)]
 		Delta,
 
 		/// <summary>
 		/// Гамма.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str301Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.GammaKey)]
 		Gamma,
 
 		/// <summary>
 		/// Вега.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str302Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.VegaKey)]
 		Vega,
 
 		/// <summary>
 		/// Тета.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str303Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.ThetaKey)]
 		Theta,
 
 		/// <summary>
@@ -287,7 +287,7 @@ namespace StockSharp.Messages
 		/// Ро.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str317Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.RhoKey)]
 		Rho,
 
 		/// <summary>
@@ -539,7 +539,7 @@ namespace StockSharp.Messages
 		/// Бета.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str339Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.BetaKey)]
 		Beta,
 
 		/// <summary>

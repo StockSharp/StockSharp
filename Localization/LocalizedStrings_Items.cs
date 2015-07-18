@@ -3645,53 +3645,53 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Delta
 		/// </summary>
-		public const string Str300Key = "Str300";
+		public const string DeltaKey = "Delta";
 
 		/// <summary>
 		/// Delta
 		/// </summary>
-		public static string Str300
+		public static string Delta
 		{
-			get { return GetString(Str300Key); }
+			get { return GetString(DeltaKey); }
 		}
 
 		/// <summary>
 		/// Gamma
 		/// </summary>
-		public const string Str301Key = "Str301";
+		public const string GammaKey = "Gamma";
 
 		/// <summary>
 		/// Gamma
 		/// </summary>
-		public static string Str301
+		public static string Gamma
 		{
-			get { return GetString(Str301Key); }
+			get { return GetString(GammaKey); }
 		}
 
 		/// <summary>
 		/// Vega
 		/// </summary>
-		public const string Str302Key = "Str302";
+		public const string VegaKey = "Vega";
 
 		/// <summary>
 		/// Vega
 		/// </summary>
-		public static string Str302
+		public static string Vega
 		{
-			get { return GetString(Str302Key); }
+			get { return GetString(VegaKey); }
 		}
 
 		/// <summary>
 		/// Theta
 		/// </summary>
-		public const string Str303Key = "Str303";
+		public const string ThetaKey = "Theta";
 
 		/// <summary>
 		/// Theta
 		/// </summary>
-		public static string Str303
+		public static string Theta
 		{
-			get { return GetString(Str303Key); }
+			get { return GetString(ThetaKey); }
 		}
 
 		/// <summary>
@@ -3866,14 +3866,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Rho
 		/// </summary>
-		public const string Str317Key = "Str317";
+		public const string RhoKey = "Rho";
 
 		/// <summary>
 		/// Rho
 		/// </summary>
-		public static string Str317
+		public static string Rho
 		{
-			get { return GetString(Str317Key); }
+			get { return GetString(RhoKey); }
 		}
 
 		/// <summary>
@@ -4139,14 +4139,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Beta
 		/// </summary>
-		public const string Str339Key = "Str339";
+		public const string BetaKey = "Beta";
 
 		/// <summary>
 		/// Beta
 		/// </summary>
-		public static string Str339
+		public static string Beta
 		{
-			get { return GetString(Str339Key); }
+			get { return GetString(BetaKey); }
 		}
 
 		/// <summary>

@@ -1030,13 +1030,13 @@ namespace StockSharp.InteractiveBrokers
 			/// <summary>
 			/// Дельта.
 			/// </summary>
-			[EnumDisplayNameLoc(LocalizedStrings.Str300Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.DeltaKey)]
 			Delta,
 
 			/// <summary>
 			/// Бета.
 			/// </summary>
-			[EnumDisplayNameLoc(LocalizedStrings.Str339Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.BetaKey)]
 			Beta,
 
 			/// <summary>

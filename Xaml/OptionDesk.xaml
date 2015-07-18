@@ -64,11 +64,11 @@
 	</ug:UniversalGrid.Resources>
 	
 	<ug:UniversalGrid.Columns>
-		<DataGridTextColumn x:Name="CallRho" Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str317}" Width="45" Binding="{Binding Path=Call.Rho}" SortMemberPath="Call.Rho" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="CallTheta" Header="{x:Static loc:LocalizedStrings.Str303}" Width="45" Binding="{Binding Path=Call.Theta}" SortMemberPath="Call.Theta" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="CallVega" Header="{x:Static loc:LocalizedStrings.Str302}" Width="45" Binding="{Binding Path=Call.Vega}" SortMemberPath="Call.Vega" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="CallGamma" Header="{x:Static loc:LocalizedStrings.Str301}" Width="45" Binding="{Binding Path=Call.Gamma}" SortMemberPath="Call.Gamma" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="CallDelta" Header="{x:Static loc:LocalizedStrings.Str300}" Width="45" Binding="{Binding Path=Call.Delta}" SortMemberPath="Call.Delta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallRho" Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Rho}" Width="45" Binding="{Binding Path=Call.Rho}" SortMemberPath="Call.Rho" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallTheta" Header="{x:Static loc:LocalizedStrings.Theta}" Width="45" Binding="{Binding Path=Call.Theta}" SortMemberPath="Call.Theta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallVega" Header="{x:Static loc:LocalizedStrings.Vega}" Width="45" Binding="{Binding Path=Call.Vega}" SortMemberPath="Call.Vega" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallGamma" Header="{x:Static loc:LocalizedStrings.Gamma}" Width="45" Binding="{Binding Path=Call.Gamma}" SortMemberPath="Call.Gamma" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="CallDelta" Header="{x:Static loc:LocalizedStrings.Delta}" Width="45" Binding="{Binding Path=Call.Delta}" SortMemberPath="Call.Delta" ElementStyle="{StaticResource NumberCellStyle}"/>
 		<DataGridTextColumn x:Name="CallBid" Header="{x:Static loc:LocalizedStrings.Bid}" Width="70" Binding="{Binding Path=Call.BestBidPrice}" SortMemberPath="Call.BestBidPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
 		<DataGridTextColumn x:Name="CallAsk" Header="{x:Static loc:LocalizedStrings.Ask}" Width="70" Binding="{Binding Path=Call.BestAskPrice}" SortMemberPath="Call.BestAskPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
 		<DataGridTextColumn x:Name="CallTheorPrice" Header="{x:Static loc:LocalizedStrings.XamlStr743}" Width="70" Binding="{Binding Path=Call.TheorPrice}" SortMemberPath="Call.TheorPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
@@ -182,10 +182,10 @@
 		<DataGridTextColumn x:Name="PutTheorPrice" Header="{x:Static loc:LocalizedStrings.XamlStr743}" Width="70" Binding="{Binding Path=Put.TheorPrice}" SortMemberPath="Put.TheorPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
 		<DataGridTextColumn x:Name="PutBid" Header="{x:Static loc:LocalizedStrings.Bid}" Width="70" Binding="{Binding Path=Put.BestBidPrice}" SortMemberPath="Put.BestBidPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
 		<DataGridTextColumn x:Name="PutAsk" Header="{x:Static loc:LocalizedStrings.Ask}" Width="70" Binding="{Binding Path=Put.BestAskPrice}" SortMemberPath="Put.BestAskPrice" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="PutDelta" Header="{x:Static loc:LocalizedStrings.Str300}" Width="45" Binding="{Binding Path=Put.Delta}" SortMemberPath="Put.Delta" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="PutGamma" Header="{x:Static loc:LocalizedStrings.Str301}" Width="45" Binding="{Binding Path=Put.Gamma}" SortMemberPath="Put.Gamma" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="PutVega" Header="{x:Static loc:LocalizedStrings.Str302}" Width="45" Binding="{Binding Path=Put.Vega}" SortMemberPath="Put.Vega" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="PutTheta" Header="{x:Static loc:LocalizedStrings.Str303}" Width="45" Binding="{Binding Path=Put.Theta}" SortMemberPath="Put.Theta" ElementStyle="{StaticResource NumberCellStyle}"/>
-		<DataGridTextColumn x:Name="PutRho" Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str317}" Width="45" Binding="{Binding Path=Put.Rho}" SortMemberPath="Put.Rho" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutDelta" Header="{x:Static loc:LocalizedStrings.Delta}" Width="45" Binding="{Binding Path=Put.Delta}" SortMemberPath="Put.Delta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutGamma" Header="{x:Static loc:LocalizedStrings.Gamma}" Width="45" Binding="{Binding Path=Put.Gamma}" SortMemberPath="Put.Gamma" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutVega" Header="{x:Static loc:LocalizedStrings.Vega}" Width="45" Binding="{Binding Path=Put.Vega}" SortMemberPath="Put.Vega" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutTheta" Header="{x:Static loc:LocalizedStrings.Theta}" Width="45" Binding="{Binding Path=Put.Theta}" SortMemberPath="Put.Theta" ElementStyle="{StaticResource NumberCellStyle}"/>
+		<DataGridTextColumn x:Name="PutRho" Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Rho}" Width="45" Binding="{Binding Path=Put.Rho}" SortMemberPath="Put.Rho" ElementStyle="{StaticResource NumberCellStyle}"/>
 	</ug:UniversalGrid.Columns>
 </ug:UniversalGrid>

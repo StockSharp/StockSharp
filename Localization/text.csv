@@ -278,10 +278,10 @@ Str296;Number of bids;Количество бидов
 Str297;Ask volume;Объем офферов
 Str298;Number of asks;Количество офферов
 Str299;Volatility (historic);Волатильность (историческая)
-Str300;Delta;Дельта
-Str301;Gamma;Гамма
-Str302;Vega;Вега
-Str303;Theta;Тета
+Delta;Delta;Дельта
+Gamma;Gamma;Гамма
+Vega;Vega;Вега
+Theta;Theta;Тета
 Str304;Initial margin (buy);ГО (покупка)
 Str305;Initial margin (sell);ГО (продажа)
 Str306;Minimum price step;Минимальный шаг цены
@@ -295,7 +295,7 @@ Str313;Best bid price;Лучшая цена покупки
 Str314;Best bid volume;Лучший объем покупки
 Str315;Best ask price;Лучшая цена продажи
 Str316;Best ask volume;Лучший объем продажи
-Str317;Rho;Ро
+Rho;Rho;Ро
 Str318;Accrued Coupon Interest;НКД
 Str319;Bid (max);Бид (макс)
 Str320;Ask (min);Оффер (мин)
@@ -316,7 +316,7 @@ Str335;Capital (debt);Капитал (долг)
 Str336;Assets margin (gross);Маржа активов (гросс)
 Str337;Assets margin;Маржа активов
 Str338;Profit margin;Маржа прибыли
-Str339;Beta;Бета
+Beta;Beta;Бета
 Str340;HV (week);HV (неделя)
 Str341;HV (month);HV (месяц)
 Str342;System;Системная
