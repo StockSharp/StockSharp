@@ -736,7 +736,7 @@ namespace StockSharp.Hydra
 
 		private void ExecutedHelpCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			Process.Start("http://stocksharp.com/doc/?topic=html/a720a275-440a-44ce-86e2-bcec2e0bc55f.htm");
+			Process.Start("http://stocksharp.com/doc/html/a720a275-440a-44ce-86e2-bcec2e0bc55f.htm");
 		}
 
 		private void ExecutedAboutCommand(object sender, ExecutedRoutedEventArgs e)
