@@ -179,7 +179,7 @@ namespace StockSharp.BusinessEntities
 		/// Минимальный шаг объема.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str365Key)]
+		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
 		[PropertyOrder(6)]
@@ -227,7 +227,7 @@ namespace StockSharp.BusinessEntities
 		/// Количество знаков в цене после запятой.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str547Key)]
+		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
 		[DescriptionLoc(LocalizedStrings.Str548Key)]
 		[MainCategory]
 		[PropertyOrder(7)]

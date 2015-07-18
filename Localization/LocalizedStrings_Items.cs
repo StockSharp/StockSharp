@@ -4464,14 +4464,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Volume step
 		/// </summary>
-		public const string Str365Key = "Str365";
+		public const string VolumeStepKey = "VolumeStep";
 
 		/// <summary>
 		/// Volume step
 		/// </summary>
-		public static string Str365
+		public static string VolumeStep
 		{
-			get { return GetString(Str365Key); }
+			get { return GetString(VolumeStepKey); }
 		}
 
 		/// <summary>
@@ -6271,14 +6271,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Decimals
 		/// </summary>
-		public const string Str547Key = "Str547";
+		public const string DecimalsKey = "Decimals";
 
 		/// <summary>
 		/// Decimals
 		/// </summary>
-		public static string Str547
+		public static string Decimals
 		{
-			get { return GetString(Str547Key); }
+			get { return GetString(DecimalsKey); }
 		}
 
 		/// <summary>

@@ -574,7 +574,7 @@ namespace StockSharp.Messages
 		/// Количество знаков в цене после запятой.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str547Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.DecimalsKey)]
 		Decimals
 	}
 

@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 		/// Минимальный шаг объема.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str365Key)]
+		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
 		[Nullable]
@@ -68,12 +68,12 @@ namespace StockSharp.Messages
 		/// Количество знаков в цене после запятой.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str547Key)]
+		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
 		[DescriptionLoc(LocalizedStrings.Str548Key)]
 		[MainCategory]
 		[Nullable]
 		public int? Decimals { get; set; }
-
+		
 		/// <summary>
 		/// Минимальный шаг цены.
 		/// </summary>

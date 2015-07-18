@@ -53,7 +53,7 @@
 			<TextBox x:Name="SecName" Grid.Column="1" Grid.Row="2" />
 
 			<TextBlock Height="23" Grid.Row="6" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.Str547}"/>:
+				<Run Text="{x:Static loc:LocalizedStrings.Decimals}"/>:
 			</TextBlock>
 			<xctk:IntegerUpDown x:Name="Decimals" TextAlignment="Right" Grid.Column="1" Grid.Row="6" Minimum="0" />
 
@@ -63,7 +63,7 @@
 			<xctk:DecimalUpDown x:Name="PriceStep" TextAlignment="Right" Grid.Column="1" Grid.Row="8" Minimum="0" Increment="0.01" />
 
 			<TextBlock Height="23" Grid.Row="10" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.Str365}"/><Run Text=":"/>
+				<Run Text="{x:Static loc:LocalizedStrings.VolumeStep}"/><Run Text=":"/>
 			</TextBlock>
 			<xctk:DecimalUpDown x:Name="VolumeStep" TextAlignment="Right" Grid.Column="1" Grid.Row="10" Minimum="0" Increment="0.01" />
 

@@ -341,7 +341,7 @@ Str361;Identifier;Идентификатор
 Str362;Security name.;Название инструмента.
 Str363;Short name;Короткое название
 Str364;Short security name.;Короткое название инструмента.
-Str365;Volume step;Шаг объема
+VolumeStep;Volume step;Шаг объема
 Str366;Minimum volume step.;Минимальный шаг объема.
 LotVolume;Lot volume.;Объем лота.
 PriceStep;Price step;Шаг цены
@@ -480,7 +480,7 @@ Str542;Leverage;Плечо
 Str544;Stock exchange board, for which the current portfolio is active.;Биржевая площадка, для которой действует данный портфель.
 Str545;Anonymous account;Анонимный счет
 Str546;Security (shares, futures, options etc.).;Инструмент (акция, фьючерс, опцион и т.д.).
-Str547;Decimals;Точность
+Decimals;Decimals;Точность
 Str548;Number of digits in price after coma.;Количество знаков в цене после запятой.
 Str549;Stock exchange board where the security is traded.;Биржевая площадка, на которой торгуется инструмент.
 Str550;Underlying asset on which the current security is built.;Базовый актив, на основе которого построен данный инструмент.
