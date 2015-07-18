@@ -40,28 +40,95 @@ _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSou
 <section address="optionalAddress">
   <title>Графические компоненты S#</title>
   <content>
-    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, а так же бесплатная библиотека графических компонент для Wpf
+    <para>В состав <token>stocksharp</token> входит большое количество собственных графических компонент, а так же бесплатная библиотека для Wpf
     <externalLink>
 	<linkText>Xceed.Wpf.Toolkit</linkText>
 <linkAlternateText>Optional alternate text</linkAlternateText>
 <linkUri>http://wpftoolkit.codeplex.com/</linkUri>
 <linkTarget>_blank</linkTarget>
-</externalLink>. Собственные графические компоненты размещены в пространствах имен <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
-и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Условно компоненты можно разделить на следующие группы: </para>
-
+</externalLink>. Собственные графические компоненты размещены в пространствах имен 
+<codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
+и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Некоторые специфические компоненты находятся в пространствах имен коннекторов,
+ как например, комбинированный список <codeEntityReference qualifyHint="false">T:StockSharp.SmartCom.Xml.SmartComAddressComboBox</codeEntityReference> для выбора адреса сервера
+ <token>smartcom</token>.
+ </para>
+<para>
+ <token>stocksharp</token> имеет различные контролы для:
+</para>
 
 <list class="bullet">
-  <listItem><para>Для ввода поиска биржевой информации</para></listItem>
-  <listItem><para>Для отображения биржевой информации</para></listItem>
-  <listItem><para>Для построения графиков</para></listItem>
+  <listItem><para>поиска и выбора данных (инструментов, портфелей, адресов); </para></listItem>
+  <listItem><para>создания заявок; </para></listItem>
+  <listItem><para>отображения биржевой и другой информации (сделки, заявки, транзакции, стаканы, логи и т.д.);</para></listItem>
+  <listItem><para>построения графиков.</para></listItem>
 </list>
 
+
 <para>
-	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соотвествующих пространств имен. Как это сделать показано в следующем
-	 примере:
+	 Для доступа к графическим контролам <token>stocksharp</token> в коде XAML необходимо определить псевдонимы для соотвествующих пространств имен и использовать эти
+	 псевдонимы в коде XAML. Как это сделать показано в следующем примере:
 </para>
-	  <code language="C#">// обязательно нужно вызвать метод GuiSync, прежде чем обратиться к элементу окна 'Security' (это выпадающий список)
-_trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSource = _trader.Securities);</code>
+	  <code language="XAML">
+	  <![CDATA[
+<Window x:Class="SampleSmartSMA.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
+        xmlns:ss="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
+        xmlns:charting="http://schemas.stocksharp.com/xaml"
+        Title="{x:Static loc:LocalizedStrings.XamlStr570}" Height="700" Width="900">
+    
+    <Grid>
+		<Grid.RowDefinitions>
+			...............................
+		</Grid.RowDefinitions>
+			
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				...............................
+			</Grid.ColumnDefinitions>
+        	    <charting:Chart x:Name="_chart" Grid.Column="0" />
+			<Grid Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					...............................
+				</Grid.RowDefinitions>
+				
+					...............................
+					
+				<Label Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.XamlStr651}" />
+				<ss:SmartComAddressComboBox x:Name="Address" Grid.Column="1" Grid.Row="2" />
+
+                <TextBlock Grid.Column="0" Grid.Row="3">
+					<Run Text="{x:Static loc:LocalizedStrings.Account}"/><Run Text=":"/>
+				</TextBlock>
+                <sx:PortfolioComboBox x:Name="Portfolios" Grid.Column="1" Grid.Row="3" />
+
+					...............................
+
+			</Grid>
+		</Grid>
+		
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				...............................
+			</Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                ...............................
+            </Grid.RowDefinitions>
+
+			<sx:MyTradeGrid x:Name="_trades" Grid.Column="0" />
+			<sx:OrderGrid x:Name="_orders" Grid.Column="1" SelectionChanged="OrdersOrderSelected" />
+            <sx:LogControl x:Name="LogControl" Grid.Row="1" Grid.ColumnSpan="2"/>
+		</Grid>
+    </Grid>
+</Window>
+	]]>
+</code>
 
 <para>
 	 Ниже приведена таблица с описанием некоторых полезных графических компонент, входящих в состав <token>stocksharp</token>:
@@ -75,11 +142,66 @@ _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSou
     </row>
   </tableHeader>
   <row>
-    <entry><para>MonitorWindow</para></entry>
-    <entry><para>Компонент для отображения информации из логов</para></entry>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.Monitor</codeEntityReference></para></entry>
+    <entry><para>Компонент для мониторинга работы торговых стратегий.</para></entry>
   </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.LogControl</codeEntityReference></para></entry>
+    <entry><para>Компонент для отображения информации из логов.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.IndexSecurityWindow</codeEntityReference></para></entry>
+    <entry><para>Окно для редактирования параметров индексных инструментов.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.MarketDepthControl</codeEntityReference></para></entry>
+    <entry><para>Визуальный контрол, отображающий стакан с котировками.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.OptionDesk</codeEntityReference></para></entry>
+    <entry><para>Доска опционов.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.PortfolioComboBox</codeEntityReference></para></entry>
+    <entry><para>Выпадающий список для выбора портфеля.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.PortfolioGrid</codeEntityReference></para></entry>
+    <entry><para>Таблица, отображающая портфели и позиции.</para></entry>
+  </row>
+  <row>
+    <entry>
+    <para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.SecurityEditor</codeEntityReference></para>
+    <para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.SecurityPicker</codeEntityReference></para>
+    </entry>
+    <entry><para>Визуальные компоненты для поиска и выбора инструмента.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.Level1Grid</codeEntityReference></para></entry>
+    <entry><para>Таблица для отображения полей Level1.</para></entry>
+  </row>
+    <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.TradeGrid</codeEntityReference></para></entry>
+    <entry><para>Таблица, отображающая тиковые сделки.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.OrderGrid</codeEntityReference></para></entry>
+    <entry><para>Таблица, отображающая заявки.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xml.StatisticParameterGrid</codeEntityReference></para></entry>
+    <entry><para>Визуальная панель для статистики работы стратегии.</para></entry>
+  </row>
+  <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xaml.Charting.Chart</codeEntityReference></para></entry>
+    <entry><para>Графический компонент отображения графиков.</para></entry>
+  </row>
+   <row>
+    <entry><para><codeEntityReference qualifyHint="false">T:StockSharp.Xaml.Charting.EquityCurveChart</codeEntityReference></para></entry>
+    <entry><para>Графический компонент отображения кривой эквити.</para></entry>
+  </row>
+  
 </table>
-
  
   </content>
 </section>
