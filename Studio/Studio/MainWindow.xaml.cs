@@ -292,7 +292,7 @@ namespace StockSharp.Studio
 						.YesNo()
 						.Show();
 
-					if (res == MessageBoxResult.No)
+					if (res != MessageBoxResult.Yes)
 						return;
 
 					new LogInCommand().Process(this, true);

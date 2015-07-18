@@ -632,7 +632,7 @@ namespace StockSharp.Hydra
 						.Warning()
 						.Owner(this)
 						.YesNo()
-						.Show() == MessageBoxResult.No)
+						.Show() != MessageBoxResult.Yes)
 				{
 					StartStop.IsChecked = false;
 					return;
@@ -935,7 +935,7 @@ namespace StockSharp.Hydra
 						.YesNo()
 						.Show();
 
-			if (res == MessageBoxResult.No)
+			if (res != MessageBoxResult.Yes)
 				return;
 
 			_isReseting = true;

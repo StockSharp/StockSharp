@@ -171,7 +171,7 @@ namespace StockSharp.Studio.Controls
 						.YesNo()
 						.Show();
 
-					if (res == MessageBoxResult.No)
+					if (res != MessageBoxResult.Yes)
 						return;
 				}
 			}
