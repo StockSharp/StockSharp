@@ -42,10 +42,11 @@ namespace StockSharp.Localization
 		/// Get localized string.
 		/// </summary>
 		/// <param name="resourceId">Resource unique key.</param>
+		/// <param name="language">Language.</param>
 		/// <returns>Localized string.</returns>
-		public static string GetString(string resourceId)
+		public static string GetString(string resourceId, Languages? language = null)
 		{
-			return LocalizationHelper.DefaultManager.GetString(resourceId);
+			return LocalizationHelper.DefaultManager.GetString(resourceId, language);
 		}
 	}
 }

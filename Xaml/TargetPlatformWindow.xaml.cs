@@ -119,11 +119,9 @@ namespace StockSharp.Xaml
 			get { return LocalizedStrings.ActiveLanguage; }
 			private set
 			{
-				LocalizedStrings.ActiveLanguage = value;
-
-				HintLabel.Text = LocalizedStrings.XamlStr178;
-				AutoCheckBox.Content = LocalizedStrings.XamlStr176;
-				SelectPlatformLabel.Text = LocalizedStrings.SelectAppMode;
+				HintLabel.Text = LocalizedStrings.GetString(LocalizedStrings.XamlStr178Key, value);
+				AutoCheckBox.Content = LocalizedStrings.GetString(LocalizedStrings.XamlStr176Key, value);
+				SelectPlatformLabel.Text = LocalizedStrings.GetString(LocalizedStrings.SelectAppModeKey, value);
 			}
 		}
 
@@ -187,27 +185,27 @@ namespace StockSharp.Xaml
 			if (configFile.IsEmptyOrWhiteSpace() || !File.Exists(configFile))
 				return;
 
-			AppStartSettings settings;
+			//AppStartSettings settings;
 
-			if (File.ReadAllText(configFile).ContainsIgnoreCase("RefPair"))
-			{
-				var pair = new XmlSerializer<RefPair<Platforms, bool>>().Deserialize(configFile);
+			//if (File.ReadAllText(configFile).ContainsIgnoreCase("RefPair"))
+			//{
+			//	var pair = new XmlSerializer<RefPair<Platforms, bool>>().Deserialize(configFile);
 
-				settings = new AppStartSettings
-				{
-					Platform = pair.First,
-					AutoStart = pair.Second,
-					Language = Languages.Russian
-				};
-			}
-			else
-			{
-				settings = new XmlSerializer<AppStartSettings>().Deserialize(configFile);
-			}
+			//	settings = new AppStartSettings
+			//	{
+			//		Platform = pair.First,
+			//		AutoStart = pair.Second,
+			//		Language = Languages.Russian
+			//	};
+			//}
+			//else
+			//{
+			var settings = new XmlSerializer<AppStartSettings>().Deserialize(configFile);
+			//}
 
 			SelectedPlatform = PlatformCheckBox.IsEnabled ? settings.Platform : Platforms.x86;
 			AutoStart = settings.AutoStart;
-			SelectedLanguage = settings.Language;
+			LocalizedStrings.ActiveLanguage = SelectedLanguage = settings.Language;
 
 			UpdateLangButtons();
 			UpdatePlatformCheckBox();
@@ -268,6 +266,8 @@ namespace StockSharp.Xaml
 		{
 			//if (!AutoStart)
 			//	SelectedPlatform = Platforms.x64;
+
+			LocalizedStrings.ActiveLanguage = SelectedLanguage;
 
 			Save();
 
