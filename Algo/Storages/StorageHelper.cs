@@ -270,6 +270,9 @@ namespace StockSharp.Algo.Storages
 				{
 					var metaInfo = storage.GetMetaInfo(date.Date);
 
+					if (metaInfo == null)
+						continue;
+
 					if (metaInfo.FirstTime >= date.UtcDateTime && range.Max.Date != range.Min.Date)
 					{
 						storage.Delete(date.Date);
