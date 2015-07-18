@@ -235,13 +235,15 @@
 
 				if (activeWnd != null)
 					activeWnd.Activate();
-
-				DriveCache.Instance.NewDriveCreated += s => { lock (_timerSync) _needToSave = true; };
-				DatabaseConnectionCache.Instance.NewConnectionCreated += c => { lock (_timerSync) _needToSave = true; };
 			}
 			catch (Exception ex)
 			{
 				ex.LogError();
+			}
+			finally
+			{
+				DriveCache.Instance.NewDriveCreated += s => { lock (_timerSync) _needToSave = true; };
+				DatabaseConnectionCache.Instance.NewConnectionCreated += c => { lock (_timerSync) _needToSave = true; };
 			}
 		}
 
@@ -306,6 +308,8 @@
 		protected override void DisposeManaged()
 		{
 			GuiDispatcher.GlobalDispatcher.RemovePeriodicalAction(_timerToken);
+
+			_needToSave = true;
 			Save();
 
 			base.DisposeManaged();
