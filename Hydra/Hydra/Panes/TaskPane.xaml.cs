@@ -679,11 +679,25 @@ namespace StockSharp.Hydra.Panes
 		}
 	}
 
-	class PriceStepToImageConvertor : IValueConverter
+	class EmptyFieldToImageConvertor : IValueConverter
 	{
 		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var sec = (decimal?)value;
+			var dec = (decimal?)value;
+			return dec == null || dec == 0 ? Visibility.Visible : Visibility.Collapsed;
+		}
+
+		object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			throw new NotSupportedException();
+		}
+	}
+
+	class DecimalsToImageConvertor : IValueConverter
+	{
+		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			var sec = (int?)value;
 			return sec == null ? Visibility.Visible : Visibility.Collapsed;
 		}
 

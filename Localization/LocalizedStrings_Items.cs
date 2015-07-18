@@ -53033,19 +53033,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Price step is zero.
-		/// </summary>
-		public const string XamlStr843Key = "XamlStr843";
-
-		/// <summary>
-		/// Price step is zero.
-		/// </summary>
-		public static string XamlStr843
-		{
-			get { return GetString(XamlStr843Key); }
-		}
-
-		/// <summary>
 		/// Equity from
 		/// </summary>
 		public const string XamlStr846Key = "XamlStr846";
@@ -53719,6 +53706,19 @@ namespace StockSharp.Localization
 		public static string TimeFormat
 		{
 			get { return GetString(TimeFormatKey); }
+		}
+
+		/// <summary>
+		/// Decimals not filled.
+		/// </summary>
+		public const string DecimalsNotFilledKey = "DecimalsNotFilled";
+
+		/// <summary>
+		/// Decimals not filled.
+		/// </summary>
+		public static string DecimalsNotFilled
+		{
+			get { return GetString(DecimalsNotFilledKey); }
 		}
 	}
 }

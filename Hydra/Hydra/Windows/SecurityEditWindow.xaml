@@ -3,7 +3,9 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
-        Title="{x:Static loc:LocalizedStrings.Str2922}" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="{x:Static loc:LocalizedStrings.Str2922}"
+		ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
 
 	<Window.Resources>
 		<Style TargetType="{x:Type TextBlock}">
@@ -20,9 +22,11 @@
 		<Grid Margin="5,6,5,4">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition MinWidth="188" Width="Auto" />
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="5" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="5" />
 				<RowDefinition Height="Auto" />
@@ -41,34 +45,39 @@
 			</Grid.RowDefinitions>
 
 			<TextBlock Height="23"><Run Text="{x:Static loc:LocalizedStrings.Code}" />:</TextBlock>
-			<TextBox x:Name="Code" Grid.Row="0" Grid.Column="1" Width="188" Height="23" IsReadOnly="True" />
+			<TextBox x:Name="Code" Grid.Row="0" Grid.Column="1" IsReadOnly="True" />
 
 			<TextBlock Height="23" Grid.Row="2" Grid.Column="0">
 				<Run Text="{x:Static loc:LocalizedStrings.Name}" />:
 			</TextBlock>
-			<TextBox x:Name="SecName" Height="23" Width="188" Grid.Column="1" Grid.Row="2" />
+			<TextBox x:Name="SecName" Grid.Column="1" Grid.Row="2" />
 
 			<TextBlock Height="23" Grid.Row="6" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.PriceStep}"/>:
+				<Run Text="{x:Static loc:LocalizedStrings.Str547}"/>:
 			</TextBlock>
-			<TextBox x:Name="PriceStep" TextAlignment="Right" Width="188" Height="23" Grid.Column="1" Grid.Row="6" />
+			<xctk:IntegerUpDown x:Name="Decimals" TextAlignment="Right" Grid.Column="1" Grid.Row="6" Minimum="0" />
 
 			<TextBlock Height="23" Grid.Row="8" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.Str365}"/><Run Text=":"/>
+				<Run Text="{x:Static loc:LocalizedStrings.PriceStep}"/>:
 			</TextBlock>
-			<TextBox x:Name="VolumeStep" TextAlignment="Right" Width="188" Height="23" Grid.Column="1" Grid.Row="8" />
+			<xctk:DecimalUpDown x:Name="PriceStep" TextAlignment="Right" Grid.Column="1" Grid.Row="8" Minimum="0" Increment="0.01" />
 
 			<TextBlock Height="23" Grid.Row="10" Grid.Column="0">
-				<Run Text="{x:Static loc:LocalizedStrings.Board}"/>:
+				<Run Text="{x:Static loc:LocalizedStrings.Str365}"/><Run Text=":"/>
 			</TextBlock>
-			<sx:ExchangeBoardComboBox x:Name="ExchangeCtrl" Width="188" Height="23" Grid.Column="1" Grid.Row="10" IsEnabled="False" />
+			<xctk:DecimalUpDown x:Name="VolumeStep" TextAlignment="Right" Grid.Column="1" Grid.Row="10" Minimum="0" Increment="0.01" />
 
 			<TextBlock Height="23" Grid.Row="12" Grid.Column="0">
+				<Run Text="{x:Static loc:LocalizedStrings.Board}"/>:
+			</TextBlock>
+			<sx:ExchangeBoardComboBox x:Name="ExchangeCtrl" Grid.Column="1" Grid.Row="12" IsEnabled="False" />
+
+			<TextBlock Height="23" Grid.Row="14" Grid.Column="0">
 				<Run Text="{x:Static loc:LocalizedStrings.Type}"/><Run Text=":"/>
 			</TextBlock>
-			<sx:SecurityTypeComboBox x:Name="TypeCtrl" Width="188" Height="23" Grid.Column="1" Grid.Row="12" />
+			<sx:SecurityTypeComboBox x:Name="TypeCtrl" Grid.Column="1" Grid.Row="14" />
 
-			<Button x:Name="Ok" Content="OK" IsDefault="True" Click="OkClick" Height="23" VerticalAlignment="Top" HorizontalAlignment="Right" Width="90" Grid.Column="1" Grid.Row="14" />
+			<Button x:Name="Ok" Content="OK" IsDefault="True" Click="OkClick" HorizontalAlignment="Right" Width="90" Grid.Column="1" Grid.Row="16" />
 		</Grid>
 	</Grid>
 </Window>

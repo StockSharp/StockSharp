@@ -56,8 +56,9 @@ namespace StockSharp.Hydra.Windows
 
 				Code.Text = value.Code;
 				SecName.Text = value.Name;
-				VolumeStep.Text = value.VolumeStep.To<string>();
-				PriceStep.Text = value.PriceStep.To<string>();
+				VolumeStep.Value = value.VolumeStep;
+				PriceStep.Value = value.PriceStep;
+				Decimals.Value = value.Decimals;
 				ExchangeCtrl.SelectedBoard = value.Board;
 				TypeCtrl.SelectedType = value.Type;
 
@@ -97,8 +98,9 @@ namespace StockSharp.Hydra.Windows
 
 				var firstSecurity = value.First();
 
-				VolumeStep.Text = value.All(s => s.VolumeStep == firstSecurity.VolumeStep) ? firstSecurity.VolumeStep.To<string>() : string.Empty;
-				PriceStep.Text = value.All(s => s.PriceStep == firstSecurity.PriceStep) ? firstSecurity.PriceStep.To<string>() : string.Empty;
+				VolumeStep.Value = value.All(s => s.VolumeStep == firstSecurity.VolumeStep) ? firstSecurity.VolumeStep : null;
+				PriceStep.Value = value.All(s => s.PriceStep == firstSecurity.PriceStep) ? firstSecurity.PriceStep : null;
+				Decimals.Value = value.All(s => s.Decimals == firstSecurity.Decimals) ? firstSecurity.Decimals : null;
 				ExchangeCtrl.SelectedBoard = value.All(s => s.Board == firstSecurity.Board) ? firstSecurity.Board : null;
 				TypeCtrl.SelectedType = value.All(s => s.Type == firstSecurity.Type) ? firstSecurity.Type : null;
 			}
@@ -115,8 +117,9 @@ namespace StockSharp.Hydra.Windows
 
 		private void OkClick(object sender, RoutedEventArgs e)
 		{
-			var volumeStep = VolumeStep.Text.To<decimal?>();
-			var priceStep = PriceStep.Text.To<decimal?>();
+			var volumeStep = VolumeStep.Value;
+			var priceStep = PriceStep.Value;
+			var decimals = Decimals.Value;
 			var type = TypeCtrl.SelectedType;
 
 			if (Securities == null)
@@ -127,21 +130,21 @@ namespace StockSharp.Hydra.Windows
 					return;
 				}
 
-				//if (SecName.Text.IsEmpty())
-				//{
-				//	ShowError("Не заполнено название инструмента.");
-				//	return;
-				//}
-
-				if (volumeStep == null)
+				if (decimals == null)
 				{
-					ShowError(LocalizedStrings.Str2924);
+					ShowError(LocalizedStrings.DecimalsNotFilled);
 					return;
 				}
 
-				if (priceStep == null)
+				if (priceStep == null || priceStep == 0)
 				{
 					ShowError(LocalizedStrings.Str2925);
+					return;
+				}
+
+				if (volumeStep == null || volumeStep == 0)
+				{
+					ShowError(LocalizedStrings.Str2924);
 					return;
 				}
 
@@ -158,8 +161,9 @@ namespace StockSharp.Hydra.Windows
 				if (!SecName.Text.IsEmpty())
 					security.Name = SecName.Text;
 
-				security.VolumeStep = volumeStep.Value;
-				security.PriceStep = priceStep.Value;
+				security.VolumeStep = volumeStep;
+				security.PriceStep = priceStep;
+				security.Decimals = decimals;
 				security.Board = ExchangeCtrl.SelectedBoard;
 				security.Type = TypeCtrl.SelectedType;
 
@@ -195,6 +199,9 @@ namespace StockSharp.Hydra.Windows
 
 					if (priceStep != null)
 						security.PriceStep = priceStep.Value;
+
+					if (decimals != null)
+						security.Decimals = decimals.Value;
 
 					if (type != null)
 						security.Type = type.Value;

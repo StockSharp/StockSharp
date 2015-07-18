@@ -144,7 +144,8 @@
 			</Style.Triggers>
 		</Style>
 
-		<panes:PriceStepToImageConvertor x:Key="PriceStepToImageConvertor" />
+		<panes:EmptyFieldToImageConvertor x:Key="EmptyFieldToImageConvertor" />
+		<panes:DecimalsToImageConvertor x:Key="DecimalsToImageConvertor" />
 		<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseVisibilityValue="Hidden" />
 
 		<Style x:Key="TextCenterStyle" TargetType="TextBlock">
@@ -191,18 +192,24 @@
 
 		<ug:UniversalGrid x:Name="SecuritiesCtrl" Grid.ColumnSpan="17" Grid.Row="0" SelectionMode="Extended" MouseDoubleClick="HandleDoubleClick" SelectionChanged="SecuritiesCtrl_OnSelectionChanged">
 			<ug:UniversalGrid.Columns>
-				<DataGridTemplateColumn Width="50">
+				<DataGridTemplateColumn Width="70">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<Grid Margin="5,0,5,0">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition />
-									<ColumnDefinition Width="5" />
+									<ColumnDefinition Width="2" />
+									<ColumnDefinition />
+									<ColumnDefinition Width="2" />
+									<ColumnDefinition />
+									<ColumnDefinition Width="2" />
 									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
 
 								<ex:BmpImage Grid.Column="0" ToolTip="{x:Static loc:LocalizedStrings.XamlStr344}" Source="pack://application:,,,/StockSharp.Xaml;component/Images/Warning_16x16.png" Visibility="{Binding Path=IsInvalid, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<ex:BmpImage Grid.Column="2" ToolTip="{x:Static loc:LocalizedStrings.XamlStr843}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.PriceStep, Converter={StaticResource PriceStepToImageConvertor}}" />
+								<ex:BmpImage Grid.Column="2" ToolTip="{x:Static loc:LocalizedStrings.Str2925}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.PriceStep, Converter={StaticResource EmptyFieldToImageConvertor}}" />
+								<ex:BmpImage Grid.Column="4" ToolTip="{x:Static loc:LocalizedStrings.DecimalsNotFilled}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.Decimals, Converter={StaticResource DecimalsToImageConvertor}}" />
+								<ex:BmpImage Grid.Column="6" ToolTip="{x:Static loc:LocalizedStrings.Str2924}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.VolumeStep, Converter={StaticResource EmptyFieldToImageConvertor}}" />
 							</Grid>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
