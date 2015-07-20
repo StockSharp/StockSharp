@@ -67,7 +67,7 @@ namespace StockSharp.Algo.Storages
 						var dates = InteropHelper
 							.GetDirectories(_path)
 							.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
-							.Select(dir => IOPath.GetFileName(dir).ToDateTime(_dateFormat));
+							.Select(dir => IOPath.GetFileName(dir).ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc));
 
 						foreach (var date in dates)
 							retVal.Add(date, date);

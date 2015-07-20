@@ -209,8 +209,8 @@ namespace StockSharp.Algo.Storages
 		private static readonly MemberProxy _setSecurityId;
 		private static readonly MemberProxy _setExecutionType;
 		private static readonly FastInvoker<VoidType, VoidType, TData> _ctor;
-		private const string _timeFormatMcs = "HHmmssffffff zzz";
-		private const string _timeFormatSec = "HHmmss zzz";
+		private const string _timeFormatMcs = "HHmmssffffff";
+		private const string _timeFormatSec = "HHmmss";
 		private static readonly string _timeFormat;
 		private static readonly SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]> _info = new SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]>();
 		private static readonly bool _isLevel1 = typeof(TData) == typeof(Level1ChangeMessage);
@@ -220,7 +220,8 @@ namespace StockSharp.Algo.Storages
 
 		static CsvMarketDataSerializer()
 		{
-			_timeFormat = GetTimeFormat();
+			_timeFormat = (typeof(TData).IsSubclassOf(typeof(CandleMessage)) || typeof(TData) == typeof(NewsMessage))
+				? _timeFormatSec : _timeFormatMcs;
 
 			if (typeof(TData) == typeof(ExecutionMessage) || typeof(TData).IsSubclassOf(typeof(CandleMessage)))
 				_setSecurityId = MemberProxy.Create(typeof(TData), "SecurityId");
@@ -256,12 +257,12 @@ namespace StockSharp.Algo.Storages
 			if (typeof(TData) == typeof(QuoteChangeMessage))
 				return;
 
-			_format = GetFormat(executionType).Put(_timeFormat);
-
-			var timeFormat = ":" + _timeFormat;
+			_format = GetFormat(executionType).Replace(":{0}", ".UtcDateTime:" + _timeFormat);
 
 			if (_isLevel1)
 				return;
+
+			var timeFormat = ":" + _timeFormat;
 
 			_members = _info.SafeAdd(Tuple.Create(typeof(TData), executionType), key =>
 				_format
@@ -281,9 +282,9 @@ namespace StockSharp.Algo.Storages
 				switch (executionType)
 				{
 					case ExecutionTypes.Tick:
-						return "{{ServerTime:{0}}};{{TradeId}};{{TradePrice}};{{Volume}};{{OriginSide}};{{OpenInterest}}";
+						return "{ServerTime:{0}};{TradeId};{TradePrice};{Volume};{OriginSide};{OpenInterest}";
 					case ExecutionTypes.OrderLog:
-						return "{{ServerTime:{0}}};{{IsSystem}};{{OrderId}};{{Price}};{{Volume}};{{Side}};{{OrderState}};{{TimeInForce}};{{TradeId}};{{TradePrice}};{{PortfolioName}}";
+						return "{ServerTime:{0}};{IsSystem};{OrderId};{Price};{Volume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice};{PortfolioName}";
 					case null:
 						throw new ArgumentNullException("executionType");
 					default:
@@ -292,7 +293,7 @@ namespace StockSharp.Algo.Storages
 			}
 			
 			if (typeof(TData) == typeof(TimeQuoteChange))
-				return "{{ServerTime:{0}}};{{Price}};{{Volume}};{{Side}}";
+				return "{ServerTime:{0}};{Price};{Volume};{Side}";
 
 			if (typeof(TData) == typeof(Level1ChangeMessage))
 			{
@@ -305,33 +306,27 @@ namespace StockSharp.Algo.Storages
 						case Level1Fields.BestAskTime:
 						case Level1Fields.BestBidTime:
 						case Level1Fields.LastTradeTime:
-							time = ":" + _timeFormatMcs;
+							time = ".UtcDateTime:" + _timeFormatMcs;
 							break;
 					}
 
 					return "{" + s + time + "}";
 				}).Join(";");
 
-				return "{{ServerTime:{0}}};" + "{{Changes:{0}}}".Put(fields);
+				return "{ServerTime:{0}};" + "{{Changes:{0}}}".Put(fields);
 			}
 
 			if (typeof(TData).IsSubclassOf(typeof(CandleMessage)))
-				return "{{OpenTime:{0}}};{{OpenPrice}};{{HighPrice}};{{LowPrice}};{{ClosePrice}};{{TotalVolume}}";
+				return "{OpenTime:{0}};{OpenPrice};{HighPrice};{LowPrice};{ClosePrice};{TotalVolume}";
 
 			if (typeof(TData) == typeof(NewsMessage))
 			{
 				// NewsMessage.Story do not supported
-				// TODO ;{{SecurityId.Value.SecurityCode}}
-				return "{{ServerTime:{0}}};{{Headline}};{{Source}};{{Url}};{{Id}};{{BoardCode}}";
+				// TODO ;{SecurityId.Value.SecurityCode}
+				return "{ServerTime:{0}};{Headline};{Source};{Url};{Id};{BoardCode}";
 			}
 
 			throw new InvalidOperationException(LocalizedStrings.Str888Params.Put(typeof(TData).Name));
-		}
-
-		private static string GetTimeFormat()
-		{
-			return (typeof(TData).IsSubclassOf(typeof(CandleMessage)) || typeof(TData) == typeof(NewsMessage))
-				? _timeFormatSec : _timeFormatMcs;
 		}
 
 		public virtual IMarketDataMetaInfo CreateMetaInfo(DateTime date)
@@ -387,8 +382,7 @@ namespace StockSharp.Algo.Storages
 
 		private static DateTimeOffset ParseTime(string str, DateTime date)
 		{
-			var dto = str.ToDateTimeOffset(_timeFormat);
-			return (date + dto.TimeOfDay).ApplyTimeZone(dto.Offset);
+			return (date + str.ToDateTime(_timeFormat).TimeOfDay).ChangeKind(DateTimeKind.Utc);
 		}
 	}
 }
