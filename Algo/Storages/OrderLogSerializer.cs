@@ -297,11 +297,11 @@ namespace StockSharp.Algo.Storages
 
 				writer.Write(!isEmptyPf);
 
-				if (isEmptyPf)
-					continue;
-
-				metaInfo.Portfolios.TryAdd(item.PortfolioName);
-				writer.WriteInt(metaInfo.Portfolios.IndexOf(item.PortfolioName));
+				if (!isEmptyPf)
+				{
+					metaInfo.Portfolios.TryAdd(item.PortfolioName);
+					writer.WriteInt(metaInfo.Portfolios.IndexOf(item.PortfolioName));	
+				}
 
 				if (metaInfo.Version < MarketDataVersions.Version51)
 					continue;

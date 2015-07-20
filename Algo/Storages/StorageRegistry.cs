@@ -818,9 +818,6 @@ namespace StockSharp.Algo.Storages
 			if (security == null)
 				throw new ArgumentNullException("security");
 
-			if (arg == null)
-				throw new ArgumentNullException("arg");
-
 			if (arg.IsNull(true))
 				throw new ArgumentNullException("arg", LocalizedStrings.EmptyCandleArg);
 
