@@ -83,6 +83,7 @@
       <content>
         <para><link xlink:href="eca7454c-0532-4aaf-92bf-7a3d0cba635b">Логирование Strategy</link></para>
         <para><link xlink:href="9619f1db-064f-421f-967e-4c15a5b0aa71">Логирование IConnector</link></para>
+        <para><link xlink:href="f9e75266-8f0e-4983-8319-7a41d53e0f39">Другие источники логов</link></para>
         <para><link xlink:href="1bed8343-9171-49ce-8259-f44007e01a78">Визуальный мониторинг</link></para>
         <para><link xlink:href="a711d06d-9d1d-40b8-89bf-ee62d817a878">Создание ILogListener</link></para>
       </content>

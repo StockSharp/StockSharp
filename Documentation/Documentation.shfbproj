@@ -24,54 +24,55 @@
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Alerts\Alerts.csproj" />
-<DocumentationSource sourceFile="..\Connectors\AlfaDirect\AlfaDirect.csproj" />
-<DocumentationSource sourceFile="..\Algo\Algo.csproj" />
-<DocumentationSource sourceFile="..\Connectors\BitStamp\BitStamp.csproj" />
-<DocumentationSource sourceFile="..\Connectors\Btce\Btce.csproj" />
-<DocumentationSource sourceFile="..\BusinessEntities\BusinessEntities.csproj" />
-<DocumentationSource sourceFile="..\Community\Community.csproj" />
-<DocumentationSource sourceFile="..\Hydra\Core\CorePublic.csproj" />
-<DocumentationSource sourceFile="..\Connectors\CQG\CQG.csproj" />
-<DocumentationSource sourceFile="..\References\Ecng\Ecng.Common.dll" />
-<DocumentationSource sourceFile="..\References\Ecng\Ecng.ComponentModel.dll" />
-<DocumentationSource sourceFile="..\References\Ecng\Ecng.Serialization.dll" />
-<DocumentationSource sourceFile="..\Connectors\ETrade\ETrade.csproj" />
-<DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj" />
-<DocumentationSource sourceFile="..\Connectors\IQFeed\IQFeed.csproj" />
-<DocumentationSource sourceFile="..\Connectors\LMAX\LMAX.csproj" />
-<DocumentationSource sourceFile="..\Localization\Localization.csproj" />
-<DocumentationSource sourceFile="..\Logging\Logging.csproj" />
-<DocumentationSource sourceFile="..\Connectors\MatLab\MatLab.csproj" />
-<DocumentationSource sourceFile="..\Messages\Messages.csproj" />
-<DocumentationSource sourceFile="..\Connectors\Oanda\Oanda.csproj" />
-<DocumentationSource sourceFile="..\Connectors\OpenECry\OpenECry.csproj" />
-<DocumentationSource sourceFile="Comments\project.xml" />
-<DocumentationSource sourceFile="..\Connectors\Quik\Quik.csproj" />
-<DocumentationSource sourceFile="..\Connectors\Rss\Rss.csproj" />
-<DocumentationSource sourceFile="..\Connectors\SmartCom\SmartCom.csproj" />
-<DocumentationSource sourceFile="..\Connectors\Sterling\Sterling.csproj" />
-<DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.dll" />
-<DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.xml" />
-<DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.dll" />
-<DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.xml" />
-<DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.dll" />
-<DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.xml" />
-<DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.dll" />
-<DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.xml" />
-<DocumentationSource sourceFile="..\References\StockSharp.Licensing.dll" />
-<DocumentationSource sourceFile="..\References\StockSharp.Licensing.xml" />
-<DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.dll" />
-<DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.xml" />
-<DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.dll" />
-<DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.xml" />
-<DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.dll" />
-<DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.xml" />
-<DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.dll" />
-<DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.xml" />
-<DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll" />
-<DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.xml" />
-<DocumentationSource sourceFile="..\Connectors\Transaq\Transaq.csproj" />
-<DocumentationSource sourceFile="..\Xaml\Xaml.csproj" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\Connectors\AlfaDirect\AlfaDirect.csproj" />
+      <DocumentationSource sourceFile="..\Algo\Algo.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\BitStamp\BitStamp.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\Btce\Btce.csproj" />
+      <DocumentationSource sourceFile="..\BusinessEntities\BusinessEntities.csproj" />
+      <DocumentationSource sourceFile="..\Community\Community.csproj" />
+      <DocumentationSource sourceFile="..\Hydra\Core\CorePublic.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\CQG\CQG.csproj" />
+      <DocumentationSource sourceFile="..\References\Ecng\Ecng.Common.dll" />
+      <DocumentationSource sourceFile="..\References\Ecng\Ecng.ComponentModel.dll" />
+      <DocumentationSource sourceFile="..\References\Ecng\Ecng.Serialization.dll" />
+      <DocumentationSource sourceFile="..\Connectors\ETrade\ETrade.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\IQFeed\IQFeed.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\LMAX\LMAX.csproj" />
+      <DocumentationSource sourceFile="..\Localization\Localization.csproj" />
+      <DocumentationSource sourceFile="..\Logging\Logging.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\MatLab\MatLab.csproj" />
+      <DocumentationSource sourceFile="..\Messages\Messages.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\Oanda\Oanda.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\OpenECry\OpenECry.csproj" />
+      <DocumentationSource sourceFile="Comments\project.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Quik\Quik.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\Rss\Rss.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\SmartCom\SmartCom.csproj" />
+      <DocumentationSource sourceFile="..\Connectors\Sterling\Sterling.csproj" />
+      <DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.dll" />
+      <DocumentationSource sourceFile="..\Algo.History\StockSharp.Algo.History.xml" />
+      <DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.dll" />
+      <DocumentationSource sourceFile="..\Algo.Strategies\StockSharp.Algo.Strategies.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Blackwood\StockSharp.Blackwood.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Fix\StockSharp.Fix.xml" />
+      <DocumentationSource sourceFile="..\References\StockSharp.Licensing.dll" />
+      <DocumentationSource sourceFile="..\References\StockSharp.Licensing.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Micex\StockSharp.Micex.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Plaza\StockSharp.Plaza.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.dll" />
+      <DocumentationSource sourceFile="..\Connectors\Rithmic\StockSharp.Rithmic.xml" />
+      <DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.dll" />
+      <DocumentationSource sourceFile="..\Xaml.Charting\StockSharp.Xaml.Charting.xml" />
+      <DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.dll" />
+      <DocumentationSource sourceFile="..\Xaml.Diagram\StockSharp.Xaml.Diagram.xml" />
+      <DocumentationSource sourceFile="..\Connectors\Transaq\Transaq.csproj" />
+      <DocumentationSource sourceFile="..\Xaml\Xaml.csproj" />
+    </DocumentationSources>
     <CopyrightHref>http://stocksharp.com</CopyrightHref>
     <CopyrightText>&amp;#169%3b 2015 - StockSharp LLC</CopyrightText>
     <FeedbackEMailAddress>info%40stocksharp.com</FeedbackEMailAddress>
@@ -151,6 +152,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\AppLogging.aml" />
     <None Include="Topics\FixNews.aml" />
     <None Include="Topics\FixStopOrders.aml" />
     <None Include="Topics\BitStampSample.aml" />
@@ -1347,6 +1349,10 @@
     <Image Include="Art\sample_candleschart.png">
       <ImageId>sample_candleschart</ImageId>
       <AlternateText>sample candleschart</AlternateText>
+    </Image>
+    <Image Include="Art\sample_logging.png">
+      <ImageId>sample_logging</ImageId>
+      <AlternateText>sample logging</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
