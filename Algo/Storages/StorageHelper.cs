@@ -262,29 +262,34 @@ namespace StockSharp.Algo.Storages
 
 			var info = (IMarketDataStorageInfo)storage;
 
-			var max = range.Max.Date.EndOfDay();
+			var min = range.Min.UtcDateTime;
+			var max = range.Max.UtcDateTime.EndOfDay();
 
-			for (var date = range.Min; date <= max; date = date.AddDays(1))
+			for (var date = min; date <= max; date = date.AddDays(1))
 			{
-				if (date == range.Min)
+				if (date == min)
 				{
 					var metaInfo = storage.GetMetaInfo(date.Date);
 
 					if (metaInfo == null)
 						continue;
 
-					if (metaInfo.FirstTime >= date.UtcDateTime && range.Max.Date != range.Min.Date)
+					if (metaInfo.FirstTime >= date && max.Date != min.Date)
 					{
 						storage.Delete(date.Date);
 					}
 					else
 					{
 						var data = storage.Load(date.Date).Cast<object>().ToList();
-						data.RemoveWhere(d => info.GetTime(d) < range.Min);
+						data.RemoveWhere(d =>
+						{
+							var time = info.GetTime(d);
+							return time < min || time > range.Max;
+						});
 						storage.Delete(data);
 					}
 				}
-				else if (date.Date < range.Max.Date)
+				else if (date.Date < max.Date)
 					storage.Delete(date.Date);
 				else
 				{
