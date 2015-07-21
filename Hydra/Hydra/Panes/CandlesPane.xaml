@@ -11,7 +11,7 @@
 				xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml">
 	
 	<DockPanel>
-		<controls:ExportProgress x:Name="Progress" Height="23" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
+		<controls:ExportProgress x:Name="Progress" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
 
 		<Grid x:Name="MainGrid">
 			<Grid.ColumnDefinitions>

@@ -8,7 +8,7 @@
 				xmlns:controls="clr-namespace:StockSharp.Hydra.Controls"
 				xmlns:panes="clr-namespace:StockSharp.Hydra.Panes">
 	<DockPanel>
-		<controls:ExportProgress x:Name="Progress" Height="23" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
+		<controls:ExportProgress x:Name="Progress" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
 
 		<Grid x:Name="MainGrid">
 			<Grid.ColumnDefinitions>
