@@ -209,9 +209,7 @@ namespace StockSharp.Algo.Storages
 		private static readonly MemberProxy _setSecurityId;
 		private static readonly MemberProxy _setExecutionType;
 		private static readonly FastInvoker<VoidType, VoidType, TData> _ctor;
-		private const string _timeFormatMcs = "HHmmssffffff";
-		private const string _timeFormatSec = "HHmmss";
-		private static readonly string _timeFormat;
+		private const string _timeFormat = "HHmmssffffff";
 		private static readonly SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]> _info = new SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]>();
 		private static readonly bool _isLevel1 = typeof(TData) == typeof(Level1ChangeMessage);
 		private static readonly Level1Fields[] _level1Fields = _isLevel1 ? Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray() : null;
@@ -220,9 +218,6 @@ namespace StockSharp.Algo.Storages
 
 		static CsvMarketDataSerializer()
 		{
-			_timeFormat = (typeof(TData).IsSubclassOf(typeof(CandleMessage)) || typeof(TData) == typeof(NewsMessage))
-				? _timeFormatSec : _timeFormatMcs;
-
 			if (typeof(TData) == typeof(ExecutionMessage) || typeof(TData).IsSubclassOf(typeof(CandleMessage)))
 				_setSecurityId = MemberProxy.Create(typeof(TData), "SecurityId");
 
@@ -262,7 +257,7 @@ namespace StockSharp.Algo.Storages
 			if (_isLevel1)
 				return;
 
-			var timeFormat = ":" + _timeFormat;
+			const string timeFormat = ":" + _timeFormat;
 
 			_members = _info.SafeAdd(Tuple.Create(typeof(TData), executionType), key =>
 				_format
@@ -282,7 +277,7 @@ namespace StockSharp.Algo.Storages
 				switch (executionType)
 				{
 					case ExecutionTypes.Tick:
-						return "{ServerTime:{0}};{TradeId};{TradePrice};{Volume};{OriginSide};{OpenInterest}";
+						return "{ServerTime:{0}};{TradeId};{TradePrice};{Volume};{OriginSide};{OpenInterest};{IsSystem}";
 					case ExecutionTypes.OrderLog:
 						return "{ServerTime:{0}};{IsSystem};{OrderId};{Price};{Volume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice};{PortfolioName}";
 					case null:
@@ -306,7 +301,7 @@ namespace StockSharp.Algo.Storages
 						case Level1Fields.BestAskTime:
 						case Level1Fields.BestBidTime:
 						case Level1Fields.LastTradeTime:
-							time = ".UtcDateTime:" + _timeFormatMcs;
+							time = ".UtcDateTime:" + _timeFormat;
 							break;
 					}
 
