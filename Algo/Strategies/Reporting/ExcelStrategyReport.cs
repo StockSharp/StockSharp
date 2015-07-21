@@ -375,7 +375,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					}
 				}
 
-				worker.Save(FileName);
+				worker.Save(FileName, true);
 			}
 		}
 	}

@@ -460,7 +460,7 @@ namespace StockSharp.Algo.Export
 			using (var worker = new ExcelWorker())
 			{
 				action(worker);
-				worker.Save(Path);
+				worker.Save(Path, false);
 			}
 		}
 
