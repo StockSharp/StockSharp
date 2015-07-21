@@ -76,7 +76,7 @@
         <member name="F:NPOI.OpenXml4Net.OPC.EncryptionOption.NONE">
             No encryption. 
         </member>
-        <!-- Badly formed XML comment ignored for member "T:NPOI.OpenXml4Net.OPC.Internal.ContentType" -->
+        <!-- 对于成员“T:NPOI.OpenXml4Net.OPC.Internal.ContentType”忽略有格式错误的 XML 注释 -->
         <member name="F:NPOI.OpenXml4Net.OPC.Internal.ContentType.type">
             Type in Type/Subtype.
         </member>
@@ -129,7 +129,7 @@
         <member name="F:NPOI.OpenXml4Net.OPC.Internal.ContentTypeManager.container">
             Reference to the package using this content type manager.
         </member>
-        <!-- Badly formed XML comment ignored for member "F:NPOI.OpenXml4Net.OPC.Internal.ContentTypeManager.defaultContentType" -->
+        <!-- 对于成员“F:NPOI.OpenXml4Net.OPC.Internal.ContentTypeManager.defaultContentType”忽略有格式错误的 XML 注释 -->
         <member name="F:NPOI.OpenXml4Net.OPC.Internal.ContentTypeManager.overrideContentType">
             Override content type tree.
         </member>
@@ -1324,8 +1324,8 @@
         <member name="M:NPOI.OpenXml4Net.OPC.Internal.PackagePropertiesPart.SetStringValue(System.String)">
             Convert a strig value into a String
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.OpenXml4Net.OPC.Internal.PackagePropertiesPart.SetDateValue(System.String)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.OpenXml4Net.OPC.Internal.PackagePropertiesPart.GetDateValue(System.Nullable{System.DateTime})" -->
+        <!-- 对于成员“M:NPOI.OpenXml4Net.OPC.Internal.PackagePropertiesPart.SetDateValue(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:NPOI.OpenXml4Net.OPC.Internal.PackagePropertiesPart.GetDateValue(System.Nullable{System.DateTime})”忽略有格式错误的 XML 注释 -->
         <member name="T:NPOI.OpenXml4Net.OPC.Internal.PartUnmarshaller">
              Object implemented this interface are considered as part unmarshaller. A part
              unmarshaller is responsible to unmarshall a part in order to load it from a
@@ -1350,7 +1350,7 @@
              @author Julien Chable
              @version 1.0
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.OpenXml4Net.OPC.Internal.Unmarshallers.PackagePropertiesUnmarshaller.CheckElementForOPCCompliance(System.Xml.XmlElement)" -->
+        <!-- 对于成员“M:NPOI.OpenXml4Net.OPC.Internal.Unmarshallers.PackagePropertiesUnmarshaller.CheckElementForOPCCompliance(System.Xml.XmlElement)”忽略有格式错误的 XML 注释 -->
         <member name="T:NPOI.OpenXml4Net.OPC.Internal.Unmarshallers.UnmarshallContext">
             Context needed for the unmarshall process of a part. This class is immutable.
             
@@ -2088,7 +2088,7 @@
         <member name="F:NPOI.OpenXml4Net.OPC.PackagePartName.RFC3986_PCHAR_SUB_DELIMS">
             Reserved characters for sub delimitations.
         </member>
-        <!-- Badly formed XML comment ignored for member "F:NPOI.OpenXml4Net.OPC.PackagePartName.RFC3986_PCHAR_UNRESERVED_SUP" -->
+        <!-- 对于成员“F:NPOI.OpenXml4Net.OPC.PackagePartName.RFC3986_PCHAR_UNRESERVED_SUP”忽略有格式错误的 XML 注释 -->
         <member name="F:NPOI.OpenXml4Net.OPC.PackagePartName.RFC3986_PCHAR_AUTHORIZED_SUP">
             Authorized reserved characters for pChar.
         </member>
@@ -2692,8 +2692,8 @@
              @return The specified Uri in a String with converted percent encoded
                      characters.
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.OpenXml4Net.OPC.PackagingUriHelper.ToUri(System.String)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.OpenXml4Net.OPC.PackagingUriHelper.Encode(System.String)" -->
+        <!-- 对于成员“M:NPOI.OpenXml4Net.OPC.PackagingUriHelper.ToUri(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:NPOI.OpenXml4Net.OPC.PackagingUriHelper.Encode(System.String)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.OpenXml4Net.OPC.PackagingUriHelper.GetRelationshipPartName(NPOI.OpenXml4Net.OPC.PackagePartName)">
              Build a part name where the relationship should be stored ((ex
              /word/document.xml -> /word/_rels/document.xml.rels)

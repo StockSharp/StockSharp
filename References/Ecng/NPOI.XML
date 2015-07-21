@@ -247,62 +247,6 @@
             Constructs an UnsupportedEncodingException with a detail message.
             @param s Describes the reason for the exception.
         </member>
-        <member name="M:NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessRow(NPOI.SS.Util.CellRangeAddress[][],NPOI.HSSF.UserModel.HSSFRow,System.Xml.XmlElement)">
-            @return maximum 1-base index of column that were rendered, zero if none
-        </member>
-        <member name="M:NPOI.HSSF.Converter.ExcelToHtmlConverter.ProcessColumnWidths(NPOI.HSSF.UserModel.HSSFSheet,System.Int32,System.Xml.XmlElement)">
-            Creates COLGROUP element with width specified for all columns. (Except
-            first if <tt>{@link #isOutputRowNumbers()}==true</tt>)
-        </member>
-        <member name="P:NPOI.HSSF.Converter.ExcelToHtmlConverter.OutputColumnHeaders">
-            <summary>
-            是否输出列头
-            </summary>
-        </member>
-        <member name="P:NPOI.HSSF.Converter.ExcelToHtmlConverter.OutputHiddenColumns">
-            <summary>
-            是否输出隐藏的列
-            </summary>
-        </member>
-        <member name="P:NPOI.HSSF.Converter.ExcelToHtmlConverter.OutputHiddenRows">
-            <summary>
-            是否输出隐藏的行
-            </summary>
-        </member>
-        <member name="P:NPOI.HSSF.Converter.ExcelToHtmlConverter.OutputLeadingSpacesAsNonBreaking">
-            <summary>
-            是否输出文本前的空格
-            </summary>
-        </member>
-        <member name="P:NPOI.HSSF.Converter.ExcelToHtmlConverter.OutputRowNumbers">
-            <summary>
-            是否输出行号
-            </summary>
-        </member>
-        <member name="P:NPOI.HSSF.Converter.ExcelToHtmlConverter.UseDivsToSpan">
-            <summary>
-            在跨列的单元格使用DIV标记
-            </summary>
-        </member>
-        <member name="M:NPOI.HSSF.Converter.ExcelToHtmlUtils.BuildMergedRangesMap(NPOI.HSSF.UserModel.HSSFSheet)">
-            Creates a map (i.e. two-dimensional array) filled with ranges. Allow fast
-            retrieving {@link CellRangeAddress} of any cell, if cell is contained in
-            range.
-            
-            @see #getMergedRange(CellRangeAddress[][], int, int)
-        </member>
-        <member name="M:NPOI.HSSF.Converter.ExcelToHtmlUtils.GetColumnWidthInPx(System.Int32)">
-            See <a href=
-            "http://apache-poi.1045710.n5.nabble.com/Excel-Column-Width-Unit-Converter-pixels-excel-column-width-units-td2301481.html"
-            >here</a> for Xio explanation and details
-        </member>
-        <member name="M:NPOI.HSSF.Converter.ExcelToHtmlUtils.GetMergedRange(NPOI.SS.Util.CellRangeAddress[][],System.Int32,System.Int32)">
-            @param mergedRanges
-                       map of sheet merged ranges built with
-                       {@link #buildMergedRangesMap(HSSFSheet)}
-            @return {@link CellRangeAddress} from map if cell with specified row and
-                    column numbers contained in found range, <tt>null</tt> otherwise
-        </member>
         <member name="T:NPOI.HSSF.Record.Aggregates.Chart.AttachedLabelAggregate">
             <summary>
             ATTACHEDLABEL = Text Begin Pos [FontX] [AlRuns] AI [FRAME] [ObjectLink] [DataLabExtContents] [CrtLayout12] [TEXTPROPS] [CRTMLFRT] End
@@ -1780,17 +1724,6 @@
         <member name="M:NPOI.SS.Formula.Atp.DateParser.MakeDate(System.Int32,System.Int32,System.Int32)">
             @param month 1-based
         </member>
-        <member name="T:NPOI.SS.Formula.Atp.NetworkdaysFunction">
-            Implementation of Excel 'Analysis ToolPak' function NETWORKDAYS()<br/>
-            Returns the number of workdays given a starting and an ending date, considering an interval of holidays. A workday is any non
-            saturday/sunday date.
-            <p/>
-            <b>Syntax</b><br/>
-            <b>NETWORKDAYS</b>(<b>startDate</b>, <b>endDate</b>, holidays)
-            <p/>
-            
-            @author jfaenomoto@gmail.com
-        </member>
         <member name="T:NPOI.SS.Formula.Functions.FreeRefFunction">
             For most Excel functions, involving references ((cell, area), (2d, 3d)), the references are 
             passed in as arguments, and the exact location remains fixed.  However, a select few Excel
@@ -1815,6 +1748,17 @@
                         may also be used to dynamically create reference evals.
             @return never <code>null</code>. Possibly an instance of <c>ErrorEval</c> in the case of
             a specified Excel error (Exceptions are never thrown to represent Excel errors).
+        </member>
+        <member name="T:NPOI.SS.Formula.Atp.NetworkdaysFunction">
+            Implementation of Excel 'Analysis ToolPak' function NETWORKDAYS()<br/>
+            Returns the number of workdays given a starting and an ending date, considering an interval of holidays. A workday is any non
+            saturday/sunday date.
+            <p/>
+            <b>Syntax</b><br/>
+            <b>NETWORKDAYS</b>(<b>startDate</b>, <b>endDate</b>, holidays)
+            <p/>
+            
+            @author jfaenomoto@gmail.com
         </member>
         <member name="M:NPOI.SS.Formula.Atp.NetworkdaysFunction.#ctor(NPOI.SS.Formula.Atp.ArgumentsEvaluator)">
             Constructor.
@@ -1904,31 +1848,16 @@
             
             @return {@link ValueEval} with date as its value.
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.Errortype">
-             Implementation for the ERROR.TYPE() Excel function.
-             <p>
-             <b>Syntax:</b><br/>
-             <b>ERROR.TYPE</b>(<b>errorValue</b>)</p>
-             <p>
-             Returns a number corresponding to the error type of the supplied argument.</p>
-             <p>
-                <table border="1" cellpadding="1" cellspacing="1" summary="Return values for ERROR.TYPE()">
-                  <tr><td>errorValue</td><td>Return Value</td></tr>
-                  <tr><td>#NULL!</td><td>1</td></tr>
-                  <tr><td>#DIV/0!</td><td>2</td></tr>
-                  <tr><td>#VALUE!</td><td>3</td></tr>
-                  <tr><td>#REF!</td><td>4</td></tr>
-                  <tr><td>#NAME?</td><td>5</td></tr>
-                  <tr><td>#NUM!</td><td>6</td></tr>
-                  <tr><td>#N/A!</td><td>7</td></tr>
-                  <tr><td>everything else</td><td>#N/A!</td></tr>
-                </table>
+        <member name="T:NPOI.SS.Formula.Functions.Code">
+             Implementation for Excel CODE () function.<p/>
+             <p/>
+             <b>Syntax</b>:<br/> <b>CODE   </b>(<b>text</b> )<br/>
+             <p/>
+             Returns a numeric code for the first character in a text string. The returned code corresponds to the character set used by your computer.
+             <p/>
+             text The text for which you want the code of the first character.
             
-             Note - the results of ERROR.TYPE() are different to the constants defined in
-             <tt>ErrorConstants</tt>.
-             </p>
-            
-             @author Josh Micich
+             @author cedric dot walter @ gmail dot com
         </member>
         <member name="T:NPOI.SS.Formula.Functions.Fixed1ArgFunction">
              Convenience base class for functions that must take exactly one argument.
@@ -1958,6 +1887,82 @@
         <member name="M:NPOI.SS.Formula.Functions.Function1Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval)">
             see {@link Function#Evaluate(ValueEval[], int, int)}
         </member>
+        <member name="T:NPOI.SS.Formula.Functions.Complex">
+             Implementation for Excel COMPLEX () function.<p/>
+             <p/>
+             <b>Syntax</b>:<br/> <b>COMPLEX   </b>(<b>real_num</b>,<b>i_num</b>,<b>suffix </b> )<br/>
+             <p/>
+             Converts real and imaginary coefficients into a complex number of the form x + yi or x + yj.
+             <p/>
+             <p/>
+             All complex number functions accept "i" and "j" for suffix, but neither "I" nor "J".
+             Using uppercase results in the #VALUE! error value. All functions that accept two
+             or more complex numbers require that all suffixes match.
+             <p/>
+             <b>real_num</b> The real coefficient of the complex number.
+             If this argument is nonnumeric, this function returns the #VALUE! error value.
+             <p/>
+             <p/>
+             <b>i_num</b> The imaginary coefficient of the complex number.
+             If this argument is nonnumeric, this function returns the #VALUE! error value.
+             <p/>
+             <p/>
+             <b>suffix</b> The suffix for the imaginary component of the complex number.
+             <ul>
+             <li>If omitted, suffix is assumed to be "i".</li>
+             <li>If suffix is neither "i" nor "j", COMPLEX returns the #VALUE! error value.</li>
+             </ul>
+            
+             @author cedric dot walter @ gmail dot com
+        </member>
+        <member name="T:NPOI.SS.Formula.Functions.Var2or3ArgFunction">
+             Convenience base class for any function which must take two or three
+             arguments
+            
+             @author Josh Micich
+        </member>
+        <member name="T:NPOI.SS.Formula.Functions.Function2Arg">
+             Implemented by all functions that can be called with two arguments
+            
+             @author Josh Micich
+        </member>
+        <member name="M:NPOI.SS.Formula.Functions.Function2Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
+            see {@link Function#Evaluate(ValueEval[], int, int)}
+        </member>
+        <member name="T:NPOI.SS.Formula.Functions.Function3Arg">
+             Implemented by all functions that can be called with three arguments
+            
+             @author Josh Micich
+        </member>
+        <member name="M:NPOI.SS.Formula.Functions.Function3Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
+            see {@link Function#Evaluate(ValueEval[], int, int)}
+        </member>
+        <member name="T:NPOI.SS.Formula.Functions.Errortype">
+             Implementation for the ERROR.TYPE() Excel function.
+             <p>
+             <b>Syntax:</b><br/>
+             <b>ERROR.TYPE</b>(<b>errorValue</b>)</p>
+             <p>
+             Returns a number corresponding to the error type of the supplied argument.</p>
+             <p>
+                <table border="1" cellpadding="1" cellspacing="1" summary="Return values for ERROR.TYPE()">
+                  <tr><td>errorValue</td><td>Return Value</td></tr>
+                  <tr><td>#NULL!</td><td>1</td></tr>
+                  <tr><td>#DIV/0!</td><td>2</td></tr>
+                  <tr><td>#VALUE!</td><td>3</td></tr>
+                  <tr><td>#REF!</td><td>4</td></tr>
+                  <tr><td>#NAME?</td><td>5</td></tr>
+                  <tr><td>#NUM!</td><td>6</td></tr>
+                  <tr><td>#N/A!</td><td>7</td></tr>
+                  <tr><td>everything else</td><td>#N/A!</td></tr>
+                </table>
+            
+             Note - the results of ERROR.TYPE() are different to the constants defined in
+             <tt>ErrorConstants</tt>.
+             </p>
+            
+             @author Josh Micich
+        </member>
         <member name="T:NPOI.SS.Formula.Functions.Hyperlink">
              Implementation of Excel HYPERLINK function.<p/>
             
@@ -1980,14 +1985,6 @@
             
              @author Josh Micich
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.Function2Arg">
-             Implemented by all functions that can be called with two arguments
-            
-             @author Josh Micich
-        </member>
-        <member name="M:NPOI.SS.Formula.Functions.Function2Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
-            see {@link Function#Evaluate(ValueEval[], int, int)}
-        </member>
         <member name="T:NPOI.SS.Formula.Functions.Rank">
                  * Returns the rank of a number in a list of numbers. The rank of a number is its size relative to other values in a list.
             
@@ -2002,20 +1999,6 @@
                  * 
                  * @author Rubin Wang
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.Var2or3ArgFunction">
-             Convenience base class for any function which must take two or three
-             arguments
-            
-             @author Josh Micich
-        </member>
-        <member name="T:NPOI.SS.Formula.Functions.Function3Arg">
-             Implemented by all functions that can be called with three arguments
-            
-             @author Josh Micich
-        </member>
-        <member name="M:NPOI.SS.Formula.Functions.Function3Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
-            see {@link Function#Evaluate(ValueEval[], int, int)}
-        </member>
         <member name="T:NPOI.SS.Formula.Functions.Rate">
             Implements the Excel Rate function
         </member>
@@ -2023,6 +2006,28 @@
             Excel does not support infinities and NaNs, rather, it gives a #NUM! error in these cases
             
             @throws EvaluationException (#NUM!) if result is NaN or Infinity
+        </member>
+        <member name="T:NPOI.SS.Formula.Functions.Rept">
+             Implementation for Excel REPT () function.<p/>
+             <p/>
+             <b>Syntax</b>:<br/> <b>REPT  </b>(<b>text</b>,<b>number_times</b> )<br/>
+             <p/>
+             Repeats text a given number of times. Use REPT to fill a cell with a number of instances of a text string.
+            
+             text : text The text that you want to repeat.
+             number_times:	A positive number specifying the number of times to repeat text.
+            
+             If number_times is 0 (zero), REPT returns "" (empty text).
+             If this argument contains a decimal value, this function ignores the numbers to the right side of the decimal point.
+            
+             The result of the REPT function cannot be longer than 32,767 characters, or REPT returns #VALUE!.
+            
+             @author cedric dot walter @ gmail dot com
+        </member>
+        <member name="T:NPOI.SS.Formula.Functions.Fixed2ArgFunction">
+             Convenience base class for functions that must take exactly two arguments.
+            
+             @author Josh Micich
         </member>
         <member name="T:NPOI.SS.Formula.Functions.Sumifs">
              Implementation for the Excel function SUMIFS<br/>
@@ -2051,7 +2056,7 @@
             
              @throws EvaluationException if
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.Sumifs.SumMatchingCells(NPOI.SS.Formula.Eval.AreaEval[],NPOI.SS.Formula.Functions.I_MatchPredicate[],NPOI.SS.Formula.Eval.AreaEval)">
+        <member name="M:NPOI.SS.Formula.Functions.Sumifs.SumMatchingCells(NPOI.SS.Formula.Eval.AreaEval[],NPOI.SS.Formula.Functions.IMatchPredicate[],NPOI.SS.Formula.Eval.AreaEval)">
             
              @param ranges  criteria ranges, each range must be of the same dimensions as <code>aeSum</code>
              @param predicates  array of predicates, a predicate for each value in <code>ranges</code>
@@ -10121,6 +10126,15 @@
             </summary>
             <param name="indexes">The indexes.</param>
         </member>
+        <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.SetActiveSheet(System.Int32)">
+            <summary>
+            Sets the tab whose data is actually seen when the sheet is opened.
+            This may be different from the "selected sheet" since excel seems to
+            allow you to show the data of one sheet when another Is seen "selected"
+            in the tabs (at the bottom).
+            <param name="index">The sheet number(0 based).</param>
+            </summary>
+        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFWorkbook.SetSheetName(System.Int32,System.String)">
             <summary>
             Set the sheet name.
@@ -10536,7 +10550,7 @@
         </member>
         <member name="P:NPOI.HSSF.UserModel.HSSFWorkbook.ActiveSheetIndex">
             <summary>
-            Gets or sets the tab whose data is actually seen when the sheet is opened.
+            Gets the tab whose data is actually seen when the sheet is opened.
             This may be different from the "selected sheet" since excel seems to
             allow you to show the data of one sheet when another Is seen "selected"
             in the tabs (at the bottom).
@@ -11005,6 +11019,13 @@
             indexing by something like Lucene, but not really
             intended for display to the user.
             </summary>
+        </member>
+        <member name="T:NPOI.SS.Extractor.IExcelExtractor">
+            Common interface for Excel text extractors, covering
+             HSSF and XSSF
+        </member>
+        <member name="P:NPOI.SS.Extractor.IExcelExtractor.Text">
+            Retreives the text contents of the file
         </member>
         <member name="M:NPOI.HSSF.Extractor.ExcelExtractor.#ctor(NPOI.HSSF.UserModel.HSSFWorkbook)">
             <summary>
@@ -12261,7 +12282,7 @@
         </member>
         <member name="P:NPOI.HSSF.Model.InternalSheet.ActiveCellCol">
             <summary>
-            Gets or sets the active cell col.
+            Gets the active cell col.
             </summary>
             <value>the active column index</value>
             @see org.apache.poi.hssf.record.SelectionRecord
@@ -16685,23 +16706,6 @@
             <value>The size of the big block.</value>
             @return 
         </member>
-        <member name="T:NPOI.SS.Extractor.ExcelExtractor">
-            Common interface for Excel text extractors, covering
-             HSSF and XSSF
-        </member>
-        <member name="M:NPOI.SS.Extractor.ExcelExtractor.SetIncludeSheetNames(System.Boolean)">
-            Should sheet names be included? Default is true
-        </member>
-        <member name="M:NPOI.SS.Extractor.ExcelExtractor.SetFormulasNotResults(System.Boolean)">
-            Should we return the formula itself, and not
-             the result it produces? Default is false
-        </member>
-        <member name="M:NPOI.SS.Extractor.ExcelExtractor.SetIncludeCellComments(System.Boolean)">
-            Should cell comments be included? Default is false
-        </member>
-        <member name="P:NPOI.SS.Extractor.ExcelExtractor.Text">
-            Retreives the text contents of the file
-        </member>
         <member name="T:NPOI.SS.Format.CellDateFormatter">
              Formats a date value.
             
@@ -18043,7 +18047,7 @@
             @param sid - record sid we want to check if it belongs to drawing layer
             @return true if record is instance of DrawingRecord or ContinueRecord or ObjRecord or TextObjRecord
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.HSSF.Record.EscherAggregate.CreateAggregate(System.Collections.Generic.List{NPOI.HSSF.Record.RecordBase},System.Int32)" -->
+        <!-- 对于成员“M:NPOI.HSSF.Record.EscherAggregate.CreateAggregate(System.Collections.Generic.List{NPOI.HSSF.Record.RecordBase},System.Int32)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.HSSF.Record.EscherAggregate.Serialize(System.Int32,System.Byte[])">
              Serializes this aggregate to a byte array.  Since this Is an aggregate
              record it will effectively Serialize the aggregated records.
@@ -21901,6 +21905,49 @@
              @throws {@code UnsupportedOperationException} if the data source is not a
                             reference.
         </member>
+        <member name="M:NPOI.SS.UserModel.Charts.IChartSerie.SetTitle(System.String)">
+             Sets the title of the series as a string literal.
+            
+             @param title
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.IChartSerie.SetTitle(NPOI.SS.Util.CellReference)">
+             Sets the title of the series as a cell reference.
+            
+             @param titleReference
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.IChartSerie.GetTitleString">
+            @return title as string literal.
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.IChartSerie.GetTitleCellReference">
+            @return title as cell reference.
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.IChartSerie.GetTitleType">
+            @return title type.
+        </member>
+        <member name="T:NPOI.SS.UserModel.Charts.IChartData">
+            <summary>
+            A base for all chart data types.
+            </summary>
+            <remarks>
+            @author  Roman Kashitsyn
+            </remarks>
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.IChartData.FillChart(NPOI.SS.UserModel.IChart,NPOI.SS.UserModel.Charts.IChartAxis[])">
+            <summary>
+            Fills a chart with data specified by implementation.
+            </summary>
+            <param name="chart">a chart to fill in</param>
+            <param name="axis">chart axis to use</param>
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.ILineChartData`2.GetSeries">
+            @return list of all series.
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.ILineChartSerie`2.GetCategoryAxisData">
+            @return data source used for category axis data.
+        </member>
+        <member name="M:NPOI.SS.UserModel.Charts.ILineChartSerie`2.GetValues">
+            @return data source used for value axis.
+        </member>
         <member name="T:NPOI.SS.UserModel.FontUnderline">
              the different types of possible underline formatting
             
@@ -21928,6 +21975,56 @@
         </member>
         <member name="F:NPOI.SS.UserModel.FontUnderline.NONE">
             No underline.
+        </member>
+        <member name="T:NPOI.SS.Util.DataMarker">
+            <summary>
+            Represents data marker used in charts.
+            @author Roman Kashitsyn
+            </summary>
+        </member>
+        <member name="M:NPOI.SS.Util.DataMarker.#ctor(NPOI.SS.UserModel.ISheet,NPOI.SS.Util.CellRangeAddress)">
+            <summary>
+            constructor
+            </summary>
+            <param name="sheet">the sheet where data located.</param>
+            <param name="range">the range within that sheet.</param>
+        </member>
+        <member name="M:NPOI.SS.Util.DataMarker.FormatAsString">
+            <summary>
+            Formats data marker using canonical format, for example
+            'SheetName!$A$1:$A$5'.
+            </summary>
+            <returns>formatted data marker</returns>
+        </member>
+        <member name="P:NPOI.SS.Util.DataMarker.Sheet">
+            <summary>
+            get or set the sheet marker points to.
+            </summary>
+        </member>
+        <member name="P:NPOI.SS.Util.DataMarker.Range">
+            <summary>
+            get or set range of the marker.
+            </summary>
+        </member>
+        <member name="T:NPOI.SS.Util.DateFormatConverter">
+              Convert DateFormat patterns into Excel custom number formats.
+              For example, to format a date in excel using the "dd MMMM, yyyy" pattern and Japanese
+              locale, use the following code:
+            
+              <pre><code>
+                  // returns "[$-0411]dd MMMM, yyyy;@" where the [$-0411] prefix tells Excel to use the Japanese locale
+                  String excelFormatPattern = DateFormatConverter.convert(Locale.JAPANESE, "dd MMMM, yyyy");
+            
+                  CellStyle cellStyle = workbook.createCellStyle();
+            
+                  DataFormat poiFormat = workbook.createDataFormat();
+                  cellStyle.setDataFormat(poiFormat.getFormat(excelFormatPattern));
+                  cell.setCellValue(new Date());
+                  cell.setCellStyle(cellStyle);  // formats date as '2012\u5e743\u670817\u65e5'
+            
+              </code></pre>
+            
+            
         </member>
         <member name="T:NPOI.Util.BlockingInputStream">
              Implementation of a BlockingInputStream to provide data to 
@@ -24357,6 +24454,11 @@
             <param name="column">the column index to Create the cell in</param>
             <param name="value">The value of the cell</param>
             <returns>A new HSSFCell.</returns>
+        </member>
+        <member name="M:NPOI.HSSF.Util.HSSFCellUtil.RemapCellStyle(NPOI.HSSF.UserModel.HSSFCellStyle,System.Collections.Generic.Dictionary{System.Int16,System.Int16})">
+            <summary>
+            Translate color palette entries from the source to the destination sheet
+            </summary>
         </member>
         <member name="M:NPOI.HSSF.Util.HSSFCellUtil.SetAlignment(NPOI.SS.UserModel.ICell,NPOI.HSSF.UserModel.HSSFWorkbook,System.Int16)">
             <summary>
@@ -27967,14 +28069,14 @@
             </summary>
             <returns>a hashtable containing all colors keyed by String gnumeric-like triplets</returns>
         </member>
-        <member name="M:NPOI.HSSF.Util.HSSFColor.GetIndex">
-            @return index to the standard palette
-        </member>
         <member name="M:NPOI.HSSF.Util.HSSFColor.GetTriplet">
             @return  triplet representation like that in Excel
         </member>
         <member name="M:NPOI.HSSF.Util.HSSFColor.GetHexString">
             @return a hex string exactly like a gnumeric triplet
+        </member>
+        <member name="P:NPOI.HSSF.Util.HSSFColor.Indexed">
+            @return index to the standard palette
         </member>
         <member name="T:NPOI.HSSF.Util.HSSFColor.Black">
              Class BLACK
@@ -28157,12 +28259,6 @@
             <param name="green">The green.</param>
             <param name="blue">The blue.</param>
         </member>
-        <member name="M:NPOI.HSSF.UserModel.HSSFPalette.CustomColor.GetIndex">
-            <summary>
-            Gets index to the standard palette
-            </summary>
-            <value></value>
-        </member>
         <member name="M:NPOI.HSSF.UserModel.HSSFPalette.CustomColor.GetTriplet">
             <summary>
             Gets triplet representation like that in Excel
@@ -28181,6 +28277,12 @@
             </summary>
             <param name="color">The color.</param>
             <returns></returns>
+        </member>
+        <member name="P:NPOI.HSSF.UserModel.HSSFPalette.CustomColor.Indexed">
+            <summary>
+            Gets index to the standard palette
+            </summary>
+            <value></value>
         </member>
         <member name="T:NPOI.HSSF.UserModel.HSSFPatriarch">
             <summary>
@@ -29990,6 +30092,21 @@
             </summary>
             <param name="range">the range of cells to filter</param>
         </member>
+        <member name="M:NPOI.SS.UserModel.ISheet.CopySheet(System.String)">
+            <summary>
+            Copy sheet with a new name
+            </summary>
+            <param name="Name">new sheet name</param>
+            <returns>cloned sheet</returns>
+        </member>
+        <member name="M:NPOI.SS.UserModel.ISheet.CopySheet(System.String,System.Boolean)">
+            <summary>
+            Copy sheet with a new name
+            </summary>
+            <param name="Name">new sheet name</param>
+            <param name="copyStyle">whether to copy styles</param>
+            <returns>cloned sheet</returns>
+        </member>
         <member name="P:NPOI.SS.UserModel.ISheet.PhysicalNumberOfRows">
             <summary>
             Returns the number of physically defined rows (NOT the number of rows in the sheet)
@@ -30849,12 +30966,7 @@
             </summary>
             <param name="range">the range of cells to filter</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.HSSF.UserModel.HSSFSheet.CopySheet" -->
-        <member name="M:NPOI.HSSF.UserModel.HSSFSheet.RemapCellStyle(NPOI.HSSF.UserModel.HSSFCellStyle,System.Collections.Generic.Dictionary{System.Int16,System.Int16})">
-            <summary>
-            Translate color palette entries from the source to the destination sheet
-            </summary>
-        </member>
+        <!-- 对于成员“M:NPOI.HSSF.UserModel.HSSFSheet.CopySheet”忽略有格式错误的 XML 注释 -->
         <member name="P:NPOI.HSSF.UserModel.HSSFSheet.DisplayZeros">
             Gets the flag indicating whether the window should show 0 (zero) in cells containing zero value.
             When false, cells with zero value appear blank instead of showing the number zero.
@@ -31960,11 +32072,6 @@
             @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
              
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.Fixed2ArgFunction">
-             Convenience base class for functions that must take exactly two arguments.
-            
-             @author Josh Micich
-        </member>
         <member name="T:NPOI.SS.Formula.Eval.ErrorEval">
              @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
             
@@ -32860,7 +32967,7 @@
             
               @see Subtotal
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.I_MatchPredicate">
+        <member name="T:NPOI.SS.Formula.Functions.IMatchPredicate">
             Common interface for the matching criteria.
         </member>
         <member name="T:NPOI.SS.Formula.Functions.Counta">
@@ -32898,7 +33005,7 @@
             
             @author Josh Micich
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.Countif.CountMatchingCellsInArea(NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Functions.I_MatchPredicate)">
+        <member name="M:NPOI.SS.Formula.Functions.Countif.CountMatchingCellsInArea(NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Functions.IMatchPredicate)">
             @return the number of evaluated cells in the range that match the specified criteria
         </member>
         <member name="M:NPOI.SS.Formula.Functions.Countif.EvaluateCriteriaArg(NPOI.SS.Formula.Eval.ValueEval,System.Int32,System.Int32)">
@@ -32930,10 +33037,10 @@
             
              @author Josh Micich 
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCell(NPOI.SS.Formula.Eval.RefEval,NPOI.SS.Formula.Functions.I_MatchPredicate)">
+        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCell(NPOI.SS.Formula.Eval.RefEval,NPOI.SS.Formula.Functions.IMatchPredicate)">
             @return 1 if the evaluated cell matches the specified criteria
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCellsInArea(NPOI.SS.Formula.TwoDEval,NPOI.SS.Formula.Functions.I_MatchPredicate)">
+        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCellsInArea(NPOI.SS.Formula.TwoDEval,NPOI.SS.Formula.Functions.IMatchPredicate)">
             @return the number of evaluated cells in the range that match the specified criteria
         </member>
         <member name="T:NPOI.SS.Formula.Functions.DateFunc">
@@ -35643,21 +35750,6 @@
             <param name="pos"></param>
             <returns></returns>
         </member>
-        <member name="T:NPOI.SS.UserModel.Charts.IChartData">
-            <summary>
-            A base for all chart data types.
-            </summary>
-            <remarks>
-            @author  Roman Kashitsyn
-            </remarks>
-        </member>
-        <member name="M:NPOI.SS.UserModel.Charts.IChartData.FillChart(NPOI.SS.UserModel.IChart,NPOI.SS.UserModel.Charts.IChartAxis[])">
-            <summary>
-            Fills a chart with data specified by implementation.
-            </summary>
-            <param name="chart">a chart to fill in</param>
-            <param name="axis">chart axis to use</param>
-        </member>
         <member name="T:NPOI.SS.UserModel.Charts.IChartDataFactory">
             <summary>
             A factory for different chart data types.
@@ -36245,23 +36337,6 @@
             <summary>
             Link to a file
             </summary>
-        </member>
-        <member name="T:NPOI.SS.UserModel.IndexedColors">
-             A deprecated indexing scheme for colours that is still required for some records, and for backwards
-              compatibility with OLE2 formats.
-            
-             <p>
-             Each element corresponds to a color index (zero-based). When using the default indexed color palette,
-             the values are not written out, but instead are implied. When the color palette has been modified from default,
-             then the entire color palette is used.
-             </p>
-            
-             @author Yegor Kozlov
-        </member>
-        <member name="P:NPOI.SS.UserModel.IndexedColors.Index">
-             Returns index of this color
-            
-             @return index of this color
         </member>
         <member name="T:NPOI.SS.UserModel.PageOrder">
              Specifies printed page order.
@@ -37398,6 +37473,12 @@
             </summary>
             <param name="font1">The font.</param>
             <returns></returns>
+        </member>
+        <member name="M:NPOI.SS.Util.SheetUtil.GetUniqueSheetName(NPOI.SS.UserModel.IWorkbook,System.String)">
+             Generate a valid sheet name based on the existing one. Used when cloning sheets.
+            
+             @param srcName the original sheet name to
+             @return clone sheet name
         </member>
         <member name="T:NPOI.SS.Util.SSCellRange`1">
              For POI internal use only
