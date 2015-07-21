@@ -165,7 +165,7 @@
     <Topic id="82437493-cd53-41eb-b756-d913af0f4f8e" visible="True" isExpanded="true" title="Логирование">
       <Topic id="eca7454c-0532-4aaf-92bf-7a3d0cba635b" visible="True" title="Логирование Strategy" />
       <Topic id="9619f1db-064f-421f-967e-4c15a5b0aa71" visible="True" title="Логирование IConnector" />
-      <Topic id="f9e75266-8f0e-4983-8319-7a41d53e0f39" visible="True" isSelected="true" title="Другие источники логов" />
+      <Topic id="f9e75266-8f0e-4983-8319-7a41d53e0f39" visible="True" title="Другие источники логов" />
       <Topic id="1bed8343-9171-49ce-8259-f44007e01a78" visible="True" title="Визуальный мониторинг" />
       <Topic id="a711d06d-9d1d-40b8-89bf-ee62d817a878" visible="True" title="Создание ILogListener" />
     </Topic>
@@ -211,7 +211,9 @@
     <Topic id="a188710e-7bb7-41b3-8119-6088f2bf1780" visible="True" title="Переподключение" />
     <Topic id="16070956-6e63-4cef-b6a8-6eb42372c424" visible="True" title="Биржевое время" />
     <Topic id="a8486498-a2d8-4924-b009-8b93138b268a" visible="True" title="Арифметические операции" />
-    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" title="Пользовательский интерфейс (GUI)" />
+    <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
+      <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" isSelected="true" title="Визуальные компоненты логирования" />
+    </Topic>
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
   </Topic>
