@@ -22,6 +22,11 @@ namespace StockSharp.Algo.Storages
 			Portfolios = new List<string>();
 		}
 
+		public override object LastId
+		{
+			get { return LastTransactionId; }
+		}
+
 		public long FirstOrderId { get; set; }
 		public long LastOrderId { get; set; }
 

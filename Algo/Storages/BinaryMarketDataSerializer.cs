@@ -66,6 +66,11 @@
 		public DateTime FirstLocalTime { get; set; }
 		public DateTime LastLocalTime { get; set; }
 
+		public override object LastId
+		{
+			get { return LastTime; }
+		}
+
 		public bool IsEmpty()
 		{
 			return Count == 0;

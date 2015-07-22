@@ -43,6 +43,11 @@ namespace StockSharp.Algo.Storages
 		DateTime LastTime { get; set; }
 
 		/// <summary>
+		/// Идентификатор последней записи.
+		/// </summary>
+		object LastId { get; }
+
+		/// <summary>
 		/// Сохранить параметры мета-информации в поток.
 		/// </summary>
 		/// <param name="stream">Поток данных.</param>
@@ -71,6 +76,8 @@ namespace StockSharp.Algo.Storages
 
 		public DateTime FirstTime { get; set; }
 		public DateTime LastTime { get; set; }
+
+		public abstract object LastId { get; }
 
 		/// <summary>
 		/// Сохранить параметры мета-информации в поток.

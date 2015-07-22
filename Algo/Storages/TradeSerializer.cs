@@ -20,6 +20,11 @@ namespace StockSharp.Algo.Storages
 			FirstId = -1;
 		}
 
+		public override object LastId
+		{
+			get { return PrevId; }
+		}
+
 		public long FirstId { get; set; }
 		public long PrevId { get; set; }
 

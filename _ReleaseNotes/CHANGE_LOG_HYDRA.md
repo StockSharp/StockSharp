@@ -9,6 +9,7 @@ StockSharp Data (Hydra) Change log
 * (bug) Help url fix.
 * (feature) Storage. Date cache bin->txt format.
 * (bug) CSV storage. Fix save NewsMessage.SecurityId.
+* (bug) CSV storage. Fix append data with same time for order log and tick trades.
 
 ###v4.3.7:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/95

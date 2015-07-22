@@ -202,13 +202,8 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var tradeInfo = metaInfo as TradeMetaInfo;
-
-				if (tradeInfo == null)
-					return base.FilterNewData(data, metaInfo);
-
-				var prevId = tradeInfo.PrevId;
-				var prevTime = tradeInfo.LastTime;
+				var prevId = (long)metaInfo.LastId;
+				var prevTime = metaInfo.LastTime;
 
 				return data.Where(t =>
 				{
@@ -239,16 +234,6 @@ namespace StockSharp.Algo.Storages
 			{
 			}
 
-			protected override IEnumerable<QuoteChangeMessage> FilterNewData(IEnumerable<QuoteChangeMessage> data, IMarketDataMetaInfo metaInfo)
-			{
-				var mdInfo = metaInfo as QuoteMetaInfo;
-
-				if (mdInfo == null || mdInfo.Version < MarketDataVersions.Version45)
-					return base.FilterNewData(data, metaInfo);
-
-				return data.Where(d => d.ServerTime.Truncate() >= mdInfo.LastTime);
-			}
-
 			public override DateTimeOffset GetTime(MarketDepth data)
 			{
 				return data.LastChangeTime;
@@ -269,12 +254,7 @@ namespace StockSharp.Algo.Storages
 
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
-				var olInfo = metaInfo as OrderLogMetaInfo;
-
-				if (olInfo == null || olInfo.Version < MarketDataVersions.Version34)
-					return base.FilterNewData(data, metaInfo);
-
-				var prevTransId = olInfo.LastTransactionId;
+				var prevTransId = (long)metaInfo.LastId;
 				return data.Where(i => i.TransactionId > prevTransId);
 			}
 
