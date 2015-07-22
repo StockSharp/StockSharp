@@ -66,19 +66,26 @@ namespace StockSharp.Algo.Storages
 							}
 							else if (Current.ServerTime != quote.ServerTime)
 							{
+								FlushEmptyQuotes();
+
 								_resetCurrent = true;
 								_needMoveNext = false;
 
 								return true;
 							}
 
-							var quotes = (List<QuoteChange>)(quote.Side == Sides.Buy ? Current.Bids : Current.Asks);
-							quotes.Add(quote);
+							if (quote.Price != 0)
+							{
+								var quotes = (List<QuoteChange>)(quote.Side == Sides.Buy ? Current.Bids : Current.Asks);
+								quotes.Add(quote);
+							}
 						}
 						while (_enumerator.MoveNext());
 
 						if (Current == null)
 							return false;
+
+						FlushEmptyQuotes();
 
 						_resetCurrent = true;
 						_needMoveNext = true;
@@ -93,6 +100,20 @@ namespace StockSharp.Algo.Storages
 						_needMoveNext = true;
 
 						base.Reset();
+					}
+
+					private void FlushEmptyQuotes()
+					{
+						FlushEmptyQuotes(Current.Bids);
+						FlushEmptyQuotes(Current.Asks);
+					}
+
+					private static void FlushEmptyQuotes(IEnumerable<QuoteChange> quotes)
+					{
+						var list = (List<QuoteChange>)quotes;
+
+						if (list.Count == 1 && list[0].Price == 0)
+							list.Clear();
 					}
 
 					protected override void DisposeManaged()
@@ -130,7 +151,16 @@ namespace StockSharp.Algo.Storages
 					var items = new List<TimeQuoteChange>();
 
 					items.AddRange(d.Bids.OrderBy(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+
+					if (items.Count == 0)
+						items.Add(new TimeQuoteChange { Side = Sides.Buy, ServerTime = d.ServerTime });
+
+					var bidsCount = items.Count;
+
 					items.AddRange(d.Asks.OrderBy(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+
+					if (items.Count == bidsCount)
+						items.Add(new TimeQuoteChange { Side = Sides.Sell, ServerTime = d.ServerTime });
 
 					return items;
 				});
