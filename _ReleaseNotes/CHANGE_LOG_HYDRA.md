@@ -1,5 +1,13 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.8:
+* (feature) BarChart (history mode).
+* (bug) Excel export boost.
+* (bug) CSV storage fix.
+* (bug) Storage. Fix delete range
+* (bug) Auto save config fix.
+* (bug) Help url fix.
+
 ###v4.3.7:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/95
 

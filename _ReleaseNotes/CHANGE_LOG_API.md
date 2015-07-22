@@ -1,5 +1,30 @@
 StockSharp API Change log
 ========================
+###v4.3.8:
+* (bug) FIX connector and FixServer. Many fixes.
+* (bug) CSV storage fix.
+* (bug) Excel export boost.
+* (bug) Storage. Fix delete range.
+* (bug) TargetPlatformWindow fix.
+* (feature) BarChart connector (history mode).
+* (feature) SampleLogging. New sample.
+* (feature) CandleStates. Started + Changed -> Active.
+* (feature) OrderWindow. Set default price and volume.
+* (feature) ExecutionMessage.ClientCode
+* (feature) MyTradeGrid, OrderGrid and OrderWindow. Display ClientCode.
+* (feature) Order, Trade, MarketDepth. New field Currency.
+* (feature) FilterableSecurityProvider. Indexing Security.ExternalId
+* (feature) PF combo. Insert unknown portfolio.
+* (feature) OrderCancelMessage. New field Side.
+* (bug) Connector. Fix overflow.
+* (bug) SampleSmartCandles. Fix
+* (feature) ExternalCandleSource.Stopped event.
+* (feature) TraceSource
+* (bug) LogManager. FlushInterval lower bound check fix.
+* (feature) SampleHistoryTesting. Order book emulation option.
+* (feature) Blackwood. 3.1.9
+* (feature) Currency. GBX
+
 ###v4.3.7:
 * (feature) MessageDirections. Removed.
 * (feature) Connector. OnRegisterXXX OnUnRegisterXXX removed.

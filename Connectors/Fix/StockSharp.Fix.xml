@@ -241,9 +241,19 @@
             Смещение времени относительно UTC для серверного времени данных.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixSession.DateFormat">
+      <summary>
+            Формат даты.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.FixSession.DateTimeFormat">
       <summary>
             Формат даты и времени.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.TimeFormat">
+      <summary>
+            Формат времени.
             </summary>
     </member>
     <member name="T:StockSharp.Fix.Native.BaseFixReader">
@@ -3279,7 +3289,7 @@
       <param name="currency">Валюта.</param>
       <param name="changes">Список изменений.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.#ctor(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.FixVersions,StockSharp.Fix.FixFormats,Ecng.Common.IncrementalIdGenerator,System.String,System.String)">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.#ctor(StockSharp.Fix.Native.IFixWriter,StockSharp.Fix.FixVersions,StockSharp.Fix.FixFormats,Ecng.Common.IncrementalIdGenerator,System.String,System.String,System.String,System.String,System.String)">
       <summary>
             Создать <see cref="T:StockSharp.Fix.Native.FixMessageWriter" />.
             </summary>
@@ -3289,6 +3299,9 @@
       <param name="idGenerator">Генератор транзакций.</param>
       <param name="senderCompId">Идентификатор отправителя.</param>
       <param name="targetCompId">Идентификатор получателя.</param>
+      <param name="dateFormat">Формат даты.</param>
+      <param name="dateTimeFormat">Формат даты и времени.</param>
+      <param name="timeFormat">Формат времени.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteLogonRequest(System.TimeSpan,System.Boolean,System.String,System.String)">
       <summary>
@@ -3518,6 +3531,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ExDestination">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.CxlRejReason">
       <summary>
       </summary>
@@ -3527,6 +3544,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.HeartBtInt">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.ClientID">
       <summary>
       </summary>
     </member>
@@ -4074,9 +4095,19 @@
             Смещение времени относительно UTC для серверного времени данных.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.DateFormat">
+      <summary>
+            Формат даты.
+            </summary>
+    </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.DateTimeFormat">
       <summary>
             Формат даты и времени.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFormat">
+      <summary>
+            Формат времени.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">
@@ -4269,6 +4300,13 @@
       <summary>
             Создать <see cref="T:StockSharp.Fix.FixTrader" />.
             </summary>
+    </member>
+    <member name="M:StockSharp.Fix.FixTrader.OnCancelOrder(StockSharp.BusinessEntities.Order,System.Int64)">
+      <summary>
+            Отменить заявку на бирже.
+            </summary>
+      <param name="order">Заявка, которую нужно отменять.</param>
+      <param name="transactionId">Идентификатор транзакции отмены.</param>
     </member>
     <member name="M:StockSharp.Fix.FixTrader.OnCancelOrders(System.Int64,System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)">
       <summary>
