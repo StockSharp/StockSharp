@@ -49,6 +49,8 @@ namespace StockSharp.Algo.Storages
 
 						_needMoveNext = true;
 
+						Sides? side = null;
+
 						do
 						{
 							var quote = _enumerator.Current;
@@ -64,15 +66,15 @@ namespace StockSharp.Algo.Storages
 									Asks = new List<QuoteChange>(),
 								};
 							}
-							else if (Current.ServerTime != quote.ServerTime)
+							else if (Current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))
 							{
-								FlushEmptyQuotes();
-
 								_resetCurrent = true;
 								_needMoveNext = false;
 
 								return true;
 							}
+
+							side = quote.Side;
 
 							if (quote.Price != 0)
 							{
@@ -84,8 +86,6 @@ namespace StockSharp.Algo.Storages
 
 						if (Current == null)
 							return false;
-
-						FlushEmptyQuotes();
 
 						_resetCurrent = true;
 						_needMoveNext = true;
@@ -100,20 +100,6 @@ namespace StockSharp.Algo.Storages
 						_needMoveNext = true;
 
 						base.Reset();
-					}
-
-					private void FlushEmptyQuotes()
-					{
-						FlushEmptyQuotes(Current.Bids);
-						FlushEmptyQuotes(Current.Asks);
-					}
-
-					private static void FlushEmptyQuotes(IEnumerable<QuoteChange> quotes)
-					{
-						var list = (List<QuoteChange>)quotes;
-
-						if (list.Count == 1 && list[0].Price == 0)
-							list.Clear();
 					}
 
 					protected override void DisposeManaged()
@@ -134,9 +120,9 @@ namespace StockSharp.Algo.Storages
 			private readonly CsvMarketDataSerializer<TimeQuoteChange> _quoteSerializer;
 
 			public MarketDepthCsvSerializer(SecurityId securityId)
-				: base(securityId, null)
+				: base(securityId)
 			{
-				_quoteSerializer = new CsvMarketDataSerializer<TimeQuoteChange>(securityId, null);
+				_quoteSerializer = new CsvMarketDataSerializer<TimeQuoteChange>(securityId);
 			}
 
 			public override IMarketDataMetaInfo CreateMetaInfo(DateTime date)
@@ -818,7 +804,7 @@ namespace StockSharp.Algo.Storages
 						serializer = new Level1Serializer(key.Item1);
 						break;
 					case StorageFormats.Csv:
-						serializer = new CsvMarketDataSerializer<Level1ChangeMessage>(key.Item1, null);
+						serializer = new CsvMarketDataSerializer<Level1ChangeMessage>(key.Item1);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException("format");
@@ -879,7 +865,7 @@ namespace StockSharp.Algo.Storages
 							serializer = typeof(CandleSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), arg);
 							break;
 						case StorageFormats.Csv:
-							serializer = typeof(CsvMarketDataSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), null, null);
+							serializer = typeof(CsvMarketDataSerializer<>).Make(candleMessageType).CreateInstance<IMarketDataSerializer>(security.ToSecurityId(), null, arg, null);
 							break;
 						default:
 							throw new ArgumentOutOfRangeException("format");

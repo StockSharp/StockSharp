@@ -83,9 +83,10 @@ namespace StockSharp.Algo.Storages
 			private readonly SecurityId _securityId;
 			private readonly DateTime _date;
 			private readonly ExecutionTypes? _executionType;
+			private readonly object _candleArg;
 			private readonly MemberProxy[] _members;
 
-			public CsvReader(Stream stream, Encoding encoding, SecurityId securityId, DateTime date, ExecutionTypes? executionType, MemberProxy[] members)
+			public CsvReader(Stream stream, Encoding encoding, SecurityId securityId, DateTime date, ExecutionTypes? executionType, object candleArg, MemberProxy[] members)
 			{
 				if (stream == null)
 					throw new ArgumentNullException("stream");
@@ -95,6 +96,7 @@ namespace StockSharp.Algo.Storages
 				_securityId = securityId;
 				_date = date.ChangeKind(DateTimeKind.Utc);
 				_executionType = executionType;
+				_candleArg = candleArg;
 				_members = members;
 			}
 
@@ -181,7 +183,9 @@ namespace StockSharp.Algo.Storages
 
 						if (_executionType != null)
 							_setExecutionType.SetValue(item, _executionType.Value);
-	
+
+						if (_candleArg != null)
+							_setCandleArg.SetValue(item, _candleArg);
 					}
 					
 					return item;
@@ -208,6 +212,7 @@ namespace StockSharp.Algo.Storages
 		// ReSharper disable StaticFieldInGenericType
 		private static readonly MemberProxy _setSecurityId;
 		private static readonly MemberProxy _setExecutionType;
+		private static readonly MemberProxy _setCandleArg;
 		private static readonly FastInvoker<VoidType, VoidType, TData> _ctor;
 		private const string _timeFormat = "HHmmssffffff";
 		private static readonly SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]> _info = new SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]>();
@@ -224,6 +229,9 @@ namespace StockSharp.Algo.Storages
 			if (typeof(TData) == typeof(ExecutionMessage))
 				_setExecutionType = MemberProxy.Create(typeof(TData), "ExecutionType");
 
+			if (typeof(TData).IsSubclassOf(typeof(CandleMessage)))
+				_setCandleArg = MemberProxy.Create(typeof(TData), "Arg");
+
 			_ctor = FastInvoker<VoidType, VoidType, TData>.Create(typeof(TData).GetMember<ConstructorInfo>());
 
 			_dateMember = MemberProxy.Create(typeof(TData),
@@ -232,6 +240,7 @@ namespace StockSharp.Algo.Storages
 
 		private readonly Encoding _encoding;
 		private readonly ExecutionTypes? _executionType;
+		private readonly object _candleArg;
 		private readonly string _format;
 		private readonly MemberProxy[] _members;
 
@@ -240,13 +249,14 @@ namespace StockSharp.Algo.Storages
 		{
 		}
 
-		public CsvMarketDataSerializer(SecurityId securityId, ExecutionTypes? executionType, Encoding encoding = null)
+		public CsvMarketDataSerializer(SecurityId securityId, ExecutionTypes? executionType = null, object candleArg = null, Encoding encoding = null)
 		{
 			if (securityId.IsDefault() && typeof(TData) != typeof(NewsMessage))
 				throw new ArgumentNullException("securityId");
 
 			SecurityId = securityId;
 			_executionType = executionType;
+			_candleArg = candleArg;
 			_encoding = encoding ?? Encoding.UTF8;
 
 			if (typeof(TData) == typeof(QuoteChangeMessage))
@@ -371,7 +381,7 @@ namespace StockSharp.Algo.Storages
 			stream.Dispose();
 
 			return new SimpleEnumerable<TData>(() =>
-				new CsvReader(copy, _encoding, SecurityId, metaInfo.Date.Date, _executionType, _members))
+				new CsvReader(copy, _encoding, SecurityId, metaInfo.Date.Date, _executionType, _candleArg, _members))
 				.ToEx(metaInfo.Count);
 		}
 
