@@ -175,7 +175,10 @@ namespace StockSharp.Algo.Storages
 							if (parts[i].IsEmpty())
 								continue;
 
-							_members[i].SetValue(item, parts[i].To(_members[i].ReturnType));
+							if (_isNews && i == 6)
+								_members[i].SetValue(item, new SecurityId { SecurityCode = parts[i] });
+							else
+								_members[i].SetValue(item, parts[i].To(_members[i].ReturnType));
 						}
 
 						if (_setSecurityId != null)
@@ -217,6 +220,8 @@ namespace StockSharp.Algo.Storages
 		private const string _timeFormat = "HHmmssffffff";
 		private static readonly SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]> _info = new SynchronizedDictionary<Tuple<Type, ExecutionTypes?>, MemberProxy[]>();
 		private static readonly bool _isLevel1 = typeof(TData) == typeof(Level1ChangeMessage);
+		private static readonly bool _isNews = typeof(TData) == typeof(NewsMessage);
+		private static readonly bool _isQuotes = typeof(TData) == typeof(QuoteChangeMessage);
 		private static readonly Level1Fields[] _level1Fields = _isLevel1 ? Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray() : null;
 		private static readonly MemberProxy _dateMember;
 		// ReSharper restore StaticFieldInGenericType
@@ -251,7 +256,7 @@ namespace StockSharp.Algo.Storages
 
 		public CsvMarketDataSerializer(SecurityId securityId, ExecutionTypes? executionType = null, object candleArg = null, Encoding encoding = null)
 		{
-			if (securityId.IsDefault() && typeof(TData) != typeof(NewsMessage))
+			if (securityId.IsDefault() && !_isNews)
 				throw new ArgumentNullException("securityId");
 
 			SecurityId = securityId;
@@ -259,7 +264,7 @@ namespace StockSharp.Algo.Storages
 			_candleArg = candleArg;
 			_encoding = encoding ?? Encoding.UTF8;
 
-			if (typeof(TData) == typeof(QuoteChangeMessage))
+			if (_isQuotes)
 				return;
 
 			_format = GetFormat(executionType).Replace(":{0}", ".UtcDateTime:" + _timeFormat);
@@ -275,6 +280,7 @@ namespace StockSharp.Algo.Storages
 					.Select(s =>
 						MemberProxy.Create(typeof(TData),
 							s.Substring(1, s.Length - 2).Replace(timeFormat, string.Empty)))
+					.Concat(_isNews ? new[] { MemberProxy.Create(typeof(TData), "SecurityId") } : Enumerable.Empty<MemberProxy>())
 					.ToArray());
 		}
 
@@ -327,7 +333,6 @@ namespace StockSharp.Algo.Storages
 			if (typeof(TData) == typeof(NewsMessage))
 			{
 				// NewsMessage.Story do not supported
-				// TODO ;{SecurityId.Value.SecurityCode}
 				return "{ServerTime:{0}};{Headline};{Source};{Url};{Id};{BoardCode}";
 			}
 
@@ -365,6 +370,15 @@ namespace StockSharp.Algo.Storages
 						appendLine = true;
 
 					sb.Append(_format.PutEx(item));
+
+					var news = item as NewsMessage;
+					if (news != null)
+					{
+						sb.Append(";").Append(
+							news.SecurityId == null
+								? null
+								: news.SecurityId.Value.SecurityCode);
+					}
 				}
 
 				return _encoding.GetBytes(sb.ToString());

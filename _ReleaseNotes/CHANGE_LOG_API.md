@@ -25,6 +25,7 @@ StockSharp API Change log
 * (feature) Blackwood. 3.1.9
 * (feature) Currency. GBX
 * (feature) Storage. Date cache bin->txt format.
+* (bug) CSV storage. Fix save NewsMessage.SecurityId.
 
 ###v4.3.7:
 * (feature) MessageDirections. Removed.
