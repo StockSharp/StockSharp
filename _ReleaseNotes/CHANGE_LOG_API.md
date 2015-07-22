@@ -24,6 +24,7 @@ StockSharp API Change log
 * (feature) SampleHistoryTesting. Order book emulation option.
 * (feature) Blackwood. 3.1.9
 * (feature) Currency. GBX
+* (feature) Storage. Date cache bin->txt format.
 
 ###v4.3.7:
 * (feature) MessageDirections. Removed.
