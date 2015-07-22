@@ -308,8 +308,9 @@ private void ShowChart_Click(object sender, RoutedEventArgs e)
       </content>
     </section> -->
 
-    
-    
+     <relatedTopics>
+       <link xlink:href="4cd2b7f9-fe8d-404a-bec6-227783410beb">Визуальные компоненты логирования</link>
+    </relatedTopics>
     
   </developerWalkthroughDocument>
 </topic>
