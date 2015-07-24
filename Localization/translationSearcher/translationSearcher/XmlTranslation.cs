@@ -142,7 +142,7 @@ public class XmlTranslation
 
 	private string cleanString(string s)
 	{
-		return s.Replace("\n", "").Trim().TrimEnd('.').Trim();
+		return s.Replace("\n", " ").Trim().TrimEnd('.').Trim();
 	}
 
 	private string parseContent(XElement tag, out XElement []tagChildren)
