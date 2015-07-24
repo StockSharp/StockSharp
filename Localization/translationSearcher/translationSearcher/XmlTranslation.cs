@@ -33,6 +33,7 @@ public class XmlTranslation
 		var root = XDocument.Load(xmlFile);
 		var members = root.Elements("doc").Elements("members").Elements("member");
 
+		var newTranslations = new HashSet<string>();
 		foreach (var member in members)
 		{
 			var name = member.Attribute("name");
@@ -42,9 +43,16 @@ public class XmlTranslation
 				var content = parseContent(tag, out tagChildren);
 				if (!m_TranslationKeys.ContainsKey(content))
 				{
+					if (newTranslations.Contains(content))
+						continue;
+					newTranslations.Add(content);
+
 					if (content.Contains(";"))
 						content = "\"" + content + "\"";
-					outStreamTextCsv.WriteLine(prefix + newKeyIndex++.ToString() + ";" + content + ";" + content);
+
+					var newKey = prefix + newKeyIndex++.ToString();
+					outStreamTextCsv.WriteLine(newKey + ";" + content + ";" + content);
+
 					newKeyCount++;
 				}
 				else
@@ -55,7 +63,7 @@ public class XmlTranslation
 		outStream.Close();
 		outStreamTextCsv.Close();
 
-		Console.WriteLine(newKeyCount.ToString() + " описаний без перевода");
+		Console.WriteLine("не хватает" + newKeyCount.ToString() + " переводов");
 	}
 
 	/// <summary>
