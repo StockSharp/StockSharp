@@ -2087,7 +2087,7 @@ namespace StockSharp.Algo
 				if (criteria.OptionType != null && s.OptionType != criteria.OptionType)
 					return false;
 
-				if (criteria.Currency != CurrencyTypes.RUB && s.Currency != criteria.Currency)
+				if (criteria.Currency != null && s.Currency != criteria.Currency)
 					return false;
 
 				if (!criteria.Class.IsEmptyOrWhiteSpace() && !s.Class.ContainsIgnoreCase(criteria.Class))
