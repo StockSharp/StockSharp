@@ -333,7 +333,7 @@
 				</listItem> -->
 				
 				<listItem>
-				 	<codeEntityReference qualifyHint="false" autoUpgrade="true">Overload: StockSharp.Algo.Strategies.Extensions.Protect</codeEntityReference>
+				 	<codeEntityReference qualifyHint="false" autoUpgrade="true">Overload:StockSharp.Algo.Strategies.Extensions.Protect</codeEntityReference>
 					- действие, защищающее сделки одновременно стратегиями <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy</codeEntityReference>
 					и <codeEntityReference>T:StockSharp.Algo.Strategies.Protective.StopLossStrategy</codeEntityReference>.
 				</listItem>

@@ -21,6 +21,10 @@
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Модель_Блэка_—_Шоулза</ddue:linkUri>
 		</ddue:externalLink></item>
   <item id="btce"><ddue:link xlink:href="5d162089-902a-4a4e-885f-f38ff94fbe58" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">BTC-E</ddue:link></item>
+  <item id="moex"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
+    <ddue:linkText>MOEX</ddue:linkText>
+    <ddue:linkUri>http://moex.com</ddue:linkUri>
+  </ddue:externalLink></item>
   <item id="calendar"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>Настройка Google Calendar</ddue:linkText>
 		  <ddue:linkUri>http://google.com/support/calendar/bin/answer.py?hl=ru&amp;answer=45351</ddue:linkUri>
@@ -68,9 +72,7 @@
 		  <ddue:linkText>Excel</ddue:linkText>
 		  <ddue:linkUri>http://ru.wikipedia.org/wiki/Excel</ddue:linkUri>
 		</ddue:externalLink></item>
-  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" 
-xmlns:xlink="http://www.w3.org/1999/xlink" 
-xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
+  <item id="fix"><ddue:link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link></item>
   <item id="forts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>ФОРТС</ddue:linkText>
 		  <ddue:linkUri>http://rts.ru/ru/forts/</ddue:linkUri>
@@ -203,6 +205,7 @@ xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link><
 </ddue:externalLink></item>
   <item id="sterling"><ddue:link xlink:href="8a531942-a16c-4348-a4d0-dd4ae999d8f9" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">Sterling</ddue:link></item>
   <item id="stocksharp"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#</ddue:link></item>
+  <item id="stocksharpapi"><ddue:link xlink:href="e0f9d08e-5dba-4d5d-9248-4d37eba61b22" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.API</ddue:link></item>
   <item id="stocksharpcontacts"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
     <ddue:linkText>StockSharp Contacts</ddue:linkText>
     <ddue:linkUri>http://stocksharp.com/company/contacts/</ddue:linkUri>
@@ -243,6 +246,7 @@ xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">FIX</ddue:link><
     <ddue:linkText>StockSharp Sources</ddue:linkText>
     <ddue:linkUri>https://github.com/StockSharp/StockSharp/releases/</ddue:linkUri>
   </ddue:externalLink></item>
+  <item id="stocksharpstudio"><ddue:link xlink:href="49ba804f-908b-473a-a31f-76540d8a79d7" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">S#.Studio</ddue:link></item>
   <item id="stocksharpsupport"><ddue:externalLink xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5">
 		  <ddue:linkText>StockSharp.Support</ddue:linkText>
 		  <ddue:linkUri>http://stocksharp.com/support/</ddue:linkUri>

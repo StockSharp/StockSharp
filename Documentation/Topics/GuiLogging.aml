@@ -17,8 +17,8 @@
      <sections>
           <section address="SubSection1">
               <title>LogControl</title>
-              <mediaLink><image placement="left" xlink:href="GUI_LogControl" /></mediaLink>	
               <content>
+              <mediaLink><image placement="left" xlink:href="GUI_LogControl" /></mediaLink>	
                   <para><codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference> - таблица для отображения сообщений логов.
                   Кнопки панели инструментов позволяют фильтровать сообщения с разным уровнем логирования.</para>
                   <para><legacyUnderline>Пример кода</legacyUnderline></para>
@@ -55,15 +55,15 @@ Trace.TraceError("Error test message");
           </section>
           <section address="SubSection2">
               <title>Monitor</title>
-              <mediaLink><image placement="left" xlink:href="GUI_Monitor" /></mediaLink>
               <content>
-                  <para><codeEntityReference>T:StockSharp.Xaml.Monitor</codeEntityReference> - визуальный элемент, где 
-                  <codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference> используется вместе с иерархическим деревом <legacyBold>TreeView</legacyBold>, 
-                  в котором отображаются источники логов. Изначально компонент предназначался для мониторинга торговых стратегий. Поэтому по умолчанию
-                  в "дереве" присутствует узел <legacyBold>Стратегии</legacyBold>. В тоже время с этим компонетом могут использоваться и другие источники.
-                  </para>
-                  <para><legacyUnderline>Пример кода</legacyUnderline></para>
-                  <code title="XAML" language="XAML">
+              	<mediaLink><image placement="left" xlink:href="GUI_Monitor" /></mediaLink>
+                <para><codeEntityReference>T:StockSharp.Xaml.Monitor</codeEntityReference> - визуальный элемент, где 
+                	<codeEntityReference>T:StockSharp.Xaml.LogControl</codeEntityReference> используется вместе с иерархическим деревом <legacyBold>TreeView</legacyBold>, 
+                	в котором отображаются источники логов. Изначально компонент предназначался для мониторинга торговых стратегий. Поэтому по умолчанию
+                	в "дереве" присутствует узел <legacyBold>Стратегии</legacyBold>. В тоже время с этим компонетом могут использоваться и другие источники.
+                </para>
+                <para><legacyUnderline>Пример кода</legacyUnderline></para>
+                <code title="XAML" language="XAML">
 				<![CDATA[
 <Window x:Class="LoggingControls.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

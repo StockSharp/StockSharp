@@ -36,11 +36,12 @@
 		</list>
 	  
 		<para>Как работать со свечками, показано в примере SampleCandle, который расположен в папке <legacyItalic>Samples/Quik/SampleCandles</legacyItalic>.</para>
-		<para>На следующем рисунке представлены графики <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> и 
+		<para>На следующих рисунках представлены графики <codeEntityReference>T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> и 
 		<codeEntityReference>T:StockSharp.Algo.Candles.RangeCandle</codeEntityReference>:</para>
 		
 	  
-		<mediaLink><image placement="center" xlink:href="sample_candles" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="sample_timeframecandles" /></mediaLink>
+		<mediaLink><image placement="center" xlink:href="sample_rangecandles" /></mediaLink>
 	</introduction>
 
     <procedure>

@@ -9,7 +9,7 @@
 			</para>
 			<para>
 				S#.API является основой всех наших продуктов. 
-				На базе библиотеки созданы такие решения как S#.Studio, <token>hydra</token> и т.д.. 
+				На базе библиотеки созданы такие решения как <token>stocksharpstudio</token>, <token>hydra</token> и т.д.. 
 				А также наши адаптеры <token>wealthlab</token>, <token>matlab</token>.
 			</para>
 		</summary>
@@ -30,7 +30,12 @@
 					
 					<step>
 						<content>
-						<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Мировые площадки</link></legacyBold> - торговля NASDAQ, NYSE, CME и т.д. через брокеров <token>OpenECry</token>, <token>IB</token>, <token>etrade</token>.
+						<legacyBold><link xlink:href="ad178c36-15c8-4314-bc5c-56220f41a67e">Мировые площадки</link></legacyBold> - торговля NASDAQ, NYSE, CME и т.д. через брокеров <token>OpenECry</token>, <token>IB</token>, <token>etrade</token> и <externalLink>
+						<linkText>других</linkText>
+						<linkAlternateText>Брокеры-партнеры StockSharp</linkAlternateText>
+						<linkUri>http://stocksharp.com/broker/</linkUri>
+						<linkTarget>_blank</linkTarget>
+						</externalLink>.
 						</content>
 					</step>
 					<step>
@@ -75,32 +80,7 @@
 		<relatedTopics>
 			<link xlink:href="87d2cacd-5492-4bca-9140-7d7c3f5218d7">Архитектура StockSharp</link>
 	
-			<!--link xlink:href="769f74c8-6f8e-4312-a867-3dc6e8482636">Quik</link>
-			<link xlink:href="7f488b0b-0f59-42b4-845b-fd766f5699dc">SmartCOM</link>
-			<link xlink:href="fdfe3e0b-60b8-4915-8db5-8bfab7d9e391">Альфа-Директ</link>
-			<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza II</link>
-			<link xlink:href="f8cae46b-57e1-4954-a4cf-832854840981">OEC Trader</link>
-
-			<link xlink:href="1c3c9835-b65b-48d5-8abf-70986c666ef4">Управление заявками</link>
-
-			<link xlink:href="7a8a9518-6270-4cfe-a829-fa6c40e5fabd">Хранение данных</link>
-
-			<link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>
-			<link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Индикаторы</link>
-			<link xlink:href="82437493-cd53-41eb-b756-d913af0f4f8e">Логирование</link>
-			<link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Стратегии</link>
-			<link xlink:href="a720a275-440a-44ce-86e2-bcec2e0bc55f">S#.Data</link>
-			<link xlink:href="8ab11b62-a6d0-4507-a101-1bd63d9933c0">Торговые алгоритмы</link>
-			<link xlink:href="b85270c7-ee7f-4dbc-a0a3-aac466b75f98">Опционы</link>
 			
-			<link xlink:href="a188710e-7bb7-41b3-8119-6088f2bf1780">Переподключение</link>
-			<link xlink:href="16070956-6e63-4cef-b6a8-6eb42372c424">Биржевое время</link>
-			<link xlink:href="7387c108-01ed-48f2-81f6-653c71d1e628">Платформо-независимость</link>
-			<link xlink:href="1cfb4f7c-b9fc-43da-a958-b0e0f881479d">BasketTrader</link>
-			<link xlink:href="a8486498-a2d8-4924-b009-8b93138b268a">Арифметические операции</link>
-			<link xlink:href="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92">Пользовательский интерфейс (GUI)</link>
-			<link xlink:href="aca28ee6-5c0c-47ee-a7e6-fe295e001be7">Конвертация валют</link>
-			<link xlink:href="4efd0545-a100-44ed-bdf5-4588e5665199">Примеры</link-->
 		</relatedTopics>
 
 	</developerConceptualDocument>

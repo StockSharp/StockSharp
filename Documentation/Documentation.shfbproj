@@ -32,9 +32,6 @@
       <DocumentationSource sourceFile="..\Community\Community.csproj" />
       <DocumentationSource sourceFile="..\Hydra\Core\CorePublic.csproj" />
       <DocumentationSource sourceFile="..\Connectors\CQG\CQG.csproj" />
-      <DocumentationSource sourceFile="..\References\Ecng\Ecng.Common.dll" />
-      <DocumentationSource sourceFile="..\References\Ecng\Ecng.ComponentModel.dll" />
-      <DocumentationSource sourceFile="..\References\Ecng\Ecng.Serialization.dll" />
       <DocumentationSource sourceFile="..\Connectors\ETrade\ETrade.csproj" />
       <DocumentationSource sourceFile="..\Connectors\InteractiveBrokers\InteractiveBrokers.csproj" />
       <DocumentationSource sourceFile="..\Connectors\IQFeed\IQFeed.csproj" />
@@ -152,6 +149,9 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\OptionsGUI.aml" />
+    <None Include="Topics\ALLBoard.aml" />
+    <None Include="Topics\GUISecurities.aml" />
     <None Include="Topics\GuiLogging.aml" />
     <None Include="Topics\AppLogging.aml" />
     <None Include="Topics\FixNews.aml" />
@@ -1362,6 +1362,26 @@
     <Image Include="Art\GUI_Monitor.png">
       <ImageId>GUI_Monitor</ImageId>
       <AlternateText>GUI Monitor</AlternateText>
+    </Image>
+    <Image Include="Art\sample_timeframecandles.png">
+      <ImageId>sample_timeframecandles</ImageId>
+      <AlternateText>sample timeframecandles</AlternateText>
+    </Image>
+    <Image Include="Art\sample_rangecandles.png">
+      <ImageId>sample_rangecandles</ImageId>
+      <AlternateText>sample rangecandles</AlternateText>
+    </Image>
+    <Image Include="Art\ssapi_schema.png">
+      <ImageId>ssapi_schema</ImageId>
+      <AlternateText>ssapi schema</AlternateText>
+    </Image>
+    <Image Include="Art\option_desk.png">
+      <ImageId>option_desk</ImageId>
+      <AlternateText>option desk</AlternateText>
+    </Image>
+    <Image Include="Art\option_volsmile.png">
+      <ImageId>option_volsmile</ImageId>
+      <AlternateText>option volsmile</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
