@@ -13,12 +13,14 @@
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
       <para>
-      	В <token>stocksharp</token> инструменты, приходящие из разных источников, имеют единообразные идентификатор <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Id</codeEntityReference>.
+      	В <token>stocksharp</token> инструменты из разных источников имеют унифицированные идентификаторы 
+      	<codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Security.Id</codeEntityReference>.
       	Это сделано для того, чтобы код торгового робота не зависел от типа подключения (<token>plaza</token>, <token>quik</token>, <token>smartcom</token> и т.д.).
-      	Идентификатор инструмента генерируется по следующему алгоритму. Через символ @ записываются код и площадка инструмента.
-      	Например, для Лукойла идентификатор будет равен <legacyBold>LKOH@EQBR</legacyBold>. Для инструментов <token>rts</token> площадка инструмента будет равен FORTS.
-      	Идентификатор, к примеру, для июньского фьючерса на индекс РТС будет равен <legacyBold>RIM5@FORTS</legacyBold>.
+      	Для идентификатора инструмента используется следующий синтаксис - <legacyBold>[код инструмента]@[код площадки]</legacyBold>.
+      	Например, для акций Лукойла идентификатором будет <legacyBold>LKOH@EQBR</legacyBold>. Для инструментов срочного рынка <token>moex</token> площадкой будет "FORTS".
+      	Так, например, для июньского фьючерса на индекс РТС идентификатором будет <legacyBold>RIM5@FORTS</legacyBold>.
       </para>
+      
       <alert class="note">
       	Программа <token>hydra</token> для скачивания маркет-данных нумерует папки с историей, основываясь на таком же механизме.
       </alert>

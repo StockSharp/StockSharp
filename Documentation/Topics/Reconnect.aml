@@ -37,7 +37,7 @@
 			<listItem>
 				В процессе установки или отключения соединения соответствующие события <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Connected</codeEntityReference> или
 				 <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.Disconnected</codeEntityReference> могут не приходить долгое время. Для таких ситуаций можно использовать свойство
-				 <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.ConnectDisconnectTimeOutInterval</codeEntityReference>, чтобы задать максимально допустимое время отсутствия успешного события.
+				 <codeEntityReference qualifyHint="true">P:StockSharp.Messages.ReConnectionSettings.TimeOutInterval</codeEntityReference>, чтобы задать максимально допустимое время отсутствия успешного события.
 				 Если по истечению данного времени желаемое событие не возникает, то вызывается событие <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.ConnectionError</codeEntityReference> с ошибкой окончания ожидания.
 			</listItem>
 		</list>
