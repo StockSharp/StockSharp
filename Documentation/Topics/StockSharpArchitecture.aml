@@ -116,7 +116,7 @@
   							<para><codeEntityReference>N:StockSharp.Xaml.Charting</codeEntityReference> - средства для построения различных графиков: cвечки, индикаторы, доходность и др.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Xaml.Diagrams</codeEntityReference> - графические элементы для визуального создания стратегий.</para>
+  							<para><codeEntityReference>N:StockSharp.Xaml.Diagram</codeEntityReference> - графические элементы для визуального создания стратегий.</para>
   						</listItem>
 				</list>
 			</listItem>

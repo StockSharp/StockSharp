@@ -42,33 +42,47 @@
 // создаем настройки для тестирования
 var settings = new[]
 {
-	new Tuple<CheckBox, ProgressBar, StatisticParameterPanel, EmulationInfo>(
-		TicksCheckBox, 
-		TicksTestingProcess, 
-		TicksParametersPanel,
-		// тест только на тиках
-		new EmulationInfo {CurveColor = Colors.DarkGreen, StrategyName = "На тиках"}),
+	Tuple.Create(
+		TicksCheckBox,
+		TicksTestingProcess,
+		TicksParameterGrid,
+		// ticks
+		new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks}),
 
-	new Tuple<CheckBox, ProgressBar, StatisticParameterPanel, EmulationInfo>(
-		TicksAndDepthsCheckBox, 
-		TicksAndDepthsTestingProcess, 
-		TicksAndDepthsParametersPanel,
-		// тест на тиках + стаканы
-		new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = "На тиках & стаканах"}),
+		Tuple.Create(
+		TicksAndDepthsCheckBox,
+		TicksAndDepthsTestingProcess,
+		TicksAndDepthsParameterGrid,
+		// ticks + order book
+		new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757}),
 
-	new Tuple<CheckBox, ProgressBar, StatisticParameterPanel, EmulationInfo>(
-		CandlesCheckBox, 
-		CandlesTestingProcess, 
-		CandlesParametersPanel,
-		// тест на свечках
-		new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = "На свечках"})
-		
-	new Tuple<CheckBox, ProgressBar, StatisticParameterPanel, EmulationInfo>(
-		CandlesAndDepthsCheckBox, 
-		CandlesAndDepthsTestingProcess, 
-		CandlesAndDepthsParametersPanel,
-		// тест на свечках + стаканы
-		new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = "На свечках&стаканах"})		
+	Tuple.Create(
+		DepthsCheckBox,	
+		DepthsTestingProcess,
+		DepthsParameterGrid,
+		// order book
+		new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.Str1414}),
+
+	Tuple.Create(
+		CandlesCheckBox,
+		CandlesTestingProcess,
+		CandlesParameterGrid,
+		// candles
+		new EmulationInfo {UseCandleTimeFrame = timeFrame, CurveColor = Colors.DarkBlue, StrategyName = LocalizedStrings.Candles}),
+				
+	Tuple.Create(
+		CandlesAndDepthsCheckBox,
+		CandlesAndDepthsTestingProcess,
+		CandlesAndDepthsParameterGrid,
+		// candles + orderbook
+		new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635}),
+			
+	Tuple.Create(
+		OrderLogCheckBox,
+		OrderLogTestingProcess,
+		OrderLogParameterGrid,
+		// order log
+		new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog})
 };
 		]]>
 		</code>
@@ -83,13 +97,11 @@ var settings = new[]
 					  </para>
 					  <code language="C#">
 // хранилище, через которое будет производиться доступ к тиковой и котировочной базе
-var storageRegistry = new StorageRegistry();
-
-// изменяем путь, используемый по умолчанию
-((LocalMarketDataDrive)storageRegistry.DefaultDrive).Path = HistoryPath.Text;
-
-// используем алфавитное хранилище
-((LocalMarketDataDrive) storageRegistry.DefaultDrive).UseAlphabeticPath = true;
+var storageRegistry = new StorageRegistry
+{
+	// set historical path
+	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Text)
+};
 </code>
 					  <alert class="caution">
 						  Через <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.Path</codeEntityReference> указывается директория, где
@@ -116,6 +128,10 @@ foreach (var set in settings)
 	var progressBar = set.Item2;
 	var statistic = set.Item3;
 	var emulationInfo = set.Item4;
+	
+	.............................
+
+}	
 		]]>
 		</code>
 				  </content>
@@ -128,17 +144,19 @@ foreach (var set in settings)
 					  </para>
 					  <code language="C#">// создаем тестовый инструмент, на котором будет производится тестирование
 var security = new Security
-{
-	Id = "RIZ2@FORTS", // по идентификатору инструмента будет искаться папка с историческими маркет данными
-	Code = "RIZ2",
-	Name = "RTS-12.12",
-	MinStepSize = 10,
-	MinStepPrice = 2,
-	ExchangeBoard = ExchangeBoard.Forts,
-}
+			{
+				Id = SecId.Text, // sec id has the same name as folder with historical data
+				Code = secCode,
+				Board = board,
+			};
 
 // тестовый портфель
-var portfolio = new Portfolio { Name = "test account", BeginValue = 1000000m };</code>
+var portfolio = new Portfolio
+				{
+					Name = "test account",
+					BeginValue = 1000000,
+				};
+				</code>
 				  </content>
 			  </step>
 			  
@@ -151,19 +169,36 @@ var portfolio = new Portfolio { Name = "test account", BeginValue = 1000000m };<
 					  <code language="C#"><![CDATA[
 // создаем шлюз для эмуляции
 // инициализируем настройки (инструмент в истории обновляется раз в секунду)
-var trader = new HistoryEmulationConnector(
-	new[] { security },
-	new[] { portfolio })
-{
-	MarketTimeChangedInterval = timeFrame,
-	StorageRegistry = storageRegistry,
-					
-	// использовать стаканы
-	UseMarketDepth = emulationInfo.UseMarketDepth,
-					
-	// использовать свечки
-	UseCandlesTimeFrame = emulationInfo.UseCandleTimeFrame,
-};
+var connector = new HistoryEmulationConnector(
+					new[] { security },
+					new[] { portfolio })
+				{
+					StorageRegistry = storageRegistry,
+					MarketEmulator =
+					{
+						Settings =
+						{
+							// set time frame is backtesting on candles
+							UseCandlesTimeFrame = emulationInfo.UseCandleTimeFrame,
+
+							// match order if historical price touched our limit order price. 
+							// It is terned off, and price should go through limit order price level
+							// (more "severe" test mode)
+							MatchOnTouch = false,
+						}
+					},
+
+					//UseExternalCandleSource = true,
+					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
+					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
+
+					// set history range
+					StartDate = startTime,
+					StopDate = stopTime,
+
+					// set market time freq as time frame
+					MarketTimeChangedInterval = timeFrame,
+				};
 					  ]]></code>
 					  <!--para>
 							При тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> или <link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/>
@@ -200,37 +235,52 @@ var trader = new HistoryEmulationConnector(
 						  частотой в истории будет меняться стакан):
 					  </para>
 					  <code language="C#">
-if (emulationInfo.UseMarketDepth)
-	trader.RegisterMarketDepth(security);
-
-if (emulationInfo.UseMarketDepth									// тест подразумевает наличие стаканов
-		&amp;&amp; (generateDepths.Value									// если выбрана генерация стаканов вместо реальных стаканов
-		|| emulationInfo.UseCandleTimeFrame!=TimeSpan.Zero			// для свечей генерируем стаканы всегда
-	))
+connector.NewSecurities += securities =>
 {
-	// если история по стаканам отсутствует, но стаканы необходимы для стратегии,
-	// то их можно сгенерировать на основании цен последних сделок или свечек.
-	trader.RegisterMarketDepth(new TrendMarketDepthGenerator(security)
+	if (securities.All(s => s != security))
+		return;
+
+	// fill level1 values
+	connector.SendInMessage(level1Info);
+
+	if (emulationInfo.UseMarketDepth)
 	{
-		Interval = TimeSpan.FromSeconds(1), // стакан для инструмента в истории обновляется раз в секунду
-		MaxAsksDepth = 1,
-		MaxBidsDepth = 1,
-		UseTradeVolume = true,
-		MaxVolume = 1,
-		MinSpreadStepCount = 2,  // минимальный генерируемый спред - 2 минимальных шага цены
-		MaxSpreadStepCount = 5, // не генерировать спрэд между лучшим бид и аск больше чем 5 минимальных шагов цены - нужно чтобы при генерации из свечей не получалось слишком широкого спреда.
-	});
+		connector.RegisterMarketDepth(security);
+
+		if (
+			// если тест подразумевает наличие стаканов
+			generateDepths ||
+			// of backtesting will be on candles
+			emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
+			)
+		{
+			// если нет исторических стаканов, а тест подразумевает их наличие,
+			// то используем генерацию стаканов на основе цены последней сделки
+			connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
+			{
+				Interval = TimeSpan.FromSeconds(1), // стакан для инструмента в истории обновляется раз в секунду
+				MaxAsksDepth = maxDepth,
+				MaxBidsDepth = maxDepth,
+				UseTradeVolume = true,
+				MaxVolume = maxVolume,
+				MinSpreadStepCount = 2,	// минимальный генерируемый спред - 2 минимальных шага цены
+				MaxSpreadStepCount = 5,	// не генерировать спрэд между лучшим бид и аск больше чем 5 минимальных шагов цены - нужно чтобы при генерации из свечей не получалось слишком широкого спреда.
+				MaxPriceStepCount = 3	// pips size,
+			});
+	}
 }
+			  
 					</code>
 				  </content>
 			  </step>				  
 			  <step>
 				  <content>
 					  <para>
-						  Подключение и запуск эскпорта данных:
+						  Подключение:
 					  </para>
-					  <code language="C#">trader.Connect();
-trader.StartExport();</code>
+					  <code language="C#">
+trader.Connect();
+					</code>
 					  <para>
 						  Для переданных в конструктор <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> инструментов
 						  и портфелей вызывается <codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.NewSecurities</codeEntityReference>
@@ -248,7 +298,7 @@ trader.StartExport();</code>
 						  и регистрация 5-минутных свечек:
 					  </para>
 					  <code language="C#">
-			var candleManager = new CandleManager(trader);
+			var candleManager = new CandleManager(new TradeCandleBuilderSourceEx(connector));
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 			candleManager.Start(series);
 </code>
@@ -260,15 +310,21 @@ trader.StartExport();</code>
 					  <para>
 						  Создание самой стратегии <token>ma</token>:
 					  </para>
-					  <code language="C#">
+					  <code language="C#"><![CDATA[
 // создаем торговую стратегию, скользящие средние на 80 5-минуток и 10 5-минуток
-var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, new SimpleMovingAverage { Length = 10 })
+var strategy = new SmaStrategy(_bufferedChart, _candlesElem, _tradesElem, _shortMa, _shortElem, _longMa, _longElem, series)
 {
-	Volume = 1,
-	Portfolio = portfolio,
-	Security = security,
-	Trader = _trader
+			Volume = 1,
+			Portfolio = portfolio,
+			Security = security,
+			Connector = connector,
+			LogLevel = DebugLogCheckBox.IsChecked == true ? LogLevels.Debug : LogLevels.Info,
+
+			// by default interval is 1 min,
+			// it is excessively for time range with several months
+			UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>()
 };
+]]>
 </code>
 				  </content>
 			  </step>
@@ -281,33 +337,49 @@ var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = 80 }, 
 					  </para>
 						<code language="C#">
 						<![CDATA[
-
 // копируем параметры на визуальную панель
 statistic.Parameters.Clear();
 statistic.Parameters.AddRange(strategy.StatisticManager.Parameters);
 
-var curveItems = Curve.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
+var pnlCurve = Curve.CreateCurve("P&L " + emulationInfo.StrategyName, emulationInfo.CurveColor, EquityCurveChartStyles.Area);
+var unrealizedPnLCurve = Curve.CreateCurve(LocalizedStrings.PnLUnreal + emulationInfo.StrategyName, Colors.Black);
+var commissionCurve = Curve.CreateCurve(LocalizedStrings.Str159 + " " + emulationInfo.StrategyName, Colors.Red, EquityCurveChartStyles.DashedLine);
+var posItems = PositionCurve.CreateCurve(emulationInfo.StrategyName, emulationInfo.CurveColor);
+
 strategy.PnLChanged += () =>
 {
-	var data = new EquityData
-	{
-		Time = strategy.GetMarketTime(),
-		Value = strategy.PnL,
-	};
+	var pnl = new EquityData
+		{
+			Time = strategy.CurrentTime,
+			Value = strategy.PnL - strategy.Commission ?? 0
+		};
 
-	this.GuiAsync(() => curveItems.Add(data));
-};
+	var unrealizedPnL = new EquityData
+		{
+			Time = strategy.CurrentTime,
+			Value = strategy.PnLManager.UnrealizedPnL
+		};
 
-var nextTime = startTime + progressStep;
+	var commission = new EquityData
+		{
+			Time = strategy.CurrentTime,
+			Value = strategy.Commission ?? 0
+		};
 
+	pnlCurve.Add(pnl);
+	unrealizedPnLCurve.Add(unrealizedPnL);
+	commissionCurve.Add(commission);
+};						
+					
 // и подписываемся на событие изменения времени, чтобы обновить ProgressBar
-trader.MarketTimeChanged += d =>
+connector.MarketTimeChanged += d =>
 {
-	if (trader.CurrentTime >= nextTime || trader.CurrentTime >= stopTime)
-	{
-		nextTime += progressStep;
-		this.GuiAsync(() => progressBar.Value++);
-	}
+	if (connector.CurrentTime < nextTime && connector.CurrentTime < stopTime)
+		return;
+
+	var steps = (connector.CurrentTime - startTime).Ticks / progressStep.Ticks + 1;
+		nextTime = startTime + (steps * progressStep.Ticks).To<TimeSpan>();
+		this.GuiAsync(() => progressBar.Value = steps);
 };
 					]]>
 					</code>				
@@ -322,10 +394,15 @@ trader.MarketTimeChanged += d =>
 					  </para>
 					  <code language="C#">
 // запускаем эмуляцию
-foreach (var trader in _traders)
+foreach (var connector in _connectors)
 {
-	// указываем даты начала и конца тестирования
-	trader.Start(startTime, stopTime);
+		connector.Connect();
+
+		// устанавливаем комиссию
+		connector.SendInMessage(new CommissionRuleMessage
+		{
+			Rule = new CommissionPerTradeRule { Value = 0.01m }
+		});
 }
 					  </code>
 				  </content>

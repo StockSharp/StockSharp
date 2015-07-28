@@ -117,7 +117,7 @@
     <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
-    <BuildLogFile>F:\GitHub\StockSharp\Documentation\doc_log.log</BuildLogFile>
+    <BuildLogFile>C:\Users\surface\Documents\GitHub\StockSharp\Documentation\doc_log.log</BuildLogFile>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
@@ -149,6 +149,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\GUIOptions.aml" />
     <None Include="Topics\OptionsGUI.aml" />
     <None Include="Topics\ALLBoard.aml" />
     <None Include="Topics\GUISecurities.aml" />
