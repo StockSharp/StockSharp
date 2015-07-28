@@ -33,7 +33,6 @@ public class XmlTranslation
 		var root = XDocument.Load(xmlFile);
 		var members = root.Elements("doc").Elements("members").Elements("member");
 
-		var newTranslations = new HashSet<string>();
 		foreach (var member in members)
 		{
 			var name = member.Attribute("name");
@@ -43,27 +42,31 @@ public class XmlTranslation
 				var content = parseContent(tag, out tagChildren);
 				if (!m_TranslationKeys.ContainsKey(content))
 				{
-					if (newTranslations.Contains(content))
-						continue;
-					newTranslations.Add(content);
-
-					if (content.Contains(";"))
-						content = "\"" + content + "\"";
-
 					var newKey = prefix + newKeyIndex++.ToString();
-					outStreamTextCsv.WriteLine(newKey + ";" + content + ";" + content);
+					m_TranslationKeys[content] = new Tuple<string, string>(newKey, content);
 
+					var writtenContent = "";
+					if (content.Contains(";"))
+						writtenContent = "\"" + content + "\"";
+					else
+						writtenContent = content;
+
+					outStreamTextCsv.WriteLine(newKey + ";" + writtenContent + ";" + writtenContent);
+				
 					newKeyCount++;
 				}
-				else
-					outStream.WriteLine(getPath(tag) + ";" + m_TranslationKeys[content].Item1);
+
+				outStream.WriteLine(getPath(tag) + ";" + m_TranslationKeys[content].Item1);
 			}
 		}
 
 		outStream.Close();
 		outStreamTextCsv.Close();
 
-		Console.WriteLine("не хватает" + newKeyCount.ToString() + " переводов");
+		if (newKeyCount != 0)
+			Console.WriteLine("не хватает " + newKeyCount.ToString() + " переводов");
+		else
+			Console.WriteLine("все переводы найдены");
 	}
 
 	/// <summary>
@@ -123,15 +126,18 @@ public class XmlTranslation
 		var encoded = HttpUtility.HtmlEncode(translation);	//	например, было содержимое "—веча (X&amp;0)", превращавшеес€ в XElement.Value в "—веча (X&0)", в этом месте преобразуем обратно
 
 		var newContent = "";
-		try
-		{
-			newContent = string.Format(encoded, tagChildren);
-		}
-		catch (FormatException)
-		{
-			throw new Exception("Ќе удаетс€ сопоставить xml теги исходной строки формату перевода:\nисходна€ - " + original +
-				"\nперевод - " + encoded);
-		}
+		if (tagChildren.Count() != 0)
+			try
+			{
+				newContent = string.Format(encoded, tagChildren);
+			}
+			catch (FormatException)
+			{
+				throw new Exception("Ќе удаетс€ сопоставить xml теги исходной строки формату перевода:\nисходна€ - " + original +
+					"\nперевод - " + encoded);
+			}
+		else	//	встречаютс€ странные строки без параметров, но с фигурными скобками
+			newContent = encoded;
 
 		var newText = "<" + tag.Name + ">" + newContent + "</" + tag.Name + ">";
 		var newEl = XElement.Parse(newText);
@@ -142,7 +148,11 @@ public class XmlTranslation
 
 	private string cleanString(string s)
 	{
-		return s.Replace("\n", " ").Trim().TrimEnd('.').Trim();
+		var ss = s.Split('\n');
+		for (int i = 0; i < ss.Count(); i++ )
+			ss[i] = ss[i].Trim();
+		s = string.Join(" ", ss).Trim();
+		return s.TrimEnd('.').Trim();
 	}
 
 	private string parseContent(XElement tag, out XElement []tagChildren)
@@ -238,7 +248,12 @@ public class XmlTranslation
 
 	private string getPath(XElement tag)
 	{
-		return tag.Parent.Attribute("name").Value + "/" + tag.Name;
+		var basic = tag.Parent.Attribute("name").Value + "/" + tag.Name;
+		var nameAttr = tag.Attribute("name");
+		if (nameAttr != null)
+			return basic + "/" + nameAttr.Value;
+		else
+			return basic;
 	}
 };
 
