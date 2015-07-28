@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###v4.3.8:
+* (feature) ITCH connector.
 * (bug) FIX connector and FixServer. Many fixes.
 * (bug) CSV storage fix.
 * (bug) Excel export boost.
