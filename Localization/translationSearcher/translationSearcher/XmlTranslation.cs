@@ -63,7 +63,10 @@ public class XmlTranslation
 		outStream.Close();
 		outStreamTextCsv.Close();
 
-		Console.WriteLine("не хватает" + newKeyCount.ToString() + " переводов");
+		if (newKeyCount != 0)
+			Console.WriteLine("не хватает " + newKeyCount.ToString() + " переводов");
+		else
+			Console.WriteLine("все переводы найдены");
 	}
 
 	/// <summary>
@@ -142,7 +145,11 @@ public class XmlTranslation
 
 	private string cleanString(string s)
 	{
-		return s.Replace("\n", " ").Trim().TrimEnd('.').Trim();
+		var ss = s.Split('\n');
+		for (int i = 0; i < ss.Count(); i++ )
+			ss[i] = ss[i].Trim();
+		s = string.Join(" ", ss).Trim();
+		return s.TrimEnd('.').Trim();
 	}
 
 	private string parseContent(XElement tag, out XElement []tagChildren)
