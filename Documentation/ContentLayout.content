@@ -217,7 +217,7 @@
     <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
       <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" title="Визуальные компоненты логирования" />
       <Topic id="c4bfe1be-0e21-4480-814b-abaa13536f1f" visible="True" title="Визуальные компоненты: инструменты" />
-      <Topic id="667d9230-82d2-4052-9e23-6cdd983d3461" visible="True" isSelected="true" title="Графические компоненты для опционов" />
+      <Topic id="b69ea6e5-d4e9-4889-b2aa-18c60a736805" visible="True" isSelected="true" title="Графические компоненты для опционов" />
     </Topic>
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />

@@ -131,9 +131,8 @@ Desk.CurrentTime = null;
   									<listItem>Заполняем массив цепочкой опционов, где подлежащим активом выступает выбранный инструмент;</listItem>
   									<listItem>Присваиваем свойству <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> этот массив;</listItem>
   									<listItem>Обновляем значения доски опционов при помощи метода 
-  									<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions()</codeEntityReference>.</listItem>
+  									<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
 								</list>
-
             					<code title="C#" language="C#">
                   <![CDATA[
 _connector.NewSecurities += securities =>
@@ -172,7 +171,7 @@ _connector.NewSecurities += securities =>
   									<codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference>;</listItem>
   									<listItem>
   									 Если были добавлены новые опционы или изменились параметры ранее добавленных опционов, то обновляем доску опционов 
-  									<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions()</codeEntityReference>.</listItem>
+  									<codeEntityReference qualifyHint="true">M:StockSharp.Xaml.OptionDesk.RefreshOptions</codeEntityReference>.</listItem>
 								</list>
             					<code title="C#" language="C#">
                   <![CDATA[

@@ -49,7 +49,7 @@ _trader.NewSecurities += securities => this.GuiSync(() => this.Security.ItemsSou
 </externalLink>. Собственные графические компоненты размещены в пространствах имен 
 <codeEntityReference qualifyHint="true">N:StockSharp.Xaml</codeEntityReference>, <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Charting</codeEntityReference>
 и <codeEntityReference qualifyHint="true">N:StockSharp.Xaml.Diagram</codeEntityReference>. Некоторые специфические компоненты находятся в пространствах имен коннекторов,
- как например, комбинированный список <codeEntityReference qualifyHint="false">T:StockSharp.SmartCom.Xml.SmartComAddressComboBox</codeEntityReference> для выбора адреса сервера
+ как например, комбинированный список <codeEntityReference qualifyHint="false">T:StockSharp.SmartCom.Xaml.SmartComAddressComboBox</codeEntityReference> для выбора адреса сервера
  <token>smartcom</token>.
  </para>
 <para>

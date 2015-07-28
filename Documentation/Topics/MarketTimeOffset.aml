@@ -41,10 +41,9 @@
       <para>Для определения биржевого времени в <token>stocksharp</token> есть метод
 		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.TraderHelper.GetMarketTime(StockSharp.BusinessEntities.IConnector,StockSharp.BusinessEntities.Security)</codeEntityReference>.
 		Чтобы данный метод возвращал точное время, необходимо синхронизировать локальное время компьютера с атомными часами через вызов метода
-		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:Ecng.Common.TimeHelper.SyncMarketTime(System.Int32)</codeEntityReference>. Разница во времени будет записана в
-		<codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>.
-		После этого в <codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.Now</codeEntityReference> будет хранится синхронизированное локальное время с учетом
-		<codeEntityReference qualifyHint="true">P:Ecng.Common.TimeHelper.NowOffset</codeEntityReference>.
+		<legacyBold>TimeHelper.SyncMarketTime</legacyBold>. Разница во времени будет записана в <legacyBold>TimeHelper.NowOffset</legacyBold>.
+		После этого в <legacyBold>TimeHelper.Now</legacyBold> будет хранится синхронизированное локальное время с учетом <legacyBold>TimeHelper.NowOffset</legacyBold>. Класс <legacyBold>TimeHelper</legacyBold> находится
+		в пространстве имен <legacyBold>Ecng.Common</legacyBold>.
 	  </para>
     </introduction>
 
