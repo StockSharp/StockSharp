@@ -33,7 +33,6 @@ public class XmlTranslation
 		var root = XDocument.Load(xmlFile);
 		var members = root.Elements("doc").Elements("members").Elements("member");
 
-		var newTranslations = new HashSet<string>();
 		foreach (var member in members)
 		{
 			var name = member.Attribute("name");
@@ -43,20 +42,21 @@ public class XmlTranslation
 				var content = parseContent(tag, out tagChildren);
 				if (!m_TranslationKeys.ContainsKey(content))
 				{
-					if (newTranslations.Contains(content))
-						continue;
-					newTranslations.Add(content);
-
-					if (content.Contains(";"))
-						content = "\"" + content + "\"";
-
 					var newKey = prefix + newKeyIndex++.ToString();
-					outStreamTextCsv.WriteLine(newKey + ";" + content + ";" + content);
+					m_TranslationKeys[content] = new Tuple<string, string>(newKey, content);
 
+					var writtenContent = "";
+					if (content.Contains(";"))
+						writtenContent = "\"" + content + "\"";
+					else
+						writtenContent = content;
+
+					outStreamTextCsv.WriteLine(newKey + ";" + writtenContent + ";" + writtenContent);
+				
 					newKeyCount++;
 				}
-				else
-					outStream.WriteLine(getPath(tag) + ";" + m_TranslationKeys[content].Item1);
+
+				outStream.WriteLine(getPath(tag) + ";" + m_TranslationKeys[content].Item1);
 			}
 		}
 

@@ -21,7 +21,6 @@ namespace translationSearcher
 				//var textCsvFName = args[1];
 				var outputCsvFName = Path.ChangeExtension(s, "csv");
 				tr.SearchTranslationsForXml(s, textCsvFName, outputCsvFName);
-				tr.SearchTranslationsForXml(s, textCsvFName, outputCsvFName);
 			}
 
 			foreach (var s in Directory.GetFiles(refDir, "StockSharp.*.xml"))
@@ -34,8 +33,8 @@ namespace translationSearcher
 		}
 		static void Main(string[] args)
 		{
-//			MichaelsTest();
-//			return;
+// 			MichaelsTest();
+// 			return;
 
 // 			var inputXmlFName = @"d:\code\translationSearcher\StockSharp xmls\a.xml";//StockSharp.Messages.xml";
 // 			var outputCsvFName = Path.ChangeExtension(inputXmlFName,"csv");
