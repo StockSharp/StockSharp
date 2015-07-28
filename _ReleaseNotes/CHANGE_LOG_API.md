@@ -28,6 +28,8 @@ StockSharp API Change log
 * (feature) Storage. Date cache bin->txt format.
 * (bug) CSV storage. Fix save NewsMessage.SecurityId.
 * (bug) CSV storage. Fix append data with same time for order log and tick trades.
+* (feature) FIX connector. ExecMsg.ClientCode.
+* (feature) FIX connector. Read/write timeouts.
 
 ###v4.3.7:
 * (feature) MessageDirections. Removed.

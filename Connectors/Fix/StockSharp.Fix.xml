@@ -256,6 +256,16 @@
             Формат времени.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.FixSession.ReadTimeout">
+      <summary>
+            Время ожидания получения данных от сервера. По-умолчанию равно <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixSession.WriteTimeout">
+      <summary>
+            Время ожидания отправки данных на сервер. По-умолчанию равно <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.BaseFixReader">
       <summary>
             Базовый класс читателя.
@@ -314,6 +324,11 @@
     <member name="P:StockSharp.Fix.Native.FixBase.LastTag">
       <summary>
             Последний рабочий тэг.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.FixBase.IsValueRead">
+      <summary>
+            Было ли прочитано значение тэга.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.Native.BaseFixReader.#ctor(System.IO.Stream,System.Text.Encoding)">
@@ -472,6 +487,11 @@
     <member name="P:StockSharp.Fix.Native.IFixReader.Encoding">
       <summary>
             Кодировка строковых данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.Native.IFixReader.IsValueRead">
+      <summary>
+            Было ли прочитано значение тэга.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.Native.IFixReader.LastTag">
@@ -2886,6 +2906,354 @@
       <summary>
       </summary>
     </member>
+    <member name="T:StockSharp.Fix.Native.PartyRole">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ExecutingFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.SettlementLocation">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.OrderOriginationTrader">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ExecutingTrader">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.OrderOriginationFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.GiveupClearingFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.CorrespondantClearingFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ExecutingSystem">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ContraFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ContraClearingFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.SponsoringFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.BrokerOfCredit">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.UnderlyingContraFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ClearingOrganization">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.Exchange">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.CustomerAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.CorrespondentClearingOrganization">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.CorrespondentBroker">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.BuyerSeller">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.Custodian">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.Intermediary">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ClientId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.Agent">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.SubCustodian">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.Beneficiary">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.InterestedParty">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.RegulatoryBody">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.LiquidityProvider">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.EnteringTrader">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ContraTrader">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.PositionAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ClearingFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.InvestorId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.IntroducingFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.EnteringFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.Locate">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.FundManagerClientId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.IntroducingBroker">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ContraPositionAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ContraExchange">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.InternalCarryAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.OrderEntryOperatorId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.SecondaryAccountNumber">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ForeignFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ThirdPartyAllocationFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ClaimingAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.AssetManager">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.PledgorAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.PledgeeAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.LargeTraderReportableAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.TraderMnemonic">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.SenderLocation">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.SessionId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.AcceptableCounterparty">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.UnacceptableCounterparty">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.EnteringUnit">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ExecutingUnit">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ContraInvestorId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.TransferToFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.QuoteOriginator">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ReportOriginator">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.SystematicInternaliser">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.MultilateralTradingFacility">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.RegulatedMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.MarketMaker">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.InvestmentFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.HostCompetentAuthority">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.HomeCompetentAuthority">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.CompetentAuthorityOfTheMostRelevantMarketInTermsOfLiquidity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.CompetentAuthorityOfTheTransaction">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ReportingIntermediary">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ExecutionVenue">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.MarketDataEntryOriginator">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.LocationId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.DeskId">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.MarketDataMarket">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.AllocationEntity">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.PrimeBrokerProvidingGeneralTradeServices">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.StepOutFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.Brokerclearingid">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.CentralRegistrationDepository">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ClearingAccount">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.AcceptableSettlingCounterparty">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.UnacceptableSettlingCounterparty">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.ForiegnFirm">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.PartyRole.LocateLendingFirm">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixMessages">
       <summary>
             Коды FIX сообщений.
@@ -3171,13 +3539,21 @@
             </summary>
       <param name="message">Критерий поиска.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityListResponse(System.Collections.Generic.ICollection{StockSharp.Messages.SecurityMessage},System.String,System.String)">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityListResponse(System.String,System.String,System.String)">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.SecurityList" /> (ответ).
             </summary>
-      <param name="securityMessages">Информация об инструментах.</param>
       <param name="requestId">Идентификатор запроса.</param>
       <param name="responseId">Идентификатор ответа.</param>
+      <param name="error">Информация об ошибке.</param>
+    </member>
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityListResponse(System.String,System.String,System.Collections.Generic.ICollection{StockSharp.Messages.SecurityMessage})">
+      <summary>
+            Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.SecurityList" /> (ответ).
+            </summary>
+      <param name="requestId">Идентификатор запроса.</param>
+      <param name="responseId">Идентификатор ответа.</param>
+      <param name="securityMessages">Информация об инструментах.</param>
     </member>
     <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataSnapshotFullRefresh(StockSharp.Messages.SecurityId,System.String,System.DateTimeOffset,System.Collections.Generic.ICollection{StockSharp.Fix.Native.MDEntry})">
       <summary>
@@ -3365,6 +3741,16 @@
       <param name="status">Статус.</param>
       <param name="text">Текстовое сообщение.</param>
     </member>
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteReject(System.String,System.Int32,System.String,System.Nullable{StockSharp.Fix.Native.FixTags},System.Nullable{System.Int32})">
+      <summary>
+            Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.Reject" />.
+            </summary>
+      <param name="error">Информация об ошибке.</param>
+      <param name="seqNum">Номер сообщения.</param>
+      <param name="msgType">Тип сообщения.</param>
+      <param name="tag">Тэг.</param>
+      <param name="sessionRejectReason">Код ошибки.</param>
+    </member>
     <member name="P:StockSharp.Fix.Native.FixMessageWriter.Writer">
       <summary>
             Писать FIX протокола.
@@ -3520,6 +3906,10 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.SymbolSfx">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.TradeDate">
       <summary>
       </summary>
     </member>
@@ -3731,6 +4121,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.RefTagID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.RefMsgType">
       <summary>
       </summary>
@@ -3763,6 +4157,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NestedPartyID">
+      <summary>
+      </summary>
+    </member>
     <member name="F:StockSharp.Fix.Native.FixTags.MassCancelRequestType">
       <summary>
       </summary>
@@ -3776,6 +4174,14 @@
       </summary>
     </member>
     <member name="F:StockSharp.Fix.Native.FixTags.QuoteType">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NestedPartyRole">
+      <summary>
+      </summary>
+    </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.NoNestedPartyIDs">
       <summary>
       </summary>
     </member>
@@ -4108,6 +4514,16 @@
     <member name="P:StockSharp.Fix.FixMessageAdapter.TimeFormat">
       <summary>
             Формат времени.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.ReadTimeout">
+      <summary>
+            Время ожидания получения данных от сервера. По-умолчанию равно <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Fix.FixMessageAdapter.WriteTimeout">
+      <summary>
+            Время ожидания отправки данных на сервер. По-умолчанию равно <see cref="F:Ecng.Common.SyncObject.InfiniteTimeSpan" />.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.IsValid">
