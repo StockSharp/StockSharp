@@ -126,15 +126,18 @@ public class XmlTranslation
 		var encoded = HttpUtility.HtmlEncode(translation);	//	например, было содержимое "Свеча (X&amp;0)", превращавшееся в XElement.Value в "Свеча (X&0)", в этом месте преобразуем обратно
 
 		var newContent = "";
-		try
-		{
-			newContent = string.Format(encoded, tagChildren);
-		}
-		catch (FormatException)
-		{
-			throw new Exception("Не удается сопоставить xml теги исходной строки формату перевода:\nисходная - " + original +
-				"\nперевод - " + encoded);
-		}
+		if (tagChildren.Count() != 0)
+			try
+			{
+				newContent = string.Format(encoded, tagChildren);
+			}
+			catch (FormatException)
+			{
+				throw new Exception("Не удается сопоставить xml теги исходной строки формату перевода:\nисходная - " + original +
+					"\nперевод - " + encoded);
+			}
+		else	//	встречаются странные строки без параметров, но с фигурными скобками
+			newContent = encoded;
 
 		var newText = "<" + tag.Name + ">" + newContent + "</" + tag.Name + ">";
 		var newEl = XElement.Parse(newText);
@@ -245,7 +248,12 @@ public class XmlTranslation
 
 	private string getPath(XElement tag)
 	{
-		return tag.Parent.Attribute("name").Value + "/" + tag.Name;
+		var basic = tag.Parent.Attribute("name").Value + "/" + tag.Name;
+		var nameAttr = tag.Attribute("name");
+		if (nameAttr != null)
+			return basic + "/" + nameAttr.Value;
+		else
+			return basic;
 	}
 };
 
