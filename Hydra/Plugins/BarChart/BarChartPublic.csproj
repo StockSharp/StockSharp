@@ -107,9 +107,9 @@
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\Core.csproj">
+    <ProjectReference Include="..\..\Core\CorePublic.csproj">
       <Project>{95ca16e0-0a47-43a3-aab7-7e0803e817ca}</Project>
-      <Name>Core</Name>
+      <Name>CorePublic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
