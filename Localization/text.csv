@@ -1754,8 +1754,12 @@ Str1875;Connection to SmartCOM is not initialized.;Подключение к Sma
 Str1876;SmartCOM connection timeout.;Время установления связи со SmartCOM вышло.
 NetworkError;Network error.;Сетевая ошибка.
 Main;Main;Основной
+MainServer;Main server;Основной сервер
 Demo;Demo;Демо
 Backup;Backup;Резервный
+BackupServer;Backup server;Резервный сервер
+Recovery;Recovery;Аварийный
+RecoveryServer;Recovery server;Аварийный сервер
 Stalker;Stalker;Сталкер
 Str1882;Unknown value for order direction.;Неизвестное значение для направления заявки.
 Str1883;Unknown value for order type.;Неизвестное значение для типа заявки.

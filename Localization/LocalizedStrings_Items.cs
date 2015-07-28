@@ -22766,6 +22766,19 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// Main server
+		/// </summary>
+		public const string MainServerKey = "MainServer";
+
+		/// <summary>
+		/// Main server
+		/// </summary>
+		public static string MainServer
+		{
+			get { return GetString(MainServerKey); }
+		}
+
+		/// <summary>
 		/// Demo
 		/// </summary>
 		public const string DemoKey = "Demo";
@@ -22789,6 +22802,45 @@ namespace StockSharp.Localization
 		public static string Backup
 		{
 			get { return GetString(BackupKey); }
+		}
+
+		/// <summary>
+		/// Backup server
+		/// </summary>
+		public const string BackupServerKey = "BackupServer";
+
+		/// <summary>
+		/// Backup server
+		/// </summary>
+		public static string BackupServer
+		{
+			get { return GetString(BackupServerKey); }
+		}
+
+		/// <summary>
+		/// Recovery
+		/// </summary>
+		public const string RecoveryKey = "Recovery";
+
+		/// <summary>
+		/// Recovery
+		/// </summary>
+		public static string Recovery
+		{
+			get { return GetString(RecoveryKey); }
+		}
+
+		/// <summary>
+		/// Recovery server
+		/// </summary>
+		public const string RecoveryServerKey = "RecoveryServer";
+
+		/// <summary>
+		/// Recovery server
+		/// </summary>
+		public static string RecoveryServer
+		{
+			get { return GetString(RecoveryServerKey); }
 		}
 
 		/// <summary>
