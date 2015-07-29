@@ -64,6 +64,7 @@ namespace StockSharp.Algo.Storages
 									LocalTime = quote.LocalTime,
 									Bids = new List<QuoteChange>(),
 									Asks = new List<QuoteChange>(),
+									IsSorted = true,
 								};
 							}
 							else if (Current.ServerTime != quote.ServerTime || (side == Sides.Sell && quote.Side == Sides.Buy))
@@ -136,7 +137,7 @@ namespace StockSharp.Algo.Storages
 				{
 					var items = new List<TimeQuoteChange>();
 
-					items.AddRange(d.Bids.OrderBy(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
+					items.AddRange(d.Bids.OrderByDescending(q => q.Price).Select(q => new TimeQuoteChange(q, d)));
 
 					if (items.Count == 0)
 						items.Add(new TimeQuoteChange { Side = Sides.Buy, ServerTime = d.ServerTime });
