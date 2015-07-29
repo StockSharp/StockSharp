@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" isDefault="true" title="О StockSharp" />
+  <Topic id="b5725b73-8ba6-46d6-b456-cba5f6678f91" visible="True" isDefault="true" isSelected="true" title="О StockSharp" />
   <Topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" visible="True" title="Лицензирование StockSharp" />
   <Topic id="536b1c81-5336-4dc0-ab29-8bef70a162ba" visible="True" title="Исходные коды" />
   <Topic id="a594740e-58f1-4148-afe7-d41abc4d486b" visible="True" title="Справочные материалы" />
@@ -196,12 +196,15 @@
       <Topic id="9feaabde-52ea-4562-a666-380ce49c6df6" visible="True" title="Стакан: алгоритмы" />
       <Topic id="973860e9-8f2d-4035-98de-bb88b33b6751" visible="True" title="Кривая эквити" />
     </Topic>
-    <Topic id="b85270c7-ee7f-4dbc-a0a3-aac466b75f98" visible="True" title="Опционы">
+    <Topic id="b85270c7-ee7f-4dbc-a0a3-aac466b75f98" visible="True" isExpanded="true" title="Опционы">
       <Topic id="063708c5-b6a8-45f6-9ff9-608f89796a88" visible="True" title="Греки" />
       <Topic id="6fe5b321-a23d-415d-b3e3-af9de9212a20" visible="True" title="Котирование по волатильности" />
       <Topic id="598efa7f-83fb-4dc8-8822-e6776362f652" visible="True" title="Дельта-хеджирование" />
       <Topic id="efad2861-7392-4ed6-957d-f7fde651a48f" visible="True" title="Синтетика" />
-      <Topic id="667d9230-82d2-4052-9e23-6cdd983d3461" visible="True" title="Графические компоненты для опционов" />
+      <Topic id="667d9230-82d2-4052-9e23-6cdd983d3461" visible="True" isExpanded="true" title="Графические компоненты для опционов">
+        <Topic id="0bcd3950-6fc9-463a-b473-6b0c6587f7f1" visible="True" />
+        <Topic id="5d9f8c0d-d05c-4a39-9fad-7148df4411ad" visible="True" />
+      </Topic>
     </Topic>
     <Topic id="febbcf31-63d1-449d-847e-92fd8424f926" visible="True" title="Тестирование">
       <Topic id="5b90a23e-24b9-474a-a699-da47b666194a" visible="True" title="На истории" />
@@ -217,7 +220,7 @@
     <Topic id="a0a4c8df-2bba-4e1e-8ba9-e1fa98728f92" visible="True" isExpanded="true" title="Пользовательский интерфейс (GUI)">
       <Topic id="4cd2b7f9-fe8d-404a-bec6-227783410beb" visible="True" title="Визуальные компоненты логирования" />
       <Topic id="c4bfe1be-0e21-4480-814b-abaa13536f1f" visible="True" title="Визуальные компоненты: инструменты" />
-      <Topic id="b69ea6e5-d4e9-4889-b2aa-18c60a736805" visible="True" isSelected="true" title="Графические компоненты для опционов" />
+      <Topic id="b69ea6e5-d4e9-4889-b2aa-18c60a736805" visible="True" title="Графические компоненты для опционов" />
     </Topic>
     <Topic id="aca28ee6-5c0c-47ee-a7e6-fe295e001be7" visible="True" title="Конвертация валют" />
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
