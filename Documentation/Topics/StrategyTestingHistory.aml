@@ -1,10 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <topic id="5b90a23e-24b9-474a-a699-da47b666194a" revisionNumber="0">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--<summary>
-      <para>Optional abstract</para>
-    </summary>-->
-
+    
     <introduction>
 		<para>
 			Тестирование на исторических данных позволяет проводить как анализ рынка для поиска закономерностей, так и
