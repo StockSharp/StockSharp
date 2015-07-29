@@ -85,34 +85,20 @@ namespace StockSharp.Algo.Testing
 			// чтобы склонировать внутренние котировки
 			//message = (QuoteChangeMessage)message.Clone();
 			// TODO для ускорения идет shallow copy котировок
-			var newBids = message.IsSorted ? message.Bids.ToArray() : message.Bids.OrderByDescending(q => q.Price).ToArray();
-			var newAsks = message.IsSorted ? message.Asks.ToArray() : message.Asks.OrderBy(q => q.Price).ToArray();
+			var newBids = message.IsSorted ? message.Bids : message.Bids.OrderByDescending(q => q.Price);
+			var newAsks = message.IsSorted ? message.Asks : message.Asks.OrderBy(q => q.Price);
 
-			return ProcessQuoteChange(message.LocalTime, newBids, newAsks);
+			return ProcessQuoteChange(message.LocalTime, newBids.ToArray(), newAsks.ToArray());
 		}
 
 		private IEnumerable<ExecutionMessage> ProcessQuoteChange(DateTime time, QuoteChange[] newBids, QuoteChange[] newAsks)
 		{
-			var retVal = _bids.Select(p => p.Value.Second)
-				.GetDiff(newBids, Sides.Buy, true)
-				.Concat(_asks.Select(p => p.Value.Second).GetDiff(newAsks, Sides.Sell, true))
-				.Select(q => CreateMessage(time, q.Side, q.Price, q.Volume.Abs(), !(q.Volume > 0)));
+			decimal bestBidPrice;
+			decimal bestAskPrice;
 
-			var bestBidPrice = 0m;
-
-			foreach (var bid in newBids)
-			{
-				if (bid.Price > bestBidPrice)
-					bestBidPrice = bid.Price;
-			}
-
-			var bestAskPrice = 0m;
-
-			foreach (var ask in newAsks)
-			{
-				if (bestAskPrice == 0 || ask.Price < bestAskPrice)
-					bestAskPrice = ask.Price;
-			}
+			var retVal =
+				GetDiff(time, _bids.Select(p => p.Value.Second), newBids, Sides.Buy, out bestBidPrice)
+				.Concat(GetDiff(time, _asks.Select(p => p.Value.Second), newAsks, Sides.Sell, out bestAskPrice));
 
 			var spreadPrice = bestAskPrice == 0
 				? bestBidPrice
@@ -129,6 +115,158 @@ namespace StockSharp.Algo.Testing
 			_currSpreadPrice = spreadPrice;
 
 			return retVal.ToArray();
+		}
+
+		/// <summary>
+		/// Вычислить приращение между котировками. 
+		/// </summary>
+		/// <param name="time"></param>
+		/// <param name="from">Первые котировки.</param>
+		/// <param name="to">Вторые котировки.</param>
+		/// <param name="side">Направление, показывающее тип котировок.</param>
+		/// <param name="newBestPrice"></param>
+		/// <returns>Изменения.</returns>
+		private IEnumerable<ExecutionMessage> GetDiff(DateTime time, IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side, out decimal newBestPrice)
+		{
+			//if (!isSorted)
+			//{
+			//	if (side == Sides.Sell)
+			//	{
+			//		from = from.OrderBy(q => q.Price);
+			//		to = to.OrderBy(q => q.Price);
+			//	}
+			//	else
+			//	{
+			//		from = from.OrderByDescending(q => q.Price);
+			//		to = to.OrderByDescending(q => q.Price);
+			//	}
+			//}
+
+			newBestPrice = 0;
+
+			var diff = new List<ExecutionMessage>();
+
+			var canProcessFrom = true;
+			var canProcessTo = true;
+
+			QuoteChange currFrom = null;
+			QuoteChange currTo = null;
+
+			var mult = side == Sides.Buy ? -1 : 1;
+
+			using (var fromEnum = from.GetEnumerator())
+			using (var toEnum = to.GetEnumerator())
+			{
+				while (true)
+				{
+					if (canProcessFrom && currFrom == null)
+					{
+						if (!fromEnum.MoveNext())
+							canProcessFrom = false;
+						else
+							currFrom = fromEnum.Current;
+					}
+
+					if (canProcessTo && currTo == null)
+					{
+						if (!toEnum.MoveNext())
+							canProcessTo = false;
+						else
+						{
+							currTo = toEnum.Current;
+
+							if (newBestPrice == 0)
+								newBestPrice = currTo.Price;
+						}
+					}
+
+					if (currFrom == null)
+					{
+						if (currTo == null)
+							break;
+						else
+						{
+							//diff.Add(currTo.Clone());
+							AddExecMsg(diff, time, currTo, currTo.Volume);
+							currTo = null;
+						}
+					}
+					else
+					{
+						if (currTo == null)
+						{
+							//var clone = currFrom.Clone();
+							//clone.Volume = -clone.Volume;
+							//diff.Add(clone);
+							AddExecMsg(diff, time, currFrom, -currFrom.Volume);
+							currFrom = null;
+						}
+						else
+						{
+							if (currFrom.Price == currTo.Price)
+							{
+								if (currFrom.Volume != currTo.Volume)
+								{
+									//var clone = currTo.Clone();
+									//clone.Volume -= currFrom.Volume;
+									//diff.Add(clone);
+									AddExecMsg(diff, time, currTo, currTo.Volume - currFrom.Volume);
+								}
+
+								currFrom = currTo = null;
+							}
+							else if (currFrom.Price * mult > currTo.Price * mult)
+							{
+								//diff.Add(currTo.Clone());
+								AddExecMsg(diff, time, currTo, currTo.Volume);
+								currTo = null;
+							}
+							else
+							{
+								//var clone = currFrom.Clone();
+								//clone.Volume = -clone.Volume;
+								//diff.Add(clone);
+								AddExecMsg(diff, time, currFrom, -currFrom.Volume);
+								currFrom = null;
+							}
+						}
+					}
+				}
+			}
+
+			return diff;
+		}
+
+		private readonly RandomArray<bool> _isMatch = new RandomArray<bool>(100);
+
+		private void AddExecMsg(List<ExecutionMessage> diff, DateTime time, QuoteChange quote, decimal volume)
+		{
+			if (volume > 0)
+				diff.Add(CreateMessage(time, quote.Side, quote.Price, volume));
+			else
+			{
+				volume = volume.Abs();
+
+				if (volume > 1 && _isMatch.Next())
+				{
+					var tradeVolume = (int)volume / 2;
+
+					diff.Add(new ExecutionMessage
+					{
+						Side = quote.Side,
+						Volume = tradeVolume,
+						ExecutionType = ExecutionTypes.Tick,
+						SecurityId = SecurityId,
+						LocalTime = time,
+						TradePrice = quote.Price,
+					});
+
+					// that tick will not affect on order book
+					//volume -= tradeVolume;
+				}
+
+				diff.Add(CreateMessage(time, quote.Side, quote.Price, volume, true));
+			}
 		}
 
 		/// <summary>

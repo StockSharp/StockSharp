@@ -257,7 +257,15 @@ namespace StockSharp.Algo.Testing
 						var quoteMsg = (QuoteChangeMessage)message;
 
 						foreach (var m in _execLogConverter.ToExecutionLog(quoteMsg))
-							Process(m, result);
+						{
+							if (m.ExecutionType == ExecutionTypes.Tick)
+							{
+								m.ServerTime = quoteMsg.ServerTime;
+								result.Add(m);
+							}
+							else
+								Process(m, result);
+						}
 
 						// возращаем не входящий стакан, а тот, что сейчас хранится внутри эмулятора.
 						// таким образом мы можем видеть в стакане свои цены и объемы
