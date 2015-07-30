@@ -536,7 +536,7 @@ namespace StockSharp.BusinessEntities
 		private Trade _lastTrade;
 
 		/// <summary>
-		/// Информация о последней сделке. Если за сессию по инструменту не было сделок, то значение равно null.
+		/// Информация о последней сделке. Если за сессию по инструменту не было сделок, то значение равно <see langword="null"/>.
 		/// </summary>
 		//[DataMember]
 		[Ignore]

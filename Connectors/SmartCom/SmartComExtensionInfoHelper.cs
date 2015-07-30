@@ -25,7 +25,7 @@
 		/// Получить гарантийное обеспечение продажи опционов для инструмента.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
-		/// <returns>Гарантийное обеспечение продажи опционов. Если информация отсутствует, то будет возвращено null.</returns>
+		/// <returns>Гарантийное обеспечение продажи опционов. Если информация отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static decimal? GetOptionsMargin(this Security security)
 		{
 			return security.GetValue<decimal?>(SecurityOptionsMargin);
@@ -49,7 +49,7 @@
 		/// Получить гарантийное обеспечение по синтетическим позициям для инструмента.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
-		/// <returns>Гарантийное обеспечение по синтетическим позициям. Если информация отсутствует, то будет возвращено null.</returns>
+		/// <returns>Гарантийное обеспечение по синтетическим позициям. Если информация отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static decimal? GetOptionsSyntheticMargin(this Security security)
 		{
 			return security.GetValue<decimal?>(SecurityOptionsSyntheticMargin);
@@ -73,7 +73,7 @@
 		/// Получить SmartCOM статус портфеля.
 		/// </summary>
 		/// <param name="portfolio">Портфель.</param>
-		/// <returns>Статус портфеля. Если статус отсутствует, то будет возвращено null.</returns>
+		/// <returns>Статус портфеля. Если статус отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static SmartPortfolioStatus GetSmartStatus(this Portfolio portfolio)
 		{
 			return portfolio.GetValue<SmartPortfolioStatus>(PortfolioStatus);

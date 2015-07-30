@@ -3048,7 +3048,7 @@ namespace StockSharp.BusinessEntities
 		/// Получить площадку по ее коду.
 		/// </summary>
 		/// <param name="code">Код площадки.</param>
-		/// <returns>Найденная площадка. Если площадки с переданным названием не существует, то будет возвращено null.</returns>
+		/// <returns>Найденная площадка. Если площадки с переданным названием не существует, то будет возвращено <see langword="null"/>.</returns>
 		public static ExchangeBoard GetBoard(string code)
 		{
 			return code.CompareIgnoreCase("RTS") ? Forts : ExchangeInfoProvider.GetExchangeBoard(code);
@@ -3058,7 +3058,7 @@ namespace StockSharp.BusinessEntities
 		/// Получить площадку по ее коду. Если площадки с переданным кодом не существует, то она будет создана.
 		/// </summary>
 		/// <param name="code">Код площадки.</param>
-		/// <param name="createBoard">Обработчик, создающий площадку, если она не найдена. Если значение равно null, то площадка создается с инициализацией по-умолчанию.</param>
+		/// <param name="createBoard">Обработчик, создающий площадку, если она не найдена. Если значение равно <see langword="null"/>, то площадка создается с инициализацией по-умолчанию.</param>
 		/// <returns>Биржевая площадка.</returns>
 		public static ExchangeBoard GetOrCreateBoard(string code, Func<string, ExchangeBoard> createBoard = null)
 		{

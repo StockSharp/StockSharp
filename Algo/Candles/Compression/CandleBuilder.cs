@@ -445,7 +445,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="currentCandle">Текущая свеча.</param>
 		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
 		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается null.</returns>
+		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
 		protected virtual TCandle ProcessValue(CandleSeries series, TCandle currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (currentCandle == null || IsCandleFinishedBeforeChange(series, currentCandle, value))
@@ -1223,7 +1223,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="currentCandle">Текущая свеча.</param>
 		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
 		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается null.</returns>
+		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
 		protected override RenkoCandle ProcessValue(CandleSeries series, RenkoCandle currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (value == null)

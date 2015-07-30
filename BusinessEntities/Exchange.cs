@@ -768,7 +768,7 @@ namespace StockSharp.BusinessEntities
 		public static Exchange MBTrading { get; private set; }
 
 		/// <summary>
-		/// Информация о брокере TrueFX
+		/// Информация о брокере TrueFX.
 		/// </summary>
 		public static Exchange TrueFX { get; private set; }
 

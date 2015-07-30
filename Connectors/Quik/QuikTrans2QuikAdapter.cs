@@ -135,7 +135,7 @@ namespace StockSharp.Quik
 		private bool _isAsyncMode = true;
 
 		/// <summary>
-		/// Асинхронный режим. Если true, то все транзакции, такие как <see cref="OrderRegisterMessage"/>
+		/// Асинхронный режим. Если <see langword="true"/>, то все транзакции, такие как <see cref="OrderRegisterMessage"/>
 		/// или <see cref="OrderCancelMessage"/> будут отправляться в асинхронном режиме.
 		/// </summary>
 		/// <remarks>
@@ -178,7 +178,7 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new QuikOrderCondition();

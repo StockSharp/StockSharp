@@ -57,7 +57,7 @@ namespace StockSharp.Algo.Derivatives
 			/// Получить модель расчета значений "греков" по формуле Блэка-Шоулза для конкретного опциона.
 			/// </summary>
 			/// <param name="option">Опцион.</param>
-			/// <returns>Модель. Если опцион не зарегистрирован, то будет возвращено null.</returns>
+			/// <returns>Модель. Если опцион не зарегистрирован, то будет возвращено <see langword="null"/>.</returns>
 			InnerModel this[Security option] { get; }
 		}
 

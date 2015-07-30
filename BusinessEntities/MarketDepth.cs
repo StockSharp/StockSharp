@@ -339,7 +339,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		/// <param name="orderDirection">Направление заявок.</param>
 		/// <param name="depthIndex">Индекс глубины. Нулевой индекс означает лучшую котировку.</param>
-		/// <returns>Котировка. Если для заданной глубины не существует котировки, то будет возвращено null.</returns>
+		/// <returns>Котировка. Если для заданной глубины не существует котировки, то будет возвращено <see langword="null"/>.</returns>
 		public Quote GetQuote(Sides orderDirection, int depthIndex)
 		{
 			lock (_syncRoot)
@@ -350,7 +350,7 @@ namespace StockSharp.BusinessEntities
 		/// Получить котировку по цене.
 		/// </summary>
 		/// <param name="price">Цена котировки.</param>
-		/// <returns>Найденная котировка. Если для переданной цены в стакане не существует котировки, то будет возвращено null.</returns>
+		/// <returns>Найденная котировка. Если для переданной цены в стакане не существует котировки, то будет возвращено <see langword="null"/>.</returns>
 		public Quote GetQuote(decimal price)
 		{
 			var quotes = GetQuotes(price);
@@ -372,7 +372,7 @@ namespace StockSharp.BusinessEntities
 		/// Получить лучшую котировку по направлению <see cref="Sides"/>.
 		/// </summary>
 		/// <param name="orderDirection">Направление заявки.</param>
-		/// <returns>Лучшая котировка. Если стакан пустой, то будет возвращено null.</returns>
+		/// <returns>Лучшая котировка. Если стакан пустой, то будет возвращено <see langword="null"/>.</returns>
 		public Quote GetBestQuote(Sides orderDirection)
 		{
 			return orderDirection == Sides.Buy ? BestBid : BestAsk;

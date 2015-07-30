@@ -1599,7 +1599,7 @@ namespace StockSharp.Algo
 		/// Получить направление заявки для позиции.
 		/// </summary>
 		/// <remarks>
-		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - null.
+		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - <see langword="null"/>.
 		/// </remarks>
 		/// <param name="position">Значение позиции.</param>
 		/// <returns>Направление заявки.</returns>
@@ -1615,7 +1615,7 @@ namespace StockSharp.Algo
 		/// Получить направление заявки для позиции.
 		/// </summary>
 		/// <remarks>
-		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - null.
+		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - <see langword="null"/>.
 		/// </remarks>
 		/// <param name="position">Значение позиции.</param>
 		/// <returns>Направление заявки.</returns>
@@ -1632,11 +1632,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">Подключение взаимодействия с торговыми системами.</param>
 		/// <param name="orders">Группа заявок, из которой необходимо найти требуемые заявки и отменить их.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
+		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
+		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
+		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
+		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
 		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			if (connector == null)
@@ -3037,7 +3037,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0 и null.
+		/// Добавить изменение в коллекцию, если значение отлично от 0 и <see langword="null"/>.
 		/// </summary>
 		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
 		/// <typeparam name="TChange">Тип изменения.</typeparam>
@@ -3073,7 +3073,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0 и null.
+		/// Добавить изменение в коллекцию, если значение отлично от 0 и <see langword="null"/>.
 		/// </summary>
 		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
 		/// <typeparam name="TChange">Тип изменения.</typeparam>

@@ -21,7 +21,7 @@ namespace StockSharp.InteractiveBrokers
 		///// Получить идентификатор инструмента в системе Interactive Brokers.
 		///// </summary>
 		///// <param name="security">Инструмент.</param>
-		///// <returns>Идентификатор инструмента в системе Interactive Brokers. Если идентификатор отсутствует, то будет возвращено null.</returns>
+		///// <returns>Идентификатор инструмента в системе Interactive Brokers. Если идентификатор отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		//public static int? GetContractId(this Security security)
 		//{
 		//	return security.GetValue<int?>(_contractId);
@@ -47,7 +47,7 @@ namespace StockSharp.InteractiveBrokers
 		///// Получить локальный код инструмента.
 		///// </summary>
 		///// <param name="security">Инструмент.</param>
-		///// <returns>Локальный код инструмента. Если код отсутствует, то будет возвращено null.</returns>
+		///// <returns>Локальный код инструмента. Если код отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		//public static string GetLocalCode(this Security security)
 		//{
 		//	return security.GetValue<string>(_localCode);
@@ -68,7 +68,7 @@ namespace StockSharp.InteractiveBrokers
 		///// Получить множитель дериватива.
 		///// </summary>
 		///// <param name="security">Инструмент.</param>
-		///// <returns>Множитель. Если множитель отсутствует, то будет возвращено null.</returns>
+		///// <returns>Множитель. Если множитель отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		//public static decimal? GetMultiplier(this Security security)
 		//{
 		//	return security.GetValue<decimal?>(_multiplier);
@@ -89,7 +89,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить для инструмента биржевую площадку исполнения заявок.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
-		/// <returns>Биржевая площадка исполнения заявок. Если площадка отсутствует, то будет возвращено null.</returns>
+		/// <returns>Биржевая площадка исполнения заявок. Если площадка отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static ExchangeBoard GetRoutingBoard(this Security security)
 		{
 			return ExchangeBoard.GetOrCreateBoard(security.GetValue<string>(_routingExchange));
@@ -209,7 +209,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить идентификатор клиента.
 		/// </summary>
 		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено null.</returns>
+		/// <returns>Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static int? GetClientId(this MyTrade trade)
 		{
 			return trade.GetValue<int?>(_clientId);
@@ -230,7 +230,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить позицию ликвидации.
 		/// </summary>
 		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Позиция ликвидации. Если позиция отсутствует, то будет возвращено null.</returns>
+		/// <returns>Позиция ликвидации. Если позиция отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static int? GetLiquidation(this MyTrade trade)
 		{
 			return trade.GetValue<int?>(_liquidation);
@@ -267,7 +267,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить количество прибыльных контрактов в сделке.
 		/// </summary>
 		/// <param name="trade">>Собственная сделка.</param>
-		/// <returns>Количество прибыльных контрактов в сделке. Если количество отсутствует, то будет возвращено null.</returns>
+		/// <returns>Количество прибыльных контрактов в сделке. Если количество отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static int? GetCumulativeQuantity(this MyTrade trade)
 		{
 			return trade.GetValue<int?>(_cumulativeQuantity);
@@ -288,7 +288,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить среднюю цену исполнения сделки.
 		/// </summary>
 		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Средняя цена исполнения сделки. Если цена отсутствует, то будет возвращено null.</returns>
+		/// <returns>Средняя цена исполнения сделки. Если цена отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static decimal? GetAveragePrice(this MyTrade trade)
 		{
 			return trade.GetValue<decimal?>(_averagePrice);
@@ -309,7 +309,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить описание заявки.
 		/// </summary>
 		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Описание заявки. Если описание отсутствует, то будет возвращено null.</returns>
+		/// <returns>Описание заявки. Если описание отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static string GetOrderRef(this MyTrade trade)
 		{
 			return trade.GetValue<string>(_orderRef);
@@ -330,7 +330,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить Economic Value правило.
 		/// </summary>
 		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Economic Value правило. Если правило отсутствует, то будет возвращено null.</returns>
+		/// <returns>Economic Value правило. Если правило отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static string GetEvRule(this MyTrade trade)
 		{
 			return trade.GetValue<string>(_evRule);
@@ -351,7 +351,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить множитель рыночной цены контракта при изменении цены на 1.
 		/// </summary>
 		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Множитель рыночной цены. Если множитель отсутствует, то будет возвращено null.</returns>
+		/// <returns>Множитель рыночной цены. Если множитель отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static decimal? GetEvMultiplier(this MyTrade trade)
 		{
 			return trade.GetValue<decimal?>(_evMultiplier);
@@ -384,7 +384,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить идентификатор клиента.
 		/// </summary>
 		/// <param name="order">Заявка.</param>
-		/// <returns>Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено null.</returns>
+		/// <returns>Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static int? GetClientId(this Order order)
 		{
 			return order.GetValue<int?>(_clientId);
@@ -400,7 +400,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить цену последней сделки.
 		/// </summary>
 		/// <param name="order">Заявка.</param>
-		/// <returns>Цена последней сделки. Если цена отсутствует, то будет возвращено null.</returns>
+		/// <returns>Цена последней сделки. Если цена отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static decimal GetLastTradePrice(this Order order)
 		{
 			return order.GetValue<decimal>(_lastTradePrice);
@@ -421,7 +421,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Получить причину удержания заявки.
 		/// </summary>
 		/// <param name="order">Заявка.</param>
-		/// <returns>Причина удержания. Если причина отсутствует, то будет возвращено null.</returns>
+		/// <returns>Причина удержания. Если причина отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static string GetWhyHeld(this Order order)
 		{
 			return order.GetValue<string>(_whyHeld);

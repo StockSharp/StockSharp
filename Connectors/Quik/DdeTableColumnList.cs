@@ -38,7 +38,7 @@ namespace StockSharp.Quik
 		/// Найти колонку по текстовому названию.
 		/// </summary>
 		/// <param name="name">Название колонки.</param>
-		/// <returns>Найденная колонка. Если колонка не найдена, то будет возвращено значение null.</returns>
+		/// <returns>Найденная колонка. Если колонка не найдена, то будет возвращено значение <see langword="null"/>.</returns>
 		public DdeTableColumn this[string name]
 		{
 			get { return this.FirstOrDefault(c => c.Name == name); }

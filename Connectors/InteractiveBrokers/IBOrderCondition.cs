@@ -50,7 +50,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Получить значение параметра. Если значение не существует, будет возвращено null.
+			/// Получить значение параметра. Если значение не существует, будет возвращено <see langword="null"/>.
 			/// </summary>
 			/// <typeparam name="T">Тип значения.</typeparam>
 			/// <param name="name">Название параметра.</param>

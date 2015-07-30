@@ -35,27 +35,27 @@ namespace StockSharp.Algo
 			/// <summary>
 			/// Получить первый по экспирации инструмент.
 			/// </summary>
-			/// <returns>Первый инструмент. Если <see cref="ExpirationJumps"/> пустой, то будет возвращено null.</returns>
+			/// <returns>Первый инструмент. Если <see cref="ExpirationJumps"/> пустой, то будет возвращено <see langword="null"/>.</returns>
 			Security FirstSecurity { get; }
 
 			/// <summary>
 			/// Получить последний по экспирации инструмент.
 			/// </summary>
-			/// <returns>Последний инструмент. Если <see cref="ExpirationJumps"/> пустой, то будет возвращено null.</returns>
+			/// <returns>Последний инструмент. Если <see cref="ExpirationJumps"/> пустой, то будет возвращено <see langword="null"/>.</returns>
 			Security LastSecurity { get; }
 
 			/// <summary>
 			/// Получить следующий инструмент.
 			/// </summary>
 			/// <param name="security">Инструмент.</param>
-			/// <returns>Следующий инструмент. Если <paramref name="security"/> является последним инструментом, то будет возвращено null.</returns>
+			/// <returns>Следующий инструмент. Если <paramref name="security"/> является последним инструментом, то будет возвращено <see langword="null"/>.</returns>
 			Security GetNextSecurity(Security security);
 
 			/// <summary>
 			/// Получить предыдущий инструмент.
 			/// </summary>
 			/// <param name="security">Инструмент.</param>
-			/// <returns>Предыдущий инструмент. Если <paramref name="security"/> является первым инструментом, то будет возвращено null.</returns>
+			/// <returns>Предыдущий инструмент. Если <paramref name="security"/> является первым инструментом, то будет возвращено <see langword="null"/>.</returns>
 			Security GetPrevSecurity(Security security);
 			
 			/// <summary>
@@ -277,7 +277,7 @@ namespace StockSharp.Algo
 		///// <summary>
 		///// Получить инструмент, который торгуется в текущий момент (текущее время вычисляется через метод <see cref="TraderHelper.GetMarketTime"/>).
 		///// </summary>
-		///// <returns>Инструмент. Если не существует инструмента для указанного времени, то будет возвращено null.</returns>
+		///// <returns>Инструмент. Если не существует инструмента для указанного времени, то будет возвращено <see langword="null"/>.</returns>
 		//public Security GetSecurity()
 		//{
 		//	return GetSecurity(this.GetMarketTime());
@@ -287,7 +287,7 @@ namespace StockSharp.Algo
 		/// Получить инструмент, который торгуется для указанного биржевого времени.
 		/// </summary>
 		/// <param name="marketTime">Биржевое время.</param>
-		/// <returns>Инструмент. Если не существует инструмента для указанного времени, то будет возвращено null.</returns>
+		/// <returns>Инструмент. Если не существует инструмента для указанного времени, то будет возвращено <see langword="null"/>.</returns>
 		public Security GetSecurity(DateTimeOffset marketTime)
 		{
 			return _expirationJumps.GetSecurity(marketTime);

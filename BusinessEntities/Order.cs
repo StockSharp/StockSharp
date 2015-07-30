@@ -457,7 +457,7 @@ namespace StockSharp.BusinessEntities
 		private Order _derivedOrder;
 
 		/// <summary>
-		/// Биржевая заявка, которая была создана стоп-заявкой при активации условия (null, если стоп-условие еще не было активировано).
+		/// Биржевая заявка, которая была создана стоп-заявкой при активации условия (<see langword="null"/>, если стоп-условие еще не было активировано).
 		/// </summary>
 		[DataMember]
 		[InnerSchema]

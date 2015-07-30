@@ -2261,7 +2261,7 @@ namespace StockSharp.Algo
 		/// <param name="container">Контейнер правил.</param>
 		/// <param name="rule">Правило.</param>
 		/// <param name="checkCanFinish">Проверять возможность остановки правила.</param>
-		/// <returns><see langword="true"/>, если правило было успешно удалено, false - если правило нельзя удалить в текущий момент.</returns>
+		/// <returns><see langword="true"/>, если правило было успешно удалено, <see langword="false"/> - если правило нельзя удалить в текущий момент.</returns>
 		public static bool TryRemoveRule(this IMarketRuleContainer container, IMarketRule rule, bool checkCanFinish = true)
 		{
 			if (container == null)
@@ -2679,7 +2679,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <typeparam name="TRule">Тип правила.</typeparam>
 		/// <param name="rule">Правило.</param>
-		/// <param name="suspend">True - приостановить, false - возобновить.</param>
+		/// <param name="suspend"><see langword="true"/> - приостановить, <see langword="false"/> - возобновить.</param>
 		/// <returns>Правило.</returns>
 		public static TRule Suspend<TRule>(this TRule rule, bool suspend)
 			where TRule : IMarketRule
@@ -2692,7 +2692,7 @@ namespace StockSharp.Algo
 		///// </summary>
 		///// <typeparam name="TRule">Тип правила.</typeparam>
 		///// <param name="rule">Правило.</param>
-		///// <param name="syncToken">Объект синхронизации. Если значение равно null, то правило рассинхронизовывается.</param>
+		///// <param name="syncToken">Объект синхронизации. Если значение равно <see langword="null"/>, то правило рассинхронизовывается.</param>
 		///// <returns>Правило.</returns>
 		//public static TRule Sync<TRule>(this TRule rule, SyncObject syncToken)
 		//	where TRule : IMarketRule

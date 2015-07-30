@@ -45,7 +45,7 @@ namespace StockSharp.Algo
 
 		/// <summary>
 		/// Токен правила, с которым он ассоциирован (например, для правила <see cref="MarketRuleHelper.WhenRegistered"/> токеном будет являтся заявка).
-		/// Если правильно ни с чем не ассоциировано, то будет возвращено null.
+		/// Если правильно ни с чем не ассоциировано, то будет возвращено <see langword="null"/>.
 		/// </summary>
 		object Token { get; }
 
@@ -55,7 +55,7 @@ namespace StockSharp.Algo
 		ISynchronizedCollection<IMarketRule> ExclusiveRules { get; }
 
 		/// <summary>
-		/// Сделать правило периодичным (будет вызываться до тех пор, пока <paramref name="canFinish"/> не вернет true).
+		/// Сделать правило периодичным (будет вызываться до тех пор, пока <paramref name="canFinish"/> не вернет <see langword="true"/>).
 		/// </summary>
 		/// <param name="canFinish">Критерий окончания периодичности.</param>
 		/// <returns>Правило.</returns>
@@ -188,7 +188,7 @@ namespace StockSharp.Algo
 
 		/// <summary>
 		/// Токен правила, с которым он ассоциирован (например, для правила <see cref="MarketRuleHelper.WhenRegistered"/> токеном будет являтся заявка).
-		/// Если правильно ни с чем не ассоциировано, то будет возвращено null.
+		/// Если правильно ни с чем не ассоциировано, то будет возвращено <see langword="null"/>.
 		/// </summary>
 		public virtual object Token
 		{
@@ -228,7 +228,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Сделать правило периодичным (будет вызываться до тех пор, пока <paramref name="canFinish"/> не вернет true).
+		/// Сделать правило периодичным (будет вызываться до тех пор, пока <paramref name="canFinish"/> не вернет <see langword="true"/>).
 		/// </summary>
 		/// <param name="canFinish">Критерий окончания периодичности.</param>
 		/// <returns>Правило.</returns>

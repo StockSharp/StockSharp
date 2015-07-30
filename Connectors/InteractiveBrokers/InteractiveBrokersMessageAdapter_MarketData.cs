@@ -612,7 +612,7 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Call this method to start receiving news bulletins. Each bulletin will be returned by the updateNewsBulletin() method.
 		/// </summary>
-		/// <param name="allMessages">if set to TRUE, returns all the existing bulletins for the current day and any new ones. IF set to FALSE, will only return new bulletins.</param>
+		/// <param name="allMessages">if set to <see langword="true"/>, returns all the existing bulletins for the current day and any new ones. IF set to <see langword="false"/>, will only return new bulletins.</param>
 		private void SubscribeNewsBulletins(bool allMessages)
 		{
 			ProcessRequest(RequestMessages.SubscribeNewsBulletins, 0, ServerVersions.V1, socket => socket.Send(allMessages));

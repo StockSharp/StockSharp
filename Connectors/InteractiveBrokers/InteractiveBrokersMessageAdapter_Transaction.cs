@@ -388,7 +388,7 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Call this function to start getting account values, portfolio, and last update time information.
 		/// </summary>
-		/// <param name="isSubscribe">If set to TRUE, the client will start receiving account and portfolio updates. If set to FALSE, the client will stop receiving this information.</param>
+		/// <param name="isSubscribe">If set to <see langword="true"/>, the client will start receiving account and portfolio updates. If set to <see langword="false"/>, the client will stop receiving this information.</param>
 		/// <param name="portfolioName">the account code for which to receive account and portfolio updates.</param>
 		private void SubscribePortfolio(string portfolioName, bool isSubscribe)
 		{
@@ -446,7 +446,7 @@ namespace StockSharp.InteractiveBrokers
 		/// 
 		/// TWS orders can only be bound to clients with a clientId of “0”.
 		/// </summary>
-		/// <param name="autoBind">If set to TRUE, newly created TWS orders will be implicitly associated with the client. If set to FALSE, no association will be made.</param>
+		/// <param name="autoBind">If set to <see langword="true"/>, newly created TWS orders will be implicitly associated with the client. If set to <see langword="false"/>, no association will be made.</param>
 		private void RequestAutoOpenOrders(bool autoBind)
 		{
 			ProcessRequest(RequestMessages.RequestAllOpenOrders, 0, ServerVersions.V1, socket => socket.Send(autoBind));
