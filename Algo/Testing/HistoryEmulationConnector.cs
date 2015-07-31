@@ -125,6 +125,8 @@ namespace StockSharp.Algo.Testing
 			ReConnectionSettings.TimeOutInterval = TimeSpan.MaxValue;
 
 			MaxMessageCount = 1000;
+
+			TradesKeepCount = 0;
 		}
 
 		/// <summary>
