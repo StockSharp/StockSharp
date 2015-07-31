@@ -33,6 +33,8 @@ namespace SampleBtce
 		{
 			InitializeComponent();
 
+			Title = Title.Put("BTCE");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

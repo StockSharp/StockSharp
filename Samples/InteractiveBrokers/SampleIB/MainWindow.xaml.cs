@@ -38,6 +38,8 @@ namespace SampleIB
 			InitializeComponent();
 			MainWindow.Instance = this;
 
+			Title = Title.Put("Interactive Brokers");
+
 			_ordersWindow.MakeHideable();
 			_conditionOrdersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();

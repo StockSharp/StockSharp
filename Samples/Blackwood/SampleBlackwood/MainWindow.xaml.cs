@@ -36,6 +36,8 @@ namespace SampleBlackwood
 		{
 			InitializeComponent();
 
+			Title = Title.Put("Blackwood/Fusion");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

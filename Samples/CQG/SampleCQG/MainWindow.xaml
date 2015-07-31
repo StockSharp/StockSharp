@@ -6,7 +6,7 @@
         xmlns:properties="clr-namespace:SampleCQG.Properties"
         xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="{x:Static loc:LocalizedStrings.XamlStr544}" Height="351" Width="850">
+        Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="351" Width="850">
 
     <Window.Resources>
         <converters:InverseBooleanConverter x:Key="invbool"/>

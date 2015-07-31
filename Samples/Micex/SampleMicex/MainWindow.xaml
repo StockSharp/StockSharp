@@ -5,7 +5,7 @@
     xmlns:micex="clr-namespace:StockSharp.Micex.Xaml;assembly=StockSharp.Micex"
     xmlns:micex2="clr-namespace:StockSharp.Micex;assembly=StockSharp.Micex"
     xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
-    Title="{x:Static loc:LocalizedStrings.XamlStr550}"
+    Title="{x:Static loc:LocalizedStrings.XamlStr540}"
 	Height="124" Width="750" WindowStartupLocation="CenterScreen">
     <Grid>
 		<Grid.ColumnDefinitions>

@@ -11,6 +11,8 @@ namespace SampleITCH
 	using StockSharp.BusinessEntities;
 	using StockSharp.ITCH;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
+	using StockSharp.Xaml;
 
 	public partial class MainWindow
 	{
@@ -22,6 +24,8 @@ namespace SampleITCH
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
 		private readonly OrdersLogWindow _orderLogWindow = new OrdersLogWindow();
 
+		private readonly LogManager _logManager = new LogManager();
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -30,7 +34,12 @@ namespace SampleITCH
 			_tradesWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
 
+			Title = Title.Put("ITCH");
+
 			Instance = this;
+
+			_logManager.Listeners.Add(new FileLogListener { LogDirectory = "StockSharp_ITCH" });
+			_logManager.Listeners.Add(new GuiLogListener(Monitor));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -69,7 +78,9 @@ namespace SampleITCH
 				if (Trader == null)
 				{
 					// create connector
-					Trader = new ITCHTrader();
+					Trader = new ITCHTrader();// { LogLevel = LogLevels.Debug };
+
+					_logManager.Sources.Add(Trader);
 
 					ConfigManager.RegisterService(new FilterableSecurityProvider(Trader));
 
@@ -125,6 +136,7 @@ namespace SampleITCH
 				Trader.PrimaryAddress = Primary.EndPoint;
 				Trader.DuplicateAddress = Duplicate.EndPoint;
 				Trader.RecoveryAddress = Recovery.EndPoint;
+				Trader.ReplayAddress = Replay.EndPoint;
 
 				// clear password box for security reason
 				//Password.Clear();

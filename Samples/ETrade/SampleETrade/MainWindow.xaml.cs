@@ -59,6 +59,8 @@ namespace SampleETrade
 			Instance = this;
 			InitializeComponent();
 
+			Title = Title.Put("E*TRADE");
+
 			Closing += OnClosing;
 
 			_ordersWindow.MakeHideable();

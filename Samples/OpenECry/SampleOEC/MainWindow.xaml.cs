@@ -32,6 +32,8 @@ namespace SampleOEC
 		{
 			InitializeComponent();
 
+			Title = Title.Put("OpenECry");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

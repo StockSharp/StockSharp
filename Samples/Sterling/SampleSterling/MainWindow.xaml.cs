@@ -46,6 +46,8 @@ namespace SampleSterling
 			Instance = this;
 			InitializeComponent();
 
+			Title = Title.Put("Sterling");
+
 			Closing += OnClosing;
 
 			_ordersWindow.MakeHideable();

@@ -31,6 +31,8 @@ namespace SampleLMAX
 		{
 			InitializeComponent();
 
+			Title = Title.Put("LMAX");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

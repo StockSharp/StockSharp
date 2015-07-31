@@ -4,7 +4,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:plaza="clr-namespace:StockSharp.Plaza.Xaml;assembly=StockSharp.Plaza"
-		Title="{x:Static loc:LocalizedStrings.XamlStr553}"
+		Title="{x:Static loc:LocalizedStrings.XamlStr540}"
 		Height="160" Width="512"
 		WindowStartupLocation="CenterScreen">
 	

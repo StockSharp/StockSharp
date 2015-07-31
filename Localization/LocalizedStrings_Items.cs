@@ -22844,6 +22844,32 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// Replay
+		/// </summary>
+		public const string ReplayKey = "Replay";
+
+		/// <summary>
+		/// Replay
+		/// </summary>
+		public static string Replay
+		{
+			get { return GetString(ReplayKey); }
+		}
+
+		/// <summary>
+		/// Replay server
+		/// </summary>
+		public const string ReplayServerKey = "ReplayServer";
+
+		/// <summary>
+		/// Replay server
+		/// </summary>
+		public static string ReplayServer
+		{
+			get { return GetString(ReplayServerKey); }
+		}
+
+		/// <summary>
 		/// Stalker
 		/// </summary>
 		public const string StalkerKey = "Stalker";
@@ -50381,276 +50407,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// AlfaDirect sample application
+		/// {0} sample application
 		/// </summary>
 		public const string XamlStr540Key = "XamlStr540";
 
 		/// <summary>
-		/// AlfaDirect sample application
+		/// {0} sample application
 		/// </summary>
 		public static string XamlStr540
 		{
 			get { return GetString(XamlStr540Key); }
-		}
-
-		/// <summary>
-		/// BitStamp sample application
-		/// </summary>
-		public const string XamlStr541Key = "XamlStr541";
-
-		/// <summary>
-		/// BitStamp sample application
-		/// </summary>
-		public static string XamlStr541
-		{
-			get { return GetString(XamlStr541Key); }
-		}
-
-		/// <summary>
-		/// Blackwood/Fusion sample application
-		/// </summary>
-		public const string XamlStr542Key = "XamlStr542";
-
-		/// <summary>
-		/// Blackwood/Fusion sample application
-		/// </summary>
-		public static string XamlStr542
-		{
-			get { return GetString(XamlStr542Key); }
-		}
-
-		/// <summary>
-		/// BTCE sample application
-		/// </summary>
-		public const string XamlStr543Key = "XamlStr543";
-
-		/// <summary>
-		/// BTCE sample application
-		/// </summary>
-		public static string XamlStr543
-		{
-			get { return GetString(XamlStr543Key); }
-		}
-
-		/// <summary>
-		/// CQG sample application
-		/// </summary>
-		public const string XamlStr544Key = "XamlStr544";
-
-		/// <summary>
-		/// CQG sample application
-		/// </summary>
-		public static string XamlStr544
-		{
-			get { return GetString(XamlStr544Key); }
-		}
-
-		/// <summary>
-		/// ETrade sample application
-		/// </summary>
-		public const string XamlStr545Key = "XamlStr545";
-
-		/// <summary>
-		/// ETrade sample application
-		/// </summary>
-		public static string XamlStr545
-		{
-			get { return GetString(XamlStr545Key); }
-		}
-
-		/// <summary>
-		/// FIX sample application
-		/// </summary>
-		public const string XamlStr546Key = "XamlStr546";
-
-		/// <summary>
-		/// FIX sample application
-		/// </summary>
-		public static string XamlStr546
-		{
-			get { return GetString(XamlStr546Key); }
-		}
-
-		/// <summary>
-		/// Interactive Brokers sample application
-		/// </summary>
-		public const string XamlStr547Key = "XamlStr547";
-
-		/// <summary>
-		/// Interactive Brokers sample application
-		/// </summary>
-		public static string XamlStr547
-		{
-			get { return GetString(XamlStr547Key); }
-		}
-
-		/// <summary>
-		/// IQFeed sample application
-		/// </summary>
-		public const string XamlStr548Key = "XamlStr548";
-
-		/// <summary>
-		/// IQFeed sample application
-		/// </summary>
-		public static string XamlStr548
-		{
-			get { return GetString(XamlStr548Key); }
-		}
-
-		/// <summary>
-		/// LMAX sample application
-		/// </summary>
-		public const string XamlStr549Key = "XamlStr549";
-
-		/// <summary>
-		/// LMAX sample application
-		/// </summary>
-		public static string XamlStr549
-		{
-			get { return GetString(XamlStr549Key); }
-		}
-
-		/// <summary>
-		/// Micex sample application
-		/// </summary>
-		public const string XamlStr550Key = "XamlStr550";
-
-		/// <summary>
-		/// Micex sample application
-		/// </summary>
-		public static string XamlStr550
-		{
-			get { return GetString(XamlStr550Key); }
-		}
-
-		/// <summary>
-		/// OANDA sample application
-		/// </summary>
-		public const string XamlStr551Key = "XamlStr551";
-
-		/// <summary>
-		/// OANDA sample application
-		/// </summary>
-		public static string XamlStr551
-		{
-			get { return GetString(XamlStr551Key); }
-		}
-
-		/// <summary>
-		/// OpenECry sample application
-		/// </summary>
-		public const string XamlStr552Key = "XamlStr552";
-
-		/// <summary>
-		/// OpenECry sample application
-		/// </summary>
-		public static string XamlStr552
-		{
-			get { return GetString(XamlStr552Key); }
-		}
-
-		/// <summary>
-		/// Plaza2 sample application
-		/// </summary>
-		public const string XamlStr553Key = "XamlStr553";
-
-		/// <summary>
-		/// Plaza2 sample application
-		/// </summary>
-		public static string XamlStr553
-		{
-			get { return GetString(XamlStr553Key); }
-		}
-
-		/// <summary>
-		/// Quik sample application
-		/// </summary>
-		public const string XamlStr554Key = "XamlStr554";
-
-		/// <summary>
-		/// Quik sample application
-		/// </summary>
-		public static string XamlStr554
-		{
-			get { return GetString(XamlStr554Key); }
-		}
-
-		/// <summary>
-		/// Quik+SmartCOM sample application
-		/// </summary>
-		public const string XamlStr555Key = "XamlStr555";
-
-		/// <summary>
-		/// Quik+SmartCOM sample application
-		/// </summary>
-		public static string XamlStr555
-		{
-			get { return GetString(XamlStr555Key); }
-		}
-
-		/// <summary>
-		/// Rithmic sample application
-		/// </summary>
-		public const string XamlStr556Key = "XamlStr556";
-
-		/// <summary>
-		/// Rithmic sample application
-		/// </summary>
-		public static string XamlStr556
-		{
-			get { return GetString(XamlStr556Key); }
-		}
-
-		/// <summary>
-		/// RSS sample application
-		/// </summary>
-		public const string XamlStr557Key = "XamlStr557";
-
-		/// <summary>
-		/// RSS sample application
-		/// </summary>
-		public static string XamlStr557
-		{
-			get { return GetString(XamlStr557Key); }
-		}
-
-		/// <summary>
-		/// Sterling sample application
-		/// </summary>
-		public const string XamlStr558Key = "XamlStr558";
-
-		/// <summary>
-		/// Sterling sample application
-		/// </summary>
-		public static string XamlStr558
-		{
-			get { return GetString(XamlStr558Key); }
-		}
-
-		/// <summary>
-		/// Transaq sample application
-		/// </summary>
-		public const string XamlStr559Key = "XamlStr559";
-
-		/// <summary>
-		/// Transaq sample application
-		/// </summary>
-		public static string XamlStr559
-		{
-			get { return GetString(XamlStr559Key); }
-		}
-
-		/// <summary>
-		/// SmartCOM sample application
-		/// </summary>
-		public const string XamlStr560Key = "XamlStr560";
-
-		/// <summary>
-		/// SmartCOM sample application
-		/// </summary>
-		public static string XamlStr560
-		{
-			get { return GetString(XamlStr560Key); }
 		}
 
 		/// <summary>

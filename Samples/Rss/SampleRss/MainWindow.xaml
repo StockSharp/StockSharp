@@ -4,7 +4,7 @@
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:rss="clr-namespace:StockSharp.Rss.Xaml;assembly=StockSharp.Rss"
         xmlns:sx="http://schemas.stocksharp.com/xaml"
-        Title="{x:Static loc:LocalizedStrings.XamlStr557}" Height="350" Width="525">
+        Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="350" Width="525">
     <Grid>
         <Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />

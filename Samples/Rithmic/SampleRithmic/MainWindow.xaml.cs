@@ -47,6 +47,8 @@ namespace SampleRithmic
 			InitializeComponent();
 			Instance = this;
 
+			Title = Title.Put("Rithmic");
+
 			_securitiesWindow.MakeHideable();
 			_ordersWindow.MakeHideable();
 			_stopOrdersWindow.MakeHideable();

@@ -5,7 +5,7 @@
         xmlns:xaml="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
         xmlns:ex="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="{x:Static loc:LocalizedStrings.XamlStr545}" Height="351" Width="850">
+        Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="351" Width="850">
     
     <Window.Resources>
         <ex:InverseBooleanConverter x:Key="invbool"/>

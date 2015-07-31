@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:rithmic="clr-namespace:StockSharp.Rithmic.Xaml;assembly=StockSharp.Rithmic"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="{x:Static loc:LocalizedStrings.XamlStr556}" Height="351" Width="850">
+        Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="351" Width="850">
 
     <Window.Resources>
         <converters:InverseBooleanConverter x:Key="Invbool"/>

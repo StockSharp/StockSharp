@@ -33,6 +33,8 @@ namespace SampleMicex
 			InitializeComponent();
 			Instance = this;
 
+			Title = Title.Put("Micex (TEAP)");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

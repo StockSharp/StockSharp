@@ -1760,6 +1760,8 @@ Backup;Backup;Резервный
 BackupServer;Backup server;Резервный сервер
 Recovery;Recovery;Аварийный
 RecoveryServer;Recovery server;Аварийный сервер
+Replay;Replay;Проигрывание
+ReplayServer;Replay server;Сервер проигрывания
 Stalker;Stalker;Сталкер
 Str1882;Unknown value for order direction.;Неизвестное значение для направления заявки.
 Str1883;Unknown value for order type.;Неизвестное значение для типа заявки.
@@ -3884,27 +3886,7 @@ XamlStr536;P&L (realized.);Прибыль (реализ.)
 XamlStr537;Apply;Применить
 XamlStr538;Currency convertion sample application;Пример - перевод валют
 XamlStr539;Option quoting sample application;Пример котирования по волатильности
-XamlStr540;AlfaDirect sample application;Пример работы с AlfaDirect
-XamlStr541;BitStamp sample application;Пример работы с BitStamp
-XamlStr542;Blackwood/Fusion sample application;Пример работы с Blackwood/Fusion
-XamlStr543;BTCE sample application;Пример работы с BTCE
-XamlStr544;CQG sample application;Пример работы с CQG
-XamlStr545;ETrade sample application;Пример работы с ETrade
-XamlStr546;FIX sample application;Пример работы с FIX
-XamlStr547;Interactive Brokers sample application;Пример работы с Interactive Brokers
-XamlStr548;IQFeed sample application;Пример работы с IQFeed
-XamlStr549;LMAX sample application;Пример работы с LMAX
-XamlStr550;Micex sample application;Пример работы с Micex
-XamlStr551;OANDA sample application;Пример работы с OANDA
-XamlStr552;OpenECry sample application;Пример работы с OpenECry
-XamlStr553;Plaza2 sample application;Пример работы с Plaza2
-XamlStr554;Quik sample application;Пример работы с Quik
-XamlStr555;Quik+SmartCOM sample application;Пример работы с Quik+SmartCOM
-XamlStr556;Rithmic sample application;Пример работы с Rithmic
-XamlStr557;RSS sample application;Пример работы с RSS
-XamlStr558;Sterling sample application;Пример работы с Sterling
-XamlStr559;Transaq sample application;Пример работы с Transaq
-XamlStr560;SmartCOM sample application;Пример работы со SmartCOM
+XamlStr540;{0} sample application;Пример работы с {0}
 XamlStr561;Market simulator sample application;Пример симулятора торгов
 XamlStr562;Backtesting sample application;Пример тестирование на истории
 XamlStr563;Backtesting (multi thread) sample application;Пример тестирование на истории (многопоточный)

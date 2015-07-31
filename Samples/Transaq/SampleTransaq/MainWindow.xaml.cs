@@ -31,6 +31,8 @@ namespace SampleTransaq
 		{
 			InitializeComponent();
 
+			Title = Title.Put("Transaq");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

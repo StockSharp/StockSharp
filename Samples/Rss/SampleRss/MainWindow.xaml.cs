@@ -3,6 +3,7 @@ namespace SampleRss
 	using System;
 	using System.Windows;
 
+	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using StockSharp.Rss;
@@ -16,6 +17,8 @@ namespace SampleRss
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			Title = Title.Put("RSS");
 		}
 
 		protected override void OnClosed(EventArgs e)
