@@ -149,6 +149,14 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\GUICharting.aml" />
+    <None Include="Topics\Messages_networking.aml" />
+    <None Include="Topics\Messages_storage.aml" />
+    <None Include="Topics\Messages_adapters.aml" />
+    <None Include="Topics\Messages_description.aml" />
+    <None Include="Topics\Messages.aml" />
+    <None Include="Topics\FixServer.aml" />
+    <None Include="Topics\ConnectorsFixFast.aml" />
     <None Include="Topics\OptionPositionChart.aml" />
     <None Include="Topics\OptionCalculator.aml" />
     <None Include="Topics\OptionDesk.aml" />

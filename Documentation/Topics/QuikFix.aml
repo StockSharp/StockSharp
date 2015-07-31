@@ -6,9 +6,9 @@
 			Для написания торговых роботов под прямое подключение к серверу <token>quik_external</token> через протокол <token>quikfix_external</token> необходимо использовать
 			<codeEntityReference qualifyHint="false">T:StockSharp.Fix.FixTrader</codeEntityReference>.
 			Механизм взаимодействия показан на данном рисунке:
-		</para>
-		
+	  </para>
 		<mediaLink><image placement="center" xlink:href="quikfix_trader"/></mediaLink>
+	  <para>Подробности см. <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX</link>.</para>
     </introduction>
   </developerConceptualDocument>
 </topic>
