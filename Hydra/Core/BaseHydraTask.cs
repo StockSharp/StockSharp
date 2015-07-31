@@ -335,12 +335,12 @@ namespace StockSharp.Hydra.Core
 
 			if (now < from || now > to)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1126Params, now.ToString("HH:mm:ss"), Settings.WorkingFrom, Settings.WorkingTo);
+				this.AddInfoLog(LocalizedStrings.Str1126Params, now.ToString("T"), Settings.WorkingFrom, Settings.WorkingTo);
 
 				var nextStart = now < from ? from : from.AddDays(1);
 				var interval = nextStart - now;
 
-				this.AddInfoLog(LocalizedStrings.Str2197Params, nextStart.ToString("dd.MM.yyyy HH:mm:ss"));
+				this.AddInfoLog(LocalizedStrings.Str2197Params, nextStart.ToString("G"));
 				return interval;
 			}
 

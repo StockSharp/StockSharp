@@ -123,10 +123,10 @@ namespace StockSharp.Hydra.Windows
 				msg += LocalizedStrings.Str3846;
 
 				if (from != DateTime.MinValue)
-					msg += " " + LocalizedStrings.XamlStr624.ToLowerInvariant() + " " + from.ToString("yyyy-MM-dd");
+					msg += " " + LocalizedStrings.XamlStr624.ToLowerInvariant() + " " + from.ToString("d");
 
 				if (to != DateTime.MaxValue)
-					msg += " " + LocalizedStrings.XamlStr132 + " " + to.ToString("yyyy-MM-dd");
+					msg += " " + LocalizedStrings.XamlStr132 + " " + to.ToString("d");
 			}
 
 			//msg += AllSecurities.IsChecked == true

@@ -66,8 +66,8 @@ namespace StockSharp.Studio.Ribbon
 								new Tuple<string, string>(LocalizedStrings.Str3585, l.IssuedTo.To<string>()),
 								new Tuple<string, string>(LocalizedStrings.Str3586, estimatedDays == 0 ? LocalizedStrings.Str1536 : (estimatedDays + LocalizedStrings.Str1537)),
 								new Tuple<string, string>(LocalizedStrings.Str3587, l.Id.To<string>()),
-								new Tuple<string, string>(LocalizedStrings.Str3588, l.IssuedDate.ToString("dd.MM.yyyy")),
-								new Tuple<string, string>(LocalizedStrings.Str3518 + ":", l.ExpirationDate.ToString("dd.MM.yyyy"))
+								new Tuple<string, string>(LocalizedStrings.Str3588, l.IssuedDate.ToString("d")),
+								new Tuple<string, string>(LocalizedStrings.Str3518 + ":", l.ExpirationDate.ToString("d"))
 							}
 						};
 						return item;
