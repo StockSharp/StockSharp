@@ -5437,12 +5437,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// New depth can not be negative.
+		/// New depth can not be less than zero.
 		/// </summary>
 		public const string Str481Key = "Str481";
 
 		/// <summary>
-		/// New depth can not be negative.
+		/// New depth can not be less than zero.
 		/// </summary>
 		public static string Str481
 		{
@@ -5463,12 +5463,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Depth index can not be negative.
+		/// Depth index can not be less than zero.
 		/// </summary>
 		public const string Str483Key = "Str483";
 
 		/// <summary>
-		/// Depth index can not be negative.
+		/// Depth index can not be less than zero.
 		/// </summary>
 		public static string Str483
 		{
@@ -5476,12 +5476,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Depth can not be negative.
+		/// Depth can not be less than zero.
 		/// </summary>
 		public const string Str484Key = "Str484";
 
 		/// <summary>
-		/// Depth can not be negative.
+		/// Depth can not be less than zero.
 		/// </summary>
 		public static string Str484
 		{
@@ -7309,12 +7309,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Candles storage time cannot be negative.
+		/// Candles storage time cannot be less than zero.
 		/// </summary>
 		public const string Str647Key = "Str647";
 
 		/// <summary>
-		/// Candles storage time cannot be negative.
+		/// Candles storage time cannot be less than zero.
 		/// </summary>
 		public static string Str647
 		{
@@ -7374,12 +7374,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Data keep time cannot be negative.
+		/// Data keep time cannot be less than zero.
 		/// </summary>
 		public const string Str652Key = "Str652";
 
 		/// <summary>
-		/// Data keep time cannot be negative.
+		/// Data keep time cannot be less than zero.
 		/// </summary>
 		public static string Str652
 		{
@@ -10481,12 +10481,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order volume can not be negative.
+		/// Order volume can not be less than zero.
 		/// </summary>
 		public const string Str895Key = "Str895";
 
 		/// <summary>
-		/// Order volume can not be negative.
+		/// Order volume can not be less than zero.
 		/// </summary>
 		public static string Str895
 		{
@@ -11040,12 +11040,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Interval can not be negative.
+		/// Interval can not be less than zero.
 		/// </summary>
 		public const string Str940Key = "Str940";
 
 		/// <summary>
-		/// Interval can not be negative.
+		/// Interval can not be less than zero.
 		/// </summary>
 		public static string Str940
 		{
@@ -11053,12 +11053,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Market depth can not be negative.
+		/// Market depth can not be less than zero.
 		/// </summary>
 		public const string Str941Key = "Str941";
 
 		/// <summary>
-		/// Market depth can not be negative.
+		/// Market depth can not be less than zero.
 		/// </summary>
 		public static string Str941
 		{
@@ -12444,12 +12444,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Price value can not be negative.
+		/// Price value can not be less than zero.
 		/// </summary>
 		public const string Str1052Key = "Str1052";
 
 		/// <summary>
-		/// Price value can not be negative.
+		/// Price value can not be less than zero.
 		/// </summary>
 		public static string Str1052
 		{
@@ -14095,12 +14095,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Percentage value can not be negative.
+		/// Percentage value can not be less than zero.
 		/// </summary>
 		public const string Str1182Key = "Str1182";
 
 		/// <summary>
-		/// Percentage value can not be negative.
+		/// Percentage value can not be less than zero.
 		/// </summary>
 		public static string Str1182
 		{
@@ -14134,12 +14134,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Latency can not be negative.
+		/// Latency can not be less than zero.
 		/// </summary>
 		public const string Str1185Key = "Str1185";
 
 		/// <summary>
-		/// Latency can not be negative.
+		/// Latency can not be less than zero.
 		/// </summary>
 		public static string Str1185
 		{
@@ -14186,12 +14186,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Time-frame can not be negative or zero.
+		/// Time-frame can not be less than zero or zero.
 		/// </summary>
 		public const string Str1189Key = "Str1189";
 
 		/// <summary>
-		/// Time-frame can not be negative or zero.
+		/// Time-frame can not be less than zero or zero.
 		/// </summary>
 		public static string Str1189
 		{
@@ -14667,12 +14667,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Limitation in time can not be negative.
+		/// Limitation in time can not be less than zero.
 		/// </summary>
 		public const string Str1227Key = "Str1227";
 
 		/// <summary>
-		/// Limitation in time can not be negative.
+		/// Limitation in time can not be less than zero.
 		/// </summary>
 		public static string Str1227
 		{
@@ -16448,12 +16448,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Orders storage time cannot be negative.
+		/// Orders storage time cannot be less than zero.
 		/// </summary>
 		public const string Str1375Key = "Str1375";
 
 		/// <summary>
-		/// Orders storage time cannot be negative.
+		/// Orders storage time cannot be less than zero.
 		/// </summary>
 		public static string Str1375
 		{
@@ -33699,12 +33699,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Parameter value can not be negative.
+		/// Parameter value can not be less than zero.
 		/// </summary>
 		public const string Str2796Key = "Str2796";
 
 		/// <summary>
-		/// Parameter value can not be negative.
+		/// Parameter value can not be less than zero.
 		/// </summary>
 		public static string Str2796
 		{
@@ -42175,12 +42175,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number of headers {0} can not be negative.
+		/// Number of headers {0} can not be less than zero.
 		/// </summary>
 		public const string Str3511ParamsKey = "Str3511Params";
 
 		/// <summary>
-		/// Number of headers {0} can not be negative.
+		/// Number of headers {0} can not be less than zero.
 		/// </summary>
 		public static string Str3511Params
 		{
@@ -53771,6 +53771,32 @@ namespace StockSharp.Localization
 		public static string DecimalsNotFilled
 		{
 			get { return GetString(DecimalsNotFilledKey); }
+		}
+
+		/// <summary>
+		/// Tick count for storage cannot be less than zero.
+		/// </summary>
+		public const string NegativeTickCountStorageKey = "NegativeTickCountStorage";
+
+		/// <summary>
+		/// Tick count for storage cannot be less than zero.
+		/// </summary>
+		public static string NegativeTickCountStorage
+		{
+			get { return GetString(NegativeTickCountStorageKey); }
+		}
+
+		/// <summary>
+		/// Order count for storage cannot be less than zero.
+		/// </summary>
+		public const string NegativeOrderCountStorageKey = "NegativeOrderCountStorage";
+
+		/// <summary>
+		/// Order count for storage cannot be less than zero.
+		/// </summary>
+		public static string NegativeOrderCountStorage
+		{
+			get { return GetString(NegativeOrderCountStorageKey); }
 		}
 	}
 }
