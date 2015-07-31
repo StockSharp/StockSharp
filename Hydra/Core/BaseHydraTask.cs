@@ -337,11 +337,10 @@ namespace StockSharp.Hydra.Core
 			{
 				this.AddInfoLog(LocalizedStrings.Str1126Params, now.ToString("HH:mm:ss"), Settings.WorkingFrom, Settings.WorkingTo);
 
-				var interval = now < from
-					? from - now
-					: (from + TimeSpan.FromDays(1)) - now;
-				
-				this.AddInfoLog(LocalizedStrings.Str2197Params, to.ToString("dd.MM.yyyy HH:mm:ss"));
+				var nextStart = now < from ? from : from.AddDays(1);
+				var interval = nextStart - now;
+
+				this.AddInfoLog(LocalizedStrings.Str2197Params, nextStart.ToString("dd.MM.yyyy HH:mm:ss"));
 				return interval;
 			}
 
