@@ -189,15 +189,15 @@ namespace StockSharp.Hydra.Windows
 				if (_token.IsCancellationRequested)
 					return;
 
-				var dataTypes = new Dictionary<Type, object>
+				var dataTypes = new[]
 				{
-					{ typeof(ExecutionMessage), ExecutionTypes.Tick },
-					{ typeof(ExecutionMessage), ExecutionTypes.OrderLog },
-					{ typeof(ExecutionMessage), ExecutionTypes.Order },
-					{ typeof(ExecutionMessage), ExecutionTypes.Trade },
-					{ typeof(QuoteChangeMessage), null },
-					{ typeof(Level1ChangeMessage), null },
-					{ typeof(NewsMessage), null }
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
+					Tuple.Create(typeof(QuoteChangeMessage), (object)null),
+					Tuple.Create(typeof(Level1ChangeMessage), (object)null),
+					Tuple.Create(typeof(NewsMessage), (object)null)
 				};
 
 				var formats = Enumerator.GetValues<StorageFormats>();
@@ -213,7 +213,7 @@ namespace StockSharp.Hydra.Windows
 								if (_token.IsCancellationRequested)
 									break;
 
-								drive.GetStorageDrive(security.ToSecurityId(), dataType.Key, dataType.Value, format).ClearDatesCache();
+								drive.GetStorageDrive(security.ToSecurityId(), dataType.Item1, dataType.Item2, format).ClearDatesCache();
 							}
 						}
 
