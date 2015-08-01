@@ -17,7 +17,7 @@ namespace StockSharp.Transaq
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("Transaq")]
-	[CategoryLoc(LocalizedStrings.Str1769Key)]
+	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[DescriptionLoc(LocalizedStrings.Str3538Key)]
 	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 1)]

@@ -375,10 +375,10 @@
 							</ItemsPanelTemplate>
 						</MenuItem.ItemsPanel>
 
-						<MenuItem x:Name="RussianSourcesMi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
-						<MenuItem x:Name="AmericanSourcesMi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
+						<MenuItem x:Name="RussianSourcesMi" Header="{x:Static loc:LocalizedStrings.Russia}" />
+						<MenuItem x:Name="AmericanSourcesMi" Header="{x:Static loc:LocalizedStrings.America}" />
 						<MenuItem x:Name="ForexSourcesMi" Header="{x:Static loc:LocalizedStrings.Forex}" />
-						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.Str398}" />
+						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.Cryptocurrency}" />
 						<MenuItem x:Name="OtherSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
 
 						<!--<MenuItem.ItemContainerStyle>
@@ -409,23 +409,23 @@
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Import}">
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Security"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Trade"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Depth"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Ticks}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Trade"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Depth"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Candle"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
-					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Level1}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="News"/>
-                    <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Execution"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Execution"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Export}">
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Ticks}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
-                    <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}">
@@ -502,13 +502,13 @@
 				</ToolBar>
 
 				<ToolBar ToolBarTray.IsLocked="True">
-					<Button Content="{x:Static loc:LocalizedStrings.Str985}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
-					<Button Content="{x:Static loc:LocalizedStrings.Str1414}" Width="85" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Ticks}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
+					<Button Content="{x:Static loc:LocalizedStrings.MarketDepths}" Width="85" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
 					<Button Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
-					<Button Content="Level 1" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Level1}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<Button Content="{x:Static loc:LocalizedStrings.News}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
-                    <Button Content="Executions" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Transactions}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
 				</ToolBar>
 
 				<ToolBar ToolBarTray.IsLocked="True">
@@ -571,10 +571,10 @@
 							<xctk:DropDownButton x:Name="NewSourceButton" Content="{x:Static loc:LocalizedStrings.XamlStr140}" DockPanel.Dock="Top" Margin="0,0,0,3">
 								<xctk:DropDownButton.DropDownContent>
 									<Menu x:Name="SourcesDropDownButtonMenu">
-										<MenuItem x:Name="RussianSourcesCi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
-										<MenuItem x:Name="AmericanSourcesCi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
+										<MenuItem x:Name="RussianSourcesCi" Header="{x:Static loc:LocalizedStrings.Russia}" />
+										<MenuItem x:Name="AmericanSourcesCi" Header="{x:Static loc:LocalizedStrings.America}" />
 										<MenuItem x:Name="ForexSourcesCi" Header="{x:Static loc:LocalizedStrings.Forex}" />
-										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.Str398}" />
+										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.Cryptocurrency}" />
 										<MenuItem x:Name="OtherSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
 										
 										<Menu.ItemsPanel>

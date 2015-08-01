@@ -17,7 +17,7 @@ namespace StockSharp.SmartCom
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("SmartCOM")]
-	[CategoryLoc(LocalizedStrings.Str1769Key)]
+	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1857Key)]
 	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 1)]

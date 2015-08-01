@@ -405,8 +405,8 @@ namespace StockSharp.Hydra.Panes
 
 							_fields.Add(new FieldMapping(_settings, "Id", LocalizedStrings.Id, string.Empty, typeof(long), (i, v) => i.TradeId = v));
 							_fields.Add(new FieldMapping(_settings, "StringId", LocalizedStrings.Str2856, string.Empty, typeof(string), (i, v) => i.TradeStringId = v));
-							_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Str219, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
+							_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Date, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Time, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
 							_fields.Add(new FieldMapping(_settings, "Price", LocalizedStrings.Price, string.Empty, typeof(decimal), (i, v) => i.TradePrice = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "Volume", LocalizedStrings.Volume, string.Empty, typeof(decimal), (i, v) => i.Volume = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "Side", LocalizedStrings.Str329, string.Empty, typeof(Sides), (i, v) => i.OriginSide = v));
@@ -424,8 +424,8 @@ namespace StockSharp.Hydra.Panes
 							_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
 
 							_fields.Add(new FieldMapping(_settings, "Id", LocalizedStrings.Id, string.Empty, typeof(long), (i, v) => i.OrderId = v) { IsRequired = true });
-							_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Str219, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
+							_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Date, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Time, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
 							_fields.Add(new FieldMapping(_settings, "Price", LocalizedStrings.Price, string.Empty, typeof(decimal), (i, v) => i.Price = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "Volume", LocalizedStrings.Volume, string.Empty, typeof(decimal), (i, v) => i.Volume = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "Side", LocalizedStrings.Str128, string.Empty, typeof(Sides), (i, v) => i.Side = v) { IsRequired = true });
@@ -438,12 +438,12 @@ namespace StockSharp.Hydra.Panes
 						}
 						case ExecutionTypes.Order:
 						{
-							_title = LocalizedStrings.OwnTransactions;
+							_title = LocalizedStrings.Transactions;
 
 							_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
-							_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Str219, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
+							_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Date, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+							_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Time, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
 							_fields.Add(new FieldMapping(_settings, "Portfolio", LocalizedStrings.Portfolio, string.Empty, typeof(string), (i, v) => i.PortfolioName = v) { IsRequired = true });
 							_fields.Add(new FieldMapping(_settings, "TransactionId", LocalizedStrings.TransactionId, string.Empty, typeof(long), (i, v) => i.TransactionId = v));
 							_fields.Add(new FieldMapping(_settings, "Id", LocalizedStrings.Id, string.Empty, typeof(long), (i, v) => i.OrderId = v));
@@ -470,7 +470,7 @@ namespace StockSharp.Hydra.Panes
 					_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
 
-					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) =>
+					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Date, dateDescr, typeof(DateTimeOffset), (i, v) =>
 					{
 						i.OpenTime = v + i.OpenTime.TimeOfDay;
 						i.CloseTime = v + i.CloseTime.TimeOfDay;
@@ -492,8 +492,8 @@ namespace StockSharp.Hydra.Panes
 					_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
 
-					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-					_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Str219, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
+					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Date, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+					_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Time, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
 					_fields.Add(new FieldMapping(_settings, "Price", LocalizedStrings.Price, string.Empty, typeof(decimal), (i, v) => i.Price = v) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "Volume", LocalizedStrings.Volume, string.Empty, typeof(decimal), (i, v) => i.Volume = v) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "Side", LocalizedStrings.Str128, string.Empty, typeof(Sides), (i, v) => i.Side = v) { IsRequired = true });
@@ -505,8 +505,8 @@ namespace StockSharp.Hydra.Panes
 					_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => SetSecCode(i, v)) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => SetBoardCode(i, v)) { IsRequired = true });
 
-					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-					_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Str219, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
+					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Date, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+					_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Time, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
 
 					_fields.Add(new FieldMapping(_settings, "LastTradeId", Level1Fields.LastTradeId.GetDisplayName(), string.Empty, typeof(long), (i, v) => i.Changes.Add(Level1Fields.LastTradeId, v)));
 					_fields.Add(new FieldMapping(_settings, "LastTradeTime", Level1Fields.LastTradeTime.GetDisplayName(), string.Empty, typeof(DateTimeOffset), (i, v) => i.Changes.Add(Level1Fields.LastTradeTime, v)));
@@ -572,8 +572,8 @@ namespace StockSharp.Hydra.Panes
 					_fields.Add(new FieldMapping(_settings, "Id", LocalizedStrings.Id, string.Empty, typeof(string), (i, v) => i.Id = v) { IsRequired = true });
 					_fields.Add(new FieldMapping(_settings, "SecurityCode", LocalizedStrings.Security, secCodeDescr, typeof(string), (i, v) => i.Security.Code = v));
 					_fields.Add(new FieldMapping(_settings, "BoardCode", LocalizedStrings.Board, boardCodeDescr, typeof(string), (i, v) => i.BoardCode = v));
-					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Str2857, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-					_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Str219, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
+					_fields.Add(new FieldMapping(_settings, "Date", LocalizedStrings.Date, dateDescr, typeof(DateTimeOffset), (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
+					_fields.Add(new FieldMapping(_settings, "Time", LocalizedStrings.Time, timeDescr, typeof(TimeSpan), (i, v) => i.ServerTime += v));
 					_fields.Add(new FieldMapping(_settings, "Headline", LocalizedStrings.Str215, string.Empty, typeof(string), (i, v) => i.Headline = v));
 					_fields.Add(new FieldMapping(_settings, "Story", LocalizedStrings.Str217, string.Empty, typeof(string), (i, v) => i.Story = v));
 					_fields.Add(new FieldMapping(_settings, "Source", LocalizedStrings.Str213, string.Empty, typeof(string), (i, v) => i.Source = v));

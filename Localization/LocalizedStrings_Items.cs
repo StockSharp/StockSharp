@@ -2644,14 +2644,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Time
 		/// </summary>
-		public const string Str219Key = "Str219";
+		public const string TimeKey = "Time";
 
 		/// <summary>
 		/// Time
 		/// </summary>
-		public static string Str219
+		public static string Time
 		{
-			get { return GetString(Str219Key); }
+			get { return GetString(TimeKey); }
 		}
 
 		/// <summary>
@@ -4893,14 +4893,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Cryptocurrency
 		/// </summary>
-		public const string Str398Key = "Str398";
+		public const string CryptocurrencyKey = "Cryptocurrency";
 
 		/// <summary>
 		/// Cryptocurrency
 		/// </summary>
-		public static string Str398
+		public static string Cryptocurrency
 		{
-			get { return GetString(Str398Key); }
+			get { return GetString(CryptocurrencyKey); }
 		}
 
 		/// <summary>
@@ -16944,14 +16944,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Market depths
 		/// </summary>
-		public const string Str1414Key = "Str1414";
+		public const string MarketDepthsKey = "MarketDepths";
 
 		/// <summary>
 		/// Market depths
 		/// </summary>
-		public static string Str1414
+		public static string MarketDepths
 		{
-			get { return GetString(Str1414Key); }
+			get { return GetString(MarketDepthsKey); }
 		}
 
 		/// <summary>
@@ -21377,14 +21377,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Russia
 		/// </summary>
-		public const string Str1769Key = "Str1769";
+		public const string RussiaKey = "Russia";
 
 		/// <summary>
 		/// Russia
 		/// </summary>
-		public static string Str1769
+		public static string Russia
 		{
-			get { return GetString(Str1769Key); }
+			get { return GetString(RussiaKey); }
 		}
 
 		/// <summary>
@@ -25706,14 +25706,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// America
 		/// </summary>
-		public const string Str2119Key = "Str2119";
+		public const string AmericaKey = "America";
 
 		/// <summary>
 		/// America
 		/// </summary>
-		public static string Str2119
+		public static string America
 		{
-			get { return GetString(Str2119Key); }
+			get { return GetString(AmericaKey); }
 		}
 
 		/// <summary>
@@ -30178,14 +30178,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Real-time
 		/// </summary>
-		public const string Str2519Key = "Str2519";
+		public const string RealTimeKey = "RealTime";
 
 		/// <summary>
 		/// Real-time
 		/// </summary>
-		public static string Str2519
+		public static string RealTime
 		{
-			get { return GetString(Str2519Key); }
+			get { return GetString(RealTimeKey); }
 		}
 
 		/// <summary>
@@ -34455,14 +34455,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Date
 		/// </summary>
-		public const string Str2857Key = "Str2857";
+		public const string DateKey = "Date";
 
 		/// <summary>
 		/// Date
 		/// </summary>
-		public static string Str2857
+		public static string Date
 		{
-			get { return GetString(Str2857Key); }
+			get { return GetString(DateKey); }
 		}
 
 		/// <summary>
@@ -53228,19 +53228,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Own transactions
-		/// </summary>
-		public const string OwnTransactionsKey = "OwnTransactions";
-
-		/// <summary>
-		/// Own transactions
-		/// </summary>
-		public static string OwnTransactions
-		{
-			get { return GetString(OwnTransactionsKey); }
-		}
-
-		/// <summary>
 		/// Hardware ID
 		/// </summary>
 		public const string HddIdKey = "HddId";
@@ -53563,6 +53550,32 @@ namespace StockSharp.Localization
 		public static string NegativeOrderCountStorage
 		{
 			get { return GetString(NegativeOrderCountStorageKey); }
+		}
+
+		/// <summary>
+		/// Free access
+		/// </summary>
+		public const string FreeAccessKey = "FreeAccess";
+
+		/// <summary>
+		/// Free access
+		/// </summary>
+		public static string FreeAccess
+		{
+			get { return GetString(FreeAccessKey); }
+		}
+
+		/// <summary>
+		/// ITCH
+		/// </summary>
+		public const string ITCHKey = "ITCH";
+
+		/// <summary>
+		/// ITCH
+		/// </summary>
+		public static string ITCH
+		{
+			get { return GetString(ITCHKey); }
 		}
 	}
 }

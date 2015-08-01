@@ -66,7 +66,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					WriteValues(writer, statParameters.Select(p => p.Value is TimeSpan ? Format((TimeSpan)p.Value) : p.Value).ToArray());
 
 					WriteValues(writer, LocalizedStrings.Orders);
-					WriteValues(writer, LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Str219, LocalizedStrings.Price,
+					WriteValues(writer, LocalizedStrings.Str1190, LocalizedStrings.Transaction, LocalizedStrings.Str128, LocalizedStrings.Time, LocalizedStrings.Price,
 						LocalizedStrings.Str1323, LocalizedStrings.Str1324, LocalizedStrings.State, LocalizedStrings.Str1325,
 						LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.Str1326, LocalizedStrings.Str1327);
 
@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					}
 
 					WriteValues(writer, LocalizedStrings.Str985);
-					WriteValues(writer, LocalizedStrings.Str1192, LocalizedStrings.Transaction, LocalizedStrings.Str219, LocalizedStrings.Price, LocalizedStrings.Volume,
+					WriteValues(writer, LocalizedStrings.Str1192, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
 						LocalizedStrings.Str128, LocalizedStrings.Str1190, LocalizedStrings.Str1330, LocalizedStrings.Str163);
 
 					foreach (var trade in strategy.MyTrades)

@@ -51,7 +51,7 @@ namespace StockSharp.Algo.Export
 					{
 						worker
 							.SetCell(0, 0, LocalizedStrings.Id).SetStyle(0, typeof(string))
-							.SetCell(1, 0, LocalizedStrings.Str219).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
+							.SetCell(1, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
 							.SetCell(2, 0, LocalizedStrings.Price).SetStyle(2, typeof(decimal))
 							.SetCell(3, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
 							.SetCell(4, 0, LocalizedStrings.Str128)
@@ -86,7 +86,7 @@ namespace StockSharp.Algo.Export
 					{
 						worker
 							.SetCell(0, 0, LocalizedStrings.Id).SetStyle(0, typeof(string))
-							.SetCell(1, 0, LocalizedStrings.Str219).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
+							.SetCell(1, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
 							.SetCell(2, 0, LocalizedStrings.Price).SetStyle(2, typeof(decimal))
 							.SetCell(3, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
 							.SetCell(4, 0, LocalizedStrings.Str128)
@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Export
 					Do(worker =>
 					{
 						worker
-							.SetCell(0, 0, LocalizedStrings.Str219).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
+							.SetCell(0, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff zzz")
 							.SetCell(1, 0, LocalizedStrings.Portfolio)
 							.SetCell(2, 0, LocalizedStrings.TransactionId)
 							.SetCell(3, 0, LocalizedStrings.OrderId)
@@ -191,7 +191,7 @@ namespace StockSharp.Algo.Export
 				foreach (var message in messages)
 				{
 					worker
-						.SetCell(0, rowIndex, LocalizedStrings.Str219)
+						.SetCell(0, rowIndex, LocalizedStrings.Time)
 						.SetCell(1, rowIndex, message.ServerTime);
 
 					var columnIndex = 0;
@@ -244,7 +244,7 @@ namespace StockSharp.Algo.Export
 				};
 
 				worker
-					.SetCell(0, 0, LocalizedStrings.Str219).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
+					.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
 
 				foreach (var field in Enumerator.GetValues<Level1Fields>())
 				{
@@ -346,7 +346,7 @@ namespace StockSharp.Algo.Export
 			{
 				worker
 					.SetCell(0, 0, LocalizedStrings.Id).SetStyle(0, typeof(string))
-					.SetCell(1, 0, LocalizedStrings.Str219).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
+					.SetCell(1, 0, LocalizedStrings.Time).SetStyle(1, "yyyy-MM-dd HH:mm:ss.fff")
 					.SetCell(2, 0, LocalizedStrings.Security).SetStyle(2, typeof(string))
 					.SetCell(3, 0, LocalizedStrings.Board).SetStyle(3, typeof(string))
 					.SetCell(4, 0, LocalizedStrings.Str215).SetStyle(4, typeof(string))

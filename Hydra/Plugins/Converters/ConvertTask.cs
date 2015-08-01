@@ -106,7 +106,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["CandleSettings"] = value; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str1414Key)]
+			[CategoryLoc(LocalizedStrings.MarketDepthsKey)]
 			[DisplayNameLoc(LocalizedStrings.Str175Key)]
 			[DescriptionLoc(LocalizedStrings.Str3781Key)]
 			[PropertyOrder(0)]
@@ -116,7 +116,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["MarketDepthInterval"] = value; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str1414Key)]
+			[CategoryLoc(LocalizedStrings.MarketDepthsKey)]
 			[DisplayNameLoc(LocalizedStrings.Str1660Key)]
 			[DescriptionLoc(LocalizedStrings.Str3782Key)]
 			[PropertyOrder(1)]

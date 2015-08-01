@@ -201,7 +201,7 @@ Str214;News source.;Источник новости.
 Str215;Header;Заголовок
 Str217;Text;Текст
 Str218;News text.;Текст новости.
-Str219;Time;Время
+Time;Time;Время
 Str220;Time of news arrival.;Время появления новости.
 Str221;Link;Ссылка
 Str222;News link in the internet.;Ссылка на новость в интернете.
@@ -374,7 +374,7 @@ Product;Product;Товар
 Str395;News;Новость
 Weather;Weather;Погода
 ShareFund;Share (Open-end fund);Паи
-Str398;Cryptocurrency;Крипто-валюта
+Cryptocurrency;Cryptocurrency;Крипто-валюта
 Str399;Assigned;Назначена
 Str400;Suspended;Приостановлена
 Str401;Completed (forced);Завершена (принудительно)
@@ -1306,7 +1306,7 @@ Str1409;Time change interval.;Интервал изменения времени
 Str1410;Unrealized P&L;Нереализ. P&L
 Str1411;Unrealized profit recalculation interval.;Интервал пересчета нереализованной прибыли.
 Str1413;What trades to use.;Какие использовать сделки.
-Str1414;Market depths;Стаканы
+MarketDepths;Market depths;Стаканы
 Str1415;What market depths to use.;Какие использовать стаканы.
 Str1417;Use orders log.;Использовать лог заявок.
 Str1418;Number of strategies;Кол-во стратегий
@@ -1647,7 +1647,7 @@ Str1764;Offset from maximum (minimum) price of last transaction.;Величин�
 Str1766;Protection spread size.;Величина защитного спрэда.
 Str1767;Take-profit at market price;Тэйк-профит по рыночной цене
 Str1768;Sign that the «Take-profit» was executed at the market price.;Признак исполнения заявки «Тэйк-профит» по рыночной цене.
-Str1769;Russia;Россия
+Russia;Russia;Россия
 Str1770;Connection to broker using Quik.;Подключение к брокеру, использующий Quik.
 Str1771;General (Quik);Общие (Quik)
 Str1772;Use for old DDE + Trans2Quik connection.;Использовать для старое подключение DDE + Trans2Quik.
@@ -1980,7 +1980,7 @@ Str2115Params;List {0} was not found in file {1}.;Лист {0} не был на�
 Str2116;Default value is not specified.;Не указано значение по-умолчанию.
 Str2117;Wrong type of security.;Неправильный тип инструмента.
 Str2118Params;Wrong type of security {0}.;Неправильный тип инструмента {0}.
-Str2119;America;Америка
+America;America;Америка
 Str2120;Connection to IQFeed.;Подключение к IQFeed.
 Str2121;Additional;Дополнительно
 Str2122;Level1 server;Level1 сервер
@@ -2325,7 +2325,7 @@ Str2514Params;Order {0} does not have extended information.;Заявка {0} н�
 Str2515Params;Unknown order {0} duration time.;Неизвестное время действия заявки {0}.
 Str2516;Connection to Interactive Brokers broker.;Подключение к брокеру Interactive Brokers.
 Str2518;Unique ID. Used when several clients are connected to one terminal or gateway.;Уникальный идентификатор. Используется в случае подключения нескольких клиентов к одному терминалу или gateway.
-Str2519;Real-time;Реал-тайм
+RealTime;Real-time;Реал-тайм
 Str2520;Should real-time or 'frozen' on broker server data be used.;Использовать ли данные реального времени или 'замороженные' на сервере брокера.
 Str2521;Server messages logging level.;Уровень логирования сообщений сервера.
 Str2522;Market data fields;Поля маркет-данных
@@ -2655,7 +2655,7 @@ Str2851;Board code. Must be completed, if the data file does not contain the boa
 Str2852;Date. Column can contain just a date or date with time.;Дата. Колонка может содержать как просто дату, так и дату со временем.
 Str2853;Time. This column is optional and is only necessary in case the date and time are separate in file being exported.;Время. Колонка является необязательно и необходима только в том случае, если дата и время в экспортируемом файле разделены.
 Str2856;Number (line);Номер (строка)
-Str2857;Date;Дата
+Date;Date;Дата
 Str2858;orders log;лога заявок
 Str2859;candles;свечек
 Str2860;Time (opening);Время (открытие)
@@ -4126,7 +4126,6 @@ TemporaryFiles;Temporary files;Временные файлы
 Use;Use;Использовать
 NotUse;Not use;Не использовать
 UseAndDelete;Use and delete;Использовать и удалять
-OwnTransactions;Own transactions;Свои транзакции
 HddId;Hardware ID;ИД компьютера
 SelectAppMode;Select application launch mode (available features are marked);Выберите режим запуска (доступная функциональность выделена)
 InProgress;In progress. Please wait...;Пожалуйста, подождите...
@@ -4147,3 +4146,5 @@ TimeFormat;Time format;Формат времени
 DecimalsNotFilled;Decimals not filled.;Точность не заполнена.
 NegativeTickCountStorage;Tick count for storage cannot be less than zero.;Количество тиковых сделок для хранения не может быть отрицательным.
 NegativeOrderCountStorage;Order count for storage cannot be less than zero.;Количество заявок для хранения не может быть отрицательным.
+FreeAccess;Free access;Бесплатно
+ITCH;Direct market-data access to LSE or NASDAQ via ITCH protocol.;Прямое подключения к биржам LSE или NASDAQ через протокол маркет-данных ITCH.

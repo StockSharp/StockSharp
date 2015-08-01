@@ -5,7 +5,7 @@
 	using StockSharp.Localization;
 
 	[DisplayName("Sterling")]
-	[CategoryLoc(LocalizedStrings.Str2119Key)]
+	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.SterlingConnectorKey)]
 	partial class SterlingMessageAdapter
 	{

@@ -78,7 +78,7 @@
 
 			<ug:UniversalGrid x:Name="BuildedCandles" Grid.Row="6" Grid.ColumnSpan="7" Grid.Column="0" SelectionMode="Single">
 				<ug:UniversalGrid.Columns>
-					<DataGridTextColumn Width="150" Header="{x:Static loc:LocalizedStrings.Str219}" Binding="{Binding Path=OpenTime}" SortMemberPath="OpenTime" />
+					<DataGridTextColumn Width="150" Header="{x:Static loc:LocalizedStrings.Time}" Binding="{Binding Path=OpenTime}" SortMemberPath="OpenTime" />
 					<DataGridTextColumn Width="80" Header="O" Binding="{Binding Path=OpenPrice}" SortMemberPath="OpenPrice" />
 					<DataGridTextColumn Width="80" Header="H" Binding="{Binding Path=HighPrice}" SortMemberPath="HighPrice" />
 					<DataGridTextColumn Width="80" Header="L" Binding="{Binding Path=LowPrice}" SortMemberPath="LowPrice" />

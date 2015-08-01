@@ -64,7 +64,7 @@ namespace StockSharp.BusinessEntities
 		/// Время совершения сделки.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str219Key)]
+		[DisplayNameLoc(LocalizedStrings.TimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str605Key)]
 		[MainCategory]
 		[PropertyOrder(3)]

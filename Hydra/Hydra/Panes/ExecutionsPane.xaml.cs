@@ -34,7 +34,7 @@
 
 		public override string Title
 		{
-			get { return LocalizedStrings.OwnTransactions + " " + SelectedSecurity; }
+			get { return LocalizedStrings.Transactions + " " + SelectedSecurity; }
 		}
 
 		public override Security SelectedSecurity

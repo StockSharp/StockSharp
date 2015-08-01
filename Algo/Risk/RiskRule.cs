@@ -235,7 +235,7 @@ namespace StockSharp.Algo.Risk
 		/// <summary>
 		/// Время жизни позиции.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str219Key)]
+		[DisplayNameLoc(LocalizedStrings.TimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str867Key)]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		public TimeSpan Time

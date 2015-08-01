@@ -152,7 +152,7 @@ namespace SampleHistoryTesting
 					DepthsTestingProcess,
 					DepthsParameterGrid,
 					// order book
-					new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.Str1414}),
+					new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.MarketDepths}),
 
 
 				Tuple.Create(

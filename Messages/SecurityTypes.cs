@@ -123,7 +123,7 @@ namespace StockSharp.Messages
 		/// Крипто-валюта.
 		/// </summary>
 		[EnumMember]
-		[EnumDisplayNameLoc(LocalizedStrings.Str398Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.CryptocurrencyKey)]
 		CryptoCurrency,
 	}
 }

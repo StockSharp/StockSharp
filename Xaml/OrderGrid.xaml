@@ -213,7 +213,7 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Transaction}" Width="100" Binding="{Binding Path=Order.TransactionId}" SortMemberPath="Order.TransactionId"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr365}" Visibility="Collapsed" Width="100" Binding="{Binding Path=Order.BoardId}" SortMemberPath="Order.BoardId"/>
         <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str165}" Visibility="Collapsed" Width="100" Binding="{Binding Path=Order.UserOrderId}" SortMemberPath="Order.UserOrderId"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Width="120" Binding="{Binding Path=Order.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Order.Time"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Width="120" Binding="{Binding Path=Order.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Order.Time"/>
         <DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="120" Binding="{Binding Path=Order.Security.Id}" SortMemberPath="Order.Security.Id"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Portfolio}" Width="120" Binding="{Binding Path=Order.Portfolio.Name}" SortMemberPath="Order.Portfolio.Name"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.ClientCode}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Order.ClientCode}" SortMemberPath="Order.ClientCode"/>

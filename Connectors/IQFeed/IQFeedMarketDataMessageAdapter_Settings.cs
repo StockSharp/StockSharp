@@ -15,7 +15,7 @@ namespace StockSharp.IQFeed
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("IQFeed")]
-	[CategoryLoc(LocalizedStrings.Str2119Key)]
+	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str2120Key)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str2121Key, 1)]

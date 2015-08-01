@@ -14,7 +14,7 @@ namespace StockSharp.InteractiveBrokers
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("Interactive Brokers")]
-	[CategoryLoc(LocalizedStrings.Str2119Key)]
+	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str2516Key)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
@@ -53,7 +53,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Использовать ли данные реального времени или "замороженные" на сервере брокера. По-умолчанию используются "замороженные" данные.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
-		[DisplayNameLoc(LocalizedStrings.Str2519Key)]
+		[DisplayNameLoc(LocalizedStrings.RealTimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str2520Key)]
 		[PropertyOrder(3)]
 		public bool IsRealTimeMarketData { get; set; }

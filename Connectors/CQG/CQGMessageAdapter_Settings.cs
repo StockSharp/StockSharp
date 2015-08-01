@@ -5,7 +5,7 @@ namespace StockSharp.CQG
 	using StockSharp.Localization;
 
 	[DisplayName("CQG")]
-	[CategoryLoc(LocalizedStrings.Str2119Key)]
+	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.CQGConnectorKey)]
 	partial class CQGMessageAdapter
 	{

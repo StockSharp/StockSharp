@@ -39,7 +39,7 @@ namespace StockSharp.OpenECry
 	}
 
 	[DisplayName("OpenECry")]
-	[CategoryLoc(LocalizedStrings.Str2119Key)]
+	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str2561Key)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]

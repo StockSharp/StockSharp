@@ -15,7 +15,6 @@ namespace StockSharp.Hydra.Core
 
 	using MoreLinq;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;

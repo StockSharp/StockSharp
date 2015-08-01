@@ -14,7 +14,7 @@ namespace StockSharp.AlfaDirect
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("AlfaDirect")]
-	[CategoryLoc(LocalizedStrings.Str1769Key)]
+	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[DescriptionLoc(LocalizedStrings.Str2260Key)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
