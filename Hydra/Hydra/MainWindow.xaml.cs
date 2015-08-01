@@ -490,8 +490,8 @@ namespace StockSharp.Hydra
 			InitTaskMenus(null, TasksMenu, _availableTasks.Where(t => t.Type != TaskTypes.Source));
 			//TasksMenu.ItemsSource = _availableTasks.Where(t => t.Type != TaskTypes.Source);
 
-			if (CurrentConverters.Items.Count > 0)
-				CurrentConverters.SelectedIndex = 0;
+			if (CurrentTools.Items.Count > 0)
+				CurrentTools.SelectedIndex = 0;
 
 			UserConfig.Instance.LoadLayout();
 
@@ -819,7 +819,7 @@ namespace StockSharp.Hydra
 					break;
 
 				case "task":
-					var task = (IHydraTask)(NavigationBar.SelectedPane == SourcesPane ? CurrentSources.SelectedItem : CurrentConverters.SelectedItem);
+					var task = (IHydraTask)(NavigationBar.SelectedPane == SourcesPane ? CurrentSources.SelectedItem : CurrentTools.SelectedItem);
 
 					if (task != null)
 					{
@@ -1138,7 +1138,7 @@ namespace StockSharp.Hydra
 
 			var task = taskPane.Task;
 
-			var lv = task.Type == TaskTypes.Source ? CurrentSources : CurrentConverters;
+			var lv = task.Type == TaskTypes.Source ? CurrentSources : CurrentTools;
 
 			lv.ScrollIntoView(task);
 			lv.SelectedItem = task;

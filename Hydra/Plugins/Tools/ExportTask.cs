@@ -1,4 +1,4 @@
-namespace StockSharp.Hydra.Converters
+namespace StockSharp.Hydra.Tools
 {
 	using System;
 	using System.ComponentModel;
@@ -167,7 +167,7 @@ namespace StockSharp.Hydra.Converters
 
 		public override TaskTypes Type
 		{
-			get { return TaskTypes.Converter; }
+			get { return TaskTypes.Tool; }
 		}
 
 		public override Uri Icon

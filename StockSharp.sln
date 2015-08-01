@@ -196,7 +196,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rithmic", "Rithmic", "{FD91
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRithmicPublic", "Samples\Rithmic\SampleRithmic\SampleRithmicPublic.csproj", "{97BFC2F1-4A43-43E5-A4E3-023867837235}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertersPublic", "Hydra\Plugins\Converters\ConvertersPublic.csproj", "{99610F38-695A-4616-9C5C-28449C27E938}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsPublic", "Hydra\Plugins\Tools\ToolsPublic.csproj", "{99610F38-695A-4616-9C5C-28449C27E938}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DukasCopyPublic", "Hydra\Plugins\DukasCopy\DukasCopyPublic.csproj", "{83DB4333-8D0D-41BA-9ABD-068A91EAFF97}"
 EndProject

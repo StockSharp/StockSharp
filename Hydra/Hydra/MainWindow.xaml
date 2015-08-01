@@ -357,7 +357,7 @@
 			</ex:AutoRefreshCollectionViewSource.SortDescriptions>
 		</ex:AutoRefreshCollectionViewSource>
 
-		<ex:AutoRefreshCollectionViewSource Source="{Binding Path=Tasks}" x:Key="SortedConverters" Filter="SortedConverters_OnFilter">
+		<ex:AutoRefreshCollectionViewSource Source="{Binding Path=Tasks}" x:Key="SortedTools" Filter="SortedTools_OnFilter">
 			<ex:AutoRefreshCollectionViewSource.SortDescriptions>
 				<componentModel:SortDescription PropertyName="Settings.IsEnabled" Direction="Descending"/>
 			</ex:AutoRefreshCollectionViewSource.SortDescriptions>
@@ -620,7 +620,7 @@
 						</DockPanel>
 					</navigation:NavigationPane>
 
-					<navigation:NavigationPane x:Name="ConvertersPane" Title="{x:Static loc:LocalizedStrings.XamlStr166}" ImageSourceLarge="/Images/Tasks32.png" ImageSourceSmall="/Images/Tasks16.png">
+					<navigation:NavigationPane x:Name="ToolsPane" Title="{x:Static loc:LocalizedStrings.XamlStr166}" ImageSourceLarge="/Images/Tasks32.png" ImageSourceSmall="/Images/Tasks16.png">
 						<DockPanel LastChildFill="True" Margin="3">
 							<xctk:DropDownButton x:Name="NewTaskButton" Content="{x:Static loc:LocalizedStrings.XamlStr136}" DockPanel.Dock="Top" Margin="0,0,0,3">
 								<xctk:DropDownButton.DropDownContent>
@@ -641,7 +641,7 @@
 								</xctk:DropDownButton.DropDownContent>
 							</xctk:DropDownButton>
 
-							<ListView Name="CurrentConverters" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedConverters}}"
+							<ListView Name="CurrentTools" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedTools}}"
 									 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
 								<ListView.ItemsPanel>
 									<ItemsPanelTemplate>

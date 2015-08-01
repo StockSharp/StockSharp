@@ -336,7 +336,7 @@ namespace StockSharp.Hydra
 
 		private ListView GetListView(IHydraTask task)
 		{
-			return task.Type == TaskTypes.Source ? CurrentSources : CurrentConverters;
+			return task.Type == TaskTypes.Source ? CurrentSources : CurrentTools;
 		}
 
 		private void ExecutedRemoveTaskCommand(object sender, ExecutedRoutedEventArgs e)
@@ -641,9 +641,9 @@ namespace StockSharp.Hydra
 			e.Accepted = IsAccept(e, TaskTypes.Source);
 		}
 
-		private void SortedConverters_OnFilter(object sender, FilterEventArgs e)
+		private void SortedTools_OnFilter(object sender, FilterEventArgs e)
 		{
-			e.Accepted = IsAccept(e, TaskTypes.Converter);
+			e.Accepted = IsAccept(e, TaskTypes.Tool);
 		}
 
 		private static bool IsAccept(FilterEventArgs e, TaskTypes type)
