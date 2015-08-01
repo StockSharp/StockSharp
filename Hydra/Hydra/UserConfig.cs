@@ -122,7 +122,7 @@
 					navBar.SetValue("Width", MainWindow.NavigationBar.ContentWidth);
 					navBar.SetValue("SelectedPane", MainWindow.NavigationBar.SelectedIndex);
 					navBar.SetValue("SelectedSource", MainWindow.CurrentSources.SelectedIndex);
-					navBar.SetValue("SelectedConverter", MainWindow.CurrentConverters.SelectedIndex);
+					navBar.SetValue("SelectedTool", MainWindow.CurrentTools.SelectedIndex);
 
 					root.SetValue("navBar", navBar);
 
@@ -200,7 +200,7 @@
 
 				var navBar = _settings.GetValue<SettingsStorage>("navBar");
 				MainWindow.CurrentSources.SelectedIndex = navBar.GetValue<int>("SelectedSource");
-				MainWindow.CurrentConverters.SelectedIndex = navBar.GetValue<int>("SelectedConverter");
+				MainWindow.CurrentTools.SelectedIndex = navBar.GetValue<int?>("SelectedTool") ?? navBar.GetValue<int>("SelectedConverter");
 
 				var panes = _settings.GetValue<IEnumerable<SettingsStorage>>("panes").ToArray();
 				var wnds = MainWindow.DockSite.DocumentWindows.OfType<PaneWindow>().ToArray();
