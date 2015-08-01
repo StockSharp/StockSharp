@@ -76,7 +76,18 @@
 
 			LogsDir = Path.Combine(BaseApplication.AppDataPath, "Logs");
 
-			_timerToken = GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(Save);
+			_timerToken = GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(() =>
+			{
+				lock (_timerSync)
+				{
+					if (!_needToSave)
+						return;
+
+					_needToSave = false;
+				}
+
+				Save();
+			});
 		}
 
 		// после обфускации название типа нечитаемо
@@ -89,14 +100,6 @@
 		{
 			try
 			{
-				lock (_timerSync)
-				{
-					if (!_needToSave)
-						return;
-
-					_needToSave = false;
-				}
-
 				CultureInfo.InvariantCulture.DoInCulture(() =>
 				{
 					var root = new SettingsStorage();
@@ -308,8 +311,6 @@
 		protected override void DisposeManaged()
 		{
 			GuiDispatcher.GlobalDispatcher.RemovePeriodicalAction(_timerToken);
-
-			_needToSave = true;
 			Save();
 
 			base.DisposeManaged();
