@@ -43,14 +43,17 @@ namespace StockSharp.Hydra.Windows
 			get { return _task; }
 			set
 			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
 				_task = value;
 				_clonnedSettings = _task.Settings.Clone();
 
 				TaskSettings.IsEnabled = true;
 				TaskSettings.SelectedObject = _clonnedSettings;
 
-				lbDescription.Text = _task.Description;
-				lbAbilities.Text = _task.SupportedMarketDataTypes.Select(t => _dataTypes[t]).Join(", ");
+				DescriptionCtrl.Text = _task.GetDescription();
+				AbilitiesCtrl.Text = _task.SupportedMarketDataTypes.Select(t => _dataTypes[t]).Join(", ");
 			}
 		}
 

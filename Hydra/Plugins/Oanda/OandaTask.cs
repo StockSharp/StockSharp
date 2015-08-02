@@ -18,7 +18,8 @@ namespace StockSharp.Hydra.Oanda
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Forex)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	class OandaTask : ConnectorHydraTask<OandaTrader>
 	{
 		private const string _sourceName = "OANDA";
@@ -32,7 +33,7 @@ namespace StockSharp.Hydra.Oanda
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3416Key)]
 			[DescriptionLoc(LocalizedStrings.Str3450Key)]
 			[PropertyOrder(0)]
@@ -42,7 +43,7 @@ namespace StockSharp.Hydra.Oanda
 				set { ExtensionInfo["Server"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3451Key)]
 			[DescriptionLoc(LocalizedStrings.Str3451Key, true)]
 			[PropertyOrder(1)]
@@ -67,11 +68,6 @@ namespace StockSharp.Hydra.Oanda
 		public override Uri Icon
 		{
 			get { return "oanda_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3840Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

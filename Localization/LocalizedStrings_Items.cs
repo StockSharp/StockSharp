@@ -34050,12 +34050,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Source of market-data from MICEX-RTS FTP-server.
+		/// Source of market-data from MOEX FTP-server.
 		/// </summary>
 		public const string Str2822Key = "Str2822";
 
 		/// <summary>
-		/// Source of market-data from MICEX-RTS FTP-server.
+		/// Source of market-data from MOEX FTP-server.
 		/// </summary>
 		public static string Str2822
 		{
@@ -34089,12 +34089,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Best Private Investor
+		/// BPI
 		/// </summary>
 		public const string Str2825Key = "Str2825";
 
 		/// <summary>
-		/// Best Private Investor
+		/// BPI
 		/// </summary>
 		public static string Str2825
 		{
@@ -45724,19 +45724,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Source is designed to get market-data from website {0}.
-		/// </summary>
-		public const string Str3807ParamsKey = "Str3807Params";
-
-		/// <summary>
-		/// Source is designed to get market-data from website {0}.
-		/// </summary>
-		public static string Str3807Params
-		{
-			get { return GetString(Str3807ParamsKey); }
-		}
-
-		/// <summary>
 		/// Client number is not specified.
 		/// </summary>
 		public const string Str3835Key = "Str3835";
@@ -45799,19 +45786,6 @@ namespace StockSharp.Localization
 		public static string Str3839Params
 		{
 			get { return GetString(Str3839ParamsKey); }
-		}
-
-		/// <summary>
-		/// Source is designed to get history data from {0}.
-		/// </summary>
-		public const string Str3840ParamsKey = "Str3840Params";
-
-		/// <summary>
-		/// Source is designed to get history data from {0}.
-		/// </summary>
-		public static string Str3840Params
-		{
-			get { return GetString(Str3840ParamsKey); }
 		}
 
 		/// <summary>

@@ -79,11 +79,6 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
-		/// Краткая инструкция по настройке и работе.
-		/// </summary>
-		public abstract string Description { get; }
-
-		/// <summary>
 		/// Адрес иконки, для визуального обозначения.
 		/// </summary>
 		public abstract Uri Icon { get; }

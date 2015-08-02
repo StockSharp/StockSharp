@@ -21,7 +21,8 @@ namespace StockSharp.Hydra.RtsCompetition
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2826Key)]
 	[TargetPlatform(Languages.Russian)]
 	class RtsCompetitionTask : BaseHydraTask
 	{
@@ -37,7 +38,7 @@ namespace StockSharp.Hydra.RtsCompetition
 				ExtensionInfo.TryAdd("IgnoreWeekends", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -47,7 +48,7 @@ namespace StockSharp.Hydra.RtsCompetition
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -57,7 +58,7 @@ namespace StockSharp.Hydra.RtsCompetition
 				set { ExtensionInfo["RtsOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(2)]
@@ -66,11 +67,6 @@ namespace StockSharp.Hydra.RtsCompetition
 				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2826; }
 		}
 
 		public override Uri Icon

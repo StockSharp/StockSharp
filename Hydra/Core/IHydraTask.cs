@@ -60,11 +60,6 @@
 		TaskTypes Type { get; }
 
 		/// <summary>
-		/// Краткое описание задачи.
-		/// </summary>
-		string Description { get; }
-
-		/// <summary>
 		/// Адрес иконки, для визуального обозначения.
 		/// </summary>
 		Uri Icon { get; }

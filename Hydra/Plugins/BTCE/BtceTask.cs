@@ -15,7 +15,8 @@ namespace StockSharp.Hydra.Btce
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[Category(TaskCategories.Crypto)]
 	class BtceTask : ConnectorHydraTask<BtceTrader>
 	{
@@ -35,7 +36,7 @@ namespace StockSharp.Hydra.Btce
 			/// <summary>
 			/// Ключ.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3304Key)]
 			[DescriptionLoc(LocalizedStrings.Str3304Key, true)]
 			[PropertyOrder(1)]
@@ -48,7 +49,7 @@ namespace StockSharp.Hydra.Btce
 			/// <summary>
 			/// Секрет.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3306Key)]
 			[DescriptionLoc(LocalizedStrings.Str3307Key)]
 			[PropertyOrder(2)]
@@ -64,11 +65,6 @@ namespace StockSharp.Hydra.Btce
 		public override Uri Icon
 		{
 			get { return "btce_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

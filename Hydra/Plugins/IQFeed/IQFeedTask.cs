@@ -23,7 +23,8 @@ namespace StockSharp.Hydra.IQFeed
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	class IQFeedTask : ConnectorHydraTask<IQFeedTrader>
 	{
 		private const string _sourceName = "IQFeed";
@@ -174,11 +175,6 @@ namespace StockSharp.Hydra.IQFeed
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
 			}).ToArray();
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override Uri Icon

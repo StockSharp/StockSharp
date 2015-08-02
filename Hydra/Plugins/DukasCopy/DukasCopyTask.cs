@@ -24,7 +24,8 @@ namespace StockSharp.Hydra.DukasCopy
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Forex)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	class DukasCopyTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "DukasCopy";
@@ -39,7 +40,7 @@ namespace StockSharp.Hydra.DukasCopy
 				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -49,7 +50,7 @@ namespace StockSharp.Hydra.DukasCopy
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str273Key)]
 			[DescriptionLoc(LocalizedStrings.Str3789Key)]
 			[PropertyOrder(1)]
@@ -59,7 +60,7 @@ namespace StockSharp.Hydra.DukasCopy
 				set { ExtensionInfo["Side"] = (int)value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(2)]
@@ -69,7 +70,7 @@ namespace StockSharp.Hydra.DukasCopy
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(3)]
@@ -113,11 +114,6 @@ namespace StockSharp.Hydra.DukasCopy
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2288Params.Put(_sourceName); }
 		}
 
 		public override TaskTypes Type

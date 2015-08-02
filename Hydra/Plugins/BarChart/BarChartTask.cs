@@ -21,7 +21,8 @@ namespace StockSharp.Hydra.BarChart
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	class BarChartTask : ConnectorHydraTask<BarChartTrader>
 	{
 		private const string _sourceName = "BarChart";
@@ -47,7 +48,7 @@ namespace StockSharp.Hydra.BarChart
 				set { ExtensionInfo["IsRealTime"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
@@ -57,7 +58,7 @@ namespace StockSharp.Hydra.BarChart
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
@@ -114,11 +115,6 @@ namespace StockSharp.Hydra.BarChart
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
 			}).ToArray();
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override Uri Icon

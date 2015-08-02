@@ -27,10 +27,10 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Margin="3" Grid.Row="0" Grid.Column="0" Text="{x:Static loc:LocalizedStrings.XamlStr392}"/>
-                <TextBlock Margin="3" Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Name="lbDescription"/>
+				<TextBlock Margin="3" Grid.Row="0" Grid.Column="1" TextWrapping="Wrap" Name="DescriptionCtrl"/>
 
                 <TextBlock Margin="3" Grid.Row="1" Grid.Column="0" Text="{x:Static loc:LocalizedStrings.XamlStr496}"/>
-                <TextBlock Margin="3" Grid.Row="1" Grid.Column="1" Name="lbAbilities"/>
+                <TextBlock Margin="3" Grid.Row="1" Grid.Column="1" Name="AbilitiesCtrl"/>
             </Grid>
         </Expander>
         

@@ -3,7 +3,6 @@ namespace StockSharp.Hydra.Sterling
 	using System;
 	using System.ComponentModel;
 
-	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
@@ -13,7 +12,8 @@ namespace StockSharp.Hydra.Sterling
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	class SterlingTask : ConnectorHydraTask<SterlingTrader>
 	{
 		private const string _sourceName = "Sterling";
@@ -35,11 +35,6 @@ namespace StockSharp.Hydra.Sterling
 		public override Uri Icon
 		{
 			get { return "sterling_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		private SterlingSettings _settings;

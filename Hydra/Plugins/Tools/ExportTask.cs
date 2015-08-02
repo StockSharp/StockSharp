@@ -24,9 +24,10 @@ namespace StockSharp.Hydra.Tools
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayNameLoc(LocalizedStrings.Str3754Key)]
+	[DescriptionLoc(LocalizedStrings.Str3767Key)]
 	class ExportTask : BaseHydraTask
 	{
-		[TaskSettingsDisplayName(LocalizedStrings.Str3754Key, true)]
+		[TaskSettingsDisplayName(LocalizedStrings.Str3754Key)]
 		private sealed class ExportSettings : HydraTaskSettings
 		{
 			public ExportSettings(HydraTaskSettings settings)
@@ -129,9 +130,6 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["BatchSize"] = value; }
 			}
 
-			/// <summary>
-			/// Проверять уникальность данных в базе данных. Влияет на производительность. По-умолчанию включено.
-			/// </summary>
 			[CategoryLoc(LocalizedStrings.Str3755Key)]
 			[DisplayNameLoc(LocalizedStrings.Str3765Key)]
 			[DescriptionLoc(LocalizedStrings.Str3766Key)]
@@ -158,11 +156,6 @@ namespace StockSharp.Hydra.Tools
 				clone.CandleSettings = CandleSettings.Clone();
 				return clone;
 			}
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3767; }
 		}
 
 		public override TaskTypes Type

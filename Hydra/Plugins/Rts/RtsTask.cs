@@ -22,7 +22,8 @@ namespace StockSharp.Hydra.Rts
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2822Key)]
 	[TargetPlatform(Languages.Russian)]
 	class RtsTask : BaseHydraTask
 	{
@@ -41,7 +42,7 @@ namespace StockSharp.Hydra.Rts
 				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -51,7 +52,7 @@ namespace StockSharp.Hydra.Rts
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -61,7 +62,7 @@ namespace StockSharp.Hydra.Rts
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2617Key)]
 			[DescriptionLoc(LocalizedStrings.Str2813Key)]
 			[PropertyOrder(3)]
@@ -71,7 +72,7 @@ namespace StockSharp.Hydra.Rts
 				set { ExtensionInfo["IsSystemOnly"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2814Key)]
 			[DescriptionLoc(LocalizedStrings.Str2815Key)]
 			[PropertyOrder(4)]
@@ -81,7 +82,7 @@ namespace StockSharp.Hydra.Rts
 				set { ExtensionInfo["LoadEveningSession"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(5)]
@@ -91,7 +92,7 @@ namespace StockSharp.Hydra.Rts
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(6)]
@@ -178,11 +179,6 @@ namespace StockSharp.Hydra.Rts
 		public override TaskTypes Type
 		{
 			get { return TaskTypes.Source; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2822; }
 		}
 
 		protected override TimeSpan OnProcess()

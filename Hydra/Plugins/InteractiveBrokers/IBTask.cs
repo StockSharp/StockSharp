@@ -18,7 +18,8 @@ namespace StockSharp.Hydra.InteractiveBrokers
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	class IBTask : ConnectorHydraTask<IBTrader>
 	{
 		private const string _sourceName = "Interactive Brokers";
@@ -86,11 +87,6 @@ namespace StockSharp.Hydra.InteractiveBrokers
 		public override Uri Icon
 		{
 			get { return "ib_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

@@ -5,7 +5,6 @@ namespace StockSharp.Hydra.FinViz
 	using System.ComponentModel;
 	using System.Linq;
 
-	using Ecng.Common;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -21,7 +20,8 @@ namespace StockSharp.Hydra.FinViz
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	class FinVizTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "FinViz";
@@ -54,11 +54,6 @@ namespace StockSharp.Hydra.FinViz
 		public override Uri Icon
 		{
 			get { return "finviz_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3807Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

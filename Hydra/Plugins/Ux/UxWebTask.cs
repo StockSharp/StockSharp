@@ -24,11 +24,12 @@ namespace StockSharp.Hydra.Ux
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	class UxWebTask : BaseHydraTask, ISecurityDownloader
 	{
-		private const string _sourceName = "UX (сайт)";
+		private const string _sourceName = LocalizedStrings.Str2830Key;
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
@@ -40,7 +41,7 @@ namespace StockSharp.Hydra.Ux
 				ExtensionInfo.TryAdd("IgnoreWeekends", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -50,7 +51,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -60,7 +61,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(2)]
@@ -103,11 +104,6 @@ namespace StockSharp.Hydra.Ux
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(LocalizedStrings.Str2830); }
 		}
 
 		public override TaskTypes Type

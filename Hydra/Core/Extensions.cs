@@ -114,6 +114,19 @@
 		}
 
 		/// <summary>
+		/// Получить описание задачи.
+		/// </summary>
+		/// <param name="task">Задача.</param>
+		/// <returns>Описание задачи.</returns>
+		public static string GetDescription(this IHydraTask task)
+		{
+			if (task == null)
+				throw new ArgumentNullException("task");
+
+			return task.GetType().GetDescription();
+		}
+
+		/// <summary>
 		/// Сгенерировать имя эспортируемого файла.
 		/// </summary>
 		/// <param name="security">Инструмент.</param>

@@ -22,7 +22,8 @@ namespace StockSharp.Hydra.Quik
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	class QuikTask : ConnectorHydraTask<QuikTrader>
 	{
@@ -79,7 +80,7 @@ namespace StockSharp.Hydra.Quik
 				ExtensionInfo.TryAdd("LuaPassword", new SecureString());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayName("DDE")]
 			[DescriptionLoc(LocalizedStrings.Str2803Key)]
 			[PropertyOrder(0)]
@@ -149,7 +150,7 @@ namespace StockSharp.Hydra.Quik
 				set { ExtensionInfo["IsDownloadSecurityChangesHistory"] = value; }
 			}
 
-			[TaskCategory(_luaCategory)]
+			[CategoryLoc(_luaCategory)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(0)]
@@ -160,7 +161,7 @@ namespace StockSharp.Hydra.Quik
 				set { ExtensionInfo["LuaAddress"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_luaCategory)]
+			[CategoryLoc(_luaCategory)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
@@ -171,7 +172,7 @@ namespace StockSharp.Hydra.Quik
 				set { ExtensionInfo["LuaLogin"] = value; }
 			}
 
-			[TaskCategory(_luaCategory)]
+			[CategoryLoc(_luaCategory)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
@@ -317,11 +318,6 @@ namespace StockSharp.Hydra.Quik
 		public override Uri Icon
 		{
 			get { return "quik_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

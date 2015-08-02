@@ -17,7 +17,7 @@ namespace StockSharp.InteractiveBrokers
 	/// <summary>
 	/// Условие заявок, специфичных для <see cref="InteractiveBrokers"/>.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str2264Key, "FIX")]
+	[DisplayNameLoc(LocalizedStrings.Str2264Key, "Interactive Brokers")]
 	public class IBOrderCondition : OrderCondition
 	{
 		/// <summary>

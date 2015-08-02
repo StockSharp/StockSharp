@@ -21,6 +21,7 @@ namespace StockSharp.Hydra.Tools
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayNameLoc(LocalizedStrings.Str3131Key)]
+	[DescriptionLoc(LocalizedStrings.Str3785Key)]
 	class ConvertTask : BaseHydraTask
 	{
 		private enum ConvertModes
@@ -41,17 +42,19 @@ namespace StockSharp.Hydra.Tools
 			DepthsToCandles,
 		}
 
-		[TaskSettingsDisplayName(LocalizedStrings.Str3131Key, true)]
+		[TaskSettingsDisplayName(_sourceName)]
 		//[CategoryOrder(_sourceName, 0)]
 		private sealed class ConvertTaskSettings : HydraTaskSettings
 		{
+			private const string _sourceName = LocalizedStrings.Str3131Key;
+
 			public ConvertTaskSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
 				ExtensionInfo.TryAdd("DestinationStorageFormat", StorageFormats.Binary.To<string>());
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3131Key)]
 			[DescriptionLoc(LocalizedStrings.Str3131Key, true)]
 			[PropertyOrder(0)]
@@ -61,10 +64,7 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["ConvertMode"] = value.To<string>(); }
 			}
 
-			/// <summary>
-			/// Формат данных.
-			/// </summary>
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2239Key)]
 			[DescriptionLoc(LocalizedStrings.Str2240Key)]
 			[PropertyOrder(1)]
@@ -75,7 +75,7 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["DestinationStorageFormat"] = value.To<string>(); }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str3779Key)]
 			[PropertyOrder(1)]
@@ -85,7 +85,7 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str3778Key)]
 			[PropertyOrder(2)]
@@ -149,11 +149,6 @@ namespace StockSharp.Hydra.Tools
 				clone.CandleSettings = CandleSettings.Clone();
 				return clone;
 			}
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3785; }
 		}
 
 		public override Uri Icon

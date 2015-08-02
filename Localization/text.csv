@@ -2624,7 +2624,7 @@ Str2818;From what date to begin downloading data for USD/RUR.;С какой да
 Str2819;Download data for RTS Standard securities.;Скачивать данные для инструментов РТС Стандарт.
 Str2820;Glue;Склеивать
 Str2821;Glue trades for RTS Standard securities (trades for T+N are not split to folders).;Склеивать сделки для инструментов РТС Стандарт (сделки для T+N не разбиваются по папкам).
-Str2822;Source of market-data from MICEX-RTS FTP-server.;Источник получения с биржи ММВБ-РТС рыночных данных c FTP-сервера.
+Str2822;Source of market-data from MOEX FTP-server.;Источник получения с Московской Биржи рыночных данных c FTP-сервера.
 Str2823Params;Start downloading trades for {0:d}.;Старт загрузки сделок за {0:d}.
 Str2824;USD-RUR exchange rate;Курс USD-RUR
 Str2825;BPI;ЛЧИ
@@ -3525,13 +3525,11 @@ Str3803;Extended type of order not initialized.;Расширенный тип з
 AddrNotSpecified;Address is not specified.;Не указан адрес.
 RssSource;Source is designed to receive news through RSS feeds.;Источник предназначен для получения новостей через RSS фиды.
 AlorHistory;Alor (history);Alor (история)
-Str3807Params;Source is designed to get market-data from website {0}.;Источник предназначен для получения рыночных данных с сайта {0}.
 Str3835;Client number is not specified.;Не указан номер клиента.
 Str3836;Token is not specified.;Не указан токен.
 OandaHistory;OANDA (history);OANDA (история)
 Str3838Params;Start downloading quotes for {0} for {1}.;Старт загрузки котировок за {0} для {1}.
 Str3839Params;Error loading quotes for {0} for {1}.;Ошибка загрузки котировок за {0} для {1}.
-Str3840Params;Source is designed to get history data from {0}.;Источник предназначен для получения исторических данных с {0}.
 Str3843;Cannot cast adapter with type {0} to {1}.;Невозможно привести адаптера с типом {0} к {1}.
 TaskSettings;{0} task settings;Настройки задачи {0}
 Str3846; for period of; за период
@@ -4148,3 +4146,4 @@ NegativeTickCountStorage;Tick count for storage cannot be less than zero.;Кол
 NegativeOrderCountStorage;Order count for storage cannot be less than zero.;Количество заявок для хранения не может быть отрицательным.
 FreeAccess;Free access;Бесплатно
 ITCH;Direct market-data access to LSE or NASDAQ via ITCH protocol.;Прямое подключения к биржам LSE или NASDAQ через протокол маркет-данных ITCH.
+BackupPlugin;Back up save market data to online service.;Делать резервные копии для сохраненных маркет-данных.

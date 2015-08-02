@@ -13,7 +13,8 @@ namespace StockSharp.Hydra.Fix
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	class FixTask : ConnectorHydraTask<FixTrader>
 	{
 		private const string _sourceName = "FIX";
@@ -29,7 +30,7 @@ namespace StockSharp.Hydra.Fix
 
 			private FixMessageAdapter _marketDataSession;
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.SessionKey)]
 			[DescriptionLoc(LocalizedStrings.Str3746Key)]
 			[PropertyOrder(0)]
@@ -75,11 +76,6 @@ namespace StockSharp.Hydra.Fix
 		public override Uri Icon
 		{
 			get { return "fix_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

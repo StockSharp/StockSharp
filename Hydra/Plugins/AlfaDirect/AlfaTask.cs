@@ -19,7 +19,8 @@ namespace StockSharp.Hydra.AlfaDirect
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	class AlfaTask : ConnectorHydraTask<AlfaTrader>
 	{
@@ -34,7 +35,7 @@ namespace StockSharp.Hydra.AlfaDirect
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
@@ -44,7 +45,7 @@ namespace StockSharp.Hydra.AlfaDirect
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
@@ -76,11 +77,6 @@ namespace StockSharp.Hydra.AlfaDirect
 		public override Uri Icon
 		{
 			get { return "alfa_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

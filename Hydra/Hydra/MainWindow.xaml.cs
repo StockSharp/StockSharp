@@ -440,7 +440,7 @@ namespace StockSharp.Hydra
 					{
 						Icon = new Image { MinHeight = 22, Source = new BitmapImage(task.Icon) },
 						Header = task.GetDisplayName(),
-						ToolTip = task.Description,
+						ToolTip = task.GetDescription(),
 						Command = NewTaskCommand,
 						CommandParameter = task
 					});	
@@ -450,7 +450,7 @@ namespace StockSharp.Hydra
 				{
 					Icon = new Image { MinHeight = 22, Source = new BitmapImage(task.Icon) },
 					Header = task.GetDisplayName(),
-					ToolTip = task.Description,
+					ToolTip = task.GetDescription(),
 					Command = NewTaskCommand,
 					CommandParameter = task
 				});

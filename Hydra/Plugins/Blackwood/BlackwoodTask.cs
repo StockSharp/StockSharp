@@ -20,7 +20,8 @@ namespace StockSharp.Hydra.Blackwood
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	class BlackwoodTask : ConnectorHydraTask<BlackwoodTrader>
 	{
 		private const string _sourceName = "Fusion/Blackwood";
@@ -34,7 +35,7 @@ namespace StockSharp.Hydra.Blackwood
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
@@ -44,7 +45,7 @@ namespace StockSharp.Hydra.Blackwood
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
@@ -54,7 +55,7 @@ namespace StockSharp.Hydra.Blackwood
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3694Key)]
 			[DescriptionLoc(LocalizedStrings.Str3695Key)]
 			[PropertyOrder(2)]
@@ -64,7 +65,7 @@ namespace StockSharp.Hydra.Blackwood
 				set { ExtensionInfo["HistoricalDataAddress"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3696Key)]
 			[DescriptionLoc(LocalizedStrings.Str3697Key)]
 			[PropertyOrder(3)]
@@ -96,11 +97,6 @@ namespace StockSharp.Hydra.Blackwood
 		public override Uri Icon
 		{
 			get { return "bw_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

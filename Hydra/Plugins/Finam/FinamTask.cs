@@ -24,7 +24,8 @@ namespace StockSharp.Hydra.Finam
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	class FinamTask : BaseHydraTask, ISecurityDownloader
 	{
@@ -40,7 +41,7 @@ namespace StockSharp.Hydra.Finam
 				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -50,7 +51,7 @@ namespace StockSharp.Hydra.Finam
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -60,7 +61,7 @@ namespace StockSharp.Hydra.Finam
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(2)]
@@ -70,7 +71,7 @@ namespace StockSharp.Hydra.Finam
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(3)]
@@ -117,11 +118,6 @@ namespace StockSharp.Hydra.Finam
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2288Params.Put(_sourceName); }
 		}
 
 		public override TaskTypes Type

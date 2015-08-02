@@ -21,7 +21,8 @@ namespace StockSharp.Hydra.Transaq
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	class TransaqTask : ConnectorHydraTask<TransaqTrader>
 	{
@@ -37,7 +38,7 @@ namespace StockSharp.Hydra.Transaq
 				ExtensionInfo.TryAdd("OverrideDll", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.Str3679Key)]
 			[PropertyOrder(0)]
@@ -47,7 +48,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.Str3680Key)]
 			[PropertyOrder(1)]
@@ -57,7 +58,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.Str3681Key)]
 			[PropertyOrder(2)]
@@ -118,7 +119,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["ProxyAddress"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayName("HFT")]
 			[DescriptionLoc(LocalizedStrings.Str3545Key)]
 			[PropertyOrder(8)]
@@ -128,7 +129,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["IsHFT"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str736Key)]
 			[DescriptionLoc(LocalizedStrings.Str3547Key)]
 			[PropertyOrder(9)]
@@ -175,11 +176,6 @@ namespace StockSharp.Hydra.Transaq
 		public override Uri Icon
 		{
 			get { return "transaq_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

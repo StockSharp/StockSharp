@@ -22,7 +22,8 @@ namespace StockSharp.Hydra.SmartCom
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	class SmartComTask : ConnectorHydraTask<SmartTrader>
 	{
@@ -39,7 +40,7 @@ namespace StockSharp.Hydra.SmartCom
 					ExtensionInfo.Add("IsVersion3", false);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[Editor(typeof(SmartComEndPointEditor), typeof(SmartComEndPointEditor))]
@@ -50,7 +51,7 @@ namespace StockSharp.Hydra.SmartCom
 				set { ExtensionInfo["Address"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
@@ -60,7 +61,7 @@ namespace StockSharp.Hydra.SmartCom
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
@@ -70,7 +71,7 @@ namespace StockSharp.Hydra.SmartCom
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayName("SmartCOM 3")]
 			[DescriptionLoc(LocalizedStrings.Str2829Key)]
 			[PropertyOrder(3)]
@@ -95,11 +96,6 @@ namespace StockSharp.Hydra.SmartCom
 		public override Uri Icon
 		{
 			get { return "smart_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings
