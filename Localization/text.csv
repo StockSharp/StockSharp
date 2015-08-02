@@ -4147,3 +4147,4 @@ NegativeOrderCountStorage;Order count for storage cannot be less than zero.;Ко
 FreeAccess;Free access;Бесплатно
 ITCH;Direct market-data access to LSE or NASDAQ via ITCH protocol.;Прямое подключения к биржам LSE или NASDAQ через протокол маркет-данных ITCH.
 BackupPlugin;Back up save market data to online service.;Делать резервные копии для сохраненных маркет-данных.
+TF;TF;ТФ

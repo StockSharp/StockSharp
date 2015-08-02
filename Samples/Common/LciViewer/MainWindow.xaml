@@ -14,56 +14,59 @@
 				<RowDefinition Height="5" />
 				<RowDefinition />
 			</Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="300"/>
-            </Grid.ColumnDefinitions>
 
-			<Grid Grid.ColumnSpan="2">
+			<Grid>
 				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="40" />
+					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="100" />
-					<ColumnDefinition Width="60" />
+					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="100" />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="80" />
-					<ColumnDefinition Width="100" />
-					<ColumnDefinition Width="5" />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition Width="5" />
-					<ColumnDefinition Width="30" />
-					<ColumnDefinition Width="70" />
 					<ColumnDefinition Width="5" />
 					<ColumnDefinition Width="100" />
 				</Grid.ColumnDefinitions>
 
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Year}"/>:</TextBlock>
+				<TextBlock VerticalAlignment="Center" Margin="0,0,5,0"><Run Text="{x:Static loc:LocalizedStrings.Year}"/>:</TextBlock>
 				<ComboBox Grid.Column="1" x:Name="Year" DisplayMemberPath="Year" SelectionChanged="Year_OnSelectionChanged" />
 
-				<TextBlock Grid.Column="2">
+				<TextBlock VerticalAlignment="Center" Grid.Column="2" Margin="5,0,5,0">
 					<Run Text="{x:Static loc:LocalizedStrings.XamlStr776}"/><Run Text=":"/>
 				</TextBlock>
 				<ComboBox Grid.Column="3" x:Name="Trader" IsEditable="True" SelectionChanged="Trader_OnSelectionChanged" />
 
-				<Label Grid.Column="4">
-					<TextBlock>
-						<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
-					</TextBlock>
-				</Label>
+				<TextBlock VerticalAlignment="Center" Grid.Column="4" Margin="5,0,5,0">
+					<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
+				</TextBlock>
 				<ComboBox Grid.Column="5" x:Name="Security" IsEditable="True" SelectionChanged="Security_OnSelectionChanged" />
 
 				<xctk:DateTimePicker x:Name="From" Grid.Column="7" />
 				<xctk:DateTimePicker x:Name="To" Grid.Column="8" />
 
-				<Label Grid.Column="10">ТФ:</Label>
+				<TextBlock VerticalAlignment="Center" Grid.Column="10" Margin="5,0,5,0">
+					<Run Text="{x:Static loc:LocalizedStrings.TF}"/><Run Text=":"/>
+				</TextBlock>
 				<ComboBox Grid.Column="11" x:Name="TimeFrame" />
 
 				<Button x:Name="Download" Grid.Column="13" IsEnabled="False" Click="Download_OnClick"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr655}"/></Button>
 			</Grid>
 
-			<ss:ChartPanel x:Name="Chart" Grid.Row="2" Grid.Column="0" IsInteracted="True" />
+			<Grid Grid.Row="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="3*"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
 
-            <ss:StatisticParameterGrid x:Name="Statistics" Grid.Row="2" Grid.Column="1" />
+				<ss:ChartPanel x:Name="Chart" Grid.Column="0" IsInteracted="True" />
+				<GridSplitter Grid.Column="0" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+				<ss:StatisticParameterGrid x:Name="Statistics" Grid.Column="1" />
+			</Grid>
 		</Grid>
 	</xctk:BusyIndicator>
 </Window>

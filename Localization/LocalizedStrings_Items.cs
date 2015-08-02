@@ -53551,5 +53551,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(ITCHKey); }
 		}
+
+		/// <summary>
+		/// TF
+		/// </summary>
+		public const string TFKey = "TF";
+
+		/// <summary>
+		/// TF
+		/// </summary>
+		public static string TF
+		{
+			get { return GetString(TFKey); }
+		}
 	}
 }
