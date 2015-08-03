@@ -200,7 +200,7 @@ namespace StockSharp.Hydra.Windows
 					Tuple.Create(typeof(NewsMessage), (object)null)
 				};
 
-				var formats = Enumerator.GetValues<StorageFormats>();
+				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
 				foreach (var drive in DriveCache.Instance.AllDrives)
 				{
@@ -213,7 +213,18 @@ namespace StockSharp.Hydra.Windows
 								if (_token.IsCancellationRequested)
 									break;
 
-								drive.GetStorageDrive(security.ToSecurityId(), dataType.Item1, dataType.Item2, format).ClearDatesCache();
+								var secId = security.ToSecurityId();
+
+								drive
+									.GetStorageDrive(secId, dataType.Item1, dataType.Item2, format)
+									.ClearDatesCache();
+
+								foreach (var candleType in drive.GetCandleTypes(security.ToSecurityId(), format))
+								{
+									drive
+										.GetStorageDrive(secId, candleType.Item1, candleType.Item2, format)
+										.ClearDatesCache();
+								}
 							}
 						}
 
