@@ -11,7 +11,7 @@
 			<listItem><codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> для <token>iqfeed</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.Sterling.SterlingTrader</codeEntityReference> для <token>sterling</token></listItem>
 			<listItem><codeEntityReference>T:StockSharp.CQG.CQGTrader</codeEntityReference> для <token>cqg</token></listItem>
-			<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> для <token>fix</token></listItem>
+			<!--<listItem><codeEntityReference>T:StockSharp.Fix.FixTrader</codeEntityReference> для <token>fix</token></listItem>-->
 			<listItem><codeEntityReference>T:StockSharp.Rithmic.RithmicTrader</codeEntityReference> для <token>rithmic</token></listItem>
 		</list>
 	</introduction>
