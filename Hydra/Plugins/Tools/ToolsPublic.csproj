@@ -7,8 +7,8 @@
     <ProjectGuid>{99610F38-695A-4616-9C5C-28449C27E938}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StockSharp.Hydra.Converters</RootNamespace>
-    <AssemblyName>StockSharp.Hydra.Converters</AssemblyName>
+    <RootNamespace>StockSharp.Hydra.Tools</RootNamespace>
+    <AssemblyName>StockSharp.Hydra.Tools</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
