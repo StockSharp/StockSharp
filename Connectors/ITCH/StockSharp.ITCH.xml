@@ -54,6 +54,11 @@
             Адрес сервера восстановления состояния.
             </summary>
     </member>
+    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.ReplayAddress">
+      <summary>
+            Адрес сервера проигрывания данных.
+            </summary>
+    </member>
     <member name="P:StockSharp.ITCH.ITCHMessageAdapter.Login">
       <summary>
             Логин.
@@ -102,6 +107,11 @@
     <member name="P:StockSharp.ITCH.ITCHTrader.RecoveryAddress">
       <summary>
             Адрес сервера восстановления состояния.
+            </summary>
+    </member>
+    <member name="P:StockSharp.ITCH.ITCHTrader.ReplayAddress">
+      <summary>
+            Адрес сервера проигрывания данных.
             </summary>
     </member>
   </members>

@@ -2929,7 +2929,7 @@
     </member>
     <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.OnlySystemTrades">
       <summary>
-            Передавать только системные сделки. По-умолчанию значение равно true.
+            Передавать только системные сделки. По-умолчанию значение равно <see langword="true" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.RevisionPath">
@@ -3264,19 +3264,19 @@
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.RestrictLocalLogin">
       <summary>
             Ограничить доступ к роутеру локальным пользователям.
-            По умолчнию его значение равно false.
+            По умолчнию его значение равно <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.TcpNoDelayIn">
       <summary>
             Отключен ли алгоритм Nagl'e для входящих пакетов, что ускоряет их пересылку.
-            По умолчнию его значение равно true.
+            По умолчнию его значение равно <see langword="true" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.TcpNoDelayOut">
       <summary>
             Отключен ли алгоритм Nagl'e для исходящих пакетов, что ускоряет их пересылку.
-            По умолчнию его значение равно true.
+            По умолчнию его значение равно <see langword="true" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouterConfigParser.UserName">
@@ -5643,8 +5643,8 @@
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouter.IsServiceController">
       <summary>
-            true - программа запускается, как сервис Windows,
-            false - программа запускается вручную.
+        <see langword="true" /> - программа запускается, как сервис Windows,
+            <see langword="false" /> - программа запускается вручную.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaRouter.ConfigParser">
@@ -5735,7 +5735,7 @@
             Найти колонку по текстовому названию.
             </summary>
       <param name="name">Название колонки.</param>
-      <returns>Найденная колонка. Если колонка не найдена, то будет возвращено значение null.</returns>
+      <returns>Найденная колонка. Если колонка не найдена, то будет возвращено значение <see langword="null" />.</returns>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaAggregationColumns">
       <summary>
@@ -6010,7 +6010,7 @@
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaDeliveryReportFutureColumns.Unexec">
       <summary>
-            Признак исполнения/неисполнения клиентом позиций, указанных в поле pos_neisp (False - исполнение, True - неисполнение).
+            Признак исполнения/неисполнения клиентом позиций, указанных в поле pos_neisp (<see langword="false" /> - исполнение, <see langword="true" /> - неисполнение).
             </summary>
     </member>
     <member name="F:StockSharp.Plaza.Metadata.PlazaDeliveryReportFutureColumns.SettlPair">
@@ -7037,7 +7037,7 @@
     </member>
     <member name="P:StockSharp.Plaza.Metadata.PlazaTable.LogTableData">
       <summary>
-            Писать RAW-логфайл с данными таблицы. Имя файла совпадает с названием таблицы. По умолчанию false.
+            Писать RAW-логфайл с данными таблицы. Имя файла совпадает с названием таблицы. По умолчанию <see langword="false" />.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.PlazaTrader">
@@ -7056,11 +7056,11 @@
             </summary>
       <param name="transactionId">Идентификатор транзакции отмены.</param>
       <param name="isStopOrder">
-        <see langword="true" />, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-      <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-      <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-      <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-      <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+        <see langword="true" />, если нужно отменить только стоп-заявки, <see langword="false" /> - если только обычный и <see langword="null" /> - если оба типа.</param>
+      <param name="portfolio">Портфель. Если значение равно <see langword="null" />, то портфель не попадает в фильтр снятия заявок.</param>
+      <param name="direction">Направление заявки. Если значение равно <see langword="null" />, то направление не попадает в фильтр снятия заявок.</param>
+      <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
+      <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
     </member>
     <member name="M:StockSharp.Plaza.PlazaTrader.OnReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)">
       <summary>
@@ -7179,7 +7179,7 @@
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.OnlySystemTrades">
       <summary>
-            Передавать через событие <see cref="E:StockSharp.BusinessEntities.IConnector.NewTrades" /> только системные сделки. По-умолчанию значение равно true.
+            Передавать через событие <see cref="E:StockSharp.BusinessEntities.IConnector.NewTrades" /> только системные сделки. По-умолчанию значение равно <see langword="true" />.
             </summary>
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.DefaultFutureDepthTable">

@@ -46,7 +46,7 @@
       <summary>
             Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
             </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено <see langword="null" />.</returns>
     </member>
     <member name="M:StockSharp.Micex.MicexMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
@@ -122,7 +122,7 @@
             Строка в формате “N,M”, где первое число N – уровень логирования вызовов API MTESRL.
             Второе число M – уровень сбора статистики по соединению.
             Максимальный уровень логирования равен "5,2". Минимальный (выключен) "0,0".
-            По-умолчанию значение равно null.
+            По-умолчанию значение равно <see langword="null" />.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.MicexMessageAdapter.CompressionLevel">
@@ -3727,7 +3727,7 @@
             Строка в формате “N,M”, где первое число N – уровень логирования вызовов API MTESRL.
             Второе число M – уровень сбора статистики по соединению.
             Максимальный уровень логирования равен "5,2". Минимальный (выключен) "0,0".
-            По-умолчанию значение равно null.
+            По-умолчанию значение равно <see langword="null" />.
             </summary>
     </member>
     <member name="P:StockSharp.Micex.MicexTrader.CompressionLevel">
