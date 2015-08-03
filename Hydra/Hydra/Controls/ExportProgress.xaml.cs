@@ -190,7 +190,7 @@ namespace StockSharp.Hydra.Controls
 						Directory.CreateDirectory(destDrive.Path);
 
 					var dataPath = ((LocalMarketDataDrive)sourceDrive).GetSecurityPath(security.ToSecurityId());
-					var fileName = LocalMarketDataDrive.CreateFileName(dataType, arg) + ".bin";
+					var fileName = LocalMarketDataDrive.CreateFileName(dataType, arg) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary);
 
 					foreach (var date in datesToExport)
 					{

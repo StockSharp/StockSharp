@@ -12,6 +12,7 @@
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Storages.Backup;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
@@ -140,7 +141,7 @@
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.Service = BackupServices.AwsS3;
 				_settings.Address = RegionEndpoint.USEast1.SystemName;
-				_settings.ServiceRepo = "StockSharp";
+				_settings.ServiceRepo = "stocksharp";
 				_settings.Login = string.Empty;
 				_settings.Password = new SecureString();
 			}
@@ -195,14 +196,18 @@
 					if (!CanProcess())
 						break;
 
-					var secEntry = new BackupEntry
+					var dateEntry = new BackupEntry
 					{
+						Name = date.ToString("yyyy_MM_dd"),
 						Parent = new BackupEntry
 						{
-							Name = security.Security.Id.Substring(0, 1),
-							Parent = pathEntry
-						},
-						Name = security.Security.Id,
+							Parent = new BackupEntry
+							{
+								Name = security.Security.Id.Substring(0, 1),
+								Parent = pathEntry
+							},
+							Name = security.Security.Id,
+						}
 					};
 
 					var candleTypes = _settings.Drive.GetCandleTypes(security.Security.ToSecurityId(), _settings.StorageFormat);
@@ -220,11 +225,15 @@
 						if (stream == Stream.Null)
 							continue;
 
-						service.Upload(new BackupEntry
+						var entry = new BackupEntry
 						{
-							Name = _settings.StartFrom.ToString("yyyy_MM_dd"),
-							Parent = secEntry
-						}, stream, p => { });
+							Name = LocalMarketDataDrive.CreateFileName(tuple.Item1, tuple.Item2) + LocalMarketDataDrive.GetExtension(StorageFormats.Binary),
+							Parent = dateEntry,
+						};
+
+						service.Upload(entry, stream, p => { });
+
+						this.AddInfoLog(LocalizedStrings.Str1580Params, GetPath(entry));
 					}
 				}
 
@@ -245,6 +254,14 @@
 				this.AddInfoLog(LocalizedStrings.Str2300);
 
 			return base.OnProcess();
+		}
+
+		private static string GetPath(BackupEntry entry)
+		{
+			if (entry == null)
+				return null;
+
+			return GetPath(entry.Parent) + "/" + entry.Name;
 		}
 
 		private static BackupEntry ToEntry(DirectoryInfo di)

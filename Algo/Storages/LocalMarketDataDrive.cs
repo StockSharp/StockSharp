@@ -334,19 +334,6 @@ namespace StockSharp.Algo.Storages
 				_drives.Values.ForEach(d => d.ResetCache());
 		}
 
-		private static string GetExtension(StorageFormats format)
-		{
-			switch (format)
-			{
-				case StorageFormats.Binary:
-					return ".bin";
-				case StorageFormats.Csv:
-					return ".csv";
-				default:
-					throw new ArgumentOutOfRangeException("format");
-			}
-		}
-
 		/// <summary>
 		/// Получить для инструмента доступные типы свечек с параметрами.
 		/// </summary>
@@ -391,6 +378,24 @@ namespace StockSharp.Algo.Storages
 
 			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
 				key => new LocalMarketDataStorageDrive(CreateFileName(dataType, arg), GetSecurityPath(securityId), format, this));
+		}
+
+		/// <summary>
+		/// Получить расширение файла для формата.
+		/// </summary>
+		/// <param name="format">Формат.</param>
+		/// <returns>Расширение.</returns>
+		public static string GetExtension(StorageFormats format)
+		{
+			switch (format)
+			{
+				case StorageFormats.Binary:
+					return ".bin";
+				case StorageFormats.Csv:
+					return ".csv";
+				default:
+					throw new ArgumentOutOfRangeException("format");
+			}
 		}
 
 		/// <summary>
