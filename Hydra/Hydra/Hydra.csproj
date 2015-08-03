@@ -167,7 +167,7 @@
     <Compile Include="Configuration\CandleElementCollection.cs" />
     <Compile Include="Configuration\IndicatorElement.cs" />
     <Compile Include="Configuration\IndicatorElementCollection.cs" />
-    <Compile Include="Configuration\StudioSection.cs" />
+    <Compile Include="Configuration\HydraSection.cs" />
     <Compile Include="Controls\DrivePanel.xaml.cs">
       <DependentUpon>DrivePanel.xaml</DependentUpon>
     </Compile>
