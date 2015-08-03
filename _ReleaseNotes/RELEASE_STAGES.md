@@ -13,10 +13,12 @@
 | Connnector | Stage |
 | --- |:---:|
 | Blackwood/Fusion | Stable |
+| BarChart | beta |
 | CQG | Alfa |
 | E*Trade | Stable |
 | FIX | Stable |
 | IQFeed | Stable |
+| ITCH | Stable |
 | InteractiveBrokers | Beta |
 | LMAX | Stable |
 | MatLab | Stable |
