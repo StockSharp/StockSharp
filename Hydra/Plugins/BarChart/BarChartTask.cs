@@ -23,6 +23,8 @@ namespace StockSharp.Hydra.BarChart
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	// TODO
+	//[TaskDoc("")]
 	class BarChartTask : ConnectorHydraTask<BarChartTrader>
 	{
 		private const string _sourceName = "BarChart";

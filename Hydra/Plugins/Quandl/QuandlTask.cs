@@ -24,6 +24,7 @@
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/bb5fedcc-9226-448e-8bb9-42969fba227e.htm")]
 	class QuandlTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "Quandl";

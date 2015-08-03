@@ -22,6 +22,8 @@ namespace StockSharp.Hydra.Oanda
 	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	// TODO
+	//[TaskDoc("")]
 	class OandaHistoryTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = LocalizedStrings.OandaHistoryKey;

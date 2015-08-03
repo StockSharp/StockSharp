@@ -22,6 +22,7 @@ namespace StockSharp.Hydra.Tools
 
 	[DisplayNameLoc(LocalizedStrings.Str3131Key)]
 	[DescriptionLoc(LocalizedStrings.Str3785Key)]
+	[TaskDoc("http://stocksharp.com/doc/html/272eef99-c7e4-4245-ae83-7efa4d2345bc.htm")]
 	class ConvertTask : BaseHydraTask
 	{
 		private enum ConvertModes

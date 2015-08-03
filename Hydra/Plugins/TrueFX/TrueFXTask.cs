@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.TrueFX
 	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/a92bca75-1a0c-4581-a75a-6f13afd7975e.htm")]
 	class TrueFXTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "TrueFX";

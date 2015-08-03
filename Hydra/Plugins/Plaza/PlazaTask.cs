@@ -26,6 +26,7 @@ namespace StockSharp.Hydra.Plaza
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/53930a42-ae5a-45fc-b9cf-8295584bf8fc.htm")]
 	class PlazaTask : ConnectorHydraTask<PlazaTrader>
 	{
 		private const string _sourceName = "Plaza";

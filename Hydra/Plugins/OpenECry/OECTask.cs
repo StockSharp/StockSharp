@@ -22,6 +22,7 @@ namespace StockSharp.Hydra.OpenECry
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/4d84a1e0-fe23-4b14-8323-c5f68f117cc7.htm")]
 	class OECTask : ConnectorHydraTask<OECTrader>
 	{
 		private const string _sourceName = "OpenECry";

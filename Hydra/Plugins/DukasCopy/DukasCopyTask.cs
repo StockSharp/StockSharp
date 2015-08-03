@@ -26,6 +26,7 @@ namespace StockSharp.Hydra.DukasCopy
 	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/bba0059b-526b-406c-ba6e-a80d6c9e4ae0.htm")]
 	class DukasCopyTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "DukasCopy";

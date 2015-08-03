@@ -20,6 +20,7 @@ namespace StockSharp.Hydra.Rithmic
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/26ff0aad-623b-47e2-a8f8-a337506cd2ff.htm")]
 	class RithmicTask : ConnectorHydraTask<RithmicTrader>
 	{
 		private const string _sourceName = "Rithmic";

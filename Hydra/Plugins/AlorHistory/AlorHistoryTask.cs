@@ -24,6 +24,7 @@ namespace StockSharp.Hydra.AlorHistory
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/cec19cef-4bf7-4dcb-90fb-fccba4c0248c.htm")]
 	class AlorHistoryTask : BaseHydraTask
 	{
 		private const string _sourceName = LocalizedStrings.AlorHistoryKey;

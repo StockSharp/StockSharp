@@ -23,6 +23,7 @@ namespace StockSharp.Hydra.Yahoo
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/c60b2dd2-518c-49e5-8ba4-edabbda04222.htm")]
 	class YahooTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "Yahoo";

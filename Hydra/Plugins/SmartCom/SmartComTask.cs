@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.SmartCom
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/1cca5a33-e5ab-434e-bfed-287389fea2eb.htm")]
 	class SmartComTask : ConnectorHydraTask<SmartTrader>
 	{
 		private const string _sourceName = "SmartCOM";

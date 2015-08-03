@@ -20,6 +20,7 @@ namespace StockSharp.Hydra.Oanda
 	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/6a99aea5-1142-4b2e-b183-554fcc890fad.htm")]
 	class OandaTask : ConnectorHydraTask<OandaTrader>
 	{
 		private const string _sourceName = "OANDA";

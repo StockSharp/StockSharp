@@ -21,6 +21,7 @@ namespace StockSharp.Hydra.LMAX
 	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/0b962432-d81d-4646-a818-9fa7093cbe4f.htm")]
 	class LmaxTask : ConnectorHydraTask<LmaxTrader>
 	{
 		private const string _sourceName = "LMAX";

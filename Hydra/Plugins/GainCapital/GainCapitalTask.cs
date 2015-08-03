@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.GainCapital
 	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/c1863414-25cb-4994-818f-3e4fa511f21b.htm")]
 	class GainCapitalTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "GainCapital";

@@ -33,7 +33,17 @@
                 <TextBlock Margin="3" Grid.Row="1" Grid.Column="1" Name="AbilitiesCtrl"/>
             </Grid>
         </Expander>
-        
-        <Button x:Name="OK" Grid.Row="4" Click="OkClick" Width="75" IsDefault="True">OK</Button>
+
+		<Grid Grid.Row="4">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+
+			<Button x:Name="Help" Click="Help_OnClick" Width="75" IsEnabled="false">
+				<TextBlock Text="{x:Static loc:LocalizedStrings.Help}"/>
+			</Button>
+			<Button x:Name="OK" Grid.Column="1" Click="OkClick" Width="75" IsDefault="True">OK</Button>
+		</Grid>
     </Grid>
 </Window>

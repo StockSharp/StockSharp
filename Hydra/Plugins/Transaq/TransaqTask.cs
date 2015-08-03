@@ -24,6 +24,7 @@ namespace StockSharp.Hydra.Transaq
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/065a9dec-12d0-49d0-be8c-9f9b48f6a899.htm")]
 	class TransaqTask : ConnectorHydraTask<TransaqTrader>
 	{
 		private const string _sourceName = "Transaq";

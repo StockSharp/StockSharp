@@ -20,6 +20,7 @@ namespace StockSharp.Hydra.Google
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/0166d686-9fb0-4e78-8578-f5b706ad6a07.htm")]
 	class GoogleTask : BaseHydraTask
     {
 		private const string _sourceName = "Google";

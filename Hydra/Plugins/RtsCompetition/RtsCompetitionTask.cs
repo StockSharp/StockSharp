@@ -24,6 +24,7 @@ namespace StockSharp.Hydra.RtsCompetition
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2826Key)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/53c15f3a-4320-422d-850a-22ef6c90d76b.htm")]
 	class RtsCompetitionTask : BaseHydraTask
 	{
 		private const string _sourceName = "ЛЧИ";

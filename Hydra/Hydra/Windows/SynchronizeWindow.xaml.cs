@@ -3,6 +3,7 @@ namespace StockSharp.Hydra.Windows
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
 	using System.Threading;
@@ -252,6 +253,11 @@ namespace StockSharp.Hydra.Windows
 
 				_token = null;
 			});
+		}
+
+		private void Help_OnClick(object sender, RoutedEventArgs e)
+		{
+			Process.Start("http://stocksharp.com/doc/html/99f9b236-13bd-4a8c-b616-f04e3ff84785.htm");
 		}
 	}
 }

@@ -24,10 +24,16 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="5" />
 				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
 			<Button x:Name="ImportBtn" Grid.Column="0" Click="ImportBtn_OnClick" Width="100"><TextBlock Text="{x:Static loc:LocalizedStrings.Import}"/></Button>
 			<ProgressBar Grid.Column="2" x:Name="ProgressBar" />
+
+			<Button x:Name="Help" Grid.Column="4" Click="Help_OnClick" Width="75">
+				<TextBlock Text="{x:Static loc:LocalizedStrings.Help}"/>
+			</Button>
 		</Grid>
 
 		<propertyGrid:PropertyGridEx Grid.Row="2" Grid.Column="0" x:Name="SettingsGrid" />

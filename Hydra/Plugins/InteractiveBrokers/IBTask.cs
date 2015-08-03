@@ -20,6 +20,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/bcb8050d-d330-4071-affc-b6ed5639e1fb.htm")]
 	class IBTask : ConnectorHydraTask<IBTrader>
 	{
 		private const string _sourceName = "Interactive Brokers";

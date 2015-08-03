@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.Rts
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2822Key)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/0da19c49-1f11-455e-bbd5-c20e428e5149.htm")]
 	class RtsTask : BaseHydraTask
 	{
 		private const string _sourceName = "RTS";

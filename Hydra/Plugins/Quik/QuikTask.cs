@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.Quik
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/54a1e95e-ea39-4322-9613-e74859a3a596.htm")]
 	class QuikTask : ConnectorHydraTask<QuikTrader>
 	{
 		private const string _sourceName = "Quik";

@@ -26,6 +26,7 @@ namespace StockSharp.Hydra.HydraServer
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f.htm")]
 	class HydraServerTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "S#.Data Server";

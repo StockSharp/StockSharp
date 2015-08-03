@@ -22,6 +22,7 @@ namespace StockSharp.Hydra.FinViz
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/34b9a25a-ecb2-4d82-b342-3fa46ec155ba.htm")]
 	class FinVizTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "FinViz";

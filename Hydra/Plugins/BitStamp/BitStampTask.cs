@@ -18,6 +18,7 @@ namespace StockSharp.Hydra.BitStamp
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[Category(TaskCategories.Crypto)]
+	[TaskDoc("http://stocksharp.com/doc/html/7a11d9ff-17c9-406b-ab88-c4b9c080912d.htm")]
 	class BitStampTask : ConnectorHydraTask<BitStampTrader>
 	{
 		private const string _sourceName = "BitStamp";

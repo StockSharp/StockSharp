@@ -52,6 +52,9 @@
 					<Run Text="{x:Static loc:LocalizedStrings.Str1993}"/><Run Text=":"/>
 				</TextBlock>
 				<ComboBox x:Name="Templates" MinWidth="100" DisplayMemberPath="Title" SelectionChanged="Templates_OnSelectionChanged" />
+				<Button x:Name="Help" Click="Help_OnClick" Width="75">
+					<TextBlock Text="{x:Static loc:LocalizedStrings.Help}"/>
+				</Button>
 			</ToolBar>
 		</shared:PixelSnapper>
 

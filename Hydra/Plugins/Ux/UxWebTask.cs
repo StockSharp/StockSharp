@@ -27,6 +27,7 @@ namespace StockSharp.Hydra.Ux
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/184da0f9-29db-4397-8497-1ed4c8f7ea0d.htm")]
 	class UxWebTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = LocalizedStrings.Str2830Key;

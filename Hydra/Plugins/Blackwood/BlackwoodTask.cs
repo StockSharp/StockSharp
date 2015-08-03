@@ -22,6 +22,7 @@ namespace StockSharp.Hydra.Blackwood
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/89a8b34c-63cf-4623-bbb7-90251d53e8e6.htm")]
 	class BlackwoodTask : ConnectorHydraTask<BlackwoodTrader>
 	{
 		private const string _sourceName = "Fusion/Blackwood";

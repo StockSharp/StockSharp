@@ -27,6 +27,7 @@ namespace StockSharp.Hydra.Mfd
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2.htm")]
 	class MfdTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "MFD";

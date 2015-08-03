@@ -9,6 +9,8 @@
 			<ColumnDefinition Width="100" />
 			<ColumnDefinition Width="5" />
 			<ColumnDefinition />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 		
 		<Grid.RowDefinitions>
@@ -17,8 +19,16 @@
 			<RowDefinition Height="25" />
 		</Grid.RowDefinitions>
 		
-		<xaml:LogControl x:Name="Logs" Grid.ColumnSpan="3" ShowSourceNameColumn="False" AutoScroll="True" />
-		<Button x:Name="Sync" Grid.Row="2" IsDefault="True" Click="Sync_Click"><TextBlock Text="{x:Static loc:LocalizedStrings.Str2932}"/></Button>
+		<xaml:LogControl x:Name="Logs" Grid.ColumnSpan="5" ShowSourceNameColumn="False" AutoScroll="True" />
+		
+		<Button x:Name="Sync" Grid.Row="2" Grid.Column="0" IsDefault="True" Click="Sync_Click">
+			<TextBlock Text="{x:Static loc:LocalizedStrings.Str2932}"/>
+		</Button>
+		
 		<ProgressBar x:Name="Progress" Grid.Column="2" Grid.Row="2" />
+
+		<Button x:Name="Help" Grid.Row="2" Grid.Column="4" Click="Help_OnClick" Width="75">
+			<TextBlock Text="{x:Static loc:LocalizedStrings.Help}"/>
+		</Button>
 	</Grid>
 </Window>

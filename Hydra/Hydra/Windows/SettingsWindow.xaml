@@ -8,14 +8,24 @@
 		WindowStartupLocation="CenterOwner" Height="390" Width="350">
 	<Grid>
 		<Grid Margin="5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			
 			<Grid.RowDefinitions>
 				<RowDefinition Height="168*" />
 				<RowDefinition Height="5" />
 				<RowDefinition Height="23" />
 			</Grid.RowDefinitions>
 
-			<pg:PropertyGridEx x:Name="SettingsGrid" />
-			<Button Content="OK" Grid.Row="2" Name="OkBtn" Width="75" IsDefault="True" ex:XamlHelper.DialogResult="True" />
+			<pg:PropertyGridEx x:Name="SettingsGrid" Grid.ColumnSpan="2" />
+
+			<Button x:Name="Help" Grid.Column="0" Grid.Row="2" Click="Help_OnClick" Width="75">
+				<TextBlock Text="{x:Static loc:LocalizedStrings.Help}"/>
+			</Button>
+			
+			<Button Content="OK" Grid.Column="1" Grid.Row="2" Name="OkBtn" Width="75" IsDefault="True" ex:XamlHelper.DialogResult="True" />
 		</Grid>
 	</Grid>
 </Window>

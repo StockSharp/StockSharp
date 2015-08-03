@@ -22,6 +22,7 @@ namespace StockSharp.Hydra.AlfaDirect
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/2a908a19-0272-48e1-b143-df7ff9e2607c.htm")]
 	class AlfaTask : ConnectorHydraTask<AlfaTrader>
 	{
 		private const string _sourceName = "AlfaDirect";

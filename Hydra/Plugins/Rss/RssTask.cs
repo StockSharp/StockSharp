@@ -18,6 +18,7 @@ namespace StockSharp.Hydra.Rss
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.RssSourceKey)]
+	[TaskDoc("http://stocksharp.com/doc/html/91454878-ec26-4872-9a85-1bfbc76dc77a.htm")]
 	class RssTask : ConnectorHydraTask<RssTrader>
 	{
 		private const string _sourceName = "RSS";

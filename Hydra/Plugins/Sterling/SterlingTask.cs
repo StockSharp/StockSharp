@@ -14,6 +14,7 @@ namespace StockSharp.Hydra.Sterling
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/f43591c9-c215-4dee-b297-4b9ed34fd465.htm")]
 	class SterlingTask : ConnectorHydraTask<SterlingTrader>
 	{
 		private const string _sourceName = "Sterling";

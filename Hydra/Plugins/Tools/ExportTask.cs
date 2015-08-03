@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.Tools
 
 	[DisplayNameLoc(LocalizedStrings.Str3754Key)]
 	[DescriptionLoc(LocalizedStrings.Str3767Key)]
+	[TaskDoc("http://stocksharp.com/doc/html/9e075b32-abb2-4fad-bfb2-b822dd7d9f30.htm")]
 	class ExportTask : BaseHydraTask
 	{
 		[TaskSettingsDisplayName(LocalizedStrings.Str3754Key)]

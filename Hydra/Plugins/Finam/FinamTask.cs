@@ -27,6 +27,7 @@ namespace StockSharp.Hydra.Finam
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/bad33f32-1a13-4ba7-a335-326e6249d1be.htm")]
 	class FinamTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "Finam";

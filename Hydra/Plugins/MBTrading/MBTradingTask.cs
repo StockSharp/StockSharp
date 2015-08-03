@@ -26,6 +26,7 @@ namespace StockSharp.Hydra.MBTrading
 	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/c3a78005-7d5d-49e6-8460-66c02109abd5.htm")]
 	class MBTradingTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "MBTrading";

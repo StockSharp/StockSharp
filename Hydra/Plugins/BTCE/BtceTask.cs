@@ -18,6 +18,7 @@ namespace StockSharp.Hydra.Btce
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[Category(TaskCategories.Crypto)]
+	[TaskDoc("http://stocksharp.com/doc/html/4e435654-38af-4ede-9987-e268a6ae3b96.htm")]
 	class BtceTask : ConnectorHydraTask<BtceTrader>
 	{
 		private const string _sourceName = "BTCE";

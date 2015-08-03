@@ -4,6 +4,7 @@ namespace StockSharp.Hydra.Panes
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
 	using System.ComponentModel;
+	using System.Diagnostics;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -898,6 +899,11 @@ namespace StockSharp.Hydra.Panes
 		void IDisposable.Dispose()
 		{
 			_worker.CancelAsync();
+		}
+
+		private void Help_OnClick(object sender, RoutedEventArgs e)
+		{
+			Process.Start("http://stocksharp.com/doc/html/4edabdad-84d9-4dfa-9940-0559642b1ca2.htm");
 		}
 	}
 }

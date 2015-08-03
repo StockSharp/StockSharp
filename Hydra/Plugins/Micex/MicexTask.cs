@@ -21,6 +21,7 @@ namespace StockSharp.Hydra.Micex
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49.htm")]
 	class MicexTask : ConnectorHydraTask<MicexTrader>
 	{
 		private const string _sourceName = "Micex";

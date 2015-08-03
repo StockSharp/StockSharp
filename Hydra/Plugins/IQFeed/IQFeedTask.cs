@@ -25,6 +25,7 @@ namespace StockSharp.Hydra.IQFeed
 	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/f9e23239-7587-41ad-9644-c6df8e467c38.htm")]
 	class IQFeedTask : ConnectorHydraTask<IQFeedTrader>
 	{
 		private const string _sourceName = "IQFeed";
