@@ -3491,6 +3491,11 @@
             Идентификатор инструмента.
             </summary>
     </member>
+    <member name="P:StockSharp.Fix.Native.MDEntry.OtherValue">
+      <summary>
+            Дополнительное строковое значение.
+            </summary>
+    </member>
     <member name="T:StockSharp.Fix.Native.FixMessageWriter">
       <summary>
             Писатель FIX сообщений.
@@ -4321,6 +4326,10 @@
       <summary>
       </summary>
     </member>
+    <member name="F:StockSharp.Fix.Native.FixTags.MDOtherValue">
+      <summary>
+      </summary>
+    </member>
     <member name="T:StockSharp.Fix.FixFormats">
       <summary>
             Форматы FIX протокола.
@@ -4359,7 +4368,7 @@
       <summary>
             Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
             </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено null.</returns>
+      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено <see langword="null" />.</returns>
     </member>
     <member name="M:StockSharp.Fix.FixMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
@@ -4730,11 +4739,11 @@
             </summary>
       <param name="transactionId">Идентификатор транзакции отмены.</param>
       <param name="isStopOrder">
-        <see langword="true" />, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-      <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-      <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-      <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-      <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+        <see langword="true" />, если нужно отменить только стоп-заявки, <see langword="false" /> - если только обычный и <see langword="null" /> - если оба типа.</param>
+      <param name="portfolio">Портфель. Если значение равно <see langword="null" />, то портфель не попадает в фильтр снятия заявок.</param>
+      <param name="direction">Направление заявки. Если значение равно <see langword="null" />, то направление не попадает в фильтр снятия заявок.</param>
+      <param name="board">Торговая площадка. Если значение равно <see langword="null" />, то площадка не попадает в фильтр снятия заявок.</param>
+      <param name="security">Инструмент. Если значение равно <see langword="null" />, то инструмент не попадает в фильтр снятия заявок.</param>
     </member>
     <member name="M:StockSharp.Fix.FixTrader.ChangePassword(System.String)">
       <summary>
