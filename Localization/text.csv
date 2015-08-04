@@ -878,8 +878,8 @@ Str962;Relative drawdown;Относительная просадка
 Str963;Maximum relative equity drawdown during the whole period.;Максимальная относительная просадка эквити за весь период.
 Str964;Relative income;Относительная прибыль
 Str965;Relative income for the whole time period.;Относительная прибыль за весь отрезок времени.
-Str966;Coefficient of restitution;Коэффициент восстановления
-Str967;Coefficient of restitution (Net profit / maximum drawdown).;Коэффициент восстановления (чистая прибыль / максимальная просадка).
+Str966;Recovery factor;Коэффициент восстановления
+Str967;Recovery factor (net profit / maximum drawdown).;Коэффициент восстановления (чистая прибыль / максимальная просадка).
 Str968;Numeric profit;Чистая прибыль
 Str969;Net profit for whole time period.;Чистая прибыль за весь отрезок времени.
 Str970;Max long position;Max длинная позиция

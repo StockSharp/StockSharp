@@ -11378,12 +11378,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Coefficient of restitution
+		/// Recovery factor
 		/// </summary>
 		public const string Str966Key = "Str966";
 
 		/// <summary>
-		/// Coefficient of restitution
+		/// Recovery factor
 		/// </summary>
 		public static string Str966
 		{
@@ -11391,12 +11391,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Coefficient of restitution (Net profit / maximum drawdown).
+		/// Recovery factor (net profit / maximum drawdown).
 		/// </summary>
 		public const string Str967Key = "Str967";
 
 		/// <summary>
-		/// Coefficient of restitution (Net profit / maximum drawdown).
+		/// Recovery factor (net profit / maximum drawdown).
 		/// </summary>
 		public static string Str967
 		{
