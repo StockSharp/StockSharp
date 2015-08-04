@@ -26,7 +26,7 @@ namespace StockSharp.Algo
 		private readonly int _maxDepth;
 
 		private readonly SortedDictionary<decimal, QuoteChange> _bids = new SortedDictionary<decimal, QuoteChange>(new BackwardComparer<decimal>());
-		private readonly SortedDictionary<decimal, QuoteChange> _asks = new SortedDictionary<decimal, QuoteChange>(new BackwardComparer<decimal>());
+		private readonly SortedDictionary<decimal, QuoteChange> _asks = new SortedDictionary<decimal, QuoteChange>();
 
 		private readonly ExchangeBoard _exchange;
 
@@ -67,6 +67,39 @@ namespace StockSharp.Algo
 			get { return _depth; }
 		}
 
+		// mika
+		// debug code for check build algo
+
+		//private readonly Dictionary<long, decimal> _pendingMatch = new Dictionary<long, decimal>();
+		//private readonly Dictionary<long, Tuple<Sides, decimal, decimal>> _activeOrders = new Dictionary<long, Tuple<Sides, decimal, decimal>>();
+
+		//private QuoteChangeMessage BuildDepth()
+		//{
+		//	var bids = new SortedDictionary<decimal, QuoteChange>(new BackwardComparer<decimal>());
+		//	var asks = new SortedDictionary<decimal, QuoteChange>();
+
+		//	foreach (var pair in _activeOrders)
+		//	{
+		//		var quotes = pair.Value.Item1 == Sides.Buy ? bids : asks;
+
+		//		var quote = quotes.TryGetValue(pair.Value.Item2);
+
+		//		if (quote == null)
+		//		{
+		//			quote = new QuoteChange(pair.Value.Item1, pair.Value.Item2, pair.Value.Item3);
+		//			quotes.Add(pair.Value.Item2, quote);
+		//		}
+		//		else
+		//			quote.Volume += pair.Value.Item3;
+		//	}
+
+		//	return new QuoteChangeMessage
+		//	{
+		//		Bids = bids.Values.ToArray(),
+		//		Asks = asks.Values.ToArray()
+		//	};
+		//}
+
 		/// <summary>
 		/// Добавить новую строчку из лога заявок к стакану.
 		/// </summary>
@@ -79,6 +112,57 @@ namespace StockSharp.Algo
 
 			if (item.ExecutionType != ExecutionTypes.OrderLog)
 				throw new ArgumentException("item");
+
+			// mika
+			// debug code for check build algo
+
+			//var orderId = item.OrderId.Value;
+			//var orderVol = item.Volume.Value;
+
+			//if (item.IsOrderLogRegistered())
+			//{
+			//	var vol = _pendingMatch.TryGetValue2(orderId);
+
+			//	if (vol != null)
+			//		vol -= orderVol;
+			//	else
+			//		vol = orderVol;
+
+			//	if (vol > 0)
+			//		_activeOrders.Add(orderId, Tuple.Create(item.Side, item.Price, vol.Value));
+			//}
+			//else if (item.IsOrderLogMatched())
+			//{
+			//	var t = _activeOrders.TryGetValue(orderId);
+
+			//	if (t != null)
+			//	{
+			//		var vol = t.Item3;
+
+			//		vol -= orderVol;
+
+			//		if (vol < 0)
+			//			throw new Exception();
+
+			//		if (vol == 0)
+			//			_activeOrders.Remove(orderId);
+			//		else
+			//			_activeOrders[orderId] = Tuple.Create(item.Side, item.Price, vol);
+			//	}
+			//	else
+			//	{
+			//		var vol = _pendingMatch.TryGetValue2(orderId);
+
+			//		if (vol == null)
+			//			vol = orderVol;
+			//		else
+			//			vol += orderVol;
+
+			//		_pendingMatch[orderId] = vol.Value;
+			//	}
+			//}
+			//else if (item.IsOrderLogCanceled())
+			//	_activeOrders.Remove(orderId);
 
 			var volume = item.GetVolume();
 
@@ -295,7 +379,12 @@ namespace StockSharp.Algo
 
 		private IEnumerable<QuoteChange> GetArray(SortedDictionary<decimal, QuoteChange> quotes)
 		{
-			return (_maxDepth == int.MaxValue ? quotes.Values : quotes.Values.Take(_maxDepth)).ToArray();
+			IEnumerable<QuoteChange> values = quotes.Values;
+
+			if (_maxDepth < int.MaxValue)
+				values = values.Take(_maxDepth);
+
+			return values.ToArray();
 		}
 	}
 }
