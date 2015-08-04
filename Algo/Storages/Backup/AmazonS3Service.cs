@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
 	using System.Threading;
 
 	using Amazon;
@@ -11,6 +12,8 @@
 	using Amazon.S3.Model;
 
 	using Ecng.Common;
+
+	using StockSharp.Localization;
 
 	/// <summary>
 	/// Сервис хранения данных, основанный на Amazon S3 http://aws.amazon.com/s3/
@@ -54,12 +57,9 @@
 
 				foreach (var entry in response.S3Objects)
 				{
-					yield return new BackupEntry
-					{
-						Name = entry.Key,
-						Size = entry.Size,
-						Parent = parent,
-					};
+					var be = GetPath(entry.Key);
+					be.Size = entry.Size;
+					yield return be;
 				}
 
 				foreach (var commonPrefix in response.CommonPrefixes)
@@ -108,33 +108,23 @@
 			};
 
 			var bytes = new byte[_bufferSize];
-			var nextProgress = 1;
 			var readTotal = 0L;
 
 			using (var response = _client.GetObject(request))
 			using (var responseStream = response.ResponseStream)
 			{
-				while (true)
+				response.WriteObjectProgressEvent += (s, a) => progress(a.PercentDone);
+
+				while (readTotal < response.ContentLength)
 				{
 					var read = responseStream.Read(bytes, 0, bytes.Length);
 
 					if (read <= 0)
-						throw new InvalidOperationException();
+						throw new InvalidOperationException(LocalizedStrings.NetworkConnectionError.Put(read));
 
 					stream.Write(bytes, 0, read);
 
 					readTotal += read;
-
-					var currProgress = (int)(readTotal * 100 / responseStream.Length);
-
-					if (currProgress >= nextProgress)
-					{
-						progress(currProgress);
-						nextProgress = currProgress + 1;
-					}
-
-					if (currProgress == 100)
-						break;
 				}
 			}
 
@@ -219,6 +209,21 @@
 				key = GetKey(entry.Parent) + "/" + key;
 
 			return key;
+		}
+
+		private static BackupEntry GetPath(string key)
+		{
+			var entities = key.Split('/').Select(p => new BackupEntry { Name = p }).ToArray();
+
+			BackupEntry parent = null;
+
+			foreach (var entity in entities)
+			{
+				entity.Parent = parent;
+				parent = entity;
+			}
+
+			return entities.Last();
 		}
 	}
 }

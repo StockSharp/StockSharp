@@ -53564,5 +53564,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(TFKey); }
 		}
+
+		/// <summary>
+		/// Network connection returned '{0}' bytes.
+		/// </summary>
+		public const string NetworkConnectionErrorKey = "NetworkConnectionError";
+
+		/// <summary>
+		/// Network connection returned '{0}' bytes.
+		/// </summary>
+		public static string NetworkConnectionError
+		{
+			get { return GetString(NetworkConnectionErrorKey); }
+		}
 	}
 }
