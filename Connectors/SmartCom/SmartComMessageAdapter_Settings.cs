@@ -18,7 +18,7 @@ namespace StockSharp.SmartCom
 
 	[DisplayName("SmartCOM")]
 	[CategoryLoc(LocalizedStrings.RussiaKey)]
-	[DescriptionLoc(LocalizedStrings.Str1857Key)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "IT Invest (SmartCOM)")]
 	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 2)]

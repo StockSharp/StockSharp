@@ -15,7 +15,7 @@ namespace StockSharp.InteractiveBrokers
 
 	[DisplayName("Interactive Brokers")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
-	[DescriptionLoc(LocalizedStrings.Str2516Key)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "Interactive Brokers")]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]

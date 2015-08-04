@@ -1648,7 +1648,7 @@ Str1766;Protection spread size.;Величина защитного спрэда
 Str1767;Take-profit at market price;Тэйк-профит по рыночной цене
 Str1768;Sign that the «Take-profit» was executed at the market price.;Признак исполнения заявки «Тэйк-профит» по рыночной цене.
 Russia;Russia;Россия
-Str1770;Connection to broker using Quik.;Подключение к брокеру, использующий Quik.
+Str1770;Connection to {0}.;Подключение к {0}.
 Str1771;General (Quik);Общие (Quik)
 Str1772;Use for old DDE + Trans2Quik connection.;Использовать для старое подключение DDE + Trans2Quik.
 Str1773;Path to Quik;Путь к Quik
@@ -1733,7 +1733,6 @@ Str1853Params;Security {0} does not have a SmartCOM ID.;Инструмент {0}
 Str1854;SmartCOM does not support simultaneous search of securities on multiple queries.;SmartCOM не поддерживает одновременный поиск инструментов по нескольким запросам.
 Str1855Params;Unregistered candles series securityId = {0} timeFrame = {1}.;Незарегистрированная ранее серия свечек securityId = {0} timeFrame = {1}.
 Str1856;Connection was not successful.;Подключение не было произведено.
-Str1857;Connection to IT Invest broker through SmartCOM.;Подключение к брокеру IT Invest через SmartCOM.
 Str1859;Version SmartCOM API;Версия SmartCOM API
 Str1860;Version SmartCOM API. By default equal 3.x.;Версия SmartCOM API. По-умолчанию равна 3.x.
 ServerAddress;Server address;Адрес сервера
@@ -1981,7 +1980,6 @@ Str2116;Default value is not specified.;Не указано значение п�
 Str2117;Wrong type of security.;Неправильный тип инструмента.
 Str2118Params;Wrong type of security {0}.;Неправильный тип инструмента {0}.
 America;America;Америка
-Str2120;Connection to IQFeed.;Подключение к IQFeed.
 Str2121;Additional;Дополнительно
 Str2122;Level1 server;Level1 сервер
 Str2123;Address for obtaining data on Level1.;Адрес для получения данных по Level1.
@@ -2093,7 +2091,6 @@ Str2255;Connection with Alfa-Direct established;Подключение с Аль
 Str2257Params;Non-empty line in the news table, which could not be parsed: {0};Непустая строка в таблице новостей, которую не удалось распарсить: {0}
 Str2258Params;Error registering order with transaction ID {0}. {1};Ошибка регистрации заявки с идентификатором транзакции {0}. {1}
 Str2259Params;Trade with ID {0} has zero ID of initialized order;Сделка с идентификатором {0} имеет нулевой идентификатор иниц. заявки
-Str2260;Connection to AlfaDirect broker.;Подключение к брокеру AlfaDirect.
 Str2261;Alfa-Direct terminal login.;Имя пользователя в терминале Альфа-Директ.
 Str2262;Password to enter the terminal.;Пароль для входа в терминал.
 Str2263Params;Login = {0};Логин = {0}
@@ -2323,7 +2320,6 @@ Str2512Params;Minimum server version must be {0}, whilst it is {1}.;Минима
 Str2513Params;Minimum server version {0} does not correspond to the required {1}.;Минимальная версия сервера {0} не соответствует требуемой {1}.
 Str2514Params;Order {0} does not have extended information.;Заявка {0} не имеет расширенной информации.
 Str2515Params;Unknown order {0} duration time.;Неизвестное время действия заявки {0}.
-Str2516;Connection to Interactive Brokers broker.;Подключение к брокеру Interactive Brokers.
 Str2518;Unique ID. Used when several clients are connected to one terminal or gateway.;Уникальный идентификатор. Используется в случае подключения нескольких клиентов к одному терминалу или gateway.
 RealTime;Real-time;Реал-тайм
 Str2520;Should real-time or 'frozen' on broker server data be used.;Использовать ли данные реального времени или 'замороженные' на сервере брокера.
@@ -2365,7 +2361,6 @@ Str2557Params;Unexpected state of order: {0};Неожиданное состоя
 Str2558;Disabled;Отключен
 Str2559;Automatically;Автоматически
 Str2560;Secondary;Второстепенный
-Str2561;Connection to OpenECry broker.;Подключение к брокеру OpenECry.
 Str2562;OpenECry API server address.;Адрес API сервера OpenECry.
 Str2563;OpenECry login.;Имя пользователя OpenECry.
 Str2564;OpenECry password.;Пароль пользователя OpenECry.
@@ -2394,7 +2389,6 @@ Str2587;Connection is not allowed for current software.;Для данного П
 Str2588;User with same name is already connected to server.;Пользователь с таким именем уже подключен к серверу.
 Str2590Params;Quote for {0} have zero volume.;Котировка для {0} имеет нулевой объем.
 Str2591Params;Price of best bid {0} is greater or equal to the price of best ask {1} for security {2}.;Цена лучшего бида {0} больше или равна цене лучшего оффера {1} для инструмента {2}.
-Str2592;Connection to RTS.;Подключение к РТС.
 Str2593;Additional;Дополнительное
 Str2594;Server address. By default it's value us equal to the local computer address 127.0.0.1:4001.;Адрес сервера. По-умолчанию значение равно адресу локального компьютера 127.0.0.1:4001.
 Str2595;Name prefix;Префикс имени
@@ -3061,7 +3055,6 @@ Str3299;Virtual account;Виртуальный счет
 Str3300;Error cancelling order.;Ошибка снятия заявки.
 Str3301Params;Balance for order {0} is equal {1}.;Баланс для заявки {0} равен {1}.
 Str3302;Bitcoins;Биткоины
-Str3303;Connection to BitStamp stock exchange.;Подключение к бирже BitStamp.
 Str3304;Key;Ключ
 Str3306;Secret;Секрет
 Str3307;Secret.;Секрет.
@@ -3082,7 +3075,6 @@ Str3322;Bid (SMART);Бид (SMART)
 Str3323;Ask (SMART);Оффер (SMART)
 Str3324;Last (SMART);Последняя (SMART)
 Str3325;Spread (SMART);Спред (SMART)
-Str3327;Connection to broker using Fusion or Blackwood.;Подключение к брокеру, использующий Fusion или Blackwood.
 Str3328;Market data server address.;Адрес сервера рыночных данных.
 History;History;История
 Str3330;History data server address.;Адрес сервера исторических данных.
@@ -3097,7 +3089,6 @@ Str3338;Unknown board code.;Неизвестный код площадки.
 Str3339Params;Direction {0} for orders is not supported.;Направление {0} заявки не поддерживается.
 Str3340Params;Unknown order direction {0}.;Неизвестное направление {0} заявки.
 Str3341;Wrong category value.;Неправильное значение категории.
-Str3342;Connection to BTC-e stock exchange.;Подключение к бирже BTC-e.
 Str3343;Wrong price.;Неправильная цена.
 Str3344;Wrong volume.;Неправильный объем.
 Str3345;Consumer key/secret is not set.;Не заданы consumer key/secret.
@@ -3119,7 +3110,6 @@ Str3363;Securities search ended with an error.;Поиск инструменто
 Str3364Params;Connection to ETrade {0};Подключение к ETrade {0}
 Str3365;established;установлено
 Str3366;broken;разорвано
-Str3368;Connection to E*TRADE broker.;Подключение к брокеру E*TRADE.
 Str3369;Demo mode.;Демо режим.
 Str3370;Verification code;Код верификации
 Str3371;Verification code, received by user in browser, after confirming program's permission to work.;Код верификации, полученный пользователем в браузере после подтверждения разрешения на работу приложения.
@@ -3137,7 +3127,6 @@ Str3383;Stop-loss offset;Отступ стоп-лосса
 Str3384;Stop-loss offset.;Отступ стоп-лосса.
 Str3385;Take-profit offset;Отступ тейк-профита
 Str3386;Take-profit offset.;Отступ тейк-профита.
-Str3387;Connection to LMAX stock exchange.;Подключение к бирже LMAX.
 Str3388;Connect to demo trading instead of real trading server.;Подключаться ли к демо торгам вместо сервера с реальной торговлей.
 Str3389;Should the whole set of securities be loaded from LMAX website. Switched off by default.;Загружать ли инструменты из архива с сайта LMAX. По-умолчанию выключено.
 Str3390Params;Login = {0} Demo = {1};Логин = {0} Демо = {1}
@@ -3156,7 +3145,6 @@ Str3403;Order during closing auction.;Заявка в аукцион закры�
 Str3404;Router;Роутер
 Str3406;Good;Хорошая
 Str3407;Maximum;Максимальная
-Str3409;Connection to MICEX.;Подключение к ММВБ.
 Str3410;Path to dll;Путь к dll
 Str3411;Path to mtesrl.dll file.;Путь к файлу mtesrl.dll.
 Str3412;Connection type;Тип подключения
@@ -3194,7 +3182,6 @@ Str3445;Maximum execution price.;Максимальная цена исполн�
 Str3446;Trailing stop-loss;Скользящий стоп-лосс
 Str3447;Offset of a trailing stop-loss.;Отступ скользящего стоп-лосса.
 Str3448;Real;Реальный
-Str3449;Connection to OANDA broker.;Подключение к брокеру OANDA.
 Str3450;Server.;Сервер.
 Str3451;Token;Токен
 Str3453;No portfolios received.;Не получен ни один портфель.
@@ -3207,7 +3194,6 @@ Str3460;Activation price, when reached an order will be placed.;Цена акт�
 Str3461;Test;Тестовый
 Str3462;On live data;На живых данных
 Str3463;Real;Реальное
-Str3464;Connection to broker using Rithmic.;Подключение к брокеру, использующий Rithmic.
 Str3465;Certificate;Сертификат
 Str3466;Path to certificate file, necessary yo connect to Rithmic system.;Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
 Str3467;Login (extra);Логин (дополнительно)
@@ -3516,10 +3502,8 @@ Pin;Pin;Пин
 Str3792Params;Information about security {0} not found.;Информация об инструменте {0} не найдена.
 Str3793Params;Information about account {0} not found.;Информация о счете {0} не найдена.
 Str3794Params;Information about order {0} not found.;Информация о заявке {0} не найдена.
-CQGConnector;Connection to broker using CQG.;Подключение к брокеру, использующий CQG.
 UnsupportSecType;Unsupported type of security {0}.;Неподдерживаемый тип инструмента {0}.
 Str3800;Options orders settings.;Настройки для заявок на опционы.
-SterlingConnector;Connection to broker using Sterling.;Подключение к брокеру, использующий Sterling.
 Str3802;Unknown direction value.;Неизвестное значение направления.
 Str3803;Extended type of order not initialized.;Расширенный тип заявки не инициализирован.
 AddrNotSpecified;Address is not specified.;Не указан адрес.

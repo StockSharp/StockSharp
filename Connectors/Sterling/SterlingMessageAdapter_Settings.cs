@@ -6,7 +6,7 @@
 
 	[DisplayName("Sterling")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
-	[DescriptionLoc(LocalizedStrings.SterlingConnectorKey)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "Sterling")]
 	partial class SterlingMessageAdapter
 	{
 	}

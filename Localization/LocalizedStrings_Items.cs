@@ -21388,12 +21388,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to broker using Quik.
+		/// Connection to {0}.
 		/// </summary>
 		public const string Str1770Key = "Str1770";
 
 		/// <summary>
-		/// Connection to broker using Quik.
+		/// Connection to {0}.
 		/// </summary>
 		public static string Str1770
 		{
@@ -22490,19 +22490,6 @@ namespace StockSharp.Localization
 		public static string Str1856
 		{
 			get { return GetString(Str1856Key); }
-		}
-
-		/// <summary>
-		/// Connection to IT Invest broker through SmartCOM.
-		/// </summary>
-		public const string Str1857Key = "Str1857";
-
-		/// <summary>
-		/// Connection to IT Invest broker through SmartCOM.
-		/// </summary>
-		public static string Str1857
-		{
-			get { return GetString(Str1857Key); }
 		}
 
 		/// <summary>
@@ -25717,19 +25704,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to IQFeed.
-		/// </summary>
-		public const string Str2120Key = "Str2120";
-
-		/// <summary>
-		/// Connection to IQFeed.
-		/// </summary>
-		public static string Str2120
-		{
-			get { return GetString(Str2120Key); }
-		}
-
-		/// <summary>
 		/// Additional
 		/// </summary>
 		public const string Str2121Key = "Str2121";
@@ -27170,19 +27144,6 @@ namespace StockSharp.Localization
 		public static string Str2259Params
 		{
 			get { return GetString(Str2259ParamsKey); }
-		}
-
-		/// <summary>
-		/// Connection to AlfaDirect broker.
-		/// </summary>
-		public const string Str2260Key = "Str2260";
-
-		/// <summary>
-		/// Connection to AlfaDirect broker.
-		/// </summary>
-		public static string Str2260
-		{
-			get { return GetString(Str2260Key); }
 		}
 
 		/// <summary>
@@ -30150,19 +30111,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to Interactive Brokers broker.
-		/// </summary>
-		public const string Str2516Key = "Str2516";
-
-		/// <summary>
-		/// Connection to Interactive Brokers broker.
-		/// </summary>
-		public static string Str2516
-		{
-			get { return GetString(Str2516Key); }
-		}
-
-		/// <summary>
 		/// Unique ID. Used when several clients are connected to one terminal or gateway.
 		/// </summary>
 		public const string Str2518Key = "Str2518";
@@ -30696,19 +30644,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to OpenECry broker.
-		/// </summary>
-		public const string Str2561Key = "Str2561";
-
-		/// <summary>
-		/// Connection to OpenECry broker.
-		/// </summary>
-		public static string Str2561
-		{
-			get { return GetString(Str2561Key); }
-		}
-
-		/// <summary>
 		/// OpenECry API server address.
 		/// </summary>
 		public const string Str2562Key = "Str2562";
@@ -31070,19 +31005,6 @@ namespace StockSharp.Localization
 		public static string Str2591Params
 		{
 			get { return GetString(Str2591ParamsKey); }
-		}
-
-		/// <summary>
-		/// Connection to RTS.
-		/// </summary>
-		public const string Str2592Key = "Str2592";
-
-		/// <summary>
-		/// Connection to RTS.
-		/// </summary>
-		public static string Str2592
-		{
-			get { return GetString(Str2592Key); }
 		}
 
 		/// <summary>
@@ -39692,19 +39614,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to BitStamp stock exchange.
-		/// </summary>
-		public const string Str3303Key = "Str3303";
-
-		/// <summary>
-		/// Connection to BitStamp stock exchange.
-		/// </summary>
-		public static string Str3303
-		{
-			get { return GetString(Str3303Key); }
-		}
-
-		/// <summary>
 		/// Key
 		/// </summary>
 		public const string Str3304Key = "Str3304";
@@ -39965,19 +39874,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to broker using Fusion or Blackwood.
-		/// </summary>
-		public const string Str3327Key = "Str3327";
-
-		/// <summary>
-		/// Connection to broker using Fusion or Blackwood.
-		/// </summary>
-		public static string Str3327
-		{
-			get { return GetString(Str3327Key); }
-		}
-
-		/// <summary>
 		/// Market data server address.
 		/// </summary>
 		public const string Str3328Key = "Str3328";
@@ -40157,19 +40053,6 @@ namespace StockSharp.Localization
 		public static string Str3341
 		{
 			get { return GetString(Str3341Key); }
-		}
-
-		/// <summary>
-		/// Connection to BTC-e stock exchange.
-		/// </summary>
-		public const string Str3342Key = "Str3342";
-
-		/// <summary>
-		/// Connection to BTC-e stock exchange.
-		/// </summary>
-		public static string Str3342
-		{
-			get { return GetString(Str3342Key); }
 		}
 
 		/// <summary>
@@ -40446,19 +40329,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to E*TRADE broker.
-		/// </summary>
-		public const string Str3368Key = "Str3368";
-
-		/// <summary>
-		/// Connection to E*TRADE broker.
-		/// </summary>
-		public static string Str3368
-		{
-			get { return GetString(Str3368Key); }
-		}
-
-		/// <summary>
 		/// Demo mode.
 		/// </summary>
 		public const string Str3369Key = "Str3369";
@@ -40677,19 +40547,6 @@ namespace StockSharp.Localization
 		public static string Str3386
 		{
 			get { return GetString(Str3386Key); }
-		}
-
-		/// <summary>
-		/// Connection to LMAX stock exchange.
-		/// </summary>
-		public const string Str3387Key = "Str3387";
-
-		/// <summary>
-		/// Connection to LMAX stock exchange.
-		/// </summary>
-		public static string Str3387
-		{
-			get { return GetString(Str3387Key); }
 		}
 
 		/// <summary>
@@ -40924,19 +40781,6 @@ namespace StockSharp.Localization
 		public static string Str3407
 		{
 			get { return GetString(Str3407Key); }
-		}
-
-		/// <summary>
-		/// Connection to MICEX.
-		/// </summary>
-		public const string Str3409Key = "Str3409";
-
-		/// <summary>
-		/// Connection to MICEX.
-		/// </summary>
-		public static string Str3409
-		{
-			get { return GetString(Str3409Key); }
 		}
 
 		/// <summary>
@@ -41421,19 +41265,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to OANDA broker.
-		/// </summary>
-		public const string Str3449Key = "Str3449";
-
-		/// <summary>
-		/// Connection to OANDA broker.
-		/// </summary>
-		public static string Str3449
-		{
-			get { return GetString(Str3449Key); }
-		}
-
-		/// <summary>
 		/// Server.
 		/// </summary>
 		public const string Str3450Key = "Str3450";
@@ -41587,19 +41418,6 @@ namespace StockSharp.Localization
 		public static string Str3463
 		{
 			get { return GetString(Str3463Key); }
-		}
-
-		/// <summary>
-		/// Connection to broker using Rithmic.
-		/// </summary>
-		public const string Str3464Key = "Str3464";
-
-		/// <summary>
-		/// Connection to broker using Rithmic.
-		/// </summary>
-		public static string Str3464
-		{
-			get { return GetString(Str3464Key); }
 		}
 
 		/// <summary>
@@ -42510,19 +42328,6 @@ namespace StockSharp.Localization
 		public static string Str3537
 		{
 			get { return GetString(Str3537Key); }
-		}
-
-		/// <summary>
-		/// Connection to broker using Transaq.
-		/// </summary>
-		public const string Str3538Key = "Str3538";
-
-		/// <summary>
-		/// Connection to broker using Transaq.
-		/// </summary>
-		public static string Str3538
-		{
-			get { return GetString(Str3538Key); }
 		}
 
 		/// <summary>
@@ -45607,19 +45412,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to broker using CQG.
-		/// </summary>
-		public const string CQGConnectorKey = "CQGConnector";
-
-		/// <summary>
-		/// Connection to broker using CQG.
-		/// </summary>
-		public static string CQGConnector
-		{
-			get { return GetString(CQGConnectorKey); }
-		}
-
-		/// <summary>
 		/// Unsupported type of security {0}.
 		/// </summary>
 		public const string UnsupportSecTypeKey = "UnsupportSecType";
@@ -45643,19 +45435,6 @@ namespace StockSharp.Localization
 		public static string Str3800
 		{
 			get { return GetString(Str3800Key); }
-		}
-
-		/// <summary>
-		/// Connection to broker using Sterling.
-		/// </summary>
-		public const string SterlingConnectorKey = "SterlingConnector";
-
-		/// <summary>
-		/// Connection to broker using Sterling.
-		/// </summary>
-		public static string SterlingConnector
-		{
-			get { return GetString(SterlingConnectorKey); }
 		}
 
 		/// <summary>

@@ -37,8 +37,8 @@ namespace StockSharp.Oanda
 	}
 
 	[DisplayName("OANDA")]
-	[Category("Forex")]
-	[DescriptionLoc(LocalizedStrings.Str3449Key)]
+	[CategoryLoc(LocalizedStrings.ForexKey)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "OANDA")]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]

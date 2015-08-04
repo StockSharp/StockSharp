@@ -15,7 +15,7 @@ namespace StockSharp.AlfaDirect
 
 	[DisplayName("AlfaDirect")]
 	[CategoryLoc(LocalizedStrings.RussiaKey)]
-	[DescriptionLoc(LocalizedStrings.Str2260Key)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "Alfa Direct")]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]

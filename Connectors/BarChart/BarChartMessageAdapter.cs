@@ -26,6 +26,9 @@
 	/// <summary>
 	/// Маркет-дата адаптер сообщений для BarChart.
 	/// </summary>
+	[DisplayName("BarChart")]
+	[CategoryLoc(LocalizedStrings.AmericaKey)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "BarChart")]
 	public class BarChartMessageAdapter : MessageAdapter
 	{
 		private string _streamAddress;

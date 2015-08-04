@@ -13,7 +13,7 @@ namespace StockSharp.ETrade
 
 	[DisplayName("E*TRADE")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
-	[DescriptionLoc(LocalizedStrings.Str3368Key)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "E*TRADE")]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]

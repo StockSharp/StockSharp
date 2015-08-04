@@ -18,7 +18,7 @@ namespace StockSharp.Transaq
 
 	[DisplayName("Transaq")]
 	[CategoryLoc(LocalizedStrings.RussiaKey)]
-	[DescriptionLoc(LocalizedStrings.Str3538Key)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "Transaq")]
 	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 2)]
