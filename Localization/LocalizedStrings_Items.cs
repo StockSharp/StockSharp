@@ -35376,29 +35376,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Automatic S#.Data start is enabled in mode {0}. To work in selected mode S#.Data must be restarted.
+		/// You must restart {0} to apply these changes. Restart now?
 		/// </summary>
 		public const string Str2952ParamsKey = "Str2952Params";
 
 		/// <summary>
-		/// Automatic S#.Data start is enabled in mode {0}. To work in selected mode S#.Data must be restarted.
+		/// You must restart {0} to apply these changes. Restart now?
 		/// </summary>
 		public static string Str2952Params
 		{
 			get { return GetString(Str2952ParamsKey); }
-		}
-
-		/// <summary>
-		/// Manual selection of S#.Data start mode is enabled. To work in selected mode S#.Data must be restarted.
-		/// </summary>
-		public const string Str2953Key = "Str2953";
-
-		/// <summary>
-		/// Manual selection of S#.Data start mode is enabled. To work in selected mode S#.Data must be restarted.
-		/// </summary>
-		public static string Str2953
-		{
-			get { return GetString(Str2953Key); }
 		}
 
 		/// <summary>

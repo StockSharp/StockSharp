@@ -111,14 +111,18 @@ namespace StockSharp.Xaml
 		/// </summary>
 		public Platforms SelectedPlatform { get; private set; }
 
+		private Languages _selectedLanguage;
+
 		/// <summary>
 		/// Выбранная культура.
 		/// </summary>
 		public Languages SelectedLanguage
 		{
-			get { return LocalizedStrings.ActiveLanguage; }
+			get { return _selectedLanguage; }
 			private set
 			{
+				_selectedLanguage = value;
+
 				HintLabel.Text = LocalizedStrings.GetString(LocalizedStrings.XamlStr178Key, value);
 				AutoCheckBox.Content = LocalizedStrings.GetString(LocalizedStrings.XamlStr176Key, value);
 				SelectPlatformLabel.Text = LocalizedStrings.GetString(LocalizedStrings.SelectAppModeKey, value);
@@ -150,9 +154,11 @@ namespace StockSharp.Xaml
 				new TargetPlatformFeature("Blackwood/Fusion"),
 				new TargetPlatformFeature("LMAX"),
 				new TargetPlatformFeature("IQFeed"),
+				new TargetPlatformFeature("BarChart"),
 				new TargetPlatformFeature("OANDA"),
 				new TargetPlatformFeature("Rithmic"),
 				new TargetPlatformFeature("FIX/FAST"),
+				new TargetPlatformFeature("ITCH"),
 				new TargetPlatformFeature("BTCE"),
 				new TargetPlatformFeature("BitStamp"),
 				new TargetPlatformFeature("RSS")
@@ -185,23 +191,7 @@ namespace StockSharp.Xaml
 			if (configFile.IsEmptyOrWhiteSpace() || !File.Exists(configFile))
 				return;
 
-			//AppStartSettings settings;
-
-			//if (File.ReadAllText(configFile).ContainsIgnoreCase("RefPair"))
-			//{
-			//	var pair = new XmlSerializer<RefPair<Platforms, bool>>().Deserialize(configFile);
-
-			//	settings = new AppStartSettings
-			//	{
-			//		Platform = pair.First,
-			//		AutoStart = pair.Second,
-			//		Language = Languages.Russian
-			//	};
-			//}
-			//else
-			//{
 			var settings = new XmlSerializer<AppStartSettings>().Deserialize(configFile);
-			//}
 
 			SelectedPlatform = PlatformCheckBox.IsEnabled ? settings.Platform : Platforms.x86;
 			AutoStart = settings.AutoStart;

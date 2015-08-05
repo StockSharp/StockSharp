@@ -1443,17 +1443,23 @@ namespace StockSharp.Studio
 
 		private void TargetPlatformCommandExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
+			var language = LocalizedStrings.ActiveLanguage;
+			var platform = Environment.Is64BitProcess ? Platforms.x64 : Platforms.x86;
+
 			var window = new TargetPlatformWindow();
 
 			if (!window.ShowModal(this))
 				return;
 
-			var message = window.AutoStart
-				? LocalizedStrings.Str2952Params.Put(TypeHelper.ApplicationName, window.SelectedPlatform)
-				: LocalizedStrings.Str2953.Put(TypeHelper.ApplicationName);
+			if (window.SelectedLanguage == language && window.SelectedPlatform == platform)
+				return;
+
+			// temporarily set prev lang for display the followed message
+			// and leave all text as is if user will not restart the app
+			LocalizedStrings.ActiveLanguage = language;
 
 			var result = new MessageBoxBuilder()
-				.Text(message)
+				.Text(LocalizedStrings.Str2952Params.Put(TypeHelper.ApplicationName))
 				.Owner(this)
 				.Info()
 				.YesNo()

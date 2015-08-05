@@ -31,7 +31,7 @@ namespace StockSharp.Hydra.Plaza
 		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog)]
 	class PlazaTask : ConnectorHydraTask<PlazaTrader>
 	{
-		private const string _sourceName = "Plaza";
+		private const string _sourceName = "Plaza2";
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
