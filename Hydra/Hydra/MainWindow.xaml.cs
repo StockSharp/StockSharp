@@ -52,7 +52,6 @@ namespace StockSharp.Hydra
 		public readonly static RoutedCommand CopyToBufferCommand = new RoutedCommand();
 		public readonly static RoutedCommand OpenPaneCommand = new RoutedCommand();
 		public readonly static RoutedCommand ImportPaneCommand = new RoutedCommand();
-		public readonly static RoutedCommand SecuritiesCommand = new RoutedCommand();
 		public readonly static RoutedCommand BoardsCommand = new RoutedCommand();
 		public readonly static RoutedCommand AnalyticsCommand = new RoutedCommand();
 		public readonly static RoutedCommand MemoryStatisticsCommand = new RoutedCommand();
@@ -774,6 +773,24 @@ namespace StockSharp.Hydra
 				case "execution":
 					pane = new ExecutionsPane { SelectedSecurity = SelectedSecurity };
 					break;
+
+				case "security":
+					var wnd = DockSite.DocumentWindows.FirstOrDefault(w =>
+					{
+						var paneWnd = w as PaneWindow;
+
+						if (paneWnd == null)
+							return false;
+
+						return paneWnd.Pane is AllSecuritiesPane;
+					});
+
+					if (wnd != null)
+						wnd.Activate();
+					else
+						pane = new AllSecuritiesPane();
+
+					break;
 			}
 
 			if (pane == null)
@@ -911,24 +928,6 @@ namespace StockSharp.Hydra
 		private void GluingData_Click(object sender, RoutedEventArgs e)
 		{
 			ShowPane(new GluingDataPane());
-		}
-
-		private void ExecutedSecuritiesCommand(object sender, ExecutedRoutedEventArgs e)
-		{
-			var wnd = DockSite.DocumentWindows.FirstOrDefault(w =>
-			{
-				var paneWnd = w as PaneWindow;
-
-				if (paneWnd == null)
-					return false;
-
-				return paneWnd.Pane is AllSecuritiesPane;
-			});
-
-			if (wnd != null)
-				wnd.Activate();
-			else
-				ShowPane(new AllSecuritiesPane());
 		}
 
 		private void ExecutedBoardsCommand(object sender, ExecutedRoutedEventArgs e)
@@ -1069,7 +1068,7 @@ namespace StockSharp.Hydra
 			lv.SelectedItem = task;
 		}
 
-		private void ProxtSettings_Click(object sender, RoutedEventArgs e)
+		private void ProxySettings_Click(object sender, RoutedEventArgs e)
 		{
 			BaseApplication.EditProxySettigs();
 		}

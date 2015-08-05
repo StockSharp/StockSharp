@@ -1858,7 +1858,7 @@ Str1989;Value must be above or equal to 1.;Значение должно быт�
 Str1990;Renderer;Рендерер
 Str1991;Renderer for extended indicator rendering.;Рендерер для расширенной отрисовки индиктора.
 Str1992;Style of indicator rendering.;Стиль отрисовки индиктора.
-Str1993;Template;Шаблон
+Template;Template;Шаблон
 Str1994;Rendering template for Dot style.;Шаблон отрисовки для Dot стиля.
 Str1995;Indicator smoothing.;Сглаживание индикатора.
 Str1996;Security, for which orders from chart will be placed. If not specified, then strategy security is used.;Инструмент, для которого будут выставляться заявки с графика. Если не указан, то используется инструмент стратегии.
@@ -4135,3 +4135,21 @@ Region;Region;Регион
 SelectAll;Select all;Выбрать все
 UnSelectAll;Unselect all;Убрать выбранное
 BackupDescription;Backup market data to cloud storage.;Резервное копирование данных в облачное хранилище.
+Preview;Preview;Предпросмотр;
+PreviewTxt;Preview txt export;Предпосмотр txt экспорта
+TemplateTxtDepth;Depth txt export template.;Шаблон экспорта в txt для стаканов.
+TemplateTxtTick;Ticks txt export template.;Шаблон экспорта в txt для тиков.
+TemplateTxtCandle;Candles txt export template.;Шаблон экспорта в txt для свечей.
+TemplateTxtLevel1;Level1 txt export template.;Шаблон экспорта в txt для level1.
+TemplateTxtOrderLog;Order log txt export template.;Шаблон экспорта в txt для лога заявок.
+TemplateTxtTransaction;Transactions txt export template.;Шаблон экспорта в txt для транзакций.
+TemplateTxtSecurity;Security txt export template.;Шаблон экспорта в txt для инструментов.
+TemplateTxtNews;News txt export template.;Шаблон экспорта в txt для новостей.
+TemplateDepth;Depth template;Шаблон стаканов
+TemplateTick;Ticks template;Шаблон тиков
+TemplateCandle;Candles template;Шаблон свечей
+TemplateLevel1;Level1 template;Шаблон level1
+TemplateOrderLog;Order log template;Шаблон лога заявок
+TemplateTransaction;Transactions template;Шаблон транзакций
+TemplateSecurity;Security template;Шаблон инструментов
+TemplateNews;News template;Шаблон новостей

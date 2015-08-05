@@ -4,7 +4,7 @@
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:pg="http://schemas.stocksharp.com/xaml"
 		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
-		Title="{x:Static loc:LocalizedStrings.Settings}" ResizeMode="NoResize" ShowInTaskbar="False"
+		Title="{x:Static loc:LocalizedStrings.Settings}" ShowInTaskbar="False"
 		WindowStartupLocation="CenterOwner" Height="390" Width="350">
 	<Grid>
 		<Grid Margin="5">

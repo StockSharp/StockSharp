@@ -226,7 +226,7 @@
 		/// <param name="dataType">Тип данных.</param>
 		/// <param name="arg">Параметр данных.</param>
 		/// <returns>Шаблон для текстового экспорта данных.</returns>
-		public static string GetTxtTemplate(this Type dataType, object arg)
+		public static string GetTxtTemplate(this Type dataType, object arg = null)
 		{
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
@@ -251,17 +251,17 @@
 				switch ((ExecutionTypes)arg)
 				{
 					case ExecutionTypes.Tick:
-						templateName = "txt_export_trades";
+						templateName = "txt_export_ticks";
 						break;
 					case ExecutionTypes.Order:
 					case ExecutionTypes.Trade:
-						templateName = "txt_export_executions";
+						templateName = "txt_export_transactions";
 						break;
 					case ExecutionTypes.OrderLog:
 						templateName = "txt_export_orderlog";
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(LocalizedStrings.Str1122Params.Put(arg));
 				}
 			}
 			else

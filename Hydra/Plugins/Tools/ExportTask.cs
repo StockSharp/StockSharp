@@ -20,6 +20,7 @@ namespace StockSharp.Hydra.Tools
 	using StockSharp.Logging;
 	using StockSharp.Xaml.PropertyGrid;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -143,20 +144,21 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["CheckUnique"] = value; }
 			}
 
-			//[Category(_category)]
-			//[DisplayName("Шаблон экспорта")]
-			//[Description("Шаблон экспорта.")]
-			//[PropertyOrder(6)]
-			//public string ExportTemplate
-			//{
-			//	get { return (string)ExtensionInfo["ExportTemplate"]; }
-			//	set { ExtensionInfo["ExportTemplate"] = value; }
-			//}
+			[Category("CSV")]
+			[DisplayName(LocalizedStrings.TemplateKey)]
+			[DescriptionLoc(LocalizedStrings.TemplateKey, true)]
+			[ExpandableObject]
+			public TemplateTxtRegistry TemplateTxtRegistry
+			{
+				get { return (TemplateTxtRegistry)ExtensionInfo["TemplateTxtRegistry"]; }
+				set { ExtensionInfo["TemplateTxtRegistry"] = value; }
+			}
 
 			public override HydraTaskSettings Clone()
 			{
 				var clone = (ExportSettings)base.Clone();
 				clone.CandleSettings = CandleSettings.Clone();
+				clone.TemplateTxtRegistry = TemplateTxtRegistry.Clone();
 				return clone;
 			}
 		}
@@ -184,6 +186,7 @@ namespace StockSharp.Hydra.Tools
 				_settings.Connection = null;
 				_settings.BatchSize = 50;
 				_settings.CheckUnique = true;
+				_settings.TemplateTxtRegistry = new TemplateTxtRegistry();
 			}
 		}
 
@@ -270,7 +273,7 @@ namespace StockSharp.Hydra.Tools
 								exporter = new XmlExporter(security.Security, arg, isCancelled, fileName);
 								break;
 							case ExportTypes.Txt:
-								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, dataType.GetTxtTemplate(arg));
+								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, GetTxtTemplate(dataType, arg));
 								break;
 							case ExportTypes.Bin:
 								exporter = new BinExporter(security.Security, arg, isCancelled, DriveCache.Instance.GetDrive(path));
@@ -313,6 +316,45 @@ namespace StockSharp.Hydra.Tools
 			}
 
 			return base.OnProcess();
+		}
+
+		private string GetTxtTemplate(Type dataType, object arg)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException("dataType");
+
+			var registry = _settings.TemplateTxtRegistry;
+
+			if (dataType == typeof(SecurityMessage))
+				return registry.TemplateTxtSecurity;
+			else if (dataType == typeof(NewsMessage))
+				return registry.TemplateTxtNews;
+			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+				return registry.TemplateTxtCandle;
+			else if (dataType == typeof(Level1ChangeMessage))
+				return registry.TemplateTxtLevel1;
+			else if (dataType == typeof(QuoteChangeMessage))
+				return registry.TemplateTxtDepth;
+			else if (dataType == typeof(ExecutionMessage))
+			{
+				if (arg == null)
+					throw new ArgumentNullException("arg");
+
+				switch ((ExecutionTypes)arg)
+				{
+					case ExecutionTypes.Tick:
+						return registry.TemplateTxtTick;
+					case ExecutionTypes.Order:
+					case ExecutionTypes.Trade:
+						return registry.TemplateTxtTransaction;
+					case ExecutionTypes.OrderLog:
+						return registry.TemplateTxtOrderLog;
+					default:
+						throw new InvalidOperationException(LocalizedStrings.Str1122Params.Put(arg));
+				}
+			}
+			else
+				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
 		}
 	}
 }

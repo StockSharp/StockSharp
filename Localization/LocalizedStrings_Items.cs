@@ -24133,14 +24133,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Template
 		/// </summary>
-		public const string Str1993Key = "Str1993";
+		public const string TemplateKey = "Template";
 
 		/// <summary>
 		/// Template
 		/// </summary>
-		public static string Str1993
+		public static string Template
 		{
-			get { return GetString(Str1993Key); }
+			get { return GetString(TemplateKey); }
 		}
 
 		/// <summary>
@@ -53394,6 +53394,240 @@ namespace StockSharp.Localization
 		public static string BackupDescription
 		{
 			get { return GetString(BackupDescriptionKey); }
+		}
+
+		/// <summary>
+		/// Preview
+		/// </summary>
+		public const string PreviewKey = "Preview";
+
+		/// <summary>
+		/// Preview
+		/// </summary>
+		public static string Preview
+		{
+			get { return GetString(PreviewKey); }
+		}
+
+		/// <summary>
+		/// Preview txt export
+		/// </summary>
+		public const string PreviewTxtKey = "PreviewTxt";
+
+		/// <summary>
+		/// Preview txt export
+		/// </summary>
+		public static string PreviewTxt
+		{
+			get { return GetString(PreviewTxtKey); }
+		}
+
+		/// <summary>
+		/// Depth txt export template.
+		/// </summary>
+		public const string TemplateTxtDepthKey = "TemplateTxtDepth";
+
+		/// <summary>
+		/// Depth txt export template.
+		/// </summary>
+		public static string TemplateTxtDepth
+		{
+			get { return GetString(TemplateTxtDepthKey); }
+		}
+
+		/// <summary>
+		/// Tick txt export template.
+		/// </summary>
+		public const string TemplateTxtTickKey = "TemplateTxtTick";
+
+		/// <summary>
+		/// Tick txt export template.
+		/// </summary>
+		public static string TemplateTxtTick
+		{
+			get { return GetString(TemplateTxtTickKey); }
+		}
+
+		/// <summary>
+		/// Candles txt export template.
+		/// </summary>
+		public const string TemplateTxtCandleKey = "TemplateTxtCandle";
+
+		/// <summary>
+		/// Candles txt export template.
+		/// </summary>
+		public static string TemplateTxtCandle
+		{
+			get { return GetString(TemplateTxtCandleKey); }
+		}
+
+		/// <summary>
+		/// Level1 txt export template.
+		/// </summary>
+		public const string TemplateTxtLevel1Key = "TemplateTxtLevel1";
+
+		/// <summary>
+		/// Level1 txt export template.
+		/// </summary>
+		public static string TemplateTxtLevel1
+		{
+			get { return GetString(TemplateTxtLevel1Key); }
+		}
+
+		/// <summary>
+		/// Order log txt export template.
+		/// </summary>
+		public const string TemplateTxtOrderLogKey = "TemplateTxtOrderLog";
+
+		/// <summary>
+		/// Order log txt export template.
+		/// </summary>
+		public static string TemplateTxtOrderLog
+		{
+			get { return GetString(TemplateTxtOrderLogKey); }
+		}
+
+		/// <summary>
+		/// Transactions txt export template.
+		/// </summary>
+		public const string TemplateTxtTransactionKey = "TemplateTxtTransaction";
+
+		/// <summary>
+		/// Transactions txt export template.
+		/// </summary>
+		public static string TemplateTxtTransaction
+		{
+			get { return GetString(TemplateTxtTransactionKey); }
+		}
+
+		/// <summary>
+		/// Security txt export template.
+		/// </summary>
+		public const string TemplateTxtSecurityKey = "TemplateTxtSecurity";
+
+		/// <summary>
+		/// Security txt export template.
+		/// </summary>
+		public static string TemplateTxtSecurity
+		{
+			get { return GetString(TemplateTxtSecurityKey); }
+		}
+
+		/// <summary>
+		/// News txt export template.
+		/// </summary>
+		public const string TemplateTxtNewsKey = "TemplateTxtNews";
+
+		/// <summary>
+		/// News txt export template.
+		/// </summary>
+		public static string TemplateTxtNews
+		{
+			get { return GetString(TemplateTxtNewsKey); }
+		}
+
+		/// <summary>
+		/// Depth template
+		/// </summary>
+		public const string TemplateDepthKey = "TemplateDepth";
+
+		/// <summary>
+		/// Depth template
+		/// </summary>
+		public static string TemplateDepth
+		{
+			get { return GetString(TemplateDepthKey); }
+		}
+
+		/// <summary>
+		/// Tick template
+		/// </summary>
+		public const string TemplateTickKey = "TemplateTick";
+
+		/// <summary>
+		/// Tick template
+		/// </summary>
+		public static string TemplateTick
+		{
+			get { return GetString(TemplateTickKey); }
+		}
+
+		/// <summary>
+		/// Candles template.
+		/// </summary>
+		public const string TemplateCandleKey = "TemplateCandle";
+
+		/// <summary>
+		/// Candles template
+		/// </summary>
+		public static string TemplateCandle
+		{
+			get { return GetString(TemplateCandleKey); }
+		}
+
+		/// <summary>
+		/// Level1 template
+		/// </summary>
+		public const string TemplateLevel1Key = "TemplateLevel1";
+
+		/// <summary>
+		/// Level1 template
+		/// </summary>
+		public static string TemplateLevel1
+		{
+			get { return GetString(TemplateLevel1Key); }
+		}
+
+		/// <summary>
+		/// Order log template
+		/// </summary>
+		public const string TemplateOrderLogKey = "TemplateOrderLog";
+
+		/// <summary>
+		/// Order log template
+		/// </summary>
+		public static string TemplateOrderLog
+		{
+			get { return GetString(TemplateOrderLogKey); }
+		}
+
+		/// <summary>
+		/// Transactions template
+		/// </summary>
+		public const string TemplateTransactionKey = "TemplateTransaction";
+
+		/// <summary>
+		/// Transactions template
+		/// </summary>
+		public static string TemplateTransaction
+		{
+			get { return GetString(TemplateTransactionKey); }
+		}
+
+		/// <summary>
+		/// Security template
+		/// </summary>
+		public const string TemplateSecurityKey = "TemplateSecurity";
+
+		/// <summary>
+		/// Security template
+		/// </summary>
+		public static string TemplateSecurity
+		{
+			get { return GetString(TemplateSecurityKey); }
+		}
+
+		/// <summary>
+		/// News template.
+		/// </summary>
+		public const string TemplateNewsKey = "TemplateNews";
+
+		/// <summary>
+		/// News template
+		/// </summary>
+		public static string TemplateNews
+		{
+			get { return GetString(TemplateNewsKey); }
 		}
 	}
 }

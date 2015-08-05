@@ -21,6 +21,7 @@ namespace StockSharp.Hydra.Controls
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
+	using StockSharp.Hydra.Windows;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -110,8 +111,88 @@ namespace StockSharp.Hydra.Controls
 					exporter = new XmlExporter(security, arg, isCancelled, fileName);
 					break;
 				case ExportTypes.Txt:
+					var wnd = new ExportTxtPreviewWindow
+					{
+						DataType = dataType,
+						Arg = arg
+					};
+
+					var registry = ((HydraEntityRegistry)ConfigManager.GetService<IEntityRegistry>()).Settings.TemplateTxtRegistry;
+
+					if (dataType == typeof(SecurityMessage))
+						wnd.TxtTemplate = registry.TemplateTxtSecurity;
+					else if (dataType == typeof(NewsMessage))
+						wnd.TxtTemplate = registry.TemplateTxtNews;
+					else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+						wnd.TxtTemplate = registry.TemplateTxtCandle;
+					else if (dataType == typeof(Level1ChangeMessage))
+						wnd.TxtTemplate = registry.TemplateTxtLevel1;
+					else if (dataType == typeof(QuoteChangeMessage))
+						wnd.TxtTemplate = registry.TemplateTxtDepth;
+					else if (dataType == typeof(ExecutionMessage))
+					{
+						if (arg == null)
+							throw new ArgumentNullException("arg");
+
+						switch ((ExecutionTypes)arg)
+						{
+							case ExecutionTypes.Tick:
+								wnd.TxtTemplate = registry.TemplateTxtTick;
+								break;
+							case ExecutionTypes.Order:
+							case ExecutionTypes.Trade:
+								wnd.TxtTemplate = registry.TemplateTxtTransaction;
+								break;
+							case ExecutionTypes.OrderLog:
+								wnd.TxtTemplate = registry.TemplateTxtOrderLog;
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+					}
+					else
+						throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+
+
+					if (!wnd.ShowModal(this))
+						return;
+
+					if (dataType == typeof(SecurityMessage))
+						registry.TemplateTxtSecurity = wnd.TxtTemplate;
+					else if (dataType == typeof(NewsMessage))
+						registry.TemplateTxtNews = wnd.TxtTemplate;
+					else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+						registry.TemplateTxtCandle = wnd.TxtTemplate;
+					else if (dataType == typeof(Level1ChangeMessage))
+						registry.TemplateTxtLevel1 = wnd.TxtTemplate;
+					else if (dataType == typeof(QuoteChangeMessage))
+						registry.TemplateTxtDepth = wnd.TxtTemplate;
+					else if (dataType == typeof(ExecutionMessage))
+					{
+						if (arg == null)
+							throw new ArgumentNullException("arg");
+
+						switch ((ExecutionTypes)arg)
+						{
+							case ExecutionTypes.Tick:
+								registry.TemplateTxtTick = wnd.TxtTemplate;
+								break;
+							case ExecutionTypes.Order:
+							case ExecutionTypes.Trade:
+								registry.TemplateTxtTransaction = wnd.TxtTemplate;
+								break;
+							case ExecutionTypes.OrderLog:
+								registry.TemplateTxtOrderLog = wnd.TxtTemplate;
+								break;
+							default:
+								throw new ArgumentOutOfRangeException();
+						}
+					}
+					else
+						throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
+
 					fileName = (string)path;
-					exporter = new TextExporter(security, arg, isCancelled, fileName, dataType.GetTxtTemplate(arg));
+					exporter = new TextExporter(security, arg, isCancelled, fileName, wnd.TxtTemplate);
 					break;
 				case ExportTypes.Sql:
 					fileName = null;

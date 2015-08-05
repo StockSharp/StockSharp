@@ -60,9 +60,6 @@
 		<CommandBinding Command="{x:Static hydra:MainWindow.AnalyticsCommand}"
 					Executed="ExecutedAnalyticsCommand" />
 
-		<CommandBinding Command="{x:Static hydra:MainWindow.SecuritiesCommand}"
-					Executed="ExecutedSecuritiesCommand" />
-
 		<CommandBinding Command="{x:Static hydra:MainWindow.BoardsCommand}"
 					Executed="ExecutedBoardsCommand" />
 
@@ -397,6 +394,7 @@
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Export}">
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Security"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Ticks}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
@@ -407,8 +405,8 @@
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}">
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2835}" Command="{x:Static hydra:MainWindow.SecuritiesCommand}" />
-					<MenuItem x:Name="GluingData" Header="{x:Static loc:LocalizedStrings.Str2892}" Click="GluingData_Click"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2835}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Security"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2892}" Click="GluingData_Click"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Str2121}">
@@ -424,7 +422,11 @@
 						</MenuItem.Header>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.NetworkSettings}" x:Name="ProxyButton" Click="ProxtSettings_Click"/>
+					<MenuItem x:Name="ProxyButton" Click="ProxySettings_Click">
+						<MenuItem.Header>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NetworkSettings}" />...</TextBlock>
+						</MenuItem.Header>
+					</MenuItem>
 					<MenuItem x:Name="ServiceButton" Click="Settings_Click">
 						<MenuItem.Header>
 							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Settings}" />...</TextBlock>
@@ -490,7 +492,7 @@
 				</ToolBar>
 
 				<ToolBar ToolBarTray.IsLocked="True">
-					<Button Content="{x:Static loc:LocalizedStrings.Securities}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.SecuritiesCommand}" />
+					<Button Content="{x:Static loc:LocalizedStrings.Securities}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Security"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str1221}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.AnalyticsCommand}" />
 				</ToolBar>
 

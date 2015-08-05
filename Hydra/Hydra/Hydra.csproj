@@ -186,6 +186,9 @@
     <Compile Include="Windows\DatabaseConnectionWindow.xaml.cs">
       <DependentUpon>DatabaseConnectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ExportTxtPreviewWindow.xaml.cs">
+      <DependentUpon>ExportTxtPreviewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ImportEnumMappingWindow.xaml.cs">
       <DependentUpon>ImportEnumMappingWindow.xaml</DependentUpon>
     </Compile>
@@ -293,6 +296,10 @@
     <Page Include="Windows\DatabaseConnectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ExportTxtPreviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ImportEnumMappingWindow.xaml">
       <SubType>Designer</SubType>

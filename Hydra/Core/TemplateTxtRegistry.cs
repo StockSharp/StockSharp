@@ -1,0 +1,128 @@
+namespace StockSharp.Hydra.Core
+{
+	using System.ComponentModel;
+
+	using Ecng.Serialization;
+
+	using StockSharp.Localization;
+	using StockSharp.Messages;
+
+	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+
+	/// <summary>
+	/// Реестр txt шаблонов.
+	/// </summary>
+	public class TemplateTxtRegistry : IPersistable
+	{
+		/// <summary>
+		/// Создать <see cref="TemplateTxtRegistry"/>.
+		/// </summary>
+		public TemplateTxtRegistry()
+		{
+			TemplateTxtCandle = typeof(TimeFrameCandleMessage).GetTxtTemplate();
+			TemplateTxtDepth = typeof(QuoteChangeMessage).GetTxtTemplate();
+			TemplateTxtLevel1 = typeof(Level1ChangeMessage).GetTxtTemplate();
+			TemplateTxtOrderLog = typeof(ExecutionMessage).GetTxtTemplate(ExecutionTypes.OrderLog);
+			TemplateTxtSecurity = typeof(SecurityMessage).GetTxtTemplate();
+			TemplateTxtTick = typeof(ExecutionMessage).GetTxtTemplate(ExecutionTypes.Tick);
+			TemplateTxtTransaction = typeof(ExecutionMessage).GetTxtTemplate(ExecutionTypes.Order);
+			TemplateTxtNews = typeof(NewsMessage).GetTxtTemplate();
+		}
+
+		/// <summary>
+		/// Шаблон экспорта в txt для стаканов.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateDepthKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtDepthKey)]
+		[PropertyOrder(0)]
+		public string TemplateTxtDepth { get; set; }
+
+		/// <summary>
+		/// Шаблон экспорта в txt для тиков.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateTickKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtTickKey)]
+		[PropertyOrder(1)]
+		public string TemplateTxtTick { get; set; }
+
+		/// <summary>
+		/// Шаблон экспорта в txt для свечей.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateCandleKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtCandleKey)]
+		[PropertyOrder(2)]
+		public string TemplateTxtCandle { get; set; }
+
+		/// <summary>
+		/// Шаблон экспорта в txt для level1.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateLevel1Key)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtLevel1Key)]
+		[PropertyOrder(3)]
+		public string TemplateTxtLevel1 { get; set; }
+
+		/// <summary>
+		/// Шаблон экспорта в txt для лога заявок.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateOrderLogKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtOrderLogKey)]
+		[PropertyOrder(4)]
+		public string TemplateTxtOrderLog { get; set; }
+
+		/// <summary>
+		/// Шаблон экспорта в txt для транзакций.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateTransactionKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtTransactionKey)]
+		[PropertyOrder(5)]
+		public string TemplateTxtTransaction { get; set; }
+
+		/// <summary>
+		/// Шаблон экспорта в txt для инструментов.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateSecurityKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtSecurityKey)]
+		[PropertyOrder(6)]
+		public string TemplateTxtSecurity { get; set; }
+
+		/// <summary>
+		/// Шаблон экспорта в txt для новостей.
+		/// </summary>
+		[DisplayNameLoc(LocalizedStrings.TemplateNewsKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateTxtNewsKey)]
+		[PropertyOrder(7)]
+		public string TemplateTxtNews { get; set; }
+
+		/// <summary>
+		/// Загрузить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public void Load(SettingsStorage storage)
+		{
+			TemplateTxtDepth = storage.GetValue("TemplateTxtDepth", TemplateTxtDepth);
+			TemplateTxtTick = storage.GetValue("TemplateTxtTick", TemplateTxtTick);
+			TemplateTxtCandle = storage.GetValue("TemplateTxtCandle", TemplateTxtCandle);
+			TemplateTxtLevel1 = storage.GetValue("TemplateTxtLevel1", TemplateTxtLevel1);
+			TemplateTxtOrderLog = storage.GetValue("TemplateTxtOrderLog", TemplateTxtOrderLog);
+			TemplateTxtTransaction = storage.GetValue("TemplateTxtTransaction", TemplateTxtTransaction);
+			TemplateTxtSecurity = storage.GetValue("TemplateTxtSecurity", TemplateTxtSecurity);
+			TemplateTxtNews = storage.GetValue("TemplateTxtNews", TemplateTxtNews);
+		}
+
+		/// <summary>
+		/// Сохранить настройки.
+		/// </summary>
+		/// <param name="storage">Хранилище настроек.</param>
+		public void Save(SettingsStorage storage)
+		{
+			storage.SetValue("TemplateTxtDepth", TemplateTxtDepth);
+			storage.SetValue("TemplateTxtTick", TemplateTxtTick);
+			storage.SetValue("TemplateTxtCandle", TemplateTxtCandle);
+			storage.SetValue("TemplateTxtLevel1", TemplateTxtLevel1);
+			storage.SetValue("TemplateTxtOrderLog", TemplateTxtOrderLog);
+			storage.SetValue("TemplateTxtTransaction", TemplateTxtTransaction);
+			storage.SetValue("TemplateTxtSecurity", TemplateTxtSecurity);
+			storage.SetValue("TemplateTxtNews", TemplateTxtNews);
+		}
+	}
+}

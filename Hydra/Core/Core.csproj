@@ -126,6 +126,7 @@
     <Compile Include="Attributes.cs" />
     <Compile Include="TaskCategories.cs" />
     <Compile Include="TempFiles.cs" />
+    <Compile Include="TemplateTxtRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo.History\Algo.History.csproj">
