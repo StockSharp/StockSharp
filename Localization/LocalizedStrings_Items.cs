@@ -3097,12 +3097,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Position cost
+		/// Position price
 		/// </summary>
 		public const string Str256Key = "Str256";
 
 		/// <summary>
-		/// Position cost
+		/// Position price
 		/// </summary>
 		public static string Str256
 		{
@@ -5281,12 +5281,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Position cost, calculated using current market price of security.
+		/// Position price, calculated using current market price of security.
 		/// </summary>
 		public const string Str428Key = "Str428";
 
 		/// <summary>
-		/// Position cost, calculated using current market price of security.
+		/// Position price, calculated using current market price of security.
 		/// </summary>
 		public static string Str428
 		{
@@ -13065,19 +13065,6 @@ namespace StockSharp.Localization
 		public static string Str1102Params
 		{
 			get { return GetString(Str1102ParamsKey); }
-		}
-
-		/// <summary>
-		/// Security '{0}' does not have information about the stock exchange.
-		/// </summary>
-		public const string Str1103ParamsKey = "Str1103Params";
-
-		/// <summary>
-		/// Security '{0}' does not have information about the stock exchange.
-		/// </summary>
-		public static string Str1103Params
-		{
-			get { return GetString(Str1103ParamsKey); }
 		}
 
 		/// <summary>
@@ -39603,14 +39590,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Bitcoins
 		/// </summary>
-		public const string Str3302Key = "Str3302";
+		public const string BitcoinsKey = "Bitcoins";
 
 		/// <summary>
 		/// Bitcoins
 		/// </summary>
-		public static string Str3302
+		public static string Bitcoins
 		{
-			get { return GetString(Str3302Key); }
+			get { return GetString(BitcoinsKey); }
 		}
 
 		/// <summary>
@@ -43121,19 +43108,6 @@ namespace StockSharp.Localization
 		public static string Str3601
 		{
 			get { return GetString(Str3601Key); }
-		}
-
-		/// <summary>
-		/// Security {0} is missing information about the stock exchange.
-		/// </summary>
-		public const string Str3602ParamsKey = "Str3602Params";
-
-		/// <summary>
-		/// Security {0} is missing information about the stock exchange.
-		/// </summary>
-		public static string Str3602Params
-		{
-			get { return GetString(Str3602ParamsKey); }
 		}
 
 		/// <summary>
@@ -46701,12 +46675,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Add task
+		/// Add tools
 		/// </summary>
 		public const string XamlStr136Key = "XamlStr136";
 
 		/// <summary>
-		/// Add task
+		/// Add tools
 		/// </summary>
 		public static string XamlStr136
 		{
@@ -46740,12 +46714,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Add source
+		/// Add sources
 		/// </summary>
 		public const string XamlStr140Key = "XamlStr140";
 
 		/// <summary>
-		/// Add source
+		/// Add sources
 		/// </summary>
 		public static string XamlStr140
 		{
@@ -53306,16 +53280,29 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Free access
+		/// Free
 		/// </summary>
-		public const string FreeAccessKey = "FreeAccess";
+		public const string FreeKey = "Free";
 
 		/// <summary>
-		/// Free access
+		/// Free
 		/// </summary>
-		public static string FreeAccess
+		public static string Free
 		{
-			get { return GetString(FreeAccessKey); }
+			get { return GetString(FreeKey); }
+		}
+
+		/// <summary>
+		/// Paid
+		/// </summary>
+		public const string PaidKey = "Paid";
+
+		/// <summary>
+		/// Paid
+		/// </summary>
+		public static string Paid
+		{
+			get { return GetString(PaidKey); }
 		}
 
 		/// <summary>
@@ -53355,6 +53342,71 @@ namespace StockSharp.Localization
 		public static string NetworkConnectionError
 		{
 			get { return GetString(NetworkConnectionErrorKey); }
+		}
+
+		/// <summary>
+		/// Cost
+		/// </summary>
+		public const string CostKey = "Cost";
+
+		/// <summary>
+		/// Cost
+		/// </summary>
+		public static string Cost
+		{
+			get { return GetString(CostKey); }
+		}
+
+		/// <summary>
+		/// Region
+		/// </summary>
+		public const string RegionKey = "Region";
+
+		/// <summary>
+		/// Region
+		/// </summary>
+		public static string Region
+		{
+			get { return GetString(RegionKey); }
+		}
+
+		/// <summary>
+		/// Select all
+		/// </summary>
+		public const string SelectAllKey = "SelectAll";
+
+		/// <summary>
+		/// Select all
+		/// </summary>
+		public static string SelectAll
+		{
+			get { return GetString(SelectAllKey); }
+		}
+
+		/// <summary>
+		/// Unselect all
+		/// </summary>
+		public const string UnSelectAllKey = "UnSelectAll";
+
+		/// <summary>
+		/// Unselect all
+		/// </summary>
+		public static string UnSelectAll
+		{
+			get { return GetString(UnSelectAllKey); }
+		}
+
+		/// <summary>
+		/// Backup market data to cloud storage.
+		/// </summary>
+		public const string BackupDescriptionKey = "BackupDescription";
+
+		/// <summary>
+		/// Backup market data to cloud storage.
+		/// </summary>
+		public static string BackupDescription
+		{
+			get { return GetString(BackupDescriptionKey); }
 		}
 	}
 }

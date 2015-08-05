@@ -2967,7 +2967,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.StockExchangeKey)]
+		[DisplayNameLoc(LocalizedStrings.ExchangeInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str479Key)]
 		[MainCategory]
 		public Exchange Exchange { get; set; }

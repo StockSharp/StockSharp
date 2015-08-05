@@ -18,7 +18,7 @@ namespace StockSharp.Messages
 		/// Код биржи, которой принадлежит прощадка. Может совпадать с <see cref="Code"/>, если площадка и биржа является одним целым.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.StockExchangeKey)]
+		[DisplayNameLoc(LocalizedStrings.ExchangeInfoKey)]
 		[DescriptionLoc(LocalizedStrings.Str56Key)]
 		[MainCategory]
 		public string ExchangeCode { get; set; }

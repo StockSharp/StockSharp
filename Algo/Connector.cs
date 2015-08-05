@@ -1325,7 +1325,7 @@ namespace StockSharp.Algo
 			if (isNew)
 			{
 				if (security.Board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1103Params.Put(id));
+					throw new InvalidOperationException(LocalizedStrings.Str903Params.Put(id));
 
 				_exchangeBoards.TryAdd(security.Board);
 				RaiseNewSecurities(new[] { security });

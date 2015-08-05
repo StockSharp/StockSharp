@@ -30,11 +30,11 @@
 		<ComboBox x:Name="SecType" Grid.Row="2" Grid.Column="1" SelectionChanged="SecType_SelectionChanged" />
 
 		<TextBlock Grid.Row="4" Grid.Column="0">
-			<TextBlock Text="{x:Static loc:LocalizedStrings.StockExchange}"/><Run Text=":"/>
+			<TextBlock Text="{x:Static loc:LocalizedStrings.Board}"/><Run Text=":"/>
 		</TextBlock>
 		<TextBox x:Name="BoardName" Grid.Row="4" Grid.Column="1" TextChanged="BoardName_TextChanged" />
 
-		<Label Grid.Row="6" Grid.Column="0"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr236}"/></Label>
+		<TextBlock Grid.Row="6" Grid.Column="0" Text="{x:Static loc:LocalizedStrings.XamlStr236}"/>
 		<TextBox x:Name="ContractId" Grid.Row="6" Grid.Column="1" TextChanged="ContractId_TextChanged" />
 
 		<Button x:Name="Ok" IsDefault="True" Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" Width="100" Click="Ok_Click" IsEnabled="False">OK</Button>

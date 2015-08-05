@@ -2109,7 +2109,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("security");
 
 			if (security.Board == null)
-				throw new ArgumentException(LocalizedStrings.Str1215Params.Put(security.Id), "security");
+				throw new ArgumentException(LocalizedStrings.Str903Params.Put(security.Id), "security");
 
 			if (security.Board.Exchange == null)
 				throw new ArgumentException(LocalizedStrings.Str1216Params.Put(security.Id), "security");

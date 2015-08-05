@@ -13,7 +13,7 @@ namespace StockSharp.BitStamp
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("BitStamp")]
-	[CategoryLoc(LocalizedStrings.Str3302Key)]
+	[CategoryLoc(LocalizedStrings.BitcoinsKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "BitStamp")]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
