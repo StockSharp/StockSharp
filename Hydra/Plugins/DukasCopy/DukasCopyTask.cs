@@ -2,13 +2,11 @@ namespace StockSharp.Hydra.DukasCopy
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -23,10 +21,12 @@ namespace StockSharp.Hydra.DukasCopy
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/bba0059b-526b-406c-ba6e-a80d6c9e4ae0.htm")]
+	[TaskIcon("dukas_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
+		TaskCategories.Free | TaskCategories.Level1 | TaskCategories.Candles)]
 	class DukasCopyTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "DukasCopy";
@@ -107,19 +107,9 @@ namespace StockSharp.Hydra.DukasCopy
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "dukas_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage), typeof(Candle) };

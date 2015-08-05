@@ -2,11 +2,9 @@ namespace StockSharp.Hydra.Oanda
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Forex;
@@ -19,11 +17,13 @@ namespace StockSharp.Hydra.Oanda
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	// TODO
 	//[TaskDoc("")]
+	[TaskIcon("oanda_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
+		TaskCategories.Free | TaskCategories.Level1)]
 	class OandaHistoryTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = LocalizedStrings.OandaHistoryKey;
@@ -72,19 +72,9 @@ namespace StockSharp.Hydra.Oanda
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "oanda_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage) };

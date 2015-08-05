@@ -2,12 +2,10 @@ namespace StockSharp.Hydra.Yahoo
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
@@ -20,10 +18,12 @@ namespace StockSharp.Hydra.Yahoo
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/c60b2dd2-518c-49e5-8ba4-edabbda04222.htm")]
+	[TaskIcon("yahoo_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.History | TaskCategories.Stock |
+		TaskCategories.Free | TaskCategories.Candles | TaskCategories.Level1)]
 	class YahooTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "Yahoo";
@@ -93,19 +93,9 @@ namespace StockSharp.Hydra.Yahoo
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "yahoo_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;

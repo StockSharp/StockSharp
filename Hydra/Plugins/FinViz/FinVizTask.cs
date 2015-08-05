@@ -2,10 +2,7 @@ namespace StockSharp.Hydra.FinViz
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
-
-	using Ecng.Xaml;
 
 	using MoreLinq;
 
@@ -19,10 +16,12 @@ namespace StockSharp.Hydra.FinViz
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/34b9a25a-ecb2-4d82-b342-3fa46ec155ba.htm")]
+	[TaskIcon("finviz_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Paid | TaskCategories.Level1)]
 	class FinVizTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "FinViz";
@@ -45,16 +44,6 @@ namespace StockSharp.Hydra.FinViz
 
 			if (settings.IsDefault)
 				_settings.Interval = TimeSpan.FromDays(1);
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "finviz_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		public override HydraTaskSettings Settings

@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.AlfaDirect
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -8,7 +7,6 @@ namespace StockSharp.Hydra.AlfaDirect
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
@@ -18,11 +16,14 @@ namespace StockSharp.Hydra.AlfaDirect
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/2a908a19-0272-48e1-b143-df7ff9e2607c.htm")]
+	[TaskIcon("alfa_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.Transactions | TaskCategories.RealTime |
+		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks | TaskCategories.News)]
 	class AlfaTask : ConnectorHydraTask<AlfaTrader>
 	{
 		private const string _sourceName = "AlfaDirect";
@@ -74,11 +75,6 @@ namespace StockSharp.Hydra.AlfaDirect
 		}
 
 		private AlfaSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "alfa_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

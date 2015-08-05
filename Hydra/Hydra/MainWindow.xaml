@@ -17,9 +17,6 @@
 		Title="S#.Data" Height="516" Width="1376" WindowState="Normal">
 
 	<Window.CommandBindings>
-		<CommandBinding Command="{x:Static hydra:MainWindow.NewTaskCommand}"
-					Executed="ExecutedNewTaskCommand" />
-
 		<CommandBinding Command="{x:Static hydra:MainWindow.TaskEnabledChangedCommand}"
 					Executed="ExecutedTaskEnabledChangedCommand"
 					CanExecute="CanExecuteTaskEnabledChangedCommand" />
@@ -71,6 +68,12 @@
 
 		<CommandBinding Command="{x:Static hydra:MainWindow.MemoryStatisticsCommand}"
 					Executed="ExecutedMemoryStatisticsCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.AddSourcesCommand}"
+					Executed="ExecutedAddSourcesCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.AddToolsCommand}"
+					Executed="ExecutedAddToolsCommand" />
 	</Window.CommandBindings>
 
 	<Window.Resources>
@@ -368,41 +371,16 @@
 		<DockPanel LastChildFill="True">
 			<Menu DockPanel.Dock="Top">
 				<MenuItem Header="{x:Static loc:LocalizedStrings.File}">
-					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr140}" Name="SourcesMenu">
-						<MenuItem.ItemsPanel>
-							<ItemsPanelTemplate>
-								<VirtualizingStackPanel Orientation="Vertical"/>
-							</ItemsPanelTemplate>
-						</MenuItem.ItemsPanel>
-
-						<MenuItem x:Name="RussianSourcesMi" Header="{x:Static loc:LocalizedStrings.Russia}" />
-						<MenuItem x:Name="AmericanSourcesMi" Header="{x:Static loc:LocalizedStrings.America}" />
-						<MenuItem x:Name="ForexSourcesMi" Header="{x:Static loc:LocalizedStrings.Forex}" />
-						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.Cryptocurrency}" />
-						<MenuItem x:Name="OtherSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
-
-						<!--<MenuItem.ItemContainerStyle>
-							<Style TargetType="MenuItem">
-								<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
-								<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-							</Style>
-						</MenuItem.ItemContainerStyle>
-
-						<MenuItem.ItemTemplate>
-							<DataTemplate>
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto"/>
-										<ColumnDefinition Width="Auto"/>
-									</Grid.ColumnDefinitions>
-
-									<Image Grid.Column="0" Margin="3" Source="{Binding Path=(core:IHydraTask.Icon)}" Width="20" Height="20"/>
-									<TextBlock Grid.Column="1" Margin="5,3,3,3" FontWeight="Bold" Text="{Binding Path=Name}" VerticalAlignment="Center" />
-								</Grid>
-							</DataTemplate>
-						</MenuItem.ItemTemplate>-->
+					<MenuItem Command="{x:Static hydra:MainWindow.AddSourcesCommand}">
+						<MenuItem.Header>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr140}"/>...</TextBlock>
+						</MenuItem.Header>
 					</MenuItem>
-					
+					<MenuItem Command="{x:Static hydra:MainWindow.AddToolsCommand}">
+						<MenuItem.Header>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr136}"/>...</TextBlock>
+						</MenuItem.Header>
+					</MenuItem>
 					<Separator/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Exit}" Command="Close"/>
 				</MenuItem>
@@ -568,42 +546,9 @@
 				<navigation:NavigationBar Grid.Column="0" IsHeaderVisible="True" Title="S#.Data" ContentWidth="200" x:Name="NavigationBar">
 					<navigation:NavigationPane x:Name="SourcesPane" Title="{x:Static loc:LocalizedStrings.XamlStr227}" ImageSourceLarge="/Images/Source32.png" ImageSourceSmall="/Images/Source16.png">
 						<DockPanel LastChildFill="True" Margin="3">
-							<xctk:DropDownButton x:Name="NewSourceButton" Content="{x:Static loc:LocalizedStrings.XamlStr140}" DockPanel.Dock="Top" Margin="0,0,0,3">
-								<xctk:DropDownButton.DropDownContent>
-									<Menu x:Name="SourcesDropDownButtonMenu">
-										<MenuItem x:Name="RussianSourcesCi" Header="{x:Static loc:LocalizedStrings.Russia}" />
-										<MenuItem x:Name="AmericanSourcesCi" Header="{x:Static loc:LocalizedStrings.America}" />
-										<MenuItem x:Name="ForexSourcesCi" Header="{x:Static loc:LocalizedStrings.Forex}" />
-										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.Cryptocurrency}" />
-										<MenuItem x:Name="OtherSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
-										
-										<Menu.ItemsPanel>
-											<ItemsPanelTemplate>
-												<VirtualizingStackPanel Orientation="Vertical"/>
-											</ItemsPanelTemplate>
-										</Menu.ItemsPanel>
-										<!--<Menu.ItemContainerStyle>
-											<Style TargetType="MenuItem">
-												<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
-												<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-											</Style>
-										</Menu.ItemContainerStyle>-->
-										<!--<Menu.ItemTemplate>
-											<DataTemplate>
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="Auto"/>
-														<ColumnDefinition Width="Auto"/>
-													</Grid.ColumnDefinitions>
-
-													<Image Grid.Column="0" Margin="3" Source="{Binding Path=(core:IHydraTask.Icon)}" Width="20" Height="20"/>
-													<TextBlock Grid.Column="1" Margin="5,3,3,3" FontWeight="Bold" Text="{Binding Path=Name}" VerticalAlignment="Center" />
-												</Grid>
-											</DataTemplate>
-										</Menu.ItemTemplate>-->
-									</Menu>
-								</xctk:DropDownButton.DropDownContent>
-							</xctk:DropDownButton>
+							<Button Command="{x:Static hydra:MainWindow.AddSourcesCommand}" DockPanel.Dock="Top" Margin="0,0,0,3">
+								<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr140}"/>...</TextBlock>
+							</Button>
 
 							<ListView Name="CurrentSources" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedSources}}"
 									 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="CurrentTasks_OnSelectionChanged">
@@ -622,24 +567,9 @@
 
 					<navigation:NavigationPane x:Name="ToolsPane" Title="{x:Static loc:LocalizedStrings.XamlStr166}" ImageSourceLarge="/Images/Tasks32.png" ImageSourceSmall="/Images/Tasks16.png">
 						<DockPanel LastChildFill="True" Margin="3">
-							<xctk:DropDownButton x:Name="NewTaskButton" Content="{x:Static loc:LocalizedStrings.XamlStr136}" DockPanel.Dock="Top" Margin="0,0,0,3">
-								<xctk:DropDownButton.DropDownContent>
-									<Menu Name="TasksMenu">
-										<Menu.ItemsPanel>
-											<ItemsPanelTemplate>
-												<VirtualizingStackPanel Orientation="Vertical"/>
-											</ItemsPanelTemplate>
-										</Menu.ItemsPanel>
-
-										<!--<Menu.ItemContainerStyle>
-											<Style TargetType="MenuItem">
-												<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
-												<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-											</Style>
-										</Menu.ItemContainerStyle>-->
-									</Menu>
-								</xctk:DropDownButton.DropDownContent>
-							</xctk:DropDownButton>
+							<Button Command="{x:Static hydra:MainWindow.AddToolsCommand}" DockPanel.Dock="Top" Margin="0,0,0,3">
+								<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr136}"/>...</TextBlock>
+							</Button>
 
 							<ListView Name="CurrentTools" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedTools}}"
 									 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">

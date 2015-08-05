@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.SmartCom
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -9,7 +8,6 @@ namespace StockSharp.Hydra.SmartCom
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
@@ -21,11 +19,14 @@ namespace StockSharp.Hydra.SmartCom
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/1cca5a33-e5ab-434e-bfed-287389fea2eb.htm")]
+	[TaskIcon("smart_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Stock |
+		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
+		TaskCategories.Transactions | TaskCategories.Free | TaskCategories.Ticks)]
 	class SmartComTask : ConnectorHydraTask<SmartTrader>
 	{
 		private const string _sourceName = "SmartCOM";
@@ -93,11 +94,6 @@ namespace StockSharp.Hydra.SmartCom
 		}
 
 		private SmartComSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "smart_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

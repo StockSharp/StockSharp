@@ -1,14 +1,11 @@
 namespace StockSharp.Hydra.Micex
 {
-	using System;
-	using System.ComponentModel;
 	using System.Net;
 	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Collections;
-	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -17,11 +14,14 @@ namespace StockSharp.Hydra.Micex
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49.htm")]
+	[TaskIcon("micex_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Forex |
+		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
+		TaskCategories.Transactions | TaskCategories.Paid | TaskCategories.Ticks)]
 	class MicexTask : ConnectorHydraTask<MicexTrader>
 	{
 		private const string _sourceName = "Micex";
@@ -131,11 +131,6 @@ namespace StockSharp.Hydra.Micex
 		}
 
 		private MicexSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "micex_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

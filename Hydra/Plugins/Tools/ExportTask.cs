@@ -26,6 +26,8 @@ namespace StockSharp.Hydra.Tools
 	[DisplayNameLoc(LocalizedStrings.Str3754Key)]
 	[DescriptionLoc(LocalizedStrings.Str3767Key)]
 	[TaskDoc("http://stocksharp.com/doc/html/9e075b32-abb2-4fad-bfb2-b822dd7d9f30.htm")]
+	[TaskIcon("export_logo.png")]
+	[TaskCategory(TaskCategories.Tool)]
 	class ExportTask : BaseHydraTask
 	{
 		[TaskSettingsDisplayName(LocalizedStrings.Str3754Key)]
@@ -157,16 +159,6 @@ namespace StockSharp.Hydra.Tools
 				clone.CandleSettings = CandleSettings.Clone();
 				return clone;
 			}
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Tool; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "export_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private ExportSettings _settings;

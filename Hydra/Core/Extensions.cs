@@ -8,6 +8,7 @@
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
+	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -267,6 +268,43 @@
 				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
 
 			return ConfigurationManager.AppSettings.Get(templateName);
+		}
+
+		/// <summary>
+		/// Принадлежит ли задача категории.
+		/// </summary>
+		/// <param name="task">Задача.</param>
+		/// <param name="category">Категория.</param>
+		/// <returns>Принадлежит ли задача категории.</returns>
+		public static bool IsCategoryOf(this IHydraTask task, TaskCategories category)
+		{
+			if (task == null)
+				throw new ArgumentNullException("task");
+
+			return task.GetType().IsCategoryOf(category);
+		}
+
+		/// <summary>
+		/// Принадлежит ли задача категории.
+		/// </summary>
+		/// <param name="taskType">Задача.</param>
+		/// <param name="category">Категория.</param>
+		/// <returns>Принадлежит ли задача категории.</returns>
+		public static bool IsCategoryOf(this Type taskType, TaskCategories category)
+		{
+			var attr = taskType.GetAttribute<TaskCategoryAttribute>();
+			return attr != null && attr.Categories.Contains(category);
+		}
+
+		/// <summary>
+		/// Получить инонку задачи.
+		/// </summary>
+		/// <param name="taskType">Задача.</param>
+		/// <returns>Иконка задачи.</returns>
+		public static Uri GetIcon(this Type taskType)
+		{
+			var attr = taskType.GetAttribute<TaskIconAttribute>();
+			return attr == null ? null : attr.Icon.GetResourceUrl(taskType);
 		}
 	}
 }

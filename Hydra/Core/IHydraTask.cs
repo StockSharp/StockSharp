@@ -8,22 +8,6 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Типы задач.
-	/// </summary>
-	public enum TaskTypes
-	{
-		/// <summary>
-		/// Источник маркет-данных.
-		/// </summary>
-		Source,
-
-		/// <summary>
-		/// Вспомогательная задача.
-		/// </summary>
-		Tool,
-	}
-
-	/// <summary>
 	/// Состояния задачи.
 	/// </summary>
 	public enum TaskStates
@@ -54,11 +38,6 @@
 	/// </summary>
 	public interface IHydraTask : ILogReceiver
 	{
-		/// <summary>
-		/// Тип задачи.
-		/// </summary>
-		TaskTypes Type { get; }
-
 		/// <summary>
 		/// Адрес иконки, для визуального обозначения.
 		/// </summary>

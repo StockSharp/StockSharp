@@ -248,6 +248,9 @@
       <DependentUpon>SecurityPickerButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Server\HydraServer.cs" />
+    <Compile Include="Windows\SourcesWindow.xaml.cs">
+      <DependentUpon>SourcesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SynchronizeWindow.xaml.cs">
       <DependentUpon>SynchronizeWindow.xaml</DependentUpon>
     </Compile>
@@ -257,11 +260,15 @@
     <Compile Include="Panes\Level1Pane.xaml.cs">
       <DependentUpon>Level1Pane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\TaskInfo.cs" />
     <Compile Include="Windows\TaskSettingsWindow.xaml.cs">
       <DependentUpon>TaskSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Panes\TradesPane.xaml.cs">
       <DependentUpon>TradesPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ToolsWindow.xaml.cs">
+      <DependentUpon>ToolsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\DrivePanel.xaml">
       <SubType>Designer</SubType>
@@ -371,6 +378,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\SourcesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\TaskSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -388,6 +399,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Panes\Level1Pane.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ToolsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

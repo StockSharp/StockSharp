@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.HydraServer
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -27,6 +26,10 @@ namespace StockSharp.Hydra.HydraServer
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f.htm")]
+	[TaskIcon("hydra_server_logo.png")]
+	[TaskCategory(TaskCategories.History | TaskCategories.Ticks | TaskCategories.Stock |
+		TaskCategories.Forex | TaskCategories.Free | TaskCategories.MarketDepth | TaskCategories.OrderLog |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class HydraServerTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "S#.Data Server";
@@ -144,19 +147,9 @@ namespace StockSharp.Hydra.HydraServer
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "hydra_server_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes =

@@ -1,20 +1,18 @@
 namespace StockSharp.Hydra.Sterling
 {
-	using System;
-	using System.ComponentModel;
-
-	using Ecng.Xaml;
-
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
 	using StockSharp.Sterling;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/f43591c9-c215-4dee-b297-4b9ed34fd465.htm")]
+	[TaskIcon("sterling_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class SterlingTask : ConnectorHydraTask<SterlingTrader>
 	{
 		private const string _sourceName = "Sterling";
@@ -31,11 +29,6 @@ namespace StockSharp.Hydra.Sterling
 
 		public SterlingTask()
 		{
-		}
-
-		public override Uri Icon
-		{
-			get { return "sterling_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private SterlingSettings _settings;

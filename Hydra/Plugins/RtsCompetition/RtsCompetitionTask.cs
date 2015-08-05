@@ -2,13 +2,11 @@ namespace StockSharp.Hydra.RtsCompetition
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History.Russian.Rts;
@@ -20,11 +18,13 @@ namespace StockSharp.Hydra.RtsCompetition
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2826Key)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/53c15f3a-4320-422d-850a-22ef6c90d76b.htm")]
+	[TaskIcon("rts_competition_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.OrderLog)]
 	class RtsCompetitionTask : BaseHydraTask
 	{
 		private const string _sourceName = "ЛЧИ";
@@ -68,16 +68,6 @@ namespace StockSharp.Hydra.RtsCompetition
 				get { return (bool)ExtensionInfo["IgnoreWeekends"]; }
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
-		}
-
-		public override Uri Icon
-		{
-			get { return "rts_competition_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private RtsCompetitionSettings _settings;

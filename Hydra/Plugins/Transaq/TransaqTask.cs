@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.Transaq
 
 	using Ecng.Collections;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 	using Ecng.Common;
 
 	using StockSharp.Algo.Candles;
@@ -20,11 +19,14 @@ namespace StockSharp.Hydra.Transaq
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/065a9dec-12d0-49d0-be8c-9f9b48f6a899.htm")]
+	[TaskIcon("transaq_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.Transactions | TaskCategories.RealTime |
+		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks | TaskCategories.News)]
 	class TransaqTask : ConnectorHydraTask<TransaqTrader>
 	{
 		private const string _sourceName = "Transaq";
@@ -173,11 +175,6 @@ namespace StockSharp.Hydra.Transaq
 		}
 
 		private TransaqSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "transaq_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

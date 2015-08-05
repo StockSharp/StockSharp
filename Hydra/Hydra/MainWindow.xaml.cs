@@ -11,10 +11,8 @@ namespace StockSharp.Hydra
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
-	using System.Windows.Controls;
 	using System.Windows.Data;
 	using System.Windows.Input;
-	using System.Windows.Media.Imaging;
 	using System.Windows.Threading;
 	using Timer = System.Timers.Timer;
 
@@ -28,7 +26,6 @@ namespace StockSharp.Hydra
 	using Ecng.Serialization;
 	using Ecng.Data;
 	using Ecng.Interop;
-	using Ecng.ComponentModel;
 
 	using StockSharp.Logging;
 	using StockSharp.Algo;
@@ -427,68 +424,10 @@ namespace StockSharp.Hydra
 			Close();
 		}
 
-		private static void InitTaskMenus(ItemsControl mainMenu, ItemsControl contextMenu, IEnumerable<IHydraTask> tasks)
-		{
-			if (tasks == null)
-				return;
-
-			foreach (var task in tasks)
-			{
-				if (mainMenu != null)
-				{
-					mainMenu.Items.Add(new MenuItem
-					{
-						Icon = new Image { MinHeight = 22, Source = new BitmapImage(task.Icon) },
-						Header = task.GetDisplayName(),
-						ToolTip = task.GetDescription(),
-						Command = NewTaskCommand,
-						CommandParameter = task
-					});	
-				}
-
-				contextMenu.Items.Add(new MenuItem
-				{
-					Icon = new Image { MinHeight = 22, Source = new BitmapImage(task.Icon) },
-					Header = task.GetDisplayName(),
-					ToolTip = task.GetDescription(),
-					Command = NewTaskCommand,
-					CommandParameter = task
-				});
-			}
-		}
-
 		private void InitializeGuiEnvironment()
 		{
-			var dict = _availableTasks.Where(t => t.Type == TaskTypes.Source).GroupBy(t =>
-			{
-				var category = t.GetType().GetCategory(TaskCategories.Other);
-
-				switch (category)
-				{
-					case TaskCategories.American:
-						return TaskCategories.American;
-					case TaskCategories.Russian:
-						return TaskCategories.Russian;
-					case TaskCategories.Forex:
-						return TaskCategories.Forex;
-					case TaskCategories.Crypto:
-						return TaskCategories.Crypto;
-					default:
-						return TaskCategories.Other;
-				}
-			}).ToDictionary();
-
-			InitTaskMenus(RussianSourcesMi, RussianSourcesCi, dict.TryGetValue(TaskCategories.Russian));
-			InitTaskMenus(AmericanSourcesMi, AmericanSourcesCi, dict.TryGetValue(TaskCategories.American));
-			InitTaskMenus(ForexSourcesMi, ForexSourcesCi, dict.TryGetValue(TaskCategories.Forex));
-			InitTaskMenus(CryptoSourcesMi, CryptoSourcesCi, dict.TryGetValue(TaskCategories.Crypto));
-			InitTaskMenus(OtherSourcesMi, OtherSourcesCi, dict.TryGetValue(TaskCategories.Other));
-
 			if (CurrentSources.Items.Count > 0)
 				CurrentSources.SelectedIndex = 0;
-
-			InitTaskMenus(null, TasksMenu, _availableTasks.Where(t => t.Type != TaskTypes.Source));
-			//TasksMenu.ItemsSource = _availableTasks.Where(t => t.Type != TaskTypes.Source);
 
 			if (CurrentTools.Items.Count > 0)
 				CurrentTools.SelectedIndex = 0;
@@ -822,27 +761,7 @@ namespace StockSharp.Hydra
 					var task = (IHydraTask)(NavigationBar.SelectedPane == SourcesPane ? CurrentSources.SelectedItem : CurrentTools.SelectedItem);
 
 					if (task != null)
-					{
-						var taskWnd = DockSite.DocumentWindows.FirstOrDefault(w =>
-						{
-							var pw = w as PaneWindow;
-
-							if (pw == null)
-								return false;
-
-							var taskPane = pw.Pane as TaskPane;
-
-							if (taskPane == null)
-								return false;
-
-							return taskPane.Task == task;
-						});
-
-						if (taskWnd != null)
-							taskWnd.Activate();
-						else
-							pane = new TaskPane { Task = task };
-					}
+						pane = EnsureTaskPane(task);
 
 					break;
 
@@ -1138,7 +1057,7 @@ namespace StockSharp.Hydra
 
 			var task = taskPane.Task;
 
-			var lv = task.Type == TaskTypes.Source ? CurrentSources : CurrentTools;
+			var lv = task.IsCategoryOf(TaskCategories.Tool) ? CurrentTools : CurrentSources;
 
 			lv.ScrollIntoView(task);
 			lv.SelectedItem = task;

@@ -1,12 +1,9 @@
 namespace StockSharp.Hydra.BitStamp
 {
-	using System;
-	using System.ComponentModel;
 	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.BitStamp;
 	using StockSharp.Hydra.Core;
@@ -17,8 +14,11 @@ namespace StockSharp.Hydra.BitStamp
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[Category(TaskCategories.Crypto)]
 	[TaskDoc("http://stocksharp.com/doc/html/7a11d9ff-17c9-406b-ab88-c4b9c080912d.htm")]
+	[TaskIcon("bitstamp_logo.png")]
+	[TaskCategory(TaskCategories.Crypto | TaskCategories.RealTime |
+		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
+		TaskCategories.Level1 | TaskCategories.Transactions)]
 	class BitStampTask : ConnectorHydraTask<BitStampTrader>
 	{
 		private const string _sourceName = "BitStamp";
@@ -62,11 +62,6 @@ namespace StockSharp.Hydra.BitStamp
 		}
 
 		private BitStampSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "bitstamp_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

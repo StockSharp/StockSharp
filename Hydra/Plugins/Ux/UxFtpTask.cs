@@ -2,14 +2,12 @@ namespace StockSharp.Hydra.Ux
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History.Russian.Rts;
@@ -21,11 +19,13 @@ namespace StockSharp.Hydra.Ux
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/184da0f9-29db-4397-8497-1ed4c8f7ea0d.htm")]
+	[TaskIcon("ux_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]
 	class UxFtpTask : BaseHydraTask
 	{
 		private const string _sourceName = "UX (FTP)";
@@ -108,19 +108,9 @@ namespace StockSharp.Hydra.Ux
 			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 		}
 
-		public override Uri Icon
-		{
-			get { return "ux_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		protected override TimeSpan OnProcess()

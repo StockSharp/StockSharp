@@ -2,13 +2,11 @@ namespace StockSharp.Hydra.GainCapital
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History;
@@ -22,10 +20,12 @@ namespace StockSharp.Hydra.GainCapital
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/c1863414-25cb-4994-818f-3e4fa511f21b.htm")]
+	[TaskIcon("gain_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
+		TaskCategories.Free | TaskCategories.Level1)]
 	class GainCapitalTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "GainCapital";
@@ -86,19 +86,9 @@ namespace StockSharp.Hydra.GainCapital
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "gain_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage) };

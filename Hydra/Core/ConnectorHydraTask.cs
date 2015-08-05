@@ -40,14 +40,6 @@
 		}
 
 		/// <summary>
-		/// Тип задачи.
-		/// </summary>
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
-		}
-
-		/// <summary>
 		/// Обертка над подключением <see cref="IConnector"/> для получения маркет-данных в реальном времени.
 		/// </summary>
 		public MarketDataConnector<TConnector> Connector { get; private set; }

@@ -34,6 +34,11 @@
 					</para>
 					<code language="C#">
 <![CDATA[
+	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/0da19c49-1f11-455e-bbd5-c20e428e5149.htm")]
+	[TaskIcon("rts_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]
 	class RtsTask : BaseHydraTask
 	{
 		private RtsSettings _settings;
@@ -59,47 +64,9 @@
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "rts_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
-		}
-
-		public override string Description
-		{
-			get { return "Источник получения с биржи ММВБ-РТС рыночных данных c FTP-сервера"; }
-		}
-
-		private Security GetUsdRur(string secId)
-		{
-			var usdRur = EntityRegistry.Securities.ReadById(secId);
-
-			if (usdRur != null)
-				return usdRur;
-
-			usdRur = new Security
-			{
-				Id = secId,
-				Code = "USD/RUR",
-				Name = "Курс USD-RUR",
-				Type = SecurityTypes.Index,
-				ExtensionInfo = new Dictionary<object, object>(),
-				Board = ExchangeBoard.Forts,
-				PriceStep = 0.0001m,
-			};
-
-			SaveSecurity(usdRur);
-
-			return usdRur;
 		}
 	}
 ]]>

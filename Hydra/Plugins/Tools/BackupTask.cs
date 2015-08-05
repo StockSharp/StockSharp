@@ -9,7 +9,6 @@
 	using Amazon;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -22,8 +21,11 @@
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayNameLoc(LocalizedStrings.BackupKey)]
+	[DescriptionLoc(LocalizedStrings.BackupDescriptionKey)]
 	// TODO
 	//[TaskDoc("")]
+	[TaskIcon("backup_logo.png")]
+	[TaskCategory(TaskCategories.Tool)]
 	class BackupTask : BaseHydraTask
     {
 		private enum BackupServices
@@ -111,16 +113,6 @@
 				get { return ExtensionInfo["Offset"].To<int>(); }
 				set { ExtensionInfo["Offset"] = value; }
 			}
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Tool; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "backup_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private BackupSettings _settings;

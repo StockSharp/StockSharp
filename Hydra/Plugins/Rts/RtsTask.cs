@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.Rts
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 	using Ecng.Collections;
 
 	using StockSharp.Algo;
@@ -21,11 +20,13 @@ namespace StockSharp.Hydra.Rts
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2822Key)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/0da19c49-1f11-455e-bbd5-c20e428e5149.htm")]
+	[TaskIcon("rts_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]
 	class RtsTask : BaseHydraTask
 	{
 		private const string _sourceName = "RTS";
@@ -167,19 +168,9 @@ namespace StockSharp.Hydra.Rts
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "rts_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		protected override TimeSpan OnProcess()

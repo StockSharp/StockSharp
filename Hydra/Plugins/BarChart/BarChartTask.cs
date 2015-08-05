@@ -7,7 +7,6 @@ namespace StockSharp.Hydra.BarChart
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -20,11 +19,14 @@ namespace StockSharp.Hydra.BarChart
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	// TODO
 	//[TaskDoc("")]
+	[TaskIcon("barchart_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.History |
+		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.MarketDepth |
+		TaskCategories.Stock | TaskCategories.Level1 | TaskCategories.Candles)]
 	class BarChartTask : ConnectorHydraTask<BarChartTrader>
 	{
 		private const string _sourceName = "BarChart";
@@ -117,11 +119,6 @@ namespace StockSharp.Hydra.BarChart
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
 			}).ToArray();
-		}
-
-		public override Uri Icon
-		{
-			get { return "barchart_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(MarketDepth), typeof(Level1ChangeMessage) };

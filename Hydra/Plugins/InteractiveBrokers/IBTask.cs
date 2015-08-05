@@ -1,13 +1,11 @@
 namespace StockSharp.Hydra.InteractiveBrokers
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Net;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
@@ -17,10 +15,13 @@ namespace StockSharp.Hydra.InteractiveBrokers
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/bcb8050d-d330-4071-affc-b6ed5639e1fb.htm")]
+	[TaskIcon("ib_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class IBTask : ConnectorHydraTask<IBTrader>
 	{
 		private const string _sourceName = "Interactive Brokers";
@@ -84,11 +85,6 @@ namespace StockSharp.Hydra.InteractiveBrokers
 		}
 
 		private IBSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "ib_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

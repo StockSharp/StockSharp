@@ -22,7 +22,7 @@ namespace StockSharp.Hydra.Core
 	}
 
 	/// <summary>
-	/// Документация плагина.
+	/// Документация задачи.
 	/// </summary>
 	public class TaskDocAttribute : Attribute
 	{
@@ -41,6 +41,29 @@ namespace StockSharp.Hydra.Core
 				throw new ArgumentNullException("docUrl");
 
 			DocUrl = docUrl;
+		}
+	}
+
+	/// <summary>
+	/// Иконка задачи.
+	/// </summary>
+	public class TaskIconAttribute : Attribute
+	{
+		/// <summary>
+		/// Иконка.
+		/// </summary>
+		public string Icon { get; private set; }
+
+		/// <summary>
+		/// Создать <see cref="TaskIconAttribute"/>.
+		/// </summary>
+		/// <param name="icon">Иконка.</param>
+		public TaskIconAttribute(string icon)
+		{
+			if (icon.IsEmpty())
+				throw new ArgumentNullException("icon");
+
+			Icon = icon;
 		}
 	}
 }

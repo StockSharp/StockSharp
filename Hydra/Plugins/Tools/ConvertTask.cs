@@ -7,7 +7,6 @@ namespace StockSharp.Hydra.Tools
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -23,6 +22,8 @@ namespace StockSharp.Hydra.Tools
 	[DisplayNameLoc(LocalizedStrings.Str3131Key)]
 	[DescriptionLoc(LocalizedStrings.Str3785Key)]
 	[TaskDoc("http://stocksharp.com/doc/html/272eef99-c7e4-4245-ae83-7efa4d2345bc.htm")]
+	[TaskIcon("convert_logo.png")]
+	[TaskCategory(TaskCategories.Tool)]
 	class ConvertTask : BaseHydraTask
 	{
 		private enum ConvertModes
@@ -150,16 +151,6 @@ namespace StockSharp.Hydra.Tools
 				clone.CandleSettings = CandleSettings.Clone();
 				return clone;
 			}
-		}
-
-		public override Uri Icon
-		{
-			get { return "convert_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Tool; }
 		}
 
 		private ConvertTaskSettings _settings;

@@ -2,14 +2,12 @@ namespace StockSharp.Hydra.MBTrading
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History;
@@ -23,10 +21,12 @@ namespace StockSharp.Hydra.MBTrading
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/c3a78005-7d5d-49e6-8460-66c02109abd5.htm")]
+	[TaskIcon("mbtrading_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
+		TaskCategories.Free | TaskCategories.Level1)]
 	class MBTradingTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "MBTrading";
@@ -120,19 +120,9 @@ namespace StockSharp.Hydra.MBTrading
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "mbtrading_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage) };

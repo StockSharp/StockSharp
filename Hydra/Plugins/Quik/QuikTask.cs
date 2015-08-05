@@ -10,7 +10,6 @@ namespace StockSharp.Hydra.Quik
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
@@ -21,11 +20,14 @@ namespace StockSharp.Hydra.Quik
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/54a1e95e-ea39-4322-9613-e74859a3a596.htm")]
+	[TaskIcon("quik_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime |
+		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
+		TaskCategories.Transactions | TaskCategories.Free | TaskCategories.Ticks)]
 	class QuikTask : ConnectorHydraTask<QuikTrader>
 	{
 		private const string _sourceName = "Quik";
@@ -315,11 +317,6 @@ namespace StockSharp.Hydra.Quik
 		}
 
 		private QuikSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "quik_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

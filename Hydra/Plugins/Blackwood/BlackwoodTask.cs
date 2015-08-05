@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.Blackwood
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Blackwood;
@@ -19,10 +18,13 @@ namespace StockSharp.Hydra.Blackwood
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/89a8b34c-63cf-4623-bbb7-90251d53e8e6.htm")]
+	[TaskIcon("bw_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
+		TaskCategories.Free | TaskCategories.Ticks |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class BlackwoodTask : ConnectorHydraTask<BlackwoodTrader>
 	{
 		private const string _sourceName = "Fusion/Blackwood";
@@ -94,11 +96,6 @@ namespace StockSharp.Hydra.Blackwood
 		}
 
 		private BlackwoodSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "bw_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

@@ -6,7 +6,6 @@ namespace StockSharp.Hydra.Rss
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -19,6 +18,8 @@ namespace StockSharp.Hydra.Rss
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.RssSourceKey)]
 	[TaskDoc("http://stocksharp.com/doc/html/91454878-ec26-4872-9a85-1bfbc76dc77a.htm")]
+	[TaskIcon("rss_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.Russia | TaskCategories.News)]
 	class RssTask : ConnectorHydraTask<RssTrader>
 	{
 		private const string _sourceName = "RSS";
@@ -69,11 +70,6 @@ namespace StockSharp.Hydra.Rss
 		}
 
 		private RssSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "rss_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{

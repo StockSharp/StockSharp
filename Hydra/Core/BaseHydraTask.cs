@@ -52,11 +52,6 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
-		/// Тип задачи.
-		/// </summary>
-		public abstract TaskTypes Type { get; }
-
-		/// <summary>
 		/// Название источника (для различия в лог файлах).
 		/// </summary>
 		public override string Name
@@ -81,7 +76,10 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Адрес иконки, для визуального обозначения.
 		/// </summary>
-		public abstract Uri Icon { get; }
+		public Uri Icon
+		{
+			get { return GetType().GetIcon(); }
+		}
 
 		/// <summary>
 		/// Хранилище торговых объектов.

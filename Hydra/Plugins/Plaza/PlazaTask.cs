@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.Plaza
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using MoreLinq;
 
@@ -22,11 +21,14 @@ namespace StockSharp.Hydra.Plaza
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
 	[TaskDoc("http://stocksharp.com/doc/html/53930a42-ae5a-45fc-b9cf-8295584bf8fc.htm")]
+	[TaskIcon("plaza_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Stock |
+		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Transactions |
+		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog)]
 	class PlazaTask : ConnectorHydraTask<PlazaTrader>
 	{
 		private const string _sourceName = "Plaza";
@@ -242,11 +244,6 @@ namespace StockSharp.Hydra.Plaza
 			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.AnonymousOrdersLog);
 
 			return connector;
-		}
-
-		public override Uri Icon
-		{
-			get { return "plaza_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		public override HydraTaskSettings Settings

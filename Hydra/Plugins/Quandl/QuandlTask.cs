@@ -2,14 +2,12 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Security;
 	using System.IO;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
@@ -21,10 +19,12 @@
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/bb5fedcc-9226-448e-8bb9-42969fba227e.htm")]
+	[TaskIcon("quandl_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.History | TaskCategories.Forex |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Candles)]
 	class QuandlTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "Quandl";
@@ -101,19 +101,9 @@
 			}).ToArray();
 		}
 
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "quandl_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;

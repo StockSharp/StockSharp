@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.Rithmic
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -17,10 +16,13 @@ namespace StockSharp.Hydra.Rithmic
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/26ff0aad-623b-47e2-a8f8-a337506cd2ff.htm")]
+	[TaskIcon("rithmic_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
+		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class RithmicTask : ConnectorHydraTask<RithmicTrader>
 	{
 		private const string _sourceName = "Rithmic";
@@ -112,11 +114,6 @@ namespace StockSharp.Hydra.Rithmic
 		}
 
 		private RithmicSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "rithmic_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

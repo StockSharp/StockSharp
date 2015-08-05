@@ -4,7 +4,6 @@ namespace StockSharp.Hydra.Fix
 	using System.ComponentModel;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 	using Ecng.Serialization;
 
 	using StockSharp.Fix;
@@ -16,6 +15,10 @@ namespace StockSharp.Hydra.Fix
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/e81b1b7f-5c96-488e-a90d-e60cb8675977.htm")]
+	[TaskIcon("fix_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.Russia | TaskCategories.RealTime |
+		TaskCategories.Stock | TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog |
+		TaskCategories.Forex | TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class FixTask : ConnectorHydraTask<FixTrader>
 	{
 		private const string _sourceName = "FIX";
@@ -73,11 +76,6 @@ namespace StockSharp.Hydra.Fix
 		}
 
 		private FixSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "fix_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

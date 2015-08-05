@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.OpenECry
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -8,7 +7,6 @@ namespace StockSharp.Hydra.OpenECry
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
@@ -19,10 +17,13 @@ namespace StockSharp.Hydra.OpenECry
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TaskDoc("http://stocksharp.com/doc/html/4d84a1e0-fe23-4b14-8323-c5f68f117cc7.htm")]
+	[TaskIcon("oec_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
+		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth | TaskCategories.Forex |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class OECTask : ConnectorHydraTask<OECTrader>
 	{
 		private const string _sourceName = "OpenECry";
@@ -94,11 +95,6 @@ namespace StockSharp.Hydra.OpenECry
 		}
 
 		private OECSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "oec_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override HydraTaskSettings Settings
 		{
