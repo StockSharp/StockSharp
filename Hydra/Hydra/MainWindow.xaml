@@ -449,9 +449,9 @@
 
 			<DockPanel DockPanel.Dock="Top">
 				<ToolBar ToolBarTray.IsLocked="True">
-					<ToggleButton x:Name="StartStop" Click="StartStopClick" Width="100" Height="29"  Margin="3,0,2,0" Content="{x:Static loc:LocalizedStrings.Str2421}" Style="{StaticResource ToggleButtonStyle}"/>
+					<ToggleButton x:Name="StartStop" Click="StartStopClick" Width="100" Height="29" Margin="3,0,2,0" Content="{x:Static loc:LocalizedStrings.Str2421}" Style="{StaticResource ToggleButtonStyle}"/>
 
-					<xctk:DropDownButton x:Name="Logs" Width="100" Height="30"  Margin="0,0,2,0" VerticalAlignment="Bottom">
+					<xctk:DropDownButton x:Name="Logs" Width="100" Height="28" Margin="0,2,0,0">
 						<xctk:DropDownButton.DropDownContent>
 							<Menu Name="LogsMenu">
 								<Menu.ItemsPanel>
@@ -474,7 +474,7 @@
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
 							<ex:BmpImage x:Name="WarnErrorImg" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/warning_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
 							<ex:BmpImage x:Name="LogErrorImg" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/error_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
-							<Label VerticalContentAlignment="Top"><TextBlock Text="{x:Static loc:LocalizedStrings.Str3237}"/></Label>
+							<TextBlock Text="{x:Static loc:LocalizedStrings.Str3237}"/>
 						</StackPanel>
 					</xctk:DropDownButton>
 				</ToolBar>
