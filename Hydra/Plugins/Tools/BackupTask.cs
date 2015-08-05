@@ -67,8 +67,8 @@
 			}
 
 			[CategoryLoc(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.Str3131Key)]
-			[DescriptionLoc(LocalizedStrings.Str3131Key, true)]
+			[DisplayNameLoc(LocalizedStrings.Str1405Key)]
+			[DescriptionLoc(LocalizedStrings.Str1405Key, true)]
 			[PropertyOrder(2)]
 			public string ServiceRepo
 			{
