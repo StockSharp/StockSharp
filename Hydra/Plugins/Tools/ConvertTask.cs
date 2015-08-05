@@ -45,7 +45,10 @@ namespace StockSharp.Hydra.Tools
 		}
 
 		[TaskSettingsDisplayName(_sourceName)]
-		//[CategoryOrder(_sourceName, 0)]
+		[CategoryOrderLoc(_sourceName, 0)]
+		[CategoryOrderLoc(LocalizedStrings.CandlesKey, 1)]
+		[CategoryOrderLoc(LocalizedStrings.MarketDepthsKey, 2)]
+		[CategoryOrderLoc(LocalizedStrings.GeneralKey, 3)]
 		private sealed class ConvertTaskSettings : HydraTaskSettings
 		{
 			private const string _sourceName = LocalizedStrings.Str3131Key;
@@ -128,7 +131,7 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["MarketDepthMaxDepth"] = value; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3783Key)]
 			[DescriptionLoc(LocalizedStrings.Str3784Key)]
 			[PropertyOrder(2)]

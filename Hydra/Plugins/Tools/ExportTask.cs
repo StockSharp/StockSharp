@@ -32,6 +32,11 @@ namespace StockSharp.Hydra.Tools
 	class ExportTask : BaseHydraTask
 	{
 		[TaskSettingsDisplayName(LocalizedStrings.Str3754Key)]
+		[CategoryOrderLoc(LocalizedStrings.Str3754Key, 0)]
+		[CategoryOrderLoc(LocalizedStrings.CandlesKey, 1)]
+		[CategoryOrder("CSV", 2)]
+		[CategoryOrderLoc(LocalizedStrings.Str3755Key, 3)]
+		[CategoryOrderLoc(LocalizedStrings.GeneralKey, 4)]
 		private sealed class ExportSettings : HydraTaskSettings
 		{
 			public ExportSettings(HydraTaskSettings settings)

@@ -35,6 +35,8 @@
 		}
 
 		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrderLoc(_sourceName, 0)]
+		[CategoryOrderLoc(LocalizedStrings.GeneralKey, 1)]
 		private sealed class BackupSettings : HydraTaskSettings
 		{
 			private const string _sourceName = LocalizedStrings.BackupKey;
