@@ -1,5 +1,13 @@
 StockSharp API Change log
 ========================
+###v4.3.9:
+* (bug) RecoveryFactorParameter fix.
+* (bug) OrderLogMarketDepthBuilder fix.
+* (feature) Algo.Storages.Backup - clients for cloud storage backup services.
+* (feature) FIX connector. More level1 fields support.
+* (feature) LicenseHelper.LicenseError
+* (feature) Connector. Not track ticks option.
+
 ###v4.3.8:
 * (feature) ITCH connector.
 * (bug) FIX connector and FixServer. Many fixes.

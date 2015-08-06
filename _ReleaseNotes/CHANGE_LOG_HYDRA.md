@@ -1,5 +1,16 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.9:
+* (feature) Backup plugin (Amazon S3 cloud storage)
+* (feature) Txt/csv export preview window.
+* (feature) Edit txt/csv export templates.
+* (feature) Task categories. Filterable task creation.
+* (bug) Fix txt/csv level1 export.
+* (bug) Fix sync directories.
+* (bug) Task settings serialization fix.
+* (feature) Help buttons.
+* (bug) Fix time bounds log.
+
 ###v4.3.8:
 * (feature) BarChart (history mode).
 * (bug) Excel export boost.

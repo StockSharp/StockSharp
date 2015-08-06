@@ -1,118 +1,118 @@
 <?xml version="1.0"?>
 <doc>
-  <assembly>
-    <name>StockSharp.ITCH</name>
-  </assembly>
-  <members>
-    <member name="T:StockSharp.ITCH.ITCHMessageAdapter">
-      <summary>
+    <assembly>
+        <name>StockSharp.ITCH</name>
+    </assembly>
+    <members>
+        <member name="T:StockSharp.ITCH.ITCHMessageAdapter">
+            <summary>
             Маркет-дата адаптер сообщений для ITCH.
             </summary>
-    </member>
-    <member name="M:StockSharp.ITCH.ITCHMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Создать <see cref="T:StockSharp.ITCH.ITCHMessageAdapter" />.
+        </member>
+        <member name="M:StockSharp.ITCH.ITCHMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+            <summary>
+            Создать <see cref="T:StockSharp.ITCH.ITCHMessageAdapter"/>.
             </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.ITCH.ITCHMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
+            <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ITCHMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+            <summary>
             Отправить сообщение.
             </summary>
-      <param name="message">Сообщение.</param>
-    </member>
-    <member name="M:StockSharp.ITCH.ITCHMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
+            <param name="message">Сообщение.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ITCHMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+            <summary>
             Сохранить настройки.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.ITCH.ITCHMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ITCHMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+            <summary>
             Загрузить настройки.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.ITCH.ITCHMessageAdapter.ToString">
-      <summary>
+            <param name="storage">Хранилище настроек.</param>
+        </member>
+        <member name="M:StockSharp.ITCH.ITCHMessageAdapter.ToString">
+            <summary>
             Получить строковое представление контейнера.
             </summary>
-      <returns>Строковое представление.</returns>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.PrimaryAddress">
-      <summary>
+            <returns>Строковое представление.</returns>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHMessageAdapter.PrimaryAddress">
+            <summary>
             Основной адрес сервера.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.DuplicateAddress">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHMessageAdapter.DuplicateAddress">
+            <summary>
             Дублирующий адрес сервера.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.RecoveryAddress">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHMessageAdapter.RecoveryAddress">
+            <summary>
             Адрес сервера восстановления состояния.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.ReplayAddress">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHMessageAdapter.ReplayAddress">
+            <summary>
             Адрес сервера проигрывания данных.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.Login">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHMessageAdapter.Login">
+            <summary>
             Логин.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.Password">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHMessageAdapter.Password">
+            <summary>
             Пароль.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHMessageAdapter.IsValid">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHMessageAdapter.IsValid">
+            <summary>
             Проверить введенные параметры на валидность.
             </summary>
-    </member>
-    <member name="T:StockSharp.ITCH.ITCHTrader">
-      <summary>
-            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с протоколом ITCH (LSE и NASDAQ).
+        </member>
+        <member name="T:StockSharp.ITCH.ITCHTrader">
+            <summary>
+            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector"/> для взаимодействия с протоколом ITCH (LSE и NASDAQ).
             </summary>
-    </member>
-    <member name="M:StockSharp.ITCH.ITCHTrader.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.ITCH.ITCHTrader" />.
+        </member>
+        <member name="M:StockSharp.ITCH.ITCHTrader.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.ITCH.ITCHTrader"/>.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHTrader.Login">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHTrader.Login">
+            <summary>
             Логин.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHTrader.Password">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHTrader.Password">
+            <summary>
             Пароль.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHTrader.PrimaryAddress">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHTrader.PrimaryAddress">
+            <summary>
             Основной адрес сервера.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHTrader.DuplicateAddress">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHTrader.DuplicateAddress">
+            <summary>
             Дублирующий адрес сервера.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHTrader.RecoveryAddress">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHTrader.RecoveryAddress">
+            <summary>
             Адрес сервера восстановления состояния.
             </summary>
-    </member>
-    <member name="P:StockSharp.ITCH.ITCHTrader.ReplayAddress">
-      <summary>
+        </member>
+        <member name="P:StockSharp.ITCH.ITCHTrader.ReplayAddress">
+            <summary>
             Адрес сервера проигрывания данных.
             </summary>
-    </member>
-  </members>
+        </member>
+    </members>
 </doc>
