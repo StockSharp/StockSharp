@@ -28,7 +28,7 @@
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<Button x:Name="ImportBtn" Grid.Column="0" Click="ImportBtn_OnClick" Width="100"><TextBlock Text="{x:Static loc:LocalizedStrings.Import}"/></Button>
+			<Button x:Name="ImportBtn" Grid.Column="0" Click="ImportBtn_OnClick" Width="100"><TextBlock x:Name="ImportBtnText" Text="{x:Static loc:LocalizedStrings.Import}"/></Button>
 			<ProgressBar Grid.Column="2" x:Name="ProgressBar" />
 
 			<Button x:Name="Help" Grid.Column="4" Click="Help_OnClick" Width="75">

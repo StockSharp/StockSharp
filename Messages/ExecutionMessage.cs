@@ -134,7 +134,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
-		[DescriptionLoc(LocalizedStrings.OrderIdStringKey, true)]
+		[DescriptionLoc(LocalizedStrings.OrderIdKey, true)]
 		[MainCategory]
 		[Nullable]
 		public long? OrderId { get; set; }

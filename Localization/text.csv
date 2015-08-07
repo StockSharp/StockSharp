@@ -2638,7 +2638,7 @@ Str2842;CSV import settings;Настройки импорта из CSV
 Str2843;Full path to CSV file.;Полный путь к CSV файлу.
 Str2844;Column separator;Разделитель колонок
 Str2845;Column separator. Tabulation is denoted by TAB.;Разделитель колонок. Табуляция обозначается TAB.
-Str2846;Offset from beginning;Отступ с начала
+Str2846;Skip lines;Отступ с начала
 Str2847;Number of lines to be skipped from the beginning of the file (if they contain meta information).;Количество строчек, которые нужно пропустить с начала файла (если они несут мета информацию).
 Str2848;Format of storage, where data needs to be imported.;Формат хранилища, в которое необходимо импортировать данные.
 Str2849;Imported candels parameters.;Параметры импортируемых свечек.
@@ -2657,7 +2657,7 @@ Str2863;news;новостей
 Str2864;Import;Импорт
 Str2865;File path not specified.;Путь к файлу не указан.
 Str2866Params;File {0} does not exist.;Файл {0} не существует.
-Str2867Params;Field {0} is obligatory. It must be given a default value or an ordinal number.;Поле {0} является обязательным. Для него необходимо задать или значение по-умолчанию, или порядковый номер.
+Str2867Params;Field {0} is required. It must be given a default value or an ordinal number.;Поле {0} является обязательным. Для него необходимо задать или значение по-умолчанию, или порядковый номер.
 Str2868Params;Field {0} is an enumeration. You have to set up corresponding values for it.;Поле {0} является перечисление. Для него необходимо задать значения соответствий.
 Str2869Params;Field '{0}' has index {1}, which is greater than length {2} of values array.;Поле '{0}' имеет индекс {1}, которое больше длины {2} массива значений.
 Str2870Params;Import '{0}' of type '{1}'.;Импорт '{0}' типа '{1}'.
@@ -4153,3 +4153,4 @@ TemplateOrderLog;Order log template;Шаблон лога заявок
 TemplateTransaction;Transactions template;Шаблон транзакций
 TemplateSecurity;Security template;Шаблон инструментов
 TemplateNews;News template;Шаблон новостей
+CsvImportError;Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.;Ошибка парсинга. Строка {0}, колонка {1}, значение в файле '{2}', поле {3}.

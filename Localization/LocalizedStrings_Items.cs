@@ -34245,12 +34245,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Offset from beginning
+		/// Skip lines
 		/// </summary>
 		public const string Str2846Key = "Str2846";
 
 		/// <summary>
-		/// Offset from beginning
+		/// Skip lines
 		/// </summary>
 		public static string Str2846
 		{
@@ -34492,12 +34492,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Field {0} is obligatory. It must be given a default value or an ordinal number.
+		/// Field {0} is required. It must be given a default value or an ordinal number.
 		/// </summary>
 		public const string Str2867ParamsKey = "Str2867Params";
 
 		/// <summary>
-		/// Field {0} is obligatory. It must be given a default value or an ordinal number.
+		/// Field {0} is required. It must be given a default value or an ordinal number.
 		/// </summary>
 		public static string Str2867Params
 		{
@@ -53628,6 +53628,19 @@ namespace StockSharp.Localization
 		public static string TemplateNews
 		{
 			get { return GetString(TemplateNewsKey); }
+		}
+
+		/// <summary>
+		/// Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.
+		/// </summary>
+		public const string CsvImportErrorKey = "CsvImportError";
+
+		/// <summary>
+		/// Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.
+		/// </summary>
+		public static string CsvImportError
+		{
+			get { return GetString(CsvImportErrorKey); }
 		}
 	}
 }
