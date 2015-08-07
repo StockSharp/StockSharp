@@ -229,6 +229,24 @@ namespace StockSharp.Algo.Storages
 					if (oi != null)
 						writer.WriteVolume(oi.Value, metaInfo, SecurityId);
 				}
+
+				if (metaInfo.Version < MarketDataVersions.Version52)
+					continue;
+
+				writer.Write(candle.DownTicks != null);
+
+				if (candle.DownTicks != null)
+					writer.WriteInt(candle.DownTicks.Value);
+
+				writer.Write(candle.UpTicks != null);
+
+				if (candle.UpTicks != null)
+					writer.WriteInt(candle.UpTicks.Value);
+
+				writer.Write(candle.TotalTicks != null);
+
+				if (candle.TotalTicks != null)
+					writer.WriteInt(candle.TotalTicks.Value);
 			}
 		}
 
@@ -314,6 +332,13 @@ namespace StockSharp.Algo.Storages
 			{
 				if (metaInfo.Version < MarketDataVersions.Version48 || reader.Read())
 					candle.OpenInterest = reader.ReadVolume(metaInfo);
+			}
+
+			if (metaInfo.Version >= MarketDataVersions.Version52)
+			{
+				candle.DownTicks = reader.Read() ? reader.ReadInt() : (int?)null;
+				candle.UpTicks = reader.Read() ? reader.ReadInt() : (int?)null;
+				candle.TotalTicks = reader.Read() ? reader.ReadInt() : (int?)null;
 			}
 
 			return candle;
