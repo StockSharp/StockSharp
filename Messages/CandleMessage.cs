@@ -154,7 +154,7 @@ namespace StockSharp.Messages
 		/// Относительный объем.
 		/// </summary>
 		[DataMember]
-		public decimal RelativeVolume { get; set; }
+		public decimal? RelativeVolume { get; set; }
 
 		/// <summary>
 		/// Суммарный объем.
@@ -261,6 +261,7 @@ namespace StockSharp.Messages
 			copy.OpenVolume = OpenVolume;
 			copy.SecurityId = SecurityId;
 			copy.TotalVolume = TotalVolume;
+			copy.RelativeVolume = RelativeVolume;
 			copy.OriginalTransactionId = OriginalTransactionId;
 			copy.DownTicks = DownTicks;
 			copy.UpTicks = UpTicks;

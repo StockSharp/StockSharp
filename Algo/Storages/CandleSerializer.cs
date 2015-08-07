@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException("arg");
 
 			_arg = arg;
-			Version = MarketDataVersions.Version51;
+			Version = MarketDataVersions.Version52;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<TCandleMessage> candles, CandleMetaInfo metaInfo)
@@ -92,7 +92,16 @@ namespace StockSharp.Algo.Storages
 			foreach (var candle in candles)
 			{
 				writer.WriteVolume(candle.TotalVolume, metaInfo, SecurityId);
-				writer.WriteVolume(candle.RelativeVolume, metaInfo, SecurityId);
+
+				if (metaInfo.Version < MarketDataVersions.Version52)
+					writer.WriteVolume(candle.RelativeVolume ?? 0, metaInfo, SecurityId);
+				else
+				{
+					writer.Write(candle.RelativeVolume != null);
+
+					if (candle.RelativeVolume != null)
+						writer.WriteVolume(candle.RelativeVolume.Value, metaInfo, SecurityId);
+				}
 
 				writer.WritePrice(candle.LowPrice, metaInfo.LastPrice, metaInfo, SecurityId);
 				metaInfo.LastPrice = candle.LowPrice;
@@ -232,7 +241,7 @@ namespace StockSharp.Algo.Storages
 			{
 				SecurityId = SecurityId,
 				TotalVolume = reader.ReadVolume(metaInfo),
-				RelativeVolume = reader.ReadVolume(metaInfo),
+				RelativeVolume = metaInfo.Version < MarketDataVersions.Version52 || !reader.Read() ? (decimal?)null : reader.ReadVolume(metaInfo),
 				LowPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo),
 				Arg = _arg
 			};

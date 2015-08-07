@@ -254,13 +254,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private decimal _relativeVolume;
+		private decimal? _relativeVolume;
 
 		/// <summary>
 		/// Относительный объем.
 		/// </summary>
 		[DataMember]
-		public decimal RelativeVolume
+		public decimal? RelativeVolume
 		{
 			get { return _relativeVolume; }
 			set
