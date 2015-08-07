@@ -35,53 +35,6 @@
 		  				<mediaLink><image placement="center" xlink:href="hydra_setup4" /></mediaLink>
 				  </content>
 			  </step>			  
-			  <step>
-				  <content>
-					  <para>
-						  В случае успешной установки при первом запуске будет показано окно:
-					  </para>
-					  <mediaLink>
-						  <image placement="center" xlink:href="hydra_main_first" />
-					  </mediaLink>
-					  <alert class="note">
-						  <para><token>hydra</token> должна запускаться с правами администратора.</para>
-		  			  </alert>					  
-					  <para>По умолчанию, <token>hydra</token> запускается со всеми возможными источниками данных. 
-					  Ненужные источники можно удалить, а также создать несколько однотипных источников(некоторые источники можно создать только один раз).</para>
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-					  <para>Включение/выключение источника производится через кнопку <mediaLinkInline><image xlink:href="hydra_source_on_off"/></mediaLinkInline> у соответствующего источника.</para>
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-					  <para>Следующий шаг - <link xlink:href="f005431b-3a1b-49c2-a389-f1d4e9756f45">настроить источники</link>.</para>
-				  </content>
-			  </step>
-		  	  <step>
-				  <content>
-					  <para>Нажать кнопку "Источник" и выбрать необходимый источник в левой панели.</para>
-				  </content>
-			  </step>			  
-			  <step>
-				  <content>
-					  <para>Затем <link xlink:href="b5641d6c-cc5c-4692-a5c8-87742590a0a9">найти инструменты</link> и добавить в источник необходимые инструменты.</para>
-				  </content>
-			  </step>
-			  <step>
-				  <content>
-					  <para>
-						  Когда все настройки будут применены и инструменты выбраны, то на главном окне можно нажать кнопку <legacyBold>Старт</legacyBold>. Это
-						  запустит активные источники и они начнут качать данные. Процесс работы регистрируется в лог файлы, которые создаются в локальной директории. 
-						  Так же логирование работы можно наблюдать в окне внизу главного окна.
-					  </para>
-					  <mediaLink>
-						  <image placement="center" xlink:href="hydra_main_start" />
-					  </mediaLink>					  
-			      </content>
-			  </step>			  
 		  </steps>
 	</introduction>
   </developerConceptualDocument>

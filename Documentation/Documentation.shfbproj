@@ -149,6 +149,12 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraNetworkSettings.aml" />
+    <None Include="Topics\HydraSynchronizeData.aml" />
+    <None Include="Topics\HydraRemoveData.aml" />
+    <None Include="Topics\HydraResetSettings.aml" />
+    <None Include="Topics\HydraFirstLaunch.aml" />
+    <None Include="Topics\MicexSample.aml" />
     <None Include="Topics\GUICharting.aml" />
     <None Include="Topics\Messages_networking.aml" />
     <None Include="Topics\Messages_storage.aml" />
@@ -1394,6 +1400,18 @@
     <Image Include="Art\option_volsmile.png">
       <ImageId>option_volsmile</ImageId>
       <AlternateText>option volsmile</AlternateText>
+    </Image>
+    <Image Include="Art\MicexSample.png">
+      <ImageId>MicexSample</ImageId>
+      <AlternateText>Micex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\MicexSampleSecirities.png">
+      <ImageId>MicexSampleSecirities</ImageId>
+      <AlternateText>Micex Sample Secirities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_source_first.png">
+      <ImageId>hydra_source_first</ImageId>
+      <AlternateText>hydra source first</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
