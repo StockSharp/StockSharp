@@ -299,13 +299,13 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public abstract object Arg { get; set; }
 
-		private int _totalTicks;
+		private int? _totalTicks;
 
 		/// <summary>
 		/// Количество тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int TotalTicks
+		public int? TotalTicks
 		{
 			get { return _totalTicks; }
 			set
@@ -315,13 +315,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private int _upTicks;
+		private int? _upTicks;
 
 		/// <summary>
 		/// Количество восходящих тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int UpTicks
+		public int? UpTicks
 		{
 			get { return _upTicks; }
 			set
@@ -331,13 +331,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private int _downTicks;
+		private int? _downTicks;
 
 		/// <summary>
 		/// Количество нисходящих тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int DownTicks
+		public int? DownTicks
 		{
 			get { return _downTicks; }
 			set
