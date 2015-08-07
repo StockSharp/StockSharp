@@ -440,18 +440,18 @@ namespace StockSharp.Hydra
 
 					Tasks.AddRange(tasks);
 
-					var last = tasks.FirstOrDefault();
+					var first = tasks.FirstOrDefault();
 
-					if (last != null)
+					if (first != null)
 					{
-						var isTool = last.IsCategoryOf(TaskCategories.Tool);
+						var isTool = first.IsCategoryOf(TaskCategories.Tool);
 
 						NavigationBar.SelectedIndex = isTool ? 1 : 0;
 
 						var listView = isTool ? CurrentTools : CurrentSources;
 
-						listView.SelectedItem = last;
-						listView.ScrollIntoView(last);
+						listView.SelectedItem = first;
+						listView.ScrollIntoView(first);
 
 						foreach (var task in tasks)
 						{

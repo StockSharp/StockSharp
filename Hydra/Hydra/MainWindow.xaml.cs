@@ -303,7 +303,8 @@ namespace StockSharp.Hydra
 					if (toolsWnd.ShowModal(this))
 						newTasks.AddRange(toolsWnd.SelectedTasks);
 
-					AddTasks(newTasks);
+					if (newTasks.Any())
+						AddTasks(newTasks);
 				}
 			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}
