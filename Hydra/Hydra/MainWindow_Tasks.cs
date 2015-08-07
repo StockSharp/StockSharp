@@ -33,7 +33,7 @@ namespace StockSharp.Hydra
 
 	partial class MainWindow
 	{
-		sealed class LanguageSorter : IComparer
+		private sealed class LanguageSorter : IComparer
 		{
 			private readonly Languages _language;
 
@@ -69,14 +69,9 @@ namespace StockSharp.Hydra
 			}
 		}
 
-		//public static RoutedCommand NewTaskCommand = new RoutedCommand();
-
-		public static RoutedCommand TaskEnabledChangedCommand = new RoutedCommand();
-
-		public static RoutedCommand RemoveTaskCommand = new RoutedCommand();
-		public static RoutedCommand EditTaskSettingsCommand = new RoutedCommand();
-		//public static RoutedCommand EditConverterSettingsCommand = new RoutedCommand();
-
+		public readonly static RoutedCommand TaskEnabledChangedCommand = new RoutedCommand();
+		public readonly static RoutedCommand RemoveTaskCommand = new RoutedCommand();
+		public readonly static RoutedCommand EditTaskSettingsCommand = new RoutedCommand();
 		public readonly static RoutedCommand AddSourcesCommand = new RoutedCommand();
 		public readonly static RoutedCommand AddToolsCommand = new RoutedCommand();
 
@@ -118,13 +113,6 @@ namespace StockSharp.Hydra
 						.GetTypes()
 						.Where(t => typeof(IHydraTask).IsAssignableFrom(t) && !t.IsAbstract)
 						.ToArray());
-
-					//foreach (var t in _availableTasks)
-					//{
-					//	var task = t;
-					//	GuiDispatcher.GlobalDispatcher.AddSyncAction(() => BusyIndicator.BusyContent = LocalizedStrings.Str2898.Put(task.GetDisplayName()));
-					//	_availableTasks.Add(task);
-					//}
 				}
 				catch (Exception ex)
 				{
@@ -179,21 +167,6 @@ namespace StockSharp.Hydra
 					}
 				}
 			}
-
-			//if (tasks.Count != 0)
-			//	return tasks;
-
-			//foreach (var task in _availableTasks)
-			//{
-			//	try
-			//	{
-			//		tasks.Add(CreateTask(task));
-			//	}
-			//	catch (Exception ex)
-			//	{
-			//		ex.LogError();
-			//	}
-			//}
 
 			return tasks;
 		}
@@ -401,7 +374,7 @@ namespace StockSharp.Hydra
 			if (!wnd.ShowModal(this))
 				return;
 
-			AddTasks(wnd.SelectedTasks, CurrentSources);
+			AddTasks(wnd.SelectedTasks);
 		}
 
 		private void ExecutedAddToolsCommand(object sender, ExecutedRoutedEventArgs e)
@@ -411,34 +384,13 @@ namespace StockSharp.Hydra
 			if (!wnd.ShowModal(this))
 				return;
 
-			AddTasks(wnd.SelectedTasks, CurrentSources);
+			AddTasks(wnd.SelectedTasks);
 		}
 
-		private void AddTasks(Type[] taskTypes, ListView listView)
+		private void AddTasks(IEnumerable<Type> taskTypes)
 		{
 			if (taskTypes == null)
 				throw new ArgumentNullException("taskTypes");
-
-			if (listView == null)
-				throw new ArgumentNullException("listView");
-
-			//if (Tasks.Any(t => t.GetType() == task.GetType()))
-			//{
-			//	var msg = "Multi".ValidateLicense();
-
-			//	if (msg != null)
-			//	{
-			//		_logManager.Application.AddErrorLog(msg);
-
-			//		new MessageBoxBuilder()
-			//			.Text(LocalizedStrings.Str2903Params.Put(task.GetDisplayName()))
-			//			.Warning()
-			//			.Owner(this)
-			//			.Show();
-
-			//		return;	
-			//	}
-			//}
 
 			BusyIndicator.IsBusy = true;
 			BusyIndicator.BusyContent = LocalizedStrings.Str2904Params.Put(taskTypes.First().GetDisplayName());
@@ -488,11 +440,15 @@ namespace StockSharp.Hydra
 
 					Tasks.AddRange(tasks);
 
-					var last = tasks.LastOrDefault();
+					var last = tasks.FirstOrDefault();
 
 					if (last != null)
 					{
-						NavigationBar.SelectedIndex = last.IsCategoryOf(TaskCategories.Tool) ? 1 : 0;
+						var isTool = last.IsCategoryOf(TaskCategories.Tool);
+
+						NavigationBar.SelectedIndex = isTool ? 1 : 0;
+
+						var listView = isTool ? CurrentTools : CurrentSources;
 
 						listView.SelectedItem = last;
 						listView.ScrollIntoView(last);

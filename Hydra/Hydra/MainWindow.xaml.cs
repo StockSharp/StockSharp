@@ -287,13 +287,24 @@ namespace StockSharp.Hydra
 				if (settings.AutoStart)
 					Start(true);
 
-				//if (!CheckDatabaseSecurities() || !CheckRtsSecurities(Sources))
-				//{
-				//	Application.Current.Shutdown();
-				//	return;
-				//}
-
 				AutomaticUpdater.ForceCheckForUpdate(true);
+
+				if (Tasks.Count == 0)
+				{
+					var newTasks = new List<Type>();
+
+					var sourcesWnd = new SourcesWindow { AvailableTasks = _availableTasks.Where(t => !t.IsCategoryOf(TaskCategories.Tool)).ToArray() };
+
+					if (sourcesWnd.ShowModal(this))
+						newTasks.AddRange(sourcesWnd.SelectedTasks);
+
+					var toolsWnd = new ToolsWindow { AvailableTasks = _availableTasks.Where(t => t.IsCategoryOf(TaskCategories.Tool)).ToArray() };
+
+					if (toolsWnd.ShowModal(this))
+						newTasks.AddRange(toolsWnd.SelectedTasks);
+
+					AddTasks(newTasks);
+				}
 			}, TaskScheduler.FromCurrentSynchronizationContext());
 		}
 
