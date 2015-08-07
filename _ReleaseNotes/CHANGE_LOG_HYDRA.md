@@ -1,5 +1,9 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.9.1:
+* (feature) Hydra. Import pane improve.
+* (bug) Release 4.3.9 fix (missed files).
+
 ###v4.3.9:
 * (feature) Backup plugin (Amazon S3 cloud storage)
 * (feature) Txt/csv export preview window.

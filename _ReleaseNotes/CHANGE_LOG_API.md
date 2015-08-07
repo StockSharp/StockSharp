@@ -1,5 +1,10 @@
 StockSharp API Change log
 ========================
+###v4.3.9.1:
+* (feature) Candle.RelativeVolume is nullable.
+* (feature) Candle. Ticks fields are nullable.
+* (feature) CandleSerializer. Ticks fields.
+
 ###v4.3.9:
 * (bug) RecoveryFactorParameter fix.
 * (bug) OrderLogMarketDepthBuilder fix.
