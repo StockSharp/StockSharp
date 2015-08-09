@@ -10,5 +10,8 @@
 		
 		<mediaLink><image placement="center" xlink:href="micex_trader"/></mediaLink>
     </introduction>
+    <relatedTopics>
+		<link xlink:href="356a822b-a4ed-42a9-8e7f-dfa595a15432">Пример работы с MicexTrader</link>
+    </relatedTopics>
   </developerConceptualDocument>
 </topic>

@@ -2,6 +2,7 @@
 <topic id="7d845e99-6bde-437e-b7f4-059be0438894" revisionNumber="1">
 	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
+    	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Настройки...</legacyBold>.</para>
     	<para>
     		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режиме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
     	</para>
