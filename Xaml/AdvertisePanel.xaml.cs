@@ -6,12 +6,11 @@
 	using System.Windows;
 	using System.Windows.Threading;
 
-	using CodeKicker.BBCode;
-
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Configuration;
 	using Ecng.Localization;
+	using Ecng.Web.BBCodes;
 
 	using StockSharp.Community;
 	using StockSharp.Localization;

@@ -103,9 +103,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Ecng\ClrPatch.dll</HintPath>
     </Reference>
-    <Reference Include="CodeKicker.BBCode">
-      <HintPath>..\References\CodeKicker.BBCode.dll</HintPath>
-    </Reference>
     <Reference Include="Disk.SDK">
       <HintPath>..\References\Disk.SDK.dll</HintPath>
     </Reference>
@@ -138,6 +135,10 @@
     </Reference>
     <Reference Include="Ecng.Serialization">
       <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Web.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
