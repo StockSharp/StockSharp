@@ -1,7 +1,5 @@
 namespace StockSharp.Hydra.Core
 {
-	using System.ComponentModel;
-
 	using Ecng.Serialization;
 
 	using StockSharp.Localization;
