@@ -84,6 +84,14 @@
 			</xctk:EditorTemplateDefinition.EditingTemplate>
 		</xctk:EditorTemplateDefinition>
 
+		<xctk:EditorTemplateDefinition TargetProperties="{x:Type net:IPAddress}">
+			<xctk:EditorTemplateDefinition.EditingTemplate>
+				<DataTemplate>
+					<local:IpAddressEditor Address="{Binding Value, Mode=TwoWay}" />
+				</DataTemplate>
+			</xctk:EditorTemplateDefinition.EditingTemplate>
+		</xctk:EditorTemplateDefinition>
+
 		<xctk:EditorTemplateDefinition TargetProperties="{x:Type security:SecureString}">
 			<xctk:EditorTemplateDefinition.EditingTemplate>
 				<DataTemplate>
