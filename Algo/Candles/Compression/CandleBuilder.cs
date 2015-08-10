@@ -429,7 +429,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			if (value.OrderDirection != null)
 			{
-				candle.RelativeVolume += value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume;
+				candle.RelativeVolume = (candle.RelativeVolume ?? 0) + (value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume);
 			}
 
 			candle.CloseTime = value.Time;
