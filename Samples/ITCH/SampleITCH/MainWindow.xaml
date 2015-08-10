@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:xaml="http://schemas.stocksharp.com/xaml"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="600" Width="600">
     <Grid>
 		<Grid.ColumnDefinitions>
@@ -26,11 +27,25 @@
 		<TextBlock Grid.Column="2" Grid.Row="0" HorizontalAlignment="Right"><Run Text="{x:Static loc:LocalizedStrings.Password}" />:</TextBlock>
 		<PasswordBox Grid.Column="3" Grid.Row="0" x:Name="Password" Password="" />
 
-		<Label Grid.Column="0" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Main}" HorizontalAlignment="Right" />
-		<xaml:EndPointEditor Grid.Column="1" Grid.Row="1" x:Name="Primary" />
+		<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="90" />
+			</Grid.ColumnDefinitions>
+			
+			<Label Grid.Column="0" Content="Group" HorizontalAlignment="Right" />
+			<xaml:IpAddressEditor Grid.Column="1" x:Name="GroupAddr" />
 
-		<Label Grid.Column="2" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Backup}" HorizontalAlignment="Right" />
-		<xaml:EndPointEditor Grid.Column="3" Grid.Row="1" x:Name="Duplicate" />
+			<Label Grid.Column="2" Content="Source" HorizontalAlignment="Right" />
+			<xaml:IpAddressEditor Grid.Column="3" x:Name="SourceAddr" />
+
+			<Label Grid.Column="4" Content="Port" HorizontalAlignment="Right" />
+			<xctk:IntegerUpDown Grid.Column="5" x:Name="Port" />
+		</Grid>
 
 		<Label Grid.Column="0" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.Recovery}" HorizontalAlignment="Right" />
 		<xaml:EndPointEditor Grid.Column="1" Grid.Row="2" x:Name="Recovery" />

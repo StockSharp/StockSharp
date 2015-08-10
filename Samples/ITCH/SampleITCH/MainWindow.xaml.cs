@@ -6,6 +6,7 @@ namespace SampleITCH
 
 	using Ecng.Common;
 	using Ecng.Configuration;
+	using Ecng.Net;
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
@@ -18,7 +19,7 @@ namespace SampleITCH
 	{
 		private bool _isConnected;
 
-		public ITCHTrader Trader;
+		public ItchTrader Trader;
 
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
@@ -78,7 +79,7 @@ namespace SampleITCH
 				if (Trader == null)
 				{
 					// create connector
-					Trader = new ITCHTrader();// { LogLevel = LogLevels.Debug };
+					Trader = new ItchTrader();// { LogLevel = LogLevels.Debug };
 
 					_logManager.Sources.Add(Trader);
 
@@ -133,8 +134,12 @@ namespace SampleITCH
 
 				Trader.Login = Login.Text;
 				Trader.Password = Password.Password;
-				Trader.PrimaryAddress = Primary.EndPoint;
-				Trader.DuplicateAddress = Duplicate.EndPoint;
+				Trader.PrimaryMulticast = new MulticastSourceAddress
+				{
+					GroupAddress = GroupAddr.Address,
+					SourceAddress = SourceAddr.Address,
+					Port = Port.Value ?? 0
+				};
 				Trader.RecoveryAddress = Recovery.EndPoint;
 				Trader.ReplayAddress = Replay.EndPoint;
 
