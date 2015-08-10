@@ -339,6 +339,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITCH", "ITCH", "{7A2867F3-4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleITCHPublic", "Samples\ITCH\SampleITCH\SampleITCHPublic.csproj", "{D6540BA6-8719-4E27-8182-C32026C08B7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITCHPublic", "Hydra\Plugins\ITCH\ITCHPublic.csproj", "{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -819,6 +821,10 @@ Global
 		{D6540BA6-8719-4E27-8182-C32026C08B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6540BA6-8719-4E27-8182-C32026C08B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6540BA6-8719-4E27-8182-C32026C08B7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -964,6 +970,7 @@ Global
 		{39261454-76F0-4684-8B93-091CBAB63A6A} = {551390E7-41EB-4451-AF9B-49C64439F664}
 		{7A2867F3-4D22-4F81-A0AA-09246B9B1E34} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
 		{D6540BA6-8719-4E27-8182-C32026C08B7E} = {7A2867F3-4D22-4F81-A0AA-09246B9B1E34}
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297} = {551390E7-41EB-4451-AF9B-49C64439F664}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi
