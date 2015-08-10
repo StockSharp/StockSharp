@@ -103,6 +103,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Ecng\ClrPatch.dll</HintPath>
     </Reference>
+    <Reference Include="CodeKicker.BBCode">
+      <HintPath>..\References\CodeKicker.BBCode.dll</HintPath>
+    </Reference>
     <Reference Include="Disk.SDK">
       <HintPath>..\References\Disk.SDK.dll</HintPath>
     </Reference>
@@ -143,6 +146,9 @@
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlRenderer.WPF">
+      <HintPath>..\References\HtmlRenderer.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
@@ -165,6 +171,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AdvertisePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AutoCompletePopUp.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -437,6 +447,9 @@
   <ItemGroup>
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AdvertisePanel.xaml.cs">
+      <DependentUpon>AdvertisePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="AutoCompletePopUp.xaml.cs">
       <DependentUpon>AutoCompletePopUp.xaml</DependentUpon>

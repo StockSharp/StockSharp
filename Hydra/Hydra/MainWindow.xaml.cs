@@ -211,6 +211,8 @@ namespace StockSharp.Hydra
 			Instance = this;
 
 			UserConfig.Instance.Load();
+
+			OnUpdateUi(null, null);
 		}
 
 		public static MainWindow Instance { get; private set; }
@@ -445,8 +447,9 @@ namespace StockSharp.Hydra
 
 			UserConfig.Instance.LoadLayout();
 
-			_updateStatusTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+			_updateStatusTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
 			_updateStatusTimer.Tick += OnUpdateUi;
+			_updateStatusTimer.Start();
 
 			_trayIcon = new TrayIcon();
 			_trayIcon.StartStop += () => StartStopClick(null, null);
@@ -596,8 +599,6 @@ namespace StockSharp.Hydra
 
 				IsStarted = true;
 				LockUnlock();
-
-				_updateStatusTimer.Start();
 
 				if (auto)
 				{

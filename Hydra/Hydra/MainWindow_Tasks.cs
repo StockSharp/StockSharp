@@ -645,8 +645,6 @@ namespace StockSharp.Hydra
 
 		private void OnStoppedSources()
 		{
-			_updateStatusTimer.Stop();
-
 			GuiDispatcher.GlobalDispatcher.AddAction(() =>
 			{
 				IsStarted = false;

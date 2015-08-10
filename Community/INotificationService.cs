@@ -51,6 +51,6 @@
 		/// <param name="fromId">Идентификатор, с которого необходимо получить новости.</param>
 		/// <returns>Последние новости.</returns>
 		[OperationContract]
-		Tuple<long, string, string, int>[] GetNews(Guid sessionId, long fromId);
+		CommunityNews[] GetNews(Guid sessionId, long fromId);
 	}
 }

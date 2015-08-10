@@ -495,7 +495,7 @@
 					<Button Content="{x:Static loc:LocalizedStrings.Securities}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Security"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str1221}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.AnalyticsCommand}" />
 				</ToolBar>
-
+			
 				<controls1:AutomaticUpdater x:Name="AutomaticUpdater" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10" DockPanel.Dock="Right"
 										DaysBetweenChecks="0" WaitBeforeCheckSecs="60" UpdateType="OnlyCheck" Animate="True" KeepHidden="False" wyUpdateLocation="Hydra.Update.exe" />
 			</DockPanel>
@@ -503,6 +503,10 @@
 			<StatusBar VerticalAlignment="Bottom" DockPanel.Dock="Bottom">
 				<StatusBarItem>
 					<TextBlock x:Name="Status" VerticalAlignment="Stretch" />
+				</StatusBarItem>
+				
+				<StatusBarItem Margin="10,0,0,0">
+					<sx:AdvertisePanel MaxHeight="300" Height="30" />
 				</StatusBarItem>
 				
 				<StatusBarItem HorizontalAlignment="Right">

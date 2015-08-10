@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CodeKicker.BBCode</name>
+    </assembly>
+    <members>
+        <member name="T:CodeKicker.BBCode.BBCodeParser">
+            <summary>
+            This class is useful for creating a custom parser. You can customize which tags are available
+            and how they are translated to HTML.
+            In order to use this library, we require a link to http://codekicker.de/ from you. Licensed unter the Creative Commons Attribution 3.0 Licence: http://creativecommons.org/licenses/by/3.0/.
+            </summary>
+        </member>
+        <member name="F:CodeKicker.BBCode.ErrorMode.Strict">
+            <summary>
+            Every syntax error throws a BBCodeParsingException.
+            </summary>
+        </member>
+        <member name="F:CodeKicker.BBCode.ErrorMode.TryErrorCorrection">
+            <summary>
+            Syntax errors with obvious meaning will be corrected automatically.
+            </summary>
+        </member>
+        <member name="F:CodeKicker.BBCode.ErrorMode.ErrorFree">
+            <summary>
+            The parser will never throw an exception. Invalid tags like "array[0]" will be interpreted as text.
+            </summary>
+        </member>
+        <member name="M:CodeKicker.BBCode.BBCode.ToHtml(System.String)">
+            <summary>
+            Transforms the given BBCode into safe HTML with the default configuration from http://codekicker.de
+            This method is thread safe.
+            In order to use this library, we require a link to http://codekicker.de/ from you. Licensed unter the Creative Commons Attribution 3.0 Licence: http://creativecommons.org/licenses/by/3.0/.
+            </summary>
+            <param name="bbCode">A non-null string of valid BBCode.</param>
+            <returns></returns>
+        </member>
+        <member name="M:CodeKicker.BBCode.BBCode.EscapeText(System.String)">
+            <summary>
+            Encodes an arbitrary string to be valid BBCode. Example: "[b]" => "\[b\]". The resulting string is safe against
+            BBCode-Injection attacks.
+            In order to use this library, we require a link to http://codekicker.de/ from you. Licensed unter the Creative Commons Attribution 3.0 Licence: http://creativecommons.org/licenses/by/3.0/.
+            </summary>
+        </member>
+        <member name="M:CodeKicker.BBCode.BBCode.UnescapeText(System.String)">
+            <summary>
+            Decodes a string of BBCode that only contains text (no tags). Example: "\[b\]" => "[b]". This is the reverse
+            oepration of EscapeText.
+            In order to use this library, we require a link to http://codekicker.de/ from you. Licensed unter the Creative Commons Attribution 3.0 Licence: http://creativecommons.org/licenses/by/3.0/.
+            </summary>
+        </member>
+    </members>
+</doc>
