@@ -192,6 +192,18 @@ namespace StockSharp.Hydra.Windows
 			}
 			else
 			{
+				if (priceStep == 0)
+				{
+					ShowError(LocalizedStrings.Str2925);
+					return;
+				}
+
+				if (volumeStep == 0)
+				{
+					ShowError(LocalizedStrings.Str2924);
+					return;
+				}
+
 				foreach (var security in Securities)
 				{
 					if (volumeStep != null)

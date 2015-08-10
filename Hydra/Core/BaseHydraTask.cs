@@ -571,10 +571,10 @@ namespace StockSharp.Hydra.Core
 				.GroupBy(c => Tuple.Create(c.GetType(), c.Arg))
 				.ForEach(g => SafeSave(security, g.Key.Item1.ToCandleMessageType(), g.Key.Item2, g, c => c.OpenTime, new[]
 				{
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.OpenPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2203),
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.HighPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2204),
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.LowPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2205),
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.ClosePrice % c.Security.PriceStep != 0, LocalizedStrings.Str2206)
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.OpenPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2203),
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.HighPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2204),
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.LowPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2205),
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.ClosePrice % c.Security.PriceStep != 0, LocalizedStrings.Str2206)
 				},
 				(s, d, c) => (IMarketDataStorage<TCandle>)StorageRegistry.GetCandleStorage(g.Key.Item1, security, g.Key.Item2, d, c)));
 		}
