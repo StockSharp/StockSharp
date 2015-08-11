@@ -358,7 +358,6 @@
     <Compile Include="Storages\NewsSerializer.cs" />
     <Compile Include="Storages\QuoteSerializer.cs" />
     <Compile Include="OrderLogHelper.cs" />
-    <Compile Include="OrderLogMarketDepthBuilder.cs" />
     <Compile Include="MarketTimer.cs" />
     <Compile Include="PnL\PnLInfo.cs" />
     <Compile Include="PnL\PnLQueue.cs" />

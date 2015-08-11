@@ -57,6 +57,7 @@ namespace StockSharp.Hydra.Tools
 				: base(settings)
 			{
 				ExtensionInfo.TryAdd("DestinationStorageFormat", StorageFormats.Binary.To<string>());
+				ExtensionInfo.TryAdd("MarketDepthBuilder", OrderLogBuilders.Plaza2.To<string>());
 			}
 
 			[CategoryLoc(_sourceName)]
@@ -131,6 +132,16 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["MarketDepthMaxDepth"] = value; }
 			}
 
+			[CategoryLoc(LocalizedStrings.MarketDepthsKey)]
+			[DisplayNameLoc(LocalizedStrings.Str1660Key)]
+			[DescriptionLoc(LocalizedStrings.Str3782Key)]
+			[PropertyOrder(1)]
+			public OrderLogBuilders MarketDepthBuilder
+			{
+				get { return ExtensionInfo["MarketDepthBuilder"].To<OrderLogBuilders>(); }
+				set { ExtensionInfo["MarketDepthBuilder"] = value.To<string>(); }
+			}
+
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3783Key)]
 			[DescriptionLoc(LocalizedStrings.Str3784Key)]
@@ -176,6 +187,7 @@ namespace StockSharp.Hydra.Tools
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.MarketDepthInterval = TimeSpan.FromMilliseconds(10);
 				_settings.MarketDepthMaxDepth = 50;
+				_settings.MarketDepthBuilder = OrderLogBuilders.Plaza2;
 				_settings.DestinationDrive = null;
 				_settings.DestinationStorageFormat = StorageFormats.Binary;
 			}
@@ -262,7 +274,7 @@ namespace StockSharp.Hydra.Tools
 							{
 								var depths = ((IMarketDataStorage<ExecutionMessage>)fromStorage)
 									.Load(date)
-									.ToMarketDepths(_settings.MarketDepthInterval, _settings.MarketDepthMaxDepth);
+									.ToMarketDepths(_settings.MarketDepthBuilder.CreateBuilder(security.Security.ToSecurityId()), _settings.MarketDepthInterval, _settings.MarketDepthMaxDepth);
 
 								toStorage.Save(depths);
 								RaiseDataLoaded(security.Security, typeof(QuoteChangeMessage), null, date, depths.Count);

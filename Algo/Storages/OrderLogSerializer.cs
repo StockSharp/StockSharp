@@ -162,7 +162,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var item = items.First();
 
-				metaInfo.FirstOrderId = metaInfo.LastOrderId = item.GetOrderId();
+				metaInfo.FirstOrderId = metaInfo.LastOrderId = item.SafeGetOrderId();
 				metaInfo.FirstTransactionId = metaInfo.LastTransactionId = item.TransactionId;
 				metaInfo.ServerOffset = item.ServerTime.Offset;
 			}
@@ -176,7 +176,7 @@ namespace StockSharp.Algo.Storages
 			{
 				var hasTrade = item.TradeId != null || item.TradePrice != null;
 
-				var orderId = item.GetOrderId();
+				var orderId = item.SafeGetOrderId();
 				if (orderId < 0)
 					throw new ArgumentOutOfRangeException("items", orderId, LocalizedStrings.Str925);
 
@@ -186,7 +186,7 @@ namespace StockSharp.Algo.Storages
 				//if (item.Price < 0)
 				//	throw new ArgumentOutOfRangeException("items", item.Price, LocalizedStrings.Str926Params.Put(item.OrderId));
 
-				var volume = item.GetVolume();
+				var volume = item.SafeGetVolume();
 				if (volume <= 0)
 					throw new ArgumentOutOfRangeException("items", volume, LocalizedStrings.Str927Params.Put(item.OrderId));
 

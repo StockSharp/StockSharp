@@ -2703,6 +2703,35 @@
             Признак нулевой волатильности.
             </summary>
     </member>
+    <member name="T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder">
+      <summary>
+            Построитель стакана из лога заявок Plaza 2.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.SecurityId)">
+      <summary>
+            Создать <see cref="T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder" />.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.QuoteChangeMessage)">
+      <summary>
+            Создать <see cref="T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder" />.
+            </summary>
+      <param name="depth">Стакан.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder.Update(StockSharp.Messages.ExecutionMessage)">
+      <summary>
+            Добавить новую строчку из лога заявок к стакану.
+            </summary>
+      <param name="item">Строчка лога заявок.</param>
+      <returns>Был ли изменен стакан.</returns>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder.Depth">
+      <summary>
+            Стакан.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.PlazaConnectionPoolSettings">
       <summary>
             Настройки <see cref="T:StockSharp.Plaza.PlazaConnectionPool" />.
@@ -2888,6 +2917,13 @@
             Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
             </summary>
       <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
+      <summary>
+            Создать построитель стакана.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <returns>Построитель стакана.</returns>
     </member>
     <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>

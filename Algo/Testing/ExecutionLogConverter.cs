@@ -282,7 +282,7 @@ namespace StockSharp.Algo.Testing
 			if (!_stepsUpdated)
 			{
 				_securityDefinition.PriceStep = message.GetTradePrice().GetDecimalInfo().EffectiveScale.GetPriceStep();
-				_securityDefinition.VolumeStep = message.GetVolume().GetDecimalInfo().EffectiveScale.GetPriceStep();
+				_securityDefinition.VolumeStep = message.SafeGetVolume().GetDecimalInfo().EffectiveScale.GetPriceStep();
 				_stepsUpdated = true;
 			}
 
@@ -302,7 +302,7 @@ namespace StockSharp.Algo.Testing
 			var bestAsk = _asks.FirstOrDefault();
 
 			var tradePrice = message.GetTradePrice();
-			var volume = message.GetVolume();
+			var volume = message.SafeGetVolume();
 			var time = message.LocalTime;
 
 			if (bestBid.Value != null && tradePrice <= bestBid.Key)
@@ -573,7 +573,7 @@ namespace StockSharp.Algo.Testing
 
 			// если собрали все котировки, то оставляем заявку в стакане по цене сделки
 			if (!hasQuotes)
-				retVal.Add(CreateMessage(tradeMessage.LocalTime, orderSide.Invert(), tradePrice, tradeMessage.GetVolume()));
+				retVal.Add(CreateMessage(tradeMessage.LocalTime, orderSide.Invert(), tradePrice, tradeMessage.SafeGetVolume()));
 		}
 
 		private void TryCreateOppositeOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTime localTime, decimal tradePrice, decimal volume, Sides originSide)

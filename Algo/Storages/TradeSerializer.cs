@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Storages
 				// pyhta4og.
 				// http://stocksharp.com/forum/yaf_postsm6450_Oshibka-pri-importie-instrumientov-s-Finama.aspx#post6450
 
-				var volume = msg.GetVolume();
+				var volume = msg.SafeGetVolume();
 
 				if (volume < 0)
 					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));

@@ -13,6 +13,7 @@ namespace StockSharp.Hydra.Panes
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -72,7 +73,8 @@ namespace StockSharp.Hydra.Panes
 				return StorageRegistry
 					.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
 					.Load(From + new TimeSpan(18, 45, 0), To + TimeHelper.LessOneDay + new TimeSpan(18, 45, 0))
-					.ToMarketDepths(interval, maxDepth);
+					// TODO
+					.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(SelectedSecurity.ToSecurityId()), interval, maxDepth);
 			}
 
 			var retVal = StorageRegistry

@@ -202,7 +202,7 @@
 
 				if (isMatched && trade != null)
 				{
-					item.Volume = RandomGen.GetInt(1, (int)activeOrder.GetVolume());
+					item.Volume = RandomGen.GetInt(1, (int)activeOrder.SafeGetVolume());
 
 					item.TradeId = trade.TradeId;
 					item.TradePrice = trade.TradePrice;

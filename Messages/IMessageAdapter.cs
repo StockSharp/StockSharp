@@ -74,5 +74,12 @@
 		/// </summary>
 		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
 		bool IsConnectionAlive();
+
+		/// <summary>
+		/// Создать построитель стакана.
+		/// </summary>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <returns>Построитель стакана.</returns>
+		IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
 	}
 }

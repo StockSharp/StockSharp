@@ -13,6 +13,7 @@ namespace StockSharp.Hydra.Panes
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -82,7 +83,7 @@ namespace StockSharp.Hydra.Panes
 					return StorageRegistry
 							.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
 							.Load(from, to)
-							.ToMarketDepths()
+							.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(SelectedSecurity.ToSecurityId()))
 							.ToCandles(CandleSeries);
 				case 5:
 					return StorageRegistry

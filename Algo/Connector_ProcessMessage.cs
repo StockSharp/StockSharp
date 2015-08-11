@@ -85,7 +85,7 @@ namespace StockSharp.Algo
 			}
 		}
 
-		private readonly Dictionary<Security, OrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, OrderLogMarketDepthBuilder>();
+		private readonly Dictionary<Security, IOrderLogMarketDepthBuilder> _olBuilders = new Dictionary<Security, IOrderLogMarketDepthBuilder>();
 		private readonly CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates> _adapterStates = new CachedSynchronizedDictionary<IMessageAdapter, ConnectionStates>();
 		private readonly SynchronizedDictionary<SecurityId, Level1DepthBuilder> _level1DepthBuilders = new SynchronizedDictionary<SecurityId, Level1DepthBuilder>();
 		private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new SynchronizedDictionary<string, QuoteChangeDepthBuilder>(StringComparer.InvariantCultureIgnoreCase);
@@ -1153,7 +1153,7 @@ namespace StockSharp.Algo
 			{
 				try
 				{
-					var builder = _olBuilders.SafeAdd(security, key => new OrderLogMarketDepthBuilder(new QuoteChangeMessage { SecurityId = message.SecurityId, IsSorted = true }));
+					var builder = _olBuilders.SafeAdd(security, key => MarketDataAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId));
 					var updated = builder.Update(message);
 					
 					if (updated)

@@ -104,6 +104,11 @@ namespace StockSharp.Algo
 			return _innerAdapter.IsConnectionAlive();
 		}
 
+		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
+		{
+			return _innerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
+		}
+
 		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo
 		{
 			get { return _innerAdapter.SecurityClassInfo; }

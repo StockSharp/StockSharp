@@ -211,7 +211,7 @@ namespace StockSharp.Algo.Storages
 				if (msg.Price < 0)
 					throw new ArgumentOutOfRangeException("messages", msg.Price, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
-				var volume = msg.GetVolume();
+				var volume = msg.SafeGetVolume();
 
 				if (volume < 0)
 					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));

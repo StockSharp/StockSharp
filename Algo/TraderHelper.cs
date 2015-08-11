@@ -540,7 +540,7 @@ namespace StockSharp.Algo
 		/// <returns>Прибыль-убыток.</returns>
 		public static decimal GetPnL(this ExecutionMessage trade, decimal currentPrice)
 		{
-			return GetPnL(trade.GetTradePrice(), trade.GetVolume(), trade.Side, currentPrice);
+			return GetPnL(trade.GetTradePrice(), trade.SafeGetVolume(), trade.Side, currentPrice);
 		}
 
 		internal static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)
@@ -977,7 +977,7 @@ namespace StockSharp.Algo
 				if (!changedVolume.TryGetValue(price, out vol))
 					vol = quote.Volume;
 
-				vol -= trade.GetVolume();
+				vol -= trade.SafeGetVolume();
 				changedVolume[quote.Price] = vol;
 			}
 
@@ -3570,6 +3570,46 @@ namespace StockSharp.Algo
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Получить количество операции, или выбросить исключение, если информация отсутствует.
+		/// </summary>
+		/// <param name="message">Операции.</param>
+		/// <returns>Количество.</returns>
+		public static decimal SafeGetVolume(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var volume = message.Volume;
+
+			if (volume != null)
+				return volume.Value;
+
+			var errorMsg = message.ExecutionType == ExecutionTypes.Tick || message.ExecutionType == ExecutionTypes.Trade
+				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
+				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
+
+			throw new ArgumentOutOfRangeException("message", null, errorMsg);
+		}
+
+		/// <summary>
+		/// Получить идентификатор заявки, или выбросить исключение, если информация отсутствует.
+		/// </summary>
+		/// <param name="message">Операции.</param>
+		/// <returns>Идентификатор заявки.</returns>
+		public static long SafeGetOrderId(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var orderId = message.OrderId;
+
+			if (orderId != null)
+				return orderId.Value;
+
+			throw new ArgumentOutOfRangeException("message", null, LocalizedStrings.Str925);
 		}
 	}
 }

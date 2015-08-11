@@ -548,6 +548,16 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
+		/// Создать построитель стакана.
+		/// </summary>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <returns>Построитель стакана.</returns>
+		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
 		/// Загрузить настройки.
 		/// </summary>
 		/// <param name="storage">Хранилище настроек.</param>

@@ -154,16 +154,23 @@ namespace StockSharp.Algo
 			private sealed class DepthEnumerator : IEnumerator<QuoteChangeMessage>
 			{
 				private readonly TimeSpan _interval;
-				private readonly int _maxDepth;
 				private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
-				private OrderLogMarketDepthBuilder _builder;
+				private readonly IOrderLogMarketDepthBuilder _builder;
+				private readonly int _maxDepth;
 
-				public DepthEnumerator(IEnumerable<ExecutionMessage> items, TimeSpan interval, int maxDepth)
+				public DepthEnumerator(IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
 				{
+					if (builder == null)
+						throw new ArgumentNullException("builder");
+
 					if (items == null)
 						throw new ArgumentNullException("items");
 
+					if (maxDepth < 1)
+						throw new ArgumentOutOfRangeException("maxDepth", maxDepth, LocalizedStrings.Str941);
+
 					_itemsEnumerator = items.GetEnumerator();
+					_builder = builder;
 					_interval = interval;
 					_maxDepth = maxDepth;
 				}
@@ -176,8 +183,8 @@ namespace StockSharp.Algo
 					{
 						var item = _itemsEnumerator.Current;
 
-						if (_builder == null)
-							_builder = new OrderLogMarketDepthBuilder(new QuoteChangeMessage { SecurityId = item.SecurityId, IsSorted = true }, _maxDepth);
+						//if (_builder == null)
+						//	_builder = new OrderLogMarketDepthBuilder(new QuoteChangeMessage { SecurityId = item.SecurityId, IsSorted = true }, _maxDepth);
 
 						if (!_builder.Update(item))
 							continue;
@@ -186,7 +193,14 @@ namespace StockSharp.Algo
 							continue;
 
 						Current = (QuoteChangeMessage)_builder.Depth.Clone();
-						//Current.MaxDepth = _maxDepth;
+
+						if (_maxDepth < int.MaxValue)
+						{
+							//Current.MaxDepth = _maxDepth;
+							Current.Bids = Current.Bids.Take(_maxDepth).ToArray();
+							Current.Asks = Current.Asks.Take(_maxDepth).ToArray();
+						}
+
 						return true;
 					}
 
@@ -197,7 +211,6 @@ namespace StockSharp.Algo
 				public void Reset()
 				{
 					_itemsEnumerator.Reset();
-					_builder = null;
 					Current = null;
 				}
 
@@ -215,17 +228,14 @@ namespace StockSharp.Algo
 
 			private readonly IEnumerableEx<ExecutionMessage> _items;
 
-			public DepthEnumerable(IEnumerableEx<ExecutionMessage> items, TimeSpan interval, int maxDepth)
-				: base(() => new DepthEnumerator(items, interval, maxDepth))
+			public DepthEnumerable(IEnumerableEx<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth)
+				: base(() => new DepthEnumerator(items, builder, interval, maxDepth))
 			{
 				if (items == null)
 					throw new ArgumentNullException("items");
 
 				if (interval < TimeSpan.Zero)
 					throw new ArgumentOutOfRangeException("interval", interval, LocalizedStrings.Str940);
-
-				if (maxDepth < 1)
-					throw new ArgumentOutOfRangeException("maxDepth", maxDepth, LocalizedStrings.Str941);
 
 				_items = items;
 			}
@@ -240,19 +250,19 @@ namespace StockSharp.Algo
 		/// Построить стаканы из лога заявок.
 		/// </summary>
 		/// <param name="items">Строчки лога заявок.</param>
+		/// <param name="builder">Построитель стакана.</param>
 		/// <param name="interval">Интервал генерации стакана. По-умолчанаю равен <see cref="TimeSpan.Zero"/>, что означает генерацию стаканов при каждой новой строчке лога заявок.</param>
 		/// <param name="maxDepth">Максимальная глубина стакана. По-умолчанию равно <see cref="int.MaxValue"/>, что означает бесконечную глубину.</param>
 		/// <returns>Стаканы.</returns>
-		public static IEnumerableEx<MarketDepth> ToMarketDepths(this IEnumerableEx<OrderLogItem> items, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
+		public static IEnumerableEx<MarketDepth> ToMarketDepths(this IEnumerableEx<OrderLogItem> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
 		{
 			var first = items.FirstOrDefault();
 
 			if (first == null)
 				return Enumerable.Empty<MarketDepth>().ToEx();
 
-			return items
-				.ToMessages<OrderLogItem, ExecutionMessage>()
-				.ToMarketDepths(interval, maxDepth)
+			return items.ToMessages<OrderLogItem, ExecutionMessage>()
+				.ToMarketDepths(builder, interval)
 				.ToEntities<QuoteChangeMessage, MarketDepth>(first.Order.Security);
 		}
 
@@ -260,12 +270,13 @@ namespace StockSharp.Algo
 		/// Построить стаканы из лога заявок.
 		/// </summary>
 		/// <param name="items">Строчки лога заявок.</param>
+		/// <param name="builder">Построитель стакана.</param>
 		/// <param name="interval">Интервал генерации стакана. По-умолчанаю равен <see cref="TimeSpan.Zero"/>, что означает генерацию стаканов при каждой новой строчке лога заявок.</param>
 		/// <param name="maxDepth">Максимальная глубина стакана. По-умолчанию равно <see cref="int.MaxValue"/>, что означает бесконечную глубину.</param>
 		/// <returns>Стаканы.</returns>
-		public static IEnumerableEx<QuoteChangeMessage> ToMarketDepths(this IEnumerableEx<ExecutionMessage> items, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
+		public static IEnumerableEx<QuoteChangeMessage> ToMarketDepths(this IEnumerableEx<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default(TimeSpan), int maxDepth = int.MaxValue)
 		{
-			return new DepthEnumerable(items, interval, maxDepth);
+			return new DepthEnumerable(items, builder, interval, maxDepth);
 		}
 
 		private sealed class OrderLogTickEnumerable : SimpleEnumerable<ExecutionMessage>, IEnumerableEx<ExecutionMessage>
@@ -300,7 +311,7 @@ namespace StockSharp.Algo
 
 						if (prevItem == null)
 						{
-							_trades.Add(tradeId.Value, Tuple.Create(currItem.GetOrderId(), currItem.Side));
+							_trades.Add(tradeId.Value, Tuple.Create(currItem.SafeGetOrderId(), currItem.Side));
 						}
 						else
 						{

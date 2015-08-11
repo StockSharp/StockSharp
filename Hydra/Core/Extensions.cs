@@ -13,8 +13,26 @@
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.ITCH;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
+	using StockSharp.Plaza;
+
+	/// <summary>
+	/// Построители стаканов из лога заявок.
+	/// </summary>
+	public enum OrderLogBuilders
+	{
+		/// <summary>
+		/// Плаза 2.
+		/// </summary>
+		Plaza2,
+
+		/// <summary>
+		/// ITCH.
+		/// </summary>
+		ITCH
+	}
 
 	/// <summary>
 	/// Вспомогательный класс.
@@ -305,6 +323,25 @@
 		{
 			var attr = taskType.GetAttribute<TaskIconAttribute>();
 			return attr == null ? null : attr.Icon.GetResourceUrl(taskType);
+		}
+
+		/// <summary>
+		/// Создать построитель стакана из лога заявок.
+		/// </summary>
+		/// <param name="builder">Тип построителя.</param>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <returns>Построитель стакана из лога заявок.</returns>
+		public static IOrderLogMarketDepthBuilder CreateBuilder(this OrderLogBuilders builder, SecurityId securityId)
+		{
+			switch (builder)
+			{
+				case OrderLogBuilders.Plaza2:
+					return new PlazaOrderLogMarketDepthBuilder(securityId);
+				case OrderLogBuilders.ITCH:
+					return new ItchOrderLogMarketDepthBuilder(securityId);
+				default:
+					throw new ArgumentOutOfRangeException("builder", builder, null);
+			}
 		}
 	}
 }

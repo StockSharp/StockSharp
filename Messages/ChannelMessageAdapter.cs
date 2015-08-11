@@ -241,5 +241,10 @@
 		{
 			return Adapter.IsConnectionAlive();
 		}
+
+		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
+		{
+			return Adapter.CreateOrderLogMarketDepthBuilder(securityId);
+		}
 	}
 }
