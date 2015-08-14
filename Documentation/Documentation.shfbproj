@@ -149,6 +149,7 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraTasksBackup.aml" />
     <None Include="Topics\HydraBackup_recovery.aml" />
     <None Include="Topics\HydraBackup_task.aml" />
     <None Include="Topics\HydraBackup_account.aml" />
@@ -1468,6 +1469,10 @@
     <Image Include="Art\Aws3_download.png">
       <ImageId>Aws3_download</ImageId>
       <AlternateText>Aws 3 download</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_source_add.png">
+      <ImageId>hydra_source_add</ImageId>
+      <AlternateText>hydra source add</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>
