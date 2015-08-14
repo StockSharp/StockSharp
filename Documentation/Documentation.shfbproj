@@ -149,6 +149,10 @@
       <ImageId>candle_qpile</ImageId>
       <AlternateText>candle qpile</AlternateText>
     </None>
+    <None Include="Topics\HydraBackup_recovery.aml" />
+    <None Include="Topics\HydraBackup_task.aml" />
+    <None Include="Topics\HydraBackup_account.aml" />
+    <None Include="Topics\HydraSettingsOandaHist.aml" />
     <None Include="Topics\HydraNetworkSettings.aml" />
     <None Include="Topics\HydraSynchronizeData.aml" />
     <None Include="Topics\HydraRemoveData.aml" />
@@ -1412,6 +1416,58 @@
     <Image Include="Art\hydra_source_first.png">
       <ImageId>hydra_source_first</ImageId>
       <AlternateText>hydra source first</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_oanda_hist2.png">
+      <ImageId>hydra_settings_oanda_hist2</ImageId>
+      <AlternateText>hydra settings oanda hist 2</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_NewAccount.png">
+      <ImageId>Aws3_NewAccount</ImageId>
+      <AlternateText>Aws 3 New Account</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CallMeNow.png">
+      <ImageId>Aws3_CallMeNow</ImageId>
+      <AlternateText>Aws 3 Call Me Now</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateAccount.png">
+      <ImageId>Aws3_CreateAccount</ImageId>
+      <AlternateText>Aws 3 Create Account</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_console.png">
+      <ImageId>Aws3_console</ImageId>
+      <AlternateText>Aws 3 console</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateBucket.png">
+      <ImageId>Aws3_CreateBucket</ImageId>
+      <AlternateText>Aws 3 Create Bucket</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateBucketDialog.png">
+      <ImageId>Aws3_CreateBucketDialog</ImageId>
+      <AlternateText>Aws 3 Create Bucket Dialog</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_SecurityCredentials.png">
+      <ImageId>Aws3_SecurityCredentials</ImageId>
+      <AlternateText>Aws 3 Security Credentials</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateNewAccessKey.png">
+      <ImageId>Aws3_CreateNewAccessKey</ImageId>
+      <AlternateText>Aws 3 Create New Access Key</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_SecurityCredentialsCreate.png">
+      <ImageId>Aws3_SecurityCredentialsCreate</ImageId>
+      <AlternateText>Aws 3 Security Credentials Create</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_backup.png">
+      <ImageId>hydra_tasks_backup</ImageId>
+      <AlternateText>hydra tasks backup</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_backup_add.png">
+      <ImageId>hydra_tasks_backup_add</ImageId>
+      <AlternateText>hydra tasks backup add</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_download.png">
+      <ImageId>Aws3_download</ImageId>
+      <AlternateText>Aws 3 download</AlternateText>
     </Image>
   </ItemGroup>
   <ItemGroup>

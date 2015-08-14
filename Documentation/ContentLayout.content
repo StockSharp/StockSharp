@@ -234,9 +234,9 @@
     <Topic id="4efd0545-a100-44ed-bdf5-4588e5665199" visible="True" title="Примеры" />
   </Topic>
   <Topic id="a720a275-440a-44ce-86e2-bcec2e0bc55f" visible="True" isExpanded="true" title="S#.Data">
-    <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" isSelected="true" title="Установка S#.Data" />
+    <Topic id="755b1c72-57ee-4f26-8a92-5da9af7a7345" visible="True" title="Установка S#.Data" />
     <Topic id="47ebc084-6b07-4b69-8f96-ea190110111f" visible="True" title="Первый запуск" />
-    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" title="Настройка источников">
+    <Topic id="f005431b-3a1b-49c2-a389-f1d4e9756f45" visible="True" isExpanded="true" title="Настройка источников">
       <Topic id="3b645eca-0171-49a9-ba44-e2e83507ed86" visible="True" noFile="true" title="Россия">
         <Topic id="2a908a19-0272-48e1-b143-df7ff9e2607c" visible="True" title="Альфа-Директ" />
         <Topic id="cec19cef-4bf7-4dcb-90fb-fccba4c0248c" visible="True" title="Алор" />
@@ -263,12 +263,13 @@
         <Topic id="f43591c9-c215-4dee-b297-4b9ed34fd465" visible="True" title="Sterling" />
         <Topic id="c60b2dd2-518c-49e5-8ba4-edabbda04222" visible="True" title="Yahoo Finance" />
       </Topic>
-      <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" title="Форекс" tocTitle="Форекс">
+      <Topic id="cff9ed02-959b-4281-9e17-100eae3578f0" visible="True" noFile="true" isExpanded="true" title="Форекс" tocTitle="Форекс">
         <Topic id="bba0059b-526b-406c-ba6e-a80d6c9e4ae0" visible="True" title="Dukascopy" />
         <Topic id="c1863414-25cb-4994-818f-3e4fa511f21b" visible="True" title="GainCapital" />
         <Topic id="0b962432-d81d-4646-a818-9fa7093cbe4f" visible="True" title="LMAX" />
         <Topic id="c3a78005-7d5d-49e6-8460-66c02109abd5" visible="True" title="MBTrading" />
         <Topic id="6a99aea5-1142-4b2e-b183-554fcc890fad" visible="True" title="OANDA" />
+        <Topic id="21734ebc-faae-4b42-9088-1c2f4c92ead4" visible="True" title="OANDA (история)" />
         <Topic id="a92bca75-1a0c-4581-a75a-6f13afd7975e" visible="True" title="TrueFX" />
       </Topic>
       <Topic id="8cde5dc1-05c2-412b-8f29-cd7d5d8742f5" visible="True" noFile="true" title="Крипто-валюта">
@@ -321,7 +322,11 @@
     <Topic id="7d845e99-6bde-437e-b7f4-059be0438894" visible="True" title="Опция &quot;Настройки&quot;" />
     <Topic id="38595e78-cff6-44ed-b525-2be13e6c17e4" visible="True" title="База данных" />
     <Topic id="a2130df7-ebc1-4bcd-8c8b-0e78524dfb20" visible="True" title="Аварийное восстановление" />
-    <Topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" visible="True" title="Бэкап данных" />
+    <Topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" visible="True" isExpanded="true" title="Бэкап данных">
+      <Topic id="abf5321b-0c86-4557-8240-a5e7a6133059" visible="True" title="Создание и настройка аккаунта" />
+      <Topic id="8f0fbcfe-c687-4af4-9bed-fe976b18f545" visible="True" title="Создание и настройка задачи" />
+      <Topic id="52833a55-a1df-449b-8468-55bd2aa00c58" visible="True" isSelected="true" title="Восстановление данных" />
+    </Topic>
   </Topic>
   <Topic id="49ba804f-908b-473a-a31f-76540d8a79d7" visible="True" title="S#.Studio">
     <Topic id="2ad1e974-0c2f-43bb-b25e-f1e3ccfc526a" visible="True" title="Установка" />
