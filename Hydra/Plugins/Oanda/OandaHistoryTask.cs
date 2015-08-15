@@ -19,8 +19,7 @@ namespace StockSharp.Hydra.Oanda
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	// TODO
-	//[TaskDoc("")]
+	[TaskDoc("http://stocksharp.com/doc/html/21734ebc-faae-4b42-9088-1c2f4c92ead4.htm")]
 	[TaskIcon("oanda_logo.png")]
 	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
 		TaskCategories.Free | TaskCategories.Level1)]

@@ -216,6 +216,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="HelpButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="IpAddressEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -489,6 +493,9 @@
     </Compile>
     <Compile Include="ExecutionGrid.xaml.cs">
       <DependentUpon>ExecutionGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpButton.xaml.cs">
+      <DependentUpon>HelpButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="IpAddressEditor.xaml.cs">
       <DependentUpon>IpAddressEditor.xaml</DependentUpon>
@@ -818,6 +825,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\references_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\help_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\help_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

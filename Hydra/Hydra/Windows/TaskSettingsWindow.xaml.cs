@@ -5,7 +5,6 @@ namespace StockSharp.Hydra.Windows
 	using System.Linq;
 	using System.Windows;
 	using System.ComponentModel;
-	using System.Diagnostics;
 	using System.Windows.Controls;
 
 	using Ecng.Common;
@@ -21,7 +20,6 @@ namespace StockSharp.Hydra.Windows
 	{
 		private HydraTaskSettings _clonnedSettings;
 		private bool _isError;
-		private string _docUrl;
 
 		private readonly Dictionary<Type, string> _dataTypes = new Dictionary<Type, string>
 		{
@@ -58,9 +56,7 @@ namespace StockSharp.Hydra.Windows
 				AbilitiesCtrl.Text = _task.SupportedMarketDataTypes.Select(t => _dataTypes[t]).Join(", ");
 
 				var attr = _task.GetType().GetAttribute<TaskDocAttribute>();
-				_docUrl = attr == null ? null : attr.DocUrl;
-
-				Help.IsEnabled = _docUrl != null;
+				Help.DocUrl = attr == null ? null : attr.DocUrl;
 			}
 		}
 
@@ -112,11 +108,6 @@ namespace StockSharp.Hydra.Windows
 		private void SourceSettings_OnError(object sender, ValidationErrorEventArgs e)
 		{
 			_isError = true;
-		}
-
-		private void Help_OnClick(object sender, RoutedEventArgs e)
-		{
-			Process.Start(_docUrl);
 		}
 	}
 }

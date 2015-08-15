@@ -25,6 +25,8 @@
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="5" />
 				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
 			<Grid.RowDefinitions>
@@ -35,7 +37,7 @@
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
-			<controls:DrivePanel x:Name="DrivePanel" Grid.ColumnSpan="13" />
+			<controls:DrivePanel x:Name="DrivePanel" Grid.ColumnSpan="15" />
 
 			<xctk:DateTimePicker x:Name="FromCtrl" Grid.Column="0" Grid.Row="2" Format="ShortDate" ValueChanged="OnDateValueChanged" />
 			<xctk:DateTimePicker x:Name="ToCtrl" Grid.Column="2" Grid.Row="2" Format="ShortDate" ValueChanged="OnDateValueChanged" />
@@ -43,12 +45,16 @@
 			<controls:SecurityPickerButton x:Name="SelectSecurityBtn" Grid.Column="4" Grid.Row="2" SecuritySelected="SelectSecurityBtn_SecuritySelected" />
 			<CheckBox x:Name="IsNonSystem" Content="{x:Static loc:LocalizedStrings.XamlStr62}" Grid.Column="6" Grid.Row="2" Height="16" Margin="0,4,0,3" ToolTip="{x:Static loc:LocalizedStrings.XamlStr86}" />
 			<CheckBox x:Name="IsBuildFromOrderLog" Grid.Column="8" Grid.Row="2" ToolTip="{x:Static loc:LocalizedStrings.XamlStr530}" VerticalAlignment="Center"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr191}"/></CheckBox>
-			<Button x:Name="Find" Grid.Column="10" Grid.Row="2" Click="FindClick">
+
+			<xaml:HelpButton Grid.Column="10" Grid.Row="2" DocUrl="http://stocksharp.com/doc/html/3a20fcda-25ba-4794-ac91-dfa227380530.htm" />
+
+			<Button x:Name="Find" Grid.Column="12" Grid.Row="2" Click="FindClick">
 				<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/find_16x16.png" />
 			</Button>
-			<controls:ExportButton x:Name="ExportBtn" Grid.Column="12" Grid.Row="2" />
+			
+			<controls:ExportButton x:Name="ExportBtn" Grid.Column="14" Grid.Row="2" />
 
-			<xaml:ExecutionGrid x:Name="FindedTrades" Grid.Row="4" Grid.ColumnSpan="13" Grid.Column="0" />
+			<xaml:ExecutionGrid x:Name="FindedTrades" Grid.Row="4" Grid.ColumnSpan="15" Grid.Column="0" />
 		</Grid>
 	</DockPanel>
 </panes:DataPane>
