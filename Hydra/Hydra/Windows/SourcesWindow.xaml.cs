@@ -9,6 +9,7 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
@@ -91,14 +92,20 @@
 				.Select(p => p.Value)
 				.ToArray();
 
-			_tasks.ForEach(t => t.IsVisible = IsTaskVisible(t.Task));
+			RefreshTasks();
 
 			TryEnableOk();
 		}
 
+		private void RefreshTasks()
+		{
+			_tasks.ForEach(t => t.IsVisible = IsTaskVisible(t.Task));
+		}
+
 		private bool IsTaskVisible(Type type)
 		{
-			return _lastCategories.IsEmpty() || _lastCategories.All(type.IsCategoryOf);
+			return (_lastCategories.IsEmpty() || _lastCategories.All(type.IsCategoryOf)) &&
+				(NameLike.Text.IsEmpty() || type.GetDisplayName().ContainsIgnoreCase(NameLike.Text));
 		}
 
 		private void SelectAll_OnClick(object sender, RoutedEventArgs e)
@@ -119,6 +126,11 @@
 		private void TryEnableOk()
 		{
 			OkBtn.IsEnabled = SelectedTasks.Any();
+		}
+
+		private void NameLike_OnTextChanged(object sender, RoutedEventArgs e)
+		{
+			RefreshTasks();
 		}
 	}
 }

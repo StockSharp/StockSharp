@@ -28,6 +28,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="5" />
 			<RowDefinition Height="Auto" />
@@ -159,7 +160,11 @@
 			</Grid>
 		</GroupBox>
 
-		<ListBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="6" x:Name="TasksCtrl">
+		<GroupBox Grid.Column="0" Grid.Row="5" Header="{x:Static loc:LocalizedStrings.Find}" HeaderTemplate="{StaticResource GroupBoxHeader}">
+			<TextBox x:Name="NameLike" TextChanged="NameLike_OnTextChanged" />
+		</GroupBox>
+
+		<ListBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="7" x:Name="TasksCtrl">
 			<ListBox.ItemContainerStyle>
 				<Style TargetType="{x:Type ListBoxItem}">
 					<Style.Triggers>
@@ -196,7 +201,7 @@
 			</ListBox.ItemTemplate>
         </ListBox>
 		
-		<Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3">
+		<Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
 				<ColumnDefinition Width="5" />
