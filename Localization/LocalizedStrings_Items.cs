@@ -53293,16 +53293,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// ITCH
+		/// Direct market-data access to LSE or NASDAQ via ITCH protocol.
 		/// </summary>
-		public const string ITCHKey = "ITCH";
+		public const string ItchDescriptionKey = "ItchDescription";
 
 		/// <summary>
-		/// ITCH
+		/// Direct market-data access to LSE or NASDAQ via ITCH protocol.
 		/// </summary>
-		public static string ITCH
+		public static string ItchDescription
 		{
-			get { return GetString(ITCHKey); }
+			get { return GetString(ItchDescriptionKey); }
 		}
 
 		/// <summary>
