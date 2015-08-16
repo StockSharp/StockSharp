@@ -6,7 +6,6 @@
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -59,17 +58,8 @@
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			if (SelectedSecurity == null)
-			{
-				new MessageBoxBuilder()
-					.Caption(Title)
-					.Text(LocalizedStrings.Str2875)
-					.Info()
-					.Owner(this)
-					.Show();
-
+			if (!CheckSecurity())
 				return;
-			}
 
 			FindedExecutions.Messages.Clear();
 			Progress.Load(GetExecutions(), FindedExecutions.Messages.AddRange, 10000);

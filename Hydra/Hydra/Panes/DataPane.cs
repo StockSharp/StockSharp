@@ -124,6 +124,21 @@ namespace StockSharp.Hydra.Panes
 			_getItems = getItems;
 		}
 
+		protected virtual bool CheckSecurity()
+		{
+			if (SelectedSecurity != null)
+				return true;
+
+			new MessageBoxBuilder()
+				.Caption(Title)
+				.Text(LocalizedStrings.Str2875)
+				.Info()
+				.Owner(this)
+				.Show();
+
+			return false;
+		}
+
 		protected virtual bool CanDirectBinExport
 		{
 			get { return _exportBtn.ExportType == ExportTypes.Bin; }
@@ -131,6 +146,9 @@ namespace StockSharp.Hydra.Panes
 
 		protected virtual void ExportBtnOnExportStarted()
 		{
+			if (!CheckSecurity())
+				return;
+
 			if (_getItems().Count == 0)
 			{
 				Progress.DoesntExist();

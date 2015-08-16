@@ -86,17 +86,8 @@ namespace StockSharp.Hydra.Panes
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			if (SelectedSecurity == null)
-			{
-				new MessageBoxBuilder()
-					.Caption(Title)
-					.Text(LocalizedStrings.Str2875)
-					.Info()
-					.Owner(this)
-						.Show();
-
+			if (!CheckSecurity())
 				return;
-			}
 
 			if (!CheckExportTypes())
 				return;
