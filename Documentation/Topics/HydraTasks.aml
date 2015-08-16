@@ -9,7 +9,7 @@
     	<mediaLink>
         <image placement="left" xlink:href="hydra_tasks" />
       </mediaLink>
-    	<para>На теущий момент в <token>hydra</token> существуют два класса задач:</para>
+    	<para>На теущий момент в <token>hydra</token> существуют три класса задач:</para>
     	
       <list class="bullet">
         <listItem>
@@ -22,6 +22,12 @@
             <link xlink:href="9e075b32-abb2-4fad-bfb2-b822dd7d9f30"><legacyBold>Экспорт (авто)</legacyBold></link> - задача предназначена для экспорта свечей в различные форматы.
           </para>
         </listItem>
+        <listItem>
+          <para>
+            <link xlink:href="5a056352-64c7-41ea-87a8-2e112935e3b9"><legacyBold>Бэкап данных ("Резервный") </legacyBold></link> - задача предназначена для резервного копирования данных в облачный сервис.
+          </para>
+        </listItem>
+
       </list> 
     </introduction>
   </developerWalkthroughDocument>
