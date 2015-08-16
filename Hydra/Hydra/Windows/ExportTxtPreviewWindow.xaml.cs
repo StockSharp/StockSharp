@@ -29,6 +29,12 @@
 			set { TxtTemplateCtrl.Text = value; }
 		}
 
+		public string TxtHeader
+		{
+			get { return HeaderCtrl.Text; }
+			set { HeaderCtrl.Text = value; }
+		}
+
 		private void TxtTemplateCtrl_OnTextChanged(object sender, TextChangedEventArgs e)
 		{
 			PreviewBtn.IsEnabled = OkBtn.IsEnabled = !TxtTemplate.IsEmpty();
@@ -47,7 +53,7 @@
 				BoardCode = "NASDAQ"
 			};
 
-			var serverTime = new DateTime(1977, 5, 24).ApplyTimeZone(LocalizedStrings.ActiveLanguage == Languages.Russian ? TimeHelper.Moscow : TimeHelper.Est);
+			var serverTime = new DateTime(1977, 5, 24, 14, 32, 30).AddMilliseconds(345).ApplyTimeZone(LocalizedStrings.ActiveLanguage == Languages.Russian ? TimeHelper.Moscow : TimeHelper.Est);
 			
 			if (DataType == typeof(SecurityMessage))
 			{
@@ -326,7 +332,12 @@
 			else
 				throw new InvalidOperationException(LocalizedStrings.Str2142Params.Put(DataType));
 
-			PreviewResult.Text = testValues.Select(v => TxtTemplate.PutEx(v)).Join(Environment.NewLine);
+			if (!TxtHeader.IsEmpty())
+				PreviewResult.Text = TxtHeader + Environment.NewLine;
+			else
+				PreviewResult.Text = string.Empty;
+
+			PreviewResult.Text += testValues.Select(v => TxtTemplate.PutEx(v)).Join(Environment.NewLine);
 		}
 
 		private void ResetTemplate_OnClick(object sender, RoutedEventArgs e)

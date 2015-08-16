@@ -4154,3 +4154,4 @@ TemplateTransaction;Transactions template;Шаблон транзакций
 TemplateSecurity;Security template;Шаблон инструментов
 TemplateNews;News template;Шаблон новостей
 CsvImportError;Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.;Ошибка парсинга. Строка {0}, колонка {1}, значение в файле '{2}', поле {3}.
+CsvHeader;Header at the first line. Do not add header while empty string.;Заголовок, идущий первой строкой. Если передается пустая строка, то заголовок не будет добавлен в файл.

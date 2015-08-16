@@ -53642,5 +53642,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(CsvImportErrorKey); }
 		}
+
+		/// <summary>
+		/// Header at the first line. Do not add header while empty string.
+		/// </summary>
+		public const string CsvHeaderKey = "CsvHeader";
+
+		/// <summary>
+		/// Header at the first line. Do not add header while empty string.
+		/// </summary>
+		public static string CsvHeader
+		{
+			get { return GetString(CsvHeaderKey); }
+		}
 	}
 }
