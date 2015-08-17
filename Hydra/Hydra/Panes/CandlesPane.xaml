@@ -11,7 +11,7 @@
 				xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml">
 	
 	<DockPanel>
-		<controls:ExportProgress x:Name="Progress" Height="23" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
+		<controls:ExportProgress x:Name="Progress" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
 
 		<Grid x:Name="MainGrid">
 			<Grid.ColumnDefinitions>
@@ -63,22 +63,26 @@
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="5" />
 					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 
-				<Button x:Name="Find" Grid.Column="0" Click="FindClick">
+				<sx:HelpButton Grid.Column="0" DocUrl="http://stocksharp.com/doc/html/621927b7-839f-4492-8dbb-162e63d57769.htm" />
+
+				<Button x:Name="Find" Grid.Column="2" Click="FindClick">
 					<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/find_16x16.png" />
 				</Button>
 
-				<Button x:Name="ShowChart" Grid.Column="2" ToolTip="{x:Static loc:LocalizedStrings.XamlStr482}" Click="ShowChartClick">
+				<Button x:Name="ShowChart" Grid.Column="4" ToolTip="{x:Static loc:LocalizedStrings.XamlStr482}" Click="ShowChartClick">
 					<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/candles_16x16.png" />
 				</Button>
 
-				<controls:ExportButton x:Name="ExportBtn" Grid.Column="4" />
+				<controls:ExportButton x:Name="ExportBtn" Grid.Column="6" />
 			</Grid>
 
 			<ug:UniversalGrid x:Name="BuildedCandles" Grid.Row="6" Grid.ColumnSpan="7" Grid.Column="0" SelectionMode="Single">
 				<ug:UniversalGrid.Columns>
-					<DataGridTextColumn Width="150" Header="{x:Static loc:LocalizedStrings.Str219}" Binding="{Binding Path=OpenTime}" SortMemberPath="OpenTime" />
+					<DataGridTextColumn Width="150" Header="{x:Static loc:LocalizedStrings.Time}" Binding="{Binding Path=OpenTime}" SortMemberPath="OpenTime" />
 					<DataGridTextColumn Width="80" Header="O" Binding="{Binding Path=OpenPrice}" SortMemberPath="OpenPrice" />
 					<DataGridTextColumn Width="80" Header="H" Binding="{Binding Path=HighPrice}" SortMemberPath="HighPrice" />
 					<DataGridTextColumn Width="80" Header="L" Binding="{Binding Path=LowPrice}" SortMemberPath="LowPrice" />

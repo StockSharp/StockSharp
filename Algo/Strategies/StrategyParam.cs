@@ -85,7 +85,7 @@ namespace StockSharp.Algo.Strategies
 		private bool _allowNull = typeof(T).IsNullable();
 
 		/// <summary>
-		/// ¬озможно ли в <see cref="Value"/> хранить значение, равное null.
+		/// ¬озможно ли в <see cref="Value"/> хранить значение, равное <see langword="null"/>.
 		/// </summary>
 		public bool AllowNull
 		{

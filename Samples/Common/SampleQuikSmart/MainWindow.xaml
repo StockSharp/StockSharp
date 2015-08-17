@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
     xmlns:ss="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
-    Title="{x:Static loc:LocalizedStrings.XamlStr555}" Height="115" Width="516">
+    Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="115" Width="516">
     <Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />

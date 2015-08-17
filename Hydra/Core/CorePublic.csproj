@@ -41,6 +41,14 @@
     <Reference Include="StockSharp.Algo.History">
       <HintPath>..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
     </Reference>
+    <Reference Include="StockSharp.ITCH, Version=4.3.9.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Plaza, Version=4.3.9.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -121,6 +129,7 @@
     <Compile Include="Attributes.cs" />
     <Compile Include="TaskCategories.cs" />
     <Compile Include="TempFiles.cs" />
+    <Compile Include="TemplateTxtRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="DriveComboBox.xaml">

@@ -311,7 +311,7 @@ namespace StockSharp.Algo.Candles.Compression
 						if (!valueAdded)
 							Container.AddValue(series, candle, value);
 
-						candle.State = CandleStates.Changed;
+						//candle.State = CandleStates.Changed;
 						RaiseProcessing(series, candle);
 
 						break;
@@ -331,7 +331,7 @@ namespace StockSharp.Algo.Candles.Compression
 						Container.AddValue(series, candle, value);
 						valueAdded = true;
 
-						candle.State = CandleStates.Started;
+						candle.State = CandleStates.Active;
 						RaiseProcessing(series, candle);
 					}
 				}
@@ -429,7 +429,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			if (value.OrderDirection != null)
 			{
-				candle.RelativeVolume += value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume;
+				candle.RelativeVolume = (candle.RelativeVolume ?? 0) + (value.OrderDirection == Sides.Buy ? value.Volume : -value.Volume);
 			}
 
 			candle.CloseTime = value.Time;
@@ -445,7 +445,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="currentCandle">Текущая свеча.</param>
 		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
 		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается null.</returns>
+		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
 		protected virtual TCandle ProcessValue(CandleSeries series, TCandle currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (currentCandle == null || IsCandleFinishedBeforeChange(series, currentCandle, value))
@@ -509,16 +509,18 @@ namespace StockSharp.Algo.Candles.Compression
 			if (info == null)
 				return;
 
+			var isNone = candle.State == CandleStates.None;
+
 			// если успела прийти новая свеча
-			if (candle.State == CandleStates.None && info.CurrentCandle != null)
+			if (isNone && info.CurrentCandle != null)
 				return;
 
-			if (candle.State != CandleStates.None && info.CurrentCandle != candle)
+			if (!isNone && info.CurrentCandle != candle)
 				return;
 
-			info.CurrentCandle = candle.State == CandleStates.None ? null : candle;
+			info.CurrentCandle = isNone ? null : candle;
 
-			if (candle.State != CandleStates.None)
+			if (!isNone)
 				candle.State = CandleStates.Finished;
 
 			RaiseProcessing(series, candle);
@@ -1221,7 +1223,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="currentCandle">Текущая свеча.</param>
 		/// <param name="value">Новые данные, с помощью которых принимается решение о необходимости начала или окончания формирования текущей свечи.</param>
 		/// <returns>Новая свеча. Если новую свечу нет необходимости создавать, то возвращается <paramref name="currentCandle"/>.
-		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается null.</returns>
+		/// Если новую свечу создать невозможно (<paramref name="value"/> не может быть применено к свечам), то возвращается <see langword="null"/>.</returns>
 		protected override RenkoCandle ProcessValue(CandleSeries series, RenkoCandle currentCandle, ICandleBuilderSourceValue value)
 		{
 			if (value == null)

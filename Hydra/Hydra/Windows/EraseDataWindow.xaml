@@ -4,6 +4,7 @@
         xmlns:controls="clr-namespace:StockSharp.Hydra.Controls"
         xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
         xmlns:core="clr-namespace:StockSharp.Hydra.Core;assembly=StockSharp.Hydra.Core"
+        xmlns:xaml="http://schemas.stocksharp.com/xaml"
         Title="{x:Static loc:LocalizedStrings.XamlStr781}" ResizeMode="NoResize" ShowInTaskbar="False"
 		SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <Grid>
@@ -36,10 +37,13 @@
 					<ColumnDefinition Width="100" />
 					<ColumnDefinition Width="5" />
 					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="5" />
+					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 				
 				<Button x:Name="Erase" Content="{x:Static loc:LocalizedStrings.Str2060}" Click="Erase_Click" ToolTip="{x:Static loc:LocalizedStrings.XamlStr785}"/>
 				<ProgressBar x:Name="Progress" Grid.Column="2" />
+				<xaml:HelpButton Grid.Column="4" DocUrl="http://stocksharp.com/doc/html/45cc9b3a-117c-4567-94af-fea13087ebe9.htm" />
 			</Grid>
         </Grid>
     </Grid>

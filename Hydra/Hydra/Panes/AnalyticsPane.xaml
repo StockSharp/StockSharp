@@ -49,9 +49,10 @@
 				</xctk:DropDownButton>
 				<Separator/>
 				<TextBlock>
-					<Run Text="{x:Static loc:LocalizedStrings.Str1993}"/><Run Text=":"/>
+					<Run Text="{x:Static loc:LocalizedStrings.Template}"/><Run Text=":"/>
 				</TextBlock>
 				<ComboBox x:Name="Templates" MinWidth="100" DisplayMemberPath="Title" SelectionChanged="Templates_OnSelectionChanged" />
+				<sx:HelpButton DocUrl="http://stocksharp.com/doc/html/7749ebdf-8bd5-4fae-a35c-d7e38f496c4a.htm" />
 			</ToolBar>
 		</shared:PixelSnapper>
 

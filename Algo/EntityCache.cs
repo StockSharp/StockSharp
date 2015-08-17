@@ -44,7 +44,7 @@ namespace StockSharp.Algo
 				public readonly CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo> Orders = new CachedSynchronizedDictionary<Tuple<long, bool, bool>, OrderInfo>();
 
 				public readonly SynchronizedDictionary<long, Trade> TradesById = new SynchronizedDictionary<long, Trade>();
-				public readonly SynchronizedDictionary<string, Trade> TradesByStrId = new SynchronizedDictionary<string, Trade>(StringComparer.InvariantCultureIgnoreCase);
+				public readonly SynchronizedDictionary<string, Trade> TradesByStringId = new SynchronizedDictionary<string, Trade>(StringComparer.InvariantCultureIgnoreCase);
 				public readonly SynchronizedList<Trade> Trades = new SynchronizedList<Trade>();
 
 				public readonly SynchronizedDictionary<long, Order> OrdersById = new SynchronizedDictionary<long, Order>();
@@ -62,7 +62,7 @@ namespace StockSharp.Algo
 			{
 				get
 				{
-					return _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStrId.SyncGet(t => t.Values.ToArray()))).ToArray());
+					return _securityData.SyncGet(d => d.SelectMany(p => p.Value.Trades.SyncGet(t => t.ToArray()).Concat(p.Value.TradesById.SyncGet(t => t.Values.ToArray())).Concat(p.Value.TradesByStringId.SyncGet(t => t.Values.ToArray()))).ToArray());
 				}
 			}
 
@@ -88,7 +88,7 @@ namespace StockSharp.Algo
 						return;
 
 					if (value < -1)
-						throw new ArgumentOutOfRangeException("value", value, "Количество тиковых сделок для хранения не может быть отрицательным.");
+						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeTickCountStorage);
 
 					_tradesKeepCount = value;
 					RecycleTrades();
@@ -106,7 +106,7 @@ namespace StockSharp.Algo
 						return;
 
 					if (value < -1)
-						throw new ArgumentOutOfRangeException("value", value, "Количество заявок для хранения не может быть отрицательным.");
+						throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.NegativeOrderCountStorage);
 
 					_ordersKeepCount = value;
 					RecycleOrders();
@@ -118,6 +118,9 @@ namespace StockSharp.Algo
 			
 			public void AddTrade(Trade trade)
 			{
+				if (TradesKeepCount == 0)
+					return;
+
 				_tradeStat.Add(trade);
 				_trades.Add(trade);
 				RecycleTrades();
@@ -125,12 +128,29 @@ namespace StockSharp.Algo
 
 			public void AddOrder(Order order)
 			{
+				if (OrdersKeepCount == 0)
+					return;
+
 				Orders.Add(order);
 				RecycleOrders();
 			}
 
 			private void RecycleTrades()
 			{
+				if (TradesKeepCount == 0)
+				{
+					_trades.Clear();
+					_tradeStat.Clear(true);
+					_securityData.SyncDo(d => d.Values.ForEach(v =>
+					{
+						v.Trades.Clear();
+						v.TradesById.Clear();
+						v.TradesByStringId.Clear();
+					}));
+
+					return;
+				}
+
 				var totalCount = _trades.Count;
 
 				if (TradesKeepCount == -1 || totalCount < (1.5 * TradesKeepCount))
@@ -156,7 +176,7 @@ namespace StockSharp.Algo
 						if (trade.Id != 0)
 							data.TradesById.Remove(trade.Id);
 						else if (!trade.StringId.IsEmpty())
-							data.TradesByStrId.Remove(trade.StringId);
+							data.TradesByStringId.Remove(trade.StringId);
 						else
 							data.Trades.Remove(trade);
 					}
@@ -165,6 +185,24 @@ namespace StockSharp.Algo
 
 			private void RecycleOrders()
 			{
+				if (OrdersKeepCount == 0)
+				{
+					Orders.Clear();
+
+					AllOrdersByTransactionId.Clear();
+					AllOrdersById.Clear();
+					AllOrdersByStringId.Clear();
+
+					_securityData.SyncDo(d => d.Values.ForEach(v =>
+					{
+						v.Orders.Clear();
+						v.OrdersById.Clear();
+						v.OrdersByStringId.Clear();
+					}));
+
+					return;
+				}
+
 				var totalCount = Orders.Count;
 
 				if (OrdersKeepCount == -1 || totalCount < (1.5 * OrdersKeepCount))
@@ -226,9 +264,6 @@ namespace StockSharp.Algo
 
 		private IEntityFactory _entityFactory = Algo.EntityFactory.Instance;
 
-		/// <summary>
-		/// Фабрика бизнес-сущностей (<see cref="Security"/>, <see cref="Order"/> и т.д.).
-		/// </summary>
 		public IEntityFactory EntityFactory
 		{
 			get { return _entityFactory; }
@@ -241,61 +276,38 @@ namespace StockSharp.Algo
 			}
 		}
 
-		/// <summary>
-		/// Количество тиковых сделок для хранения. 
-		/// По умолчанию равно 100000. Если значение установлено в -1, то сделки не будут удаляться.
-		/// </summary>
 		public int TradesKeepCount
 		{
 			get { return _cache.TradesKeepCount; }
 			set { _cache.TradesKeepCount = value; }
 		}
 
-		/// <summary>
-		/// Количество заявок для хранения. 
-		/// По умолчанию равно 1000. Если значение установлено в -1, то заявки не будут удаляться.
-		/// </summary>
 		public int OrdersKeepCount
 		{
 			get { return _cache.OrdersKeepCount; }
 			set { _cache.OrdersKeepCount = value; }
 		}
 
-		/// <summary>
-		/// Получить все заявки.
-		/// </summary>
 		public IEnumerable<Order> Orders
 		{
 			get { return _cache.Orders.Cache; }
 		}
 
-		/// <summary>
-		/// Получить все сделки.
-		/// </summary>
 		public IEnumerable<Trade> Trades
 		{
 			get { return _cache.Trades; }
 		}
 
-		/// <summary>
-		/// Получить все собственные сделки.
-		/// </summary>
 		public IEnumerable<MyTrade> MyTrades
 		{
 			get { return _cache.MyTrades.Cache; }
 		}
 
-		/// <summary>
-		/// Все новости.
-		/// </summary>
 		public IEnumerable<News> News
 		{
 			get { return _cache.News; }
 		}
 
-		/// <summary>
-		/// Получить все портфели.
-		/// </summary>
 		public virtual IEnumerable<Portfolio> Portfolios
 		{
 			get { return _portfolios.CachedValues; }
@@ -388,6 +400,7 @@ namespace StockSharp.Algo
 				o.Portfolio = message.PortfolioName.IsEmpty()
 					? _portfolios.FirstOrDefault().Value
 					: ProcessPortfolio(message.PortfolioName).Item1;
+				o.ClientCode = message.ClientCode;
 
 				return o;
 			}, out isNew, true);
@@ -858,7 +871,7 @@ namespace StockSharp.Algo
 			}
 			else if (!strId.IsEmpty())
 			{
-				trade = securityData.TradesByStrId.SafeAdd(strId, k =>
+				trade = securityData.TradesByStringId.SafeAdd(strId, k =>
 				{
 					isNew = true;
 

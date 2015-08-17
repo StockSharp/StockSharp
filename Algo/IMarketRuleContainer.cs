@@ -18,7 +18,7 @@ namespace StockSharp.Algo
 		/// Активировать правило.
 		/// </summary>
 		/// <param name="rule">Правило.</param>
-		/// <param name="process">Обработчик, возвращающий <see langword="true"/>, если правило закончило свою работу, иначе - false.</param>
+		/// <param name="process">Обработчик, возвращающий <see langword="true"/>, если правило закончило свою работу, иначе - <see langword="false"/>.</param>
 		void ActivateRule(IMarketRule rule, Func<bool> process);
 
 		/// <summary>

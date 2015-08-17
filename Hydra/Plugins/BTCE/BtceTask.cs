@@ -1,12 +1,9 @@
 namespace StockSharp.Hydra.Btce
 {
-	using System;
-	using System.ComponentModel;
 	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
 	using StockSharp.Btce;
@@ -15,8 +12,13 @@ namespace StockSharp.Hydra.Btce
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[TaskDisplayName(_sourceName)]
-	[Category(TaskCategories.Crypto)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/4e435654-38af-4ede-9987-e268a6ae3b96.htm")]
+	[TaskIcon("btce_logo.png")]
+	[TaskCategory(TaskCategories.Crypto | TaskCategories.RealTime |
+		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
+		TaskCategories.Level1 | TaskCategories.Transactions)]
 	class BtceTask : ConnectorHydraTask<BtceTrader>
 	{
 		private const string _sourceName = "BTCE";
@@ -35,7 +37,7 @@ namespace StockSharp.Hydra.Btce
 			/// <summary>
 			/// Ключ.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3304Key)]
 			[DescriptionLoc(LocalizedStrings.Str3304Key, true)]
 			[PropertyOrder(1)]
@@ -48,7 +50,7 @@ namespace StockSharp.Hydra.Btce
 			/// <summary>
 			/// Секрет.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3306Key)]
 			[DescriptionLoc(LocalizedStrings.Str3307Key)]
 			[PropertyOrder(2)]
@@ -60,16 +62,6 @@ namespace StockSharp.Hydra.Btce
 		}
 
 		private BtceSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "btce_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

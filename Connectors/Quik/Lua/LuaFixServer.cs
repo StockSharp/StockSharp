@@ -70,7 +70,7 @@ namespace StockSharp.Quik.Lua
 
 			protected override void WriterFixOrderCondition(IFixWriter writer, ExecutionMessage message)
 			{
-				writer.WriteOrderCondition((QuikOrderCondition)message.Condition);
+				writer.WriteOrderCondition((QuikOrderCondition)message.Condition, TransactionSession.DateTimeFormat);
 			}
 		}
 

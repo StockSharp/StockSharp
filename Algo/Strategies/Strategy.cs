@@ -1002,8 +1002,8 @@ namespace StockSharp.Algo.Strategies
 		/// (состояние <see cref="ProcessState"/> стало равным <see cref="ProcessStates.Stopped"/>)
 		/// и удалять ее из родительской через <see cref="ChildStrategies"/>.
 		/// </summary>
-		/// <remarks>Режим используется только для одноразовых стратегий, тоесть для тех, что не будут запущены повторно (например, котирование).</remarks>
-		/// <remarks>По умолчанию выключено.</remarks>
+		/// <remarks>Режим используется только для одноразовых стратегий, тоесть для тех, что не будут запущены повторно (например, котирование).
+		/// По умолчанию выключено.</remarks>
 		[Browsable(false)]
 		public bool DisposeOnStop
 		{

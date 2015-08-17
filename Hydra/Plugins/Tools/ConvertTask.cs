@@ -1,4 +1,4 @@
-namespace StockSharp.Hydra.Converters
+namespace StockSharp.Hydra.Tools
 {
 	using System;
 	using System.ComponentModel;
@@ -7,7 +7,6 @@ namespace StockSharp.Hydra.Converters
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -21,6 +20,10 @@ namespace StockSharp.Hydra.Converters
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayNameLoc(LocalizedStrings.Str3131Key)]
+	[DescriptionLoc(LocalizedStrings.Str3785Key)]
+	[TaskDoc("http://stocksharp.com/doc/html/272eef99-c7e4-4245-ae83-7efa4d2345bc.htm")]
+	[TaskIcon("convert_logo.png")]
+	[TaskCategory(TaskCategories.Tool)]
 	class ConvertTask : BaseHydraTask
 	{
 		private enum ConvertModes
@@ -41,17 +44,23 @@ namespace StockSharp.Hydra.Converters
 			DepthsToCandles,
 		}
 
-		[TaskSettingsDisplayName(LocalizedStrings.Str3131Key, true)]
-		//[CategoryOrder(_sourceName, 0)]
+		[TaskSettingsDisplayName(_sourceName)]
+		[CategoryOrderLoc(_sourceName, 0)]
+		[CategoryOrderLoc(LocalizedStrings.CandlesKey, 1)]
+		[CategoryOrderLoc(LocalizedStrings.MarketDepthsKey, 2)]
+		[CategoryOrderLoc(LocalizedStrings.GeneralKey, 3)]
 		private sealed class ConvertTaskSettings : HydraTaskSettings
 		{
+			private const string _sourceName = LocalizedStrings.Str3131Key;
+
 			public ConvertTaskSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
 				ExtensionInfo.TryAdd("DestinationStorageFormat", StorageFormats.Binary.To<string>());
+				ExtensionInfo.TryAdd("MarketDepthBuilder", OrderLogBuilders.Plaza2.To<string>());
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3131Key)]
 			[DescriptionLoc(LocalizedStrings.Str3131Key, true)]
 			[PropertyOrder(0)]
@@ -61,10 +70,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["ConvertMode"] = value.To<string>(); }
 			}
 
-			/// <summary>
-			/// Формат данных.
-			/// </summary>
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2239Key)]
 			[DescriptionLoc(LocalizedStrings.Str2240Key)]
 			[PropertyOrder(1)]
@@ -75,7 +81,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["DestinationStorageFormat"] = value.To<string>(); }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str3779Key)]
 			[PropertyOrder(1)]
@@ -85,7 +91,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str3778Key)]
 			[PropertyOrder(2)]
@@ -106,7 +112,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["CandleSettings"] = value; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str1414Key)]
+			[CategoryLoc(LocalizedStrings.MarketDepthsKey)]
 			[DisplayNameLoc(LocalizedStrings.Str175Key)]
 			[DescriptionLoc(LocalizedStrings.Str3781Key)]
 			[PropertyOrder(0)]
@@ -116,7 +122,7 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["MarketDepthInterval"] = value; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str1414Key)]
+			[CategoryLoc(LocalizedStrings.MarketDepthsKey)]
 			[DisplayNameLoc(LocalizedStrings.Str1660Key)]
 			[DescriptionLoc(LocalizedStrings.Str3782Key)]
 			[PropertyOrder(1)]
@@ -126,7 +132,17 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["MarketDepthMaxDepth"] = value; }
 			}
 
-			[CategoryLoc(LocalizedStrings.Str3131Key)]
+			[CategoryLoc(LocalizedStrings.MarketDepthsKey)]
+			[DisplayNameLoc(LocalizedStrings.Str1660Key)]
+			[DescriptionLoc(LocalizedStrings.Str3782Key)]
+			[PropertyOrder(1)]
+			public OrderLogBuilders MarketDepthBuilder
+			{
+				get { return ExtensionInfo["MarketDepthBuilder"].To<OrderLogBuilders>(); }
+				set { ExtensionInfo["MarketDepthBuilder"] = value.To<string>(); }
+			}
+
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3783Key)]
 			[DescriptionLoc(LocalizedStrings.Str3784Key)]
 			[PropertyOrder(2)]
@@ -151,21 +167,6 @@ namespace StockSharp.Hydra.Converters
 			}
 		}
 
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3785; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "convert_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Converter; }
-		}
-
 		private ConvertTaskSettings _settings;
 
 		public override HydraTaskSettings Settings
@@ -186,6 +187,7 @@ namespace StockSharp.Hydra.Converters
 				_settings.Interval = TimeSpan.FromDays(1);
 				_settings.MarketDepthInterval = TimeSpan.FromMilliseconds(10);
 				_settings.MarketDepthMaxDepth = 50;
+				_settings.MarketDepthBuilder = OrderLogBuilders.Plaza2;
 				_settings.DestinationDrive = null;
 				_settings.DestinationStorageFormat = StorageFormats.Binary;
 			}
@@ -272,7 +274,7 @@ namespace StockSharp.Hydra.Converters
 							{
 								var depths = ((IMarketDataStorage<ExecutionMessage>)fromStorage)
 									.Load(date)
-									.ToMarketDepths(_settings.MarketDepthInterval, _settings.MarketDepthMaxDepth);
+									.ToMarketDepths(_settings.MarketDepthBuilder.CreateBuilder(security.Security.ToSecurityId()), _settings.MarketDepthInterval, _settings.MarketDepthMaxDepth);
 
 								toStorage.Save(depths);
 								RaiseDataLoaded(security.Security, typeof(QuoteChangeMessage), null, date, depths.Count);

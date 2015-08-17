@@ -178,7 +178,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			throw new NotSupportedException();
@@ -392,12 +392,14 @@ namespace StockSharp.Algo
 		{
 			if (message.Error != null)
 				this.AddErrorLog(LocalizedStrings.Str625Params, innerAdapter.GetType().Name, message.Error);
-
-			var adapter = _hearbeatAdapters[innerAdapter];
-
-			foreach (var supportedMessage in adapter.SupportedMessages)
+			else
 			{
-				_connectedAdapters.SafeAdd(supportedMessage).Add(adapter);
+				var adapter = _hearbeatAdapters[innerAdapter];
+
+				foreach (var supportedMessage in adapter.SupportedMessages)
+				{
+					_connectedAdapters.SafeAdd(supportedMessage).Add(adapter);
+				}
 			}
 
 			SendOutMessage(message);

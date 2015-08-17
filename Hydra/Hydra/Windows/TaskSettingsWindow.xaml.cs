@@ -24,11 +24,11 @@ namespace StockSharp.Hydra.Windows
 		private readonly Dictionary<Type, string> _dataTypes = new Dictionary<Type, string>
 		{
 			{ typeof(Trade), LocalizedStrings.Str985 },
-			{ typeof(MarketDepth), LocalizedStrings.Str1414 },
+			{ typeof(MarketDepth), LocalizedStrings.MarketDepths },
 			{ typeof(OrderLogItem), LocalizedStrings.OrderLog },
-			{ typeof(Level1ChangeMessage), "Level 1" },
+			{ typeof(Level1ChangeMessage), LocalizedStrings.Level1 },
 			{ typeof(Candle), LocalizedStrings.Candles },
-			{ typeof(ExecutionMessage), "Executions" },
+			{ typeof(ExecutionMessage), LocalizedStrings.Transactions },
 		};
 
 		public TaskSettingsWindow()
@@ -43,14 +43,20 @@ namespace StockSharp.Hydra.Windows
 			get { return _task; }
 			set
 			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
 				_task = value;
 				_clonnedSettings = _task.Settings.Clone();
 
 				TaskSettings.IsEnabled = true;
 				TaskSettings.SelectedObject = _clonnedSettings;
 
-				lbDescription.Text = _task.Description;
-				lbAbilities.Text = _task.SupportedMarketDataTypes.Select(t => _dataTypes[t]).Join(", ");
+				DescriptionCtrl.Text = _task.GetDescription();
+				AbilitiesCtrl.Text = _task.SupportedMarketDataTypes.Select(t => _dataTypes[t]).Join(", ");
+
+				var attr = _task.GetType().GetAttribute<TaskDocAttribute>();
+				Help.DocUrl = attr == null ? null : attr.DocUrl;
 			}
 		}
 

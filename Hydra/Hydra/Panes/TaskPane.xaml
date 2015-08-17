@@ -9,6 +9,7 @@
 			 xmlns:panes="clr-namespace:StockSharp.Hydra.Panes"
              xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
              xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+             xmlns:xaml="http://schemas.stocksharp.com/xaml"
              Loaded="TaskPane_OnLoaded"
              mc:Ignorable="d" d:DesignHeight="155" d:DesignWidth="1103">
 	<UserControl.Resources>
@@ -144,7 +145,8 @@
 			</Style.Triggers>
 		</Style>
 
-		<panes:PriceStepToImageConvertor x:Key="PriceStepToImageConvertor" />
+		<panes:EmptyFieldToImageConvertor x:Key="EmptyFieldToImageConvertor" />
+		<panes:DecimalsToImageConvertor x:Key="DecimalsToImageConvertor" />
 		<converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" FalseVisibilityValue="Hidden" />
 
 		<Style x:Key="TextCenterStyle" TargetType="TextBlock">
@@ -191,18 +193,24 @@
 
 		<ug:UniversalGrid x:Name="SecuritiesCtrl" Grid.ColumnSpan="17" Grid.Row="0" SelectionMode="Extended" MouseDoubleClick="HandleDoubleClick" SelectionChanged="SecuritiesCtrl_OnSelectionChanged">
 			<ug:UniversalGrid.Columns>
-				<DataGridTemplateColumn Width="50">
+				<DataGridTemplateColumn Width="70">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<Grid Margin="5,0,5,0">
 								<Grid.ColumnDefinitions>
 									<ColumnDefinition />
-									<ColumnDefinition Width="5" />
+									<ColumnDefinition Width="2" />
+									<ColumnDefinition />
+									<ColumnDefinition Width="2" />
+									<ColumnDefinition />
+									<ColumnDefinition Width="2" />
 									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
 
 								<ex:BmpImage Grid.Column="0" ToolTip="{x:Static loc:LocalizedStrings.XamlStr344}" Source="pack://application:,,,/StockSharp.Xaml;component/Images/Warning_16x16.png" Visibility="{Binding Path=IsInvalid, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<ex:BmpImage Grid.Column="2" ToolTip="{x:Static loc:LocalizedStrings.XamlStr843}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.PriceStep, Converter={StaticResource PriceStepToImageConvertor}}" />
+								<ex:BmpImage Grid.Column="2" ToolTip="{x:Static loc:LocalizedStrings.Str2925}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.PriceStep, Converter={StaticResource EmptyFieldToImageConvertor}}" />
+								<ex:BmpImage Grid.Column="4" ToolTip="{x:Static loc:LocalizedStrings.DecimalsNotFilled}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.Decimals, Converter={StaticResource DecimalsToImageConvertor}}" />
+								<ex:BmpImage Grid.Column="6" ToolTip="{x:Static loc:LocalizedStrings.Str2924}" Source="/Images/zero.png" Visibility="{Binding TaskSecurity.Security.VolumeStep, Converter={StaticResource EmptyFieldToImageConvertor}}" />
 							</Grid>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -227,12 +235,12 @@
 									<ColumnDefinition />
 								</Grid.ColumnDefinitions>
 								
-								<TextBlock Grid.Column="0" Text="T" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str985}" Visibility="{Binding Path=IsTradeEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="1" Text="D" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Str1414}" Visibility="{Binding Path=IsDepthEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="0" Text="T" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Ticks}" Visibility="{Binding Path=IsTradeEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="1" Text="D" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.MarketDepths}" Visibility="{Binding Path=IsDepthEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="2" Text="C" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Path=IsCandleEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 								<TextBlock Grid.Column="3" Text="O" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OrderLog}" Visibility="{Binding Path=IsOrderLogEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-								<TextBlock Grid.Column="4" Text="L1" Margin="1" ToolTip="Level 1" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
-                                <TextBlock Grid.Column="5" Text="E" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.OwnTransactions}" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+								<TextBlock Grid.Column="4" Text="L1" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Level1}" Visibility="{Binding Path=IsLevel1Enabled, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <TextBlock Grid.Column="5" Text="E" Margin="1" ToolTip="{x:Static loc:LocalizedStrings.Transactions}" Visibility="{Binding Path=IsExecutionEnabled, Converter={StaticResource BoolToVisibilityConverter}}" />
 							</Grid>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
@@ -246,7 +254,7 @@
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.OrderLogOf}" Binding="{Binding Path=TaskSecurity.OrderLogInfo.Count}" SortMemberPath="TaskSecurity.OrderLogInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="Level 1" Binding="{Binding Path=TaskSecurity.Level1Info.Count}" SortMemberPath="TaskSecurity.Level1Info.Count" ElementStyle="{StaticResource TextRightStyle}" />
 				<DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr631}" Binding="{Binding Path=TaskSecurity.CandleInfo.Count}" SortMemberPath="TaskSecurity.CandleInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
-                <DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Binding="{Binding Path=TaskSecurity.ExecutionInfo.Count}" SortMemberPath="TaskSecurity.ExecutionInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
+                <DataGridTextColumn Width="70" Header="{x:Static loc:LocalizedStrings.Transactions}" Binding="{Binding Path=TaskSecurity.ExecutionInfo.Count}" SortMemberPath="TaskSecurity.ExecutionInfo.Count" ElementStyle="{StaticResource TextRightStyle}" />
 
 				<DataGridTextColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr518}" Visibility="Collapsed" Binding="{Binding Path=TaskSecurity.TradeInfo.LastTime}" SortMemberPath="TaskSecurity.TradeInfo.LastTime" ElementStyle="{StaticResource TextCenterStyle}" />
 				<DataGridTextColumn Width="140" Header="{x:Static loc:LocalizedStrings.XamlStr525}" Visibility="Collapsed" Binding="{Binding Path=TaskSecurity.DepthInfo.LastTime}" SortMemberPath="TaskSecurity.DepthInfo.LastTime" ElementStyle="{StaticResource TextCenterStyle}" />
@@ -278,12 +286,12 @@
 
 			<Grid>
 				<StackPanel x:Name="MarketDataPanel" Orientation="Horizontal" FlowDirection="LeftToRight" IsEnabled="False">
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Str985}" Height="23" x:Name="Trades" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Str1414}" Height="23" x:Name="Depths" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.TicksKey}" Height="23" x:Name="Trades" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.MarketDepths}" Height="23" x:Name="Depths" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Height="23" x:Name="Candles" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="Candles_OnClick" MouseEnter="Candles_OnMouseEnter" Style="{StaticResource CandleStyle}" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Height="23" x:Name="OrderLog" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 					<CheckBox Content="Level 1" Height="23" x:Name="Level1Changes" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
-                    <CheckBox Content="{x:Static loc:LocalizedStrings.OwnTransactions}" Height="23" x:Name="Executions" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
+                    <CheckBox Content="{x:Static loc:LocalizedStrings.Transactions}" Height="23" x:Name="Executions" Margin="5,0,0,0" MinHeight="25" IsEnabled="False" Click="CheckBoxClick" Style="{StaticResource CheckBoxStyle}" />
 				</StackPanel>
 
 				<Popup Name="TimeFramesPopup" StaysOpen="False" PopupAnimation="Scroll" AllowsTransparency="True" PlacementTarget="{Binding ElementName=Candles}">
@@ -301,6 +309,8 @@
 					</Border>
 				</Popup>
 			</Grid>
+
+			<xaml:HelpButton Margin="10,0,0,0" DocUrl="http://stocksharp.com/doc/html/47ebc084-6b07-4b69-8f96-ea190110111f.htm" />
 		</StackPanel>
 	</Grid>
 </UserControl>

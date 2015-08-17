@@ -33,6 +33,8 @@ namespace SampleBitStamp
 		{
 			InitializeComponent();
 
+			Title = Title.Put("BitStamp");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

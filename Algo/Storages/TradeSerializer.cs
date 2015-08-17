@@ -20,6 +20,11 @@ namespace StockSharp.Algo.Storages
 			FirstId = -1;
 		}
 
+		public override object LastId
+		{
+			get { return PrevId; }
+		}
+
 		public long FirstId { get; set; }
 		public long PrevId { get; set; }
 
@@ -79,7 +84,7 @@ namespace StockSharp.Algo.Storages
 		public TradeSerializer(SecurityId securityId)
 			: base(securityId, 50)
 		{
-			Version = MarketDataVersions.Version51;
+			Version = MarketDataVersions.Version52;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TradeMetaInfo metaInfo)
@@ -116,7 +121,7 @@ namespace StockSharp.Algo.Storages
 				// pyhta4og.
 				// http://stocksharp.com/forum/yaf_postsm6450_Oshibka-pri-importie-instrumientov-s-Finama.aspx#post6450
 
-				var volume = msg.GetVolume();
+				var volume = msg.SafeGetVolume();
 
 				if (volume < 0)
 					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
@@ -188,6 +193,14 @@ namespace StockSharp.Algo.Storages
 
 				if (msg.IsUpTick != null)
 					writer.Write(msg.IsUpTick.Value);
+
+				if (metaInfo.Version < MarketDataVersions.Version52)
+					continue;
+
+				writer.Write(msg.Currency != null);
+
+				if (msg.Currency != null)
+					writer.WriteInt((int)msg.Currency.Value);
 			}
 		}
 
@@ -268,6 +281,12 @@ namespace StockSharp.Algo.Storages
 
 			if (reader.Read())
 				msg.IsUpTick = reader.Read();
+
+			if (metaInfo.Version >= MarketDataVersions.Version52)
+			{
+				if (reader.Read())
+					msg.Currency = (CurrencyTypes)reader.ReadInt();
+			}
 
 			return msg;
 		}

@@ -65,6 +65,15 @@
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\References\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="AWSSDK.Core">
+      <HintPath>..\References\Amazon\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.Glacier">
+      <HintPath>..\References\Amazon\AWSSDK.Glacier.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.S3">
+      <HintPath>..\References\Amazon\AWSSDK.S3.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Collections, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Ecng\Ecng.Collections.dll</HintPath>
@@ -147,6 +156,11 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Storages\Backup\AmazonExtensions.cs" />
+    <Compile Include="Storages\Backup\AmazonGlacierService.cs" />
+    <Compile Include="Storages\Backup\AmazonS3Service.cs" />
+    <Compile Include="Storages\Backup\BackupEntry.cs" />
+    <Compile Include="Storages\Backup\IBackupService.cs" />
     <Compile Include="BasketMessageAdapter.cs" />
     <Compile Include="BasketPortfolio.cs" />
     <Compile Include="BasketPosition.cs" />
@@ -314,6 +328,8 @@
     </Compile>
     <Compile Include="AuthorizationModes.cs" />
     <Compile Include="Storages\AllSecurityMarketDataStorage.cs" />
+    <Compile Include="Storages\Backup\Xaml\AmazonRegionComboBox.cs" />
+    <Compile Include="Storages\Backup\Xaml\AmazonRegionEditor.cs" />
     <Compile Include="Storages\BinaryMarketDataSerializer.cs" />
     <Compile Include="Storages\CacheableMarketDataDrive.cs" />
     <Compile Include="Storages\CsvMarketDataSerializer.cs" />
@@ -342,7 +358,6 @@
     <Compile Include="Storages\NewsSerializer.cs" />
     <Compile Include="Storages\QuoteSerializer.cs" />
     <Compile Include="OrderLogHelper.cs" />
-    <Compile Include="OrderLogMarketDepthBuilder.cs" />
     <Compile Include="MarketTimer.cs" />
     <Compile Include="PnL\PnLInfo.cs" />
     <Compile Include="PnL\PnLQueue.cs" />

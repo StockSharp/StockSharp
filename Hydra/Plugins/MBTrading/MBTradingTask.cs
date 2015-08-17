@@ -2,14 +2,12 @@ namespace StockSharp.Hydra.MBTrading
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 	using System.Security;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History;
@@ -23,8 +21,12 @@ namespace StockSharp.Hydra.MBTrading
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/c3a78005-7d5d-49e6-8460-66c02109abd5.htm")]
+	[TaskIcon("mbtrading_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
+		TaskCategories.Free | TaskCategories.Level1)]
 	class MBTradingTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "MBTrading";
@@ -39,7 +41,7 @@ namespace StockSharp.Hydra.MBTrading
 				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -49,7 +51,7 @@ namespace StockSharp.Hydra.MBTrading
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
@@ -59,7 +61,7 @@ namespace StockSharp.Hydra.MBTrading
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
@@ -69,7 +71,7 @@ namespace StockSharp.Hydra.MBTrading
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PinKey)]
 			[DescriptionLoc(LocalizedStrings.PinKey, true)]
 			[PropertyOrder(3)]
@@ -79,7 +81,7 @@ namespace StockSharp.Hydra.MBTrading
 				set { ExtensionInfo["Pin"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(4)]
@@ -89,7 +91,7 @@ namespace StockSharp.Hydra.MBTrading
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(5)]
@@ -118,24 +120,9 @@ namespace StockSharp.Hydra.MBTrading
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "mbtrading_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2288Params.Put(_sourceName); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage) };

@@ -6,7 +6,6 @@ namespace StockSharp.Hydra.Rss
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -16,7 +15,11 @@ namespace StockSharp.Hydra.Rss
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.RssSourceKey)]
+	[TaskDoc("http://stocksharp.com/doc/html/91454878-ec26-4872-9a85-1bfbc76dc77a.htm")]
+	[TaskIcon("rss_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.Russia | TaskCategories.News)]
 	class RssTask : ConnectorHydraTask<RssTrader>
 	{
 		private const string _sourceName = "RSS";
@@ -32,7 +35,7 @@ namespace StockSharp.Hydra.Rss
 
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.Str3505Key)]
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[Editor(typeof(RssAddressEditor), typeof(RssAddressEditor))]
 			[PropertyOrder(0)]
 			public Uri Address
@@ -43,7 +46,7 @@ namespace StockSharp.Hydra.Rss
 
 			[DisplayNameLoc(LocalizedStrings.Str3506Key)]
 			[DescriptionLoc(LocalizedStrings.Str3507Key)]
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[PropertyOrder(1)]
 			public string CustomDateFormat
 			{
@@ -67,16 +70,6 @@ namespace StockSharp.Hydra.Rss
 		}
 
 		private RssSettings _settings;
-
-		public override string Description
-		{
-			get { return LocalizedStrings.RssSource; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "rss_logo.png".GetResourceUrl(GetType()); }
-		}
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{

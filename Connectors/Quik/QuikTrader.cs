@@ -126,7 +126,7 @@ namespace StockSharp.Quik
 		/// Поддерживает ли Quik Единую Денежную Позицию.
 		/// </summary>
 		/// <remarks>
-		/// False по умолчанию.
+		/// <see langword="false"/> по умолчанию.
 		/// </remarks>
 		public bool IsCommonMonetaryPosition { get; set; }
 
@@ -258,11 +258,11 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Асинхронный режим. Если true, то все транзакции, такие как <see cref="IConnector.RegisterOrder"/>
+		/// Асинхронный режим. Если <see langword="true"/>, то все транзакции, такие как <see cref="IConnector.RegisterOrder"/>
 		/// или <see cref="IConnector.CancelOrder"/> будут отправляться в асинхронном режиме.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию true.
+		/// Значение по умолчанию <see langword="true"/>.
 		/// </remarks>
 		public bool IsAsyncMode
 		{
@@ -401,7 +401,7 @@ namespace StockSharp.Quik
 		/// Загружать заявки, поданные вручную через Quik.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию false.
+		/// Значение по умолчанию <see langword="false"/>.
 		/// </remarks>
 		public bool SupportManualOrders
 		{
@@ -470,11 +470,11 @@ namespace StockSharp.Quik
 		/// Отменить группу заявок на бирже по фильтру.
 		/// </summary>
 		/// <param name="transactionId">Идентификатор транзакции отмены.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
+		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
+		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
+		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
+		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
 		protected override void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			if (security != null && portfolio != null && security.Type == SecurityTypes.Future && !security.UnderlyingSecurityId.IsEmpty())

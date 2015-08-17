@@ -84,7 +84,7 @@
 			<ug:UniversalGrid.Columns>
 				<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Name}" Binding="{Binding Path=Source.Name}" SortMemberPath="Source.Name" />
 
-				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str219}" SortMemberPath="Time">
+				<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Time}" SortMemberPath="Time">
 					<DataGridTemplateColumn.CellStyle>
 						<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
 					</DataGridTemplateColumn.CellStyle>

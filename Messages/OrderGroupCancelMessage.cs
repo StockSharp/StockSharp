@@ -15,7 +15,7 @@ namespace StockSharp.Messages
 	public class OrderGroupCancelMessage : OrderMessage
 	{
 		///// <summary>
-		///// Тип инструмента. Если значение null, то отмена идет по всем типам инструментов.
+		///// Тип инструмента. Если значение <see langword="null"/>, то отмена идет по всем типам инструментов.
 		///// </summary>
 		//[DataMember]
 		//[DisplayName("Тип")]
@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// <see langword="true"/>, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.
+		/// <see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str226Key)]
@@ -39,7 +39,7 @@ namespace StockSharp.Messages
 		public bool? IsStop { get; set; }
 
 		/// <summary>
-		/// Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.
+		/// Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]

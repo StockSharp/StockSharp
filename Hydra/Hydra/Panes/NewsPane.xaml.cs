@@ -55,5 +55,10 @@ namespace StockSharp.Hydra.Panes
 			NewsPanel.NewsGrid.Messages.Clear();
 			Progress.Load(GetNews(), NewsPanel.NewsGrid.Messages.AddRange, 1000);
 		}
+
+		protected override bool CheckSecurity()
+		{
+			return true;
+		}
 	}
 }

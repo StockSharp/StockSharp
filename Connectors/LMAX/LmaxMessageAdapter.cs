@@ -34,7 +34,7 @@ namespace StockSharp.LMAX
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new LmaxOrderCondition();
@@ -156,7 +156,7 @@ namespace StockSharp.LMAX
 		/// Привести инструкцию к идентификатору транзакции.
 		/// </summary>
 		/// <param name="instructionId">Инструкция.</param>
-		/// <returns>Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено null.</returns>
+		/// <returns>Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено <see langword="null"/>.</returns>
 		private static long? TryParseTransactionId(string instructionId)
 		{
 			long transactionId;

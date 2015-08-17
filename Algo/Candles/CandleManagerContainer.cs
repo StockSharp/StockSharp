@@ -201,7 +201,7 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="candleIndex">Порядковый номер свечи с конца.</param>
-		/// <returns>Найденная свеча. Если свечи не существует, то будет возвращено null.</returns>
+		/// <returns>Найденная свеча. Если свечи не существует, то будет возвращено <see langword="null"/>.</returns>
 		public Candle GetCandle(CandleSeries series, int candleIndex)
 		{
 			if (candleIndex < 0)

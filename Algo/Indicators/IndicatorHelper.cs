@@ -94,7 +94,7 @@ namespace StockSharp.Algo.Indicators
 		/// </summary>
 		/// <param name="indicator">Индикатор.</param>
 		/// <param name="value">Числовое значение.</param>
-		/// <param name="isFinal">Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени). По-умолчанию true.</param>
+		/// <param name="isFinal">Является ли значение окончательным (индикатор окончательно формирует свое значение и более не будет изменяться в данной точке времени). По-умолчанию <see langword="true"/>.</param>
 		/// <returns>Новое значение индикатора.</returns>
 		public static IIndicatorValue Process(this IIndicator indicator, decimal value, bool isFinal = true)
 		{

@@ -26,7 +26,7 @@
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new QuikOrderCondition();
@@ -48,7 +48,7 @@
 		/// <param name="regMsg">Сообщение, содержащее информацию для регистрации заявки.</param>
 		protected override void WriteOrderCondition(IFixWriter writer, OrderRegisterMessage regMsg)
 		{
-			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition);
+			writer.WriteOrderCondition((QuikOrderCondition)regMsg.Condition, DateTimeFormat);
 		}
 
 		/// <summary>

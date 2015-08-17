@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
-	Title="{x:Static loc:LocalizedStrings.XamlStr547}"
+	Title="{x:Static loc:LocalizedStrings.XamlStr540}"
 	Height="134" Width="512" WindowStartupLocation="CenterScreen">
     <Grid>
 		<Grid.ColumnDefinitions>

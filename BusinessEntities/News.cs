@@ -80,7 +80,7 @@ namespace StockSharp.BusinessEntities
 		/// Время появления новости.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str219Key)]
+		[DisplayNameLoc(LocalizedStrings.TimeKey)]
 		[DescriptionLoc(LocalizedStrings.Str220Key)]
 		[MainCategory]
 		public DateTimeOffset ServerTime { get; set; }

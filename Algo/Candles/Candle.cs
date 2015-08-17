@@ -22,7 +22,7 @@ namespace StockSharp.Algo.Candles
 	[KnownType(typeof(TimeFrameCandle))]
 	[KnownType(typeof(PnFCandle))]
 	[KnownType(typeof(RenkoCandle))]
-	public abstract class Candle
+	public abstract class Candle : Cloneable<Candle>
 	{
 		/// <summary>
 		/// Инструмент.
@@ -254,13 +254,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private decimal _relativeVolume;
+		private decimal? _relativeVolume;
 
 		/// <summary>
 		/// Относительный объем.
 		/// </summary>
 		[DataMember]
-		public decimal RelativeVolume
+		public decimal? RelativeVolume
 		{
 			get { return _relativeVolume; }
 			set
@@ -299,13 +299,13 @@ namespace StockSharp.Algo.Candles
 		/// </summary>
 		public abstract object Arg { get; set; }
 
-		private int _totalTicks;
+		private int? _totalTicks;
 
 		/// <summary>
 		/// Количество тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int TotalTicks
+		public int? TotalTicks
 		{
 			get { return _totalTicks; }
 			set
@@ -315,13 +315,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private int _upTicks;
+		private int? _upTicks;
 
 		/// <summary>
 		/// Количество восходящих тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int UpTicks
+		public int? UpTicks
 		{
 			get { return _upTicks; }
 			set
@@ -331,13 +331,13 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private int _downTicks;
+		private int? _downTicks;
 
 		/// <summary>
 		/// Количество нисходящих тиковых сделок.
 		/// </summary>
 		[DataMember]
-		public int DownTicks
+		public int? DownTicks
 		{
 			get { return _downTicks; }
 			set
@@ -396,6 +396,43 @@ namespace StockSharp.Algo.Candles
 			if (State == CandleStates.Finished)
 				throw new InvalidOperationException(LocalizedStrings.Str649);
 		}
+
+		/// <summary>
+		/// Скопировать данные сообщения в <paramref name="destination"/>.
+		/// </summary>
+		/// <typeparam name="TCandle">Тип свечи.</typeparam>
+		/// <param name="destination">Объект, в который копируется информация.</param>
+		/// <returns>Объект, в который копируется информация.</returns>
+		protected TCandle CopyTo<TCandle>(TCandle destination)
+			where TCandle : Candle
+		{
+			destination.Arg = Arg;
+			destination.ClosePrice = ClosePrice;
+			destination.CloseTime = CloseTime;
+			destination.CloseVolume = CloseVolume;
+			destination.DownTicks = DownTicks;
+			destination.HighPrice = HighPrice;
+			destination.HighTime = HighTime;
+			destination.HighVolume = HighVolume;
+			destination.LowPrice = LowPrice;
+			destination.LowTime = LowTime;
+			destination.LowVolume = LowVolume;
+			destination.OpenInterest = OpenInterest;
+			destination.OpenPrice = OpenPrice;
+			destination.OpenTime = OpenTime;
+			destination.OpenVolume = OpenVolume;
+			destination.RelativeVolume = RelativeVolume;
+			destination.Security = Security;
+			destination.Series = Series;
+			destination.Source = Source;
+			//destination.State = State;
+			destination.TotalPrice = TotalPrice;
+			destination.TotalTicks = TotalTicks;
+			destination.TotalVolume = TotalVolume;
+			//destination.VolumeProfileInfo = VolumeProfileInfo;
+
+			return destination;
+		}
 	}
 
 	/// <summary>
@@ -419,6 +456,15 @@ namespace StockSharp.Algo.Candles
 		{
 			get { return TimeFrame; }
 			set { TimeFrame = (TimeSpan)value; }
+		}
+
+		/// <summary>
+		/// Создать копию объекта <see cref="TimeFrameCandle"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override Candle Clone()
+		{
+			return CopyTo(new TimeFrameCandle());
 		}
 	}
 
@@ -450,6 +496,15 @@ namespace StockSharp.Algo.Candles
 			get { return MaxTradeCount; }
 			set { MaxTradeCount = (int)value; }
 		}
+
+		/// <summary>
+		/// Создать копию объекта <see cref="TickCandle"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override Candle Clone()
+		{
+			return CopyTo(new TickCandle());
+		}
 	}
 
 	/// <summary>
@@ -474,6 +529,15 @@ namespace StockSharp.Algo.Candles
 			get { return Volume; }
 			set { Volume = (decimal)value; }
 		}
+
+		/// <summary>
+		/// Создать копию объекта <see cref="VolumeCandle"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override Candle Clone()
+		{
+			return CopyTo(new VolumeCandle());
+		}
 	}
 
 	/// <summary>
@@ -497,6 +561,15 @@ namespace StockSharp.Algo.Candles
 		{
 			get { return PriceRange; }
 			set { PriceRange = (Unit)value; }
+		}
+
+		/// <summary>
+		/// Создать копию объекта <see cref="RangeCandle"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override Candle Clone()
+		{
+			return CopyTo(new RangeCandle());
 		}
 	}
 
@@ -528,6 +601,15 @@ namespace StockSharp.Algo.Candles
 			get { return PnFArg; }
 			set { PnFArg = (PnFArg)value; }
 		}
+
+		/// <summary>
+		/// Создать копию объекта <see cref="PnFCandle"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override Candle Clone()
+		{
+			return CopyTo(new PnFCandle { Type = Type });
+		}
 	}
 
 	/// <summary>
@@ -551,6 +633,15 @@ namespace StockSharp.Algo.Candles
 		{
 			get { return BoxSize; }
 			set { BoxSize = (Unit)value; }
+		}
+
+		/// <summary>
+		/// Создать копию объекта <see cref="RenkoCandle"/>.
+		/// </summary>
+		/// <returns>Копия.</returns>
+		public override Candle Clone()
+		{
+			return CopyTo(new RenkoCandle());
 		}
 	}
 }

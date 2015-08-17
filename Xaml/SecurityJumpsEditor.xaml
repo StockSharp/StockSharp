@@ -21,7 +21,7 @@
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
 
-            <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.XamlStr114}" Width="150">
+            <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.ExpiryDate}" Width="150">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <editors:DateTimeEditBox BorderThickness="0" BorderBrush="{x:Null}" Value="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

@@ -401,6 +401,10 @@ namespace StockSharp.Xaml
 		private void FilterSecurities(bool fullRefresh = false)
 		{
 			var filter = SecurityFilter;
+
+			if (filter != null)
+				filter = filter.Trim();
+
 			var secType = SelectedType;
 
 			// при уточняющем фильтре выполняем поиск в найденных инструментах

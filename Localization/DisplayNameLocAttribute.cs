@@ -12,7 +12,7 @@
 	public class DisplayNameLocAttribute : DisplayNameAttribute
 	{
 		/// <summary>
-		/// Initializes a new instance of the DisplayNameLocAttribute class using specified resource id for the display name.
+		/// Initializes a new instance of the <see cref="DisplayNameLocAttribute"/> class using specified resource id for the display name.
 		/// </summary>
 		/// <param name="resourceId">String resource id.</param>
 		public DisplayNameLocAttribute(string resourceId)
@@ -21,17 +21,17 @@
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the DisplayNameLocAttribute class using specified resource id for the display name.
+		/// Initializes a new instance of the <see cref="DisplayNameLocAttribute"/> class using specified resource id for the display name.
 		/// </summary>
 		/// <param name="resourceId">String resource id.</param>
 		/// <param name="arg">Arg for formatted string.</param>
 		public DisplayNameLocAttribute(string resourceId, string arg)
-			: base(LocalizedStrings.GetString(resourceId).Put(arg))
+			: base(LocalizedStrings.GetString(resourceId).Put(LocalizedStrings.GetString(arg)))
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the DisplayNameLocAttribute class using specified resource id for the display name.
+		/// Initializes a new instance of the <see cref="DisplayNameLocAttribute"/> class using specified resource id for the display name.
 		/// </summary>
 		/// <param name="resourceId">String resource id.</param>
 		/// <param name="args">Args for formatted string.</param>

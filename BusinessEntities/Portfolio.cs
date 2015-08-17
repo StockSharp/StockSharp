@@ -79,7 +79,7 @@ namespace StockSharp.BusinessEntities
 		/// Валюта портфеля.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str250Key)]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str251Key)]
 		[MainCategory]
 		[Nullable]

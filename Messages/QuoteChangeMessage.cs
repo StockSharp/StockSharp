@@ -6,13 +6,14 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	using Ecng.Common;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 
 	/// <summary>
 	/// Сообщение, содержащее данные по котировкам.
 	/// </summary>
-	[DataContract]
+	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public sealed class QuoteChangeMessage : Message
 	{
@@ -86,6 +87,16 @@ namespace StockSharp.Messages
 		public bool IsSorted { get; set; }
 
 		/// <summary>
+		/// Валюта торгового инструмента.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
+		[DescriptionLoc(LocalizedStrings.Str382Key)]
+		[MainCategory]
+		[Nullable]
+		public CurrencyTypes? Currency { get; set; }
+
+		/// <summary>
 		/// Создать <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		public QuoteChangeMessage()
@@ -106,7 +117,8 @@ namespace StockSharp.Messages
 				Bids = Bids.Select(q => q.Clone()).ToArray(),
 				Asks = Asks.Select(q => q.Clone()).ToArray(),
 				ServerTime = ServerTime,
-				IsSorted = IsSorted
+				IsSorted = IsSorted,
+				Currency = Currency,
 			};
 
 			this.CopyExtensionInfo(clone);

@@ -49,13 +49,13 @@
 		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.Board}" Binding="{Binding Path=Board}" SortMemberPath="Board" />
 		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.PriceStep}" Binding="{Binding Path=PriceStep}" SortMemberPath="PriceStep" />
 		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str290}" Binding="{Binding Path=StepPrice}" SortMemberPath="StepPrice" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str365}" Binding="{Binding Path=VolumeStep}" SortMemberPath="VolumeStep" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.VolumeStep}" Binding="{Binding Path=VolumeStep}" SortMemberPath="VolumeStep" />
 		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str330}" Binding="{Binding Path=Multiplier}" SortMemberPath="Multiplier" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str547}" Binding="{Binding Path=Decimals}" SortMemberPath="Decimals" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Decimals}" Binding="{Binding Path=Decimals}" SortMemberPath="Decimals" />
 		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.State}" Binding="{Binding Path=State, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="State" />
 		<DataGridTextColumn Width="50" Header="{x:Static loc:LocalizedStrings.Type}" Binding="{Binding Path=Type, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Type" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.UnderlyingAsset}" Binding="{Binding Path=UnderlyingSecurityId}" SortMemberPath="UnderlyingSecurityId" />
-		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Str250}" Binding="{Binding Path=Currency, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Currency" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.Currency}" Binding="{Binding Path=Currency, Converter={StaticResource EnumDisplayNameConverter}}" SortMemberPath="Currency" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr833}" Binding="{Binding Path=LastTrade.Price}" SortMemberPath="LastTrade.Price" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr382}" Binding="{Binding Path=LastTrade.Volume}" SortMemberPath="LastTrade.Volume" />
@@ -90,10 +90,11 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="IV" Binding="{Binding Path=ImpliedVolatility}" SortMemberPath="ImpliedVolatility" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="HV" Binding="{Binding Path=HistoricalVolatility}" SortMemberPath="HistoricalVolatility" />
 
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str300}" Binding="{Binding Path=Delta}" SortMemberPath="Delta" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str301}" Binding="{Binding Path=Gamma}" SortMemberPath="Gamma" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str302}" Binding="{Binding Path=Vega}" SortMemberPath="Vega" />
-		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str303}" Binding="{Binding Path=Theta}" SortMemberPath="Theta" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Delta}" Binding="{Binding Path=Delta}" SortMemberPath="Delta" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Gamma}" Binding="{Binding Path=Gamma}" SortMemberPath="Gamma" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Vega}" Binding="{Binding Path=Vega}" SortMemberPath="Vega" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Theta}" Binding="{Binding Path=Theta}" SortMemberPath="Theta" />
+		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Rho}" Binding="{Binding Path=Rho}" SortMemberPath="Rho" />
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.OI}" Binding="{Binding Path=OpenInterest}" SortMemberPath="OpenInterest" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr491}" Binding="{Binding Path=BidsVolume}" SortMemberPath="BidsVolume" />

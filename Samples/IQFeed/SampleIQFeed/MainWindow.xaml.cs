@@ -30,6 +30,8 @@ namespace SampleIQFeed
 		{
 			InitializeComponent();
 
+			Title = Title.Put("IQFeed");
+
 			Trader = new IQFeedTrader();
 			//{
 			//	LogLevel = LogLevels.Debug,

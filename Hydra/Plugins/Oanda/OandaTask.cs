@@ -2,12 +2,10 @@ namespace StockSharp.Hydra.Oanda
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
@@ -17,8 +15,13 @@ namespace StockSharp.Hydra.Oanda
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/6a99aea5-1142-4b2e-b183-554fcc890fad.htm")]
+	[TaskIcon("oanda_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.RealTime |
+		TaskCategories.Free | TaskCategories.History | TaskCategories.MarketDepth |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class OandaTask : ConnectorHydraTask<OandaTrader>
 	{
 		private const string _sourceName = "OANDA";
@@ -32,7 +35,7 @@ namespace StockSharp.Hydra.Oanda
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3416Key)]
 			[DescriptionLoc(LocalizedStrings.Str3450Key)]
 			[PropertyOrder(0)]
@@ -42,7 +45,7 @@ namespace StockSharp.Hydra.Oanda
 				set { ExtensionInfo["Server"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3451Key)]
 			[DescriptionLoc(LocalizedStrings.Str3451Key, true)]
 			[PropertyOrder(1)]
@@ -63,16 +66,6 @@ namespace StockSharp.Hydra.Oanda
 		}
 
 		private OandaSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "oanda_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3840Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

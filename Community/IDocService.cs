@@ -51,7 +51,7 @@
 		/// Получить дочерние страницы.
 		/// </summary>
 		/// <param name="parentUrl">Строка запроса родительской страницы.</param>
-		/// <returns>Дочерние страницы. Если страниц нет, то будет возвращено null.</returns>
+		/// <returns>Дочерние страницы. Если страниц нет, то будет возвращено <see langword="null"/>.</returns>
 		[OperationContract]
 		DocPage[] GetChildPages(string parentUrl);
 

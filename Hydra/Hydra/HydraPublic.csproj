@@ -159,9 +159,9 @@
     <Compile Include="AppConfig.cs" />
     <Compile Include="Configuration\CandleElement.cs" />
     <Compile Include="Configuration\CandleElementCollection.cs" />
+    <Compile Include="Configuration\HydraSection.cs" />
     <Compile Include="Configuration\IndicatorElement.cs" />
     <Compile Include="Configuration\IndicatorElementCollection.cs" />
-    <Compile Include="Configuration\StudioSection.cs" />
     <Compile Include="Controls\DrivePanel.xaml.cs">
       <DependentUpon>DrivePanel.xaml</DependentUpon>
     </Compile>
@@ -179,6 +179,9 @@
     </Compile>
     <Compile Include="Windows\DatabaseConnectionWindow.xaml.cs">
       <DependentUpon>DatabaseConnectionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ExportTxtPreviewWindow.xaml.cs">
+      <DependentUpon>ExportTxtPreviewWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ImportEnumMappingWindow.xaml.cs">
       <DependentUpon>ImportEnumMappingWindow.xaml</DependentUpon>
@@ -242,6 +245,9 @@
       <DependentUpon>SecurityPickerButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Server\HydraServer.cs" />
+    <Compile Include="Windows\SourcesWindow.xaml.cs">
+      <DependentUpon>SourcesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SynchronizeWindow.xaml.cs">
       <DependentUpon>SynchronizeWindow.xaml</DependentUpon>
     </Compile>
@@ -251,11 +257,15 @@
     <Compile Include="Panes\Level1Pane.xaml.cs">
       <DependentUpon>Level1Pane.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\TaskInfo.cs" />
     <Compile Include="Windows\TaskSettingsWindow.xaml.cs">
       <DependentUpon>TaskSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Panes\TradesPane.xaml.cs">
       <DependentUpon>TradesPane.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ToolsWindow.xaml.cs">
+      <DependentUpon>ToolsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\DrivePanel.xaml">
       <SubType>Designer</SubType>
@@ -280,6 +290,10 @@
     <Page Include="Windows\DatabaseConnectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ExportTxtPreviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ImportEnumMappingWindow.xaml">
       <SubType>Designer</SubType>
@@ -365,6 +379,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\SourcesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\TaskSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -384,6 +402,10 @@
     <Page Include="Panes\Level1Pane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ToolsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

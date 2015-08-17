@@ -10,41 +10,6 @@
             </summary>
             <param name="parameter">The component to validate</param>
         </member>
-        <member name="T:Abt.Licensing.Core.AES256">
-            <summary>
-            AES256 class uses the AES algorithm with a provided 256 bit key and a random 128 bit IV to meet PCI standards
-            The IV is randomly generated before each encryption and encoded with the final encrypted string
-            from http://www.dreamincode.net/forums/topic/156922-aes-encryption-and-c%23/
-            For an even more secure but complex example: http://stackoverflow.com/questions/202011/encrypt-and-decrypt-a-string/10366194#10366194
-            </summary>
-        </member>
-        <member name="M:Abt.Licensing.Core.AES256.#ctor(System.Byte[])">
-            <summary>
-            Constructor for AES class that takes a byte array for the key
-            </summary>
-            <param name="key">256 bit key (32 bytes)</param>
-        </member>
-        <member name="M:Abt.Licensing.Core.AES256.#ctor(System.String,System.String)">
-            <summary>
-            Constructor for AES class that generates the key from a hashed, salted password
-            </summary>
-            <param name="password">Password used to generate the key (Minimum of 8 characters)</param>
-            <param name="salt">Salt used to secure hash from rainbow table attacks (Minimum of 8 characters)</param>
-        </member>
-        <member name="M:Abt.Licensing.Core.AES256.Encrypt(System.String)">
-            <summary>
-            Encrypts a string with AES algorithm
-            </summary>
-            <param name="plainText">String to encrypt</param>
-            <returns>Encrypted string with IV prefix</returns>
-        </member>
-        <member name="M:Abt.Licensing.Core.AES256.Decrypt(System.String)">
-            <summary>
-            Decrypts a string with AES algorithm
-            </summary>
-            <param name="secureText">Encrypted string with IV prefix</param>
-            <returns>Decrypted string</returns>
-        </member>
         <member name="T:Abt.Controls.SciChart.ChartModifiers.AxisDragCursor">
             <summary>
             
@@ -326,17 +291,17 @@
             Instantly stops any inertia that can be associated with this modifier.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.IChartModifier.OnAnnotationCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called when the AnnotationCollection changes
             </summary>
@@ -472,17 +437,17 @@
             <param name="relativeTo"></param>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes. Overridden in derived classes.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.OnAnnotationCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called when the AnnotationCollection changes. Overridden in derived classes.
             </summary>
@@ -573,17 +538,17 @@
             Instantly stops any inertia that can be associated with this modifier.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ChartModifierBase.Abt#Controls#SciChart#ChartModifiers#IChartModifier#OnAnnotationCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called when the AnnotationCollection changes
             </summary>
@@ -672,7 +637,7 @@
             Called when the element is attached to the Chart Surface
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ZoomPanModifierBase.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ZoomPanModifierBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
             </summary>
@@ -1148,12 +1113,12 @@
             <param name="hitTestInfo"></param>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called when [X axes collection changed].
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.TooltipModifierBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called when [Y axes collection changed].
             </summary>
@@ -1524,7 +1489,7 @@
             Called when the Chart Modifier is attached to the Chart Surface
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.SeriesValueModifier.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.SeriesValueModifier.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
             </summary>
@@ -11613,17 +11578,17 @@
             </summary>
             <remarks></remarks>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnAnnotationCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.ModifierGroup.OnAnnotationCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called when the AnnotationCollection changes
             </summary>
@@ -12392,7 +12357,7 @@
             Called when the element is attached to the Chart Surface
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.XAxisDragModifier.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.XAxisDragModifier.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
             </summary>
@@ -12495,7 +12460,7 @@
             Called when the Chart Modifier is attached to the Chart Surface
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.ChartModifiers.YAxisDragModifier.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.ChartModifiers.YAxisDragModifier.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes.
             </summary>
@@ -17160,7 +17125,7 @@
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3(System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Draws a quadratic Bézier curve from the current point to (x,y) using (xControl,yControl) as the control point.
+            Draws a quadratic Bйzier curve from the current point to (x,y) using (xControl,yControl) as the control point.
             </summary>
             <param name="xControl"></param>
             <param name="yControl"></param>
@@ -17169,12 +17134,12 @@
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3_rel(System.Double,System.Double,System.Double,System.Double)">
             <summary>
-            Draws a quadratic Bézier curve from the current point to (x,y) using (xControl,yControl) as the control point.
+            Draws a quadratic Bйzier curve from the current point to (x,y) using (xControl,yControl) as the control point.
             </summary>
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3(System.Double,System.Double)">
             <summary>
-            <para>Draws a quadratic Bézier curve from the current point to (x,y).</para>
+            <para>Draws a quadratic Bйzier curve from the current point to (x,y).</para>
             <para>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.</para>
             <para>(If there is no previous command or if the previous command was not a curve, assume the control point is coincident with the current point.)</para>
             </summary>
@@ -17183,7 +17148,7 @@
         </member>
         <member name="M:MatterHackers.Agg.VertexSource.PathStorage.curve3_rel(System.Double,System.Double)">
             <summary>
-            <para>Draws a quadratic Bézier curve from the current point to (x,y).</para>
+            <para>Draws a quadratic Bйzier curve from the current point to (x,y).</para>
             <para>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.</para>
             <para>(If there is no previous command or if the previous command was not a curve, assume the control point is coincident with the current point.)</para>
             </summary>
@@ -17563,6 +17528,11 @@
             Removes all the labels from an axis.
             </summary>
         </member>
+        <member name="M:Abt.Controls.SciChart.Themes.IAxisPanel.Invalidate">
+            <summary>
+            Forces the layout pass on this panel.
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Themes.IAxisPanel.DrawTicks(Abt.Controls.SciChart.Numerics.TickCoordinateProviders.TickCoordinates,System.Single)">
             <summary>
             Draws ticks on an axis at the given coordinates.
@@ -17570,11 +17540,11 @@
             <param name="tickCoords"></param>
             <param name="offset"></param>
         </member>
-        <member name="M:Abt.Controls.SciChart.Themes.IAxisPanel.DrawTickLabels(System.Action{Abt.Controls.SciChart.Themes.AxisCanvas})">
+        <member name="M:Abt.Controls.SciChart.Themes.IAxisPanel.AddTickLabels(System.Action{Abt.Controls.SciChart.Themes.AxisCanvas})">
             <summary>
             Draws labels on an axis using 
             </summary>
-            <param name="draw"></param>
+            <param name="addOnCanvas"></param>
         </member>
         <member name="T:Abt.Controls.SciChart.Themes.AxisPanel">
             <summary>
@@ -17621,7 +17591,17 @@
             The IsLabelCullingEnabled DependencyProperty
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.DrawTickLabels(System.Action{Abt.Controls.SciChart.Themes.AxisCanvas})">
+        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.MeasureOverride(System.Windows.Size)">
+            <summary>
+            Performs the measure pass on AxisPanel.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            Performs the arrange pass on AxisPanel.
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Themes.AxisPanel.AddTickLabels(System.Action{Abt.Controls.SciChart.Themes.AxisCanvas})">
             <summary>
             Draws the tick labels.
             </summary>
@@ -17727,6 +17707,21 @@
         <member name="P:Abt.Controls.SciChart.Themes.AxisPanel.LabelToTickIndent">
             <summary>
             Gets the label to tick indent.
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Themes.AxisPanel.MajorTickSize">
+            <summary>
+            Gets the size of a major tick.
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Themes.AxisPanel.MinorTickSize">
+            <summary>
+            Gets the size of a minor tick.
+            </summary>
+        </member>
+        <member name="P:Abt.Controls.SciChart.Themes.AxisPanel.AddLabels">
+            <summary>
+            Used internally. Specifies a method which is used to fill the panel with tick labels.
             </summary>
         </member>
         <member name="T:Abt.Controls.SciChart.Themes.ModifierAxisCanvas">
@@ -18103,12 +18098,12 @@
             Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragDelta"/> event, called when a drag operation is in progress and each time the X1 Y1 X2 Y2 points update in the annotation
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> changes.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> changes.
             </summary>
@@ -18332,12 +18327,12 @@
             Raises the <see cref="E:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.DragDelta"/> event, called when a drag operation is in progress and each time the X1 Y1 X2 Y2 points update in the annotation
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.Abt#Controls#SciChart#Visuals#Annotations#IAnnotation#OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.Abt#Controls#SciChart#Visuals#Annotations#IAnnotation#OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> changes.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.Abt#Controls#SciChart#Visuals#Annotations#IAnnotation#OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.Abt#Controls#SciChart#Visuals#Annotations#IAnnotation#OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Raises notification when parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> changes.
             </summary>
@@ -18349,12 +18344,12 @@
             <param name="axis"></param>
             <param name="oldAlignment"></param>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> has changed
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> has changed
             </summary>
@@ -20975,12 +20970,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Axes.PolarXAxis.OnDrawAxis(Abt.Controls.SciChart.Numerics.TickCoordinateProviders.TickCoordinates)">
-            <summary>
-            Called when the axis should redraw itself. 
-            </summary>
-            <param name="tickCoords"> </param>
-        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.Axes.PolarXAxis.DrawGridLine(Abt.Controls.SciChart.Rendering.Common.IRenderContext2D,System.Windows.Style,System.Collections.Generic.IEnumerable{System.Single})">
             <summary>
             Draws grid lines on chart at specified coordinates
@@ -21540,7 +21529,7 @@
             Removes the <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> from the internal collection.
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String,System.String)">
             <summary>
             Called internally to move series from one StackedGroup to another.
             </summary>
@@ -21587,7 +21576,7 @@
             Add <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> to wrappers internal collection
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.AddSeriesToGroups(`0,System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.AddSeriesToGroup(`0,System.String)">
             <summary>
             Uses internally to add <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> to internal _seriesGroups dictionary
             </summary>
@@ -21597,14 +21586,14 @@
             Remove <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> from wrappers internal collection
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.RemoveSeriesFromGroups(`0,System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.RemoveSeriesFromGroup(`0,System.String)">
             <summary>
             Uses internally to remove <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> from internal _seriesGroups dictionary
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String)">
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.MoveSeriesToAnotherGroup(`0,System.String,System.String)">
             <summary>
-            Uses internally to move sSeries from old group to new one (according to passed id's
+            Used internally to move a stacked series to a new group
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedSeriesWrapperBase`1.GetStackedSeriesFromSameGroup(System.String)">
@@ -21612,9 +21601,29 @@
             Returns all <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedRenderableSeries"/> with the same groupId 
             </summary>
         </member>
+        <member name="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnsWrapper">
+            <summary>
+            Defines interface for <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnsWrapper"/>
+            </summary>
+        </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnsWrapper.GetDataPointWidthFraction">
             <summary>
             Gets fraction of the data point width
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnsWrapper.GetSeriesBodyWidth(Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries,System.Int32)">
+            <summary>
+            Returns DataPointWith of <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries"/> considering spacing between groups
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnsWrapper.GetSeriesVerticalBounds(Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries,System.Int32)">
+            <summary>
+            Returns Upper and Lower Bound of <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries"/> column
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnsWrapper.GetXRange">
+            <summary>
+            Returns the data range of all the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on X direction
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnsWrapper.GetXRange">
@@ -21635,14 +21644,13 @@
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnsWrapper.GetSeriesVerticalBounds(Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries,System.Int32)">
             <summary>
-            Returns Upper and Lower Bound of <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries"/> column
+            Returns Upper and Lower Bound of <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries"/> column
             </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnsWrapper.GetSeriesBodyWidth(Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries,System.Int32)">
             <summary>
-            Returns DataPointWith of <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnRenderableSeries"/> considering spacing between groups
+            Returns DataPointWith of <see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.IStackedColumnRenderableSeries"/> considering spacing between groups
             </summary>
-            
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.StackedColumnsWrapper.GetSpacingMode(System.String)">
             <summary>
@@ -22519,7 +22527,7 @@
         </member>
         <member name="M:System.Windows.Media.Imaging.WriteableBitmapExtensions.ComputeBezierPoints(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Windows.Media.Imaging.BitmapContext,System.Int32,System.Int32)">
             <summary>
-            Draws a filled, cubic Beziér spline defined by start, end and two control points.
+            Draws a filled, cubic Beziйr spline defined by start, end and two control points.
             </summary>
             <param name="x1">The x-coordinate of the start point.</param>
             <param name="y1">The y-coordinate of the start point.</param>
@@ -22536,7 +22544,7 @@
         </member>
         <member name="M:System.Windows.Media.Imaging.WriteableBitmapExtensions.FillBeziers(System.Windows.Media.Imaging.WriteableBitmap,System.Int32[],System.Windows.Media.Color)">
             <summary>
-            Draws a series of filled, cubic Beziér splines each defined by start, end and two control points. 
+            Draws a series of filled, cubic Beziйr splines each defined by start, end and two control points. 
             The ending point of the previous curve is used as starting point for the next. 
             Therfore the inital curve needs four points and the subsequent 3 (2 control and 1 end point).
             </summary>
@@ -22546,7 +22554,7 @@
         </member>
         <member name="M:System.Windows.Media.Imaging.WriteableBitmapExtensions.FillBeziers(System.Windows.Media.Imaging.WriteableBitmap,System.Int32[],System.Int32)">
             <summary>
-            Draws a series of filled, cubic Beziér splines each defined by start, end and two control points. 
+            Draws a series of filled, cubic Beziйr splines each defined by start, end and two control points. 
             The ending point of the previous curve is used as starting point for the next. 
             Therfore the inital curve needs four points and the subsequent 3 (2 control and 1 end point).
             </summary>
@@ -25026,12 +25034,12 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> has changed
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.LineAnnotationWithLabelsBase.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Virtual method to override if you wish to be notified that the parent <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> has changed
             </summary>
@@ -25522,12 +25530,12 @@
             <param name="annotationBase">Annotation <see cref="T:Abt.Controls.SciChart.Visuals.Annotations.IAnnotation"/> for selection</param>
             <returns></returns>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationCollection.OnXAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationCollection.OnXAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.XAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
         </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationCollection.OnYAxesCollectionChanged">
+        <member name="M:Abt.Controls.SciChart.Visuals.Annotations.AnnotationCollection.OnYAxesCollectionChanged(System.Object,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
             <summary>
             Called with the <see cref="P:Abt.Controls.SciChart.Visuals.SciChartSurface.YAxes"/> <see cref="T:Abt.Controls.SciChart.AxisCollection"/> changes
             </summary>
@@ -27447,37 +27455,9 @@
             <param name="rawPoint"></param>
             <param name="nearestHitResult"></param>
             <param name="hitTestRadius"></param>
-            <param name="yValues"></param>
             <param name="previousDataPoint"> </param>
             <param name="nextDataPoint"></param>
             <returns></returns>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetSeriesInfo(Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo)">
-            <summary>
-            Converts the result of a Hit-Test operation (<see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo"/>) to a <see cref="T:Abt.Controls.SciChart.SeriesInfo"/> class, which may be used as a
-            ViewModel when outputting series values as bindings. <see cref="T:Abt.Controls.SciChart.SeriesInfo"/> is used by the <see cref="T:Abt.Controls.SciChart.ChartModifiers.RolloverModifier"/>, <see cref="T:Abt.Controls.SciChart.ChartModifiers.CursorModifier"/>
-            and <see cref="T:Abt.Controls.SciChart.Visuals.SciChartLegend"/> classes
-            </summary>
-            <param name="hitTestInfo"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetXRange">
-            <summary>
-            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on X direction
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange)">
-            <summary>
-            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
-            <param name="xRange">The X-Axis Range currently in view</param>
-            </summary>
-        </member>
-        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
-            <summary>
-            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
-            <param name="xRange">The X-Axis Range currently in view</param>
-            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
-            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetSeriesBodyWidth(Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo)">
             <summary>
@@ -27514,6 +27494,33 @@
             <param name="lowerBound"></param>
             <param name="upperBound"></param>
             <returns></returns>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetSeriesInfo(Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo)">
+            <summary>
+            Converts the result of a Hit-Test operation (<see cref="T:Abt.Controls.SciChart.Visuals.RenderableSeries.HitTestInfo"/>) to a <see cref="T:Abt.Controls.SciChart.SeriesInfo"/> class, which may be used as a
+            ViewModel when outputting series values as bindings. <see cref="T:Abt.Controls.SciChart.SeriesInfo"/> is used by the <see cref="T:Abt.Controls.SciChart.ChartModifiers.RolloverModifier"/>, <see cref="T:Abt.Controls.SciChart.ChartModifiers.CursorModifier"/>
+            and <see cref="T:Abt.Controls.SciChart.Visuals.SciChartLegend"/> classes
+            </summary>
+            <param name="hitTestInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetXRange">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on X direction
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            </summary>
+        </member>
+        <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.GetYRange(Abt.Controls.SciChart.IRange,System.Boolean)">
+            <summary>
+            Returns the data range of the assosiated <see cref="T:Abt.Controls.SciChart.Model.DataSeries.IDataSeries"/> on Y direction
+            <param name="xRange">The X-Axis Range currently in view</param>
+            <param name="getPositiveRange">Indicates whether to return positive YRange only</param>
+            </summary>
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.RenderableSeries.BaseRenderableSeries.OnResamplingModeChanged">
             <summary>
@@ -29861,7 +29868,7 @@
         </member>
         <member name="M:Abt.Controls.SciChart.Visuals.SciChartSurface.OnAxisAlignmentChanged(Abt.Controls.SciChart.Visuals.Axes.IAxis,Abt.Controls.SciChart.Visuals.Axes.AxisAlignment)">
             <summary>
-            Called internally by SciChart when <see cref="P:Abt.Controls.SciChart.Visuals.Axes.IAxis.AxisAlignment"/> changes. Allows the <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/> to reposition the axis, e.g. at the top, left, bottom, right
+            Called internally by SciChart when <see cref="P:Abt.Controls.SciChart.Visuals.Axes.IAxis.AxisAlignment"/> changes. Allows the <see cref="T:Abt.Controls.SciChart.Visuals.SciChartSurface"/> to reposition the axis, args.g. at the top, left, bottom, right
             </summary>
             <param name="axis"></param>
             <param name="oldValue"> </param>

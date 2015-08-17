@@ -514,7 +514,7 @@ namespace StockSharp.Quik
 		/// Загружать заявки, поданные вручную через Quik.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию false.
+		/// Значение по умолчанию <see langword="false"/>.
 		/// </remarks>
 		[CategoryLoc(LocalizedStrings.Str1771Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1775Key)]

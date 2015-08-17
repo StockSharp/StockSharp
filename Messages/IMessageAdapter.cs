@@ -66,7 +66,7 @@
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
 		OrderCondition CreateOrderCondition();
 
 		/// <summary>
@@ -74,5 +74,12 @@
 		/// </summary>
 		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
 		bool IsConnectionAlive();
+
+		/// <summary>
+		/// Создать построитель стакана.
+		/// </summary>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <returns>Построитель стакана.</returns>
+		IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
 	}
 }

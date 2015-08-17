@@ -179,7 +179,7 @@ namespace StockSharp.BusinessEntities
 		/// Минимальный шаг объема.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str365Key)]
+		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
 		[DescriptionLoc(LocalizedStrings.Str366Key)]
 		[MainCategory]
 		[PropertyOrder(6)]
@@ -227,7 +227,7 @@ namespace StockSharp.BusinessEntities
 		/// Количество знаков в цене после запятой.
 		/// </summary>
 		[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str547Key)]
+		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
 		[DescriptionLoc(LocalizedStrings.Str548Key)]
 		[MainCategory]
 		[PropertyOrder(7)]
@@ -418,7 +418,7 @@ namespace StockSharp.BusinessEntities
 		/// </summary>
 		[DataMember]
 		[Nullable]
-		[DisplayNameLoc(LocalizedStrings.Str250Key)]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		[DescriptionLoc(LocalizedStrings.Str382Key)]
 		[MainCategory]
 		public CurrencyTypes? Currency
@@ -536,7 +536,7 @@ namespace StockSharp.BusinessEntities
 		private Trade _lastTrade;
 
 		/// <summary>
-		/// Информация о последней сделке. Если за сессию по инструменту не было сделок, то значение равно null.
+		/// Информация о последней сделке. Если за сессию по инструменту не было сделок, то значение равно <see langword="null"/>.
 		/// </summary>
 		//[DataMember]
 		[Ignore]
@@ -987,7 +987,7 @@ namespace StockSharp.BusinessEntities
 		/// Дельта опциона.
 		/// </summary>
 		//[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str300Key)]
+		[DisplayNameLoc(LocalizedStrings.DeltaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionDeltaKey)]
 		[DerivativesCategory]
 		[Ignore]
@@ -1014,7 +1014,7 @@ namespace StockSharp.BusinessEntities
 		/// Гамма опциона.
 		/// </summary>
 		//[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str301Key)]
+		[DisplayNameLoc(LocalizedStrings.GammaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionGammaKey)]
 		[DerivativesCategory]
 		[Ignore]
@@ -1041,7 +1041,7 @@ namespace StockSharp.BusinessEntities
 		/// Вега опциона.
 		/// </summary>
 		//[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str302Key)]
+		[DisplayNameLoc(LocalizedStrings.VegaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionVegaKey)]
 		[DerivativesCategory]
 		[Ignore]
@@ -1068,7 +1068,7 @@ namespace StockSharp.BusinessEntities
 		/// Тета опциона.
 		/// </summary>
 		//[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str303Key)]
+		[DisplayNameLoc(LocalizedStrings.ThetaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionThetaKey)]
 		[DerivativesCategory]
 		[Ignore]
@@ -1095,7 +1095,7 @@ namespace StockSharp.BusinessEntities
 		/// Ро опциона.
 		/// </summary>
 		//[DataMember]
-		[DisplayNameLoc(LocalizedStrings.Str317Key)]
+		[DisplayNameLoc(LocalizedStrings.RhoKey)]
 		[DescriptionLoc(LocalizedStrings.OptionRhoKey)]
 		[DerivativesCategory]
 		[Ignore]

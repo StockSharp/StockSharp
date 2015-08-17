@@ -13,8 +13,8 @@ namespace StockSharp.Btce
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("BTC-e")]
-	[CategoryLoc(LocalizedStrings.Str3302Key)]
-	[DescriptionLoc(LocalizedStrings.Str3342Key)]
+	[CategoryLoc(LocalizedStrings.BitcoinsKey)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "BTC-e")]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]

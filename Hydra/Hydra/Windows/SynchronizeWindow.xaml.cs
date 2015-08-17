@@ -189,18 +189,18 @@ namespace StockSharp.Hydra.Windows
 				if (_token.IsCancellationRequested)
 					return;
 
-				var dataTypes = new Dictionary<Type, object>
+				var dataTypes = new[]
 				{
-					{ typeof(ExecutionMessage), ExecutionTypes.Tick },
-					{ typeof(ExecutionMessage), ExecutionTypes.OrderLog },
-					{ typeof(ExecutionMessage), ExecutionTypes.Order },
-					{ typeof(ExecutionMessage), ExecutionTypes.Trade },
-					{ typeof(QuoteChangeMessage), null },
-					{ typeof(Level1ChangeMessage), null },
-					{ typeof(NewsMessage), null }
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Tick),
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.OrderLog),
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Order),
+					Tuple.Create(typeof(ExecutionMessage), (object)ExecutionTypes.Trade),
+					Tuple.Create(typeof(QuoteChangeMessage), (object)null),
+					Tuple.Create(typeof(Level1ChangeMessage), (object)null),
+					Tuple.Create(typeof(NewsMessage), (object)null)
 				};
 
-				var formats = Enumerator.GetValues<StorageFormats>();
+				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
 				foreach (var drive in DriveCache.Instance.AllDrives)
 				{
@@ -213,7 +213,18 @@ namespace StockSharp.Hydra.Windows
 								if (_token.IsCancellationRequested)
 									break;
 
-								drive.GetStorageDrive(security.ToSecurityId(), dataType.Key, dataType.Value, format).ClearDatesCache();
+								var secId = security.ToSecurityId();
+
+								drive
+									.GetStorageDrive(secId, dataType.Item1, dataType.Item2, format)
+									.ClearDatesCache();
+
+								foreach (var candleType in drive.GetCandleTypes(security.ToSecurityId(), format))
+								{
+									drive
+										.GetStorageDrive(secId, candleType.Item1, candleType.Item2, format)
+										.ClearDatesCache();
+								}
 							}
 						}
 

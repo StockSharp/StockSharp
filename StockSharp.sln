@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hydra", "Hydra", "{D17343AD-2FD2-4CC4-B840-B071DE0AAD5B}"
 EndProject
@@ -196,7 +196,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rithmic", "Rithmic", "{FD91
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleRithmicPublic", "Samples\Rithmic\SampleRithmic\SampleRithmicPublic.csproj", "{97BFC2F1-4A43-43E5-A4E3-023867837235}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertersPublic", "Hydra\Plugins\Converters\ConvertersPublic.csproj", "{99610F38-695A-4616-9C5C-28449C27E938}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsPublic", "Hydra\Plugins\Tools\ToolsPublic.csproj", "{99610F38-695A-4616-9C5C-28449C27E938}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DukasCopyPublic", "Hydra\Plugins\DukasCopy\DukasCopyPublic.csproj", "{83DB4333-8D0D-41BA-9ABD-068A91EAFF97}"
 EndProject
@@ -334,6 +334,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBarChartPublic", "Samples\BarChart\SampleBarChart\SampleBarChartPublic.csproj", "{E6A3A88D-A394-4004-87CE-0A1CC60668BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarChartPublic", "Hydra\Plugins\BarChart\BarChartPublic.csproj", "{39261454-76F0-4684-8B93-091CBAB63A6A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITCH", "ITCH", "{7A2867F3-4D22-4F81-A0AA-09246B9B1E34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleITCHPublic", "Samples\ITCH\SampleITCH\SampleITCHPublic.csproj", "{D6540BA6-8719-4E27-8182-C32026C08B7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITCHPublic", "Hydra\Plugins\ITCH\ITCHPublic.csproj", "{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -811,6 +817,14 @@ Global
 		{39261454-76F0-4684-8B93-091CBAB63A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39261454-76F0-4684-8B93-091CBAB63A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39261454-76F0-4684-8B93-091CBAB63A6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6540BA6-8719-4E27-8182-C32026C08B7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6540BA6-8719-4E27-8182-C32026C08B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6540BA6-8719-4E27-8182-C32026C08B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6540BA6-8719-4E27-8182-C32026C08B7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -954,6 +968,9 @@ Global
 		{0CE0617E-6EBE-469F-B76D-B64DC63F965B} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
 		{E6A3A88D-A394-4004-87CE-0A1CC60668BE} = {0CE0617E-6EBE-469F-B76D-B64DC63F965B}
 		{39261454-76F0-4684-8B93-091CBAB63A6A} = {551390E7-41EB-4451-AF9B-49C64439F664}
+		{7A2867F3-4D22-4F81-A0AA-09246B9B1E34} = {D4F0E771-46F8-41B6-BB9D-AC00C87F09E5}
+		{D6540BA6-8719-4E27-8182-C32026C08B7E} = {7A2867F3-4D22-4F81-A0AA-09246B9B1E34}
+		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297} = {551390E7-41EB-4451-AF9B-49C64439F664}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi

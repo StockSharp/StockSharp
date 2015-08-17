@@ -126,11 +126,20 @@
     <Compile Include="Attributes.cs" />
     <Compile Include="TaskCategories.cs" />
     <Compile Include="TempFiles.cs" />
+    <Compile Include="TemplateTxtRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Algo.History\Algo.History.csproj">
       <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
       <Name>Algo.History</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\ITCH\ITCH.csproj">
+      <Project>{5e66a118-9d37-4f93-9598-a8b56a6be1ca}</Project>
+      <Name>ITCH</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Plaza\Plaza.csproj">
+      <Project>{7eaba894-fc98-4f5e-a212-c40550260886}</Project>
+      <Name>Plaza</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Algo\Algo.csproj">
       <Project>{2a5c6fad-106c-4a4a-b602-77a6b1034ca2}</Project>

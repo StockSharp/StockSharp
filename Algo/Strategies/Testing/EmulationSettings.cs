@@ -125,7 +125,7 @@ namespace StockSharp.Algo.Strategies.Testing
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1174Key)]
 		[PropertyOrder(30)]
-		[DisplayNameLoc(LocalizedStrings.Str1414Key)]
+		[DisplayNameLoc(LocalizedStrings.MarketDepthsKey)]
 		[DescriptionLoc(LocalizedStrings.Str1415Key)]
 		public EmulationMarketDataModes DepthDataMode
 		{

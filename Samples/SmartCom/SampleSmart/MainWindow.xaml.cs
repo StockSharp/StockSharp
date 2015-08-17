@@ -33,6 +33,8 @@ namespace SampleSmart
 		{
 			InitializeComponent();
 
+			Title = Title.Put("SmartCOM");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
-        xmlns:properties="clr-namespace:SampleSterling.Properties"
         xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="{x:Static loc:LocalizedStrings.XamlStr558}" Height="351" Width="850">
+        Title="{x:Static loc:LocalizedStrings.XamlStr540}" Height="351" Width="850">
 
     <Window.Resources>
         <converters:InverseBooleanConverter x:Key="Invbool"/>

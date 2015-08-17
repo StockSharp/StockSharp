@@ -2,13 +2,11 @@ namespace StockSharp.Hydra.AlorHistory
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
@@ -20,12 +18,16 @@ namespace StockSharp.Hydra.AlorHistory
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/cec19cef-4bf7-4dcb-90fb-fccba4c0248c.htm")]
+	[TaskIcon("alor_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Candles | TaskCategories.Free)]
 	class AlorHistoryTask : BaseHydraTask
 	{
-		private const string _sourceName = "Alor (история)";
+		private const string _sourceName = LocalizedStrings.AlorHistoryKey;
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
@@ -37,7 +39,7 @@ namespace StockSharp.Hydra.AlorHistory
 				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -47,7 +49,7 @@ namespace StockSharp.Hydra.AlorHistory
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -57,7 +59,7 @@ namespace StockSharp.Hydra.AlorHistory
 				set { ExtensionInfo["Offset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(2)]
@@ -67,7 +69,7 @@ namespace StockSharp.Hydra.AlorHistory
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(3)]
@@ -103,24 +105,9 @@ namespace StockSharp.Hydra.AlorHistory
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "alor_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2288Params.Put(LocalizedStrings.AlorHistory); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle) };

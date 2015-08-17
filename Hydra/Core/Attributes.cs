@@ -1,7 +1,6 @@
 namespace StockSharp.Hydra.Core
 {
-	using System.Collections.Generic;
-	using System.ComponentModel;
+	using System;
 
 	using Ecng.Common;
 
@@ -10,59 +9,61 @@ namespace StockSharp.Hydra.Core
 	/// <summary>
 	/// Localized task settings display name.
 	/// </summary>
-	public class TaskDisplayNameAttribute : DisplayNameAttribute
+	public class TaskSettingsDisplayNameAttribute : DisplayNameLocAttribute
 	{
-		const string _sourceAlor = "Alor (РёСЃС‚РѕСЂРёСЏ)";
-		const string _sourceOandaHist = "OANDA (РёСЃС‚РѕСЂРёСЏ)";
-		const string _sourceCompetition = "Р›Р§Р";
-		const string _sourceUxWeb = "UX (СЃР°Р№С‚)";
-
-		private static readonly Dictionary<string, string> _sourceNames = new Dictionary<string, string>
+		/// <summary>
+		/// Initizalize new instance.
+		/// </summary>
+		/// <param name="sourceName">Default name of the task.</param>
+		public TaskSettingsDisplayNameAttribute(string sourceName)
+			: base(LocalizedStrings.TaskSettings, sourceName)
 		{
-			{ _sourceAlor,         LocalizedStrings.AlorHistory },
-			{ _sourceOandaHist,    LocalizedStrings.OandaHistory },
-			{ _sourceCompetition,  LocalizedStrings.Str2825 },
-			{ _sourceUxWeb,        LocalizedStrings.Str2830 },
-		};
-
-		internal static string GetSourceName(string key)
-		{
-			string name;
-			return _sourceNames.TryGetValue(key, out name) ? name : key;
 		}
-
-		/// <summary>
-		/// Initizalize new instance.
-		/// </summary>
-		/// <param name="sourceName">Default name of the task.</param>
-		public TaskDisplayNameAttribute(string sourceName) 
-			: base(GetSourceName(sourceName)) {}
 	}
 
 	/// <summary>
-	/// Localized task settings display name.
+	/// Документация задачи.
 	/// </summary>
-	public class TaskSettingsDisplayNameAttribute : DisplayNameAttribute
+	public class TaskDocAttribute : Attribute
 	{
 		/// <summary>
-		/// Initizalize new instance.
+		/// Ссылка на раздел документации.
 		/// </summary>
-		/// <param name="sourceName">Default name of the task.</param>
-		/// <param name="isKey"></param>
-		public TaskSettingsDisplayNameAttribute(string sourceName, bool isKey = false)
-			: base(isKey ? LocalizedStrings.GetString(sourceName) : LocalizedStrings.TaskSettings.Put(TaskDisplayNameAttribute.GetSourceName(sourceName))) { }
+		public string DocUrl { get; private set; }
+
+		/// <summary>
+		/// Создать <see cref="TaskDocAttribute"/>.
+		/// </summary>
+		/// <param name="docUrl">Ссылка на раздел документации.</param>
+		public TaskDocAttribute(string docUrl)
+		{
+			if (docUrl.IsEmpty())
+				throw new ArgumentNullException("docUrl");
+
+			DocUrl = docUrl;
+		}
 	}
 
 	/// <summary>
-	/// Localized task settings category name.
+	/// Иконка задачи.
 	/// </summary>
-	public class TaskCategoryAttribute : CategoryAttribute
+	public class TaskIconAttribute : Attribute
 	{
 		/// <summary>
-		/// Initizalize new instance.
+		/// Иконка.
 		/// </summary>
-		/// <param name="sourceName">Default name of the task.</param>
-		public TaskCategoryAttribute(string sourceName) 
-			: base(TaskDisplayNameAttribute.GetSourceName(sourceName)) {}
+		public string Icon { get; private set; }
+
+		/// <summary>
+		/// Создать <see cref="TaskIconAttribute"/>.
+		/// </summary>
+		/// <param name="icon">Иконка.</param>
+		public TaskIconAttribute(string icon)
+		{
+			if (icon.IsEmpty())
+				throw new ArgumentNullException("icon");
+
+			Icon = icon;
+		}
 	}
 }

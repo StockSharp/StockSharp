@@ -1,5 +1,32 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.9.1:
+* (feature) Hydra. Import pane improve.
+* (bug) Release 4.3.9 fix (missed files).
+
+###v4.3.9:
+* (feature) Backup plugin (Amazon S3 cloud storage)
+* (feature) Txt/csv export preview window.
+* (feature) Edit txt/csv export templates.
+* (feature) Task categories. Filterable task creation.
+* (bug) Fix txt/csv level1 export.
+* (bug) Fix sync directories.
+* (bug) Task settings serialization fix.
+* (feature) Help buttons.
+* (bug) Fix time bounds log.
+
+###v4.3.8:
+* (feature) BarChart (history mode).
+* (bug) Excel export boost.
+* (bug) CSV storage fix.
+* (bug) Storage. Fix delete range
+* (bug) Auto save config fix.
+* (bug) Help url fix.
+* (feature) Storage. Date cache bin->txt format.
+* (bug) CSV storage. Fix save NewsMessage.SecurityId.
+* (bug) CSV storage. Fix append data with same time for order log and tick trades.
+* (feature) Edit Security.Decimals.
+
 ###v4.3.7:
 * (bug) Fix https://github.com/StockSharp/StockSharp/issues/95
 

@@ -32,6 +32,8 @@ namespace SampleOanda
 		{
 			InitializeComponent();
 
+			Title = Title.Put("OANDA");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

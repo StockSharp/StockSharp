@@ -2,16 +2,21 @@ namespace StockSharp.Community
 {
 	using System;
 	using System.Linq;
+	using System.Threading;
 
 	using Ecng.Common;
 
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Клиент для доступа к сервису уведомлений StockSharp.
 	/// </summary>
 	public class NotificationClient : BaseCommunityClient<INotificationService>
 	{
+		private Timer _newsTimer;
+		private long _lastNewsId;
+
 		/// <summary>
 		/// Создать <see cref="NotificationClient"/>.
 		/// </summary>
@@ -65,18 +70,67 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Получить последние новости.
+		/// Событие появления новости.
 		/// </summary>
-		/// <param name="fromId">Идентификатор, с которого необходимо получить новости.</param>
-		/// <returns>Последние новости.</returns>
-		public Tuple<long, string, string, int>[] GetNews(long fromId)
+		public event Action<CommunityNews> NewsReceived; 
+
+		/// <summary>
+		/// Подписаться на новости.
+		/// </summary>
+		public void SubscribeNews()
 		{
-			var news = Invoke(f => f.GetNews(SessionId, fromId));
+			RequestNews();
+			_newsTimer = ThreadingHelper.Timer(() =>
+			{
+				try
+				{
+					RequestNews();
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
+				}
+			}).Interval(TimeSpan.FromDays(1));
+		}
+
+		/// <summary>
+		/// Отписаться от новостей.
+		/// </summary>
+		public void UnSubscribeNews()
+		{
+			if (_newsTimer != null)
+				_newsTimer.Dispose();
+		}
+
+		private void RequestNews()
+		{
+			var news = Invoke(f => f.GetNews(Guid.Empty, _lastNewsId));
+
+			if (news.Length <= 0)
+				return;
+
+			_lastNewsId = news.Last().Id;
+
+			foreach (var n in news)
+			{
+				n.EndDate = n.EndDate.ChangeKind(DateTimeKind.Utc);
+				NewsReceived.SafeInvoke(n);
+			}
 
 			if (news.Length == 100)
-				news = news.Concat(GetNews(news.Last().Item1));
+			{
+				RequestNews();
+			}
+		}
 
-			return news;
+		/// <summary>
+		/// Освободить занятые ресурсы.
+		/// </summary>
+		protected override void DisposeManaged()
+		{
+			UnSubscribeNews();
+
+			base.DisposeManaged();
 		}
 
 		private static void ValidateError(byte errorCode)

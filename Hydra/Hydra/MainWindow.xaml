@@ -17,9 +17,6 @@
 		Title="S#.Data" Height="516" Width="1376" WindowState="Normal">
 
 	<Window.CommandBindings>
-		<CommandBinding Command="{x:Static hydra:MainWindow.NewTaskCommand}"
-					Executed="ExecutedNewTaskCommand" />
-
 		<CommandBinding Command="{x:Static hydra:MainWindow.TaskEnabledChangedCommand}"
 					Executed="ExecutedTaskEnabledChangedCommand"
 					CanExecute="CanExecuteTaskEnabledChangedCommand" />
@@ -63,14 +60,17 @@
 		<CommandBinding Command="{x:Static hydra:MainWindow.AnalyticsCommand}"
 					Executed="ExecutedAnalyticsCommand" />
 
-		<CommandBinding Command="{x:Static hydra:MainWindow.SecuritiesCommand}"
-					Executed="ExecutedSecuritiesCommand" />
-
 		<CommandBinding Command="{x:Static hydra:MainWindow.BoardsCommand}"
 					Executed="ExecutedBoardsCommand" />
 
 		<CommandBinding Command="{x:Static hydra:MainWindow.MemoryStatisticsCommand}"
 					Executed="ExecutedMemoryStatisticsCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.AddSourcesCommand}"
+					Executed="ExecutedAddSourcesCommand" />
+
+		<CommandBinding Command="{x:Static hydra:MainWindow.AddToolsCommand}"
+					Executed="ExecutedAddToolsCommand" />
 	</Window.CommandBindings>
 
 	<Window.Resources>
@@ -357,7 +357,7 @@
 			</ex:AutoRefreshCollectionViewSource.SortDescriptions>
 		</ex:AutoRefreshCollectionViewSource>
 
-		<ex:AutoRefreshCollectionViewSource Source="{Binding Path=Tasks}" x:Key="SortedConverters" Filter="SortedConverters_OnFilter">
+		<ex:AutoRefreshCollectionViewSource Source="{Binding Path=Tasks}" x:Key="SortedTools" Filter="SortedTools_OnFilter">
 			<ex:AutoRefreshCollectionViewSource.SortDescriptions>
 				<componentModel:SortDescription PropertyName="Settings.IsEnabled" Direction="Descending"/>
 			</ex:AutoRefreshCollectionViewSource.SortDescriptions>
@@ -368,69 +368,45 @@
 		<DockPanel LastChildFill="True">
 			<Menu DockPanel.Dock="Top">
 				<MenuItem Header="{x:Static loc:LocalizedStrings.File}">
-					<MenuItem Header="{x:Static loc:LocalizedStrings.XamlStr140}" Name="SourcesMenu">
-						<MenuItem.ItemsPanel>
-							<ItemsPanelTemplate>
-								<VirtualizingStackPanel Orientation="Vertical"/>
-							</ItemsPanelTemplate>
-						</MenuItem.ItemsPanel>
-
-						<MenuItem x:Name="RussianSourcesMi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
-						<MenuItem x:Name="AmericanSourcesMi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
-						<MenuItem x:Name="ForexSourcesMi" Header="{x:Static loc:LocalizedStrings.Forex}" />
-						<MenuItem x:Name="CryptoSourcesMi" Header="{x:Static loc:LocalizedStrings.Str398}" />
-						<MenuItem x:Name="OtherSourcesMi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
-
-						<!--<MenuItem.ItemContainerStyle>
-							<Style TargetType="MenuItem">
-								<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
-								<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-							</Style>
-						</MenuItem.ItemContainerStyle>
-
-						<MenuItem.ItemTemplate>
-							<DataTemplate>
-								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto"/>
-										<ColumnDefinition Width="Auto"/>
-									</Grid.ColumnDefinitions>
-
-									<Image Grid.Column="0" Margin="3" Source="{Binding Path=(core:IHydraTask.Icon)}" Width="20" Height="20"/>
-									<TextBlock Grid.Column="1" Margin="5,3,3,3" FontWeight="Bold" Text="{Binding Path=Name}" VerticalAlignment="Center" />
-								</Grid>
-							</DataTemplate>
-						</MenuItem.ItemTemplate>-->
+					<MenuItem Command="{x:Static hydra:MainWindow.AddSourcesCommand}">
+						<MenuItem.Header>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr140}"/>...</TextBlock>
+						</MenuItem.Header>
 					</MenuItem>
-					
+					<MenuItem Command="{x:Static hydra:MainWindow.AddToolsCommand}">
+						<MenuItem.Header>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr136}"/>...</TextBlock>
+						</MenuItem.Header>
+					</MenuItem>
 					<Separator/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Exit}" Command="Close"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Import}">
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Security"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Trade"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Depth"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Ticks}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Trade"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Depth"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Candle"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="OrderLog"/>
-					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Level1}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="News"/>
-                    <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Execution"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.ImportPaneCommand}" CommandParameter="Execution"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Export}">
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str985}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str1414}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Security"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Ticks}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.Candles}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.OrderLog}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
 					<MenuItem Header="Level 1" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<MenuItem Header="{x:Static loc:LocalizedStrings.News}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
-                    <MenuItem Header="{x:Static loc:LocalizedStrings.OwnTransactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
+                    <MenuItem Header="{x:Static loc:LocalizedStrings.Transactions}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Securities}">
-					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2835}" Command="{x:Static hydra:MainWindow.SecuritiesCommand}" />
-					<MenuItem x:Name="GluingData" Header="{x:Static loc:LocalizedStrings.Str2892}" Click="GluingData_Click"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2835}" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Security"/>
+					<MenuItem Header="{x:Static loc:LocalizedStrings.Str2892}" Click="GluingData_Click"/>
 				</MenuItem>
 
 				<MenuItem Header="{x:Static loc:LocalizedStrings.Str2121}">
@@ -446,7 +422,11 @@
 						</MenuItem.Header>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="{x:Static loc:LocalizedStrings.NetworkSettings}" x:Name="ProxyButton" Click="ProxtSettings_Click"/>
+					<MenuItem x:Name="ProxyButton" Click="ProxySettings_Click">
+						<MenuItem.Header>
+							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NetworkSettings}" />...</TextBlock>
+						</MenuItem.Header>
+					</MenuItem>
 					<MenuItem x:Name="ServiceButton" Click="Settings_Click">
 						<MenuItem.Header>
 							<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Settings}" />...</TextBlock>
@@ -471,9 +451,9 @@
 
 			<DockPanel DockPanel.Dock="Top">
 				<ToolBar ToolBarTray.IsLocked="True">
-					<ToggleButton x:Name="StartStop" Click="StartStopClick" Width="100" Height="29"  Margin="3,0,2,0" Content="{x:Static loc:LocalizedStrings.Str2421}" Style="{StaticResource ToggleButtonStyle}"/>
+					<ToggleButton x:Name="StartStop" Click="StartStopClick" Width="100" Height="29" Margin="3,0,2,0" Content="{x:Static loc:LocalizedStrings.Str2421}" Style="{StaticResource ToggleButtonStyle}"/>
 
-					<xctk:DropDownButton x:Name="Logs" Width="100" Height="30"  Margin="0,0,2,0" VerticalAlignment="Bottom">
+					<xctk:DropDownButton x:Name="Logs" Width="100" Height="28" Margin="0,2,0,0">
 						<xctk:DropDownButton.DropDownContent>
 							<Menu Name="LogsMenu">
 								<Menu.ItemsPanel>
@@ -496,26 +476,26 @@
 						<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
 							<ex:BmpImage x:Name="WarnErrorImg" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/warning_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
 							<ex:BmpImage x:Name="LogErrorImg" Margin="2" Source="pack://application:,,,/StockSharp.Xaml;component/Images/error_16x16.png" VerticalAlignment="Center" Visibility="Collapsed" />
-							<Label VerticalContentAlignment="Top"><TextBlock Text="{x:Static loc:LocalizedStrings.Str3237}"/></Label>
+							<TextBlock Text="{x:Static loc:LocalizedStrings.Str3237}"/>
 						</StackPanel>
 					</xctk:DropDownButton>
 				</ToolBar>
 
 				<ToolBar ToolBarTray.IsLocked="True">
-					<Button Content="{x:Static loc:LocalizedStrings.Str985}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
-					<Button Content="{x:Static loc:LocalizedStrings.Str1414}" Width="85" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Ticks}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Trade"/>
+					<Button Content="{x:Static loc:LocalizedStrings.MarketDepths}" Width="85" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Depth"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Candles}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Candle"/>
 					<Button Content="{x:Static loc:LocalizedStrings.OrderLog}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="OrderLog"/>
-					<Button Content="Level 1" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Level1}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Level1"/>
 					<Button Content="{x:Static loc:LocalizedStrings.News}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="News"/>
-                    <Button Content="Executions" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
+					<Button Content="{x:Static loc:LocalizedStrings.Transactions}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Execution"/>
 				</ToolBar>
 
 				<ToolBar ToolBarTray.IsLocked="True">
-					<Button Content="{x:Static loc:LocalizedStrings.Securities}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.SecuritiesCommand}" />
+					<Button Content="{x:Static loc:LocalizedStrings.Securities}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.OpenPaneCommand}" CommandParameter="Security"/>
 					<Button Content="{x:Static loc:LocalizedStrings.Str1221}" Width="80" Height="29" Command="{x:Static hydra:MainWindow.AnalyticsCommand}" />
 				</ToolBar>
-
+			
 				<controls1:AutomaticUpdater x:Name="AutomaticUpdater" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10" DockPanel.Dock="Right"
 										DaysBetweenChecks="0" WaitBeforeCheckSecs="60" UpdateType="OnlyCheck" Animate="True" KeepHidden="False" wyUpdateLocation="Hydra.Update.exe" />
 			</DockPanel>
@@ -523,6 +503,10 @@
 			<StatusBar VerticalAlignment="Bottom" DockPanel.Dock="Bottom">
 				<StatusBarItem>
 					<TextBlock x:Name="Status" VerticalAlignment="Stretch" />
+				</StatusBarItem>
+				
+				<StatusBarItem Margin="10,0,0,0">
+					<sx:AdvertisePanel MaxHeight="300" Height="30" />
 				</StatusBarItem>
 				
 				<StatusBarItem HorizontalAlignment="Right">
@@ -568,42 +552,9 @@
 				<navigation:NavigationBar Grid.Column="0" IsHeaderVisible="True" Title="S#.Data" ContentWidth="200" x:Name="NavigationBar">
 					<navigation:NavigationPane x:Name="SourcesPane" Title="{x:Static loc:LocalizedStrings.XamlStr227}" ImageSourceLarge="/Images/Source32.png" ImageSourceSmall="/Images/Source16.png">
 						<DockPanel LastChildFill="True" Margin="3">
-							<xctk:DropDownButton x:Name="NewSourceButton" Content="{x:Static loc:LocalizedStrings.XamlStr140}" DockPanel.Dock="Top" Margin="0,0,0,3">
-								<xctk:DropDownButton.DropDownContent>
-									<Menu x:Name="SourcesDropDownButtonMenu">
-										<MenuItem x:Name="RussianSourcesCi" Header="{x:Static loc:LocalizedStrings.Str1769}" />
-										<MenuItem x:Name="AmericanSourcesCi" Header="{x:Static loc:LocalizedStrings.Str2119}" />
-										<MenuItem x:Name="ForexSourcesCi" Header="{x:Static loc:LocalizedStrings.Forex}" />
-										<MenuItem x:Name="CryptoSourcesCi" Header="{x:Static loc:LocalizedStrings.Str398}" />
-										<MenuItem x:Name="OtherSourcesCi" Header="{x:Static loc:LocalizedStrings.XamlStr157}" />
-										
-										<Menu.ItemsPanel>
-											<ItemsPanelTemplate>
-												<VirtualizingStackPanel Orientation="Vertical"/>
-											</ItemsPanelTemplate>
-										</Menu.ItemsPanel>
-										<!--<Menu.ItemContainerStyle>
-											<Style TargetType="MenuItem">
-												<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
-												<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-											</Style>
-										</Menu.ItemContainerStyle>-->
-										<!--<Menu.ItemTemplate>
-											<DataTemplate>
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="Auto"/>
-														<ColumnDefinition Width="Auto"/>
-													</Grid.ColumnDefinitions>
-
-													<Image Grid.Column="0" Margin="3" Source="{Binding Path=(core:IHydraTask.Icon)}" Width="20" Height="20"/>
-													<TextBlock Grid.Column="1" Margin="5,3,3,3" FontWeight="Bold" Text="{Binding Path=Name}" VerticalAlignment="Center" />
-												</Grid>
-											</DataTemplate>
-										</Menu.ItemTemplate>-->
-									</Menu>
-								</xctk:DropDownButton.DropDownContent>
-							</xctk:DropDownButton>
+							<Button Command="{x:Static hydra:MainWindow.AddSourcesCommand}" DockPanel.Dock="Top" Margin="0,0,0,3">
+								<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr140}"/>...</TextBlock>
+							</Button>
 
 							<ListView Name="CurrentSources" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedSources}}"
 									 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="CurrentTasks_OnSelectionChanged">
@@ -620,28 +571,13 @@
 						</DockPanel>
 					</navigation:NavigationPane>
 
-					<navigation:NavigationPane x:Name="ConvertersPane" Title="{x:Static loc:LocalizedStrings.XamlStr166}" ImageSourceLarge="/Images/Tasks32.png" ImageSourceSmall="/Images/Tasks16.png">
+					<navigation:NavigationPane x:Name="ToolsPane" Title="{x:Static loc:LocalizedStrings.XamlStr166}" ImageSourceLarge="/Images/Tasks32.png" ImageSourceSmall="/Images/Tasks16.png">
 						<DockPanel LastChildFill="True" Margin="3">
-							<xctk:DropDownButton x:Name="NewTaskButton" Content="{x:Static loc:LocalizedStrings.XamlStr136}" DockPanel.Dock="Top" Margin="0,0,0,3">
-								<xctk:DropDownButton.DropDownContent>
-									<Menu Name="TasksMenu">
-										<Menu.ItemsPanel>
-											<ItemsPanelTemplate>
-												<VirtualizingStackPanel Orientation="Vertical"/>
-											</ItemsPanelTemplate>
-										</Menu.ItemsPanel>
+							<Button Command="{x:Static hydra:MainWindow.AddToolsCommand}" DockPanel.Dock="Top" Margin="0,0,0,3">
+								<TextBlock><Run Text="{x:Static loc:LocalizedStrings.XamlStr136}"/>...</TextBlock>
+							</Button>
 
-										<!--<Menu.ItemContainerStyle>
-											<Style TargetType="MenuItem">
-												<Setter Property="Command" Value="{x:Static hydra:MainWindow.NewTaskCommand}"/>
-												<Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-											</Style>
-										</Menu.ItemContainerStyle>-->
-									</Menu>
-								</xctk:DropDownButton.DropDownContent>
-							</xctk:DropDownButton>
-
-							<ListView Name="CurrentConverters" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedConverters}}"
+							<ListView Name="CurrentTools" ItemContainerStyle="{StaticResource TaskListViewItemStyle}" ItemsSource="{Binding Source={StaticResource SortedTools}}"
 									 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
 								<ListView.ItemsPanel>
 									<ItemsPanelTemplate>

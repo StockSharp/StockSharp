@@ -21,14 +21,14 @@
 		/// <summary>
 		/// Создать <see cref="PositionManager"/>.
 		/// </summary>
-		/// <param name="byOrders">Расчитывать позицию по реализованному объему у заявок (true) или по сделкам (false).</param>
+		/// <param name="byOrders">Расчитывать позицию по реализованному объему у заявок (<see langword="true"/>) или по сделкам (<see langword="false"/>).</param>
 		public PositionManager(bool byOrders)
 		{
 			ByOrders = byOrders;
 		}
 
 		/// <summary>
-		/// Расчитывать позицию по реализованному объему у заявок (true) или по сделкам (false).
+		/// Расчитывать позицию по реализованному объему у заявок (<see langword="true"/>) или по сделкам (<see langword="false"/>).
 		/// </summary>
 		public bool ByOrders { get; private set; }
 

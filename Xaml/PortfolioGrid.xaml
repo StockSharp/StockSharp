@@ -29,7 +29,7 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr535}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.UnrealizedPnL}" SortMemberPath="Position.UnrealizedPnL"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str257}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.AveragePrice}" SortMemberPath="Position.AveragePrice"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.CurrentPrice}" SortMemberPath="Position.CurrentPrice"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Position.LastChangeTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Position.LastChangeTime"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Position.LastChangeTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Position.LastChangeTime"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Position.LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:T\}'}" SortMemberPath="Position.LocalTime"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.State}" Visibility="Collapsed" Width="60" Binding="{Binding Path=Portfolio.State}" SortMemberPath="Portfolio.State"/>
 	</ug:UniversalGrid.Columns>

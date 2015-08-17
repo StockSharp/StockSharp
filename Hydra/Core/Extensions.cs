@@ -8,12 +8,31 @@
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
+	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
+	using StockSharp.ITCH;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
+	using StockSharp.Plaza;
+
+	/// <summary>
+	/// Построители стаканов из лога заявок.
+	/// </summary>
+	public enum OrderLogBuilders
+	{
+		/// <summary>
+		/// Плаза 2.
+		/// </summary>
+		Plaza2,
+
+		/// <summary>
+		/// ITCH.
+		/// </summary>
+		ITCH
+	}
 
 	/// <summary>
 	/// Вспомогательный класс.
@@ -111,6 +130,19 @@
 				throw new ArgumentNullException("task");
 
 			return task.GetType().GetDisplayName();
+		}
+
+		/// <summary>
+		/// Получить описание задачи.
+		/// </summary>
+		/// <param name="task">Задача.</param>
+		/// <returns>Описание задачи.</returns>
+		public static string GetDescription(this IHydraTask task)
+		{
+			if (task == null)
+				throw new ArgumentNullException("task");
+
+			return task.GetType().GetDescription();
 		}
 
 		/// <summary>
@@ -212,7 +244,7 @@
 		/// <param name="dataType">Тип данных.</param>
 		/// <param name="arg">Параметр данных.</param>
 		/// <returns>Шаблон для текстового экспорта данных.</returns>
-		public static string GetTxtTemplate(this Type dataType, object arg)
+		public static string GetTxtTemplate(this Type dataType, object arg = null)
 		{
 			if (dataType == null)
 				throw new ArgumentNullException("dataType");
@@ -237,23 +269,79 @@
 				switch ((ExecutionTypes)arg)
 				{
 					case ExecutionTypes.Tick:
-						templateName = "txt_export_trades";
+						templateName = "txt_export_ticks";
 						break;
 					case ExecutionTypes.Order:
 					case ExecutionTypes.Trade:
-						templateName = "txt_export_executions";
+						templateName = "txt_export_transactions";
 						break;
 					case ExecutionTypes.OrderLog:
 						templateName = "txt_export_orderlog";
 						break;
 					default:
-						throw new ArgumentOutOfRangeException();
+						throw new InvalidOperationException(LocalizedStrings.Str1122Params.Put(arg));
 				}
 			}
 			else
 				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
 
 			return ConfigurationManager.AppSettings.Get(templateName);
+		}
+
+		/// <summary>
+		/// Принадлежит ли задача категории.
+		/// </summary>
+		/// <param name="task">Задача.</param>
+		/// <param name="category">Категория.</param>
+		/// <returns>Принадлежит ли задача категории.</returns>
+		public static bool IsCategoryOf(this IHydraTask task, TaskCategories category)
+		{
+			if (task == null)
+				throw new ArgumentNullException("task");
+
+			return task.GetType().IsCategoryOf(category);
+		}
+
+		/// <summary>
+		/// Принадлежит ли задача категории.
+		/// </summary>
+		/// <param name="taskType">Задача.</param>
+		/// <param name="category">Категория.</param>
+		/// <returns>Принадлежит ли задача категории.</returns>
+		public static bool IsCategoryOf(this Type taskType, TaskCategories category)
+		{
+			var attr = taskType.GetAttribute<TaskCategoryAttribute>();
+			return attr != null && attr.Categories.Contains(category);
+		}
+
+		/// <summary>
+		/// Получить инонку задачи.
+		/// </summary>
+		/// <param name="taskType">Задача.</param>
+		/// <returns>Иконка задачи.</returns>
+		public static Uri GetIcon(this Type taskType)
+		{
+			var attr = taskType.GetAttribute<TaskIconAttribute>();
+			return attr == null ? null : attr.Icon.GetResourceUrl(taskType);
+		}
+
+		/// <summary>
+		/// Создать построитель стакана из лога заявок.
+		/// </summary>
+		/// <param name="builder">Тип построителя.</param>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <returns>Построитель стакана из лога заявок.</returns>
+		public static IOrderLogMarketDepthBuilder CreateBuilder(this OrderLogBuilders builder, SecurityId securityId)
+		{
+			switch (builder)
+			{
+				case OrderLogBuilders.Plaza2:
+					return new PlazaOrderLogMarketDepthBuilder(securityId);
+				case OrderLogBuilders.ITCH:
+					return new ItchOrderLogMarketDepthBuilder(securityId);
+				default:
+					throw new ArgumentOutOfRangeException("builder", builder, null);
+			}
 		}
 	}
 }

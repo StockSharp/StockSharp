@@ -19,8 +19,8 @@
         <ListView x:Name="CandleDetails" Grid.Column="0" Grid.Row="0" ItemContainerStyle="{StaticResource myItemStyle}">
 			<ListView.View>
 				<GridView>
-					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Str2857}" DisplayMemberBinding="{Binding Path=DateTime.Date}" />
-					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Str219}" DisplayMemberBinding="{Binding Path=DateTime.Time}" />
+					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Date}" DisplayMemberBinding="{Binding Path=DateTime.Date}" />
+					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Time}" DisplayMemberBinding="{Binding Path=DateTime.Time}" />
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr408}" DisplayMemberBinding="{Binding Path=OpenPrice}" />
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Max}" DisplayMemberBinding="{Binding Path=HighPrice}" />
 					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Min}" DisplayMemberBinding="{Binding Path=LowPrice}" />

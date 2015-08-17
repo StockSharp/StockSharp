@@ -79,35 +79,35 @@ namespace StockSharp.Xaml
 			/// <summary>
 			/// Дельта опциона.
 			/// </summary>
-			[DisplayNameLoc(LocalizedStrings.Str300Key)]
+			[DisplayNameLoc(LocalizedStrings.DeltaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionDeltaKey)]
 			public decimal? Delta { get; set; }
 
 			/// <summary>
 			/// Гамма опциона.
 			/// </summary>
-			[DisplayNameLoc(LocalizedStrings.Str301Key)]
+			[DisplayNameLoc(LocalizedStrings.GammaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionGammaKey)]
 			public decimal? Gamma { get; set; }
 
 			/// <summary>
 			/// Тета опциона.
 			/// </summary>
-			[DisplayNameLoc(LocalizedStrings.Str303Key)]
+			[DisplayNameLoc(LocalizedStrings.ThetaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionThetaKey)]
 			public decimal? Theta { get; set; }
 
 			/// <summary>
 			/// Вега опциона.
 			/// </summary>
-			[DisplayNameLoc(LocalizedStrings.Str302Key)]
+			[DisplayNameLoc(LocalizedStrings.VegaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionVegaKey)]
 			public decimal? Vega { get; set; }
 
 			/// <summary>
 			/// Ро опциона.
 			/// </summary>
-			[DisplayNameLoc(LocalizedStrings.Str317Key)]
+			[DisplayNameLoc(LocalizedStrings.RhoKey)]
 			[DescriptionLoc(LocalizedStrings.OptionRhoKey)]
 			public decimal? Rho { get; set; }
 

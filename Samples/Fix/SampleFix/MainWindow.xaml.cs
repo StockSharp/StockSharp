@@ -40,6 +40,8 @@ namespace SampleFix
 		{
 			InitializeComponent();
 
+			Title = Title.Put("FIX");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

@@ -98,7 +98,7 @@ namespace StockSharp.Algo.Strategies.Analytics
 				chart.XAxis = new DateTimeAxis { GrowBy = new DoubleRange(0.0, 0.1) };
 				chart.YAxis = new NumericAxis { GrowBy = new DoubleRange(0.1, 0.1) };
 
-				grid.AddTextColumn("Time", LocalizedStrings.Str219).Width = 150;
+				grid.AddTextColumn("Time", LocalizedStrings.Time).Width = 150;
 				var volumeColumn = grid.AddTextColumn("Volume", LocalizedStrings.Volume);
 				volumeColumn.Width = 100;
 

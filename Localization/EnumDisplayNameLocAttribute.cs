@@ -11,7 +11,7 @@
 	public class EnumDisplayNameLocAttribute : EnumDisplayNameAttribute
 	{
 		/// <summary>
-		/// Initializes a new instance of the EnumDisplayNameLocAttribute class using specified resource id for the display name.
+		/// Initializes a new instance of the <see cref="EnumDisplayNameLocAttribute"/> class using specified resource id for the display name.
 		/// </summary>
 		/// <param name="resourceId">String resource id.</param>
 		public EnumDisplayNameLocAttribute(string resourceId)

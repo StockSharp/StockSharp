@@ -83,7 +83,7 @@
 
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Ticks}" Grid.Row="2" Grid.Column="0" Name="TicksCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr757}" Grid.Row="3" Grid.Column="0" Name="TicksAndDepthsCheckBox" Click="CheckBoxClick" />
-					<CheckBox Content="{x:Static loc:LocalizedStrings.Str1414}" Grid.Row="4" Grid.Column="0" Name="DepthsCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.MarketDepths}" Grid.Row="4" Grid.Column="0" Name="DepthsCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Candles}" Grid.Row="5" Grid.Column="0" Name="CandlesCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr635}" Grid.Row="6" Grid.Column="0" Name="CandlesAndDepthsCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Grid.Row="7" Grid.Column="0" Name="OrderLogCheckBox" Click="CheckBoxClick" />
@@ -114,7 +114,7 @@
 						<TabItem Header="{x:Static loc:LocalizedStrings.XamlStr757}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=TicksAndDepthsCheckBox, Path=IsChecked}">
 							<sx:StatisticParameterGrid x:Name="TicksAndDepthsParameterGrid" />
 						</TabItem>
-						<TabItem Header="{x:Static loc:LocalizedStrings.Str1414}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=DepthsCheckBox, Path=IsChecked}">
+						<TabItem Header="{x:Static loc:LocalizedStrings.MarketDepths}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=DepthsCheckBox, Path=IsChecked}">
 							<sx:StatisticParameterGrid x:Name="DepthsParameterGrid" />
 						</TabItem>
 						<TabItem Header="{x:Static loc:LocalizedStrings.Candles}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=CandlesCheckBox, Path=IsChecked}">

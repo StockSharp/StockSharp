@@ -245,6 +245,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Количество тиковых сделок для хранения. 
 		/// По умолчанию равно 100000. Если значение установлено в -1, то сделки не будут удаляться.
+		/// Если значение установлено в 0, то сделки не будут сохраняться.
 		/// </summary>
 		public int TradesKeepCount
 		{
@@ -255,6 +256,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Количество заявок для хранения. 
 		/// По умолчанию равно 1000. Если значение установлено в -1, то заявки не будут удаляться.
+		/// Если значение установлено в 0, то заявки не будут сохраняться.
 		/// </summary>
 		public int OrdersKeepCount
 		{
@@ -1207,11 +1209,11 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Отменить группу заявок на бирже по фильтру.
 		/// </summary>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
+		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
+		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
+		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
+		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
 		public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
@@ -1223,11 +1225,11 @@ namespace StockSharp.Algo
 		/// Отменить группу заявок на бирже по фильтру.
 		/// </summary>
 		/// <param name="transactionId">Идентификатор транзакции отмены.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
+		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
+		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
+		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
+		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
 		protected virtual void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			var cancelMsg = MessageConverterHelper.CreateGroupCancelMessage(transactionId, isStopOrder, portfolio, direction, board, security == null ? default(SecurityId) : GetSecurityId(security), security);
@@ -1323,7 +1325,7 @@ namespace StockSharp.Algo
 			if (isNew)
 			{
 				if (security.Board == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1103Params.Put(id));
+					throw new InvalidOperationException(LocalizedStrings.Str903Params.Put(id));
 
 				_exchangeBoards.TryAdd(security.Board);
 				RaiseNewSecurities(new[] { security });

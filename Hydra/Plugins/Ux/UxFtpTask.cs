@@ -2,14 +2,12 @@ namespace StockSharp.Hydra.Ux
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History.Russian.Rts;
@@ -21,9 +19,13 @@ namespace StockSharp.Hydra.Ux
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/184da0f9-29db-4397-8497-1ed4c8f7ea0d.htm")]
+	[TaskIcon("ux_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]
 	class UxFtpTask : BaseHydraTask
 	{
 		private const string _sourceName = "UX (FTP)";
@@ -38,7 +40,7 @@ namespace StockSharp.Hydra.Ux
 				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -48,7 +50,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["StartFrom"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -58,7 +60,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2617Key)]
 			[DescriptionLoc(LocalizedStrings.Str2813Key)]
 			[PropertyOrder(2)]
@@ -68,7 +70,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["IsSystemOnly"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(3)]
@@ -78,7 +80,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(4)]
@@ -106,24 +108,9 @@ namespace StockSharp.Hydra.Ux
 			_settings.UseTemporaryFiles = TempFiles.UseAndDelete;
 		}
 
-		public override Uri Icon
-		{
-			get { return "ux_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		protected override TimeSpan OnProcess()

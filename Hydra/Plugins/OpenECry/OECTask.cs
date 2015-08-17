@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.OpenECry
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -8,7 +7,6 @@ namespace StockSharp.Hydra.OpenECry
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
@@ -19,8 +17,13 @@ namespace StockSharp.Hydra.OpenECry
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/4d84a1e0-fe23-4b14-8323-c5f68f117cc7.htm")]
+	[TaskIcon("oec_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
+		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth | TaskCategories.Forex |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class OECTask : ConnectorHydraTask<OECTrader>
 	{
 		private const string _sourceName = "OpenECry";
@@ -34,7 +37,7 @@ namespace StockSharp.Hydra.OpenECry
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(0)]
@@ -44,7 +47,7 @@ namespace StockSharp.Hydra.OpenECry
 				set { ExtensionInfo["Address"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
@@ -54,7 +57,7 @@ namespace StockSharp.Hydra.OpenECry
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
@@ -64,7 +67,7 @@ namespace StockSharp.Hydra.OpenECry
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayName("UUID")]
 			[DescriptionLoc(LocalizedStrings.Str2565Key)]
 			[PropertyOrder(3)]
@@ -92,16 +95,6 @@ namespace StockSharp.Hydra.OpenECry
 		}
 
 		private OECSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "oec_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

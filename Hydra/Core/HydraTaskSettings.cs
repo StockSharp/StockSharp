@@ -15,7 +15,6 @@ namespace StockSharp.Hydra.Core
 
 	using MoreLinq;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -60,7 +59,6 @@ namespace StockSharp.Hydra.Core
 		/// </summary>
 		public HydraTaskSettings()
 		{
-			ExtensionInfo = new Dictionary<object, object>();
 		}
 
 		/// <summary>
@@ -343,11 +341,37 @@ namespace StockSharp.Hydra.Core
 			}
 		}
 
+		private readonly CachedSynchronizedDictionary<object, object> _extensionInfo = new CachedSynchronizedDictionary<object, object>();
+
 		/// <summary>
 		/// Расширенная информация, храняющая в себе дополнительные настройки задачи.
 		/// </summary>
 		[Browsable(false)]
-		public IDictionary<object, object> ExtensionInfo { get; private set; }
+		public IDictionary<object, object> ExtensionInfo
+		{
+			get { return _extensionInfo; }
+			private set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				_extensionInfo.Clear();
+
+				var syncCol = value as ISynchronizedCollection;
+
+				if (syncCol == null)
+				{
+					_extensionInfo.AddRange(value);
+				}
+				else
+				{
+					lock (syncCol.SyncRoot)
+					{
+						_extensionInfo.AddRange(value);
+					}
+				}
+			}
+		}
 
 		/// <summary>
 		/// Инструменты, связанные с задачей.
@@ -383,7 +407,7 @@ namespace StockSharp.Hydra.Core
 
 			clone.Id = Id;
 			clone.TaskType = TaskType;
-			clone.ExtensionInfo = ExtensionInfo.ToDictionary();
+			clone.ExtensionInfo = ExtensionInfo;
 			clone.Securities = Securities;
 			clone.SupportedLevel1Fields = SupportedLevel1Fields.ToArray();
 

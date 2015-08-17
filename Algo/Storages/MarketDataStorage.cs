@@ -227,8 +227,8 @@ namespace StockSharp.Algo.Storages
 
 		protected virtual IEnumerable<TData> FilterNewData(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
-			var pt = metaInfo.LastTime;
-			return data.Where(i => GetTruncatedTime(i) > pt);
+			var lastTime = metaInfo.LastTime;
+			return data.Where(i => GetTruncatedTime(i) >= lastTime);
 		}
 
 		void IMarketDataStorage.Save(IEnumerable data)

@@ -8,11 +8,11 @@ namespace StockSharp.Hydra.Panes
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
+	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 	using StockSharp.Localization;
@@ -40,7 +40,7 @@ namespace StockSharp.Hydra.Panes
 
 		public override string Title
 		{
-			get { return LocalizedStrings.Str1414 + " " + SelectedSecurity; }
+			get { return LocalizedStrings.MarketDepths + " " + SelectedSecurity; }
 		}
 
 		public override Security SelectedSecurity
@@ -72,7 +72,8 @@ namespace StockSharp.Hydra.Panes
 				return StorageRegistry
 					.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
 					.Load(From + new TimeSpan(18, 45, 0), To + TimeHelper.LessOneDay + new TimeSpan(18, 45, 0))
-					.ToMarketDepths(interval, maxDepth);
+					// TODO
+					.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(SelectedSecurity.ToSecurityId()), interval, maxDepth);
 			}
 
 			var retVal = StorageRegistry
@@ -92,17 +93,8 @@ namespace StockSharp.Hydra.Panes
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			if (SelectedSecurity == null)
-			{
-				new MessageBoxBuilder()
-					.Caption(Title)
-					.Text(LocalizedStrings.Str2875)
-					.Info()
-					.Owner(this)
-						.Show();
-
+			if (!CheckSecurity())
 				return;
-			}
 
 			int maxDepth;
 

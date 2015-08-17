@@ -38,6 +38,8 @@ namespace SamplePlaza
 			InitializeComponent();
 			Instance = this;
 
+			Title = Title.Put("Plaza II");
+
 			_ordersWindow.MakeHideable();
 			_ordersLogWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();

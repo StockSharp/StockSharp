@@ -28,6 +28,11 @@ namespace StockSharp.Algo.Storages
 			Errors = new List<string>();
 		}
 
+		public override object LastId
+		{
+			get { return LastTransactionId; }
+		}
+
 		public long FirstOrderId { get; set; }
 		public long LastOrderId { get; set; }
 
@@ -169,7 +174,7 @@ namespace StockSharp.Algo.Storages
 		public ExecutionSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version54;
+			Version = MarketDataVersions.Version55;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)
@@ -206,7 +211,7 @@ namespace StockSharp.Algo.Storages
 				if (msg.Price < 0)
 					throw new ArgumentOutOfRangeException("messages", msg.Price, LocalizedStrings.Str926Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
 
-				var volume = msg.GetVolume();
+				var volume = msg.SafeGetVolume();
 
 				if (volume < 0)
 					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str927Params.Put(msg.OrderId == null ? msg.OrderStringId : msg.OrderId.To<string>()));
@@ -336,6 +341,14 @@ namespace StockSharp.Algo.Storages
 				WriteString(writer, metaInfo.StrategyIds, msg.UserOrderId);
 				WriteString(writer, metaInfo.Comments, msg.Comment);
 				WriteString(writer, metaInfo.Errors, msg.Error != null ? msg.Error.Message : null);
+
+				if (metaInfo.Version < MarketDataVersions.Version55)
+					continue;
+
+				writer.Write(msg.Currency != null);
+
+				if (msg.Currency != null)
+					writer.WriteInt((int)msg.Currency.Value);
 			}
 		}
 
@@ -483,6 +496,12 @@ namespace StockSharp.Algo.Storages
 
 			if (!error.IsEmpty())
 				msg.Error = new InvalidOperationException(error);
+
+			if (metaInfo.Version >= MarketDataVersions.Version55)
+			{
+				if (reader.Read())
+					msg.Currency = (CurrencyTypes)reader.ReadInt();
+			}
 
 			return msg;
 		}

@@ -1,4 +1,4 @@
-namespace StockSharp.Hydra.Converters
+namespace StockSharp.Hydra.Tools
 {
 	using System;
 	using System.ComponentModel;
@@ -20,18 +20,29 @@ namespace StockSharp.Hydra.Converters
 	using StockSharp.Logging;
 	using StockSharp.Xaml.PropertyGrid;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayNameLoc(LocalizedStrings.Str3754Key)]
+	[DescriptionLoc(LocalizedStrings.Str3767Key)]
+	[TaskDoc("http://stocksharp.com/doc/html/9e075b32-abb2-4fad-bfb2-b822dd7d9f30.htm")]
+	[TaskIcon("export_logo.png")]
+	[TaskCategory(TaskCategories.Tool)]
 	class ExportTask : BaseHydraTask
 	{
-		[TaskSettingsDisplayName(LocalizedStrings.Str3754Key, true)]
+		[TaskSettingsDisplayName(LocalizedStrings.Str3754Key)]
+		[CategoryOrderLoc(LocalizedStrings.Str3754Key, 0)]
+		[CategoryOrderLoc(LocalizedStrings.CandlesKey, 1)]
+		[CategoryOrder("CSV", 2)]
+		[CategoryOrderLoc(LocalizedStrings.Str3755Key, 3)]
+		[CategoryOrderLoc(LocalizedStrings.GeneralKey, 4)]
 		private sealed class ExportSettings : HydraTaskSettings
 		{
 			public ExportSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("Header", string.Empty);
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3754Key)]
@@ -129,9 +140,6 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["BatchSize"] = value; }
 			}
 
-			/// <summary>
-			/// Проверять уникальность данных в базе данных. Влияет на производительность. По-умолчанию включено.
-			/// </summary>
 			[CategoryLoc(LocalizedStrings.Str3755Key)]
 			[DisplayNameLoc(LocalizedStrings.Str3765Key)]
 			[DescriptionLoc(LocalizedStrings.Str3766Key)]
@@ -142,37 +150,33 @@ namespace StockSharp.Hydra.Converters
 				set { ExtensionInfo["CheckUnique"] = value; }
 			}
 
-			//[Category(_category)]
-			//[DisplayName("Шаблон экспорта")]
-			//[Description("Шаблон экспорта.")]
-			//[PropertyOrder(6)]
-			//public string ExportTemplate
-			//{
-			//	get { return (string)ExtensionInfo["ExportTemplate"]; }
-			//	set { ExtensionInfo["ExportTemplate"] = value; }
-			//}
+			[Category("CSV")]
+			[DisplayName(LocalizedStrings.TemplateKey)]
+			[DescriptionLoc(LocalizedStrings.TemplateKey, true)]
+			[ExpandableObject]
+			public TemplateTxtRegistry TemplateTxtRegistry
+			{
+				get { return (TemplateTxtRegistry)ExtensionInfo["TemplateTxtRegistry"]; }
+				set { ExtensionInfo["TemplateTxtRegistry"] = value; }
+			}
+
+			[Category("CSV")]
+			[DisplayName(LocalizedStrings.Str215Key)]
+			[DescriptionLoc(LocalizedStrings.CsvHeaderKey, true)]
+			[ExpandableObject]
+			public string Header
+			{
+				get { return (string)ExtensionInfo["Header"]; }
+				set { ExtensionInfo["Header"] = value; }
+			}
 
 			public override HydraTaskSettings Clone()
 			{
 				var clone = (ExportSettings)base.Clone();
 				clone.CandleSettings = CandleSettings.Clone();
+				clone.TemplateTxtRegistry = TemplateTxtRegistry.Clone();
 				return clone;
 			}
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3767; }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Converter; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "export_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private ExportSettings _settings;
@@ -198,6 +202,8 @@ namespace StockSharp.Hydra.Converters
 				_settings.Connection = null;
 				_settings.BatchSize = 50;
 				_settings.CheckUnique = true;
+				_settings.TemplateTxtRegistry = new TemplateTxtRegistry();
+				_settings.Header = string.Empty;
 			}
 		}
 
@@ -284,7 +290,7 @@ namespace StockSharp.Hydra.Converters
 								exporter = new XmlExporter(security.Security, arg, isCancelled, fileName);
 								break;
 							case ExportTypes.Txt:
-								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, dataType.GetTxtTemplate(arg));
+								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, GetTxtTemplate(dataType, arg), _settings.Header);
 								break;
 							case ExportTypes.Bin:
 								exporter = new BinExporter(security.Security, arg, isCancelled, DriveCache.Instance.GetDrive(path));
@@ -327,6 +333,45 @@ namespace StockSharp.Hydra.Converters
 			}
 
 			return base.OnProcess();
+		}
+
+		private string GetTxtTemplate(Type dataType, object arg)
+		{
+			if (dataType == null)
+				throw new ArgumentNullException("dataType");
+
+			var registry = _settings.TemplateTxtRegistry;
+
+			if (dataType == typeof(SecurityMessage))
+				return registry.TemplateTxtSecurity;
+			else if (dataType == typeof(NewsMessage))
+				return registry.TemplateTxtNews;
+			else if (dataType.IsSubclassOf(typeof(CandleMessage)))
+				return registry.TemplateTxtCandle;
+			else if (dataType == typeof(Level1ChangeMessage))
+				return registry.TemplateTxtLevel1;
+			else if (dataType == typeof(QuoteChangeMessage))
+				return registry.TemplateTxtDepth;
+			else if (dataType == typeof(ExecutionMessage))
+			{
+				if (arg == null)
+					throw new ArgumentNullException("arg");
+
+				switch ((ExecutionTypes)arg)
+				{
+					case ExecutionTypes.Tick:
+						return registry.TemplateTxtTick;
+					case ExecutionTypes.Order:
+					case ExecutionTypes.Trade:
+						return registry.TemplateTxtTransaction;
+					case ExecutionTypes.OrderLog:
+						return registry.TemplateTxtOrderLog;
+					default:
+						throw new InvalidOperationException(LocalizedStrings.Str1122Params.Put(arg));
+				}
+			}
+			else
+				throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
 		}
 	}
 }

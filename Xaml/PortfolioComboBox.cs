@@ -89,6 +89,9 @@
 			var portfolio = (Portfolio)e.NewValue;
 			var cb = (PortfolioComboBox)source;
 
+			if (portfolio != null && !cb.Portfolios.Contains(portfolio))
+				cb.Portfolios.Add(portfolio);
+
 			cb.SelectedItem = portfolio;
 		}
 

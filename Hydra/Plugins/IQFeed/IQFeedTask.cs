@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.IQFeed
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -22,8 +21,13 @@ namespace StockSharp.Hydra.IQFeed
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/f9e23239-7587-41ad-9644-c6df8e467c38.htm")]
+	[TaskIcon("iqfeed_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.History |
+		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.MarketDepth |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Stock | TaskCategories.Forex)]
 	class IQFeedTask : ConnectorHydraTask<IQFeedTrader>
 	{
 		private const string _sourceName = "IQFeed";
@@ -174,16 +178,6 @@ namespace StockSharp.Hydra.IQFeed
 				CandleType = typeof(TimeFrameCandle),
 				Arg = tf
 			}).ToArray();
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
-
-		public override Uri Icon
-		{
-			get { return "iqfeed_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(MarketDepth), typeof(Level1ChangeMessage) };

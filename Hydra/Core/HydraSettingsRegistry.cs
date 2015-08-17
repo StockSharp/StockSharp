@@ -8,15 +8,17 @@ namespace StockSharp.Hydra.Core
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History.Hydra;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Класс для представления всех настроек.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str2211Key)]
+	[CategoryOrderLoc(LocalizedStrings.GeneralKey, 0)]
+	[CategoryOrder(_serverCategory, 1)]
+	[CategoryOrder("CSV", 2)]
 	public class HydraSettingsRegistry : IPersistable
 	{
 		private const string _serverCategory = "S#.Data Server";
@@ -146,6 +148,27 @@ namespace StockSharp.Hydra.Core
 		[PropertyOrder(5)]
 		public string EmailErrorAddress { get; set; }
 
+		private TemplateTxtRegistry _templateTxtRegistry = new TemplateTxtRegistry();
+
+		/// <summary>
+		/// Реестр шаблонов для экспорта в формат txt.
+		/// </summary>
+		[Category("CSV")]
+		[DisplayName(LocalizedStrings.TemplateKey)]
+		[DescriptionLoc(LocalizedStrings.TemplateKey, true)]
+		[ExpandableObject]
+		public TemplateTxtRegistry TemplateTxtRegistry
+		{
+			get { return _templateTxtRegistry; }
+			set
+			{
+				if (value == null)
+					throw new ArgumentNullException("value");
+
+				_templateTxtRegistry = value;
+			}
+		}
+
 		/// <summary>
 		/// Загрузить настройки.
 		/// </summary>
@@ -161,6 +184,8 @@ namespace StockSharp.Hydra.Core
 			StopTime = storage.GetValue("StopTime", 0L).To<TimeSpan>();
 			EmailErrorCount = storage.GetValue<int>("EmailErrorCount");
 			EmailErrorAddress = storage.GetValue<string>("EmailErrorAddress");
+			
+			TemplateTxtRegistry.Load(storage);
 		}
 
 		/// <summary>
@@ -178,6 +203,8 @@ namespace StockSharp.Hydra.Core
 			storage.SetValue("StopTime", StopTime.To<long>());
 			storage.SetValue("EmailErrorCount", EmailErrorCount);
 			storage.SetValue("EmailErrorAddress", EmailErrorAddress);
+			
+			TemplateTxtRegistry.Save(storage);
 		}
 	}
 }

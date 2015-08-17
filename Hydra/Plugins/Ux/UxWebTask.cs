@@ -2,12 +2,10 @@ namespace StockSharp.Hydra.Ux
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 	using Ecng.Collections;
 
 	using StockSharp.Algo;
@@ -23,12 +21,16 @@ namespace StockSharp.Hydra.Ux
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/184da0f9-29db-4397-8497-1ed4c8f7ea0d.htm")]
+	[TaskIcon("ux_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]
 	class UxWebTask : BaseHydraTask, ISecurityDownloader
 	{
-		private const string _sourceName = "UX (сайт)";
+		private const string _sourceName = LocalizedStrings.Str2830Key;
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
@@ -40,7 +42,7 @@ namespace StockSharp.Hydra.Ux
 				ExtensionInfo.TryAdd("IgnoreWeekends", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -50,7 +52,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -60,7 +62,7 @@ namespace StockSharp.Hydra.Ux
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(2)]
@@ -95,24 +97,9 @@ namespace StockSharp.Hydra.Ux
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "ux_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(LocalizedStrings.Str2830); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Trade), typeof(Candle) };

@@ -217,7 +217,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено null.</returns>
+		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
 		public virtual OrderCondition CreateOrderCondition()
 		{
 			return null;
@@ -545,6 +545,16 @@ namespace StockSharp.Messages
 		public virtual bool IsConnectionAlive()
 		{
 			return true;
+		}
+
+		/// <summary>
+		/// Создать построитель стакана.
+		/// </summary>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <returns>Построитель стакана.</returns>
+		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
+		{
+			throw new NotSupportedException();
 		}
 
 		/// <summary>

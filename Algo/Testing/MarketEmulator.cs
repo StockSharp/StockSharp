@@ -257,7 +257,15 @@ namespace StockSharp.Algo.Testing
 						var quoteMsg = (QuoteChangeMessage)message;
 
 						foreach (var m in _execLogConverter.ToExecutionLog(quoteMsg))
-							Process(m, result);
+						{
+							if (m.ExecutionType == ExecutionTypes.Tick)
+							{
+								m.ServerTime = quoteMsg.ServerTime;
+								result.Add(m);
+							}
+							else
+								Process(m, result);
+						}
 
 						// возращаем не входящий стакан, а тот, что сейчас хранится внутри эмулятора.
 						// таким образом мы можем видеть в стакане свои цены и объемы
@@ -961,7 +969,7 @@ namespace StockSharp.Algo.Testing
 
 				var level = pair.First;
 
-				var volume = message.GetVolume();
+				var volume = message.SafeGetVolume();
 
 				if (register)
 				{
@@ -1229,7 +1237,7 @@ namespace StockSharp.Algo.Testing
 				var totalPos = pos.First + pos.Second;
 
 				if (register)
-					pos.Second += orderMsg.GetVolume() * sign;
+					pos.Second += orderMsg.SafeGetVolume() * sign;
 				else
 					pos.Second -= orderMsg.GetBalance() * sign;
 
@@ -1340,7 +1348,7 @@ namespace StockSharp.Algo.Testing
 				var reqMoney = GetRequiredMoney(execMsg.SecurityId, execMsg.Side, execMsg.Price);
 
 				// если задан баланс, то проверям по нему (для частично исполненных заявок)
-				var volume = execMsg.Balance ?? execMsg.GetVolume();
+				var volume = execMsg.Balance ?? execMsg.SafeGetVolume();
 
 				var pos = _positions.SafeAdd(execMsg.SecurityId, k => RefTuple.Create(0m, 0m));
 

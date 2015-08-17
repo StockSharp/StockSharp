@@ -2644,14 +2644,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Time
 		/// </summary>
-		public const string Str219Key = "Str219";
+		public const string TimeKey = "Time";
 
 		/// <summary>
 		/// Time
 		/// </summary>
-		public static string Str219
+		public static string Time
 		{
-			get { return GetString(Str219Key); }
+			get { return GetString(TimeKey); }
 		}
 
 		/// <summary>
@@ -2787,14 +2787,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Time in force
 		/// </summary>
-		public const string Str231Key = "Str231";
+		public const string TimeInForceKey = "TimeInForce";
 
 		/// <summary>
 		/// Time in force
 		/// </summary>
-		public static string Str231
+		public static string TimeInForce
 		{
-			get { return GetString(Str231Key); }
+			get { return GetString(TimeInForceKey); }
 		}
 
 		/// <summary>
@@ -3021,14 +3021,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Currency
 		/// </summary>
-		public const string Str250Key = "Str250";
+		public const string CurrencyKey = "Currency";
 
 		/// <summary>
 		/// Currency
 		/// </summary>
-		public static string Str250
+		public static string Currency
 		{
-			get { return GetString(Str250Key); }
+			get { return GetString(CurrencyKey); }
 		}
 
 		/// <summary>
@@ -3097,12 +3097,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Position cost
+		/// Position price
 		/// </summary>
 		public const string Str256Key = "Str256";
 
 		/// <summary>
-		/// Position cost
+		/// Position price
 		/// </summary>
 		public static string Str256
 		{
@@ -3645,53 +3645,53 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Delta
 		/// </summary>
-		public const string Str300Key = "Str300";
+		public const string DeltaKey = "Delta";
 
 		/// <summary>
 		/// Delta
 		/// </summary>
-		public static string Str300
+		public static string Delta
 		{
-			get { return GetString(Str300Key); }
+			get { return GetString(DeltaKey); }
 		}
 
 		/// <summary>
 		/// Gamma
 		/// </summary>
-		public const string Str301Key = "Str301";
+		public const string GammaKey = "Gamma";
 
 		/// <summary>
 		/// Gamma
 		/// </summary>
-		public static string Str301
+		public static string Gamma
 		{
-			get { return GetString(Str301Key); }
+			get { return GetString(GammaKey); }
 		}
 
 		/// <summary>
 		/// Vega
 		/// </summary>
-		public const string Str302Key = "Str302";
+		public const string VegaKey = "Vega";
 
 		/// <summary>
 		/// Vega
 		/// </summary>
-		public static string Str302
+		public static string Vega
 		{
-			get { return GetString(Str302Key); }
+			get { return GetString(VegaKey); }
 		}
 
 		/// <summary>
 		/// Theta
 		/// </summary>
-		public const string Str303Key = "Str303";
+		public const string ThetaKey = "Theta";
 
 		/// <summary>
 		/// Theta
 		/// </summary>
-		public static string Str303
+		public static string Theta
 		{
-			get { return GetString(Str303Key); }
+			get { return GetString(ThetaKey); }
 		}
 
 		/// <summary>
@@ -3866,14 +3866,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Rho
 		/// </summary>
-		public const string Str317Key = "Str317";
+		public const string RhoKey = "Rho";
 
 		/// <summary>
 		/// Rho
 		/// </summary>
-		public static string Str317
+		public static string Rho
 		{
-			get { return GetString(Str317Key); }
+			get { return GetString(RhoKey); }
 		}
 
 		/// <summary>
@@ -4139,14 +4139,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Beta
 		/// </summary>
-		public const string Str339Key = "Str339";
+		public const string BetaKey = "Beta";
 
 		/// <summary>
 		/// Beta
 		/// </summary>
-		public static string Str339
+		public static string Beta
 		{
-			get { return GetString(Str339Key); }
+			get { return GetString(BetaKey); }
 		}
 
 		/// <summary>
@@ -4464,14 +4464,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Volume step
 		/// </summary>
-		public const string Str365Key = "Str365";
+		public const string VolumeStepKey = "VolumeStep";
 
 		/// <summary>
 		/// Volume step
 		/// </summary>
-		public static string Str365
+		public static string VolumeStep
 		{
-			get { return GetString(Str365Key); }
+			get { return GetString(VolumeStepKey); }
 		}
 
 		/// <summary>
@@ -4893,14 +4893,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Cryptocurrency
 		/// </summary>
-		public const string Str398Key = "Str398";
+		public const string CryptocurrencyKey = "Cryptocurrency";
 
 		/// <summary>
 		/// Cryptocurrency
 		/// </summary>
-		public static string Str398
+		public static string Cryptocurrency
 		{
-			get { return GetString(Str398Key); }
+			get { return GetString(CryptocurrencyKey); }
 		}
 
 		/// <summary>
@@ -4995,29 +4995,29 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Immediately or reject
+		/// Fill Or Kill
 		/// </summary>
-		public const string Str406Key = "Str406";
+		public const string FOKKey = "Foc";
 
 		/// <summary>
-		/// Immediately or reject
+		/// Fill Or Kill
 		/// </summary>
-		public static string Str406
+		public static string FOK
 		{
-			get { return GetString(Str406Key); }
+			get { return GetString(FOKKey); }
 		}
 
 		/// <summary>
-		/// Cancel remainder
+		/// Immediate Or Cancel
 		/// </summary>
-		public const string Str407Key = "Str407";
+		public const string IOCKey = "IOC";
 
 		/// <summary>
-		/// Cancel remainder
+		/// Immediate Or Cancel
 		/// </summary>
-		public static string Str407
+		public static string IOC
 		{
-			get { return GetString(Str407Key); }
+			get { return GetString(IOCKey); }
 		}
 
 		/// <summary>
@@ -5281,12 +5281,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Position cost, calculated using current market price of security.
+		/// Position price, calculated using current market price of security.
 		/// </summary>
 		public const string Str428Key = "Str428";
 
 		/// <summary>
-		/// Position cost, calculated using current market price of security.
+		/// Position price, calculated using current market price of security.
 		/// </summary>
 		public static string Str428
 		{
@@ -5437,12 +5437,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// New depth can not be negative.
+		/// New depth can not be less than zero.
 		/// </summary>
 		public const string Str481Key = "Str481";
 
 		/// <summary>
-		/// New depth can not be negative.
+		/// New depth can not be less than zero.
 		/// </summary>
 		public static string Str481
 		{
@@ -5463,12 +5463,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Depth index can not be negative.
+		/// Depth index can not be less than zero.
 		/// </summary>
 		public const string Str483Key = "Str483";
 
 		/// <summary>
-		/// Depth index can not be negative.
+		/// Depth index can not be less than zero.
 		/// </summary>
 		public static string Str483
 		{
@@ -5476,12 +5476,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Depth can not be negative.
+		/// Depth can not be less than zero.
 		/// </summary>
 		public const string Str484Key = "Str484";
 
 		/// <summary>
-		/// Depth can not be negative.
+		/// Depth can not be less than zero.
 		/// </summary>
 		public static string Str484
 		{
@@ -6271,14 +6271,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Decimals
 		/// </summary>
-		public const string Str547Key = "Str547";
+		public const string DecimalsKey = "Decimals";
 
 		/// <summary>
 		/// Decimals
 		/// </summary>
-		public static string Str547
+		public static string Decimals
 		{
-			get { return GetString(Str547Key); }
+			get { return GetString(DecimalsKey); }
 		}
 
 		/// <summary>
@@ -7309,12 +7309,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Candles storage time cannot be negative.
+		/// Candles storage time cannot be less than zero.
 		/// </summary>
 		public const string Str647Key = "Str647";
 
 		/// <summary>
-		/// Candles storage time cannot be negative.
+		/// Candles storage time cannot be less than zero.
 		/// </summary>
 		public static string Str647
 		{
@@ -7374,12 +7374,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Data keep time cannot be negative.
+		/// Data keep time cannot be less than zero.
 		/// </summary>
 		public const string Str652Key = "Str652";
 
 		/// <summary>
-		/// Data keep time cannot be negative.
+		/// Data keep time cannot be less than zero.
 		/// </summary>
 		public static string Str652
 		{
@@ -10481,12 +10481,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Order volume can not be negative.
+		/// Order volume can not be less than zero.
 		/// </summary>
 		public const string Str895Key = "Str895";
 
 		/// <summary>
-		/// Order volume can not be negative.
+		/// Order volume can not be less than zero.
 		/// </summary>
 		public static string Str895
 		{
@@ -11040,12 +11040,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Interval can not be negative.
+		/// Interval can not be less than zero.
 		/// </summary>
 		public const string Str940Key = "Str940";
 
 		/// <summary>
-		/// Interval can not be negative.
+		/// Interval can not be less than zero.
 		/// </summary>
 		public static string Str940
 		{
@@ -11053,12 +11053,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Market depth can not be negative.
+		/// Market depth can not be less than zero.
 		/// </summary>
 		public const string Str941Key = "Str941";
 
 		/// <summary>
-		/// Market depth can not be negative.
+		/// Market depth can not be less than zero.
 		/// </summary>
 		public static string Str941
 		{
@@ -11378,12 +11378,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Coefficient of restitution
+		/// Recovery factor
 		/// </summary>
 		public const string Str966Key = "Str966";
 
 		/// <summary>
-		/// Coefficient of restitution
+		/// Recovery factor
 		/// </summary>
 		public static string Str966
 		{
@@ -11391,12 +11391,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Coefficient of restitution (Net profit / maximum drawdown).
+		/// Recovery factor (net profit / maximum drawdown).
 		/// </summary>
 		public const string Str967Key = "Str967";
 
 		/// <summary>
-		/// Coefficient of restitution (Net profit / maximum drawdown).
+		/// Recovery factor (net profit / maximum drawdown).
 		/// </summary>
 		public static string Str967
 		{
@@ -12444,12 +12444,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Price value can not be negative.
+		/// Price value can not be less than zero.
 		/// </summary>
 		public const string Str1052Key = "Str1052";
 
 		/// <summary>
-		/// Price value can not be negative.
+		/// Price value can not be less than zero.
 		/// </summary>
 		public static string Str1052
 		{
@@ -13065,19 +13065,6 @@ namespace StockSharp.Localization
 		public static string Str1102Params
 		{
 			get { return GetString(Str1102ParamsKey); }
-		}
-
-		/// <summary>
-		/// Security '{0}' does not have information about the stock exchange.
-		/// </summary>
-		public const string Str1103ParamsKey = "Str1103Params";
-
-		/// <summary>
-		/// Security '{0}' does not have information about the stock exchange.
-		/// </summary>
-		public static string Str1103Params
-		{
-			get { return GetString(Str1103ParamsKey); }
 		}
 
 		/// <summary>
@@ -14095,12 +14082,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Percentage value can not be negative.
+		/// Percentage value can not be less than zero.
 		/// </summary>
 		public const string Str1182Key = "Str1182";
 
 		/// <summary>
-		/// Percentage value can not be negative.
+		/// Percentage value can not be less than zero.
 		/// </summary>
 		public static string Str1182
 		{
@@ -14134,12 +14121,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Latency can not be negative.
+		/// Latency can not be less than zero.
 		/// </summary>
 		public const string Str1185Key = "Str1185";
 
 		/// <summary>
-		/// Latency can not be negative.
+		/// Latency can not be less than zero.
 		/// </summary>
 		public static string Str1185
 		{
@@ -14186,12 +14173,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Time-frame can not be negative or zero.
+		/// Time-frame can not be less than zero or zero.
 		/// </summary>
 		public const string Str1189Key = "Str1189";
 
 		/// <summary>
-		/// Time-frame can not be negative or zero.
+		/// Time-frame can not be less than zero or zero.
 		/// </summary>
 		public static string Str1189
 		{
@@ -14667,12 +14654,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Limitation in time can not be negative.
+		/// Limitation in time can not be less than zero.
 		/// </summary>
 		public const string Str1227Key = "Str1227";
 
 		/// <summary>
-		/// Limitation in time can not be negative.
+		/// Limitation in time can not be less than zero.
 		/// </summary>
 		public static string Str1227
 		{
@@ -16448,12 +16435,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Orders storage time cannot be negative.
+		/// Orders storage time cannot be less than zero.
 		/// </summary>
 		public const string Str1375Key = "Str1375";
 
 		/// <summary>
-		/// Orders storage time cannot be negative.
+		/// Orders storage time cannot be less than zero.
 		/// </summary>
 		public static string Str1375
 		{
@@ -16944,14 +16931,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Market depths
 		/// </summary>
-		public const string Str1414Key = "Str1414";
+		public const string MarketDepthsKey = "MarketDepths";
 
 		/// <summary>
 		/// Market depths
 		/// </summary>
-		public static string Str1414
+		public static string MarketDepths
 		{
-			get { return GetString(Str1414Key); }
+			get { return GetString(MarketDepthsKey); }
 		}
 
 		/// <summary>
@@ -18530,14 +18517,27 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Good til cancelled
 		/// </summary>
-		public const string Str1539Key = "Str1539";
+		public const string GTCKey = "GTC";
 
 		/// <summary>
 		/// Good til cancelled
 		/// </summary>
-		public static string Str1539
+		public static string GTC
 		{
-			get { return GetString(Str1539Key); }
+			get { return GetString(GTCKey); }
+		}
+
+		/// <summary>
+		/// Good til date
+		/// </summary>
+		public const string GTDKey = "GTD";
+
+		/// <summary>
+		/// Good til date
+		/// </summary>
+		public static string GTD
+		{
+			get { return GetString(GTDKey); }
 		}
 
 		/// <summary>
@@ -21364,23 +21364,23 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Russia
 		/// </summary>
-		public const string Str1769Key = "Str1769";
+		public const string RussiaKey = "Russia";
 
 		/// <summary>
 		/// Russia
 		/// </summary>
-		public static string Str1769
+		public static string Russia
 		{
-			get { return GetString(Str1769Key); }
+			get { return GetString(RussiaKey); }
 		}
 
 		/// <summary>
-		/// Connection to broker using Quik.
+		/// Connection to {0}.
 		/// </summary>
 		public const string Str1770Key = "Str1770";
 
 		/// <summary>
-		/// Connection to broker using Quik.
+		/// Connection to {0}.
 		/// </summary>
 		public static string Str1770
 		{
@@ -22480,19 +22480,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to IT Invest broker through SmartCOM.
-		/// </summary>
-		public const string Str1857Key = "Str1857";
-
-		/// <summary>
-		/// Connection to IT Invest broker through SmartCOM.
-		/// </summary>
-		public static string Str1857
-		{
-			get { return GetString(Str1857Key); }
-		}
-
-		/// <summary>
 		/// Version SmartCOM API
 		/// </summary>
 		public const string Str1859Key = "Str1859";
@@ -22753,6 +22740,19 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// Main server
+		/// </summary>
+		public const string MainServerKey = "MainServer";
+
+		/// <summary>
+		/// Main server
+		/// </summary>
+		public static string MainServer
+		{
+			get { return GetString(MainServerKey); }
+		}
+
+		/// <summary>
 		/// Demo
 		/// </summary>
 		public const string DemoKey = "Demo";
@@ -22776,6 +22776,71 @@ namespace StockSharp.Localization
 		public static string Backup
 		{
 			get { return GetString(BackupKey); }
+		}
+
+		/// <summary>
+		/// Backup server
+		/// </summary>
+		public const string BackupServerKey = "BackupServer";
+
+		/// <summary>
+		/// Backup server
+		/// </summary>
+		public static string BackupServer
+		{
+			get { return GetString(BackupServerKey); }
+		}
+
+		/// <summary>
+		/// Recovery
+		/// </summary>
+		public const string RecoveryKey = "Recovery";
+
+		/// <summary>
+		/// Recovery
+		/// </summary>
+		public static string Recovery
+		{
+			get { return GetString(RecoveryKey); }
+		}
+
+		/// <summary>
+		/// Recovery server
+		/// </summary>
+		public const string RecoveryServerKey = "RecoveryServer";
+
+		/// <summary>
+		/// Recovery server
+		/// </summary>
+		public static string RecoveryServer
+		{
+			get { return GetString(RecoveryServerKey); }
+		}
+
+		/// <summary>
+		/// Replay
+		/// </summary>
+		public const string ReplayKey = "Replay";
+
+		/// <summary>
+		/// Replay
+		/// </summary>
+		public static string Replay
+		{
+			get { return GetString(ReplayKey); }
+		}
+
+		/// <summary>
+		/// Replay server
+		/// </summary>
+		public const string ReplayServerKey = "ReplayServer";
+
+		/// <summary>
+		/// Replay server
+		/// </summary>
+		public static string ReplayServer
+		{
+			get { return GetString(ReplayServerKey); }
 		}
 
 		/// <summary>
@@ -24068,14 +24133,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Template
 		/// </summary>
-		public const string Str1993Key = "Str1993";
+		public const string TemplateKey = "Template";
 
 		/// <summary>
 		/// Template
 		/// </summary>
-		public static string Str1993
+		public static string Template
 		{
-			get { return GetString(Str1993Key); }
+			get { return GetString(TemplateKey); }
 		}
 
 		/// <summary>
@@ -25615,27 +25680,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// America
 		/// </summary>
-		public const string Str2119Key = "Str2119";
+		public const string AmericaKey = "America";
 
 		/// <summary>
 		/// America
 		/// </summary>
-		public static string Str2119
+		public static string America
 		{
-			get { return GetString(Str2119Key); }
-		}
-
-		/// <summary>
-		/// Connection to IQFeed.
-		/// </summary>
-		public const string Str2120Key = "Str2120";
-
-		/// <summary>
-		/// Connection to IQFeed.
-		/// </summary>
-		public static string Str2120
-		{
-			get { return GetString(Str2120Key); }
+			get { return GetString(AmericaKey); }
 		}
 
 		/// <summary>
@@ -27079,19 +27131,6 @@ namespace StockSharp.Localization
 		public static string Str2259Params
 		{
 			get { return GetString(Str2259ParamsKey); }
-		}
-
-		/// <summary>
-		/// Connection to AlfaDirect broker.
-		/// </summary>
-		public const string Str2260Key = "Str2260";
-
-		/// <summary>
-		/// Connection to AlfaDirect broker.
-		/// </summary>
-		public static string Str2260
-		{
-			get { return GetString(Str2260Key); }
 		}
 
 		/// <summary>
@@ -30059,19 +30098,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to Interactive Brokers broker.
-		/// </summary>
-		public const string Str2516Key = "Str2516";
-
-		/// <summary>
-		/// Connection to Interactive Brokers broker.
-		/// </summary>
-		public static string Str2516
-		{
-			get { return GetString(Str2516Key); }
-		}
-
-		/// <summary>
 		/// Unique ID. Used when several clients are connected to one terminal or gateway.
 		/// </summary>
 		public const string Str2518Key = "Str2518";
@@ -30087,14 +30113,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Real-time
 		/// </summary>
-		public const string Str2519Key = "Str2519";
+		public const string RealTimeKey = "RealTime";
 
 		/// <summary>
 		/// Real-time
 		/// </summary>
-		public static string Str2519
+		public static string RealTime
 		{
-			get { return GetString(Str2519Key); }
+			get { return GetString(RealTimeKey); }
 		}
 
 		/// <summary>
@@ -30605,19 +30631,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to OpenECry broker.
-		/// </summary>
-		public const string Str2561Key = "Str2561";
-
-		/// <summary>
-		/// Connection to OpenECry broker.
-		/// </summary>
-		public static string Str2561
-		{
-			get { return GetString(Str2561Key); }
-		}
-
-		/// <summary>
 		/// OpenECry API server address.
 		/// </summary>
 		public const string Str2562Key = "Str2562";
@@ -30979,19 +30992,6 @@ namespace StockSharp.Localization
 		public static string Str2591Params
 		{
 			get { return GetString(Str2591ParamsKey); }
-		}
-
-		/// <summary>
-		/// Connection to RTS.
-		/// </summary>
-		public const string Str2592Key = "Str2592";
-
-		/// <summary>
-		/// Connection to RTS.
-		/// </summary>
-		public static string Str2592
-		{
-			get { return GetString(Str2592Key); }
 		}
 
 		/// <summary>
@@ -33634,12 +33634,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Parameter value can not be negative.
+		/// Parameter value can not be less than zero.
 		/// </summary>
 		public const string Str2796Key = "Str2796";
 
 		/// <summary>
-		/// Parameter value can not be negative.
+		/// Parameter value can not be less than zero.
 		/// </summary>
 		public static string Str2796
 		{
@@ -33959,12 +33959,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Source of market-data from MICEX-RTS FTP-server.
+		/// Source of market-data from MOEX FTP-server.
 		/// </summary>
 		public const string Str2822Key = "Str2822";
 
 		/// <summary>
-		/// Source of market-data from MICEX-RTS FTP-server.
+		/// Source of market-data from MOEX FTP-server.
 		/// </summary>
 		public static string Str2822
 		{
@@ -33998,12 +33998,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Best Private Investor
+		/// BPI
 		/// </summary>
 		public const string Str2825Key = "Str2825";
 
 		/// <summary>
-		/// Best Private Investor
+		/// BPI
 		/// </summary>
 		public static string Str2825
 		{
@@ -34245,12 +34245,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Offset from beginning
+		/// Skip lines
 		/// </summary>
 		public const string Str2846Key = "Str2846";
 
 		/// <summary>
-		/// Offset from beginning
+		/// Skip lines
 		/// </summary>
 		public static string Str2846
 		{
@@ -34364,14 +34364,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Date
 		/// </summary>
-		public const string Str2857Key = "Str2857";
+		public const string DateKey = "Date";
 
 		/// <summary>
 		/// Date
 		/// </summary>
-		public static string Str2857
+		public static string Date
 		{
-			get { return GetString(Str2857Key); }
+			get { return GetString(DateKey); }
 		}
 
 		/// <summary>
@@ -34492,12 +34492,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Field {0} is obligatory. It must be given a default value or an ordinal number.
+		/// Field {0} is required. It must be given a default value or an ordinal number.
 		/// </summary>
 		public const string Str2867ParamsKey = "Str2867Params";
 
 		/// <summary>
-		/// Field {0} is obligatory. It must be given a default value or an ordinal number.
+		/// Field {0} is required. It must be given a default value or an ordinal number.
 		/// </summary>
 		public static string Str2867Params
 		{
@@ -35376,29 +35376,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Automatic S#.Data start is enabled in mode {0}. To work in selected mode S#.Data must be restarted.
+		/// You must restart {0} to apply these changes. Restart now?
 		/// </summary>
 		public const string Str2952ParamsKey = "Str2952Params";
 
 		/// <summary>
-		/// Automatic S#.Data start is enabled in mode {0}. To work in selected mode S#.Data must be restarted.
+		/// You must restart {0} to apply these changes. Restart now?
 		/// </summary>
 		public static string Str2952Params
 		{
 			get { return GetString(Str2952ParamsKey); }
-		}
-
-		/// <summary>
-		/// Manual selection of S#.Data start mode is enabled. To work in selected mode S#.Data must be restarted.
-		/// </summary>
-		public const string Str2953Key = "Str2953";
-
-		/// <summary>
-		/// Manual selection of S#.Data start mode is enabled. To work in selected mode S#.Data must be restarted.
-		/// </summary>
-		public static string Str2953
-		{
-			get { return GetString(Str2953Key); }
 		}
 
 		/// <summary>
@@ -39590,27 +39577,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Bitcoins
 		/// </summary>
-		public const string Str3302Key = "Str3302";
+		public const string BitcoinsKey = "Bitcoins";
 
 		/// <summary>
 		/// Bitcoins
 		/// </summary>
-		public static string Str3302
+		public static string Bitcoins
 		{
-			get { return GetString(Str3302Key); }
-		}
-
-		/// <summary>
-		/// Connection to BitStamp stock exchange.
-		/// </summary>
-		public const string Str3303Key = "Str3303";
-
-		/// <summary>
-		/// Connection to BitStamp stock exchange.
-		/// </summary>
-		public static string Str3303
-		{
-			get { return GetString(Str3303Key); }
+			get { return GetString(BitcoinsKey); }
 		}
 
 		/// <summary>
@@ -39874,19 +39848,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to broker using Fusion or Blackwood.
-		/// </summary>
-		public const string Str3327Key = "Str3327";
-
-		/// <summary>
-		/// Connection to broker using Fusion or Blackwood.
-		/// </summary>
-		public static string Str3327
-		{
-			get { return GetString(Str3327Key); }
-		}
-
-		/// <summary>
 		/// Market data server address.
 		/// </summary>
 		public const string Str3328Key = "Str3328";
@@ -40066,19 +40027,6 @@ namespace StockSharp.Localization
 		public static string Str3341
 		{
 			get { return GetString(Str3341Key); }
-		}
-
-		/// <summary>
-		/// Connection to BTC-e stock exchange.
-		/// </summary>
-		public const string Str3342Key = "Str3342";
-
-		/// <summary>
-		/// Connection to BTC-e stock exchange.
-		/// </summary>
-		public static string Str3342
-		{
-			get { return GetString(Str3342Key); }
 		}
 
 		/// <summary>
@@ -40355,19 +40303,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to E*TRADE broker.
-		/// </summary>
-		public const string Str3368Key = "Str3368";
-
-		/// <summary>
-		/// Connection to E*TRADE broker.
-		/// </summary>
-		public static string Str3368
-		{
-			get { return GetString(Str3368Key); }
-		}
-
-		/// <summary>
 		/// Demo mode.
 		/// </summary>
 		public const string Str3369Key = "Str3369";
@@ -40586,19 +40521,6 @@ namespace StockSharp.Localization
 		public static string Str3386
 		{
 			get { return GetString(Str3386Key); }
-		}
-
-		/// <summary>
-		/// Connection to LMAX stock exchange.
-		/// </summary>
-		public const string Str3387Key = "Str3387";
-
-		/// <summary>
-		/// Connection to LMAX stock exchange.
-		/// </summary>
-		public static string Str3387
-		{
-			get { return GetString(Str3387Key); }
 		}
 
 		/// <summary>
@@ -40836,19 +40758,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to MICEX.
-		/// </summary>
-		public const string Str3409Key = "Str3409";
-
-		/// <summary>
-		/// Connection to MICEX.
-		/// </summary>
-		public static string Str3409
-		{
-			get { return GetString(Str3409Key); }
-		}
-
-		/// <summary>
 		/// Path to dll
 		/// </summary>
 		public const string Str3410Key = "Str3410";
@@ -41046,27 +40955,27 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// Client code
 		/// </summary>
-		public const string Str3425Key = "Str3425";
+		public const string ClientCodeKey = "ClientCode";
 
 		/// <summary>
 		/// Client code
 		/// </summary>
-		public static string Str3425
+		public static string ClientCode
 		{
-			get { return GetString(Str3425Key); }
+			get { return GetString(ClientCodeKey); }
 		}
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
-		public const string Str3426Key = "Str3426";
+		public const string ClientCodeDescKey = "ClientCodeDesc";
 
 		/// <summary>
 		/// Client code assigned by the broker.
 		/// </summary>
-		public static string Str3426
+		public static string ClientCodeDesc
 		{
-			get { return GetString(Str3426Key); }
+			get { return GetString(ClientCodeDescKey); }
 		}
 
 		/// <summary>
@@ -41330,19 +41239,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to OANDA broker.
-		/// </summary>
-		public const string Str3449Key = "Str3449";
-
-		/// <summary>
-		/// Connection to OANDA broker.
-		/// </summary>
-		public static string Str3449
-		{
-			get { return GetString(Str3449Key); }
-		}
-
-		/// <summary>
 		/// Server.
 		/// </summary>
 		public const string Str3450Key = "Str3450";
@@ -41496,19 +41392,6 @@ namespace StockSharp.Localization
 		public static string Str3463
 		{
 			get { return GetString(Str3463Key); }
-		}
-
-		/// <summary>
-		/// Connection to broker using Rithmic.
-		/// </summary>
-		public const string Str3464Key = "Str3464";
-
-		/// <summary>
-		/// Connection to broker using Rithmic.
-		/// </summary>
-		public static string Str3464
-		{
-			get { return GetString(Str3464Key); }
 		}
 
 		/// <summary>
@@ -42110,12 +41993,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Number of headers {0} can not be negative.
+		/// Number of headers {0} can not be less than zero.
 		/// </summary>
 		public const string Str3511ParamsKey = "Str3511Params";
 
 		/// <summary>
-		/// Number of headers {0} can not be negative.
+		/// Number of headers {0} can not be less than zero.
 		/// </summary>
 		public static string Str3511Params
 		{
@@ -42419,19 +42302,6 @@ namespace StockSharp.Localization
 		public static string Str3537
 		{
 			get { return GetString(Str3537Key); }
-		}
-
-		/// <summary>
-		/// Connection to broker using Transaq.
-		/// </summary>
-		public const string Str3538Key = "Str3538";
-
-		/// <summary>
-		/// Connection to broker using Transaq.
-		/// </summary>
-		public static string Str3538
-		{
-			get { return GetString(Str3538Key); }
 		}
 
 		/// <summary>
@@ -43225,19 +43095,6 @@ namespace StockSharp.Localization
 		public static string Str3601
 		{
 			get { return GetString(Str3601Key); }
-		}
-
-		/// <summary>
-		/// Security {0} is missing information about the stock exchange.
-		/// </summary>
-		public const string Str3602ParamsKey = "Str3602Params";
-
-		/// <summary>
-		/// Security {0} is missing information about the stock exchange.
-		/// </summary>
-		public static string Str3602Params
-		{
-			get { return GetString(Str3602ParamsKey); }
 		}
 
 		/// <summary>
@@ -45516,19 +45373,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Connection to broker using CQG.
-		/// </summary>
-		public const string CQGConnectorKey = "CQGConnector";
-
-		/// <summary>
-		/// Connection to broker using CQG.
-		/// </summary>
-		public static string CQGConnector
-		{
-			get { return GetString(CQGConnectorKey); }
-		}
-
-		/// <summary>
 		/// Unsupported type of security {0}.
 		/// </summary>
 		public const string UnsupportSecTypeKey = "UnsupportSecType";
@@ -45552,19 +45396,6 @@ namespace StockSharp.Localization
 		public static string Str3800
 		{
 			get { return GetString(Str3800Key); }
-		}
-
-		/// <summary>
-		/// Connection to broker using Sterling.
-		/// </summary>
-		public const string SterlingConnectorKey = "SterlingConnector";
-
-		/// <summary>
-		/// Connection to broker using Sterling.
-		/// </summary>
-		public static string SterlingConnector
-		{
-			get { return GetString(SterlingConnectorKey); }
 		}
 
 		/// <summary>
@@ -45633,19 +45464,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Source is designed to get market-data from website {0}.
-		/// </summary>
-		public const string Str3807ParamsKey = "Str3807Params";
-
-		/// <summary>
-		/// Source is designed to get market-data from website {0}.
-		/// </summary>
-		public static string Str3807Params
-		{
-			get { return GetString(Str3807ParamsKey); }
-		}
-
-		/// <summary>
 		/// Client number is not specified.
 		/// </summary>
 		public const string Str3835Key = "Str3835";
@@ -45708,19 +45526,6 @@ namespace StockSharp.Localization
 		public static string Str3839Params
 		{
 			get { return GetString(Str3839ParamsKey); }
-		}
-
-		/// <summary>
-		/// Source is designed to get history data from {0}.
-		/// </summary>
-		public const string Str3840ParamsKey = "Str3840Params";
-
-		/// <summary>
-		/// Source is designed to get history data from {0}.
-		/// </summary>
-		public static string Str3840Params
-		{
-			get { return GetString(Str3840ParamsKey); }
 		}
 
 		/// <summary>
@@ -46324,19 +46129,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Time in force:
-		/// </summary>
-		public const string XamlStr72Key = "XamlStr72";
-
-		/// <summary>
-		/// Time in force:
-		/// </summary>
-		public static string XamlStr72
-		{
-			get { return GetString(XamlStr72Key); }
-		}
-
-		/// <summary>
 		/// Last trade time
 		/// </summary>
 		public const string XamlStr73Key = "XamlStr73";
@@ -46701,19 +46493,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Expiration date
-		/// </summary>
-		public const string XamlStr114Key = "XamlStr114";
-
-		/// <summary>
-		/// Expiration date
-		/// </summary>
-		public static string XamlStr114
-		{
-			get { return GetString(XamlStr114Key); }
-		}
-
-		/// <summary>
 		/// The date until which the schedule is valid
 		/// </summary>
 		public const string XamlStr115Key = "XamlStr115";
@@ -46883,12 +46662,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Add task
+		/// Add tools
 		/// </summary>
 		public const string XamlStr136Key = "XamlStr136";
 
 		/// <summary>
-		/// Add task
+		/// Add tools
 		/// </summary>
 		public static string XamlStr136
 		{
@@ -46922,12 +46701,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Add source
+		/// Add sources
 		/// </summary>
 		public const string XamlStr140Key = "XamlStr140";
 
 		/// <summary>
-		/// Add source
+		/// Add sources
 		/// </summary>
 		public static string XamlStr140
 		{
@@ -50342,276 +50121,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// AlfaDirect sample application
+		/// {0} sample application
 		/// </summary>
 		public const string XamlStr540Key = "XamlStr540";
 
 		/// <summary>
-		/// AlfaDirect sample application
+		/// {0} sample application
 		/// </summary>
 		public static string XamlStr540
 		{
 			get { return GetString(XamlStr540Key); }
-		}
-
-		/// <summary>
-		/// BitStamp sample application
-		/// </summary>
-		public const string XamlStr541Key = "XamlStr541";
-
-		/// <summary>
-		/// BitStamp sample application
-		/// </summary>
-		public static string XamlStr541
-		{
-			get { return GetString(XamlStr541Key); }
-		}
-
-		/// <summary>
-		/// Blackwood/Fusion sample application
-		/// </summary>
-		public const string XamlStr542Key = "XamlStr542";
-
-		/// <summary>
-		/// Blackwood/Fusion sample application
-		/// </summary>
-		public static string XamlStr542
-		{
-			get { return GetString(XamlStr542Key); }
-		}
-
-		/// <summary>
-		/// BTCE sample application
-		/// </summary>
-		public const string XamlStr543Key = "XamlStr543";
-
-		/// <summary>
-		/// BTCE sample application
-		/// </summary>
-		public static string XamlStr543
-		{
-			get { return GetString(XamlStr543Key); }
-		}
-
-		/// <summary>
-		/// CQG sample application
-		/// </summary>
-		public const string XamlStr544Key = "XamlStr544";
-
-		/// <summary>
-		/// CQG sample application
-		/// </summary>
-		public static string XamlStr544
-		{
-			get { return GetString(XamlStr544Key); }
-		}
-
-		/// <summary>
-		/// ETrade sample application
-		/// </summary>
-		public const string XamlStr545Key = "XamlStr545";
-
-		/// <summary>
-		/// ETrade sample application
-		/// </summary>
-		public static string XamlStr545
-		{
-			get { return GetString(XamlStr545Key); }
-		}
-
-		/// <summary>
-		/// FIX sample application
-		/// </summary>
-		public const string XamlStr546Key = "XamlStr546";
-
-		/// <summary>
-		/// FIX sample application
-		/// </summary>
-		public static string XamlStr546
-		{
-			get { return GetString(XamlStr546Key); }
-		}
-
-		/// <summary>
-		/// Interactive Brokers sample application
-		/// </summary>
-		public const string XamlStr547Key = "XamlStr547";
-
-		/// <summary>
-		/// Interactive Brokers sample application
-		/// </summary>
-		public static string XamlStr547
-		{
-			get { return GetString(XamlStr547Key); }
-		}
-
-		/// <summary>
-		/// IQFeed sample application
-		/// </summary>
-		public const string XamlStr548Key = "XamlStr548";
-
-		/// <summary>
-		/// IQFeed sample application
-		/// </summary>
-		public static string XamlStr548
-		{
-			get { return GetString(XamlStr548Key); }
-		}
-
-		/// <summary>
-		/// LMAX sample application
-		/// </summary>
-		public const string XamlStr549Key = "XamlStr549";
-
-		/// <summary>
-		/// LMAX sample application
-		/// </summary>
-		public static string XamlStr549
-		{
-			get { return GetString(XamlStr549Key); }
-		}
-
-		/// <summary>
-		/// Micex sample application
-		/// </summary>
-		public const string XamlStr550Key = "XamlStr550";
-
-		/// <summary>
-		/// Micex sample application
-		/// </summary>
-		public static string XamlStr550
-		{
-			get { return GetString(XamlStr550Key); }
-		}
-
-		/// <summary>
-		/// OANDA sample application
-		/// </summary>
-		public const string XamlStr551Key = "XamlStr551";
-
-		/// <summary>
-		/// OANDA sample application
-		/// </summary>
-		public static string XamlStr551
-		{
-			get { return GetString(XamlStr551Key); }
-		}
-
-		/// <summary>
-		/// OpenECry sample application
-		/// </summary>
-		public const string XamlStr552Key = "XamlStr552";
-
-		/// <summary>
-		/// OpenECry sample application
-		/// </summary>
-		public static string XamlStr552
-		{
-			get { return GetString(XamlStr552Key); }
-		}
-
-		/// <summary>
-		/// Plaza2 sample application
-		/// </summary>
-		public const string XamlStr553Key = "XamlStr553";
-
-		/// <summary>
-		/// Plaza2 sample application
-		/// </summary>
-		public static string XamlStr553
-		{
-			get { return GetString(XamlStr553Key); }
-		}
-
-		/// <summary>
-		/// Quik sample application
-		/// </summary>
-		public const string XamlStr554Key = "XamlStr554";
-
-		/// <summary>
-		/// Quik sample application
-		/// </summary>
-		public static string XamlStr554
-		{
-			get { return GetString(XamlStr554Key); }
-		}
-
-		/// <summary>
-		/// Quik+SmartCOM sample application
-		/// </summary>
-		public const string XamlStr555Key = "XamlStr555";
-
-		/// <summary>
-		/// Quik+SmartCOM sample application
-		/// </summary>
-		public static string XamlStr555
-		{
-			get { return GetString(XamlStr555Key); }
-		}
-
-		/// <summary>
-		/// Rithmic sample application
-		/// </summary>
-		public const string XamlStr556Key = "XamlStr556";
-
-		/// <summary>
-		/// Rithmic sample application
-		/// </summary>
-		public static string XamlStr556
-		{
-			get { return GetString(XamlStr556Key); }
-		}
-
-		/// <summary>
-		/// RSS sample application
-		/// </summary>
-		public const string XamlStr557Key = "XamlStr557";
-
-		/// <summary>
-		/// RSS sample application
-		/// </summary>
-		public static string XamlStr557
-		{
-			get { return GetString(XamlStr557Key); }
-		}
-
-		/// <summary>
-		/// Sterling sample application
-		/// </summary>
-		public const string XamlStr558Key = "XamlStr558";
-
-		/// <summary>
-		/// Sterling sample application
-		/// </summary>
-		public static string XamlStr558
-		{
-			get { return GetString(XamlStr558Key); }
-		}
-
-		/// <summary>
-		/// Transaq sample application
-		/// </summary>
-		public const string XamlStr559Key = "XamlStr559";
-
-		/// <summary>
-		/// Transaq sample application
-		/// </summary>
-		public static string XamlStr559
-		{
-			get { return GetString(XamlStr559Key); }
-		}
-
-		/// <summary>
-		/// SmartCOM sample application
-		/// </summary>
-		public const string XamlStr560Key = "XamlStr560";
-
-		/// <summary>
-		/// SmartCOM sample application
-		/// </summary>
-		public static string XamlStr560
-		{
-			get { return GetString(XamlStr560Key); }
 		}
 
 		/// <summary>
@@ -52201,16 +51720,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Amount:
+		/// Amount
 		/// </summary>
-		public const string XamlStr731Key = "XamlStr731";
+		public const string AmountKey = "Amount";
 
 		/// <summary>
-		/// Amount:
+		/// Amount
 		/// </summary>
-		public static string XamlStr731
+		public static string Amount
 		{
-			get { return GetString(XamlStr731Key); }
+			get { return GetString(AmountKey); }
 		}
 
 		/// <summary>
@@ -53046,19 +52565,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Price step is zero.
-		/// </summary>
-		public const string XamlStr843Key = "XamlStr843";
-
-		/// <summary>
-		/// Price step is zero.
-		/// </summary>
-		public static string XamlStr843
-		{
-			get { return GetString(XamlStr843Key); }
-		}
-
-		/// <summary>
 		/// Equity from
 		/// </summary>
 		public const string XamlStr846Key = "XamlStr846";
@@ -53436,19 +52942,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Own transactions
-		/// </summary>
-		public const string OwnTransactionsKey = "OwnTransactions";
-
-		/// <summary>
-		/// Own transactions
-		/// </summary>
-		public static string OwnTransactions
-		{
-			get { return GetString(OwnTransactionsKey); }
-		}
-
-		/// <summary>
 		/// Hardware ID
 		/// </summary>
 		public const string HddIdKey = "HddId";
@@ -53706,6 +53199,461 @@ namespace StockSharp.Localization
 		public static string AssociatedSecurityBoard
 		{
 			get { return GetString(AssociatedSecurityBoardKey); }
+		}
+
+		/// <summary>
+		/// Date and time format
+		/// </summary>
+		public const string DateTimeFormatKey = "DateTimeFormat";
+
+		/// <summary>
+		/// Date and time format
+		/// </summary>
+		public static string DateTimeFormat
+		{
+			get { return GetString(DateTimeFormatKey); }
+		}
+
+		/// <summary>
+		/// Time format
+		/// </summary>
+		public const string TimeFormatKey = "TimeFormat";
+
+		/// <summary>
+		/// Time format
+		/// </summary>
+		public static string TimeFormat
+		{
+			get { return GetString(TimeFormatKey); }
+		}
+
+		/// <summary>
+		/// Decimals not filled.
+		/// </summary>
+		public const string DecimalsNotFilledKey = "DecimalsNotFilled";
+
+		/// <summary>
+		/// Decimals not filled.
+		/// </summary>
+		public static string DecimalsNotFilled
+		{
+			get { return GetString(DecimalsNotFilledKey); }
+		}
+
+		/// <summary>
+		/// Tick count for storage cannot be less than zero.
+		/// </summary>
+		public const string NegativeTickCountStorageKey = "NegativeTickCountStorage";
+
+		/// <summary>
+		/// Tick count for storage cannot be less than zero.
+		/// </summary>
+		public static string NegativeTickCountStorage
+		{
+			get { return GetString(NegativeTickCountStorageKey); }
+		}
+
+		/// <summary>
+		/// Order count for storage cannot be less than zero.
+		/// </summary>
+		public const string NegativeOrderCountStorageKey = "NegativeOrderCountStorage";
+
+		/// <summary>
+		/// Order count for storage cannot be less than zero.
+		/// </summary>
+		public static string NegativeOrderCountStorage
+		{
+			get { return GetString(NegativeOrderCountStorageKey); }
+		}
+
+		/// <summary>
+		/// Free
+		/// </summary>
+		public const string FreeKey = "Free";
+
+		/// <summary>
+		/// Free
+		/// </summary>
+		public static string Free
+		{
+			get { return GetString(FreeKey); }
+		}
+
+		/// <summary>
+		/// Paid
+		/// </summary>
+		public const string PaidKey = "Paid";
+
+		/// <summary>
+		/// Paid
+		/// </summary>
+		public static string Paid
+		{
+			get { return GetString(PaidKey); }
+		}
+
+		/// <summary>
+		/// Direct market-data access to LSE or NASDAQ via ITCH protocol.
+		/// </summary>
+		public const string ItchDescriptionKey = "ItchDescription";
+
+		/// <summary>
+		/// Direct market-data access to LSE or NASDAQ via ITCH protocol.
+		/// </summary>
+		public static string ItchDescription
+		{
+			get { return GetString(ItchDescriptionKey); }
+		}
+
+		/// <summary>
+		/// TF
+		/// </summary>
+		public const string TFKey = "TF";
+
+		/// <summary>
+		/// TF
+		/// </summary>
+		public static string TF
+		{
+			get { return GetString(TFKey); }
+		}
+
+		/// <summary>
+		/// Network connection returned '{0}' bytes.
+		/// </summary>
+		public const string NetworkConnectionErrorKey = "NetworkConnectionError";
+
+		/// <summary>
+		/// Network connection returned '{0}' bytes.
+		/// </summary>
+		public static string NetworkConnectionError
+		{
+			get { return GetString(NetworkConnectionErrorKey); }
+		}
+
+		/// <summary>
+		/// Cost
+		/// </summary>
+		public const string CostKey = "Cost";
+
+		/// <summary>
+		/// Cost
+		/// </summary>
+		public static string Cost
+		{
+			get { return GetString(CostKey); }
+		}
+
+		/// <summary>
+		/// Region
+		/// </summary>
+		public const string RegionKey = "Region";
+
+		/// <summary>
+		/// Region
+		/// </summary>
+		public static string Region
+		{
+			get { return GetString(RegionKey); }
+		}
+
+		/// <summary>
+		/// Select all
+		/// </summary>
+		public const string SelectAllKey = "SelectAll";
+
+		/// <summary>
+		/// Select all
+		/// </summary>
+		public static string SelectAll
+		{
+			get { return GetString(SelectAllKey); }
+		}
+
+		/// <summary>
+		/// Unselect all
+		/// </summary>
+		public const string UnSelectAllKey = "UnSelectAll";
+
+		/// <summary>
+		/// Unselect all
+		/// </summary>
+		public static string UnSelectAll
+		{
+			get { return GetString(UnSelectAllKey); }
+		}
+
+		/// <summary>
+		/// Backup market data to cloud storage.
+		/// </summary>
+		public const string BackupDescriptionKey = "BackupDescription";
+
+		/// <summary>
+		/// Backup market data to cloud storage.
+		/// </summary>
+		public static string BackupDescription
+		{
+			get { return GetString(BackupDescriptionKey); }
+		}
+
+		/// <summary>
+		/// Preview
+		/// </summary>
+		public const string PreviewKey = "Preview";
+
+		/// <summary>
+		/// Preview
+		/// </summary>
+		public static string Preview
+		{
+			get { return GetString(PreviewKey); }
+		}
+
+		/// <summary>
+		/// Preview txt export
+		/// </summary>
+		public const string PreviewTxtKey = "PreviewTxt";
+
+		/// <summary>
+		/// Preview txt export
+		/// </summary>
+		public static string PreviewTxt
+		{
+			get { return GetString(PreviewTxtKey); }
+		}
+
+		/// <summary>
+		/// Depth txt export template.
+		/// </summary>
+		public const string TemplateTxtDepthKey = "TemplateTxtDepth";
+
+		/// <summary>
+		/// Depth txt export template.
+		/// </summary>
+		public static string TemplateTxtDepth
+		{
+			get { return GetString(TemplateTxtDepthKey); }
+		}
+
+		/// <summary>
+		/// Tick txt export template.
+		/// </summary>
+		public const string TemplateTxtTickKey = "TemplateTxtTick";
+
+		/// <summary>
+		/// Tick txt export template.
+		/// </summary>
+		public static string TemplateTxtTick
+		{
+			get { return GetString(TemplateTxtTickKey); }
+		}
+
+		/// <summary>
+		/// Candles txt export template.
+		/// </summary>
+		public const string TemplateTxtCandleKey = "TemplateTxtCandle";
+
+		/// <summary>
+		/// Candles txt export template.
+		/// </summary>
+		public static string TemplateTxtCandle
+		{
+			get { return GetString(TemplateTxtCandleKey); }
+		}
+
+		/// <summary>
+		/// Level1 txt export template.
+		/// </summary>
+		public const string TemplateTxtLevel1Key = "TemplateTxtLevel1";
+
+		/// <summary>
+		/// Level1 txt export template.
+		/// </summary>
+		public static string TemplateTxtLevel1
+		{
+			get { return GetString(TemplateTxtLevel1Key); }
+		}
+
+		/// <summary>
+		/// Order log txt export template.
+		/// </summary>
+		public const string TemplateTxtOrderLogKey = "TemplateTxtOrderLog";
+
+		/// <summary>
+		/// Order log txt export template.
+		/// </summary>
+		public static string TemplateTxtOrderLog
+		{
+			get { return GetString(TemplateTxtOrderLogKey); }
+		}
+
+		/// <summary>
+		/// Transactions txt export template.
+		/// </summary>
+		public const string TemplateTxtTransactionKey = "TemplateTxtTransaction";
+
+		/// <summary>
+		/// Transactions txt export template.
+		/// </summary>
+		public static string TemplateTxtTransaction
+		{
+			get { return GetString(TemplateTxtTransactionKey); }
+		}
+
+		/// <summary>
+		/// Security txt export template.
+		/// </summary>
+		public const string TemplateTxtSecurityKey = "TemplateTxtSecurity";
+
+		/// <summary>
+		/// Security txt export template.
+		/// </summary>
+		public static string TemplateTxtSecurity
+		{
+			get { return GetString(TemplateTxtSecurityKey); }
+		}
+
+		/// <summary>
+		/// News txt export template.
+		/// </summary>
+		public const string TemplateTxtNewsKey = "TemplateTxtNews";
+
+		/// <summary>
+		/// News txt export template.
+		/// </summary>
+		public static string TemplateTxtNews
+		{
+			get { return GetString(TemplateTxtNewsKey); }
+		}
+
+		/// <summary>
+		/// Depth template
+		/// </summary>
+		public const string TemplateDepthKey = "TemplateDepth";
+
+		/// <summary>
+		/// Depth template
+		/// </summary>
+		public static string TemplateDepth
+		{
+			get { return GetString(TemplateDepthKey); }
+		}
+
+		/// <summary>
+		/// Tick template
+		/// </summary>
+		public const string TemplateTickKey = "TemplateTick";
+
+		/// <summary>
+		/// Tick template
+		/// </summary>
+		public static string TemplateTick
+		{
+			get { return GetString(TemplateTickKey); }
+		}
+
+		/// <summary>
+		/// Candles template.
+		/// </summary>
+		public const string TemplateCandleKey = "TemplateCandle";
+
+		/// <summary>
+		/// Candles template
+		/// </summary>
+		public static string TemplateCandle
+		{
+			get { return GetString(TemplateCandleKey); }
+		}
+
+		/// <summary>
+		/// Level1 template
+		/// </summary>
+		public const string TemplateLevel1Key = "TemplateLevel1";
+
+		/// <summary>
+		/// Level1 template
+		/// </summary>
+		public static string TemplateLevel1
+		{
+			get { return GetString(TemplateLevel1Key); }
+		}
+
+		/// <summary>
+		/// Order log template
+		/// </summary>
+		public const string TemplateOrderLogKey = "TemplateOrderLog";
+
+		/// <summary>
+		/// Order log template
+		/// </summary>
+		public static string TemplateOrderLog
+		{
+			get { return GetString(TemplateOrderLogKey); }
+		}
+
+		/// <summary>
+		/// Transactions template
+		/// </summary>
+		public const string TemplateTransactionKey = "TemplateTransaction";
+
+		/// <summary>
+		/// Transactions template
+		/// </summary>
+		public static string TemplateTransaction
+		{
+			get { return GetString(TemplateTransactionKey); }
+		}
+
+		/// <summary>
+		/// Security template
+		/// </summary>
+		public const string TemplateSecurityKey = "TemplateSecurity";
+
+		/// <summary>
+		/// Security template
+		/// </summary>
+		public static string TemplateSecurity
+		{
+			get { return GetString(TemplateSecurityKey); }
+		}
+
+		/// <summary>
+		/// News template.
+		/// </summary>
+		public const string TemplateNewsKey = "TemplateNews";
+
+		/// <summary>
+		/// News template
+		/// </summary>
+		public static string TemplateNews
+		{
+			get { return GetString(TemplateNewsKey); }
+		}
+
+		/// <summary>
+		/// Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.
+		/// </summary>
+		public const string CsvImportErrorKey = "CsvImportError";
+
+		/// <summary>
+		/// Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.
+		/// </summary>
+		public static string CsvImportError
+		{
+			get { return GetString(CsvImportErrorKey); }
+		}
+
+		/// <summary>
+		/// Header at the first line. Do not add header while empty string.
+		/// </summary>
+		public const string CsvHeaderKey = "CsvHeader";
+
+		/// <summary>
+		/// Header at the first line. Do not add header while empty string.
+		/// </summary>
+		public static string CsvHeader
+		{
+			get { return GetString(CsvHeaderKey); }
 		}
 	}
 }

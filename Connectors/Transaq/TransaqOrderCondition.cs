@@ -93,7 +93,7 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// Время выставления заявки на Биржу.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str219Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.TimeKey)]
 		[EnumMember]
 		Time,
 
@@ -136,7 +136,7 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// По дате и времени.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str2857Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.DateKey)]
 		[EnumMember]
 		Date,
 
@@ -150,7 +150,7 @@ namespace StockSharp.Transaq
 		/// <summary>
 		/// До отмены.
 		/// </summary>
-		[EnumDisplayNameLoc(LocalizedStrings.Str1539Key)]
+		[EnumDisplayNameLoc(LocalizedStrings.GTCKey)]
 		[EnumMember]
 		TillCancelled
 	}

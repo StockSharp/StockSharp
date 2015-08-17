@@ -188,7 +188,7 @@ namespace StockSharp.Algo.Strategies
 		/// Получить режим запуска стратегии (эмуляция или реал).
 		/// </summary>
 		/// <param name="strategy">Стратегия.</param>
-		/// <returns>Если используется режим эмуляции - true, иначе - false.</returns>
+		/// <returns>Если используется режим эмуляции - <see langword="true"/>, иначе - <see langword="false"/>.</returns>
 		public static bool GetIsEmulation(this Strategy strategy)
 		{
 			return strategy.Environment.GetValue("IsEmulationMode", false);
@@ -198,7 +198,7 @@ namespace StockSharp.Algo.Strategies
 		/// Установить режим запуска стратегии (эмуляция или реал).
 		/// </summary>
 		/// <param name="strategy">Стратегия.</param>
-		/// <param name="isEmulation">Если используется режим эмуляции - true, иначе - false.</param>
+		/// <param name="isEmulation">Если используется режим эмуляции - <see langword="true"/>, иначе - <see langword="false"/>.</param>
 		public static void SetIsEmulation(this Strategy strategy, bool isEmulation)
 		{
 			strategy.Environment.SetValue("IsEmulationMode", isEmulation);
@@ -208,7 +208,7 @@ namespace StockSharp.Algo.Strategies
 		/// Получить режим работы стратегии (инициализация или торговля).
 		/// </summary>
 		/// <param name="strategy">Стратегия.</param>
-		/// <returns>Если выполняется инициализация - true, иначе - false.</returns>
+		/// <returns>Если выполняется инициализация - <see langword="true"/>, иначе - <see langword="false"/>.</returns>
 		public static bool GetIsInitialization(this Strategy strategy)
 		{
 			return strategy.Environment.GetValue("IsInitializationMode", false);
@@ -218,7 +218,7 @@ namespace StockSharp.Algo.Strategies
 		/// Установить режим работы стратегии (инициализация или торговля).
 		/// </summary>
 		/// <param name="strategy">Стратегия.</param>
-		/// <param name="isInitialization">Если выполняется инициализация - true, иначе - false.</param>
+		/// <param name="isInitialization">Если выполняется инициализация - <see langword="true"/>, иначе - <see langword="false"/>.</param>
 		public static void SetIsInitialization(this Strategy strategy, bool isInitialization)
 		{
 			strategy.Environment.SetValue("IsInitializationMode", isInitialization);

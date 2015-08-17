@@ -50,6 +50,8 @@ namespace SampleCQG
 			Instance = this;
 			InitializeComponent();
 
+			Title = Title.Put("CQG");
+
 			Closing += OnClosing;
 
 			_ordersWindow.MakeHideable();

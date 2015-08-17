@@ -376,7 +376,7 @@
             </summary>
       <param name="sessionId">Идентификатор сессии.</param>
       <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.
-            Если значение равно null, то идет поиск всех имеющихся инструментов.</param>
+            Если значение равно <see langword="null" />, то идет поиск всех имеющихся инструментов.</param>
       <returns>Найденные идентификаторы инструментов.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Hydra.IRemoteStorage.GetSecurities(System.Guid,System.String[])">

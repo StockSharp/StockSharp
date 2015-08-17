@@ -10,7 +10,7 @@
 	public class CategoryLocAttribute : CategoryAttribute
 	{
 		/// <summary>
-		/// Initializes a new instance of the CategoryLocAttribute class using the specified resource id for category name.
+		/// Initializes a new instance of the <see cref="CategoryLocAttribute"/> class using the specified resource id for category name.
 		/// </summary>
 		/// <param name="resourceId">String resource id to use for category name.</param>
 		public CategoryLocAttribute(string resourceId)

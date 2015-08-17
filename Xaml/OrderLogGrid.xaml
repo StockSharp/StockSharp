@@ -31,7 +31,7 @@
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Width="100" Binding="{Binding Order.Price}" SortMemberPath="Order.Price" />
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Order.Volume}" SortMemberPath="Order.Volume" />
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Width="140" Binding="{Binding Path=Order.Time, StringFormat=yyyy.MM.dd HH\\:mm\\:ss.fff}" SortMemberPath="Order.Time" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Width="140" Binding="{Binding Path=Order.Time, StringFormat=yyyy.MM.dd HH\\:mm\\:ss.fff}" SortMemberPath="Order.Time" />
 		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str128}" Width="80" SortMemberPath="Order.Direction">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
@@ -68,7 +68,7 @@
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
 			</DataGridTemplateColumn.CellStyle>
 		</DataGridTemplateColumn>
-		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str231}" Visibility="Collapsed" SortMemberPath="Order.TimeInForce">
+		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.TimeInForce}" Visibility="Collapsed" SortMemberPath="Order.TimeInForce">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
 					<TextBlock TextAlignment="Center">
@@ -87,6 +87,7 @@
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str1324}" Binding="{Binding Order.Status}" Visibility="Collapsed" SortMemberPath="Order.Status" />
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str342}" Width="60" Binding="{Binding Path=Order.IsSystem}" SortMemberPath="Order.IsSystem" Visibility="Collapsed"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Currency}" Width="40" Binding="{Binding Path=Order.Currency}" SortMemberPath="Order.Currency" Visibility="Collapsed"/>
 		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str506}" Width="100" SortMemberPath="Trade.Id">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>

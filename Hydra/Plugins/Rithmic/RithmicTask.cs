@@ -1,6 +1,5 @@
 namespace StockSharp.Hydra.Rithmic
 {
-	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
@@ -17,8 +16,13 @@ namespace StockSharp.Hydra.Rithmic
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/26ff0aad-623b-47e2-a8f8-a337506cd2ff.htm")]
+	[TaskIcon("rithmic_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
+		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class RithmicTask : ConnectorHydraTask<RithmicTrader>
 	{
 		private const string _sourceName = "Rithmic";
@@ -35,7 +39,7 @@ namespace StockSharp.Hydra.Rithmic
 			/// <summary>
 			/// Логин.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
@@ -48,7 +52,7 @@ namespace StockSharp.Hydra.Rithmic
 			/// <summary>
 			/// Пароль.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
@@ -61,7 +65,7 @@ namespace StockSharp.Hydra.Rithmic
 			/// <summary>
 			/// Путь к файлу сертификата, необходимому для подключения к системе Rithmic.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3465Key)]
 			[DescriptionLoc(LocalizedStrings.Str3466Key)]
 			[PropertyOrder(2)]
@@ -75,7 +79,7 @@ namespace StockSharp.Hydra.Rithmic
 			/// <summary>
 			/// Тип сервера.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3416Key)]
 			[DescriptionLoc(LocalizedStrings.Str3474Key)]
 			[PropertyOrder(3)]
@@ -88,7 +92,7 @@ namespace StockSharp.Hydra.Rithmic
 			/// <summary>
 			/// Путь к лог файлу.
 			/// </summary>
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3471Key)]
 			[DescriptionLoc(LocalizedStrings.Str3472Key)]
 			[PropertyOrder(4)]
@@ -110,16 +114,6 @@ namespace StockSharp.Hydra.Rithmic
 		}
 
 		private RithmicSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "rithmic_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

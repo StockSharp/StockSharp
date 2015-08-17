@@ -47,7 +47,7 @@
                     <ex:BmpImage Grid.RowSpan="5" Margin="5" Source="Images\strategy_diagram_128x128.png"/>
 
                     <TextBlock Grid.Column="2" Grid.Row="0">
-						<Run Text="{x:Static loc:LocalizedStrings.Str1993}"/><Run Text=":"/>
+						<Run Text="{x:Static loc:LocalizedStrings.Template}"/><Run Text=":"/>
 					</TextBlock>
                     <ComboBox x:Name="DiagramStrategyTemplateCtrl" Grid.Column="2" Grid.Row="1" SelectedIndex="0" DisplayMemberPath="Name" SelectedValuePath="Body" />
                 </Grid>
@@ -71,7 +71,7 @@
                     <ex:BmpImage Grid.RowSpan="5" Margin="5" Source="Images\strategy_code_128x128.png"/>
 
 					<TextBlock Grid.Column="2" Grid.Row="0">
-						<Run Text="{x:Static loc:LocalizedStrings.Str1993}"/><Run Text=":"/>
+						<Run Text="{x:Static loc:LocalizedStrings.Template}"/><Run Text=":"/>
 					</TextBlock>
                     <ComboBox x:Name="CodeStrategyTemplateCtrl" Grid.Column="2" Grid.Row="1" SelectedIndex="0" DisplayMemberPath="Name" SelectedValuePath="Body" />
                 </Grid>
@@ -128,7 +128,7 @@
                     <ex:BmpImage Grid.RowSpan="5" Margin="5" Source="Images\strategy_code_128x128.png"/>
 
 					<TextBlock Grid.Column="2" Grid.Row="0">
-						<Run Text="{x:Static loc:LocalizedStrings.Str1993}"/><Run Text=":"/>
+						<Run Text="{x:Static loc:LocalizedStrings.Template}"/><Run Text=":"/>
 					</TextBlock>
                     <ComboBox x:Name="CodeAnalyticsTemplateCtrl" Grid.Column="2" Grid.Row="1" SelectedIndex="0" DisplayMemberPath="Name" SelectedValuePath="Body" />
                 </Grid>

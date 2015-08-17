@@ -206,6 +206,11 @@
 				AddSuffix(security.Code, security);
 				AddSuffix(security.Name, security);
 				AddSuffix(security.ShortName, security);
+				AddSuffix(security.ExternalId.Bloomberg, security);
+				AddSuffix(security.ExternalId.Cusip, security);
+				AddSuffix(security.ExternalId.Isin, security);
+				AddSuffix(security.ExternalId.Ric, security);
+				AddSuffix(security.ExternalId.Sedol, security);
 			}
 
 			if (ExcludeFilter != null && ExcludeFilter(security))

@@ -408,6 +408,79 @@
             
              @return the class of the object used to construct instances of this relation
         </member>
+        <member name="M:NPOI.SS.Converter.ExcelToHtmlConverter.ProcessRow(NPOI.SS.Util.CellRangeAddress[][],NPOI.SS.UserModel.IRow,System.Xml.XmlElement)">
+            @return maximum 1-base index of column that were rendered, zero if none
+        </member>
+        <member name="M:NPOI.SS.Converter.ExcelToHtmlConverter.ProcessColumnWidths(NPOI.SS.UserModel.ISheet,System.Int32,System.Xml.XmlElement)">
+            Creates COLGROUP element with width specified for all columns. (Except
+            first if <tt>{@link #isOutputRowNumbers()}==true</tt>)
+        </member>
+        <member name="P:NPOI.SS.Converter.ExcelToHtmlConverter.OutputColumnHeaders">
+            <summary>
+            是否输出列头
+            </summary>
+        </member>
+        <member name="P:NPOI.SS.Converter.ExcelToHtmlConverter.OutputHiddenColumns">
+            <summary>
+            是否输出隐藏的列
+            </summary>
+        </member>
+        <member name="P:NPOI.SS.Converter.ExcelToHtmlConverter.OutputHiddenRows">
+            <summary>
+            是否输出隐藏的行
+            </summary>
+        </member>
+        <member name="P:NPOI.SS.Converter.ExcelToHtmlConverter.OutputLeadingSpacesAsNonBreaking">
+            <summary>
+            是否输出文本前的空格
+            </summary>
+        </member>
+        <member name="P:NPOI.SS.Converter.ExcelToHtmlConverter.OutputRowNumbers">
+            <summary>
+            是否输出行号
+            </summary>
+        </member>
+        <member name="P:NPOI.SS.Converter.ExcelToHtmlConverter.UseDivsToSpan">
+            <summary>
+            在跨列的单元格使用DIV标记
+            </summary>
+        </member>
+        <member name="M:NPOI.SS.Converter.ExcelToHtmlUtils.BuildMergedRangesMap(NPOI.SS.UserModel.ISheet)">
+            Creates a map (i.e. two-dimensional array) filled with ranges. Allow fast
+            retrieving {@link CellRangeAddress} of any cell, if cell is contained in
+            range.
+            
+            @see #getMergedRange(CellRangeAddress[][], int, int)
+        </member>
+        <member name="M:NPOI.SS.Converter.ExcelToHtmlUtils.GetColumnWidthInPx(System.Int32)">
+            See <a href=
+            "http://apache-poi.1045710.n5.nabble.com/Excel-Column-Width-Unit-Converter-pixels-excel-column-width-units-td2301481.html"
+            >here</a> for Xio explanation and details
+        </member>
+        <member name="M:NPOI.SS.Converter.ExcelToHtmlUtils.GetMergedRange(NPOI.SS.Util.CellRangeAddress[][],System.Int32,System.Int32)">
+            @param mergedRanges
+                       map of sheet merged ranges built with
+                       {@link #buildMergedRangesMap(HSSFSheet)}
+            @return {@link CellRangeAddress} from map if cell with specified row and
+                    column numbers contained in found range, <tt>null</tt> otherwise
+        </member>
+        <member name="T:NPOI.SS.UserModel.IndexedColors">
+             A deprecated indexing scheme for colours that is still required for some records, and for backwards
+              compatibility with OLE2 formats.
+            
+             <p>
+             Each element corresponds to a color index (zero-based). When using the default indexed color palette,
+             the values are not written out, but instead are implied. When the color palette has been modified from default,
+             then the entire color palette is used.
+             </p>
+            
+             @author Yegor Kozlov
+        </member>
+        <member name="P:NPOI.SS.UserModel.IndexedColors.Index">
+             Returns index of this color
+            
+             @return index of this color
+        </member>
         <member name="F:NPOI.SS.UserModel.ImportOption.SheetContentOnly">
             <summary>
             Only Text and Formulas are imported. Pictures, Drawing, Styles etc. are all ignored.
@@ -549,6 +622,30 @@
         </member>
         <member name="M:NPOI.XSSF.Extractor.XSSFExcelExtractor.SetIncludeHeadersFooters(System.Boolean)">
             Should headers and footers be included? Default is true
+        </member>
+        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.IncludeHeaderFooter">
+            <summary>
+             Should header and footer be included? Default is true
+            </summary>
+        </member>
+        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.IncludeSheetNames">
+            <summary>
+            Should sheet names be included? Default is true
+            </summary>
+            <value>if set to <c>true</c> [include sheet names].</value>
+        </member>
+        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.FormulasNotResults">
+            <summary>
+            Should we return the formula itself, and not
+            the result it produces? Default is false
+            </summary>
+            <value>if set to <c>true</c> [formulas not results].</value>
+        </member>
+        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.IncludeCellComments">
+            <summary>
+            Should cell comments be included? Default is false
+            </summary>
+            <value>if set to <c>true</c> [include cell comments].</value>
         </member>
         <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.Text">
             Retreives the text contents of the file
@@ -789,18 +886,6 @@
             Note - End Users probably want to call
              {@link XSSFFont#registerTo(StylesTable)}
         </member>
-        <member name="M:NPOI.XSSF.Model.StylesTable.GetNumCellStyles">
-            get the size of cell styles
-        </member>
-        <member name="M:NPOI.XSSF.Model.StylesTable.GetNumberFormatSize">
-            For unit testing only
-        </member>
-        <member name="M:NPOI.XSSF.Model.StylesTable.GetXfsSize">
-            For unit testing only
-        </member>
-        <member name="M:NPOI.XSSF.Model.StylesTable.GetStyleXfsSize">
-            For unit testing only
-        </member>
         <member name="M:NPOI.XSSF.Model.StylesTable.GetCTStylesheet">
             For unit testing only!
         </member>
@@ -812,6 +897,18 @@
         </member>
         <member name="M:NPOI.XSSF.Model.StylesTable.FindFont(System.Int16,System.Int16,System.Int16,System.String,System.Boolean,System.Boolean,NPOI.SS.UserModel.FontSuperScript,NPOI.SS.UserModel.FontUnderlineType)">
             Finds a font that matches the one with the supplied attributes
+        </member>
+        <member name="P:NPOI.XSSF.Model.StylesTable.NumCellStyles">
+            get the size of cell styles
+        </member>
+        <member name="P:NPOI.XSSF.Model.StylesTable.NumberFormatSize">
+            For unit testing only
+        </member>
+        <member name="P:NPOI.XSSF.Model.StylesTable.XfsSize">
+            For unit testing only
+        </member>
+        <member name="P:NPOI.XSSF.Model.StylesTable.StyleXfsSize">
+            For unit testing only
         </member>
         <member name="T:NPOI.XSSF.Model.ThemesTable">
             Class that represents theme of XLSX document. The theme includes specific
@@ -868,6 +965,9 @@
             @param ctNumDataSource OOXML data source to build
             @param dataSource POI data source to use
         </member>
+        <member name="F:NPOI.XSSF.UserModel.Charts.XSSFLineChartData`2.series">
+            List of all data series.
+        </member>
         <member name="T:NPOI.XSSF.UserModel.Charts.XSSFManualLayout">
             Represents a SpreadsheetML manual layout.
             @author Roman Kashitsyn
@@ -910,11 +1010,6 @@
         <member name="M:NPOI.XSSF.UserModel.Charts.XSSFScatterChartData`2.Serie.SetUseCache(System.Boolean)">
             @param useCache if true, cached results will be Added on plot
         </member>
-        <member name="M:NPOI.XSSF.UserModel.Charts.XSSFScatterChartData`2.Serie.AddToChart(NPOI.OpenXmlFormats.Dml.Chart.CT_ScatterChart)">
-            <summary>
-            Returns last calculated number cache for Y axis.
-            </summary>
-        </member>
         <member name="T:NPOI.XSSF.UserModel.Charts.XSSFValueAxis">
              Value axis type.
             
@@ -948,7 +1043,7 @@
             
              @return indent - number of spaces
         </member>
-        <!-- Badly formed XML comment ignored for member "P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.TextRotation" -->
+        <!-- 对于成员“P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.TextRotation”忽略有格式错误的 XML 注释 -->
         <member name="P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.WrapText">
              Whether the text should be wrapped
             
@@ -1574,7 +1669,10 @@
             Used so that StylesSource can figure out our location
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.#ctor(NPOI.XSSF.Model.StylesTable)">
+            <summary>
             Creates an empty Cell Style
+            </summary>
+            <param name="stylesSource"></param>
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.VerifyBelongsToStylesSource(NPOI.XSSF.Model.StylesTable)">
             Verifies that this style belongs to the supplied Workbook
@@ -1598,15 +1696,10 @@
               copy styles from one XSSFWorkbook to another.
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.GetAlignmentEnum">
-             Get the type of horizontal alignment for the cell
-            
-             @return HorizontalAlignment - the type of alignment
-             @see NPOI.ss.usermodel.HorizontalAlignment
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.GetBottomBorderXSSFColor">
-             Get the color to use for the bottom border as a {@link XSSFColor}
-            
-             @return the used color or <code>null</code> if not Set
+            <summary>
+            Get the type of horizontal alignment for the cell
+            </summary>
+            <returns>the type of alignment</returns>
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.GetDataFormatString">
              Get the contents of the format string, by looking up
@@ -1618,34 +1711,18 @@
             Gets the font for this style
             @return Font - font
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.GetLeftBorderXSSFColor">
-             Get the color to use for the left border
-            
-             @return the index of the color defInition or <code>null</code> if not Set
-             @see NPOI.ss.usermodel.IndexedColors
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.GetRightBorderXSSFColor">
-             Get the color to use for the right border
-            
-             @return the used color or <code>null</code> if not Set
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.GetTopBorderXSSFColor">
-             Get the color to use for the top border
-            
-             @return the used color or <code>null</code> if not Set
-        </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.GetVerticalAlignmentEnum">
-             Get the type of vertical alignment for the cell
-            
-             @return the type of alignment, default value is {@link NPOI.ss.usermodel.VerticalAlignment#BOTTOM}
-             @see NPOI.ss.usermodel.VerticalAlignment
+            <summary>
+            Get the type of vertical alignment for the cell
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.SetBottomBorderColor(NPOI.XSSF.UserModel.XSSFColor)">
              Set the color to use for the bottom border
             
              @param color the color to use, null means no color
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFCellStyle.SetFillBackgroundColor(NPOI.XSSF.UserModel.XSSFColor)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFCellStyle.SetFillBackgroundColor(NPOI.XSSF.UserModel.XSSFColor)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.SetFillForegroundColor(NPOI.XSSF.UserModel.XSSFColor)">
                     * Set the foreground fill color represented as a {@link XSSFColor} value.
                      * <br/>
@@ -1730,16 +1807,20 @@
              @return a copy of this style
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.BorderRight">
-             Get the type of border to use for the right border of the cell
-            
-             @return short - border type, default value is {@link NPOI.ss.usermodel.CellStyle#BorderStyle.None}
+            <summary>
+            Get the type of border to use for the right border of the cell
+            </summary>
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.BottomBorderColor">
             Get the color to use for the bottom border
-            <br/>
             Color is optional. When missing, IndexedColors.Automatic is implied.
             @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#AUTOMATIC}
             @see NPOI.ss.usermodel.IndexedColors
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.BottomBorderXSSFColor">
+             Get the color to use for the bottom border as a {@link XSSFColor}
+            
+             @return the used color or <code>null</code> if not Set
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.DataFormat">
              Get the index of the number format (numFmt) record used by this cell format.
@@ -1747,13 +1828,10 @@
              @return the index of the number format
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.FillBackgroundColor">
+            <summary>
             Get the background fill color.
-            <p>
-            Note - many cells are actually Filled with a foreground
-             Fill, not a background fill - see {@link #getFillForegroundColor()}
-            </p>
-            @return fill color, default value is {@link NPOI.ss.usermodel.IndexedColors#AUTOMATIC}
-            @see NPOI.ss.usermodel.IndexedColors
+            Note - many cells are actually filled with a foreground fill, not a background fill
+            </summary>
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.FillBackgroundColorColor">
             Get the background fill color.
@@ -1774,14 +1852,14 @@
             @return fill color, default value is {@link NPOI.ss.usermodel.IndexedColors#AUTOMATIC}
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.FillForegroundColorColor">
-             Get the foreground fill color.
-            
-             @return XSSFColor - fill color or <code>null</code> if not Set
+            <summary>
+            Get the foreground fill color.
+            </summary>
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.FillForegroundXSSFColor">
-             Get the foreground fill color.
-            
-             @return XSSFColor - fill color or <code>null</code> if not set
+            <summary>
+            Get the foreground fill color.
+            </summary>
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.FontIndex">
              Gets the index of the font for this style
@@ -1810,30 +1888,38 @@
              @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#BLACK}
              @see NPOI.ss.usermodel.IndexedColors
         </member>
-        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.IsLocked">
-             Get whether the cell's using this style are locked
+        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.LeftBorderXSSFColor">
+             Get the color to use for the left border
             
-             @return whether the cell using this style are locked
-        </member>
-        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.RightBorderColor">
-             Get the color to use for the right border
-            
-             @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#BLACK}
+             @return the index of the color defInition or <code>null</code> if not Set
              @see NPOI.ss.usermodel.IndexedColors
         </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.IsLocked">
+            <summary>
+            Get whether the cell's using this style are locked
+            </summary>
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.RightBorderColor">
+            <summary>
+            Get the color to use for the right border
+            </summary>
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.RightBorderXSSFColor">
+            <summary>
+            Get the color to use for the right border
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.Rotation">
-             Get the degree of rotation for the text in the cell
-             <p>
-             Expressed in degrees. Values range from 0 to 180. The first letter of
-             the text is considered the center-point of the arc.
-             <br/>
-             For 0 - 90, the value represents degrees above horizon. For 91-180 the degrees below the
-             horizon is calculated as:
-             <br/>
-             <code>[degrees below horizon] = 90 - textRotation.</code>
-             </p>
-            
-             @return rotation degrees (between 0 and 180 degrees)
+            <summary>
+            Get the degree of rotation (between 0 and 180 degrees) for the text in the cell
+            </summary>
+            <example>
+            Expressed in degrees. Values range from 0 to 180. The first letter of
+            the text is considered the center-point of the arc.
+            For 0 - 90, the value represents degrees above horizon. For 91-180 the degrees below the horizon is calculated as:
+            <code>[degrees below horizon] = 90 - textRotation.</code>
+            </example>
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.TopBorderColor">
              Get the color to use for the top border
@@ -1841,19 +1927,21 @@
              @return the index of the color defInition, default value is {@link NPOI.ss.usermodel.IndexedColors#BLACK}
              @see NPOI.ss.usermodel.IndexedColors
         </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.TopBorderXSSFColor">
+            <summary>
+            Get the color to use for the top border
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.VerticalAlignment">
-             Get the type of vertical alignment for the cell
-            
-             @return align the type of alignment, default value is {@link NPOI.ss.usermodel.CellStyle#VERTICAL_BOTTOM}
-             @see NPOI.ss.usermodel.CellStyle#VERTICAL_TOP
-             @see NPOI.ss.usermodel.CellStyle#VERTICAL_CENTER
-             @see NPOI.ss.usermodel.CellStyle#VERTICAL_BOTTOM
-             @see NPOI.ss.usermodel.CellStyle#VERTICAL_JUSTIFY
+            <summary>
+            Get the type of vertical alignment for the cell
+            </summary>
         </member>
         <member name="P:NPOI.XSSF.UserModel.XSSFCellStyle.WrapText">
-             Whether the text should be wrapped
-            
-             @return  a bool value indicating if the text in a cell should be line-wrapped within the cell.
+            <summary>
+            Whether the text in a cell should be line-wrapped within the cell.
+            </summary>
         </member>
         <member name="T:NPOI.XSSF.UserModel.XSSFChart">
             Represents a SpreadsheetML Chart
@@ -2205,7 +2293,7 @@
              @param columnIndex - the column to get (0-based)
              @param hidden - the visiblity state of the column
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.SetColumnWidth(System.Int32,System.Int32)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.SetColumnWidth(System.Int32,System.Int32)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFSheet.SetRowGroupCollapsed(System.Int32,System.Boolean)">
              group the row It is possible for collapsed to be false and yet still have
              the rows in question hidden. This can be achieved by having a lower
@@ -2245,9 +2333,9 @@
              @param denominator   The denominator for the zoom magnification.
              @see #SetZoom(int)
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.SetZoom(System.Int32)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.SetZoom(System.Int32)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFSheet.ShowInPane(System.Int16,System.Int16)">
              Location of the top left visible cell Location of the top left visible cell in the bottom right
              pane (when in Left-to-Right mode).
@@ -2738,10 +2826,6 @@
             For RGB colours, but not ARGB (we think...)
             Excel Gets black and white the wrong way around, so switch them 
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFColor.GetRgb">
-            Standard Red Green Blue ctColor value (RGB).
-            If there was an A (Alpha) value, it will be stripped.
-        </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFColor.GetARgb">
             Standard Alpha Red Green Blue ctColor value (ARGB).
         </member>
@@ -2756,8 +2840,6 @@
         <member name="M:NPOI.XSSF.UserModel.XSSFColor.SetRgb(System.Byte[])">
             Standard Alpha Red Green Blue ctColor value (ARGB).
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFColor.GetTheme" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFColor.SetTheme(System.Int32)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFColor.GetCTColor">
              Returns the underlying XML bean
             
@@ -2771,6 +2853,11 @@
         <member name="P:NPOI.XSSF.UserModel.XSSFColor.Indexed">
             Indexed ctColor value. Only used for backwards compatibility. References a ctColor in indexedColors.
         </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFColor.RGB">
+            Standard Red Green Blue ctColor value (RGB).
+            If there was an A (Alpha) value, it will be stripped.
+        </member>
+        <!-- 对于成员“P:NPOI.XSSF.UserModel.XSSFColor.Theme”忽略有格式错误的 XML 注释 -->
         <member name="P:NPOI.XSSF.UserModel.XSSFColor.Tint">
              Specifies the tint value applied to the ctColor.
             
@@ -3593,7 +3680,7 @@
         <member name="M:NPOI.XSSF.UserModel.XSSFGraphicFrame.SetChart(NPOI.XSSF.UserModel.XSSFChart,System.String)">
             Assign a DrawingML chart to the graphic frame.
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFGraphicFrame.AppendChartElement(NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData,System.String)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFGraphicFrame.AppendChartElement(NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData,System.String)”忽略有格式错误的 XML 注释 -->
         <member name="P:NPOI.XSSF.UserModel.XSSFGraphicFrame.Name">
             Returns the frame name.
             @return name of the frame
@@ -3664,7 +3751,7 @@
             output values resulting from Applying an advanced filter criteria to a source
             range
         </member>
-        <!-- Badly formed XML comment ignored for member "F:NPOI.XSSF.UserModel.XSSFName.BUILTIN_FILTER_DB" -->
+        <!-- 对于成员“F:NPOI.XSSF.UserModel.XSSFName.BUILTIN_FILTER_DB”忽略有格式错误的 XML 注释 -->
         <member name="F:NPOI.XSSF.UserModel.XSSFName.BUILTIN_CONSOLIDATE_AREA">
             A built-in defined name that refers to a consolidation area
         </member>
@@ -4281,7 +4368,7 @@
              @param row the xml bean Containing all cell defInitions for this row.
              @param sheet the parent sheet.
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.CellIterator" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.CellIterator”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFRow.GetEnumerator">
              Alias for {@link #cellIterator()} to allow  foreach loops:
              <blockquote><pre>
@@ -4305,8 +4392,8 @@
              		 greater than the row number of the argument <code>XSSFRow</code>.
              @throws ArgumentException if the argument row belongs to a different worksheet
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32,NPOI.SS.UserModel.CellType)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32,NPOI.SS.UserModel.CellType)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFRow.GetCell(System.Int32)">
              Returns the cell at the given (0 based) index,
               with the {@link NPOI.SS.usermodel.Row.MissingCellPolicy} from the parent Workbook.
@@ -4323,7 +4410,7 @@
             <param name="cellnum">0 based column number</param>
             <returns>Cell representing that column or null if Undefined.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.GetCell(System.Int32,NPOI.SS.UserModel.MissingCellPolicy)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.GetCell(System.Int32,NPOI.SS.UserModel.MissingCellPolicy)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFRow.SetRowStyle(NPOI.SS.UserModel.ICellStyle)">
             Applies a whole-row cell styling to the row.
             If the value is null then the style information is Removed,
@@ -4499,8 +4586,8 @@
              {@link NPOI.ss.usermodel.ComparisonOperator#BETWEEN}) and
              {@link NPOI.ss.usermodel.ComparisonOperator#NOT_BETWEEN} operations)
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.CreateConditionalFormattingRule(System.String)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.AddConditionalFormatting(NPOI.SS.UserModel.IConditionalFormatting)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.CreateConditionalFormattingRule(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.AddConditionalFormatting(NPOI.SS.UserModel.IConditionalFormatting)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.GetConditionalFormattingAt(System.Int32)">
              Gets Conditional Formatting object at a particular index
             
@@ -4530,22 +4617,16 @@
         <member name="M:NPOI.XSSF.UserModel.XSSFSimpleShape.Prototype">
             Prototype with the default structure of a new auto-shape.
         </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFSimpleShape.GetShapeType">
-             Gets the shape type, one of the constants defined in {@link NPOI.ss.usermodel.ShapeTypes}.
-            
-             @return the shape type
-             @see NPOI.ss.usermodel.ShapeTypes
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFSimpleShape.SetShapeType(System.Int32)">
-             Sets the shape types.
-            
-             @param type the shape type, one of the constants defined in {@link NPOI.ss.usermodel.ShapeTypes}.
-             @see NPOI.ss.usermodel.ShapeTypes
-        </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFSimpleShape.ApplyAttributes(NPOI.OpenXmlFormats.Spreadsheet.CT_RPrElt,NPOI.OpenXmlFormats.Dml.CT_TextCharacterProperties)">
             
              org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRPrElt to
              org.openxmlformats.schemas.drawingml.x2006.main.CTFont adapter
+        </member>
+        <member name="P:NPOI.XSSF.UserModel.XSSFSimpleShape.ShapeType">
+             Gets the shape type, one of the constants defined in {@link NPOI.ss.usermodel.ShapeTypes}.
+            
+             @return the shape type
+             @see NPOI.ss.usermodel.ShapeTypes
         </member>
         <member name="T:NPOI.XSSF.UserModel.XSSFTable">
              
@@ -4758,7 +4839,7 @@
                   pkg.close(); // gracefully closes the underlying zip file
               </code></pre>     
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(System.String)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(System.String)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.OnWorkbookCreate">
             Create a new CT_Workbook with all values Set to default
         </member>
@@ -4807,12 +4888,6 @@
              @return XSSFSheet representing the Cloned sheet.
              @throws ArgumentException if the sheet index in invalid
              @throws POIXMLException if there were errors when cloning
-        </member>
-        <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.GetUniqueSheetName(System.String)">
-             Generate a valid sheet name based on the existing one. Used when cloning sheets.
-            
-             @param srcName the original sheet name to
-             @return clone sheet name
         </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.CreateCellStyle">
              Create a new XSSFCellStyle and add it to the workbook's style table
@@ -4923,8 +4998,14 @@
              @param name of the sheet
              @return XSSFSheet with the name provided or <code>null</code> if it does not exist
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetAt(System.Int32)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetIndex(System.String)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetAt(System.Int32)”忽略有格式错误的 XML 注释 -->
+        <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetIndex(System.String)">
+            <summary>
+            Returns the index of the sheet by his name (case insensitive match)
+            </summary>
+            <param name="name">the sheet name</param>
+            <returns>index of the sheet (0 based) or -1 if not found</returns>
+        </member>
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetIndex(NPOI.SS.UserModel.ISheet)">
              Returns the index of the given sheet
             
@@ -4987,7 +5068,7 @@
              @throws ArgumentException if the index is out of range (index
                         &lt; 0 || index &gt;= NumberOfSheets).
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.SetPrintArea(System.Int32,System.String)" -->
+        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFWorkbook.SetPrintArea(System.Int32,System.String)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.SetPrintArea(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             For the Convenience of Java Programmers maintaining pointers.
             @see #setPrintArea(int, String)
@@ -5626,7 +5707,7 @@
             <li> If the parent paragraph is right to left, then these behaviors are
             also reversed. </li>
         </member>
-        <!-- Badly formed XML comment ignored for member "F:NPOI.XWPF.UserModel.BreakClear.RIGHT" -->
+        <!-- 对于成员“F:NPOI.XWPF.UserModel.BreakClear.RIGHT”忽略有格式错误的 XML 注释 -->
         <member name="F:NPOI.XWPF.UserModel.BreakClear.ALL">
             Specifies that the text wrapping break shall advance the text to the next
             line in the WordProcessingML document which spans the full width of the
@@ -5835,6 +5916,31 @@
         </member>
         <member name="T:NPOI.XWPF.UserModel.TextSegement">
             saves the begin and end position  of a text in a Paragraph
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.TextSegement.BeginRun">
+            <summary>
+            The index of the start run
+            </summary>
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.TextSegement.BeginText">
+            <summary>
+            The index of the start CT_Text
+            </summary>
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.TextSegement.BeginChar">
+            <summary>
+            The index of the start text character
+            </summary>
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.TextSegement.EndText">
+            <summary>
+            the index of the end CT_Text 
+            </summary>
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.TextSegement.EndChar">
+            <summary>
+            the index of the end text character
+            </summary>
         </member>
         <member name="T:NPOI.XWPF.UserModel.UnderlinePatterns">
             Specifies the types of patterns which may be used to create the underline
@@ -6293,7 +6399,7 @@
         <member name="F:NPOI.XWPF.UserModel.XWPFDocument.headerFooterPolicy">
             Handles the joy of different headers/footers for different pages 
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFDocument.newPackage">
+        <member name="M:NPOI.XWPF.UserModel.XWPFDocument.NewPackage">
             Create a new WordProcessingML package and Setup the default minimal content
         </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFDocument.OnDocumentCreate">
@@ -6927,9 +7033,6 @@
             
              @return the text of this text run.or <code>null</code> if not Set
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFRun.GetPictureText">
-            Returns text embedded in pictures
-        </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFRun.SetText(System.String)">
              Sets the text of this text run
             
@@ -6941,33 +7044,26 @@
              @param value the literal text which shall be displayed in the document
              @param pos - position in the text array (NB: 0 based)
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetUnderline(NPOI.XWPF.UserModel.UnderlinePatterns)" -->
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetStrike(System.Boolean)" -->
-        <member name="M:NPOI.XWPF.UserModel.XWPFRun.GetSubscript">
-             Specifies the alignment which shall be applied to the contents of this
-             run.in relation to the default appearance of the run.s text.
-             This allows the text to be repositioned as subscript or superscript without
-             altering the font size of the run.properties.
-            
-             @return VerticalAlign
-             @see VerticalAlign all possible value that could be Applyed to this run
+        <member name="M:NPOI.XWPF.UserModel.XWPFRun.InsertText(System.String,System.Int32)">
+            <summary>
+            insert text at start index in the run
+            </summary>
+            <param name="text">insert text</param>
+            <param name="startIndex">start index of the insertion in the run text</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetSubscript(NPOI.XWPF.UserModel.VerticalAlign)" -->
-        <member name="M:NPOI.XWPF.UserModel.XWPFRun.GetFontFamily">
-             Specifies the fonts which shall be used to display the text contents of
-             this run. Specifies a font which shall be used to format all characters
-             in the ASCII range (0 - 127) within the parent run
+        <member name="M:NPOI.XWPF.UserModel.XWPFRun.SetUnderline(NPOI.XWPF.UserModel.UnderlinePatterns)">
+             Specifies that the contents of this run.should be displayed along with an
+             underline appearing directly below the character heigh
+             If this element is not present, the default value is to leave the
+             formatting applied at previous level in the style hierarchy. If this
+             element is never applied in the style hierarchy, then an underline shall
+             not be applied to the contents of this run.
             
-             @return a string representing the font family
+             @param value -
+                          underline type
+             @see UnderlinePatterns : all possible patterns that could be applied
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFRun.SetFontFamily(System.String)">
-             Specifies the fonts which shall be used to display the text contents of
-             this run. Specifies a font which shall be used to format all characters
-             in the ASCII range (0 - 127) within the parent run
-            
-             @param fontFamily
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetFontSize(System.Int32)" -->
+        <!-- 对于成员“M:NPOI.XWPF.UserModel.XWPFRun.SetStrike(System.Boolean)”忽略有格式错误的 XML 注释 -->
         <member name="M:NPOI.XWPF.UserModel.XWPFRun.GetTextPosition">
              This element specifies the amount by which text shall be raised or
              lowered for this run.in relation to the default baseline of the
@@ -6976,7 +7072,24 @@
             
              @return a big integer representing the amount of text shall be "moved"
         </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetTextPosition(System.Int32)" -->
+        <member name="M:NPOI.XWPF.UserModel.XWPFRun.SetTextPosition(System.Int32)">
+            This element specifies the amount by which text shall be raised or
+            lowered for this run.in relation to the default baseline of the
+            surrounding non-positioned text. This allows the text to be repositioned
+            without altering the font size of the contents.
+            
+            If the val attribute is positive, then the parent run.shall be raised
+            above the baseline of the surrounding text by the specified number of
+            half-points. If the val attribute is negative, then the parent run.shall
+            be lowered below the baseline of the surrounding text by the specified
+            number of half-points.
+                    * 
+            If this element is not present, the default value is to leave the
+            formatting applied at previous level in the style hierarchy. If this
+            element is never applied in the style hierarchy, then the text shall not
+            be raised or lowered relative to the default baseline location for the
+            contents of this run.
+        </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFRun.RemoveBreak">
             
         </member>
@@ -7071,6 +7184,9 @@
             
              @return <code>true</code> if the bold property is applied
         </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFRun.PictureText">
+            Returns text embedded in pictures
+        </member>
         <member name="P:NPOI.XWPF.UserModel.XWPFRun.IsItalic">
              Whether the italic property should be applied to all non-complex script
              characters in the contents of this run.when displayed in a document.
@@ -7089,6 +7205,22 @@
              horizontal line through the center of the line.
             
              @return <code>true</code> if the strike property is applied
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFRun.Subscript">
+             Specifies the alignment which shall be applied to the contents of this
+             run.in relation to the default appearance of the run.s text.
+             This allows the text to be repositioned as subscript or superscript without
+             altering the font size of the run.properties.
+            
+             @return VerticalAlign
+             @see VerticalAlign all possible value that could be Applyed to this run
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFRun.FontFamily">
+             Specifies the fonts which shall be used to display the text contents of
+             this run. Specifies a font which shall be used to format all characters
+             in the ASCII range (0 - 127) within the parent run
+            
+             @return a string representing the font family
         </member>
         <member name="P:NPOI.XWPF.UserModel.XWPFRun.FontSize">
              Specifies the font size which shall be applied to all non complex script
@@ -7221,299 +7353,11 @@
             <param name="numId"></param>
             <param name="ilvl"></param>
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetPictureText">
-            Returns any text from any suitable pictures in the paragraph
-        </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.CreateRun">
             <summary>
             Appends a new run to this paragraph
             </summary>
             <returns>a new text run</returns>
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetAlignment">
-             Returns the paragraph alignment which shall be applied to text in this
-             paragraph.
-             <p>
-             If this element is not Set on a given paragraph, its value is determined
-             by the Setting previously Set at any level of the style hierarchy (i.e.
-             that previous Setting remains unChanged). If this Setting is never
-             specified in the style hierarchy, then no alignment is applied to the
-             paragraph.
-             </p>
-            
-             @return the paragraph alignment of this paragraph.
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFParagraph.SetAlignment(NPOI.XWPF.UserModel.ParagraphAlignment)" -->
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetVerticalAlignment">
-             Returns the text vertical alignment which shall be applied to text in
-             this paragraph.
-             <p>
-             If the line height (before any Added spacing) is larger than one or more
-             characters on the line, all characters will be aligned to each other as
-             specified by this element.
-             </p>
-             <p>
-             If this element is omitted on a given paragraph, its value is determined
-             by the Setting previously Set at any level of the style hierarchy (i.e.
-             that previous Setting remains unChanged). If this Setting is never
-             specified in the style hierarchy, then the vertical alignment of all
-             characters on the line shall be automatically determined by the consumer.
-             </p>
-            
-             @return the vertical alignment of this paragraph.
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetVerticalAlignment(NPOI.XWPF.UserModel.TextAlignment)">
-             Specifies the text vertical alignment which shall be applied to text in
-             this paragraph.
-             <p>
-             If the line height (before any Added spacing) is larger than one or more
-             characters on the line, all characters will be aligned to each other as
-             specified by this element.
-             </p>
-             <p>
-             If this element is omitted on a given paragraph, its value is determined
-             by the Setting previously Set at any level of the style hierarchy (i.e.
-             that previous Setting remains unChanged). If this Setting is never
-             specified in the style hierarchy, then the vertical alignment of all
-             characters on the line shall be automatically determined by the consumer.
-             </p>
-            
-             @param valign the paragraph vertical alignment to apply to this
-                           paragraph.
-        </member>
-        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFParagraph.SetBorderTop(NPOI.XWPF.UserModel.Borders)" -->
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetBorderTop">
-             Specifies the border which shall be displayed above a Set of paragraphs
-             which have the same Set of paragraph border Settings.
-            
-             @return paragraphBorder - the top border for the paragraph
-             @see #setBorderTop(Borders)
-             @see Borders a list of all types of borders
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetBorderBottom(NPOI.XWPF.UserModel.Borders)">
-             * 
-             * <p>
-            
-             * </p>
-             * <p>
-             * If this element is omitted on a given paragraph, its value is determined
-             * by the Setting previously Set at any level of the style hierarchy (i.e.
-             * that previous Setting remains unChanged). If this Setting is never
-             * specified in the style hierarchy, then no between border shall be applied
-             * below identical paragraphs.
-             * </p>
-             * <b>This border can only be a line border.</b>
-            <summary>
-            Specifies the border which shall be displayed below a Set of paragraphs
-            which have the same Set of paragraph border Settings.
-            </summary>
-            <param name="border">a list of all types of borders</param>
-            <remarks>
-             To determine if any two adjoining paragraphs shall have an individual top
-            and bottom border or a between border, the Set of borders on the two
-            adjoining paragraphs are Compared. If the border information on those two
-            paragraphs is identical for all possible paragraphs borders, then the
-            between border is displayed. Otherwise, the paragraph shall use its
-            bottom border and the following paragraph shall use its top border,
-            respectively. If this border specifies a space attribute, that value
-            determines the space After the bottom of the text (ignoring any space
-            below) which should be left before this border is Drawn, specified in
-            points.
-            </remarks>
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetBorderBottom">
-             <summary>
-            Specifies the border which shall be displayed below a Set of
-             paragraphs which have the same Set of paragraph border Settings.
-             </summary>
-             <returns>the bottom border for the paragraph</returns>
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetBorderLeft(NPOI.XWPF.UserModel.Borders)">
-             Specifies the border which shall be displayed on the left side of the
-             page around the specified paragraph.
-             <p>
-             To determine if any two adjoining paragraphs should have a left border
-             which spans the full line height or not, the left border shall be Drawn
-             between the top border or between border at the top (whichever would be
-             rendered for the current paragraph), and the bottom border or between
-             border at the bottom (whichever would be rendered for the current
-             paragraph).
-             </p>
-             <p>
-             If this element is omitted on a given paragraph, its value is determined
-             by the Setting previously Set at any level of the style hierarchy (i.e.
-             that previous Setting remains unChanged). If this Setting is never
-             specified in the style hierarchy, then no left border shall be applied.
-             </p>
-             <b>This border can only be a line border.</b>
-            
-             @param border
-             @see Borders for a list of all possible borders
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetBorderLeft">
-            <summary>
-            Specifies the border which shall be displayed on the left side of the
-            page around the specified paragraph.
-            </summary>
-            <returns>the left border for the paragraph</returns>
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetBorderRight(NPOI.XWPF.UserModel.Borders)">
-             Specifies the border which shall be displayed on the right side of the
-             page around the specified paragraph.
-             <p>
-             To determine if any two adjoining paragraphs should have a right border
-             which spans the full line height or not, the right border shall be Drawn
-             between the top border or between border at the top (whichever would be
-             rendered for the current paragraph), and the bottom border or between
-             border at the bottom (whichever would be rendered for the current
-             paragraph).
-             </p>
-             <p>
-             If this element is omitted on a given paragraph, its value is determined
-             by the Setting previously Set at any level of the style hierarchy (i.e.
-             that previous Setting remains unChanged). If this Setting is never
-             specified in the style hierarchy, then no right border shall be applied.
-             </p>
-             <b>This border can only be a line border.</b>
-            
-             @param border
-             @see Borders for a list of all possible borders
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetBorderRight">
-             Specifies the border which shall be displayed on the right side of the
-             page around the specified paragraph.
-            
-             @return ParagraphBorder - the right border for the paragraph
-             @see #setBorderRight(Borders)
-             @see Borders for a list of all possible borders
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetBorderBetween(NPOI.XWPF.UserModel.Borders)">
-             Specifies the border which shall be displayed between each paragraph in a
-             Set of paragraphs which have the same Set of paragraph border Settings.
-             <p>
-             To determine if any two adjoining paragraphs should have a between border
-             or an individual top and bottom border, the Set of borders on the two
-             adjoining paragraphs are Compared. If the border information on those two
-             paragraphs is identical for all possible paragraphs borders, then the
-             between border is displayed. Otherwise, each paragraph shall use its
-             bottom and top border, respectively. If this border specifies a space
-             attribute, that value is ignored - this border is always located at the
-             bottom of each paragraph with an identical following paragraph, taking
-             into account any space After the line pitch.
-             </p>
-             <p>
-             If this element is omitted on a given paragraph, its value is determined
-             by the Setting previously Set at any level of the style hierarchy (i.e.
-             that previous Setting remains unChanged). If this Setting is never
-             specified in the style hierarchy, then no between border shall be applied
-             between identical paragraphs.
-             </p>
-             <b>This border can only be a line border.</b>
-            
-             @param border
-             @see Borders for a list of all possible borders
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetBorderBetween">
-             Specifies the border which shall be displayed between each paragraph in a
-             Set of paragraphs which have the same Set of paragraph border Settings.
-            
-             @return ParagraphBorder - the between border for the paragraph
-             @see #setBorderBetween(Borders)
-             @see Borders for a list of all possible borders
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetPageBreak(System.Boolean)">
-             Specifies that when rendering this document in a paginated
-             view, the contents of this paragraph are rendered on the start of a new
-             page in the document.
-             <p>
-             If this element is omitted on a given paragraph,
-             its value is determined by the Setting previously Set at any level of the
-             style hierarchy (i.e. that previous Setting remains unChanged). If this
-             Setting is never specified in the style hierarchy, then this property
-             shall not be applied. Since the paragraph is specified to start on a new
-             page, it begins page two even though it could have fit on page one.
-             </p>
-            
-             @param pageBreak -
-                              bool value
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetSpacingAfterLines(System.Int32)">
-             Specifies the spacing that should be Added After the last line in this
-             paragraph in the document in line units.
-             <b>The value of this attribute is
-             specified in one hundredths of a line.
-             </b>
-             <p>
-             If the AfterAutoSpacing attribute
-             is also specified, then this attribute value is ignored. If this Setting
-             is never specified in the style hierarchy, then its value shall be zero
-             (if needed)
-             </p>
-            
-             @param spaces -
-                           a positive whole number, whose contents consist of a
-                           measurement in twentieths of a
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetSpacingAfterLines">
-             Specifies the spacing that should be Added After the last line in this
-             paragraph in the document in absolute units.
-            
-             @return bigint - value representing the spacing After the paragraph
-             @see #setSpacingAfterLines(int)
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetSpacingBefore(System.Int32)">
-             Specifies the spacing that should be Added above the first line in this
-             paragraph in the document in absolute units.
-             <p>
-             If the beforeLines attribute or the beforeAutoSpacing attribute is also
-             specified, then this attribute value is ignored.
-             </p>
-            
-             @param spaces
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetSpacingBefore">
-             Specifies the spacing that should be Added above the first line in this
-             paragraph in the document in absolute units.
-            
-             @return the spacing that should be Added above the first line
-             @see #setSpacingBefore(int)
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetSpacingBeforeLines(System.Int32)">
-             Specifies the spacing that should be Added before the first line in this
-             paragraph in the document in line units. <b> The value of this attribute
-             is specified in one hundredths of a line. </b>
-             <p>
-             If the beforeAutoSpacing attribute is also specified, then this attribute
-             value is ignored. If this Setting is never specified in the style
-             hierarchy, then its value shall be zero.
-             </p>
-            
-             @param spaces
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetSpacingBeforeLines">
-             Specifies the spacing that should be Added before the first line in this paragraph in the
-             document in line units.
-             The value of this attribute is specified in one hundredths of a line.
-            
-             @return the spacing that should be Added before the first line in this paragraph
-             @see #setSpacingBeforeLines(int)
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SetSpacingLineRule(NPOI.XWPF.UserModel.LineSpacingRule)">
-             Specifies how the spacing between lines is calculated as stored in the
-             line attribute. If this attribute is omitted, then it shall be assumed to
-             be of a value auto if a line attribute value is present.
-            
-             @param rule
-             @see LineSpacingRule
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetSpacingLineRule">
-             Specifies how the spacing between lines is calculated as stored in the
-             line attribute. If this attribute is omitted, then it shall be assumed to
-             be of a value auto if a line attribute value is present.
-            
-             @return rule
-             @see LineSpacingRule
-             @see #setSpacingLineRule(LineSpacingRule)
         </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetCTPBrd(System.Boolean)">
             Get a <b>copy</b> of the currently used CTPBrd, if none is used, return
@@ -7536,17 +7380,28 @@
             the content of parameter run
             @param run
         </member>
+        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.ReplaceText(System.String,System.String)">
+            <summary>
+            Replace text inside each run (cross run is not supported yet)
+            </summary>
+            <param name="oldText">target text</param>
+            <param name="newText">replacement text</param>
+        </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SearchText(System.String,NPOI.XWPF.UserModel.PositionInParagraph)">
-            this methods parse the paragraph and search for the string searched.
-            If it Finds the string, it will return true and the position of the String
-            will be saved in the parameter startPos.
-            @param searched
-            @param startPos
+            <summary>
+            this methods parse the paragraph and search for the string searched. 
+            If it finds the string, it will return true and the position of the String will be saved in the parameter startPos.
+            </summary>
+            <param name="searched"></param>
+            <param name="startPos"></param>
+            <returns></returns>
         </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.InsertNewRun(System.Int32)">
+            <summary>
             insert a new Run in RunArray
-            @param pos
-            @return  the inserted run
+            </summary>
+            <param name="pos"></param>
+            <returns>the inserted run</returns>
         </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.GetText(NPOI.XWPF.UserModel.TextSegement)">
             Get a Text
@@ -7584,10 +7439,79 @@
             Returns the text of the paragraph, but not of any objects in the
             paragraph
         </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.PictureText">
+            Returns any text from any suitable pictures in the paragraph
+        </member>
         <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.FootnoteText">
              Returns the footnote text of the paragraph
             
              @return  the footnote text or empty string if the paragraph does not have footnotes
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.Alignment">
+             Returns the paragraph alignment which shall be applied to text in this
+             paragraph.
+             <p>
+             If this element is not Set on a given paragraph, its value is determined
+             by the Setting previously Set at any level of the style hierarchy (i.e.
+             that previous Setting remains unChanged). If this Setting is never
+             specified in the style hierarchy, then no alignment is applied to the
+             paragraph.
+             </p>
+            
+             @return the paragraph alignment of this paragraph.
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.VerticalAlignment">
+             Returns the text vertical alignment which shall be applied to text in
+             this paragraph.
+             <p>
+             If the line height (before any Added spacing) is larger than one or more
+             characters on the line, all characters will be aligned to each other as
+             specified by this element.
+             </p>
+             <p>
+             If this element is omitted on a given paragraph, its value is determined
+             by the Setting previously Set at any level of the style hierarchy (i.e.
+             that previous Setting remains unChanged). If this Setting is never
+             specified in the style hierarchy, then the vertical alignment of all
+             characters on the line shall be automatically determined by the consumer.
+             </p>
+            
+             @return the vertical alignment of this paragraph.
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.BorderTop">
+            <summary>
+            the top border for the paragraph
+            </summary>
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.BorderBottom">
+             <summary>
+            Specifies the border which shall be displayed below a Set of
+             paragraphs which have the same Set of paragraph border Settings.
+             </summary>
+             <returns>the bottom border for the paragraph</returns>
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.BorderLeft">
+            <summary>
+            Specifies the border which shall be displayed on the left side of the
+            page around the specified paragraph.
+            </summary>
+            <returns>the left border for the paragraph</returns>
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.BorderRight">
+             Specifies the border which shall be displayed on the right side of the
+             page around the specified paragraph.
+            
+             @return ParagraphBorder - the right border for the paragraph
+             @see #setBorderRight(Borders)
+             @see Borders for a list of all possible borders
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.BorderBetween">
+             Specifies the border which shall be displayed between each paragraph in a
+             Set of paragraphs which have the same Set of paragraph border Settings.
+            
+             @return ParagraphBorder - the between border for the paragraph
+             @see #setBorderBetween(Borders)
+             @see Borders for a list of all possible borders
         </member>
         <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.IsPageBreak">
              Specifies that when rendering this document in a paginated
@@ -7609,6 +7533,37 @@
              paragraph in the document in absolute units.
             
              @return int - value representing the spacing After the paragraph
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.SpacingAfterLines">
+             Specifies the spacing that should be Added After the last line in this
+             paragraph in the document in absolute units.
+            
+             @return bigint - value representing the spacing After the paragraph
+             @see #setSpacingAfterLines(int)
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.SpacingBefore">
+             Specifies the spacing that should be Added above the first line in this
+             paragraph in the document in absolute units.
+            
+             @return the spacing that should be Added above the first line
+             @see #setSpacingBefore(int)
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.SpacingBeforeLines">
+             Specifies the spacing that should be Added before the first line in this paragraph in the
+             document in line units.
+             The value of this attribute is specified in one hundredths of a line.
+            
+             @return the spacing that should be Added before the first line in this paragraph
+             @see #setSpacingBeforeLines(int)
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.SpacingLineRule">
+             Specifies how the spacing between lines is calculated as stored in the
+             line attribute. If this attribute is omitted, then it shall be assumed to
+             be of a value auto if a line attribute value is present.
+            
+             @return rule
+             @see LineSpacingRule
+             @see #setSpacingLineRule(LineSpacingRule)
         </member>
         <member name="P:NPOI.XWPF.UserModel.XWPFParagraph.IndentationLeft">
              Specifies the indentation which shall be placed between the left text
@@ -7722,24 +7677,7 @@
              @param rel  the package relationship holding this Drawing,
              the relationship type must be http://schemas.Openxmlformats.org/officeDocument/2006/relationships/image
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFPictureData.GetData">
-            Gets the picture data as a byte array.
-            <p>
-            Note, that this call might be expensive since all the picture data is copied into a temporary byte array.
-            You can grab the picture data directly from the underlying package part as follows:
-            <br/>
-            <code>
-            InputStream is1 = GetPackagePart().InputStream;
-            </code>
-            </p>
-            @return the Picture data.
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFPictureData.GetFileName">
-            Returns the file name of the image, eg image7.jpg . The original filename
-            isn't always available, but if it can be found it's likely to be in the
-            CTDrawing
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFPictureData.suggestFileExtension">
+        <member name="M:NPOI.XWPF.UserModel.XWPFPictureData.SuggestFileExtension">
             Suggests a file extension for this image.
             @return the file extension.
         </member>
@@ -7753,6 +7691,23 @@
             @see NPOI.XWPF.UserModel.PictureTypeJPEG
             @see NPOI.XWPF.UserModel.PictureTypePNG
             @see NPOI.XWPF.UserModel.PictureTypeDIB
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFPictureData.Data">
+            Gets the picture data as a byte array.
+            <p>
+            Note, that this call might be expensive since all the picture data is copied into a temporary byte array.
+            You can grab the picture data directly from the underlying package part as follows:
+            <br/>
+            <code>
+            InputStream is1 = GetPackagePart().InputStream;
+            </code>
+            </p>
+            @return the Picture data.
+        </member>
+        <member name="P:NPOI.XWPF.UserModel.XWPFPictureData.FileName">
+            Returns the file name of the image, eg image7.jpg . The original filename
+            isn't always available, but if it can be found it's likely to be in the
+            CTDrawing
         </member>
         <member name="T:NPOI.XWPF.UserModel.XWPFRelation">
             @author Yegor Kozlov
@@ -8119,26 +8074,6 @@
         <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.AddNewTableCell">
             Adds a new TableCell at the end of this tableRow
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.SetHeight(System.Int32)">
-             This element specifies the height of the current table row within the
-             current table. This height shall be used to determine the resulting
-             height of the table row, which may be absolute or relative (depending on
-             its attribute values). If omitted, then the table row shall automatically
-             resize its height to the height required by its contents (the equivalent
-             of an hRule value of auto).
-            
-             @param height
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.GetHeight">
-             This element specifies the height of the current table row within the
-             current table. This height shall be used to determine the resulting
-             height of the table row, which may be absolute or relative (depending on
-             its attribute values). If omitted, then the table row shall automatically
-             resize its height to the height required by its contents (the equivalent
-             of an hRule value of auto).
-            
-             @return height
-        </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.GetTableCells">
             create and return a list of all XWPFTableCell
             who belongs to this row
@@ -8148,26 +8083,23 @@
             returns the XWPFTableCell which belongs to the CTTC cell
             if there is no XWPFTableCell which belongs to the parameter CTTc cell null will be returned
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.SetCantSplitRow(System.Boolean)">
-            This attribute controls whether to allow table rows to split across pages.
-            The logic for this attribute is a little unusual: a true value means
-            DON'T allow rows to split, false means allow rows to split.
-            @param split - if true, don't allow rows to be split. If false, allow
-                   rows to be split.
+        <member name="P:NPOI.XWPF.UserModel.XWPFTableRow.Height">
+             This element specifies the height of the current table row within the
+             current table. This height shall be used to determine the resulting
+             height of the table row, which may be absolute or relative (depending on
+             its attribute values). If omitted, then the table row shall automatically
+             resize its height to the height required by its contents (the equivalent
+             of an hRule value of auto).
+            
+             @return height
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.IsCantSplitRow">
+        <member name="P:NPOI.XWPF.UserModel.XWPFTableRow.IsCantSplitRow">
             Return true if the "can't split row" value is true. The logic for this
             attribute is a little unusual: a TRUE value means DON'T allow rows to
             split, FALSE means allow rows to split.
             @return true if rows can't be split, false otherwise.
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.SetRepeatHeader(System.Boolean)">
-            This attribute controls whether to repeat a table's header row at the top
-            of a table split across pages.
-            @param repeat - if TRUE, repeat header row at the top of each page of table;
-                            if FALSE, don't repeat header row.
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFTableRow.IsRepeatHeader">
+        <member name="P:NPOI.XWPF.UserModel.XWPFTableRow.IsRepeatHeader">
             Return true if a table's header row should be repeated at the top of a
             table split across pages.
             @return true if table's header row should be repeated at the top of each

@@ -67,6 +67,15 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
+		/// Код клиента, присвоенный брокером.
+		/// </summary>
+		[DataMember]
+		[MainCategory]
+		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
+		[DescriptionLoc(LocalizedStrings.ClientCodeDescKey)]
+		public string ClientCode { get; set; }
+
+		/// <summary>
 		/// Название депозитария, где находится физически ценная бумага.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.DepoKey)]
@@ -125,7 +134,7 @@ namespace StockSharp.Messages
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
-		[DescriptionLoc(LocalizedStrings.OrderIdStringKey, true)]
+		[DescriptionLoc(LocalizedStrings.OrderIdKey, true)]
 		[MainCategory]
 		[Nullable]
 		public long? OrderId { get; set; }
@@ -423,6 +432,16 @@ namespace StockSharp.Messages
 		public string UserOrderId { get; set; }
 
 		/// <summary>
+		/// Валюта торгового инструмента.
+		/// </summary>
+		[DataMember]
+		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
+		[DescriptionLoc(LocalizedStrings.Str382Key)]
+		[MainCategory]
+		[Nullable]
+		public CurrencyTypes? Currency { get; set; }
+
+		/// <summary>
 		/// Создать <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
@@ -452,6 +471,8 @@ namespace StockSharp.Messages
 				Balance = Balance,
 				Comment = Comment,
 				Condition = Condition.CloneNullable(),
+				ClientCode = ClientCode,
+				Currency = Currency,
 				ServerTime = ServerTime,
 				DepoName = DepoName,
 				Error = Error,

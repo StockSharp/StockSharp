@@ -540,7 +540,7 @@ namespace StockSharp.Algo
 		/// <returns>Прибыль-убыток.</returns>
 		public static decimal GetPnL(this ExecutionMessage trade, decimal currentPrice)
 		{
-			return GetPnL(trade.GetTradePrice(), trade.GetVolume(), trade.Side, currentPrice);
+			return GetPnL(trade.GetTradePrice(), trade.SafeGetVolume(), trade.Side, currentPrice);
 		}
 
 		internal static decimal GetPnL(decimal price, decimal volume, Sides side, decimal marketPrice)
@@ -977,7 +977,7 @@ namespace StockSharp.Algo
 				if (!changedVolume.TryGetValue(price, out vol))
 					vol = quote.Volume;
 
-				vol -= trade.GetVolume();
+				vol -= trade.SafeGetVolume();
 				changedVolume[quote.Price] = vol;
 			}
 
@@ -1281,113 +1281,6 @@ namespace StockSharp.Algo
 			}
 
 			return result;
-		}
-
-		/// <summary>
-		/// Вычислить приращение между котировками. 
-		/// </summary>
-		/// <param name="from">Первые котировки.</param>
-		/// <param name="to">Вторые котировки.</param>
-		/// <param name="side">Направление, показывающее тип котировок.</param>
-		/// <param name="isSorted">Отсортированы ли котировки.</param>
-		/// <returns>Изменения.</returns>
-		public static IEnumerable<QuoteChange> GetDiff(this IEnumerable<QuoteChange> from, IEnumerable<QuoteChange> to, Sides side, bool isSorted)
-		{
-			if (!isSorted)
-			{
-				if (side == Sides.Sell)
-				{
-					from = from.OrderBy(q => q.Price);
-					to = to.OrderBy(q => q.Price);
-				}
-				else
-				{
-					from = from.OrderByDescending(q => q.Price);
-					to = to.OrderByDescending(q => q.Price);
-				}
-			}
-
-			var diff = new List<QuoteChange>();
-
-			var canProcessFrom = true;
-			var canProcessTo = true;
-
-			QuoteChange currFrom = null;
-			QuoteChange currTo = null;
-
-			var mult = side == Sides.Buy ? -1 : 1;
-
-			using (var fromEnum = from.GetEnumerator())
-			using (var toEnum = to.GetEnumerator())
-			{
-				while (true)
-				{
-					if (canProcessFrom && currFrom == null)
-					{
-						if (!fromEnum.MoveNext())
-							canProcessFrom = false;
-						else
-							currFrom = fromEnum.Current;
-					}
-
-					if (canProcessTo && currTo == null)
-					{
-						if (!toEnum.MoveNext())
-							canProcessTo = false;
-						else
-							currTo = toEnum.Current;
-					}
-
-					if (currFrom == null)
-					{
-						if (currTo == null)
-							break;
-						else
-						{
-							diff.Add(currTo.Clone());
-							currTo = null;
-						}
-					}
-					else
-					{
-						if (currTo == null)
-						{
-							var clone = currFrom.Clone();
-							clone.Volume = -clone.Volume;
-							diff.Add(clone);
-							currFrom = null;
-						}
-						else
-						{
-							if (currFrom.Price == currTo.Price)
-							{
-								if (currFrom.Volume != currTo.Volume)
-								{
-									var clone = currTo.Clone();
-									clone.Volume -= currFrom.Volume;
-									diff.Add(clone);
-								}
-
-								currFrom = currTo = null;
-							}
-							else if (currFrom.Price * mult > currTo.Price * mult)
-							{
-								diff.Add(currTo.Clone());
-								currTo = null;
-							}
-							else
-							{
-								var clone = currFrom.Clone();
-								clone.Volume = -clone.Volume;
-								diff.Add(clone);
-								currFrom = null;
-							}
-						}
-					}
-				}
-			}
-
-			return diff;
 		}
 
 		/// <summary>
@@ -1706,7 +1599,7 @@ namespace StockSharp.Algo
 		/// Получить направление заявки для позиции.
 		/// </summary>
 		/// <remarks>
-		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - null.
+		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - <see langword="null"/>.
 		/// </remarks>
 		/// <param name="position">Значение позиции.</param>
 		/// <returns>Направление заявки.</returns>
@@ -1722,7 +1615,7 @@ namespace StockSharp.Algo
 		/// Получить направление заявки для позиции.
 		/// </summary>
 		/// <remarks>
-		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - null.
+		/// Положительное значение равно <see cref="Sides.Buy"/>, отрицательное - <see cref="Sides.Sell"/>, нулевое - <see langword="null"/>.
 		/// </remarks>
 		/// <param name="position">Значение позиции.</param>
 		/// <returns>Направление заявки.</returns>
@@ -1739,11 +1632,11 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="connector">Подключение взаимодействия с торговыми системами.</param>
 		/// <param name="orders">Группа заявок, из которой необходимо найти требуемые заявки и отменить их.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, false - если только обычный и null - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно null, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно null, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно null, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно null, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
+		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
+		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
+		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
+		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
 		public static void CancelOrders(this IConnector connector, IEnumerable<Order> orders, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			if (connector == null)
@@ -2087,7 +1980,7 @@ namespace StockSharp.Algo
 				if (criteria.OptionType != null && s.OptionType != criteria.OptionType)
 					return false;
 
-				if (criteria.Currency != CurrencyTypes.RUB && s.Currency != criteria.Currency)
+				if (criteria.Currency != null && s.Currency != criteria.Currency)
 					return false;
 
 				if (!criteria.Class.IsEmptyOrWhiteSpace() && !s.Class.ContainsIgnoreCase(criteria.Class))
@@ -2216,7 +2109,7 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("security");
 
 			if (security.Board == null)
-				throw new ArgumentException(LocalizedStrings.Str1215Params.Put(security.Id), "security");
+				throw new ArgumentException(LocalizedStrings.Str903Params.Put(security.Id), "security");
 
 			if (security.Board.Exchange == null)
 				throw new ArgumentException(LocalizedStrings.Str1216Params.Put(security.Id), "security");
@@ -3144,7 +3037,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0 и null.
+		/// Добавить изменение в коллекцию, если значение отлично от 0 и <see langword="null"/>.
 		/// </summary>
 		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
 		/// <typeparam name="TChange">Тип изменения.</typeparam>
@@ -3180,7 +3073,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Добавить изменение в коллекцию, если значение отлично от 0 и null.
+		/// Добавить изменение в коллекцию, если значение отлично от 0 и <see langword="null"/>.
 		/// </summary>
 		/// <typeparam name="TMessage">Тип сообщения с изменениями.</typeparam>
 		/// <typeparam name="TChange">Тип изменения.</typeparam>
@@ -3677,6 +3570,46 @@ namespace StockSharp.Algo
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Получить количество операции, или выбросить исключение, если информация отсутствует.
+		/// </summary>
+		/// <param name="message">Операции.</param>
+		/// <returns>Количество.</returns>
+		public static decimal SafeGetVolume(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var volume = message.Volume;
+
+			if (volume != null)
+				return volume.Value;
+
+			var errorMsg = message.ExecutionType == ExecutionTypes.Tick || message.ExecutionType == ExecutionTypes.Trade
+				? LocalizedStrings.Str1022Params.Put((object)message.TradeId ?? message.TradeStringId)
+				: LocalizedStrings.Str927Params.Put((object)message.OrderId ?? message.OrderStringId);
+
+			throw new ArgumentOutOfRangeException("message", null, errorMsg);
+		}
+
+		/// <summary>
+		/// Получить идентификатор заявки, или выбросить исключение, если информация отсутствует.
+		/// </summary>
+		/// <param name="message">Операции.</param>
+		/// <returns>Идентификатор заявки.</returns>
+		public static long SafeGetOrderId(this ExecutionMessage message)
+		{
+			if (message == null)
+				throw new ArgumentNullException("message");
+
+			var orderId = message.OrderId;
+
+			if (orderId != null)
+				return orderId.Value;
+
+			throw new ArgumentOutOfRangeException("message", null, LocalizedStrings.Str925);
 		}
 	}
 }

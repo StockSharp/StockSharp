@@ -52,11 +52,6 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
-		/// Тип задачи.
-		/// </summary>
-		public abstract TaskTypes Type { get; }
-
-		/// <summary>
 		/// Название источника (для различия в лог файлах).
 		/// </summary>
 		public override string Name
@@ -79,14 +74,12 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
-		/// Краткая инструкция по настройке и работе.
-		/// </summary>
-		public abstract string Description { get; }
-
-		/// <summary>
 		/// Адрес иконки, для визуального обозначения.
 		/// </summary>
-		public abstract Uri Icon { get; }
+		public Uri Icon
+		{
+			get { return GetType().GetIcon(); }
+		}
 
 		/// <summary>
 		/// Хранилище торговых объектов.
@@ -335,13 +328,12 @@ namespace StockSharp.Hydra.Core
 
 			if (now < from || now > to)
 			{
-				this.AddInfoLog(LocalizedStrings.Str1126Params, now.ToString("HH:mm:ss"), Settings.WorkingFrom, Settings.WorkingTo);
+				this.AddInfoLog(LocalizedStrings.Str1126Params, now.ToString("T"), Settings.WorkingFrom, Settings.WorkingTo);
 
-				var interval = now < from
-					? from - now
-					: (from + TimeSpan.FromDays(1)) - now;
-				
-				this.AddInfoLog(LocalizedStrings.Str2197Params, to.ToString("dd.MM.yyyy HH:mm:ss"));
+				var nextStart = now < from ? from : from.AddDays(1);
+				var interval = nextStart - now;
+
+				this.AddInfoLog(LocalizedStrings.Str2197Params, nextStart.ToString("G"));
 				return interval;
 			}
 
@@ -579,10 +571,10 @@ namespace StockSharp.Hydra.Core
 				.GroupBy(c => Tuple.Create(c.GetType(), c.Arg))
 				.ForEach(g => SafeSave(security, g.Key.Item1.ToCandleMessageType(), g.Key.Item2, g, c => c.OpenTime, new[]
 				{
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.OpenPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2203),
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.HighPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2204),
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.LowPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2205),
-					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.ClosePrice % c.Security.PriceStep != 0, LocalizedStrings.Str2206)
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.OpenPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2203),
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.HighPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2204),
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.LowPrice % c.Security.PriceStep != 0, LocalizedStrings.Str2205),
+					CreateErrorCheck<TCandle>(c => c.Security.PriceStep != null && c.Security.PriceStep != 0 && c.ClosePrice % c.Security.PriceStep != 0, LocalizedStrings.Str2206)
 				},
 				(s, d, c) => (IMarketDataStorage<TCandle>)StorageRegistry.GetCandleStorage(g.Key.Item1, security, g.Key.Item2, d, c)));
 		}

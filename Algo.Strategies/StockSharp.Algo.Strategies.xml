@@ -29,7 +29,7 @@
             Защитить позицию, которая была обновлена через <see cref="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Item(StockSharp.BusinessEntities.Security)"/>.
             </summary>
             <param name="position">Позиция.</param>
-            <returns>Защитная стратегия. Если будет возвращено null, значит защита позиции игнорируется.</returns>
+            <returns>Защитная стратегия. Если будет возвращено <see langword="null"/>, значит защита позиции игнорируется.</returns>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.Protect(System.Collections.Generic.IDictionary{StockSharp.BusinessEntities.MyTrade,System.Decimal})">
             <summary>
@@ -143,7 +143,7 @@
             <remarks>
             По умолчанию, котирование останавливается тогда, когда все контракты реализованы и <see cref="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.LeftVolume"/> равно 0.
             </remarks>
-            <returns>True, можно, иначе, <see langword="false"/>.</returns>
+            <returns><see langword="true"/>, можно, иначе, <see langword="false"/>.</returns>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.NeedQuoting(System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal)">
             <summary>

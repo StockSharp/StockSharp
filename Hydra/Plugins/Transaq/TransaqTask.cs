@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.Transaq
 
 	using Ecng.Collections;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 	using Ecng.Common;
 
 	using StockSharp.Algo.Candles;
@@ -20,9 +19,14 @@ namespace StockSharp.Hydra.Transaq
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/065a9dec-12d0-49d0-be8c-9f9b48f6a899.htm")]
+	[TaskIcon("transaq_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.Transactions | TaskCategories.RealTime |
+		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks | TaskCategories.News)]
 	class TransaqTask : ConnectorHydraTask<TransaqTrader>
 	{
 		private const string _sourceName = "Transaq";
@@ -37,7 +41,7 @@ namespace StockSharp.Hydra.Transaq
 				ExtensionInfo.TryAdd("OverrideDll", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.Str3679Key)]
 			[PropertyOrder(0)]
@@ -47,7 +51,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.Str3680Key)]
 			[PropertyOrder(1)]
@@ -57,7 +61,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.Str3681Key)]
 			[PropertyOrder(2)]
@@ -118,7 +122,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["ProxyAddress"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayName("HFT")]
 			[DescriptionLoc(LocalizedStrings.Str3545Key)]
 			[PropertyOrder(8)]
@@ -128,7 +132,7 @@ namespace StockSharp.Hydra.Transaq
 				set { ExtensionInfo["IsHFT"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str736Key)]
 			[DescriptionLoc(LocalizedStrings.Str3547Key)]
 			[PropertyOrder(9)]
@@ -171,16 +175,6 @@ namespace StockSharp.Hydra.Transaq
 		}
 
 		private TransaqSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "transaq_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

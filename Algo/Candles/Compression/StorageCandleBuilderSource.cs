@@ -121,7 +121,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
 		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
-		/// <returns>Данные. Если данных не существует для заданного диапазона, то будет возвращено null.</returns>
+		/// <returns>Данные. Если данных не существует для заданного диапазона, то будет возвращено <see langword="null"/>.</returns>
 		protected virtual IEnumerable<TSourceValue> GetValues(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			var storage = GetStorage(series.Security);
@@ -344,7 +344,7 @@ namespace StockSharp.Algo.Candles.Compression
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
 		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
-		/// <returns>Данные. Если данных не существует для заданного диапазона, то будет возвращено null.</returns>
+		/// <returns>Данные. Если данных не существует для заданного диапазона, то будет возвращено <see langword="null"/>.</returns>
 		protected override IEnumerable<Trade> GetValues(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			var storage = StorageRegistry.GetOrderLogStorage(series.Security, Drive);

@@ -216,7 +216,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 
 						.SetCell(columnShift + 0, 1, LocalizedStrings.Str1192).SetStyle(columnShift + 0, typeof(long))
 						.SetCell(columnShift + 1, 1, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
-						.SetCell(columnShift + 2, 1, LocalizedStrings.Str219).SetStyle(columnShift + 2, "HH:mm:ss.fff")
+						.SetCell(columnShift + 2, 1, LocalizedStrings.Time).SetStyle(columnShift + 2, "HH:mm:ss.fff")
 						.SetCell(columnShift + 3, 1, LocalizedStrings.Price).SetStyle(columnShift + 3, typeof(decimal))
 						.SetCell(columnShift + 4, 1, LocalizedStrings.Str1341).SetStyle(columnShift + 4, typeof(decimal))
 						.SetCell(columnShift + 5, 1, LocalizedStrings.Volume).SetStyle(columnShift + 5, typeof(decimal))
@@ -337,7 +337,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 								.SetCell(columnShift + 0, rowIndex, LocalizedStrings.Str1190).SetStyle(columnShift + 0, typeof(long))
 								.SetCell(columnShift + 1, rowIndex, LocalizedStrings.Transaction).SetStyle(columnShift + 1, typeof(long))
 								.SetCell(columnShift + 2, rowIndex, LocalizedStrings.Str128)
-								.SetCell(columnShift + 3, rowIndex, LocalizedStrings.Str219).SetStyle(columnShift + 3, "HH:mm:ss.fff")
+								.SetCell(columnShift + 3, rowIndex, LocalizedStrings.Time).SetStyle(columnShift + 3, "HH:mm:ss.fff")
 								.SetCell(columnShift + 4, rowIndex, LocalizedStrings.Price).SetStyle(columnShift + 4, typeof(decimal))
 								.SetCell(columnShift + 5, rowIndex, LocalizedStrings.Str1324)
 								.SetCell(columnShift + 6, rowIndex, LocalizedStrings.State)
@@ -375,7 +375,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 					}
 				}
 
-				worker.Save(FileName);
+				worker.Save(FileName, true);
 			}
 		}
 	}

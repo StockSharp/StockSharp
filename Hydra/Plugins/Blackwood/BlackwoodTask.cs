@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.Blackwood
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Blackwood;
@@ -19,8 +18,13 @@ namespace StockSharp.Hydra.Blackwood
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/89a8b34c-63cf-4623-bbb7-90251d53e8e6.htm")]
+	[TaskIcon("bw_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
+		TaskCategories.Free | TaskCategories.Ticks |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class BlackwoodTask : ConnectorHydraTask<BlackwoodTrader>
 	{
 		private const string _sourceName = "Fusion/Blackwood";
@@ -34,7 +38,7 @@ namespace StockSharp.Hydra.Blackwood
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
@@ -44,7 +48,7 @@ namespace StockSharp.Hydra.Blackwood
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
@@ -54,7 +58,7 @@ namespace StockSharp.Hydra.Blackwood
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3694Key)]
 			[DescriptionLoc(LocalizedStrings.Str3695Key)]
 			[PropertyOrder(2)]
@@ -64,7 +68,7 @@ namespace StockSharp.Hydra.Blackwood
 				set { ExtensionInfo["HistoricalDataAddress"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3696Key)]
 			[DescriptionLoc(LocalizedStrings.Str3697Key)]
 			[PropertyOrder(3)]
@@ -92,16 +96,6 @@ namespace StockSharp.Hydra.Blackwood
 		}
 
 		private BlackwoodSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "bw_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

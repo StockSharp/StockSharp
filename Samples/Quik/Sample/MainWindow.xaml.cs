@@ -36,6 +36,8 @@ namespace Sample
 			InitializeComponent();
 			Instance = this;
 
+			Title = Title.Put("QUIK");
+
 			_ordersWindow.MakeHideable();
 			_myTradesWindow.MakeHideable();
 			_tradesWindow.MakeHideable();

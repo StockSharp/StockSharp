@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using IOPath = System.IO.Path;
@@ -24,14 +25,13 @@ namespace StockSharp.Algo.Storages
 	{
 		private sealed class LocalMarketDataStorageDrive : IMarketDataStorageDrive
 		{
-			private readonly string _fileName;
 			private readonly string _path;
-			private readonly StorageFormats _format;
 			private readonly string _fileNameWithExtension;
+			private readonly string _datesPath;
 
 			private readonly SyncObject _cacheSync = new SyncObject();
 
-			private static readonly Version _dateVersion = new Version(1, 0);
+			//private static readonly Version _dateVersion = new Version(1, 0);
 			private const string _dateFormat = "yyyy_MM_dd";
 
 			public LocalMarketDataStorageDrive(string fileName, string path, StorageFormats format, IMarketDataDrive drive)
@@ -45,19 +45,16 @@ namespace StockSharp.Algo.Storages
 				if (path.IsEmpty())
 					throw new ArgumentNullException("path");
 
-				_fileName = fileName;
 				_path = path;
-				_format = format;
 				_drive = drive;
-				_fileNameWithExtension = _fileName + GetExtension(_format);
+				_fileNameWithExtension = fileName + GetExtension(format);
+				_datesPath = IOPath.Combine(_path, fileName + format + "Dates.txt");
 
 				_datesDict = new Lazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>>(() =>
 				{
 					var retVal = new CachedSynchronizedOrderedDictionary<DateTime, DateTime>();
 
-					var datesPath = GetDatesCachePath();
-
-					if (File.Exists(datesPath))
+					if (File.Exists(_datesPath))
 					{
 						foreach (var date in LoadDates())
 							retVal.Add(date, date);
@@ -67,7 +64,7 @@ namespace StockSharp.Algo.Storages
 						var dates = InteropHelper
 							.GetDirectories(_path)
 							.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
-							.Select(dir => IOPath.GetFileName(dir).ToDateTime(_dateFormat));
+							.Select(dir => IOPath.GetFileName(dir).ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc));
 
 						foreach (var date in dates)
 							retVal.Add(date, date);
@@ -103,7 +100,7 @@ namespace StockSharp.Algo.Storages
 				if (Directory.Exists(_path))
 				{
 					lock (_cacheSync)
-						File.Delete(GetDatesCachePath());
+						File.Delete(_datesPath);
 				}
 
 				ResetCache();
@@ -160,44 +157,45 @@ namespace StockSharp.Algo.Storages
 					: Stream.Null;
 			}
 
-			private string GetDatesCacheFileName()
-			{
-				return _fileName + (_format == StorageFormats.Csv ? "Csv" : string.Empty) + "Dates.bin";
-			}
-
-			private string GetDatesCachePath()
-			{
-				return IOPath.Combine(_path, GetDatesCacheFileName());
-			}
-
 			private IEnumerable<DateTime> LoadDates()
 			{
-				var path = GetDatesCachePath();
-
 				try
 				{
-					using (var file = new FileStream(path, FileMode.Open, FileAccess.Read))
+					return CultureInfo.InvariantCulture.DoInCulture(() =>
 					{
-						var version = new Version(file.ReadByte(), file.ReadByte());
-
-						if (version > _dateVersion)
-							throw new InvalidOperationException(LocalizedStrings.Str1002Params.Put(GetDatesCacheFileName(), version, _dateVersion));
-
-						var count = file.Read<int>();
-
-						var dates = new DateTime[count];
-
-						for (var i = 0; i < count; i++)
+						using (var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read)))
 						{
-							dates[i] = file.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
-						}
+							//var version = new Version(file.ReadByte(), file.ReadByte());
 
-						return dates;
-					}
+							//if (version > _dateVersion)
+							//	throw new InvalidOperationException(LocalizedStrings.Str1002Params.Put(_datesPath, version, _dateVersion));
+
+							//var count = file.Read<int>();
+
+							var dates = new List<DateTime>();
+
+							while (true)
+							{
+								var line = reader.ReadLine();
+
+								if (line == null)
+									break;
+
+								dates.Add(line.ToDateTime(_dateFormat));
+							}
+
+							//for (var i = 0; i < count; i++)
+							//{
+							//	dates[i] = file.Read<DateTime>().ChangeKind(DateTimeKind.Utc);
+							//}
+
+							return dates;
+						}
+					});
 				}
 				catch (Exception ex)
 				{
-					throw new InvalidOperationException(LocalizedStrings.Str1003Params.Put(path), ex);
+					throw new InvalidOperationException(LocalizedStrings.Str1003Params.Put(_datesPath), ex);
 				}
 			}
 
@@ -212,20 +210,28 @@ namespace StockSharp.Algo.Storages
 
 						Directory.CreateDirectory(_path);
 					}
-					
+
 					var stream = new MemoryStream();
 
-					stream.WriteByte((byte)_dateVersion.Major);
-					stream.WriteByte((byte)_dateVersion.Minor);
-					stream.Write(dates.Length);
+					//stream.WriteByte((byte)_dateVersion.Major);
+					//stream.WriteByte((byte)_dateVersion.Minor);
+					//stream.Write(dates.Length);
 
-					foreach (var date in dates)
-						stream.Write(date);
+					CultureInfo.InvariantCulture.DoInCulture(() =>
+					{
+						var writer = new StreamWriter(stream) { AutoFlush = true };
 
+						foreach (var date in dates)
+						{
+							writer.WriteLine(date.ToString(_dateFormat));
+							//stream.Write(date);
+						}
+					});
+					
 					lock (_cacheSync)
 					{
 						stream.Position = 0;
-						stream.Save(GetDatesCachePath());
+						stream.Save(_datesPath);
 					}
 				}
 				catch (UnauthorizedAccessException)
@@ -328,19 +334,6 @@ namespace StockSharp.Algo.Storages
 				_drives.Values.ForEach(d => d.ResetCache());
 		}
 
-		private static string GetExtension(StorageFormats format)
-		{
-			switch (format)
-			{
-				case StorageFormats.Binary:
-					return ".bin";
-				case StorageFormats.Csv:
-					return ".csv";
-				default:
-					throw new ArgumentOutOfRangeException("format");
-			}
-		}
-
 		/// <summary>
 		/// Получить для инструмента доступные типы свечек с параметрами.
 		/// </summary>
@@ -385,6 +378,24 @@ namespace StockSharp.Algo.Storages
 
 			return _drives.SafeAdd(Tuple.Create(securityId, dataType, arg, format),
 				key => new LocalMarketDataStorageDrive(CreateFileName(dataType, arg), GetSecurityPath(securityId), format, this));
+		}
+
+		/// <summary>
+		/// Получить расширение файла для формата.
+		/// </summary>
+		/// <param name="format">Формат.</param>
+		/// <returns>Расширение.</returns>
+		public static string GetExtension(StorageFormats format)
+		{
+			switch (format)
+			{
+				case StorageFormats.Binary:
+					return ".bin";
+				case StorageFormats.Csv:
+					return ".csv";
+				default:
+					throw new ArgumentOutOfRangeException("format");
+			}
 		}
 
 		/// <summary>

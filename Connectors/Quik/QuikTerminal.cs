@@ -112,7 +112,7 @@ namespace StockSharp.Quik
 
 		/// <summary>
 		/// Информация о первом терминале из <see cref="GetTerminals"/>.
-		/// Если ни одного терминала не запущено, то будет возвращено значение null.
+		/// Если ни одного терминала не запущено, то будет возвращено значение <see langword="null"/>.
 		/// </summary>
 		public static QuikTerminal DefaultTerminal
 		{
@@ -175,7 +175,7 @@ namespace StockSharp.Quik
 		/// <summary>
 		/// Получить список запущенных терминалов Quik.
 		/// </summary>
-		/// <param name="throwOnError">Бросать ли исключение при получении недостаточной информации о процессе Quik. Если значение установлено в false, то
+		/// <param name="throwOnError">Бросать ли исключение при получении недостаточной информации о процессе Quik. Если значение установлено в <see langword="false"/>, то
 		/// терминал с такой информацией исключается из результирующего списка. По умолчанию значение включено.</param>
 		/// <returns>Список запущенных терминалов.</returns>
 		public static IEnumerable<QuikTerminal> GetTerminals(bool throwOnError = true)
@@ -333,7 +333,7 @@ namespace StockSharp.Quik
 		/// </summary>
 		/// <param name="certPath">Путь к сертификату.</param>
 		/// <param name="password">Пароль. Если значение не задано, то пароль не используется при подключении.</param>
-		/// <param name="address">Адрес сервера Quik. Если значение равно null, то используется адрес по умолчанию.</param>
+		/// <param name="address">Адрес сервера Quik. Если значение равно <see langword="null"/>, то используется адрес по умолчанию.</param>
 		public void LoginWithCertificate(string certPath, string password = null, IPEndPoint address = null)
 		{
 			if (certPath.IsEmpty())
@@ -401,7 +401,7 @@ namespace StockSharp.Quik
 		/// </summary>
 		/// <param name="login">Логин.</param>
 		/// <param name="password">Пароль.</param>
-		/// <param name="address">Адрес сервера Quik. Если значение равно null, то используется адрес по умолчанию.</param>
+		/// <param name="address">Адрес сервера Quik. Если значение равно <see langword="null"/>, то используется адрес по умолчанию.</param>
 		public void Login(string login, string password, IPEndPoint address = null)
 		{
 			if (login.IsEmpty())
@@ -579,7 +579,7 @@ namespace StockSharp.Quik
 
 		/// <summary>
 		/// Получить время биржи из Quik окна.
-		/// Свойство возвращает null, если соединение с биржей потеряно.
+		/// Свойство возвращает <see langword="null"/>, если соединение с биржей потеряно.
 		/// </summary>
 		public DateTime? ServerTime
 		{

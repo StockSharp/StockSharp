@@ -2,12 +2,10 @@ namespace StockSharp.Hydra.Google
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
@@ -17,8 +15,12 @@ namespace StockSharp.Hydra.Google
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/0166d686-9fb0-4e78-8578-f5b706ad6a07.htm")]
+	[TaskIcon("google_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.History |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Candles)]
 	class GoogleTask : BaseHydraTask
     {
 		private const string _sourceName = "Google";
@@ -33,7 +35,7 @@ namespace StockSharp.Hydra.Google
 				ExtensionInfo.TryAdd("IgnoreWeekends", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -43,7 +45,7 @@ namespace StockSharp.Hydra.Google
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -53,7 +55,7 @@ namespace StockSharp.Hydra.Google
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(2)]
@@ -88,24 +90,9 @@ namespace StockSharp.Hydra.Google
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "google_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2288Params.Put(_sourceName); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;

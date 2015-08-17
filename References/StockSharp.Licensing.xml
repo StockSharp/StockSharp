@@ -164,7 +164,7 @@
         </member>
         <member name="P:StockSharp.Licensing.License.Company">
             <summary>
-            Название компании, для которой выдана лицензия. Значение равно null, если лицензия выдана частному лицу.
+            Название компании, для которой выдана лицензия. Значение равно <see langword="null"/>, если лицензия выдана частному лицу.
             </summary>
         </member>
         <member name="P:StockSharp.Licensing.License.IssuedBy">
@@ -299,6 +299,26 @@
             Неутвержденные лицензии клиентов.
             </summary>
         </member>
+        <member name="T:StockSharp.Licensing.LicenseErrorLogSource">
+            <summary>
+            Источник логов, отсылающий информацию об ошибках лицензии <see cref="E:StockSharp.Licensing.LicenseHelper.LicenseError"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseErrorLogSource.#ctor">
+            <summary>
+            Создать <see cref="T:StockSharp.Licensing.LicenseErrorLogSource"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged">
+            <summary>
+            Удалить занятые ресурсы.
+            </summary>
+        </member>
+        <member name="P:StockSharp.Licensing.LicenseErrorLogSource.Name">
+            <summary>
+            Название.
+            </summary>
+        </member>
         <member name="T:StockSharp.Licensing.LicenseHelper">
             <summary>
             Вспомагательный класс для работы с лицензиями.
@@ -359,6 +379,11 @@
         <member name="E:StockSharp.Licensing.LicenseHelper.LicenseChanged">
             <summary>
             Событие измения <see cref="P:StockSharp.Licensing.LicenseHelper.Licenses"/>.
+            </summary>
+        </member>
+        <member name="E:StockSharp.Licensing.LicenseHelper.LicenseError">
+            <summary>
+            Событие ошибки проверки лицензии.
             </summary>
         </member>
         <member name="P:StockSharp.Licensing.LicenseHelper.Licenses">

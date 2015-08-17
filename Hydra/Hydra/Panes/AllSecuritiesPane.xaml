@@ -11,7 +11,7 @@
 
     <xctk:BusyIndicator Name="BusyIndicator" DisplayAfter="0" BusyContent="{x:Static loc:LocalizedStrings.XamlStr91}">
 		<DockPanel>
-			<controls:ExportProgress x:Name="Progress" Height="23" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
+			<controls:ExportProgress x:Name="Progress" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" />
 
 			<Grid x:Name="MainGrid">
 				<Grid.ColumnDefinitions>

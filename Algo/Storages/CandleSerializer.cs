@@ -70,7 +70,7 @@ namespace StockSharp.Algo.Storages
 				throw new ArgumentNullException("arg");
 
 			_arg = arg;
-			Version = MarketDataVersions.Version51;
+			Version = MarketDataVersions.Version52;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<TCandleMessage> candles, CandleMetaInfo metaInfo)
@@ -92,7 +92,16 @@ namespace StockSharp.Algo.Storages
 			foreach (var candle in candles)
 			{
 				writer.WriteVolume(candle.TotalVolume, metaInfo, SecurityId);
-				writer.WriteVolume(candle.RelativeVolume, metaInfo, SecurityId);
+
+				if (metaInfo.Version < MarketDataVersions.Version52)
+					writer.WriteVolume(candle.RelativeVolume ?? 0, metaInfo, SecurityId);
+				else
+				{
+					writer.Write(candle.RelativeVolume != null);
+
+					if (candle.RelativeVolume != null)
+						writer.WriteVolume(candle.RelativeVolume.Value, metaInfo, SecurityId);
+				}
 
 				writer.WritePrice(candle.LowPrice, metaInfo.LastPrice, metaInfo, SecurityId);
 				metaInfo.LastPrice = candle.LowPrice;
@@ -220,6 +229,24 @@ namespace StockSharp.Algo.Storages
 					if (oi != null)
 						writer.WriteVolume(oi.Value, metaInfo, SecurityId);
 				}
+
+				if (metaInfo.Version < MarketDataVersions.Version52)
+					continue;
+
+				writer.Write(candle.DownTicks != null);
+
+				if (candle.DownTicks != null)
+					writer.WriteInt(candle.DownTicks.Value);
+
+				writer.Write(candle.UpTicks != null);
+
+				if (candle.UpTicks != null)
+					writer.WriteInt(candle.UpTicks.Value);
+
+				writer.Write(candle.TotalTicks != null);
+
+				if (candle.TotalTicks != null)
+					writer.WriteInt(candle.TotalTicks.Value);
 			}
 		}
 
@@ -232,7 +259,7 @@ namespace StockSharp.Algo.Storages
 			{
 				SecurityId = SecurityId,
 				TotalVolume = reader.ReadVolume(metaInfo),
-				RelativeVolume = reader.ReadVolume(metaInfo),
+				RelativeVolume = metaInfo.Version < MarketDataVersions.Version52 || !reader.Read() ? (decimal?)null : reader.ReadVolume(metaInfo),
 				LowPrice = reader.ReadPrice(metaInfo.FirstPrice, metaInfo),
 				Arg = _arg
 			};
@@ -305,6 +332,13 @@ namespace StockSharp.Algo.Storages
 			{
 				if (metaInfo.Version < MarketDataVersions.Version48 || reader.Read())
 					candle.OpenInterest = reader.ReadVolume(metaInfo);
+			}
+
+			if (metaInfo.Version >= MarketDataVersions.Version52)
+			{
+				candle.DownTicks = reader.Read() ? reader.ReadInt() : (int?)null;
+				candle.UpTicks = reader.Read() ? reader.ReadInt() : (int?)null;
+				candle.TotalTicks = reader.Read() ? reader.ReadInt() : (int?)null;
 			}
 
 			return candle;

@@ -2,13 +2,11 @@ namespace StockSharp.Hydra.Mfd
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Candles;
@@ -23,9 +21,13 @@ namespace StockSharp.Hydra.Mfd
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2.htm")]
+	[TaskIcon("mfd_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.History | TaskCategories.Stock |
+		TaskCategories.Forex | TaskCategories.Candles | TaskCategories.Free | TaskCategories.Ticks)]
 	class MfdTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "MFD";
@@ -40,7 +42,7 @@ namespace StockSharp.Hydra.Mfd
 				ExtensionInfo.TryAdd("UseTemporaryFiles", TempFiles.UseAndDelete.To<string>());
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -50,7 +52,7 @@ namespace StockSharp.Hydra.Mfd
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -60,7 +62,7 @@ namespace StockSharp.Hydra.Mfd
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(2)]
@@ -70,7 +72,7 @@ namespace StockSharp.Hydra.Mfd
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(3)]
@@ -109,24 +111,9 @@ namespace StockSharp.Hydra.Mfd
 			_mfdSecurityStorage = new MfdSecurityStorage(EntityRegistry);
 		}
 
-		public override Uri Icon
-		{
-			get { return "mfd_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3807Params.Put(_sourceName); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Trade), typeof(Candle) };

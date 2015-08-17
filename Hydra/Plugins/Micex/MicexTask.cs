@@ -1,14 +1,11 @@
 namespace StockSharp.Hydra.Micex
 {
-	using System;
-	using System.ComponentModel;
 	using System.Net;
 	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Collections;
-	using Ecng.Xaml;
 
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -17,9 +14,14 @@ namespace StockSharp.Hydra.Micex
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49.htm")]
+	[TaskIcon("micex_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Forex |
+		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
+		TaskCategories.Transactions | TaskCategories.Paid | TaskCategories.Ticks)]
 	class MicexTask : ConnectorHydraTask<MicexTrader>
 	{
 		private const string _sourceName = "Micex";
@@ -37,7 +39,7 @@ namespace StockSharp.Hydra.Micex
 				ExtensionInfo.TryAdd("OverrideDll", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(0)]
@@ -47,7 +49,7 @@ namespace StockSharp.Hydra.Micex
 				set { ExtensionInfo["Address"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(1)]
@@ -57,7 +59,7 @@ namespace StockSharp.Hydra.Micex
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(2)]
@@ -67,7 +69,7 @@ namespace StockSharp.Hydra.Micex
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3418Key)]
 			[DescriptionLoc(LocalizedStrings.Str3419Key)]
 			[PropertyOrder(3)]
@@ -77,7 +79,7 @@ namespace StockSharp.Hydra.Micex
 				set { ExtensionInfo["Interface"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3416Key)]
 			[DescriptionLoc(LocalizedStrings.Str3692Key)]
 			[PropertyOrder(4)]
@@ -87,7 +89,7 @@ namespace StockSharp.Hydra.Micex
 				set { ExtensionInfo["Server"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str1197Key)]
 			[DescriptionLoc(LocalizedStrings.Str1197Key, true)]
 			[PropertyOrder(5)]
@@ -97,7 +99,7 @@ namespace StockSharp.Hydra.Micex
 				set { ExtensionInfo["OrderBookDepth"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AllDepthsKey)]
 			[DescriptionLoc(LocalizedStrings.RequestAllDepthsKey)]
 			[PropertyOrder(6)]
@@ -107,7 +109,7 @@ namespace StockSharp.Hydra.Micex
 				set { ExtensionInfo["RequestAllDepths"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoggingKey)]
 			[DescriptionLoc(LocalizedStrings.Str3422Key)]
 			[PropertyOrder(7)]
@@ -129,16 +131,6 @@ namespace StockSharp.Hydra.Micex
 		}
 
 		private MicexSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "micex_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

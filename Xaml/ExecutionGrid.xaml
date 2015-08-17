@@ -42,6 +42,7 @@
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Security}" Width="70" Binding="{Binding Path=SecurityId.SecurityCode}" SortMemberPath="SecurityId.SecurityCode"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Board}" Width="70" Binding="{Binding Path=SecurityId.BoardCode}" SortMemberPath="SecurityId.BoardCode"/>
 		<DataGridTextColumn x:Name="PortfolioColumn" Header="{x:Static loc:LocalizedStrings.Portfolio}" Width="120" Binding="{Binding Path=PortfolioName}" SortMemberPath="PortfolioName"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.ClientCode}" Width="120" Binding="{Binding Path=ClientCode}" SortMemberPath="ClientCode"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Depo}" Width="80" Binding="{Binding Path=DepoName}" SortMemberPath="DepoName"/>
 		<DataGridTextColumn x:Name="TransactionColumn" Header="{x:Static loc:LocalizedStrings.Transaction}" Width="100" Binding="{Binding Path=TransactionId}" SortMemberPath="TransactionId"/>
 		<DataGridTemplateColumn x:Name="OrderIdColumn" Header="{x:Static loc:LocalizedStrings.Id}" Width="70" SortMemberPath="OrderId">
@@ -63,11 +64,12 @@
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.XamlStr365}" Width="100" Binding="{Binding Path=BoardId}" SortMemberPath="BoardId"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str165}" Width="100" Binding="{Binding Path=UserOrderId}" SortMemberPath="UserOrderId"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str219}" Width="120" Binding="{Binding Path=ServerTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="ServerTime"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Width="120" Binding="{Binding Path=ServerTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="ServerTime"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="120" Binding="{Binding Path=LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="LocalTime"/>
 		<DataGridTextColumn x:Name="OrderPriceColumn" Header="{x:Static loc:LocalizedStrings.Price}" Width="60" Binding="{Binding Path=Price}" SortMemberPath="Price"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Volume}" SortMemberPath="Volume"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.VisibleVolume}" Width="50" Binding="{Binding Path=VisibleVolume}" SortMemberPath="VisibleVolume"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Currency}" Width="40" Binding="{Binding Path=Currency}" SortMemberPath="Currency"/>
 		<DataGridTextColumn x:Name="BalanceColumn" Header="{x:Static loc:LocalizedStrings.Str1325}" Width="50" Binding="{Binding Path=Balance}" SortMemberPath="Balance"/>
 		<DataGridTemplateColumn x:Name="OrderSideColumn" Header="{x:Static loc:LocalizedStrings.Str128}" Width="60" CellTemplate="{StaticResource SideTemplate}" SortMemberPath="Side">
 			<DataGridTemplateColumn.CellStyle>

@@ -17,7 +17,7 @@ namespace StockSharp.InteractiveBrokers
 	/// <summary>
 	/// Условие заявок, специфичных для <see cref="InteractiveBrokers"/>.
 	/// </summary>
-	[DisplayNameLoc(LocalizedStrings.Str2264Key, "FIX")]
+	[DisplayNameLoc(LocalizedStrings.Str2264Key, "Interactive Brokers")]
 	public class IBOrderCondition : OrderCondition
 	{
 		/// <summary>
@@ -50,7 +50,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Получить значение параметра. Если значение не существует, будет возвращено null.
+			/// Получить значение параметра. Если значение не существует, будет возвращено <see langword="null"/>.
 			/// </summary>
 			/// <typeparam name="T">Тип значения.</typeparam>
 			/// <param name="name">Название параметра.</param>
@@ -1030,19 +1030,19 @@ namespace StockSharp.InteractiveBrokers
 			/// <summary>
 			/// Дельта.
 			/// </summary>
-			[EnumDisplayNameLoc(LocalizedStrings.Str300Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.DeltaKey)]
 			Delta,
 
 			/// <summary>
 			/// Бета.
 			/// </summary>
-			[EnumDisplayNameLoc(LocalizedStrings.Str339Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.BetaKey)]
 			Beta,
 
 			/// <summary>
 			/// Валюта.
 			/// </summary>
-			[EnumDisplayNameLoc(LocalizedStrings.Str250Key)]
+			[EnumDisplayNameLoc(LocalizedStrings.CurrencyKey)]
 			FX,
 
 			/// <summary>

@@ -12,8 +12,8 @@ namespace StockSharp.ETrade
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	[DisplayName("E*TRADE")]
-	[CategoryLoc(LocalizedStrings.Str2119Key)]
-	[DescriptionLoc(LocalizedStrings.Str3368Key)]
+	[CategoryLoc(LocalizedStrings.AmericaKey)]
+	[DescriptionLoc(LocalizedStrings.Str1770Key, "E*TRADE")]
 	[CategoryOrderLoc(LocalizedStrings.Str174Key, 0)]
 	[CategoryOrderLoc(LocalizedStrings.Str186Key, 1)]
 	[CategoryOrderLoc(LocalizedStrings.LoggingKey, 2)]

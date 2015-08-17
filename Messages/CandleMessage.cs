@@ -22,16 +22,10 @@ namespace StockSharp.Messages
 		None,
 
 		/// <summary>
-		/// Свеча запущена на формирование.
+		/// Свеча формируется.
 		/// </summary>
 		[EnumMember]
-		Started,
-
-		/// <summary>
-		/// Свеча изменена.
-		/// </summary>
-		[EnumMember]
-		Changed,
+		Active,
 
 		/// <summary>
 		/// Свеча закончена.
@@ -160,7 +154,7 @@ namespace StockSharp.Messages
 		/// Относительный объем.
 		/// </summary>
 		[DataMember]
-		public decimal RelativeVolume { get; set; }
+		public decimal? RelativeVolume { get; set; }
 
 		/// <summary>
 		/// Суммарный объем.
@@ -187,7 +181,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TicksKey)]
 		[DescriptionLoc(LocalizedStrings.TickCountKey)]
 		[MainCategory]
-		public int TotalTicks { get; set; }
+		public int? TotalTicks { get; set; }
 
 		/// <summary>
 		/// Количество восходящих тиковых сделок.
@@ -196,7 +190,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
 		[DescriptionLoc(LocalizedStrings.TickUpCountKey)]
 		[MainCategory]
-		public int UpTicks { get; set; }
+		public int? UpTicks { get; set; }
 
 		/// <summary>
 		/// Количество нисходящих тиковых сделок.
@@ -205,7 +199,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.TickDownKey)]
 		[DescriptionLoc(LocalizedStrings.TickDownCountKey)]
 		[MainCategory]
-		public int DownTicks { get; set; }
+		public int? DownTicks { get; set; }
 
 		/// <summary>
 		/// Состояние.
@@ -267,6 +261,7 @@ namespace StockSharp.Messages
 			copy.OpenVolume = OpenVolume;
 			copy.SecurityId = SecurityId;
 			copy.TotalVolume = TotalVolume;
+			copy.RelativeVolume = RelativeVolume;
 			copy.OriginalTransactionId = OriginalTransactionId;
 			copy.DownTicks = DownTicks;
 			copy.UpTicks = UpTicks;

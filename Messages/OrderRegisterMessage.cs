@@ -94,7 +94,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Время жизни лимитной заявки.
 		/// </summary>
-		[DisplayNameLoc(LocalizedStrings.Str231Key)]
+		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
 		[MainCategory]
 		[Nullable]

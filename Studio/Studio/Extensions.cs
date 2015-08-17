@@ -47,7 +47,7 @@ namespace StockSharp.Studio
 				throw new ArgumentNullException("security");
 
 			if (security.Board == null)
-				throw new ArgumentException(LocalizedStrings.Str3602Params.Put(security), "security");
+				throw new ArgumentException(LocalizedStrings.Str903Params.Put(security), "security");
 		}
 
         public static StrategyContainer CreateStrategy(this StrategyInfo info, SessionType sessionType)

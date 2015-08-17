@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.Plaza
 
 	using Ecng.Common;
 	using Ecng.Localization;
-	using Ecng.Xaml;
 
 	using MoreLinq;
 
@@ -22,12 +21,17 @@ namespace StockSharp.Hydra.Plaza
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Russian)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
+	[TaskDoc("http://stocksharp.com/doc/html/53930a42-ae5a-45fc-b9cf-8295584bf8fc.htm")]
+	[TaskIcon("plaza_logo.png")]
+	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Stock |
+		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Transactions |
+		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog)]
 	class PlazaTask : ConnectorHydraTask<PlazaTrader>
 	{
-		private const string _sourceName = "Plaza";
+		private const string _sourceName = "Plaza2";
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
@@ -38,7 +42,7 @@ namespace StockSharp.Hydra.Plaza
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
@@ -48,7 +52,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
@@ -58,7 +62,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(2)]
@@ -68,7 +72,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["Address"] = value.To<string>(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2595Key)]
 			[DescriptionLoc(LocalizedStrings.Str2596Key)]
 			[PropertyOrder(3)]
@@ -78,7 +82,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["AppName"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayName("CGate")]
 			[DescriptionLoc(LocalizedStrings.Str2798Key)]
 			[PropertyOrder(4)]
@@ -88,7 +92,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["IsCGate"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.CGateIdKey)]
 			[DescriptionLoc(LocalizedStrings.Str2799Key)]
 			[PropertyOrder(5)]
@@ -98,7 +102,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["CGateKey"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2606Key)]
 			[DescriptionLoc(LocalizedStrings.Str2607Key)]
 			[PropertyOrder(6)]
@@ -109,7 +113,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["Tables"] = value.ToArray(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2617Key)]
 			[DescriptionLoc(LocalizedStrings.Str2800Key)]
 			[PropertyOrder(7)]
@@ -119,7 +123,7 @@ namespace StockSharp.Hydra.Plaza
 				set { ExtensionInfo["OnlySystemTrades"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2801Key)]
 			[DescriptionLoc(LocalizedStrings.Str2802Key)]
 			[PropertyOrder(7)]
@@ -240,16 +244,6 @@ namespace StockSharp.Hydra.Plaza
 			connector.StreamManager.RevisionManager.Tables.Add(connector.TableRegistry.AnonymousOrdersLog);
 
 			return connector;
-		}
-
-		public override Uri Icon
-		{
-			get { return "plaza_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
 		}
 
 		public override HydraTaskSettings Settings

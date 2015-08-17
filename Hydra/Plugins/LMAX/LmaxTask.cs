@@ -2,12 +2,10 @@ namespace StockSharp.Hydra.LMAX
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Security;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
@@ -18,8 +16,13 @@ namespace StockSharp.Hydra.LMAX
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/0b962432-d81d-4646-a818-9fa7093cbe4f.htm")]
+	[TaskIcon("lmax_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.RealTime |
+		TaskCategories.Free | TaskCategories.History | TaskCategories.MarketDepth |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class LmaxTask : ConnectorHydraTask<LmaxTrader>
 	{
 		private const string _sourceName = "LMAX";
@@ -33,7 +36,7 @@ namespace StockSharp.Hydra.LMAX
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.LoginKey, true)]
 			[PropertyOrder(0)]
@@ -43,7 +46,7 @@ namespace StockSharp.Hydra.LMAX
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.PasswordKey, true)]
 			[PropertyOrder(1)]
@@ -53,7 +56,7 @@ namespace StockSharp.Hydra.LMAX
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.DemoKey)]
 			[DescriptionLoc(LocalizedStrings.Str3388Key)]
 			[PropertyOrder(2)]
@@ -63,7 +66,7 @@ namespace StockSharp.Hydra.LMAX
 				set { ExtensionInfo["IsDemo"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3710Key)]
 			[DescriptionLoc(LocalizedStrings.Str3711Key)]
 			[PropertyOrder(3)]
@@ -84,16 +87,6 @@ namespace StockSharp.Hydra.LMAX
 		}
 
 		private LmaxSettings _settings;
-
-		public override Uri Icon
-		{
-			get { return "lmax_logo.png".GetResourceUrl(GetType()); }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
 
 		public override HydraTaskSettings Settings
 		{

@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.HydraServer
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -24,7 +23,13 @@ namespace StockSharp.Hydra.HydraServer
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f.htm")]
+	[TaskIcon("hydra_server_logo.png")]
+	[TaskCategory(TaskCategories.History | TaskCategories.Ticks | TaskCategories.Stock |
+		TaskCategories.Forex | TaskCategories.Free | TaskCategories.MarketDepth | TaskCategories.OrderLog |
+		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]
 	class HydraServerTask : BaseHydraTask, ISecurityDownloader
 	{
 		private const string _sourceName = "S#.Data Server";
@@ -39,7 +44,7 @@ namespace StockSharp.Hydra.HydraServer
 				ExtensionInfo.TryAdd("IgnoreWeekends", true);
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.AddressKey)]
 			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
 			[PropertyOrder(0)]
@@ -49,7 +54,7 @@ namespace StockSharp.Hydra.HydraServer
 				set { ExtensionInfo["Address"] = value.ToString(); }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.LoginKey)]
 			[DescriptionLoc(LocalizedStrings.Str2302Key)]
 			[PropertyOrder(1)]
@@ -59,7 +64,7 @@ namespace StockSharp.Hydra.HydraServer
 				set { ExtensionInfo["Login"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.PasswordKey)]
 			[DescriptionLoc(LocalizedStrings.Str2303Key)]
 			[PropertyOrder(2)]
@@ -69,7 +74,7 @@ namespace StockSharp.Hydra.HydraServer
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2304Key)]
 			[PropertyOrder(3)]
@@ -79,7 +84,7 @@ namespace StockSharp.Hydra.HydraServer
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(4)]
@@ -89,7 +94,7 @@ namespace StockSharp.Hydra.HydraServer
 				set { ExtensionInfo["HydraOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(5)]
@@ -142,24 +147,9 @@ namespace StockSharp.Hydra.HydraServer
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "hydra_server_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2281Params.Put(_sourceName); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes =

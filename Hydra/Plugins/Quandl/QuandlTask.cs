@@ -2,14 +2,12 @@
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Security;
 	using System.IO;
 
 	using Ecng.Collections;
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
@@ -21,8 +19,12 @@
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.American)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/bb5fedcc-9226-448e-8bb9-42969fba227e.htm")]
+	[TaskIcon("quandl_logo.png")]
+	[TaskCategory(TaskCategories.America | TaskCategories.History | TaskCategories.Forex |
+		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Candles)]
 	class QuandlTask : BaseHydraTask, ISecurityDownloader
     {
 		private const string _sourceName = "Quandl";
@@ -36,7 +38,7 @@
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str3451Key)]
 			[DescriptionLoc(LocalizedStrings.Str3451Key, true)]
 			[PropertyOrder(0)]
@@ -46,7 +48,7 @@
 				set { ExtensionInfo["AuthToken"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(1)]
@@ -56,7 +58,7 @@
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(2)]
@@ -66,7 +68,7 @@
 				set { ExtensionInfo["DayOffset"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2286Key)]
 			[DescriptionLoc(LocalizedStrings.Str2287Key)]
 			[PropertyOrder(3)]
@@ -76,7 +78,7 @@
 				set { ExtensionInfo["IgnoreWeekends"] = value; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.TemporaryFilesKey)]
 			[DescriptionLoc(LocalizedStrings.TemporaryFilesKey, true)]
 			[PropertyOrder(4)]
@@ -99,24 +101,9 @@
 			}).ToArray();
 		}
 
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str2288Params.Put(_sourceName); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override Uri Icon
-		{
-			get { return "quandl_logo.png".GetResourceUrl(GetType()); }
 		}
 
 		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;

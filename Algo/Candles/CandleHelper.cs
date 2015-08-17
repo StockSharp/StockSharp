@@ -184,7 +184,7 @@
 		/// <typeparam name="TCandle">Тип свечек.</typeparam>
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="candleIndex">Порядковый номер свечи с конца.</param>
-		/// <returns>Найденная свеча. Если свечи не существует, то будет возвращено null.</returns>
+		/// <returns>Найденная свеча. Если свечи не существует, то будет возвращено <see langword="null"/>.</returns>
 		public static TCandle GetCandle<TCandle>(this CandleSeries series, int candleIndex)
 			where TCandle : Candle
 		{
@@ -196,7 +196,7 @@
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="time">Дата свечи.</param>
-		/// <returns>Найденная свеча (null, если свеча по заданным критериям не существует).</returns>
+		/// <returns>Найденная свеча (<see langword="null"/>, если свеча по заданным критериям не существует).</returns>
 		public static TimeFrameCandle GetTimeFrameCandle(this CandleSeries series, DateTime time)
 		{
 			return series.GetCandles<TimeFrameCandle>().FirstOrDefault(c => c.OpenTime == time);
@@ -207,7 +207,7 @@
 		/// </summary>
 		/// <typeparam name="TCandle">Тип свечек.</typeparam>
 		/// <param name="series">Серия свечек.</param>
-		/// <returns>Найденная свеча. Если свеча не существует, то будет возвращено null.</returns>
+		/// <returns>Найденная свеча. Если свеча не существует, то будет возвращено <see langword="null"/>.</returns>
 		public static TCandle GetCurrentCandle<TCandle>(this CandleSeries series)
 			where TCandle : Candle
 		{
@@ -221,7 +221,7 @@
 		/// <param name="manager">Менеджер свечек.</param>
 		/// <param name="security">Инструмент, по которому нужно фильтровать сделки для формирования свечек.</param>
 		/// <param name="arg">Параметр свечи.</param>
-		/// <returns>Серия свечек. Null, если такая серия не зарегистрирована.</returns>
+		/// <returns>Серия свечек. <see langword="null"/>, если такая серия не зарегистрирована.</returns>
 		public static CandleSeries GetSeries<TCandle>(this ICandleManager manager, Security security, object arg)
 			where TCandle : Candle
 		{
@@ -829,7 +829,7 @@
 		/// Белая ли или черная свеча.
 		/// </summary>
 		/// <param name="candle">Свеча, для которой необходимо определить цвет.</param>
-		/// <returns><see langword="true"/>, если свеча белая, <see langword="false"/>, если черная, и null, если свеча плоская.</returns>
+		/// <returns><see langword="true"/>, если свеча белая, <see langword="false"/>, если черная, и <see langword="null"/>, если свеча плоская.</returns>
 		public static bool? IsWhiteOrBlack(this Candle candle)
 		{
 			if (candle == null)

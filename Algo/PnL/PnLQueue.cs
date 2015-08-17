@@ -125,7 +125,7 @@
 
 			var closedVolume = 0m;
 			var pnl = 0m;
-			var volume = trade.GetVolume();
+			var volume = trade.SafeGetVolume();
 			var price = trade.GetTradePrice();
 
 			_unrealizedPnL = null;

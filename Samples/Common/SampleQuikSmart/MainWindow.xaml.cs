@@ -35,6 +35,8 @@ namespace SampleQuikSmart
 			InitializeComponent();
 			Instance = this;
 
+			Title = Title.Put("QUIK+SmartCOM");
+
 			_ordersWindow.MakeHideable();
 			_securitiesWindow.MakeHideable();
 

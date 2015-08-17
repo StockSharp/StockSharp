@@ -2,11 +2,9 @@ namespace StockSharp.Hydra.Oanda
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 
 	using Ecng.Common;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Forex;
@@ -19,11 +17,15 @@ namespace StockSharp.Hydra.Oanda
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
-	[Category(TaskCategories.Forex)]
-	[TaskDisplayName(_sourceName)]
+	[DisplayNameLoc(_sourceName)]
+	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
+	[TaskDoc("http://stocksharp.com/doc/html/21734ebc-faae-4b42-9088-1c2f4c92ead4.htm")]
+	[TaskIcon("oanda_logo.png")]
+	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
+		TaskCategories.Free | TaskCategories.Level1)]
 	class OandaHistoryTask : BaseHydraTask, ISecurityDownloader
 	{
-		private const string _sourceName = "OANDA (история)";
+		private const string _sourceName = LocalizedStrings.OandaHistoryKey;
 
 		[TaskSettingsDisplayName(_sourceName)]
 		[CategoryOrder(_sourceName, 0)]
@@ -34,7 +36,7 @@ namespace StockSharp.Hydra.Oanda
 			{
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2282Key)]
 			[DescriptionLoc(LocalizedStrings.Str2283Key)]
 			[PropertyOrder(0)]
@@ -44,7 +46,7 @@ namespace StockSharp.Hydra.Oanda
 				set { ExtensionInfo["StartFrom"] = value.Ticks; }
 			}
 
-			[TaskCategory(_sourceName)]
+			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.Str2284Key)]
 			[DescriptionLoc(LocalizedStrings.Str2285Key)]
 			[PropertyOrder(1)]
@@ -69,24 +71,9 @@ namespace StockSharp.Hydra.Oanda
 			}
 		}
 
-		public override Uri Icon
-		{
-			get { return "oanda_logo.png".GetResourceUrl(GetType()); }
-		}
-
 		public override HydraTaskSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public override string Description
-		{
-			get { return LocalizedStrings.Str3807Params.Put(LocalizedStrings.OandaHistory); }
-		}
-
-		public override TaskTypes Type
-		{
-			get { return TaskTypes.Source; }
 		}
 
 		private readonly Type[] _supportedMarketDataTypes = { typeof(Level1ChangeMessage) };

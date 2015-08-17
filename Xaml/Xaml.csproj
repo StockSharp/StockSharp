@@ -136,12 +136,19 @@
     <Reference Include="Ecng.Serialization">
       <HintPath>..\References\Ecng\Ecng.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Ecng.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\References\Ecng\Ecng.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Ecng.Xaml, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Ecng\Ecng.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="Ecng.Localization">
       <HintPath>..\References\Ecng\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer.WPF">
+      <HintPath>..\References\HtmlRenderer.WPF.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq">
       <HintPath>..\References\Ecng\MoreLinq.dll</HintPath>
@@ -165,6 +172,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="AdvertisePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AutoCompletePopUp.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -202,6 +213,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ExecutionGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HelpButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IpAddressEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -438,6 +457,9 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AdvertisePanel.xaml.cs">
+      <DependentUpon>AdvertisePanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AutoCompletePopUp.xaml.cs">
       <DependentUpon>AutoCompletePopUp.xaml</DependentUpon>
     </Compile>
@@ -471,6 +493,13 @@
     </Compile>
     <Compile Include="ExecutionGrid.xaml.cs">
       <DependentUpon>ExecutionGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HelpButton.xaml.cs">
+      <DependentUpon>HelpButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="IpAddressEditor.xaml.cs">
+      <DependentUpon>IpAddressEditor.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="MultiIdConverter.cs" />
     <Compile Include="NewsMessageGrid.xaml.cs">
@@ -796,6 +825,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\references_32x32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\help_20x20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\help_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
