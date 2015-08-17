@@ -5,10 +5,7 @@
 			<para><legacyBold>Материалы от <token>stocksharp</token>:</legacyBold></para>
       	<list class="bullet">
 			<listItem>
-				Обучение C# и S# - <token>stocksharpeducation</token>.
-			</listItem>
-			<listItem>
-				Консультация - <token>stocksharpsupport</token>.
+				Обучение и консультации C# и S# - <token>stocksharpeducation</token>.
 			</listItem>
 			<listItem>
 				Исходные коды - <token>stocksharpsources</token>.

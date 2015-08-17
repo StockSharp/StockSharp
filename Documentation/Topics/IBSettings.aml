@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
 		<para>
-			Для корректной работый с <codeEntityReference>T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> необходимо предварительно 
+			Для корректной работы с <codeEntityReference>T:StockSharp.InteractiveBrokers.IBTrader</codeEntityReference> необходимо предварительно 
 			настроить торговый терминал <token>IB_TWS</token>.
 		</para>
     </introduction>
@@ -29,7 +29,7 @@
         </step>
         <step>
           <content>
-            <para>Рекомендуется так же добавить адрес компьютера, на котором будет запускаться робот (локальный адрес - 127.0.0.1).
+            <para>Рекомендуется также добавить адрес компьютера, на котором будет запускаться робот (локальный адрес - 127.0.0.1).
             Это позволит не подтверждать каждый раз при запуске робота разрешение на его подключение в терминале.</para>
           </content>
         </step>
