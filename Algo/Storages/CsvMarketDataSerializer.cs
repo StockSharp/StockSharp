@@ -240,6 +240,7 @@ namespace StockSharp.Algo.Storages
 		private static readonly bool _isQuotes = typeof(TData) == typeof(QuoteChangeMessage);
 		private static readonly Level1Fields[] _level1Fields = _isLevel1 ? Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray() : null;
 		private static readonly MemberProxy _dateMember;
+		private static readonly UTF8Encoding _utf = new UTF8Encoding(false);
 		// ReSharper restore StaticFieldInGenericType
 
 		static CsvMarketDataSerializer()
@@ -291,7 +292,7 @@ namespace StockSharp.Algo.Storages
 			SecurityId = securityId;
 			_executionType = executionType;
 			_candleArg = candleArg;
-			_encoding = encoding ?? Encoding.UTF8;
+			_encoding = encoding ?? _utf;
 
 			if (_isQuotes)
 				return;
