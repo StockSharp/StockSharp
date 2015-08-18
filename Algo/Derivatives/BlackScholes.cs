@@ -109,8 +109,8 @@ namespace StockSharp.Algo.Derivatives
 		/// Расчет времени до экспирации.
 		/// </summary>
 		/// <param name="currentTime">Текущее время.</param>
-		/// <returns>Время, оставшееся до экспирации.</returns>
-		public virtual double GetExpirationTimeLine(DateTimeOffset currentTime)
+		/// <returns>Время, оставшееся до экспирации. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public virtual double? GetExpirationTimeLine(DateTimeOffset currentTime)
 		{
 			return DerivativesHelper.GetExpirationTimeLine(Option.GetExpirationTime(), currentTime);
 		}
@@ -173,7 +173,11 @@ namespace StockSharp.Algo.Derivatives
 				return null;
 
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice.Value, RiskFree, Dividend, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
+
+			if (timeToExp == null)
+				return null;
+
+			return TryRound(DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice.Value, RiskFree, Dividend, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
 		/// <summary>
@@ -190,7 +194,12 @@ namespace StockSharp.Algo.Derivatives
 			if (assetPrice == null)
 				return null;
 
-			return TryRound(DerivativesHelper.Delta(OptionType, assetPrice.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, GetExpirationTimeLine(currentTime))));
+			var timeToExp = GetExpirationTimeLine(currentTime);
+
+			if (timeToExp == null)
+				return null;
+
+			return TryRound(DerivativesHelper.Delta(OptionType, assetPrice.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
 		}
 
 		/// <summary>
@@ -209,7 +218,11 @@ namespace StockSharp.Algo.Derivatives
 				return null;
 
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Gamma(assetPrice.Value, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
+
+			if (timeToExp == null)
+				return null;
+
+			return TryRound(DerivativesHelper.Gamma(assetPrice.Value, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
 		/// <summary>
@@ -227,7 +240,11 @@ namespace StockSharp.Algo.Derivatives
 				return null;
 
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Vega(assetPrice.Value, timeToExp, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp)));
+
+			if (timeToExp == null)
+				return null;
+
+			return TryRound(DerivativesHelper.Vega(assetPrice.Value, timeToExp.Value, D1(deviation ?? DefaultDeviation, assetPrice.Value, timeToExp.Value)));
 		}
 
 		/// <summary>
@@ -246,7 +263,11 @@ namespace StockSharp.Algo.Derivatives
 				return null;
 
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
+
+			if (timeToExp == null)
+				return null;
+
+			return TryRound(DerivativesHelper.Theta(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
 		/// <summary>
@@ -265,7 +286,11 @@ namespace StockSharp.Algo.Derivatives
 				return null;
 
 			var timeToExp = GetExpirationTimeLine(currentTime);
-			return TryRound(DerivativesHelper.Rho(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp, D1(deviation.Value, assetPrice.Value, timeToExp)));
+
+			if (timeToExp == null)
+				return null;
+
+			return TryRound(DerivativesHelper.Rho(OptionType, GetStrike(), assetPrice.Value, RiskFree, deviation.Value, timeToExp.Value, D1(deviation.Value, assetPrice.Value, timeToExp.Value)));
 		}
 
 		/// <summary>
