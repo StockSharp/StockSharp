@@ -31,7 +31,8 @@
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Width="100" Binding="{Binding Order.Price}" SortMemberPath="Order.Price" />
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Order.Volume}" SortMemberPath="Order.Volume" />
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Width="140" Binding="{Binding Path=Order.Time, StringFormat=yyyy.MM.dd HH\\:mm\\:ss.fff}" SortMemberPath="Order.Time" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Width="140" Binding="{Binding Path=Order.Time, StringFormat=O}" SortMemberPath="Order.Time" />
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.TimeZone}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Order.Time, StringFormat=zzz}" SortMemberPath="Order.Time.Offset"/>
 		<DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str128}" Width="80" SortMemberPath="Order.Direction">
 			<DataGridTemplateColumn.CellTemplate>
 				<DataTemplate>
