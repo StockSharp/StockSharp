@@ -350,6 +350,7 @@
     <Compile Include="Indicators\LengthIndicator.cs" />
     <Compile Include="Indicators\ShiftedIndicatorValue.cs" />
     <Compile Include="Storages\IMarketDataMetaInfo.cs" />
+    <Compile Include="Storages\ISecurityMarketDataDrive.cs" />
     <Compile Include="Storages\IStorageSecurityList.cs" />
     <Compile Include="Storages\ISecurityStorage.cs" />
     <Compile Include="Storages\Level1Serializer.cs" />

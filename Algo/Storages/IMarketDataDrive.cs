@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
 	/// <summary>
@@ -61,6 +62,20 @@ namespace StockSharp.Algo.Storages
 		string Path { get; }
 
 		/// <summary>
+		/// Получить хранилище новостей.
+		/// </summary>
+		/// <param name="serializer">Сериализатор.</param>
+		/// <returns>Хранилище новостей.</returns>
+		IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer);
+
+		/// <summary>
+		/// Получить хранилище для инструмента.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <returns>Хранилище для инструмента.</returns>
+		ISecurityMarketDataDrive GetSecurityDrive(Security security);
+
+		/// <summary>
 		/// Получить для инструмента доступные типы свечек с параметрами.
 		/// </summary>
 		/// <param name="securityId">Идентификатор инструмента.</param>
@@ -95,6 +110,26 @@ namespace StockSharp.Algo.Storages
 		/// Путь к данными.
 		/// </summary>
 		public abstract string Path { get; set; }
+
+		/// <summary>
+		/// Получить хранилище новостей.
+		/// </summary>
+		/// <param name="serializer">Сериализатор.</param>
+		/// <returns>Хранилище новостей.</returns>
+		public IMarketDataStorage<NewsMessage> GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Получить хранилище для инструмента.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <returns>Хранилище для инструмента.</returns>
+		public ISecurityMarketDataDrive GetSecurityDrive(Security security)
+		{
+			return new SecurityMarketDataDrive(this, security);
+		}
 
 		/// <summary>
 		/// Получить для инструмента доступные типы свечек с параметрами.

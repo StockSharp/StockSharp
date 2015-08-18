@@ -49,8 +49,7 @@ namespace StockSharp.Algo.Storages
 			return prevPrice + diff;
 		}
 
-		public static void WritePrice<T>(this BitArrayWriter writer, decimal price, decimal prevPrice, MetaInfo<T> info, SecurityId securityId, bool useLong = false)
-			where T : MetaInfo<T>
+		public static void WritePrice(this BitArrayWriter writer, decimal price, decimal prevPrice, MetaInfo info, SecurityId securityId, bool useLong = false)
 		{
 			if ((price % info.PriceStep) != 0)
 				throw new ArgumentException(LocalizedStrings.Str1007Params.Put(info.PriceStep, securityId, price), "info");
@@ -102,8 +101,7 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
-		public static decimal ReadPrice<T>(this BitArrayReader reader, decimal prevPrice, MetaInfo<T> info, bool useLong = false)
-			where T : MetaInfo<T>
+		public static decimal ReadPrice(this BitArrayReader reader, decimal prevPrice, MetaInfo info, bool useLong = false)
 		{
 			var count = useLong ? reader.ReadLong() : reader.ReadInt();
 			return prevPrice + count * info.PriceStep;

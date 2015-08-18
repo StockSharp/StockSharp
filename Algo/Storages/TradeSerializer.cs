@@ -68,7 +68,7 @@ namespace StockSharp.Algo.Storages
 			ServerOffset = stream.Read<TimeSpan>();
 		}
 
-		protected override void CopyFrom(TradeMetaInfo src)
+		public override void CopyFrom(TradeMetaInfo src)
 		{
 			base.CopyFrom(src);
 
