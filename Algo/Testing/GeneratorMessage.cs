@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Сообщение о создании или удалении генератора маркет-данных.
 	/// </summary>
-	class GeneratorMessage : MarketDataMessage
+	public class GeneratorMessage : MarketDataMessage
 	{
 		/// <summary>
 		/// Генератор маркет-данных.
