@@ -10,6 +10,7 @@
 
 	using StockSharp.Algo.History.Hydra;
 	using StockSharp.Algo.Storages;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
@@ -33,6 +34,16 @@
 			string IMarketDataDrive.Path
 			{
 				get { return GetDrive().Path; }
+			}
+
+			ISecurityMarketDataDrive IMarketDataDrive.GetSecurityDrive(Security security)
+			{
+				return GetDrive().GetSecurityDrive(security);
+			}
+
+			IMarketDataStorage<NewsMessage> IMarketDataDrive.GetNewsMessageStorage(IMarketDataSerializer<NewsMessage> serializer)
+			{
+				return GetDrive().GetNewsMessageStorage(serializer);
 			}
 
 			IEnumerable<Tuple<Type, object[]>> IMarketDataDrive.GetCandleTypes(SecurityId securityId, StorageFormats format)

@@ -627,8 +627,8 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="expirationTime">Время экспирации опциона.</param>
 		/// <param name="currentTime">Текущее время.</param>
-		/// <returns>Период опциона до экспирации.</returns>
-		public static double GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime)
+		/// <returns>Период опциона до экспирации. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public static double? GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime)
 		{
 			return GetExpirationTimeLine(expirationTime, currentTime, TimeSpan.FromDays(365));
 		}
@@ -639,13 +639,14 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="expirationTime">Время экспирации опциона.</param>
 		/// <param name="currentTime">Текущее время.</param>
 		/// <param name="timeLine">Длина общего периода.</param>
-		/// <returns>Период опциона до экспирации.</returns>
-		public static double GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime, TimeSpan timeLine)
+		/// <returns>Период опциона до экспирации. Если значение равно <see langword="null"/>, то расчет значения в данный момент невозможен.</returns>
+		public static double? GetExpirationTimeLine(DateTimeOffset expirationTime, DateTimeOffset currentTime, TimeSpan timeLine)
 		{
 			var retVal = expirationTime - currentTime;
 
 			if (retVal <= TimeSpan.Zero)
-				throw new InvalidOperationException(LocalizedStrings.Str710Params.Put(expirationTime, currentTime));
+				return null;
+				//throw new InvalidOperationException(LocalizedStrings.Str710Params.Put(expirationTime, currentTime));
 
 			return (double)retVal.Ticks / timeLine.Ticks;
 		}

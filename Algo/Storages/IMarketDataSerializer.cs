@@ -22,15 +22,15 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Преобразовать данные в поток байтов.
 		/// </summary>
+		/// <param name="stream">Поток данных.</param>
 		/// <param name="data">Данные.</param>
 		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
-		/// <returns>Поток байтов.</returns>
-		byte[] Serialize(IEnumerable data, IMarketDataMetaInfo metaInfo);
+		void Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo);
 
 		/// <summary>
 		/// Загрузить данные из потока.
 		/// </summary>
-		/// <param name="stream">Потока.</param>
+		/// <param name="stream">Поток данных.</param>
 		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
 		/// <returns>Данные.</returns>
 		IEnumerableEx Deserialize(Stream stream, IMarketDataMetaInfo metaInfo);
@@ -45,10 +45,10 @@ namespace StockSharp.Algo.Storages
 		/// <summary>
 		/// Преобразовать данные в поток байтов.
 		/// </summary>
+		/// <param name="stream">Поток данных.</param>
 		/// <param name="data">Данные.</param>
 		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
-		/// <returns>Поток байт.</returns>
-		byte[] Serialize(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo);
+		void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo);
 
 		/// <summary>
 		/// Загрузить данные из потока.

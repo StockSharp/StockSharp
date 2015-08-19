@@ -18,31 +18,35 @@ namespace StockSharp.Algo.Storages
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
-	class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TData>
+	/// <summary>
+	/// Сериализатор в формате CSV.
+	/// </summary>
+	/// <typeparam name="TData">Тип данных.</typeparam>
+	public class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TData>
 	{
-		class CsvMetaInfo : MetaInfo<CsvMetaInfo>
+		class CsvMetaInfo : MetaInfo
 		{
-			private readonly Encoding _encoding;
+			//private readonly Encoding _encoding;
 			private readonly Func<string[], object> _toId;
 
-			public CsvMetaInfo(DateTime date, Encoding encoding, Func<string[], object> toId)
+			public CsvMetaInfo(DateTime date, /*Encoding encoding,*/ Func<string[], object> toId)
 				: base(date)
 			{
-				_encoding = encoding;
+				//_encoding = encoding;
 				_toId = toId;
 			}
 
-			public override CsvMetaInfo Clone()
-			{
-				return new CsvMetaInfo(Date, _encoding, _toId)
-				{
-					Count = Count,
-					FirstTime = FirstTime,
-					LastTime = LastTime,
-					PriceStep = PriceStep,
-					VolumeStep = VolumeStep,
-				};
-			}
+			//public override CsvMetaInfo Clone()
+			//{
+			//	return new CsvMetaInfo(Date, _encoding, _toId)
+			//	{
+			//		Count = Count,
+			//		FirstTime = FirstTime,
+			//		LastTime = LastTime,
+			//		PriceStep = PriceStep,
+			//		VolumeStep = VolumeStep,
+			//	};
+			//}
 
 			private object _lastId;
 
@@ -236,6 +240,7 @@ namespace StockSharp.Algo.Storages
 		private static readonly bool _isQuotes = typeof(TData) == typeof(QuoteChangeMessage);
 		private static readonly Level1Fields[] _level1Fields = _isLevel1 ? Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray() : null;
 		private static readonly MemberProxy _dateMember;
+		private static readonly UTF8Encoding _utf = new UTF8Encoding(false);
 		// ReSharper restore StaticFieldInGenericType
 
 		static CsvMarketDataSerializer()
@@ -263,11 +268,22 @@ namespace StockSharp.Algo.Storages
 		private readonly MemberProxy[] _members;
 		private readonly Func<string[], object> _toId;
 
+		/// <summary>
+		/// Создать <see cref="CsvMarketDataSerializer{TData}"/>.
+		/// </summary>
+		/// <param name="encoding">Кодировка.</param>
 		public CsvMarketDataSerializer(Encoding encoding = null)
 			: this(default(SecurityId), null, encoding)
 		{
 		}
 
+		/// <summary>
+		/// Создать <see cref="CsvMarketDataSerializer{TData}"/>.
+		/// </summary>
+		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <param name="executionType">Тип исполнения.</param>
+		/// <param name="candleArg">Параметр свечи.</param>
+		/// <param name="encoding">Кодировка.</param>
 		public CsvMarketDataSerializer(SecurityId securityId, ExecutionTypes? executionType = null, object candleArg = null, Encoding encoding = null)
 		{
 			if (securityId.IsDefault() && !_isNews)
@@ -276,7 +292,7 @@ namespace StockSharp.Algo.Storages
 			SecurityId = securityId;
 			_executionType = executionType;
 			_candleArg = candleArg;
-			_encoding = encoding ?? Encoding.UTF8;
+			_encoding = encoding ?? _utf;
 
 			if (_isQuotes)
 				return;
@@ -309,6 +325,9 @@ namespace StockSharp.Algo.Storages
 			}
 		}
 
+		/// <summary>
+		/// Идентификатор инструмента.
+		/// </summary>
 		public SecurityId SecurityId { get; private set; }
 
 		private static string GetFormat(ExecutionTypes? executionType)
@@ -364,14 +383,19 @@ namespace StockSharp.Algo.Storages
 			throw new InvalidOperationException(LocalizedStrings.Str888Params.Put(typeof(TData).Name));
 		}
 
+		/// <summary>
+		/// Создать пустую мета-информацию.
+		/// </summary>
+		/// <param name="date">Дата.</param>
+		/// <returns>Мета-информация о данных за один день.</returns>
 		public virtual IMarketDataMetaInfo CreateMetaInfo(DateTime date)
 		{
-			return new CsvMetaInfo(date, _encoding, _toId);
+			return new CsvMetaInfo(date, _toId);
 		}
 
-		byte[] IMarketDataSerializer.Serialize(IEnumerable data, IMarketDataMetaInfo metaInfo)
+		void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
 		{
-			return Serialize(data.Cast<TData>(), metaInfo);
+			Serialize(stream, data.Cast<TData>(), metaInfo);
 		}
 
 		IEnumerableEx IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
@@ -379,37 +403,51 @@ namespace StockSharp.Algo.Storages
 			return Deserialize(stream, metaInfo);
 		}
 
-		public virtual byte[] Serialize(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
+		/// <summary>
+		/// Преобразовать данные в поток байтов.
+		/// </summary>
+		/// <param name="stream">Поток данных.</param>
+		/// <param name="data">Данные.</param>
+		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
+		public virtual void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
-			return CultureInfo.InvariantCulture.DoInCulture(() =>
+			CultureInfo.InvariantCulture.DoInCulture(() =>
 			{
-				var sb = new StringBuilder();
+				var writer = new StreamWriter(stream, _encoding);
 
 				var appendLine = metaInfo.Count > 0;
 
 				foreach (var item in data)
 				{
 					if (appendLine)
-						sb.AppendLine();
+						writer.WriteLine();
 					else
 						appendLine = true;
 
-					sb.Append(_format.PutEx(item));
+					writer.Write(_format.PutEx(item));
 
 					var news = item as NewsMessage;
-					if (news != null)
-					{
-						sb.Append(";").Append(
-							news.SecurityId == null
-								? null
-								: news.SecurityId.Value.SecurityCode);
-					}
+					if (news == null)
+						continue;
+
+					writer.Write(";");
+
+					writer.Write(
+						news.SecurityId == null
+							? null
+							: news.SecurityId.Value.SecurityCode);
 				}
 
-				return _encoding.GetBytes(sb.ToString());
+				writer.Flush();
 			});
 		}
 
+		/// <summary>
+		/// Загрузить данные из потока.
+		/// </summary>
+		/// <param name="stream">Поток.</param>
+		/// <param name="metaInfo">Мета-информация о данных за один день.</param>
+		/// <returns>Данные.</returns>
 		public virtual IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
 		{
 			// TODO (переделать в будущем)

@@ -37,7 +37,7 @@
 		public static readonly Version Version55 = new Version(5, 5);
 	}
 
-	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo<TMetaInfo>
+	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
 		where TMetaInfo : BinaryMetaInfo<TMetaInfo>
 	{
 		protected BinaryMetaInfo(DateTime date)
@@ -180,14 +180,14 @@
 			LastLocalTime = stream.Read<DateTime>();
 		}
 
-		public override TMetaInfo Clone()
-		{
-			var copy = typeof(TMetaInfo).CreateInstance<TMetaInfo>(Date);
-			copy.CopyFrom((TMetaInfo)this);
-			return copy;
-		}
+		//public override TMetaInfo Clone()
+		//{
+		//	var copy = typeof(TMetaInfo).CreateInstance<TMetaInfo>(Date);
+		//	copy.CopyFrom((TMetaInfo)this);
+		//	return copy;
+		//}
 
-		protected virtual void CopyFrom(TMetaInfo src)
+		public virtual void CopyFrom(TMetaInfo src)
 		{
 			Version = src.Version;
 			Count = src.Count;
@@ -250,7 +250,8 @@
 			{
 				if (Index < 0) // enumerator стоит перед первой записью
 				{
-					MetaInfo = _originalMetaInfo.Clone();
+					MetaInfo = (TMetaInfo)((IMarketDataSerializer)Serializer).CreateMetaInfo(_originalMetaInfo.Date);
+					MetaInfo.CopyFrom(_originalMetaInfo);
 					Index = 0;
 				}
 
@@ -307,14 +308,14 @@
 
 		IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
 		{
-			var info = MetaInfo<TMetaInfo>.CreateMetaInfo(date);
+			var info = typeof(TMetaInfo).CreateInstance<TMetaInfo>(date);
 			info.Version = Version;
 			return info;
 		}
 
-		byte[] IMarketDataSerializer.Serialize(IEnumerable data, IMarketDataMetaInfo metaInfo)
+		void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
 		{
-			return Serialize(data.Cast<TData>(), metaInfo);
+			Serialize(stream, data.Cast<TData>(), metaInfo);
 		}
 
 		IEnumerableEx IMarketDataSerializer.Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)
@@ -322,14 +323,14 @@
 			return Deserialize(stream, metaInfo);
 		}
 
-		public byte[] Serialize(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
+		public void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
 		{
-			var stream = new MemoryStream { Capacity = DataSize * data.Count() * 2 };
+			//var temp = new MemoryStream { Capacity = DataSize * data.Count() * 2 };
 
 			using (var writer = new BitArrayWriter(stream))
 				OnSave(writer, data, (TMetaInfo)metaInfo);
 
-			return stream.To<byte[]>();
+			//return stream.To<byte[]>();
 		}
 
 		public IEnumerableEx<TData> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)

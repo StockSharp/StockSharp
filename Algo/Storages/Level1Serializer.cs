@@ -295,7 +295,7 @@ namespace StockSharp.Algo.Storages
 			return RefTuple.Create(stream.Read<decimal>(), stream.Read<decimal>());
 		}
 
-		protected override void CopyFrom(Level1MetaInfo src)
+		public override void CopyFrom(Level1MetaInfo src)
 		{
 			base.CopyFrom(src);
 
