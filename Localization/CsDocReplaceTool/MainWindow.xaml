@@ -1,0 +1,71 @@
+﻿<Window x:Class="CsDocReplaceTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="C# doc replace tool" Height="600" Width="1000">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        
+        <xctk:BusyIndicator x:Name="_busyIndicator">
+            <Grid Margin="5,3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="0" Header="Путь к CSV файлу ресурсов (ключ ресурса;англ строка;рус строка)" Margin="0,2" Padding="3">
+                    <Grid Margin="2,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="_tbResourcesCsvText" IsReadOnly="True"/>
+                        <Button Grid.Column="1" Content=" . . . " Margin="5,0" Click="SelectResourcesCsv_Click" Width="70" Padding="3"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Grid.Row="1" Header="Путь к CSV файлу со структурой xml документации (id символа/xmldoc путь;ключ ресурса)" Margin="0,2" Padding="3">
+                    <Grid Margin="2,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="_tbDocDsvText" IsReadOnly="True"/>
+                        <Button Grid.Column="1" Content=" . . . " Margin="5,0" Click="SelectDocCsv_Click" Width="70"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Grid.Row="2" Header="Путь к файлу решения Visual Studio (StockSharp.sln)" Margin="0,2">
+                    <Grid Margin="2,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="_tbSlnText" IsReadOnly="True"/>
+                        <Button Grid.Column="1" Content=" . . . " Margin="5,0" Click="SelectSolution_Click" Width="70"/>
+                    </Grid>
+                </GroupBox>
+                
+                <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10">
+                    <Button Content="Анализ" Height="50" Width="200" FontSize="20" Margin="20,0" x:Name="_btnAnalysis" Click="_btnAnalysis_OnClick"/>
+                    <Button Content="Замена" Height="50" Width="200" FontSize="20" Margin="20,0" x:Name="_btnReplace" Click="_btnReplace_OnClick"/>
+                </StackPanel>
+            </Grid>
+        </xctk:BusyIndicator>
+
+        <GridSplitter Grid.Row="1" Height="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsTabStop="False" Background="DarkGray"/>
+        
+        <TextBox Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="_tbLog" IsReadOnly="True"
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+    </Grid>
+</Window>
