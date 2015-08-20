@@ -1,6 +1,7 @@
 namespace SampleITCH
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
 
@@ -15,6 +16,7 @@ namespace SampleITCH
 	using StockSharp.ITCH;
 	using StockSharp.Localization;
 	using StockSharp.Logging;
+	using StockSharp.Messages;
 	using StockSharp.Xaml;
 
 	public partial class MainWindow
@@ -26,6 +28,8 @@ namespace SampleITCH
 		private readonly SecuritiesWindow _securitiesWindow = new SecuritiesWindow();
 		private readonly TradesWindow _tradesWindow = new TradesWindow();
 		private readonly OrdersLogWindow _orderLogWindow = new OrdersLogWindow();
+
+		private readonly HashSet<string> _requestedBoards = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -141,9 +145,31 @@ namespace SampleITCH
 					Trader.MarketDataSubscriptionFailed += (security, type, error) =>
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-					Trader.NewSecurities += securities => _securitiesWindow.SecurityPicker.Securities.AddRange(securities);
-					Trader.NewTrades += trades => _tradesWindow.TradeGrid.Trades.AddRange(trades);
-					Trader.NewOrderLogItems += items => _orderLogWindow.OrderLogGrid.LogItems.AddRange(items);
+					var isAllDepths = AllDepths.IsChecked == true;
+
+					Trader.NewSecurities += securities =>
+					{
+						foreach (var security in securities)
+						{
+							_securitiesWindow.SecurityPicker.Securities.Add(security);
+
+							if (isAllDepths && _requestedBoards.Add(security.Board.Code))
+							{
+								Trader.SendInMessage(new MarketDataMessage
+								{
+									SecurityId = new SecurityId
+									{
+										BoardCode = security.Board.Code,
+									},
+									IsSubscribe = true,
+									DataType = MarketDataTypes.OrderLog,
+									TransactionId = Trader.TransactionIdGenerator.GetNextId(),
+								});
+							}
+						}
+					};
+					Trader.NewTrades += _tradesWindow.TradeGrid.Trades.AddRange;
+					Trader.NewOrderLogItems += _orderLogWindow.OrderLogGrid.LogItems.AddRange;
 
 					// set market data provider
 					_securitiesWindow.SecurityPicker.MarketDataProvider = Trader;

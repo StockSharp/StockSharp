@@ -83,9 +83,6 @@ namespace StockSharp.Hydra.ITCH
 				set { ExtensionInfo["Password"] = value; }
 			}
 
-			/// <summary>
-			/// Файл с инструментами.
-			/// </summary>
 			[CategoryLoc(_sourceName)]
 			[DisplayNameLoc(LocalizedStrings.SecuritiesKey)]
 			[DescriptionLoc(LocalizedStrings.Str2137Key, true)]
@@ -94,6 +91,16 @@ namespace StockSharp.Hydra.ITCH
 			{
 				get { return (string)ExtensionInfo["SecurityCsvFile"]; }
 				set { ExtensionInfo["SecurityCsvFile"] = value; }
+			}
+
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.XamlStr23Key)]
+			[DescriptionLoc(LocalizedStrings.XamlStr23Key, true)]
+			[PropertyOrder(6)]
+			public bool OnlyActiveSecurities
+			{
+				get { return (bool)ExtensionInfo["OnlyActiveSecurities"]; }
+				set { ExtensionInfo["OnlyActiveSecurities"] = value; }
 			}
 		}
 
@@ -120,6 +127,7 @@ namespace StockSharp.Hydra.ITCH
 				_settings.Password = new SecureString();
 				_settings.ReplayAddress = _settings.RecoveryAddress = new IPEndPoint(IPAddress.Loopback, 3);
 				_settings.SecurityCsvFile = string.Empty;
+				_settings.OnlyActiveSecurities = true;
 			}
 
 			return new MarketDataConnector<ItchTrader>(EntityRegistry.Securities, this, () => new ItchTrader
@@ -129,7 +137,8 @@ namespace StockSharp.Hydra.ITCH
 				PrimaryMulticast = _settings.PrimaryMulticast,
 				RecoveryAddress = _settings.RecoveryAddress,
 				ReplayAddress = _settings.ReplayAddress,
-				SecurityCsvFile = _settings.SecurityCsvFile
+				SecurityCsvFile = _settings.SecurityCsvFile,
+				OnlyActiveSecurities = _settings.OnlyActiveSecurities
 			});
 		}
 	}
