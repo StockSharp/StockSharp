@@ -9,6 +9,8 @@ namespace SampleITCH
 	using Ecng.Net;
 	using Ecng.Xaml;
 
+	using Ookii.Dialogs.Wpf;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.ITCH;
 	using StockSharp.Localization;
@@ -61,6 +63,19 @@ namespace SampleITCH
 
 		public static MainWindow Instance { get; private set; }
 
+		private void FindPathClick(object sender, RoutedEventArgs e)
+		{
+			var dlg = new VistaFolderBrowserDialog();
+
+			if (!SecuritiesCsv.Text.IsEmpty())
+				dlg.SelectedPath = SecuritiesCsv.Text;
+
+			if (dlg.ShowDialog(this) == true)
+			{
+				SecuritiesCsv.Text = dlg.SelectedPath;
+			}
+		}
+
 		private void ConnectClick(object sender, RoutedEventArgs e)
 		{
 			if (!_isConnected)
@@ -79,7 +94,11 @@ namespace SampleITCH
 				if (Trader == null)
 				{
 					// create connector
-					Trader = new ItchTrader();// { LogLevel = LogLevels.Debug };
+					Trader = new ItchTrader
+					{
+						//LogLevel = LogLevels.Debug,
+						CreateDepthFromOrdersLog = true
+					};
 
 					_logManager.Sources.Add(Trader);
 
@@ -142,6 +161,7 @@ namespace SampleITCH
 				};
 				Trader.RecoveryAddress = Recovery.EndPoint;
 				Trader.ReplayAddress = Replay.EndPoint;
+				Trader.SecurityCsvFile = SecuritiesCsv.Text;
 
 				// clear password box for security reason
 				//Password.Clear();

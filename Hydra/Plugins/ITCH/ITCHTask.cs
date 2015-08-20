@@ -82,6 +82,19 @@ namespace StockSharp.Hydra.ITCH
 				get { return ExtensionInfo["Password"].To<SecureString>(); }
 				set { ExtensionInfo["Password"] = value; }
 			}
+
+			/// <summary>
+			/// Файл с инструментами.
+			/// </summary>
+			[CategoryLoc(_sourceName)]
+			[DisplayNameLoc(LocalizedStrings.SecuritiesKey)]
+			[DescriptionLoc(LocalizedStrings.Str2137Key, true)]
+			[PropertyOrder(5)]
+			public string SecurityCsvFile
+			{
+				get { return (string)ExtensionInfo["SecurityCsvFile"]; }
+				set { ExtensionInfo["SecurityCsvFile"] = value; }
+			}
 		}
 
 		private ItchSettings _settings;
@@ -106,6 +119,7 @@ namespace StockSharp.Hydra.ITCH
 				_settings.Login = string.Empty;
 				_settings.Password = new SecureString();
 				_settings.ReplayAddress = _settings.RecoveryAddress = new IPEndPoint(IPAddress.Loopback, 3);
+				_settings.SecurityCsvFile = string.Empty;
 			}
 
 			return new MarketDataConnector<ItchTrader>(EntityRegistry.Securities, this, () => new ItchTrader
@@ -115,6 +129,7 @@ namespace StockSharp.Hydra.ITCH
 				PrimaryMulticast = _settings.PrimaryMulticast,
 				RecoveryAddress = _settings.RecoveryAddress,
 				ReplayAddress = _settings.ReplayAddress,
+				SecurityCsvFile = _settings.SecurityCsvFile
 			});
 		}
 	}

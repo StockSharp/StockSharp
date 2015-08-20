@@ -2,7 +2,6 @@ namespace SampleITCH
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Windows;
 
 	using Ecng.Collections;
@@ -37,15 +36,12 @@ namespace SampleITCH
 				{
 					foreach (var pair in d)
 					{
-						trader.UnRegisterMarketDepth(pair.Key);
-
 						pair.Value.DeleteHideable();
 						pair.Value.Close();
 					}
 				});
 
-				trader.RegisteredSecurities.ForEach(trader.UnRegisterSecurity);
-				trader.RegisteredTrades.ForEach(trader.UnRegisterTrades);
+				trader.RegisteredOrderLogs.ForEach(trader.UnRegisterOrderLog);
 			}
 
 			base.OnClosed(e);
@@ -53,8 +49,7 @@ namespace SampleITCH
 
 		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			Depth.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled =
-			Quotes.IsEnabled = security != null;
+			Depth.IsEnabled = NewStopOrder.IsEnabled = NewOrder.IsEnabled = security != null;
 		}
 
 		private void NewOrderClick(object sender, RoutedEventArgs e)
@@ -91,10 +86,10 @@ namespace SampleITCH
 
 			var window = _quotesWindows.SafeAdd(SecurityPicker.SelectedSecurity, security =>
 			{
-				// начинаем получать котировки стакана
-				trader.RegisterMarketDepth(security);
+				// subscribe on order book flow
+				trader.RegisterOrderLog(security);
 
-				// создаем окно со стаканом
+				// create order book window
 				var wnd = new QuotesWindow { Title = security.Id + " " + LocalizedStrings.MarketDepth };
 				wnd.MakeHideable();
 				return wnd;
@@ -121,23 +116,6 @@ namespace SampleITCH
 
 				if (wnd != null)
 					wnd.DepthCtrl.UpdateDepth(depth);
-			}
-		}
-
-		private void QuotesClick(object sender, RoutedEventArgs e)
-		{
-			var security = SecurityPicker.SelectedSecurity;
-			var trader = MainWindow.Instance.Trader;
-
-			if (trader.RegisteredSecurities.Contains(security))
-			{
-				trader.UnRegisterSecurity(security);
-				trader.UnRegisterTrades(security);
-			}
-			else
-			{
-				trader.RegisterSecurity(security);
-				trader.RegisterTrades(security);
 			}
 		}
 	}
