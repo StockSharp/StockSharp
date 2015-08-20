@@ -254,7 +254,6 @@ namespace SampleHistoryTesting
 					new[] { security },
 					new[] { portfolio })
 				{
-					StorageRegistry = storageRegistry,
 					MarketEmulator =
 					{
 						Settings =
@@ -271,9 +270,14 @@ namespace SampleHistoryTesting
 					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
 					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
 
-					// set history range
-					StartDate = startTime,
-					StopDate = stopTime,
+					HistoryMessageAdapter =
+					{
+						StorageRegistry = storageRegistry,
+
+						// set history range
+						StartDate = startTime,
+						StopDate = stopTime,
+					},
 
 					// set market time freq as time frame
 					MarketTimeChangedInterval = timeFrame,

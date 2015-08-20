@@ -339,7 +339,7 @@ namespace StockSharp.Studio.Services
 
 			strategyInfoList.Add(_infoClone);
 			
-			EmulationConnector.StorageRegistry = new StudioStorageRegistry { MarketDataSettings = Strategy.MarketDataSettings };
+			EmulationConnector.HistoryMessageAdapter.StorageRegistry = new StudioStorageRegistry { MarketDataSettings = Strategy.MarketDataSettings };
 		}
 
 		private CandleManager CreateCandleManager()

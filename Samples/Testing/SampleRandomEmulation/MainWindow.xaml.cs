@@ -26,7 +26,7 @@ namespace SampleRandomEmulation
 	{
 		private SmaStrategy _strategy;
 
-		private ICollection<EquityData> _curveItems;
+		private readonly ICollection<EquityData> _curveItems;
 		private HistoryEmulationConnector _connector;
 
 		private readonly LogManager _logManager = new LogManager();
@@ -38,12 +38,13 @@ namespace SampleRandomEmulation
 			InitializeComponent();
 
 			_logManager.Listeners.Add(new FileLogListener("log.txt"));
+			_curveItems = Curve.CreateCurve("Equity", Colors.DarkGreen);
 		}
 
 		private void StartBtnClick(object sender, RoutedEventArgs e)
 		{
 			// if process was already started, will stop it now
-			if (_connector != null)
+			if (_connector != null && _connector.State != EmulationStates.Stopped)
 			{
 				_strategy.Stop();
 				_connector.Disconnect();
@@ -56,10 +57,10 @@ namespace SampleRandomEmulation
 			// create test security
 			var security = new Security
 			{
-				Id = "RIU9@FORTS",
-				Code = "RIU9",
-				Name = "RTS-9.09",
-				Board = ExchangeBoard.Forts,
+				Id = "AAPL@NASDAQ",
+				Code = "AAPL",
+				Name = "AAPL Inc",
+				Board = ExchangeBoard.Nasdaq,
 			};
 
 			var startTime = new DateTime(2009, 6, 1);
@@ -91,14 +92,16 @@ namespace SampleRandomEmulation
 				new[] { security },
 				new[] { portfolio })
 			{
-				// set history range
-				StartDate = startTime,
-				StopDate = stopTime,
+				HistoryMessageAdapter =
+				{
+					// set history range
+					StartDate = startTime,
+					StopDate = stopTime,
+				},
 
 				// set market time freq as time frame
 				MarketTimeChangedInterval = timeFrame,
 			};
-
 
 			_logManager.Sources.Add(_connector);
 
@@ -188,10 +191,7 @@ namespace SampleRandomEmulation
 				}
 			};
 
-			if (_curveItems == null)
-				_curveItems = Curve.CreateCurve(_strategy.Name, Colors.DarkGreen);
-			else
-				_curveItems.Clear();
+			_curveItems.Clear();
 
 			Report.IsEnabled = false;
 

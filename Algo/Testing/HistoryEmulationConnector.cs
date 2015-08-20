@@ -62,7 +62,6 @@ namespace StockSharp.Algo.Testing
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		
-		private readonly HistoryMessageAdapter _historyAdapter;
 		private readonly EmulationMessageAdapter _emulationAdapter;
 
 		private readonly InMemoryMessageChannel _historyChannel;
@@ -129,32 +128,42 @@ namespace StockSharp.Algo.Testing
 			TradesKeepCount = 0;
 		}
 
-		/// <summary>
-		/// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
-		/// </summary>
-		public override TimeSpan MarketTimeChangedInterval
-		{
-			get { return _historyAdapter.MarketTimeChangedInterval; }
-			set { _historyAdapter.MarketTimeChangedInterval = value; }
-		}
+		private readonly HistoryMessageAdapter _historyAdapter;
 
 		/// <summary>
-		/// Дата в истории, с которой необходимо начать эмуляцию.
+		/// Адаптер, получающий сообщения из хранилища <see cref="IStorageRegistry"/>.
 		/// </summary>
-		public DateTimeOffset StartDate
+		public HistoryMessageAdapter HistoryMessageAdapter
 		{
-			get { return _historyAdapter.StartDate; }
-			set { _historyAdapter.StartDate = value; }
+			get { return _historyAdapter; }
 		}
 
-		/// <summary>
-		/// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
-		/// </summary>
-		public DateTimeOffset StopDate
-		{
-			get { return _historyAdapter.StopDate; }
-			set { _historyAdapter.StopDate = value; }
-		}
+		///// <summary>
+		///// Интервал генерации сообщения <see cref="TimeMessage"/>. По-умолчанию равно 10 миллисекундам.
+		///// </summary>
+		//public override TimeSpan MarketTimeChangedInterval
+		//{
+		//	get { return _historyAdapter.MarketTimeChangedInterval; }
+		//	set { _historyAdapter.MarketTimeChangedInterval = value; }
+		//}
+
+		///// <summary>
+		///// Дата в истории, с которой необходимо начать эмуляцию.
+		///// </summary>
+		//public DateTimeOffset StartDate
+		//{
+		//	get { return _historyAdapter.StartDate; }
+		//	set { _historyAdapter.StartDate = value; }
+		//}
+
+		///// <summary>
+		///// Дата в истории, на которой необходимо закончить эмуляцию (дата включается).
+		///// </summary>
+		//public DateTimeOffset StopDate
+		//{
+		//	get { return _historyAdapter.StopDate; }
+		//	set { _historyAdapter.StopDate = value; }
+		//}
 
 		/// <summary>
 		/// Максимальный размер очереди сообщений, до которого читаются исторические данные. По-умолчанию равно 1000.
@@ -254,32 +263,32 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public event Action StateChanged;
 
-		/// <summary>
-		/// Хранилище данных.
-		/// </summary>
-		public IStorageRegistry StorageRegistry
-		{
-			get { return _historyAdapter.StorageRegistry; }
-			set { _historyAdapter.StorageRegistry = value; }
-		}
+		///// <summary>
+		///// Хранилище данных.
+		///// </summary>
+		//public IStorageRegistry StorageRegistry
+		//{
+		//	get { return _historyAdapter.StorageRegistry; }
+		//	set { _historyAdapter.StorageRegistry = value; }
+		//}
 
-		/// <summary>
-		/// Хранилище, которое используется по-умолчанию. По умолчанию используется <see cref="IStorageRegistry.DefaultDrive"/>.
-		/// </summary>
-		public IMarketDataDrive Drive
-		{
-			get { return _historyAdapter.Drive; }
-			set { _historyAdapter.Drive = value; }
-		}
+		///// <summary>
+		///// Хранилище, которое используется по-умолчанию. По умолчанию используется <see cref="IStorageRegistry.DefaultDrive"/>.
+		///// </summary>
+		//public IMarketDataDrive Drive
+		//{
+		//	get { return _historyAdapter.Drive; }
+		//	set { _historyAdapter.Drive = value; }
+		//}
 
-		/// <summary>
-		/// Формат маркет-данных. По умолчанию используется <see cref="StorageFormats.Binary"/>.
-		/// </summary>
-		public StorageFormats StorageFormat
-		{
-			get { return _historyAdapter.StorageFormat; }
-			set { _historyAdapter.StorageFormat = value; }
-		}
+		///// <summary>
+		///// Формат маркет-данных. По умолчанию используется <see cref="StorageFormats.Binary"/>.
+		///// </summary>
+		//public StorageFormats StorageFormat
+		//{
+		//	get { return _historyAdapter.StorageFormat; }
+		//	set { _historyAdapter.StorageFormat = value; }
+		//}
 
 		/// <summary>
 		/// Закончил ли эмулятор свою работу по причине окончания данных или он был прерван через метод <see cref="IConnector.Disconnect"/>.
@@ -541,74 +550,6 @@ namespace StockSharp.Algo.Testing
 		//	return securities;
 		//}
 
-		private void SendInGeneratorMessage(MarketDataGenerator generator, bool isSubscribe)
-		{
-			if (generator == null)
-				throw new ArgumentNullException("generator");
-
-			SendInMessage(new GeneratorMessage
-			{
-				IsSubscribe = isSubscribe,
-				SecurityId = generator.SecurityId,
-				Generator = generator,
-				DataType = generator.DataType,
-			});
-		}
-
-		/// <summary>
-		/// Зарегистрировать генератор сделок.
-		/// </summary>
-		/// <param name="generator">Генератор сделок.</param>
-		public void RegisterTrades(TradeGenerator generator)
-		{
-			SendInGeneratorMessage(generator, true);
-		}
-
-		/// <summary>
-		/// Удалить генератор сделок, ранее зарегистрированный через <see cref="RegisterTrades"/>.
-		/// </summary>
-		/// <param name="generator">Генератор сделок.</param>
-		public void UnRegisterTrades(TradeGenerator generator)
-		{
-			SendInGeneratorMessage(generator, false);
-		}
-
-		/// <summary>
-		/// Зарегистрировать генератор стаканов.
-		/// </summary>
-		/// <param name="generator">Генератор стаканов.</param>
-		public void RegisterMarketDepth(MarketDepthGenerator generator)
-		{
-			SendInGeneratorMessage(generator, true);
-		}
-
-		/// <summary>
-		/// Удалить генератор стаканов, ранее зарегистрированный через <see cref="RegisterMarketDepth"/>.
-		/// </summary>
-		/// <param name="generator">Генератор стаканов.</param>
-		public void UnRegisterMarketDepth(MarketDepthGenerator generator)
-		{
-			SendInGeneratorMessage(generator, false);
-		}
-
-		/// <summary>
-		/// Зарегистрировать генератор лога заявок.
-		/// </summary>
-		/// <param name="generator">Генератор лога заявок.</param>
-		public void RegisterOrderLog(OrderLogGenerator generator)
-		{
-			SendInGeneratorMessage(generator, true);
-		}
-
-		/// <summary>
-		/// Удалить генератор лога заявок, ранее зарегистрированный через <see cref="RegisterOrderLog"/>.
-		/// </summary>
-		/// <param name="generator">Генератор лога заявок.</param>
-		public void UnRegisterOrderLog(OrderLogGenerator generator)
-		{
-			SendInGeneratorMessage(generator, false);
-		}
-
 		/// <summary>
 		/// Начать получать новую информацию по портфелю.
 		/// </summary>
@@ -628,7 +569,7 @@ namespace StockSharp.Algo.Testing
 			if (!UseExternalCandleSource)
 				yield break;
 
-			var types = Drive.GetCandleTypes(series.Security.ToSecurityId(), StorageFormat);
+			var types = _historyAdapter.Drive.GetCandleTypes(series.Security.ToSecurityId(), _historyAdapter.StorageFormat);
 
 			foreach (var tuple in types)
 			{
@@ -640,7 +581,7 @@ namespace StockSharp.Algo.Testing
 					if (!arg.Equals(series.Arg))
 						continue;
 
-					var dates = StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, arg, Drive, StorageFormat).Dates;
+					var dates = _historyAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, arg, _historyAdapter.Drive, _historyAdapter.StorageFormat).Dates;
 
 					if (dates.Any())
 						yield return new Range<DateTimeOffset>(dates.First(), dates.Last());

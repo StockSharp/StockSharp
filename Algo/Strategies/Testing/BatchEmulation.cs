@@ -383,8 +383,8 @@
 
 			InitAdapters(_batch);
 
-			EmulationConnector.StartDate = EmulationSettings.StartTime;
-			EmulationConnector.StopDate = EmulationSettings.StopTime;
+			EmulationConnector.HistoryMessageAdapter.StartDate = EmulationSettings.StartTime;
+			EmulationConnector.HistoryMessageAdapter.StopDate = EmulationSettings.StopTime;
 
 			EmulationConnector.Connect();
 		}
@@ -467,7 +467,7 @@
 					realData = true;
 
 				if (!realData)
-					EmulationConnector.StorageRegistry = null;
+					EmulationConnector.HistoryMessageAdapter.StorageRegistry = null;
 			}
 
 			EmulationConnector.MarketTimeChangedInterval = EmulationSettings.MarketTimeChangedInterval;

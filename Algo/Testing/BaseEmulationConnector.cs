@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Testing
 {
+	using System;
+
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -82,5 +84,73 @@ namespace StockSharp.Algo.Testing
 		//	else
 		//		base.OnProcessMessage(message, direction);
 		//}
+
+		private void SendInGeneratorMessage(MarketDataGenerator generator, bool isSubscribe)
+		{
+			if (generator == null)
+				throw new ArgumentNullException("generator");
+
+			SendInMessage(new GeneratorMessage
+			{
+				IsSubscribe = isSubscribe,
+				SecurityId = generator.SecurityId,
+				Generator = generator,
+				DataType = generator.DataType,
+			});
+		}
+
+		/// <summary>
+		/// Зарегистрировать генератор сделок.
+		/// </summary>
+		/// <param name="generator">Генератор сделок.</param>
+		public void RegisterTrades(TradeGenerator generator)
+		{
+			SendInGeneratorMessage(generator, true);
+		}
+
+		/// <summary>
+		/// Удалить генератор сделок, ранее зарегистрированный через <see cref="RegisterTrades"/>.
+		/// </summary>
+		/// <param name="generator">Генератор сделок.</param>
+		public void UnRegisterTrades(TradeGenerator generator)
+		{
+			SendInGeneratorMessage(generator, false);
+		}
+
+		/// <summary>
+		/// Зарегистрировать генератор стаканов.
+		/// </summary>
+		/// <param name="generator">Генератор стаканов.</param>
+		public void RegisterMarketDepth(MarketDepthGenerator generator)
+		{
+			SendInGeneratorMessage(generator, true);
+		}
+
+		/// <summary>
+		/// Удалить генератор стаканов, ранее зарегистрированный через <see cref="RegisterMarketDepth"/>.
+		/// </summary>
+		/// <param name="generator">Генератор стаканов.</param>
+		public void UnRegisterMarketDepth(MarketDepthGenerator generator)
+		{
+			SendInGeneratorMessage(generator, false);
+		}
+
+		/// <summary>
+		/// Зарегистрировать генератор лога заявок.
+		/// </summary>
+		/// <param name="generator">Генератор лога заявок.</param>
+		public void RegisterOrderLog(OrderLogGenerator generator)
+		{
+			SendInGeneratorMessage(generator, true);
+		}
+
+		/// <summary>
+		/// Удалить генератор лога заявок, ранее зарегистрированный через <see cref="RegisterOrderLog"/>.
+		/// </summary>
+		/// <param name="generator">Генератор лога заявок.</param>
+		public void UnRegisterOrderLog(OrderLogGenerator generator)
+		{
+			SendInGeneratorMessage(generator, false);
+		}
 	}
 }
