@@ -60,7 +60,7 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, TimeSpan>, int>();
+		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		
 		private readonly HistoryMessageAdapter _historyAdapter;
 		private readonly EmulationMessageAdapter _emulationAdapter;
@@ -412,6 +412,29 @@ namespace StockSharp.Algo.Testing
 					{
 						if (message.Adapter == MarketDataAdapter)
 							TransactionAdapter.SendInMessage(message);
+						else if (message.Adapter == TransactionAdapter)
+						{
+							var candleMsg = message as CandleMessage;
+
+							if (candleMsg != null)
+							{
+								if (!UseExternalCandleSource)
+									break;
+
+								var security = GetSecurity(candleMsg.SecurityId);
+								var series = _series.TryGetValue(security);
+
+								if (series != null)
+								{
+									_newCandles.SafeInvoke(series, new[] { candleMsg.ToCandle(series) });
+
+									if (candleMsg.IsFinished)
+										_stopped.SafeInvoke(series);
+								}
+
+								break;
+							}
+						}
 
 						base.OnProcessMessage(message);
 						break;
@@ -419,13 +442,6 @@ namespace StockSharp.Algo.Testing
 
 					default:
 					{
-						var candleMsg = message as CandleMessage;
-						if (candleMsg != null)
-						{
-							ProcessCandleMessage((CandleMessage)message);
-							break;
-						}
-
 						if (State == EmulationStates.Stopping && message.Type != MessageTypes.Disconnect)
 							break;
 
@@ -460,23 +476,6 @@ namespace StockSharp.Algo.Testing
 					SendEmulationState(EmulationStates.Started);
 					break;
 				}
-			}
-		}
-
-		private void ProcessCandleMessage(CandleMessage message)
-		{
-			if (!UseExternalCandleSource)
-				return;
-
-			var security = GetSecurity(message.SecurityId);
-			var series = _series.TryGetValue(security);
-
-			if (series != null)
-			{
-				_newCandles.SafeInvoke(series, new[] { message.ToCandle(series) });
-
-				if (message.IsFinished)
-					_stopped.SafeInvoke(series);
 			}
 		}
 
@@ -622,71 +621,34 @@ namespace StockSharp.Algo.Testing
 				SendPortfolio(portfolio);
 		}
 
-		/// <summary>
-		/// Подписаться на получение рыночных данных по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
-		public override void SubscribeMarketData(Security security, MarketDataTypes type)
-		{
-			var tf = MarketEmulator.Settings.UseCandlesTimeFrame;
-
-			if (tf != null)
-			{
-				var securityId = GetSecurityId(security);
-				var key = Tuple.Create(securityId, tf.Value);
-
-				if (_subscribedCandles.ChangeSubscribers(key, 1) != 1)
-					return;
-
-				MarketDataAdapter.SendInMessage(new MarketDataMessage
-				{
-					//SecurityId = securityId,
-					DataType = MarketDataTypes.CandleTimeFrame,
-					Arg = tf.Value,
-					IsSubscribe = true,
-				}.FillSecurityInfo(this, security));
-			}
-			else
-				base.SubscribeMarketData(security, type);
-		}
-
-		/// <summary>
-		/// Отписаться от получения рыночных данных по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
-		public override void UnSubscribeMarketData(Security security, MarketDataTypes type)
-		{
-			var tf = MarketEmulator.Settings.UseCandlesTimeFrame;
-
-			if (tf != null)
-			{
-				var securityId = GetSecurityId(security);
-				var key = Tuple.Create(securityId, tf.Value);
-
-				if (_subscribedCandles.ChangeSubscribers(key, -1) != 0)
-					return;
-
-				MarketDataAdapter.SendInMessage(new MarketDataMessage
-				{
-					//SecurityId = securityId,
-					DataType = MarketDataTypes.CandleTimeFrame,
-					Arg = tf.Value,
-					IsSubscribe = false,
-				}.FillSecurityInfo(this, security));
-			}
-			else
-				base.UnSubscribeMarketData(security, type);
-		}
-
 		private readonly SynchronizedDictionary<Security, CandleSeries> _series = new SynchronizedDictionary<Security, CandleSeries>();
 
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
 		{
-			if (UseExternalCandleSource && series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan && (TimeSpan)series.Arg == MarketEmulator.Settings.UseCandlesTimeFrame)
+			if (!UseExternalCandleSource)
+				yield break;
+
+			var types = Drive.GetCandleTypes(series.Security.ToSecurityId(), StorageFormat);
+
+			foreach (var tuple in types)
 			{
-				yield return new Range<DateTimeOffset>(StartDate, StopDate.EndOfDay());
+				if (tuple.Item1 != series.CandleType.ToCandleMessageType())
+					continue;
+
+				foreach (var arg in tuple.Item2)
+				{
+					if (!arg.Equals(series.Arg))
+						continue;
+
+					var dates = StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, arg, Drive, StorageFormat).Dates;
+
+					if (dates.Any())
+						yield return new Range<DateTimeOffset>(dates.First(), dates.Last());
+
+					break;
+				}
+
+				break;
 			}
 		}
 
@@ -708,11 +670,39 @@ namespace StockSharp.Algo.Testing
 
 		void IExternalCandleSource.SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
+			var securityId = GetSecurityId(series.Security);
+			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+
+			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), 1) != 1)
+				return;
+
+			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			{
+				//SecurityId = securityId,
+				DataType = dataType,
+				Arg = series.Arg,
+				IsSubscribe = true,
+			}.FillSecurityInfo(this, series.Security));
+
 			_series.Add(series.Security, series);
 		}
 
 		void IExternalCandleSource.UnSubscribeCandles(CandleSeries series)
 		{
+			var securityId = GetSecurityId(series.Security);
+			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+
+			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), -1) != 0)
+				return;
+
+			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			{
+				//SecurityId = securityId,
+				DataType = MarketDataTypes.CandleTimeFrame,
+				Arg = series.Arg,
+				IsSubscribe = false,
+			}.FillSecurityInfo(this, series.Security));
+
 			_series.Remove(series.Security);
 		}
 	}

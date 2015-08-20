@@ -62,6 +62,34 @@ namespace StockSharp.Algo
 			{ MessageTypes.CandleRenko, MarketDataTypes.CandleRenko },
 		};
 
+		private static readonly PairSet<Type, MarketDataTypes> _candleMarketDataTypes = new PairSet<Type, MarketDataTypes>
+		{
+			{ typeof(TimeFrameCandleMessage), MarketDataTypes.CandleTimeFrame },
+			{ typeof(TickCandleMessage), MarketDataTypes.CandleTick },
+			{ typeof(VolumeCandleMessage), MarketDataTypes.CandleVolume },
+			{ typeof(RangeCandleMessage), MarketDataTypes.CandleRange },
+			{ typeof(PnFCandleMessage), MarketDataTypes.CandlePnF },
+			{ typeof(RenkoCandleMessage), MarketDataTypes.CandleRenko },
+		};
+
+		/// <summary>
+		/// Преобразовать тип сообщения <see cref="CandleMessage"/> в <see cref="MarketDataTypes"/>.
+		/// </summary>
+		/// <param name="messageType">Тип сообщения <see cref="CandleMessage"/>.</param>
+		/// <returns><see cref="MarketDataTypes"/>.</returns>
+		public static MarketDataTypes ToCandleMarketDataType(this Type messageType)
+		{
+			if (messageType == null)
+				throw new ArgumentNullException("messageType");
+
+			var dataType = _candleMarketDataTypes.TryGetValue2(messageType);
+
+			if (dataType == null)
+				throw new ArgumentOutOfRangeException("messageType", messageType, LocalizedStrings.WrongCandleType);
+
+			return dataType.Value;
+		}
+
 		/// <summary>
 		/// Преобразовать тип свечи <see cref="Candle"/> в тип сообщения <see cref="CandleMessage"/>.
 		/// </summary>

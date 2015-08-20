@@ -470,7 +470,6 @@
 					EmulationConnector.StorageRegistry = null;
 			}
 
-			EmulationConnector.MarketEmulator.Settings.UseCandlesTimeFrame = EmulationSettings.UseCandlesTimeFrame;
 			EmulationConnector.MarketTimeChangedInterval = EmulationSettings.MarketTimeChangedInterval;
 			EmulationConnector.LogLevel = EmulationSettings.LogLevel;
 

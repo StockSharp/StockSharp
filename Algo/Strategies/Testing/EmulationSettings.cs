@@ -207,7 +207,6 @@ namespace StockSharp.Algo.Strategies.Testing
 		{
 			MarketTimeChangedInterval = TimeSpan.FromMinutes(1);
 			LogLevel = LogLevels.Info;
-			UseCandlesTimeFrame = TimeSpan.FromMinutes(5);
 		}
 
 		/// <summary>
