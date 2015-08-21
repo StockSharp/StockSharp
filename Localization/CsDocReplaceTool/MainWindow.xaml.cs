@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.Win32;
+using Ecng.Common;
 
 namespace CsDocReplaceTool {
     /// <summary>
