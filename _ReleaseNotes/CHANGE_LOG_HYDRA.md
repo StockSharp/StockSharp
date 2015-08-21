@@ -1,5 +1,18 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.10:
+* (bug) Hydra. Level1 csv export fix.
+* (bug) Storage. Level1 fix.
+* (bug) ITCH fixes.
+* (bug) LocalMarketDataDrive.Dates fix.
+* (bug) CsvMarketDataSerializer. Fix BOM char.
+* (feature) Grids. TimeZone column
+* (bug) FIX connector. Fix ExecMsg.ServerTime
+* (feature) Hydra. Export csv. Header.
+* (feature) Hydra. SourcesWindow. Find by name.
+* (feature) AdvertisePanel.
+* (bug) Hydra. Depth csv export fix.
+
 ###v4.3.9.1:
 * (feature) Hydra. Import pane improve.
 * (bug) Release 4.3.9 fix (missed files).
