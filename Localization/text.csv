@@ -4126,7 +4126,7 @@ NegativeTickCountStorage;Tick count for storage cannot be less than zero.;Кол
 NegativeOrderCountStorage;Order count for storage cannot be less than zero.;Количество заявок для хранения не может быть отрицательным.
 Free;Free;Бесплатно
 Paid;Paid;Платно
-ITCH;Direct market-data access to LSE or NASDAQ via ITCH protocol.;Прямое подключения к биржам LSE или NASDAQ через протокол маркет-данных ITCH.
+ItchDescription;Direct market-data access to LSE or NASDAQ via ITCH protocol.;Прямое подключения к биржам LSE или NASDAQ через протокол маркет-данных ITCH.
 BackupPlugin;Back up save market data to online service.;Делать резервные копии для сохраненных маркет-данных.
 TF;TF;ТФ
 NetworkConnectionError;Network connection returned '{0}' bytes.;Сетевое соединение вернуло {0} байт.
@@ -4135,7 +4135,7 @@ Region;Region;Регион
 SelectAll;Select all;Выбрать все
 UnSelectAll;Unselect all;Убрать выбранное
 BackupDescription;Backup market data to cloud storage.;Резервное копирование данных в облачное хранилище.
-Preview;Preview;Предпросмотр;
+Preview;Preview;Предпросмотр
 PreviewTxt;Preview txt export;Предпосмотр txt экспорта
 TemplateTxtDepth;Depth txt export template.;Шаблон экспорта в txt для стаканов.
 TemplateTxtTick;Ticks txt export template.;Шаблон экспорта в txt для тиков.
@@ -4154,3 +4154,4 @@ TemplateTransaction;Transactions template;Шаблон транзакций
 TemplateSecurity;Security template;Шаблон инструментов
 TemplateNews;News template;Шаблон новостей
 CsvImportError;Parsing error. Line {0}, column {1}, txt value '{2}', field {3}.;Ошибка парсинга. Строка {0}, колонка {1}, значение в файле '{2}', поле {3}.
+CsvHeader;Header at the first line. Do not add header while empty string.;Заголовок, идущий первой строкой. Если передается пустая строка, то заголовок не будет добавлен в файл.

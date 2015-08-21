@@ -20,6 +20,7 @@ namespace StockSharp.Algo.Export
 	public class TextExporter : BaseExporter
 	{
 		private readonly string _template;
+		private readonly string _header;
 
 		/// <summary>
 		/// Создать <see cref="TextExporter"/>.
@@ -29,13 +30,15 @@ namespace StockSharp.Algo.Export
 		/// <param name="isCancelled">Обработчик, возвращающий признак прерывания экспорта.</param>
 		/// <param name="fileName">Путь к файлу.</param>
 		/// <param name="template">Шаблон форматирование строки.</param>
-		public TextExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, string template)
+		/// <param name="header">Заголовок, идущий первой строкой. Если передается пустая строка, то заголовок не будет добавлен в файл.</param>
+		public TextExporter(Security security, object arg, Func<int, bool> isCancelled, string fileName, string template, string header)
 			: base(security, arg, isCancelled, fileName)
 		{
 			if (template.IsEmpty())
 				throw new ArgumentNullException("template");
 
 			_template = template;
+			_header = header;
 		}
 
 		/// <summary>
@@ -96,7 +99,8 @@ namespace StockSharp.Algo.Export
 		{
 			using (var writer = new StreamWriter(Path))
 			{
-				//var template = ConfigurationManager.AppSettings.Get(templateName);
+				if (!_header.IsEmpty())
+					writer.WriteLine(_header);
 
 				FormatCache templateCache = null;
 				var formater = Smart.Default;

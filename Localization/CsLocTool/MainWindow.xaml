@@ -202,9 +202,9 @@
 										ToolTip="Copy selected string to currently selected resource"/>
 								<Button Content="Save all strings" Click="SaveAllStrings_Click" Margin="5" HorizontalAlignment="Stretch"
 										ToolTip="save"/>
-                                <Button Content="Generate resources" Click="GenerateResources_Click" Margin="5" HorizontalAlignment="Stretch"
+								<Button Content="Generate resources" Click="GenerateResources_Click" Margin="5" HorizontalAlignment="Stretch"
 										ToolTip="generate resources from chosen literals"/>
-                                <Button Content="Save XAML resources" Click="SaveXamlResources_Click" Margin="5" HorizontalAlignment="Stretch"/>
+								<Button Content="Save XAML resources" Click="SaveXamlResources_Click" Margin="5" HorizontalAlignment="Stretch"/>
 							</StackPanel>
 						</Grid>
 					</TabItem>
@@ -256,9 +256,9 @@
 								<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
 									<TextBlock TextWrapping="Wrap" Text="Source code will be updated to replace string literals, which were moved to resources, with corresponding properties."/>
 									<Button Content="Update source code" HorizontalAlignment="Center" Width="130" Click="UpdateSource_Click" Margin="0,5,0,10"/>
-                                    <TextBlock TextWrapping="Wrap" Text="Xaml files will be updated."/>
-                                    <Button Content="Update XAML files" HorizontalAlignment="Center" Width="130" Click="UpdateXaml_Click" Margin="0,5"/>
-                                </StackPanel>
+									<TextBlock TextWrapping="Wrap" Text="Xaml files will be updated."/>
+									<Button Content="Update XAML files" HorizontalAlignment="Center" Width="130" Click="UpdateXaml_Click" Margin="0,5"/>
+								</StackPanel>
 							</GroupBox>
 
 						</Grid>

@@ -5,10 +5,10 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SampleSmart")]
+[assembly: AssemblyTitle("SampleITCH")]
 [assembly: AssemblyDescription("")]
 
-[assembly: Guid("BC55DCD2-A4E1-4359-96D4-0B23C103B10F")]
+[assembly: Guid("E5BADAB7-E2C6-4C32-8853-45D49721C504")]
 
 [assembly: ThemeInfo(
 	ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located

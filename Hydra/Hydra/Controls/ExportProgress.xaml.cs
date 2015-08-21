@@ -192,7 +192,7 @@ namespace StockSharp.Hydra.Controls
 						throw new ArgumentOutOfRangeException("dataType", dataType, LocalizedStrings.Str721);
 
 					fileName = (string)path;
-					exporter = new TextExporter(security, arg, isCancelled, fileName, wnd.TxtTemplate);
+					exporter = new TextExporter(security, arg, isCancelled, fileName, wnd.TxtTemplate, wnd.TxtHeader);
 					break;
 				case ExportTypes.Sql:
 					fileName = null;

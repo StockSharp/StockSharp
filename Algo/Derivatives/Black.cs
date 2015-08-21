@@ -39,9 +39,14 @@ namespace StockSharp.Algo.Derivatives
 			}
 		}
 
-		private decimal GetExpRate(DateTimeOffset currentTime)
+		private decimal? GetExpRate(DateTimeOffset currentTime)
 		{
-			return (decimal)DerivativesHelper.ExpRate(RiskFree, GetExpirationTimeLine(currentTime));
+			var timeLine = GetExpirationTimeLine(currentTime);
+
+			if (timeLine == null)
+				return null;
+
+			return (decimal)DerivativesHelper.ExpRate(RiskFree, timeLine.Value);
 		}
 
 		/// <summary>

@@ -52,9 +52,7 @@
 					<Run Text="{x:Static loc:LocalizedStrings.Template}"/><Run Text=":"/>
 				</TextBlock>
 				<ComboBox x:Name="Templates" MinWidth="100" DisplayMemberPath="Title" SelectionChanged="Templates_OnSelectionChanged" />
-				<Button x:Name="Help" Click="Help_OnClick" Width="75">
-					<TextBlock Text="{x:Static loc:LocalizedStrings.Help}"/>
-				</Button>
+				<sx:HelpButton DocUrl="http://stocksharp.com/doc/html/7749ebdf-8bd5-4fae-a35c-d7e38f496c4a.htm" />
 			</ToolBar>
 		</shared:PixelSnapper>
 

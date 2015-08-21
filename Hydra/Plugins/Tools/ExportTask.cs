@@ -42,6 +42,7 @@ namespace StockSharp.Hydra.Tools
 			public ExportSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
+				ExtensionInfo.TryAdd("Header", string.Empty);
 			}
 
 			[CategoryLoc(LocalizedStrings.Str3754Key)]
@@ -159,6 +160,16 @@ namespace StockSharp.Hydra.Tools
 				set { ExtensionInfo["TemplateTxtRegistry"] = value; }
 			}
 
+			[Category("CSV")]
+			[DisplayName(LocalizedStrings.Str215Key)]
+			[DescriptionLoc(LocalizedStrings.CsvHeaderKey, true)]
+			[ExpandableObject]
+			public string Header
+			{
+				get { return (string)ExtensionInfo["Header"]; }
+				set { ExtensionInfo["Header"] = value; }
+			}
+
 			public override HydraTaskSettings Clone()
 			{
 				var clone = (ExportSettings)base.Clone();
@@ -192,6 +203,7 @@ namespace StockSharp.Hydra.Tools
 				_settings.BatchSize = 50;
 				_settings.CheckUnique = true;
 				_settings.TemplateTxtRegistry = new TemplateTxtRegistry();
+				_settings.Header = string.Empty;
 			}
 		}
 
@@ -278,7 +290,7 @@ namespace StockSharp.Hydra.Tools
 								exporter = new XmlExporter(security.Security, arg, isCancelled, fileName);
 								break;
 							case ExportTypes.Txt:
-								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, GetTxtTemplate(dataType, arg));
+								exporter = new TextExporter(security.Security, arg, isCancelled, fileName, GetTxtTemplate(dataType, arg), _settings.Header);
 								break;
 							case ExportTypes.Bin:
 								exporter = new BinExporter(security.Security, arg, isCancelled, DriveCache.Instance.GetDrive(path));

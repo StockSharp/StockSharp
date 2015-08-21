@@ -3,10 +3,8 @@ namespace StockSharp.Hydra.Panes
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
-	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
 
@@ -410,11 +408,6 @@ namespace StockSharp.Hydra.Panes
 		void IDisposable.Dispose()
 		{
 			ExecutedStopCommand(null, null);
-		}
-
-		private void Help_OnClick(object sender, RoutedEventArgs e)
-		{
-			Process.Start("http://stocksharp.com/doc/html/7749ebdf-8bd5-4fae-a35c-d7e38f496c4a.htm");
 		}
 	}
 }

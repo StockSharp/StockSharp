@@ -15,6 +15,7 @@
 		<DataGridTextColumn Width="80" Header="{x:Static loc:LocalizedStrings.Board}" Binding="{Binding Path=SecurityId.BoardCode}" SortMemberPath="SecurityId.BoardCode" Visibility="Collapsed" />
 
 		<DataGridTextColumn Width="120" Header="{x:Static loc:LocalizedStrings.Time}" Binding="{Binding Path=ServerTime}" SortMemberPath="ServerTime" />
+		<DataGridTextColumn Width="50" Header="{x:Static loc:LocalizedStrings.TimeZone}" Binding="{Binding Path=ServerTime, StringFormat=zzz}" SortMemberPath="ServerTime.Offset" Visibility="Collapsed" />
 		<DataGridTextColumn Width="120" Header="{x:Static loc:LocalizedStrings.Str514}" Binding="{Binding Path=LocalTime}" SortMemberPath="LocalTime" Visibility="Collapsed" />
 		
 		<DataGridTextColumn Width="90" Header="{x:Static loc:LocalizedStrings.XamlStr519}" Binding="{Binding Path=Changes, Converter={StaticResource DictConverter}, ConverterParameter=LastTradeTime}" SortMemberPath="LastTradeTime" />

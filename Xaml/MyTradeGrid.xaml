@@ -44,6 +44,7 @@
 			</DataGridTemplateColumn.CellStyle>
 		</DataGridTemplateColumn>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Width="120" Binding="{Binding Path=Trade.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Trade.Time"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.TimeZone}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Trade.Time, StringFormat=zzz}" SortMemberPath="Trade.Time.Offset"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str514}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Trade.LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Trade.LocalTime"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Volume}" Width="50" Binding="{Binding Path=Trade.Volume}" SortMemberPath="Trade.Volume"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Width="60" Binding="{Binding Path=Trade.Price}" SortMemberPath="Trade.Price"/>

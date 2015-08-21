@@ -9,6 +9,7 @@
 			 xmlns:panes="clr-namespace:StockSharp.Hydra.Panes"
              xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
              xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+             xmlns:xaml="http://schemas.stocksharp.com/xaml"
              Loaded="TaskPane_OnLoaded"
              mc:Ignorable="d" d:DesignHeight="155" d:DesignWidth="1103">
 	<UserControl.Resources>
@@ -308,6 +309,8 @@
 					</Border>
 				</Popup>
 			</Grid>
+
+			<xaml:HelpButton Margin="10,0,0,0" DocUrl="http://stocksharp.com/doc/html/47ebc084-6b07-4b69-8f96-ea190110111f.htm" />
 		</StackPanel>
 	</Grid>
 </UserControl>

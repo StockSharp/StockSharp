@@ -2,8 +2,23 @@
 <topic id="5a056352-64c7-41ea-87a8-2e112935e3b9" revisionNumber="1">
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
-      <para>Для резервного копирования (бэкапа) скачанных данных можно использовать функционал <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9">экспорта данных</link>, т.к. экспорт позволяет скопировать данные в другую директорию в нужном формате (в частности в формате BIN). Резервное копирование можно выполнить в <link xlink:href="fdba9886-25e8-4462-86e6-79ad5f40d9a9"><legacyItalic>ручном</legacyItalic></link> режиме, но предпочтительнее использовать задачу <link xlink:href="9e075b32-abb2-4fad-bfb2-b822dd7d9f30">Экспорт (авто)</link>, что позволяет скопировать целый каталог с данными в автоматическом режиме.</para>
+ 		<para>
+ 		<token>stocksharp</token> предоставляет функционал для резервного копирования (бэкапа) скачанных данных в облачное хранилице <externalLink>
+		<linkText>Amazon Web Services (AWS)</linkText>
+			<linkAlternateText>Amazon Simple Storage Service</linkAlternateText>
+			<linkUri>https://aws.amazon.com/ru/s3/</linkUri>
+		<linkTarget>_blank</linkTarget>
+		</externalLink>
+. 		</para>
+      <para>Для целей резервного копирования необходимо создать и настроить аккаунт на AWS, а затем создать и настроить задачу "Резервный".</para>
     </introduction>
+    
+    <relatedTopics>
+		<link xlink:href="abf5321b-0c86-4557-8240-a5e7a6133059">Создание и настройка аккаунта</link>
+		<link xlink:href="8f0fbcfe-c687-4af4-9bed-fe976b18f545">Создание и настройка задачи</link>
+		<link xlink:href="52833a55-a1df-449b-8468-55bd2aa00c58">Восстановление данных</link>
+    </relatedTopics>
+    
   </developerConceptualDocument>
 </topic>
 

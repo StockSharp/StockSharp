@@ -150,7 +150,7 @@ namespace StockSharp.SmartCom
 		/// <returns>Строковое представление.</returns>
 		public override string ToString()
 		{
-			return LocalizedStrings.Str1866Params.Put(Login, Address);
+			return LocalizedStrings.Str1866Params.Put(Login, Address.To<string>());
 		}
 	}
 }

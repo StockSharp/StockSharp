@@ -3,8 +3,6 @@ namespace StockSharp.Algo.Storages
 	using System;
 	using System.IO;
 
-	using Ecng.Common;
-
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -60,8 +58,7 @@ namespace StockSharp.Algo.Storages
 		void Read(Stream stream);
 	}
 
-	abstract class MetaInfo<TMetaInfo> : Cloneable<TMetaInfo>, IMarketDataMetaInfo
-		where TMetaInfo : MetaInfo<TMetaInfo>
+	abstract class MetaInfo : IMarketDataMetaInfo
 	{
 		protected MetaInfo(DateTime date)
 		{
@@ -91,9 +88,9 @@ namespace StockSharp.Algo.Storages
 		/// <param name="stream">Поток данных.</param>
 		public abstract void Read(Stream stream);
 
-		public static TMetaInfo CreateMetaInfo(DateTime date)
-		{
-			return typeof(TMetaInfo).CreateInstance<TMetaInfo>(date);
-		}
+		//public static TMetaInfo CreateMetaInfo(DateTime date)
+		//{
+		//	return typeof(TMetaInfo).CreateInstance<TMetaInfo>(date);
+		//}
 	}
 }

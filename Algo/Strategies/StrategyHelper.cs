@@ -384,44 +384,46 @@ namespace StockSharp.Algo.Strategies
 			if (orders == null)
 				throw new ArgumentNullException("orders");
 
-			if (orders.IsEmpty())
+			var array = orders.ToArray();
+
+			if (array.IsEmpty())
 				throw new ArgumentOutOfRangeException("orders");
 
-			using (var connector = new RealTimeEmulationTrader<HistoryEmulationConnector>(new HistoryEmulationConnector(orders.Select(o => o.Security).Distinct(), orders.Select(o => o.Portfolio).Distinct())
+			using (var connector = new RealTimeEmulationTrader<HistoryMessageAdapter>(new HistoryMessageAdapter(new IncrementalIdGenerator(), new CollectionSecurityProvider(array.Select(o => o.Security).Distinct()))
 			{
 				StorageRegistry = storageRegistry
 			}))
 			{
-				var from = orders.Min(o => o.Time).Date;
+				var from = array.Min(o => o.Time).Date;
 				var to = from.EndOfDay();
 
-				var strategy = new EquityStrategy(orders, openedPositions) { Connector = connector };
+				var strategy = new EquityStrategy(array, openedPositions) { Connector = connector };
 
 				var waitHandle = new SyncObject();
 
-				connector.UnderlyingConnector.StateChanged += () =>
-				{
-					if (connector.UnderlyingConnector.State == EmulationStates.Started)
-						strategy.Start();
+				//connector.UnderlyngMarketDataAdapter.StateChanged += () =>
+				//{
+				//	if (connector.UnderlyngMarketDataAdapter.State == EmulationStates.Started)
+				//		strategy.Start();
 
-					if (connector.UnderlyingConnector.State == EmulationStates.Stopped)
-					{
-						strategy.Stop();
+				//	if (connector.UnderlyngMarketDataAdapter.State == EmulationStates.Stopped)
+				//	{
+				//		strategy.Stop();
 
-						waitHandle.Pulse();
-					}
-				};
+				//		waitHandle.Pulse();
+				//	}
+				//};
 
-				connector.UnderlyingConnector.StartDate = from;
-				connector.UnderlyingConnector.StopDate = to;
+				connector.UnderlyngMarketDataAdapter.StartDate = from;
+				connector.UnderlyngMarketDataAdapter.StopDate = to;
 
 				connector.Connect();
 
-				lock (waitHandle)
-				{
-					if (connector.UnderlyingConnector.State != EmulationStates.Stopped)
-						waitHandle.Wait();
-				}
+				//lock (waitHandle)
+				//{
+				//	if (connector.UnderlyngMarketDataAdapter.State != EmulationStates.Stopped)
+				//		waitHandle.Wait();
+				//}
 
 				return strategy;
 			}

@@ -43,7 +43,7 @@ namespace CsLocTool {
 				{
 					var fld = FindParentNode<FieldDeclarationSyntax>(expression);
 					if (fld != null)
-						IsConstString = fld.Modifiers.Any(m => m.CSharpKind() == SyntaxKind.ConstKeyword);
+						IsConstString = fld.Modifiers.Any(m => m.Kind() == SyntaxKind.ConstKeyword);
 				}
 			}
 		}

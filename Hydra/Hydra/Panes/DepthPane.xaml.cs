@@ -8,7 +8,6 @@ namespace StockSharp.Hydra.Panes
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -94,17 +93,8 @@ namespace StockSharp.Hydra.Panes
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			if (SelectedSecurity == null)
-			{
-				new MessageBoxBuilder()
-					.Caption(Title)
-					.Text(LocalizedStrings.Str2875)
-					.Info()
-					.Owner(this)
-						.Show();
-
+			if (!CheckSecurity())
 				return;
-			}
 
 			int maxDepth;
 
