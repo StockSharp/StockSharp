@@ -633,7 +633,15 @@ namespace StockSharp.Algo.Storages
 						case Level1Fields.BestBidTime:
 						case Level1Fields.BestAskTime:
 						{
-							writer.WriteTime((DateTimeOffset)change.Value, metaInfo.LastFieldTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset);
+							var timeValue = (DateTimeOffset)change.Value;
+
+							if (metaInfo.FirstFieldTime.IsDefault())
+							{
+								timeValue = timeValue.Truncate();
+								metaInfo.FirstFieldTime = metaInfo.LastFieldTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
+							}
+
+							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset);
 							break;
 						}
 						case Level1Fields.BidsCount:

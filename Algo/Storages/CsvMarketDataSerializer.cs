@@ -138,6 +138,7 @@ namespace StockSharp.Algo.Storages
 						var l1 = item.To<Level1ChangeMessage>();
 
 						l1.ServerTime = time;
+						l1.SecurityId = _securityId;
 
 						for (var i = 1; i < parts.Length; i++)
 						{
@@ -154,7 +155,7 @@ namespace StockSharp.Algo.Storages
 								case Level1Fields.BestAskTime:
 								case Level1Fields.BestBidTime:
 								case Level1Fields.LastTradeTime:
-									value = ParseTime(part, _date);
+									value = part.To<DateTimeOffset>();
 									break;
 								case Level1Fields.AsksCount:
 								case Level1Fields.BidsCount:
@@ -354,18 +355,18 @@ namespace StockSharp.Algo.Storages
 			{
 				var fields = _level1Fields.Select(s =>
 				{
-					string time = null;
+					//string time = null;
 
-					switch (s)
-					{
-						case Level1Fields.BestAskTime:
-						case Level1Fields.BestBidTime:
-						case Level1Fields.LastTradeTime:
-							time = ".UtcDateTime:" + _timeFormat;
-							break;
-					}
+					//switch (s)
+					//{
+					//	case Level1Fields.BestAskTime:
+					//	case Level1Fields.BestBidTime:
+					//	case Level1Fields.LastTradeTime:
+					//		time = ".UtcDateTime:" + _timeFormat;
+					//		break;
+					//}
 
-					return "{" + s + time + "}";
+					return "{" + s + "}";
 				}).Join(";");
 
 				return "{ServerTime:{0}};" + "{{Changes:{0}}}".Put(fields);
