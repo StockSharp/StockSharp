@@ -3393,6 +3393,9 @@ namespace StockSharp.Algo
 			};
 		}
 
+		private const double _minValue = (double)decimal.MinValue;
+		private const double _maxValue = (double)decimal.MaxValue;
+
 		/// <summary>
 		/// Перевести <see cref="double"/> в <see cref="decimal"/>. Если исходное значение <see cref="double.IsNaN"/> или <see cref="double.IsInfinity"/>, то будет возвращено <see langword="null"/>.
 		/// </summary>
@@ -3400,7 +3403,7 @@ namespace StockSharp.Algo
 		/// <returns><see cref="decimal"/> значение.</returns>
 		public static decimal? ToDecimal(this double value)
 		{
-			return value.IsInfinity() || value.IsNaN() ? (decimal?)null : (decimal)value;
+			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;
 		}
 
 		/// <summary>
@@ -3410,7 +3413,7 @@ namespace StockSharp.Algo
 		/// <returns><see cref="decimal"/> значение.</returns>
 		public static decimal? ToDecimal(this float value)
 		{
-			return value.IsInfinity() || value.IsNaN() ? (decimal?)null : (decimal)value;
+			return value.IsInfinity() || value.IsNaN() || value < _minValue || value > _maxValue ? (decimal?)null : (decimal)value;
 		}
 
 		/// <summary>
