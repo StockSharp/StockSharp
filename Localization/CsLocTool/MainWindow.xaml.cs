@@ -17,7 +17,6 @@ using ActiproSoftware.Text;
 using ActiproSoftware.Text.Languages.CSharp.Implementation;
 using Ecng.Collections;
 using Ecng.Common;
-using Ecng.Localization;
 using Ecng.Xaml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -847,7 +846,7 @@ namespace CsLocTool
 					_busyIndicator.BusyContent = "Processed files: {0}/{1}...".Put(loadedCount, numDocuments);
 
 					_allLiterals.AddRange(root.DescendantNodes().OfType<LiteralExpressionSyntax>()
-						.Where(s => s.CSharpKind() == SyntaxKind.StringLiteralExpression)
+						.Where(s => s.Kind() == SyntaxKind.StringLiteralExpression)
 						.Select(e => new SourceCodeLiteral(d, e)));
 				}
 			}

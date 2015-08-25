@@ -181,7 +181,7 @@ namespace StockSharp.Algo.Storages
 								if (line == null)
 									break;
 
-								dates.Add(line.ToDateTime(_dateFormat));
+								dates.Add(line.ToDateTime(_dateFormat).ChangeKind(DateTimeKind.Utc));
 							}
 
 							//for (var i = 0; i < count; i++)

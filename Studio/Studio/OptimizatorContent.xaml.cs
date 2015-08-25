@@ -439,7 +439,7 @@ namespace StockSharp.Studio
 			strategy.Reseted += () =>
 			{
 				var settings = EmulationService.EmulationSettings;
-				new StartStrategyCommand(strategy, settings.StartTime, settings.StopTime, settings.UseCandlesTimeFrame, true).Process(this);
+				new StartStrategyCommand(strategy, settings.StartTime, settings.StopTime, null, true).Process(this);
 			};
 
 			new OpenStrategyCommand(strategy, Properties.Resources.EmulationStrategyContent).Process(strategy.StrategyInfo);

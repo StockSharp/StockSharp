@@ -184,13 +184,13 @@
 					if (getCondition().ActiveTime == null)
 						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					getCondition().ActiveTime.Min = reader.ReadDateTime(dateTimeFormat).ApplyTimeZone(dateTimeOffset);
+					getCondition().ActiveTime.Min = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(dateTimeOffset);
 					return true;
 				case QuikFixTags.ActiveTimeTo:
 					if (getCondition().ActiveTime == null)
 						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					getCondition().ActiveTime.Max = reader.ReadDateTime(dateTimeFormat).ApplyTimeZone(dateTimeOffset);
+					getCondition().ActiveTime.Max = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(dateTimeOffset);
 					return true;
 				case QuikFixTags.ConditionOrderId:
 					getCondition().ConditionOrderId = reader.ReadLong();

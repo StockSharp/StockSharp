@@ -4,13 +4,13 @@ namespace SampleRealTimeEmulation
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
+	using System.Security;
 	using System.Windows;
 
 	using Ecng.Common;
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
@@ -25,7 +25,7 @@ namespace SampleRealTimeEmulation
 	{
 		private bool _isConnected;
 		private CandleManager _candleManager;
-		private RealTimeEmulationTrader<Connector> _connector;
+		private RealTimeEmulationTrader<SmartComMessageAdapter> _connector;
 		private readonly ChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
 		private Security _security;
@@ -73,10 +73,10 @@ namespace SampleRealTimeEmulation
 					}
 					
 					// create real-time emu connector
-					_connector = new RealTimeEmulationTrader<Connector>(new SmartTrader
+					_connector = new RealTimeEmulationTrader<SmartComMessageAdapter>(new SmartComMessageAdapter(new MillisecondIncrementalIdGenerator())
 					{
 						Login = Login.Text,
-						Password = Password.Password,
+						Password = Password.Password.To<SecureString>(),
 						Address = Address.SelectedAddress
 					});
 
@@ -86,6 +86,8 @@ namespace SampleRealTimeEmulation
 					//}, portfolio);
 
 					SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
+
+					_candleManager = new CandleManager(_connector);
 
 					_logManager.Sources.Add(_connector);
 					
@@ -99,27 +101,9 @@ namespace SampleRealTimeEmulation
 						_isConnected = true;
 
 						// update gui labels
-						this.GuiAsync(() => ChangeConnectStatus(true));
-
-						_candleManager = new CandleManager(_connector);
-
-						_connector.NewMarketDepths += OnDepths;
-						_connector.MarketDepthsChanged += OnDepths;
-
-						_connector.NewOrders += orders => Orders.Orders.AddRange(orders);
-						_connector.NewMyTrades += trades => Trades.Trades.AddRange(trades);
-
-						// подписываемся на событие о неудачной регистрации заявок
-						_connector.OrdersRegisterFailed += OrdersFailed;
-
-						_candleManager.Processing += (s, candle) =>
-						{
-							if (candle.State == CandleStates.Finished)
-								_buffer.Add(candle);
-						};
-
 						this.GuiAsync(() =>
 						{
+							ChangeConnectStatus(true);
 							ConnectBtn.IsEnabled = false;
 						});
 					};
@@ -132,6 +116,24 @@ namespace SampleRealTimeEmulation
 
 						MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
 					});
+
+					_connector.NewMarketDepths += OnDepths;
+					_connector.MarketDepthsChanged += OnDepths;
+
+					_connector.NewPortfolios += PortfolioGrid.Portfolios.AddRange;
+					_connector.NewPositions += PortfolioGrid.Positions.AddRange;
+
+					_connector.NewOrders += Orders.Orders.AddRange;
+					_connector.NewMyTrades += Trades.Trades.AddRange;
+
+					// subscribe on error of order registration event
+					_connector.OrdersRegisterFailed += OrdersFailed;
+
+					_candleManager.Processing += (s, candle) =>
+					{
+						if (candle.State == CandleStates.Finished)
+							_buffer.Add(candle);
+					};
 
 					// subscribe on error event
 					_connector.Error += error =>

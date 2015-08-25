@@ -20,7 +20,6 @@
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<Button x:Name="Quotes" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr40}" Width="100" IsEnabled="False" Click="QuotesClick" />
 			<Button x:Name="Depth" Grid.Column="1" Width="100" IsEnabled="False" Click="DepthClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
 			</Button>

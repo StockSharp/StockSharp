@@ -138,7 +138,7 @@ namespace StockSharp.Algo.Storages
 			ServerOffset = stream.Read<TimeSpan>();
 		}
 
-		protected override void CopyFrom(ExecutionSerializerMetaInfo src)
+		public override void CopyFrom(ExecutionSerializerMetaInfo src)
 		{
 			base.CopyFrom(src);
 

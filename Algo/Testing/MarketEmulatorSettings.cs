@@ -164,29 +164,29 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
-		private TimeSpan? _useCandlesTimeFrame;
+		//private TimeSpan? _useCandlesTimeFrame;
 
-		/// <summary>
-		/// Использовать свечи с заданным тайм-фреймом. Если тайм-фрейм равен <see langword="null"/>, свечи не используются.
-		/// </summary>
-		[CategoryLoc(LocalizedStrings.Str1174Key)]
-		[PropertyOrder(10)]
-		[DisplayNameLoc(LocalizedStrings.CandlesKey)]
-		[DescriptionLoc(LocalizedStrings.Str1188Key)]
-		[Nullable]
-		[DefaultValue(typeof(TimeSpan), "00:05:00")]
-		public TimeSpan? UseCandlesTimeFrame
-		{
-			get { return _useCandlesTimeFrame; }
-			set
-			{
-				if (value <= TimeSpan.Zero)
-					throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1189);
+		///// <summary>
+		///// Использовать свечи с заданным тайм-фреймом. Если тайм-фрейм равен <see langword="null"/>, свечи не используются.
+		///// </summary>
+		//[CategoryLoc(LocalizedStrings.Str1174Key)]
+		//[PropertyOrder(10)]
+		//[DisplayNameLoc(LocalizedStrings.CandlesKey)]
+		//[DescriptionLoc(LocalizedStrings.Str1188Key)]
+		//[Nullable]
+		//[DefaultValue(typeof(TimeSpan), "00:05:00")]
+		//public TimeSpan? UseCandlesTimeFrame
+		//{
+		//	get { return _useCandlesTimeFrame; }
+		//	set
+		//	{
+		//		if (value <= TimeSpan.Zero)
+		//			throw new ArgumentOutOfRangeException("value", value, LocalizedStrings.Str1189);
 
-				_useCandlesTimeFrame = value;
-				NotifyChanged("UseCandlesTimeFrame");
-			}
-		}
+		//		_useCandlesTimeFrame = value;
+		//		NotifyChanged("UseCandlesTimeFrame");
+		//	}
+		//}
 
 		private long _initialOrderId;
 
@@ -408,7 +408,7 @@ namespace StockSharp.Algo.Testing
 			storage.SetValue("Latency", Latency);
 			storage.SetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
 			storage.SetValue("BufferTime", BufferTime);
-			storage.SetValue("UseCandlesTimeFrame", UseCandlesTimeFrame);
+			//storage.SetValue("UseCandlesTimeFrame", UseCandlesTimeFrame);
 			storage.SetValue("InitialOrderId", InitialOrderId);
 			storage.SetValue("InitialTradeId", InitialTradeId);
 			storage.SetValue("InitialTransactionId", InitialTransactionId);
@@ -433,7 +433,7 @@ namespace StockSharp.Algo.Testing
 			Latency = storage.GetValue("Latency", Latency);
 			IsSupportAtomicReRegister = storage.GetValue("IsSupportAtomicReRegister", IsSupportAtomicReRegister);
 			BufferTime = storage.GetValue("BufferTime", BufferTime);
-			UseCandlesTimeFrame = storage.GetValue("UseCandlesTimeFrame", UseCandlesTimeFrame);
+			//UseCandlesTimeFrame = storage.GetValue("UseCandlesTimeFrame", UseCandlesTimeFrame);
 			InitialOrderId = storage.GetValue("InitialOrderId", InitialOrderId);
 			InitialTradeId = storage.GetValue("InitialTradeId", InitialTradeId);
 			InitialTransactionId = storage.GetValue("InitialTransactionId", InitialTransactionId);

@@ -207,7 +207,9 @@ namespace StockSharp.Algo.Storages
 				}
 			}
 
-			var newDayData = Serializer.Serialize(data, metaInfo);
+			var newDayData = new MemoryStream();
+
+			Serializer.Serialize(newDayData, data, metaInfo);
 
 			if (isOverride)
 				metaInfo.Count = data.Length;
@@ -222,7 +224,8 @@ namespace StockSharp.Algo.Storages
 			else
 				stream.Position = stream.Length;
 
-			stream.WriteRaw(newDayData);
+			newDayData.Position = 0;
+			stream.WriteRaw(newDayData.To<byte[]>());
 		}
 
 		protected virtual IEnumerable<TData> FilterNewData(IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)

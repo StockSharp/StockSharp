@@ -320,7 +320,7 @@ namespace StockSharp.Algo.Testing
 
 						info.Item1.Add((CandleMessage)candleMsg.Clone());
 
-						if (_securityDefinition != null && _parent._settings.UseCandlesTimeFrame != null)
+						if (_securityDefinition != null/* && _parent._settings.UseCandlesTimeFrame != null*/)
 						{
 							var trades = candleMsg.ToTrades(GetVolumeStep(), _volumeDecimals).ToArray();
 							Process(trades[0], result);
@@ -911,9 +911,7 @@ namespace StockSharp.Algo.Testing
 						foreach (var trade in pair.Value.Item2)
 							Process(trade, result);
 
-						// добавляем сами свечи
-						// esper. эти данные уходят в BaseTrader, а он не умеет работать со свечами, а в EmuTrader свеча уже обработана.
-						//result.AddRange(pair.Value.Item1);
+						result.AddRange(pair.Value.Item1);
 					}
 				}
 			}

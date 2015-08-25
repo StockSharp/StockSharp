@@ -5,29 +5,28 @@ namespace StockSharp.Algo.Testing
 	using Ecng.Common;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 	using EntityFactory = StockSharp.Algo.EntityFactory;
 
 	/// <summary>
-	/// Симуляционное подключение, предназначенный для тестирования стратегии c реальном подключения к торговой системе через <see cref="UnderlyingConnector"/>,
+	/// Симуляционное подключение, предназначенный для тестирования стратегии c реальном подключения к торговой системе через <see cref="UnderlyngMarketDataAdapter"/>,
 	/// но без реального выставления заявок на бирже. Исполнение заявок и их сделки эмулируются подключением, используя информацию по стаканам, приходящих от реального подключения.
 	/// </summary>
-	/// <typeparam name="TUnderlyingConnector">Тип реального подключения, с которым будет вестить симуляция.</typeparam>
-	public class RealTimeEmulationTrader<TUnderlyingConnector> : BaseEmulationConnector
-		where TUnderlyingConnector : Connector
+	/// <typeparam name="TUnderlyingMarketDataAdapter">Тип <see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.</typeparam>
+	public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulationConnector
+		where TUnderlyingMarketDataAdapter : IMessageAdapter
 	{
 		private sealed class EmulationEntityFactory : EntityFactory
 		{
 			private readonly Portfolio _portfolio;
-			private readonly Connector _connector;
+			//private readonly Connector _connector;
 
-			public EmulationEntityFactory(Portfolio portfolio, Connector connector)
+			public EmulationEntityFactory(Portfolio portfolio/*, Connector connector*/)
 			{
 				_portfolio = portfolio;
-				_connector = connector;
+				//_connector = connector;
 			}
 
 			public override Portfolio CreatePortfolio(string name)
@@ -35,29 +34,29 @@ namespace StockSharp.Algo.Testing
 				return _portfolio.Name.CompareIgnoreCase(name) ? _portfolio : base.CreatePortfolio(name);
 			}
 
-			public override Security CreateSecurity(string id)
-			{
-				return _connector.LookupById(id);
-			}
+			//public override Security CreateSecurity(string id)
+			//{
+			//	return _connector.LookupById(id);
+			//}
 		}
 
 		private readonly Portfolio _portfolio;
-		private readonly bool _ownTrader;
+		private readonly bool _ownAdapter;
+
+		///// <summary>
+		///// Создать <see cref="RealTimeEmulationTrader{TUnderlyingMarketDataAdapter}"/>.
+		///// </summary>
+		//public RealTimeEmulationTrader()
+		//	: this(Activator.CreateInstance<TUnderlyingMarketDataAdapter>())
+		//{
+		//}
 
 		/// <summary>
-		/// Создать <see cref="RealTimeEmulationTrader{TUnderlyingTrader}"/>.
+		/// Создать <see cref="RealTimeEmulationTrader{TUnderlyingMarketDataAdapter}"/>.
 		/// </summary>
-		public RealTimeEmulationTrader()
-			: this(Activator.CreateInstance<TUnderlyingConnector>())
-		{
-		}
-
-		/// <summary>
-		/// Создать <see cref="RealTimeEmulationTrader{TUnderlyingTrader}"/>.
-		/// </summary>
-		/// <param name="underlyingConnector">Реальное подключение к торговой системе.</param>
-		public RealTimeEmulationTrader(TUnderlyingConnector underlyingConnector)
-			: this(underlyingConnector, new Portfolio
+		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.</param>
+		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter)
+			: this(underlyngMarketDataAdapter, new Portfolio
 			{
 				Name = LocalizedStrings.Str1209,
 				BeginValue = 1000000
@@ -66,63 +65,64 @@ namespace StockSharp.Algo.Testing
 		}
 
 		/// <summary>
-		/// Создать <see cref="RealTimeEmulationTrader{TUnderlyingTrader}"/>.
+		/// Создать <see cref="RealTimeEmulationTrader{TUnderlyingMarketDataAdapter}"/>.
 		/// </summary>
-		/// <param name="underlyingConnector">Реальное подключение к торговой системе.</param>
+		/// <param name="underlyngMarketDataAdapter"><see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.</param>
 		/// <param name="portfolio">Портфель, который будет использоваться для выставления заявок. Если значение не задано, то будет создан портфель по умолчанию с названием Симулятор.</param>
-		/// <param name="ownTrader">Контролировать время жизни подключения <paramref name="underlyingConnector"/>.</param>
-		public RealTimeEmulationTrader(TUnderlyingConnector underlyingConnector, Portfolio portfolio, bool ownTrader = true)
+		/// <param name="ownAdapter">Контролировать время жизни подключения <paramref name="underlyngMarketDataAdapter"/>.</param>
+		public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, Portfolio portfolio, bool ownAdapter = true)
 		{
-			if (underlyingConnector == null)
-				throw new ArgumentNullException("underlyingConnector");
+			if (underlyngMarketDataAdapter == null)
+				throw new ArgumentNullException("underlyngMarketDataAdapter");
 
 			if (portfolio == null)
 				throw new ArgumentNullException("portfolio");
 
-			UnderlyingConnector = underlyingConnector;
+			UnderlyngMarketDataAdapter = underlyngMarketDataAdapter;
+			UnderlyngMarketDataAdapter.RemoveTransactionalSupport();
 
 			UpdateSecurityByLevel1 = false;
 			UpdateSecurityLastQuotes = false;
 
 			_portfolio = portfolio;
-			EntityFactory = new EmulationEntityFactory(_portfolio, underlyingConnector);
-			
-			_ownTrader = ownTrader;
+			EntityFactory = new EmulationEntityFactory(_portfolio);
+
+			_ownAdapter = ownAdapter;
 
 			//MarketEmulator.Settings.UseMarketDepth = true;
 
-			Adapter.InnerAdapters.Add(UnderlyingConnector.MarketDataAdapter);
+			Adapter.InnerAdapters.Add(underlyngMarketDataAdapter);
 
-			if (_ownTrader)
-				UnderlyingConnector.Log += RaiseLog;
+			if (_ownAdapter)
+				UnderlyngMarketDataAdapter.Log += RaiseLog;
 		}
 
 		/// <summary>
-		/// Реальное подключение к торговой системе.
+		/// <see cref="IMessageAdapter"/>, через который будут получаться маркет-данные.
 		/// </summary>
-		public TUnderlyingConnector UnderlyingConnector { get; private set; }
+		public TUnderlyingMarketDataAdapter UnderlyngMarketDataAdapter { get; private set; }
 
-		/// <summary>
-		/// Подключиться к торговой системе.
-		/// </summary>
-		protected override void OnConnect()
-		{
-			base.OnConnect();
+		///// <summary>
+		///// Подключиться к торговой системе.
+		///// </summary>
+		//protected override void OnConnect()
+		//{
+		//	base.OnConnect();
 
-			if (_ownTrader)
-				UnderlyingConnector.Connect();
-		}
+		//	if (_ownAdapter)
+		//		UnderlyingConnector.Connect();
+		//}
 
-		/// <summary>
-		/// Отключиться от торговой системы.
-		/// </summary>
-		protected override void OnDisconnect()
-		{
-			base.OnDisconnect();
+		///// <summary>
+		///// Отключиться от торговой системы.
+		///// </summary>
+		//protected override void OnDisconnect()
+		//{
+		//	base.OnDisconnect();
 
-			if (_ownTrader)
-				UnderlyingConnector.Disconnect();
-		}
+		//	if (_ownAdapter)
+		//		UnderlyingConnector.Disconnect();
+		//}
 
 		/// <summary>
 		/// Обработать сообщение, содержащее рыночные данные.
@@ -139,53 +139,66 @@ namespace StockSharp.Algo.Testing
 					PortfolioName = _portfolio.Name
 				}.Add(PositionChangeTypes.BeginValue, _portfolio.BeginValue));
 			}
+			else if (message.Adapter == MarketDataAdapter)
+			{
+				switch (message.Type)
+				{
+					case MessageTypes.Connect:
+					case MessageTypes.Disconnect:
+					case MessageTypes.MarketData:
+					case MessageTypes.SecurityLookupResult:
+						break;
+					default:
+						TransactionAdapter.SendInMessage(message);
+						break;
+				}
+			}
 
 			base.OnProcessMessage(message);
 		}
 
-		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные инструменты будут переданы через событие <see cref="IConnector.LookupSecuritiesResult"/>.
-		/// </summary>
-		/// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
-		public override void LookupSecurities(SecurityLookupMessage criteria)
-		{
-			if (_ownTrader)
-				UnderlyingConnector.LookupSecurities(criteria);
-		}
+		///// <summary>
+		///// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		///// Найденные инструменты будут переданы через событие <see cref="IConnector.LookupSecuritiesResult"/>.
+		///// </summary>
+		///// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
+		//public override void LookupSecurities(SecurityLookupMessage criteria)
+		//{
+		//	MarketDataAdapter.LookupSecurities(criteria);
+		//}
 
-		/// <summary>
-		/// Найти портфели, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные портфели будут переданы через событие <see cref="IConnector.LookupPortfoliosResult"/>.
-		/// </summary>
-		/// <param name="criteria">Портфель, поля которого будут использоваться в качестве фильтра.</param>
-		public override void LookupPortfolios(Portfolio criteria)
-		{
-			if (_ownTrader)
-				UnderlyingConnector.LookupPortfolios(criteria);
-		}
+		///// <summary>
+		///// Найти портфели, соответствующие фильтру <paramref name="criteria"/>.
+		///// Найденные портфели будут переданы через событие <see cref="IConnector.LookupPortfoliosResult"/>.
+		///// </summary>
+		///// <param name="criteria">Портфель, поля которого будут использоваться в качестве фильтра.</param>
+		//public override void LookupPortfolios(Portfolio criteria)
+		//{
+		//	if (_ownTrader)
+		//		UnderlyingConnector.LookupPortfolios(criteria);
+		//}
 
-		/// <summary>
-		/// Подписаться на получение рыночных данных по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
-		public override void SubscribeMarketData(Security security, MarketDataTypes type)
-		{
-			if (_ownTrader)
-				UnderlyingConnector.SubscribeMarketData(security, type);
-		}
+		///// <summary>
+		///// Подписаться на получение рыночных данных по инструменту.
+		///// </summary>
+		///// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
+		///// <param name="type">Тип рыночных данных.</param>
+		//public override void SubscribeMarketData(Security security, MarketDataTypes type)
+		//{
+		//	if (_ownTrader)
+		//		UnderlyingConnector.SubscribeMarketData(security, type);
+		//}
 
-		/// <summary>
-		/// Отписаться от получения рыночных данных по инструменту.
-		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
-		public override void UnSubscribeMarketData(Security security, MarketDataTypes type)
-		{
-			if (_ownTrader)
-				UnderlyingConnector.UnSubscribeMarketData(security, type);
-		}
+		///// <summary>
+		///// Отписаться от получения рыночных данных по инструменту.
+		///// </summary>
+		///// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
+		///// <param name="type">Тип рыночных данных.</param>
+		//public override void UnSubscribeMarketData(Security security, MarketDataTypes type)
+		//{
+		//	if (_ownTrader)
+		//		UnderlyingConnector.UnSubscribeMarketData(security, type);
+		//}
 
 		/// <summary>
 		/// Загрузить настройки.
@@ -193,7 +206,9 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			UnderlyingConnector.Load(storage.GetValue<SettingsStorage>("UnderlyingConnector"));
+			if (_ownAdapter)
+				UnderlyngMarketDataAdapter.Load(storage.GetValue<SettingsStorage>("UnderlyngMarketDataAdapter"));
+
 			//LagTimeout = storage.GetValue<TimeSpan>("LagTimeout");
 
 			base.Load(storage);
@@ -205,7 +220,9 @@ namespace StockSharp.Algo.Testing
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("UnderlyingConnector", UnderlyingConnector.Save());
+			if (_ownAdapter)
+				storage.SetValue("UnderlyngMarketDataAdapter", UnderlyngMarketDataAdapter.Save());
+
 			//storage.SetValue("LagTimeout", LagTimeout);
 
 			base.Save(storage);
@@ -218,10 +235,10 @@ namespace StockSharp.Algo.Testing
 		{
 			//UnderlyingTrader.NewMessage -= NewMessageHandler;
 
-			if (_ownTrader)
+			if (_ownAdapter)
 			{
-				UnderlyingConnector.Log -= RaiseLog;
-				UnderlyingConnector.Dispose();
+				MarketDataAdapter.Log -= RaiseLog;
+				MarketDataAdapter.Dispose();
 			}
 
 			base.DisposeManaged();
@@ -261,19 +278,19 @@ namespace StockSharp.Algo.Testing
 		//}
 	}
 
-	/// <summary>
-	/// Симуляционное подключение, предназначенный для тестирования стратегии c реальном подключения к торговой системе,
-	/// но без реального выставления заявок на бирже. Исполнение заявок и их сделки эмулируются подключением, используя информацию по стаканам, приходящих от реального подключения.
-	/// </summary>
-	public class RealTimeEmulationTrader : RealTimeEmulationTrader<Connector>
-	{
-		/// <summary>
-		/// Создать <see cref="RealTimeEmulationTrader"/>.
-		/// </summary>
-		/// <param name="underlyingConnector">Реальное подключение к торговой системе.</param>
-		public RealTimeEmulationTrader(Connector underlyingConnector)
-			: base(underlyingConnector)
-		{
-		}
-	}
+	///// <summary>
+	///// Симуляционное подключение, предназначенный для тестирования стратегии c реальном подключения к торговой системе,
+	///// но без реального выставления заявок на бирже. Исполнение заявок и их сделки эмулируются подключением, используя информацию по стаканам, приходящих от реального подключения.
+	///// </summary>
+	//public class RealTimeEmulationTrader : RealTimeEmulationTrader<Connector>
+	//{
+	//	/// <summary>
+	//	/// Создать <see cref="RealTimeEmulationTrader"/>.
+	//	/// </summary>
+	//	/// <param name="underlyingConnector">Реальное подключение к торговой системе.</param>
+	//	public RealTimeEmulationTrader(Connector underlyingConnector)
+	//		: base(underlyingConnector)
+	//	{
+	//	}
+	//}
 }

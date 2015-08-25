@@ -131,7 +131,7 @@ namespace StockSharp.Algo.Storages
 				return _quoteSerializer.CreateMetaInfo(date);
 			}
 
-			public override byte[] Serialize(IEnumerable<QuoteChangeMessage> data, IMarketDataMetaInfo metaInfo)
+			public override void Serialize(Stream stream, IEnumerable<QuoteChangeMessage> data, IMarketDataMetaInfo metaInfo)
 			{
 				var list = data.SelectMany(d =>
 				{
@@ -152,7 +152,7 @@ namespace StockSharp.Algo.Storages
 					return items;
 				});
 
-				return _quoteSerializer.Serialize(list, metaInfo);
+				_quoteSerializer.Serialize(stream, list, metaInfo);
 			}
 
 			public override IEnumerableEx<QuoteChangeMessage> Deserialize(Stream stream, IMarketDataMetaInfo metaInfo)

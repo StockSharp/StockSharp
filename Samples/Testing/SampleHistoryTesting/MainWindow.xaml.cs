@@ -184,8 +184,8 @@ namespace SampleHistoryTesting
 				DefaultDrive = new LocalMarketDataDrive(HistoryPath.Text)
 			};
 
-			var startTime = (DateTime)From.Value;
-			var stopTime = (DateTime)To.Value;
+			var startTime = ((DateTime)From.Value).ChangeKind(DateTimeKind.Utc);
+			var stopTime = ((DateTime)To.Value).ChangeKind(DateTimeKind.Utc);
 
 			// ОЛ необходимо загружать с 18.45 пред дня, чтобы стаканы строились правильно
 			if (OrderLogCheckBox.IsChecked == true)
@@ -254,14 +254,10 @@ namespace SampleHistoryTesting
 					new[] { security },
 					new[] { portfolio })
 				{
-					StorageRegistry = storageRegistry,
 					MarketEmulator =
 					{
 						Settings =
 						{
-							// set time frame is backtesting on candles
-							UseCandlesTimeFrame = emulationInfo.UseCandleTimeFrame,
-
 							// match order if historical price touched our limit order price. 
 							// It is terned off, and price should go through limit order price level
 							// (more "severe" test mode)
@@ -269,13 +265,19 @@ namespace SampleHistoryTesting
 						}
 					},
 
-					//UseExternalCandleSource = true,
+					UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
+
 					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
 					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
 
-					// set history range
-					StartDate = startTime,
-					StopDate = stopTime,
+					HistoryMessageAdapter =
+					{
+						StorageRegistry = storageRegistry,
+
+						// set history range
+						StartDate = startTime,
+						StopDate = stopTime,
+					},
 
 					// set market time freq as time frame
 					MarketTimeChangedInterval = timeFrame,
@@ -285,7 +287,9 @@ namespace SampleHistoryTesting
 
 				logManager.Sources.Add(connector);
 
-				var candleManager = new CandleManager(new TradeCandleBuilderSourceEx(connector));
+				var candleManager = emulationInfo.UseCandleTimeFrame == null
+					? new CandleManager(new TradeCandleBuilderSourceEx(connector))
+					: new CandleManager(connector);
 
 				var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
 
@@ -492,10 +496,10 @@ namespace SampleHistoryTesting
 		{
 			var isEnabled = TicksCheckBox.IsChecked == true ||
 			                TicksAndDepthsCheckBox.IsChecked == true ||
-							DepthsCheckBox.IsChecked == true ||
-			                CandlesCheckBox.IsChecked == true ||
+					DepthsCheckBox.IsChecked == true ||
+			            	CandlesCheckBox.IsChecked == true ||
 			                CandlesAndDepthsCheckBox.IsChecked == true ||
-			                OrderLogCheckBox.IsChecked == true;
+			               	OrderLogCheckBox.IsChecked == true;
 
 			StartBtn.IsEnabled = isEnabled;
 			TabControl.Visibility = isEnabled ? Visibility.Visible : Visibility.Collapsed;
@@ -531,8 +535,8 @@ namespace SampleHistoryTesting
 			{
 				StopBtn.IsEnabled = started;
 				StartBtn.IsEnabled = !started;
-				TicksCheckBox.IsEnabled = TicksAndDepthsCheckBox.IsEnabled = CandlesCheckBox.IsEnabled
-					= CandlesAndDepthsCheckBox.IsEnabled = OrderLogCheckBox.IsEnabled = !started;
+				TicksCheckBox.IsEnabled = TicksAndDepthsCheckBox.IsEnabled = DepthsCheckBox.IsEnabled =
+				CandlesCheckBox.IsEnabled = CandlesAndDepthsCheckBox.IsEnabled = OrderLogCheckBox.IsEnabled = !started;
 
 				_bufferedChart.IsAutoRange = started;
 			});
