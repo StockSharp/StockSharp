@@ -50979,58 +50979,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Server (level 1):
-		/// </summary>
-		public const string XamlStr647Key = "XamlStr647";
-
-		/// <summary>
-		/// Server (level 1):
-		/// </summary>
-		public static string XamlStr647
-		{
-			get { return GetString(XamlStr647Key); }
-		}
-
-		/// <summary>
-		/// Server (level 2):
-		/// </summary>
-		public const string XamlStr648Key = "XamlStr648";
-
-		/// <summary>
-		/// Server (level 2):
-		/// </summary>
-		public static string XamlStr648
-		{
-			get { return GetString(XamlStr648Key); }
-		}
-
-		/// <summary>
-		/// Server (lookup):
-		/// </summary>
-		public const string XamlStr649Key = "XamlStr649";
-
-		/// <summary>
-		/// Server (lookup):
-		/// </summary>
-		public static string XamlStr649
-		{
-			get { return GetString(XamlStr649Key); }
-		}
-
-		/// <summary>
-		/// Server (admin):
-		/// </summary>
-		public const string XamlStr650Key = "XamlStr650";
-
-		/// <summary>
-		/// Server (admin):
-		/// </summary>
-		public static string XamlStr650
-		{
-			get { return GetString(XamlStr650Key); }
-		}
-
-		/// <summary>
 		/// Server:
 		/// </summary>
 		public const string XamlStr651Key = "XamlStr651";
