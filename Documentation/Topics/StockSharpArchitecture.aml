@@ -23,7 +23,7 @@
 				Код алгоритма имеет единый формат (HFT или позиционная торговля).
 			</listItem>
 			<listItem>
-				Большое сообщество объединяет разных алготрейдеров, не зависимо от площадки, брокера или типа подключения.
+				Большое сообщество объединяет разных алготрейдеров, независимо от площадки, брокера или типа подключения.
 			</listItem>
 			<listItem>
 				Увеличение клиентов для разработчиков торговых стратегий.
@@ -62,30 +62,30 @@
 		  <para><legacyUnderline>Библиотека разделена на следующие основные блоки:</legacyUnderline></para>
 		<list class="bullet">
 			<listItem>
-				<codeEntityReference>N:StockSharp.BusinessEntities</codeEntityReference> - основные торговые объекты (инструмент, заявка, сделка и
-				т.д.), в том числе находится и само описание интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>.
+				<codeEntityReference>N:StockSharp.BusinessEntities</codeEntityReference> - объединяет основные торговые объекты (инструмент, заявка, сделка и
+				т.д.). Также здесь находится описание интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>.
 			</listItem>
 			
 			<listItem>
 			<codeEntityReference>N:StockSharp.Algo</codeEntityReference> - объединяет большое количество блоков, непосредственно связанных c написанием торговых стратегий
 				(подробнее, <link xlink:href="2c3a0d3a-6e89-42a1-a158-9a258e0a62e1">Торговые стратегии</link>). Здесь находятся некоторые вспомогательные стратегии, например,
 				котирования заявок по нескольким схемам (подробнее, <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">котирование</link>).
-				Также в этом блоке расположена базовая реализация интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> - класс 
+				Также здесь расположена базовая реализация интерфейса <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference> - класс 
 				<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference>. 
 				<list class="bullet">
 				  		<listItem>
   							<para><codeEntityReference>N:StockSharp.Algo.Strategies</codeEntityReference> - базовые классы для создания стратегии.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Candles</codeEntityReference> - здесь собран весь необходимый функционал для работы со свечками и распознования
+  							<para><codeEntityReference>N:StockSharp.Algo.Candles</codeEntityReference> - здесь собран весь необходимый функционал для работы со свечками и распознавания
 						графических паттернов (подробнее, <link xlink:href="cd52cfcf-938c-4fce-9a56-4e9a001f0792">Свечки</link>).</para>
   						</listItem>
   						<listItem>
   							<para><codeEntityReference>N:StockSharp.Algo.Indicators</codeEntityReference> - содержит базовые классы и интерфейсы для создания технических индикаторов,
-  							а также готовые индикторы. См. <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Индикаторы</link>.</para>
+  							а также готовые индикаторы. См. <link xlink:href="8b9125ee-9d74-444f-82d6-5dea51266fd4">Индикаторы</link>.</para>
   						</listItem>
   						<listItem>
-  							<para><codeEntityReference>N:StockSharp.Algo.Derivatives</codeEntityReference> - классы для работы с опционами. 
+  							<para><codeEntityReference>N:StockSharp.Algo.Derivatives</codeEntityReference> - классы для работы с опционами.
   							См. <link xlink:href="b85270c7-ee7f-4dbc-a0a3-aac466b75f98">Опционы</link>.</para>
   						</listItem>
   						<listItem>
@@ -98,7 +98,7 @@
   						</listItem>
   						<listItem>
   							<para><legacyBold>Другие блоки</legacyBold> - различные дополнительные блоки, связанные с разработкой стратегий: комиссии, проскальзывания, прибыль-убыток,
-  							управление рисками, статистика, ряд вспомагательных алгоритмов	(очистка стакана от своих заявок, вычисление рыночной цены, округление цены до шага цены по инструменту и т.д.) и т.п,
+  							управление рисками, статистика, ряд вспомогательных алгоритмов	(очистка стакана от своих заявок, вычисление рыночной цены, округление цены до шага цены по инструменту и т.д.) и т.п,
   							которые упрощают создание торговых роботов.</para>
   						</listItem>
 				</list>
@@ -106,7 +106,7 @@
 			</listItem>
 			<listItem>
 				<codeEntityReference qualifyHint="false">N:StockSharp.Messages</codeEntityReference> - 
-				классы сообщений, основные перечисления, режимы работы биржи, класс <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Unit</codeEntityReference>  и др.
+				классы сообщений, основные перечисления, режимы работы биржи, класс <codeEntityReference qualifyHint="false">T:StockSharp.Messages.Unit</codeEntityReference> и др.
 			</listItem>
 			<listItem>
 				<codeEntityReference qualifyHint="false">N:StockSharp.Xaml</codeEntityReference> - графические компоненты для отображения табличной информации (заявки, сделки, Level1 и др.), 
@@ -123,7 +123,7 @@
 			
 			<listItem>
 				<codeEntityReference qualifyHint="false">N:StockSharp.Logging</codeEntityReference> - специальный инструментарий для работы с отладочной информацией. Предлагаются различные способы
-				вывода отладочных сообщений: в окно отладки, в файл, в графический компонет, а также во системы (email, звуковой сигнал) в случае возникновения проблем у робота.
+				вывода отладочных сообщений: в окно отладки, в файл, в окно графического компонета, а также в системы оповещения (email, звуковой сигнал) в случае возникновения проблем у робота.
 			</listItem>
 		
 			<listItem>

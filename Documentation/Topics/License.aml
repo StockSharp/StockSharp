@@ -15,7 +15,7 @@
 		</alert>
 
 		<para><legacyBold>Расширенная лицензия</legacyBold></para>
-		<para>Существует два уровня расширенной лицензии. Наполненность по функционалу для каждого уровня идентична и включает все, что есть в базовой версии плюс:</para> 
+		<para>Существуют два уровня расширенной лицензии. Наполненность по функционалу для каждого уровня идентична и включает все, что есть в базовой версии плюс:</para> 
 		<list class="ordered">
   			<listItem>
   				<para><token>plaza</token> коннектор (режим ClientGate COM).</para>
@@ -65,7 +65,7 @@
 					<para>FIX-сервер для роутинга заявок, эмуляции торгов, сохранения хода торгов для каждого клиента.</para>
 				</listItem>
 				<listItem>
-					<para>Доступ к online репозиторию с обновляемыми исходными кодами.</para>
+					<para>Доступ к онлайн репозиторию с обновляемыми исходными кодами.</para>
 				</listItem>
 				<listItem>
 					<para>Сервер исторических данных.</para>
@@ -76,8 +76,8 @@
 	
 	 <relatedTopics>
      	<externalLink>
-			<linkText>Новые подходы к лиценцизованию</linkText>
-			<linkAlternateText>Лиценцизование</linkAlternateText>
+			<linkText>Новые подходы к лицензированию</linkText>
+			<linkAlternateText>Лицензирование</linkAlternateText>
 			<linkUri>http://stocksharp.com/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
 			<linkTarget>_blank</linkTarget>
 		</externalLink>

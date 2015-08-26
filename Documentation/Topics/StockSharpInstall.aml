@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
     
-      <para>Существует два способа установки <token>stocksharp</token>:</para>
+      <para>Существуют два способа установки <token>stocksharp</token>:</para>
 		<list class="ordered">
   			<listItem>
   				<para>Установка из репозитория <token>stocksharpgithub</token> с веб-сервиса <token>github</token>.</para>
@@ -22,7 +22,7 @@
         </step>
         <step>
           <content>
-          	<para>Передите на страницу <externalLink>
+          	<para>Перейдите на страницу <externalLink>
 			<linkText>github.com/StockSharp/StockSharp</linkText>
 				<linkAlternateText>Optional alternate text</linkAlternateText>
 				<linkUri>https://github.com/StockSharp/StockSharp</linkUri>
@@ -41,14 +41,14 @@
           <content>
           	<para>На открывшейся странице выберите нужную версию <token>stocksharp</token> и из раздела <legacyBold>Downloads</legacyBold> загрузите необходимые архивы.</para>
 			<alert class="note">
-  				<para>Обратите внимание, что в архивах Source Code содержаться исходные коды, а в архивах StockSharp_#.#.#.zip - файлы библиотеки (референнсы) и исходные коды примеров.</para>
+  				<para>Обратите внимание, что в архивах Source Code содержатся исходные коды, а в архивах StockSharp_#.#.#.zip - файлы библиотеки и исходные коды примеров.</para>
 			</alert>
           	<mediaLink><image placement="left" xlink:href="stocksharp_instalation2"/></mediaLink>
           </content>
         </step>
         <step>
           <content>
-          	<para>Разблокируйте и разархивируйте скаченные архивы.</para>
+          	<para>Разблокируйте и разархивируйте скачанные архивы.</para>
           </content>
         </step>
       </steps>
@@ -78,7 +78,7 @@
         </step>
         <step>
           <content>
-          	<para>После инсталяции пакета в папке с решением появится папка packages, а в ней папка StockSharp.#.#.# с последней версией <token>stocksharp</token>.</para>
+          	<para>После установки пакета в папке с решением появится папка packages, а в ней папка StockSharp.#.#.# с последней версией <token>stocksharp</token>.</para>
           	<mediaLink><image placement="left" xlink:href="stocksharp_instalation5"/></mediaLink>
           </content>
         </step>

@@ -3,7 +3,7 @@
   <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
     <introduction>
       	<para>
-      		<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> позоволяет получать новости.
+      		<codeEntityReference>T:StockSharp.IQFeed.IQFeedTrader</codeEntityReference> позволяет получать новости.
       		Список полученных новостей можно получить через <codeEntityReference>P:StockSharp.BusinessEntities.IConnector.News</codeEntityReference>.
       	</para>
 		<para>

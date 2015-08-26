@@ -31,7 +31,7 @@ Trader.SubscribeCandles(series, DateTime.Today.Subtract(TimeSpan.FromDays(30)), 
         </step>
         <step>
         	<para>
-            	Исторически свечки передаются через событие 
+            	Исторические свечки передаются через событие 
             	<codeEntityReference qualifyHint="true">E:StockSharp.InteractiveBrokers.IBTrader.NewCandles</codeEntityReference>:
        		</para>
           <code language="C#">

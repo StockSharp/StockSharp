@@ -9,8 +9,6 @@
 			<image placement="left" xlink:href="hydra_main_first" />
 		</mediaLink>
 
-    </introduction>
-   	<section>
 		<steps class="ordered">
 			<step>
 				<content>
@@ -93,6 +91,6 @@
 			    </content>
 			</step>			  
 		  </steps>
-	</section>
+	    </introduction>
   </developerConceptualDocument>
 </topic>
