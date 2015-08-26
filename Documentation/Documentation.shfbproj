@@ -1474,6 +1474,10 @@
       <ImageId>hydra_source_add</ImageId>
       <AlternateText>hydra source add</AlternateText>
     </Image>
+    <Image Include="Art\sample_realtaime_emulation.png">
+      <ImageId>sample_realtaime_emulation</ImageId>
+      <AlternateText>sample realtaime emulation</AlternateText>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="Art\sample_options_calc.png">
@@ -1657,10 +1661,6 @@
     <Image Include="Art\sample_smart_history.png">
       <ImageId>samplesmarthistory</ImageId>
       <AlternateText>Исторические данные SmartCOM.</AlternateText>
-    </Image>
-    <Image Include="Art\sample_smart_sma.png">
-      <ImageId>samplesmartsma</ImageId>
-      <AlternateText>Пример скользящих средних под SmartCOM.</AlternateText>
     </Image>
     <Image Include="Art\sample_history_test.png">
       <ImageId>samplehistorytest</ImageId>
