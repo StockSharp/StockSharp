@@ -575,6 +575,19 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
+		/// License renewed max times.
+		/// </summary>
+		public const string LicenseMaxRenewKey = "LicenseMaxRenew";
+
+		/// <summary>
+		/// License renewed max times.
+		/// </summary>
+		public static string LicenseMaxRenew
+		{
+			get { return GetString(LicenseMaxRenewKey); }
+		}
+
+		/// <summary>
 		/// SMS activation failed. Read more at http://stocksharp.com/profile/ .
 		/// </summary>
 		public const string SmsActivationFailedKey = "SmsActivationFailed";

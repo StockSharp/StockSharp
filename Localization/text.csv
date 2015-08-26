@@ -42,6 +42,7 @@ IncorrectVerificationCode;Incorrect verification code.;Неверный код �
 IncorrectSmsCode;Incorrect SMS code.;Неверный SMS код.
 CannotGetLicense;Cannot get a license.;Невозможно получить лицензию.
 LicenseRevoked;License revoked.;Лицензия отозвана.
+LicenseMaxRenew;License renewed max times.;Лицензия обновлена максимальное количество раз.
 SmsActivationFailed;SMS activation failed. Read more at http://stocksharp.com/profile/ .;Не пройдена активация через SMS. Подробнее в http://stocksharp.com/profile/ .
 MaxLicensePerMin;Maximum number of license generations per minute exceeded.;Превышено максимальное количество генераций лицензий в минуту.
 Str50Params;for '{0}' portfolio '{1}';для '{0}' портфель '{1}'
