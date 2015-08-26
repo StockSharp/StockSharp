@@ -153,6 +153,7 @@ namespace StockSharp.Algo.Testing
 			QuoteChange currTo = null;
 
 			var mult = side == Sides.Buy ? -1 : 1;
+			bool? isSpread = null;
 
 			using (var fromEnum = from.GetEnumerator())
 			using (var toEnum = to.GetEnumerator())
@@ -164,7 +165,10 @@ namespace StockSharp.Algo.Testing
 						if (!fromEnum.MoveNext())
 							canProcessFrom = false;
 						else
+						{
 							currFrom = fromEnum.Current;
+							isSpread = isSpread == null;
+						}
 					}
 
 					if (canProcessTo && currTo == null)
@@ -187,7 +191,7 @@ namespace StockSharp.Algo.Testing
 						else
 						{
 							//diff.Add(currTo.Clone());
-							AddExecMsg(diff, time, currTo, currTo.Volume);
+							AddExecMsg(diff, time, currTo, currTo.Volume, false);
 							currTo = null;
 						}
 					}
@@ -198,7 +202,7 @@ namespace StockSharp.Algo.Testing
 							//var clone = currFrom.Clone();
 							//clone.Volume = -clone.Volume;
 							//diff.Add(clone);
-							AddExecMsg(diff, time, currFrom, -currFrom.Volume);
+							AddExecMsg(diff, time, currFrom, -currFrom.Volume, isSpread.Value);
 							currFrom = null;
 						}
 						else
@@ -210,7 +214,7 @@ namespace StockSharp.Algo.Testing
 									//var clone = currTo.Clone();
 									//clone.Volume -= currFrom.Volume;
 									//diff.Add(clone);
-									AddExecMsg(diff, time, currTo, currTo.Volume - currFrom.Volume);
+									AddExecMsg(diff, time, currTo, currTo.Volume - currFrom.Volume, isSpread.Value);
 								}
 
 								currFrom = currTo = null;
@@ -218,7 +222,7 @@ namespace StockSharp.Algo.Testing
 							else if (currFrom.Price * mult > currTo.Price * mult)
 							{
 								//diff.Add(currTo.Clone());
-								AddExecMsg(diff, time, currTo, currTo.Volume);
+								AddExecMsg(diff, time, currTo, currTo.Volume, isSpread.Value);
 								currTo = null;
 							}
 							else
@@ -226,7 +230,7 @@ namespace StockSharp.Algo.Testing
 								//var clone = currFrom.Clone();
 								//clone.Volume = -clone.Volume;
 								//diff.Add(clone);
-								AddExecMsg(diff, time, currFrom, -currFrom.Volume);
+								AddExecMsg(diff, time, currFrom, -currFrom.Volume, isSpread.Value);
 								currFrom = null;
 							}
 						}
@@ -239,7 +243,7 @@ namespace StockSharp.Algo.Testing
 
 		private readonly RandomArray<bool> _isMatch = new RandomArray<bool>(100);
 
-		private void AddExecMsg(List<ExecutionMessage> diff, DateTime time, QuoteChange quote, decimal volume)
+		private void AddExecMsg(List<ExecutionMessage> diff, DateTime time, QuoteChange quote, decimal volume, bool isSpread)
 		{
 			if (volume > 0)
 				diff.Add(CreateMessage(time, quote.Side, quote.Price, volume));
@@ -247,7 +251,8 @@ namespace StockSharp.Algo.Testing
 			{
 				volume = volume.Abs();
 
-				if (volume > 1 && _isMatch.Next())
+				// matching only top orders (spread)
+				if (isSpread && volume > 1 && _isMatch.Next())
 				{
 					var tradeVolume = (int)volume / 2;
 
