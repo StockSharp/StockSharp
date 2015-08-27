@@ -50,6 +50,10 @@ namespace SampleRealTimeEmulation
 			area.Elements.Add(_candlesElem);
 
 			GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(ProcessCandles);
+
+			Level1AddressCtrl.Text = IQFeedAddresses.DefaultLevel1Address.To<string>();
+			Level2AddressCtrl.Text = IQFeedAddresses.DefaultLevel2Address.To<string>();
+			LookupAddressCtrl.Text = IQFeedAddresses.DefaultLookupAddress.To<string>();
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
