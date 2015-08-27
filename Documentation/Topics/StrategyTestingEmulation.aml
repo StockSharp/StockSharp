@@ -56,8 +56,10 @@
 						  маркет-данные не подгружаются, а генерируются "на лету". Поэтому в пример добавляются два генератора случайных данных: для стакана
 						  и для тиковых сделок. В SampleHistoryTesting используется только один генератор - для стакана, так как нет сохраненной истории.
 					  </para>
-					  <code language="C#">_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
-_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });</code>
+					  <code language="C#"><![CDATA[
+_connector.RegisterTrades(new RandomWalkTradeGenerator(_connector.GetSecurityId(security)));
+_connector.RegisterMarketDepth(new TrendMarketDepthGenerator(_connector.GetSecurityId(security)) { GenerateDepthOnEachTrade = false });
+]]></code>
 				  </content>
 			  </step>
 			  <step>

@@ -43,22 +43,26 @@ var settings = new[]
 		TicksCheckBox,
 		TicksTestingProcess,
 		TicksParameterGrid,
+		
 		// ticks
 		new EmulationInfo {UseTicks = true, CurveColor = Colors.DarkGreen, StrategyName = LocalizedStrings.Ticks}),
 
-		Tuple.Create(
+	Tuple.Create(
 		TicksAndDepthsCheckBox,
 		TicksAndDepthsTestingProcess,
 		TicksAndDepthsParameterGrid,
+		
 		// ticks + order book
 		new EmulationInfo {UseTicks = true, UseMarketDepth = true, CurveColor = Colors.Red, StrategyName = LocalizedStrings.XamlStr757}),
 
 	Tuple.Create(
-		DepthsCheckBox,	
+		DepthsCheckBox,
 		DepthsTestingProcess,
 		DepthsParameterGrid,
+		
 		// order book
-		new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.Str1414}),
+		new EmulationInfo {UseMarketDepth = true, CurveColor = Colors.OrangeRed, StrategyName = LocalizedStrings.MarketDepths}),
+
 
 	Tuple.Create(
 		CandlesCheckBox,
@@ -71,6 +75,7 @@ var settings = new[]
 		CandlesAndDepthsCheckBox,
 		CandlesAndDepthsTestingProcess,
 		CandlesAndDepthsParameterGrid,
+		
 		// candles + orderbook
 		new EmulationInfo {UseMarketDepth = true, UseCandleTimeFrame = timeFrame, CurveColor = Colors.Cyan, StrategyName = LocalizedStrings.XamlStr635}),
 			
@@ -92,20 +97,20 @@ var settings = new[]
 						  Далее, создать объект <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Storages.IStorageRegistry</codeEntityReference>, через который
 						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference> будет получать исторические данные:
 					  </para>
-					  <code language="C#">
+					  <code language="C#"><![CDATA[
 // хранилище, через которое будет производиться доступ к тиковой и котировочной базе
 var storageRegistry = new StorageRegistry
 {
 	// set historical path
 	DefaultDrive = new LocalMarketDataDrive(HistoryPath.Text)
 };
-</code>
+]]></code>
 					  <alert class="caution">
-						  Через <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.Path</codeEntityReference> указывается директория, где
-						  лежит история для <legacyBold>всех инструментов</legacyBold>, а не директория с конкретным инструментом. Например, если архив
+						  В конструктор <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Storages.LocalMarketDataDrive</codeEntityReference> передается путь к директории, где
+						  лежит история для <legacyBold>всех инструментов</legacyBold>, а не к директории с конкретным инструментом. Например, если архив
 						  HistoryData.zip был распакован в директорию <localUri>C:\R\RIZ2@FORTS\</localUri>, то в 
-						  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Storages.LocalMarketDataDrive.Path</codeEntityReference>
-						  необходимо передать пусть <localUri>C:\</localUri>. Подробнее, в разделе <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>.
+						  <codeEntityReference qualifyHint="true">T:StockSharp.Algo.Storages.LocalMarketDataDrive</codeEntityReference>
+						  необходимо передать путь <localUri>C:\</localUri>. Подробнее, в разделе <link xlink:href="e4a57b52-bd14-4640-a7c7-0979dba1ad0a">API</link>.
 					  </alert>
 				  </content>
 			  </step>
@@ -113,20 +118,16 @@ var storageRegistry = new StorageRegistry
 			  <step>
 				  <content>
 					  <para>
-						  Затем в зависимости от выбранных CheckBox в главном окне(Тики, Тики и стаканы, Свечки) создается отдельный инструмент, портфель, стратегия, шлюз для тестирования и т.д.:
+						  Далее в цикле создаются инструмент, портфель, стратегия, шлюз для тестирования и т.д. с соответсвущими настройками, в зависимости от значений флагов, 
+						  установленных в главном окне (Тики, Тики и стаканы, Свечки и пр.). Если значение флага False, то программа переходит к следующему набору настроек. 
 					  </para>
         <code language="C#">
         <![CDATA[
 foreach (var set in settings)
-{
-	if(!set.Item1.IsChecked.Value)
-		continue;
-
-	var progressBar = set.Item2;
-	var statistic = set.Item3;
-	var emulationInfo = set.Item4;
-	
-	.............................
+   {
+     if (set.Item1.IsChecked == false)
+         continue;
+   .................
 
 }	
 		]]>
@@ -137,23 +138,24 @@ foreach (var set in settings)
 			  <step>
 				  <content>
 					  <para>
-						  Необходимо создать (или загрузить) инструменты и портфели, по которым будет производиться тестирование:
+						  Создаем инструменты и портфели, по которым будет производиться тестирование:
 					  </para>
-					  <code language="C#">// создаем тестовый инструмент, на котором будет производится тестирование
+					  <code language="C#"><![CDATA[
+// создаем тестовый инструмент, на котором будет производится тестирование
 var security = new Security
-			{
-				Id = SecId.Text, // sec id has the same name as folder with historical data
-				Code = secCode,
-				Board = board,
-			};
+{
+	Id = SecId.Text, // sec id has the same name as folder with historical data
+	Code = secCode,
+	Board = board,
+};
 
 // тестовый портфель
 var portfolio = new Portfolio
-				{
-					Name = "test account",
-					BeginValue = 1000000,
-				};
-				</code>
+{
+	Name = "test account",
+	BeginValue = 1000000,
+};
+				]]></code>
 				  </content>
 			  </step>
 			  
@@ -166,18 +168,13 @@ var portfolio = new Portfolio
 					  <code language="C#"><![CDATA[
 // создаем шлюз для эмуляции
 // инициализируем настройки (инструмент в истории обновляется раз в секунду)
-var connector = new HistoryEmulationConnector(
-					new[] { security },
-					new[] { portfolio })
+var connector = new HistoryEmulationConnector(new[] { security }, new[] { portfolio })
 				{
 					StorageRegistry = storageRegistry,
 					MarketEmulator =
 					{
 						Settings =
 						{
-							// set time frame is backtesting on candles
-							UseCandlesTimeFrame = emulationInfo.UseCandleTimeFrame,
-
 							// match order if historical price touched our limit order price. 
 							// It is terned off, and price should go through limit order price level
 							// (more "severe" test mode)
@@ -185,18 +182,22 @@ var connector = new HistoryEmulationConnector(
 						}
 					},
 
-					//UseExternalCandleSource = true,
-					CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
-					CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
+					UseExternalCandleSource = emulationInfo.UseCandleTimeFrame != null,
+                    CreateDepthFromOrdersLog = emulationInfo.UseOrderLog,
+                    CreateTradesFromOrdersLog = emulationInfo.UseOrderLog,
+                    
+                    HistoryMessageAdapter =
+                    {
+                        StorageRegistry = storageRegistry,
+                        // set history range
+                        StartDate = startTime,
+                        StopDate = stopTime,
+                    },
 
-					// set history range
-					StartDate = startTime,
-					StopDate = stopTime,
-
-					// set market time freq as time frame
-					MarketTimeChangedInterval = timeFrame,
+                    // set market time freq as time frame
+                    MarketTimeChangedInterval = timeFrame,
 				};
-					  ]]></code>
+				]]></code>
 					  <!--para>
 							При тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/> или <link xlink:href="ab42038e-836b-4c00-9332-0b2db2cbd948"/>
 							вместе с информацией об инструменте передается и его ликвидность через параметр securitySettings в конструкторы
@@ -227,47 +228,64 @@ var connector = new HistoryEmulationConnector(
 			  <step>
 				  <content>
 					  <para>
-						  Зарегистрировать стакан по инструменту, для начала получения данных. 
-						  Если для инструмента нет сохраненной истории стаканов, то необходимо указать ликвидность инструмента в истории (с какой
-						  частотой в истории будет меняться стакан):
+						 В событии получения нового инструмента задаем начальные значения Level1, регистрируем стакан или создаем и настраиваем генератор стакана. Также в зависимости
+						 от настроек регистрируем получение ордерлога и сделок. Запускаем стратегию и генерацию свечек. А также запускаем сам эмулятор.
 					  </para>
-					  <code language="C#">
-connector.NewSecurities += securities =>
-{
-	if (securities.All(s => s != security))
-		return;
+					  <code language="C#"><![CDATA[
+ connector.NewSecurities += securities =>
+                {
+                    if (securities.All(s => s != security))
+                        return;
 
-	// fill level1 values
-	connector.SendInMessage(level1Info);
+                    // fill level1 values
+                    connector.SendInMessage(level1Info);
 
-	if (emulationInfo.UseMarketDepth)
-	{
-		connector.RegisterMarketDepth(security);
+                    if (emulationInfo.UseMarketDepth)
+                    {
+                        connector.RegisterMarketDepth(security);
 
-		if (
-			// если тест подразумевает наличие стаканов
-			generateDepths ||
-			// of backtesting will be on candles
-			emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
-			)
-		{
-			// если нет исторических стаканов, а тест подразумевает их наличие,
-			// то используем генерацию стаканов на основе цены последней сделки
-			connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
-			{
-				Interval = TimeSpan.FromSeconds(1), // стакан для инструмента в истории обновляется раз в секунду
-				MaxAsksDepth = maxDepth,
-				MaxBidsDepth = maxDepth,
-				UseTradeVolume = true,
-				MaxVolume = maxVolume,
-				MinSpreadStepCount = 2,	// минимальный генерируемый спред - 2 минимальных шага цены
-				MaxSpreadStepCount = 5,	// не генерировать спрэд между лучшим бид и аск больше чем 5 минимальных шагов цены - нужно чтобы при генерации из свечей не получалось слишком широкого спреда.
-				MaxPriceStepCount = 3	// pips size,
-			});
-	}
-}
+                        if (
+                            // if order book will be generated
+                                generateDepths ||
+                            // of backtesting will be on candles
+                                emulationInfo.UseCandleTimeFrame != TimeSpan.Zero
+                            )
+                        {
+                            // if no have order book historical data, but strategy is required,
+                            // use generator based on last prices
+                            connector.RegisterMarketDepth(new TrendMarketDepthGenerator(connector.GetSecurityId(security))
+                            {
+                                Interval = TimeSpan.FromSeconds(1), // order book freq refresh is 1 sec
+                                MaxAsksDepth = maxDepth,
+                                MaxBidsDepth = maxDepth,
+                                UseTradeVolume = true,
+                                MaxVolume = maxVolume,
+                                MinSpreadStepCount = 2,	// min spread generation is 2 pips
+                                MaxSpreadStepCount = 5,	// max spread generation size (prevent extremely size)
+                                MaxPriceStepCount = 3	// pips size,
+                            });
+                        }
+                    }
+
+                    if (emulationInfo.UseOrderLog)
+                    {
+                        connector.RegisterOrderLog(security);
+                    }
+
+                    if (emulationInfo.UseTicks)
+                    {
+                        connector.RegisterTrades(security);
+                    }
+
+                    // start strategy before emulation started
+                    strategy.Start();
+                    candleManager.Start(series);
+
+                    // start historical data loading when connection established successfully and all data subscribed
+                    connector.Start();
+                };
 			  
-					</code>
+					]]></code>
 				  </content>
 			  </step>				  
 			  <step>
@@ -291,14 +309,14 @@ trader.Connect();
 					  <para>
 						  Создание менеджера свечек <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> (необходимо для
 						  стратегии скользящих средних), в котором в качестве источника указан шлюз 
-						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>
-						  и регистрация 5-минутных свечек:
+						  <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
 					  </para>
-					  <code language="C#">
-			var candleManager = new CandleManager(new TradeCandleBuilderSourceEx(connector));
-			var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
-			candleManager.Start(series);
-</code>
+					  <code language="C#"><![CDATA[
+			 var candleManager = emulationInfo.UseCandleTimeFrame == null
+                    ? new CandleManager(new TradeCandleBuilderSourceEx(connector))
+                    : new CandleManager(connector);
+             var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+]]></code>
 
 				  </content>
 			  </step>
@@ -382,14 +400,12 @@ connector.MarketTimeChanged += d =>
 					</code>				
 				  </content>
 			  </step>
-			  
-
 			  <step>
 				  <content>
 					  <para>
 						  Запуск начала тестирования:
 					  </para>
-					  <code language="C#">
+					  <code language="C#"><![CDATA[
 // запускаем эмуляцию
 foreach (var connector in _connectors)
 {
@@ -401,7 +417,7 @@ foreach (var connector in _connectors)
 			Rule = new CommissionPerTradeRule { Value = 0.01m }
 		});
 }
-					  </code>
+					 ]]> </code>
 				  </content>
 			  </step>
 		  </steps>
