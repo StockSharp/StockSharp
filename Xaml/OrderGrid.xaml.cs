@@ -244,7 +244,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие ререгистрации заявки.
+		/// Событие регистрации заявки.
 		/// </summary>
 		public event Action OrderRegistering;
 
