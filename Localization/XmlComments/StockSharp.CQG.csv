@@ -1,0 +1,14 @@
+T:StockSharp.CQG.CQGMessageAdapter/summary;DocStr3085
+M:StockSharp.CQG.CQGMessageAdapter.#ctor(Ecng.Common.IdGenerator)/summary;DocStr1
+M:StockSharp.CQG.CQGMessageAdapter.#ctor(Ecng.Common.IdGenerator)/param/transactionIdGenerator;DocStr43
+M:StockSharp.CQG.CQGMessageAdapter.CreateOrderCondition/summary;DocStr44
+M:StockSharp.CQG.CQGMessageAdapter.CreateOrderCondition/returns;DocStr45
+M:StockSharp.CQG.CQGMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
+M:StockSharp.CQG.CQGMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
+M:StockSharp.CQG.CQGMessageAdapter.ToString/summary;DocStr49
+M:StockSharp.CQG.CQGMessageAdapter.ToString/returns;DocStr50
+T:StockSharp.CQG.CQGOrderCondition/summary;DocStr2570
+M:StockSharp.CQG.CQGOrderCondition.#ctor/summary;DocStr1
+P:StockSharp.CQG.CQGOrderCondition.StopPrice/summary;Str3460
+T:StockSharp.CQG.CQGTrader/summary;DocStr3086
+M:StockSharp.CQG.CQGTrader.#ctor/summary;DocStr1
