@@ -128,8 +128,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-			<sx:OrderGrid x:Name="Orders" Grid.Column="1" />
-            <sx:MyTradeGrid x:Name="Trades" Grid.Row="0" Grid.Column="0" />
+			<sx:OrderGrid x:Name="OrderGrid" Grid.Column="1" OrderRegistering="OrderGrid_OrderRegistering" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
+            <sx:MyTradeGrid x:Name="TradeGrid" Grid.Row="0" Grid.Column="0" />
             
             <sx:LogControl Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" x:Name="Log"></sx:LogControl>
 		</Grid>

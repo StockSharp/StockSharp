@@ -12,6 +12,9 @@ namespace SampleRealTimeEmulation
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
@@ -133,8 +136,8 @@ namespace SampleRealTimeEmulation
 					_connector.NewPortfolios += PortfolioGrid.Portfolios.AddRange;
 					_connector.NewPositions += PortfolioGrid.Positions.AddRange;
 
-					_connector.NewOrders += Orders.Orders.AddRange;
-					_connector.NewMyTrades += Trades.Trades.AddRange;
+					_connector.NewOrders += OrderGrid.Orders.AddRange;
+					_connector.NewMyTrades += TradeGrid.Trades.AddRange;
 
 					// subscribe on error of order registration event
 					_connector.OrdersRegisterFailed += OrdersFailed;
@@ -210,6 +213,11 @@ namespace SampleRealTimeEmulation
 
 		private void NewOrder_OnClick(object sender, RoutedEventArgs e)
 		{
+			OrderGrid_OrderRegistering();
+		}
+
+		private void OrderGrid_OrderRegistering()
+		{
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = _security },
@@ -218,6 +226,26 @@ namespace SampleRealTimeEmulation
 
 			if (newOrder.ShowModal(this))
 				_connector.RegisterOrder(newOrder.Order);
+		}
+
+		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		{
+			orders.ForEach(_connector.CancelOrder);
+		}
+
+		private void OrderGrid_OnOrderReRegistering(Order order)
+		{
+			var window = new OrderWindow
+			{
+				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
+				Connector = _connector,
+				Order = order.ReRegisterClone(newVolume: order.Balance),
+			};
+
+			if (window.ShowModal(this))
+			{
+				_connector.ReRegisterOrder(order, window.Order);
+			}
 		}
 	}
 }
