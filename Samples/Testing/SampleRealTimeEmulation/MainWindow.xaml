@@ -110,7 +110,17 @@
 				<TextBlock Grid.Column="0" Grid.Row="4">
 					<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
 				</TextBlock>
-				<sx:SecurityEditor x:Name="SecurityEditor" Grid.Column="1" Grid.Row="4" SecuritySelected="SecurityEditor_OnSecuritySelected" />
+				<Grid Grid.Column="1" Grid.Row="4">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+					
+					<sx:SecurityEditor x:Name="SecurityEditor" SecuritySelected="SecurityEditor_OnSecuritySelected" />
+					<Button x:Name="Find" Width="100" Grid.Column="1" IsEnabled="False" Click="FindClick">
+						<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
+					</Button>
+				</Grid>
 
 				<Button x:Name="NewOrder" Grid.Column="0" Grid.Row="5" Height="25" Grid.ColumnSpan="2" Width="100" Click="NewOrder_OnClick"><TextBlock Text="{x:Static loc:LocalizedStrings.Str504}"/></Button>
 				

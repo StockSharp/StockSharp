@@ -191,6 +191,7 @@ namespace SampleRealTimeEmulation
 		{
 			_isConnected = isConnected;
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
+			Find.IsEnabled = _isConnected;
 		}
 
 		private void ProcessCandles()
@@ -246,6 +247,16 @@ namespace SampleRealTimeEmulation
 			{
 				_connector.ReRegisterOrder(order, window.Order);
 			}
+		}
+
+		private void FindClick(object sender, RoutedEventArgs e)
+		{
+			var wnd = new FindSecurityWindow();
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			_connector.LookupSecurities(wnd.Criteria);
 		}
 	}
 }
