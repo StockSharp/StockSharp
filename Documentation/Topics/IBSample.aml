@@ -155,7 +155,7 @@ MainWindow.Instance.Trader.LookupSecurities(criteria);
 
 					<step>
 						<content>
-							<para>Для получения обновлений по выбранному инструменту необходимо вызвать методам
+							<para>Для получения обновлений по выбранному инструменту необходимо вызвать метод
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>:</para>
             				<code language="C#">
             				<![CDATA[

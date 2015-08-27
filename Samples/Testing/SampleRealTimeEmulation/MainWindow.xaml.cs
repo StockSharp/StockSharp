@@ -4,6 +4,7 @@ namespace SampleRealTimeEmulation
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
+	using System.Net;
 	using System.Security;
 	using System.Windows;
 
@@ -14,6 +15,7 @@ namespace SampleRealTimeEmulation
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
+	using StockSharp.IQFeed;
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.SmartCom;
@@ -25,7 +27,7 @@ namespace SampleRealTimeEmulation
 	{
 		private bool _isConnected;
 		private CandleManager _candleManager;
-		private RealTimeEmulationTrader<SmartComMessageAdapter> _connector;
+		private RealTimeEmulationTrader<IMessageAdapter> _connector;
 		private readonly ChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
 		private Security _security;
@@ -61,29 +63,37 @@ namespace SampleRealTimeEmulation
 			{
 				if (_connector == null)
 				{
-					if (Login.Text.IsEmpty())
+					if (SmartCom.IsChecked == true)
 					{
-						MessageBox.Show(this, LocalizedStrings.Str2974);
-						return;
-					}
-					else if (Password.Password.IsEmpty())
-					{
-						MessageBox.Show(this, LocalizedStrings.Str2975);
-						return;
-					}
-					
-					// create real-time emu connector
-					_connector = new RealTimeEmulationTrader<SmartComMessageAdapter>(new SmartComMessageAdapter(new MillisecondIncrementalIdGenerator())
-					{
-						Login = Login.Text,
-						Password = Password.Password.To<SecureString>(),
-						Address = Address.SelectedAddress
-					});
+						if (Login.Text.IsEmpty())
+						{
+							MessageBox.Show(this, LocalizedStrings.Str2974);
+							return;
+						}
+						else if (Password.Password.IsEmpty())
+						{
+							MessageBox.Show(this, LocalizedStrings.Str2975);
+							return;
+						}
 
-					//_connector = new RealTimeEmulationTrader<Connector>(new PlazaTrader
-					//{
-					//	IsCGate = true,
-					//}, portfolio);
+						// create real-time emu connector
+						_connector = new RealTimeEmulationTrader<IMessageAdapter>(new SmartComMessageAdapter(new MillisecondIncrementalIdGenerator())
+						{
+							Login = Login.Text,
+							Password = Password.Password.To<SecureString>(),
+							Address = Address.SelectedAddress
+						});
+					}
+					else
+					{
+						// create real-time emu connector
+						_connector = new RealTimeEmulationTrader<IMessageAdapter>(new IQFeedMarketDataMessageAdapter(new MillisecondIncrementalIdGenerator())
+						{
+							Level1Address = Level1AddressCtrl.Text.To<EndPoint>(),
+							Level2Address = Level2AddressCtrl.Text.To<EndPoint>(),
+							LookupAddress = LookupAddressCtrl.Text.To<EndPoint>(),
+						});
+					}
 
 					SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
 

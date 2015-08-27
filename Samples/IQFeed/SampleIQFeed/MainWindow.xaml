@@ -38,21 +38,29 @@
 				<RowDefinition Height="Auto" MinHeight="25" />
 			</Grid.RowDefinitions>
 
-			<Label Grid.Row="0"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr647}"/></Label>
+			<TextBlock Grid.Row="0" Grid.Column="0">
+				<Run Text="{x:Static loc:LocalizedStrings.Str2122}"/>:
+			</TextBlock>
 			<TextBox x:Name="Level1AddressCtrl" Grid.Row="0" Grid.Column="1" Width="Auto" />
 
-			<Label Grid.Row="2"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr648}"/></Label>
+			<TextBlock Grid.Row="2" Grid.Column="0">
+				<Run Text="{x:Static loc:LocalizedStrings.Str2124}"/>:
+			</TextBlock>
 			<TextBox x:Name="Level2AddressCtrl" Grid.Row="2" Grid.Column="1" Width="Auto" />
 
-			<Label Grid.Row="4"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr649}"/></Label>
+			<TextBlock Grid.Row="4" Grid.Column="0">
+				<Run Text="{x:Static loc:LocalizedStrings.Str2126}"/>:
+			</TextBlock>
 			<TextBox x:Name="LookupAddressCtrl" Grid.Row="4" Grid.Column="1" Width="Auto" />
 
-			<Label Grid.Row="6"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr650}"/></Label>
+			<TextBlock Grid.Row="6" Grid.Column="0">
+				<Run Text="{x:Static loc:LocalizedStrings.Str2128}"/>:
+			</TextBlock>
 			<TextBox x:Name="AdminAddressCtrl" Grid.Row="6" Grid.Column="1" Width="Auto" />
 
-			<Label Grid.Row="8" ToolTip="{x:Static loc:LocalizedStrings.XamlStr503}" VerticalAlignment="Center">
-				<TextBlock TextWrapping="Wrap"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr162}"/></TextBlock>
-			</Label>
+			<TextBlock Grid.Row="8" Grid.Column="0" ToolTip="{x:Static loc:LocalizedStrings.XamlStr503}" VerticalAlignment="Center" TextWrapping="Wrap">
+				<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr162}"/>
+			</TextBlock>
 			<CheckBox x:Name="DownloadSecurityFromSiteCtrl" Grid.Row="8" Grid.Column="1" VerticalAlignment="Center"/>
 		</Grid>
 

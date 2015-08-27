@@ -11,34 +11,109 @@
 			  заявок на биржу. Все регистрируемые заявки перехватываются, и их исполнение эмулируется на основе рыночных стаканов. Такое тестирование может
 			  быть полезно, например, если разрабатывается торговый тренажер. Или необходимо проверить торговый алгоритм на краткосрочном отрезке времени с
 			  реальными котировками.
+		 </para>
+		 <para>
+			  Для эмуляции торговли на реальных данных необходимо использовать <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference>, 
+			  который выполняет роль "обертки" коннектора конкретной торговой системы (<token>quik</token>, <token>smartcom</token> и т.п.). Ниже приводится описание примера работы с эмулятором с использованием подключения
+			  к <token>smartcom</token>. Сам пример находится в папке <legacyItalic>Samples/Testing/SampleRealTimeEmulation</legacyItalic>.
 		  </para>
 	  </introduction>
 
 	  <procedure>
-		  <title>Тестирование на рыночных данных стратегии скользящих средних из примеров SampleSMA и SampleSmartSMA</title>
+		  <title>Работа с эмулятором торговли на реальных данных</title>
 		  <steps class="ordered">
 			  <step>
 				  <content>
-					  <alert class="note">
-						  Пример находится в папке SampleRealTimeTesting. За основу был взят SampleSmartSMA.
-					  </alert>
 					  <para>
-						  Создание шлюза <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference> для тестирования на рыночных
-						  данных. Так как используется пример SampleSmartSMA, то создание шлюза для <token>smartcom</token>:
+						  Создаем шлюз <codeEntityReference>T:StockSharp.Algo.Testing.RealTimeEmulationTrader`1</codeEntityReference> и передаем в его конструктор
+						  адаптер сообщений <codeEntityReference>T:StockSharp.SmartCom.SmartComMessageAdapter</codeEntityReference>. Для создания идентификаторов "виртуальных" транзакций используем
+						  генератор идентификаторов <legacyBold>MillisecondIncrementalIdGenerator</legacyBold>.
 					  </para>
-					  <code language="C#">_trader = new SmartTrader(this.Login.Text, this.Password.Password, this.Address.SelectedAddress);</code>
-					  <para>заменяется на:</para>
-					  <code language="C#"><![CDATA[_trader = new RealTimeEmulationTrader<SmartTrader>(new SmartTrader(this.Login.Text, this.Password.Password, this.Address.SelectedAddress));]]></code>
+					  <code language="C#"><![CDATA[
+					_connector = new RealTimeEmulationTrader<SmartComMessageAdapter>(new SmartComMessageAdapter(new MillisecondIncrementalIdGenerator())
+					{
+						Login = Login.Text,
+						Password = Password.Password.To<SecureString>(),
+						Address = Address.SelectedAddress
+					});
+					  ]]></code>
+				  </content>
+			  </step>
+			  <step>
+				  <content>
+					  <para>
+						  Созданный шлюз используется как обычный коннектор. В нашем случае подписываемся на события, 
+						  создаем <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference>, передаем информацию
+						  в графические компоненты и устанавливаем соединение.
+					  </para>
+					  <code language="C#"><![CDATA[
+SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
+
+_candleManager = new CandleManager(_connector);
+
+_logManager.Sources.Add(_connector);
+					
+_connector.Connected += () =>
+{
+	// set flag (connection is established)
+	_isConnected = true;
+
+	// update gui labels
+	this.GuiAsync(() =>
+		{
+			ChangeConnectStatus(true);
+			ConnectBtn.IsEnabled = false;
+		});
+};
+
+// subscribe on connection error event
+_connector.ConnectionError += error => this.GuiAsync(() =>
+{
+	// update gui labels
+	ChangeConnectStatus(false);
+
+	MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959);
+});
+
+_connector.NewMarketDepths += OnDepths;
+_connector.MarketDepthsChanged += OnDepths;
+
+_connector.NewPortfolios += PortfolioGrid.Portfolios.AddRange;
+_connector.NewPositions += PortfolioGrid.Positions.AddRange;
+
+_connector.NewOrders += Orders.Orders.AddRange;
+_connector.NewMyTrades += Trades.Trades.AddRange;
+
+// subscribe on error of order registration event
+_connector.OrdersRegisterFailed += OrdersFailed;
+
+_candleManager.Processing += (s, candle) =>
+	{
+		if (candle.State == CandleStates.Finished)
+			_buffer.Add(candle);
+	};
+
+// subscribe on error event
+_connector.Error += error =>
+	this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2955));
+
+	// subscribe on error of market data subscription event
+	_connector.MarketDataSubscriptionFailed += (security, type, error) =>
+		this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
+			}
+
+_connector.Connect();
+					  ]]></code>
 				  </content>
 			  </step>
 
 			  <step>
 				  <content>
 					  <para>
-						  Пример выглядит и работает как оригинальный, но при этом не выставляет реальных заявок в <token>smartcom</token>:
+						  На следующем рисунке показан результат работы примера.
 					  </para>
 					  <mediaLink>
-						  <image placement="center" xlink:href="samplesmartsma" />
+						  <image placement="center" xlink:href="sample_realtaime_emulation" />
 					  </mediaLink>
 				  </content>
 			  </step>
@@ -46,6 +121,11 @@
 	  </procedure>
 
     <relatedTopics>
+    
+    
+    
+    
+    
       <!-- Supported Link Types
     
          All of the following linking mechanisms may be used in the topic's content 

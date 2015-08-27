@@ -1,5 +1,24 @@
 StockSharp API Change log
 ========================
+###v4.3.10
+* (bug) Storage. Level1 fix.
+* (bug) ITCH. Fixes.
+* (feature) HistoryEmulationConnector refactoring.
+* (feature) History emulation. Support all candle types.
+* (bug) LocalMarketDataDrive.Dates fix.
+* (feature) Candles history update.
+* (feature) Real time emulation refactoring.
+* (bug) Fix https://github.com/StockSharp/StockSharp/issues/88
+* (feature) CurrencyTypes.GHS
+* (bug) BlackScholes fixes.
+* (bug) CsvMarketDataSerializer. Fix BOM char.
+* (feature) Grids. TimeZone column
+* (bug) FIX connector. Fix ExecMsg.ServerTime
+* (feature) HelpButton.
+* (feature) IOrderLogMarketDepthBuilder.
+* (feature) IpAddressEditor.
+* (feature) AdvertisePanel.
+
 ###v4.3.9.1:
 * (feature) Candle.RelativeVolume is nullable.
 * (feature) Candle. Ticks fields are nullable.

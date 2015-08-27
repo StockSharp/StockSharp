@@ -69,7 +69,7 @@ Trader.RegisterNews();
  	  			изменение стакана, запрошенного с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterMarketDepth(StockSharp.BusinessEntities.Security)</codeEntityReference>.</listItem>
  	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewTrades</codeEntityReference> – 
  	  			новые тики по подписанным с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> инструментам.</listItem>
- 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> – новые новости.</listItem>
+ 	  			<listItem><codeEntityReference>E:StockSharp.BusinessEntities.IConnector.NewNews</codeEntityReference> – поступление новости.</listItem>
  	  		</list>
  	  	</listItem>
 		<listItem>

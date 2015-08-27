@@ -158,7 +158,7 @@ private void SearchText_PreviewKeyUp(object sender, KeyEventArgs e)
 
 					<step>
 						<content>
-							<para>Для получения обновлений по выбранному инструменту и тиков необходимо воспользоваться методами 
+							<para>Для получения обновлений по выбранному инструменту и тикам необходимо воспользоваться методами 
 							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference> 
 							и <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterTrades(StockSharp.BusinessEntities.Security)</codeEntityReference> соответственно:</para>
             				<code language="C#">

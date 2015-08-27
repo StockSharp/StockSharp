@@ -5,22 +5,22 @@
 			 Loaded="AdvertisePanel_OnLoaded">
 	<Grid>
 		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="5" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="5" />
 			<ColumnDefinition />
-			<ColumnDefinition Width="5" />
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="5" />
-			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 
-		<wpf:HtmlLabel x:Name="HtmlPanel" VerticalAlignment="Center">
+		<Button Grid.Column="0" Click="OnPrevClick">&lt;</Button>
+		<Button Grid.Column="2" Click="OnNextClick">&gt;</Button>
+
+		<wpf:HtmlLabel Grid.Column="4" x:Name="HtmlPanel" VerticalAlignment="Center">
 			<!--<wpf:HtmlPanel.ToolTip>
 				<ToolTip BorderBrush="Transparent" Padding="0">
 					<wpf1:HtmlLabel x:Name="_htmlTooltipLabel"/>
 				</ToolTip>
 			</wpf:HtmlPanel.ToolTip>-->
 		</wpf:HtmlLabel>
-
-		<Button Grid.Column="2" Click="OnPrevClick">&lt;</Button>
-		<Button Grid.Column="4" Click="OnNextClick">&gt;</Button>
 	</Grid>
 </UserControl>

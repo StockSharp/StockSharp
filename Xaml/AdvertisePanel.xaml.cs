@@ -14,6 +14,7 @@
 
 	using StockSharp.Community;
 	using StockSharp.Localization;
+	using StockSharp.Logging;
 
 	/// <summary>
 	/// Панель отображения рекламных акций.
@@ -105,24 +106,39 @@
 			if (DesignerProperties.GetIsInDesignMode(this))
 				return;
 
-			_client.SubscribeNews();
+			try
+			{
+				_client.SubscribeNews();
+			}
+			catch (Exception ex)
+			{
+				ex.LogError();
+			}
 		}
 
 		private void OnNextClick(object sender, RoutedEventArgs e)
 		{
-			if (_news.Count <= 0 || _index >= (_news.Count - 1))
+			if (_news.Count <= 0)
 				return;
 
-			_index++;
+			if (_index >= (_news.Count - 1))
+				_index = 0;
+			else
+				_index++;
+
 			ShowNews();
 		}
 
 		private void OnPrevClick(object sender, RoutedEventArgs e)
 		{
-			if (_news.Count <= 0 || _index < 1)
+			if (_news.Count <= 0)
 				return;
 
-			_index--;
+			if (_index < 1)
+				_index = _news.Count - 1;
+			else
+				_index--;
+
 			ShowNews();
 		}
 	}

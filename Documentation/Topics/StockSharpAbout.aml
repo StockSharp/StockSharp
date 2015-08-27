@@ -9,7 +9,7 @@
 			</para>
 			<para>
 				S#.API является основой всех наших продуктов. 
-				На базе библиотеки созданы такие решения как <token>stocksharpstudio</token>, <token>hydra</token> и т.д.. 
+				На базе библиотеки созданы такие решения как <token>stocksharpstudio</token>, <token>hydra</token> и т.д. 
 				А также наши адаптеры <token>wealthlab</token>, <token>matlab</token>.
 			</para>
 		</summary>

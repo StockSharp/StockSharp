@@ -1,7 +1,6 @@
 namespace StockSharp.Community
 {
 	using System;
-	using System.Linq;
 	using System.Threading;
 
 	using Ecng.Common;
@@ -15,7 +14,7 @@ namespace StockSharp.Community
 	public class NotificationClient : BaseCommunityClient<INotificationService>
 	{
 		private Timer _newsTimer;
-		private long _lastNewsId;
+		//private long _lastNewsId;
 
 		/// <summary>
 		/// Создать <see cref="NotificationClient"/>.
@@ -104,12 +103,12 @@ namespace StockSharp.Community
 
 		private void RequestNews()
 		{
-			var news = Invoke(f => f.GetNews(Guid.Empty, _lastNewsId));
+			var news = Invoke(f => f.GetNews(Guid.Empty, 0));
 
-			if (news.Length <= 0)
-				return;
+			//if (news.Length <= 0)
+			//	return;
 
-			_lastNewsId = news.Last().Id;
+			//_lastNewsId = news.Last().Id;
 
 			foreach (var n in news)
 			{
@@ -117,10 +116,10 @@ namespace StockSharp.Community
 				NewsReceived.SafeInvoke(n);
 			}
 
-			if (news.Length == 100)
-			{
-				RequestNews();
-			}
+			//if (news.Length == 100)
+			//{
+			//	RequestNews();
+			//}
 		}
 
 		/// <summary>

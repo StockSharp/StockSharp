@@ -496,10 +496,10 @@ namespace SampleHistoryTesting
 		{
 			var isEnabled = TicksCheckBox.IsChecked == true ||
 			                TicksAndDepthsCheckBox.IsChecked == true ||
-							DepthsCheckBox.IsChecked == true ||
-			                CandlesCheckBox.IsChecked == true ||
+					DepthsCheckBox.IsChecked == true ||
+			            	CandlesCheckBox.IsChecked == true ||
 			                CandlesAndDepthsCheckBox.IsChecked == true ||
-			                OrderLogCheckBox.IsChecked == true;
+			               	OrderLogCheckBox.IsChecked == true;
 
 			StartBtn.IsEnabled = isEnabled;
 			TabControl.Visibility = isEnabled ? Visibility.Visible : Visibility.Collapsed;
@@ -535,8 +535,8 @@ namespace SampleHistoryTesting
 			{
 				StopBtn.IsEnabled = started;
 				StartBtn.IsEnabled = !started;
-				TicksCheckBox.IsEnabled = TicksAndDepthsCheckBox.IsEnabled = CandlesCheckBox.IsEnabled
-					= CandlesAndDepthsCheckBox.IsEnabled = OrderLogCheckBox.IsEnabled = !started;
+				TicksCheckBox.IsEnabled = TicksAndDepthsCheckBox.IsEnabled = DepthsCheckBox.IsEnabled =
+				CandlesCheckBox.IsEnabled = CandlesAndDepthsCheckBox.IsEnabled = OrderLogCheckBox.IsEnabled = !started;
 
 				_bufferedChart.IsAutoRange = started;
 			});

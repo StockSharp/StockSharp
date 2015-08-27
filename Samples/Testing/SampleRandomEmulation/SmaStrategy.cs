@@ -46,7 +46,7 @@ namespace SampleRandomEmulation
 				return;
 			}
 
-			// добавляем новую свечу
+			// update indicators
 			LongSma.Process(candle);
 			ShortSma.Process(candle);
 

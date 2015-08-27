@@ -21,6 +21,7 @@ namespace StockSharp.Community
 		LicenseRejected = 6,
 		ClientNotApproved = 9,
 		TooMuchFrequency = 12,
+		LicenseMaxRenew = 7,
 
 		// reg error codes
 		InvalidEmail = 2,
