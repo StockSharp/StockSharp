@@ -12,7 +12,9 @@ namespace SampleRealTimeEmulation
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
+	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.IQFeed;
@@ -31,9 +33,21 @@ namespace SampleRealTimeEmulation
 		private readonly ChartCandleElement _candlesElem;
 		private readonly LogManager _logManager;
 		private Security _security;
-		private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>(); 
+		private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>();
 
-		public MainWindow()
+	    public bool IsConnected
+	    {
+	        get
+	        {
+	            return _isConnected;
+	        }
+	        set
+	        {
+	            _isConnected = value;
+	        }
+	    }
+
+	    public MainWindow()
 		{
 			InitializeComponent();
 
@@ -86,16 +100,20 @@ namespace SampleRealTimeEmulation
 					}
 					else
 					{
+					    var adapter = new IQFeedMarketDataMessageAdapter(new MillisecondIncrementalIdGenerator());
+                        
+					    this.Level1AddressCtrl.Text = adapter.Level1Address.ToString();
+                        this.Level2AddressCtrl.Text = adapter.Level2Address.ToString();
+                        this.LookupAddressCtrl.Text = adapter.LookupAddress.ToString();
+                        
+
 						// create real-time emu connector
-						_connector = new RealTimeEmulationTrader<IMessageAdapter>(new IQFeedMarketDataMessageAdapter(new MillisecondIncrementalIdGenerator())
-						{
-							Level1Address = Level1AddressCtrl.Text.To<EndPoint>(),
-							Level2Address = Level2AddressCtrl.Text.To<EndPoint>(),
-							LookupAddress = LookupAddressCtrl.Text.To<EndPoint>(),
-						});
+					    _connector = new RealTimeEmulationTrader<IMessageAdapter>(adapter);
 					}
 
-					SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
+                    SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
+                    SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_connector);
+                    SecurityPicker.MarketDataProvider = _connector;
 
 					_candleManager = new CandleManager(_connector);
 
@@ -210,14 +228,26 @@ namespace SampleRealTimeEmulation
 
 		private void NewOrder_OnClick(object sender, RoutedEventArgs e)
 		{
+            if (!this.IsConnected)
+            {
+                throw new ArgumentException("connected");
+            }
+
 			var newOrder = new OrderWindow
 			{
 				Order = new Order { Security = _security },
 				Connector = _connector,
 			};
-
+            
 			if (newOrder.ShowModal(this))
 				_connector.RegisterOrder(newOrder.Order);
 		}
+
+	    private void SecurityLookupPanel_OnLookup(Security security)
+	    {
+	        if (security.Code == null) throw new ArgumentNullException("security");
+
+	        _connector.LookupSecurities(security);
+	    }
 	}
 }
