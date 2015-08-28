@@ -120,7 +120,7 @@ Desk.CurrentTime = null;
 					<para>При получении инструментов:</para>
 					<list class="ordered">
   							<listItem>Заполняем коллекцию фьючерсов для выпадающего списка;</listItem>
-  							<listItem>Инициалицируем выбранный инструмент первым элементом этой коллекции;</listItem>
+  							<listItem>Инициализируем выбранный инструмент первым элементом этой коллекции;</listItem>
   							<listItem>Заполняем массив цепочкой опционов, где подлежащим активом выступает выбранный инструмент;</listItem>
   							<listItem>Присваиваем свойству <codeEntityReference qualifyHint="true">P:StockSharp.Xaml.OptionDesk.Options</codeEntityReference> этот массив;</listItem>
   							<listItem>Обновляем значения доски опционов при помощи метода 

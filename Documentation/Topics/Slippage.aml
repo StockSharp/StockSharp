@@ -7,12 +7,12 @@
 	</summary>
 
     <introduction>
-		<para>Учет проскальзывание ведется через специальный менеджер. Базовый интерфейс менеджера проскальзывания называется <codeEntityReference>T:StockSharp.Algo.Slippage.ISlippageManager</codeEntityReference>.
+		<para>Учет проскальзывания ведется через специальный менеджер. Базовый интерфейс менеджера проскальзывания называется <codeEntityReference>T:StockSharp.Algo.Slippage.ISlippageManager</codeEntityReference>.
 		Данный интерфейс имеет реализацию в виде <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Slippage.SlippageManager</codeEntityReference>. В классе подключений к торговым системам
-		<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> имеется свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.SlippageManager</codeEntityReference>, которое можно использовать для расчета проскальзования.
+		<codeEntityReference>T:StockSharp.Algo.Connector</codeEntityReference> имеется свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Connector.SlippageManager</codeEntityReference>, которое можно использовать для расчета проскальзывания.
 		</para>
 
-		<para>В стратегиях <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> используется собственный механизим расчета проскальзывания. 
+		<para>В стратегиях <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference> используется собственный механизм расчета проскальзывания.
 		В этом случае величину проскальзывания можно получить через свойство 
 		<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Slippage</codeEntityReference>.</para>
 		
@@ -38,7 +38,7 @@
 	</prerequisites>
     
 	<procedure>
-		<title>Добавление в SampleSMA учет проскальзывания</title>
+		<title>Добавление в SampleSMA учета проскальзывания</title>
 			<steps class="ordered">
 				<step>
 					<content>

@@ -19,7 +19,7 @@
   			<para>Продукты сторонних разработчиков с ограничениями лицензии выложены без исходных кодов.</para>
   		</listItem>
   		<listItem>
-  			<para>Платные компоненты (коннекторы Плаза, ММВБ, FIX и др.) - доступны по <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">корпоративной лицензии</link>.</para>
+  			<para>Платные компоненты (коннекторы  <link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">Plaza</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">Micex</link>, <link xlink:href="29dfad18-ac49-4cf4-993c-c32d62101fff">FIX</link> и др.) - доступны по <link xlink:href="ba149b22-2024-4479-aaf3-8dd271a681f5">корпоративной лицензии</link>.</para>
  		</listItem>
 	</list>
 

@@ -218,7 +218,7 @@
 				  - правило на событие изменения свечек.
 			  </listItem>
 			  <listItem>
-				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesChanged(StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
+				  <codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenCandlesFinished(StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
 				  - правило на событие окончания свечек.
 			  </listItem>
 			  <listItem>
@@ -283,7 +283,7 @@
 				</listItem>
 				<listItem>
 					<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.MarketRuleHelper.WhenTimeCome(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.IConnector,System.DateTimeOffset[])</codeEntityReference>
-					- правило правило, которое активизируется при наступлении точного времени.
+					- правило, которое активизируется при наступлении точного времени.
 				</listItem>
 		  	    
 		  	    <listItem>

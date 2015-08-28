@@ -5,7 +5,7 @@
     <introduction>
 		<para>
 			Объекты <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
-			аналогично <link xlink:href="eca7454c-0532-4aaf-92bf-7a3d0cba635b">стратегиям</link>, так же реализуют интерфейс
+			аналогично <link xlink:href="eca7454c-0532-4aaf-92bf-7a3d0cba635b">стратегиям</link>, также реализуют интерфейс
 			<codeEntityReference>T:StockSharp.Logging.ILogSource</codeEntityReference>. Следовательно, от объекта <codeEntityReference>T:StockSharp.BusinessEntities.IConnector</codeEntityReference>
 			можно получать сообщения через <codeEntityReference>T:StockSharp.Logging.LogManager</codeEntityReference> всеми способами,
 			что доступны стратегиям.

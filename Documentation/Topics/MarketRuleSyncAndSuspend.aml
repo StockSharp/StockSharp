@@ -57,12 +57,6 @@ order
     <section address="Section2">
 		<title>Использование приостановки правил</title>
 		<content>
-		
-			<para>
-				Иногда требуется установить одновременно несколько правил, чтобы каждое из них было активно только тогда, когда завершено формирование всех этих правил.
-				Для этого используется метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.MarketRuleHelper.SuspendRules(System.Action)</codeEntityReference>.
-			</para>
-
 			<procedure>
 				<steps class="bullet">
 				<step>

@@ -27,7 +27,7 @@
 			  <step>
 				  <content>
 					  <para>
-						  Создание подключение к <token>quik</token> и запуск экспорта:
+						  Создание подключения к <token>quik</token> и запуск экспорта:
 					  </para>
 					  <code language="C#">// создаем шлюз
 _trader = new QuikTrader(this.Path.Text);
@@ -68,7 +68,7 @@ _trader.Connect();</code>
 				  <content>
 					  <para>
 						  Настройка стратегии <codeEntityReference>T:StockSharp.Algo.Strategies.Derivatives.VolatilityQuotingStrategy</codeEntityReference> (заполнение
-						  границ волатильности, а так же создание заявки, через которую указываются требуемый объем и направление котирования):
+						  границ волатильности, а также создание заявки, через которую указываются требуемый объем и направление котирования):
 					  </para>
 					  <code><![CDATA[// создаем котирование на покупку 20-ти контрактов
 var quoting = new VolatilityQuotingStrategy(

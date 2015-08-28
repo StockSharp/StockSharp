@@ -22,7 +22,7 @@
 			</listItem>
 		  
 			<listItem>
-				<codeEntityReference>T:StockSharp.Algo.Candles.TickCandle</codeEntityReference> - тоже самое, что и <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference>,
+				<codeEntityReference>T:StockSharp.Algo.Candles.TickCandle</codeEntityReference> - то же самое, что и <codeEntityReference>T:StockSharp.Algo.Candles.VolumeCandle</codeEntityReference>,
 				только в качестве ограничения вместо объема берется количество сделок.
 			</listItem>
 		  

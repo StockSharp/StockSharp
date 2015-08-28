@@ -46,7 +46,7 @@
 		</para>
 		<alert class="caution">
 			<para>
-				Если при старте приложения из шлюза были переданы ранее зарегистрированные заявки, то они передаются все через события <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference>,
+				Если при старте приложения из шлюза были переданы ранее зарегистрированные заявки, то все они передаются через события <codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference>,
 				независимо от их состояния (кроме состояния <codeEntityReference>F:StockSharp.Messages.OrderStates.Failed</codeEntityReference>). Это сделано потому, что событие
 				<codeEntityReference qualifyHint="false">E:StockSharp.BusinessEntities.IConnector.NewOrders</codeEntityReference> отражает факт появления новых заявок в программе, а не событие успешной
 				регистрации заявки.
