@@ -196,13 +196,6 @@ namespace StockSharp.Quik.Lua
 			_logManager.Application = new QuikNativeApp();
 
 			_logManager.Sources.Add(_fixServer);
-
-			LogFile = "StockSharp.QuikLua.log";
-
-			var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var logFileName = Path.Combine(path, LogFile);
-
-			_logManager.Listeners.Add(new FileLogListener(logFileName));
 		}
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
@@ -315,11 +308,25 @@ namespace StockSharp.Quik.Lua
 			set { _fixServer.MarketDataSession.IncrementalDepthUpdates = value; }
 		}
 
-		// TODO
+		private string _logFile = "*init*";
+
 		/// <summary>
 		/// Название текстового файла, в который будут писаться логи.
 		/// </summary>
-		public string LogFile { get; set; }
+		public string LogFile
+		{
+			get { return _logFile; }
+			set
+			{				
+				_logFile = value;
+				if (_logFile != "*init*")
+				{
+					var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+					var logFileName = Path.Combine(path, _logFile+".log");
+					_logManager.Listeners.Add(new FileLogListener(logFileName));
+				}
+			}
+		}
 
 		/// <summary>
 		/// Уровень логирования для Lua.
