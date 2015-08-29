@@ -6,7 +6,7 @@
 	
 		<list class="bullet">
   			<listItem>
-  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.MarketTimeChangedInterval</codeEntityReference>
+  				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.Testing.EmulationSettings.MarketTimeChangedInterval</codeEntityReference>
   				- интервал прихода события о смене времени. Если используются генераторы сделок, сделки будут генерироваться с этой периодичностью. По-умолчанию равно 1 минуте.</para>
   			</listItem>
 
@@ -19,13 +19,13 @@
   			</listItem> -->
 
 
-  			<listItem>
+  		<!--	<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> -
 				Если таймфрейм указан, то будут загружаться свечки указанного таймфрейма (вместо трейдов). Далее по свечкам будут генерироваться набор из
 				5 тиковых сделок O, X, H, L, C (не обязательно в таком порядке), соответствующих точкам в свечке. Точка X выбирается рядом с точкой O,
 				чтобы изменение цены шло по цене X строго внутри диапазона L&lt;X&lt;H (нужно для того чтобы сделки были более реалистичными - по цене близкой к O, а не H или L). 
 				По-умолчанию свечки не используются.</para>
-  			</listItem>
+  			</listItem> -->
 
   			<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.MarketEmulatorSettings.Latency</codeEntityReference> -
@@ -38,12 +38,21 @@
 				удовлетворять заявки, если цена “коснулась” уровня (допущение иногда слишком “оптимистично” и для реалистичного тестирования следует выключить режим).
 				Если режим выключен, то лимитные заявки будут удовлетворяться, если цена “прошла сквозь них” хотя бы на 1 шаг. Опция работает во всех режимах кроме ордер лога.	По-умолчанию выключено.</para>
   			</listItem>
-  			
-  			<listItem>
+
+  		<!--	<listItem>
 				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
 				отправлять свечки c таймфреймом	<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Testing.MarketEmulatorSettings.UseCandlesTimeFrame</codeEntityReference> в 
 				<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. Может ускорить построение свечек. По-умолчанию выключено.</para>
+  			</listItem> --> 			
+  			
+  			<listItem>
+				<para><codeEntityReference qualifyHint="true">P:StockSharp.Algo.Testing.HistoryEmulationConnector.UseExternalCandleSource</codeEntityReference> -
+				отправлять свечки в	<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.ICandleManager</codeEntityReference> напрямую. 
+				Может ускорить построение свечек, но при этом будут отсутствовать промежуточные изменения свечи. По-умолчанию выключено.</para>
   			</listItem>  			
+  			
+  			
+  			
   		</list>
 
 		<para>Даже если стратегия тестируется на свечах, нужно подписываться на тиковые сделки:</para>

@@ -7,7 +7,7 @@
 
     <introduction>
 		<para>
-			Для построения систетических позиций по опционам (или, наоборот, опционных позиций по базовому инструменту) можно воспользоваться специальным
+			Для построения синтетических позиций по опционам (или, наоборот, опционных позиций по базовому инструменту) можно воспользоваться специальным
 			классом <codeEntityReference>T:StockSharp.Algo.Derivatives.Synthetic</codeEntityReference>. Данный класс через методы
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Buy</codeEntityReference> и
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Sell</codeEntityReference> возвращает комбинацию из
@@ -59,7 +59,7 @@ if (elapsedVolume > 0)
 	}
 }]]></code>
 		<para>
-			Аналогично опционам так же можно получить опционную позицию для базового инструмента через методы
+			Аналогично опционам также можно получить опционную позицию для базового инструмента через методы
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Buy(System.Decimal)</codeEntityReference> и
 			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Derivatives.Synthetic.Sell(System.Decimal)</codeEntityReference>.
 		</para>

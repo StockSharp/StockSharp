@@ -4,7 +4,7 @@
 
 	<introduction>
 		<para><codeEntityReference>T:StockSharp.Algo.IndexSecurity</codeEntityReference> - индекс, построенный из инструментов.</para>
-		<para>И его реализация <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - индекс построенный из инструментов с примененим весовых коэффициентов.</para>
+		<para>И его реализация <codeEntityReference>T:StockSharp.Algo.WeightedIndexSecurity</codeEntityReference> - индекс построенный из инструментов с применением весовых коэффициентов.</para>
 		<para>Например когда требуется построить спред между двумя инструментами GZM5 и LKM5.</para>
 	</introduction>
 

@@ -38,7 +38,7 @@
 			можно не устанавливать, и они автоматически заполнятся при добавлении в родительскую стратегию.
 		</para>
 		<para>
-			При добавлении новой дочерней стратегии она автоматически получает состоянии из родительской. Например, если родительская стратегия находится в
+			При добавлении новой дочерней стратегии она автоматически получает состояние из родительской. Например, если родительская стратегия находится в
 			работающем состоянии (<codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Started</codeEntityReference>),
 			то дочерняя автоматически будет установлена в работающее состояние (и, наоборот, в случае с <codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Stopped</codeEntityReference>).
 			Поэтому вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Start</codeEntityReference> для дочерней
@@ -60,7 +60,7 @@
 		  стратегии еще не выполнился до конца (например, прервать <link xlink:href="24250c24-029c-4dbc-bc8b-4afde645e483">Котирование</link>).
 	  </alert>
 		<para>
-		  По умолчанию, дочерние стратегии не связанны друг с другом, и исполняются независимо друг от друга. Когда требуется установить
+		  По умолчанию, дочерние стратегии не связаны друг с другом, и исполняются независимо. Когда требуется установить
 		  зависимость между стратегиями, необходимо использовать класс <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategy</codeEntityReference>.
 		  Данный класс позволяет задать условия завершения стратегий в зависимости друг от друга через признаки
 		  <codeEntityReference>T:StockSharp.Algo.Strategies.BasketStrategyFinishModes</codeEntityReference>. Например, через значение

@@ -28,7 +28,7 @@
 	  	Если же используется <link xlink:href="a8159c99-256b-46e4-80fe-7cf92944b4c9">итерационная модель</link>,
 		то код вызывается только по окончанию интервала <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.TimeFrameStrategy.TimeFrame</codeEntityReference>,
 		и есть вероятность пропустить необходимые сигналы на рынке. Поэтому в <token>stocksharp</token> рекомендуется использовать именно события при
-		создании логики работы стратегий (все стандартные стратегии <token>stocksharp</token> реализуют именно такой подход). 
+		создании логики работы стратегий (все стандартные стратегии <token>stocksharp</token> реализуют именно такой подход).
 	  </para>
 	  <para>
 	  	Для использования событийного подхода необходимо использовать свойство <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Rules</codeEntityReference>,
@@ -145,7 +145,7 @@ Security
 		</para>
 			
 		<para>
-			По-умолчанию правило является периодическим, тоесть вызывается столько раз, сколько раз произойдет событие. Это будет продолжаться до тех пор,
+			По-умолчанию правило является периодическим, то есть вызывается столько раз, сколько раз произойдет событие. Это будет продолжаться до тех пор,
 			пока работает стратегия, в которую добавлено правило (<codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.ProcessState</codeEntityReference>
 			равно <codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Started</codeEntityReference>).
 			Если необходимо сделать правило, которое будет активно от другого условия (например, правило, которое закрывает позицию при остановке стратегии,
@@ -158,7 +158,7 @@ Security
 
 		<alert class="caution">
 			Если стратегия была принудительно остановлена через метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference>
-			(например, при нажатие пользователем на окне программы), то стратегия не сразу останавливается, а переходит в состояние 
+			(например, при нажатии пользователем на окне программы), то стратегия не сразу останавливается, а переходит в состояние 
 			<codeEntityReference qualifyHint="true">F:StockSharp.Algo.ProcessStates.Stopping</codeEntityReference>
 			и будет продолжать оставаться активной до тех пор, пока список с правилами <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Rules</codeEntityReference>
 			не пустой (что означает, что какие-то правила все еще активны). Поэтому необходимо быть внимательным с добавлением критерия остановки правила,

@@ -6,13 +6,13 @@
 		<para>Для учета комиссий в торговом роботе используется менеджер расчета комиссии 
 		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionManager</codeEntityReference>.</para>
 		
-		<para>Тарифный план создается с помощью добавления соответсвующих правил 
+		<para>Тарифный план создается с помощью добавления соответствующих правил 
 		<codeEntityReference qualifyHint="false">T:StockSharp.Algo.Commissions.CommissionRule</codeEntityReference>,
 		на основе которых в дальнейшем и будет вестись расчет комиссий.</para>
 	</introduction>
 
 	<procedure>
-		<title>Созадание CommissionManager</title>
+		<title>Создание CommissionManager</title>
 			<steps class="ordered">
 				<step>
 					<content>

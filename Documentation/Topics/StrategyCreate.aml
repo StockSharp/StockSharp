@@ -12,10 +12,10 @@
 	  	Для создания стратегии на основе итерационной модели используется класс
 	  	<codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference>. При использовании данного класса
 	  	основной код торгового алгоритма должен быть сосредоточен в методе <codeEntityReference>M:StockSharp.Algo.Strategies.TimeFrameStrategy.OnProcess</codeEntityReference>.
-	  	Частота вызова данного метод зависить от значения <codeEntityReference>P:StockSharp.Algo.Strategies.TimeFrameStrategy.Interval</codeEntityReference>.
+	  	Частота вызова данного метода зависит от значения <codeEntityReference>P:StockSharp.Algo.Strategies.TimeFrameStrategy.Interval</codeEntityReference>.
 	  	Подход в использовании <codeEntityReference>T:StockSharp.Algo.Strategies.TimeFrameStrategy</codeEntityReference>
 		состоит в итерационной обработке: начало метода -> проверка состояния рынка -> регистрация (или отмена) заявок -> конец метода.
-		При таком подходе необходимо хранить состояния, для того, чтобы следующий вызов метода мог получить данные, созданные в предыдущем вызове.		
+		При таком подходе необходимо хранить состояния, для того, чтобы следующий вызов метода мог получить данные, созданные в предыдущем вызове.
       </para>
 
       <para>
@@ -161,7 +161,7 @@
 			  проверяется, не находится ли стратегия в процессе остановки (например, был вызван метод <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.Stop</codeEntityReference>
 			  или произошла ошибка). Если стратегия в процессе остановки, то отменяются все активные заявки через метод
 			  <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.CancelActiveOrders</codeEntityReference>,
-			  чтобы предотвратить их активацию по невыгодным ценам. Если необходимо не только отменить заявки, но так же и закрыть позицию,
+			  чтобы предотвратить их активацию по невыгодным ценам. Если необходимо не только отменить заявки, но также и закрыть позицию,
 			  то можно воспользоваться методом <codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.StrategyHelper.ClosePosition(StockSharp.Algo.Strategies.Strategy,System.Decimal)</codeEntityReference>.
 			 </para>
 			<para> 
@@ -178,21 +178,21 @@
 			  есть метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 			  который необходимо вызывать вместо регистрации напрямую через шлюз (<codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>).
 			  Все сделки, которые произошли по такой заявке, будут перехватываться <codeEntityReference>T:StockSharp.Algo.Strategies.Strategy</codeEntityReference>,
-			  и на основе них будет производиться расчет позиции, проскальзывания, P&amp;L и т.д.. Так же, такие заявки и сделки будут добавлятся в коллекции
+			  и на основе них будет производиться расчет позиции, проскальзывания, P&amp;L и т.д.. Также, такие заявки и сделки будут добавлятся в коллекции
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.Orders</codeEntityReference> и
 			  <codeEntityReference qualifyHint="true">P:StockSharp.Algo.Strategies.Strategy.MyTrades</codeEntityReference>, что позволяет просматривать все заявки
 			  и сделки, совершенные в рамках работы стратегии.
 			</para>
 			<alert class-="note">
 			  <para>
-				Если необходимо изменить зарегистрированную заявку, то так же нужно вызывать метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>,
+				Если необходимо изменить зарегистрированную заявку, то также нужно вызывать метод <codeEntityReference>M:StockSharp.Algo.Strategies.Strategy.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>,
 				а не обращаться напрямую к шлюзу через метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
 			  </para>
 			</alert>
 			<para>
 			  В самом конце метода возвращается значение <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Continue</codeEntityReference>,
 			  которое означает, что стратегия не закончила свою работу и необходимо вызвать ее еще раз. Если реализуется какой-либо другой алгоритм,
-			  у которого есть критерий завершения (например, набор позиции до определенного значение), то в случае окончания работы такого алгоритма
+			  у которого есть критерий завершения (например, набор позиции до определенного значения), то в случае окончания работы такого алгоритма
 			  необходимо возвращать значение <codeEntityReference qualifyHint="true">F:StockSharp.Algo.Strategies.ProcessResults.Stop</codeEntityReference>.
 			</para>
 		  </content>

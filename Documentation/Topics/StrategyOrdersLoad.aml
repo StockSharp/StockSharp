@@ -58,7 +58,7 @@ protected override IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrd
         		<para>
         			Чтобы реализовать фильтрацию заявок, необходимо определить критерий отсеивания. Например, если в процессе работы стратегии сохранять
         			все регистрируемые заявки в файл, то можно сделать фильтр по номеру транзакции <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.TransactionId</codeEntityReference>.
-        			Если они такой номер присутствует в файле, значит заявка была зарегистрирована через данную стратегию:
+        			Если такой номер присутствует в файле, значит заявка была зарегистрирована через данную стратегию:
         		</para>
         		<code language="C#"><![CDATA[private IEnumerable<Order> Filter(IEnumerable<Order> orders)
 {
@@ -73,7 +73,7 @@ protected override IEnumerable<Order> ProcessNewOrders(IEnumerable<Order> newOrd
         <step>
         	<content>
         		<para>
-        			Запись номеров транзакций заявок, регисрируемых через стратегию, можно осуществить, переопределив метод
+        			Запись номеров транзакций заявок, регистрируемых через стратегию, можно осуществить, переопределив метод
         			<codeEntityReference qualifyHint="true">M:StockSharp.Algo.Strategies.Strategy.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>:
         		</para>
         		<code language="C#"><![CDATA[protected override void RegisterOrder(Order order)
