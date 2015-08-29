@@ -16,9 +16,7 @@ namespace StockSharp.AlfaDirect
 
 	partial class AlfaDirectMessageAdapter
 	{
-		/// <summary>&lt;s# transactionId, alfaDirectTransactionId&gt;</summary>
 		private readonly SynchronizedPairSet<long, int> _localIds = new SynchronizedPairSet<long, int>();
-		/// <summary>&lt;alfaDirectTransactionId, orderId&gt;</summary>
 		private readonly SynchronizedPairSet<int, int> _alfaIds = new SynchronizedPairSet<int, int>();
 
 		private int _lastFakeAlfaTransactionId = -1000000;

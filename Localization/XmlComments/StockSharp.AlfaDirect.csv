@@ -5,8 +5,6 @@ M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.CreateOrderCondition/summary;Do
 M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.CreateOrderCondition/returns;DocStr45
 M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/summary;DocStr46
 M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)/param/message;Str3166
-F:StockSharp.AlfaDirect.AlfaDirectMessageAdapter._localIds/summary;DocStr47
-F:StockSharp.AlfaDirect.AlfaDirectMessageAdapter._alfaIds/summary;DocStr48
 M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.AlfaDirect.AlfaDirectMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
