@@ -820,7 +820,7 @@
             Показывать дополнительные линии сетки.
             </summary>
     </member>
-    <member name="P:StockSharp.Xaml.Charting.ChartAxis.DrwaLables">
+    <member name="P:StockSharp.Xaml.Charting.ChartAxis.DrawLabels">
       <summary>
             Показывать надписи на оси.
             </summary>

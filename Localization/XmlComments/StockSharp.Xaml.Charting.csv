@@ -244,7 +244,7 @@ P:StockSharp.Xaml.Charting.ChartAxis.DrawMajorTicks/summary;Str1929
 P:StockSharp.Xaml.Charting.ChartAxis.DrawMajorGridLines/summary;Str1931
 P:StockSharp.Xaml.Charting.ChartAxis.DrawMinorTicks/summary;Str1933
 P:StockSharp.Xaml.Charting.ChartAxis.DrawMinorGridLines/summary;Str1935
-P:StockSharp.Xaml.Charting.ChartAxis.DrwaLables/summary;Str1937
+P:StockSharp.Xaml.Charting.ChartAxis.DrawLabels/summary;Str1937
 P:StockSharp.Xaml.Charting.ChartAxis.TextFormatting/summary;Str1938
 P:StockSharp.Xaml.Charting.ChartAxis.SubDayTextFormatting/summary;DocStr7764
 E:StockSharp.Xaml.Charting.ChartAxis.PropertyChanged/summary;DocStr7752

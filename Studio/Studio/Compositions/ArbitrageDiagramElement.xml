@@ -11965,7 +11965,7 @@
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>DrwaLables</key>
+                                                <key>DrawLabels</key>
                                                 <value>
                                                   <Type type="string">bool</Type>
                                                   <Value type="bool">True</Value>
@@ -12087,7 +12087,7 @@
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>DrwaLables</key>
+                                                <key>DrawLabels</key>
                                                 <value>
                                                   <Type type="string">bool</Type>
                                                   <Value type="bool">True</Value>
@@ -12530,7 +12530,7 @@
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>DrwaLables</key>
+                                                <key>DrawLabels</key>
                                                 <value>
                                                   <Type type="string">bool</Type>
                                                   <Value type="bool">True</Value>
@@ -12649,7 +12649,7 @@
                                                 </value>
                                               </KeyValuePairBeginStringAndObjectEnd>
                                               <KeyValuePairBeginStringAndObjectEnd>
-                                                <key>DrwaLables</key>
+                                                <key>DrawLabels</key>
                                                 <value>
                                                   <Type type="string">bool</Type>
                                                   <Value type="bool">True</Value>
