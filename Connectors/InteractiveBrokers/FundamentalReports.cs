@@ -28,7 +28,7 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Прогноз.
 		/// </summary>
-		Estimaes,
+		Estimates,
 		
 		/// <summary>
 		/// График.

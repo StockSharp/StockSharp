@@ -30,7 +30,7 @@
 		/// <summary>
 		/// Получить колонку по имени <see cref="IQFeedLevel1Column.Name"/>.
 		/// </summary>
-		/// <param name="name">Имя колонка.</param>
+		/// <param name="name">Название колонки.</param>
 		/// <returns>Найденная колонка. Если колонка не существует, то будет возвращено <see langword="null"/>.</returns>
 		public IQFeedLevel1Column this[string name]
 		{

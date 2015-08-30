@@ -126,7 +126,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Получить исторические сделки.
+		/// Загрузить исторические сделки.
 		/// </summary>
 		/// <param name="security">Инструмент, для которого необходимо получить все сделки.</param>
 		/// <param name="from">Дата начала периода.</param>

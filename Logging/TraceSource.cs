@@ -106,7 +106,7 @@
 		}
 
 		/// <summary>
-		/// Удалить занятые ресурсы.
+		/// Освободить занятые ресурсы.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

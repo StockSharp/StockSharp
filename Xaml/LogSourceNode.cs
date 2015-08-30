@@ -55,9 +55,9 @@
 		public ThreadSafeObservableCollection<LogSourceNode> ChildNodes { get; private set; }
 
 		/// <summary>
-		/// Получить строковое представление узла.
+		/// Получить строковое представление.
 		/// </summary>
-		/// <returns>Строковое представление узла.</returns>
+		/// <returns>Строковое представление.</returns>
 		public override string ToString()
 		{
 			return Name;

@@ -527,7 +527,7 @@ namespace StockSharp.InteractiveBrokers.Native
 					return socket.Send("ReportsFinSummary");
 				case FundamentalReports.Ratio:
 					return socket.Send("ReportRatios");
-				case FundamentalReports.Estimaes:
+				case FundamentalReports.Estimates:
 					return socket.Send("RESC");
 				case FundamentalReports.Calendar:
 					return socket.Send("CalendarReport");

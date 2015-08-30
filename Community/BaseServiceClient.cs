@@ -7,7 +7,7 @@
 	using Ecng.Net;
 
 	/// <summary>
-	/// Базовый клиент для доступа к WCFсервисам.
+	/// Базовый клиент для доступа к WCF сервисам.
 	/// </summary>
 	/// <typeparam name="TService">Тип WCF сервиса.</typeparam>
 	public abstract class BaseServiceClient<TService> : Disposable

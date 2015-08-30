@@ -113,7 +113,7 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Освободить ресурсы.
+		/// Освободить занятые ресурсы.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

@@ -80,7 +80,7 @@ namespace StockSharp.AlfaDirect
 		}
 
 		/// <summary>
-		/// Получить строковое представление контейнера.
+		/// Получить строковое представление.
 		/// </summary>
 		/// <returns>Строковое представление.</returns>
 		public override string ToString()

@@ -49,7 +49,7 @@ namespace StockSharp.SmartCom
 		}
 
 		/// <summary>
-		/// Все доступные тайм-фреймы.
+		/// Возможные тайм-фреймы.
 		/// </summary>
 		public static IEnumerable<TimeSpan> AllTimeFrames
 		{

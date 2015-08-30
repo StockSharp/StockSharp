@@ -181,9 +181,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Получить строковое представление источника.
+		/// Получить строковое представление.
 		/// </summary>
-		/// <returns>Строковое представление источника.</returns>
+		/// <returns>Строковое представление.</returns>
 		public override string ToString()
 		{
 			return Name;

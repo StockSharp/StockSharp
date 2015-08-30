@@ -428,7 +428,7 @@ M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSh
 M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSharp.Messages.SecurityId,System.String,System.DateTime,System.DateTime)/param/securityId;SecurityId
 M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSharp.Messages.SecurityId,System.String,System.DateTime,System.DateTime)/param/securityName;Str362
 M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSharp.Messages.SecurityId,System.String,System.DateTime,System.DateTime)/param/fromDate;DocStr247
-M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSharp.Messages.SecurityId,System.String,System.DateTime,System.DateTime)/param/toDate;DocStr248
+M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSharp.Messages.SecurityId,System.String,System.DateTime,System.DateTime)/param/toDate;DocStr251
 M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetSecurityEndOfDay(StockSharp.Messages.SecurityId,System.String,System.DateTime,System.DateTime)/returns;DocStr249
 M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetRate(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)/summary;DocStr250
 M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetRate(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)/param/security;DocStr192
