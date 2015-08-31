@@ -529,7 +529,7 @@ namespace StockSharp.Messages
 		/// <summary>
 		/// Сравнить на эквивалентность.
 		/// </summary>
-		/// <param name="other">Значение параметров пункто-цифрового графика, с которым необходимо сделать сравнение.</param>
+		/// <param name="other">Объект для сравнения.</param>
 		/// <returns><see langword="true"/>, если значения равны. Иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(PnFArg other)
 		{
