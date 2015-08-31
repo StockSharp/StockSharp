@@ -181,10 +181,10 @@ M:StockSharp.Messages.ConnectMessage.#ctor/summary;DocStr1
 M:StockSharp.Messages.ConnectMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.ConnectMessage.Clone/returns;DocStr644
 T:StockSharp.Messages.Currency/summary;Currency
-M:StockSharp.Messages.Currency.#ctor/summary;DocStr4094
+M:StockSharp.Messages.Currency.#ctor/summary;DocStr1
 M:StockSharp.Messages.Currency.Clone/summary;DocStr643
 M:StockSharp.Messages.Currency.Clone/returns;DocStr644
-M:StockSharp.Messages.Currency.OnEquals(StockSharp.Messages.Currency)/summary;DocStr4097
+M:StockSharp.Messages.Currency.OnEquals(StockSharp.Messages.Currency)/summary;DocStr4066
 M:StockSharp.Messages.Currency.OnEquals(StockSharp.Messages.Currency)/param/other;DocStr4098
 M:StockSharp.Messages.Currency.OnEquals(StockSharp.Messages.Currency)/returns;DocStr4099
 M:StockSharp.Messages.Currency.GetHashCode/summary;DocStr2637

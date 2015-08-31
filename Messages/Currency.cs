@@ -13,7 +13,7 @@ namespace StockSharp.Messages
 	public class Currency : Equatable<Currency>
 	{
 		/// <summary>
-		/// Создать объект валюты.
+		/// Создать <see cref="Currency"/>.
 		/// </summary>
 		public Currency()
 		{
@@ -42,7 +42,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить на равенство.
+		/// Сравнить на эквивалентность.
 		/// </summary>
 		/// <param name="other">Валюта, с которой нужно сравнить.</param>
 		/// <returns>Результат сравнения.</returns>

@@ -4438,7 +4438,7 @@ M:StockSharp.Algo.Strategies.Reporting.XmlStrategyReport.#ctor(System.Collection
 M:StockSharp.Algo.Strategies.Reporting.XmlStrategyReport.#ctor(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy},System.String)/param/strategies;DocStr1741
 M:StockSharp.Algo.Strategies.Reporting.XmlStrategyReport.#ctor(System.Collections.Generic.IEnumerable{StockSharp.Algo.Strategies.Strategy},System.String)/param/fileName;DocStr1761
 M:StockSharp.Algo.Strategies.Reporting.XmlStrategyReport.Generate/summary;DocStr1743
-T:StockSharp.Algo.Strategies.StrategyHelper/summary;DocStr1762
+T:StockSharp.Algo.Strategies.StrategyHelper/summary;DocStr722
 M:StockSharp.Algo.Strategies.StrategyHelper.BuyAtMarket(StockSharp.Algo.Strategies.Strategy,System.Nullable{System.Decimal})/summary;DocStr1763
 M:StockSharp.Algo.Strategies.StrategyHelper.BuyAtMarket(StockSharp.Algo.Strategies.Strategy,System.Nullable{System.Decimal})/remarks;DocStr1764
 M:StockSharp.Algo.Strategies.StrategyHelper.BuyAtMarket(StockSharp.Algo.Strategies.Strategy,System.Nullable{System.Decimal})/param/strategy;Strategy
@@ -4781,7 +4781,7 @@ P:StockSharp.Algo.TimeQuoteChange.LocalTime/summary;DocStr1918
 T:StockSharp.Algo.Storages.TradeList/summary;DocStr1919
 M:StockSharp.Algo.Storages.TradeList.#ctor(Ecng.Serialization.IStorage)/summary;DocStr1
 M:StockSharp.Algo.Storages.TradeList.#ctor(Ecng.Serialization.IStorage)/param/storage;DocStr1336
-T:StockSharp.Algo.MarketRuleHelper/summary;DocStr1920
+T:StockSharp.Algo.MarketRuleHelper/summary;DocStr722
 M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Order)/summary;DocStr1921
 M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Order)/param/order;DocStr1922
 M:StockSharp.Algo.MarketRuleHelper.WhenRegistered(StockSharp.BusinessEntities.Order)/returns;DocStr14

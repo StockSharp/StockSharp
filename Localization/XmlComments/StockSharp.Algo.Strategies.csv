@@ -132,7 +132,7 @@ M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.#ctor/summary;DocStr
 M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.GetReHedgeOrders/summary;DocStr351
 M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.GetReHedgeOrders/returns;DocStr352
 P:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.PositionOffset/summary;Str1246
-T:StockSharp.Algo.Strategies.Extensions/summary;DocStr365
+T:StockSharp.Algo.Strategies.Extensions/summary;DocStr722
 M:StockSharp.Algo.Strategies.Extensions.OpenPositionByQuoting(StockSharp.Algo.Strategies.Strategy,System.Decimal)/summary;DocStr366
 M:StockSharp.Algo.Strategies.Extensions.OpenPositionByQuoting(StockSharp.Algo.Strategies.Strategy,System.Decimal)/param/strategy;Strategy
 M:StockSharp.Algo.Strategies.Extensions.OpenPositionByQuoting(StockSharp.Algo.Strategies.Strategy,System.Decimal)/param/finishPosition;DocStr367

@@ -16,7 +16,7 @@ namespace StockSharp.Algo
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с торговыми правилами <see cref="IMarketRule"/>.
+	/// Вспомогательный класс для работы с <see cref="IMarketRule"/>.
 	/// </summary>
 	public static class MarketRuleHelper
 	{

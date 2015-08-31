@@ -1486,9 +1486,9 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.Clone">
       <summary>
-            Создать копию стратегии со всеми настройками.
+            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramStrategy" />.
             </summary>
-      <returns>Копия стратегии.</returns>
+      <returns>Копия.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.NeedShowProperty(System.ComponentModel.PropertyDescriptor)">
       <summary>

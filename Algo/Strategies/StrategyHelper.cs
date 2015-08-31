@@ -21,7 +21,7 @@ namespace StockSharp.Algo.Strategies
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с классом <see cref="Strategy"/>.
+	/// Вспомогательный класс для работы с <see cref="Strategy"/>.
 	/// </summary>
 	public static class StrategyHelper
 	{
