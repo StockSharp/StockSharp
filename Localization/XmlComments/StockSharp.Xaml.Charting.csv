@@ -203,7 +203,7 @@ M:StockSharp.Xaml.Charting.ChartArea.Load(Ecng.Serialization.SettingsStorage)/su
 M:StockSharp.Xaml.Charting.ChartArea.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartArea.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.ChartArea.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.Charting.ChartArea.Clone/summary;DocStr7756
+M:StockSharp.Xaml.Charting.ChartArea.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.ChartArea.Clone/returns;DocStr644
 M:StockSharp.Xaml.Charting.ChartArea.ToString/summary;DocStr49
 M:StockSharp.Xaml.Charting.ChartArea.ToString/returns;DocStr50
@@ -281,7 +281,7 @@ M:StockSharp.Xaml.Charting.ChartCandleElement.Load(Ecng.Serialization.SettingsSt
 M:StockSharp.Xaml.Charting.ChartCandleElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartCandleElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.ChartCandleElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.Charting.ChartCandleElement.Clone/summary;DocStr7756
+M:StockSharp.Xaml.Charting.ChartCandleElement.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.ChartCandleElement.Clone/returns;DocStr644
 P:StockSharp.Xaml.Charting.ChartCandleElement.CandleSeries/summary;DocStr7772
 P:StockSharp.Xaml.Charting.ChartCandleElement.Title/summary;Str1945
@@ -374,7 +374,7 @@ M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.Setting
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.Charting.ChartIndicatorElement.Clone/summary;DocStr7756
+M:StockSharp.Xaml.Charting.ChartIndicatorElement.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Clone/returns;DocStr644
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.ToString/summary;DocStr49
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.ToString/returns;DocStr50
@@ -400,7 +400,7 @@ M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Save(Ecng.Serialization.Set
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.FillClone(`0)/summary;DocStr7750
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.FillClone(`0)/param/elem;DocStr644
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.FillClone(`0)/returns;DocStr644
-M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone/summary;DocStr7756
+M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone/returns;DocStr644
 P:StockSharp.Xaml.Charting.ChartTransactionElement`1.Security/summary;DocStr7803
 P:StockSharp.Xaml.Charting.ChartTransactionElement`1.Title/summary;Str1945
@@ -696,7 +696,7 @@ M:StockSharp.Xaml.Charting.IndicatorType.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.IndicatorType.#ctor(System.Type,System.Type)/summary;DocStr1
 M:StockSharp.Xaml.Charting.IndicatorType.#ctor(System.Type,System.Type)/param/indicator;IndicatorType
 M:StockSharp.Xaml.Charting.IndicatorType.#ctor(System.Type,System.Type)/param/painter;DocStr7851
-M:StockSharp.Xaml.Charting.IndicatorType.Clone/summary;DocStr4430
+M:StockSharp.Xaml.Charting.IndicatorType.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.IndicatorType.Clone/returns;DocStr1116
 M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/summary;DocStr4066
 M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/param/other;DocStr7852
@@ -711,7 +711,7 @@ P:StockSharp.Xaml.Charting.IndicatorType.Indicator/summary;IndicatorType
 P:StockSharp.Xaml.Charting.IndicatorType.Painter/summary;DocStr7851
 T:StockSharp.Xaml.Charting.LineElement/summary;DocStr7855
 M:StockSharp.Xaml.Charting.LineElement.#ctor/summary;DocStr1
-M:StockSharp.Xaml.Charting.LineElement.Clone/summary;DocStr7756
+M:StockSharp.Xaml.Charting.LineElement.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.LineElement.Clone/returns;DocStr644
 P:StockSharp.Xaml.Charting.LineElement.Color/summary;Str2056
 P:StockSharp.Xaml.Charting.LineElement.AdditionalColor/summary;Str2057

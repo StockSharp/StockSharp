@@ -1979,8 +1979,8 @@ M:StockSharp.Algo.Indicators.BaseIndicator.OnProcess(StockSharp.Algo.Indicators.
 M:StockSharp.Algo.Indicators.BaseIndicator.RaiseChangedEvent(StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr466
 M:StockSharp.Algo.Indicators.BaseIndicator.RaiseChangedEvent(StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1132
 M:StockSharp.Algo.Indicators.BaseIndicator.RaiseChangedEvent(StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Algo.Indicators.IIndicatorValue)/param/result;DocStr1133
-M:StockSharp.Algo.Indicators.BaseIndicator.Clone/summary;DocStr1134
-M:StockSharp.Algo.Indicators.BaseIndicator.Clone/returns;DocStr1135
+M:StockSharp.Algo.Indicators.BaseIndicator.Clone/summary;DocStr643
+M:StockSharp.Algo.Indicators.BaseIndicator.Clone/returns;DocStr644
 M:StockSharp.Algo.Indicators.BaseIndicator.ToString/summary;DocStr49
 M:StockSharp.Algo.Indicators.BaseIndicator.ToString/returns;DocStr50
 P:StockSharp.Algo.Indicators.BaseIndicator.Id/summary;Str1917
@@ -2806,8 +2806,8 @@ T:StockSharp.Algo.Indicators.GatorHistogram/summary;DocStr1236
 M:StockSharp.Algo.Indicators.GatorHistogram.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/summary;DocStr1122
 M:StockSharp.Algo.Indicators.GatorHistogram.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/param/input;DocStr1123
 M:StockSharp.Algo.Indicators.GatorHistogram.OnProcess(StockSharp.Algo.Indicators.IIndicatorValue)/returns;DocStr1131
-M:StockSharp.Algo.Indicators.GatorHistogram.Clone/summary;DocStr1134
-M:StockSharp.Algo.Indicators.GatorHistogram.Clone/returns;DocStr1135
+M:StockSharp.Algo.Indicators.GatorHistogram.Clone/summary;DocStr643
+M:StockSharp.Algo.Indicators.GatorHistogram.Clone/returns;DocStr644
 M:StockSharp.Algo.Indicators.GatorHistogram.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Algo.Indicators.GatorHistogram.Load(Ecng.Serialization.SettingsStorage)/param/settings;DocStr3
 M:StockSharp.Algo.Indicators.GatorHistogram.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
@@ -4262,8 +4262,8 @@ M:StockSharp.Algo.Strategies.Strategy.CancelActiveOrders/summary;DocStr1674
 M:StockSharp.Algo.Strategies.Strategy.ProcessCancelActiveOrders/summary;DocStr1674
 M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)/summary;DocStr1675
 M:StockSharp.Algo.Strategies.Strategy.OnError(System.Exception)/param/error;Str152
-M:StockSharp.Algo.Strategies.Strategy.Clone/summary;DocStr1676
-M:StockSharp.Algo.Strategies.Strategy.Clone/returns;DocStr1677
+M:StockSharp.Algo.Strategies.Strategy.Clone/summary;DocStr643
+M:StockSharp.Algo.Strategies.Strategy.Clone/returns;DocStr644
 M:StockSharp.Algo.Strategies.Strategy.GetMarketDepth(StockSharp.BusinessEntities.Security)/summary;DocStr816
 M:StockSharp.Algo.Strategies.Strategy.GetMarketDepth(StockSharp.BusinessEntities.Security)/param/security;DocStr817
 M:StockSharp.Algo.Strategies.Strategy.GetMarketDepth(StockSharp.BusinessEntities.Security)/returns;DocStr818
@@ -5575,7 +5575,7 @@ M:StockSharp.Algo.Testing.TrendMarketDepthGenerator.Init/summary;DocStr2184
 M:StockSharp.Algo.Testing.TrendMarketDepthGenerator.OnProcess(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Algo.Testing.TrendMarketDepthGenerator.OnProcess(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.Testing.TrendMarketDepthGenerator.OnProcess(StockSharp.Messages.Message)/returns;DocStr2185
-M:StockSharp.Algo.Testing.TrendMarketDepthGenerator.Clone/summary;DocStr2213
+M:StockSharp.Algo.Testing.TrendMarketDepthGenerator.Clone/summary;DocStr643
 M:StockSharp.Algo.Testing.TrendMarketDepthGenerator.Clone/returns;DocStr644
 T:StockSharp.Algo.Storages.MyTradeList/summary;DocStr2214
 M:StockSharp.Algo.Storages.MyTradeList.#ctor(Ecng.Serialization.IStorage)/summary;DocStr1
@@ -5663,7 +5663,7 @@ M:StockSharp.Algo.Testing.OrderLogGenerator.Process(StockSharp.Messages.Message)
 M:StockSharp.Algo.Testing.OrderLogGenerator.OnProcess(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Algo.Testing.OrderLogGenerator.OnProcess(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.Testing.OrderLogGenerator.OnProcess(StockSharp.Messages.Message)/returns;DocStr2185
-M:StockSharp.Algo.Testing.OrderLogGenerator.Clone/summary;DocStr2213
+M:StockSharp.Algo.Testing.OrderLogGenerator.Clone/summary;DocStr643
 M:StockSharp.Algo.Testing.OrderLogGenerator.Clone/returns;DocStr644
 P:StockSharp.Algo.Testing.OrderLogGenerator.DataType/summary;Str1670
 P:StockSharp.Algo.Testing.OrderLogGenerator.TradeGenerator/summary;DocStr2239
@@ -5696,7 +5696,7 @@ M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.#ctor(StockSharp.Messages.Sec
 M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.OnProcess(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.OnProcess(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.OnProcess(StockSharp.Messages.Message)/returns;DocStr2185
-M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.Clone/summary;DocStr2213
+M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.Clone/summary;DocStr643
 M:StockSharp.Algo.Testing.RandomWalkTradeGenerator.Clone/returns;DocStr644
 T:StockSharp.Algo.ShrinkRules/summary;DocStr2249
 F:StockSharp.Algo.ShrinkRules.Auto/summary;DocStr2250

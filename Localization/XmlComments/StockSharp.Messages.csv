@@ -182,8 +182,8 @@ M:StockSharp.Messages.ConnectMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.ConnectMessage.Clone/returns;DocStr644
 T:StockSharp.Messages.Currency/summary;Currency
 M:StockSharp.Messages.Currency.#ctor/summary;DocStr4094
-M:StockSharp.Messages.Currency.Clone/summary;DocStr4095
-M:StockSharp.Messages.Currency.Clone/returns;DocStr4096
+M:StockSharp.Messages.Currency.Clone/summary;DocStr643
+M:StockSharp.Messages.Currency.Clone/returns;DocStr644
 M:StockSharp.Messages.Currency.OnEquals(StockSharp.Messages.Currency)/summary;DocStr4097
 M:StockSharp.Messages.Currency.OnEquals(StockSharp.Messages.Currency)/param/other;DocStr4098
 M:StockSharp.Messages.Currency.OnEquals(StockSharp.Messages.Currency)/returns;DocStr4099
@@ -728,8 +728,8 @@ P:StockSharp.Messages.OrderCancelMessage.Volume/summary;DocStr4382
 P:StockSharp.Messages.OrderCancelMessage.Side/summary;DocStr660
 T:StockSharp.Messages.OrderCondition/summary;DocStr4383
 M:StockSharp.Messages.OrderCondition.#ctor/summary;DocStr93
-M:StockSharp.Messages.OrderCondition.Clone/summary;DocStr4384
-M:StockSharp.Messages.OrderCondition.Clone/returns;DocStr4385
+M:StockSharp.Messages.OrderCondition.Clone/summary;DocStr643
+M:StockSharp.Messages.OrderCondition.Clone/returns;DocStr644
 P:StockSharp.Messages.OrderCondition.Parameters/summary;DocStr4386
 T:StockSharp.Messages.OrderGroupCancelMessage/summary;DocStr4387
 M:StockSharp.Messages.OrderGroupCancelMessage.#ctor/summary;DocStr1
@@ -821,7 +821,7 @@ F:StockSharp.Messages.OrderTypes.Rps/summary;DocStr4427
 F:StockSharp.Messages.OrderTypes.Execute/summary;DocStr4428
 T:StockSharp.Messages.PortfolioChangeMessage/summary;DocStr4429
 M:StockSharp.Messages.PortfolioChangeMessage.#ctor/summary;DocStr1
-M:StockSharp.Messages.PortfolioChangeMessage.Clone/summary;DocStr4430
+M:StockSharp.Messages.PortfolioChangeMessage.Clone/summary;DocStr643
 M:StockSharp.Messages.PortfolioChangeMessage.Clone/returns;DocStr644
 M:StockSharp.Messages.PortfolioChangeMessage.ToString/summary;DocStr49
 M:StockSharp.Messages.PortfolioChangeMessage.ToString/returns;DocStr50

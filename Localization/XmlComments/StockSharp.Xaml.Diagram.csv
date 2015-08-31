@@ -63,9 +63,9 @@ M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.String)/par
 M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)/summary;DocStr7897
 M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)/param/sender;Str1664
 M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)/param/args;DocStr6849
-M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/summary;DocStr7898
+M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
-M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/returns;DocStr7900
+M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)/returns;DocStr644
 M:StockSharp.Xaml.Diagram.DiagramElement.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Diagram.DiagramElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.DiagramElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
@@ -104,9 +104,9 @@ M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnBind(StockSharp.Xaml.Dia
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStart/summary;DocStr7892
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStop/summary;DocStr7894
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnReseted/summary;DocStr7896
-M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr7898
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/summary;DocStr643
 M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/param/cloneSockets;DocStr7899
-M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/returns;DocStr7900
+M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)/returns;DocStr644
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId/summary;DocStr7902
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Icon/summary;DocStr7908
 P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Parameters/summary;DocStr7905
@@ -344,8 +344,8 @@ M:StockSharp.Xaml.Diagram.DiagramSocket.Save(Ecng.Serialization.SettingsStorage)
 M:StockSharp.Xaml.Diagram.DiagramSocket.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/summary;DocStr7970
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/param/propertyName;DocStr2622
-M:StockSharp.Xaml.Diagram.DiagramSocket.Clone/summary;DocStr8011
-M:StockSharp.Xaml.Diagram.DiagramSocket.Clone/returns;DocStr8012
+M:StockSharp.Xaml.Diagram.DiagramSocket.Clone/summary;DocStr643
+M:StockSharp.Xaml.Diagram.DiagramSocket.Clone/returns;DocStr644
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr4066
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/param/other;DocStr8013
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/returns;DocStr8014
@@ -378,8 +378,8 @@ M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System
 M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)/param/color;DocStr8026
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)/summary;DocStr7970
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)/param/propertyName;DocStr2622
-M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone/summary;DocStr8028
-M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone/returns;DocStr8029
+M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone/summary;DocStr643
+M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone/returns;DocStr644
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/summary;DocStr4066
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/param/other;DocStr8030
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/returns;DocStr8031
@@ -426,8 +426,8 @@ M:StockSharp.Xaml.Diagram.DiagramStrategy.Save(Ecng.Serialization.SettingsStorag
 M:StockSharp.Xaml.Diagram.DiagramStrategy.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.DiagramStrategy.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Diagram.DiagramStrategy.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.Diagram.DiagramStrategy.Clone/summary;DocStr1676
-M:StockSharp.Xaml.Diagram.DiagramStrategy.Clone/returns;DocStr1677
+M:StockSharp.Xaml.Diagram.DiagramStrategy.Clone/summary;DocStr643
+M:StockSharp.Xaml.Diagram.DiagramStrategy.Clone/returns;DocStr644
 M:StockSharp.Xaml.Diagram.DiagramStrategy.NeedShowProperty(System.ComponentModel.PropertyDescriptor)/summary;DocStr8038
 M:StockSharp.Xaml.Diagram.DiagramStrategy.NeedShowProperty(System.ComponentModel.PropertyDescriptor)/param/propertyDescriptor;DocStr8039
 M:StockSharp.Xaml.Diagram.DiagramStrategy.NeedShowProperty(System.ComponentModel.PropertyDescriptor)/returns;DocStr8040

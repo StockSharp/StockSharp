@@ -574,8 +574,8 @@ F:StockSharp.Quik.QuikOrderConditionResults.CalculateMinMax/summary;DocStr7211
 F:StockSharp.Quik.QuikOrderConditionResults.CalculateMinMaxAndWaitForActivation/summary;DocStr7212
 T:StockSharp.Quik.QuikOrderCondition/summary;DocStr60
 M:StockSharp.Quik.QuikOrderCondition.#ctor/summary;DocStr1
-M:StockSharp.Quik.QuikOrderCondition.Clone/summary;DocStr4384
-M:StockSharp.Quik.QuikOrderCondition.Clone/returns;DocStr4385
+M:StockSharp.Quik.QuikOrderCondition.Clone/summary;DocStr643
+M:StockSharp.Quik.QuikOrderCondition.Clone/returns;DocStr644
 P:StockSharp.Quik.QuikOrderCondition.Type/summary;Str1737
 P:StockSharp.Quik.QuikOrderCondition.Result/summary;Str1739
 P:StockSharp.Quik.QuikOrderCondition.Result/remarks;DocStr7213
