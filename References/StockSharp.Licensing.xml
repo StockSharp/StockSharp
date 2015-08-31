@@ -154,7 +154,7 @@
         </member>
         <member name="P:StockSharp.Licensing.License.Id">
             <summary>
-            Номер лицензии.
+            Идентификатор лицензии.
             </summary>
         </member>
         <member name="P:StockSharp.Licensing.License.IssuedTo">
@@ -311,7 +311,7 @@
         </member>
         <member name="M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged">
             <summary>
-            Удалить занятые ресурсы.
+            Освободить занятые ресурсы.
             </summary>
         </member>
         <member name="P:StockSharp.Licensing.LicenseErrorLogSource.Name">
