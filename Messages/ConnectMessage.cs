@@ -19,7 +19,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="ConnectMessage"/>.
+		/// Создать копию <see cref="ConnectMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

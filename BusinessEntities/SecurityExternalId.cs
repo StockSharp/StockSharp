@@ -125,7 +125,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="SecurityExternalId"/>.
+		/// Создать копию <see cref="SecurityExternalId"/>.
 		/// </summary>
 		/// <returns>Копия объекта.</returns>
 		public override SecurityExternalId Clone()

@@ -78,7 +78,7 @@ namespace StockSharp.Messages
 		public SessionStates State { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="SessionMessage"/>.
+		/// Создать копию <see cref="SessionMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

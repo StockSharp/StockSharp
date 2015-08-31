@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 		public IList<Quote> InnerQuotes { get; private set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="AggregatedQuote" />.
+		/// Создать копию <see cref="AggregatedQuote" />.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Quote Clone()

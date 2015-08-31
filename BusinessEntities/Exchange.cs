@@ -882,7 +882,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Exchange" />.
+		/// Создать копию <see cref="Exchange" />.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Exchange Clone()

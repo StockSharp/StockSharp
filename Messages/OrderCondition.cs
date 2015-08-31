@@ -56,9 +56,9 @@ namespace StockSharp.Messages
 		//}
 
 		/// <summary>
-		/// Создать копию условия (копирование параметров условия).
+		/// Создать копию <see cref="OrderCondition"/>.
 		/// </summary>
-		/// <returns>Копия условия.</returns>
+		/// <returns>Копия.</returns>
 		public override OrderCondition Clone()
 		{
 			var clone = GetType().CreateInstance<OrderCondition>();

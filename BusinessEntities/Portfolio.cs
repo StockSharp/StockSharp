@@ -152,7 +152,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Portfolio"/>.
+		/// Создать копию <see cref="Portfolio"/>.
 		/// </summary>
 		/// <returns>Копия объекта.</returns>
 		public Portfolio Clone()

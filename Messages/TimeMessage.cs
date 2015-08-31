@@ -55,7 +55,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="TimeMessage"/>.
+		/// Создать копию <see cref="TimeMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

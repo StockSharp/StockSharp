@@ -57,7 +57,7 @@ namespace StockSharp.Quik
 		internal DdeTableTypes TableType { get; set; }
 
 		///<summary>
-		/// Создать копию объекта <see cref="DdeTableColumn" />.
+		/// Создать копию <see cref="DdeTableColumn" />.
 		///</summary>
 		///<returns>Копия.</returns>
 		public override DdeTableColumn Clone()

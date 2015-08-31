@@ -50,7 +50,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="OrderStatusMessage"/>.
+		/// Создать копию <see cref="OrderStatusMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

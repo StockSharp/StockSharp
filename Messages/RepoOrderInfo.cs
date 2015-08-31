@@ -112,7 +112,7 @@
 		public decimal? Value { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="RepoOrderInfo"/>.
+		/// Создать копию <see cref="RepoOrderInfo"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override RepoOrderInfo Clone()

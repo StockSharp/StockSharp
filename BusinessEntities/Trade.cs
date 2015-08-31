@@ -183,7 +183,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Trade"/>.
+		/// Создать копию <see cref="Trade"/>.
 		/// </summary>
 		/// <returns>Копия объекта.</returns>
 		public override Trade Clone()

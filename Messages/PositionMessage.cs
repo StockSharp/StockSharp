@@ -84,7 +84,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="PositionMessage"/>.
+		/// Создать копию <see cref="PositionMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

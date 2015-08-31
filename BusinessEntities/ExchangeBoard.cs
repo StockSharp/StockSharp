@@ -3194,7 +3194,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="ExchangeBoard" />.
+		/// Создать копию <see cref="ExchangeBoard" />.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override ExchangeBoard Clone()

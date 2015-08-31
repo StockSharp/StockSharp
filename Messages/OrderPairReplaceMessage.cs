@@ -33,7 +33,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="OrderPairReplaceMessage"/>.
+		/// Создать копию <see cref="OrderPairReplaceMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

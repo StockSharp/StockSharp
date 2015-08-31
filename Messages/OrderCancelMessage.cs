@@ -57,7 +57,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="OrderCancelMessage"/>.
+		/// Создать копию <see cref="OrderCancelMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

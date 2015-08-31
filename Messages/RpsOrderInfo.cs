@@ -61,7 +61,7 @@
 		public CurrencyTypes CurrencyType { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="RpsOrderInfo"/>.
+		/// Создать копию <see cref="RpsOrderInfo"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override RpsOrderInfo Clone()

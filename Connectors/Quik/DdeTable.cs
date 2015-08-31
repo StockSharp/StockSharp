@@ -102,7 +102,7 @@ namespace StockSharp.Quik
 		}
 
 		///<summary>
-		/// Создать копию объекта <see cref="DdeTable" />.
+		/// Создать копию <see cref="DdeTable" />.
 		///</summary>
 		///<returns>Копия.</returns>
 		public override DdeTable Clone()

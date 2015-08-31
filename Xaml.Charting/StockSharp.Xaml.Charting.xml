@@ -645,7 +645,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartArea.Clone">
       <summary>
-            Создать копию элемента.
+            Создать копию <see cref="T:StockSharp.Xaml.Charting.ChartArea" />.
             </summary>
       <returns>Копия.</returns>
     </member>
@@ -979,7 +979,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartCandleElement.Clone">
       <summary>
-            Создать копию элемента.
+            Создать копию <see cref="T:StockSharp.Xaml.Charting.ChartCandleElement" />.
             </summary>
       <returns>Копия.</returns>
     </member>
@@ -1255,7 +1255,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartIndicatorElement.Clone">
       <summary>
-            Создать копию элемента.
+            Создать копию <see cref="T:StockSharp.Xaml.Charting.ChartIndicatorElement" />.
             </summary>
       <returns>Копия.</returns>
     </member>
@@ -1359,7 +1359,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartTransactionElement`1.Clone">
       <summary>
-            Создать копию элемента.
+            Создать копию <see cref="T:StockSharp.Xaml.Charting.ChartTransactionElement`1" />.
             </summary>
       <returns>Копия.</returns>
     </member>
@@ -2290,7 +2290,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.IndicatorType.Clone">
       <summary>
-            Создать копию объекта.
+            Создать копию <see cref="T:StockSharp.Xaml.Charting.IndicatorType" />.
             </summary>
       <returns>Копия объекта.</returns>
     </member>
@@ -2346,7 +2346,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Charting.LineElement.Clone">
       <summary>
-            Создать копию элемента.
+            Создать копию <see cref="T:StockSharp.Xaml.Charting.LineElement" />.
             </summary>
       <returns>Копия.</returns>
     </member>

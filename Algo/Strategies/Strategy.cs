@@ -2508,9 +2508,9 @@ namespace StockSharp.Algo.Strategies
 		}
 
 		/// <summary>
-		/// Создать копию стратегии со всеми настройками.
+		/// Создать копию <see cref="Strategy"/>.
 		/// </summary>
-		/// <returns>Копия стратегии.</returns>
+		/// <returns>Копия.</returns>
 		public virtual Strategy Clone()
 		{
 			var clone = GetType().CreateInstance<Strategy>();

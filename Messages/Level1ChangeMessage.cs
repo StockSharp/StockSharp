@@ -603,7 +603,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Level1ChangeMessage"/>.
+		/// Создать копию <see cref="Level1ChangeMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

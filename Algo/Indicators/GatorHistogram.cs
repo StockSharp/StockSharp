@@ -40,9 +40,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию данного объекта.
+		/// Создать копию <see cref="GatorHistogram"/>.
 		/// </summary>
-		/// <returns>Копия данного объекта.</returns>
+		/// <returns>Копия.</returns>
 		public override IIndicator Clone()
 		{
 			return new GatorHistogram((AlligatorLine)_line1.Clone(), (AlligatorLine)_line2.Clone(), _isNegative) { Name = Name };

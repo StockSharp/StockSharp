@@ -36,7 +36,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="ErrorMessage"/>.
+		/// Создать копию <see cref="ErrorMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

@@ -127,7 +127,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Quote" />.
+		/// Создать копию <see cref="Quote" />.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Quote Clone()

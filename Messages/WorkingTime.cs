@@ -100,7 +100,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="WorkingTime"/>.
+		/// Создать копию <see cref="WorkingTime"/>.
 		/// </summary>
 		/// <returns>Копия объекта.</returns>
 		public override WorkingTime Clone()

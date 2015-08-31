@@ -65,7 +65,7 @@
 		public TPlusLimits? LimitType { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Position"/>.
+		/// Создать копию <see cref="Position"/>.
 		/// </summary>
 		/// <returns>Копия объекта.</returns>
 		public Position Clone()

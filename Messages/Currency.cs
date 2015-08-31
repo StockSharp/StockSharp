@@ -33,9 +33,9 @@ namespace StockSharp.Messages
 		public decimal Value { get; set; }
 
 		/// <summary>
-		/// Создать копию валюты (копирование параметров валюты).
+		/// Создать копию <see cref="Currency"/>.
 		/// </summary>
-		/// <returns>Копия валюты.</returns>
+		/// <returns>Копия.</returns>
 		public override Currency Clone()
 		{
 			return new Currency { Type = Type, Value = Value };

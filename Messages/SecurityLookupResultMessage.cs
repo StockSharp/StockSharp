@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="SecurityLookupResultMessage"/>.
+		/// Создать копию <see cref="SecurityLookupResultMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

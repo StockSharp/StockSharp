@@ -105,7 +105,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="QuoteChangeMessage"/>.
+		/// Создать копию <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

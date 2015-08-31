@@ -459,7 +459,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="TimeFrameCandle"/>.
+		/// Создать копию <see cref="TimeFrameCandle"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Candle Clone()
@@ -498,7 +498,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="TickCandle"/>.
+		/// Создать копию <see cref="TickCandle"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Candle Clone()
@@ -531,7 +531,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="VolumeCandle"/>.
+		/// Создать копию <see cref="VolumeCandle"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Candle Clone()
@@ -564,7 +564,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="RangeCandle"/>.
+		/// Создать копию <see cref="RangeCandle"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Candle Clone()
@@ -603,7 +603,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="PnFCandle"/>.
+		/// Создать копию <see cref="PnFCandle"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Candle Clone()
@@ -636,7 +636,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="RenkoCandle"/>.
+		/// Создать копию <see cref="RenkoCandle"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Candle Clone()

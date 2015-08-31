@@ -241,7 +241,7 @@
 		}
 
 		/// <summary>
-		/// Создать копию генератора.
+		/// Создать копию <see cref="MarketDataGenerator"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override MarketDataGenerator Clone()

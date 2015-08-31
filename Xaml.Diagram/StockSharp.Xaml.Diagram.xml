@@ -195,10 +195,10 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)">
       <summary>
-            Создать копию элемента схемы со всеми настройками.
+            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
             </summary>
       <param name="cloneSockets">Создавать копии соединений.</param>
-      <returns>Копия элемента схемы.</returns>
+      <returns>Копия.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
@@ -360,10 +360,10 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
       <summary>
-            Создать копию элемента схемы со всеми настройками.
+            Создать копию <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
             </summary>
       <param name="cloneSockets">Создавать копии соединений.</param>
-      <returns>Копия элемента схемы.</returns>
+      <returns>Копия.</returns>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId">
       <summary>
@@ -1172,9 +1172,9 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Clone">
       <summary>
-            Создать копию соединения.
+            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" />.
             </summary>
-      <returns>Копия соединения.</returns>
+      <returns>Копия.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
@@ -1297,9 +1297,9 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone">
       <summary>
-            Создать копию типа соединения.
+            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
             </summary>
-      <returns>Копия типа соединения.</returns>
+      <returns>Копия.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)">
       <summary>

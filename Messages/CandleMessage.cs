@@ -303,7 +303,7 @@ namespace StockSharp.Messages
 		public TimeSpan TimeFrame { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="TimeFrameCandleMessage"/>.
+		/// Создать копию <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()
@@ -346,7 +346,7 @@ namespace StockSharp.Messages
 		public int MaxTradeCount { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="TickCandleMessage"/>.
+		/// Создать копию <see cref="TickCandleMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()
@@ -389,7 +389,7 @@ namespace StockSharp.Messages
 		public decimal Volume { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="VolumeCandleMessage"/>.
+		/// Создать копию <see cref="VolumeCandleMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()
@@ -432,7 +432,7 @@ namespace StockSharp.Messages
 		public Unit PriceRange { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="RangeCandleMessage"/>.
+		/// Создать копию <see cref="RangeCandleMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()
@@ -514,7 +514,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="PnFArg"/>.
+		/// Создать копию <see cref="PnFArg"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override PnFArg Clone()
@@ -574,7 +574,7 @@ namespace StockSharp.Messages
 		public PnFTypes PnFType { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="PnFCandleMessage"/>.
+		/// Создать копию <see cref="PnFCandleMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()
@@ -618,7 +618,7 @@ namespace StockSharp.Messages
 		public Unit BoxSize { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="RenkoCandleMessage"/>.
+		/// Создать копию <see cref="RenkoCandleMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

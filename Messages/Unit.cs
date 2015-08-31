@@ -130,7 +130,7 @@ namespace StockSharp.Messages
 		}
 
 		///<summary>
-		/// Создать копию объекта <see cref="Unit" />.
+		/// Создать копию <see cref="Unit" />.
 		///</summary>
 		///<returns>Копия.</returns>
 		public override Unit Clone()

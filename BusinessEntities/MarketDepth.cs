@@ -1021,7 +1021,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="MarketDepth"/>.
+		/// Создать копию <see cref="MarketDepth"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override MarketDepth Clone()

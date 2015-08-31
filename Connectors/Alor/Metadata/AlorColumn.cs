@@ -50,7 +50,7 @@ namespace StockSharp.Alor.Metadata
 		public Type DataType { get; private set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="AlorColumn"/>.
+		/// Создать копию <see cref="AlorColumn"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override AlorColumn Clone()

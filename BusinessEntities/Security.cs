@@ -1484,7 +1484,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="Security"/>.
+		/// Создать копию <see cref="Security"/>.
 		/// </summary>
 		/// <returns>Копия объекта.</returns>
 		public override Security Clone()

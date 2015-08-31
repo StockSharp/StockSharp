@@ -65,7 +65,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="OrderGroupCancelMessage"/>.
+		/// Создать копию <see cref="OrderGroupCancelMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

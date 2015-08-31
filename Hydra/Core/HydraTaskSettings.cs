@@ -396,7 +396,7 @@ namespace StockSharp.Hydra.Core
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="HydraTaskSettings"/>.
+		/// Создать копию <see cref="HydraTaskSettings"/>.
 		/// </summary>
 		/// <returns>Копия объекта.</returns>
 		public override HydraTaskSettings Clone()

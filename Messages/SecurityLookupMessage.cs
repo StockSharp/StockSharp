@@ -43,7 +43,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта <see cref="SecurityLookupMessage"/>.
+		/// Создать копию <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

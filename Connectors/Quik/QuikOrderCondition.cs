@@ -391,9 +391,9 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Создать копию условия (копирование параметров условия).
+		/// Создать копию <see cref="QuikOrderCondition"/>.
 		/// </summary>
-		/// <returns>Копия условия.</returns>
+		/// <returns>Копия.</returns>
 		public override OrderCondition Clone()
 		{
 			var clone = (QuikOrderCondition)base.Clone();

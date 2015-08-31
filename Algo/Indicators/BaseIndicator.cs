@@ -158,9 +158,9 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Создать копию данного объекта.
+		/// Создать копию <see cref="IIndicator"/>.
 		/// </summary>
-		/// <returns>Копия данного объекта.</returns>
+		/// <returns>Копия.</returns>
 		public override IIndicator Clone()
 		{
 			return PersistableHelper.Clone(this);

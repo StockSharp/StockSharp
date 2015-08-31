@@ -437,7 +437,7 @@ namespace StockSharp.Algo.Testing
 		//}
 		
 		/// <summary>
-		/// Создать копию генератора.
+		/// Создать копию <see cref="TrendMarketDepthGenerator"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override MarketDataGenerator Clone()

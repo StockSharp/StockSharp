@@ -43,7 +43,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию объекта.
+		/// Создать копию.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()

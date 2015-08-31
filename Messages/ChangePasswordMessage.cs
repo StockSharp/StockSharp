@@ -45,7 +45,7 @@
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Создать копию объекта <see cref="ChangePasswordMessage"/>.
+		/// Создать копию <see cref="ChangePasswordMessage"/>.
 		/// </summary>
 		/// <returns>Копия.</returns>
 		public override Message Clone()
