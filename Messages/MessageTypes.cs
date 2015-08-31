@@ -3,7 +3,7 @@
 	using System;
 
 	/// <summary>
-	/// Типы сообщениий.
+	/// Типы сообщений.
 	/// </summary>
 	public enum MessageTypes
 	{

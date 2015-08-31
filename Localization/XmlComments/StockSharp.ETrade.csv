@@ -67,7 +67,7 @@ M:StockSharp.ETrade.ETradeMessageAdapter.ClientOnPositionsData(System.String,Sys
 P:StockSharp.ETrade.ETradeMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 P:StockSharp.ETrade.ETradeMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerKey/summary;Str3304
-P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerSecret/summary;Str3307
+P:StockSharp.ETrade.ETradeMessageAdapter.ConsumerSecret/summary;Str3306
 P:StockSharp.ETrade.ETradeMessageAdapter.Sandbox/summary;Str3369
 P:StockSharp.ETrade.ETradeMessageAdapter.AccessToken/summary;DocStr3136
 P:StockSharp.ETrade.ETradeMessageAdapter.VerificationCode/summary;Str3371
@@ -77,14 +77,14 @@ F:StockSharp.ETrade.ETradeStopTypes.StopMarket/summary;DocStr3138
 F:StockSharp.ETrade.ETradeStopTypes.StopLimit/summary;DocStr3139
 T:StockSharp.ETrade.ETradeOrderCondition/summary;DocStr60
 M:StockSharp.ETrade.ETradeOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.ETrade.ETradeOrderCondition.StopType/summary;Str2571
+P:StockSharp.ETrade.ETradeOrderCondition.StopType/summary;Str2570
 P:StockSharp.ETrade.ETradeOrderCondition.StopPrice/summary;StopPrice
 T:StockSharp.ETrade.ETradeTrader/summary;DocStr3140
 M:StockSharp.ETrade.ETradeTrader.#ctor/summary;DocStr1
 M:StockSharp.ETrade.ETradeTrader.SetCustomAuthorizationMethod(System.Action{System.String})/summary;DocStr3117
 M:StockSharp.ETrade.ETradeTrader.SetCustomAuthorizationMethod(System.Action{System.String})/param/method;DocStr3118
 P:StockSharp.ETrade.ETradeTrader.ConsumerKey/summary;Str3304
-P:StockSharp.ETrade.ETradeTrader.ConsumerSecret/summary;Str3307
+P:StockSharp.ETrade.ETradeTrader.ConsumerSecret/summary;Str3306
 P:StockSharp.ETrade.ETradeTrader.AccessToken/summary;DocStr3136
 P:StockSharp.ETrade.ETradeTrader.VerificationCode/summary;Str3371
 P:StockSharp.ETrade.ETradeTrader.Sandbox/summary;DocStr3141

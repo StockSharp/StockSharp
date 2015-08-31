@@ -11,7 +11,7 @@ P:StockSharp.MatLab.TradesEventArgs.Trades/summary;Str985
 T:StockSharp.MatLab.MyTradesEventArgs/summary;DocStr4030
 P:StockSharp.MatLab.MyTradesEventArgs.Trades/summary;Str985
 T:StockSharp.MatLab.PortfoliosEventArgs/summary;DocStr4031
-P:StockSharp.MatLab.PortfoliosEventArgs.Portfolios/summary;XamlStr510
+P:StockSharp.MatLab.PortfoliosEventArgs.Portfolios/summary;Portfolios
 T:StockSharp.MatLab.PositionsEventArgs/summary;DocStr4032
 P:StockSharp.MatLab.PositionsEventArgs.Positions/summary;Str972
 T:StockSharp.MatLab.MarketDepthsEventArgs/summary;DocStr4033

@@ -149,7 +149,7 @@ namespace SampleHistoryTestingParallel
 				});
 			};
 
-			// получаем подключение для эмуляции
+			// get emulation connector
 			var connector = batchEmulation.EmulationConnector;
 
 			logManager.Sources.Add(connector);

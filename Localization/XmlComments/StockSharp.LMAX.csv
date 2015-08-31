@@ -24,8 +24,8 @@ P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames/summary;DocStr2531
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr2570
 M:StockSharp.LMAX.LmaxOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3384
-P:StockSharp.LMAX.LmaxOrderCondition.TakeProfitOffset/summary;Str3386
+P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383
+P:StockSharp.LMAX.LmaxOrderCondition.TakeProfitOffset/summary;Str3385
 T:StockSharp.LMAX.LmaxTrader/summary;DocStr3908
 M:StockSharp.LMAX.LmaxTrader.#ctor/summary;DocStr1
 M:StockSharp.LMAX.LmaxTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)/summary;DocStr83

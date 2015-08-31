@@ -474,7 +474,7 @@ F:StockSharp.SmartCom.SmartComHistoryDirections.Forward/summary;DocStr7546
 F:StockSharp.SmartCom.SmartComHistoryDirections.Backward/summary;DocStr7547
 T:StockSharp.SmartCom.SmartComOrderCondition/summary;DocStr60
 M:StockSharp.SmartCom.SmartComOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.SmartCom.SmartComOrderCondition.StopPrice/summary;Str1886
+P:StockSharp.SmartCom.SmartComOrderCondition.StopPrice/summary;Str1885
 T:StockSharp.SmartCom.SmartComTimeFrames/summary;DocStr7548
 M:StockSharp.SmartCom.SmartComTimeFrames.op_Implicit(System.TimeSpan)~StockSharp.SmartCom.SmartComTimeFrames/summary;DocStr64
 M:StockSharp.SmartCom.SmartComTimeFrames.op_Implicit(System.TimeSpan)~StockSharp.SmartCom.SmartComTimeFrames/param/value;DocStr65
@@ -482,7 +482,7 @@ M:StockSharp.SmartCom.SmartComTimeFrames.op_Implicit(System.TimeSpan)~StockSharp
 M:StockSharp.SmartCom.SmartComTimeFrames.op_Explicit(StockSharp.SmartCom.SmartComTimeFrames)~System.TimeSpan/summary;DocStr67
 M:StockSharp.SmartCom.SmartComTimeFrames.op_Explicit(StockSharp.SmartCom.SmartComTimeFrames)~System.TimeSpan/param/timeFrame;DocStr66
 M:StockSharp.SmartCom.SmartComTimeFrames.op_Explicit(StockSharp.SmartCom.SmartComTimeFrames)~System.TimeSpan/returns;DocStr65
-P:StockSharp.SmartCom.SmartComTimeFrames.AllTimeFrames/summary;DocStr68
+P:StockSharp.SmartCom.SmartComTimeFrames.AllTimeFrames/summary;DocStr206
 P:StockSharp.SmartCom.SmartComTimeFrames.Minute1/summary;DocStr69
 P:StockSharp.SmartCom.SmartComTimeFrames.Minute5/summary;DocStr70
 P:StockSharp.SmartCom.SmartComTimeFrames.Minute10/summary;DocStr71

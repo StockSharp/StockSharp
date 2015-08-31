@@ -205,7 +205,7 @@ M:StockSharp.Xaml.Charting.ChartArea.Save(Ecng.Serialization.SettingsStorage)/su
 M:StockSharp.Xaml.Charting.ChartArea.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartArea.Clone/summary;DocStr7756
 M:StockSharp.Xaml.Charting.ChartArea.Clone/returns;DocStr644
-M:StockSharp.Xaml.Charting.ChartArea.ToString/summary;DocStr628
+M:StockSharp.Xaml.Charting.ChartArea.ToString/summary;DocStr49
 M:StockSharp.Xaml.Charting.ChartArea.ToString/returns;DocStr50
 P:StockSharp.Xaml.Charting.ChartArea.Title/summary;Str1905
 P:StockSharp.Xaml.Charting.ChartArea.Height/summary;DocStr7757
@@ -258,8 +258,8 @@ T:StockSharp.Xaml.Charting.ChartElement`1/typeparam/T;DocStr7746
 T:StockSharp.Xaml.Charting.IChartElement/summary;DocStr7768
 P:StockSharp.Xaml.Charting.IChartElement.Id/summary;Str1917
 P:StockSharp.Xaml.Charting.IChartElement.IsLegend/summary;Str1965
-P:StockSharp.Xaml.Charting.IChartElement.XAxisId/summary;Str1967
-P:StockSharp.Xaml.Charting.IChartElement.YAxisId/summary;Str1969
+P:StockSharp.Xaml.Charting.IChartElement.XAxisId/summary;Str1966
+P:StockSharp.Xaml.Charting.IChartElement.YAxisId/summary;Str1968
 P:StockSharp.Xaml.Charting.IChartElement.Chart/summary;DocStr7769
 P:StockSharp.Xaml.Charting.IChartElement.ChartArea/summary;DocStr7770
 M:StockSharp.Xaml.Charting.ChartElement`1.#ctor/summary;DocStr93
@@ -274,8 +274,8 @@ P:StockSharp.Xaml.Charting.ChartElement`1.Chart/summary;DocStr7769
 P:StockSharp.Xaml.Charting.ChartElement`1.ChartArea/summary;DocStr7770
 P:StockSharp.Xaml.Charting.ChartElement`1.FullTitle/summary;DocStr7771
 P:StockSharp.Xaml.Charting.ChartElement`1.IsLegend/summary;Str1965
-P:StockSharp.Xaml.Charting.ChartElement`1.XAxisId/summary;Str1967
-P:StockSharp.Xaml.Charting.ChartElement`1.YAxisId/summary;Str1969
+P:StockSharp.Xaml.Charting.ChartElement`1.XAxisId/summary;Str1966
+P:StockSharp.Xaml.Charting.ChartElement`1.YAxisId/summary;Str1968
 M:StockSharp.Xaml.Charting.ChartCandleElement.#ctor/summary;DocStr1
 M:StockSharp.Xaml.Charting.ChartCandleElement.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.ChartCandleElement.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
@@ -376,7 +376,7 @@ M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.Setting
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Clone/summary;DocStr7756
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.Clone/returns;DocStr644
-M:StockSharp.Xaml.Charting.ChartIndicatorElement.ToString/summary;DocStr628
+M:StockSharp.Xaml.Charting.ChartIndicatorElement.ToString/summary;DocStr49
 M:StockSharp.Xaml.Charting.ChartIndicatorElement.ToString/returns;DocStr50
 P:StockSharp.Xaml.Charting.ChartIndicatorElement.Indicator/summary;Str1981
 P:StockSharp.Xaml.Charting.ChartIndicatorElement.Title/summary;Str1983
@@ -528,7 +528,7 @@ M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessVa
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/value;DocStr7842
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/param/draw;DocStr7843
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ProcessValues(System.DateTimeOffset,StockSharp.Algo.Indicators.IIndicatorValue,StockSharp.Xaml.Charting.DrawHandler)/returns;DocStr7844
-M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ToString/summary;DocStr628
+M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ToString/summary;DocStr49
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.ToString/returns;DocStr50
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorPainters.BaseChartIndicatorPainter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3

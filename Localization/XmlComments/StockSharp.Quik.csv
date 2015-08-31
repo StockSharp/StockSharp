@@ -41,8 +41,8 @@ M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.ReadOrderCondition(StockSh
 M:StockSharp.Quik.Lua.LuaFixTransactionMessageAdapter.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/returns;DocStr3157
 T:StockSharp.Quik.Lua.LuaRequest/summary;DocStr6856
 M:StockSharp.Quik.Lua.LuaRequest.#ctor/summary;DocStr1
-M:StockSharp.Quik.Lua.LuaRequest.ToString/summary;DocStr6864
-M:StockSharp.Quik.Lua.LuaRequest.ToString/returns;DocStr6865
+M:StockSharp.Quik.Lua.LuaRequest.ToString/summary;DocStr49
+M:StockSharp.Quik.Lua.LuaRequest.ToString/returns;DocStr50
 P:StockSharp.Quik.Lua.LuaRequest.MessageType/summary;DocStr9
 P:StockSharp.Quik.Lua.LuaRequest.TransactionId/summary;TransactionId
 P:StockSharp.Quik.Lua.LuaRequest.Value/summary;DocStr3643
@@ -292,7 +292,7 @@ P:StockSharp.Quik.DdeSecurityColumns.HighPrice/summary;DocStr7050
 P:StockSharp.Quik.DdeSecurityColumns.LowPrice/summary;DocStr7051
 P:StockSharp.Quik.DdeSecurityColumns.ClosePrice/summary;ClosingPrice
 P:StockSharp.Quik.DdeSecurityColumns.LotVolume/summary;DocStr7052
-P:StockSharp.Quik.DdeSecurityColumns.PriceStep/summary;MinPriceStep
+P:StockSharp.Quik.DdeSecurityColumns.PriceStep/summary;Str306
 P:StockSharp.Quik.DdeSecurityColumns.StepPrice/summary;Str555
 P:StockSharp.Quik.DdeSecurityColumns.Decimals/summary;DocStr6020
 P:StockSharp.Quik.DdeSecurityColumns.MinPrice/summary;DocStr7053
@@ -421,7 +421,7 @@ M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/param/other;DocStr
 M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/returns;DocStr7145
 M:StockSharp.Quik.DdeTable.GetHashCode/summary;DocStr2637
 M:StockSharp.Quik.DdeTable.GetHashCode/returns;DocStr2638
-M:StockSharp.Quik.DdeTable.ToString/summary;DocStr628
+M:StockSharp.Quik.DdeTable.ToString/summary;DocStr49
 M:StockSharp.Quik.DdeTable.ToString/returns;DocStr50
 P:StockSharp.Quik.DdeTable.Caption/summary;DocStr7146
 P:StockSharp.Quik.DdeTable.ClassName/summary;DocStr7147
@@ -438,7 +438,7 @@ M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/param/
 M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/returns;DocStr7155
 M:StockSharp.Quik.DdeTableColumn.GetHashCode/summary;DocStr2637
 M:StockSharp.Quik.DdeTableColumn.GetHashCode/returns;DocStr2638
-M:StockSharp.Quik.DdeTableColumn.ToString/summary;DocStr628
+M:StockSharp.Quik.DdeTableColumn.ToString/summary;DocStr49
 M:StockSharp.Quik.DdeTableColumn.ToString/returns;DocStr50
 P:StockSharp.Quik.DdeTableColumn.Name/summary;DocStr7151
 P:StockSharp.Quik.DdeTableColumn.DataType/summary;DocStr7152
@@ -791,8 +791,8 @@ F:StockSharp.Quik.TransactionTypes.ReRegister/summary;Str1031
 F:StockSharp.Quik.TransactionTypes.Cancel/summary;Str1037
 F:StockSharp.Quik.TransactionTypes.CancelGroup/summary;DocStr4352
 T:StockSharp.Quik.TransactionActions/summary;DocStr7326
-F:StockSharp.Quik.TransactionActions.NewOrder/summary;XamlStr353
-F:StockSharp.Quik.TransactionActions.NewStopOrder/summary;XamlStr354
+F:StockSharp.Quik.TransactionActions.NewOrder/summary;NewOrder
+F:StockSharp.Quik.TransactionActions.NewStopOrder/summary;NewStopOrder
 F:StockSharp.Quik.TransactionActions.MoveOrders/summary;DocStr7327
 F:StockSharp.Quik.TransactionActions.KillStopOrder/summary;DocStr7328
 F:StockSharp.Quik.TransactionActions.KillOrder/summary;DocStr7329

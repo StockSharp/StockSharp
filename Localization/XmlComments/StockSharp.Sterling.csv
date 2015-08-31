@@ -29,7 +29,7 @@ F:StockSharp.Sterling.SterlingExecutionInstructions.NoPreference/summary;DocStr7
 T:StockSharp.Sterling.SterlingOrderCondition/summary;DocStr2570
 M:StockSharp.Sterling.SterlingOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Sterling.SterlingOrderCondition.StopPrice/summary;Str3460
-P:StockSharp.Sterling.SterlingOrderCondition.ExtendedOrderType/summary;Str2369
+P:StockSharp.Sterling.SterlingOrderCondition.ExtendedOrderType/summary;Str2368
 P:StockSharp.Sterling.SterlingOrderCondition.Discretion/summary;DocStr2550
 P:StockSharp.Sterling.SterlingOrderCondition.ExecutionInstruction/summary;DocStr7574
 P:StockSharp.Sterling.SterlingOrderCondition.ExecutionBroker/summary;DocStr7575

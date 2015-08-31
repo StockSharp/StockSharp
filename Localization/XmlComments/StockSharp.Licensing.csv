@@ -54,7 +54,7 @@ M:StockSharp.Licensing.ILicenseService.CreateLicense(System.Guid,System.String,S
 M:StockSharp.Licensing.ILicenseService.CreateLicense(System.Guid,System.String,System.String,System.String,System.String,System.DateTime)/returns;License
 T:StockSharp.Licensing.License/summary;License
 P:StockSharp.Licensing.License.FileName/summary;DocStr3866
-P:StockSharp.Licensing.License.Id/summary;DocStr3867
+P:StockSharp.Licensing.License.Id/summary;DocStr3848
 P:StockSharp.Licensing.License.IssuedTo/summary;DocStr3868
 P:StockSharp.Licensing.License.Company/summary;DocStr3869
 P:StockSharp.Licensing.License.IssuedBy/summary;DocStr3870
@@ -99,7 +99,7 @@ P:StockSharp.Licensing.LicenseClient.BrokerCriterias/summary;DocStr3883
 P:StockSharp.Licensing.LicenseClient.AwaitingLicenses/summary;DocStr3862
 T:StockSharp.Licensing.LicenseErrorLogSource/summary;DocStr3884
 M:StockSharp.Licensing.LicenseErrorLogSource.#ctor/summary;DocStr1
-M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged/summary;DocStr3885
+M:StockSharp.Licensing.LicenseErrorLogSource.DisposeManaged/summary;DocStr7
 P:StockSharp.Licensing.LicenseErrorLogSource.Name/summary;Name
 T:StockSharp.Licensing.LicenseHelper/summary;DocStr3886
 F:StockSharp.Licensing.LicenseHelper.SpecialSplitter/summary;DocStr3887

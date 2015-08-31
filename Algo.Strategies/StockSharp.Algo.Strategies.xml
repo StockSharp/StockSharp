@@ -285,7 +285,7 @@
         </member>
         <member name="P:StockSharp.Algo.Strategies.Quoting.QuotingStrategy.RegisterInterval">
             <summary>
-            Интервал частоты ререгистрации заявки, при превышении которого новая заявка выставляться не будет.
+            Интервал частоты перерегистрации заявки, при превышении которого новая заявка выставляться не будет.
             </summary>
             <remarks>
             По-умолчанию интервал выключен, и равен <see cref="F:System.TimeSpan.Zero"/>.

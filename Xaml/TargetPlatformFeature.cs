@@ -45,11 +45,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Returns a string that represents the current object.
+		/// Получить строковое представление.
 		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
+		/// <returns>Строковое представление.</returns>
 		public override string ToString()
 		{
 			var str = LocalizedStrings.GetString(LocalizationKey);

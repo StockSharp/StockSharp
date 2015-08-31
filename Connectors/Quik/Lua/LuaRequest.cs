@@ -52,11 +52,9 @@ namespace StockSharp.Quik.Lua
 		public MarketDataTypes DataType { get; set; }
 
 		/// <summary>
-		/// Returns a string that represents the current object.
+		/// Получить строковое представление.
 		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
+		/// <returns>Строковое представление.</returns>
 		public override string ToString()
 		{
 			return "Type = {0} TrId = {1} Value = {2} SecId = {3} OrdType = {4} IsSubscribe = {5} DataType = {6}"

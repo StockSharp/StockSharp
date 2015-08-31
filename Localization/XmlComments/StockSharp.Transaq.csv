@@ -67,7 +67,7 @@ E:StockSharp.Transaq.TransaqMessageAdapter.CandleTimeFramesInitialized/summary;D
 P:StockSharp.Transaq.TransaqMessageAdapter.Login/summary;Login
 P:StockSharp.Transaq.TransaqMessageAdapter.Password/summary;Password
 P:StockSharp.Transaq.TransaqMessageAdapter.Address/summary;ServerAddress
-P:StockSharp.Transaq.TransaqMessageAdapter.Proxy/summary;Str3540
+P:StockSharp.Transaq.TransaqMessageAdapter.Proxy/summary;Str3539
 P:StockSharp.Transaq.TransaqMessageAdapter.ApiLogLevel/summary;DocStr7627
 P:StockSharp.Transaq.TransaqMessageAdapter.DllPath/summary;Str3542
 P:StockSharp.Transaq.TransaqMessageAdapter.MicexRegisters/summary;Str3544
@@ -119,13 +119,13 @@ P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitProtectionTime/summary;DocS
 P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitComment/summary;DocStr4588
 P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitCorrection/summary;DocStr7647
 P:StockSharp.Transaq.TransaqOrderCondition.TakeProfitProtectionSpread/summary;DocStr7648
-P:StockSharp.Transaq.TransaqOrderCondition.AlgoType/summary;Str3552
+P:StockSharp.Transaq.TransaqOrderCondition.AlgoType/summary;Str154
 P:StockSharp.Transaq.TransaqOrderCondition.AlgoValue/summary;Str3553
 P:StockSharp.Transaq.TransaqOrderCondition.AlgoValidAfterType/summary;Str3555
 P:StockSharp.Transaq.TransaqOrderCondition.AlgoValidAfter/summary;Str3557
 P:StockSharp.Transaq.TransaqOrderCondition.AlgoValidBeforeType/summary;Str3555
 P:StockSharp.Transaq.TransaqOrderCondition.AlgoValidBefore/summary;Str3519
-T:StockSharp.Transaq.Proxy/summary;Str3540
+T:StockSharp.Transaq.Proxy/summary;Str3539
 P:StockSharp.Transaq.Proxy.Type/summary;Str3685
 P:StockSharp.Transaq.Proxy.Address/summary;DocStr7649
 P:StockSharp.Transaq.Proxy.Login/summary;Str3686
@@ -241,7 +241,7 @@ M:StockSharp.Transaq.TransaqTrader.ChangePassword(System.String)/param/newPasswo
 P:StockSharp.Transaq.TransaqTrader.Password/summary;Password
 P:StockSharp.Transaq.TransaqTrader.Login/summary;Login
 P:StockSharp.Transaq.TransaqTrader.Address/summary;ServerAddress
-P:StockSharp.Transaq.TransaqTrader.Proxy/summary;Str3540
+P:StockSharp.Transaq.TransaqTrader.Proxy/summary;Str3539
 P:StockSharp.Transaq.TransaqTrader.ApiLogLevel/summary;DocStr7627
 P:StockSharp.Transaq.TransaqTrader.DllPath/summary;Str3542
 P:StockSharp.Transaq.TransaqTrader.MicexRegisters/summary;Str3544

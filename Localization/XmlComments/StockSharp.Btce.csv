@@ -12,13 +12,13 @@ M:StockSharp.Btce.BtceMessageAdapter.ToString/returns;DocStr50
 P:StockSharp.Btce.BtceMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
 P:StockSharp.Btce.BtceMessageAdapter.IsSupportNativePortfolioLookup/summary;DocStr51
 P:StockSharp.Btce.BtceMessageAdapter.Key/summary;Str3304
-P:StockSharp.Btce.BtceMessageAdapter.Secret/summary;Str3307
+P:StockSharp.Btce.BtceMessageAdapter.Secret/summary;Str3306
 P:StockSharp.Btce.BtceMessageAdapter.IsValid/summary;DocStr53
 T:StockSharp.Btce.BtceTrader/summary;DocStr2582
 M:StockSharp.Btce.BtceTrader.#ctor/summary;DocStr1
 P:StockSharp.Btce.BtceTrader.IsSupportAtomicReRegister/summary;DocStr87
 P:StockSharp.Btce.BtceTrader.Key/summary;Str3304
-P:StockSharp.Btce.BtceTrader.Secret/summary;Str3307
+P:StockSharp.Btce.BtceTrader.Secret/summary;Str3306
 T:StockSharp.Btce.Native.BtceClient/summary;DocStr2583
 M:StockSharp.Btce.Native.BtceClient.#ctor(System.Security.SecureString,System.Security.SecureString)/summary;DocStr2584
 M:StockSharp.Btce.Native.BtceClient.#ctor(System.Security.SecureString,System.Security.SecureString)/param/key;DocStr2585

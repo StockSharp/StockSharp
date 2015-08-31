@@ -195,7 +195,7 @@ M:StockSharp.Xaml.ProxySettings.Save(Ecng.Serialization.SettingsStorage)/summary
 M:StockSharp.Xaml.ProxySettings.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.ProxySettings.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.ProxySettings.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.ProxySettings.ToString/summary;DocStr628
+M:StockSharp.Xaml.ProxySettings.ToString/summary;DocStr49
 M:StockSharp.Xaml.ProxySettings.ToString/returns;DocStr50
 P:StockSharp.Xaml.ProxySettings.UseProxy/summary;DocStr8168
 P:StockSharp.Xaml.ProxySettings.Address/summary;Str1440
@@ -349,7 +349,7 @@ T:StockSharp.Xaml.OptionDeskRow/summary;DocStr8224
 P:StockSharp.Xaml.OptionDeskRow.Strike/summary;OptionStrikePrice
 P:StockSharp.Xaml.OptionDeskRow.ImpliedVolatility/summary;Str1531
 P:StockSharp.Xaml.OptionDeskRow.HistoricalVolatility/summary;Str1532
-P:StockSharp.Xaml.OptionDeskRow.PnL/summary;Str1528
+P:StockSharp.Xaml.OptionDeskRow.PnL/summary;Str1527
 P:StockSharp.Xaml.OptionDeskRow.MaxImpliedVolatility/summary;DocStr8225
 P:StockSharp.Xaml.OptionDeskRow.MaxHistoricalVolatility/summary;DocStr8225
 P:StockSharp.Xaml.OptionDeskRow.MaxPnL/summary;DocStr8225
@@ -357,12 +357,12 @@ P:StockSharp.Xaml.OptionDeskRow.UnderlyingAsset/summary;Str1533
 P:StockSharp.Xaml.OptionDeskRow.Call/summary;DocStr8226
 P:StockSharp.Xaml.OptionDeskRow.Put/summary;DocStr8226
 T:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide/summary;DocStr8227
-M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString/summary;DocStr628
+M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString/summary;DocStr49
 M:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.ToString/returns;DocStr50
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.BestBidPrice/summary;DocStr8228
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.BestAskPrice/summary;DocStr8228
-P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Volume/summary;Str601
-P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.TheorPrice/summary;TheoreticalPrice
+P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Volume/summary;Str310
+P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.TheorPrice/summary;Str294
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.MaxOpenInterest/summary;DocStr8225
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Option/summary;Str1526
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Delta/summary;OptionDelta
@@ -371,7 +371,7 @@ P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Theta/summary;OptionTheta
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Vega/summary;OptionVega
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.Rho/summary;OptionRho
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.OpenInterest/summary;Str150
-P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.PnL/summary;Str1528
+P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.PnL/summary;Str1527
 P:StockSharp.Xaml.OptionDeskRow.OptionDeskRowSide.MaxVolume/summary;DocStr8225
 T:StockSharp.Xaml.OrderLogGrid/summary;DocStr8229
 M:StockSharp.Xaml.OrderLogGrid.#ctor/summary;DocStr1
@@ -680,7 +680,7 @@ M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Ord
 M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/param/oldOrder;DocStr824
 M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/param/price;DocStr825
 M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/param/volume;DocStr826
-M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/returns;XamlStr353
+M:StockSharp.Xaml.GuiConnector`1.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/returns;NewOrder
 M:StockSharp.Xaml.GuiConnector`1.CancelOrder(StockSharp.BusinessEntities.Order)/summary;DocStr835
 M:StockSharp.Xaml.GuiConnector`1.CancelOrder(StockSharp.BusinessEntities.Order)/param/order;DocStr836
 M:StockSharp.Xaml.GuiConnector`1.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/summary;DocStr839
@@ -924,8 +924,8 @@ M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.
 M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.LogSourceNode)/param/key;DocStr5982
 M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.LogSourceNode)/param/name;DocStr7982
 M:StockSharp.Xaml.LogSourceNode.#ctor(System.Guid,System.String,StockSharp.Xaml.LogSourceNode)/param/parentNode;DocStr8400
-M:StockSharp.Xaml.LogSourceNode.ToString/summary;DocStr8401
-M:StockSharp.Xaml.LogSourceNode.ToString/returns;DocStr8402
+M:StockSharp.Xaml.LogSourceNode.ToString/summary;DocStr49
+M:StockSharp.Xaml.LogSourceNode.ToString/returns;DocStr50
 P:StockSharp.Xaml.LogSourceNode.Key/summary;DocStr5982
 P:StockSharp.Xaml.LogSourceNode.Name/summary;DocStr7982
 P:StockSharp.Xaml.LogSourceNode.ParentNode/summary;DocStr8400
@@ -974,8 +974,8 @@ M:StockSharp.Xaml.TargetPlatformFeature.#ctor(System.String,Ecng.Localization.La
 M:StockSharp.Xaml.TargetPlatformFeature.#ctor(System.String,Ecng.Localization.Languages,Ecng.Interop.Platforms)/param/localizationKey;DocStr8425
 M:StockSharp.Xaml.TargetPlatformFeature.#ctor(System.String,Ecng.Localization.Languages,Ecng.Interop.Platforms)/param/preferLanguage;DocStr4324
 M:StockSharp.Xaml.TargetPlatformFeature.#ctor(System.String,Ecng.Localization.Languages,Ecng.Interop.Platforms)/param/platform;DocStr4325
-M:StockSharp.Xaml.TargetPlatformFeature.ToString/summary;DocStr6864
-M:StockSharp.Xaml.TargetPlatformFeature.ToString/returns;DocStr6865
+M:StockSharp.Xaml.TargetPlatformFeature.ToString/summary;DocStr49
+M:StockSharp.Xaml.TargetPlatformFeature.ToString/returns;DocStr50
 P:StockSharp.Xaml.TargetPlatformFeature.LocalizationKey/summary;DocStr8425
 P:StockSharp.Xaml.TargetPlatformFeature.PreferLanguage/summary;DocStr4324
 P:StockSharp.Xaml.TargetPlatformFeature.Platform/summary;DocStr4325

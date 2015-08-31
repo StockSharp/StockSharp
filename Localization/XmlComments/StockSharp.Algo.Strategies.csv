@@ -125,7 +125,7 @@ M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.IsSuspended/returns;DocSt
 M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.CreateQuoting(StockSharp.BusinessEntities.Order)/summary;DocStr360
 M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.CreateQuoting(StockSharp.BusinessEntities.Order)/param/order;DocStr306
 M:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.CreateQuoting(StockSharp.BusinessEntities.Order)/returns;DocStr361
-P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.BlackScholes/summary;DocStr362
+P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.BlackScholes/summary;DocStr951
 P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.UseQuoting/summary;DocStr363
 P:StockSharp.Algo.Strategies.Derivatives.HedgeStrategy.PriceOffset/summary;DocStr364
 M:StockSharp.Algo.Strategies.Derivatives.DeltaHedgeStrategy.#ctor/summary;DocStr1

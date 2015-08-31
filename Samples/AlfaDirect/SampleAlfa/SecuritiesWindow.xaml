@@ -26,8 +26,12 @@
 			<Button x:Name="Depth" Grid.Column="2" Width="100" IsEnabled="False" Click="DepthClick">
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.MarketDepth}" />...</TextBlock>
 			</Button>
-			<Button x:Name="NewOrder" Grid.Column="3" Content="{x:Static loc:LocalizedStrings.XamlStr353}" Width="100" IsEnabled="False" Click="NewOrderClick" />
-			<Button x:Name="NewStopOrder" Grid.Column="4" Content="{x:Static loc:LocalizedStrings.XamlStr354}" Width="120" IsEnabled="False" Click="NewStopOrderClick" />
+			<Button x:Name="NewOrder" Grid.Column="3" Width="100" IsEnabled="False" Click="NewOrderClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
+			</Button>
+			<Button x:Name="NewStopOrder" Grid.Column="4" Width="120" IsEnabled="False" Click="NewStopOrderClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
+			</Button>
 		</Grid>
 	</Grid>
 </Window>

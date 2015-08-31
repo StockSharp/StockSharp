@@ -1165,7 +1165,7 @@ M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/summ
 M:StockSharp.Fix.FixMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Fix.FixMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Fix.FixMessageAdapter.ToString/summary;DocStr628
+M:StockSharp.Fix.FixMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Fix.FixMessageAdapter.ToString/returns;DocStr50
 M:StockSharp.Fix.FixMessageAdapter.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/summary;DocStr3153
 M:StockSharp.Fix.FixMessageAdapter.ReadOrderCondition(StockSharp.Fix.Native.IFixReader,StockSharp.Fix.Native.FixTags,System.Func{StockSharp.Messages.OrderCondition})/param/reader;DocStr3154

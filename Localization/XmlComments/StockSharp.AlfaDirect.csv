@@ -28,7 +28,7 @@ P:StockSharp.AlfaDirect.AlfaException.Code/summary;Str3698
 T:StockSharp.AlfaDirect.AlfaOrderCondition/summary;DocStr60
 M:StockSharp.AlfaDirect.AlfaOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.AlfaDirect.AlfaOrderCondition.StopPrice/summary;StopPrice
-P:StockSharp.AlfaDirect.AlfaOrderCondition.Slippage/summary;Str2265
+P:StockSharp.AlfaDirect.AlfaOrderCondition.Slippage/summary;Str163
 P:StockSharp.AlfaDirect.AlfaOrderCondition.TargetPrice/summary;DocStr61
 P:StockSharp.AlfaDirect.AlfaOrderCondition.Level/summary;DocStr62
 T:StockSharp.AlfaDirect.AlfaTimeFrames/summary;DocStr63
@@ -40,7 +40,7 @@ M:StockSharp.AlfaDirect.AlfaTimeFrames.op_Explicit(StockSharp.AlfaDirect.AlfaTim
 M:StockSharp.AlfaDirect.AlfaTimeFrames.op_Explicit(StockSharp.AlfaDirect.AlfaTimeFrames)~System.TimeSpan/returns;DocStr65
 M:StockSharp.AlfaDirect.AlfaTimeFrames.ToString/summary;DocStr67
 M:StockSharp.AlfaDirect.AlfaTimeFrames.ToString/returns;DocStr65
-P:StockSharp.AlfaDirect.AlfaTimeFrames.AllTimeFrames/summary;DocStr68
+P:StockSharp.AlfaDirect.AlfaTimeFrames.AllTimeFrames/summary;DocStr206
 P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute1/summary;DocStr69
 P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute5/summary;DocStr70
 P:StockSharp.AlfaDirect.AlfaTimeFrames.Minute10/summary;DocStr71

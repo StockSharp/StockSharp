@@ -68,7 +68,7 @@
     </member>
     <member name="M:StockSharp.Micex.MicexMessageAdapter.ToString">
       <summary>
-            Получить строковое представление контейнера.
+            Получить строковое представление.
             </summary>
       <returns>Строковое представление.</returns>
     </member>
@@ -3514,8 +3514,7 @@
     </member>
     <member name="P:StockSharp.Micex.Native.ServerInfo.SystemId">
       <summary>
-            Тип торговой системысистемы, возможные
-            значения:
+            Тип торговой системы, возможные значения:
             “P” - фондовый рынок или рынок ГЦБ;
             “C” - валютный рынок;
             “F” – срочный рынок.

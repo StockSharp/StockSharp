@@ -8,7 +8,7 @@ M:StockSharp.BusinessEntities.Quote.#ctor(StockSharp.BusinessEntities.Security,S
 M:StockSharp.BusinessEntities.Quote.#ctor(StockSharp.BusinessEntities.Security,System.Decimal,System.Decimal,StockSharp.Messages.Sides)/param/direction;Str277
 M:StockSharp.BusinessEntities.Quote.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Quote.Clone/returns;DocStr644
-M:StockSharp.BusinessEntities.Quote.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.Quote.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Quote.ToString/returns;DocStr50
 P:StockSharp.BusinessEntities.Quote.Security/summary;DocStr2609
 P:StockSharp.BusinessEntities.Quote.Price/summary;Str275
@@ -34,15 +34,15 @@ P:StockSharp.BusinessEntities.BasePosition.CurrentPrice/summary;Str256
 P:StockSharp.BusinessEntities.BasePosition.AveragePrice/summary;Str257
 P:StockSharp.BusinessEntities.BasePosition.UnrealizedPnL/summary;Str258
 P:StockSharp.BusinessEntities.BasePosition.RealizedPnL/summary;Str259
-P:StockSharp.BusinessEntities.BasePosition.VariationMargin/summary;Str432
-P:StockSharp.BusinessEntities.BasePosition.Commission/summary;Str433
+P:StockSharp.BusinessEntities.BasePosition.VariationMargin/summary;Str260
+P:StockSharp.BusinessEntities.BasePosition.Commission/summary;Str262
 P:StockSharp.BusinessEntities.BasePosition.LastChangeTime/summary;Str435
 P:StockSharp.BusinessEntities.BasePosition.LocalTime/summary;DocStr2618
 P:StockSharp.BusinessEntities.BasePosition.Description/summary;Str269
 T:StockSharp.BusinessEntities.BasketSecurity/summary;DocStr2619
 T:StockSharp.BusinessEntities.Security/summary;Str546
 M:StockSharp.BusinessEntities.Security.#ctor/summary;DocStr1
-M:StockSharp.BusinessEntities.Security.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.Security.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Security.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.Security.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Security.Clone/returns;DocStr1116
@@ -55,8 +55,8 @@ P:StockSharp.BusinessEntities.Security.Name/summary;Str362
 P:StockSharp.BusinessEntities.Security.ShortName/summary;Str364
 P:StockSharp.BusinessEntities.Security.Code/summary;Str349
 P:StockSharp.BusinessEntities.Security.Class/summary;SecurityClass
-P:StockSharp.BusinessEntities.Security.PriceStep/summary;MinPriceStep
-P:StockSharp.BusinessEntities.Security.VolumeStep/summary;Str366
+P:StockSharp.BusinessEntities.Security.PriceStep/summary;Str306
+P:StockSharp.BusinessEntities.Security.VolumeStep/summary;Str307
 P:StockSharp.BusinessEntities.Security.Multiplier/summary;DocStr2623
 P:StockSharp.BusinessEntities.Security.Decimals/summary;Str548
 P:StockSharp.BusinessEntities.Security.Type/summary;Str360
@@ -88,7 +88,7 @@ P:StockSharp.BusinessEntities.Security.MarginSell/summary;MarginSell
 P:StockSharp.BusinessEntities.Security.Connector/summary;DocStr2628
 P:StockSharp.BusinessEntities.Security.ImpliedVolatility/summary;Str293
 P:StockSharp.BusinessEntities.Security.HistoricalVolatility/summary;Str299
-P:StockSharp.BusinessEntities.Security.TheorPrice/summary;TheoreticalPrice
+P:StockSharp.BusinessEntities.Security.TheorPrice/summary;Str294
 P:StockSharp.BusinessEntities.Security.Delta/summary;OptionDelta
 P:StockSharp.BusinessEntities.Security.Gamma/summary;OptionGamma
 P:StockSharp.BusinessEntities.Security.Vega/summary;OptionVega
@@ -106,9 +106,9 @@ P:StockSharp.BusinessEntities.Security.HighBidPrice/summary;Str594
 P:StockSharp.BusinessEntities.Security.LowAskPrice/summary;Str595
 P:StockSharp.BusinessEntities.Security.Yield/summary;Str321
 P:StockSharp.BusinessEntities.Security.VWAP/summary;AveragePrice
-P:StockSharp.BusinessEntities.Security.SettlementPrice/summary;SettlementPrice
-P:StockSharp.BusinessEntities.Security.AveragePrice/summary;Str600
-P:StockSharp.BusinessEntities.Security.Volume/summary;Str601
+P:StockSharp.BusinessEntities.Security.SettlementPrice/summary;Str312
+P:StockSharp.BusinessEntities.Security.AveragePrice/summary;Str311
+P:StockSharp.BusinessEntities.Security.Volume/summary;Str310
 M:StockSharp.BusinessEntities.BasketSecurity.#ctor/summary;DocStr93
 M:StockSharp.BusinessEntities.BasketSecurity.Contains(StockSharp.BusinessEntities.Security)/summary;DocStr2631
 M:StockSharp.BusinessEntities.BasketSecurity.Contains(StockSharp.BusinessEntities.Security)/param/security;DocStr2632
@@ -116,7 +116,7 @@ M:StockSharp.BusinessEntities.BasketSecurity.Contains(StockSharp.BusinessEntitie
 P:StockSharp.BusinessEntities.BasketSecurity.InnerSecurities/summary;DocStr936
 T:StockSharp.BusinessEntities.Exchange/summary;ExchangeInfo
 M:StockSharp.BusinessEntities.Exchange.#ctor/summary;DocStr1
-M:StockSharp.BusinessEntities.Exchange.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.Exchange.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Exchange.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/summary;DocStr2634
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/param/other;DocStr2635
@@ -198,7 +198,7 @@ M:StockSharp.BusinessEntities.ExchangeBoard.GetOrCreateBoard(System.String,Syste
 M:StockSharp.BusinessEntities.ExchangeBoard.GetOrCreateBoard(System.String,System.Func{System.String,StockSharp.BusinessEntities.ExchangeBoard})/returns;DocStr2700
 M:StockSharp.BusinessEntities.ExchangeBoard.SaveBoard(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr1310
 M:StockSharp.BusinessEntities.ExchangeBoard.SaveBoard(StockSharp.BusinessEntities.ExchangeBoard)/param/board;Board
-M:StockSharp.BusinessEntities.ExchangeBoard.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.ExchangeBoard.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.ExchangeBoard.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.ExchangeBoard.OnEquals(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr2634
 M:StockSharp.BusinessEntities.ExchangeBoard.OnEquals(StockSharp.BusinessEntities.ExchangeBoard)/param/other;DocStr2635
@@ -458,7 +458,7 @@ M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEnti
 M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/param/oldOrder;DocStr824
 M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/param/price;DocStr825
 M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/param/volume;DocStr826
-M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/returns;XamlStr353
+M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)/returns;NewOrder
 M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)/summary;DocStr835
 M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)/param/order;DocStr2827
 M:StockSharp.BusinessEntities.IConnector.CancelOrders(System.Nullable{System.Boolean},StockSharp.BusinessEntities.Portfolio,System.Nullable{StockSharp.Messages.Sides},StockSharp.BusinessEntities.ExchangeBoard,StockSharp.BusinessEntities.Security)/summary;DocStr839
@@ -626,7 +626,7 @@ M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,Syste
 M:StockSharp.BusinessEntities.MarketDepth.Remove(StockSharp.Messages.Sides,System.Decimal,System.Decimal,System.DateTimeOffset)/param/lastChangeTime;DocStr2878
 M:StockSharp.BusinessEntities.MarketDepth.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.MarketDepth.Clone/returns;DocStr644
-M:StockSharp.BusinessEntities.MarketDepth.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.MarketDepth.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.MarketDepth.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.MarketDepth.Verify/summary;DocStr2882
 M:StockSharp.BusinessEntities.MarketDepth.Verify/remarks;DocStr2883
@@ -663,7 +663,7 @@ M:StockSharp.BusinessEntities.MarketDepthPair.#ctor(StockSharp.BusinessEntities.
 M:StockSharp.BusinessEntities.MarketDepthPair.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Quote,StockSharp.BusinessEntities.Quote)/param/security;Security
 M:StockSharp.BusinessEntities.MarketDepthPair.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Quote,StockSharp.BusinessEntities.Quote)/param/bid;Bid
 M:StockSharp.BusinessEntities.MarketDepthPair.#ctor(StockSharp.BusinessEntities.Security,StockSharp.BusinessEntities.Quote,StockSharp.BusinessEntities.Quote)/param/ask;Ask
-M:StockSharp.BusinessEntities.MarketDepthPair.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.MarketDepthPair.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.MarketDepthPair.ToString/returns;DocStr50
 P:StockSharp.BusinessEntities.MarketDepthPair.Security/summary;Security
 P:StockSharp.BusinessEntities.MarketDepthPair.Bid/summary;Bid
@@ -674,7 +674,7 @@ P:StockSharp.BusinessEntities.MarketDepthPair.MiddlePrice/summary;DocStr2909
 P:StockSharp.BusinessEntities.MarketDepthPair.IsFull/summary;DocStr2910
 T:StockSharp.BusinessEntities.MyTrade/summary;Str502
 M:StockSharp.BusinessEntities.MyTrade.#ctor/summary;DocStr1
-M:StockSharp.BusinessEntities.MyTrade.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.MyTrade.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.MyTrade.ToString/returns;DocStr50
 P:StockSharp.BusinessEntities.MyTrade.Order/summary;Str505
 P:StockSharp.BusinessEntities.MyTrade.Trade/summary;DocStr2911
@@ -696,7 +696,7 @@ P:StockSharp.BusinessEntities.News.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.BusinessEntities.News.ExtensionInfo/remarks;Str427
 T:StockSharp.BusinessEntities.Order/summary;Str504
 M:StockSharp.BusinessEntities.Order.#ctor/summary;DocStr1
-M:StockSharp.BusinessEntities.Order.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.Order.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Order.ToString/returns;DocStr50
 P:StockSharp.BusinessEntities.Order.LatencyRegistration/summary;Str518
 P:StockSharp.BusinessEntities.Order.LatencyCancellation/summary;Str520
@@ -744,7 +744,7 @@ P:StockSharp.BusinessEntities.OrderFail.LocalTime/summary;DocStr2927
 P:StockSharp.BusinessEntities.OrderFail.ExtensionInfo/summary;DocStr2928
 T:StockSharp.BusinessEntities.OrderLogItem/summary;DocStr1442
 M:StockSharp.BusinessEntities.OrderLogItem.#ctor/summary;DocStr1
-M:StockSharp.BusinessEntities.OrderLogItem.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.OrderLogItem.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.OrderLogItem.ToString/returns;DocStr50
 T:StockSharp.BusinessEntities.Portfolio/summary;Str541
 M:StockSharp.BusinessEntities.Portfolio.#ctor/summary;DocStr1
@@ -752,7 +752,7 @@ M:StockSharp.BusinessEntities.Portfolio.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Portfolio.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Portfolio.CopyTo(StockSharp.BusinessEntities.Portfolio)/summary;DocStr2929
 M:StockSharp.BusinessEntities.Portfolio.CopyTo(StockSharp.BusinessEntities.Portfolio)/param/destination;DocStr2930
-M:StockSharp.BusinessEntities.Portfolio.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.Portfolio.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Portfolio.ToString/returns;DocStr50
 P:StockSharp.BusinessEntities.Portfolio.Name/summary;Str247
 P:StockSharp.BusinessEntities.Portfolio.Leverage/summary;Str261
@@ -767,7 +767,7 @@ M:StockSharp.BusinessEntities.Position.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Position.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Position.CopyTo(StockSharp.BusinessEntities.Position)/summary;DocStr2615
 M:StockSharp.BusinessEntities.Position.CopyTo(StockSharp.BusinessEntities.Position)/param/destination;DocStr2616
-M:StockSharp.BusinessEntities.Position.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.Position.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Position.ToString/returns;DocStr50
 P:StockSharp.BusinessEntities.Position.Portfolio/summary;Str270
 P:StockSharp.BusinessEntities.Position.Security/summary;Str271
@@ -775,7 +775,7 @@ P:StockSharp.BusinessEntities.Position.DepoName/summary;DocStr2933
 P:StockSharp.BusinessEntities.Position.LimitType/summary;DocStr2934
 T:StockSharp.BusinessEntities.SecurityExternalId/summary;Str603
 M:StockSharp.BusinessEntities.SecurityExternalId.#ctor/summary;DocStr1
-M:StockSharp.BusinessEntities.SecurityExternalId.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.SecurityExternalId.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.SecurityExternalId.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.SecurityExternalId.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.SecurityExternalId.Clone/returns;DocStr1116
@@ -793,7 +793,7 @@ M:StockSharp.BusinessEntities.Trade.Clone/summary;DocStr643
 M:StockSharp.BusinessEntities.Trade.Clone/returns;DocStr1116
 M:StockSharp.BusinessEntities.Trade.GetHashCode/summary;DocStr2637
 M:StockSharp.BusinessEntities.Trade.GetHashCode/returns;DocStr2638
-M:StockSharp.BusinessEntities.Trade.ToString/summary;DocStr628
+M:StockSharp.BusinessEntities.Trade.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Trade.ToString/returns;DocStr50
 P:StockSharp.BusinessEntities.Trade.Id/summary;Str1192
 P:StockSharp.BusinessEntities.Trade.StringId/summary;Str146

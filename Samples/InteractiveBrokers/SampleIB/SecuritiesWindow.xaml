@@ -39,7 +39,9 @@
 			<ToggleButton x:Name="RealTimeCandles" Grid.Column="6" Content="{x:Static loc:LocalizedStrings.XamlStr634}" IsEnabled="False" Click="RealTimeCandlesClick" />
 			<ComboBox x:Name="CandlesPeriods" Grid.Column="7" Width="100" />
 
-			<Button x:Name="NewOrder" Grid.Column="9" Content="{x:Static loc:LocalizedStrings.XamlStr353}" IsEnabled="False" Click="NewOrderClick" />
+			<Button x:Name="NewOrder" Grid.Column="9" IsEnabled="False" Click="NewOrderClick">
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
+			</Button>
 		</Grid>
 	</Grid>
 </Window>

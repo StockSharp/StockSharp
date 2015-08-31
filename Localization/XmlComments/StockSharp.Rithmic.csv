@@ -9,7 +9,7 @@ M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStora
 M:StockSharp.Rithmic.RithmicMessageAdapter.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Rithmic.RithmicMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Rithmic.RithmicMessageAdapter.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Rithmic.RithmicMessageAdapter.ToString/summary;DocStr628
+M:StockSharp.Rithmic.RithmicMessageAdapter.ToString/summary;DocStr49
 M:StockSharp.Rithmic.RithmicMessageAdapter.ToString/returns;DocStr50
 P:StockSharp.Rithmic.RithmicMessageAdapter.SecurityLookupRequired/summary;DocStr452
 P:StockSharp.Rithmic.RithmicMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
@@ -19,7 +19,7 @@ P:StockSharp.Rithmic.RithmicMessageAdapter.CertFile/summary;Str3466
 P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionalUserName/summary;Str3468
 P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionalPassword/summary;Str3470
 P:StockSharp.Rithmic.RithmicMessageAdapter.LogFileName/summary;Str3472
-P:StockSharp.Rithmic.RithmicMessageAdapter.Server/summary;Str3474
+P:StockSharp.Rithmic.RithmicMessageAdapter.Server/summary;Str3473
 P:StockSharp.Rithmic.RithmicMessageAdapter.AdminConnectionPoint/summary;Str3476
 P:StockSharp.Rithmic.RithmicMessageAdapter.MarketDataConnectionPoint/summary;Str3478
 P:StockSharp.Rithmic.RithmicMessageAdapter.TransactionConnectionPoint/summary;Str3480
@@ -56,7 +56,7 @@ M:StockSharp.Rithmic.RithmicTrader.OnProcessMessage(StockSharp.Messages.Message)
 P:StockSharp.Rithmic.RithmicTrader.UserName/summary;DocStr3319
 P:StockSharp.Rithmic.RithmicTrader.Password/summary;Password
 P:StockSharp.Rithmic.RithmicTrader.CertFile/summary;Str3466
-P:StockSharp.Rithmic.RithmicTrader.Server/summary;Str3474
+P:StockSharp.Rithmic.RithmicTrader.Server/summary;Str3473
 P:StockSharp.Rithmic.RithmicTrader.LogFileName/summary;Str3472
 E:StockSharp.Rithmic.RithmicTrader.NewCandles/summary;DocStr90
 E:StockSharp.Rithmic.RithmicTrader.Stopped/summary;DocStr91

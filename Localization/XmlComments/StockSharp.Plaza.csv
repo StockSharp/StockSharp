@@ -78,7 +78,7 @@ F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LimitUpOpt/summary;DocStr
 F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LimitDownOpt/summary;DocStr6013
 F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.OldKotir/summary;DocStr6014
 F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.CodeVcb/summary;DocStr6015
-F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.MinStep/summary;MinPriceStep
+F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.MinStep/summary;Str306
 F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.LotVolume/summary;DocStr6016
 F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.StepPrice/summary;Str555
 F:StockSharp.Plaza.Metadata.PlazaFutInstrumentsColumns.DateEnd/summary;DocStr6017
@@ -628,8 +628,8 @@ F:StockSharp.Plaza.PlazaStreamRegistry.MarketMaking/summary;DocStr6301
 F:StockSharp.Plaza.PlazaStreamRegistry.Clearing/summary;DocStr6302
 F:StockSharp.Plaza.PlazaStreamRegistry.Index/summary;Str2691
 F:StockSharp.Plaza.PlazaStreamRegistry.IndexLog/summary;DocStr6303
-F:StockSharp.Plaza.PlazaStreamRegistry.VarMargin/summary;Str432
-F:StockSharp.Plaza.PlazaStreamRegistry.Volatility/summary;Str2364
+F:StockSharp.Plaza.PlazaStreamRegistry.VarMargin/summary;Str260
+F:StockSharp.Plaza.PlazaStreamRegistry.Volatility/summary;Volatility
 F:StockSharp.Plaza.PlazaStreamRegistry.Info/summary;DocStr6300
 F:StockSharp.Plaza.PlazaStreamRegistry.Penalty/summary;DocStr6304
 F:StockSharp.Plaza.PlazaStreamRegistry.Rate/summary;DocStr6305
@@ -831,7 +831,7 @@ F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.Name/summary;D
 F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.CodeVcb/summary;DocStr6015
 F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.OldKotir/summary;DocStr6014
 F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.RoundTo/summary;DocStr6020
-F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.MinStep/summary;MinPriceStep
+F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.MinStep/summary;Str306
 F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.LotVolume/summary;DocStr6016
 F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.StepPrice/summary;Str555
 F:StockSharp.Plaza.Metadata.PlazaSessionContentsDerivativeColumns.IsLimited/summary;DocStr6011
@@ -974,7 +974,7 @@ F:StockSharp.Plaza.Metadata.PlazaTableRegistry.VcbFuture/summary;Str2670
 F:StockSharp.Plaza.Metadata.PlazaTableRegistry.VcbOption/summary;Str1529
 F:StockSharp.Plaza.Metadata.PlazaTableRegistry.VarMarginFuture/summary;Str2693
 F:StockSharp.Plaza.Metadata.PlazaTableRegistry.VarMarginOption/summary;Str2694
-F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Volatility/summary;Str2364
+F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Volatility/summary;Volatility
 F:StockSharp.Plaza.Metadata.PlazaTableRegistry.VolatilitySmile/summary;Str2684
 F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ClearingMoney/summary;Str2687
 F:StockSharp.Plaza.Metadata.PlazaTableRegistry.ClearingRate/summary;DocStr6507
@@ -1169,7 +1169,7 @@ P:StockSharp.Plaza.PlazaRouter.InstallDirName/summary;DocStr6593
 P:StockSharp.Plaza.PlazaRouter.ExecutableFileName/summary;DocStr6594
 P:StockSharp.Plaza.PlazaRouter.ConfigFilePath/summary;DocStr6595
 T:StockSharp.Plaza.Metadata.PlazaColumn/summary;DocStr6596
-M:StockSharp.Plaza.Metadata.PlazaColumn.ToString/summary;DocStr628
+M:StockSharp.Plaza.Metadata.PlazaColumn.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaColumn.ToString/returns;DocStr50
 P:StockSharp.Plaza.Metadata.PlazaColumn.Name/summary;DocStr3707
 P:StockSharp.Plaza.Metadata.PlazaColumn.PlazaType/summary;DocStr6597
@@ -1425,7 +1425,7 @@ F:StockSharp.Plaza.PlazaStreamReplicationTypes.RemoteSnapshot/summary;DocStr6770
 F:StockSharp.Plaza.PlazaStreamReplicationTypes.RemoteOnline/summary;DocStr6771
 F:StockSharp.Plaza.PlazaStreamReplicationTypes.RemoveDeleted/summary;DocStr6772
 T:StockSharp.Plaza.PlazaStream/summary;DocStr6773
-M:StockSharp.Plaza.PlazaStream.ToString/summary;DocStr628
+M:StockSharp.Plaza.PlazaStream.ToString/summary;DocStr49
 M:StockSharp.Plaza.PlazaStream.ToString/returns;DocStr50
 P:StockSharp.Plaza.PlazaStream.Name/summary;DocStr6774
 P:StockSharp.Plaza.PlazaStream.Tables/summary;DocStr6775
@@ -1441,7 +1441,7 @@ P:StockSharp.Plaza.PlazaStreamManager.Streams/summary;DocStr6782
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/summary;DocStr6270
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/remarks;DocStr6783
 T:StockSharp.Plaza.Metadata.PlazaTable/summary;DocStr6784
-M:StockSharp.Plaza.Metadata.PlazaTable.ToString/summary;DocStr628
+M:StockSharp.Plaza.Metadata.PlazaTable.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaTable.ToString/returns;DocStr50
 P:StockSharp.Plaza.Metadata.PlazaTable.Metadata/summary;DocStr6785
 P:StockSharp.Plaza.Metadata.PlazaTable.Id/summary;DocStr6786
@@ -1503,7 +1503,7 @@ P:StockSharp.Plaza.PlazaTrader.DefaultOptionDepthTable/summary;DocStr6803
 P:StockSharp.Plaza.PlazaTrader.DefaultOptionDepthTable/remarks;DocStr333
 P:StockSharp.Plaza.PlazaTrader.Tables/summary;DocStr6518
 T:StockSharp.Plaza.Metadata.PlazaType/summary;DocStr6804
-M:StockSharp.Plaza.Metadata.PlazaType.ToString/summary;DocStr6805
+M:StockSharp.Plaza.Metadata.PlazaType.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaType.ToString/returns;DocStr50
 M:StockSharp.Plaza.Metadata.PlazaType.op_Implicit(System.Type)~StockSharp.Plaza.Metadata.PlazaType/summary;DocStr64
 M:StockSharp.Plaza.Metadata.PlazaType.op_Implicit(System.Type)~StockSharp.Plaza.Metadata.PlazaType/param/type;DocStr6806
@@ -1516,11 +1516,11 @@ M:StockSharp.Plaza.Metadata.PlazaType.Parse(System.String)/param/value;DocStr680
 M:StockSharp.Plaza.Metadata.PlazaType.Parse(System.String)/returns;DocStr66
 P:StockSharp.Plaza.Metadata.PlazaType.DotNetType/summary;DocStr6809
 T:StockSharp.Plaza.Metadata.PlazaStringType/summary;DocStr6810
-M:StockSharp.Plaza.Metadata.PlazaStringType.ToString/summary;DocStr6805
+M:StockSharp.Plaza.Metadata.PlazaStringType.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaStringType.ToString/returns;DocStr50
 P:StockSharp.Plaza.Metadata.PlazaStringType.Length/summary;DocStr6811
 T:StockSharp.Plaza.Metadata.PlazaDecimalType/summary;DocStr6812
-M:StockSharp.Plaza.Metadata.PlazaDecimalType.ToString/summary;DocStr6805
+M:StockSharp.Plaza.Metadata.PlazaDecimalType.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaDecimalType.ToString/returns;DocStr50
 P:StockSharp.Plaza.Metadata.PlazaDecimalType.Precision/summary;DocStr6813
 P:StockSharp.Plaza.Metadata.PlazaDecimalType.Scale/summary;DocStr218

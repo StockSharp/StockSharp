@@ -37,11 +37,11 @@ F:StockSharp.OpenECry.OpenECryStopType.TrailingStopMarket/summary;DocStr5939
 F:StockSharp.OpenECry.OpenECryStopType.TrailingStopLimit/summary;DocStr5940
 T:StockSharp.OpenECry.OpenECryOrderCondition/summary;DocStr60
 M:StockSharp.OpenECry.OpenECryOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.OpenECry.OpenECryOrderCondition.StopType/summary;Str2571
+P:StockSharp.OpenECry.OpenECryOrderCondition.StopType/summary;Str2570
 P:StockSharp.OpenECry.OpenECryOrderCondition.StopPrice/summary;StopPrice
 P:StockSharp.OpenECry.OpenECryOrderCondition.Delta/summary;Str2572
 P:StockSharp.OpenECry.OpenECryOrderCondition.IsPercentDelta/summary;DocStr5941
-P:StockSharp.OpenECry.OpenECryOrderCondition.TriggerType/summary;Str2576
+P:StockSharp.OpenECry.OpenECryOrderCondition.TriggerType/summary;Str2575
 P:StockSharp.OpenECry.OpenECryOrderCondition.ReferencePrice/summary;Str2577
 T:StockSharp.OpenECry.OpenECryException/summary;DocStr5942
 M:StockSharp.OpenECry.OpenECryException.#ctor(System.String,System.Exception)/summary;DocStr1

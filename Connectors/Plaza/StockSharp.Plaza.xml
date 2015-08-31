@@ -2845,7 +2845,7 @@
     </member>
     <member name="M:StockSharp.Plaza.PlazaMessageAdapter.ToString">
       <summary>
-            Получить строковое представление контейнера.
+            Получить строковое представление.
             </summary>
       <returns>Строковое представление.</returns>
     </member>
@@ -7246,7 +7246,7 @@
     </member>
     <member name="M:StockSharp.Plaza.Metadata.PlazaType.ToString">
       <summary>
-            Привести в строковое представление.
+            Получить строковое представление.
             </summary>
       <returns>Строковое представление.</returns>
     </member>
@@ -7283,7 +7283,7 @@
     </member>
     <member name="M:StockSharp.Plaza.Metadata.PlazaStringType.ToString">
       <summary>
-            Привести в строковое представление.
+            Получить строковое представление.
             </summary>
       <returns>Строковое представление.</returns>
     </member>
@@ -7299,7 +7299,7 @@
     </member>
     <member name="M:StockSharp.Plaza.Metadata.PlazaDecimalType.ToString">
       <summary>
-            Привести в строковое представление.
+            Получить строковое представление.
             </summary>
       <returns>Строковое представление.</returns>
     </member>

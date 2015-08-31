@@ -48366,42 +48366,42 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// New algo-order...
+		/// New algo-order
 		/// </summary>
-		public const string XamlStr352Key = "XamlStr352";
+		public const string NewAlgoOrderKey = "NewAlgoOrder";
 
 		/// <summary>
-		/// New algo-order...
+		/// New algo-order
 		/// </summary>
-		public static string XamlStr352
+		public static string NewAlgoOrder
 		{
-			get { return GetString(XamlStr352Key); }
+			get { return GetString(NewAlgoOrderKey); }
 		}
 
 		/// <summary>
-		/// New order...
+		/// New order
 		/// </summary>
-		public const string XamlStr353Key = "XamlStr353";
+		public const string NewOrderKey = "NewOrder";
 
 		/// <summary>
-		/// New order...
+		/// New order
 		/// </summary>
-		public static string XamlStr353
+		public static string NewOrder
 		{
-			get { return GetString(XamlStr353Key); }
+			get { return GetString(NewOrderKey); }
 		}
 
 		/// <summary>
-		/// New stop-order...
+		/// New stop-order
 		/// </summary>
-		public const string XamlStr354Key = "XamlStr354";
+		public const string NewStopOrderKey = "NewStopOrder";
 
 		/// <summary>
-		/// New stop-order...
+		/// New stop-order
 		/// </summary>
-		public static string XamlStr354
+		public static string NewStopOrder
 		{
-			get { return GetString(XamlStr354Key); }
+			get { return GetString(NewStopOrderKey); }
 		}
 
 		/// <summary>

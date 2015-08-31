@@ -77,7 +77,7 @@ F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartDispersion/summary;DocS
 F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.CustomOrderStop/summary;DocStr2550
 T:StockSharp.Blackwood.BlackwoodOrderCondition/summary;DocStr2570
 M:StockSharp.Blackwood.BlackwoodOrderCondition.#ctor/summary;DocStr1
-P:StockSharp.Blackwood.BlackwoodOrderCondition.StopPrice/summary;Str1886
+P:StockSharp.Blackwood.BlackwoodOrderCondition.StopPrice/summary;Str1885
 P:StockSharp.Blackwood.BlackwoodOrderCondition.Type/summary;Str1737
 T:StockSharp.Blackwood.BlackwoodTrader/summary;DocStr2571
 M:StockSharp.Blackwood.BlackwoodTrader.#ctor/summary;DocStr1

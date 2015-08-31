@@ -786,8 +786,8 @@
             </summary>
       <param name="security">Инструмент, для которого необходимо получить свечи.</param>
       <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.AlorHistorySource.TimeFrames" />.</param>
-      <param name="from">Дата начала данных.</param>
-      <param name="to">Дата конца данных.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
       <param name="count">Максимальное количество свеч, которое нужно получить (не менее 1 и не более 10000).</param>
       <returns>Загруженные свечи.</returns>
     </member>
@@ -840,11 +840,11 @@
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetTrades(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
       <summary>
-            Получить исторические сделки.
+            Загрузить исторические сделки.
             </summary>
       <param name="security">Инструмент, для которого необходимо получить все сделки.</param>
-      <param name="from">Дата начала данных.</param>
-      <param name="to">Дата конца данных.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
       <returns>Исторические сделки.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
@@ -853,8 +853,8 @@
             </summary>
       <param name="security">Инструмент, для которого необходимо получить свечи.</param>
       <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.TimeFrames" />.</param>
-      <param name="from">Дата начала данных.</param>
-      <param name="to">Дата конца данных.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
       <returns>Загруженные свечи.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Finam.FinamHistorySource.Refresh(StockSharp.Algo.Storages.ISecurityStorage,StockSharp.BusinessEntities.Security,System.Action{StockSharp.BusinessEntities.Security},System.Func{System.Boolean})">
@@ -946,8 +946,8 @@
             Загрузить тиковые сделки.
             </summary>
       <param name="security">Инструмент, для которого необходимо получить сделки.</param>
-      <param name="from">Дата начала данных.</param>
-      <param name="to">Дата конца данных.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
       <returns>Загруженные сделки.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.MfdHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
@@ -956,8 +956,8 @@
             </summary>
       <param name="security">Инструмент, для которого необходимо получить свечи.</param>
       <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.MfdHistorySource.TimeFrames" />.</param>
-      <param name="from">Дата начала данных.</param>
-      <param name="to">Дата конца данных.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
       <returns>Загруженные свечи.</returns>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.MfdHistorySource.TimeFrames">
@@ -1054,7 +1054,7 @@
       <param name="securityId">Идентификатор инструмента.</param>
       <param name="securityName">Название инструмента.</param>
       <param name="fromDate">Дата начала периода.</param>
-      <param name="toDate">Дата конца периода.</param>
+      <param name="toDate">Дата окончания периода.</param>
       <returns>Исторические данные.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.Rts.FortsDailyData.GetRate(StockSharp.BusinessEntities.Security,System.DateTime,System.DateTime)">
@@ -1206,8 +1206,8 @@
             Загрузить тиковые сделки.
             </summary>
       <param name="security">Инструмент, для которого необходимо получить сделки.</param>
-      <param name="from">Дата начала данных.</param>
-      <param name="to">Дата конца данных.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
       <returns>Загруженные сделки.</returns>
     </member>
     <member name="M:StockSharp.Algo.History.Russian.UxHistorySource.GetCandles(StockSharp.BusinessEntities.Security,System.TimeSpan,System.DateTime,System.DateTime)">
@@ -1216,8 +1216,8 @@
             </summary>
       <param name="security">Инструмент, для которого необходимо получить свечи.</param>
       <param name="timeFrame">Тайм-фрейм. Возможные значения <see cref="P:StockSharp.Algo.History.Russian.UxHistorySource.TimeFrames" />.</param>
-      <param name="from">Дата начала данных.</param>
-      <param name="to">Дата конца данных.</param>
+      <param name="from">Дата начала периода.</param>
+      <param name="to">Дата окончания периода.</param>
       <returns>Загруженные свечи.</returns>
     </member>
     <member name="P:StockSharp.Algo.History.Russian.UxHistorySource.TimeFrames">

@@ -8,22 +8,23 @@ namespace SampleStorage
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;
+	using StockSharp.Messages;
 
 	class Program
 	{
 		static void Main()
 		{
-			// создаем тестовый инструмент
+			// creating AAPL security
 			var security = new Security
 			{
-				Id = "TestId",
+				Id = "AAPL@NASDAQ",
 				PriceStep = 0.1m,
 				Decimals = 1,
 			};
 
 			var trades = new List<Trade>();
 
-			// генерируем 1000 произвольных сделок
+			// generation 1000 random ticks
 			//
 
 			for (var i = 0; i < 1000; i++)
@@ -40,26 +41,30 @@ namespace SampleStorage
 				trades.Add(t);
 			}
 
-			var storage = new StorageRegistry();
-
-			// получаем хранилище для тиковых сделок
-			var tradeStorage = storage.GetTradeStorage(security);
-
-			// сохраняем сделки
-			tradeStorage.Save(trades);
-
-			// загружаем сделки
-			var loadedTrades = tradeStorage.Load(DateTime.Today, DateTime.Today + TimeSpan.FromMinutes(1000));
-
-			foreach (var trade in loadedTrades)
+			using (var drive = new LocalMarketDataDrive())
 			{
-				Console.WriteLine(LocalizedStrings.Str2968Params, trade.Id, trade);
+				// get AAPL storage
+				var aaplStorage = drive.GetSecurityDrive(security);
+
+				// get tick storage
+				var tradeStorage = (IMarketDataStorage<Trade>)aaplStorage.GetTickStorage(new CsvMarketDataSerializer<ExecutionMessage>());
+
+				// saving ticks
+				tradeStorage.Save(trades);
+
+				// loading ticks
+				var loadedTrades = tradeStorage.Load(DateTime.Today, DateTime.Today + TimeSpan.FromMinutes(1000));
+
+				foreach (var trade in loadedTrades)
+				{
+					Console.WriteLine(LocalizedStrings.Str2968Params, trade.Id, trade);
+				}
+
+				Console.ReadLine();
+
+				// deleting ticks (and removing file)
+				tradeStorage.Delete(DateTime.Today, DateTime.Today + TimeSpan.FromMinutes(1000));	
 			}
-
-			Console.ReadLine();
-
-			// удаляем сделки (очищаем файл)
-			tradeStorage.Delete(DateTime.Today, DateTime.Today + TimeSpan.FromMinutes(1000));
 		}
 	}
 }
