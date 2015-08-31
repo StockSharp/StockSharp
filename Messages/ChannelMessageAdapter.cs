@@ -54,12 +54,12 @@
 		public IMessageChannel OutputChannel { get; private set; }
 
 		/// <summary>
-		/// Контролировать время жизни входящего канала входящих сообщений.
+		/// Контролировать время жизни канала входящих сообщений.
 		/// </summary>
 		public bool OwnInputChannel { get; set; }
 
 		/// <summary>
-		/// Контролировать время жизни входящего канала исходящих сообщений.
+		/// Контролировать время жизни канала исходящих сообщений.
 		/// </summary>
 		public bool OwnOutputChannel { get; set; }
 

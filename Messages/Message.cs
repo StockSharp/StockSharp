@@ -77,15 +77,6 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Добавить задержку ко времени сообщения. Используется в эмуляции.
-		/// </summary>
-		/// <param name="diff">Значение задержки.</param>
-		public void AddLatency(TimeSpan diff)
-		{
-			LocalTime += diff;
-		}
-
-		/// <summary>
 		/// Получить строковое представление.
 		/// </summary>
 		/// <returns>Строковое представление.</returns>

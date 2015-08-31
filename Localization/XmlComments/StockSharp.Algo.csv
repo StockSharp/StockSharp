@@ -6205,7 +6205,7 @@ M:StockSharp.Algo.TraderHelper.GetBoardCode(StockSharp.Messages.IMessageAdapter,
 M:StockSharp.Algo.TraderHelper.GetBoardCode(StockSharp.Messages.IMessageAdapter,System.String)/returns;BoardCode
 M:StockSharp.Algo.TraderHelper.GetPriceStep(System.Int32)/summary;DocStr2503
 M:StockSharp.Algo.TraderHelper.GetPriceStep(System.Int32)/param/decimals;Decimals
-M:StockSharp.Algo.TraderHelper.GetPriceStep(System.Int32)/returns;DocStr2504
+M:StockSharp.Algo.TraderHelper.GetPriceStep(System.Int32)/returns;PriceStep
 M:StockSharp.Algo.TraderHelper.SecurityIdToFolderName(System.String)/summary;DocStr2505
 M:StockSharp.Algo.TraderHelper.SecurityIdToFolderName(System.String)/param/id;SecurityId
 M:StockSharp.Algo.TraderHelper.SecurityIdToFolderName(System.String)/returns;DocStr2506

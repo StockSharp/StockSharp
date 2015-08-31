@@ -5,8 +5,6 @@ P:StockSharp.Messages.IExtendableEntity.ExtensionInfo/summary;ExtendedInfo
 P:StockSharp.Messages.IExtendableEntity.ExtensionInfo/remarks;Str427
 M:StockSharp.Messages.Message.#ctor(StockSharp.Messages.MessageTypes)/summary;DocStr93
 M:StockSharp.Messages.Message.#ctor(StockSharp.Messages.MessageTypes)/param/type;DocStr9
-M:StockSharp.Messages.Message.AddLatency(System.TimeSpan)/summary;DocStr4042
-M:StockSharp.Messages.Message.AddLatency(System.TimeSpan)/param/diff;DocStr4043
 M:StockSharp.Messages.Message.ToString/summary;DocStr49
 M:StockSharp.Messages.Message.ToString/returns;DocStr50
 M:StockSharp.Messages.Message.Clone/summary;DocStr643

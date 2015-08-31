@@ -3189,7 +3189,7 @@ namespace StockSharp.Algo
 		/// Получить шаг цены на основе точности.
 		/// </summary>
 		/// <param name="decimals">Точность.</param>
-		/// <returns>Шан цены.</returns>
+		/// <returns>Шаг цены.</returns>
 		public static decimal GetPriceStep(this int decimals)
 		{
 			return 1m / 10.Pow(decimals);
