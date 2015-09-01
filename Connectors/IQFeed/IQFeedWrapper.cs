@@ -32,6 +32,12 @@ namespace StockSharp.IQFeed
 		/// Запущен ли экспорт. Экспорт запускается при отправке IQFeed команды.
 		/// </summary>
 		private bool IsExportStarted { get; set; }
+        
+        /// <summary>
+        /// Level 2 (market depth) subscription allowed.
+        /// Assumes IQFeed server returns the message: "Account not authorized for Level II" if no level 2 subscription.
+        /// </summary>
+        public bool IsLevel2Allowed { get; set; }
 
 		/// <summary>
 		/// Событие ошибки подключения (например, соединение было разорвано).
@@ -109,6 +115,19 @@ namespace StockSharp.IQFeed
 										continue;
 
 									var res = buf.ToString(0, index + 1);
+
+                                    // handle level 2 subscription not authorized condition.
+                                    if (res.ContainsIgnoreCase("Account not authorized for Level II"))
+                                    {
+                                        _logReceiver.AddDebugLog("Account not authorized for Level II.");
+                                        IsLevel2Allowed = false;
+                                        break;
+                                    }
+                                    if (res.Contains("Level II"))
+                                    {
+                                        IsLevel2Allowed = true;
+                                    }
+
 									var reply = res.Split("\n").Select(v => v.TrimEnd('\r', '\n'));
 
 									if (index < buf.Length - 1)
@@ -180,7 +199,7 @@ namespace StockSharp.IQFeed
 			}
 		}
 
-		/// <summary>
+	    /// <summary>
 		/// Отключиться от сервера.
 		/// </summary>
 		public void Disconnect()
