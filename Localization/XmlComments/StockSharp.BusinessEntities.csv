@@ -119,7 +119,7 @@ M:StockSharp.BusinessEntities.Exchange.#ctor/summary;DocStr1
 M:StockSharp.BusinessEntities.Exchange.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.Exchange.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/summary;DocStr2634
-M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/param/other;DocStr2635
+M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/param/other;DocStr1157
 M:StockSharp.BusinessEntities.Exchange.OnEquals(StockSharp.BusinessEntities.Exchange)/returns;DocStr2636
 M:StockSharp.BusinessEntities.Exchange.GetHashCode/summary;DocStr2637
 M:StockSharp.BusinessEntities.Exchange.GetHashCode/returns;DocStr2638
@@ -201,7 +201,7 @@ M:StockSharp.BusinessEntities.ExchangeBoard.SaveBoard(StockSharp.BusinessEntitie
 M:StockSharp.BusinessEntities.ExchangeBoard.ToString/summary;DocStr49
 M:StockSharp.BusinessEntities.ExchangeBoard.ToString/returns;DocStr50
 M:StockSharp.BusinessEntities.ExchangeBoard.OnEquals(StockSharp.BusinessEntities.ExchangeBoard)/summary;DocStr2634
-M:StockSharp.BusinessEntities.ExchangeBoard.OnEquals(StockSharp.BusinessEntities.ExchangeBoard)/param/other;DocStr2635
+M:StockSharp.BusinessEntities.ExchangeBoard.OnEquals(StockSharp.BusinessEntities.ExchangeBoard)/param/other;DocStr1157
 M:StockSharp.BusinessEntities.ExchangeBoard.OnEquals(StockSharp.BusinessEntities.ExchangeBoard)/returns;DocStr2636
 M:StockSharp.BusinessEntities.ExchangeBoard.GetHashCode/summary;DocStr2637
 M:StockSharp.BusinessEntities.ExchangeBoard.GetHashCode/returns;DocStr2638

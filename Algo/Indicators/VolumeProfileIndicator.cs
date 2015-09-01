@@ -133,7 +133,7 @@ namespace StockSharp.Algo.Indicators
 		/// Сравнить <see cref="VolumeProfileIndicatorValue" /> на эквивалентность.
 		/// </summary>
 		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Код сравнения.</returns>
+		/// <returns>Результат сравнения.</returns>
 		public override int CompareTo(IIndicatorValue other)
 		{
 			throw new NotSupportedException();

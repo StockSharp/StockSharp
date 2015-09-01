@@ -416,9 +416,9 @@ P:StockSharp.Quik.DdeStopOrderColumns.Server/summary;DocStr7141
 T:StockSharp.Quik.DdeTable/summary;DocStr7142
 M:StockSharp.Quik.DdeTable.Clone/summary;DocStr643
 M:StockSharp.Quik.DdeTable.Clone/returns;DocStr644
-M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/summary;DocStr7143
-M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/param/other;DocStr7144
-M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/returns;DocStr7145
+M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/summary;DocStr2634
+M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/param/other;DocStr1157
+M:StockSharp.Quik.DdeTable.OnEquals(StockSharp.Quik.DdeTable)/returns;DocStr2636
 M:StockSharp.Quik.DdeTable.GetHashCode/summary;DocStr2637
 M:StockSharp.Quik.DdeTable.GetHashCode/returns;DocStr2638
 M:StockSharp.Quik.DdeTable.ToString/summary;DocStr49
@@ -433,9 +433,9 @@ M:StockSharp.Quik.DdeTableColumn.#ctor(System.String,System.Type)/param/name;Doc
 M:StockSharp.Quik.DdeTableColumn.#ctor(System.String,System.Type)/param/dataType;DocStr7152
 M:StockSharp.Quik.DdeTableColumn.Clone/summary;DocStr643
 M:StockSharp.Quik.DdeTableColumn.Clone/returns;DocStr644
-M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/summary;DocStr7153
-M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/param/other;DocStr7154
-M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/returns;DocStr7155
+M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/summary;DocStr2634
+M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/param/other;DocStr1157
+M:StockSharp.Quik.DdeTableColumn.OnEquals(StockSharp.Quik.DdeTableColumn)/returns;DocStr2636
 M:StockSharp.Quik.DdeTableColumn.GetHashCode/summary;DocStr2637
 M:StockSharp.Quik.DdeTableColumn.GetHashCode/returns;DocStr2638
 M:StockSharp.Quik.DdeTableColumn.ToString/summary;DocStr49

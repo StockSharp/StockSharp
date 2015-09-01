@@ -346,9 +346,9 @@ M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/summary
 M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)/param/propertyName;DocStr2622
 M:StockSharp.Xaml.Diagram.DiagramSocket.Clone/summary;DocStr643
 M:StockSharp.Xaml.Diagram.DiagramSocket.Clone/returns;DocStr644
-M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr4066
-M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/param/other;DocStr8013
-M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/returns;DocStr8014
+M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/summary;DocStr2634
+M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/param/other;DocStr1157
+M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)/returns;DocStr2636
 M:StockSharp.Xaml.Diagram.DiagramSocket.ToString/summary;DocStr49
 M:StockSharp.Xaml.Diagram.DiagramSocket.ToString/returns;DocStr50
 P:StockSharp.Xaml.Diagram.DiagramSocket.Id/summary;DocStr7873
@@ -380,9 +380,9 @@ M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)/sum
 M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)/param/propertyName;DocStr2622
 M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone/summary;DocStr643
 M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone/returns;DocStr644
-M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/summary;DocStr4066
-M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/param/other;DocStr8030
-M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/returns;DocStr8031
+M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/summary;DocStr2634
+M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/param/other;DocStr1157
+M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)/returns;DocStr2636
 M:StockSharp.Xaml.Diagram.DiagramSocketType.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Diagram.DiagramSocketType.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Diagram.DiagramSocketType.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4

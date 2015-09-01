@@ -1440,6 +1440,7 @@ M:StockSharp.Plaza.PlazaStreamManager.DisposeManaged/summary;DocStr7
 P:StockSharp.Plaza.PlazaStreamManager.Streams/summary;DocStr6782
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/summary;DocStr6270
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/remarks;DocStr6783
+P:StockSharp.Plaza.PlazaStreamManager.ConnectionPool/summary;DocStr6276
 T:StockSharp.Plaza.Metadata.PlazaTable/summary;DocStr6784
 M:StockSharp.Plaza.Metadata.PlazaTable.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaTable.ToString/returns;DocStr50

@@ -144,10 +144,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить величину с другой.
+		/// Сравнить <see cref="Unit" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Другая величина, с которой необходимо сравнивать.</param>
-		/// <returns>Результат сравнения величин.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns>Результат сравнения.</returns>
 		public override int CompareTo(Unit other)
 		{
 			if (this == other)

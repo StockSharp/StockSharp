@@ -20,9 +20,6 @@ namespace StockSharp.Messages
 	/// </summary>
 	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
-		/// <summary>
-		/// Ожидание выполнения некоего действия, связанного с ключом.
-		/// </summary>
 		private class CodeTimeOut
 			//where T : class
 		{
@@ -30,12 +27,6 @@ namespace StockSharp.Messages
 
 			private TimeSpan _timeOut = TimeSpan.FromSeconds(10);
 
-			/// <summary>
-			/// Ограничение по времени, в течении которого должен отработать действие.
-			/// </summary>
-			/// <remarks>
-			/// Значение по умолчанию равно 10 секундам.
-			/// </remarks>
 			public TimeSpan TimeOut
 			{
 				get { return _timeOut; }
@@ -48,10 +39,6 @@ namespace StockSharp.Messages
 				}
 			}
 
-			/// <summary>
-			/// Запустить ожидание для ключа.
-			/// </summary>
-			/// <param name="key">Ключ.</param>
 			public void StartTimeOut(long key)
 			{
 				//if (key == 0)
@@ -60,11 +47,6 @@ namespace StockSharp.Messages
 				_registeredKeys.SafeAdd(key, s => TimeOut);
 			}
 
-			/// <summary>
-			/// Обработать событие изменения рыночного времени и получить те ключи, ожидание для которых закончего.
-			/// </summary>
-			/// <param name="diff">Изменение рыночного времени.</param>
-			/// <returns>Ключи.</returns>
 			public IEnumerable<long> ProcessTime(TimeSpan diff)
 			{
 				if (_registeredKeys.Count == 0)

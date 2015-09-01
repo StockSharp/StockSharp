@@ -135,14 +135,14 @@ namespace StockSharp.Algo.Indicators
 		/// Сравнить <see cref="IIndicatorValue" /> на эквивалентность.
 		/// </summary>
 		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Код сравнения.</returns>
+		/// <returns>Результат сравнения.</returns>
 		public abstract int CompareTo(IIndicatorValue other);
 
 		/// <summary>
 		/// Сравнить <see cref="IIndicatorValue" /> на эквивалентность.
 		/// </summary>
 		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Код сравнения.</returns>
+		/// <returns>Результат сравнения.</returns>
 		int IComparable.CompareTo(object other)
 		{
 			var value = other as IIndicatorValue;
@@ -245,7 +245,7 @@ namespace StockSharp.Algo.Indicators
 		/// Сравнить <see cref="SingleIndicatorValue{T}" /> на эквивалентность.
 		/// </summary>
 		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Код сравнения.</returns>
+		/// <returns>Результат сравнения.</returns>
 		public override int CompareTo(IIndicatorValue other)
 		{
 			return Value.Compare(other.GetValue<TValue>());
@@ -558,7 +558,7 @@ namespace StockSharp.Algo.Indicators
 		/// Сравнить <see cref="ComplexIndicatorValue" /> на эквивалентность.
 		/// </summary>
 		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Код сравнения.</returns>
+		/// <returns>Результат сравнения.</returns>
 		public override int CompareTo(IIndicatorValue other)
 		{
 			throw new NotSupportedException();

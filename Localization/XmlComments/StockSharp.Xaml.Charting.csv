@@ -180,9 +180,9 @@ M:StockSharp.Xaml.Charting.ChartPart`1.Load(Ecng.Serialization.SettingsStorage)/
 M:StockSharp.Xaml.Charting.ChartPart`1.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.ChartPart`1.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
 M:StockSharp.Xaml.Charting.ChartPart`1.Save(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
-M:StockSharp.Xaml.Charting.ChartPart`1.OnEquals(`0)/summary;DocStr7747
-M:StockSharp.Xaml.Charting.ChartPart`1.OnEquals(`0)/param/other;DocStr7748
-M:StockSharp.Xaml.Charting.ChartPart`1.OnEquals(`0)/returns;DocStr7749
+M:StockSharp.Xaml.Charting.ChartPart`1.OnEquals(`0)/summary;DocStr2634
+M:StockSharp.Xaml.Charting.ChartPart`1.OnEquals(`0)/param/other;DocStr1157
+M:StockSharp.Xaml.Charting.ChartPart`1.OnEquals(`0)/returns;DocStr2636
 M:StockSharp.Xaml.Charting.ChartPart`1.GetHashCode/summary;DocStr2637
 M:StockSharp.Xaml.Charting.ChartPart`1.GetHashCode/returns;DocStr2638
 M:StockSharp.Xaml.Charting.ChartPart`1.FillClone(`0)/summary;DocStr7750
@@ -698,9 +698,9 @@ M:StockSharp.Xaml.Charting.IndicatorType.#ctor(System.Type,System.Type)/param/in
 M:StockSharp.Xaml.Charting.IndicatorType.#ctor(System.Type,System.Type)/param/painter;DocStr7851
 M:StockSharp.Xaml.Charting.IndicatorType.Clone/summary;DocStr643
 M:StockSharp.Xaml.Charting.IndicatorType.Clone/returns;DocStr1116
-M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/summary;DocStr4066
-M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/param/other;DocStr7852
-M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/returns;DocStr7853
+M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/summary;DocStr2634
+M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/param/other;DocStr1157
+M:StockSharp.Xaml.Charting.IndicatorType.OnEquals(StockSharp.Xaml.Charting.IndicatorType)/returns;DocStr2636
 M:StockSharp.Xaml.Charting.IndicatorType.Load(Ecng.Serialization.SettingsStorage)/summary;DocStr2
 M:StockSharp.Xaml.Charting.IndicatorType.Load(Ecng.Serialization.SettingsStorage)/param/storage;DocStr3
 M:StockSharp.Xaml.Charting.IndicatorType.Save(Ecng.Serialization.SettingsStorage)/summary;DocStr4
