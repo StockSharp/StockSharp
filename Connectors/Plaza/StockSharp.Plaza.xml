@@ -6989,6 +6989,11 @@
             </summary>
       <remarks>Используется только в случае "безбазового" клиента.</remarks>
     </member>
+    <member name="P:StockSharp.Plaza.PlazaStreamManager.ConnectionPool">
+      <summary>
+            Пул подключений.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaTable">
       <summary>
             Таблица, описывающая данные с сервера РТС.

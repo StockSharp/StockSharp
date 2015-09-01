@@ -157,20 +157,20 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить идентификатор инструмента на эквивалентность.
+		/// Сравнить <see cref="Currency" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Другой идентификатор для сравнения.</param>
-		/// <returns><see langword="true"/>, если идентификаторы эквивалентны, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		public override bool Equals(object other)
 		{
 			return Equals((SecurityId)other);
 		}
 
 		/// <summary>
-		/// Сравнить идентификатор инструмента на эквивалентность.
+		/// Сравнить <see cref="Currency" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Другой идентификатор для сравнения.</param>
-		/// <returns><see langword="true"/>, если идентификаторы эквивалентны, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		public bool Equals(SecurityId other)
 		{
 			if (EnsureGetHashCode() != other.EnsureGetHashCode())

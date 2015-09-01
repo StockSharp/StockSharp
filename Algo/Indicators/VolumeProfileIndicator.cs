@@ -130,7 +130,7 @@ namespace StockSharp.Algo.Indicators
 		}
 
 		/// <summary>
-		/// Сравнить с другим значением индикатора.
+		/// Сравнить <see cref="VolumeProfileIndicatorValue" /> на эквивалентность.
 		/// </summary>
 		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
 		/// <returns>Код сравнения.</returns>

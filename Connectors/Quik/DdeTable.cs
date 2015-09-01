@@ -111,10 +111,10 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Сравнить две таблицы на эквивалентность.
+		/// Сравнить <see cref="DdeTable" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Другая таблица, с которой необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другая таблица равна текущей, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(DdeTable other)
 		{
 			return

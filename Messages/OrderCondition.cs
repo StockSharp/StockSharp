@@ -45,16 +45,6 @@ namespace StockSharp.Messages
 			}
 		}
 
-		///// <summary>
-		///// Проверить, возможно ли по рыночной цене активировать заявку. И возвратить демо заявки, если это возможно.
-		///// </summary>
-		///// <param name="depth">Стакан, отражающий текущую рыночную ситуацию.</param>
-		///// <returns>Демо заявки.</returns>
-		//public virtual IEnumerable<Order> TryActivate(MarketDepth depth)
-		//{
-		//	throw new NotImplementedException();
-		//}
-
 		/// <summary>
 		/// Создать копию <see cref="OrderCondition"/>.
 		/// </summary>

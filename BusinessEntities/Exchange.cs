@@ -863,10 +863,10 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Сравнить два объекта <see cref="Exchange" /> на эквивалентность.
+		/// Сравнить <see cref="Exchange" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Объект для сравнения.</param>
-		/// <returns><see langword="true"/>, если другой объект равен текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(Exchange other)
 		{
 			return Name == other.Name;

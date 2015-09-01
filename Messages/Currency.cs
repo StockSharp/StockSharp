@@ -42,10 +42,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить на эквивалентность.
+		/// Сравнить <see cref="Currency" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Валюта, с которой нужно сравнить.</param>
-		/// <returns>Результат сравнения.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(Currency other)
 		{
 			return Type == other.Type && Value == other.Value;

@@ -66,10 +66,10 @@ namespace StockSharp.Quik
 		}
 
 		/// <summary>
-		/// Сравнить две колонки на эквивалентность.
+		/// Сравнить <see cref="DdeTableColumn" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Другая колонка, с которой необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другая колонка равна текущей, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(DdeTableColumn other)
 		{
 			return TableType == other.TableType && Name == other.Name;

@@ -108,10 +108,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить две котировки на эквивалентность.
+		/// Сравнить <see cref="QuoteChange" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Другая котировки, с которой необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другая котировки равна текущей, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(QuoteChange other)
 		{
 			return Price == other.Price && Side == other.Side;

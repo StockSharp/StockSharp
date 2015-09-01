@@ -527,10 +527,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить на эквивалентность.
+		/// Сравнить <see cref="PnFArg" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Объект для сравнения.</param>
-		/// <returns><see langword="true"/>, если значения равны. Иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(PnFArg other)
 		{
 			return other.BoxSize == BoxSize && other.ReversalAmount == ReversalAmount;

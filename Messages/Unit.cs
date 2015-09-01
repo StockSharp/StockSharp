@@ -225,16 +225,6 @@ namespace StockSharp.Messages
 			return (double)(decimal)unit;
 		}
 
-		///// <summary>
-		///// Привести <see cref="string"/> значение к объекту <see cref="Unit"/>.
-		///// </summary>
-		///// <param name="value"><see cref="string"/> значение.</param>
-		///// <returns>Объект <see cref="Unit"/>.</returns>
-		//public static implicit operator Unit(string value)
-		//{
-		//    return value.ToUnit(null);
-		//}
-
 		private decimal SafeGetTypeValue(Func<UnitTypes, decimal?> getTypeValue)
 		{
 			var func = GetTypeValue ?? getTypeValue;
@@ -384,10 +374,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить величину на эквивалентность с другой.
+		/// Сравнить <see cref="Unit" /> на эквивалентность.
 		/// </summary>
-		/// <param name="other">Другая величина, с которой необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другая величина равна текущей, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
 		protected override bool OnEquals(Unit other)
 		{
 			//var retVal = Type == other.Type && Value == other.Value;
@@ -414,13 +404,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить величину на эквивалентность с другой.
+		/// Сравнить <see cref="Unit" /> на эквивалентность.
 		/// </summary>
-		/// <param name="obj">Другая величина, с которой необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другая величина равна текущей, иначе, <see langword="false"/>.</returns>
-		public override bool Equals(object obj)
+		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		public override bool Equals(object other)
 		{
-			return base.Equals(obj);
+			return base.Equals(other);
 		}
 
 		/// <summary>
