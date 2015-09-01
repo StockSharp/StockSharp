@@ -54,13 +54,6 @@ namespace StockSharp.Messages
 		[EnumDisplayNameLoc(LocalizedStrings.Str245Key)]
 		Rps,
 
-		///// <summary>
-		///// Айсберг-заявка.
-		///// </summary>
-		//[EnumMember]
-		//[EnumDisplayName("Айсберг")]
-		//Iceberg,
-
 		/// <summary>
 		/// Заявка на исполнение поставочных контрактов (например, опционы).
 		/// </summary>

@@ -1,7 +1,7 @@
 ﻿namespace StockSharp.Messages
 {
 	/// <summary>
-	/// Сообщение, информирующее о сбросе состояния эмулятора.
+	/// Сообщение, информирующее о сбросе состояния.
 	/// </summary>
 	public sealed class ResetMessage : Message
 	{

@@ -33,12 +33,6 @@
 		[DataMember]
 		public string OriginalTransactionId { get; set; }
 
-		///// <summary>
-		///// Временной сдвиг от текущего времени. Используется в случае, если сервер брокера самостоятельно
-		///// указывает сдвиг во времени.
-		///// </summary>
-		//public TimeSpan? Shift { get; set; }
-
 		/// <summary>
 		/// Серверное время.
 		/// </summary>

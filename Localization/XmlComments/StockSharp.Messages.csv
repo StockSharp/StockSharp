@@ -101,7 +101,7 @@ M:StockSharp.Messages.PnFArg.ToString/returns;DocStr50
 M:StockSharp.Messages.PnFArg.Clone/summary;DocStr643
 M:StockSharp.Messages.PnFArg.Clone/returns;DocStr644
 M:StockSharp.Messages.PnFArg.OnEquals(StockSharp.Messages.PnFArg)/summary;DocStr4066
-M:StockSharp.Messages.PnFArg.OnEquals(StockSharp.Messages.PnFArg)/param/other;DocStr4067
+M:StockSharp.Messages.PnFArg.OnEquals(StockSharp.Messages.PnFArg)/param/other;DocStr2635
 M:StockSharp.Messages.PnFArg.OnEquals(StockSharp.Messages.PnFArg)/returns;DocStr4068
 M:StockSharp.Messages.PnFArg.GetHashCode/summary;DocStr2637
 M:StockSharp.Messages.PnFArg.GetHashCode/returns;DocStr2638
