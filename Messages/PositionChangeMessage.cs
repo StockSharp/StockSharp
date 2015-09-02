@@ -12,112 +12,112 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы значения изменения в <see cref="PositionChangeMessage"/>.
+	/// Type of the changes in <see cref="PositionChangeMessage"/>.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public enum PositionChangeTypes
 	{
 		/// <summary>
-		/// Начальное значение.
+		/// Initial value.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str253Key)]
 		BeginValue,
 
 		/// <summary>
-		/// Текущая значение.
+		/// Current value.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str254Key)]
 		CurrentValue,
 
 		/// <summary>
-		/// Заблокировано.
+		/// Blocked.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str255Key)]
 		BlockedValue,
 
 		/// <summary>
-		/// Стоимость позиции.
+		/// Position price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str256Key)]
 		CurrentPrice,
 
 		/// <summary>
-		/// Средневзвешанная цена.
+		/// Average price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str257Key)]
 		AveragePrice,
 
 		/// <summary>
-		/// Нереализованная прибыль.
+		/// Unrealized profit.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str258Key)]
 		UnrealizedPnL,
 
 		/// <summary>
-		/// Реализованная прибыль.
+		/// Realized profit.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str259Key)]
 		RealizedPnL,
 
 		/// <summary>
-		/// Вариационная маржа.
+		/// Variation margin.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str260Key)]
 		VariationMargin,
 
 		/// <summary>
-		/// Валюта.
+		/// Currency.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		Currency,
 
 		/// <summary>
-		/// Расширенная информация.
+		/// Extended information.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		ExtensionInfo,
 
 		/// <summary>
-		/// Плечо маржи.
+		/// Margin leverage.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str261Key)]
 		Leverage,
 
 		/// <summary>
-		/// Общий размер комиссий.
+		/// Total commission.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str262Key)]
 		Commission,
 
 		/// <summary>
-		/// Текущее значение (в лотах).
+		/// Current value (in lots).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str263Key)]
 		CurrentValueInLots,
 
 		/// <summary>
-		/// Название депозитария, где находится физически ценная бумага.
+		/// The depositary where the physical security.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str264Key)]
 		DepoName,
 
 		/// <summary>
-		/// Состояние портфеля.
+		/// Portfolio state.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str265Key)]
@@ -125,14 +125,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные об изменениях позиции.
+	/// The message contains information about the position changes.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public sealed class PositionChangeMessage : BaseChangeMessage<PositionChangeTypes>
 	{
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
@@ -141,7 +141,7 @@ namespace StockSharp.Messages
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Название портфеля.
+		/// Portfolio name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
@@ -151,7 +151,7 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
-		/// Название депозитария, где находится физически ценная бумага.
+		/// The depositary where the physical security.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str264Key)]
 		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
@@ -159,7 +159,7 @@ namespace StockSharp.Messages
 		public string DepoName { get; set; }
 
 		/// <summary>
-		/// Вид лимита для Т+ рынка.
+		/// Limit type for Т+ market.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str266Key)]
 		[DescriptionLoc(LocalizedStrings.Str267Key)]
@@ -168,7 +168,7 @@ namespace StockSharp.Messages
 		public TPlusLimits? LimitType { get; set; }
 
 		/// <summary>
-		/// Текстовое описание позиции.
+		/// Text position description.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DescriptionKey)]
@@ -177,7 +177,7 @@ namespace StockSharp.Messages
 		public string Description { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="PositionChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
 		public PositionChangeMessage()
 			: base(MessageTypes.PositionChange)
@@ -185,9 +185,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PositionChangeMessage"/>.
+		/// Create a copy of <see cref="PositionChangeMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var msg = new PositionChangeMessage
@@ -208,9 +208,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Sec={0},P={1},Changes={2}".Put(SecurityId, PortfolioName, Changes.Select(c => c.ToString()).Join(","));

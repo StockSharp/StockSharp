@@ -12,91 +12,90 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Единицы измерения.
+	/// Mearure units.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
 	public enum UnitTypes
 	{
 		/// <summary>
-		/// Абсолютное значение. Шаг изменения равен заданному числу.
+		/// The absolute value. Incremental change is a given number.
 		/// </summary>
 		[EnumMember]
 		Absolute,
 
 		/// <summary>
-		/// Проценты. Шаг изменения – одна сотая процента.
+		/// Percents.Step change - one hundredth of a percent.
 		/// </summary>
 		[EnumMember]
 		Percent,
 
 		/// <summary>
-		/// Пункт цены инструмента.
+		/// Point.
 		/// </summary>
 		[EnumMember]
 		Point,
 
 		/// <summary>
-		/// Шаг цены инструмента.
+		/// Price step.
 		/// </summary>
 		[EnumMember]
 		Step,
 
 		/// <summary>
-		/// Лимитированное значение. Данная единица изменения позволяет задавать конкретное число,
-		/// которое не может быть использовано в арифметических операциях <see cref="Unit"/>.
+		/// The limited value. This unit allows to set a specific change number, which can not be used in arithmetic operations <see cref="Unit"/>.
 		/// </summary>
 		[EnumMember]
 		Limit,
 	}
 
 	/// <summary>
-	/// Специальный класс, позволяющий задавать величины в процентном, абсолютном, пунктовым и пипсовых значениях.
+	/// Special class, allows to set the value as a percentage, absolute, points and pips values.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
 	public class Unit : Equatable<Unit>, IOperable<Unit>
 	{
 		/// <summary>
-		/// Создать величину.
+		/// Create unit.
 		/// </summary>
 		public Unit()
 		{
 		}
 
 		/// <summary>
-		/// Создать абсолютную величину <see cref="UnitTypes.Absolute"/>.
+		/// Create absolute value <see cref="UnitTypes.Absolute"/>.
 		/// </summary>
-		/// <param name="value">Значение.</param>
+		/// <param name="value">Value.</param>
 		public Unit(decimal value)
 			: this(value, UnitTypes.Absolute)
 		{
 		}
 
 		/// <summary>
-		/// Создать величину типа <see cref="UnitTypes.Absolute"/> или <see cref="UnitTypes.Percent"/>.
+		/// Create a value of types <see cref="UnitTypes.Absolute"/> and <see cref="UnitTypes.Percent"/>.
 		/// </summary>
-		/// <param name="value">Значение.</param>
-		/// <param name="type">Единица измерения.</param>
+		/// <param name="value">Value.</param>
+		/// <param name="type">Mearure unit.</param>
 		public Unit(decimal value, UnitTypes type)
 			: this(value, type, null)
 		{
 		}
 
 		/// <summary>
-		/// Создать величину типа <see cref="UnitTypes.Point"/> или <see cref="UnitTypes.Step"/>.
+		/// Create a value of types <see cref="UnitTypes.Point"/> and <see cref="UnitTypes.Step"/>.
 		/// </summary>
-		/// <param name="value">Значение.</param>
-		/// <param name="type">Единица измерения.</param>
-		/// <param name="getTypeValue">Обработчик, возвращающие значение, ассоциированное с <see cref="Type"/> (шаг цены или объема).</param>
+		/// <param name="value">Value.</param>
+		/// <param name="type">Mearure unit.</param>
+		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
 		public Unit(decimal value, UnitTypes type, Func<UnitTypes, decimal?> getTypeValue)
 		{
-			// mika Данную проверку лучше делать при арифметических действиях
+			// mika Г„Г Г­Г­ГіГѕ ГЇГ°Г®ГўГҐГ°ГЄГі Г«ГіГ·ГёГҐ Г¤ГҐГ«Г ГІГј ГЇГ°ГЁ Г Г°ГЁГґГ¬ГҐГІГЁГ·ГҐГ±ГЄГЁГµ Г¤ГҐГ©Г±ГІГўГЁГїГµ
 			//
 			//if (type == UnitTypes.Point || type == UnitTypes.Step)
 			//{
 			//    if (security == null)
-			//        throw new ArgumentException("Единица измерения не может быть '{0}' так как не передана информация об инструменте.".Put(type), "type");
+			//        throw new ArgumentException("Г…Г¤ГЁГ­ГЁГ¶Г  ГЁГ§Г¬ГҐГ°ГҐГ­ГЁГї Г­ГҐ Г¬Г®Г¦ГҐГІ ГЎГ»ГІГј '{0}' ГІГ ГЄ ГЄГ ГЄ Г­ГҐ ГЇГҐГ°ГҐГ¤Г Г­Г  ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГї Г®ГЎ ГЁГ­Г±ГІГ°ГіГ¬ГҐГ­ГІГҐ.".Put(type), "type");
 			//}
 
 			Value = value;
@@ -105,13 +104,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Единица измерения.
+		/// Mearure unit.
 		/// </summary>
 		[DataMember]
 		public UnitTypes Type { get; set; }
 
 		/// <summary>
-		/// Значение.
+		/// Value.
 		/// </summary>
 		[DataMember]
 		public decimal Value { get; set; }
@@ -120,7 +119,7 @@ namespace StockSharp.Messages
 		private Func<UnitTypes, decimal?> _getTypeValue;
 
 		/// <summary>
-		/// Обработчик, возвращающие значение, ассоциированное с <see cref="Type"/> (шаг цены или объема).
+		/// The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).
 		/// </summary>
 		[Ignore]
 		public Func<UnitTypes, decimal?> GetTypeValue
@@ -129,10 +128,10 @@ namespace StockSharp.Messages
 			set { _getTypeValue = value; }
 		}
 
-		///<summary>
-		/// Создать копию <see cref="Unit" />.
-		///</summary>
-		///<returns>Копия.</returns>
+		/// <summary>
+		/// Create a copy of <see cref="Unit"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
 		public override Unit Clone()
 		{
 			return new Unit
@@ -144,10 +143,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="Unit" /> на эквивалентность.
+		/// Compare <see cref="Unit"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns>Результат сравнения.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns>The result of the comparison.</returns>
 		public override int CompareTo(Unit other)
 		{
 			if (this == other)
@@ -160,30 +159,30 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Привести <see cref="decimal"/> значение к объекту <see cref="Unit"/>.
+		/// Cast <see cref="Decimal"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="decimal"/> значение.</param>
-		/// <returns>Объект <see cref="Unit"/>.</returns>
+		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(decimal value)
 		{
 			return new Unit(value);
 		}
 
 		/// <summary>
-		/// Привести <see cref="int"/> значение к объекту <see cref="Unit"/>.
+		/// Cast <see cref="Int32"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="int"/> значение.</param>
-		/// <returns>Объект <see cref="Unit"/>.</returns>
+		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(int value)
 		{
 			return new Unit(value);
 		}
 
 		/// <summary>
-		/// Привести объект <see cref="Unit"/> к <see cref="decimal"/> значению.
+		/// Cast object from <see cref="Unit"/> to <see cref="Decimal"/>.
 		/// </summary>
-		/// <param name="unit">Объект <see cref="Unit"/>.</param>
-		/// <returns><see cref="decimal"/> значение.</returns>
+		/// <param name="unit">Object <see cref="Unit"/>.</param>
+		/// <returns><see cref="Decimal"/> value.</returns>
 		public static explicit operator decimal(Unit unit)
 		{
 			if (unit == null)
@@ -206,20 +205,20 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Привести <see cref="double"/> значение к объекту <see cref="Unit"/>.
+		/// Cast <see cref="Double"/> object to the type <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="value"><see cref="double"/> значение.</param>
-		/// <returns>Объект <see cref="Unit"/>.</returns>
+		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static implicit operator Unit(double value)
 		{
 			return (decimal)value;
 		}
 
 		/// <summary>
-		/// Привести объект <see cref="Unit"/> к <see cref="double"/> значению.
+		/// Cast object from <see cref="Unit"/> to <see cref="Double"/>.
 		/// </summary>
-		/// <param name="unit">Объект <see cref="Unit"/>.</param>
-		/// <returns><see cref="double"/> значение.</returns>
+		/// <param name="unit">Object <see cref="Unit"/>.</param>
+		/// <returns><see cref="Double"/> value.</returns>
 		public static explicit operator double(Unit unit)
 		{
 			return (double)(decimal)unit;
@@ -230,7 +229,7 @@ namespace StockSharp.Messages
 			var func = GetTypeValue ?? getTypeValue;
 
 			if (func == null)
-				throw new InvalidOperationException("Обработчик получения значения не установлен.");
+				throw new InvalidOperationException("ГЋГЎГ°Г ГЎГ®ГІГ·ГЁГЄ ГЇГ®Г«ГіГ·ГҐГ­ГЁГї Г§Г­Г Г·ГҐГ­ГЁГї Г­ГҐ ГіГ±ГІГ Г­Г®ГўГ«ГҐГ­.");
 
 			var value = func(Type);
 
@@ -250,7 +249,7 @@ namespace StockSharp.Messages
 
 		private static Unit CreateResult(Unit u1, Unit u2, Func<decimal, decimal, decimal> operation, Func<decimal, decimal, decimal> percentOperation)
 		{
-			//  предовратить вызов переопределенного оператора
+			//  ГЇГ°ГҐГ¤Г®ГўГ°Г ГІГЁГІГј ГўГ»Г§Г®Гў ГЇГҐГ°ГҐГ®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г®ГЈГ® Г®ГЇГҐГ°Г ГІГ®Г°Г 
 			//if (u1 == null)
 			if (u1.IsNull())
 				throw new ArgumentNullException("u1");
@@ -269,7 +268,7 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException("percentOperation");
 
 			//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
-			//	throw new ArgumentException("У одной из величин не установлено получение значения.");
+			//	throw new ArgumentException("Г“ Г®Г¤Г­Г®Г© ГЁГ§ ГўГҐГ«ГЁГ·ГЁГ­ Г­ГҐ ГіГ±ГІГ Г­Г®ГўГ«ГҐГ­Г® ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ Г§Г­Г Г·ГҐГ­ГЁГї.");
 
 			//if (u1.GetTypeValue != null && u2.GetTypeValue != null && u1.GetTypeValue != u2.GetTypeValue)
 			//	throw new ArgumentException(LocalizedStrings.Str614Params.Put(u1.Security.Id, u2.Security.Id));
@@ -321,63 +320,63 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сложить два объекта <see cref="Unit"/>.
+		/// Add the two objects <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="u1">Первый объект <see cref="Unit"/>.</param>
-		/// <param name="u2">Второй объект <see cref="Unit"/>.</param>
-		/// <returns>Результат сложения.</returns>
+		/// <param name="u1">First object <see cref="Unit"/>.</param>
+		/// <param name="u2">Second object <see cref="Unit"/>.</param>
+		/// <returns>The result of addition.</returns>
 		public static Unit operator +(Unit u1, Unit u2)
 		{
 			return CreateResult(u1, u2, (v1, v2) => v1 + v2, (nonPer, per) => nonPer + per);
 		}
 
 		/// <summary>
-		/// Перемножить два объекта <see cref="Unit"/>.
+		/// Multiply the two objects <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="u1">Первый объект <see cref="Unit"/>.</param>
-		/// <param name="u2">Второй объект <see cref="Unit"/>.</param>
-		/// <returns>Результат перемножения.</returns>
+		/// <param name="u1">First object <see cref="Unit"/>.</param>
+		/// <param name="u2">Second object <see cref="Unit"/>.</param>
+		/// <returns>The result of the multiplication.</returns>
 		public static Unit operator *(Unit u1, Unit u2)
 		{
 			return CreateResult(u1, u2, (v1, v2) => v1 * v2, (nonPer, per) => nonPer * per);
 		}
 
 		/// <summary>
-		/// Вычесть одну величину <see cref="Unit"/> из другой.
+		/// Subtract the unit <see cref="Unit"/> from another.
 		/// </summary>
-		/// <param name="u1">Первый объект <see cref="Unit"/>.</param>
-		/// <param name="u2">Второй объект <see cref="Unit"/>.</param>
-		/// <returns>Результат вычитания.</returns>
+		/// <param name="u1">First object <see cref="Unit"/>.</param>
+		/// <param name="u2">Second object <see cref="Unit"/>.</param>
+		/// <returns>The result of the subtraction.</returns>
 		public static Unit operator -(Unit u1, Unit u2)
 		{
 			return CreateResult(u1, u2, (v1, v2) => v1 - v2, (nonPer, per) => (u1.Type == UnitTypes.Percent ? (per - nonPer) : (nonPer - per)));
 		}
 
 		/// <summary>
-		/// Поделить одну величину <see cref="Unit"/> на другую.
+		/// Divide the unit <see cref="Unit"/> to another.
 		/// </summary>
-		/// <param name="u1">Первый объект <see cref="Unit"/>.</param>
-		/// <param name="u2">Второй объект <see cref="Unit"/>.</param>
-		/// <returns>Результат деления.</returns>
+		/// <param name="u1">First object <see cref="Unit"/>.</param>
+		/// <param name="u2">Second object <see cref="Unit"/>.</param>
+		/// <returns>The result of the division.</returns>
 		public static Unit operator /(Unit u1, Unit u2)
 		{
 			return CreateResult(u1, u2, (v1, v2) => v1 / v2, (nonPer, per) => u1.Type == UnitTypes.Percent ? per / nonPer : nonPer / per);
 		}
 
 		/// <summary>
-		/// Рассчитать хеш-код объекта <see cref="Unit"/>.
+		/// Get the hash code of the object <see cref="Unit"/>.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			return Type.GetHashCode() ^ Value.GetHashCode();
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="Unit" /> на эквивалентность.
+		/// Compare <see cref="Unit"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		protected override bool OnEquals(Unit other)
 		{
 			//var retVal = Type == other.Type && Value == other.Value;
@@ -404,32 +403,32 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="Unit" /> на эквивалентность.
+		/// Compare <see cref="Unit"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		public override bool Equals(object other)
 		{
 			return base.Equals(other);
 		}
 
 		/// <summary>
-		/// Сравнить две величины на неравенство (если величины разных типов, то для сравнения будет применена конвертация).
+		/// Compare two values in the inequality (if the value of different types, the convertion will be used).
 		/// </summary>
-		/// <param name="u1">Первая величина.</param>
-		/// <param name="u2">Вторая величина.</param>
-		/// <returns><see langword="true"/>, если величины не равны, иначе, <see langword="false"/>.</returns>
+		/// <param name="u1">First unit.</param>
+		/// <param name="u2">Second unit.</param>
+		/// <returns><see langword="true" />, if the values are equals, otherwise, <see langword="false" />.</returns>
 		public static bool operator !=(Unit u1, Unit u2)
 		{
 			return !(u1 == u2);
 		}
 
 		/// <summary>
-		/// Сравнить две величины на равенство (если величины разных типов, то для сравнения будет применена конвертация).
+		/// Compare two values for equality (if the value of different types, the convertion will be used).
 		/// </summary>
-		/// <param name="u1">Первая величина.</param>
-		/// <param name="u2">Вторая величина.</param>
-		/// <returns><see langword="true"/>, если величины равны, иначе, <see langword="false"/>.</returns>
+		/// <param name="u1">First unit.</param>
+		/// <param name="u2">Second unit.</param>
+		/// <returns><see langword="true" />, if the values are equals, otherwise, <see langword="false" />.</returns>
 		public static bool operator ==(Unit u1, Unit u2)
 		{
 			if (ReferenceEquals(u1, null))
@@ -442,9 +441,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			switch (Type)
@@ -454,32 +453,32 @@ namespace StockSharp.Messages
 				case UnitTypes.Absolute:
 					return Value.To<string>();
 				case UnitTypes.Step:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ш" : "s");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "Гё" : "s");
 				case UnitTypes.Point:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "п" : "p");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "ГЇ" : "p");
 				case UnitTypes.Limit:
-					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "л" : "l");
+					return Value + (LocalizedStrings.ActiveLanguage == Languages.Russian ? "Г«" : "l");
 				default:
 					throw new InvalidOperationException(LocalizedStrings.UnknownUnitMeasurement.Put(Type));
 			}
 		}
 
 		/// <summary>
-		/// Перевести величину в другой тип измерения.
+		/// Cast the value to another type.
 		/// </summary>
-		/// <param name="destinationType">Тип измерения, в который необходимо перевести.</param>
-		/// <returns>Сконвертированная величина.</returns>
+		/// <param name="destinationType">Destination value type.</param>
+		/// <returns>Converted value.</returns>
 		public Unit Convert(UnitTypes destinationType)
 		{
 			return Convert(destinationType, GetTypeValue);
 		}
 
 		/// <summary>
-		/// Перевести величину в другой тип измерения.
+		/// Cast the value to another type.
 		/// </summary>
-		/// <param name="destinationType">Тип измерения, в который необходимо перевести.</param>
-		/// <param name="getTypeValue">Обработчик, возвращающие значение, ассоциированное с <see cref="Type"/> (шаг цены или объема).</param>
-		/// <returns>Сконвертированная величина.</returns>
+		/// <param name="destinationType">Destination value type.</param>
+		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Unit.Type"/> (price or volume steps).</param>
+		/// <returns>Converted value.</returns>
 		public Unit Convert(UnitTypes destinationType, Func<UnitTypes, decimal?> getTypeValue)
 		{
 			if (Type == destinationType)
@@ -520,11 +519,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Проверить, является ли первая величина больше второй.
+		/// Check whether the first value is greater than the second.
 		/// </summary>
-		/// <param name="u1">Первая величина.</param>
-		/// <param name="u2">Вторая величина.</param>
-		/// <returns><see langword="true"/>, если первая величина больше второй, иначе, <see langword="false"/>.</returns>
+		/// <param name="u1">First unit.</param>
+		/// <param name="u2">Second unit.</param>
+		/// <returns><see langword="true" />, if the first value is greater than the second, <see langword="false" />.</returns>
 		public static bool operator >(Unit u1, Unit u2)
 		{
 			if (u1.IsNull())
@@ -534,10 +533,10 @@ namespace StockSharp.Messages
 				throw new ArgumentNullException("u2");
 
 			//if (u1.Type == UnitTypes.Limit || u2.Type == UnitTypes.Limit)
-			//	throw new ArgumentException("Лимитированное значение не может участвовать в арифметических операциях.");
+			//	throw new ArgumentException("Г‹ГЁГ¬ГЁГІГЁГ°Г®ГўГ Г­Г­Г®ГҐ Г§Г­Г Г·ГҐГ­ГЁГҐ Г­ГҐ Г¬Г®Г¦ГҐГІ ГіГ·Г Г±ГІГўГ®ГўГ ГІГј Гў Г Г°ГЁГґГ¬ГҐГІГЁГ·ГҐГ±ГЄГЁГµ Г®ГЇГҐГ°Г Г¶ГЁГїГµ.");
 
 			//if (u1.CheckGetTypeValue(false) != u2.CheckGetTypeValue(false))
-			//	throw new ArgumentException("У одной из величин не установлено получение значения.");
+			//	throw new ArgumentException("Г“ Г®Г¤Г­Г®Г© ГЁГ§ ГўГҐГ«ГЁГ·ГЁГ­ Г­ГҐ ГіГ±ГІГ Г­Г®ГўГ«ГҐГ­Г® ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ Г§Г­Г Г·ГҐГ­ГЁГї.");
 
 			if (u1.Type != u2.Type)
 			{
@@ -554,43 +553,43 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Проверить, является ли первая величина больше или равной второй.
+		/// Check whether the first value is greater than or equal to the second.
 		/// </summary>
-		/// <param name="u1">Первая величина.</param>
-		/// <param name="u2">Вторая величина.</param>
-		/// <returns><see langword="true"/>, если первая величина больше или равной второй, иначе, <see langword="false"/>.</returns>
+		/// <param name="u1">First unit.</param>
+		/// <param name="u2">Second unit.</param>
+		/// <returns><see langword="true" />, if the first value is greater than or equal the second, otherwise, <see langword="false" />.</returns>
 		public static bool operator >=(Unit u1, Unit u2)
 		{
 			return u1 == u2 || u1 > u2;
 		}
 
 		/// <summary>
-		/// Проверить, является ли первая величина меньше второй.
+		/// Check whether the first value is less than the second.
 		/// </summary>
-		/// <param name="u1">Первая величина.</param>
-		/// <param name="u2">Вторая величина.</param>
-		/// <returns><see langword="true"/>, если первая величина меньше второй, иначе, <see langword="false"/>.</returns>
+		/// <param name="u1">First unit.</param>
+		/// <param name="u2">Second unit.</param>
+		/// <returns><see langword="true" />, if the first value is less than the second, <see langword="false" />.</returns>
 		public static bool operator <(Unit u1, Unit u2)
 		{
 			return u1 != u2 && !(u1 > u2);
 		}
 
 		/// <summary>
-		/// Проверить, является ли первая величина меньше или равной второй.
+		/// Check whether the first value is less than or equal to the second.
 		/// </summary>
-		/// <param name="u1">Первая величина.</param>
-		/// <param name="u2">Вторая величина.</param>
-		/// <returns><see langword="true"/>, если первая величина меньше или равной второй, иначе, <see langword="false"/>.</returns>
+		/// <param name="u1">First unit.</param>
+		/// <param name="u2">Second unit.</param>
+		/// <returns><see langword="true" />, if the first value is less than or equal to the second, <see langword="false" />.</returns>
 		public static bool operator <=(Unit u1, Unit u2)
 		{
 			return !(u1 > u2);
 		}
 
 		/// <summary>
-		/// Получить величину с противоположным знаком у значения <see cref="Value"/>.
+		/// Get the value with the opposite sign from the value <see cref="Unit.Value"/>.
 		/// </summary>
-		/// <param name="u">Величина.</param>
-		/// <returns>Обратная величина.</returns>
+		/// <param name="u">Unit.</param>
+		/// <returns>Opposite value.</returns>
 		public static Unit operator -(Unit u)
 		{
 			if (u == null)
@@ -626,46 +625,46 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Вспомогательный класс для <see cref="Unit"/>.
+	/// Extension class for <see cref="Unit"/>.
 	/// </summary>
 	public static class UnitHelper
 	{
 		/// <summary>
-		/// Создать из <see cref="int"/> значения проценты.
+		/// Convert the <see cref="Int32"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="int"/> значение.</param>
-		/// <returns>Проценты.</returns>
+		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <returns>Percents.</returns>
 		public static Unit Percents(this int value)
 		{
 			return Percents((decimal)value);
 		}
 
 		/// <summary>
-		/// Создать из <see cref="double"/> значения проценты.
+		/// Convert the <see cref="Double"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="double"/> значение.</param>
-		/// <returns>Проценты.</returns>
+		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <returns>Percents.</returns>
 		public static Unit Percents(this double value)
 		{
 			return Percents((decimal)value);
 		}
 
 		/// <summary>
-		/// Создать из <see cref="decimal"/> значения проценты.
+		/// Convert the <see cref="Decimal"/> to percents.
 		/// </summary>
-		/// <param name="value"><see cref="decimal"/> значение.</param>
-		/// <returns>Проценты.</returns>
+		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <returns>Percents.</returns>
 		public static Unit Percents(this decimal value)
 		{
 			return new Unit(value, UnitTypes.Percent);
 		}
 
 		/// <summary>
-		/// Пробразовать строку в <see cref="Unit"/>.
+		/// Convert string to <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="str">Строковое представление <see cref="Unit"/>.</param>
-		/// <param name="getTypeValue">Обработчик, возвращающие значение, ассоциированное с <see cref="Type"/> (шаг цены или объема).</param>
-		/// <returns>Объект <see cref="Unit"/>.</returns>
+		/// <param name="str">String value of <see cref="Unit"/>.</param>
+		/// <param name="getTypeValue">The handler returns a value associated with <see cref="Type"/> (price or volume steps).</param>
+		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static Unit ToUnit(this string str, Func<UnitTypes, decimal?> getTypeValue = null)
 		{
 			if (str.IsEmpty())
@@ -682,14 +681,14 @@ namespace StockSharp.Messages
 
 			switch (lastSymbol)
 			{
-				case 'ш':
+				case 'Гё':
 				case 's':
 					if (getTypeValue == null)
 						throw new ArgumentNullException("getTypeValue");
 
 					type = UnitTypes.Step;
 					break;
-				case 'п':
+				case 'ГЇ':
 				case 'p':
 					if (getTypeValue == null)
 						throw new ArgumentNullException("getTypeValue");
@@ -699,7 +698,7 @@ namespace StockSharp.Messages
 				case '%':
 					type = UnitTypes.Percent;
 					break;
-				case 'л':
+				case 'Г«':
 				case 'l':
 					type = UnitTypes.Limit;
 					break;

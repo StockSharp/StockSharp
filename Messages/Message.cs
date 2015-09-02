@@ -11,14 +11,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее рыночные данные или команду.
+	/// A message containing market data or command.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public abstract class Message : Cloneable<Message>, IExtendableEntity
 	{
 		/// <summary>
-		/// Метка локального времени, когда сообщение было получено/создано.
+		/// Local time label when a message was received/created.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str203Key)]
 		[DescriptionLoc(LocalizedStrings.Str204Key)]
@@ -30,7 +30,7 @@ namespace StockSharp.Messages
 		private readonly MessageTypes _type;
 
 		/// <summary>
-		/// Тип сообщения.
+		/// Message type.
 		/// </summary>
 		public MessageTypes Type
 		{
@@ -41,10 +41,10 @@ namespace StockSharp.Messages
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация.
+		/// Extended information.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с сообщением.
+		/// Necessary to keep additional information associated with the message.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -58,37 +58,37 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Следует ли отправлять сообщение обратно отправителю.
+		/// Is loopback message.
 		/// </summary>
 		public bool IsBack { get; set; }
 
 		/// <summary>
-		/// Адаптер, отправивший сообщение. Может быть <see langword="null"/>.
+		/// Source adapter. Can be <see langword="null" />.
 		/// </summary>
 		public IMessageAdapter Adapter { get; set; }
 
 		/// <summary>
-		/// Инициализировать <see cref="Message"/>.
+		/// Initialize <see cref="Message"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected Message(MessageTypes type)
 		{
 			_type = type;
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Type + ",T(L)={0:yyyy/MM/dd HH:mm:ss.fff}".Put(LocalTime);
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Message"/>.
+		/// Create a copy of <see cref="Message"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			throw new NotSupportedException();

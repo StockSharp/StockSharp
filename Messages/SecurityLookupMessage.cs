@@ -10,14 +10,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение поиска инструментов по заданному критерию.
+	/// Message security lookup for specified criteria.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class SecurityLookupMessage : SecurityMessage, IEquatable<SecurityLookupMessage>
 	{
 		/// <summary>
-		/// Идентификатор транзакции.
+		/// Transaction ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Типы инструментов.
+		/// Securities types.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TypeKey)]
@@ -35,7 +35,7 @@ namespace StockSharp.Messages
 		public IEnumerable<SecurityTypes> SecurityTypes { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="SecurityLookupMessage"/>.
+		/// Initializes a new instance of the <see cref="SecurityLookupMessage"/>.
 		/// </summary>
 		public SecurityLookupMessage()
 			: base(MessageTypes.SecurityLookup)
@@ -43,9 +43,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="SecurityLookupMessage"/>.
+		/// Create a copy of <see cref="SecurityLookupMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new SecurityLookupMessage
@@ -60,10 +60,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Проверить критерии поиска на эквивалентность.
+		/// Determines whether the specified criterias are considered equal.
 		/// </summary>
-		/// <param name="other">Другой критерий поиска, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если критерии поиска равны, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another search criteria with which to compare.</param>
+		/// <returns><see langword="true" />, if criterias are equal, otherwise, <see langword="false" />.</returns>
 		public bool Equals(SecurityLookupMessage other)
 		{
 			if (SecurityId.Equals(other.SecurityId))
@@ -85,9 +85,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",TransId={0}".Put(TransactionId);

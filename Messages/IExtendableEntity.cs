@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -6,42 +6,42 @@
 	using Ecng.Collections;
 
 	/// <summary>
-	/// Интерфейс для всех бизнес-объектов, которые имеют свойство <see cref="ExtensionInfo"/> для хранения расширенной информации.
+	/// The interface for all trading types that have the property <see cref="IExtendableEntity.ExtensionInfo"/> for keeping extended information.
 	/// </summary>
 	public interface IExtendableEntity
 	{
 		/// <summary>
-		/// Расширенная информация.
+		/// Extended information.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации.
+		/// Required when extra information is stored in the program.
 		/// </remarks>
 		IDictionary<object, object> ExtensionInfo { get; set; }
 	}
 
 	/// <summary>
-	/// Вспомогательный класс для работы с <see cref="IExtendableEntity.ExtensionInfo"/>.
+	/// Extension class for <see cref="IExtendableEntity.ExtensionInfo"/>.
 	/// </summary>
 	public static class ExtandableEntityHelper
 	{
 		/// <summary>
-		/// Добавить значение в <see cref="IExtendableEntity.ExtensionInfo"/>.
+		/// Add value into <see cref="IExtendableEntity.ExtensionInfo"/>.
 		/// </summary>
-		/// <param name="entity">Сущность.</param>
-		/// <param name="key">Ключ.</param>
-		/// <param name="value">Значение.</param>
+		/// <param name="entity">Entity.</param>
+		/// <param name="key">Key.</param>
+		/// <param name="value">Value.</param>
 		public static void AddValue(this IExtendableEntity entity, object key, object value)
 		{
 			entity.GetExtInfo(true)[key] = value;
 		}
 
 		/// <summary>
-		/// Получить значение из <see cref="IExtendableEntity.ExtensionInfo"/>.
+		/// Get value from <see cref="IExtendableEntity.ExtensionInfo"/>.
 		/// </summary>
-		/// <typeparam name="T">Тип значения.</typeparam>
-		/// <param name="entity">Сущность.</param>
-		/// <param name="key">Ключ.</param>
-		/// <returns>Значение.</returns>
+		/// <typeparam name="T">Value type.</typeparam>
+		/// <param name="entity">Entity.</param>
+		/// <param name="key">Key.</param>
+		/// <returns>Value.</returns>
 		public static T GetValue<T>(this IExtendableEntity entity, object key)
 		{
 			var info = entity.GetExtInfo(false);

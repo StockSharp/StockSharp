@@ -11,14 +11,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее данные по котировкам.
+	/// Messages containing quotes.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public sealed class QuoteChangeMessage : Message
 	{
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 		private IEnumerable<QuoteChange> _bids = Enumerable.Empty<QuoteChange>();
 
 		/// <summary>
-		/// Котировки на покупку.
+		/// Quotes to buy.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str281Key)]
@@ -50,7 +50,7 @@ namespace StockSharp.Messages
 		private IEnumerable<QuoteChange> _asks = Enumerable.Empty<QuoteChange>();
 
 		/// <summary>
-		/// Котировки на продажу.
+		/// Quotes to sell.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str283Key)]
@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Серверное время изменения.
+		/// Change server time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
@@ -78,7 +78,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Отсортированы ли котировки по цене (<see cref="Bids"/> по убыванию, <see cref="Asks"/> по возрастанию).
+		/// Flag sorted by price quotes (<see cref="QuoteChangeMessage.Bids"/> by descending, <see cref="QuoteChangeMessage.Asks"/> by ascending).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str285Key)]
@@ -87,7 +87,7 @@ namespace StockSharp.Messages
 		public bool IsSorted { get; set; }
 
 		/// <summary>
-		/// Валюта торгового инструмента.
+		/// Trading security currency.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
@@ -97,7 +97,7 @@ namespace StockSharp.Messages
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="QuoteChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="QuoteChangeMessage"/>.
 		/// </summary>
 		public QuoteChangeMessage()
 			: base(MessageTypes.QuoteChange)
@@ -105,9 +105,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="QuoteChangeMessage"/>.
+		/// Create a copy of <see cref="QuoteChangeMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new QuoteChangeMessage
@@ -127,9 +127,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff}".Put(ServerTime);

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,7 +11,7 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Транспортный канал сообщений, основанный на очереди и работающий в пределах одного процесса.
+	/// Message channel, based on the queue and operate within a single process.
 	/// </summary>
 	public class InMemoryMessageChannel : IMessageChannel
 	{
@@ -84,10 +84,10 @@
 		private readonly BlockingPriorityQueue _messageQueue = new BlockingPriorityQueue();
 
 		/// <summary>
-		/// Создать <see cref="InMemoryMessageChannel"/>.
+		/// Initializes a new instance of the <see cref="InMemoryMessageChannel"/>.
 		/// </summary>
-		/// <param name="name">Название канала.</param>
-		/// <param name="errorHandler">Обработчик ошибок.</param>
+		/// <param name="name">Channel name.</param>
+		/// <param name="errorHandler">Error handler.</param>
 		public InMemoryMessageChannel(string name, Action<Exception> errorHandler)
 		{
 			if (name.IsEmpty())
@@ -103,12 +103,12 @@
 		}
 
 		/// <summary>
-		/// Название обработчика.
+		/// Handler name.
 		/// </summary>
 		public string Name { get; private set; }
 
 		/// <summary>
-		/// Количество сообщений в очереди.
+		/// Message queue count.
 		/// </summary>
 		public int MessageCount
 		{
@@ -116,10 +116,10 @@
 		}
 
 		/// <summary>
-		/// Максимальный размер очереди сообщений. 
+		/// Max message queue count.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно -1, что соответствует размеру без ограничений.
+		/// The default value is -1, which corresponds to the size without limitations.
 		/// </remarks>
 		public int MaxMessageCount
 		{
@@ -128,12 +128,12 @@
 		}
 
 		/// <summary>
-		/// Событие закрытия канала.
+		/// Channel closing event.
 		/// </summary>
 		public event Action Closed;
 
 		/// <summary>
-		/// Открыт ли канал.
+		/// Is channel opened.
 		/// </summary>
 		public bool IsOpened
 		{
@@ -141,7 +141,7 @@
 		}
 
 		/// <summary>
-		/// Открыть канал.
+		/// Open channel.
 		/// </summary>
 		public void Open()
 		{
@@ -181,7 +181,7 @@
 		}
 
 		/// <summary>
-		/// Закрыть канал.
+		/// Close channel.
 		/// </summary>
 		public void Close()
 		{
@@ -189,9 +189,9 @@
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public void SendInMessage(Message message)
 		{
 			if (!IsOpened)
@@ -214,7 +214,7 @@
 		}
 
 		/// <summary>
-		/// Событие появления нового сообщения.
+		/// New message event.
 		/// </summary>
 		public event Action<Message> NewOutMessage;
 

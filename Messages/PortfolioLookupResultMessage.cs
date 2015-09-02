@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,27 +6,26 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Сообщение окончания поиска портфелей.
+	/// Portfolio lookup result message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class PortfolioLookupResultMessage : Message
 	{
 		/// <summary>
-		/// Идентификатор первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
-		/// для которого данное сообщение является ответом.
+		/// ID of the original message <see cref="PortfolioMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Информация об ошибке поиска портфелей.
+		/// Portfolio lookup error info.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="PortfolioLookupResultMessage"/>.
+		/// Initializes a new instance of the <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
 		public PortfolioLookupResultMessage()
 			: base(MessageTypes.PortfolioLookupResult)
@@ -34,9 +33,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PortfolioLookupResultMessage"/>.
+		/// Create a copy of <see cref="PortfolioLookupResultMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new PortfolioLookupResultMessage
@@ -48,9 +47,9 @@
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Orig={0}".Put(OriginalTransactionId);

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,14 +6,14 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Сообщение, содержащее данные о текущем времени.
+	/// The message contains information about the current time.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public sealed class TimeMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="TimeMessage"/>.
+		/// Initializes a new instance of the <see cref="TimeMessage"/>.
 		/// </summary>
 		public TimeMessage()
 			: base(MessageTypes.Time)
@@ -21,37 +21,36 @@
 		}
 
 		/// <summary>
-		/// Идентификатор запроса.
+		/// Request identifier.
 		/// </summary>
 		[DataMember]
 		public string TransactionId { get; set; }
 
 		/// <summary>
-		/// Идентификатор первоначального сообщения <see cref="TimeMessage.TransactionId"/>,
-		/// для которого данное сообщение является ответом.
+		/// ID of the original message <see cref="TimeMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public string OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Серверное время.
+		/// Server time.
 		/// </summary>
 		[DataMember]
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",ID={0},Response={1}".Put(TransactionId, OriginalTransactionId);
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="TimeMessage"/>.
+		/// Create a copy of <see cref="TimeMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new TimeMessage

@@ -10,15 +10,15 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее изменения.
+	/// A message containing changes.
 	/// </summary>
-	/// <typeparam name="TField">Тип изменений.</typeparam>
+	/// <typeparam name="TField">Changes type.</typeparam>
 	[DataContract]
 	[Serializable]
 	public abstract class BaseChangeMessage<TField> : Message
 	{
 		/// <summary>
-		/// Серверное время изменения.
+		/// Change server time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
@@ -29,7 +29,7 @@ namespace StockSharp.Messages
 		private readonly IDictionary<TField, object> _changes = new Dictionary<TField, object>();
 
 		/// <summary>
-		/// Изменения.
+		/// Changes.
 		/// </summary>
 		[Browsable(false)]
 		[DataMember]
@@ -39,18 +39,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="BaseChangeMessage{T}"/>.
+		/// Initialize <see cref="BaseChangeMessage{T}"/>.
 		/// </summary>
-		/// <param name="type">Тип данных.</param>
+		/// <param name="type">Data type.</param>
 		protected BaseChangeMessage(MessageTypes type)
 			: base(type)
 		{
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff}".Put(ServerTime);

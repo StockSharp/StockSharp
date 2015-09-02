@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
     using System;
     using System.Runtime.Serialization;
@@ -6,115 +6,112 @@
     using Ecng.Common;
     using Ecng.Serialization;
 
-	/// <summary>
-    /// Информация, необходимая для создания РЕПО-заявки.
+    /// <summary>
+    /// REPO info.
     /// </summary>
     [Serializable]
     [System.Runtime.Serialization.DataContract]
 	public class RepoOrderInfo : Cloneable<RepoOrderInfo>
     {
         /// <summary>
-        /// Создать <see cref="RepoOrderInfo"/>.
+        /// Initializes a new instance of the <see cref="RepoOrderInfo"/>.
         /// </summary>
         public RepoOrderInfo()
         {
         }
 
 		/// <summary>
-		/// Код организации – партнера по внебиржевой сделке.
+		/// Partner-organization.
 		/// </summary>
 		[DataMember]
 		public string Partner { get; set; }
 
 		/// <summary>
-		/// Срок РЕПО. Параметр сделок РЕПО-М.
+		/// REPO expiration.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public int? Term { get; set; }
 
 		/// <summary>
-		/// Ставка РЕПО, в процентах. 
+		/// Repo rate, in percentage.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public int? Rate { get; set; }
 
 		/// <summary>
-		/// Признак блокировки бумаг на время операции РЕПО («YES», «NO»).
+		/// Blocking code.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public bool? BlockSecurities { get; set; }
 
 		/// <summary>
-		/// Ставка фиксированного возмещения, выплачиваемого в случае неисполнения второй части РЕПО, в процентах.
+		/// The rate of fixed compensation payable in the event that the second part of the repo, the percentage.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public int? RefundRate { get; set; }
 
 		/// <summary>
-		/// Ссылка, которая связывает две сделки РЕПО или РПС.
-		/// Сделка может быть заключена только между контрагентами, указавшими одинаковое значение этого параметра в своих заявках.
-		/// Параметр представляет собой произвольный набор количеством до 10 символов (допускаются цифры и буквы).
-		/// Необязательный параметр.
+		/// REPO RPS reference.
 		/// </summary>
 		[DataMember]
 		public string MatchRef { get; set; }
         
 		/// <summary>
-		/// Код расчетов при исполнении внебиржевых заявок.
+		/// Settlement code.
 		/// </summary>
 		[DataMember]
 		public string SettleCode { get; set; }
 
 		/// <summary>
-		/// Цена второй части РЕПО. 
+		/// REPO second price part.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public decimal? SecondPrice { get; set; }
 
 		/// <summary>
-		/// Дата исполнения внебиржевой сделки.
+		/// Execution date OTC.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public DateTimeOffset? SettleDate { get; set; }
 
 		/// <summary>
-		/// Начальное значение дисконта в заявке на сделку РЕПО-М.
+		/// REPO-M the begin value of the discount.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public int? StartDiscount { get; set; }
 
 		/// <summary>
-		/// Нижнее предельное значение дисконта в заявке на сделку РЕПО-М.
+		/// REPO-M the lower limit value of the discount.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public int? LowerDiscount { get; set; }
 
 		/// <summary>
-		/// Верхнее предельное значение дисконта в заявке на сделку РЕПО-М.
+		/// REPO-M the upper limit value of the discount.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public int? UpperDiscount { get; set; }
 
 		/// <summary>
-		/// Объем сделки РЕПО-М в рублях.
+		/// REPO-M volume.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public decimal? Value { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="RepoOrderInfo"/>.
+		/// Create a copy of <see cref="RepoOrderInfo"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override RepoOrderInfo Clone()
 		{
 			return new RepoOrderInfo

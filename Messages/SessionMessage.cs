@@ -8,42 +8,42 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Состояния торговой сессии.
+	/// Session states.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum SessionStates
 	{
 		/// <summary>
-		/// Сессия назначена. Нельзя ставить заявки, но можно удалять.
+		/// Session assigned. Cannot register new orders, but can cancel.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str399Key)]
 		Assigned,
 
 		/// <summary>
-		/// Сессия идет. Можно ставить и удалять заявки.
+		/// Session active. Can register and cancel orders.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str238Key)]
 		Active,
 
 		/// <summary>
-		/// Приостановка торгов по всем инструментам. Нельзя ставить заявки, но можно удалять.
+		/// Suspended. Cannot register new orders, but can cancel.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str400Key)]
 		Paused,
 
 		/// <summary>
-		/// Сессия принудительно завершена. Нельзя ставить и удалять заявки.
+		/// Rejected. Cannot register and cancel orders.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str401Key)]
 		ForceStopped,
 
 		/// <summary>
-		/// Сессия завершена по времени. Нельзя ставить и удалять заявки.
+		/// Finished. Cannot register and cancel orders.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str402Key)]
@@ -51,14 +51,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение о изменении состояния сессии.
+	/// Session change changed message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class SessionMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="SessionMessage"/>.
+		/// Initializes a new instance of the <see cref="SessionMessage"/>.
 		/// </summary>
 		public SessionMessage()
 			: base(MessageTypes.Session)
@@ -66,21 +66,21 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Код площадки.
+		/// Board code.
 		/// </summary>
 		[DataMember]
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// Состояние торговой сессии.
+		/// Session state.
 		/// </summary>
 		[DataMember]
 		public SessionStates State { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="SessionMessage"/>.
+		/// Create a copy of <see cref="SessionMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new SessionMessage
@@ -92,9 +92,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Board={0},State={1}".Put(BoardCode, State);

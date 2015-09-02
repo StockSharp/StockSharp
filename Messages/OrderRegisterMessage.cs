@@ -9,14 +9,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее информацию для регистрации заявки.
+	/// The message containing the information for the order registration.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class OrderRegisterMessage : OrderMessage
 	{
 		/// <summary>
-		/// Идентификатор транзакции.
+		/// Transaction ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -25,7 +25,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Цена заявки.
+		/// Order price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
@@ -34,7 +34,7 @@ namespace StockSharp.Messages
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// Количество контрактов в заявке.
+		/// Number of contracts in an order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -43,7 +43,7 @@ namespace StockSharp.Messages
 		public decimal Volume { get; set; }
 
 		/// <summary>
-		/// Видимое количество контрактов в заявке.
+		/// Visible quantity of contracts in order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
@@ -53,7 +53,7 @@ namespace StockSharp.Messages
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
-		/// Направление заявки (покупка или продажа).
+		/// Order side (buy or sell).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]
@@ -62,7 +62,7 @@ namespace StockSharp.Messages
 		public Sides Side { get; set; }
 
 		/// <summary>
-		/// Комментарий к выставляемой заявке.
+		/// Placed order comment.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str135Key)]
@@ -71,11 +71,10 @@ namespace StockSharp.Messages
 		public string Comment { get; set; }
 
 		/// <summary>
-		/// Время экспирации заявки. По-умолчанию равно <see langword="null"/>, что означает действие заявки до отмены (GTC).
+		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 		/// </summary>
 		/// <remarks>
-		/// Если значение равно <see langword="null"/> или <see cref="DateTimeOffset.MaxValue"/>, то заявка выставляется до отмены (GTC).
-		/// Иначе, указывается конкретный срок.
+		/// If the value is equal <see langword="null" /> or <see cref="DateTimeOffset.MaxValue"/>, order will be GTC (good til cancel). Or uses exact date.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
@@ -84,7 +83,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset? TillDate { get; set; }
 
 		/// <summary>
-		/// Условие заявки (например, параметры стоп- или алго- заявков).
+		/// Order condition (e.g., stop- and algo- orders parameters).
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str154Key)]
 		[DescriptionLoc(LocalizedStrings.Str155Key)]
@@ -92,7 +91,7 @@ namespace StockSharp.Messages
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>
-		/// Время жизни лимитной заявки.
+		/// Limit order time in force.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
@@ -101,7 +100,7 @@ namespace StockSharp.Messages
 		public TimeInForce? TimeInForce { get; set; }
 
 		/// <summary>
-		/// Информация для РЕПО\РЕПО-М заявок.
+		/// Information for REPO\REPO-M orders.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str233Key)]
 		[DescriptionLoc(LocalizedStrings.Str234Key)]
@@ -109,7 +108,7 @@ namespace StockSharp.Messages
 		public RepoOrderInfo RepoInfo { get; set; }
 
 		/// <summary>
-		/// Информация для РПС заявок.
+		/// Information for Negotiate Deals Mode orders.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str235Key)]
 		[DescriptionLoc(LocalizedStrings.Str236Key)]
@@ -117,7 +116,7 @@ namespace StockSharp.Messages
 		public RpsOrderInfo RpsInfo { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="OrderRegisterMessage"/>.
+		/// Initializes a new instance of the <see cref="OrderRegisterMessage"/>.
 		/// </summary>
 		public OrderRegisterMessage()
 			: base(MessageTypes.OrderRegister)
@@ -125,18 +124,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="OrderRegisterMessage"/>.
+		/// Initialize <see cref="OrderRegisterMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected OrderRegisterMessage(MessageTypes type)
 			: base(type)
 		{
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="OrderRegisterMessage"/>.
+		/// Create a copy of <see cref="OrderRegisterMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new OrderRegisterMessage(Type)
@@ -168,9 +167,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",TransId={0},Price={1},Side={2},OrdType={3},Vol={4},Sec={5}".Put(TransactionId, Price, Side, OrderType, Volume, SecurityId);

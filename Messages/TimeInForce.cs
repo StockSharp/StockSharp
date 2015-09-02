@@ -6,28 +6,28 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Время жизни лимитной заявки.
+	/// Limit order time in force.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum TimeInForce
 	{
 		/// <summary>
-		/// Поставить в очередь.
+		/// Put in queue.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str405Key)]
 		PutInQueue,
 
 		/// <summary>
-		/// Немедленно или отклонить.
+		/// Fill Or Kill.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.FOKKey)]
 		MatchOrCancel,
 
 		/// <summary>
-		/// Снять остаток.
+		/// Immediate Or Cancel.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.IOCKey)]

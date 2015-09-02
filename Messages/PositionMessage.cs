@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -9,14 +9,14 @@
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее данные о позиции.
+	/// The message contains information about the position.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public sealed class PositionMessage : Message
 	{
 		/// <summary>
-		/// Портфель, в котором создана позиция.
+		/// Portfolio, in which position is created.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
@@ -25,7 +25,7 @@
 		public string PortfolioName { get; set; }
 
 		/// <summary>
-		/// Текстовое описание позиции.
+		/// Text position description.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DescriptionKey)]
@@ -34,7 +34,7 @@
 		public string Description { get; set; }
 
 		/// <summary>
-		/// Инструмент, по которому создана позиция.
+		/// Security, for which a position was created.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
@@ -43,7 +43,7 @@
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Название депозитария, где находится физически ценная бумага.
+		/// The depositary where the physical security.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.DepoKey)]
 		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
@@ -51,7 +51,7 @@
 		public string DepoName { get; set; }
 
 		/// <summary>
-		/// Вид лимита для Т+ рынка.
+		/// Limit type for Т+ market.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str272Key)]
 		[DescriptionLoc(LocalizedStrings.Str267Key)]
@@ -60,14 +60,13 @@
 		public TPlusLimits? LimitType { get; set; }
 
 		/// <summary>
-		/// Идентификатор первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
-		/// для которого данное сообщение является ответом.
+		/// ID of the original message <see cref="PortfolioMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="PositionMessage"/>.
+		/// Initializes a new instance of the <see cref="PositionMessage"/>.
 		/// </summary>
 		public PositionMessage()
 			: base(MessageTypes.Position)
@@ -75,18 +74,18 @@
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() +  ",Sec={0},P={1}".Put(SecurityId, PortfolioName);
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PositionMessage"/>.
+		/// Create a copy of <see cref="PositionMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new PositionMessage

@@ -8,14 +8,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, запрашивающее текущие зарегистрированные заявки и сделки.
+	/// A message requesting current registered orders and trades.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class OrderStatusMessage : Message
 	{
 		/// <summary>
-		/// Идентификатор транзакции.
+		/// Transaction ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -24,25 +24,25 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Идентификатор запрашиваемой заявки.
+		/// The requested order id.
 		/// </summary>
 		[DataMember]
 		public long? OrderId { get; set; }
 
 		/// <summary>
-		/// Идентификатор запрашиваемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
+		/// The identifier of the requested order (as a string if the electronic board does not use a numeric representation of the identifiers).
 		/// </summary>
 		[DataMember]
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Идентификатор транзакции запрашиваемой заявки.
+		/// Transaction ID of the requested order.
 		/// </summary>
 		[DataMember]
 		public long? OrderTransactionId { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="OrderStatusMessage"/>.
+		/// Initializes a new instance of the <see cref="OrderStatusMessage"/>.
 		/// </summary>
 		public OrderStatusMessage()
 			: base(MessageTypes.OrderStatus)
@@ -50,9 +50,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="OrderStatusMessage"/>.
+		/// Create a copy of <see cref="OrderStatusMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new OrderStatusMessage
@@ -66,9 +66,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",TransId={0}".Put(TransactionId);

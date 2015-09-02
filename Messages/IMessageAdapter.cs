@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -9,77 +9,77 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Интерфейс, описывающий адаптер, конвертирующий сообщения <see cref="Message"/> в команды торговой системы и обратно.
+	/// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 	/// </summary>
 	public interface IMessageAdapter : IMessageChannel, IPersistable, ILogReceiver
 	{
 		/// <summary>
-		/// Генератор идентификаторов транзакций.
+		/// Transaction id generator.
 		/// </summary>
 		IdGenerator TransactionIdGenerator { get; }
 
 		/// <summary>
-		/// Поддерживаемые типы сообщений, который может обработать адаптер.
+		/// Supported by adapter message types.
 		/// </summary>
 		MessageTypes[] SupportedMessages { get; set; }
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		bool IsValid { get; }
 
 		/// <summary>
-		/// Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.
+		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
 		/// </summary>
 		IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; }
 
 		/// <summary>
-		/// Настройки механизма отслеживания соединений <see cref="IMessageAdapter"/> с торговом системой.
+		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 		/// </summary>
 		ReConnectionSettings ReConnectionSettings { get; }
 
 		/// <summary>
-		/// Интервал оповещения сервера о том, что подключение еще живое.
+		/// Lifetime ping interval.
 		/// </summary>
 		TimeSpan HeartbeatInterval { get; set; }
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
 		/// </summary>
 		bool PortfolioLookupRequired { get; }
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		bool SecurityLookupRequired { get; }
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
 		/// </summary>
 		bool OrderStatusRequired { get; }
 
 		/// <summary>
-		/// Код площадки для объединенного инструмента.
+		/// Board code for combined security.
 		/// </summary>
 		string AssociatedBoardCode { get; }
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		OrderCondition CreateOrderCondition();
 
 		/// <summary>
-		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// Check the connection is alive. Uses only for connected states.
 		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		/// <returns><see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
 		bool IsConnectionAlive();
 
 		/// <summary>
-		/// Создать построитель стакана.
+		/// Create market depth builder.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Построитель стакана.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Order log to market depth builder.</returns>
 		IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId);
 	}
 }

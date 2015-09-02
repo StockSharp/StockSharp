@@ -6,26 +6,26 @@ namespace StockSharp.Messages
 	using Ecng.Localization;
 
 	/// <summary>
-	/// Функциональность.
+	/// Features.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]
 	public class TargetPlatformAttribute : Attribute
 	{
 		/// <summary>
-		/// Целевая аудитория.
+		/// The target audience.
 		/// </summary>
 		public Languages PreferLanguage { get; private set; }
 
 		/// <summary>
-		/// Платформа.
+		/// Platform.
 		/// </summary>
 		public Platforms Platform { get; private set; }
 
 		/// <summary>
-		/// Создать <see cref="TargetPlatformAttribute"/>.
+		/// Initializes a new instance of the <see cref="TargetPlatformAttribute"/>.
 		/// </summary>
-		/// <param name="preferLanguage">Целевая аудитория.</param>
-		/// <param name="platform">Платформа.</param>
+		/// <param name="preferLanguage">The target audience.</param>
+		/// <param name="platform">Platform.</param>
 		public TargetPlatformAttribute(Languages preferLanguage = Languages.English, Platforms platform = Platforms.AnyCPU)
 		{
 			PreferLanguage = preferLanguage;

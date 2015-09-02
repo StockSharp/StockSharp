@@ -1,17 +1,17 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Сообщение об отключении от торговой системы (при отправке используется как команда, при получении является событием отключения).
+	/// Disconnect from a server message (uses as a command in outgoing case, event in incoming case).
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class DisconnectMessage : BaseConnectionMessage
 	{
 		/// <summary>
-		/// Создать <see cref="DisconnectMessage"/>.
+		/// Initializes a new instance of the <see cref="DisconnectMessage"/>.
 		/// </summary>
 		public DisconnectMessage()
 			: base(MessageTypes.Disconnect)
@@ -19,9 +19,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="DisconnectMessage"/>.
+		/// Create a copy of <see cref="DisconnectMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new DisconnectMessage

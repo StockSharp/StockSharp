@@ -4,91 +4,89 @@ namespace StockSharp.Messages
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Системные статусы заявки.
+	/// System order states.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum OrderStatus : long
 	{
 		/// <summary>
-		/// Транзакция отправлена на сервер.
+		/// The transaction is sent to the server.
 		/// </summary>
 		[EnumMember]SentToServer = 0,
 
 		/// <summary>
-		/// Транзакция получена сервером.
+		/// The transaction is received by the server.
 		/// </summary>
 		[EnumMember]ReceiveByServer = 1,
 
 		/// <summary>
-		/// Ошибка отправки транзакции на биржу.
+		/// Sending transaction error.
 		/// </summary>
 		[EnumMember]GateError = 2,
 
 		/// <summary>
-		/// Транзакция принята биржей.
+		/// The order is accepted by the exchange.
 		/// </summary>
 		[EnumMember]Accepted = 3,
 
 		/// <summary>
-		/// Транзакция не принята биржей.
+		/// The order is not accepted by the exchange.
 		/// </summary>
 		[EnumMember]NotDone = 4,
 
 		/// <summary>
-		/// Транзакция не прошла проверку сервера по каким-либо критериям.
-		/// Например, проверку на наличие прав у пользователя на отправку транзакции данного типа.
+		/// The transaction did not pass server check.
 		/// </summary>
 		[EnumMember]NotValidated = 5,
 
 		/// <summary>
-		/// Транзакция не прошла проверку лимитов сервера.
+		/// The transaction did not pass server limits.
 		/// </summary>
 		[EnumMember]NotValidatedLimit = 6,
 
 		/// <summary>
-		/// Транзакция клиента, работающего с подтверждением, подтверждена менеджером фирмы.
+		/// The transaction was approved by manager.
 		/// </summary>
 		[EnumMember]AcceptedByManager = 7,
 
 		/// <summary>
-		/// Транзакция клиента, работающего с подтверждением, не подтверждена менеджером фирмы.
+		/// The transaction did not approved by manager.
 		/// </summary>
 		[EnumMember]NotAcceptedByManager = 8,
 
 		/// <summary>
-		/// Транзакция клиента, работающего с подтверждением, снята менеджером фирмы.
+		/// The transaction was cancelled by manager.
 		/// </summary>
 		[EnumMember]CanceledByManager = 9,
 
 		/// <summary>
-		/// Транзакция не поддерживается торговой системой.
+		/// The transaction is not supported by server.
 		/// </summary>
 		[EnumMember]NotSupported = 10,
 
 		/// <summary>
-		/// Транзакция не прошла проверку правильности электронной подписи. К примеру, если ключи,
-		/// зарегистрированные на сервере, не соответствуют подписи отправленной транзакции.
+		/// Digital signature fail.
 		/// </summary>
 		[EnumMember]NotSigned = 11,
 
 		/// <summary>
-		/// Транзакция отправлена на снятие заявки.
+		/// Cancel pending.
 		/// </summary>
 		[EnumMember]SentToCanceled = 12,
 
 		/// <summary>
-		/// Транзакция об успешно снятой заявке.
+		/// Cancelled.
 		/// </summary>
 		[EnumMember]Cancelled = 13,
 
 		/// <summary>
-		/// Транзакция об успешно исполненной заявке.
+		/// Matched.
 		/// </summary>
 		[EnumMember]Matched = 14,
 
 		/// <summary>
-		/// Транзакция об отклоненной биржей заявке.
+		/// Reject by server.
 		/// </summary>
 		[EnumMember]RejectedBySystem = 15,
 	}

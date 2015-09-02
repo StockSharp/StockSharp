@@ -5,44 +5,44 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 
 	/// <summary>
-	/// Интерфейс, описывающий транспортный канал сообщений.
+	/// Message channel base interface.
 	/// </summary>
 	public interface IMessageChannel : IDisposable
 	{
 		/// <summary>
-		/// Открыт ли канал.
+		/// Is channel opened.
 		/// </summary>
 		bool IsOpened { get; }
 
 		/// <summary>
-		/// Открыть канал.
+		/// Open channel.
 		/// </summary>
 		void Open();
 
 		/// <summary>
-		/// Закрыть канал.
+		/// Close channel.
 		/// </summary>
 		void Close();
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		void SendInMessage(Message message);
 
 		/// <summary>
-		/// Событие появления нового сообщения.
+		/// New message event.
 		/// </summary>
 		event Action<Message> NewOutMessage;
 	}
 
 	/// <summary>
-	/// Транспортный канал сообщений, который передает сразу на выход все входящие сообщения.
+	/// Message channel, which passes directly to the output all incoming messages.
 	/// </summary>
 	public class PassThroughMessageChannel : IMessageChannel
 	{
 		/// <summary>
-		/// Создать <see cref="PassThroughMessageChannel"/>.
+		/// Initializes a new instance of the <see cref="PassThroughMessageChannel"/>.
 		/// </summary>
 		public PassThroughMessageChannel()
 		{

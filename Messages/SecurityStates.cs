@@ -6,21 +6,21 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Состояния инструмента.
+	/// Security states.
 	/// </summary>
 	[Serializable]
 	[DataContract]
 	public enum SecurityStates
 	{
 		/// <summary>
-		/// Торгуется.
+		/// Active.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.SecurityActiveKey)]
 		Trading,
 
 		/// <summary>
-		/// Торги приостановлены.
+		/// Suspended.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.SecuritySuspendedKey)]

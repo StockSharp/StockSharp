@@ -1,36 +1,34 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Сообщение очистки очереди обработки.
+	/// Clear message queue message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class ClearQueueMessage : Message
 	{
 		/// <summary>
-		/// Тип сообщений, которые необходимо удалить.
-		/// Если значение равно <see langword="null"/>, то необходимо удалить все сообщения.
+		/// Type of messages that should be deleted. If the value is <see langword="null" />, all messages will be deleted.
 		/// </summary>
 		public MessageTypes? ClearMessageType { get; set; }
 
 		/// <summary>
-		/// Идентификатор инструмента.
-		/// Если значение равно <see langword="null"/>, то необходимо удалить сообщения для всех инструментов.
+		/// Security id. If the value is <see langword="null" />, all messages for the security will be deleted.
 		/// </summary>
 		[DataMember]
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
-		/// Дополнительный аргумент для фильтра маркет-данных.
+		/// An additional argument for the market data filter.
 		/// </summary>
 		[DataMember]
 		public object Arg { get; set; }
 
 		/// <summary>
-		/// Инициализировать <see cref="ClearQueueMessage"/>.
+		/// Initialize <see cref="ClearQueueMessage"/>.
 		/// </summary>
 		public ClearQueueMessage()
 			: base(MessageTypes.ClearQueue)

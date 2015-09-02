@@ -11,7 +11,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Котировка стакана, представляющая бид или оффер.
+	/// Market depth quote representing bid or ask.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -20,18 +20,18 @@ namespace StockSharp.Messages
 	public class QuoteChange : Equatable<QuoteChange>, IExtendableEntity
 	{
 		/// <summary>
-		/// Создать <see cref="QuoteChange"/>.
+		/// Initializes a new instance of the <see cref="QuoteChange"/>.
 		/// </summary>
 		public QuoteChange()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="QuoteChange"/>.
+		/// Initializes a new instance of the <see cref="QuoteChange"/>.
 		/// </summary>
-		/// <param name="side">Направление (покупка или продажа).</param>
-		/// <param name="price">Цена котировки.</param>
-		/// <param name="volume">Объем котировки.</param>
+		/// <param name="side">Direction (buy or sell).</param>
+		/// <param name="price">Quote price.</param>
+		/// <param name="volume">Quote volume.</param>
 		public QuoteChange(Sides side, decimal price, decimal volume)
 		{
 			Side = side;
@@ -40,7 +40,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Цена котировки.
+		/// Quote price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
@@ -49,7 +49,7 @@ namespace StockSharp.Messages
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// Объем котировки.
+		/// Quote volume.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 		public decimal Volume { get; set; }
 
 		/// <summary>
-		/// Направление (покупка или продажа).
+		/// Direction (buy or sell).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]
@@ -67,7 +67,7 @@ namespace StockSharp.Messages
 		public Sides Side { get; set; }
 
 		/// <summary>
-		/// Код электронной площадки.
+		/// Electronic board code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
@@ -79,11 +79,10 @@ namespace StockSharp.Messages
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по котировке.
+		/// Extended quote info.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с котировкой.
-		/// Например, количество собственных контрактов в стакане, сумму лучшей покупки-продажи.
+		/// Uses in case of keep additional information associated with the quotation. For example, the number of contracts in its own order book, the amount of the best buying and selling.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -97,9 +96,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="QuoteChange" />.
+		/// Create a copy of <see cref="QuoteChange"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override QuoteChange Clone()
 		{
 			var clone = new QuoteChange(Side, Price, Volume);
@@ -108,28 +107,28 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="QuoteChange" /> на эквивалентность.
+		/// Compare <see cref="QuoteChange"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		protected override bool OnEquals(QuoteChange other)
 		{
 			return Price == other.Price && Side == other.Side;
 		}
 
 		/// <summary>
-		/// Рассчитать хеш-код объекта <see cref="QuoteChange" />.
+		/// Get the hash code of the object <see cref="QuoteChange"/>.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			return Price.GetHashCode() ^ Side.GetHashCode();
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0} {1} {2}".Put(Side == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask, Price, Volume);

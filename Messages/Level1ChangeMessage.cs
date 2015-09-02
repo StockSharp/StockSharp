@@ -11,238 +11,238 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Поля маркет-данных первого уровня.
+	/// Level1 fields of market-data.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum Level1Fields
 	{
 		/// <summary>
-		/// Цена открытия.
+		/// Opening price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str79Key)]
 		OpenPrice,
 
 		/// <summary>
-		/// Наибольшая цена.
+		/// Greatest price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str287Key)]
 		HighPrice,
 
 		/// <summary>
-		/// Наименьшая цена.
+		/// Lowest price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str288Key)]
 		LowPrice,
 
 		/// <summary>
-		/// Цена закрытия.
+		/// Closing price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ClosingPriceKey)]
 		ClosePrice,
 
 		/// <summary>
-		/// Последняя сделка.
+		/// Last trade.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str289Key)]
 		LastTrade,
 
 		/// <summary>
-		/// Стоимость шага.
+		/// Step price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str290Key)]
 		StepPrice,
 
 		/// <summary>
-		/// Лучший бид.
+		/// Best bid.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str291Key)]
 		BestBid,
 
 		/// <summary>
-		/// Лучший оффер.
+		/// Best ask.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str292Key)]
 		BestAsk,
 
 		/// <summary>
-		/// Волатильность (подразумеваемая).
+		/// Volatility (implied).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str293Key)]
 		ImpliedVolatility,
 
 		/// <summary>
-		/// Теоретическая цена.
+		/// Theoretical price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str294Key)]
 		TheorPrice,
 
 		/// <summary>
-		/// Открытый интерес.
+		/// Open interest.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str150Key)]
 		OpenInterest,
 
 		/// <summary>
-		/// Минимальная цена.
+		/// Minimum price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str83Key)]
 		MinPrice,
 
 		/// <summary>
-		/// Максимальная цена.
+		/// Maximum price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str81Key)]
 		MaxPrice,
 
 		/// <summary>
-		/// Объем бидов.
+		/// Bids volume.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str295Key)]
 		BidsVolume,
 
 		/// <summary>
-		/// Количество бидов.
+		/// Number of bids.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str296Key)]
 		BidsCount,
 
 		/// <summary>
-		/// Объем офферов.
+		/// Ask volume.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str297Key)]
 		AsksVolume,
 
 		/// <summary>
-		/// Количество офферов.
+		/// Number of asks.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str298Key)]
 		AsksCount,
 
 		/// <summary>
-		/// Волатильность (историческая).
+		/// Volatility (historic).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str299Key)]
 		HistoricalVolatility,
 
 		/// <summary>
-		/// Дельта.
+		/// Delta.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.DeltaKey)]
 		Delta,
 
 		/// <summary>
-		/// Гамма.
+		/// Gamma.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.GammaKey)]
 		Gamma,
 
 		/// <summary>
-		/// Вега.
+		/// Vega.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.VegaKey)]
 		Vega,
 
 		/// <summary>
-		/// Тета.
+		/// Theta.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ThetaKey)]
 		Theta,
 
 		/// <summary>
-		/// ГО (покупка).
+		/// Initial margin (buy).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str304Key)]
 		MarginBuy,
 
 		/// <summary>
-		/// ГО (продажа).
+		/// Initial margin (sell).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str305Key)]
 		MarginSell,
 
 		/// <summary>
-		/// Минимальный шаг цены.
+		/// Minimum price step.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str306Key)]
 		PriceStep,
 
 		/// <summary>
-		/// Минимальный шаг объема.
+		/// Minimum volume step.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str307Key)]
 		VolumeStep,
 
 		/// <summary>
-		/// Расширенная информация.
+		/// Extended information.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ExtendedInfoKey)]
 		ExtensionInfo,
 
 		/// <summary>
-		/// Состояние.
+		/// State.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.StateKey)]
 		State,
 
 		/// <summary>
-		/// Цена последней сделки.
+		/// Last trade price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str308Key)]
 		LastTradePrice,
 
 		/// <summary>
-		/// Объем последней сделки.
+		/// Last trade volume.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str309Key)]
 		LastTradeVolume,
 
 		/// <summary>
-		/// Объем за сессию.
+		/// Volume per session.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str310Key)]
 		Volume,
 
 		/// <summary>
-		/// Средняя цена за сессию.
+		/// Average price per session.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str311Key)]
 		AveragePrice,
 
 		/// <summary>
-		/// Рассчетная цена.
+		/// Settlement price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str312Key)]
@@ -256,189 +256,189 @@ namespace StockSharp.Messages
 		Change,
 
 		/// <summary>
-		/// Лучшая цена покупки.
+		/// Best bid price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str313Key)]
 		BestBidPrice,
 
 		/// <summary>
-		/// Лучшая объем покупки.
+		/// Best buy volume.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str314Key)]
 		BestBidVolume,
 
 		/// <summary>
-		/// Лучшая цена продажи.
+		/// Best ask price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str315Key)]
 		BestAskPrice,
 
 		/// <summary>
-		/// Лучшая объем продажи.
+		/// Best sell volume.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str316Key)]
 		BestAskVolume,
 
 		/// <summary>
-		/// Ро.
+		/// Rho.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.RhoKey)]
 		Rho,
 
 		/// <summary>
-		/// Накопленный купонный доход (НКД).
+		/// Accrued coupon income (ACI).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str318Key)]
 		AccruedCouponIncome,
 
 		/// <summary>
-		/// Максимальный бид за сессию.
+		/// Maximum bid during the session.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str319Key)]
 		HighBidPrice,
 
 		/// <summary>
-		/// Минимальный оффер за сессию.
+		/// Maximum ask during the session.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str320Key)]
 		LowAskPrice,
 
 		/// <summary>
-		/// Доходность.
+		/// Yield.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str321Key)]
 		Yield,
 
 		/// <summary>
-		/// Время последней сделки.
+		/// Time of last trade.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str322Key)]
 		LastTradeTime,
 
 		/// <summary>
-		/// Количество сделок.
+		/// Number of trades.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str323Key)]
 		TradesCount,
 
 		/// <summary>
-		/// Средневзвешенная цена.
+		/// Average price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.AveragePriceKey)]
 		VWAP,
 
 		/// <summary>
-		/// Идентификатор последней сделки.
+		/// Last trade ID.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str325Key)]
 		LastTradeId,
 
 		/// <summary>
-		/// Время лучшего бида.
+		/// Best bid time.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str326Key)]
 		BestBidTime,
 
 		/// <summary>
-		/// Время лучшего офера.
+		/// Best ask time.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str327Key)]
 		BestAskTime,
 
 		/// <summary>
-		/// Является ли тик восходящим или нисходящим в цене.
+		/// Is tick ascending or descending in price.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str328Key)]
 		LastTradeUpDown,
 
 		/// <summary>
-		/// Инициатор последней сделки (покупатель или продавец).
+		/// Initiator of the last trade (buyer or seller).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str329Key)]
 		LastTradeOrigin,
 
 		/// <summary>
-		/// Коэфициент объема между лотом и активом.
+		/// Lot multiplier.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str330Key)]
 		Multiplier,
 
 		/// <summary>
-		/// Цена/прибыль.
+		/// Price/profit.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("P/E")]
 		PriceEarnings,
 
 		/// <summary>
-		/// Прогнозируемая цена/прибыль.
+		/// Price target/profit.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("Forward P/E")]
 		ForwardPriceEarnings,
 
 		/// <summary>
-		/// Цена/прибыль (рост).
+		/// Price/profit (increase).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("PEG")]
 		PriceEarningsGrowth,
 
 		/// <summary>
-		/// Цена/продажа.
+		/// Price/buy.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("P/S")]
 		PriceSales,
 
 		/// <summary>
-		/// Цена/покупка.
+		/// Price/sell.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("P/B")]
 		PriceBook,
 
 		/// <summary>
-		/// Цена/деньги.
+		/// Price/amount.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("P/CF")]
 		PriceCash,
 
 		/// <summary>
-		/// Цена/деньги (свободные).
+		/// Price/amount (free).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("P/FCF")]
 		PriceFreeCash,
 
 		/// <summary>
-		/// Выплаты.
+		/// Payments.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("Payout")]
 		Payout,
 
 		/// <summary>
-		/// Количество акций.
+		/// Number of shares.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str331Key)]
@@ -466,77 +466,77 @@ namespace StockSharp.Messages
 		ShortRatio,
 
 		/// <summary>
-		/// Рентабельность активов.
+		/// Return on assets.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("ROA")]
 		ReturnOnAssets,
 
 		/// <summary>
-		/// Рентабельность капитала.
+		/// Return on equity.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("ROE")]
 		ReturnOnEquity,
 
 		/// <summary>
-		/// Возврат инвестиций.
+		/// Return on investment.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("ROI")]
 		ReturnOnInvestment,
 
 		/// <summary>
-		/// Ликвидность (текущая).
+		/// Liquidity (current).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str332Key)]
 		CurrentRatio,
 
 		/// <summary>
-		/// Ликвидность (мгновенная).
+		/// Liquidity (instantaneous).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str333Key)]
 		QuickRatio,
 
 		/// <summary>
-		/// Капитал (долгосрочный долг).
+		/// Capital (longterm debt).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str334Key)]
 		LongTermDebtEquity,
 
 		/// <summary>
-		/// Капитал (долг).
+		/// Capital (debt).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str335Key)]
 		TotalDebtEquity,
 
 		/// <summary>
-		/// Маржа активов (гросс).
+		/// Assets margin (gross).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str336Key)]
 		GrossMargin,
 
 		/// <summary>
-		/// Маржа активов.
+		/// Assets margin.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str337Key)]
 		OperatingMargin,
 
 		/// <summary>
-		/// Маржа прибыли.
+		/// Profit margin.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str338Key)]
 		ProfitMargin,
 
 		/// <summary>
-		/// Бета.
+		/// Beta.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.BetaKey)]
@@ -550,28 +550,28 @@ namespace StockSharp.Messages
 		AverageTrueRange,
 
 		/// <summary>
-		/// Волатильность (неделя).
+		/// Volatility (week).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str340Key)]
 		HistoricalVolatilityWeek,
 
 		/// <summary>
-		/// Волатильность (месяц).
+		/// Volatility (month).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str341Key)]
 		HistoricalVolatilityMonth,
 
 		/// <summary>
-		/// Системная информация.
+		/// System info.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str342Key)]
 		IsSystem,
 
 		/// <summary>
-		/// Количество знаков в цене после запятой.
+		/// Number of digits in price after coma.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.DecimalsKey)]
@@ -579,14 +579,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее первый уровень маркет-данных.
+	/// The message containing the level1 market data.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class Level1ChangeMessage : BaseChangeMessage<Level1Fields>
 	{
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
@@ -595,7 +595,7 @@ namespace StockSharp.Messages
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="Level1ChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="Level1ChangeMessage"/>.
 		/// </summary>
 		public Level1ChangeMessage()
 			: base(MessageTypes.Level1Change)
@@ -603,9 +603,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Level1ChangeMessage"/>.
+		/// Create a copy of <see cref="Level1ChangeMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var msg = new Level1ChangeMessage
@@ -621,9 +621,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Sec={0},Changes={1}".Put(SecurityId, Changes.Select(c => c.ToString()).Join(","));

@@ -9,40 +9,40 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Состояния свечи.
+	/// Candle states.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public enum CandleStates
 	{
 		/// <summary>
-		/// Пустое состояние (свеча отсутствует).
+		/// Empty state (candle doesn't exist).
 		/// </summary>
 		[EnumMember]
 		None,
 
 		/// <summary>
-		/// Свеча формируется.
+		/// Candle active.
 		/// </summary>
 		[EnumMember]
 		Active,
 
 		/// <summary>
-		/// Свеча закончена.
+		/// Candle finished.
 		/// </summary>
 		[EnumMember]
 		Finished,
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о свече.
+	/// The message contains information about the candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public abstract class CandleMessage : Message
 	{
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
@@ -51,7 +51,7 @@ namespace StockSharp.Messages
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Время начала свечи.
+		/// Open time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleOpenTimeKey)]
@@ -60,7 +60,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset OpenTime { get; set; }
 
 		/// <summary>
-		/// Время максимума свечи.
+		/// Time of candle high.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleHighTimeKey)]
@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset HighTime { get; set; }
 
 		/// <summary>
-		/// Время минимума свечи.
+		/// Time of candle low.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleLowTimeKey)]
@@ -78,7 +78,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset LowTime { get; set; }
 
 		/// <summary>
-		/// Время окончания свечи.
+		/// Close time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CandleCloseTimeKey)]
@@ -87,7 +87,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset CloseTime { get; set; }
 
 		/// <summary>
-		/// Цена открытия.
+		/// Opening price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str79Key)]
@@ -96,7 +96,7 @@ namespace StockSharp.Messages
 		public decimal OpenPrice { get; set; }
 
 		/// <summary>
-		/// Максимальная цена.
+		/// Maximum price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str81Key)]
@@ -105,7 +105,7 @@ namespace StockSharp.Messages
 		public decimal HighPrice { get; set; }
 
 		/// <summary>
-		/// Минимальная цена.
+		/// Minimum price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str83Key)]
@@ -114,7 +114,7 @@ namespace StockSharp.Messages
 		public decimal LowPrice { get; set; }
 
 		/// <summary>
-		/// Цена закрытия.
+		/// Closing price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ClosingPriceKey)]
@@ -123,41 +123,41 @@ namespace StockSharp.Messages
 		public decimal ClosePrice { get; set; }
 
 		/// <summary>
-		/// Объем открытия.
+		/// Volume at open.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public decimal? OpenVolume { get; set; }
 
 		/// <summary>
-		/// Объем закрытия.
+		/// Volume at close.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public decimal? CloseVolume { get; set; }
 
 		/// <summary>
-		/// Максимальный объем.
+		/// Volume at high.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public decimal? HighVolume { get; set; }
 
 		/// <summary>
-		/// Минимальный объем.
+		/// Minimum volume.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public decimal? LowVolume { get; set; }
 
 		/// <summary>
-		/// Относительный объем.
+		/// Relative colume.
 		/// </summary>
 		[DataMember]
 		public decimal? RelativeVolume { get; set; }
 
 		/// <summary>
-		/// Суммарный объем.
+		/// Total volume.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -166,7 +166,7 @@ namespace StockSharp.Messages
 		public decimal TotalVolume { get; set; }
 
 		/// <summary>
-		/// Открытый интерес.
+		/// Open interest.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OIKey)]
@@ -175,7 +175,7 @@ namespace StockSharp.Messages
 		public decimal? OpenInterest { get; set; }
 
 		/// <summary>
-		/// Количество тиковых сделок.
+		/// Number of ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TicksKey)]
@@ -184,7 +184,7 @@ namespace StockSharp.Messages
 		public int? TotalTicks { get; set; }
 
 		/// <summary>
-		/// Количество восходящих тиковых сделок.
+		/// Number of uptrending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickUpKey)]
@@ -193,7 +193,7 @@ namespace StockSharp.Messages
 		public int? UpTicks { get; set; }
 
 		/// <summary>
-		/// Количество нисходящих тиковых сделок.
+		/// Number of downtrending ticks.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TickDownKey)]
@@ -202,7 +202,7 @@ namespace StockSharp.Messages
 		public int? DownTicks { get; set; }
 
 		/// <summary>
-		/// Состояние.
+		/// State.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
@@ -211,37 +211,36 @@ namespace StockSharp.Messages
 		public CandleStates State { get; set; }
 
 		/// <summary>
-		/// Идентификатор первоначального сообщения <see cref="MarketDataMessage.TransactionId"/>,
-		/// для которого данное сообщение является ответом.
+		/// ID of the original message <see cref="MarketDataMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Является ли сообщение последним в запрашиваемом пакете свечек.
+		/// It is the last message in the requested batch of candles.
 		/// </summary>
 		[DataMember]
 		public bool IsFinished { get; set; }
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public abstract object Arg { get; set; }
 
 		/// <summary>
-		/// Инициализировать <see cref="CandleMessage"/>.
+		/// Initialize <see cref="CandleMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected CandleMessage(MessageTypes type)
 			: base(type)
 		{
 		}
 
 		/// <summary>
-		/// Скопировать параметры.
+		/// Copy parameters.
 		/// </summary>
-		/// <param name="copy">Копия.</param>
-		/// <returns>Копия.</returns>
+		/// <param name="copy">Copy.</param>
+		/// <returns>Copy.</returns>
 		protected CandleMessage CopyTo(CandleMessage copy)
 		{
 			if (copy == null)
@@ -272,9 +271,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0},T={1:yyyy/MM/dd HH:mm:ss.fff},O={2},H={3},L={4},C={5},V={6}".Put(Type, OpenTime, OpenPrice, HighPrice, LowPrice, ClosePrice, TotalVolume);
@@ -282,14 +281,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о тайм-фрейм свече.
+	/// The message contains information about the time-frame candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class TimeFrameCandleMessage : CandleMessage
 	{
 		/// <summary>
-		/// Создать <see cref="TimeFrameCandleMessage"/>.
+		/// Initializes a new instance of the <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
 		public TimeFrameCandleMessage()
 			: base(MessageTypes.CandleTimeFrame)
@@ -297,15 +296,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Тайм-фрейм.
+		/// Time-frame.
 		/// </summary>
 		[DataMember]
 		public TimeSpan TimeFrame { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="TimeFrameCandleMessage"/>.
+		/// Create a copy of <see cref="TimeFrameCandleMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new TimeFrameCandleMessage
@@ -315,7 +314,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -325,14 +324,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о свече, группируемая по количеству сделок.
+	/// The message contains information about the tick candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class TickCandleMessage : CandleMessage
 	{
 		/// <summary>
-		/// Создать <see cref="TickCandleMessage"/>.
+		/// Initializes a new instance of the <see cref="TickCandleMessage"/>.
 		/// </summary>
 		public TickCandleMessage()
 			: base(MessageTypes.CandleTick)
@@ -340,15 +339,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Максимальное количество сделок, которое может содержать свеча.
+		/// Maximum tick count.
 		/// </summary>
 		[DataMember]
 		public int MaxTradeCount { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="TickCandleMessage"/>.
+		/// Create a copy of <see cref="TickCandleMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new TickCandleMessage
@@ -358,7 +357,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -368,14 +367,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о свече, группируемая по количеству контрактов.
+	/// The message contains information about the volume candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class VolumeCandleMessage : CandleMessage
 	{
 		/// <summary>
-		/// Создать <see cref="VolumeCandleMessage"/>.
+		/// Initializes a new instance of the <see cref="VolumeCandleMessage"/>.
 		/// </summary>
 		public VolumeCandleMessage()
 			: base(MessageTypes.CandleVolume)
@@ -383,15 +382,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Максимальное количество контрактов, которое может содержать свеча.
+		/// Maximum volume.
 		/// </summary>
 		[DataMember]
 		public decimal Volume { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="VolumeCandleMessage"/>.
+		/// Create a copy of <see cref="VolumeCandleMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new VolumeCandleMessage
@@ -401,7 +400,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -411,14 +410,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о свече, группируемая по ценовому диапазону.
+	/// The message contains information about the range candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class RangeCandleMessage : CandleMessage
 	{
 		/// <summary>
-		/// Создать <see cref="RangeCandleMessage"/>.
+		/// Initializes a new instance of the <see cref="RangeCandleMessage"/>.
 		/// </summary>
 		public RangeCandleMessage()
 			: base(MessageTypes.CandleRange)
@@ -426,15 +425,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Дельта цены, в рамках которой свеча может содержать сделки.
+		/// Range of price.
 		/// </summary>
 		[DataMember]
 		public Unit PriceRange { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="RangeCandleMessage"/>.
+		/// Create a copy of <see cref="RangeCandleMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new RangeCandleMessage
@@ -444,7 +443,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -454,27 +453,27 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Типы символов.
+	/// Symbol types.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public enum PnFTypes
 	{
 		/// <summary>
-		/// Крестики (цена растет).
+		/// X (price up).
 		/// </summary>
 		[EnumMember]
 		X,
 
 		/// <summary>
-		/// Нолики (цена падает).
+		/// 0 (price down).
 		/// </summary>
 		[EnumMember]
 		O,
 	}
 
 	/// <summary>
-	/// Значение параметров пункто-цифрового графика (график крестики-нолики).
+	/// Point in fugure (X0) candle arg.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -483,7 +482,7 @@ namespace StockSharp.Messages
 		private Unit _boxSize = new Unit();
 
 		/// <summary>
-		/// Изменение цены, при превышении которого регистрируется новый <see cref="PnFTypes.X"/> или <see cref="PnFTypes.O"/>.
+		/// Range of price above which create a new <see cref="PnFTypes.X"/> or <see cref="PnFTypes.O"/>.
 		/// </summary>
 		[DataMember]
 		public Unit BoxSize
@@ -499,24 +498,24 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Величина противоположного движения цены, при котором происходит смена <see cref="PnFTypes.X"/> на <see cref="PnFTypes.O"/> (или наоборот).
+		/// The number of boxes (an <see cref="PnFTypes.X"/> or an <see cref="PnFTypes.O"/>) required to cause a reversal.
 		/// </summary>
 		[DataMember]
 		public int ReversalAmount { get; set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "Box = {0} RA = {1}".Put(BoxSize, ReversalAmount);
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PnFArg"/>.
+		/// Create a copy of <see cref="PnFArg"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override PnFArg Clone()
 		{
 			return new PnFArg
@@ -527,19 +526,19 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="PnFArg" /> на эквивалентность.
+		/// Compare <see cref="PnFArg"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		protected override bool OnEquals(PnFArg other)
 		{
 			return other.BoxSize == BoxSize && other.ReversalAmount == ReversalAmount;
 		}
 
 		/// <summary>
-		/// Рассчитать хеш-код объекта <see cref="PnFArg"/>.
+		/// Get the hash code of the object <see cref="PnFArg"/>.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			return BoxSize.GetHashCode() ^ ReversalAmount.GetHashCode();
@@ -547,14 +546,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о свече пункто-цифрового графика (график крестики-нолики).
+	/// The message contains information about the XO candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class PnFCandleMessage : CandleMessage
 	{
 		/// <summary>
-		/// Создать <see cref="PnFCandleMessage"/>.
+		/// Initializes a new instance of the <see cref="PnFCandleMessage"/>.
 		/// </summary>
 		public PnFCandleMessage()
 			: base(MessageTypes.CandlePnF)
@@ -562,21 +561,21 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Значение параметров.
+		/// Value of arguments.
 		/// </summary>
 		[DataMember]
 		public PnFArg PnFArg { get; set; }
 
 		/// <summary>
-		/// Тип символов.
+		/// Type of symbols.
 		/// </summary>
 		[DataMember]
 		public PnFTypes PnFType { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="PnFCandleMessage"/>.
+		/// Create a copy of <see cref="PnFCandleMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new PnFCandleMessage
@@ -587,7 +586,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{
@@ -597,14 +596,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о Рэнко свече.
+	/// The message contains information about the renko candle.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class RenkoCandleMessage : CandleMessage
 	{
 		/// <summary>
-		/// Создать <see cref="RenkoCandleMessage"/>.
+		/// Initializes a new instance of the <see cref="RenkoCandleMessage"/>.
 		/// </summary>
 		public RenkoCandleMessage()
 			: base(MessageTypes.CandleRenko)
@@ -612,15 +611,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Изменение цены, при превышении которого регистрируется новая свеча.
+		/// Possible price change range.
 		/// </summary>
 		[DataMember]
 		public Unit BoxSize { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="RenkoCandleMessage"/>.
+		/// Create a copy of <see cref="RenkoCandleMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new RenkoCandleMessage
@@ -630,7 +629,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Параметр свечи.
+		/// Candle arg.
 		/// </summary>
 		public override object Arg
 		{

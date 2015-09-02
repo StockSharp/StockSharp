@@ -10,14 +10,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее данные об инструменте.
+	/// A message containing info about the security.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public class SecurityMessage : Message
 	{
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str361Key)]
@@ -27,7 +27,7 @@ namespace StockSharp.Messages
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Название инструмента.
+		/// Security name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
@@ -36,7 +36,7 @@ namespace StockSharp.Messages
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Короткое название инструмента.
+		/// Short security name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str363Key)]
@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 		public string ShortName { get; set; }
 
 		/// <summary>
-		/// Минимальный шаг объема.
+		/// Minimum volume step.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 		public decimal? VolumeStep { get; set; }
 
 		/// <summary>
-		/// Коэфициент объема между лотом и активом.
+		/// Lot multiplier.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str330Key)]
@@ -65,7 +65,7 @@ namespace StockSharp.Messages
 		public decimal? Multiplier { get; set; }
 
 		/// <summary>
-		/// Количество знаков в цене после запятой.
+		/// Number of digits in price after coma.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
@@ -75,7 +75,7 @@ namespace StockSharp.Messages
 		public int? Decimals { get; set; }
 		
 		/// <summary>
-		/// Минимальный шаг цены.
+		/// Minimum price step.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
@@ -85,7 +85,7 @@ namespace StockSharp.Messages
 		public decimal? PriceStep { get; set; }
 
 		/// <summary>
-		/// Тип инструмента.
+		/// Security type.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TypeKey)]
@@ -95,7 +95,7 @@ namespace StockSharp.Messages
 		public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
-		/// Дата экспирация инструмента (для деривативов - экспирация, для облигаций - погашение).
+		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
@@ -105,7 +105,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <summary>
-		/// Дата выплат по инструмента (для деривативов и облигаций).
+		/// Settlement date for security (for derivatives and bonds).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SettlementDateKey)]
@@ -115,7 +115,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset? SettlementDate { get; set; }
 
 		/// <summary>
-		/// Код базового актива, на основе которого построен данный инструмент.
+		/// Underlying asset code, on which the current security is based.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.UnderlyingAssetKey)]
@@ -123,7 +123,7 @@ namespace StockSharp.Messages
 		public string UnderlyingSecurityCode { get; set; }
 
 		/// <summary>
-		/// Страйк цена опциона.
+		/// Option strike price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
@@ -132,7 +132,7 @@ namespace StockSharp.Messages
 		public decimal? Strike { get; set; }
 
 		/// <summary>
-		/// Тип опциона.
+		/// Option type.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OptionsContractKey)]
@@ -141,7 +141,7 @@ namespace StockSharp.Messages
 		public OptionTypes? OptionType { get; set; }
 
 		/// <summary>
-		/// Тип бинарного опциона.
+		/// Type of binary option.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BinaryOptionKey)]
@@ -149,7 +149,7 @@ namespace StockSharp.Messages
 		public string BinaryOptionType { get; set; }
 
 		/// <summary>
-		/// Валюта торгового инструмента.
+		/// Trading security currency.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
@@ -159,14 +159,13 @@ namespace StockSharp.Messages
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// Идентификатор первоначального сообщения <see cref="SecurityLookupMessage.TransactionId"/>,
-		/// для которого данное сообщение является ответом.
+		/// ID of the original message <see cref="SecurityLookupMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Класс инструмента.
+		/// Security class.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ClassKey)]
@@ -175,7 +174,7 @@ namespace StockSharp.Messages
 		public string Class { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="SecurityMessage"/>.
+		/// Initializes a new instance of the <see cref="SecurityMessage"/>.
 		/// </summary>
 		public SecurityMessage()
 			: base(MessageTypes.Security)
@@ -183,18 +182,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="SecurityMessage"/>.
+		/// Initialize <see cref="SecurityMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected SecurityMessage(MessageTypes type)
 			: base(type)
 		{
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="SecurityMessage"/>.
+		/// Create a copy of <see cref="SecurityMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new SecurityMessage();
@@ -203,9 +202,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Скопировать данные сообщения в <paramref name="destination"/>.
+		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">Объект, в который копируется информация.</param>
+		/// <param name="destination">The object, which copied information.</param>
 		public void CopyTo(SecurityMessage destination)
 		{
 			if (destination == null)
@@ -232,9 +231,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Sec={0}".Put(SecurityId);

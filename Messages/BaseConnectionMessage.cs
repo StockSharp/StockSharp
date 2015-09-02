@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,31 +6,31 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Базовое сообщение подключения или отключения.
+	/// Base connect/disconnect message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public abstract class BaseConnectionMessage : Message
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseConnectionMessage"/>.
+		/// Initialize <see cref="BaseConnectionMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected BaseConnectionMessage(MessageTypes type)
 			: base(type)
 		{
 		}
 
 		/// <summary>
-		/// Информация об ошибке. Сигнализирует об ошибке подключения или отключения.
+		/// Information about the error connection or disconnection.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + (Error == null ? null : ",Error={Message}".PutEx(Error));

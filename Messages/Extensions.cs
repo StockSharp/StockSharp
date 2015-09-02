@@ -7,16 +7,16 @@ namespace StockSharp.Messages
 	using MoreLinq;
 
 	/// <summary>
-	/// Вспомогательный класс.
+	/// Extension class.
 	/// </summary>
 	public static class Extensions
 	{
 		/// <summary>
-		/// Создать <see cref="PortfolioChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
-		/// <param name="adapter">Апаптер к торговой системе.</param>
-		/// <param name="pfName">Название портфеля.</param>
-		/// <returns>Сообщение об изменении портфеля.</returns>
+		/// <param name="adapter">Trading system adapter.</param>
+		/// <param name="pfName">Portfolio name.</param>
+		/// <returns>Portfolio change message.</returns>
 		public static PortfolioChangeMessage CreatePortfolioChangeMessage(this IMessageAdapter adapter, string pfName)
 		{
 			if (adapter == null)
@@ -33,12 +33,12 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать <see cref="PositionChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="PositionChangeMessage"/>.
 		/// </summary>
-		/// <param name="adapter">Апаптер к торговой системе.</param>
-		/// <param name="pfName">Название портфеля.</param>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Сообщение об изменении позиции.</returns>
+		/// <param name="adapter">Trading system adapter.</param>
+		/// <param name="pfName">Portfolio name.</param>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Position change message.</returns>
 		public static PositionChangeMessage CreatePositionChangeMessage(this IMessageAdapter adapter, string pfName, SecurityId securityId)
 		{
 			if (adapter == null)
@@ -56,10 +56,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить лучший бид.
+		/// Get best bid.
 		/// </summary>
-		/// <param name="message">Стакан.</param>
-		/// <returns>Лучший бид, или <see langword="null"/>, если котировки на покупку отсутствуют.</returns>
+		/// <param name="message">Market depth.</param>
+		/// <returns>Best bid, or <see langword="null" />, if no bids are empty.</returns>
 		public static QuoteChange GetBestBid(this QuoteChangeMessage message)
 		{
 			if (message == null)
@@ -69,10 +69,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить лучший оффер.
+		/// Get best ask.
 		/// </summary>
-		/// <param name="message">Стакан.</param>
-		/// <returns>Лучший оффер, или <see langword="null"/>, если котировки на продажу отсутствуют.</returns>
+		/// <param name="message">Market depth.</param>
+		/// <returns>Best ask, or <see langword="null" />, if no asks are empty.</returns>
 		public static QuoteChange GetBestAsk(this QuoteChangeMessage message)
 		{
 			if (message == null)
@@ -82,10 +82,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="OrderMessage"/> в <see cref="ExecutionMessage"/>.
+		/// Cast <see cref="OrderMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="message"><see cref="OrderMessage"/></param>
-		/// <returns><see cref="ExecutionMessage"/></returns>
+		/// <param name="message"><see cref="OrderMessage"/>.</param>
+		/// <returns><see cref="ExecutionMessage"/>.</returns>
 		public static ExecutionMessage ToExecutionMessage(this OrderMessage message)
 		{
 			switch (message.Type)
@@ -108,10 +108,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="OrderGroupCancelMessage"/> в <see cref="ExecutionMessage"/>.
+		/// Cast <see cref="OrderGroupCancelMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="message"><see cref="OrderGroupCancelMessage"/></param>
-		/// <returns><see cref="ExecutionMessage"/></returns>
+		/// <param name="message"><see cref="OrderGroupCancelMessage"/>.</param>
+		/// <returns><see cref="ExecutionMessage"/>.</returns>
 		public static ExecutionMessage ToExecutionMessage(this OrderGroupCancelMessage message)
 		{
 			return new ExecutionMessage
@@ -122,10 +122,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="OrderPairReplaceMessage"/> в <see cref="ExecutionMessage"/>.
+		/// Cast <see cref="OrderPairReplaceMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="message"><see cref="OrderPairReplaceMessage"/></param>
-		/// <returns><see cref="ExecutionMessage"/></returns>
+		/// <param name="message"><see cref="OrderPairReplaceMessage"/>.</param>
+		/// <returns><see cref="ExecutionMessage"/>.</returns>
 		public static ExecutionMessage ToExecutionMessage(this OrderPairReplaceMessage message)
 		{
 			throw new NotImplementedException();
@@ -138,10 +138,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="OrderCancelMessage"/> в <see cref="ExecutionMessage"/>.
+		/// Cast <see cref="OrderCancelMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="message"><see cref="OrderCancelMessage"/></param>
-		/// <returns><see cref="ExecutionMessage"/></returns>
+		/// <param name="message"><see cref="OrderCancelMessage"/>.</param>
+		/// <returns><see cref="ExecutionMessage"/>.</returns>
 		public static ExecutionMessage ToExecutionMessage(this OrderCancelMessage message)
 		{
 			return new ExecutionMessage
@@ -158,10 +158,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="OrderReplaceMessage"/> в <see cref="ExecutionMessage"/>.
+		/// Cast <see cref="OrderReplaceMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="message"><see cref="OrderReplaceMessage"/></param>
-		/// <returns><see cref="ExecutionMessage"/></returns>
+		/// <param name="message"><see cref="OrderReplaceMessage"/>.</param>
+		/// <returns><see cref="ExecutionMessage"/>.</returns>
 		public static ExecutionMessage ToExecutionMessage(this OrderReplaceMessage message)
 		{
 			return new ExecutionMessage
@@ -180,10 +180,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Преобразовать <see cref="OrderRegisterMessage"/> в <see cref="ExecutionMessage"/>.
+		/// Cast <see cref="OrderRegisterMessage"/> to the <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <param name="message"><see cref="OrderRegisterMessage"/></param>
-		/// <returns><see cref="ExecutionMessage"/></returns>
+		/// <param name="message"><see cref="OrderRegisterMessage"/>.</param>
+		/// <returns><see cref="ExecutionMessage"/>.</returns>
 		public static ExecutionMessage ToExecutionMessage(this OrderRegisterMessage message)
 		{
 			return new ExecutionMessage
@@ -203,10 +203,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Скопировать расширенную информацию.
+		/// Copy extended info.
 		/// </summary>
-		/// <param name="from">Объект, из которого копируется расширенная информация.</param>
-		/// <param name="to">Объект, в который копируется расширенная информация.</param>
+		/// <param name="from">The object of which is copied to extended information.</param>
+		/// <param name="to">The object, which is copied to extended information.</param>
 		public static void CopyExtensionInfo(this IExtendableEntity from, IExtendableEntity to)
 		{
 			if (from == null)
@@ -228,10 +228,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить серверное время сообщения.
+		/// Get message server time.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
-		/// <returns>Серверное время сообщения. Если значение равно <see langword="null"/>, то сообщение не содержит серверное время.</returns>
+		/// <param name="message">Message.</param>
+		/// <returns>Server time message. If the value is <see langword="null" />, the message does not contain the server time.</returns>
 		public static DateTimeOffset? GetServerTime(this Message message)
 		{
 			switch (message.Type)
@@ -253,9 +253,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Заполнить <see cref="IMessageAdapter.SupportedMessages"/> типами сообщений, относящихся к транзакционным.
+		/// Fill the <see cref="IMessageAdapter.SupportedMessages"/> message types related to transactional.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
+		/// <param name="adapter">Adapter.</param>
 		public static void AddTransactionalSupport(this IMessageAdapter adapter)
 		{
 			adapter.AddSupportedMessage(MessageTypes.OrderCancel);
@@ -270,9 +270,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Удалить из <see cref="IMessageAdapter.SupportedMessages"/> типы сообщений, относящихся к транзакционным.
+		/// Remove from <see cref="IMessageAdapter.SupportedMessages"/> message types related to transactional.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
+		/// <param name="adapter">Adapter.</param>
 		public static void RemoveTransactionalSupport(this IMessageAdapter adapter)
 		{
 			adapter.RemoveSupportedMessage(MessageTypes.OrderCancel);
@@ -287,9 +287,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Заполнить <see cref="IMessageAdapter.SupportedMessages"/> типами сообщений, относящихся к маркет-данным.
+		/// Fill the <see cref="IMessageAdapter.SupportedMessages"/> message types related to market-data.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
+		/// <param name="adapter">Adapter.</param>
 		public static void AddMarketDataSupport(this IMessageAdapter adapter)
 		{
 			adapter.AddSupportedMessage(MessageTypes.MarketData);
@@ -297,9 +297,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Удалить из <see cref="IMessageAdapter.SupportedMessages"/> типы сообщений, относящихся к маркет-данным.
+		/// Remove from <see cref="IMessageAdapter.SupportedMessages"/> message types related to market-data.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
+		/// <param name="adapter">Adapter.</param>
 		public static void RemoveMarketDataSupport(this IMessageAdapter adapter)
 		{
 			adapter.RemoveSupportedMessage(MessageTypes.MarketData);
@@ -307,10 +307,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Добавить тип сообщения в <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Add the message type info <see cref="IMessageAdapter.SupportedMessages"/>.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
 		public static void AddSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)
@@ -320,10 +320,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Удалить тип сообщения из <see cref="IMessageAdapter.SupportedMessages"/>.
+		/// Remove the message type from <see cref="IMessageAdapter.SupportedMessages"/>.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
 		public static void RemoveSupportedMessage(this IMessageAdapter adapter, MessageTypes type)
 		{
 			if (adapter == null)

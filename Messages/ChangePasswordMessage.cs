@@ -1,18 +1,18 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 	using System.Security;
 
 	/// <summary>
-	/// Сообщение изменения пароля.
+	/// Change password message.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class ChangePasswordMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="ChangePasswordMessage"/>.
+		/// Initializes a new instance of the <see cref="ChangePasswordMessage"/>.
 		/// </summary>
 		public ChangePasswordMessage()
 			: base(MessageTypes.ChangePassword)
@@ -20,34 +20,33 @@
 		}
 
 		/// <summary>
-		/// Идентификатор запроса.
+		/// Request identifier.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Идентификатор первоначального сообщения <see cref="ChangePasswordMessage.TransactionId"/>,
-		/// для которого данное сообщение является ответом.
+		/// ID of the original message <see cref="ChangePasswordMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Новый пароль.
+		/// New password.
 		/// </summary>
 		[DataMember]
 		public SecureString NewPassword { get; set; }
 
 		/// <summary>
-		/// Информация об ошибке смены пароля.
+		/// Change password error info.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="ChangePasswordMessage"/>.
+		/// Create a copy of <see cref="ChangePasswordMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new ChangePasswordMessage

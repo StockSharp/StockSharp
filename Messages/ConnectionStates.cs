@@ -1,32 +1,32 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	/// <summary>
-	/// Состояния подключений.
+	/// Connection states.
 	/// </summary>
 	public enum ConnectionStates
 	{
 		/// <summary>
-		/// Не активно.
+		/// Non active.
 		/// </summary>
 		Disconnected,
 
 		/// <summary>
-		/// В процессе отключения.
+		/// Disconnect pending.
 		/// </summary>
 		Disconnecting,
 
 		/// <summary>
-		/// В процессе подключения.
+		/// Connect pending.
 		/// </summary>
 		Connecting,
 
 		/// <summary>
-		/// Подключение активно.
+		/// Connection active.
 		/// </summary>
 		Connected,
 
 		/// <summary>
-		/// Ошибка подключения.
+		/// Error connection.
 		/// </summary>
 		Failed,
 	}

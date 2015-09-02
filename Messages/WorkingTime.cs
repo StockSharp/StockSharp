@@ -14,7 +14,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Режим работы (время, выходные дни и т.д.).
+	/// Work mode (time, holidays etc.).
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -24,7 +24,7 @@ namespace StockSharp.Messages
 	public class WorkingTime : Cloneable<WorkingTime>, IPersistable
 	{
 		/// <summary>
-		/// Создать <see cref="WorkingTime"/>.
+		/// Initializes a new instance of the <see cref="WorkingTime"/>.
 		/// </summary>
 		public WorkingTime()
 		{
@@ -33,7 +33,7 @@ namespace StockSharp.Messages
 		private WorkingTimePeriod[] _periods = ArrayHelper.Empty<WorkingTimePeriod>();
 
 		/// <summary>
-		/// Периоды действия расписания.
+		/// Schedule validity periods.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -54,7 +54,7 @@ namespace StockSharp.Messages
 		private DateTime[] _specialWorkingDays = ArrayHelper.Empty<DateTime>();
 
 		/// <summary>
-		/// Рабочие дни, выпадающие на субботу и воскресенье.
+		/// Working days, falling on Saturday and Sunday.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 		private DateTime[] _specialHolidays = ArrayHelper.Empty<DateTime>();
 
 		/// <summary>
-		/// Выходные дни, выпадающие на будни.
+		/// Holidays that fall on workdays.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -100,9 +100,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="WorkingTime"/>.
+		/// Create a copy of <see cref="WorkingTime"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public override WorkingTime Clone()
 		{
 			var clone = new WorkingTime
@@ -119,9 +119,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			if (storage.ContainsKey("Times"))
@@ -145,9 +145,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Periods", Periods.Select(p => p.Save()).ToArray());

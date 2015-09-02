@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,50 +6,50 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Сообщение, содержащее данные для снятия заявки.
+	/// A message containing the data for the cancellation of the order.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class OrderCancelMessage : OrderMessage
 	{
 		/// <summary>
-		/// Идентификатор отменяемой заявки.
+		/// ID cancellation order.
 		/// </summary>
 		[DataMember]
 		public long? OrderId { get; set; }
 
 		/// <summary>
-		/// Идентификатор отменяемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
+		/// Cancelling order id (as a string if the electronic board does not use a numeric representation of the identifiers).
 		/// </summary>
 		[DataMember]
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Идентификатор транзакции отмены.
+		/// Order cancellation transaction id.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Идентификатор транзакции отменяемой заявки.
+		/// Transaction ID cancellation order.
 		/// </summary>
 		[DataMember]
 		public long OrderTransactionId { get; set; }
 
 		/// <summary>
-		/// Отменяемый объем. Если значение не указано, то отменяется весь активный объем заявки.
+		/// Cancelling volume. If not specified, then it canceled the entire balance.
 		/// </summary>
 		[DataMember]
 		public decimal? Volume { get; set; }
 
 		/// <summary>
-		/// Направление заявки.
+		/// Order side.
 		/// </summary>
 		[DataMember]
 		public Sides? Side { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="OrderCancelMessage"/>.
+		/// Initializes a new instance of the <see cref="OrderCancelMessage"/>.
 		/// </summary>
 		public OrderCancelMessage()
 			: base(MessageTypes.OrderCancel)
@@ -57,9 +57,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="OrderCancelMessage"/>.
+		/// Create a copy of <see cref="OrderCancelMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new OrderCancelMessage
@@ -81,9 +81,9 @@
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",OriginTransId={0},TransId={1},OrderId={2}".Put(OrderTransactionId, TransactionId, OrderId);

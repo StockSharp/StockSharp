@@ -8,7 +8,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее фильтр для снятия заявок.
+	/// The message containing the order group cancel filter.
 	/// </summary>
 	[DataContract]
 	[Serializable]
@@ -24,13 +24,13 @@ namespace StockSharp.Messages
 		//public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
-		/// Идентификатор транзакции отмены.
+		/// Order cancellation transaction id.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// <see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.
+		/// <see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str226Key)]
@@ -39,7 +39,7 @@ namespace StockSharp.Messages
 		public bool? IsStop { get; set; }
 
 		/// <summary>
-		/// Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.
+		/// Order side. If the value is <see langword="null" />, the direction does not use.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]
@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 		public Sides? Side { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="OrderGroupCancelMessage"/>.
+		/// Initializes a new instance of the <see cref="OrderGroupCancelMessage"/>.
 		/// </summary>
 		public OrderGroupCancelMessage()
 			: base(MessageTypes.OrderGroupCancel)
@@ -56,18 +56,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",IsStop={0},Side={1},SecType={2}".Put(IsStop, Side, SecurityType);
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="OrderGroupCancelMessage"/>.
+		/// Create a copy of <see cref="OrderGroupCancelMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new OrderGroupCancelMessage

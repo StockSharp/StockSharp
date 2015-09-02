@@ -11,7 +11,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Период действия расписания.
+	/// Schedule validity period.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -20,7 +20,7 @@ namespace StockSharp.Messages
 	public class WorkingTimePeriod : Cloneable<WorkingTimePeriod>, IPersistable
 	{
 		/// <summary>
-		/// Дата окончания действия расписания.
+		/// Schedule expiration date.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -31,7 +31,7 @@ namespace StockSharp.Messages
 		private Range<TimeSpan>[] _times = new Range<TimeSpan>[0];
 
 		/// <summary>
-		/// Расписание работы внутри дня.
+		/// Work schedule within day.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -50,9 +50,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="WorkingTimePeriod"/>.
+		/// Create a copy of <see cref="WorkingTimePeriod"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public override WorkingTimePeriod Clone()
 		{
 			return new WorkingTimePeriod
@@ -63,9 +63,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Times = storage.GetValue<Range<TimeSpan>[]>("Times");
@@ -73,9 +73,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Times", Times);

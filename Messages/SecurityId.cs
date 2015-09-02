@@ -10,7 +10,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Идентификатор инструмента.
+	/// Security ID.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -19,7 +19,7 @@ namespace StockSharp.Messages
 		private string _securityCode;
 
 		/// <summary>
-		/// Код инструмента.
+		/// Security code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str349Key)]
@@ -34,7 +34,7 @@ namespace StockSharp.Messages
 		private string _boardCode;
 
 		/// <summary>
-		/// Код электронной площадки.
+		/// Electronic board code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
@@ -49,7 +49,7 @@ namespace StockSharp.Messages
 		private object _native;
 
 		/// <summary>
-		/// Внутренний идентификатор торговой системы.
+		/// Native (internal) trading system security id.
 		/// </summary>
 		public object Native
 		{
@@ -60,7 +60,7 @@ namespace StockSharp.Messages
 		private SecurityTypes? _securityType;
 
 		/// <summary>
-		/// Тип инструмента.
+		/// Security type.
 		/// </summary>
 		public SecurityTypes? SecurityType
 		{
@@ -69,7 +69,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Идентификатор в формате SEDOL (Stock Exchange Daily Official List).
+		/// ID in SEDOL format (Stock Exchange Daily Official List).
 		/// </summary>
 		[DataMember]
 		[DisplayName("SEDOL")]
@@ -77,7 +77,7 @@ namespace StockSharp.Messages
 		public string Sedol { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате CUSIP (Committee on Uniform Securities Identification Procedures).
+		/// ID in CUSIP format (Committee on Uniform Securities Identification Procedures).
 		/// </summary>
 		[DataMember]
 		[DisplayName("CUSIP")]
@@ -85,7 +85,7 @@ namespace StockSharp.Messages
 		public string Cusip { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате ISIN (International Securities Identification Number).
+		/// ID in ISIN format (International Securities Identification Number).
 		/// </summary>
 		[DataMember]
 		[DisplayName("ISIN")]
@@ -93,7 +93,7 @@ namespace StockSharp.Messages
 		public string Isin { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате RIC (Reuters Instrument Code).
+		/// ID in RIC format (Reuters Instrument Code).
 		/// </summary>
 		[DataMember]
 		[DisplayName("RIC")]
@@ -101,7 +101,7 @@ namespace StockSharp.Messages
 		public string Ric { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате Bloomberg.
+		/// ID in Bloomberg format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("Bloomberg")]
@@ -109,7 +109,7 @@ namespace StockSharp.Messages
 		public string Bloomberg { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате IQFeed.
+		/// ID in IQFeed format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("IQFeed")]
@@ -117,7 +117,7 @@ namespace StockSharp.Messages
 		public string IQFeed { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате Interactive Brokers.
+		/// ID in Interactive Brokers format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("InteractiveBrokers")]
@@ -126,7 +126,7 @@ namespace StockSharp.Messages
 		public int? InteractiveBrokers { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате Plaza.
+		/// ID in Plaza format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("Plaza")]
@@ -136,9 +136,9 @@ namespace StockSharp.Messages
 		private int _hashCode;
 		
 		/// <summary>
-		/// Рассчитать хеш-код объекта.
+		/// Get the hash code of the object.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			return EnsureGetHashCode();
@@ -157,20 +157,20 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="Currency" /> на эквивалентность.
+		/// Compare <see cref="Currency"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		public override bool Equals(object other)
 		{
 			return Equals((SecurityId)other);
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="Currency" /> на эквивалентность.
+		/// Compare <see cref="Currency"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		public bool Equals(SecurityId other)
 		{
 			if (EnsureGetHashCode() != other.EnsureGetHashCode())
@@ -183,31 +183,31 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сравнить на неравенство два идентификатора.
+		/// Compare the inequality of two identifiers.
 		/// </summary>
-		/// <param name="left">Левый операнд.</param>
-		/// <param name="right">Правый операнд.</param>
-		/// <returns><see langword="true"/>, если идентификаторы не эквивалентны, иначе, <see langword="false"/>.</returns>
+		/// <param name="left">Left operand.</param>
+		/// <param name="right">Right operand.</param>
+		/// <returns><see langword="true" />, if identifiers are equal, otherwise, <see langword="false" />.</returns>
 		public static bool operator !=(SecurityId left, SecurityId right)
 		{
 			return !(left == right);
 		}
 
 		/// <summary>
-		/// Сравнить на равенство два идентификатора.
+		/// Compare two identifiers for equality.
 		/// </summary>
-		/// <param name="left">Левый операнд.</param>
-		/// <param name="right">Правый операнд.</param>
-		/// <returns><see langword="true"/>, если идентификаторы эквивалентны, иначе, <see langword="false"/>.</returns>
+		/// <param name="left">Left operand.</param>
+		/// <param name="right">Right operand.</param>
+		/// <returns><see langword="true" />, if the specified identifiers are equal, otherwise, <see langword="false" />.</returns>
 		public static bool operator ==(SecurityId left, SecurityId right)
 		{
 			return left.Equals(right);
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "S#:{0}@{1}, Native:{2},Type:{3}".Put(SecurityCode, BoardCode, Native, SecurityType);

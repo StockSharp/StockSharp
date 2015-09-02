@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,14 +6,14 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Сообщение поиска инструментов по заданному критерию.
+	/// Message security lookup for specified criteria.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class PortfolioLookupMessage : PortfolioMessage
 	{
 		/// <summary>
-		/// Создать <see cref="PortfolioLookupMessage"/>.
+		/// Initializes a new instance of the <see cref="PortfolioLookupMessage"/>.
 		/// </summary>
 		public PortfolioLookupMessage()
 			: base(MessageTypes.PortfolioLookup)
@@ -21,18 +21,18 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PortfolioLookupMessage"/>.
+		/// Create a copy of <see cref="PortfolioLookupMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new PortfolioLookupMessage());
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",TransId={0},Curr={1},Board={2},IsSubscribe={3}".Put(TransactionId, Currency, BoardCode, IsSubscribe);

@@ -16,7 +16,7 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый адаптер, конвертирующий сообщения <see cref="Message"/> в команды торговой системы и обратно.
+	/// The base adapter converts messages <see cref="Message"/> to the command of the trading system and back.
 	/// </summary>
 	public abstract class MessageAdapter : BaseLogReceiver, IMessageAdapter
 	{
@@ -78,9 +78,9 @@ namespace StockSharp.Messages
 		private readonly CodeTimeOut _pfLookupTimeOut = new CodeTimeOut();
 
 		/// <summary>
-		/// Инициализировать <see cref="MessageAdapter"/>.
+		/// Initialize <see cref="MessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		protected MessageAdapter(IdGenerator transactionIdGenerator)
 		{
 			if (transactionIdGenerator == null)
@@ -95,7 +95,7 @@ namespace StockSharp.Messages
 		private MessageTypes[] _supportedMessages = ArrayHelper.Empty<MessageTypes>();
 
 		/// <summary>
-		/// Поддерживаемые типы сообщений, который может обработать адаптер.
+		/// Supported by adapter message types.
 		/// </summary>
 		[Browsable(false)]
 		public virtual MessageTypes[] SupportedMessages
@@ -115,13 +115,13 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool IsValid { get { return true; } }
 
 		/// <summary>
-		/// Описание классов инструментов, в зависимости от которых будут проставляться параметры в <see cref="SecurityMessage.SecurityType"/> и <see cref="SecurityId.BoardCode"/>.
+		/// Description of the class of securities, depending on which will be marked in the <see cref="SecurityMessage.SecurityType"/> and <see cref="SecurityId.BoardCode"/>.
 		/// </summary>
 		[Browsable(false)]
 		public IDictionary<string, RefPair<SecurityTypes, string>> SecurityClassInfo { get; private set; }
@@ -129,8 +129,7 @@ namespace StockSharp.Messages
 		private TimeSpan _heartbeatInterval = TimeSpan.Zero;
 
 		/// <summary>
-		/// Интервал оповещения сервера о том, что подключение еще живое.
-		/// Значение <see cref="TimeSpan.Zero"/> означает выключенное оповещение.
+		/// Server check interval for track the connection alive. The value is <see cref="TimeSpan.Zero"/> turned off tracking.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str186Key)]
 		[DisplayNameLoc(LocalizedStrings.Str192Key)]
@@ -148,7 +147,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool SecurityLookupRequired
@@ -157,7 +156,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="PortfolioLookupMessage"/> для получения списка портфелей и позиций.
+		/// <see cref="PortfolioLookupMessage"/> required to get portfolios and positions.
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool PortfolioLookupRequired
@@ -166,7 +165,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="OrderStatusMessage"/> для получения списка заявок и собственных сделок.
+		/// <see cref="OrderStatusMessage"/> required to get orders and ow trades.
 		/// </summary>
 		[Browsable(false)]
 		public virtual bool OrderStatusRequired
@@ -175,7 +174,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected virtual bool IsSupportNativeSecurityLookup
 		{
@@ -183,7 +182,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск портфелей.
+		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
 		protected virtual bool IsSupportNativePortfolioLookup
 		{
@@ -191,15 +190,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Разрядность процесса, в котором может работать адаптер. По-умолчанию равно <see cref="Platforms.AnyCPU"/>.
+		/// Bit process, which can run the adapter. By default is <see cref="Platforms.AnyCPU"/>.
 		/// </summary>
 		[Browsable(false)]
 		public Platforms Platform { get; protected set; }
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public virtual OrderCondition CreateOrderCondition()
 		{
 			return null;
@@ -208,7 +207,7 @@ namespace StockSharp.Messages
 		private readonly ReConnectionSettings _reConnectionSettings = new ReConnectionSettings();
 
 		/// <summary>
-		/// Настройки механизма отслеживания соединений <see cref="IMessageAdapter"/> с торговом системой.
+		/// Connection tracking settings <see cref="IMessageAdapter"/> with a server.
 		/// </summary>
 		public ReConnectionSettings ReConnectionSettings
 		{
@@ -218,7 +217,7 @@ namespace StockSharp.Messages
 		private IdGenerator _transactionIdGenerator;
 
 		/// <summary>
-		/// Генератор идентификаторов транзакций.
+		/// Transaction id generator.
 		/// </summary>
 		[Browsable(false)]
 		public IdGenerator TransactionIdGenerator
@@ -234,10 +233,10 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Ограничение по времени, в течении которого должен отработать поиск инструментов или портфелей.
+		/// Securities and portfolios lookup timeout.
 		/// </summary>
 		/// <remarks>
-		/// Значение по умолчанию равно 10 секундам.
+		/// By defaut is 10 seconds.
 		/// </remarks>
 		[Browsable(false)]
 		public TimeSpan LookupTimeOut
@@ -253,7 +252,7 @@ namespace StockSharp.Messages
 		private string _associatedBoardCode = "ALL";
 
 		/// <summary>
-		/// Код площадки для объединенного инструмента. По-умолчанию равно ALL.
+		/// Associated board code. The default is ALL.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.AssociatedSecurityBoardKey)]
 		[DescriptionLoc(LocalizedStrings.Str199Key)]
@@ -264,7 +263,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Событие получения исходящего сообщения.
+		/// Outgoing message event.
 		/// </summary>
 		public event Action<Message> NewOutMessage;
 
@@ -282,9 +281,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Отправить входящее сообщение.
+		/// Send incoming message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public void SendInMessage(Message message)
 		{
 			if (message.Type == MessageTypes.Connect)
@@ -444,15 +443,15 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected abstract void OnSendInMessage(Message message);
 
 		/// <summary>
-		/// Отправить исходящее сообщение, вызвав событие <see cref="NewOutMessage"/>.
+		/// Send outgoing message and raise <see cref="MessageAdapter.NewOutMessage"/> event.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public virtual void SendOutMessage(Message message)
 		{
 			InitMessageLocalTime(message);
@@ -475,9 +474,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Инициализировать метку локального времени для <see cref="Message"/>.
+		/// Initialize local timestamp <see cref="Message"/>.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		private void InitMessageLocalTime(Message message)
 		{
 			if (message.LocalTime.IsDefault())
@@ -485,64 +484,64 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать сообщение <see cref="ErrorMessage"/> и передать его в метод <see cref="SendOutMessage"/>.
+		/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="description">Описание ошибки.</param>
+		/// <param name="description">Error detais.</param>
 		protected void SendOutError(string description)
 		{
 			SendOutError(new InvalidOperationException(description));
 		}
 
 		/// <summary>
-		/// Создать сообщение <see cref="ErrorMessage"/> и передать его в метод <see cref="SendOutMessage"/>.
+		/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="error">Описание ошибки.</param>
+		/// <param name="error">Error detais.</param>
 		protected void SendOutError(Exception error)
 		{
 			SendOutMessage(new ErrorMessage { Error = error });
 		}
 
 		/// <summary>
-		/// Создать сообщение <see cref="SecurityMessage"/> и передать его в метод <see cref="SendOutMessage"/>.
+		/// Initialize a new message <see cref="SecurityMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
+		/// <param name="securityId">Security ID.</param>
 		protected void SendOutSecurityMessage(SecurityId securityId)
 		{
 			SendOutMessage(new SecurityMessage { SecurityId = securityId });
 		}
 
 		/// <summary>
-		/// Создать сообщение <see cref="SecurityMessage"/> и передать его в метод <see cref="SendOutMessage"/>.
+		/// Initialize a new message <see cref="SecurityMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 		/// </summary>
-		/// <param name="originalTransactionId">Идентификатор первоначального сообщения, для которого данное сообщение является ответом..</param>
+		/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 		protected void SendOutMarketDataNotSupported(long originalTransactionId)
 		{
 			SendOutMessage(new MarketDataMessage { OriginalTransactionId = originalTransactionId, IsNotSupported = true });
 		}
 
 		/// <summary>
-		/// Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+		/// Check the connection is alive. Uses only for connected states.
 		/// </summary>
-		/// <returns><see langword="true"/>, если соединение еще установлено, <see langword="false"/>, если торговая система разорвала подключение.</returns>
+		/// <returns><see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
 		public virtual bool IsConnectionAlive()
 		{
 			return true;
 		}
 
 		/// <summary>
-		/// Создать построитель стакана.
+		/// Create market depth builder.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента.</param>
-		/// <returns>Построитель стакана.</returns>
+		/// <param name="securityId">Security ID.</param>
+		/// <returns>Order log to market depth builder.</returns>
 		public virtual IOrderLogMarketDepthBuilder CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			HeartbeatInterval = storage.GetValue<TimeSpan>("HeartbeatInterval");
@@ -553,9 +552,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			storage.SetValue("HeartbeatInterval", HeartbeatInterval);
@@ -567,23 +566,23 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Специальный адаптер, который передает сразу на выход все входящие сообщения.
+	/// Special adapter, which transmits directly to the output of all incoming messages.
 	/// </summary>
 	public class PassThroughMessageAdapter : MessageAdapter
 	{
 		/// <summary>
-		/// Создать <see cref="PassThroughMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="PassThroughMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public PassThroughMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			SendOutMessage(message);

@@ -10,14 +10,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее данные по изменениям для позиции.
+	/// Messages containing changes to the position.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public sealed class PortfolioChangeMessage : BaseChangeMessage<PositionChangeTypes>
 	{
 		/// <summary>
-		/// Название портфеля.
+		/// Portfolio name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
-		/// Код электронной площадки.
+		/// Electronic board code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
@@ -35,7 +35,7 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="PortfolioChangeMessage"/>.
+		/// Initializes a new instance of the <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
 		public PortfolioChangeMessage()
 			: base(MessageTypes.PortfolioChange)
@@ -43,9 +43,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PortfolioChangeMessage"/>.
+		/// Create a copy of <see cref="PortfolioChangeMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var msg = new PortfolioChangeMessage
@@ -63,9 +63,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",P={0},Changes={1}".Put(PortfolioName, Changes.Select(c => c.ToString()).Join(","));

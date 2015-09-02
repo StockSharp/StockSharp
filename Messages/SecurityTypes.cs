@@ -8,77 +8,77 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы инструментов.
+	/// Securities types.
 	/// </summary>
 	[Serializable]
 	[DataContract]
 	public enum SecurityTypes
 	{
 		/// <summary>
-		/// Ценная бумага.
+		/// Shares.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.StockKey)]
 		Stock,
 
 		/// <summary>
-		/// Фьючерс.
+		/// Future contract.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.FutureContractKey)]
 		Future,
 
 		/// <summary>
-		/// Опцион.
+		/// Options contract.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.OptionsContractKey)]
 		Option,
 
 		/// <summary>
-		/// Индекс.
+		/// Index.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.IndexKey)]
 		Index,
 
 		/// <summary>
-		/// Валюта.
+		/// Currency.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.CurrencyKey)]
 		Currency,
 
 		/// <summary>
-		/// Облигация.
+		/// Bond.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.BondKey)]
 		Bond,
 
 		/// <summary>
-		/// Варрант.
+		/// Warrant.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.WarrantKey)]
 		Warrant,
 
 		/// <summary>
-		/// Форвард.
+		/// Forward.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ForwardKey)]
 		Forward,
 
 		/// <summary>
-		/// Споп.
+		/// Swap.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.SwapKey)]
 		Swap,
 
 		/// <summary>
-		/// Товар.
+		/// Product.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ProductKey)]
@@ -92,35 +92,35 @@ namespace StockSharp.Messages
 		Cfd,
 
 		/// <summary>
-		/// Новость.
+		/// News.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str395Key)]
 		News,
 
 		/// <summary>
-		/// Погода.
+		/// Weather.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.WeatherKey)]
 		Weather,
 
 		/// <summary>
-		/// Паевые фонды.
+		/// Mutual funds.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ShareFundKey)]
 		Fund,
 
 		/// <summary>
-		/// Американские депозитарные расписки.
+		/// American Depositary Receipts.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayName("ADR")]
 		Adr,
 
 		/// <summary>
-		/// Крипто-валюта.
+		/// Cryptocurrency.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.CryptocurrencyKey)]

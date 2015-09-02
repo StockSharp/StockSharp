@@ -1,20 +1,20 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	/// <summary>
-	/// Интерфейс, описывающий построитель стакана из лога заявок.
+	/// Base interface for order book builder.
 	/// </summary>
 	public interface IOrderLogMarketDepthBuilder
 	{
 		/// <summary>
-		/// Стакан.
+		/// Market depth.
 		/// </summary>
 		QuoteChangeMessage Depth { get; }
 
 		/// <summary>
-		/// Добавить новую строчку из лога заявок к стакану.
+		/// Process order log item.
 		/// </summary>
-		/// <param name="item">Строчка лога заявок.</param>
-		/// <returns>Был ли изменен стакан.</returns>
+		/// <param name="item">Order log item.</param>
+		/// <returns>Order book was changed.</returns>
 		bool Update(ExecutionMessage item);
 	}
 }

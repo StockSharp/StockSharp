@@ -6,14 +6,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее общую информацию о заявке.
+	/// A message containing info about the order.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public abstract class OrderMessage : SecurityMessage
 	{
 		/// <summary>
-		/// Название портфеля, по которому необходимо выставить/снять заявку.
+		/// Portfolio name, for which an order must be placed/cancelled.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
@@ -22,7 +22,7 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
-		/// Тип заявки.
+		/// Order type.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str132Key)]
@@ -31,7 +31,7 @@ namespace StockSharp.Messages
 		public OrderTypes OrderType { get; set; }
 
 		/// <summary>
-		/// Пользовательский идентификатор заявки.
+		/// User's order ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str165Key)]
@@ -40,7 +40,7 @@ namespace StockSharp.Messages
 		public string UserOrderId { get; set; }
 
 		/// <summary>
-		/// Код брокерской фирмы.
+		/// Broker firm code.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2593Key)]
 		[DisplayNameLoc(LocalizedStrings.BrokerKey)]
@@ -48,7 +48,7 @@ namespace StockSharp.Messages
 		public string BrokerCode { get; set; }
 
 		/// <summary>
-		/// Код клиента, присвоенный брокером.
+		/// Client code assigned by the broker.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2593Key)]
 		[DisplayNameLoc(LocalizedStrings.ClientCodeKey)]
@@ -56,9 +56,9 @@ namespace StockSharp.Messages
 		public string ClientCode { get; set; }
 
 		/// <summary>
-		/// Инициализировать <see cref="OrderMessage"/>.
+		/// Initialize <see cref="OrderMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected OrderMessage(MessageTypes type)
 			: base(type)
 		{

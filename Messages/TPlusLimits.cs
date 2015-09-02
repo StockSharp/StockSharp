@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,7 +6,7 @@
 	using Ecng.ComponentModel;
 
 	/// <summary>
-	/// Виды лимитов для Т+ рынка.
+	/// Т+ limit types.
 	/// </summary>
 	[DataContract]
 	[Serializable]

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Collections.Generic;
@@ -9,16 +9,16 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Адаптер сообщений, пересылающий сообщения через транспортный канал <see cref="IMessageChannel"/>.
+	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>
 	public class ChannelMessageAdapter : IMessageAdapter
 	{
 		/// <summary>
-		/// Создать <see cref="ChannelMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="ChannelMessageAdapter"/>.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
-		/// <param name="inputChannel">Транспортный канал входящих сообщений.</param>
-		/// <param name="outputChannel">Транспортный канал исходящих сообщений.</param>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="inputChannel">Incomming messages channgel.</param>
+		/// <param name="outputChannel">Outgoing message channel.</param>
 		public ChannelMessageAdapter(IMessageAdapter adapter, IMessageChannel inputChannel, IMessageChannel outputChannel)
 		{
 			if (adapter == null)
@@ -39,27 +39,27 @@
 		}
 
 		/// <summary>
-		/// Адаптер.
+		/// Adapter.
 		/// </summary>
 		public IMessageAdapter Adapter { get; private set; }
 
 		/// <summary>
-		/// Адаптер.
+		/// Adapter.
 		/// </summary>
 		public IMessageChannel InputChannel { get; private set; }
 
 		/// <summary>
-		/// Адаптер.
+		/// Adapter.
 		/// </summary>
 		public IMessageChannel OutputChannel { get; private set; }
 
 		/// <summary>
-		/// Контролировать время жизни канала входящих сообщений.
+		/// Control the lifetime of the incoming messages channel.
 		/// </summary>
 		public bool OwnInputChannel { get; set; }
 
 		/// <summary>
-		/// Контролировать время жизни канала исходящих сообщений.
+		/// Control the lifetime of the outgoing messages channel.
 		/// </summary>
 		public bool OwnOutputChannel { get; set; }
 

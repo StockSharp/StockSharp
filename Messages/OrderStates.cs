@@ -6,45 +6,45 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Состояния заявки.
+	/// Order states.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum OrderStates
 	{
 		/// <summary>
-		/// Не отправлена в торговую систему.
+		/// Not sent to the trading system.
 		/// </summary>
 		/// <remarks>
-		/// Первоначальное значение заявки, когда еще программа не отправила транзакцию в торговую систему.
+		/// The original state of the order, when the transaction is not sent to the trading system.
 		/// </remarks>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str237Key)]
 		None,
 
 		/// <summary>
-		/// Заявка принята биржей и активна.
+		/// The order is accepted by the exchange and is active.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str238Key)]
 		Active,
 
 		/// <summary>
-		/// Заявка больше не активна на бирже (была полностью удовлетворена или снята из программы).
+		/// The order is no longer active on an exchange (it was fully matched or cancelled).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str239Key)]
 		Done,
 
 		/// <summary>
-		/// Заявка не принята торговой системой.
+		/// The order is not accepted by the trading system.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str152Key)]
 		Failed,
 
 		/// <summary>
-		/// Заявка ожидает от биржи подтверждение регистрации.
+		/// Pending acception.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str238Key)]

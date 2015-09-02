@@ -9,87 +9,87 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы маркет-данных.
+	/// Market-data types.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum MarketDataTypes
 	{
 		/// <summary>
-		/// Первый уровень маркет-данных.
+		/// Level 1.
 		/// </summary>
 		[EnumMember]
 		Level1,
 
 		/// <summary>
-		/// Глубина рынка (стаканы).
+		/// Market depth (order book).
 		/// </summary>
 		[EnumMember]
 		MarketDepth,
 
 		/// <summary>
-		/// Тиковые сделки.
+		/// Tick trades.
 		/// </summary>
 		[EnumMember]
 		Trades,
 
 		/// <summary>
-		/// Лог заявок.
+		/// Order log.
 		/// </summary>
 		[EnumMember]
 		OrderLog,
 
 		/// <summary>
-		/// Новости.
+		/// News.
 		/// </summary>
 		[EnumMember]
 		News,
 
 		/// <summary>
-		/// Свечи (тайм-фрейм).
+		/// Candles (time-frame).
 		/// </summary>
 		[EnumMember]
 		CandleTimeFrame,
 
 		/// <summary>
-		/// Свеча (тиковая).
+		/// Candle (tick).
 		/// </summary>
 		CandleTick,
 
 		/// <summary>
-		/// Свеча (объем).
+		/// Candle (volume).
 		/// </summary>
 		[EnumMember]
 		CandleVolume,
 
 		/// <summary>
-		/// Свеча (рендж).
+		/// Candle (range).
 		/// </summary>
 		[EnumMember]
 		CandleRange,
 
 		/// <summary>
-		/// Свеча (X&amp;0).
+		/// Candle (X&amp;0).
 		/// </summary>
 		[EnumMember]
 		CandlePnF,
 
 		/// <summary>
-		/// Свеча (ренко).
+		/// Candle (renko).
 		/// </summary>
 		[EnumMember]
 		CandleRenko,
 	}
 
 	/// <summary>
-	/// Сообщение о подписке или отписки на маркет-данные (при отправке используется как команда, при получении является событием подтверждения).
+	/// Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class MarketDataMessage : SecurityMessage
 	{
 		/// <summary>
-		/// Дата начала, с которой необходимо получать данные.
+		/// Start date, from which data needs to be retrieved.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
@@ -98,7 +98,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset From { get; set; }
 
 		/// <summary>
-		/// Дата окончания, до которой необходимо получать данные.
+		/// End date, until which data needs to be retrieved.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str345Key)]
@@ -107,14 +107,14 @@ namespace StockSharp.Messages
 		public DateTimeOffset To { get; set; }
 
 		/// <summary>
-		/// Тип маркет-данных.
+		/// Market data type.
 		/// </summary>
 		[Browsable(false)]
 		[DataMember]
 		public MarketDataTypes DataType { get; set; }
 
 		/// <summary>
-		/// Дополнительный аргумент для запроса маркет-данных.
+		/// Additional argument for market data request.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str347Key)]
@@ -123,54 +123,54 @@ namespace StockSharp.Messages
 		public object Arg { get; set; }
 
 		/// <summary>
-		/// Является ли сообщение подпиской на маркет-данные.
+		/// The message is market-data subscription.
 		/// </summary>
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
 		/// <summary>
-		/// Идентификатор запроса.
+		/// Request identifier.
 		/// </summary>
 		[DataMember]
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Поддерживает ли торговая система запрашиваемый тип данных. Заполняется в случае ответа.
+		/// The message is not supported by adapter. To be setted if the answer.
 		/// </summary>
 		[DataMember]
 		public bool IsNotSupported { get; set; }
 
 		/// <summary>
-		/// Информация об ошибке. Сигнализирует об ошибке подписки или отписки. Заполняется в случае ответа.
+		/// Subscribe or unsubscribe error info. Заполняется в случае ответа.
 		/// </summary>
 		[DataMember]
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Количество маркет-данных.
+		/// Market-data count.
 		/// </summary>
 		[DataMember]
 		public long Count { get; set; }
 
 		/// <summary>
-		/// Максимальная глубина стакана. Используется в случае <see cref="DataType"/> равное <see cref="MarketDataTypes.MarketDepth"/>.
+		/// Max depth or requested order book. Uses in case <see cref="MarketDataMessage.DataType"/> = <see cref="MarketDataTypes.MarketDepth"/>.
 		/// </summary>
 		[DataMember]
 		public int MaxDepth { get; set; }
 
 		/// <summary>
-		/// Идентификатор новости. Используется, если идет запрос получения текста новости.
+		/// News id. Uses in case of request news text.
 		/// </summary>
 		[DataMember]
 		public string NewsId { get; set; }
 
 		/// <summary>
-		/// Максимальная глубина стакана по-умолчанию.
+		/// The default depth of order book.
 		/// </summary>
 		public const int DefaultMaxDepth = 50;
 
 		/// <summary>
-		/// Создать <see cref="MarketDataMessage"/>.
+		/// Initializes a new instance of the <see cref="MarketDataMessage"/>.
 		/// </summary>
 		public MarketDataMessage()
 			: base(MessageTypes.MarketData)
@@ -178,18 +178,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="MarketDataMessage"/>.
+		/// Initialize <see cref="MarketDataMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected MarketDataMessage(MessageTypes type)
 			: base(type)
 		{
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="MarketDataMessage"/>.
+		/// Create a copy of <see cref="MarketDataMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new MarketDataMessage
@@ -214,9 +214,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Sec={0},Types={1},IsSubscribe={2},TransId={3},OrigId={4}".Put(SecurityId, DataType, IsSubscribe, TransactionId, OriginalTransactionId);

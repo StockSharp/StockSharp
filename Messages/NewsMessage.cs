@@ -9,14 +9,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее данные о новости.
+	/// The message contains information about the news.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
 	public class NewsMessage : Message
 	{
 		/// <summary>
-		/// Идентификатор новости.
+		/// News ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.IdKey)]
@@ -26,7 +26,7 @@ namespace StockSharp.Messages
 		public string Id { get; set; }
 
 		/// <summary>
-		/// Код электронной площадки.
+		/// Electronic board code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
@@ -35,7 +35,7 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// Идентификатор инструмента, для которого опубликована новость.
+		/// Security ID, for which news have been published.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityKey)]
@@ -45,7 +45,7 @@ namespace StockSharp.Messages
 		public SecurityId? SecurityId { get; set; }
 
 		/// <summary>
-		/// Источник новости.
+		/// News source.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str213Key)]
@@ -54,7 +54,7 @@ namespace StockSharp.Messages
 		public string Source { get; set; }
 
 		/// <summary>
-		/// Заголовок.
+		/// Header.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str215Key)]
@@ -63,7 +63,7 @@ namespace StockSharp.Messages
 		public string Headline { get; set; }
 
 		/// <summary>
-		/// Текст новости.
+		/// News text.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str217Key)]
@@ -72,7 +72,7 @@ namespace StockSharp.Messages
 		public string Story { get; set; }
 
 		/// <summary>
-		/// Время появления новости.
+		/// Time of news arrival.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TimeKey)]
@@ -81,7 +81,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Ссылка на новость в интернете.
+		/// News link in the internet.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str221Key)]
@@ -90,7 +90,7 @@ namespace StockSharp.Messages
 		public Uri Url { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="NewsMessage"/>.
+		/// Initializes a new instance of the <see cref="NewsMessage"/>.
 		/// </summary>
 		public NewsMessage()
 			: base(MessageTypes.News)
@@ -98,18 +98,18 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Sec={0},Head={1}".Put(SecurityId, Headline);
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="NewsMessage"/>.
+		/// Create a copy of <see cref="NewsMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new NewsMessage

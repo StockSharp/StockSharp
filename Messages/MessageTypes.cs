@@ -1,195 +1,195 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 
 	/// <summary>
-	/// Типы сообщений.
+	/// The types of messages.
 	/// </summary>
 	public enum MessageTypes
 	{
 		/// <summary>
-		/// Информация об инструменте.
+		/// Security info.
 		/// </summary>
 		Security,
 
 		/// <summary>
-		/// Изменение level1 маркет-данных.
+		/// Level1 market-data changes.
 		/// </summary>
 		Level1Change,
 
 		/// <summary>
-		/// Регистрация новой заявки.
+		/// Register new order.
 		/// </summary>
 		OrderRegister,
 
 		/// <summary>
-		/// Замена заявки на новую.
+		/// Modify order.
 		/// </summary>
 		OrderReplace,
 
 		/// <summary>
-		/// Парная замена заявок.
+		/// Pair order move.
 		/// </summary>
 		OrderPairReplace,
 
 		/// <summary>
-		/// Отмена заявки.
+		/// Cancel order.
 		/// </summary>
 		OrderCancel,
 
 		/// <summary>
-		/// Отмена группы заявок.
+		/// Order group cancel.
 		/// </summary>
 		OrderGroupCancel,
 
 		/// <summary>
-		/// Изменение времени.
+		/// Time change.
 		/// </summary>
 		Time,
 
 		/// <summary>
-		/// Новость.
+		/// News.
 		/// </summary>
 		News,
 
 		/// <summary>
-		/// Ошибка регистрации или снятия заявки.
+		/// Order error (registration or cancel).
 		/// </summary>
 		OrderError,
 
 		/// <summary>
-		/// Портфель.
+		/// Portfolio.
 		/// </summary>
 		Portfolio,
 
 		/// <summary>
-		/// Позиция.
+		/// Position.
 		/// </summary>
 		Position,
 
 		/// <summary>
-		/// Свеча (тайм-фрейм).
+		/// Candle (time-frame).
 		/// </summary>
 		CandleTimeFrame,
 
 		/// <summary>
-		/// Изменение котировок.
+		/// Quotes change.
 		/// </summary>
 		QuoteChange,
 
 		/// <summary>
-		/// Исполнение заявки.
+		/// Order execution.
 		/// </summary>
 		Execution,
 
 		/// <summary>
-		/// Изменение позиции.
+		/// Position change.
 		/// </summary>
 		PositionChange,
 
 		/// <summary>
-		/// Изменение портфеля.
+		/// Portfolio change.
 		/// </summary>
 		PortfolioChange,
 
 		/// <summary>
-		/// Подписка/отписка на маркет-данные.
+		/// Subscribe/unsubscribe market-data.
 		/// </summary>
 		MarketData,
 
 		/// <summary>
-		/// Ассоциация <see cref="SecurityId"/> с <see cref="SecurityId.Native"/>.
+		/// Association <see cref="SecurityId"/> with <see cref="SecurityId.Native"/>.
 		/// </summary>
 		[Obsolete]
 		NativeSecurityId,
 
 		/// <summary>
-		/// Подключение.
+		/// Connection string.
 		/// </summary>
 		Connect,
 
 		/// <summary>
-		/// Отключение.
+		/// Disconnect.
 		/// </summary>
 		Disconnect,
 
 		/// <summary>
-		/// Поиск инструментов.
+		/// Securities search.
 		/// </summary>
 		SecurityLookup,
 
 		/// <summary>
-		/// Поиск портфелей.
+		/// Portfolio lookup.
 		/// </summary>
 		PortfolioLookup,
 
 		/// <summary>
-		/// Окончание поиска инструментов.
+		/// Security lookup result.
 		/// </summary>
 		SecurityLookupResult,
 
 		/// <summary>
-		/// Ошибка.
+		/// Error.
 		/// </summary>
 		Error,
 
 		/// <summary>
-		/// Сессия.
+		/// Session.
 		/// </summary>
 		Session,
 
 		/// <summary>
-		/// Запросить состояние заявок.
+		/// Order state request.
 		/// </summary>
 		OrderStatus,
 
 		/// <summary>
-		/// Информация об электронной площадке.
+		/// Electronic board info.
 		/// </summary>
 		Board,
 
 		/// <summary>
-		/// Окончание поиска портфелей.
+		/// Portfolio lookup result.
 		/// </summary>
 		PortfolioLookupResult,
 
 		/// <summary>
-		/// Изменение пароля.
+		/// Password change.
 		/// </summary>
 		ChangePassword,
 
 		/// <summary>
-		/// Очистить очередь сообщений.
+		/// Clear message queueu.
 		/// </summary>
 		ClearQueue,
 
 		/// <summary>
-		/// Свеча (тиковая).
+		/// Candle (tick).
 		/// </summary>
 		CandleTick,
 
 		/// <summary>
-		/// Свеча (объем).
+		/// Candle (volume).
 		/// </summary>
 		CandleVolume,
 
 		/// <summary>
-		/// Свеча (рендж).
+		/// Candle (range).
 		/// </summary>
 		CandleRange,
 
 		/// <summary>
-		/// Свеча (X&amp;0).
+		/// Candle (X&amp;0).
 		/// </summary>
 		CandlePnF,
 
 		/// <summary>
-		/// Свеча (ренко).
+		/// Candle (renko).
 		/// </summary>
 		CandleRenko,
 
 		/// <summary>
-		/// Сброс состояния.
+		/// Reset state.
 		/// </summary>
 		Reset
 	}

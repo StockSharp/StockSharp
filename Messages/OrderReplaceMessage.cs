@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,32 +6,32 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Сообщение, содержащее информацию для перерегистрации заявки.
+	/// The message containing the information for modify order.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class OrderReplaceMessage : OrderRegisterMessage
 	{
 		/// <summary>
-		/// Идентификатор перерегистрируемой заявки.
+		/// Modified order id.
 		/// </summary>
 		[DataMember]
 		public long? OldOrderId { get; set; }
 
 		/// <summary>
-		/// Идентификатор перерегистрируемой заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
+		/// Modified order id (as a string if the electronic board does not use a numeric representation of the identifiers).
 		/// </summary>
 		[DataMember]
 		public string OldOrderStringId { get; set; }
 
 		/// <summary>
-		/// Идентификатор транзакции перерегистрируемой заявки.
+		/// Modified order transaction id.
 		/// </summary>
 		[DataMember]
 		public long OldTransactionId { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="OrderReplaceMessage"/>.
+		/// Initializes a new instance of the <see cref="OrderReplaceMessage"/>.
 		/// </summary>
 		public OrderReplaceMessage()
 			: base(MessageTypes.OrderReplace)
@@ -39,9 +39,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="OrderReplaceMessage"/>.
+		/// Create a copy of <see cref="OrderReplaceMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new OrderReplaceMessage
@@ -74,9 +74,9 @@
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",OldTransId={0},OldOrdId={1},NewTransId={2}".Put(OldTransactionId, OldOrderId, TransactionId);

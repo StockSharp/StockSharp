@@ -11,7 +11,7 @@ namespace StockSharp.Messages
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Базовое условие заявок (например, параметры стоп- или алго- заявков).
+	/// Base order condition (for example, for stop order algo orders).
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -19,7 +19,7 @@ namespace StockSharp.Messages
 	public abstract class OrderCondition : Cloneable<OrderCondition>
 	{
 		/// <summary>
-		/// Инициализировать <see cref="OrderCondition"/>.
+		/// Initialize <see cref="OrderCondition"/>.
 		/// </summary>
 		protected OrderCondition()
 		{
@@ -28,7 +28,7 @@ namespace StockSharp.Messages
 		private readonly SynchronizedDictionary<string, object> _parameters = new SynchronizedDictionary<string, object>();
 
 		/// <summary>
-		/// Параметры условия.
+		/// Condition parameters.
 		/// </summary>
 		[Browsable(false)]
 		[DataMember]
@@ -46,9 +46,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="OrderCondition"/>.
+		/// Create a copy of <see cref="OrderCondition"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override OrderCondition Clone()
 		{
 			var clone = GetType().CreateInstance<OrderCondition>();

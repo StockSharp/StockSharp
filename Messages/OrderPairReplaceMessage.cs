@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -6,26 +6,26 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Сообщение, содержащее информацию для перерегистрации пары заявок.
+	/// The message containing the information for modify order's pair.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class OrderPairReplaceMessage : SecurityMessage
 	{
 		/// <summary>
-		/// Сообщение, содержащее информацию для перерегистрации первой заявки.
+		/// The message containing the information for modify the first order.
 		/// </summary>
 		[DataMember]
 		public OrderReplaceMessage Message1 { get; set; }
 
 		/// <summary>
-		/// Сообщение, содержащее информацию для перерегистрации второй заявки.
+		/// The message containing the information for modify the second order.
 		/// </summary>
 		[DataMember]
 		public OrderReplaceMessage Message2 { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="OrderPairReplaceMessage"/>.
+		/// Initializes a new instance of the <see cref="OrderPairReplaceMessage"/>.
 		/// </summary>
 		public OrderPairReplaceMessage()
 			: base(MessageTypes.OrderPairReplace)
@@ -33,9 +33,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="OrderPairReplaceMessage"/>.
+		/// Create a copy of <see cref="OrderPairReplaceMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new OrderPairReplaceMessage
@@ -51,9 +51,9 @@
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",{0},{1}".Put(Message1, Message2);

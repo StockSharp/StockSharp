@@ -1,17 +1,17 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Сообщение о подключении к торговой системе (при отправке используется как команда, при получении является событием подключения).
+	/// Connect to a server message (uses as a command in outgoing case, event in incoming case).
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class ConnectMessage : BaseConnectionMessage
 	{
 		/// <summary>
-		/// Создать <see cref="ConnectMessage"/>.
+		/// Initializes a new instance of the <see cref="ConnectMessage"/>.
 		/// </summary>
 		public ConnectMessage()
 			: base(MessageTypes.Connect)
@@ -19,9 +19,9 @@
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="ConnectMessage"/>.
+		/// Create a copy of <see cref="ConnectMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new ConnectMessage

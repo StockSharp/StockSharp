@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Messages
+namespace StockSharp.Messages
 {
     using System;
     using System.Runtime.Serialization;
@@ -6,64 +6,61 @@
     using Ecng.Common;
     using Ecng.Serialization;
 
-	/// <summary>
-    /// Информация, необходимая для создания РПС-заявки.
+    /// <summary>
+    /// RPS order info.
     /// </summary>
     [Serializable]
     [System.Runtime.Serialization.DataContract]
 	public class RpsOrderInfo : Cloneable<RpsOrderInfo>
     {
         /// <summary>
-        /// Создать <see cref="RpsOrderInfo"/>.
+        /// Initializes a new instance of the <see cref="RpsOrderInfo"/>.
         /// </summary>
         public RpsOrderInfo()
         {
         }
 
 		/// <summary>
-		/// Код организации – партнера по внебиржевой сделке.
+		/// Partner-organization.
 		/// </summary>
 		[DataMember]
 		public string Partner { get; set; }
 
 		/// <summary>
-		/// Дата исполнения внебиржевой сделки.
+		/// Execution date OTC.
 		/// </summary>
 		[DataMember]
 		[Nullable]
 		public DateTimeOffset? SettleDate { get; set; }
 
 		/// <summary>
-		/// Ссылка, которая связывает две сделки РЕПО или РПС.
-		/// Сделка может быть заключена только между контрагентами, указавшими одинаковое значение этого параметра в своих заявках.
-		/// Параметр представляет собой произвольный набор количеством до 10 символов (допускаются цифры и буквы).
-		/// Необязательный параметр.
+		/// REPO RPS reference.
 		/// </summary>
 		[DataMember]
 		public string MatchRef { get; set; }
 
 		/// <summary>
-		/// Код расчетов при исполнении внебиржевых заявок.
+		/// Settlement code.
 		/// </summary>
 		[DataMember]
 		public string SettleCode { get; set; }
 
 		/// <summary>
-		/// Лицо, от имени которого и за чей счет регистрируется сделка (параметр внебиржевой сделки).
+		/// Owner of transaction (OTC trade).
 		/// </summary>
 		[DataMember]
 		public string ForAccount { get; set; }
 
 		/// <summary>
-		/// Код валюты расчетов по внебиржевой сделки в формате ISO 4217. Параметр внебиржевой сделки.
+		/// Currency code in ISO 4217 standard (OTC trade). Параметр внебиржевой сделки.
 		/// </summary>
 		[DataMember]
 		public CurrencyTypes CurrencyType { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="RpsOrderInfo"/>.
+		/// Create a copy of <see cref="RpsOrderInfo"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override RpsOrderInfo Clone()
 		{
 			return new RpsOrderInfo

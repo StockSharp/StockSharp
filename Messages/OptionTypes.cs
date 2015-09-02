@@ -6,21 +6,21 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы опционов.
+	/// Option types.
 	/// </summary>
 	[Serializable]
 	[DataContract]
 	public enum OptionTypes
 	{
 		/// <summary>
-		/// Кол.
+		/// Call.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str223Key)]
 		Call,
 
 		/// <summary>
-		/// Пут.
+		/// Put.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str224Key)]

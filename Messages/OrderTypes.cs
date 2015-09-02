@@ -6,56 +6,56 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы заявок.
+	/// Order types.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum OrderTypes
 	{
 		/// <summary>
-		/// Лимитная.
+		/// Limit.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str1353Key)]
 		Limit,
 
 		/// <summary>
-		/// Рыночная.
+		/// Market.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str241Key)]
 		Market,
 
 		/// <summary>
-		/// Условная (стоп, тейк-профик).
+		/// Conditional (stop-loss, take-profit).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str242Key)]
 		Conditional,
 
 		/// <summary>
-		/// Заявка на сделку РЕПО.
+		/// The order for REPO.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str243Key)]
 		Repo,
 
 		/// <summary>
-		/// Заявка на модифицированную сделку РЕПО (РЕПО-М).
+		/// The order for modified REPO (REPO-M).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str244Key)]
 		ExtRepo,
 
 		/// <summary>
-		/// Заявка на внебиржевую сделку.
+		/// Order for OTC trade.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str245Key)]
 		Rps,
 
 		/// <summary>
-		/// Заявка на исполнение поставочных контрактов (например, опционы).
+		/// Execution order to settlement contracts (such as options).
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str246Key)]

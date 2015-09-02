@@ -8,14 +8,14 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сообщение, содержащее данные об электронной площадке.
+	/// The message contains information about the electronic board.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class BoardMessage : Message
 	{
 		/// <summary>
-		/// Код биржи, которой принадлежит прощадка. Может совпадать с <see cref="Code"/>, если площадка и биржа является одним целым.
+		/// Exchange code, which owns the board. Maybe be the same <see cref="BoardMessage.Code"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ExchangeInfoKey)]
@@ -24,7 +24,7 @@ namespace StockSharp.Messages
 		public string ExchangeCode { get; set; }
 
 		/// <summary>
-		/// Код площадки.
+		/// Board code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
@@ -33,7 +33,7 @@ namespace StockSharp.Messages
 		public string Code { get; set; }
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через <see cref="OrderReplaceMessage"/> в виде одной транзакции.
+		/// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
@@ -42,7 +42,7 @@ namespace StockSharp.Messages
 		public bool IsSupportAtomicReRegister { get; set; }
 
 		/// <summary>
-		/// Поддерживается ли рыночный тип заявок <see cref="OrderTypes.Market"/>.
+		/// Are market type orders <see cref="OrderTypes.Market"/> supported.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
@@ -51,7 +51,7 @@ namespace StockSharp.Messages
 		public bool IsSupportMarketOrders { get; set; }
 
 		/// <summary>
-		/// Время экспирации инструментов.
+		/// Securities expiration times.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ExpiryDateKey)]
@@ -62,7 +62,7 @@ namespace StockSharp.Messages
 		private WorkingTime _workingTime = new WorkingTime();
 
 		/// <summary>
-		/// Время работы площадки.
+		/// Board working hours.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.WorkingTimeKey)]
@@ -87,7 +87,7 @@ namespace StockSharp.Messages
 		private TimeZoneInfo _timeZoneInfo = TimeZoneInfo.Utc;
 
 		/// <summary>
-		/// Информация о временной зоне, где находится биржа.
+		/// Information about the time zone where the exchange is located.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TimeZoneKey)]
@@ -109,7 +109,7 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать <see cref="BoardMessage"/>.
+		/// Initializes a new instance of the <see cref="BoardMessage"/>.
 		/// </summary>
 		public BoardMessage()
 			: base(MessageTypes.Board)
@@ -117,9 +117,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="BoardMessage"/>.
+		/// Create a copy of <see cref="BoardMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return new BoardMessage
@@ -135,9 +135,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Code={0},Ex={1}".Put(Code, ExchangeCode);

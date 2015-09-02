@@ -10,46 +10,46 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Типы данных, информация о которых содержится <see cref="ExecutionMessage"/>.
+	/// The types of data that contain information in <see cref="ExecutionMessage"/>.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public enum ExecutionTypes
 	{
 		/// <summary>
-		/// Тиковая сделка.
+		/// Tick trade.
 		/// </summary>
 		[EnumMember]
 		Tick,
 
 		/// <summary>
-		/// Лог заявок.
+		/// Order log.
 		/// </summary>
 		[EnumMember]
 		Order,
 
 		/// <summary>
-		/// Собственная сделка.
+		/// Own trade.
 		/// </summary>
 		[EnumMember]
 		Trade,
 
 		/// <summary>
-		/// Лог заявок
+		/// Order log.
 		/// </summary>
 		[EnumMember]
 		OrderLog,
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее информацию об исполнении.
+	/// The message contains information about the execution.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
 	public sealed class ExecutionMessage : Message
 	{
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SecurityIdKey)]
@@ -58,7 +58,7 @@ namespace StockSharp.Messages
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Название портфеля.
+		/// Portfolio name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PortfolioKey)]
@@ -67,7 +67,7 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
-		/// Код клиента, присвоенный брокером.
+		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
 		[MainCategory]
@@ -76,7 +76,7 @@ namespace StockSharp.Messages
 		public string ClientCode { get; set; }
 
 		/// <summary>
-		/// Название депозитария, где находится физически ценная бумага.
+		/// The depositary where the physical security.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.DepoKey)]
 		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
@@ -84,7 +84,7 @@ namespace StockSharp.Messages
 		public string DepoName { get; set; }
 
 		/// <summary>
-		/// Серверное время.
+		/// Server time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ServerTimeKey)]
@@ -93,7 +93,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset ServerTime { get; set; }
 
 		/// <summary>
-		/// Идентификатор транзакции.
+		/// Transaction ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -102,7 +102,7 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Идентификатор первоначальной транзакции, для которой данное сообщение является ответом.
+		/// ID of original transaction, for which this message is the answer.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OriginalTrasactionKey)]
@@ -111,7 +111,7 @@ namespace StockSharp.Messages
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Тип данных, информация о которых содержится <see cref="ExecutionMessage"/>.
+		/// Data type, information about which is contained in the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DataTypeKey)]
@@ -121,7 +121,7 @@ namespace StockSharp.Messages
 		public ExecutionTypes? ExecutionType { get; set; }
 
 		/// <summary>
-		/// Является ли действие отменой заявки.
+		/// Is the action an order cancellation.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CancelKey)]
@@ -130,7 +130,7 @@ namespace StockSharp.Messages
 		public bool IsCancelled { get; set; }
 
 		/// <summary>
-		/// Идентификатор заявки.
+		/// Order ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
@@ -140,7 +140,7 @@ namespace StockSharp.Messages
 		public long? OrderId { get; set; }
 
 		/// <summary>
-		/// Идентификатор заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
+		/// Order ID (as string, if electronic board does not use numeric order ID representation).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OrderIdStringKey)]
@@ -149,7 +149,7 @@ namespace StockSharp.Messages
 		public string OrderStringId { get; set; }
 
 		/// <summary>
-		/// Идентификатор заявки электронной площадки. Используется, если <see cref="OrderId"/> или <see cref="OrderStringId"/> содержат идентификаторы брокерской системы.
+		/// Board order id. Uses in case of <see cref="ExecutionMessage.OrderId"/> and <see cref="ExecutionMessage.OrderStringId"/> is a brokerage system ids.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str117Key)]
@@ -158,7 +158,7 @@ namespace StockSharp.Messages
 		public string OrderBoardId { get; set; }
 
 		/// <summary>
-		/// Идентификатор производной заявки (например, условная заявка сгенерировала реальную биржевую).
+		/// Derived order ID (e.g., conditional order generated a real exchange order).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DerivedKey)]
@@ -168,7 +168,7 @@ namespace StockSharp.Messages
 		public long? DerivedOrderId { get; set; }
 
 		/// <summary>
-		/// Идентификатор производной заявки (например, условная заявка сгенерировала реальную биржевую).
+		/// Derived order ID (e.g., conditional order generated a real exchange order).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DerivedStringKey)]
@@ -177,7 +177,7 @@ namespace StockSharp.Messages
 		public string DerivedOrderStringId { get; set; }
 
 		/// <summary>
-		/// Цена заявки.
+		/// Order price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
@@ -186,7 +186,7 @@ namespace StockSharp.Messages
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// Количество контрактов в заявке.
+		/// Number of contracts in an order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -196,7 +196,7 @@ namespace StockSharp.Messages
 		public decimal? Volume { get; set; }
 
 		/// <summary>
-		/// Видимое количество контрактов в заявке.
+		/// Visible quantity of contracts in order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
@@ -206,7 +206,7 @@ namespace StockSharp.Messages
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
-		/// Направление заявки (покупка или продажа).
+		/// Order side (buy or sell).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]
@@ -215,7 +215,7 @@ namespace StockSharp.Messages
 		public Sides Side { get; set; }
 
 		/// <summary>
-		/// Остаток контрактов в заявке.
+		/// Order contracts remainder.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str130Key)]
@@ -225,7 +225,7 @@ namespace StockSharp.Messages
 		public decimal? Balance { get; set; }
 
 		/// <summary>
-		/// Тип заявки.
+		/// Order type.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str132Key)]
@@ -234,7 +234,7 @@ namespace StockSharp.Messages
 		public OrderTypes OrderType { get; set; }
 
 		/// <summary>
-		/// Системный статус заявки.
+		/// System order status.
 		/// </summary>
 		[DataMember]
 		[Browsable(false)]
@@ -242,7 +242,7 @@ namespace StockSharp.Messages
 		public OrderStatus? OrderStatus { get; set; }
 
 		/// <summary>
-		/// Состояние заявки.
+		/// Order state.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
@@ -252,7 +252,7 @@ namespace StockSharp.Messages
 		public OrderStates? OrderState { get; set; }
 
 		/// <summary>
-		/// Комментарий к выставляемой заявке.
+		/// Placed order comment.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str135Key)]
@@ -261,7 +261,7 @@ namespace StockSharp.Messages
 		public string Comment { get; set; }
 
 		/// <summary>
-		/// Сообщение к заявке (создается торговой системой при регистрации, изменении или снятии).
+		/// Message for order (created by the trading system when registered, changed or cancelled).
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str137Key)]
 		[DescriptionLoc(LocalizedStrings.Str138Key)]
@@ -269,7 +269,7 @@ namespace StockSharp.Messages
 		public string SystemComment { get; set; }
 
 		/// <summary>
-		/// Является ли заявка системной.
+		/// Is a system trade.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str139Key)]
@@ -279,11 +279,10 @@ namespace StockSharp.Messages
 		public bool? IsSystem { get; set; }
 
 		/// <summary>
-		/// Время экспирации заявки. По-умолчанию равно <see langword="null"/>, что означает действие заявки до отмены (GTC).
+		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 		/// </summary>
 		/// <remarks>
-		/// Если значение равно <see langword="null"/> или <see cref="DateTimeOffset.MaxValue"/>, то заявка выставляется до отмены (GTC).
-		/// Иначе, указывается конкретный срок.
+		/// If the value is equal <see langword="null" /> or <see cref="DateTimeOffset.MaxValue"/>, order will be GTC (good til cancel). Or uses exact date.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
@@ -292,7 +291,7 @@ namespace StockSharp.Messages
 		public DateTimeOffset? ExpiryDate { get; set; }
 
 		/// <summary>
-		/// Условие исполнения лимитированной заявки.
+		/// Limit order execution condition.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str143Key)]
 		[DescriptionLoc(LocalizedStrings.Str144Key)]
@@ -301,7 +300,7 @@ namespace StockSharp.Messages
 		public TimeInForce? TimeInForce { get; set; }
 
 		/// <summary>
-		/// Идентификатор сделки.
+		/// Trade ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OrderIdKey)]
@@ -311,7 +310,7 @@ namespace StockSharp.Messages
 		public long? TradeId { get; set; }
 
 		/// <summary>
-		/// Идентификатор сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).
+		/// Trade ID (as string, if electronic board does not use numeric order ID representation).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OrderIdStringKey)]
@@ -320,7 +319,7 @@ namespace StockSharp.Messages
 		public string TradeStringId { get; set; }
 
 		/// <summary>
-		/// Цена сделки.
+		/// Trade price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
@@ -330,7 +329,7 @@ namespace StockSharp.Messages
 		public decimal? TradePrice { get; set; }
 
 		/// <summary>
-		/// Системный статус сделки.
+		/// System trade status.
 		/// </summary>
 		[DataMember]
 		[Browsable(false)]
@@ -338,7 +337,7 @@ namespace StockSharp.Messages
 		public int? TradeStatus { get; set; }
 
 		/// <summary>
-		/// Инициатор сделки (продавец или покупатель).
+		/// Deal initiator (seller or buyer).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str148Key)]
@@ -348,7 +347,7 @@ namespace StockSharp.Messages
 		public Sides? OriginSide { get; set; }
 
 		/// <summary>
-		/// Количество открытых позиций (открытый интерес).
+		/// Number of open positions (open interest).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str150Key)]
@@ -358,7 +357,7 @@ namespace StockSharp.Messages
 		public decimal? OpenInterest { get; set; }
 
 		/// <summary>
-		/// Ошибка регистрации/отмены заявки.
+		/// Error registering/cancelling order.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str152Key)]
 		[DescriptionLoc(LocalizedStrings.Str153Key)]
@@ -366,7 +365,7 @@ namespace StockSharp.Messages
 		public Exception Error { get; set; }
 
 		/// <summary>
-		/// Условие заявки (например, параметры стоп- или алго- заявков).
+		/// Order condition (e.g., stop- and algo- orders parameters).
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str154Key)]
 		[DescriptionLoc(LocalizedStrings.Str155Key)]
@@ -383,7 +382,7 @@ namespace StockSharp.Messages
 		//public bool IsFinished { get; set; }
 
 		/// <summary>
-		/// Является ли тик восходящим или нисходящим в цене. Заполняется только для <see cref="ExecutionType"/> равным <see cref="ExecutionTypes.Tick"/>.
+		/// Is tick uptrend or downtrend in price. Uses only <see cref="ExecutionMessage.ExecutionType"/> for <see cref="ExecutionTypes.Tick"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str157Key)]
@@ -393,7 +392,7 @@ namespace StockSharp.Messages
 		public bool? IsUpTick { get; set; }
 
 		/// <summary>
-		/// Комиссия (брокерская, биржевая и т.д.).  Заполняется при <see cref="ExecutionType"/> равном <see cref="ExecutionTypes.Order"/> или <see cref="ExecutionTypes.Trade"/>.
+		/// Commission (broker, exchange etc.).  Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Order"/> or <see cref="ExecutionTypes.Trade"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
@@ -403,7 +402,7 @@ namespace StockSharp.Messages
 		public decimal? Commission { get; set; }
 
 		/// <summary>
-		/// Сетевая задержка. Заполняется при <see cref="ExecutionType"/> равном <see cref="ExecutionTypes.Order"/>.
+		/// Network latency. Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Order"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str161Key)]
@@ -413,7 +412,7 @@ namespace StockSharp.Messages
 		public TimeSpan? Latency { get; set; }
 
 		/// <summary>
-		/// Проскальзывание в цене сделки. Заполняется при <see cref="ExecutionType"/> равном <see cref="ExecutionTypes.Trade"/>.
+		/// Slippage in trade price. Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Trade"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str163Key)]
@@ -423,7 +422,7 @@ namespace StockSharp.Messages
 		public decimal? Slippage { get; set; }
 
 		/// <summary>
-		/// Пользовательский идентификатор заявки. Заполняется при <see cref="ExecutionType"/> равном <see cref="ExecutionTypes.Order"/>.
+		/// User order id. Uses when <see cref="ExecutionMessage.ExecutionType"/> set to <see cref="ExecutionTypes.Order"/>.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str165Key)]
@@ -432,7 +431,7 @@ namespace StockSharp.Messages
 		public string UserOrderId { get; set; }
 
 		/// <summary>
-		/// Валюта торгового инструмента.
+		/// Trading security currency.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
@@ -442,7 +441,7 @@ namespace StockSharp.Messages
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="ExecutionMessage"/>.
+		/// Initializes a new instance of the <see cref="ExecutionMessage"/>.
 		/// </summary>
 		public ExecutionMessage()
 			: base(MessageTypes.Execution)
@@ -450,9 +449,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",T(S)={0:yyyy/MM/dd HH:mm:ss.fff},({1}),Sec={2},Ord={3}/{4}/{5},Fail={6},TId={7},Pf={8},TPrice={9},UId={10}"
@@ -461,9 +460,9 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="ExecutionMessage"/>.
+		/// Create a copy of <see cref="ExecutionMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			var clone = new ExecutionMessage

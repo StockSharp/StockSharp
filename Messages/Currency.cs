@@ -6,14 +6,14 @@ namespace StockSharp.Messages
 	using Ecng.Common;
 
 	/// <summary>
-	/// Валюта.
+	/// Currency.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class Currency : Equatable<Currency>
 	{
 		/// <summary>
-		/// Создать <see cref="Currency"/>.
+		/// Initializes a new instance of the <see cref="Currency"/>.
 		/// </summary>
 		public Currency()
 		{
@@ -21,69 +21,69 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Тип валюты. По умолчанию, стоит значение <see cref="CurrencyTypes.RUB"/>.
+		/// Currency type. The default is <see cref="CurrencyTypes.RUB"/>.
 		/// </summary>
 		[DataMember]
 		public CurrencyTypes Type { get; set; }
 
 		/// <summary>
-		/// Значение в единицах <see cref="CurrencyTypes"/>.
+		/// Absolute value in <see cref="CurrencyTypes"/>.
 		/// </summary>
 		[DataMember]
 		public decimal Value { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="Currency"/>.
+		/// Create a copy of <see cref="Currency"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Currency Clone()
 		{
 			return new Currency { Type = Type, Value = Value };
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="Currency" /> на эквивалентность.
+		/// Compare <see cref="Currency"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		protected override bool OnEquals(Currency other)
 		{
 			return Type == other.Type && Value == other.Value;
 		}
 
 		/// <summary>
-		/// Рассчитать хеш-код объекта <see cref="Currency"/>.
+		/// Get the hash code of the object <see cref="Currency"/>.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			return Type.GetHashCode() ^ Value.GetHashCode();
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0} {1}".Put(Value, Type);
 		}
 
 		/// <summary>
-		/// Привести <see cref="decimal"/> значение к объекту <see cref="Currency"/>.
+		/// Cast <see cref="Decimal"/> object to the type <see cref="Currency"/>.
 		/// </summary>
-		/// <param name="value"><see cref="decimal"/> значение.</param>
-		/// <returns>Объект <see cref="Currency"/>.</returns>
+		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <returns>Object <see cref="Currency"/>.</returns>
 		public static implicit operator Currency(decimal value)
 		{
 			return new Currency { Value = value };
 		}
 
 		/// <summary>
-		/// Привести объект <see cref="Currency"/> к <see cref="decimal"/> значению.
+		/// Cast object from <see cref="Currency"/> to <see cref="Decimal"/>.
 		/// </summary>
-		/// <param name="unit">Объект <see cref="Currency"/>.</param>
-		/// <returns><see cref="decimal"/> значение.</returns>
+		/// <param name="unit">Object <see cref="Currency"/>.</param>
+		/// <returns><see cref="Decimal"/> value.</returns>
 		public static explicit operator decimal(Currency unit)
 		{
 			if (unit == null)
@@ -93,14 +93,14 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Сложить два объекта <see cref="Currency"/>.
+		/// Add the two objects <see cref="Currency"/>.
 		/// </summary>
+		/// <param name="c1">First object <see cref="Currency"/>.</param>
+		/// <param name="c2">Second object <see cref="Currency"/>.</param>
+		/// <returns>The result of addition.</returns>
 		/// <remarks>
-		/// Величины должны иметь одинаковый <see cref="Type"/>.
+		/// The values must be the same <see cref="Currency.Type"/>.
 		/// </remarks>
-		/// <param name="c1">Первый объект <see cref="Currency"/>.</param>
-		/// <param name="c2">Второй объект <see cref="Currency"/>.</param>
-		/// <returns>Результат сложения.</returns>
 		public static Currency operator +(Currency c1, Currency c2)
 		{
 			if (c1 == null)
@@ -113,11 +113,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Вычесть одну величину из другой величины.
+		/// Subtract one value from another value.
 		/// </summary>
-		/// <param name="c1">Первый объект <see cref="Currency"/>.</param>
-		/// <param name="c2">Второй объект <see cref="Currency"/>.</param>
-		/// <returns>Результат вычитания.</returns>
+		/// <param name="c1">First object <see cref="Currency"/>.</param>
+		/// <param name="c2">Second object <see cref="Currency"/>.</param>
+		/// <returns>The result of the subtraction.</returns>
 		public static Currency operator -(Currency c1, Currency c2)
 		{
 			if (c1 == null)
@@ -130,11 +130,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Умножить одну величину на другую.
+		/// Multiply one value to another.
 		/// </summary>
-		/// <param name="c1">Первый объект <see cref="Currency"/>.</param>
-		/// <param name="c2">Второй объект <see cref="Currency"/>.</param>
-		/// <returns>Результат умножения.</returns>
+		/// <param name="c1">First object <see cref="Currency"/>.</param>
+		/// <param name="c2">Second object <see cref="Currency"/>.</param>
+		/// <returns>The result of the multiplication.</returns>
 		public static Currency operator *(Currency c1, Currency c2)
 		{
 			if (c1 == null)
@@ -147,11 +147,11 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Поделить одну величину на другую.
+		/// Divide one value to another.
 		/// </summary>
-		/// <param name="c1">Первый объект <see cref="Currency"/>.</param>
-		/// <param name="c2">Второй объект <see cref="Currency"/>.</param>
-		/// <returns>Результат деления.</returns>
+		/// <param name="c1">First object <see cref="Currency"/>.</param>
+		/// <param name="c2">Second object <see cref="Currency"/>.</param>
+		/// <returns>The result of the division.</returns>
 		public static Currency operator /(Currency c1, Currency c2)
 		{
 			if (c1 == null)
@@ -165,16 +165,16 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Вспомогательный класс для работы с <see cref="Currency"/>.
+	/// Extension class for <see cref="Currency"/>.
 	/// </summary>
 	public static class CurrencyHelper
 	{
 		/// <summary>
-		/// Привести объект типа <see cref="Decimal"/> к типу <see cref="Currency"/>.
+		/// Cast <see cref="Decimal"/> to <see cref="Currency"/>.
 		/// </summary>
-		/// <param name="value">Значение валюты.</param>
-		/// <param name="type">Тип валюты.</param>
-		/// <returns>Валюта.</returns>
+		/// <param name="value">Currency value.</param>
+		/// <param name="type">Currency type.</param>
+		/// <returns>Currency.</returns>
 		public static Currency ToCurrency(this decimal value, CurrencyTypes type)
 		{
 			return new Currency { Type = type, Value = value };

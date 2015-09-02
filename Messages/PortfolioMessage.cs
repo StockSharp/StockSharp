@@ -8,21 +8,21 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Состояния портфеля.
+	/// Portfolio states.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum PortfolioStates
 	{
 		/// <summary>
-		/// Активен.
+		/// Active.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str248Key)]
 		Active,
 		
 		/// <summary>
-		/// Заблокирован.
+		/// Blocked.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str249Key)]
@@ -30,14 +30,14 @@ namespace StockSharp.Messages
 	}
 
 	/// <summary>
-	/// Сообщение, содержащее данные о портфеле.
+	/// The message contains information about portfolio.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public class PortfolioMessage : Message
 	{
 		/// <summary>
-		/// Кодовое название портфеля.
+		/// Portfolio code name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
@@ -46,7 +46,7 @@ namespace StockSharp.Messages
 		public string PortfolioName { get; set; }
 
 		/// <summary>
-		/// Валюта портфеля.
+		/// Portfolio currency.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
@@ -55,7 +55,7 @@ namespace StockSharp.Messages
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// Код электронной площадки.
+		/// Electronic board code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.BoardKey)]
@@ -64,7 +64,7 @@ namespace StockSharp.Messages
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// Состояние портфеля.
+		/// Portfolio state.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
@@ -73,14 +73,13 @@ namespace StockSharp.Messages
 		public PortfolioStates? State { get; set; }
 
 		/// <summary>
-		/// Идентификатор первоначального сообщения <see cref="PortfolioMessage.TransactionId"/>,
-		/// для которого данное сообщение является ответом.
+		/// ID of the original message <see cref="PortfolioMessage.TransactionId"/> for which this message is a response.
 		/// </summary>
 		[DataMember]
 		public long OriginalTransactionId { get; set; }
 
 		/// <summary>
-		/// Идентификатор транзакции подписки или отписки на изменения портфеля.
+		/// Subscription/unsubscription portfolio changes transaction id.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -89,13 +88,13 @@ namespace StockSharp.Messages
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Является ли сообщение подпиской на изменения портфеля.
+		/// Is the message subscription portfolio changes.
 		/// </summary>
 		[DataMember]
 		public bool IsSubscribe { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="PortfolioMessage"/>.
+		/// Initializes a new instance of the <see cref="PortfolioMessage"/>.
 		/// </summary>
 		public PortfolioMessage()
 			: base(MessageTypes.Portfolio)
@@ -103,36 +102,36 @@ namespace StockSharp.Messages
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="PortfolioMessage"/>.
+		/// Initialize <see cref="PortfolioMessage"/>.
 		/// </summary>
-		/// <param name="type">Тип сообщения.</param>
+		/// <param name="type">Message type.</param>
 		protected PortfolioMessage(MessageTypes type)
 			: base(type)
 		{
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return base.ToString() + ",Name={0}".Put(PortfolioName);
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="PortfolioMessage"/>.
+		/// Create a copy of <see cref="PortfolioMessage"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Message Clone()
 		{
 			return CopyTo(new PortfolioMessage());
 		}
 
 		/// <summary>
-		/// Скопировать данные сообщения в <paramref name="destination"/>.
+		/// Copy the message into the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">Объект, в который копируется информация.</param>
+		/// <param name="destination">The object, which copied information.</param>
 		protected PortfolioMessage CopyTo(PortfolioMessage destination)
 		{
 			destination.PortfolioName = PortfolioName;

@@ -6,21 +6,21 @@ namespace StockSharp.Messages
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Стороны действий.
+	/// Sides.
 	/// </summary>
 	[DataContract]
 	[Serializable]
 	public enum Sides
 	{
 		/// <summary>
-		/// Покупка.
+		/// Buy.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str403Key)]
 		Buy,
 
 		/// <summary>
-		/// Продажа.
+		/// Sell.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str404Key)]
