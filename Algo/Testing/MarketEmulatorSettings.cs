@@ -355,6 +355,25 @@ namespace StockSharp.Algo.Testing
 			}
 		}
 
+		private TimeZoneInfo _timeZone;
+
+		/// <summary>
+		/// Информация о временной зоне, где находится биржа.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str1175Key)]
+		[PropertyOrder(140)]
+		[DisplayNameLoc(LocalizedStrings.TimeZoneKey)]
+		[DescriptionLoc(LocalizedStrings.Str68Key)]
+		public TimeZoneInfo TimeZone
+		{
+			get { return _timeZone; }
+			set
+			{
+				_timeZone = value;
+				NotifyChanged("TimeZone");
+			}
+		}
+
 		private Unit _priceLimitOffset = new Unit(40, UnitTypes.Percent);
 
 		/// <summary>
@@ -362,7 +381,7 @@ namespace StockSharp.Algo.Testing
 		/// Используется только, если нет сохраненной информации <see cref="Level1ChangeMessage"/>. По-умолчанию равен 40%.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1175Key)]
-		[PropertyOrder(140)]
+		[PropertyOrder(150)]
 		[DisplayNameLoc(LocalizedStrings.Str1205Key)]
 		[DescriptionLoc(LocalizedStrings.Str1206Key)]
 		public Unit PriceLimitOffset
@@ -419,6 +438,9 @@ namespace StockSharp.Algo.Testing
 			storage.SetValue("ConvertTime", ConvertTime);
 			storage.SetValue("PriceLimitOffset", PriceLimitOffset);
 			storage.SetValue("IncreaseDepthVolume", IncreaseDepthVolume);
+
+			if (TimeZone != null)
+				storage.SetValue("TimeZone", TimeZone.ToSerializedString());
 		}
 
 		/// <summary>
@@ -444,6 +466,9 @@ namespace StockSharp.Algo.Testing
 			ConvertTime = storage.GetValue("ConvertTime", ConvertTime);
 			PriceLimitOffset = storage.GetValue("PriceLimitOffset", PriceLimitOffset);
 			IncreaseDepthVolume = storage.GetValue("IncreaseDepthVolume", IncreaseDepthVolume);
+
+			if (storage.Contains("TimeZone"))
+				TimeZone = TimeZoneInfo.FromSerializedString(storage.GetValue<string>("TimeZone"));
 		}
 	}
 }

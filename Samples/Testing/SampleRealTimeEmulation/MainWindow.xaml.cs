@@ -90,6 +90,8 @@ namespace SampleRealTimeEmulation
 							Password = Password.Password.To<SecureString>(),
 							Address = Address.SelectedAddress
 						});
+
+						_connector.EmulationAdapter.Emulator.Settings.TimeZone = TimeHelper.Moscow;
 					}
 					else
 					{
@@ -100,7 +102,11 @@ namespace SampleRealTimeEmulation
 							Level2Address = Level2AddressCtrl.Text.To<EndPoint>(),
 							LookupAddress = LookupAddressCtrl.Text.To<EndPoint>(),
 						});
+
+						_connector.EmulationAdapter.Emulator.Settings.TimeZone = TimeHelper.Est;
 					}
+
+					_connector.EmulationAdapter.Emulator.Settings.ConvertTime = true;
 
 					SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
 
