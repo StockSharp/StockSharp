@@ -85,6 +85,7 @@ namespace StockSharp.IQFeed
 					{
 						var buf = new StringBuilder();
 						var buffer = new byte[1024];
+						var isError = false;
 
 						try
 						{
@@ -143,11 +144,19 @@ namespace StockSharp.IQFeed
 						}
 						catch (ObjectDisposedException ex)
 						{
+							isError = true;
 							ConnectionError.SafeInvoke(new InvalidOperationException(LocalizedStrings.Str2155, ex));
 						}
 						catch (Exception ex)
 						{
+							isError = true;
 							ConnectionError.SafeInvoke(ex);
+						}
+
+						if (isError)
+						{
+							lock (_syncDisconnect)
+								IsExportStarted = false;	
 						}
 
 						try
