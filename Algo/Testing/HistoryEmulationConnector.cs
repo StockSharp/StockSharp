@@ -62,8 +62,6 @@ namespace StockSharp.Algo.Testing
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
 		
-		private readonly EmulationMessageAdapter _emulationAdapter;
-
 		private readonly InMemoryMessageChannel _historyChannel;
 
 		/// <summary>
@@ -112,12 +110,11 @@ namespace StockSharp.Algo.Testing
 
 			OutMessageChannel = new PassThroughMessageChannel();
 
-			_emulationAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
 			_historyAdapter = new HistoryMessageAdapter(TransactionIdGenerator, securityProvider) { StorageRegistry = storageRegistry };
 			_historyChannel = new InMemoryMessageChannel("History Out", SendOutError);
 
 			Adapter = new HistoryBasketMessageAdapter(this);
-			Adapter.InnerAdapters.Add(_emulationAdapter);
+			Adapter.InnerAdapters.Add(EmulationAdapter);
 			Adapter.InnerAdapters.Add(new ChannelMessageAdapter(_historyAdapter, new InMemoryMessageChannel("History In", SendOutError), _historyChannel));
 
 			// при тестировании по свечкам, время меняется быстрее и таймаут должен быть больше 30с.
@@ -200,7 +197,7 @@ namespace StockSharp.Algo.Testing
 		/// <summary>
 		/// Число обработанных сообщений.
 		/// </summary>
-		public int ProcessedMessageCount { get { return _emulationAdapter.ProcessedMessageCount; } }
+		public int ProcessedMessageCount { get { return EmulationAdapter.ProcessedMessageCount; } }
 
 		private EmulationStates _state = EmulationStates.Stopped;
 
@@ -495,7 +492,7 @@ namespace StockSharp.Algo.Testing
 			var money = _initialMoney[portfolio];
 
 			SendInMessage(
-				_emulationAdapter
+				EmulationAdapter
 					.CreatePortfolioChangeMessage(portfolio.Name)
 						.Add(PositionChangeTypes.BeginValue, money)
 						.Add(PositionChangeTypes.CurrentValue, money)

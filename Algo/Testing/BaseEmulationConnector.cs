@@ -15,8 +15,15 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		protected BaseEmulationConnector()
 		{
-			var adapter = new EmulationMessageAdapter(new MarketEmulator(), TransactionIdGenerator);
-			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
+			EmulationAdapter = new EmulationMessageAdapter(TransactionIdGenerator);
+		}
+
+		/// <summary>
+		/// јдаптер, исполн€ющий сообщени€ в <see cref="IMarketEmulator"/>.
+		/// </summary>
+		public EmulationMessageAdapter EmulationAdapter
+		{
+			get; private set;
 		}
 
 		/// <summary>
@@ -25,17 +32,17 @@ namespace StockSharp.Algo.Testing
 		/// </summary>
 		public override bool IsSupportAtomicReRegister
 		{
-			get { return MarketEmulator.Settings.IsSupportAtomicReRegister; }
+			get { return EmulationAdapter.Emulator.Settings.IsSupportAtomicReRegister; }
 		}
 
-		/// <summary>
-		/// Ёмул€тор торгов.
-		/// </summary>
-		public IMarketEmulator MarketEmulator
-		{
-			get { return ((EmulationMessageAdapter)TransactionAdapter).Emulator; }
-			set { ((EmulationMessageAdapter)TransactionAdapter).Emulator = value; }
-		}
+		///// <summary>
+		///// Ёмул€тор торгов.
+		///// </summary>
+		//public IMarketEmulator MarketEmulator
+		//{
+		//	get { return EmulationAdapter.Emulator; }
+		//	set { EmulationAdapter.Emulator = value; }
+		//}
 
 		/// <summary>
 		/// «апустить таймер генерации сообщений <see cref="TimeMessage"/> с интервалом <see cref="Connector.MarketTimeChangedInterval"/>.

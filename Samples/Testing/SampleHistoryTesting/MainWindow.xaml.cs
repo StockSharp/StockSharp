@@ -254,14 +254,17 @@ namespace SampleHistoryTesting
 					new[] { security },
 					new[] { portfolio })
 				{
-					MarketEmulator =
+					EmulationAdapter =
 					{
-						Settings =
+						Emulator =
 						{
-							// match order if historical price touched our limit order price. 
-							// It is terned off, and price should go through limit order price level
-							// (more "severe" test mode)
-							MatchOnTouch = false,
+							Settings =
+							{
+								// match order if historical price touched our limit order price. 
+								// It is terned off, and price should go through limit order price level
+								// (more "severe" test mode)
+								MatchOnTouch = false,
+							}
 						}
 					},
 
