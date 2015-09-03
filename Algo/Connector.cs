@@ -596,7 +596,10 @@ namespace StockSharp.Algo
 
 			foreach (var adapter in Adapter.InnerAdapters.SortedAdapters)
 			{
-				_adapterStates[adapter] = ConnectionStates.Disconnecting;
+				var prevState = _adapterStates.TryGetValue2(adapter);
+
+				if (prevState != ConnectionStates.Failed)
+					_adapterStates[adapter] = ConnectionStates.Disconnecting;
 			}
 
 			_subscriptionManager.Stop();
