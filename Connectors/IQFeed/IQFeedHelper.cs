@@ -26,6 +26,7 @@
 				case "EQUITY":
 				case "SPOT":
 				case "EQTYDEPTH":
+				case "JACOBSEN": // TODO The Jacobsen
 					return SecurityTypes.Stock;
 				case "FUTURE":
 				case "SSFUTURE":
@@ -63,6 +64,7 @@
 				case "NP_FLOW": // Nord Pool-N2EX Flow
 				case "NP_POWER": // Nord Pool-N2EX Power Prices
 				case "NP_CAPACITY": // Nord Pool-N2EX Capacity
+				case "COMM3": // Commodity 3
 					return SecurityTypes.Commodity;
 				case "SWAPS": // Interest Rate Swap
 					return SecurityTypes.Swap;
