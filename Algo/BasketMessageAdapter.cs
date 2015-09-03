@@ -420,9 +420,15 @@ namespace StockSharp.Algo
 			else
 			{
 				_subscriptionQueue.RemoveByValue(enumerator);
-				_subscriptionKeys.Remove(originalTransactionId);
 
-				RaiseMarketDataMessage(null, originalTransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(message.SecurityId + " " + message.DataType), "message"));
+				var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId);
+
+				if (key == null)
+					key = Tuple.Create(message.SecurityId, message.DataType);
+				else
+					_subscriptionKeys.Remove(originalTransactionId);
+
+				RaiseMarketDataMessage(null, originalTransactionId, new ArgumentException(LocalizedStrings.Str629Params.Put(key.Item1 + " " + key.Item2), "message"));
 			}
 		}
 
