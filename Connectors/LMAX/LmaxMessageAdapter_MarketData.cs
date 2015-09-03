@@ -189,6 +189,7 @@ namespace StockSharp.LMAX
 			switch (mdMsg.DataType)
 			{
 				case MarketDataTypes.Level1:
+				case MarketDataTypes.Trades:
 				{
 					_session.Subscribe(new OrderBookStatusSubscriptionRequest(lmaxId), () => { }, CreateErrorHandler("OrderBookStatusSubscriptionRequest"));
 					break;
@@ -229,8 +230,6 @@ namespace StockSharp.LMAX
 					_session.RequestHistoricMarketData(request, () => { }, CreateErrorHandler("RequestHistoricMarketData"));
 					break;
 				}
-				case MarketDataTypes.Trades:
-					break;
 				default:
 				{
 					SendOutMarketDataNotSupported(mdMsg.TransactionId);

@@ -23,8 +23,9 @@ namespace StockSharp.InteractiveBrokers
 			switch (mdMsg.DataType)
 			{
 				case MarketDataTypes.Level1:
+				case MarketDataTypes.Trades:
 				{
-					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)null);
+					var key = Tuple.Create(MarketDataTypes.Level1, mdMsg.SecurityId, (object)null);
 
 					if (mdMsg.IsSubscribe)
 					{
@@ -50,8 +51,6 @@ namespace StockSharp.InteractiveBrokers
 
 					break;
 				}
-				case MarketDataTypes.Trades:
-					break;
 				case MarketDataTypes.News:
 				{
 					if (mdMsg.IsSubscribe)

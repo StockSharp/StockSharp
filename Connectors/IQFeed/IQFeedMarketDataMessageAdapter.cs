@@ -232,6 +232,7 @@ namespace StockSharp.IQFeed
 					switch (mdMsg.DataType)
 					{
 						case MarketDataTypes.Level1:
+						case MarketDataTypes.Trades:
 						{
 							if (mdMsg.To == DateTimeOffset.MaxValue)
 							{
