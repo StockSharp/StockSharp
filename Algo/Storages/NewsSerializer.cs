@@ -2,10 +2,12 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Serialization;
 
 	using StockSharp.Localization;
 	using StockSharp.Messages;
@@ -16,6 +18,26 @@
 			: base(date)
 		{
 		}
+
+		public override void Read(Stream stream)
+		{
+			base.Read(stream);
+
+			if (Version < MarketDataVersions.Version45)
+				return;
+
+			ServerOffset = stream.Read<TimeSpan>();
+		}
+
+		public override void Write(Stream stream)
+		{
+			base.Write(stream);
+
+			if (Version < MarketDataVersions.Version45)
+				return;
+
+			stream.Write(ServerOffset);
+		}
 	}
 
 	class NewsSerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
@@ -23,6 +45,7 @@
 		public NewsSerializer()
 			: base(default(SecurityId), 200)
 		{
+			Version = MarketDataVersions.Version45;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<NewsMessage> messages, NewsMetaInfo metaInfo)
