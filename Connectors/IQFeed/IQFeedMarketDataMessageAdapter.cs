@@ -970,7 +970,7 @@ namespace StockSharp.IQFeed
 						else// if (tf == TimeSpan.FromDays(7) || tf.Ticks == TimeHelper.TicksPerMonth)
 						{
 							candleMsg.CloseTime -= TimeSpan.FromTicks(1);
-							candleMsg.OpenTime = tf.GetCandleBounds(candleMsg.CloseTime.ToLocalTime(TimeHelper.Est)).Min;
+							candleMsg.OpenTime = ((DateTimeOffset)tf.GetCandleBounds(candleMsg.CloseTime.ToLocalTime(TimeHelper.Est)).Min).Convert(TimeHelper.Est);
 						}
 					}
 					else
