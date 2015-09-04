@@ -573,7 +573,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Информация о тестовой бирже, не имеющая ограничения в расписание работы.
+		/// Информация о тестовой бирже, не имеющей ограничений в расписании работы.
 		/// </summary>
 		public static Exchange Test { get; private set; }
 

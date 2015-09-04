@@ -535,7 +535,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе, через который была зарегистрирована данная заявка.
+		/// Подключение к торговой системе, через которую была зарегистрирована данная заявка.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]

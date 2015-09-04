@@ -9,7 +9,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Основной интерфейс, предоставляющий подключение с торговыми системами.
+	/// Основной интерфейс, предоставляющий подключение к торговым системам.
 	/// </summary>
 	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider
 	{
@@ -188,7 +188,7 @@ namespace StockSharp.BusinessEntities
 
 		/// <summary>
 		/// Список всех загруженных инструментов.
-		/// Вызывать необходимо после того, как пришло событие <see cref="NewSecurities" />. Иначе будет возвращено постое множество.
+		/// Вызывать необходимо после того, как пришло событие <see cref="NewSecurities" />. Иначе будет возвращено пустое множество.
 		/// </summary>
 		IEnumerable<Security> Securities { get; }
 

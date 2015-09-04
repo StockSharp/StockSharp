@@ -97,7 +97,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе, через который был загружен данный портфель.
+		/// Подключение к торговой системе, через которое был загружен данный портфель.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -144,7 +144,7 @@ namespace StockSharp.BusinessEntities
 		private static readonly Portfolio _anonymousPortfolio = new Portfolio { Name = LocalizedStrings.Str545 };
 
 		/// <summary>
-		/// Портфель, ассоциированный с заявками, полученные через лог заявок.
+		/// Портфель, ассоциированный с заявками, полученными через лог заявок.
 		/// </summary>
 		public static Portfolio AnonymousPortfolio
 		{

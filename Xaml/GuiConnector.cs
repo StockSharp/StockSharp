@@ -551,7 +551,7 @@ namespace StockSharp.Xaml
 
 		/// <summary>
 		/// Список всех загруженных инструментов.
-		/// Вызывать необходимо после того, как пришло событие <see cref="IConnector.NewSecurities" />. Иначе будет возвращено постое множество.
+		/// Вызывать необходимо после того, как пришло событие <see cref="IConnector.NewSecurities" />. Иначе будет возвращено пустое множество.
 		/// </summary>
 		public IEnumerable<Security> Securities
 		{
