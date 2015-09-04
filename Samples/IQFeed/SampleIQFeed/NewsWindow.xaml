@@ -15,9 +15,9 @@
 		
 		<StackPanel Orientation="Horizontal">
 			<Label Margin="2" Content="{x:Static loc:LocalizedStrings.XamlStr116}" />
-			<xctk:DateTimePicker Margin="2" ShowButtonSpinner="False" x:Name="DatePicker" Width="170" />
+			<xctk:DateTimePicker Margin="2" ShowButtonSpinner="False" x:Name="DatePicker" Width="170" ValueChanged="DatePicker_OnValueChanged" />
 
-			<Button Content="{x:Static loc:LocalizedStrings.XamlStr500}" Click="NistoryNews_OnClick"/>
+			<Button x:Name="HistoryNews" Content="{x:Static loc:LocalizedStrings.XamlStr500}" Click="HistoryNews_OnClick" IsEnabled="False" />
 		</StackPanel>
 		
 		<xaml:NewsGrid x:Name="NewsGrid" x:FieldModifier="public" Grid.Row="1" />
