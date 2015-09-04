@@ -6,6 +6,7 @@ namespace StockSharp.IQFeed
 	using System.IO.Compression;
 	using System.Linq;
 	using System.Net;
+	using System.Text;
 	using System.Text.RegularExpressions;
 
 	using Ecng.Collections;
@@ -50,7 +51,7 @@ namespace StockSharp.IQFeed
 		private MessageTypes? _currSystemType;
 		private bool _isDownloadSecurityFromSite;
 
-		private readonly SynchronizedDictionary<long, string> _newsIds = new SynchronizedDictionary<long, string>();
+		private readonly SynchronizedDictionary<long, Tuple<string, StringBuilder>> _newsIds = new SynchronizedDictionary<long, Tuple<string, StringBuilder>>();
 
 		/// <summary>
 		/// Создать <see cref="IQFeedMarketDataMessageAdapter"/>.
@@ -303,7 +304,7 @@ namespace StockSharp.IQFeed
 								else
 								{
 									var newsId = mdMsg.NewsId;
-									_newsIds.Add(mdMsg.TransactionId, newsId);
+									_newsIds.Add(mdMsg.TransactionId, Tuple.Create(newsId, new StringBuilder()));
 									_requestsType.Add(mdMsg.TransactionId, ExtendedMessageTypes.NewsStory);
 									_lookupFeed.RequestNewsStory(mdMsg.TransactionId, newsId);
 								}
@@ -787,7 +788,7 @@ namespace StockSharp.IQFeed
 
 			if (feed == _lookupFeed && _currSystemType != null)
 				type = _currSystemType.Value;
-			else if (!_requestsType.TryGetValue(requestId, out type))
+			else
 			{
 				match = _regex.Match(line);
 
@@ -820,11 +821,13 @@ namespace StockSharp.IQFeed
 							type = MessageTypes.News;
 							break;
 						default:
-							type = ExtendedMessageTypes.Data;
+							if (!_requestsType.TryGetValue(requestId, out type))
+								type = ExtendedMessageTypes.Data;
+
 							break;
 					}
 				}
-				else
+				else if (!_requestsType.TryGetValue(requestId, out type))
 					type = ExtendedMessageTypes.Data;
 			}
 
@@ -916,12 +919,27 @@ namespace StockSharp.IQFeed
 
 				case ExtendedMessageTypes.NewsStory:
 				{
-					yield return new NewsMessage
+					var tuple = _newsIds[requestId];
+
+					if (str.IsEmpty())
 					{
-						Id = _newsIds[requestId],
-						Story = str.StripBrackets("<BEGIN>", "<END>"),
-						ServerTime = CurrentTime.Convert(TimeHelper.Est)
-					};
+						tuple.Item2.AppendLine();
+						break;
+					}
+
+					tuple.Item2.Append(str.Replace("<BEGIN>", string.Empty).Replace("<END>", string.Empty));
+
+					if (str.EndsWith("<END>"))
+					{
+						_newsIds.Remove(requestId);
+
+						yield return new NewsMessage
+						{
+							Id = tuple.Item1,
+							Story = tuple.Item2.ToString(),
+							ServerTime = CurrentTime.Convert(TimeHelper.Est)
+						};
+					}
 
 					break;
 				}

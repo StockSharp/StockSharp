@@ -267,15 +267,17 @@
 		{
 			var parts = value.SplitByComma();
 
+			var timeFormat = parts[3].Contains(' ') ? "yyyyMMdd HHmmss" : "yyyyMMddHHmmss";
+
 			var msg = new NewsMessage
 			{
 				Source = parts[0],
 				Id = parts[1],
-				ServerTime = parts[3].ToDateTime("yyyyMMdd HHmmss").ApplyTimeZone(TimeHelper.Est),
+				ServerTime = parts[3].ToDateTime(timeFormat).ApplyTimeZone(TimeHelper.Est),
 				Headline = parts[4],
 			};
 
-			// новость может приходит без указания инструмента
+			// news received without associated instrument
 			if (parts[2].IsEmpty())
 				return msg;
 
