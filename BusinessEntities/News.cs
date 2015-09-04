@@ -5,6 +5,7 @@ namespace StockSharp.BusinessEntities
 	using System.Runtime.Serialization;
 	using System.Xml.Serialization;
 
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Messages;
@@ -17,7 +18,7 @@ namespace StockSharp.BusinessEntities
 	[System.Runtime.Serialization.DataContract]
 	[DisplayNameLoc(LocalizedStrings.Str395Key)]
 	[DescriptionLoc(LocalizedStrings.Str510Key)]
-	public class News : IExtendableEntity
+	public class News : NotifiableObject, IExtendableEntity
 	{
 		/// <summary>
 		/// Идентификатор новости.
@@ -74,7 +75,15 @@ namespace StockSharp.BusinessEntities
 		[DisplayNameLoc(LocalizedStrings.Str217Key)]
 		[DescriptionLoc(LocalizedStrings.Str218Key)]
 		[MainCategory]
-		public string Story { get; set; }
+		public string Story
+		{
+			get { return _story; }
+			set
+			{
+				_story = value;
+				NotifyChanged("Story");
+			}
+		}
 
 		/// <summary>
 		/// Время появления новости.
@@ -106,6 +115,8 @@ namespace StockSharp.BusinessEntities
 
 		[field: NonSerialized]
 		private IDictionary<object, object> _extensionInfo;
+
+		private string _story;
 
 		/// <summary>
 		/// Расширенная информация.

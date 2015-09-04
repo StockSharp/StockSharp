@@ -697,7 +697,9 @@ namespace StockSharp.Algo
 				news = _cache.NewsById.SafeAdd(message.Id, key =>
 				{
 					isNew = true;
-					return EntityFactory.CreateNews();
+					var n = EntityFactory.CreateNews();
+					n.Id = key;
+					return n;
 				});
 			}
 			else
