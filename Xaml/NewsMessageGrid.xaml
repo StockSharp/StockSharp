@@ -22,13 +22,27 @@
                         CanExecute="CanExecuteOpenUrlCommand" />
 
 	</ug:UniversalGrid.CommandBindings>
-	
+
+	<ug:UniversalGrid.RowStyle>
+		<Style TargetType="{x:Type DataGridRow}">
+			<Setter Property="ContextMenu">
+				<Setter.Value>
+					<ContextMenu>
+						<MenuItem Header="{x:Static loc:LocalizedStrings.RequestNewsBody}" Command="{x:Static local:NewsGrid.RequestStoryCommand}" />
+						<MenuItem Header="{x:Static loc:LocalizedStrings.OpenUrl}" Command="{x:Static local:NewsGrid.OpenUrlCommand}" />
+					</ContextMenu>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</ug:UniversalGrid.RowStyle>
+
 	<ug:UniversalGrid.Columns>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Id}" Width="50" Binding="{Binding Path=Id}" SortMemberPath="Id"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Width="120" Binding="{Binding Path=ServerTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="ServerTime"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.TimeZone}" Visibility="Collapsed" Width="50" Binding="{Binding Path=ServerTime, StringFormat=zzz}" SortMemberPath="ServerTime.Offset"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str514}" Width="120" Binding="{Binding Path=LocalTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="LocalTime"/>
 		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str213}" Width="70" Binding="{Binding Path=Source}" SortMemberPath="Source"/>
+		<DataGridTextColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Security}" Width="70" Binding="{Binding Path=SecurityId.SecurityCode}" SortMemberPath="SecurityId.SecurityCode"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str215}" Width="300" Binding="{Binding Path=Headline}" SortMemberPath="Headline"/>
 		<DataGridTemplateColumn Visibility="Collapsed" Header="{x:Static loc:LocalizedStrings.Str221}" Width="100" SortMemberPath="Url">
 			<DataGridTemplateColumn.CellTemplate>

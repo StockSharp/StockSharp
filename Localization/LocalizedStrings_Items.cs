@@ -53616,5 +53616,31 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(CsvHeaderKey); }
 		}
+
+		/// <summary>
+		/// Request news body
+		/// </summary>
+		public const string RequestNewsBodyKey = "RequestNewsBody";
+
+		/// <summary>
+		/// Request news body
+		/// </summary>
+		public static string RequestNewsBody
+		{
+			get { return GetString(RequestNewsBodyKey); }
+		}
+
+		/// <summary>
+		/// Open url
+		/// </summary>
+		public const string OpenUrlKey = "OpenUrl";
+
+		/// <summary>
+		/// Open url
+		/// </summary>
+		public static string OpenUrl
+		{
+			get { return GetString(OpenUrlKey); }
+		}
 	}
 }

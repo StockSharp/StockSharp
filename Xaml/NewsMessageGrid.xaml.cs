@@ -81,7 +81,7 @@
 
 		private void ExecutedRequestStoryCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			SelectedMessages.ForEach(m => ConfigManager.GetService<IConnector>().RequestNewsStory(m.ToNews()));
+			SelectedMessages.Where(n => n.Story.IsEmpty()).ForEach(m => ConfigManager.GetService<IConnector>().RequestNewsStory(m.ToNews()));
 		}
 
 		private void CanExecuteRequestStoryCommand(object sender, CanExecuteRoutedEventArgs e)

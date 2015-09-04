@@ -80,7 +80,7 @@
 
 		private void ExecutedRequestStoryCommand(object sender, ExecutedRoutedEventArgs e)
 		{
-			SelectedNews.ForEach(ConfigManager.GetService<IConnector>().RequestNewsStory);
+			SelectedNews.Where(n => n.Story.IsEmpty()).ForEach(ConfigManager.GetService<IConnector>().RequestNewsStory);
 		}
 
 		private void CanExecuteRequestStoryCommand(object sender, CanExecuteRoutedEventArgs e)
