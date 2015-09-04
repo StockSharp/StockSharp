@@ -521,6 +521,8 @@ F:StockSharp.Plaza.Metadata.PlazaVirtualFuturesParamsColumns.S/summary;DocStr625
 F:StockSharp.Plaza.Metadata.PlazaVirtualFuturesParamsColumns.ExpDate/summary;DocStr1018
 F:StockSharp.Plaza.Metadata.PlazaVirtualFuturesParamsColumns.FutType/summary;DocStr6258
 F:StockSharp.Plaza.Metadata.PlazaVirtualFuturesParamsColumns.UseNullVolat/summary;DocStr6259
+T:StockSharp.Plaza.PlazaBaseManager/summary;DocStr8447
+P:StockSharp.Plaza.PlazaBaseManager.ConnectionPool/summary;DocStr6276
 T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder/summary;DocStr6260
 M:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.SecurityId)/summary;DocStr1
 M:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder.#ctor(StockSharp.Messages.SecurityId)/param/securityId;SecurityId
@@ -1440,7 +1442,6 @@ M:StockSharp.Plaza.PlazaStreamManager.DisposeManaged/summary;DocStr7
 P:StockSharp.Plaza.PlazaStreamManager.Streams/summary;DocStr6782
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/summary;DocStr6270
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/remarks;DocStr6783
-P:StockSharp.Plaza.PlazaStreamManager.ConnectionPool/summary;DocStr6276
 T:StockSharp.Plaza.Metadata.PlazaTable/summary;DocStr6784
 M:StockSharp.Plaza.Metadata.PlazaTable.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaTable.ToString/returns;DocStr50

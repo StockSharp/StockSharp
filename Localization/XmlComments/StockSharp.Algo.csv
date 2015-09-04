@@ -4739,6 +4739,7 @@ P:StockSharp.Algo.Testing.MarketEmulatorSettings.MaxDepth/summary;DocStr1896
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.VolumeMultiplier/summary;DocStr1897
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.PortfolioRecalcInterval/summary;DocStr1898
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.ConvertTime/summary;DocStr1899
+P:StockSharp.Algo.Testing.MarketEmulatorSettings.TimeZone/summary;Str68
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.PriceLimitOffset/summary;DocStr1900
 P:StockSharp.Algo.Testing.MarketEmulatorSettings.IncreaseDepthVolume/summary;DocStr1901
 M:StockSharp.Algo.Strategies.Testing.EmulationSettings.#ctor/summary;DocStr1
@@ -5208,8 +5209,8 @@ M:StockSharp.Algo.Testing.BaseEmulationConnector.RegisterOrderLog(StockSharp.Alg
 M:StockSharp.Algo.Testing.BaseEmulationConnector.RegisterOrderLog(StockSharp.Algo.Testing.OrderLogGenerator)/param/generator;DocStr2089
 M:StockSharp.Algo.Testing.BaseEmulationConnector.UnRegisterOrderLog(StockSharp.Algo.Testing.OrderLogGenerator)/summary;DocStr2090
 M:StockSharp.Algo.Testing.BaseEmulationConnector.UnRegisterOrderLog(StockSharp.Algo.Testing.OrderLogGenerator)/param/generator;DocStr2089
+P:StockSharp.Algo.Testing.BaseEmulationConnector.EmulationAdapter/summary;DocStr2112
 P:StockSharp.Algo.Testing.BaseEmulationConnector.IsSupportAtomicReRegister/summary;DocStr2091
-P:StockSharp.Algo.Testing.BaseEmulationConnector.MarketEmulator/summary;DocStr2092
 T:StockSharp.Algo.Storages.BasketMarketDataStorage`1/summary;DocStr2093
 T:StockSharp.Algo.Storages.BasketMarketDataStorage`1/typeparam/T;DocStr9
 M:StockSharp.Algo.Storages.BasketMarketDataStorage`1.#ctor/summary;DocStr1
