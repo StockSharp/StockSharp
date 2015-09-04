@@ -12,7 +12,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовые класс, описывающий денежную позицию и позицию по инструменту.
+	/// Базовый класс, описывающий денежную позицию и позицию по инструменту.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]

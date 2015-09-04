@@ -546,7 +546,7 @@
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartPart`1">
       <summary>
-            Базовые класс, описывающий часть графика.
+            Базовый класс, описывающий часть графика.
             </summary>
       <typeparam name="T">Тип элемента графика.</typeparam>
     </member>
@@ -867,7 +867,7 @@
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartElement`1">
       <summary>
-            Базовые класс, описывающий элемент графика (индикатор, свеча и т.д.).
+            Базовый класс, описывающий элемент графика (индикатор, свеча и т.д.).
             </summary>
       <typeparam name="T">Тип элемента графика.</typeparam>
     </member>
@@ -1329,7 +1329,7 @@
     </member>
     <member name="T:StockSharp.Xaml.Charting.ChartTransactionElement`1">
       <summary>
-            Базовые класс, описывающий элемент графика Заявки или Сделки.
+            Базовый класс, описывающий элемент графика Заявки или Сделки.
             </summary>
       <typeparam name="T">Тип элемента.</typeparam>
     </member>
