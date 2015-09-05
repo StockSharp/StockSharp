@@ -210,7 +210,7 @@ namespace StockSharp.Hydra.IQFeed
 				_settings.LookupAddress = IQFeedAddresses.DefaultLookupAddress;
 				_settings.AdminAddress = IQFeedAddresses.DefaultAdminAddress;
 				_settings.Offset = 0;
-				_settings.StartFrom = DateTime.Today;
+				_settings.StartFrom = DateTime.Today.Subtract(TimeSpan.FromDays(30));
 				_settings.IsDownloadSecurityFromSite = false;
 				_settings.IsDownloadNews = true;
 				_settings.Types = new[] { SecurityTypes.Stock };
@@ -286,7 +286,7 @@ namespace StockSharp.Hydra.IQFeed
 						this.AddInfoLog(LocalizedStrings.Str2294Params, date, security.Security.Id);
 
 						bool isSuccess;
-						var trades = Connector.Connector.GetHistoricalLevel1(security.Security.ToSecurityId(), _settings.StartFrom, _settings.StartFrom.EndOfDay(), out isSuccess);
+						var trades = Connector.Connector.GetHistoricalLevel1(security.Security.ToSecurityId(), date, date.EndOfDay(), out isSuccess);
 
 						if (isSuccess)
 						{
