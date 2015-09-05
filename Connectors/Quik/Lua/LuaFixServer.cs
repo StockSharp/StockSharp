@@ -37,6 +37,9 @@ namespace StockSharp.Quik.Lua
 
 			public void AddTransactionId(long transactionId)
 			{
+				if (transactionId == 0)
+					return;
+
 				this.AddInfoLog("Added trans id {0} mapping.", transactionId);
 				_transactionIds.Add(transactionId);
 			}
@@ -409,15 +412,6 @@ namespace StockSharp.Quik.Lua
 		}
 
 		/// <summary>
-		/// Добавить ассоциацию идентификатора запроса и транзакции.
-		/// </summary>
-		/// <param name="transactionId">Идентификатор транзакции.</param>
-		public void AddTransactionId(long transactionId)
-		{
-			_fixServer.AddTransactionId(transactionId);
-		}
-
-		/// <summary>
 		/// Обработать сообщение.
 		/// </summary>
 		/// <param name="message">Сообщение.</param>
@@ -492,6 +486,20 @@ namespace StockSharp.Quik.Lua
 
 					if (execMsg.ExecutionType == ExecutionTypes.Order)
 					{
+						if (execMsg.OrderId != null)
+						{
+							// TODO
+							// автоинкремент проставляется для ручных заявок, но возникает баг,
+							// что и для заявок робота может приходить нулевой идентификатор
+							// https://forum.quik.ru/forum10/topic870/
+							//
+							//if (execMsg.TransactionId == 0)
+							//	execMsg.TransactionId = GetNextTransactionId();
+
+							_fixServer.AddTransactionId(execMsg.OriginalTransactionId);
+							_fixServer.AddTransactionId(execMsg.TransactionId);
+						}
+
 						var transaction = _transactions.TryGetValue(execMsg.OriginalTransactionId);
 
 						if (transaction != null && execMsg.Error != null)
