@@ -880,7 +880,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Connection to the trading system through which this instrument has been downloaded.
+		/// Connection to the trading system, through which this instrument has been downloaded.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]

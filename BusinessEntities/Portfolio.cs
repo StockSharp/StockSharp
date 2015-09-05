@@ -97,7 +97,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Connection to the trading system through which this portfolio has been loaded.
+		/// Connection to the trading system, through which this portfolio has been loaded.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]

@@ -533,7 +533,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Connection to the trading system through which this order has been registered.
+		/// Connection to the trading system, through which this order has been registered.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]

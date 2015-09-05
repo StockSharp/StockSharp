@@ -2713,7 +2713,6 @@ Str2930Params;New security added {0}.;Добавлен новый инструм
 Str2931Params;Dates cache for security {0} in directory '{1}' was reset.;Кэш дат для инструмента {0} в директории '{1}' сброшен.
 Str2932;Start;Запустить
 Str2933;Show;Показать
-Str2934;Changes;Изменения
 Str2935;At least one change must be selected.;Необходимо выбрать хотя бы одно изменение.
 Str2938;One of the fields in incorrectly set.;Одно из полей задано неверно.
 Str2940Params;Errors count esceeded {0}.;Количество ошибок превысило {0}.
@@ -6763,7 +6762,7 @@ DocStr2624;Extended security info;Расширенная информация п
 DocStr2625;Required if additional information associated with the instrument is stored in the program. For example, the date of instrument expiration (if it is option) or information about the underlying asset if it is the futures contract;Необходима в случае хранения в программе дополнительной информации, ассоциированной с инструментом. Например, дата экспирации инструмента (если это опцион) или информация о базовом активе, если это фьючерсный контракт
 DocStr2626;Information about the last trade. If during the session on the instrument there were no trades, the value equals to {0};Информация о последней сделке. Если за сессию по инструменту не было сделок, то значение равно {0}
 DocStr2627;Best pair quotes;Лучшая пара котировок
-DocStr2628;Connection to the trading system through which this instrument has been downloaded;Подключение к торговой системе, через которое был загружен данный инструмент
+DocStr2628;Connection to the trading system, through which this instrument has been downloaded;Подключение к торговой системе, через которое был загружен данный инструмент
 DocStr2629;Local time of the last instrument change;Локальное время последнего изменения инструмента
 DocStr2630;Time of the last instrument change;Время последнего изменения инструмента
 DocStr2631;To check whether specified instrument is used now;Проверить, используется ли указанный инструмент в настоящее время
@@ -7057,7 +7056,7 @@ DocStr2919;If the value is {0}, then the order is registered until cancel. Other
 DocStr2920;Exchange order that was created by the stop-order when the condition is activated ({0} if a stop condition has not been activated);Биржевая заявка, которая была создана стоп-заявкой при активации условия ({0}, если стоп-условие еще не было активировано)
 DocStr2921;Extended information on order;Расширенная информация по заявке
 DocStr2922;Required if additional information associated with the order is stored in the program. For example, the activation time, the yield for usual orders or the condition order ID for a stop order;Необходима в случае хранения в программе дополнительной информации, ассоциированной с заявкой. Например, время активации, доходность для обычных заявок, или идентификатор заявки-условия для стоп-заявки
-DocStr2923;Connection to the trading system through which this order has been registered;Подключение к торговой системе, через которое была зарегистрирована данная заявка
+DocStr2923;Connection to the trading system, through which this order has been registered;Подключение к торговой системе, через которое была зарегистрирована данная заявка
 DocStr2924;Description of the error that occurred during the registration or cancellation of the order;Описание ошибки, которая произошла при регистрации или отмене заявки
 DocStr2925;The order which was not registered or was canceled due to an error;Заявка, которая не была зарегистрирована или отменена из-за ошибки
 DocStr2926;System information about error containing the reason for the refusal or cancel of registration;Системная информация об ошибке, содержащее причину отказа в регистрации или отмене
@@ -7065,7 +7064,7 @@ DocStr2927;Local time, when the error has been received;Метка локаль�
 DocStr2928;Extended information on the order with an error;Расширенная информация по заявке с ошибкой
 DocStr2929;To copy the current portfolio fields to the {0};Скопировать поля текущего портфеля в {0}
 DocStr2930;The portfolio, in which fields should be copied ;Портфель, в который необходимо скопировать поля
-DocStr2931;Connection to the trading system through which this portfolio has been loaded;Подключение к торговой системе, через которое был загружен данный портфель
+DocStr2931;Connection to the trading system, through which this portfolio has been loaded;Подключение к торговой системе, через которое был загружен данный портфель
 DocStr2932;Portfolio associated with the orders received through the orders log;Портфель, ассоциированный с заявками, полученными через лог заявок
 DocStr2933;The depositary where the physical security;Название депозитария, где находится физически ценная бумага
 DocStr2934;Limit type for Т+ market;Вид лимита для Т+ рынка

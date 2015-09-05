@@ -35207,19 +35207,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Changes
-		/// </summary>
-		public const string Str2934Key = "Str2934";
-
-		/// <summary>
-		/// Changes
-		/// </summary>
-		public static string Str2934
-		{
-			get { return GetString(Str2934Key); }
-		}
-
-		/// <summary>
 		/// At least one change must be selected.
 		/// </summary>
 		public const string Str2935Key = "Str2935";
