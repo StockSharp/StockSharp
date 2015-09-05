@@ -8,12 +8,12 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Логгер, записывающий данные в консольное окно.
+	/// The logger that records the data to the console window.
 	/// </summary>
 	public class ConsoleLogListener : LogListener
 	{
 		/// <summary>
-		/// Создать <see cref="ConsoleLogListener"/>.
+		/// Initializes a new instance of the <see cref="ConsoleLogListener"/>.
 		/// </summary>
 		public ConsoleLogListener()
 		{
@@ -22,9 +22,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Записать сообщение.
+		/// To record a message.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
+		/// <param name="message">A debug message.</param>
 		protected override void OnWriteMessage(LogMessage message)
 		{
 			if (message.IsDispose)

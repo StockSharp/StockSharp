@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Collections.ObjectModel;
@@ -9,7 +9,7 @@
 	using System.ServiceModel.Dispatcher;
 
 	/// <summary>
-	/// Атрибут для WCF сервер, который автоматически записывает все ошибки в <see cref="LoggingHelper.LogError"/>.
+	/// The attribute for the WCF server that automatically records all errors to <see cref="LoggingHelper.LogError"/>.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]
 	public class ErrorLoggingAttribute : Attribute, IServiceBehavior

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Linq;
@@ -8,46 +8,46 @@
 	using Ecng.Configuration;
 
 	/// <summary>
-	/// Вспомогательный класс для работы с <see cref="ILogSource"/>. 
+	/// Extension class for <see cref="ILogSource"/>.
 	/// </summary>
 	public static class LoggingHelper
 	{
 		/// <summary>
-		/// Записать сообщение в лог.
+		/// To record a message to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="getMessage">Функция, возвращающая текст для <see cref="LogMessage.Message"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="getMessage">The function returns the text for <see cref="LogMessage.Message"/>.</param>
 		public static void AddInfoLog(this ILogReceiver receiver, Func<string> getMessage)
 		{
 			receiver.AddLog(LogLevels.Info, getMessage);
 		}
 
 		/// <summary>
-		/// Записать предупреждение в лог.
+		/// To record a warning to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="getMessage">Функция, возвращающая текст для <see cref="LogMessage.Message"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="getMessage">The function returns the text for <see cref="LogMessage.Message"/>.</param>
 		public static void AddWarningLog(this ILogReceiver receiver, Func<string> getMessage)
 		{
 			receiver.AddLog(LogLevels.Warning, getMessage);
 		}
 
 		/// <summary>
-		/// Записать ошибку в лог.
+		/// To record an error to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="getMessage">Функция, возвращающая текст для <see cref="LogMessage.Message"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="getMessage">The function returns the text for <see cref="LogMessage.Message"/>.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Func<string> getMessage)
 		{
 			receiver.AddLog(LogLevels.Error, getMessage);
 		}
 
 		/// <summary>
-		/// Записать сообщение в лог.
+		/// To record a message to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="level">Уровень лог-сообщения.</param>
-		/// <param name="getMessage">Функция, возвращающая текст для <see cref="LogMessage.Message"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="level">The level of the log message.</param>
+		/// <param name="getMessage">The function returns the text for <see cref="LogMessage.Message"/>.</param>
 		public static void AddLog(this ILogReceiver receiver, LogLevels level, Func<string> getMessage)
 		{
 			if (receiver == null)
@@ -57,60 +57,54 @@
 		}
 
 		/// <summary>
-		/// Записать сообщение в лог.
+		/// To record a message to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="message">Текстовое сообщение.</param>
-		/// <param name="args">Параметры текстового сообщения.
-		/// Используются в случае, если message является форматирующей строкой.
-		/// Подробнее, <see cref="string.Format(string,object[])"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
 		public static void AddInfoLog(this ILogReceiver receiver, string message, params object[] args)
 		{
 			receiver.AddMessage(LogLevels.Info, message, args);
 		}
 
 		/// <summary>
-		/// Записать отладку в лог.
+		/// To record a debugging to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="message">Текстовое сообщение.</param>
-		/// <param name="args">Параметры текстового сообщения.
-		/// Используются в случае, если message является форматирующей строкой.
-		/// Подробнее, <see cref="string.Format(string,object[])"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
 		public static void AddDebugLog(this ILogReceiver receiver, string message, params object[] args)
 		{
 			receiver.AddMessage(LogLevels.Debug, message, args);
 		}
 
 		/// <summary>
-		/// Записать предупреждение в лог.
+		/// To record a warning to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="message">Текстовое сообщение.</param>
-		/// <param name="args">Параметры текстового сообщения.
-		/// Используются в случае, если message является форматирующей строкой.
-		/// Подробнее, <see cref="string.Format(string,object[])"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
 		public static void AddWarningLog(this ILogReceiver receiver, string message, params object[] args)
 		{
 			receiver.AddMessage(LogLevels.Warning, message, args);
 		}
 
 		/// <summary>
-		/// Записать ошибку в лог.
+		/// To record an error to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="exception">Описание ошибки.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="exception">Error detais.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception)
 		{
 			receiver.AddErrorLog(exception, null);
 		}
 
 		/// <summary>
-		/// Записать ошибку в лог.
+		/// To record an error to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="exception">Описание ошибки.</param>
-		/// <param name="message">Текстовое сообщение.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="exception">Error detais.</param>
+		/// <param name="message">Text message.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, Exception exception, string message)
 		{
 			if (receiver == null)
@@ -142,13 +136,11 @@
 		}
 
 		/// <summary>
-		/// Записать ошибку в лог.
+		/// To record an error to the log.
 		/// </summary>
-		/// <param name="receiver">Получатель логов.</param>
-		/// <param name="message">Текстовое сообщение.</param>
-		/// <param name="args">Параметры текстового сообщения.
-		/// Используются в случае, если message является форматирующей строкой.
-		/// Подробнее, <see cref="string.Format(string,object[])"/>.</param>
+		/// <param name="receiver">Logs receiver.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
 		public static void AddErrorLog(this ILogReceiver receiver, string message, params object[] args)
 		{
 			receiver.AddMessage(LogLevels.Error, message, args);
@@ -166,10 +158,10 @@
 		}
 
 		/// <summary>
-		/// Записать ошибку в <see cref="LogManager.Application"/>.
+		/// To record an error to the <see cref="LogManager.Application"/>.
 		/// </summary>
-		/// <param name="error">Ошибка.</param>
-		/// <param name="message">Текстовое сообщение.</param>
+		/// <param name="error">Error.</param>
+		/// <param name="message">Text message.</param>
 		public static void LogError(this Exception error, string message = null)
 		{
 			if (error == null)
@@ -182,11 +174,10 @@
 		}
 
 		/// <summary>
-		/// Получить <see cref="ILogSource.LogLevel"/> для источника.
-		/// Если значение равно <see cref="LogLevels.Inherit"/>, то берется уровень родительского источника.
+		/// Get <see cref="ILogSource.LogLevel"/> for the source. If the value is equal to <see cref="LogLevels.Inherit"/>, then parental source level is taken.
 		/// </summary>
-		/// <param name="source">Источник логов.</param>
-		/// <returns>Уровень логирования.</returns>
+		/// <param name="source">The log source.</param>
+		/// <returns>Logging level.</returns>
 		public static LogLevels GetLogLevel(this ILogSource source)
 		{
 			if (source == null)

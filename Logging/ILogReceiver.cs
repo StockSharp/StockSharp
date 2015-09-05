@@ -1,24 +1,24 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	/// <summary>
-	/// Интерфейс получателя логов.
+	/// Logs recipient interface.
 	/// </summary>
 	public interface ILogReceiver : ILogSource
 	{
 		/// <summary>
-		/// Записать сообщение в лог.
+		/// To record a message to the log.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
+		/// <param name="message">A debug message.</param>
 		void AddLog(LogMessage message);
 	}
 
 	/// <summary>
-	/// Базовая реализация <see cref="ILogReceiver"/>.
+	/// The base implementation <see cref="ILogReceiver"/>.
 	/// </summary>
 	public abstract class BaseLogReceiver : BaseLogSource, ILogReceiver
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseLogReceiver"/>.
+		/// Initialize <see cref="BaseLogReceiver"/>.
 		/// </summary>
 		protected BaseLogReceiver()
 		{

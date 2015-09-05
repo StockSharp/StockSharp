@@ -5,48 +5,48 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Уровни лог-сообщений <see cref="LogMessage"/>.
+	/// Levels of log messages <see cref="LogMessage"/>.
 	/// </summary>
 	[DataContract]
 	public enum LogLevels
 	{
 		/// <summary>
-		/// Использовать уровень логирования контейнера.
+		/// To use the logging level of the container.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.InheritedKey)]
 		[EnumMember]
 		Inherit,
 
 		/// <summary>
-		/// Отладочное сообщение, информация, предупреждения и ошибки.
+		/// Debug message, information, warnings and errors.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.Str12Key)]
 		Debug,
 		
 		/// <summary>
-		/// Информация, предупреждения и ошибки.
+		/// Information, warnings and errors.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.InfoKey)]
 		Info,
 
 		/// <summary>
-		/// Предупреждения и ошибки.
+		/// Warnings and errors.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.WarningsKey)]
 		Warning,
 		
 		/// <summary>
-		/// Только ошибки.
+		/// Errors only.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.ErrorsKey)]
 		Error,
 
 		/// <summary>
-		/// Логи выключены.
+		/// Logs off.
 		/// </summary>
 		[EnumMember]
 		[EnumDisplayNameLoc(LocalizedStrings.OffKey)]

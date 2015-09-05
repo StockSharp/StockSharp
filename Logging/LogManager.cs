@@ -16,7 +16,7 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Менеджер логирования сообщений, который мониторит событие <see cref="ILogSource.Log"/> и перенаправляет сообщения в <see cref="Listeners"/>.
+	/// Messages logging manager that monitors the <see cref="ILogSource.Log"/> event and forwards messages to the <see cref="LogManager.Listeners"/>.
 	/// </summary>
 	public class LogManager : Disposable, IPersistable
 	{
@@ -77,7 +77,7 @@ namespace StockSharp.Logging
 		private bool _isFlusing;
 
 		/// <summary>
-		/// Создать <see cref="LogManager"/>.
+		/// Initializes a new instance of the <see cref="LogManager"/>.
 		/// </summary>
 		public LogManager()
 		{
@@ -152,7 +152,7 @@ namespace StockSharp.Logging
 		private ILogReceiver _application = new ApplicationReceiver();
 
 		/// <summary>
-		/// Получатель логов уровня всего приложения.
+		/// The all application level logs recipient .
 		/// </summary>
 		public ILogReceiver Application
 		{
@@ -174,7 +174,7 @@ namespace StockSharp.Logging
 		private readonly CachedSynchronizedSet<ILogListener> _listeners = new CachedSynchronizedSet<ILogListener>();
 
 		/// <summary>
-		/// Логгеры сообщений, приходящие от <see cref="Sources"/>.
+		/// Messages loggers arriving from <see cref="LogManager.Sources"/>.
 		/// </summary>
 		public IList<ILogListener> Listeners
 		{
@@ -182,13 +182,12 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Источники логов, у которых слушается событие <see cref="ILogSource.Log"/>.
+		/// Logs sources which are listened to the event <see cref="ILogSource.Log"/>.
 		/// </summary>
 		public IList<ILogSource> Sources { get; private set; }
 
 		/// <summary>
-		/// Интервал передачи накопленных от <see cref="Sources"/> сообщений в <see cref="Listeners"/>.
-		/// По-умолчанию равно 500 млс.
+		/// Sending interval of messages collected from <see cref="LogManager.Sources"/> to the <see cref="LogManager.Listeners"/>. The default is 500 ms.
 		/// </summary>
 		public TimeSpan FlushInterval
 		{
@@ -253,7 +252,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -274,9 +273,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			FlushInterval = storage.GetValue<TimeSpan>("FlushInterval");
@@ -285,9 +284,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("FlushInterval", FlushInterval);

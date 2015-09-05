@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Diagnostics;
@@ -9,7 +9,7 @@
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Логгер, отсылающий данные на email. 
+	/// The logger sending data to the email.
 	/// </summary>
 	public class EmailLogListener : LogListener
 	{
@@ -18,36 +18,36 @@
 		private bool _isThreadStarted;
 
 		/// <summary>
-		/// Создать <see cref="EmailLogListener"/>.
+		/// Initializes a new instance of the <see cref="EmailLogListener"/>.
 		/// </summary>
 		public EmailLogListener()
 		{
 		}
 
 		/// <summary>
-		/// Адрес, от имени которого будет отправлено сообщение.
+		/// The address, on whose behalf the message will be sent.
 		/// </summary>
 		public string From { get; set; }
 
 		/// <summary>
-		/// Адрес, куда будет отправлено сообщение.
+		/// The address to which the message will be sent to.
 		/// </summary>
 		public string To { get; set; }
 
 		/// <summary>
-		/// Создать email клиента.
+		/// To create the email client.
 		/// </summary>
-		/// <returns>Email клиент.</returns>
+		/// <returns>The email client.</returns>
 		protected virtual SmtpClient CreateClient()
 		{
 			return new SmtpClient();
 		}
 
 		/// <summary>
-		/// Создать заголовок.
+		/// To create a header.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
-		/// <returns>Заголовок.</returns>
+		/// <param name="message">A debug message.</param>
+		/// <returns>Header.</returns>
 		protected virtual string GetSubject(LogMessage message)
 		{
 			if (message == null)
@@ -57,9 +57,9 @@
 		}
 
 		/// <summary>
-		/// Добавить сообщение в очередь на отправку.
+		/// To add a message in a queue for sending.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		private void EnqueueMessage(LogMessage message)
 		{
 			if (message.IsDispose)
@@ -106,18 +106,18 @@
 		}
 
 		/// <summary>
-		/// Записать сообщение.
+		/// To record a message.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
+		/// <param name="message">A debug message.</param>
 		protected override void OnWriteMessage(LogMessage message)
 		{
 			EnqueueMessage(message);
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -127,9 +127,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -139,7 +139,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

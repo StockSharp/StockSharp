@@ -1,17 +1,17 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Логгер, отсылающий сообщения во внешний приемник <see cref="ILogListener"/>.
+	/// The logger sending messages to the external recipient <see cref="ILogListener"/>.
 	/// </summary>
 	public class ExternalLogListener : LogListener
 	{
 		/// <summary>
-		/// Создать <see cref="ExternalLogListener"/>.
+		/// Initializes a new instance of the <see cref="ExternalLogListener"/>.
 		/// </summary>
-		/// <param name="logger">Внешний приемник сообщений.</param>
+		/// <param name="logger">External recipient of messages.</param>
 		public ExternalLogListener(ILogListener logger)
 		{
 			if (logger == null)
@@ -21,14 +21,14 @@
 		}
 
 		/// <summary>
-		/// Внешний приемник сообщений.
+		/// External recipient of messages.
 		/// </summary>
 		public ILogListener Logger { get; private set; }
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			Logger.WriteMessages(messages);

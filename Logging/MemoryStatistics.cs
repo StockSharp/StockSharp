@@ -13,7 +13,7 @@ namespace StockSharp.Logging
 	using MoreLinq;
 
 	/// <summary>
-	/// Класс отслеживания занимаемых объектов в памяти.
+	/// The class for tracking objects taking in memory.
 	/// </summary>
 	public sealed class MemoryStatistics : BaseLogReceiver
 	{
@@ -23,7 +23,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Объект класса <see cref="MemoryStatistics"/>.
+		/// An object of class <see cref="MemoryStatistics"/>.
 		/// </summary>
 		public static MemoryStatistics Instance { get; private set; }
 
@@ -48,7 +48,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
@@ -63,7 +63,7 @@ namespace StockSharp.Logging
 		private TimeSpan _interval = TimeSpan.FromSeconds(60);
 
 		/// <summary>
-		/// Интервал логирования статистики. По умолчанию 1 минута.
+		/// Statistics logging interval. The default is 1 minute.
 		/// </summary>
 		public TimeSpan Interval
 		{
@@ -81,7 +81,7 @@ namespace StockSharp.Logging
 		private readonly CachedSynchronizedSet<IMemoryStatisticsValue> _values = new CachedSynchronizedSet<IMemoryStatisticsValue>();
 
 		/// <summary>
-		/// Отслеживаемые объекты.
+		/// Monitored objects.
 		/// </summary>
 		public IList<IMemoryStatisticsValue> Values
 		{
@@ -89,9 +89,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -100,9 +100,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -111,25 +111,25 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Очистить статистику памяти.
+		/// To clear memory statistics.
 		/// </summary>
-		/// <param name="resetCounter">Очищать ли счетчик объектов.</param>
+		/// <param name="resetCounter">Whether to clear the objects counter.</param>
 		public void Clear(bool resetCounter)
 		{
 			_values.Cache.ForEach(v => v.Clear(resetCounter));
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return _values.Select(v => "{0} = {1}".Put(v.Name, v.ObjectCount)).Join(", ");
 		}
 
 		/// <summary>
-		/// Включен ли источник.
+		/// Is the source on.
 		/// </summary>
 		public static bool IsEnabled
 		{
@@ -140,7 +140,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Добавить или удалить источник <see cref="MemoryStatistics"/> из зарегистрированного <see cref="LogManager"/>.
+		/// To add or to remove the source <see cref="MemoryStatistics"/> from the registered <see cref="LogManager"/>.
 		/// </summary>
 		public static void AddOrRemove()
 		{

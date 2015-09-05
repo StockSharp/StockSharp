@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Threading.Tasks;
@@ -6,12 +6,12 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Источник логов, отсылающий информацию о необработанных ошибках <see cref="AppDomain.UnhandledException"/> и <see cref="TaskScheduler.UnobservedTaskException"/>.
+	/// The logs source sending information about unhandled errors <see cref="AppDomain.UnhandledException"/> and <see cref="TaskScheduler.UnobservedTaskException"/>.
 	/// </summary>
 	public class UnhandledExceptionSource : BaseLogSource
 	{
 		/// <summary>
-		/// Создать <see cref="UnhandledExceptionSource"/>.
+		/// Initializes a new instance of the <see cref="UnhandledExceptionSource"/>.
 		/// </summary>
 		public UnhandledExceptionSource()
 		{
@@ -20,7 +20,7 @@
 		}
 
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		public override string Name
 		{
@@ -42,7 +42,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

@@ -12,7 +12,7 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый класс, который мониторит событие <see cref="ILogSource.Log"/> и сохраняет в некое хранилище.
+	/// The base class that monitors the event <see cref="ILogSource.Log"/> and saves to some storage.
 	/// </summary>
 	public abstract class LogListener : Disposable, ILogListener
 	{
@@ -23,7 +23,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Инициализировать <see cref="LogListener"/>.
+		/// Initialize <see cref="LogListener"/>.
 		/// </summary>
 		protected LogListener()
 		{
@@ -31,24 +31,24 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Фильтр, который принимает только сообщения типа <see cref="LogLevels.Warning"/>.
+		/// The filter that only accepts messages of <see cref="LogLevels.Warning"/> type.
 		/// </summary>
 		public static readonly Func<LogMessage, bool> AllWarningFilter;
 
 		/// <summary>
-		/// Фильтр, который принимает только сообщения типа <see cref="LogLevels.Error"/>.
+		/// The filter that only accepts messages of <see cref="LogLevels.Error"/> type.
 		/// </summary>
 		public static readonly Func<LogMessage, bool> AllErrorFilter;
 
 		/// <summary>
-		/// Фильтры сообщений, которыми указывается, какие сообщения следует обрабатывать.
+		/// Messages filters that specify which messages should be handled.
 		/// </summary>
 		public IList<Func<LogMessage, bool>> Filters { get; private set; }
 
 		private string _dateFormat = "yyyy/MM/dd";
 
 		/// <summary>
-		/// Формат даты. По-умолчанию используется yyyy/MM/dd.
+		/// Date format. By default yyyy/MM/dd.
 		/// </summary>
 		public string DateFormat
 		{
@@ -65,7 +65,7 @@ namespace StockSharp.Logging
 		private string _timeFormat = "HH:mm:ss.fff";
 
 		/// <summary>
-		/// Формат времени. По-умолчанию используется HH:mm:ss.fff.
+		/// Time format. By default HH:mm:ss.fff.
 		/// </summary>
 		public string TimeFormat
 		{
@@ -80,9 +80,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		public void WriteMessages(IEnumerable<LogMessage> messages)
 		{
 			if (Filters.Count > 0)
@@ -92,27 +92,27 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		protected virtual void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			messages.ForEach(OnWriteMessage);
 		}
 
 		/// <summary>
-		/// Записать сообщение.
+		/// To record a message.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
+		/// <param name="message">A debug message.</param>
 		protected virtual void OnWriteMessage(LogMessage message)
 		{
 			throw new NotSupportedException(LocalizedStrings.Str17);
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			DateFormat = storage.GetValue<string>("DateFormat");
@@ -120,9 +120,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("DateFormat", DateFormat);

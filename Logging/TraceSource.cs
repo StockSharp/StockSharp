@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Diagnostics;
@@ -6,7 +6,7 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Источник логов, получающий информацию из <see cref="Trace"/>.
+	/// The logs source which receives information from <see cref="Trace"/>.
 	/// </summary>
 	public class TraceSource : BaseLogSource
 	{
@@ -87,7 +87,7 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="TraceSource"/>.
+		/// Initializes a new instance of the <see cref="TraceSource"/>.
 		/// </summary>
 		public TraceSource()
 		{
@@ -95,7 +95,7 @@
 		}
 
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		public override string Name
 		{
@@ -106,7 +106,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

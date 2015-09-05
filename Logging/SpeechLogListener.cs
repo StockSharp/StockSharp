@@ -6,26 +6,26 @@ namespace StockSharp.Logging
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Логгер, произносящий слова при получении сообщения.
+	/// Logger speaking words when a message received.
 	/// </summary>
 	public class SpeechLogListener : LogListener
 	{
 		/// <summary>
-		/// Создать <see cref="SpeechLogListener"/>.
+		/// Initializes a new instance of the <see cref="SpeechLogListener"/>.
 		/// </summary>
 		public SpeechLogListener()
 		{
 		}
 
 		/// <summary>
-		/// Уровень громкости.
+		/// The volume level.
 		/// </summary>
 		public int Volume { get; set; }
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			using (var speech = new SpeechSynthesizer { Volume = Volume })
@@ -44,9 +44,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -55,9 +55,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);

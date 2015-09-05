@@ -12,38 +12,38 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс для отслеживания количества активных объектов конкретного типа.
+	/// The interface for tracking the number of active objects of the particular type.
 	/// </summary>
 	public interface IMemoryStatisticsValue
 	{
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		string Name { get; }
 
 		/// <summary>
-		/// Количество активных объектов.
+		/// The number of active objects.
 		/// </summary>
 		int ObjectCount { get; }
 
 		/// <summary>
-		/// Очистить активные объекты.
+		/// To clear active objects.
 		/// </summary>
-		/// <param name="resetCounter">Очищать ли счетчик объектов.</param>
+		/// <param name="resetCounter">Whether to clear the objects counter.</param>
 		void Clear(bool resetCounter = false);
 	}
 
 	/// <summary>
-	/// Класс для отслеживания количества активных объектов конкретного типа.
+	/// The class for tracking the number of active objects of the particular type.
 	/// </summary>
-	/// <typeparam name="T">Тип объекта.</typeparam>
+	/// <typeparam name="T">The object type.</typeparam>
 	public class MemoryStatisticsValue<T> : IPersistable, IMemoryStatisticsValue
 	{
 		//private readonly MemoryStatistics _parent;
 		private readonly CachedSynchronizedSet<T> _objects = new CachedSynchronizedSet<T>();
 
 		/// <summary>
-		/// Создать <see cref="MemoryStatisticsValue{T}"/>.
+		/// Initializes a new instance of the <see cref="MemoryStatisticsValue{T}"/>.
 		/// </summary>
 		public MemoryStatisticsValue(string name/*, MemoryStatistics parent*/)
 		{
@@ -58,7 +58,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Активные объекты.
+		/// Active objects.
 		/// </summary>
 		public T[] Objects
 		{
@@ -66,14 +66,14 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		public string Name { get; private set; }
 
 		private int _objectCount;
 
 		/// <summary>
-		/// Количество активных объектов.
+		/// The number of active objects.
 		/// </summary>
 		public int ObjectCount
 		{
@@ -81,19 +81,19 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Проверять, что удаляется ранее удаленный объект.
+		/// To check that they are going to delete a previously deleted object.
 		/// </summary>
 		public bool ThrowOnRemoveDeleted { get; set; }
 
 		/// <summary>
-		/// Логировать создание и удаление объектов. По умолчанию выключено.
+		/// To log the objects creating and deletion. The default is off.
 		/// </summary>
 		public bool IsTraceObjects { get; set; }
 
 		private bool _isObjectTracking;
 
 		/// <summary>
-		/// Включено ли хранение объектов, доступных через <see cref="Objects"/>. По-умолчанию, выключено.
+		/// Whether the storage of objects available through <see cref="Objects"/> is on. The default is off.
 		/// </summary>
 		public bool IsObjectTracking
 		{
@@ -108,9 +108,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Добавить новый объект.
+		/// To add a new object.
 		/// </summary>
-		/// <param name="obj">Новый объект.</param>
+		/// <param name="obj">The new object.</param>
 		public void Add(T obj)
 		{
 			Interlocked.Increment(ref _objectCount);
@@ -126,9 +126,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Добавить новые объекты.
+		/// To add new objects.
 		/// </summary>
-		/// <param name="objects">Активные объекты.</param>
+		/// <param name="objects">Active objects.</param>
 		public void Add(IEnumerable<T> objects)
 		{
 			var count = objects.Count();
@@ -145,9 +145,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Удалить активный объект.
+		/// To delete the active object.
 		/// </summary>
-		/// <param name="obj">Активный объект.</param>
+		/// <param name="obj">The active object.</param>
 		public void Remove(T obj)
 		{
 			Interlocked.Decrement(ref _objectCount);
@@ -165,18 +165,18 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Изменить <see cref="ObjectCount"/>, уменьшив его на количество удаленных объектов.
+		/// To change <see cref="ObjectCount"/>, reducing it by the number of deleted objects.
 		/// </summary>
-		/// <param name="count">Количество удаленных объектов.</param>
+		/// <param name="count">The number of deleted objects.</param>
 		public void Remove(int count)
 		{
 			Interlocked.Exchange(ref _objectCount, _objectCount - count);
 		}
 
 		/// <summary>
-		/// Удалить активные объекты.
+		/// To delete active objects.
 		/// </summary>
-		/// <param name="objects">Активные объекты.</param>
+		/// <param name="objects">Active objects.</param>
 		public void Remove(IEnumerable<T> objects)
 		{
 			Remove(objects.Count());
@@ -200,9 +200,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Очистить активные объекты <see cref="Objects"/>.
+		/// To clear active objects <see cref="ObjectCount"/>.
 		/// </summary>
-		/// <param name="resetCounter">Очищать ли счетчик объектов.</param>
+		/// <param name="resetCounter">Whether to clear the objects counter.</param>
 		public void Clear(bool resetCounter = false)
 		{
 			if (resetCounter)
@@ -216,9 +216,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			IsObjectTracking = storage.GetValue<bool>("IsObjectTracking");
@@ -227,9 +227,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("IsObjectTracking", IsObjectTracking);

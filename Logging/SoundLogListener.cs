@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,26 +8,26 @@
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Логгер, проигрывающий музыку при получении сообщения.
+	/// Logger playing the music when a message received.
 	/// </summary>
 	public class SoundLogListener : LogListener
 	{
 		/// <summary>
-		/// Создать <see cref="SoundLogListener"/>.
+		/// Initializes a new instance of the <see cref="SoundLogListener"/>.
 		/// </summary>
 		public SoundLogListener()
 		{
 		}
 
 		/// <summary>
-		/// Путь к файлу со звуком, который будет проигран при получении сообщения.
+		/// The path to the file with the sound that will be played when a message received.
 		/// </summary>
 		public string FileName { get; set; }
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			var player = new MediaPlayer();
@@ -39,9 +39,9 @@
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -50,9 +50,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);

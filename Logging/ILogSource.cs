@@ -10,53 +10,53 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс источника логов.
+	/// Logs source interface.
 	/// </summary>
 	public interface ILogSource : IDisposable
 	{
 		/// <summary>
-		/// Уникальный идентификатор источника.
+		/// The unique identifier of the source.
 		/// </summary>
 		Guid Id { get; }
 
 		/// <summary>
-		/// Имя источника.
+		/// The source name.
 		/// </summary>
 		string Name { get; }
 
 		/// <summary>
-		/// Родительский источник логов.
+		/// Parental logs source.
 		/// </summary>
 		ILogSource Parent { get; set; }
 
 		/// <summary>
-		/// Уровень логирования для источника.
+		/// The logging level for the source.
 		/// </summary>
 		LogLevels LogLevel { get; set; }
 
 		/// <summary>
-		/// Текущее время, которое будет передано в <see cref="LogMessage.Time"/>.
+		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
 		DateTimeOffset CurrentTime { get; }
 
 		/// <summary>
-		/// Является ли источник корнем (даже при <see cref="Parent"/> не равным <see langword="null"/>).
+		/// Whether the source is the root (even if <see cref="ILogSource.Parent"/> is not equal to <see langword="null" />).
 		/// </summary>
 		bool IsRoot { get; }
 
 		/// <summary>
-		/// Событие нового отладочного сообщения.
+		/// New debug message event.
 		/// </summary>
 		event Action<LogMessage> Log;
 	}
 
 	/// <summary>
-	/// Базовая реализация <see cref="ILogSource"/>.
+	/// The base implementation <see cref="ILogSource"/>.
 	/// </summary>
 	public abstract class BaseLogSource : Disposable, ILogSource, IPersistable
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseLogSource"/>.
+		/// Initialize <see cref="BaseLogSource"/>.
 		/// </summary>
 		protected BaseLogSource()
 		{
@@ -66,7 +66,7 @@ namespace StockSharp.Logging
 		private Guid _id = Guid.NewGuid();
 
 		/// <summary>
-		/// Уникальный идентификатор источника.
+		/// The unique identifier of the source.
 		/// </summary>
 		[Browsable(false)]
 		public virtual Guid Id
@@ -78,7 +78,7 @@ namespace StockSharp.Logging
 		private string _name;
 
 		/// <summary>
-		/// Название источника (для различия в лог файлах).
+		/// Source name (to distinguish in log files).
 		/// </summary>
 		[ReadOnly(true)]
 		[CategoryLoc(LocalizedStrings.LoggingKey)]
@@ -99,7 +99,7 @@ namespace StockSharp.Logging
 		private ILogSource _parent;
 
 		/// <summary>
-		/// Родитель.
+		/// Parent.
 		/// </summary>
 		[Browsable(false)]
 		public ILogSource Parent
@@ -120,7 +120,7 @@ namespace StockSharp.Logging
 		private LogLevels _logLevel = LogLevels.Inherit;
 
 		/// <summary>
-		/// Уровень логирования. По-умолчанию установлено в <see cref="LogLevels.Inherit"/>.
+		/// The logging level. The default is set to <see cref="LogLevels.Inherit"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.LoggingKey)]
 		[DisplayNameLoc(LocalizedStrings.Str9Key)]
@@ -132,7 +132,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Текущее время, которое будет передано в <see cref="LogMessage.Time"/>.
+		/// Current time, which will be passed to the <see cref="LogMessage.Time"/>.
 		/// </summary>
 		[Browsable(false)]
 		public virtual DateTimeOffset CurrentTime
@@ -141,7 +141,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Является ли источник корнем (даже при <see cref="ILogSource.Parent"/> не равным <see langword="null"/>).
+		/// Whether the source is the root (even if <see cref="ILogSource.Parent"/> is not equal to <see langword="null" />).
 		/// </summary>
 		[Browsable(false)]
 		public bool IsRoot { get; set; }
@@ -149,7 +149,7 @@ namespace StockSharp.Logging
 		private Action<LogMessage> _log;
 
 		/// <summary>
-		/// Событие нового отладочного сообщения.
+		/// New debug message event.
 		/// </summary>
 		public event Action<LogMessage> Log
 		{
@@ -158,9 +158,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="ILogSource.Log"/>.
+		/// To call the event <see cref="ILogSource.Log"/>.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
+		/// <param name="message">A debug message.</param>
 		protected virtual void RaiseLog(LogMessage message)
 		{
 			if (message == null)
@@ -181,27 +181,27 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Name;
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Load(SettingsStorage storage)
 		{
 			LogLevel = storage.GetValue("LogLevel", LogLevels.Inherit);
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public virtual void Save(SettingsStorage storage)
 		{
 			storage.SetValue("LogLevel", LogLevel.To<string>());

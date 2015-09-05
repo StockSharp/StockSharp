@@ -15,28 +15,28 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Режимы разделения лог файлов по датам.
+	/// Modes of log files splitting by date.
 	/// </summary>
 	public enum SeparateByDateModes
 	{
 		/// <summary>
-		/// Не разделять. Разделение выключено.
+		/// Do not split. The splitting is off.
 		/// </summary>
 		None,
 
 		/// <summary>
-		/// Разделять через добавление к названию файла.
+		/// To split by adding to the file name.
 		/// </summary>
 		FileName,
 
 		/// <summary>
-		/// Разделять через поддиректории.
+		/// To split via subdirectories.
 		/// </summary>
 		SubDirectories,
 	}
 
 	/// <summary>
-	/// Логгер, записывающий данные в текстовый файл.
+	/// The logger recording the data to a text file.
 	/// </summary>
 	public class FileLogListener : LogListener
 	{
@@ -54,16 +54,16 @@ namespace StockSharp.Logging
 		private readonly Dictionary<StreamWriter, string> _fileNames = new Dictionary<StreamWriter, string>();
 
 		/// <summary>
-		/// Создать <see cref="FileLogListener"/>. Для каждого <see cref="ILogSource"/> будет создан отдельный файл с названием, равный <see cref="ILogSource.Name"/>.
+		/// To create <see cref="FileLogListener"/>. For each <see cref="ILogSource"/> a separate file with a name equal to <see cref="ILogSource.Name"/> will be created.
 		/// </summary>
 		public FileLogListener()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="FileLogListener"/>. Все сообщения из <see cref="ILogSource.Log"/> будут записываться в файл <paramref name="fileName"/>.
+		/// To create <see cref="FileLogListener"/>. All messages from the <see cref="ILogSource.Log"/> will be recorded to the file <paramref name="fileName" />.
 		/// </summary>
-		/// <param name="fileName">Название текстового файла, в который будут писаться сообщения из события <see cref="ILogSource.Log"/>.</param>
+		/// <param name="fileName">The name of a text file to which messages from the event <see cref="ILogSource.Log"/> will be recorded.</param>
 		public FileLogListener(string fileName)
 		{
 			if (fileName.IsEmpty())
@@ -86,7 +86,7 @@ namespace StockSharp.Logging
 		private string _fileName;
 
 		/// <summary>
-		/// Название текстового файла (без расширения), в который будут писаться сообщения из события <see cref="ILogSource.Log"/>.
+		/// The name of a text file (without filename extension) to which messages from the event <see cref="ILogSource.Log"/> will be recorded.
 		/// </summary>
 		public string FileName
 		{
@@ -100,7 +100,7 @@ namespace StockSharp.Logging
 		private Encoding _encoding = Encoding.UTF8;
 
 		/// <summary>
-		/// Кодировка файла. По умолчанию используется кодировка UTF-8.
+		/// File encoding. The default is UTF-8 encoding.
 		/// </summary>
 		public Encoding Encoding
 		{
@@ -117,7 +117,7 @@ namespace StockSharp.Logging
 		private long _maxLength;
 
 		/// <summary>
-		/// Максимальная длина файла лога. По-умолчанию установлено 0, что значит файл будет иметь неограниченный размер.
+		/// The maximum length of the log file. The default is 0, which means that the file will have unlimited size.
 		/// </summary>
 		public long MaxLength
 		{
@@ -134,7 +134,7 @@ namespace StockSharp.Logging
 		private int _maxCount;
 
 		/// <summary>
-		/// Максимальное количество роллируемых файлов. По-умолчанию установлено 0, что значит файлы будут роллироваться без ограничения.
+		/// The maximum number of rolling files. The default is 0, which means that the files will be rolled without limitation.
 		/// </summary>
 		public int MaxCount
 		{
@@ -149,17 +149,17 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Добавлять ли в файл данные, если он уже существует. По-умолчанию выключено.
+		/// Whether to add the data to a file, if it already exists. The default is off.
 		/// </summary>
 		public bool Append { get; set; }
 
 		private string _logDirectory = Directory.GetCurrentDirectory();
 
 		/// <summary>
-		/// Директория, где будет создан файл лога. По умолчанию - директория с исполняемым файлом.
+		/// The directory where the log file will be created. By default, it is the directory where the executable file is located.
 		/// </summary>
 		/// <remarks>
-		/// Если директория не существует, она будет создана.
+		/// If the directory does not exist, it will be created.
 		/// </remarks>
 		public string LogDirectory
 		{
@@ -178,7 +178,7 @@ namespace StockSharp.Logging
 		private bool _writeChildDataToRootFile = true;
 
 		/// <summary>
-		/// Записывать данные дочерних источников в файл родителя. По-умолчанию режим включен.
+		/// To record the subsidiary sources data to the parent file. The default mode is enabled.
 		/// </summary>
 		public bool WriteChildDataToRootFile
 		{
@@ -189,7 +189,7 @@ namespace StockSharp.Logging
 		private string _extension = ".txt";
 
 		/// <summary>
-		/// Расширение лог файлов. По-умолчанию значение равно txt.
+		/// Extension of log files. The default value is 'txt'.
 		/// </summary>
 		public string Extension
 		{
@@ -204,14 +204,14 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Выводить в файл идентификатор источника <see cref="ILogSource.Id"/>. По-умолчанию выключено.
+		/// To output the source identifier <see cref="ILogSource.Id"/> to a file. The default is off.
 		/// </summary>
 		public bool WriteSourceId { get; set; }
 
 		private string _directoryDateFormat = "yyyy_MM_dd";
 
 		/// <summary>
-		/// Формат названия директории, представляющий дату. По-умолчанию используется yyyy_MM_dd.
+		/// The directory name format that represents a date. By default is 'yyyy_MM_dd'.
 		/// </summary>
 		public string DirectoryDateFormat
 		{
@@ -226,7 +226,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Режим разделения лог файлов по датам. По умолчанию режим равен <see cref="SeparateByDateModes.None"/>.
+		/// The mode of log files splitting by date. The default mode is <see cref="SeparateByDateModes.None"/>.
 		/// </summary>
 		public SeparateByDateModes SeparateByDates { get; set; }
 
@@ -267,10 +267,10 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Создать текстового писателя.
+		/// To create a text writer.
 		/// </summary>
-		/// <param name="fileName">Название текстового файла, в которое будут писаться сообщения из события <see cref="ILogSource.Log"/>.</param>
-		/// <returns>Текстовый писатель.</returns>
+		/// <param name="fileName">The name of the text file to which messages from the event <see cref="ILogSource.Log"/> will be recorded.</param>
+		/// <returns>A text writer.</returns>
 		protected virtual StreamWriter OnCreateWriter(string fileName)
 		{
 			var writer = new StreamWriter(fileName, Append, Encoding);
@@ -279,9 +279,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			// pyh: эмуляция года данных происходит за 5 секунд. На выходе 365 файлов лога? Бред.
@@ -478,9 +478,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -498,9 +498,9 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -518,7 +518,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

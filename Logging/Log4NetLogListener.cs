@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,7 +11,7 @@
 	using log4net.Config;
 
 	/// <summary>
-	/// Вспомогательный класс для логирования сообщений, основанный на log4net.
+	/// Helper class for messages logging based on log4net.
 	/// </summary>
 	public class Log4NetLogger : LogListener
 	{
@@ -37,9 +37,9 @@
 		private readonly ILog _log;
 
 		/// <summary>
-		/// Создать <see cref="Log4NetLogger"/>.
+		/// Initializes a new instance of the <see cref="Log4NetLogger"/>.
 		/// </summary>
-		/// <param name="configFile">Путь к конфигурационному файлу log4net.</param>
+		/// <param name="configFile">The path to the configuration file log4net.</param>
 		public Log4NetLogger(string configFile)
 		{
 			XmlConfigurator.Configure(new FileInfo(configFile));
@@ -49,41 +49,41 @@
 
 		internal Log4NetLogListener LogListener { get; set; }
 
-		///<summary>
-		/// Отправить информационное сообщение.
-		///</summary>
-		///<param name="message">Текст сообщения.</param>
-		///<param name="source">Источник сообщения.</param>
+		/// <summary>
+		/// To send an information message.
+		/// </summary>
+		/// <param name="message">Message text.</param>
+		/// <param name="source">The message source.</param>
 		public void Info(string message, string source = "")
 		{
 			Log(LogLevels.Info, message, source);
 		}
 
-		///<summary>
-		/// Отправить сообщение-предупреждение.
-		///</summary>
-		///<param name="message">Текст сообщения.</param>
-		///<param name="source">Источник сообщения.</param>
+		/// <summary>
+		/// To send a warning message.
+		/// </summary>
+		/// <param name="message">Message text.</param>
+		/// <param name="source">The message source.</param>
 		public void Warning(string message, string source = "")
 		{
 			Log(LogLevels.Warning, message, source);
 		}
 
-		///<summary>
-		/// Отправить сообщение об ошибке.
-		///</summary>
-		///<param name="message">Текст сообщения.</param>
-		///<param name="source">Источник сообщения.</param>
+		/// <summary>
+		/// To send an error message.
+		/// </summary>
+		/// <param name="message">Message text.</param>
+		/// <param name="source">The message source.</param>
 		public void Error(string message, string source = "")
 		{
 			Log(LogLevels.Error, message, source);
 		}
 
-		///<summary>
-		/// Отправить отладочное сообщение.
-		///</summary>
-		///<param name="message">Текст сообщения.</param>
-		///<param name="source">Источник сообщения.</param>
+		/// <summary>
+		/// To send a debug message.
+		/// </summary>
+		/// <param name="message">Message text.</param>
+		/// <param name="source">The message source.</param>
 		public void Debug(string message, string source = "")
 		{
 			Log(LogLevels.Debug, message, source);
@@ -95,9 +95,9 @@
 		}
 
 		/// <summary>
-		/// Записать сообщение.
+		/// To record a message.
 		/// </summary>
-		/// <param name="message">Отладочное сообщение.</param>
+		/// <param name="message">A debug message.</param>
 		protected override void OnWriteMessage(LogMessage message)
 		{
 			if (message.IsDispose)
@@ -129,12 +129,12 @@
 	}
 
 	/// <summary>
-	/// Логгер, отсылающий сообщения в <see cref="Log4NetLogger"/>.
+	/// Logger sending out messages to <see cref="Log4NetLogger"/>.
 	/// </summary>
 	public class Log4NetLogListener : ExternalLogListener
 	{
 		/// <summary>
-		/// Создать <see cref="Log4NetLogListener"/>.
+		/// Initializes a new instance of the <see cref="Log4NetLogListener"/>.
 		/// </summary>
 		public Log4NetLogListener()
 			: this("logger.xml")
@@ -142,18 +142,18 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="Log4NetLogListener"/>.
+		/// Initializes a new instance of the <see cref="Log4NetLogListener"/>.
 		/// </summary>
-		/// <param name="configFile">Путь к конфигурационному файлу log4net.</param>
+		/// <param name="configFile">The path to the configuration file log4net.</param>
 		public Log4NetLogListener(string configFile)
 			: this(new Log4NetLogger(configFile))
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="Log4NetLogListener"/>.
+		/// Initializes a new instance of the <see cref="Log4NetLogListener"/>.
 		/// </summary>
-		/// <param name="logger">Вспомогательный класс для логирования сообщений, основанный на log4net.</param>
+		/// <param name="logger">Helper class for messages logging based on log4net.</param>
 		public Log4NetLogListener(Log4NetLogger logger)
 			: base(logger)
 		{

@@ -8,14 +8,14 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Логгер стратегии, записывающий данные в отладочное окно.
+	/// The strategy logger that records the data to the debug window.
 	/// </summary>
 	public class DebugLogListener : LogListener
 	{
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			var sb = new StringBuilder();

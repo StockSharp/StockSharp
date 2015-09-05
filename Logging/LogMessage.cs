@@ -1,11 +1,11 @@
-﻿namespace StockSharp.Logging
+namespace StockSharp.Logging
 {
 	using System;
 
 	using Ecng.Common;
 
 	/// <summary>
-	/// Отладочное сообщение.
+	/// A debug message.
 	/// </summary>
 	public class LogMessage
 	{
@@ -14,27 +14,25 @@
 		private Func<string> _getMessage;
 
 		/// <summary>
-		/// Создать <see cref="LogMessage"/>.
+		/// Initializes a new instance of the <see cref="LogMessage"/>.
 		/// </summary>
-		/// <param name="source">Источник логов.</param>
-		/// <param name="time">Время создания сообщения.</param>
-		/// <param name="level">Уровень лог-сообщения.</param>
-		/// <param name="message">Текстовое сообщение.</param>
-		/// <param name="args">Параметры текстового сообщения.
-		/// Используются в случае, если message является форматирующей строкой.
-		/// Подробнее, <see cref="string.Format(string,object[])"/>.</param>
+		/// <param name="source">The log source.</param>
+		/// <param name="time">Message creating time.</param>
+		/// <param name="level">The level of the log message.</param>
+		/// <param name="message">Text message.</param>
+		/// <param name="args">Text message settings. Used if a message is the format string. For details, see <see cref="string.Format(string,object[])"/>.</param>
 		public LogMessage(ILogSource source, DateTimeOffset time, LogLevels level, string message, params object[] args)
 			: this(source, time, level, () => message.Put(args))
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="LogMessage"/>.
+		/// Initializes a new instance of the <see cref="LogMessage"/>.
 		/// </summary>
-		/// <param name="source">Источник логов.</param>
-		/// <param name="time">Время создания сообщения.</param>
-		/// <param name="level">Уровень лог-сообщения.</param>
-		/// <param name="getMessage">Функция, возвращающая текст для <see cref="LogMessage.Message"/>.</param>
+		/// <param name="source">The log source.</param>
+		/// <param name="time">Message creating time.</param>
+		/// <param name="level">The level of the log message.</param>
+		/// <param name="getMessage">The function returns the text for <see cref="LogMessage.Message"/>.</param>
 		public LogMessage(ILogSource source, DateTimeOffset time, LogLevels level, Func<string> getMessage)
 		{
 			if (source == null)
@@ -51,24 +49,24 @@
 		}
 
 		/// <summary>
-		/// Источник логов.
+		/// The log source.
 		/// </summary>
 		public ILogSource Source { get; private set; }
 
 		/// <summary>
-		/// Время создания сообщения.
+		/// Message creating time.
 		/// </summary>
 		public DateTimeOffset Time { get; private set; }
 
 		/// <summary>
-		/// Уровень лог-сообщения.
+		/// The level of the log message.
 		/// </summary>
 		public LogLevels Level { get; private set; }
 
 		private string _message;
 
 		/// <summary>
-		/// Сообщение.
+		/// Message.
 		/// </summary>
 		public string Message
 		{
@@ -95,9 +93,9 @@
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0} {1}".Put(Time, Message);
