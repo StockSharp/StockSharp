@@ -6,35 +6,35 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Интерфейс поставщика маркет-данных по инструменту.
+	/// The market data by the instrument provider interface.
 	/// </summary>
 	public interface IMarketDataProvider
 	{
 		/// <summary>
-		/// Событие изменения инструмента.
+		/// Security changed.
 		/// </summary>
 		event Action<Security, IEnumerable<KeyValuePair<Level1Fields, object>>, DateTimeOffset, DateTime> ValuesChanged;
 
 		/// <summary>
-		/// Получить стакан котировок.
+		/// To get the quotes order book.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому нужно получить стакан.</param>
-		/// <returns>Стакан котировок.</returns>
+		/// <param name="security">The instrument by which an order book should be got.</param>
+		/// <returns>Order book.</returns>
 		MarketDepth GetMarketDepth(Security security);
 
 		/// <summary>
-		/// Получить значение маркет-данных для инструмента.
+		/// To get the value of market data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="field">Поле маркет-данных.</param>
-		/// <returns>Значение поля. Если данных нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="security">Security.</param>
+		/// <param name="field">Market-data field.</param>
+		/// <returns>The field value. If no data, the <see langword="null" /> will be returned.</returns>
 		object GetSecurityValue(Security security, Level1Fields field);
 
 		/// <summary>
-		/// Получить набор доступных полей <see cref="Level1Fields"/>, для которых есть маркет-данные для инструмента.
+		/// To get a set of available fields <see cref="Level1Fields"/>, for which there is a market data for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Набор доступных полей.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Possible fields.</returns>
 		IEnumerable<Level1Fields> GetLevel1Fields(Security security);
 	}
 }

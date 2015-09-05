@@ -16,7 +16,7 @@ namespace StockSharp.BusinessEntities
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Инструмент (акция, фьючерс, опцион и т.д.).
+	/// Security (shares, futures, options etc.).
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -28,7 +28,7 @@ namespace StockSharp.BusinessEntities
 	public class Security : Cloneable<Security>, IExtendableEntity, INotifyPropertyChanged
 	{
 		/// <summary>
-		/// Создать <see cref="Security"/>.
+		/// Initializes a new instance of the <see cref="Security"/>.
 		/// </summary>
 		public Security()
 		{
@@ -37,7 +37,7 @@ namespace StockSharp.BusinessEntities
 		private string _id = string.Empty;
 
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		[DataMember]
 		[Identity]
@@ -62,7 +62,7 @@ namespace StockSharp.BusinessEntities
 		private string _name = string.Empty;
 
 		/// <summary>
-		/// Название инструмента.
+		/// Security name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.NameKey)]
@@ -85,7 +85,7 @@ namespace StockSharp.BusinessEntities
 		private string _shortName = string.Empty;
 
 		/// <summary>
-		/// Короткое название инструмента.
+		/// Short security name.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str363Key)]
@@ -107,7 +107,7 @@ namespace StockSharp.BusinessEntities
 		private string _code = string.Empty;
 
 		/// <summary>
-		/// Код инструмента.
+		/// Security code.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CodeKey)]
@@ -130,7 +130,7 @@ namespace StockSharp.BusinessEntities
 		private string _class = string.Empty;
 
 		/// <summary>
-		/// Класс инструмента.
+		/// Security class.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ClassKey)]
@@ -152,7 +152,7 @@ namespace StockSharp.BusinessEntities
 		private decimal? _priceStep;
 
 		/// <summary>
-		/// Минимальный шаг цены.
+		/// Minimum price step.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceStepKey)]
@@ -176,7 +176,7 @@ namespace StockSharp.BusinessEntities
 		private decimal? _volumeStep;
 
 		/// <summary>
-		/// Минимальный шаг объема.
+		/// Minimum volume step.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeStepKey)]
@@ -200,7 +200,7 @@ namespace StockSharp.BusinessEntities
 		private decimal? _multiplier;
 
 		/// <summary>
-		/// Коэфициент объема между лотом и активом.
+		/// Lot multiplier.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str330Key)]
@@ -224,7 +224,7 @@ namespace StockSharp.BusinessEntities
 		private int? _decimals;
 
 		/// <summary>
-		/// Количество знаков в цене после запятой.
+		/// Number of digits in price after coma.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DecimalsKey)]
@@ -249,7 +249,7 @@ namespace StockSharp.BusinessEntities
 		private SecurityTypes? _type;
 
 		/// <summary>
-		/// Тип инструмента.
+		/// Security type.
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -273,7 +273,7 @@ namespace StockSharp.BusinessEntities
 		private DateTimeOffset? _expiryDate;
 
 		/// <summary>
-		/// Дата экспирация инструмента (для деривативов - экспирация, для облигаций - погашение).
+		/// Security expiration date (for derivatives - expiration, for bonds — redemption).
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -296,7 +296,7 @@ namespace StockSharp.BusinessEntities
 		private DateTimeOffset? _settlementDate;
 
 		/// <summary>
-		/// Дата выплат по инструмента (для деривативов и облигаций).
+		/// Settlement date for security (for derivatives and bonds).
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -319,7 +319,7 @@ namespace StockSharp.BusinessEntities
 		private ExchangeBoard _board;
 
 		/// <summary>
-		/// Биржевая площадка, на которой торгуется инструмент.
+		/// Exchange board where the security is traded.
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
@@ -343,7 +343,7 @@ namespace StockSharp.BusinessEntities
 		private string _underlyingSecurityId = string.Empty;
 
 		/// <summary>
-		/// Базовый актив, на основе которого построен данный инструмент.
+		/// Underlying asset on which the current security is built.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.UnderlyingAssetKey)]
@@ -366,7 +366,7 @@ namespace StockSharp.BusinessEntities
 		private OptionTypes? _optionType;
 
 		/// <summary>
-		/// Тип опциона.
+		/// Option type.
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -390,7 +390,7 @@ namespace StockSharp.BusinessEntities
 		private decimal? _strike;
 
 		/// <summary>
-		/// Страйк цена опциона.
+		/// Option strike price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
@@ -414,7 +414,7 @@ namespace StockSharp.BusinessEntities
 		private CurrencyTypes? _currency;
 
 		/// <summary>
-		/// Валюта торгового инструмента.
+		/// Trading security currency.
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -434,7 +434,7 @@ namespace StockSharp.BusinessEntities
 		private string _binaryOptionType;
 
 		/// <summary>
-		/// Тип бинарного опциона.
+		/// Type of binary option.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str552Key)]
@@ -457,7 +457,7 @@ namespace StockSharp.BusinessEntities
 		private SecurityExternalId _externalId = new SecurityExternalId();
 
 		/// <summary>
-		/// Идентификатор инструмента в других системах.
+		/// Security ID in other systems.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str553Key)]
@@ -482,11 +482,10 @@ namespace StockSharp.BusinessEntities
 		private SynchronizedDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по инструменту.
+		/// Extended security info.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с инструментом.
-		/// Например, дата экспирации инструмента (если это опцион) или информация о базовом активе, если это фьючерсный контракт.
+		/// Required if additional information associated with the instrument is stored in the program. For example, the date of instrument expiration (if it is option) or information about the underlying asset if it is the futures contract.
 		/// </remarks>
 		[XmlIgnore]
 		//[DataMember]
@@ -505,10 +504,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _stepPrice;
 
-		/// <summary>
-		/// Стоимость шага цены.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Step price.
+		/// </summary>
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str290Key)]
@@ -535,10 +534,10 @@ namespace StockSharp.BusinessEntities
 
 		private Trade _lastTrade;
 
-		/// <summary>
-		/// Информация о последней сделке. Если за сессию по инструменту не было сделок, то значение равно <see langword="null"/>.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Information about the last trade. If during the session on the instrument there were no trades, the value equals to <see langword="null" />.
+		/// </summary>
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str289Key)]
@@ -569,10 +568,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _openPrice;
 
-		/// <summary>
-		/// Первая цена сделки за сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// First trade price for the session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str558Key)]
 		[DescriptionLoc(LocalizedStrings.Str559Key)]
 		[StatisticsCategory]
@@ -596,10 +595,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _closePrice;
 
-		/// <summary>
-		/// Последняя цена сделки за предыдущую сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Last trade price for the previous session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str560Key)]
 		[DescriptionLoc(LocalizedStrings.Str561Key)]
 		[StatisticsCategory]
@@ -623,10 +622,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _lowPrice;
 
-		/// <summary>
-		/// Наименьшая цена сделки за сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Lowest price for the session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str288Key)]
 		[DescriptionLoc(LocalizedStrings.Str562Key)]
 		[StatisticsCategory]
@@ -650,10 +649,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _highPrice;
 
-		/// <summary>
-		/// Наивысшая цена сделки за сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Highest price for the session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str563Key)]
 		[DescriptionLoc(LocalizedStrings.Str564Key)]
 		[StatisticsCategory]
@@ -677,10 +676,10 @@ namespace StockSharp.BusinessEntities
 
 		private Quote _bestBid;
 
-		/// <summary>
-		/// Лучшая покупка в стакане.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Best bid in market depth.
+		/// </summary>
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str565Key)]
@@ -707,10 +706,10 @@ namespace StockSharp.BusinessEntities
 
 		private Quote _bestAsk;
 
-		/// <summary>
-		/// Лучшая продажа в стакане.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Best ask in market depth.
+		/// </summary>
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.BestAskKey)]
@@ -732,13 +731,13 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		/// <summary>
-		/// Лучшая пара котировок.
-		/// </summary>
 		//[DisplayName("Лучшая пара")]
 		//[Description("Лучшая пара котировок.")]
 		//[ExpandableObject]
 		//[StatisticsCategory]
+		/// <summary>
+		/// Best pair quotes.
+		/// </summary>
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
 		public MarketDepthPair BestPair
@@ -748,11 +747,11 @@ namespace StockSharp.BusinessEntities
 
 		private SecurityStates? _state;
 
-		/// <summary>
-		/// Текущее состояние инструмента.
-		/// </summary>
 		//[DataMember]
 		//[Enum]
+		/// <summary>
+		/// Current state of security.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
 		[DescriptionLoc(LocalizedStrings.Str569Key)]
 		[StatisticsCategory]
@@ -775,10 +774,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _minPrice;
 
-		/// <summary>
-		/// Нижний лимит цены.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Lower price limit.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.PriceMinKey)]
 		[DescriptionLoc(LocalizedStrings.PriceMinLimitKey)]
 		[StatisticsCategory]
@@ -801,10 +800,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _maxPrice;
 
-		/// <summary>
-		/// Верхний лимит цены.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Upper price limit.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.PriceMaxKey)]
 		[DescriptionLoc(LocalizedStrings.PriceMaxLimitKey)]
 		[StatisticsCategory]
@@ -827,10 +826,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _marginBuy;
 
-		/// <summary>
-		/// Гарантийное обеспечение на покупку.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Initial margin to buy.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str304Key)]
 		[DescriptionLoc(LocalizedStrings.MarginBuyKey)]
 		[StatisticsCategory]
@@ -853,10 +852,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _marginSell;
 
-		/// <summary>
-		/// Гарантийное обеспечение на продажу.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Initial margin to sell.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str305Key)]
 		[DescriptionLoc(LocalizedStrings.MarginSellKey)]
 		[StatisticsCategory]
@@ -881,7 +880,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе, через которое был загружен данный инструмент.
+		/// Connection to the trading system through which this instrument has been downloaded.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -902,10 +901,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _impliedVolatility;
 
-		/// <summary>
-		/// Волатильность (подразумеваемая).
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Volatility (implied).
+		/// </summary>
 		[DisplayName("IV")]
 		[DescriptionLoc(LocalizedStrings.Str293Key, true)]
 		[DerivativesCategory]
@@ -929,10 +928,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _historicalVolatility;
 
-		/// <summary>
-		/// Волатильность (историческая).
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Volatility (historic).
+		/// </summary>
 		[DisplayName("HV")]
 		[DescriptionLoc(LocalizedStrings.Str299Key, true)]
 		[DerivativesCategory]
@@ -956,10 +955,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _theorPrice;
 
-		/// <summary>
-		/// Теоретическая цена.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Theoretical price.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str294Key)]
 		[DescriptionLoc(LocalizedStrings.TheoreticalPriceKey)]
 		[DerivativesCategory]
@@ -983,10 +982,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _delta;
 
-		/// <summary>
-		/// Дельта опциона.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Option delta.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.DeltaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionDeltaKey)]
 		[DerivativesCategory]
@@ -1010,10 +1009,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _gamma;
 
-		/// <summary>
-		/// Гамма опциона.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Option gamma.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.GammaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionGammaKey)]
 		[DerivativesCategory]
@@ -1037,10 +1036,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _vega;
 
-		/// <summary>
-		/// Вега опциона.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Option vega.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.VegaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionVegaKey)]
 		[DerivativesCategory]
@@ -1064,10 +1063,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _theta;
 
-		/// <summary>
-		/// Тета опциона.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Option theta.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.ThetaKey)]
 		[DescriptionLoc(LocalizedStrings.OptionThetaKey)]
 		[DerivativesCategory]
@@ -1091,10 +1090,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _rho;
 
-		/// <summary>
-		/// Ро опциона.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Option rho.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.RhoKey)]
 		[DescriptionLoc(LocalizedStrings.OptionRhoKey)]
 		[DerivativesCategory]
@@ -1118,10 +1117,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _openInterest;
 
-		/// <summary>
-		/// Количество открытых позиций (открытый интерес).
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Number of open positions (open interest).
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str150Key)]
 		[DescriptionLoc(LocalizedStrings.Str151Key)]
 		[StatisticsCategory]
@@ -1145,7 +1144,7 @@ namespace StockSharp.BusinessEntities
 		private DateTime _localTime;
 
 		/// <summary>
-		/// Локальное время последнего изменения инструмента.
+		/// Local time of the last instrument change.
 		/// </summary>
 		[Browsable(false)]
 		[Ignore]
@@ -1162,12 +1161,12 @@ namespace StockSharp.BusinessEntities
 
 		private DateTimeOffset _lastChangeTime;
 
-		/// <summary>
-		/// Время последнего изменения инструмента.
-		/// </summary>
 		//[DisplayName("Изменен")]
 		//[Description("Время последнего изменения инструмента.")]
 		//[StatisticsCategory]
+		/// <summary>
+		/// Time of the last instrument change.
+		/// </summary>
 		[Browsable(false)]
 		//[Obsolete("Необходимо использовать метод IConnector.GetSecurityValue.")]
 		[Ignore]
@@ -1184,10 +1183,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _bidsVolume;
 
-		/// <summary>
-		/// Суммарный объем во всех заявках на покупку.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Total volume in all buy orders.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str295Key)]
 		[DescriptionLoc(LocalizedStrings.BidsVolumeKey)]
 		[StatisticsCategory]
@@ -1208,10 +1207,10 @@ namespace StockSharp.BusinessEntities
 
 		private int? _bidsCount;
 
-		/// <summary>
-		/// Количество заявок на покупку.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Number of buy orders.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.BidsKey)]
 		[DescriptionLoc(LocalizedStrings.BidsCountKey)]
 		[StatisticsCategory]
@@ -1232,10 +1231,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _asksVolume;
 
-		/// <summary>
-		/// Суммарный объем во всех заявках на продажу.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Total volume in all sell orders.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str297Key)]
 		[DescriptionLoc(LocalizedStrings.AsksVolumeKey)]
 		[StatisticsCategory]
@@ -1256,10 +1255,10 @@ namespace StockSharp.BusinessEntities
 
 		private int? _asksCount;
 
-		/// <summary>
-		/// Количество заявок на продажу.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Number of sell orders.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.AsksKey)]
 		[DescriptionLoc(LocalizedStrings.AsksCountKey)]
 		[StatisticsCategory]
@@ -1280,10 +1279,10 @@ namespace StockSharp.BusinessEntities
 
 		private int? _tradesCount;
 
-		/// <summary>
-		/// Количество сделок.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Number of trades.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TradesOfKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key, true)]
 		[StatisticsCategory]
@@ -1304,10 +1303,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _highBidPrice;
 
-		/// <summary>
-		/// Максимальный бид за сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Maximum bid during the session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str319Key)]
 		[DescriptionLoc(LocalizedStrings.Str594Key)]
 		[StatisticsCategory]
@@ -1328,10 +1327,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _lowAskPrice;
 
-		/// <summary>
-		/// Минимальный оффер за сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Maximum ask during the session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str320Key)]
 		[DescriptionLoc(LocalizedStrings.Str595Key)]
 		[StatisticsCategory]
@@ -1352,10 +1351,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _yield;
 
-		/// <summary>
-		/// Доходность.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Yield.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str321Key)]
 		[DescriptionLoc(LocalizedStrings.Str321Key, true)]
 		[StatisticsCategory]
@@ -1375,10 +1374,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _vwap;
 
-		/// <summary>
-		/// Средневзвешенная цена.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Average price.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.AveragePriceKey)]
 		[DescriptionLoc(LocalizedStrings.AveragePriceKey, true)]
 		[StatisticsCategory]
@@ -1398,10 +1397,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _settlementPrice;
 
-		/// <summary>
-		/// Рассчетная цена.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Settlement price.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str312Key)]
 		[DescriptionLoc(LocalizedStrings.SettlementPriceKey)]
 		[StatisticsCategory]
@@ -1421,10 +1420,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _averagePrice;
 
-		/// <summary>
-		/// Средняя цена за сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Average price per session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.AveragePriceKey)]
 		[DescriptionLoc(LocalizedStrings.Str600Key)]
 		[StatisticsCategory]
@@ -1444,10 +1443,10 @@ namespace StockSharp.BusinessEntities
 
 		private decimal? _volume;
 
-		/// <summary>
-		/// Объем за сессию.
-		/// </summary>
 		//[DataMember]
+		/// <summary>
+		/// Volume per session.
+		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
 		[DescriptionLoc(LocalizedStrings.Str601Key)]
 		[StatisticsCategory]
@@ -1475,18 +1474,18 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Id;
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Security"/>.
+		/// Create a copy of <see cref="Security"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public override Security Clone()
 		{
 			var clone = new Security();
@@ -1495,9 +1494,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Скопировать поля текущего инструмента в <paramref name="destination"/>.
+		/// To copy fields of the current instrument to <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">Инструмент, в который необходимо скопировать поля.</param>
+		/// <param name="destination">The instrument in which you should to copy fields.</param>
 		public void CopyTo(Security destination)
 		{
 			if (destination == null)
@@ -1564,9 +1563,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Вызвать событие <see cref="INotifyPropertyChanged.PropertyChanged"/>.
+		/// To call the event <see cref="INotifyPropertyChanged.PropertyChanged"/>.
 		/// </summary>
-		/// <param name="propName">Название свойства.</param>
+		/// <param name="propName">Property name.</param>
 		protected void Notify(string propName)
 		{
 			_propertyChanged.SafeInvoke(this, propName);

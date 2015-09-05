@@ -10,7 +10,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Агрегированная котировка.
+	/// Aggregate quote.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -63,9 +63,9 @@ namespace StockSharp.BusinessEntities
 		private readonly bool _checkInnerPrice;
 
 		/// <summary>
-		/// Создать <see cref="AggregatedQuote"/>.
+		/// Initializes a new instance of the <see cref="AggregatedQuote"/>.
 		/// </summary>
-		/// <param name="checkInnerPrice">Проверять ли цену внутренней котировки.</param>
+		/// <param name="checkInnerPrice">Whether to check the internal quote price.</param>
 		public AggregatedQuote(bool checkInnerPrice = true)
 		{
 			_checkInnerPrice = checkInnerPrice;
@@ -73,14 +73,14 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Коллекция вложенных котировок, объединенных в одну единую котировку.
+		/// Collection of enclosed quotes, which are combined into a single quote.
 		/// </summary>
 		public IList<Quote> InnerQuotes { get; private set; }
 
 		/// <summary>
-		/// Создать копию <see cref="AggregatedQuote" />.
+		/// Create a copy of <see cref="AggregatedQuote"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Quote Clone()
 		{
 			var clone = new AggregatedQuote(_checkInnerPrice)

@@ -1,56 +1,56 @@
-﻿namespace StockSharp.BusinessEntities
+namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Интерфейс, описывающий провайдер бирж и торговых площадок.
+	/// Interface describing exchanges and trading boards provider.
 	/// </summary>
 	public interface IExchangeInfoProvider
 	{
 		/// <summary>
-		/// Все биржи.
+		/// All exchanges.
 		/// </summary>
 		IEnumerable<ExchangeBoard> Boards { get; }
 
 		/// <summary>
-		/// Все площадки.
+		/// All boards.
 		/// </summary>
 		IEnumerable<Exchange> Exchanges { get; }
 
 		/// <summary>
-		/// Получить площадку по коду.
+		/// To get a board by the code.
 		/// </summary>
-		/// <param name="code">Код площадки <see cref="ExchangeBoard.Code"/>.</param>
-		/// <returns>Торговая площадка. Если площадка с заданным кодом не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="code">The board code <see cref="ExchangeBoard.Code"/>.</param>
+		/// <returns>Trading board. If the board with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
 		ExchangeBoard GetExchangeBoard(string code);
 
 		/// <summary>
-		/// Получить биржу по коду.
+		/// To get an exchange by the code.
 		/// </summary>
-		/// <param name="code">Код биржи <see cref="Exchange.Name"/>.</param>
-		/// <returns>Биржа. Если биржа с заданным кодом не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="code">The exchange code <see cref="Exchange.Name"/>.</param>
+		/// <returns>Exchange. If the exchange with the specified code does not exist, then <see langword="null" /> will be returned.</returns>
 		Exchange GetExchange(string code);
 
 		/// <summary>
-		/// Сохранить площадку.
+		/// To save the board.
 		/// </summary>
-		/// <param name="board">Торговая площадка.</param>
+		/// <param name="board">Trading board.</param>
 		void Save(ExchangeBoard board);
 
 		/// <summary>
-		/// Сохранить биржу.
+		/// To save the exchange.
 		/// </summary>
-		/// <param name="exchange">Биржа.</param>
+		/// <param name="exchange">Exchange.</param>
 		void Save(Exchange exchange);
 
 		/// <summary>
-		/// Оповещение о добавлении новой площадки.
+		/// Notification about adding a new board.
 		/// </summary>
 		event Action<ExchangeBoard> BoardAdded;
 
 		/// <summary>
-		/// Оповещение о добавлении новой биржи.
+		/// Notification about adding a new exchange.
 		/// </summary>
 		event Action<Exchange> ExchangeAdded;
 	}

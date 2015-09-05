@@ -1,4 +1,4 @@
-﻿namespace StockSharp.BusinessEntities
+namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Collections.Generic;
@@ -6,30 +6,30 @@
 	using System.Linq;
 
 	/// <summary>
-	/// Корзина инструментов.
+	/// Instruments basket.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public abstract class BasketSecurity : Security
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BasketSecurity"/>.
+		/// Initialize <see cref="BasketSecurity"/>.
 		/// </summary>
 		protected BasketSecurity()
 		{
 		}
 
 		/// <summary>
-		/// Инструменты, из которых создана данная корзина.
+		/// Instruments, from which this basket is created.
 		/// </summary>
 		[Browsable(false)]
 		public abstract IEnumerable<Security> InnerSecurities { get; }
 
 		/// <summary>
-		/// Проверить, используется ли указанный инструмент в настоящее время.
+		/// To check whether specified instrument is used now.
 		/// </summary>
-		/// <param name="security">Инструмент, который необходимо проверить.</param>
-		/// <returns><see langword="true"/>, если указанный инструмент используется в настоящее время, иначе, <see langword="false"/>.</returns>
+		/// <param name="security">The instrument that should be checked.</param>
+		/// <returns><see langword="true" />, if specified instrument is used now, otherwise <see langword="false" />.</returns>
 		public virtual bool Contains(Security security)
 		{
 			return InnerSecurities.Any(innerSecurity =>

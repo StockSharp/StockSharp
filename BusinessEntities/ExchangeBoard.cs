@@ -21,7 +21,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Информация о биржевой площадке.
+	/// Information about electronic board.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -2114,232 +2114,232 @@ namespace StockSharp.BusinessEntities
 		//}
 
 		/// <summary>
-		/// Информация об объединенной площадке, не имеющей ограничений в расписание работы.
+		/// ALL board with no schedule limits.
 		/// </summary>
 		public static ExchangeBoard Associated { get; private set; }
 
 		/// <summary>
-		/// Информация о тестовой площадке, не имеющая ограничения в расписание работы.
+		/// Test board with no schedule limits.
 		/// </summary>
 		public static ExchangeBoard Test { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке FORTS биржи <see cref="BusinessEntities.Exchange.Moex"/>
+		/// Information about FORTS board of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Forts { get; private set; }
 
 		/// <summary>
-		/// Информация о индексах биржи <see cref="BusinessEntities.Exchange.Moex"/>
+		/// Information about indecies of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Micex { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке AUCT биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about AUCT of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexAuct { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке AUBB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about AUBB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexAubb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке CASF биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about CASF of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexCasf { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQBR биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQBR of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqbr { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQBS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQBS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqbs { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQDP биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQDP of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqdp { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQEU биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqeu { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQUS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqus { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQNB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqnb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQNE биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqne { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQNL биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqnl { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQNO биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqno { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQOB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqob { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQOS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqos { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQOV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqov { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQLV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqlv { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQDB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQDB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqdb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQDE биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQDE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqde { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQLI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqli { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQQI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqqi { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке SMAL биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about SMAL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexSmal { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке SPOB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about SPOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexSpob { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQBR биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQBR of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqbr { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQDE биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQDE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqde { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQBS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQBS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqbs { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQEU биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqeu { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQUS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqus { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQNB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqnb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQNE биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqne { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQNL биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqnl { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQNO биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqno { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQOB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqob { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQOS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqos { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQOV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqov { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQLV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqlv { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQLI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqli { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TQQI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TQQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTqqi { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке EQRP биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about EQRP of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexEqrp { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSRP биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSRP of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsrp { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RFND биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RFND of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRfnd { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TADM биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TADM of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTadm { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке NADM биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about NADM of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexNadm { get; private set; }
 
@@ -2349,546 +2349,546 @@ namespace StockSharp.BusinessEntities
 		//public static ExchangeBoard MicexTran { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSAU биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSAU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsau { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PAUS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PAUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPaus { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSBB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSBB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsbb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSEQ биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSEQ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPseq { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSES биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSES of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPses { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSEU биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPseu { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSDB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSDB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsdb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSDE биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSDE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsde { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSUS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsus { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSNB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsnb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSNE биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsne { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSNL биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsnl { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSNO биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsno { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSOB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsob { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSOS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsos { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSOV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsov { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSLV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPslv { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSLI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsli { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PSQI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PSQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPsqi { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPEU биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpeu { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPMA биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPMA of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpma { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPMO биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPMO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpmo { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPUA биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPUA of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpua { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPUO биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPUO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpuo { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPUQ биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPUQ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpuq { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке FBCB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about FBCB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexFbcb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке FBFX биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about FBFX of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexFbfx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке IRK2 биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about IRK2 of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexIrk2 { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPQI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpqi { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTEQ биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTEQ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPteq { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTES биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTES of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtes { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTEU биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTEU of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPteu { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTUS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTUS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtus { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTNB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTNB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtnb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTNE биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTNE of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtne { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTNL биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTNL of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtnl { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTNO биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTNO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtno { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTOB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTOB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtob { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTOS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTOS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtos { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTOV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTOV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtov { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTLV биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTLV of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtlv { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTLI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTLI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtli { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке PTQI биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about PTQI of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexPtqi { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке SCVC биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about SCVC of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexScvc { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPNG биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPNG of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpng { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке RPFG биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about RPFG of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexRpfg { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке CDCR биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about CDCR of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexCbcr { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке CRED биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about CRED of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexCred { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке DEPZ биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about DEPZ of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexDepz { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке DPVB биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about DPVB of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexDpvb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке DPFK биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about DPFK of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexDpfk { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке DPFO биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about DPFO of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexDpfo { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке DPPF биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about DPPF of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexDppf { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке CETS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about CETS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexCets { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке AETS биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about AETS of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexAets { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке CNGD биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about CNGD of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexCngd { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке TRAN биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about TRAN of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexTran { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке QJSIM биржи <see cref="BusinessEntities.Exchange.Moex"/>.
+		/// Information about QJSIM of <see cref="BusinessEntities.Exchange.Moex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard MicexJunior { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке срочного рынка биржи <see cref="BusinessEntities.Exchange.Ux"/>.
+		/// Information about derivatives market of <see cref="BusinessEntities.Exchange.Ux"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Ux { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке фондового рынка биржи <see cref="BusinessEntities.Exchange.Ux"/>.
+		/// Information about stock market of <see cref="BusinessEntities.Exchange.Ux"/> exchange.
 		/// </summary>
 		public static ExchangeBoard UxStock { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Cme"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Cme"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Cme { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Cce"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Cce"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Cce { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Cbot"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Cbot"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Cbot { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Nymex"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Nymex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Nymex { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Amex"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Amex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Amex { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Nyse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Nyse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Nyse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Nasdaq"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Nasdaq"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Nasdaq { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Nqlx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Nqlx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Nqlx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Lse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Lse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Lse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Tse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Tse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Tse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Hkex"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Hkex"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Hkex { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Hkfe"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Hkfe"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Hkfe { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Sse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Sse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Sse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Szse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Szse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Szse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Tsx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Tsx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Tsx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Fwb"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Fwb"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Fwb { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Asx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Asx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Asx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Nzx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Nzx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Nzx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Bse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Bse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Bse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Nse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Nse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Nse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Swx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Swx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Swx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Krx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Krx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Krx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Mse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Mse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Mse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Jse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Jse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Jse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Sgx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Sgx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Sgx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Tsec"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Tsec"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Tsec { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Pse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Pse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Pse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Klse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Klse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Klse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Idx"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Idx"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Idx { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Set"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Set"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Set { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Cse"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Cse"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Cse { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке биржи <see cref="BusinessEntities.Exchange.Tase"/>.
+		/// Information about board of <see cref="BusinessEntities.Exchange.Tase"/> exchange.
 		/// </summary>
 		public static ExchangeBoard Tase { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке брокера <see cref="BusinessEntities.Exchange.Lmax"/>.
+		/// Information about brokerage board <see cref="BusinessEntities.Exchange.Lmax"/>.
 		/// </summary>
 		public static ExchangeBoard Lmax { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке брокера <see cref="BusinessEntities.Exchange.DukasCopy"/>.
+		/// Information about brokerage board <see cref="BusinessEntities.Exchange.DukasCopy"/>.
 		/// </summary>
 		public static ExchangeBoard DukasCopy { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке брокера <see cref="BusinessEntities.Exchange.GainCapital"/>.
+		/// Information about brokerage board <see cref="BusinessEntities.Exchange.GainCapital"/>.
 		/// </summary>
 		public static ExchangeBoard GainCapital { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке брокера <see cref="BusinessEntities.Exchange.MBTrading"/>.
+		/// Information about brokerage board <see cref="BusinessEntities.Exchange.MBTrading"/>.
 		/// </summary>
 		public static ExchangeBoard MBTrading { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке брокера <see cref="BusinessEntities.Exchange.TrueFX"/>.
+		/// Information about brokerage board <see cref="BusinessEntities.Exchange.TrueFX"/>.
 		/// </summary>
 		public static ExchangeBoard TrueFX { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.Integral"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.Integral"/>.
 		/// </summary>
 		public static ExchangeBoard Integral { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.Cfh"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.Cfh"/>.
 		/// </summary>
 		public static ExchangeBoard Cfh { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.Ond"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.Ond"/>.
 		/// </summary>
 		public static ExchangeBoard Ond { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.Nasdaq"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.Nasdaq"/>.
 		/// </summary>
 		public static ExchangeBoard Smart { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.Btce"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.Btce"/>.
 		/// </summary>
 		public static ExchangeBoard Btce { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.BitStamp"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.BitStamp"/>.
 		/// </summary>
 		public static ExchangeBoard BitStamp { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.BtcChina"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.BtcChina"/>.
 		/// </summary>
 		public static ExchangeBoard BtcChina { get; private set; }
 
 		/// <summary>
-		/// Информация о площадке <see cref="BusinessEntities.Exchange.Icbit"/>.
+		/// Information about board <see cref="BusinessEntities.Exchange.Icbit"/>.
 		/// </summary>
 		public static ExchangeBoard Icbit { get; private set; }
 
 		/// <summary>
-		/// Информация о виртуальной площадке Finam.
+		/// Information about virtual board Finam.
 		/// </summary>
 		public static ExchangeBoard Finam { get; private set; }
 
 		/// <summary>
-		/// Информация о виртуальной площадке Mfd.
+		/// Information about virtual board Mfd.
 		/// </summary>
 		public static ExchangeBoard Mfd { get; private set; }
 
 		private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
 
 		/// <summary>
-		/// Получить список бирж.
+		/// To get a list of exchanges.
 		/// </summary>
-		/// <returns>Биржи.</returns>
+		/// <returns>Exchanges.</returns>
 		public static IEnumerable<Exchange> EnumerateExchanges()
 		{
 			return typeof(Exchange).GetMembers<PropertyInfo>(_publicStatic, typeof(Exchange))
@@ -2896,9 +2896,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить список площадок.
+		/// To get a list of boards.
 		/// </summary>
-		/// <returns>Площадки.</returns>
+		/// <returns>Boards.</returns>
 		public static IEnumerable<ExchangeBoard> EnumerateExchangeBoards()
 		{
 			return typeof(ExchangeBoard).GetMembers<PropertyInfo>(_publicStatic, typeof(ExchangeBoard))
@@ -2906,7 +2906,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать <see cref="ExchangeBoard"/>.
+		/// Initializes a new instance of the <see cref="ExchangeBoard"/>.
 		/// </summary>
 		public ExchangeBoard()
 		{
@@ -2916,7 +2916,7 @@ namespace StockSharp.BusinessEntities
 		private string _code = string.Empty;
 
 		/// <summary>
-		/// Код площадки.
+		/// Board code.
 		/// </summary>
 		[DataMember]
 		[Identity]
@@ -2942,7 +2942,7 @@ namespace StockSharp.BusinessEntities
 		private TimeSpan _expiryTime;
 
 		/// <summary>
-		/// Время экспирации инструментов.
+		/// Securities expiration times.
 		/// </summary>
 		[TimeSpan]
 		[DataMember]
@@ -2963,7 +2963,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Биржа, на которой расположена площадка.
+		/// Exchange, where board is situated.
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
@@ -2975,7 +2975,7 @@ namespace StockSharp.BusinessEntities
 		private bool _isSupportAtomicReRegister;
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через <see cref="OrderReplaceMessage"/> в виде одной транзакции.
+		/// Gets a value indicating whether the re-registration orders via <see cref="OrderReplaceMessage"/> as a single transaction.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.ReregisteringKey)]
@@ -2994,7 +2994,7 @@ namespace StockSharp.BusinessEntities
 		private bool _isSupportMarketOrders;
 
 		/// <summary>
-		/// Поддерживается ли рыночный тип заявок <see cref="OrderTypes.Market"/>.
+		/// Are market type orders <see cref="OrderTypes.Market"/> supported.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.MarketOrdersKey)]
@@ -3013,7 +3013,7 @@ namespace StockSharp.BusinessEntities
 		private WorkingTime _workingTime = new WorkingTime();
 
 		/// <summary>
-		/// Время работы площадки.
+		/// Board working hours.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.WorkingTimeKey)]
@@ -3045,21 +3045,21 @@ namespace StockSharp.BusinessEntities
 		//}
 
 		/// <summary>
-		/// Получить площадку по ее коду.
+		/// To get a board by its code.
 		/// </summary>
-		/// <param name="code">Код площадки.</param>
-		/// <returns>Найденная площадка. Если площадки с переданным названием не существует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="code">Board code.</param>
+		/// <returns>Found board. If board with the passed name does not exist, then <see langword="null" /> will be returned.</returns>
 		public static ExchangeBoard GetBoard(string code)
 		{
 			return code.CompareIgnoreCase("RTS") ? Forts : ExchangeInfoProvider.GetExchangeBoard(code);
 		}
 
 		/// <summary>
-		/// Получить площадку по ее коду. Если площадки с переданным кодом не существует, то она будет создана.
+		/// To get a board by its code. If board with the passed name does not exist, then it will be created.
 		/// </summary>
-		/// <param name="code">Код площадки.</param>
-		/// <param name="createBoard">Обработчик, создающий площадку, если она не найдена. Если значение равно <see langword="null"/>, то площадка создается с инициализацией по-умолчанию.</param>
-		/// <returns>Биржевая площадка.</returns>
+		/// <param name="code">Board code.</param>
+		/// <param name="createBoard">The handler creating a board, if it is not found. If the value is <see langword="null" />, then the board is created by default initialization.</param>
+		/// <returns>Exchange board.</returns>
 		public static ExchangeBoard GetOrCreateBoard(string code, Func<string, ExchangeBoard> createBoard = null)
 		{
 			if (code.IsEmpty())
@@ -3103,9 +3103,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Сохранить площадку.
+		/// To save the board.
 		/// </summary>
-		/// <param name="board">Площадка.</param>
+		/// <param name="board">Board.</param>
 		public static void SaveBoard(ExchangeBoard board)
 		{
 			if (board == null)
@@ -3118,10 +3118,10 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по бирже.
+		/// Extended exchange info.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с биржей.
+		/// Required if additional information associated with the exchange is stored in the program. .
 		/// </remarks>
 		[XmlIgnore]
 		[Browsable(false)]
@@ -3161,19 +3161,19 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0} ({1})".Put(Code, Exchange);
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="ExchangeBoard" /> на эквивалентность.
+		/// Compare <see cref="ExchangeBoard"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		protected override bool OnEquals(ExchangeBoard other)
 		{
 			return Code == other.Code && Exchange == other.Exchange;
@@ -3182,9 +3182,9 @@ namespace StockSharp.BusinessEntities
 		private int _hashCode;
 
 		/// <summary>
-		/// Рассчитать хеш-код объекта <see cref="ExchangeBoard"/>.
+		/// Get the hash code of the object <see cref="ExchangeBoard"/>.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			if (_hashCode == 0)
@@ -3194,9 +3194,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="ExchangeBoard" />.
+		/// Create a copy of <see cref="ExchangeBoard"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override ExchangeBoard Clone()
 		{
 			return new ExchangeBoard
@@ -3211,7 +3211,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Является ли площадка ММВБ площадкой.
+		/// Is MICEX board.
 		/// </summary>
 		public bool IsMicex
 		{
@@ -3219,7 +3219,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Является ли площадка площадкой фондового рынка биржи UX.
+		/// Is the UX exchange stock market board.
 		/// </summary>
 		public bool IsUxStock
 		{
@@ -3227,9 +3227,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Exchange = storage.GetValue<SettingsStorage>("Exchange").Load<Exchange>();
@@ -3241,9 +3241,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Exchange", Exchange.Save());

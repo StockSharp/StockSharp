@@ -14,7 +14,7 @@ namespace StockSharp.BusinessEntities
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Собственная сделка.
+	/// Own trade.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -25,14 +25,14 @@ namespace StockSharp.BusinessEntities
 	public class MyTrade : IExtendableEntity
 	{
 		/// <summary>
-		/// Создать <see cref="MyTrade"/>.
+		/// Initializes a new instance of the <see cref="MyTrade"/>.
 		/// </summary>
 		public MyTrade()
 		{
 		}
 
 		/// <summary>
-		/// Заявка, по которой совершена сделка.
+		/// Order, for which a trade was filled.
 		/// </summary>
 		[DataMember]
 		[RelationSingle]
@@ -44,7 +44,7 @@ namespace StockSharp.BusinessEntities
 		public Order Order { get; set; }
 
 		/// <summary>
-		/// Информация о сделке.
+		/// Trade info.
 		/// </summary>
 		[DataMember]
 		[RelationSingle]
@@ -56,7 +56,7 @@ namespace StockSharp.BusinessEntities
 		public Trade Trade { get; set; }
 
 		/// <summary>
-		/// Комиссия.
+		/// Commission.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
@@ -67,7 +67,7 @@ namespace StockSharp.BusinessEntities
 		public decimal? Commission { get; set; }
 
 		/// <summary>
-		/// Проскальзывание в цене сделки.
+		/// Slippage in trade price.
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -80,11 +80,10 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по собственной сделке.
+		/// Extended trade info.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с собственной сделкой.
-		/// Например, размер комиссии, валюту, тип сделки.
+		/// Required if additional information associated with the own trade is stored in the program. For example, the commission amount, the currency, the trade type.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -99,9 +98,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str509Params.Put(Trade, Order);

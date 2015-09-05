@@ -11,7 +11,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Портфель, описывающий торговый счет и размер сгенерированной комиссии по нему.
+	/// Portfolio, describing the trading account and the size of its generated commission.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -22,7 +22,7 @@ namespace StockSharp.BusinessEntities
 	public class Portfolio : BasePosition
 	{
 		/// <summary>
-		/// Создать <see cref="Portfolio"/>.
+		/// Initializes a new instance of the <see cref="Portfolio"/>.
 		/// </summary>
 		public Portfolio()
 		{
@@ -31,7 +31,7 @@ namespace StockSharp.BusinessEntities
 		private string _name;
 
 		/// <summary>
-		/// Кодовое название портфеля.
+		/// Portfolio code name.
 		/// </summary>
 		[DataMember]
 		[Identity]
@@ -54,7 +54,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _leverage;
 
 		/// <summary>
-		/// Плечо маржи.
+		/// Margin leverage.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str542Key)]
@@ -76,7 +76,7 @@ namespace StockSharp.BusinessEntities
 		private CurrencyTypes? _currency;
 
 		/// <summary>
-		/// Валюта портфеля.
+		/// Portfolio currency.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
@@ -97,7 +97,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе, через которое был загружен данный портфель.
+		/// Connection to the trading system through which this portfolio has been loaded.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -109,7 +109,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Биржевая площадка, для которой действует данный портфель.
+		/// Exchange board, for which the current portfolio is active.
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
@@ -121,7 +121,7 @@ namespace StockSharp.BusinessEntities
 		private PortfolioStates? _state;
 
 		/// <summary>
-		/// Состояние портфеля.
+		/// Portfolio state.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
@@ -144,7 +144,7 @@ namespace StockSharp.BusinessEntities
 		private static readonly Portfolio _anonymousPortfolio = new Portfolio { Name = LocalizedStrings.Str545 };
 
 		/// <summary>
-		/// Портфель, ассоциированный с заявками, полученными через лог заявок.
+		/// Portfolio associated with the orders received through the orders log.
 		/// </summary>
 		public static Portfolio AnonymousPortfolio
 		{
@@ -152,9 +152,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Portfolio"/>.
+		/// Create a copy of <see cref="Portfolio"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public Portfolio Clone()
 		{
 			var clone = new Portfolio();
@@ -163,9 +163,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Скопировать поля текущего портфеля в <paramref name="destination"/>.
+		/// To copy the current portfolio fields to the <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">Портфель, в который необходимо скопировать поля.</param>
+		/// <param name="destination">The portfolio, in which fields should be copied .</param>
 		public void CopyTo(Portfolio destination)
 		{
 			base.CopyTo(destination);
@@ -179,9 +179,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Name;

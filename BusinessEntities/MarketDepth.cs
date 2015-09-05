@@ -16,7 +16,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Стакан с котировками.
+	/// Order book.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -26,9 +26,9 @@ namespace StockSharp.BusinessEntities
 		private readonly SyncObject _syncRoot = new SyncObject();
 
 		/// <summary>
-		/// Создать стакан.
+		/// Create order book.
 		/// </summary>
-		/// <param name="security">Инструмент стакана.</param>
+		/// <param name="security">Security.</param>
 		public MarketDepth(Security security)
 		{
 			if (ReferenceEquals(security, null))
@@ -41,10 +41,10 @@ namespace StockSharp.BusinessEntities
 		private int _maxDepth = 100;
 
 		/// <summary>
-		/// Максимальная глубина стакана.
+		/// The maximum depth of order book.
 		/// </summary>
 		/// <remarks>
-		/// По умолчанию значение равно 100. Если новая котировка превысила максимальную глубину, то будет вызвано событие <see cref="QuoteOutOfDepth"/>.
+		/// The default value is 100. If the exceeded the maximum depth the event <see cref="MarketDepth.QuoteOutOfDepth"/> will triggered.
 		/// </remarks>
 		public int MaxDepth
 		{
@@ -61,7 +61,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Инструмент стакана.
+		/// Security.
 		/// </summary>
 		public Security Security { get; private set; }
 
@@ -69,7 +69,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -81,28 +81,28 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Автоматически проверять котировки через метод <see cref="Verify()"/>.
+		/// Automatically check for quotes by <see cref="Verify()"/>.
 		/// </summary>
 		/// <remarks>
-		/// По-умолчанию выключено в целях производительности.
+		/// The default is disabled for performance.
 		/// </remarks>
 		public bool AutoVerify { get; set; }
 
 		/// <summary>
-		/// Использовать ли аггрегированные котировки <see cref="AggregatedQuote"/> при слиянии объемом с одинаковой ценой.
+		/// Whether to use aggregated quotes <see cref="AggregatedQuote"/> at the join of the volumes with the same price.
 		/// </summary>
 		/// <remarks>
-		/// По-умолчанию выключено в целях производительности.
+		/// The default is disabled for performance.
 		/// </remarks>
 		public bool UseAggregatedQuotes { get; set; }
 
 		/// <summary>
-		/// Время последнего изменения стакана.
+		/// Last change time.
 		/// </summary>
 		public DateTimeOffset LastChangeTime { get; set; }
 
 		/// <summary>
-		/// Локальное время последнего изменения стакана.
+		/// The order book local time stamp.
 		/// </summary>
 		public DateTime LocalTime { get; set; }
 
@@ -111,7 +111,7 @@ namespace StockSharp.BusinessEntities
 		private Quote[] _bids;
 
 		/// <summary>
-		/// Возвращает массив бидов упорядоченных по убыванию цены. Первый бид будет иметь максимальную цену, и будет являться лучшим.
+		/// Get the array of bids sorted by descending price. The first (best) bid will be the maximum price.
 		/// </summary>
 		public Quote[] Bids 
 		{
@@ -137,7 +137,7 @@ namespace StockSharp.BusinessEntities
 		private Quote[] _asks;
 
 		/// <summary>
-		/// Возвращает массив офферов упорядоченных по возрастанию цены. Первый оффер будет иметь минимальную цену, и будет являться лучшим.
+		/// Get the array of asks sorted by ascending price. The first (best) ask will be the minimum price.
 		/// </summary>
 		public Quote[] Asks 
 		{ 
@@ -160,22 +160,22 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Валюта торгового инструмента.
+		/// Trading security currency.
 		/// </summary>
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// Лучший бид. Если стакан не содержит бидов, то будет возвращено <see langword="null"/>.
+		/// The best bid. If the order book does not contain bids, will be returned <see langword="null" />.
 		/// </summary>
 		public Quote BestBid { get; private set; }
 
 		/// <summary>
-		/// Лучший оффер. Если стакан не содержит офферов, то будет возвращено <see langword="null"/>.
+		/// The best ask. If the order book does not contain asks, will be returned <see langword="null" />.
 		/// </summary>
 		public Quote BestAsk { get; private set; }
 
 		/// <summary>
-		/// Лучшая пара котировок. Если стакан пустой, то будет возвращено <see langword="null"/>.
+		/// The best pair. If the order book is empty, will be returned <see langword="null" />.
 		/// </summary>
 		public MarketDepthPair BestPair
 		{
@@ -183,7 +183,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить общий ценовой размер по бидам.
+		/// To get the total price size by bids.
 		/// </summary>
 		public decimal TotalBidsPrice
 		{
@@ -195,7 +195,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить общий ценовой размер по офферам.
+		/// To get the total price size by offers.
 		/// </summary>
 		public decimal TotalAsksPrice
 		{
@@ -207,7 +207,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить общий объем по бидам.
+		/// Get bids total volume.
 		/// </summary>
 		public decimal TotalBidsVolume
 		{
@@ -219,7 +219,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить общий объем по офферам.
+		/// Get asks total volume.
 		/// </summary>
 		public decimal TotalAsksVolume
 		{
@@ -231,7 +231,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить общий объем.
+		/// Get total volume.
 		/// </summary>
 		public decimal TotalVolume
 		{
@@ -243,7 +243,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить общий ценовой размер.
+		/// To get the total price size.
 		/// </summary>
 		public decimal TotalPrice
 		{
@@ -255,7 +255,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Общее количество котировок (бидов + оферов) в стакане.
+		/// Total quotes count (bids + asks).
 		/// </summary>
 		public int Count
 		{
@@ -269,7 +269,7 @@ namespace StockSharp.BusinessEntities
 		private int _depth;
 
 		/// <summary>
-		/// Глубина стакана.
+		/// Depth of book.
 		/// </summary>
 		public int Depth
 		{
@@ -285,24 +285,24 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Событие о превышении котировки максимально допустимой глубины в стакане.
+		/// Event on exceeding the maximum allowable depth of quotes.
 		/// </summary>
 		public event Action<Quote> QuoteOutOfDepth;
 
 		/// <summary>
-		/// Событие об изменении глубины стакана <see cref="Depth"/>.
+		/// Depth <see cref="MarketDepth.Depth"/> changed.
 		/// </summary>
 		public event Action DepthChanged;
 
 		/// <summary>
-		/// Событие изменения котировок в стакане.
+		/// Quotes changed.
 		/// </summary>
 		public event Action QuotesChanged;
 
 		/// <summary>
-		/// Уменьшить стакан до необходимой глубины.
+		/// To reduce the order book to the required depth.
 		/// </summary>
-		/// <param name="newDepth">Новая глубина стакана.</param>
+		/// <param name="newDepth">New order book depth.</param>
 		public void Decrease(int newDepth)
 		{
 			var currentDepth = Depth;
@@ -335,11 +335,11 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить котировку по направлению <see cref="Sides"/> и индексу глубины.
+		/// To get a quote by the direction <see cref="Sides"/> and the depth index.
 		/// </summary>
-		/// <param name="orderDirection">Направление заявок.</param>
-		/// <param name="depthIndex">Индекс глубины. Нулевой индекс означает лучшую котировку.</param>
-		/// <returns>Котировка. Если для заданной глубины не существует котировки, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="orderDirection">Orders side.</param>
+		/// <param name="depthIndex">Depth index. Zero index means the best quote.</param>
+		/// <returns>Quote. If a quote does not exist for specified depth, then the <see langword="null" /> will be returned.</returns>
 		public Quote GetQuote(Sides orderDirection, int depthIndex)
 		{
 			lock (_syncRoot)
@@ -347,10 +347,10 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить котировку по цене.
+		/// To get a quote by the price.
 		/// </summary>
-		/// <param name="price">Цена котировки.</param>
-		/// <returns>Найденная котировка. Если для переданной цены в стакане не существует котировки, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="price">Quote price.</param>
+		/// <returns>Found quote. If there is no quote in the order book for the passed price, then the <see langword="null" /> will be returned.</returns>
 		public Quote GetQuote(decimal price)
 		{
 			var quotes = GetQuotes(price);
@@ -359,30 +359,30 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить котировки по направлению <see cref="Sides"/>.
+		/// To get quotes by the direction <see cref="Sides"/>.
 		/// </summary>
-		/// <param name="orderDirection">Направление заявок.</param>
-		/// <returns>Котировки.</returns>
+		/// <param name="orderDirection">Orders side.</param>
+		/// <returns>Quotes.</returns>
 		public Quote[] GetQuotes(Sides orderDirection)
 		{
 			return orderDirection == Sides.Buy ? Bids : Asks;
 		}
 
 		/// <summary>
-		/// Получить лучшую котировку по направлению <see cref="Sides"/>.
+		/// To get the best quote by the direction <see cref="Sides"/>.
 		/// </summary>
-		/// <param name="orderDirection">Направление заявки.</param>
-		/// <returns>Лучшая котировка. Если стакан пустой, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="orderDirection">Order side.</param>
+		/// <returns>The best quote. If the order book is empty, then the <see langword="null" /> will be returned.</returns>
 		public Quote GetBestQuote(Sides orderDirection)
 		{
 			return orderDirection == Sides.Buy ? BestBid : BestAsk;
 		}
 
 		/// <summary>
-		/// Получить пару котировок (бид + оффер) по индексу глубины.
+		/// To get a pair of quotes (bid + offer) by the depth index.
 		/// </summary>
-		/// <param name="depthIndex">Индекс глубины. Нулевой индекс означает лучшую пару котировок.</param>
-		/// <returns>Пара котировок. Если индекс больше глубины стакана <see cref="Depth"/>, то возвращается <see langword="null"/>.</returns>
+		/// <param name="depthIndex">Depth index. Zero index means the best pair of quotes.</param>
+		/// <returns>The pair of quotes. If the index is larger than book order depth <see cref="MarketDepth.Depth"/>, then the <see langword="null" /> is returned.</returns>
 		public MarketDepthPair GetPair(int depthIndex)
 		{
 			if (depthIndex < 0)
@@ -401,10 +401,10 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить край стакана на заданную глубину в виде пар котировок.
+		/// To get a pair of quotes for a given book depth.
 		/// </summary>
-		/// <param name="depth">Глубина края стакана. Отсчет идет от лучших котировок.</param>
-		/// <returns>Край стакана.</returns>
+		/// <param name="depth">Book depth. The counting is from the best quotes.</param>
+		/// <returns>Spread.</returns>
 		public IEnumerable<MarketDepthPair> GetTopPairs(int depth)
 		{
 			if (depth < 0)
@@ -429,10 +429,10 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить край стакана на заданную глубину в виде котировок.
+		/// To get quotes for a given book depth.
 		/// </summary>
-		/// <param name="depth">Глубина края стакана. Котировки идут в порядке увеличения цены от бидов до офферов.</param>
-		/// <returns>Край стакана.</returns>
+		/// <param name="depth">Book depth. Quotes are in order of price increasing from bids to offers.</param>
+		/// <returns>Spread.</returns>
 		public IEnumerable<Quote> GetTopQuotes(int depth)
 		{
 			if (depth < 0)
@@ -465,14 +465,14 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Обновить стакан новыми котировками.
+		/// Update the order book by new quotes.
 		/// </summary>
+		/// <param name="quotes">The new quotes.</param>
+		/// <param name="lastChangeTime">Last change time.</param>
+		/// <returns>Market depth.</returns>
 		/// <remarks>
-		/// Старые котировки удаляются из стакана.
+		/// The old quotes will be removed from the book.
 		/// </remarks>
-		/// <param name="quotes">Новые котировки.</param>
-		/// <param name="lastChangeTime">Время последнего изменения стакана.</param>
-		/// <returns>Стакан.</returns>
 		public MarketDepth Update(IEnumerable<Quote> quotes, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (quotes == null)
@@ -493,16 +493,16 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Обновить стакан новыми бидами и офферами.
+		/// Update the order book by new bids and asks.
 		/// </summary>
+		/// <param name="bids">The new bids.</param>
+		/// <param name="asks">The new asks.</param>
+		/// <param name="isSorted">Are quotes sorted. This parameter is used for optimization in order to prevent re-sorting.</param>
+		/// <param name="lastChangeTime">Last change time.</param>
+		/// <returns>Market depth.</returns>
 		/// <remarks>
-		/// Старые котировки удаляются из стакана.
+		/// The old quotes will be removed from the book.
 		/// </remarks>
-		/// <param name="bids">Новые биды.</param>
-		/// <param name="asks">Новые оффера.</param>
-		/// <param name="isSorted">Отсортированы ли котировки. Параметр используется в целях оптимизации для предотвращения повторной сортировки.</param>
-		/// <param name="lastChangeTime">Время последнего изменения стакана.</param>
-		/// <returns>Стакан.</returns>
 		public MarketDepth Update(IEnumerable<Quote> bids, IEnumerable<Quote> asks, bool isSorted = false, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (bids == null)
@@ -570,11 +570,11 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Обновить стакан. Версия без проверок и блокировок.
+		/// To update the order book. The version without checks and blockings.
 		/// </summary>
-		/// <param name="bids">Отсортированные биды.</param>
-		/// <param name="asks">Отсортированные офера.</param>
-		/// <param name="lastChangeTime">Время обновления.</param>
+		/// <param name="bids">Sorted bids.</param>
+		/// <param name="asks">Sorted asks.</param>
+		/// <param name="lastChangeTime">Change time.</param>
 		public void Update(Quote[] bids, Quote[] asks, DateTimeOffset lastChangeTime)
 		{
 			//_bidsCache = null;
@@ -591,20 +591,19 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Обновить котировку. Если котировка с такой ценой уже присутствует в стакане, то она обновляется переданной.
-		/// Иначе, она автоматически перестраивает стакан.
+		/// To refresh the quote. If a quote with the same price is already in the order book, it is updated as passed. Otherwise, it automatically rebuilds the order book.
 		/// </summary>
-		/// <param name="quote">Новая котировка.</param>
+		/// <param name="quote">The new quote.</param>
 		public void UpdateQuote(Quote quote)
 		{
 			SetQuote(quote, false);
 		}
 
 		/// <summary>
-		/// Добавить котировку на покупку.
+		/// Add buy quote.
 		/// </summary>
-		/// <param name="price">Цена покупки.</param>
-		/// <param name="volume">Объем покупки.</param>
+		/// <param name="price">Buy price.</param>
+		/// <param name="volume">Buy volume.</param>
 		public void AddBid(decimal price, decimal volume)
 		{
 			AddQuote(new Quote
@@ -617,10 +616,10 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Добавить котировку на продажу.
+		/// Add sell quote.
 		/// </summary>
-		/// <param name="price">Цена продажи.</param>
-		/// <param name="volume">Объем продажи.</param>
+		/// <param name="price">Sell price.</param>
+		/// <param name="volume">Sell volume.</param>
 		public void AddAsk(decimal price, decimal volume)
 		{
 			AddQuote(new Quote
@@ -633,9 +632,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Добавить котировку. Если котировка с такой ценой уже присутствует в стакане, то они объединяются в <see cref="AggregatedQuote"/>.
+		/// To add the quote. If a quote with the same price is already in the order book, they are combined into the <see cref="AggregatedQuote"/>.
 		/// </summary>
-		/// <param name="quote">Новая котировка.</param>
+		/// <param name="quote">The new quote.</param>
 		public void AddQuote(Quote quote)
 		{
 			SetQuote(quote, true);
@@ -739,18 +738,18 @@ namespace StockSharp.BusinessEntities
 		#region IEnumerable<Quote>
 
 		/// <summary>
-		/// Получить объект-перечислитель.
+		/// To get the enumerator object.
 		/// </summary>
-		/// <returns>Объект-перечислитель.</returns>
+		/// <returns>The enumerator object.</returns>
 		public IEnumerator<Quote> GetEnumerator()
 		{
 			return this.SyncGet(c => Bids.Reverse().Concat(Asks)).Cast<Quote>().GetEnumerator();
 		}
 
 		/// <summary>
-		/// Получить объект-перечислитель.
+		/// To get the enumerator object.
 		/// </summary>
-		/// <returns>Объект-перечислитель.</returns>
+		/// <returns>The enumerator object.</returns>
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
@@ -759,19 +758,19 @@ namespace StockSharp.BusinessEntities
 		#endregion
 
 		/// <summary>
-		/// Получить все пары из стакана.
+		/// To get all pairs from the order book.
 		/// </summary>
-		/// <returns>Пары, из которых составлен стакан.</returns>
+		/// <returns>Pairs from which the order book is composed.</returns>
 		public IEnumerable<MarketDepthPair> ToPairs()
 		{
 			return GetTopPairs(Depth);
 		}
 
 		/// <summary>
-		/// Удалить котировку из стакана.
+		/// Remove the quote.
 		/// </summary>
-		/// <param name="quote">Котировка, которую необходимо удалить.</param>
-		/// <param name="lastChangeTime">Время изменения стакана.</param>
+		/// <param name="quote">The quote to remove.</param>
+		/// <param name="lastChangeTime">Order book change time.</param>
 		public void Remove(Quote quote, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (quote == null)
@@ -781,11 +780,11 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Удалить объем для заданной цены.
+		/// Remove the volume for the price.
 		/// </summary>
-		/// <param name="price">Цена, для которой необходимо удалить котировку.</param>
-		/// <param name="volume">Объем, который нужно удалить. Если он не указан, значит удаляется вся котировка.</param>
-		/// <param name="lastChangeTime">Время изменения стакана.</param>
+		/// <param name="price">Remove the quote for the price.</param>
+		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
+		/// <param name="lastChangeTime">Order book change time.</param>
 		public void Remove(decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			lock (_syncRoot)
@@ -800,12 +799,12 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Удалить объем для заданной цены.
+		/// Remove the volume for the price.
 		/// </summary>
-		/// <param name="direction">Направление заявки.</param>
-		/// <param name="price">Цена, для которой необходимо удалить котировку.</param>
-		/// <param name="volume">Объем, который нужно удалить. Если он не указан, значит удаляется вся котировка.</param>
-		/// <param name="lastChangeTime">Время изменения стакана.</param>
+		/// <param name="direction">Order side.</param>
+		/// <param name="price">Remove the quote for the price.</param>
+		/// <param name="volume">The volume to be deleted. If it is not specified, then all the quote is removed.</param>
+		/// <param name="lastChangeTime">Order book change time.</param>
 		public void Remove(Sides direction, decimal price, decimal volume = 0, DateTimeOffset lastChangeTime = default(DateTimeOffset))
 		{
 			if (price <= 0)
@@ -1021,9 +1020,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="MarketDepth"/>.
+		/// Create a copy of <see cref="MarketDepth"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override MarketDepth Clone()
 		{
 			var clone = new MarketDepth(Security)
@@ -1044,21 +1043,21 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return this.Select(q => q.ToString()).Join(Environment.NewLine);
 		}
 
 		/// <summary>
-		/// Определить, правильное ли состояние содержит стакан.
+		/// To determine whether the order book is in the right state.
 		/// </summary>
+		/// <returns><see langword="true" />, if the order book contains correct data, otherwise <see langword="false" />.</returns>
 		/// <remarks>
-		/// Используется в случаях, когда торговая система в результате ошибки присылает неправильные котировки.
+		/// It is used in cases when the trading system by mistake sends the wrong quotes.
 		/// </remarks>
-		/// <returns><see langword="true"/>, если стакан содержит корректные данные, иначе, <see langword="false"/>.</returns>
 		public bool Verify()
 		{
 			lock (_syncRoot)

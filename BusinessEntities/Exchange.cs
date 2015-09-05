@@ -13,7 +13,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Информация о бирже.
+	/// Exchange info.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -461,7 +461,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать <see cref="Exchange"/>.
+		/// Initializes a new instance of the <see cref="Exchange"/>.
 		/// </summary>
 		public Exchange()
 		{
@@ -472,7 +472,7 @@ namespace StockSharp.BusinessEntities
 		private string _name;
 
 		/// <summary>
-		/// Кодовое название биржи.
+		/// Exchange code name.
 		/// </summary>
 		[DataMember]
 		[Identity]
@@ -492,7 +492,7 @@ namespace StockSharp.BusinessEntities
 		private string _rusName;
 
 		/// <summary>
-		/// Русскоязычное название биржи.
+		/// Russian exchange name.
 		/// </summary>
 		[DataMember]
 		public string RusName
@@ -511,7 +511,7 @@ namespace StockSharp.BusinessEntities
 		private string _engName;
 
 		/// <summary>
-		/// Англоязычное название биржи.
+		/// English exchange name.
 		/// </summary>
 		[DataMember]
 		public string EngName
@@ -530,7 +530,7 @@ namespace StockSharp.BusinessEntities
 		private CountryCodes? _countryCode;
 
 		/// <summary>
-		/// ISO код страны.
+		/// ISO country code.
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -551,7 +551,7 @@ namespace StockSharp.BusinessEntities
 		private TimeZoneInfo _timeZoneInfo = TimeZoneInfo.Utc;
 
 		/// <summary>
-		/// Информация о временной зоне, где находится биржа.
+		/// Information about the time zone where the exchange is located.
 		/// </summary>
 		[TimeZoneInfo]
 		[XmlIgnore]
@@ -573,237 +573,237 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Информация о тестовой бирже, не имеющей ограничений в расписании работы.
+		/// Information about the test exchange, which has no limitations in work schedule.
 		/// </summary>
 		public static Exchange Test { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже MOEX (Moscow Exchange).
+		/// Information about MOEX (Moscow Exchange).
 		/// </summary>
 		public static Exchange Moex { get; private set; }
 
 		/// <summary>
-		/// Информация об Украiнська Бiржа.
+		/// Information about UX.
 		/// </summary>
 		public static Exchange Ux { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже AMEX (American Stock Exchange).
+		/// Information about AMEX (American Stock Exchange).
 		/// </summary>
 		public static Exchange Amex { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже CME (Chicago Mercantile Exchange).
+		/// Information about CME (Chicago Mercantile Exchange).
 		/// </summary>
 		public static Exchange Cme { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже CBOT (Chicago Board of Trade).
+		/// Information about CBOT (Chicago Board of Trade).
 		/// </summary>
 		public static Exchange Cbot { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже CCE (Chicago Climate Exchange).
+		/// Information about CCE (Chicago Climate Exchange).
 		/// </summary>
 		public static Exchange Cce { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже NYMEX (New York Mercantile Exchange).
+		/// Information about NYMEX (New York Mercantile Exchange).
 		/// </summary>
 		public static Exchange Nymex { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже NYSE (New York Stock Exchange).
+		/// Information about NYSE (New York Stock Exchange).
 		/// </summary>
 		public static Exchange Nyse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже NASDAQ.
+		/// Information about NASDAQ.
 		/// </summary>
 		public static Exchange Nasdaq { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже NQLX.
+		/// Information about NQLX.
 		/// </summary>
 		public static Exchange Nqlx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже LSE (London Stock Exchange).
+		/// Information about LSE (London Stock Exchange).
 		/// </summary>
 		public static Exchange Lse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже TSE (Tokio Stock Exchange).
+		/// Information about TSE (Tokio Stock Exchange).
 		/// </summary>
 		public static Exchange Tse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже HKEX (Hong Kong Stock Exchange).
+		/// Information about HKEX (Hong Kong Stock Exchange).
 		/// </summary>
 		public static Exchange Hkex { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже HKFE (Hong Kong Futures Exchange).
+		/// Information about HKFE (Hong Kong Futures Exchange).
 		/// </summary>
 		public static Exchange Hkfe { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже Sse (Shanghai Stock Exchange).
+		/// Information about Sse (Shanghai Stock Exchange).
 		/// </summary>
 		public static Exchange Sse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже SZSE (Shenzhen Stock Exchange).
+		/// Information about SZSE (Shenzhen Stock Exchange).
 		/// </summary>
 		public static Exchange Szse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже TSX (Toronto Stock Exchange).
+		/// Information about TSX (Toronto Stock Exchange).
 		/// </summary>
 		public static Exchange Tsx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже FWB (Frankfurt Stock Exchange).
+		/// Information about FWB (Frankfurt Stock Exchange).
 		/// </summary>
 		public static Exchange Fwb { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже ASX (Australian Securities Exchange).
+		/// Information about ASX (Australian Securities Exchange).
 		/// </summary>
 		public static Exchange Asx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже NZX (New Zealand Exchange).
+		/// Information about NZX (New Zealand Exchange).
 		/// </summary>
 		public static Exchange Nzx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже BSE (Bombay Stock Exchange).
+		/// Information about BSE (Bombay Stock Exchange).
 		/// </summary>
 		public static Exchange Bse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже NSE (National Stock Exchange of India).
+		/// Information about NSE (National Stock Exchange of India).
 		/// </summary>
 		public static Exchange Nse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже SWX (Swiss Exchange).
+		/// Information about SWX (Swiss Exchange).
 		/// </summary>
 		public static Exchange Swx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже KRX (Korea Exchange).
+		/// Information about KRX (Korea Exchange).
 		/// </summary>
 		public static Exchange Krx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже MSE (Madrid Stock Exchange).
+		/// Information about MSE (Madrid Stock Exchange).
 		/// </summary>
 		public static Exchange Mse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже JSE (Johannesburg Stock Exchange).
+		/// Information about JSE (Johannesburg Stock Exchange).
 		/// </summary>
 		public static Exchange Jse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже SGX (Singapore Exchange).
+		/// Information about SGX (Singapore Exchange).
 		/// </summary>
 		public static Exchange Sgx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже TSEC (Taiwan Stock Exchange).
+		/// Information about TSEC (Taiwan Stock Exchange).
 		/// </summary>
 		public static Exchange Tsec { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже PSE (Philippine Stock Exchange).
+		/// Information about PSE (Philippine Stock Exchange).
 		/// </summary>
 		public static Exchange Pse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже KLSE (Bursa Malaysia).
+		/// Information about KLSE (Bursa Malaysia).
 		/// </summary>
 		public static Exchange Klse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже IDX (Indonesia Stock Exchange).
+		/// Information about IDX (Indonesia Stock Exchange).
 		/// </summary>
 		public static Exchange Idx { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже SET (Stock Exchange of Thailand).
+		/// Information about SET (Stock Exchange of Thailand).
 		/// </summary>
 		public static Exchange Set { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже CSE (Colombo Stock Exchange).
+		/// Information about CSE (Colombo Stock Exchange).
 		/// </summary>
 		public static Exchange Cse { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже TASE (Tel Aviv Stock Exchange).
+		/// Information about TASE (Tel Aviv Stock Exchange).
 		/// </summary>
 		public static Exchange Tase { get; private set; }
 
 		/// <summary>
-		/// Информация о брокере LMAX (LMAX Exchange).
+		/// Information about LMAX (LMAX Exchange).
 		/// </summary>
 		public static Exchange Lmax { get; private set; }
 
 		/// <summary>
-		/// Информация о брокере DukasCopy.
+		/// Information about DukasCopy.
 		/// </summary>
 		public static Exchange DukasCopy { get; private set; }
 
 		/// <summary>
-		/// Информация о брокере GAIN Capital.
+		/// Information about GAIN Capital.
 		/// </summary>
 		public static Exchange GainCapital { get; private set; }
 
 		/// <summary>
-		/// Информация о брокере MB Trading.
+		/// Information about MB Trading.
 		/// </summary>
 		public static Exchange MBTrading { get; private set; }
 
 		/// <summary>
-		/// Информация о брокере TrueFX.
+		/// Information about TrueFX.
 		/// </summary>
 		public static Exchange TrueFX { get; private set; }
 
 		/// <summary>
-		/// Информация о CFH.
+		/// Information about CFH.
 		/// </summary>
 		public static Exchange Cfh { get; private set; }
 
 		/// <summary>
-		/// Информация о OANDA.
+		/// Information about OANDA.
 		/// </summary>
 		public static Exchange Ond { get; private set; }
 
 		/// <summary>
-		/// Информация о Integral.
+		/// Information about Integral.
 		/// </summary>
 		public static Exchange Integral { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже BTCE.
+		/// Information about BTCE.
 		/// </summary>
 		public static Exchange Btce { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже BitStamp.
+		/// Information about BitStamp.
 		/// </summary>
 		public static Exchange BitStamp { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже BtcChina.
+		/// Information about BtcChina.
 		/// </summary>
 		public static Exchange BtcChina { get; private set; }
 
 		/// <summary>
-		/// Информация о бирже Icbit.
+		/// Information about Icbit.
 		/// </summary>
 		public static Exchange Icbit { get; private set; }
 		
@@ -811,10 +811,10 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по бирже.
+		/// Extended exchange info.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с биржей.
+		/// Required if additional information associated with the exchange is stored in the program. .
 		/// </remarks>
 		[XmlIgnore]
 		[Browsable(false)]
@@ -854,37 +854,37 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Name;
 		}
 
 		/// <summary>
-		/// Сравнить <see cref="Exchange" /> на эквивалентность.
+		/// Compare <see cref="Exchange"/> on the equivalence.
 		/// </summary>
-		/// <param name="other">Другое значение, с которым необходимо сравнивать.</param>
-		/// <returns><see langword="true"/>, если другое значение равно текущему, иначе, <see langword="false"/>.</returns>
+		/// <param name="other">Another value with which to compare.</param>
+		/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 		protected override bool OnEquals(Exchange other)
 		{
 			return Name == other.Name;
 		}
 
 		/// <summary>
-		/// Рассчитать хеш-код объекта <see cref="Exchange"/>.
+		/// Get the hash code of the object <see cref="Exchange"/>.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			return Name.GetHashCode();
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Exchange" />.
+		/// Create a copy of <see cref="Exchange"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Exchange Clone()
 		{
 			return new Exchange
@@ -898,9 +898,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Name = storage.GetValue<string>("Name");
@@ -911,9 +911,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Name", Name);

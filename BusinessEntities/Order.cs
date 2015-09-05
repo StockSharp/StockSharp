@@ -15,7 +15,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Заявка.
+	/// Order.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
@@ -26,7 +26,7 @@ namespace StockSharp.BusinessEntities
 	public class Order : NotifiableObject, IExtendableEntity
 	{
 		/// <summary>
-		/// Создать <see cref="Order"/>.
+		/// Initializes a new instance of the <see cref="Order"/>.
 		/// </summary>
 		public Order()
 		{
@@ -35,7 +35,7 @@ namespace StockSharp.BusinessEntities
 		private TimeSpan? _latencyRegistration;
 
 		/// <summary>
-		/// Время, которое потребовалось для регистрации заявки.
+		/// Time taken to register an order.
 		/// </summary>
 		[TimeSpan]
 		[DisplayNameLoc(LocalizedStrings.Str517Key)]
@@ -58,7 +58,7 @@ namespace StockSharp.BusinessEntities
 		private TimeSpan? _latencyCancellation;
 
 		/// <summary>
-		/// Время, которое потребовалось для отмены заявки.
+		/// Time taken to cancel an order.
 		/// </summary>
 		[TimeSpan]
 		[DisplayNameLoc(LocalizedStrings.Str519Key)]
@@ -81,7 +81,7 @@ namespace StockSharp.BusinessEntities
 		private long? _id;
 
 		/// <summary>
-		/// Идентификатор заявки.
+		/// Order ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str361Key)]
@@ -103,7 +103,7 @@ namespace StockSharp.BusinessEntities
 		private string _stringId;
 
 		/// <summary>
-		/// Идентификатор заявки (ввиде строки, если электронная площадка не использует числовое представление идентификатора заявки).
+		/// Order ID (as string, if electronic board does not use numeric order ID representation).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str521Key)]
@@ -122,7 +122,7 @@ namespace StockSharp.BusinessEntities
 		private string _boardId;
 
 		/// <summary>
-		/// Идентификатор заявки электронной площадки. Используется, если <see cref="Id"/> или <see cref="StringId"/> содержат идентификаторы брокерской системы.
+		/// Board order id. Uses in case of <see cref="Order.Id"/> and <see cref="Order.StringId"/> is a brokerage system ids.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str117Key)]
@@ -141,7 +141,7 @@ namespace StockSharp.BusinessEntities
 		private DateTimeOffset _time;
 
 		/// <summary>
-		/// Время выставления заявки на бирже.
+		/// Order placing time on exchange.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str522Key)]
@@ -164,7 +164,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Идентификатор транзакции. Автоматически устанавливается при вызове метода <see cref="IConnector.RegisterOrder" />.
+		/// Transaction ID. Automatically set when the <see cref="IConnector.RegisterOrder"/> method called.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TransactionKey)]
@@ -174,7 +174,7 @@ namespace StockSharp.BusinessEntities
 		public long TransactionId { get; set; }
 
 		/// <summary>
-		/// Инструмент, по которому выставляется заявка.
+		/// Security, for which an order is being placed.
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
@@ -186,7 +186,7 @@ namespace StockSharp.BusinessEntities
 		private OrderStates _state;
 
 		/// <summary>
-		/// Состояние заявки.
+		/// Order state.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.StateKey)]
@@ -206,7 +206,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Портфель, в рамках которого торгуется заявка.
+		/// Portfolio, in which the order is being traded.
 		/// </summary>
 		[DataMember]
 		[RelationSingle(IdentityType = typeof(string))]
@@ -218,7 +218,7 @@ namespace StockSharp.BusinessEntities
 		private readonly Lazy<SynchronizedList<string>> _messages = new Lazy<SynchronizedList<string>>(() => new SynchronizedList<string>());
 
 		/// <summary>
-		/// Сообщения к заявке (создаются торговой системой при регистрации, изменении или снятии).
+		/// Messages for order (created by the trading system when registered, changed or cancelled).
 		/// </summary>
 		[XmlIgnore]
 		[Ignore]
@@ -233,7 +233,7 @@ namespace StockSharp.BusinessEntities
 		private DateTimeOffset _lastChangeTime;
 
 		/// <summary>
-		/// Время последнего изменения заявки (Снятие, Сведение).
+		/// Time of last order change (Cancellation, Fill).
 		/// </summary>
 		[DataMember]
 		//[Nullable]
@@ -256,7 +256,7 @@ namespace StockSharp.BusinessEntities
 		private DateTime _localTime;
 
 		/// <summary>
-		/// Локальное время последнего изменения заявки (Снятие, Сведение).
+		/// Last trade change local time (Cancellation, Fill).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str530Key)]
@@ -276,7 +276,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Цена заявки.
+		/// Order price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
@@ -287,7 +287,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _volume;
 
 		/// <summary>
-		/// Количество контрактов в заявке.
+		/// Number of contracts in an order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -304,7 +304,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Видимое количество контрактов в заявке.
+		/// Visible quantity of contracts in order.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VisibleVolumeKey)]
@@ -314,7 +314,7 @@ namespace StockSharp.BusinessEntities
 		public decimal? VisibleVolume { get; set; }
 
 		/// <summary>
-		/// Направление заявки (покупка или продажа).
+		/// Order side (buy or sell).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]
@@ -325,7 +325,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _balance;
 
 		/// <summary>
-		/// Остаток контрактов в заявке.
+		/// Order contracts remainder.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str130Key)]
@@ -347,7 +347,7 @@ namespace StockSharp.BusinessEntities
 		private OrderStatus? _status;
 
 		/// <summary>
-		/// Системный статус заявки.
+		/// System order status.
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -368,7 +368,7 @@ namespace StockSharp.BusinessEntities
 		private bool? _isSystem;
 
 		/// <summary>
-		/// Является ли заявка системной.
+		/// Is a system trade.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str139Key)]
@@ -389,7 +389,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Комментарий к выставляемой заявке.
+		/// Placed order comment.
 		/// </summary>
 		[DataMember]
 		[Primitive]
@@ -399,7 +399,7 @@ namespace StockSharp.BusinessEntities
 		public string Comment { get; set; }
 
 		/// <summary>
-		/// Тип заявки.
+		/// Order type.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str132Key)]
@@ -410,11 +410,10 @@ namespace StockSharp.BusinessEntities
 		private DateTimeOffset? _expiryDate;
 
 		/// <summary>
-		/// Время экспирации заявки. По-умолчанию равно <see langword="null"/>, что означает действие заявки до отмены (GTC).
+		/// Order expiry time. The default is <see langword="null" />, which mean (GTC).
 		/// </summary>
 		/// <remarks>
-		/// Если значение равно <see cref="DateTimeOffset.MaxValue"/>, то заявка выставляется до отмены.
-		/// Иначе, указывается конкретный срок.
+		/// If the value is <see cref="DateTimeOffset.MaxValue"/>, then the order is registered until cancel. Otherwise, the period is specified.
 		/// </remarks>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str141Key)]
@@ -433,11 +432,11 @@ namespace StockSharp.BusinessEntities
 			}
 		}
 
-		/// <summary>
-		/// Условие заявки (например, параметры стоп- или алго- заявков).
-		/// </summary>
 		//[DataMember]
 		//[InnerSchema(IsNullable = true)]
+		/// <summary>
+		/// Order condition (e.g., stop- and algo- orders parameters).
+		/// </summary>
 		[Ignore]
 		[XmlIgnore]
 		[DisplayNameLoc(LocalizedStrings.Str154Key)]
@@ -446,7 +445,7 @@ namespace StockSharp.BusinessEntities
 		public OrderCondition Condition { get; set; }
 
 		/// <summary>
-		/// Время жизни лимитной заявки.
+		/// Limit order time in force.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.TimeInForceKey)]
 		[DescriptionLoc(LocalizedStrings.Str232Key)]
@@ -457,7 +456,7 @@ namespace StockSharp.BusinessEntities
 		private Order _derivedOrder;
 
 		/// <summary>
-		/// Биржевая заявка, которая была создана стоп-заявкой при активации условия (<see langword="null"/>, если стоп-условие еще не было активировано).
+		/// Exchange order that was created by the stop-order when the condition is activated (<see langword="null" /> if a stop condition has not been activated).
 		/// </summary>
 		[DataMember]
 		[InnerSchema]
@@ -479,7 +478,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Информация для РЕПО\РЕПО-М заявок.
+		/// Information for REPO\REPO-M orders.
 		/// </summary>
 		[Ignore]
 		[DisplayNameLoc(LocalizedStrings.Str233Key)]
@@ -488,7 +487,7 @@ namespace StockSharp.BusinessEntities
 		public RepoOrderInfo RepoInfo { get; set; }
 
 		/// <summary>
-		/// Информация для РПС заявок.
+		/// Information for Negotiate Deals Mode orders.
 		/// </summary>
 		[Ignore]
 		[DisplayNameLoc(LocalizedStrings.Str235Key)]
@@ -500,11 +499,10 @@ namespace StockSharp.BusinessEntities
 		private SynchronizedDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по заявке.
+		/// Extended information on order.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с заявкой.
-		/// Например, время активации, доходность для обычных заявок, или идентификатор заявки-условия для стоп-заявки.
+		/// Required if additional information associated with the order is stored in the program. For example, the activation time, the yield for usual orders or the condition order ID for a stop order.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -522,7 +520,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Комиссия (брокерская, биржевая и т.д.).
+		/// Comission (broker, exchange etc.).
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -535,7 +533,7 @@ namespace StockSharp.BusinessEntities
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе, через которое была зарегистрирована данная заявка.
+		/// Connection to the trading system through which this order has been registered.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -555,7 +553,7 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Пользовательский идентификатор заявки.
+		/// User's order ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str165Key)]
@@ -564,7 +562,7 @@ namespace StockSharp.BusinessEntities
 		public string UserOrderId { get; set; }
 
 		/// <summary>
-		/// Код брокерской фирмы.
+		/// Broker firm code.
 		/// </summary>
 		[DataMember]
 		[MainCategory]
@@ -573,7 +571,7 @@ namespace StockSharp.BusinessEntities
 		public string BrokerCode { get; set; }
 
 		/// <summary>
-		/// Код клиента, присвоенный брокером.
+		/// Client code assigned by the broker.
 		/// </summary>
 		[DataMember]
 		[MainCategory]
@@ -582,7 +580,7 @@ namespace StockSharp.BusinessEntities
 		public string ClientCode { get; set; }
 
 		/// <summary>
-		/// Валюта торгового инструмента.
+		/// Trading security currency.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
@@ -592,9 +590,9 @@ namespace StockSharp.BusinessEntities
 		public CurrencyTypes? Currency { get; set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str534Params

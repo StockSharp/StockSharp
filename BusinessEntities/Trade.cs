@@ -15,7 +15,7 @@ namespace StockSharp.BusinessEntities
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Тиковая сделка.
+	/// Tick trade.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -24,14 +24,14 @@ namespace StockSharp.BusinessEntities
 	public class Trade : Cloneable<Trade>, IExtendableEntity
 	{
 		/// <summary>
-		/// Создать <see cref="Trade"/>.
+		/// Initializes a new instance of the <see cref="Trade"/>.
 		/// </summary>
 		public Trade()
 		{
 		}
 
 		/// <summary>
-		/// Идентификатор сделки.
+		/// Trade ID.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str361Key)]
@@ -42,7 +42,7 @@ namespace StockSharp.BusinessEntities
 		public long Id { get; set; }
 
 		/// <summary>
-		/// Идентификатор сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).
+		/// Trade ID (as string, if electronic board does not use numeric order ID representation).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.OrderIdStringKey)]
@@ -52,7 +52,7 @@ namespace StockSharp.BusinessEntities
 		public string StringId { get; set; }
 
 		/// <summary>
-		/// Инструмент, по которому была совершена сделка.
+		/// The instrument, on which the trade was completed.
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[XmlIgnore]
@@ -61,7 +61,7 @@ namespace StockSharp.BusinessEntities
 		public Security Security { get; set; }
 
 		/// <summary>
-		/// Время совершения сделки.
+		/// Trade time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.TimeKey)]
@@ -71,7 +71,7 @@ namespace StockSharp.BusinessEntities
 		public DateTimeOffset Time { get; set; }
 
 		/// <summary>
-		/// Локальное время получения сделки.
+		/// Trade received local time.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str514Key)]
@@ -81,7 +81,7 @@ namespace StockSharp.BusinessEntities
 		public DateTime LocalTime { get; set; }
 
 		/// <summary>
-		/// Количество контрактов в сделке.
+		/// Number of contracts in a trade.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -91,7 +91,7 @@ namespace StockSharp.BusinessEntities
 		public decimal Volume { get; set; }
 
 		/// <summary>
-		/// Цена сделки.
+		/// Trade price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
@@ -101,7 +101,7 @@ namespace StockSharp.BusinessEntities
 		public decimal Price { get; set; }
 
 		/// <summary>
-		/// Направление заявки (покупка или продажа), которая привела к сделке.
+		/// Order side (buy or sell), which led to the trade.
 		/// </summary>
 		[DataMember]
 		[Nullable]
@@ -112,7 +112,7 @@ namespace StockSharp.BusinessEntities
 		public Sides? OrderDirection { get; set; }
 
 		/// <summary>
-		/// Является ли сделка системной.
+		/// Is a system trade.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.SystemTradeKey)]
@@ -123,14 +123,14 @@ namespace StockSharp.BusinessEntities
 		public bool? IsSystem { get; set; }
 
 		/// <summary>
-		/// Системный статус сделки.
+		/// System trade status.
 		/// </summary>
 		[Browsable(false)]
 		[Nullable]
 		public int? Status { get; set; }
 
 		/// <summary>
-		/// Количество открытых позиций (открытый интерес).
+		/// Number of open positions (open interest).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str150Key)]
@@ -141,7 +141,7 @@ namespace StockSharp.BusinessEntities
 		public decimal? OpenInterest { get; set; }
 
 		/// <summary>
-		/// Является ли тик восходящим или нисходящим в цене.
+		/// Is tick ascending or descending in price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str157Key)]
@@ -152,7 +152,7 @@ namespace StockSharp.BusinessEntities
 		public bool? IsUpTick { get; set; }
 
 		/// <summary>
-		/// Валюта торгового инструмента.
+		/// Trading security currency.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.CurrencyKey)]
@@ -165,11 +165,10 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по сделке.
+		/// Extended trade info.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной со сделкой.
-		/// Например, операция, приведшая к сделке.
+		/// Required if additional information associated with the trade is stored in the program. For example, the operation that results to the trade.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -183,9 +182,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Trade"/>.
+		/// Create a copy of <see cref="Trade"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public override Trade Clone()
 		{
 			return new Trade
@@ -207,18 +206,18 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Рассчитать хеш-код объекта <see cref="Trade"/>.
+		/// Get the hash code of the object <see cref="Trade"/>.
 		/// </summary>
-		/// <returns>Хеш-код.</returns>
+		/// <returns>A hash code.</returns>
 		public override int GetHashCode()
 		{
 			return (Security != null ? Security.GetHashCode() : 0) ^ Id.GetHashCode();
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0} {1} {2} {3}".Put(Time, Id, Price, Volume);

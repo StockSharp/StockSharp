@@ -9,7 +9,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Идентификаторы инструмента в других системах.
+	/// Security IDs in other systems.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -18,14 +18,14 @@ namespace StockSharp.BusinessEntities
 	public class SecurityExternalId : Cloneable<SecurityExternalId>
 	{
 		/// <summary>
-		/// Создать <see cref="SecurityExternalId"/>.
+		/// Initializes a new instance of the <see cref="SecurityExternalId"/>.
 		/// </summary>
 		public SecurityExternalId()
 		{
 		}
 
 		/// <summary>
-		/// Идентификатор в формате SEDOL (Stock Exchange Daily Official List).
+		/// ID in SEDOL format (Stock Exchange Daily Official List).
 		/// </summary>
 		[DataMember]
 		[DisplayName("SEDOL")]
@@ -33,7 +33,7 @@ namespace StockSharp.BusinessEntities
 		public string Sedol { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате CUSIP (Committee on Uniform Securities Identification Procedures).
+		/// ID in CUSIP format (Committee on Uniform Securities Identification Procedures).
 		/// </summary>
 		[DataMember]
 		[DisplayName("CUSIP")]
@@ -41,7 +41,7 @@ namespace StockSharp.BusinessEntities
 		public string Cusip { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате ISIN (International Securities Identification Number).
+		/// ID in ISIN format (International Securities Identification Number).
 		/// </summary>
 		[DataMember]
 		[DisplayName("ISIN")]
@@ -49,7 +49,7 @@ namespace StockSharp.BusinessEntities
 		public string Isin { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате RIC (Reuters Instrument Code).
+		/// ID in RIC format (Reuters Instrument Code).
 		/// </summary>
 		[DataMember]
 		[DisplayName("RIC")]
@@ -57,7 +57,7 @@ namespace StockSharp.BusinessEntities
 		public string Ric { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате Bloomberg.
+		/// ID in Bloomberg format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("Bloomberg")]
@@ -65,7 +65,7 @@ namespace StockSharp.BusinessEntities
 		public string Bloomberg { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате IQFeed.
+		/// ID in IQFeed format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("IQFeed")]
@@ -73,7 +73,7 @@ namespace StockSharp.BusinessEntities
 		public string IQFeed { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате Interactive Brokers.
+		/// ID in Interactive Brokers format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("Interactive Brokers")]
@@ -82,7 +82,7 @@ namespace StockSharp.BusinessEntities
 		public int? InteractiveBrokers { get; set; }
 
 		/// <summary>
-		/// Идентификатор в формате Plaza.
+		/// ID in Plaza format.
 		/// </summary>
 		[DataMember]
 		[DisplayName("Plaza")]
@@ -90,9 +90,9 @@ namespace StockSharp.BusinessEntities
 		public string Plaza { get; set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			var str = string.Empty;
@@ -125,9 +125,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="SecurityExternalId"/>.
+		/// Create a copy of <see cref="SecurityExternalId"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public override SecurityExternalId Clone()
 		{
 			return new SecurityExternalId

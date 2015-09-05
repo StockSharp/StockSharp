@@ -1,4 +1,4 @@
-﻿namespace StockSharp.BusinessEntities
+namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Runtime.Serialization;
@@ -10,7 +10,7 @@
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Позиция по инструменту.
+	/// The position by the instrument.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -21,14 +21,14 @@
 	public class Position : BasePosition
 	{
 		/// <summary>
-		/// Создать <see cref="Position"/>.
+		/// Initializes a new instance of the <see cref="Position"/>.
 		/// </summary>
 		public Position()
 		{
 		}
 
 		/// <summary>
-		/// Портфель, в котором создана позиция.
+		/// Portfolio, in which position is created.
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
@@ -38,7 +38,7 @@
 		public Portfolio Portfolio { get; set; }
 
 		/// <summary>
-		/// Инструмент, по которому создана позиция.
+		/// Security, for which a position was created.
 		/// </summary>
 		[RelationSingle(IdentityType = typeof(string))]
 		[DataMember]
@@ -48,7 +48,7 @@
 		public Security Security { get; set; }
 
 		/// <summary>
-		/// Название депозитария, где находится физически ценная бумага.
+		/// The depositary where the physical security.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.DepoKey)]
 		[DescriptionLoc(LocalizedStrings.DepoNameKey)]
@@ -56,7 +56,7 @@
 		public string DepoName { get; set; }
 
 		/// <summary>
-		/// Вид лимита для Т+ рынка.
+		/// Limit type for Т+ market.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str272Key)]
 		[DescriptionLoc(LocalizedStrings.Str267Key)]
@@ -65,9 +65,9 @@
 		public TPlusLimits? LimitType { get; set; }
 
 		/// <summary>
-		/// Создать копию <see cref="Position"/>.
+		/// Create a copy of <see cref="Position"/>.
 		/// </summary>
-		/// <returns>Копия объекта.</returns>
+		/// <returns>Copy.</returns>
 		public Position Clone()
 		{
 			var clone = new Position();
@@ -76,9 +76,9 @@
 		}
 
 		/// <summary>
-		/// Скопировать поля текущей позиции в <paramref name="destination"/>.
+		/// To copy fields of the current position to <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">Позиция, в которую необходимо скопировать поля.</param>
+		/// <param name="destination">The position in which you should to copy fields.</param>
 		public void CopyTo(Position destination)
 		{
 			base.CopyTo(destination);
@@ -90,9 +90,9 @@
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0}-{1}".Put(Portfolio, Security);

@@ -9,469 +9,459 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Основной интерфейс, предоставляющий подключение к торговым системам.
+	/// The main interface providing the connection to the trading systems.
 	/// </summary>
 	public interface IConnector : IPersistable, ILogReceiver, IMarketDataProvider, ISecurityProvider
 	{
 		/// <summary>
-		/// Событие появления собственных новых сделок.
+		/// Own trades received.
 		/// </summary>
 		event Action<IEnumerable<MyTrade>> NewMyTrades;
 
 		/// <summary>
-		/// Событие появления всех новых сделок.
+		/// Tick tades received.
 		/// </summary>
 		event Action<IEnumerable<Trade>> NewTrades;
 
 		/// <summary>
-		/// Событие появления новых заявок.
+		/// Orders received.
 		/// </summary>
 		event Action<IEnumerable<Order>> NewOrders;
 
 		/// <summary>
-		/// Событие изменения состояния заявок (снята, удовлетворена).
+		/// Orders changed (cancelled, matched).
 		/// </summary>
 		event Action<IEnumerable<Order>> OrdersChanged;
 
 		/// <summary>
-		/// Событие об ошибках, связанных с регистрацией заявок.
+		/// Order registration errors event.
 		/// </summary>
 		event Action<IEnumerable<OrderFail>> OrdersRegisterFailed;
 
 		/// <summary>
-		/// Событие об ошибках, связанных со снятием заявок.
+		/// Order cancellation errors event.
 		/// </summary>
 		event Action<IEnumerable<OrderFail>> OrdersCancelFailed;
 
 		/// <summary>
-		/// Событие об ошибках, связанных с регистрацией стоп-заявок.
+		/// Stop-order registration errors event.
 		/// </summary>
 		event Action<IEnumerable<OrderFail>> StopOrdersRegisterFailed;
 
 		/// <summary>
-		/// Событие об ошибках, связанных со снятием стоп-заявок.
+		/// Stop-order cancellation errors event.
 		/// </summary>
 		event Action<IEnumerable<OrderFail>> StopOrdersCancelFailed;
 
 		/// <summary>
-		/// Событие появления новых стоп-заявок.
+		/// Stop-orders received.
 		/// </summary>
 		event Action<IEnumerable<Order>> NewStopOrders;
 
 		/// <summary>
-		/// Событие изменения состояния стоп-заявок.
+		/// Stop orders state change event .
 		/// </summary>
 		event Action<IEnumerable<Order>> StopOrdersChanged;
 
 		/// <summary>
-		/// Событие появления новых инструментов.
+		/// Securities received.
 		/// </summary>
 		event Action<IEnumerable<Security>> NewSecurities;
 
 		/// <summary>
-		/// Событие изменения параметров инструментов.
+		/// Securities changed.
 		/// </summary>
 		event Action<IEnumerable<Security>> SecuritiesChanged;
 
 		/// <summary>
-		/// Событие появления новых портфелей.
+		/// Portfolios received.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> NewPortfolios;
 
 		/// <summary>
-		/// Событие изменения параметров портфелей.
+		/// Portfolios changed.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> PortfoliosChanged;
 
 		/// <summary>
-		/// Событие появления новых позиций.
+		/// Positions received.
 		/// </summary>
 		event Action<IEnumerable<Position>> NewPositions;
 
 		/// <summary>
-		/// Событие изменения параметров позиций.
+		/// Positions changed.
 		/// </summary>
 		event Action<IEnumerable<Position>> PositionsChanged;
 
 		/// <summary>
-		/// Событие появления новых стаканов с котировками.
+		/// Order books received.
 		/// </summary>
 		event Action<IEnumerable<MarketDepth>> NewMarketDepths;
 
 		/// <summary>
-		/// Событие изменения стаканов с котировками.
+		/// Order books changed.
 		/// </summary>
 		event Action<IEnumerable<MarketDepth>> MarketDepthsChanged;
 
 		/// <summary>
-		/// Событие появления новых записей в логе заявок.
+		/// Order log received.
 		/// </summary>
 		event Action<IEnumerable<OrderLogItem>> NewOrderLogItems;
 
 		/// <summary>
-		/// Событие появления новости.
+		/// News received.
 		/// </summary>
 		event Action<News> NewNews;
 
 		/// <summary>
-		/// Событие изменения новости (например, при скачивании текста <see cref="StockSharp.BusinessEntities.News.Story"/>).
+		/// News updated (news body received <see cref="StockSharp.BusinessEntities.News.Story"/>).
 		/// </summary>
 		event Action<News> NewsChanged;
 
 		/// <summary>
-		/// Событие обработки нового сообщения <see cref="Message"/>.
+		/// Message processed <see cref="Message"/>.
 		/// </summary>
 		event Action<Message> NewMessage;
 
 		/// <summary>
-		/// Событие успешного подключения.
+		/// Connected.
 		/// </summary>
 		event Action Connected;
 
 		/// <summary>
-		/// Событие успешного отключения.
+		/// Disconnected.
 		/// </summary>
 		event Action Disconnected;
 
 		/// <summary>
-		/// Событие ошибки подключения (например, соединения было разорвано).
+		/// Connection error (for example, the connection was aborted by server).
 		/// </summary>
 		event Action<Exception> ConnectionError;
 
 		/// <summary>
-		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
+		/// Dats process error.
 		/// </summary>
 		event Action<Exception> Error;
 
 		/// <summary>
-		/// Событие, сигнализирующее об изменении текущего времени на биржевых площадках <see cref="ExchangeBoards"/>.
-		/// Передается разница во времени, прошедшее с последнего вызова события. Первый раз событие передает значение <see cref="TimeSpan.Zero"/>.
+		/// Server time changed <see cref="IConnector.ExchangeBoards"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 		/// </summary>
 		event Action<TimeSpan> MarketTimeChanged;
 
 		/// <summary>
-		/// Событие, передающее результат поиска, запущенного через метод <see cref="LookupSecurities(StockSharp.BusinessEntities.Security)"/>.
+		/// Lookup result <see cref="LookupSecurities(StockSharp.BusinessEntities.Security)"/> received.
 		/// </summary>
 		event Action<IEnumerable<Security>> LookupSecuritiesResult;
 
 		/// <summary>
-		/// Событие, передающее результат поиска, запущенного через метод <see cref="LookupPortfolios"/>.
+		/// Lookup result <see cref="LookupPortfolios"/> received.
 		/// </summary>
 		event Action<IEnumerable<Portfolio>> LookupPortfoliosResult;
 
 		/// <summary>
-		/// Событие успешной регистрации инструмента для получения маркет-данных.
+		/// Successful subscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataTypes> MarketDataSubscriptionSucceeded;
 
 		/// <summary>
-		/// Событие ошибки регистрации инструмента для получения маркет-данных.
+		/// Error subscription market-data.
 		/// </summary>
 		event Action<Security, MarketDataTypes, Exception> MarketDataSubscriptionFailed;
 
 		/// <summary>
-		/// Событие изменения состояния сессии для биржевой площадки.
+		/// Session changed.
 		/// </summary>
 		event Action<ExchangeBoard, SessionStates> SessionStateChanged;
 
 		/// <summary>
-		/// Получить состояние сессии для заданной площадки.
+		/// Get session state for required board.
 		/// </summary>
-		/// <param name="board">Биржевая площадка электронных торгов.</param>
-		/// <returns>Состояние сессии. Если информация о состоянии сессии отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="board">Electronic board.</param>
+		/// <returns>Session state. If the information about session state does not exist, then <see langword="null" /> will be returned.</returns>
 		SessionStates? GetSessionState(ExchangeBoard board);
 
 		/// <summary>
-		/// Список всех биржевых площадок, для которых загружены инструменты <see cref="Securities"/>.
+		/// List of all exchange boards, for which instruments are loaded <see cref="Securities"/>.
 		/// </summary>
 		IEnumerable<ExchangeBoard> ExchangeBoards { get; }
 
 		/// <summary>
-		/// Список всех загруженных инструментов.
-		/// Вызывать необходимо после того, как пришло событие <see cref="NewSecurities" />. Иначе будет возвращено пустое множество.
+		/// List of all loaded instruments. It should be called after event <see cref="IConnector.NewSecurities"/> arisen. Otherwise the empty set will be returned.
 		/// </summary>
 		IEnumerable<Security> Securities { get; }
 
 		/// <summary>
-		/// Получить все заявки.
+		/// Get all orders.
 		/// </summary>
 		IEnumerable<Order> Orders { get; }
 
 		/// <summary>
-		/// Получить все стоп-заявки.
+		/// Get all stop-orders.
 		/// </summary>
 		IEnumerable<Order> StopOrders { get; }
 
 		/// <summary>
-		/// Получить все ошибки при регистрации заявок.
+		/// Get all registration errors.
 		/// </summary>
 		IEnumerable<OrderFail> OrderRegisterFails { get; }
 
 		/// <summary>
-		/// Получить все ошибки при снятии заявок.
+		/// Get all cancellation errors.
 		/// </summary>
 		IEnumerable<OrderFail> OrderCancelFails { get; }
 
 		/// <summary>
-		/// Получить все сделки.
+		/// Get all tick trades.
 		/// </summary>
 		IEnumerable<Trade> Trades { get; }
 
 		/// <summary>
-		/// Получить все собственные сделки.
+		/// Get all own trades.
 		/// </summary>
 		IEnumerable<MyTrade> MyTrades { get; }
 
 		/// <summary>
-		/// Получить все портфели.
+		/// Get all portfolios.
 		/// </summary>
 		IEnumerable<Portfolio> Portfolios { get; }
 
 		/// <summary>
-		/// Получить все позиции.
+		/// Get all positions.
 		/// </summary>
 		IEnumerable<Position> Positions { get; }
 
 		/// <summary>
-		/// Все новости.
+		/// All news.
 		/// </summary>
 		IEnumerable<News> News { get; }
 
 		/// <summary>
-		/// Состояние соединения.
+		/// Connection state.
 		/// </summary>
 		ConnectionStates ConnectionState { get; }
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через метод <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
-		/// в виде одной транзакции.
+		/// Gets a value indicating whether the re-registration orders via the method <see cref="ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/> as a single transaction.
 		/// </summary>
 		bool IsSupportAtomicReRegister { get; }
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="RegisterSecurity"/>.
+		/// List of all securities, subscribed via <see cref="RegisterSecurity"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredSecurities { get; }
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="RegisterMarketDepth"/>.
+		/// List of all securities, subscribed via <see cref="RegisterMarketDepth"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredMarketDepths { get; }
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="RegisterTrades"/>.
+		/// List of all securities, subscribed via <see cref="RegisterTrades"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredTrades { get; }
 
 		/// <summary>
-		/// Список всех инструментов, зарегистрированных через <see cref="RegisterOrderLog"/>.
+		/// List of all securities, subscribed via <see cref="RegisterOrderLog"/>.
 		/// </summary>
 		IEnumerable<Security> RegisteredOrderLogs { get; }
 
 		/// <summary>
-		/// Список всех портфелей, зарегистрированных через <see cref="RegisterPortfolio"/>.
+		/// List of all portfolios, subscribed via <see cref="RegisterPortfolio"/>.
 		/// </summary>
 		IEnumerable<Portfolio> RegisteredPortfolios { get; }
 
 		/// <summary>
-		/// Адаптер для транзакций.
+		/// Transactional adapter.
 		/// </summary>
 		IMessageAdapter TransactionAdapter { get; }
 
 		/// <summary>
-		/// Адаптер для маркет-данных.
+		/// Market-data adapter.
 		/// </summary>
 		IMessageAdapter MarketDataAdapter { get; }
 
 		/// <summary>
-		/// Подключиться к торговой системе.
+		/// Connect to trading system.
 		/// </summary>
 		void Connect();
 
 		/// <summary>
-		/// Отключиться от торговой системы.
+		/// Disconnect from trading system.
 		/// </summary>
 		void Disconnect();
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные инструменты будут переданы через событие <see cref="LookupSecuritiesResult"/>.
+		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 		void LookupSecurities(Security criteria);
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные инструменты будут переданы через событие <see cref="LookupSecuritiesResult"/>.
+		/// To find instruments that match the filter <paramref name="criteria" />. Found instruments will be passed through the event <see cref="LookupSecuritiesResult"/>.
 		/// </summary>
-		/// <param name="criteria">Критерий, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">The criterion which fields will be used as a filter.</param>
 		void LookupSecurities(SecurityLookupMessage criteria);
 
 		/// <summary>
-		/// Найти портфели, соответствующие фильтру <paramref name="criteria"/>.
-		/// Найденные портфели будут переданы через событие <see cref="LookupPortfoliosResult"/>.
+		/// To find portfolios that match the filter <paramref name="criteria" />. Found portfolios will be passed through the event <see cref="LookupPortfoliosResult"/>.
 		/// </summary>
-		/// <param name="criteria">Портфель, поля которого будут использоваться в качестве фильтра.</param>
+		/// <param name="criteria">The portfolio which fields will be used as a filter.</param>
 		void LookupPortfolios(Portfolio criteria);
 
 		/// <summary>
-		/// Получить позицию по портфелю и инструменту.
+		/// To get the position by portfolio and instrument.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому нужно найти позицию.</param>
-		/// <param name="security">Инструмент, по которому нужно найти позицию.</param>
-		/// <param name="depoName">Название депозитария, где находится физически ценная бумага.
-		/// По-умолчанию передается пустая строка, что означает суммарную позицию по всем депозитариям.</param>
-		/// <returns>Позиция.</returns>
+		/// <param name="portfolio">The portfolio on which the position should be found.</param>
+		/// <param name="security">The instrument on which the position should be found.</param>
+		/// <param name="depoName">The depository name where the stock is located physically. By default, an empty string is passed, which means the total position by all depositories.</param>
+		/// <returns>Position.</returns>
 		Position GetPosition(Portfolio portfolio, Security security, string depoName = "");
 
 		/// <summary>
-		/// Получить отфильтрованный стакан котировок.
+		/// Get filtered order book.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому нужно получить стакан.</param>
-		/// <returns>Отфильтрованный стакан котировок.</returns>
+		/// <param name="security">The instrument by which an order book should be got.</param>
+		/// <returns>Filtered order book.</returns>
 		MarketDepth GetFilteredMarketDepth(Security security);
 
 		/// <summary>
-		/// Зарегистрировать заявку на бирже.
+		/// Register new order.
 		/// </summary>
-		/// <param name="order">Заявка, содержащая информацию для регистрации.</param>
+		/// <param name="order">Registration details.</param>
 		void RegisterOrder(Order order);
 
 		/// <summary>
-		/// Перерегистрировать заявку на бирже.
+		/// Reregister the order.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять.</param>
-		/// <param name="newOrder">Новая заявка, которую нужно зарегистрировать.</param>
+		/// <param name="oldOrder">Cancelling order.</param>
+		/// <param name="newOrder">New order to register.</param>
 		void ReRegisterOrder(Order oldOrder, Order newOrder);
 
 		/// <summary>
-		/// Перерегистрировать заявку на бирже.
+		/// Reregister the order.
 		/// </summary>
-		/// <param name="oldOrder">Заявка, которую нужно снять и на основе нее зарегистрировать новую.</param>
-		/// <param name="price">Цена новой заявки.</param>
-		/// <param name="volume">Объем новой заявки.</param>
-		/// <returns>Новая заявка.</returns>
+		/// <param name="oldOrder">Changing order.</param>
+		/// <param name="price">Price of the new order.</param>
+		/// <param name="volume">Volume of the new order.</param>
+		/// <returns>New order.</returns>
 		Order ReRegisterOrder(Order oldOrder, decimal price, decimal volume);
 
 		/// <summary>
-		/// Отменить заявку на бирже.
+		/// Cancel the order.
 		/// </summary>
-		/// <param name="order">Заявка, которую нужно отменить.</param>
+		/// <param name="order">The order which should be canceled.</param>
 		void CancelOrder(Order order);
 
 		/// <summary>
-		/// Отменить группу заявок на бирже по фильтру.
+		/// Cancel orders by filter.
 		/// </summary>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null);
 
 		/// <summary>
-		/// Подписаться на получение рыночных данных по инструменту.
+		/// To sign up to get market data by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
+		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="type">Market data type.</param>
 		void SubscribeMarketData(Security security, MarketDataTypes type);
 
 		/// <summary>
-		/// Отписаться от получения рыночных данных по инструменту.
+		/// To unsubscribe from getting market data by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
-		/// <param name="type">Тип рыночных данных.</param>
+		/// <param name="security">The instrument by which new information getting should be started .</param>
+		/// <param name="type">Market data type.</param>
 		void UnSubscribeMarketData(Security security, MarketDataTypes type);
 
 		/// <summary>
-		/// Начать получать котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через событие <see cref="MarketDepthsChanged"/>.
+		/// To start getting quotes (order book) by the instrument. Quotes values are available through the event <see cref="IConnector.MarketDepthsChanged"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
+		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		void RegisterMarketDepth(Security security);
 
 		/// <summary>
-		/// Остановить получение котировок по инструменту.
+		/// To stop getting quotes by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
+		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
 		void UnRegisterMarketDepth(Security security);
 
 		/// <summary>
-		/// Начать получать отфильтрованные котировки (стакан) по инструменту.
-		/// Значение котировок можно получить через метод <see cref="IConnector.GetFilteredMarketDepth"/>.
+		/// To start getting filtered quotes (order book) by the instrument. Quotes values are available through the event <see cref="GetFilteredMarketDepth"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать котировки.</param>
+		/// <param name="security">The instrument by which quotes getting should be started.</param>
 		void RegisterFilteredMarketDepth(Security security);
 
 		/// <summary>
-		/// Остановить получение отфильтрованных котировок по инструменту.
+		/// To stop getting filtered quotes by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение котировок.</param>
+		/// <param name="security">The instrument by which quotes getting should be stopped.</param>
 		void UnRegisterFilteredMarketDepth(Security security);
 
 		/// <summary>
-		/// Начать получать сделки (тиковые данные) по инструменту. Новые сделки будут приходить через
-		/// событие <see cref="NewTrades"/>.
+		/// To start getting trades (tick data) by the instrument. New trades will come through the event <see cref="IConnector.NewTrades"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать сделки.</param>
+		/// <param name="security">The instrument by which trades getting should be started.</param>
 		void RegisterTrades(Security security);
 
 		/// <summary>
-		/// Остановить получение сделок (тиковые данные) по инструменту.
+		/// To stop getting trades (tick data) by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение сделок.</param>
+		/// <param name="security">The instrument by which trades getting should be stopped.</param>
 		void UnRegisterTrades(Security security);
 
 		/// <summary>
-		/// Начать получать новую информацию (например, <see cref="Security.LastTrade"/> или <see cref="Security.BestBid"/>) по инструменту.
+		/// To start getting new information (for example, <see cref="Security.LastTrade"/> or <see cref="Security.BestBid"/>) by the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="security">The instrument by which new information getting should be started .</param>
 		void RegisterSecurity(Security security);
 
 		/// <summary>
-		/// Остановить получение новой информации.
+		/// To stop getting new information.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение новой информации.</param>
+		/// <param name="security">The instrument by which new information getting should be stopped.</param>
 		void UnRegisterSecurity(Security security);
 
 		/// <summary>
-		/// Начать получать лог заявок для инструмента.
+		/// Subscribe on order log for the security.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо начать получать лог заявок.</param>
+		/// <param name="security">Security for subscription.</param>
 		void RegisterOrderLog(Security security);
 
 		/// <summary>
-		/// Остановить получение лога заявок для инструмента.
+		/// Unsubscribe from order log for the security.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому необходимо остановить получение лога заявок.</param>
+		/// <param name="security">Security for unsubscription.</param>
 		void UnRegisterOrderLog(Security security);
 
 		/// <summary>
-		/// Начать получать новую информацию по портфелю.
+		/// Subscribe on the portfolio changes.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо начать получать новую информацию.</param>
+		/// <param name="portfolio">Portfolio for subscription.</param>
 		void RegisterPortfolio(Portfolio portfolio);
 
 		/// <summary>
-		/// Остановить получение новой информации по портфелю.
+		/// Unsubscribe from the portfolio changes.
 		/// </summary>
-		/// <param name="portfolio">Портфель, по которому необходимо остановить получение новой информации.</param>
+		/// <param name="portfolio">Portfolio for unsubscription.</param>
 		void UnRegisterPortfolio(Portfolio portfolio);
 
 		/// <summary>
-		/// Начать получать новости.
+		/// Subscribe on news.
 		/// </summary>
 		void RegisterNews();
 
 		/// <summary>
-		/// Остановить получение новостей.
+		/// Unsubscribe from news.
 		/// </summary>
 		void UnRegisterNews();
 
 		/// <summary>
-		/// Запросить текст новости <see cref="BusinessEntities.News.Story"/>. После получения текста будет вызвано событие <see cref="NewsChanged"/>.
+		/// Request news <see cref="BusinessEntities.News.Story"/> body. After receiving the event <see cref="IConnector.NewsChanged"/> will be triggered.
 		/// </summary>
-		/// <param name="news">Новость.</param>
+		/// <param name="news">News.</param>
 		void RequestNewsStory(News news);
 	}
 }

@@ -15,7 +15,7 @@ namespace StockSharp.BusinessEntities
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Котировка стакана, представляющая бид или оффер.
+	/// Market depth quote representing bid or ask.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -25,19 +25,19 @@ namespace StockSharp.BusinessEntities
 	public class Quote : Cloneable<Quote>, IExtendableEntity
 	{
 		/// <summary>
-		/// Создать <see cref="Quote"/>.
+		/// Initializes a new instance of the <see cref="Quote"/>.
 		/// </summary>
 		public Quote()
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="Quote"/>
+		/// Initializes a new instance of the <see cref="Quote"/>.
 		/// </summary>
-		/// <param name="security">Инструмент, по которому получена котировка.</param>
-		/// <param name="price">Цена котировки.</param>
-		/// <param name="volume">Объем котировки.</param>
-		/// <param name="direction">Направление (покупка или продажа).</param>
+		/// <param name="security">The instrument by which the quote is received.</param>
+		/// <param name="price">Quote price.</param>
+		/// <param name="volume">Quote volume.</param>
+		/// <param name="direction">Direction (buy or sell).</param>
 		public Quote(Security security, decimal price, decimal volume, Sides direction)
 		{
 			_security = security;
@@ -49,7 +49,7 @@ namespace StockSharp.BusinessEntities
 		private Security _security;
 
 		/// <summary>
-		/// Инструмент, по которому получена котировка.
+		/// The instrument by which the quote is received.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -63,7 +63,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _price;
 
 		/// <summary>
-		/// Цена котировки.
+		/// Quote price.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.PriceKey)]
@@ -78,7 +78,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _volume;
 
 		/// <summary>
-		/// Объем котировки.
+		/// Quote volume.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.VolumeKey)]
@@ -93,7 +93,7 @@ namespace StockSharp.BusinessEntities
 		private Sides _direction;
 
 		/// <summary>
-		/// Направление (покупка или продажа).
+		/// Direction (buy or sell).
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str128Key)]
@@ -109,11 +109,10 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация по котировке.
+		/// Extended quote info.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации, ассоциированной с котировкой.
-		/// Например, количество собственных контрактов в стакане, сумму лучшей покупки-продажи.
+		/// Uses in case of keep additional information associated with the quotation. For example, the number of contracts in its own order book, the amount of the best buying and selling.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -127,9 +126,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать копию <see cref="Quote" />.
+		/// Create a copy of <see cref="Quote"/>.
 		/// </summary>
-		/// <returns>Копия.</returns>
+		/// <returns>Copy.</returns>
 		public override Quote Clone()
 		{
 			return new Quote(_security, _price, _volume, _direction)
@@ -139,9 +138,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "{0} {1} {2}".Put(OrderDirection == Sides.Buy ? LocalizedStrings.Bid : LocalizedStrings.Ask, Price, Volume);

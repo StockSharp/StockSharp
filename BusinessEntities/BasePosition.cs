@@ -12,14 +12,14 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Базовый класс, описывающий денежную позицию и позицию по инструменту.
+	/// The base class describes the cash position and the position on the instrument.
 	/// </summary>
 	[System.Runtime.Serialization.DataContract]
 	[Serializable]
 	public abstract class BasePosition : NotifiableObject, IExtendableEntity
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BasePosition"/>.
+		/// Initialize <see cref="BasePosition"/>.
 		/// </summary>
 		protected BasePosition()
 		{
@@ -28,7 +28,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _beginValue;
 
 		/// <summary>
-		/// Размер позиции на начало торговой сессии.
+		/// Position size at the beginning of the trading session.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str253Key)]
@@ -50,7 +50,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _currentValue;
 
 		/// <summary>
-		/// Размер позиции на текущий момент.
+		/// Current position size.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str254Key)]
@@ -72,7 +72,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _blockedValue;
 
 		/// <summary>
-		/// Размер позиции, зарезервированной под активные заявки.
+		/// Position size, registered for active orders.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str255Key)]
@@ -95,10 +95,10 @@ namespace StockSharp.BusinessEntities
 		private IDictionary<object, object> _extensionInfo;
 
 		/// <summary>
-		/// Расширенная информация.
+		/// Extended information.
 		/// </summary>
 		/// <remarks>
-		/// Необходима в случае хранения в программе дополнительной информации. Например, размер уплаченной комиссии.
+		/// Required if additional information is stored in the program. For example, the amount of commission paid.
 		/// </remarks>
 		[Ignore]
 		[XmlIgnore]
@@ -118,7 +118,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _currentPrice;
 
 		/// <summary>
-		/// Стоимость позиции.
+		/// Position price.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -141,7 +141,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _averagePrice;
 
 		/// <summary>
-		/// Средневзвешанная цена.
+		/// Average price.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -164,7 +164,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _unrealizedPnL;
 
 		/// <summary>
-		/// Нереализованная прибыль.
+		/// Unrealized profit.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -187,7 +187,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _realizedPnL;
 
 		/// <summary>
-		/// Реализованная прибыль.
+		/// Realized profit.
 		/// </summary>
 		[Ignore]
 		[XmlIgnore]
@@ -210,7 +210,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _variationMargin;
 
 		/// <summary>
-		/// Вариационная маржа.
+		/// Variation margin.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str260Key)]
@@ -232,7 +232,7 @@ namespace StockSharp.BusinessEntities
 		private decimal _commission;
 
 		/// <summary>
-		/// Общий размер комиссий.
+		/// Total commission.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str159Key)]
@@ -254,7 +254,7 @@ namespace StockSharp.BusinessEntities
 		private DateTimeOffset _lastChangeTime;
 
 		/// <summary>
-		/// Время последнего изменения позиции.
+		/// Time of last position change.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str434Key)]
@@ -273,7 +273,7 @@ namespace StockSharp.BusinessEntities
 		private DateTime _localTime;
 
 		/// <summary>
-		/// Локальное время последнего изменения позиции.
+		/// Local time of the last position change.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.Str530Key)]
@@ -292,7 +292,7 @@ namespace StockSharp.BusinessEntities
 		private string _description;
 
 		/// <summary>
-		/// Текстовое описание позиции.
+		/// Text position description.
 		/// </summary>
 		[DataMember]
 		[DisplayNameLoc(LocalizedStrings.DescriptionKey)]
@@ -309,9 +309,9 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Скопировать поля текущей позиции в <paramref name="destination"/>.
+		/// To copy fields of the current position to <paramref name="destination" />.
 		/// </summary>
-		/// <param name="destination">Позиция, в которую необходимо скопировать поля.</param>
+		/// <param name="destination">The position in which you should to copy fields.</param>
 		public void CopyTo(BasePosition destination)
 		{
 			if (destination == null)

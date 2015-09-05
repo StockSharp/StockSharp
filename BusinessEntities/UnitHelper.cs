@@ -8,38 +8,38 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Вспомогательный класс для <see cref="Unit"/>.
+	/// Extension class for <see cref="Unit"/>.
 	/// </summary>
 	public static class UnitHelper2
 	{
 		/// <summary>
-		/// Создать из <see cref="int"/> значения пипсы.
+		/// To create from <see cref="Int32"/> the pips values.
 		/// </summary>
-		/// <param name="value"><see cref="int"/> значение.</param>
-		/// <param name="security">Инструмент, из которого берется информация по шагу цены.</param>
-		/// <returns>Пипсы.</returns>
+		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <param name="security">The instrument from which information about the price increment is taken .</param>
+		/// <returns>Pips.</returns>
 		public static Unit Pips(this int value, Security security)
 		{
 			return Pips((decimal)value, security);
 		}
 
 		/// <summary>
-		/// Создать из <see cref="double"/> значения пипсы.
+		/// To create from <see cref="Double"/> the pips values.
 		/// </summary>
-		/// <param name="value"><see cref="double"/> значение.</param>
-		/// <param name="security">Инструмент, из которого берется информация по шагу цены.</param>
-		/// <returns>Пипсы.</returns>
+		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <param name="security">The instrument from which information about the price increment is taken .</param>
+		/// <returns>Pips.</returns>
 		public static Unit Pips(this double value, Security security)
 		{
 			return Pips((decimal)value, security);
 		}
 
 		/// <summary>
-		/// Создать из <see cref="decimal"/> значения пипсы.
+		/// To create from <see cref="Decimal"/> the pips values.
 		/// </summary>
-		/// <param name="value"><see cref="decimal"/> значение.</param>
-		/// <param name="security">Инструмент, из которого берется информация по шагу цены.</param>
-		/// <returns>Пипсы.</returns>
+		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <param name="security">The instrument from which information about the price increment is taken .</param>
+		/// <returns>Pips.</returns>
 		public static Unit Pips(this decimal value, Security security)
 		{
 			if (security == null)
@@ -49,33 +49,33 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Создать из <see cref="int"/> значения пункты.
+		/// To create from <see cref="Int32"/> the points values.
 		/// </summary>
-		/// <param name="value"><see cref="int"/> значение.</param>
-		/// <param name="security">Инструмент, из которого берется информация по стоимости шага цены.</param>
-		/// <returns>Пункты.</returns>
+		/// <param name="value"><see cref="Int32"/> value.</param>
+		/// <param name="security">The instrument from which information about the price increment cost is taken .</param>
+		/// <returns>Points.</returns>
 		public static Unit Points(this int value, Security security)
 		{
 			return Points((decimal)value, security);
 		}
 
 		/// <summary>
-		/// Создать из <see cref="double"/> значения пункты.
+		/// To create from <see cref="Double"/> the points values.
 		/// </summary>
-		/// <param name="value"><see cref="double"/> значение.</param>
-		/// <param name="security">Инструмент, из которого берется информация по стоимости шага цены.</param>
-		/// <returns>Пункты.</returns>
+		/// <param name="value"><see cref="Double"/> value.</param>
+		/// <param name="security">The instrument from which information about the price increment cost is taken .</param>
+		/// <returns>Points.</returns>
 		public static Unit Points(this double value, Security security)
 		{
 			return Points((decimal)value, security);
 		}
 
 		/// <summary>
-		/// Создать из <see cref="decimal"/> значения пункты.
+		/// To create from <see cref="Decimal"/> the points values.
 		/// </summary>
-		/// <param name="value"><see cref="decimal"/> значение.</param>
-		/// <param name="security">Инструмент, из которого берется информация по стоимости шага цены.</param>
-		/// <returns>Пункты.</returns>
+		/// <param name="value"><see cref="Decimal"/> value.</param>
+		/// <param name="security">The instrument from which information about the price increment cost is taken .</param>
+		/// <returns>Points.</returns>
 		public static Unit Points(this decimal value, Security security)
 		{
 			if (security == null)
@@ -85,23 +85,23 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Пробразовать строку в <see cref="Unit"/>.
+		/// Convert string to <see cref="Unit"/>.
 		/// </summary>
-		/// <param name="str">Строковое представление <see cref="Unit"/>.</param>
-		/// <param name="security">Информация по инструменту. Необходима при использовании <see cref="UnitTypes.Point"/> и <see cref="UnitTypes.Step"/>.</param>
-		/// <returns>Объект <see cref="Unit"/>.</returns>
+		/// <param name="str">String value of <see cref="Unit"/>.</param>
+		/// <param name="security">Information about the instrument. Required when using <see cref="UnitTypes.Point"/> и <see cref="UnitTypes.Step"/>.</param>
+		/// <returns>Object <see cref="Unit"/>.</returns>
 		public static Unit ToUnit2(this string str, Security security = null)
 		{
 			return str.ToUnit(t => GetTypeValue(security, t));
 		}
 
 		/// <summary>
-		/// Перевести величину в другой тип измерения.
+		/// Cast the value to another type.
 		/// </summary>
-		/// <param name="unit">Исходная величина.</param>
-		/// <param name="destinationType">Тип измерения, в который необходимо перевести.</param>
-		/// <param name="security">Информация по инструменту. Необходима при использовании <see cref="UnitTypes.Point"/> и <see cref="UnitTypes.Step"/>.</param>
-		/// <returns>Сконвертированная величина.</returns>
+		/// <param name="unit">Source unit.</param>
+		/// <param name="destinationType">Destination value type.</param>
+		/// <param name="security">Information about the instrument. Required when using <see cref="UnitTypes.Point"/> и <see cref="UnitTypes.Step"/>.</param>
+		/// <returns>Converted value.</returns>
 		public static Unit Convert(this Unit unit, UnitTypes destinationType, Security security)
 		{
 			return unit.Convert(destinationType, type => GetTypeValue(security, type));
@@ -119,11 +119,11 @@ namespace StockSharp.BusinessEntities
 		}
 
 		/// <summary>
-		/// Установить для величины свойство <see cref="Unit.GetTypeValue"/>.
+		/// To set the <see cref="Unit.GetTypeValue"/> property for the value.
 		/// </summary>
-		/// <param name="unit">Величина.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Величина.</returns>
+		/// <param name="unit">Unit.</param>
+		/// <param name="security">Security.</param>
+		/// <returns>Unit.</returns>
 		public static Unit SetSecurity(this Unit unit, Security security)
 		{
 			if (unit == null)

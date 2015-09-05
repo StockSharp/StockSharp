@@ -1,4 +1,4 @@
-﻿namespace StockSharp.BusinessEntities
+namespace StockSharp.BusinessEntities
 {
 	using System;
 	using System.Collections.Generic;
@@ -13,14 +13,14 @@
 	using MoreLinq;
 
 	/// <summary>
-	/// Интерфейс, описывающий список элементов.
+	/// Interface describing a list of items.
 	/// </summary>
 	public interface ISecurityList : INotifyList<Security>, ICollectionEx<Security>, ISynchronizedCollection<Security>
 	{
 	}
 
 	/// <summary>
-	/// Поставщик информации об инструментах с поддержкой поиска с помощью <see cref="SuffixTrie{T}"/>.
+	/// Provider of information about instruments supporting search using <see cref="SuffixTrie{T}"/>.
 	/// </summary>
 	public class FilterableSecurityProvider : Disposable, ISecurityProvider
 	{
@@ -31,14 +31,14 @@
 		private readonly ITrie<Security> _trie = new SuffixTrie<Security>(1);
 
 		/// <summary>
-		/// Доступные инструменты.
+		/// Available instruments.
 		/// </summary>
 		public ISecurityList Securities { get; private set; }
 
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		public IConnector Connector
 		{
@@ -67,30 +67,30 @@
 		}
 
 		/// <summary>
-		/// Получать только новые инструменты из торговой системы.
+		/// To get only new instruments from the trading system.
 		/// </summary>
 		public bool OnlyNewSecurities { get; set; }
 
 		/// <summary>
-		/// Фильтр для исключения инструментов.
+		/// Filter for instruments exclusion.
 		/// </summary>
 		public Func<Security, bool> ExcludeFilter { get; private set; }
 
 		/// <summary>
-		/// Количество исключенных инструментов по фильтру <see cref="ExcludeFilter"/>.
+		/// The number of excluded instruments by filter <see cref="FilterableSecurityProvider.ExcludeFilter"/>.
 		/// </summary>
 		public int ExcludedCount { get; private set; }
 
 		/// <summary>
-		/// Событие изменения набора доступных инструментов.
+		/// Available instruments set change event.
 		/// </summary>
 		public event Action<NotifyCollectionChangedAction, Security> SecuritiesChanged;
 
 		/// <summary>
-		/// Создать <see cref="FilterableSecurityProvider"/>.
+		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 		/// </summary>
-		/// <param name="securities">Инструменты.</param>
-		/// <param name="excludeFilter">Фильтр для исключения инструментов.</param>
+		/// <param name="securities">Securities.</param>
+		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
 		public FilterableSecurityProvider(ISecurityList securities, Func<Security, bool> excludeFilter = null)
 		{
 			if (securities == null)
@@ -126,20 +126,20 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="FilterableSecurityProvider"/>.
+		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 		/// </summary>
-		/// <param name="excludeFilter">Фильтр для исключения инструментов.</param>
+		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
 		public FilterableSecurityProvider(Func<Security, bool> excludeFilter = null)
 			: this(new SecurityList(), excludeFilter)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="FilterableSecurityProvider"/>.
+		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 		/// </summary>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="onlyNewSecurities">Получать только новые инструменты из торговой системы.</param>
-		/// <param name="excludeFilter">Фильтр для исключения инструментов.</param>
+		/// <param name="connector">Connection to the trading system.</param>
+		/// <param name="onlyNewSecurities">To get only new instruments from the trading system.</param>
+		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
 		public FilterableSecurityProvider(IConnector connector, bool onlyNewSecurities = false, Func<Security, bool> excludeFilter = null)
 			: this(excludeFilter)
 		{
@@ -151,10 +151,10 @@
 		}
 
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Found instruments.</returns>
 		public IEnumerable<Security> Lookup(Security criteria)
 		{
 			if (criteria == null)
@@ -228,7 +228,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

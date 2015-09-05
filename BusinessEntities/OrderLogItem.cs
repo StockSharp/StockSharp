@@ -8,7 +8,7 @@ namespace StockSharp.BusinessEntities
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Строчка лога заявок.
+	/// Order log item.
 	/// </summary>
 	[Serializable]
 	[System.Runtime.Serialization.DataContract]
@@ -16,16 +16,16 @@ namespace StockSharp.BusinessEntities
 	public class OrderLogItem : MyTrade
 	{
 		/// <summary>
-		/// Создать <see cref="OrderLogItem"/>.
+		/// Initializes a new instance of the <see cref="OrderLogItem"/>.
 		/// </summary>
 		public OrderLogItem()
 		{
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			var result = LocalizedStrings.Str536Params.Put(Trade == null ? (Order.State == OrderStates.Done ? LocalizedStrings.Str537 : LocalizedStrings.Str538) : LocalizedStrings.Str539, Order);

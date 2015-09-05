@@ -1,24 +1,24 @@
-﻿namespace StockSharp.BusinessEntities
+namespace StockSharp.BusinessEntities
 {
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Интерфейс для доступа к поставщику информации об инструментах.
+	/// The interface for access to provider of information about instruments.
 	/// </summary>
 	public interface ISecurityProvider
 	{
 		/// <summary>
-		/// Найти инструменты, соответствующие фильтру <paramref name="criteria"/>.
+		/// Lookup securities by criteria <paramref name="criteria" />.
 		/// </summary>
-		/// <param name="criteria">Инструмент, поля которого будут использоваться в качестве фильтра.</param>
-		/// <returns>Найденные инструменты.</returns>
+		/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+		/// <returns>Found instruments.</returns>
 		IEnumerable<Security> Lookup(Security criteria);
 
 		/// <summary>
-		/// Получить внутренний идентификатор торговой системы.
+		/// Get native id.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Внутренний идентификатор торговой системы.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>Native (internal) trading system security id.</returns>
 		object GetNativeId(Security security);
 	}
 }
