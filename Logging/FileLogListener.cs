@@ -15,7 +15,7 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Режими разделения лог файлов по датам.
+	/// Режимы разделения лог файлов по датам.
 	/// </summary>
 	public enum SeparateByDateModes
 	{
@@ -30,7 +30,7 @@ namespace StockSharp.Logging
 		FileName,
 
 		/// <summary>
-		/// Разделять через под директории.
+		/// Разделять через поддиректории.
 		/// </summary>
 		SubDirectories,
 	}
@@ -61,7 +61,7 @@ namespace StockSharp.Logging
 		}
 
 		/// <summary>
-		/// Создать <see cref="FileLogListener"/>. Все сообщения из <see cref="ILogSource.Log"/> будут записывать в файл <paramref name="fileName"/>.
+		/// Создать <see cref="FileLogListener"/>. Все сообщения из <see cref="ILogSource.Log"/> будут записываться в файл <paramref name="fileName"/>.
 		/// </summary>
 		/// <param name="fileName">Название текстового файла, в который будут писаться сообщения из события <see cref="ILogSource.Log"/>.</param>
 		public FileLogListener(string fileName)
@@ -211,7 +211,7 @@ namespace StockSharp.Logging
 		private string _directoryDateFormat = "yyyy_MM_dd";
 
 		/// <summary>
-		/// Формат названия директории, представляющая дату. По-умолчанию используется yyyy_MM_dd.
+		/// Формат названия директории, представляющий дату. По-умолчанию используется yyyy_MM_dd.
 		/// </summary>
 		public string DirectoryDateFormat
 		{

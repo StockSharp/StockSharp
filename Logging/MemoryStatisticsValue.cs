@@ -12,7 +12,7 @@ namespace StockSharp.Logging
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Интерфейс для отслеживания количества активных объектов конктретного типа.
+	/// Интерфейс для отслеживания количества активных объектов конкретного типа.
 	/// </summary>
 	public interface IMemoryStatisticsValue
 	{
@@ -34,7 +34,7 @@ namespace StockSharp.Logging
 	}
 
 	/// <summary>
-	/// Класс для отслеживания количества активных объектов конктретного типа.
+	/// Класс для отслеживания количества активных объектов конкретного типа.
 	/// </summary>
 	/// <typeparam name="T">Тип объекта.</typeparam>
 	public class MemoryStatisticsValue<T> : IPersistable, IMemoryStatisticsValue

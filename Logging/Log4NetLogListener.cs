@@ -50,7 +50,7 @@
 		internal Log4NetLogListener LogListener { get; set; }
 
 		///<summary>
-		/// Отравить информационное сообщение.
+		/// Отправить информационное сообщение.
 		///</summary>
 		///<param name="message">Текст сообщения.</param>
 		///<param name="source">Источник сообщения.</param>

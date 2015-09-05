@@ -185,7 +185,7 @@
 		/// Получить <see cref="ILogSource.LogLevel"/> для источника.
 		/// Если значение равно <see cref="LogLevels.Inherit"/>, то берется уровень родительского источника.
 		/// </summary>
-		/// <param name="source">Источнико логов.</param>
+		/// <param name="source">Источник логов.</param>
 		/// <returns>Уровень логирования.</returns>
 		public static LogLevels GetLogLevel(this ILogSource source)
 		{
