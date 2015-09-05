@@ -100,6 +100,12 @@
 		/// <param name="message">Отладочное сообщение.</param>
 		protected override void OnWriteMessage(LogMessage message)
 		{
+			if (message.IsDispose)
+			{
+				Dispose();
+				return;
+			}
+
 			var str = "{0} | {1,-15} | {2}".Put(message.Time.ToString(LogListener.TimeFormat), message.Source, message.Message);
 
 			switch (message.Level)

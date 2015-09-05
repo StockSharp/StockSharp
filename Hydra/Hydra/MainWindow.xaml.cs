@@ -1085,5 +1085,9 @@ namespace StockSharp.Hydra
 		{
 			BaseApplication.EditProxySettigs();
 		}
+
+		void IDisposable.Dispose()
+		{
+		}
 	}
 }

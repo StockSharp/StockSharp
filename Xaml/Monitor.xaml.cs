@@ -287,6 +287,10 @@ namespace StockSharp.Xaml
 		}
 
 		#endregion
+
+		void IDisposable.Dispose()
+		{
+		}
 	}
 
 	class SourceStateConverter : IValueConverter

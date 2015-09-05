@@ -490,5 +490,9 @@
 		}
 
 		#endregion
+
+		void IDisposable.Dispose()
+		{
+		}
 	}
 }

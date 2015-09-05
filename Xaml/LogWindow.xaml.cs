@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Xaml
 {
+	using System;
 	using System.Collections.Generic;
 
 	using Ecng.Serialization;
@@ -49,6 +50,10 @@
 		void IPersistable.Save(SettingsStorage storage)
 		{
 			LogCtrl.Save(storage);
+		}
+
+		void IDisposable.Dispose()
+		{
 		}
 	}
 }

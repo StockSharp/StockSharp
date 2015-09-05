@@ -14,7 +14,7 @@ namespace StockSharp.Logging
 	/// <summary>
 	/// Базовый класс, который мониторит событие <see cref="ILogSource.Log"/> и сохраняет в некое хранилище.
 	/// </summary>
-	public abstract class LogListener : ILogListener
+	public abstract class LogListener : Disposable, ILogListener
 	{
 		static LogListener()
 		{

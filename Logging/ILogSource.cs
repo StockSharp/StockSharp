@@ -189,15 +189,6 @@ namespace StockSharp.Logging
 			return Name;
 		}
 
-		///// <summary>
-		///// Освободить занятые ресурсы.
-		///// </summary>
-		//protected override void DisposeManaged()
-		//{
-		//	Parent = null;
-		//	base.DisposeManaged();
-		//}
-
 		/// <summary>
 		/// Загрузить настройки.
 		/// </summary>

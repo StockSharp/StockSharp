@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Logging
 {
+	using System;
 	using System.Collections.Generic;
 
 	using Ecng.Serialization;
@@ -7,7 +8,7 @@
 	/// <summary>
 	/// Интерфейс класса, который мониторит событие <see cref="ILogSource.Log"/> и сохраняет в некое хранилище.
 	/// </summary>
-	public interface ILogListener : IPersistable
+	public interface ILogListener : IPersistable, IDisposable
 	{
 		/// <summary>
 		/// Записать сообщения.

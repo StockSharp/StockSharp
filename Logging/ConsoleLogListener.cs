@@ -27,6 +27,12 @@ namespace StockSharp.Logging
 		/// <param name="message">Отладочное сообщение.</param>
 		protected override void OnWriteMessage(LogMessage message)
 		{
+			if (message.IsDispose)
+			{
+				Dispose();
+				return;
+			}
+
 			ConsoleColor color;
 
 			switch (message.Level)

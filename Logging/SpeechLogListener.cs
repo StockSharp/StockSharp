@@ -31,7 +31,15 @@ namespace StockSharp.Logging
 			using (var speech = new SpeechSynthesizer { Volume = Volume })
 			{
 				foreach (var message in messages)
+				{
+					if (message.IsDispose)
+					{
+						Dispose();
+						return;
+					}
+
 					speech.Speak(message.Message);
+				}
 			}
 		}
 

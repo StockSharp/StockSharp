@@ -64,7 +64,7 @@
 		{
 			if (message.IsDispose)
 			{
-				_queue.Close();
+				Dispose();
 				return;
 			}
 
@@ -136,6 +136,15 @@
 
 			storage.SetValue("From", From);
 			storage.SetValue("To", To);
+		}
+
+		/// <summary>
+		/// Освободить занятые ресурсы.
+		/// </summary>
+		protected override void DisposeManaged()
+		{
+			_queue.Close();
+			base.DisposeManaged();
 		}
 	}
 }

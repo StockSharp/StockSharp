@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Xaml
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
@@ -52,6 +53,10 @@
 		{
 			_monitor.Save(storage);
 			storage.SetValue("BringToFrontOnError", BringToFrontOnError);
+		}
+
+		void IDisposable.Dispose()
+		{
 		}
 	}
 }

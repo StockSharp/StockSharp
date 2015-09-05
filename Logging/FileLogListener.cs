@@ -326,8 +326,7 @@ namespace StockSharp.Logging
 			{
 				if (isDisposing)
 				{
-					_writers.Values.ForEach(w => w.Dispose());
-					_writers.Clear();
+					Dispose();
 					return;
 				}
 
@@ -516,6 +515,19 @@ namespace StockSharp.Logging
 			storage.SetValue("WriteSourceId", WriteSourceId);
 			storage.SetValue("DirectoryDateFormat", DirectoryDateFormat);
 			storage.SetValue("SeparateByDates", SeparateByDates.To<string>());
+		}
+
+		/// <summary>
+		/// Освободить занятые ресурсы.
+		/// </summary>
+		protected override void DisposeManaged()
+		{
+			_writers.Values.ForEach(w => w.Dispose());
+
+			_fileNames.Clear();
+			_writers.Clear();
+
+			base.DisposeManaged();
 		}
 	}
 }
