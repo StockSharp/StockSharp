@@ -9,26 +9,26 @@
 		<para>
 			Замена заявок при написании торговых алгоритмов более продвинутый способ, чем <link xlink:href="6267fec7-64e5-4488-ba08-c72cf61fcc9e">Снятие заявок</link> и последующая регистрация.
 			Чтобы заменить заявку необходимо вызывать метод <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,System.Decimal,System.Decimal)</codeEntityReference>,
-		  или сразу передать объект новой заявки <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
+		   или сразу передать объект новой заявки <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)</codeEntityReference>.
 			<!--При этом, регистрируемый объем <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Volume</codeEntityReference> новой заявки будет равен
 			нереализованному балансу <codeEntityReference qualifyHint="true">P:StockSharp.BusinessEntities.Order.Balance</codeEntityReference> старой.-->
 		</para>
 	  <para>
-		При замене заявок действуют следующие условия:
+			 При замене стоп-заявок используется алгоритм с отменой заявки и выставлением новой. В итоге, всегда получается новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
+		который содержит информацию старой заявки + измененная часть. В дальнейшем, если требуется работа с измененной заявкой (например, отменить ее или опять изменить),
+		то необходимо использовать именно этот новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.
+
 	  </para>
 	  <list class="ordered">
-		<listItem>
+		<!--<listItem>
 		  Если инструмент принадлежит <token>rts</token>, то посылается специализированная команда на замену заявки. Это сделано из-за того,
 		  что только <token>rts</token> умеет сам заменять заявки. Это самый быстрый способ из поддерживаемых, но у него есть свои
 		  ограничения - менять можно только цену и объем заявок. Также, он работает только с лимитированными заявками.
 		</listItem>
 		<listItem>Если инструмент принадлежит другой бирже, то заявка снимается через <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.CancelOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>,
 		  а затем регистрируется через <codeEntityReference qualifyHint="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>.
-		</listItem>
-		<listItem>Если передается только стоп-заявка, то замена выполняется как описано в пункте 2.</listItem>
-		<listItem>В итоге, всегда получается новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>,
-		которые содержит информацию старой заявки + измененная часть. В дальнейшем, если требуется работа с измененной заявкой (например, отменить ее или опять изменить),
-		то необходимо использовать именно этот новый объект <codeEntityReference>T:StockSharp.BusinessEntities.Order</codeEntityReference>.</listItem>
+		</listItem> -->
+	
 	  </list>
 
 		<para>
