@@ -196,6 +196,8 @@ namespace StockSharp.Quik.Lua
 			_logManager.Application = new QuikNativeApp();
 
 			_logManager.Sources.Add(_fixServer);
+
+			LogFile = "StockSharp.QuikLua.log";
 		}
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
@@ -308,7 +310,8 @@ namespace StockSharp.Quik.Lua
 			set { _fixServer.MarketDataSession.IncrementalDepthUpdates = value; }
 		}
 
-		private string _logFile = "*init*";
+		private FileLogListener _prevFileLogListener;
+		private string _logFile;
 
 		/// <summary>
 		/// Название текстового файла, в который будут писаться логи.
@@ -318,13 +321,28 @@ namespace StockSharp.Quik.Lua
 			get { return _logFile; }
 			set
 			{				
-				_logFile = value;
-				if (_logFile != "*init*")
+				if (_logFile.CompareIgnoreCase(value))
+					return;
+
+				if (_prevFileLogListener != null)
 				{
-					var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-					var logFileName = Path.Combine(path, _logFile+".log");
-					_logManager.Listeners.Add(new FileLogListener(logFileName));
+					_logManager.Listeners.Remove(_prevFileLogListener);
+					_prevFileLogListener.Dispose();
+					_prevFileLogListener = null;
 				}
+
+				_logFile = value;
+
+				if (_logFile.IsEmpty())
+					return;
+
+				var path = _logFile;
+
+				if (!Path.IsPathRooted(_logFile))
+					path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), path);
+
+				_prevFileLogListener = new FileLogListener(path);
+				_logManager.Listeners.Add(_prevFileLogListener);
 			}
 		}
 
