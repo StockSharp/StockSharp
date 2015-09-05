@@ -7,8 +7,6 @@ M:StockSharp.Quik.Lua.LuaFixServer.NeedProcess(StockSharp.Messages.MarketDataTyp
 M:StockSharp.Quik.Lua.LuaFixServer.NeedProcess(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/param/dataType;Str1670
 M:StockSharp.Quik.Lua.LuaFixServer.NeedProcess(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/param/securityId;SecurityId
 M:StockSharp.Quik.Lua.LuaFixServer.NeedProcess(StockSharp.Messages.MarketDataTypes,StockSharp.Messages.SecurityId)/returns;DocStr6853
-M:StockSharp.Quik.Lua.LuaFixServer.AddTransactionId(System.Int64)/summary;DocStr6854
-M:StockSharp.Quik.Lua.LuaFixServer.AddTransactionId(System.Int64)/param/transactionId;TransactionId
 M:StockSharp.Quik.Lua.LuaFixServer.Process(StockSharp.Messages.Message)/summary;DocStr80
 M:StockSharp.Quik.Lua.LuaFixServer.Process(StockSharp.Messages.Message)/param/message;Str3166
 M:StockSharp.Quik.Lua.LuaFixServer.GetNextRequest/summary;DocStr6855
