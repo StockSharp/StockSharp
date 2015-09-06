@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="ba149b22-2024-4479-aaf3-8dd271a681f5" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>
+			 В <token>stocksharp</token> больше не используется понятие <legacyItalic>базовой</legacyItalic> лицензии. Ее функциональность 
+			 (<token>quik</token>, <token>alfa</token>, <token>smartcom</token>, <token>transaq</token>, <token>alor</token>, 
+			 <token>openecry</token>, <token>IB</token>, <token>etrade</token>, <token>lmax</token>, <token>oanda</token>, 
+			 <token>blackwood</token>, <token>iqfeed</token>, <token>sterling</token>, <token>rithmic</token>, <token>cqg</token>),
+			 необходимая большинству клиентов, теперь предоставляется без лицензии и доступна всем желающим (см. <link xlink:href="b9f672db-e0c9-4208-9759-179e5de17fd8">Установка StockSharp</link>).
+		</para>
+		<alert class="caution">
+  			<para>Не нужно генерировать и скачивать лицензионные файлы!</para>
+		</alert>
+
+		<para><legacyBold>Расширенная лицензия</legacyBold></para>
+		<para>Существуют два уровня расширенной лицензии. Наполненность по функционалу для каждого уровня идентична и включает все, что есть в базовой версии плюс:</para> 
+		<list class="ordered">
+  			<listItem>
+  				<para><token>plaza</token> коннектор (режим ClientGate COM).</para>
+  			</listItem>
+  			<listItem>
+  				<para><token>fix</token> коннектор (поддерживается ограниченное количество брокеров).</para>
+  			</listItem>
+  			<listItem>
+  				<para>Готовые торговые стратегии (хеджирование опционов, маркет-мэйкинг, котирование, скользящие стоп и тейк защиты и т.д.).</para>
+  			</listItem>
+  			<listItem>
+  				<para>Подключение до 3 программ одновременно к одному терминалу QUIK.</para>
+  			</listItem>
+  			<listItem>
+  				<para>Order Log.</para>
+  			</listItem>
+		</list>
+		<para><legacyUnderline>Расширенная лицензия+</legacyUnderline> предоставляется клиентам прошедшим полный <externalLink>
+			<linkText>курс обучения</linkText>
+			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
+			<linkUri>http://stocksharp.com/edu</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>
+ и действует в течение 6 месяцев.</para>
+		<para><legacyUnderline>Расширенная лицензия++</legacyUnderline> предоставляется клиентам прошедшим расширенный <externalLink>
+			<linkText>курс обучения</linkText>
+			<linkAlternateText>Обучение Stocksharp</linkAlternateText>
+			<linkUri>http://stocksharp.com/edu</linkUri>
+			<linkTarget>_blank</linkTarget>
+			</externalLink>
+ и действует в течение 12 месяцев.</para> 
+		<para>По окончании срока действия лицензии необходимо будет либо ее продлить, либо пользоваться базовым функционалом.</para>
+
+
+		<para><legacyBold>Корпоративная лицензия</legacyBold></para>
+		<para>
+  			Корпоративная лицензия предоставляется платно и включает все функциональности базовой и расширенной лицензий, а также:
+  		</para>
+  		<list class="ordered">
+				<listItem>
+					<para>Коннекторы прямого доступа к биржам (<link xlink:href="7eda6d74-d3b8-4fe5-b6a3-fab60e441daf">CGate</link>, <link xlink:href="61692ace-225e-4ecc-845a-504021d59a8f">MicexBridge</link>).</para> 
+				</listItem>
+				<listItem>
+					<para><token>fix</token> коннекторы (прямое подключение к биржам, ряду брокеров, в т.ч. прямое подключение к серверу <token>quik</token>).</para>
+				</listItem>
+				<listItem>
+					<para>FIX-сервер для роутинга заявок, эмуляции торгов, сохранения хода торгов для каждого клиента.</para>
+				</listItem>
+				<listItem>
+					<para>Доступ к онлайн репозиторию с обновляемыми исходными кодами.</para>
+				</listItem>
+				<listItem>
+					<para>Сервер исторических данных.</para>
+				</listItem>
+		</list>
+
+	</introduction>
+	
+	 <relatedTopics>
+     	<externalLink>
+			<linkText>Новые подходы к лицензированию</linkText>
+			<linkAlternateText>Лицензирование</linkAlternateText>
+			<linkUri>http://stocksharp.com/news/10456-novye-podhody-k-litsenzirovaniyu</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+		<externalLink>
+			<linkText>Стоимость лицензий StockSharp</linkText>
+			<linkAlternateText>Стоимость лицензий</linkAlternateText>
+			<linkUri>http://stocksharp.com/products/pricing/</linkUri>
+			<linkTarget>_blank</linkTarget>
+		</externalLink>
+     </relatedTopics>
+	</developerWalkthroughDocument>
+</topic>

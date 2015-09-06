@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="35cde593-3105-4903-974e-10d85482ec8f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+     <para>Для регистрации стоп-заявок используется тот же метод <codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference>, 
+		но с указанием типа заявки <codeEntityReference qualifyHint="false">F:StockSharp.Messages.OrderTypes.Conditional</codeEntityReference>:</para>   
+		
+        <code language="C#">
+        <![CDATA[
+private void NewStopOrderClick(object sender, RoutedEventArgs e)
+{
+	var newOrder = new OrderConditionalWindow
+	{
+		Order = new Order
+		{
+			Security = SecurityPicker.SelectedSecurity,
+			Type = OrderTypes.Conditional,
+		},
+		Connector = MainWindow.Instance.Trader,
+	};
+
+	if (newOrder.ShowModal(this))
+		MainWindow.Instance.Trader.RegisterOrder(newOrder.Order);
+}
+		]]>
+		</code>
+		
+		<para>Далее открывается диалог <legacyBold>Регистрация условной заявки</legacyBold>, где нужно указать тип 
+		<codeEntityReference>T:StockSharp.Sterling.SterlingExtendedOrderTypes</codeEntityReference> и параметры такой заявки.</para>
+		<mediaLink><image placement="center" xlink:href="Sterling_StopOrder"/></mediaLink>
+		<para>За кулисами в коде <codeEntityReference>T:StockSharp.Xaml.OrderConditionalWindow</codeEntityReference> создаются и настраиваются условия при помощи класса
+		<codeEntityReference>T:StockSharp.Sterling.SterlingOrderCondition</codeEntityReference>.</para>
+		
+    </introduction>
+   
+  </developerConceptualDocument>
+</topic>

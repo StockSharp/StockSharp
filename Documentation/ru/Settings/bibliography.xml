@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Warning:
+  The Sandcastle Styles patch must be applied for the bibliography feature
+  to work.  Visit http://www.codeplex.com/SandcastleStyles and apply the latest patch
+  -before- creating a new DocProject or DocSite.
+  
+  Auto-Generated Bibliography
+  
+  The bibliography feature looks for <cite>name</cite> elements in XML documentation
+  and <ddue:cite>name</ddue:cite> elements in MAML and automatically generates links
+  to a bibliography section, which is generated at the bottom of each topic.
+
+  To use this feature in MAML you must also add the <ddue:bibliography/> element 
+  somewhere in your topics; preferably, right before the <ddue:relatedTopics> section.
+  
+  This file is used to describe the entries in the bibliographies for every topic 
+  that is generated.  For example, add a remarks section such as the following to 
+  the XML documentation comments in one of your APIs.
+  
+  <remarks>
+    <para>
+      Sandcastle is a popular download<cite>sandcastle activity</cite>.
+    </para>
+    <para>
+      Sandcastle Styles<cite>sandcastle styles</cite> adds even more value.
+    </para>
+    <para>
+      I expect Sandcastle's popularity<cite>sandcastle activity</cite> to increase
+      as more community members become aware of its usefulness, with the help of 
+      projects like Sandcastle Styles<cite>sandcastle styles</cite>.
+    </para>
+  </remarks>
+  
+  Then add the following reference elements to this file to describe those citations.
+  
+  <reference name="sandcastle activity">
+    <title>Sandcastle Activity Statistics</title>
+    <author>Microsoft</author>
+    <publisher>CodePlex.com</publisher>
+    <link>http://www.codeplex.com/Sandcastle/stats/view</link>
+  </reference>
+  <reference name="sandcastle styles">
+    <title>Sandcastle Styles</title>
+    <author>Paul Selormey, Eric Woodruff, Dave Sexton</author>
+    <publisher>CodePlex.com</publisher>
+    <link>http://www.codeplex.com/SandcastleStyles</link>
+  </reference>
+  
+  Building documentation now will produce your auto-generated reference topic with a
+  bibliography section near the bottom.  Each <cite>name</cite> is replaced in-line
+  with a hyperlink such as [1], [2], [3], [n]..., linking to the corresponding 
+  entries in the bibliography section.
+
+  - The title element is required.
+  - The author element is required.
+  - The publisher element is optional.
+  - The link element is optional.
+  - Reference names are case-sensitive.
+  - If a matching reference is not found, the cite element is processed as regular
+    markup.  Currently, the transformations will remove the outer <cite> element but 
+    inner text and content may pass through to the topic.
+  -->
+<bibliography>
+  <!-- Add <reference> elements here -->
+</bibliography>
