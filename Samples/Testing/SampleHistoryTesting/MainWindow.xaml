@@ -68,10 +68,12 @@
 						<RowDefinition Height="23" />
 					</Grid.RowDefinitions>
 
-					<TextBox x:Name="SecId">RIZ2@FORTS</TextBox>
+					<TextBox x:Name="SecId" />
 					<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-						<xctk:DateTimePicker x:Name="From" Width="200" />
-						<xctk:DateTimePicker x:Name="To"  Width="200" />
+						<xctk:DateTimePicker x:Name="From" Width="180" />
+						<xctk:DateTimePicker x:Name="To"  Width="180" />
+
+						<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr117}" VerticalAlignment="Center" Name="DebugLogCheckBox" Click="CheckBoxClick" />
 					</StackPanel>
 
 					<ProgressBar x:Name="TicksTestingProcess" Grid.Column="1" Grid.Row="2" />
@@ -95,8 +97,11 @@
 					
 					<TextBox x:Name="MaxDepth" Grid.Row="11" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr291}">1</TextBox>
 					<TextBox x:Name="MaxVolume" Grid.Row="12" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr293}">1</TextBox>
-					
-					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr117}" Grid.Row="13" Grid.Column="0" Name="DebugLogCheckBox" Click="CheckBoxClick" />
+
+					<ComboBox x:Name="TimeFrame" Grid.Row="13" Grid.Column="0">
+						<ComboBoxItem>1min</ComboBoxItem>
+						<ComboBoxItem>5min</ComboBoxItem>
+					</ComboBox>
 				</Grid>
 			</Grid>
 

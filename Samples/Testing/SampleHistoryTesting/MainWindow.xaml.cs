@@ -11,6 +11,7 @@ namespace SampleHistoryTesting
 	using Ecng.Xaml;
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.Localization;
 
 	using Ookii.Dialogs.Wpf;
 
@@ -77,8 +78,24 @@ namespace SampleHistoryTesting
 
 			HistoryPath.Text = @"..\..\..\HistoryData\".ToFullPath();
 
-			From.Value = new DateTime(2012, 10, 1);
-			To.Value = new DateTime(2012, 10, 25);
+			if (LocalizedStrings.ActiveLanguage == Languages.Russian)
+			{
+				SecId.Text = "RIZ2@FORTS";
+
+				From.Value = new DateTime(2012, 10, 1);
+				To.Value = new DateTime(2012, 10, 25);
+
+				TimeFrame.SelectedIndex = 1;
+			}
+			else
+			{
+				SecId.Text = "@ES#@CMEMINI";
+
+				From.Value = new DateTime(2015, 8, 5);
+				To.Value = new DateTime(2015, 8, 31);
+
+				TimeFrame.SelectedIndex = 0;
+			}
 
 			_progressBars.AddRange(new[]
 			{
@@ -120,15 +137,16 @@ namespace SampleHistoryTesting
 				return;
 			}
 
-			var secIdParts = SecId.Text.Split('@');
+			var secGen = new SecurityIdGenerator();
+			var secIdParts = secGen.Split(SecId.Text);
 
-			if (secIdParts.Length != 2)
-			{
-				MessageBox.Show(this, LocalizedStrings.Str3016);
-				return;
-			}
+			//if (secIdParts.Length != 2)
+			//{
+			//	MessageBox.Show(this, LocalizedStrings.Str3016);
+			//	return;
+			//}
 
-			var timeFrame = TimeSpan.FromMinutes(5);
+			var timeFrame = TimeSpan.FromMinutes(TimeFrame.SelectedIndex == 0 ? 1 : 5);
 
 			// create backtesting modes
 			var settings = new[]
@@ -210,8 +228,8 @@ namespace SampleHistoryTesting
 			var maxDepth = MaxDepth.Text.To<int>();
 			var maxVolume = MaxVolume.Text.To<int>();
 
-			var secCode = secIdParts[0];
-			var board = ExchangeBoard.GetOrCreateBoard(secIdParts[1]);
+			var secCode = secIdParts.Item1;
+			var board = ExchangeBoard.GetOrCreateBoard(secIdParts.Item2);
 
 			foreach (var set in settings)
 			{
