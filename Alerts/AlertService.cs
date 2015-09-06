@@ -19,7 +19,7 @@ namespace StockSharp.Alerts
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Сервис сигналов.
+	/// Alert service.
 	/// </summary>
 	public class AlertService : Disposable, IAlertService
 	{
@@ -27,9 +27,9 @@ namespace StockSharp.Alerts
 		private readonly SynchronizedDictionary<Type, AlertSchema> _schemas = new SynchronizedDictionary<Type, AlertSchema>(); 
 
 		/// <summary>
-		/// Создать <see cref="AlertService"/>.
+		/// Initializes a new instance of the <see cref="AlertService"/>.
 		/// </summary>
-		/// <param name="dumpDir">Директория, куда сервис будет сохранять временные файлы.</param>
+		/// <param name="dumpDir">Temp files directory.</param>
 		public AlertService(string dumpDir)
 		{
 			if (dumpDir.IsEmpty())
@@ -111,21 +111,21 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Добавить сигнал на вывод.
+		/// Add alert at the output.
 		/// </summary>
-		/// <param name="type">Тип сигнала.</param>
-		/// <param name="caption">Заголовок сигнала.</param>
-		/// <param name="message">Текст сигнала.</param>
-		/// <param name="time">Время формирования.</param>
+		/// <param name="type">Alert type.</param>
+		/// <param name="caption">Signal header.</param>
+		/// <param name="message">Alert text.</param>
+		/// <param name="time">Creation time.</param>
 		public void PushAlert(AlertTypes type, string caption, string message, DateTime time)
 		{
 			_alerts.Enqueue(Tuple.Create(type, caption, message, time));
 		}
 
 		/// <summary>
-		/// Зарегистрировать схему.
+		/// Register schema.
 		/// </summary>
-		/// <param name="schema">Схема.</param>
+		/// <param name="schema">Schema.</param>
 		public void Register(AlertSchema schema)
 		{
 			if (schema == null)
@@ -135,9 +135,9 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Удалить ранее зарегистрированную через <see cref="IAlertService.Register"/> схему.
+		/// Remove previously registered by <see cref="Alerts.AlertSchema)"/> schema.
 		/// </summary>
-		/// <param name="schema">Схема.</param>
+		/// <param name="schema">Schema.</param>
 		public void UnRegister(AlertSchema schema)
 		{
 			if (schema == null)
@@ -147,9 +147,9 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Проверить сообщение на активацию сигнала.
+		/// Check message on alert conditions.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public void Process(Message message)
 		{
 			if (message == null)
@@ -195,7 +195,7 @@ namespace StockSharp.Alerts
 		}
 		
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

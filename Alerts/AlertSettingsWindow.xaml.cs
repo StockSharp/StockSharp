@@ -19,7 +19,7 @@ namespace StockSharp.Alerts
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно редактирования схемы.
+	/// Schema modification window.
 	/// </summary>
 	public partial class AlertSettingsWindow
 	{
@@ -30,7 +30,7 @@ namespace StockSharp.Alerts
 		private const string _testCaption = "RI. Open Interest > 100 000";
 
 		/// <summary>
-		/// Создать <see cref="AlertSettingsWindow"/>.
+		/// Initializes a new instance of the <see cref="AlertSettingsWindow"/>.
 		/// </summary>
 		public AlertSettingsWindow()
 		{
@@ -75,7 +75,7 @@ namespace StockSharp.Alerts
 		private AlertSchema _schema;
 
 		/// <summary>
-		/// Схема.
+		/// Schema.
 		/// </summary>
 		public AlertSchema Schema
 		{

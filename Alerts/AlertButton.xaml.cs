@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Alerts
+namespace StockSharp.Alerts
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,14 +12,14 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Кнопка активации настроек сигнала.
+	/// Button activation alert settings.
 	/// </summary>
 	public partial class AlertButton : IPersistable, IDisposable
 	{
 		private AlertSchema _alertSchema;
 
 		/// <summary>
-		/// Создать <see cref="AlertButton"/>.
+		/// Initializes a new instance of the <see cref="AlertButton"/>.
 		/// </summary>
 		public AlertButton()
 		{
@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Тип сообщения.
+		/// Message type.
 		/// </summary>
 		public Type MessageType
 		{
@@ -47,14 +47,14 @@
 		}
 
 		/// <summary>
-		/// Событие изменения схемы.
+		/// Schema change event.
 		/// </summary>
 		public event Action SchemaChanged;
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			if (_alertSchema == null)
@@ -69,9 +69,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			if (_alertSchema == null)
@@ -100,9 +100,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщения на активацию сигнала.
+		/// Process activation alert messages.
 		/// </summary>
-		/// <param name="messages">Сообщения.</param>
+		/// <param name="messages">Messages.</param>
 		public void Process(IEnumerable<Message> messages)
 		{
 			if (messages == null)
@@ -121,9 +121,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение на активацию сигнала.
+		/// Process activation alert message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		public void Process(Message message)
 		{
 			if (message == null)
@@ -139,7 +139,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		public void Dispose()
 		{

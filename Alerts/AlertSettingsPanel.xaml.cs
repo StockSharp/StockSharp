@@ -18,7 +18,7 @@ namespace StockSharp.Alerts
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Панель редактирования параметра схемы.
+	/// Panel schema parameter modification.
 	/// </summary>
 	public partial class AlertSettingsPanel
 	{
@@ -31,7 +31,7 @@ namespace StockSharp.Alerts
 		}; 
 
 		/// <summary>
-		/// Создать <see cref="AlertSettingsPanel"/>.
+		/// Initializes a new instance of the <see cref="AlertSettingsPanel"/>.
 		/// </summary>
 		public AlertSettingsPanel()
 		{
@@ -45,7 +45,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="MessageType"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.MessageType"/>.
 		/// </summary>
 		public static readonly DependencyProperty MessageTypeProperty =
 			DependencyProperty.Register("MessageType", typeof(Type), typeof(AlertSettingsPanel), new PropertyMetadata(null, MessageTypeChanged));
@@ -56,7 +56,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Property"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Property"/>.
 		/// </summary>
 		public static readonly DependencyProperty PropertyProperty =
 			DependencyProperty.Register("Property", typeof(PropertyInfo), typeof(AlertSettingsPanel), new PropertyMetadata(null, PropertyChanged));
@@ -73,7 +73,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Operator"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Operator"/>.
 		/// </summary>
 		public static readonly DependencyProperty OperatorProperty =
 			DependencyProperty.Register("Operator", typeof(ComparisonOperator?), typeof(AlertSettingsPanel), new PropertyMetadata(null, OperatorChanged));
@@ -84,7 +84,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Value"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AlertSettingsPanel.Value"/>.
 		/// </summary>
 		public static readonly DependencyProperty ValueProperty =
 			DependencyProperty.Register("Value", typeof(object), typeof(AlertSettingsPanel), new PropertyMetadata(null, ValueChanged));
@@ -113,7 +113,7 @@ namespace StockSharp.Alerts
 		private Type _messageType;
 
 		/// <summary>
-		/// Тип сообщения.
+		/// Message type.
 		/// </summary>
 		public Type MessageType
 		{
@@ -141,8 +141,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Свойство сообщения, с которым будет производиться сравнение со значением <see cref="Value"/>
-		/// на основе критерия <see cref="Operator"/>.
+		/// Message property, which will be made a comparison with the value of <see cref="AlertSettingsPanel.Value"/> based on the criterion <see cref="AlertSettingsPanel.Operator"/>.
 		/// </summary>
 		public PropertyInfo Property
 		{
@@ -151,7 +150,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Критерий сравнения значения <see cref="Value"/>.
+		/// The criterion of comparison values <see cref="AlertSettingsPanel.Value"/>.
 		/// </summary>
 		public ComparisonOperator? Operator
 		{
@@ -160,7 +159,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Значение для сравнения.
+		/// Comparison value.
 		/// </summary>
 		public object Value
 		{

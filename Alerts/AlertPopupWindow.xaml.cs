@@ -1,14 +1,14 @@
-﻿namespace StockSharp.Alerts
+namespace StockSharp.Alerts
 {
 	using System;
 
 	/// <summary>
-	/// Всплывающее окно для типа сигнала <see cref="AlertTypes.Popup"/>.
+	/// Popup window for alert type <see cref="AlertTypes.Popup"/>.
 	/// </summary>
 	public partial class AlertPopupWindow
 	{
 		/// <summary>
-		/// Создать <see cref="AlertPopupWindow"/>.
+		/// Initializes a new instance of the <see cref="AlertPopupWindow"/>.
 		/// </summary>
 		public AlertPopupWindow()
 		{
@@ -18,7 +18,7 @@
 		private DateTime _time;
 
 		/// <summary>
-		/// Время формирования сигнала.
+		/// Alert creation time.
 		/// </summary>
 		public DateTime Time
 		{
@@ -31,7 +31,7 @@
 		}
 
 		/// <summary>
-		/// Текст сигнала.
+		/// Alert text.
 		/// </summary>
 		public string Message
 		{

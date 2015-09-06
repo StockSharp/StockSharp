@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Alerts
+namespace StockSharp.Alerts
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,14 +8,14 @@
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Схема.
+	/// Schema.
 	/// </summary>
 	public class AlertSchema : IPersistable
 	{
 		/// <summary>
-		/// Создать <see cref="AlertSchema"/>.
+		/// Initializes a new instance of the <see cref="AlertSchema"/>.
 		/// </summary>
-		/// <param name="messageType">Тип сообщения.</param>
+		/// <param name="messageType">Message type.</param>
 		public AlertSchema(Type messageType)
 		{
 			MessageType = messageType;
@@ -23,34 +23,34 @@
 		}
 
 		/// <summary>
-		/// Тип сообщения.
+		/// Message type.
 		/// </summary>
 		public Type MessageType { get; private set; }
 
 		/// <summary>
-		/// Правила.
+		/// Rules.
 		/// </summary>
 		public IList<AlertRule> Rules { get; private set; }
 
 		/// <summary>
-		/// Тип сигнала.
+		/// Alert type.
 		/// </summary>
 		public AlertTypes? AlertType { get; set; }
 
 		/// <summary>
-		/// Заголовок сигнала.
+		/// Signal header.
 		/// </summary>
 		public string Caption { get; set; }
 
 		/// <summary>
-		/// Текст сигнала.
+		/// Alert text.
 		/// </summary>
 		public string Message { get; set; }
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Rules.AddRange(storage.GetValue<IList<AlertRule>>("Rules"));
@@ -60,9 +60,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Rules", Rules);

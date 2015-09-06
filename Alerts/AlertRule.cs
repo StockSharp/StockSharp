@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Alerts
+namespace StockSharp.Alerts
 {
 	using System.Reflection;
 
@@ -6,12 +6,12 @@
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Правило.
+	/// Rule.
 	/// </summary>
 	public class AlertRule
 	{
 		/// <summary>
-		/// Создать <see cref="AlertRule"/>.
+		/// Initializes a new instance of the <see cref="AlertRule"/>.
 		/// </summary>
 		public AlertRule()
 		{
@@ -19,19 +19,18 @@
 		}
 
 		/// <summary>
-		/// Свойство сообщения, с которым будет производиться сравнение со значением <see cref="Value"/>
-		/// на основе критерия <see cref="Operator"/>.
+		/// Message property, which will be made a comparison with the value of <see cref="AlertRule.Value"/> based on the criterion <see cref="AlertRule.Operator"/>.
 		/// </summary>
 		[Member]
 		public PropertyInfo	Property { get; set; }
 
 		/// <summary>
-		/// Критерий сравнения значения <see cref="Value"/>.
+		/// The criterion of comparison values <see cref="AlertRule.Value"/>.
 		/// </summary>
 		public ComparisonOperator Operator { get; set; }
 
 		/// <summary>
-		/// Значение для сравнения.
+		/// Comparison value.
 		/// </summary>
 		public object Value { get; set; }
 	}

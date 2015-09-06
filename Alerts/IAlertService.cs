@@ -1,26 +1,26 @@
-﻿namespace StockSharp.Alerts
+namespace StockSharp.Alerts
 {
 	using System;
 
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Типы сигналов.
+	/// Alert types.
 	/// </summary>
 	public enum AlertTypes
 	{
 		/// <summary>
-		/// Звуковой.
+		/// Sound.
 		/// </summary>
 		Sound,
 		
 		/// <summary>
-		/// Речевой.
+		/// Speech.
 		/// </summary>
 		Speech,
 
 		/// <summary>
-		/// Всплывающим окном.
+		/// Popup window.
 		/// </summary>
 		Popup,
 
@@ -35,41 +35,41 @@
 		Email,
 
 		/// <summary>
-		/// Логированием.
+		/// Logging.
 		/// </summary>
 		Log,
 	}
 
 	/// <summary>
-	/// Интерфейс, описывающий сервис сигналов.
+	/// Defines a alert service.
 	/// </summary>
 	public interface IAlertService
 	{
 		/// <summary>
-		/// Добавить сигнал на вывод.
+		/// Add alert at the output.
 		/// </summary>
-		/// <param name="type">Тип сигнала.</param>
-		/// <param name="caption">Заголовок сигнала.</param>
-		/// <param name="message">Текст сигнала.</param>
-		/// <param name="time">Время формирования.</param>
+		/// <param name="type">Alert type.</param>
+		/// <param name="caption">Signal header.</param>
+		/// <param name="message">Alert text.</param>
+		/// <param name="time">Creation time.</param>
 		void PushAlert(AlertTypes type, string caption, string message, DateTime time);
 
 		/// <summary>
-		/// Зарегистрировать схему.
+		/// Register schema.
 		/// </summary>
-		/// <param name="schema">Схема.</param>
+		/// <param name="schema">Schema.</param>
 		void Register(AlertSchema schema);
 
 		/// <summary>
-		/// Удалить ранее зарегистрированную через <see cref="Register"/> схему.
+		/// Remove previously registered by <see cref="Alerts.AlertSchema)"/> schema.
 		/// </summary>
-		/// <param name="schema">Схема.</param>
+		/// <param name="schema">Schema.</param>
 		void UnRegister(AlertSchema schema);
 
 		/// <summary>
-		/// Проверить сообщение на активацию сигнала.
+		/// Check message on alert conditions.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		void Process(Message message);
 	}
 }
