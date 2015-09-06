@@ -1,0 +1,152 @@
+﻿using System;
+using System.Linq;
+using System.Xml.Linq;
+
+using XMLCommToHTM.DOM.Internal;
+using XMLCommToHTM.DOM.Internal.DOC;
+
+namespace XMLCommToHTM.DOM
+{
+	public class TypeDom
+	{
+		public enum TypeKindEnum
+		{
+			Class,
+			Struct,
+			Interface,
+			Delegate,
+			Enum
+		};
+
+		public AssemblyDom Assembly;
+		public XElement DocInfo;
+		public Type Type;
+
+		public GenericParameterDom[] GenericTypeParameters;
+		public MemberDom[] AllMembers;
+		
+		public ConstructorDom[] Constructors;
+		public FieldDom[] Fields;
+		public PropertyDom[] Properties;
+		public MethodDom[] Methods;
+		public MethodDom[] Operators;
+		public EventDom[] Events;
+
+		public MethodDom[] ExtentionMethods;
+
+
+		public TypeDom[] NestedTypes;
+
+		public TypeKindEnum TypeKind
+		{
+			get
+			{
+				if(Type.BaseType==typeof(MulticastDelegate))
+					return TypeKindEnum.Delegate;
+				if (Type.IsInterface)
+					return TypeKindEnum.Interface;
+				else if(Type.IsEnum)
+					return TypeKindEnum.Enum;
+				else if (Type.IsValueType)
+					return TypeKindEnum.Struct;
+				return TypeKindEnum.Class;
+			}
+		}
+
+		public string FullName
+		{
+			get { return Type.FullName; }
+		}
+		public string Namespace { get { return Type.Namespace??""; } }
+		public string SimpleName { get { return TypeUtils.SimpleName(Type); } }
+		//public string SimpleNameWithNestedGen { get { return TypeUtils.ToDisplayString(Type,false,"(",")"); } } 
+		public string GetDisplayName(bool includeNamespace, string brOpen="<", string brClose=">")
+		{
+			return TypeUtils.ToDisplayString(Type, includeNamespace, brOpen, brClose);
+		}
+
+		public Type[] BaseTypes
+		{
+			get
+			{
+				return Type.GetBaseTypes()
+					//.Select(_ => TypeUtils.ToDisplayString(_, true))
+					.Reverse()
+					.ToArray();
+			}
+		}
+		//public string[] GetDistinctMethodsNames()
+		//{
+		//	return Methods.Select(_ => _.Name).Distinct().ToArray();
+		//}
+
+		public Type[] DerivedTypes
+		{
+			get
+			{
+				return AssemblyUtils.GetAllDerivedTypes(Assembly.ReflectionAssembly, Type).ToArray();
+			}
+		}
+
+		public static TypeDom Build(TypeDoc doc, AssemblyDom asm, Func<MemberDom, bool> filterMembers)
+		{
+			var ret = new TypeDom
+				{
+					Assembly = asm,
+					DocInfo = doc.DocInfo,
+					Type = doc.ReflectionType,
+				};
+			MemberDom[] members = doc.Members
+									 .Where(_ => _.ReflectionMemberInfo != null)
+									 .Select(_ => MemberDom.Build(ret, _.ReflectionMemberInfo, _.DocInfo))
+									 .ToArray();
+			
+			members = members.Where(
+				_ => (filterMembers==null || filterMembers(_)) && !_.IsPrivateOrInternal
+				).ToArray();
+			
+			ret.AllMembers = members;
+			ret.Constructors = members.OfType<ConstructorDom>().OrderBy(_ => _.ShortSignature).ToArray();
+			ret.Fields = members.OfType<FieldDom>()
+			                .OrderBy(_ => _.ShortSignature)
+			                .ToArray();
+			ret.Properties = members.OfType<PropertyDom>()
+			                .OrderBy(_ => _.ShortSignature)
+			                .ToArray();
+			ret.Methods = members.OfType<MethodDom>()
+			                .Where(_ => !_.IsOperator)
+			                .OrderBy(_ => _.ShortSignature)
+			                .ToArray();
+			ret.Operators = members.OfType<MethodDom>()
+			                .Where(_ => _.IsOperator)
+			                .OrderBy(_ => _.ShortSignature)
+			                .ToArray();
+			ret.Events = members.OfType<EventDom>()
+			                .OrderBy(_ => _.ShortSignature)
+			                .ToArray();
+			ret.GenericTypeParameters = GenericParameterDom.BuildTypeGenericParameters(ret.Type, ret.DocInfo);
+			return ret;
+		}
+
+		public string Name
+		{
+			get { return Type.Name; }
+		}
+
+		public void FillOverrideIndex()
+		{
+			var groups = Methods
+				.GroupBy(_ => _.SimpleName)
+				.Where(_=>_.Count()>1);
+			foreach (var g in groups)
+			{
+				int index = 1;
+				foreach (var methodDom in g.OrderBy(_ => _.ShortSignature))
+				{
+					methodDom.OverloadIndex = index;
+					index++;
+				}
+			}
+		}
+	}
+}

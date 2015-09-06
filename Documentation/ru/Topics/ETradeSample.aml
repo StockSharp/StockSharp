@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2b16e1d6-32bf-426d-8d20-08020f5f1f40" revisionNumber="1">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>В качестве примера работы с <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>
+      рассмотрим приложение SampleETrade, показанное на рисунке ниже. Исходные коды примера лежат в дистрибутиве в папке <legacyItalic>Samples/ETrade</legacyItalic>.</para>
+		
+		<mediaLink><image placement="center" xlink:href="etrade_sample_main_window"/></mediaLink>
+    </introduction>
+    <procedure>
+				<steps class="ordered">
+					<step>
+						<content>
+							<para>В самом начале необходимо создать экземпляр класса шлюза <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>:</para>
+            				<code language="C#">
+            				<![CDATA[
+Trader = new ETradeTrader(IsSandbox, IsSandbox ? GetSandboxSecurities() : null)
+{
+	ConsumerKey = ConsumerKey,
+	ConsumerSecret = secret,
+	LogLevel = LogLevels.Debug,
+	DumpRestData = true
+};
+							]]>
+							</code>
+						</content>
+					</step>
+
+					<step>
+						<content>
+							<para>Далее следует установить требуемые обработчики событий <codeEntityReference qualifyHint="false">T:StockSharp.BusinessEntities.IConnector</codeEntityReference>:</para>
+            				<code language="C#">
+            				<![CDATA[
+// подписываемся на событие успешного соединения
+Trader.Connected += () => this.GuiAsync(() =>OnConnectionChanged(true));
+
+// подписываемся на событие разрыва соединения
+Trader.ConnectionError += error => this.GuiAsync(() =>
+{
+	OnConnectionChanged(Trader.IsConnected);
+	MessageBox.Show(this, error.ToString(), "Ошибкасоединения");
+});
+
+Trader.Disconnected += () =>this.GuiAsync(() => OnConnectionChanged(false));
+
+Trader.ProcessDataError += error =>this.GuiAsync(() => MessageBox.Show(this, error.ToString(), "Ошибкаобработкиданных"));
+
+Trader.NewSecurities += securities => this.GuiAsync(() => _securitiesWindow.AddSecurities(securities));
+Trader.NewOrders += orders => this.GuiAsync(() => _ordersWindow.Orders.AddRange(orders));
+Trader.NewStopOrders += orders => this.GuiAsync(() => _stopOrdersWindow.Orders.AddRange(orders));
+Trader.NewPortfolios += portfolios => this.GuiAsync(() =>
+{
+	// регистрирует портфели на обновление данных
+	portfolios.ForEach(Trader.RegisterPortfolio);
+
+	_portfoliosWindow.Portfolios.AddRange(portfolios);
+});
+Trader.NewPositions += positions => this.GuiAsync(() => _positionsWindow.Positions.AddRange(positions));
+
+// подписываемся на событие о неудачной регистрации заявок
+Trader.OrdersRegisterFailed += OrdersFailed;
+// подписываемся на событие о неудачном снятии заявок
+Trader.OrdersCancelFailed += OrdersFailed;
+
+// подписываемся на событие о неудачной регистрации стоп-заявок
+Trader.StopOrdersRegisterFailed += OrdersFailed;
+// подписываемся на событие о неудачном снятии стоп-заявок
+Trader.StopOrdersCancelFailed += OrdersFailed;
+							]]>
+							</code>						
+						</content>
+					</step>
+					
+					<step>
+						<content>
+							<para>Далее необходимо выполнить авторизацию на сервере <token>etrade</token>:</para>
+            				
+            				<code language="C#">
+            				<![CDATA[
+Trader.Connect();
+							]]>
+							</code>	
+							
+							<para>Если в текущий день авторизация уже проводилась, то однократного вызова 
+							<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.Connect</codeEntityReference>
+							достаточно.	В противном случае <codeEntityReference qualifyHint="false">T:StockSharp.ETrade.ETradeTrader</codeEntityReference>
+							автоматически запустит полную процедуру авторизации, в рамках которой пользователю будет предложено ввести логин/пароль на сайте <token>etrade</token>, 
+							после чего пользователь получит код верификации. Код верификации необходимо записать в свойство
+							<codeEntityReference qualifyHint="true">P:StockSharp.ETrade.ETradeTrader.VerificationCode</codeEntityReference>, после чего повторно стартовать процедуру авторизации:</para>
+							
+            				<code language="C#">
+            				<![CDATA[
+Trader.VerificationCode = Verifier;
+Trader.Connect();
+							]]>
+							</code>							
+						</content>
+					</step>
+					<step>
+					<content>
+							<para>После подключения можно ожидать срабатывания событий:</para>
+							<list class="bullet">
+								<listItem>
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged</codeEntityReference> – изменение инструмента (последней цены, цены спроса/предложения и т.д.) запрошенного через 
+									<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterSecurity(StockSharp.BusinessEntities.Security)</codeEntityReference>.</para>
+								</listItem>
+								<listItem>
+									<para><codeEntityReference qualifyHint="true">E:StockSharp.BusinessEntities.IConnector.PortfoliosChanged</codeEntityReference> – 
+									изменение портфелей, запрошенное с помощью <codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>.</para>
+								</listItem>
+							</list>							
+						</content>
+					</step>
+
+					<step>
+						<content>
+							<para>Поиск инструментов (<link xlink:href="39e0b7aa-0303-438c-b347-fea21540c9f3">подробнее</link>):</para>
+							
+							<mediaLink><image placement="center" xlink:href="etrade_sample_securities"/></mediaLink>
+            				
+            				<code language="C#">
+            				<![CDATA[
+void SearchTextPreviewKeyUp(object sender, KeyEventArgs e)
+{
+	if (e.Key != Key.Enter)
+		return;
+
+	var text = SearchText.Text.Trim();
+
+	if (text.IsEmpty())
+		return;
+	MainWindow.Instance.Trader.LookupSecurities(new Security { Name = text });
+}
+							]]>
+							</code>
+						</content>
+					</step>
+
+					<step>
+						<content>
+							<para>Для получения обновлений по портфелям используется метод 
+							<codeEntityReference qualifyHint="false" autoUpgrade="true">M:StockSharp.BusinessEntities.IConnector.RegisterPortfolio(StockSharp.BusinessEntities.Portfolio)</codeEntityReference>:</para>
+            				<code language="C#">
+            				<![CDATA[
+Trader.NewPortfolios += portfolios =>
+{
+	// регистрирует портфели на обновление данных
+	portfolios.ForEach(Trader.RegisterPortfolio);
+
+	_portfoliosWindow.Portfolios.AddRange(portfolios);
+};
+							]]>
+							</code>						
+						</content>
+					</step>
+
+					<step>
+						<content>
+							<para>Для регистрации заявок предусмотрена кнопка «Новая заявка». Метод 
+							<codeEntityReference>M:StockSharp.BusinessEntities.IConnector.RegisterOrder(StockSharp.BusinessEntities.Order)</codeEntityReference> 
+							отправляет заявку на сервер:</para>
+            				<code language="C#">
+            				<![CDATA[
+private void SendClick(object sender, RoutedEventArgs e)
+{
+	var order = new Order
+	{
+		Type = IsMarket.IsChecked == true ? OrderTypes.Market :OrderTypes.Limit,
+		Portfolio = Portfolio.SelectedPortfolio,
+		Volume = Volume.Text.To<decimal>(),
+		Price = Price.Text.To<decimal>(),
+		Security = Security,
+		Direction = IsBuy.IsChecked == true ? OrderDirections.Buy :OrderDirections.Sell,
+	};
+
+	MainWindow.Instance.Trader.RegisterOrder(order);
+	DialogResult = true;
+}
+							]]>
+							</code>						
+						</content>
+					</step>
+				</steps>
+		</procedure>
+  </developerWalkthroughDocument>
+</topic>

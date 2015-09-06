@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="b8e71f65-00e3-41f7-af6e-69bf38a2c5bb" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<introduction>
+	    <para>Добавление индикатора для отрисовки на графике демонстрирует следующий пример:</para>
+	    	
+        <code language="C#">
+        <![CDATA[
+private QuikTrader _trader;
+private Security _security;
+
+private CandleManager _candleManager;
+private CandleSeries _candleSeries;
+
+readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
+
+private ChartArea _area;
+private ChartCandleElement _candlesElem;
+private ChartIndicatorElement _longMaElem;
+
+...
+
+// _chart - StockSharp.Xaml.Charting.Chart
+// Создание области графика
+_area = new ChartArea();
+_chart.Areas.Add(_area);
+
+// Создание элемента графика представляющего свечки
+_candlesElem = new ChartCandleElement();
+_area.Elements.Add(_candlesElem);
+
+// Создание элемента графика представляющего индикатор
+_longMaElem = new ChartIndicatorElement
+{
+	Title = "Длинная",
+	Indicator = new SimpleMovingAverage{ Length = 80 }
+};
+_area.Elements.Add(_longMaElem);
+...
+
+
+_candleManager = new CandleManager(_trader);
+_candleManager.Processing += Draw;
+
+...
+
+_candleSeries = new CandleSeries(typeof(TimeFrameCandle), _security, _timeFrame);
+_candleManager.Start(_candleSeries);
+
+...
+
+private void Draw(CandleSeries series, Candle candle)
+{
+	var longValue = candle.State == CandleStates.Finished ? new ChartIndicatorValue(_longMaElem.Indicator, _longMaElem.Indicator.Process(candle)) : null;
+
+	this.GuiAsync(() => _chart.Draw(candle.OpenTime, new Dictionary<IChartElement, object>
+	{
+		{ _candlesElem, candle },
+		{ _longMaElem, longValue}
+	}));
+}
+		]]>
+		</code>	  
+		
+		<mediaLink><image placement="center" xlink:href="indicators_chart" /></mediaLink>
+    </introduction>
+	</developerWalkthroughDocument>
+</topic>

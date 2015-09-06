@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="287125e1-7c7e-4be3-a8ce-5018538e613f" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+	<introduction>
+		<para>Для графического отображения свечек можно использовать специальный компонент <codeEntityReference>T:StockSharp.Xaml.Charting.Chart</codeEntityReference>,
+		который отрисовывает свечки следующим образом:</para>
+      
+		<mediaLink><image placement="center" xlink:href="sample_candleschart" /></mediaLink>
+	  
+		<para>Для отображения, поступающие свечки от <codeEntityReference>T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> передаются в метод
+		<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Xaml.Charting.ChartHelper.ProcessCandle(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)</codeEntityReference>.</para>
+		
+		<para>При передаче свечки из события <codeEntityReference qualifyHint="false">E:StockSharp.Algo.Candles.CandleManager.Processing</codeEntityReference>
+		для отрисовки на графике, будут отбражаться изменения текущей свечки.</para>
+		
+		<para>Если же нужно отображать <legacyBold>только</legacyBold> "целые" свечки, то необходимо проверить свойство 
+		<codeEntityReference qualifyHint="false">P:StockSharp.Algo.Candles.Candle.State</codeEntityReference> пришедшей свечки:</para>
+		
+		<code language="C#">
+		<![CDATA[
+private ChartArea _area;
+private ChartCandleElement _candlesElem;
+
+// _chart - StockSharp.Xaml.Chart
+// Создание области графика
+_area = new ChartArea();
+_chart.Areas.Add(_area);
+
+// Создание элемента графика представляющего свечки
+_candlesElem = new ChartCandleElement();
+_area.Elements.Add(_candlesElem);
+
+...
+		
+_candleManager.Processing += DrawCandle;
+
+...
+
+private void DrawCandle(CandleSeries series, Candle candle)
+{
+	if (candle.State == CandleStates.Finished) this.GuiAsync(() => _chart.Draw(_candlesElem, candle) );
+}
+		]]>
+		</code>	
+	
+	</introduction>
+
+	</developerWalkthroughDocument>
+</topic>

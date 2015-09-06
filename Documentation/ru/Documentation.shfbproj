@@ -1,0 +1,2058 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9a9302fc-36c8-47f5-89bd-97055782b440}</ProjectGuid>
+    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>Documentation</Name>
+    <!-- SHFB properties -->
+    <OutputPath>.\Help\</OutputPath>
+    <HtmlHelpName>StockSharp</HtmlHelpName>
+    <Language>ru-RU</Language>
+    <HelpTitle>StockSharp - платформа для торговых роботов</HelpTitle>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <NamingMethod>MemberName</NamingMethod>
+    <PresentationStyle>VS2013</PresentationStyle>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="Comments\project.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Alerts.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Alerts.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.AlfaDirect.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.AlfaDirect.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Algo.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Algo.History.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Algo.History.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Algo.Strategies.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Algo.Strategies.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Algo.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.BitStamp.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.BitStamp.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Blackwood.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Blackwood.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Btce.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Btce.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.BusinessEntities.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.BusinessEntities.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Community.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Community.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.CQG.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.CQG.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.ETrade.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.ETrade.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Fix.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Fix.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Hydra.Core.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Hydra.Core.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.InteractiveBrokers.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.InteractiveBrokers.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.IQFeed.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.IQFeed.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Licensing.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Licensing.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.LMAX.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.LMAX.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Localization.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Localization.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Logging.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Logging.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.MatLab.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.MatLab.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Messages.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Messages.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Micex.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Micex.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Oanda.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Oanda.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.OpenECry.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.OpenECry.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Plaza.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Plaza.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Quik.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Quik.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Rithmic.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Rithmic.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Rss.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Rss.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.SmartCom.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.SmartCom.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Sterling.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Sterling.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Transaq.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Transaq.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.Charting.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.Charting.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.Diagram.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.Diagram.xml" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.dll" />
+<DocumentationSource sourceFile="..\..\..\References\ru\StockSharp.Xaml.xml" /></DocumentationSources>
+    <CopyrightHref>http://stocksharp.com</CopyrightHref>
+    <CopyrightText>&amp;#169%3b 2015 - StockSharp LLC</CopyrightText>
+    <FeedbackEMailAddress>info%40stocksharp.com</FeedbackEMailAddress>
+    <FeedbackEMailLinkText>отзыв</FeedbackEMailLinkText>
+    <ApiFilter>
+      <Filter entryType="Namespace" fullName="XamlGeneratedNamespace" isExposed="False" xmlns="" />
+    </ApiFilter>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <RootNamespaceTitle>StockSharp API</RootNamespaceTitle>
+    <SyntaxFilters>C#</SyntaxFilters>
+    <IncludeFavorites>True</IncludeFavorites>
+    <HeaderText>
+    </HeaderText>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <Preliminary>False</Preliminary>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <IndentHtml>False</IndentHtml>
+    <FrameworkVersion>.NET Framework 4.5.1</FrameworkVersion>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <CleanIntermediates>True</CleanIntermediates>
+    <MaximumGroupParts>2</MaximumGroupParts>
+    <NamespaceGrouping>False</NamespaceGrouping>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" xmlns="" />
+      <NamespaceSummaryItem name="StockSharp.Xaml.Charting.IndicatorPainters" isDocumented="True" xmlns="" />
+    </NamespaceSummaries>
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter, AutoDocumentDispose</MissingTags>
+    <WebsiteSdkLinkType>Msdn</WebsiteSdkLinkType>
+    <HtmlSdkLinkType>Msdn</HtmlSdkLinkType>
+    <BinaryTOC>True</BinaryTOC>
+    <CatalogName>VisualStudio12</CatalogName>
+    <TocParentId>-1</TocParentId>
+    <TocParentVersion>100</TocParentVersion>
+    <TopicVersion>100</TopicVersion>
+    <TocOrder>-1</TocOrder>
+    <ProductTitle>StockSharp</ProductTitle>
+    <VendorName>StockSharp LLC</VendorName>
+    <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
+    <CatalogVersion>100</CatalogVersion>
+    <CatalogProductId>VS</CatalogProductId>
+    <BuildLogFile>doc_log.log</BuildLogFile>
+  </PropertyGroup>
+  <!-- There are no properties for these groups.  AnyCPU needs to appear in
+       order for Visual Studio to perform the build.  The others are optional
+       common platform types that may appear. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Win32' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Art\" />
+    <Folder Include="Comments\" />
+    <Folder Include="Topics\" />
+    <Folder Include="Settings\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\candle_qpile.png">
+      <ImageId>candle_qpile</ImageId>
+      <AlternateText>candle qpile</AlternateText>
+    </None>
+    <None Include="Topics\GuiUniversalGrid.aml" />
+    <None Include="Topics\GuiSecurityGrid.aml" />
+    <None Include="Topics\GuiSecurityLookupPanel.aml" />
+    <None Include="Topics\GuiCreateSecurityWindow.aml" />
+    <None Include="Topics\GuiSecurityEditor.aml" />
+    <None Include="Topics\GuiSecurityPickerWindow.aml" />
+    <None Include="Topics\GuiSecuritypicker.aml" />
+    <None Include="Topics\HydraTasksBackup.aml" />
+    <None Include="Topics\HydraBackup_recovery.aml" />
+    <None Include="Topics\HydraBackup_task.aml" />
+    <None Include="Topics\HydraBackup_account.aml" />
+    <None Include="Topics\HydraSettingsOandaHist.aml" />
+    <None Include="Topics\HydraNetworkSettings.aml" />
+    <None Include="Topics\HydraSynchronizeData.aml" />
+    <None Include="Topics\HydraRemoveData.aml" />
+    <None Include="Topics\HydraResetSettings.aml" />
+    <None Include="Topics\HydraFirstLaunch.aml" />
+    <None Include="Topics\MicexSample.aml" />
+    <None Include="Topics\GUICharting.aml" />
+    <None Include="Topics\Messages_networking.aml" />
+    <None Include="Topics\Messages_storage.aml" />
+    <None Include="Topics\Messages_adapters.aml" />
+    <None Include="Topics\Messages_description.aml" />
+    <None Include="Topics\Messages.aml" />
+    <None Include="Topics\FixServer.aml" />
+    <None Include="Topics\ConnectorsFixFast.aml" />
+    <None Include="Topics\OptionPositionChart.aml" />
+    <None Include="Topics\OptionCalculator.aml" />
+    <None Include="Topics\OptionDesk.aml" />
+    <None Include="Topics\GUIOptions.aml" />
+    <None Include="Topics\OptionsGUI.aml" />
+    <None Include="Topics\ALLBoard.aml" />
+    <None Include="Topics\GUISecurities.aml" />
+    <None Include="Topics\GuiLogging.aml" />
+    <None Include="Topics\AppLogging.aml" />
+    <None Include="Topics\FixNews.aml" />
+    <None Include="Topics\FixStopOrders.aml" />
+    <None Include="Topics\BitStampSample.aml" />
+    <None Include="Topics\FixSample.aml" />
+    <None Include="Topics\BitStampSample .aml" />
+    <None Include="Topics\BtceSample.aml" />
+    <None Include="Topics\OandaHistory.aml" />
+    <None Include="Topics\OandaStopOrders.aml" />
+    <None Include="Topics\OandaSample.aml" />
+    <None Include="Topics\OandaSamples.aml" />
+    <None Include="Topics\RithmicHistory.aml" />
+    <None Include="Topics\RithmicStopOrders.aml" />
+    <None Include="Topics\RithmicSample.aml" />
+    <None Include="Topics\CQGStopOrders.aml" />
+    <None Include="Topics\CQGSample.aml" />
+    <None Include="Topics\SterlingNews.aml" />
+    <None Include="Topics\SterlingStopOrder.aml" />
+    <None Include="Topics\SterlingSample.aml" />
+    <None Include="Topics\QuikDDE.aml" />
+    <None Include="Topics\Alor.aml" />
+    <None Include="Topics\SourceCode.aml" />
+    <None Include="Topics\StockSharpInstall.aml" />
+    <None Include="Topics\Rithmic.aml" />
+    <None Include="Topics\StockSharpTitle.aml" />
+    <None Include="Topics\HydraSettingsConnectionParams.aml" />
+    <None Include="Topics\HydraDisasterRecovery.aml" />
+    <None Include="Topics\HydraBoards.aml" />
+    <None Include="Topics\HydraBackup.aml" />
+    <None Include="Topics\HydraAdditional.aml" />
+    <None Include="Topics\HydraImportExecutions.aml" />
+    <None Include="Topics\HydraImportNews.aml" />
+    <None Include="Topics\HydraImportLevel1.aml" />
+    <None Include="Topics\HydraImportOrderlog.aml" />
+    <None Include="Topics\HydraImportCandles.aml" />
+    <None Include="Topics\HydraImportDepths.aml" />
+    <None Include="Topics\HydraImportTrades.aml" />
+    <None Include="Topics\HydraImportSecurities.aml" />
+    <None Include="Topics\HydraImport.aml" />
+    <None Include="Topics\HydraAnalyticsShow.aml" />
+    <None Include="Topics\HydraAnalyticsScripts.aml" />
+    <None Include="Topics\HydraAnalytics.aml" />
+    <None Include="Topics\HydraExportExecution.aml" />
+    <None Include="Topics\HydraExportNews.aml" />
+    <None Include="Topics\HydraExportCandles.aml" />
+    <None Include="Topics\HydraSettingsBtce.aml" />
+    <None Include="Topics\HydraSettingsOanda.aml" />
+    <None Include="Topics\HydraSettingsSterling.aml" />
+    <None Include="Topics\HydraSettingsBitStamp.aml" />
+    <None Include="Topics\HydraTasksExport.aml" />
+    <None Include="Topics\HydraTasksConverter.aml" />
+    <None Include="Topics\QuikLua.aml" />
+    <None Include="Topics\HydraSettingsRSS.aml" />
+    <None Include="Topics\HydraSettingsRithmic.aml" />
+    <None Include="Topics\HydraSettingsMFD.aml" />
+    <None Include="Topics\HydraSettingsYahoo.aml" />
+    <None Include="Topics\HydraSettingsGoogle.aml" />
+    <None Include="Topics\HydraSettingsTrueFX.aml" />
+    <None Include="Topics\HydraSettingsMBTrading.aml" />
+    <None Include="Topics\HydraSettingsGainCapital.aml" />
+    <None Include="Topics\HydraSettingsDukas.aml" />
+    <None Include="Topics\HydraSettingsAlor.aml" />
+    <None Include="Topics\HydraSettingsQuandl.aml" />
+    <None Include="Topics\HydraSettingsFinViz.aml" />
+    <None Include="Topics\Fix.aml" />
+    <None Include="Topics\BitStamp.aml" />
+    <None Include="Topics\Btce.aml" />
+    <None Include="Topics\Bitcoins.aml" />
+    <None Include="Topics\Oanda.aml" />
+    <None Include="Topics\CQG.aml" />
+    <None Include="Topics\Sterling.aml" />
+    <None Include="Comments\project.xml" />
+    <None Include="Topics\LicenseInstructions.aml" />
+    <None Include="Topics\HydraTasks.aml" />
+    <None Include="Topics\HydraSettingsTransaq.aml" />
+    <None Include="Topics\HydraSettingsMicex.aml" />
+    <None Include="Topics\HydraSettingsLmax.aml" />
+    <None Include="Topics\HydraSettingsFix.aml" />
+    <None Include="Topics\HydraSettingsBlackwood.aml" />
+    <None Include="Topics\IQFeedSample.aml" />
+    <None Include="Topics\IQFeedNews.aml" />
+    <None Include="Topics\IQFeedHistory.aml" />
+    <None Include="Topics\IQFeedSecurities.aml" />
+    <None Include="Topics\IQFeedConnect.aml" />
+    <None Include="Topics\ConnectorsForex.aml" />
+    <None Include="Topics\SmartV3.aml" />
+    <None Include="Topics\IQFeed.aml" />
+    <None Include="Topics\ETradeStopOrder.aml" />
+    <None Include="Topics\ETradeAutorization.aml" />
+    <None Include="Topics\ETrade.aml" />
+    <None Include="Topics\ETradeSample.aml" />
+    <None Include="Topics\StudioSetup.aml" />
+    <None Include="Topics\StudioOptionsDesk.aml" />
+    <None Include="Topics\StudioFirstStep.aml" />
+    <None Include="Topics\Studio.aml" />
+    <None Include="Topics\LMaxHistory.aml" />
+    <None Include="Topics\LMaxStopOrder.aml" />
+    <None Include="Topics\LMaxSample.aml" />
+    <None Include="Topics\LMAX.aml" />
+    <None Include="Topics\Micex.aml" />
+    <None Include="Topics\QuikFix.aml" />
+    <None Include="Topics\BlackwoodScanner.aml" />
+    <None Include="Topics\BlackwoodNews.aml" />
+    <None Include="Topics\BlackwoodHistory.aml" />
+    <None Include="Topics\BlackwoodStopOrder.aml" />
+    <None Include="Topics\BlackwoodSample.aml" />
+    <None Include="Topics\Blackwood.aml" />
+    <None Include="Topics\TransaqAlgoOrders.aml" />
+    <None Include="Topics\TransaqStopOrders.aml" />
+    <None Include="Topics\TransaqNews.aml" />
+    <None Include="Topics\TransaqHistory.aml" />
+    <None Include="Topics\TransaqSample.aml" />
+    <None Include="Topics\Transaq.aml" />
+    <None Include="Topics\PlazaCGate.aml" />
+    <None Include="Topics\QuikMksByDde.aml" />
+    <None Include="Topics\NotifyService.aml" />
+    <None Include="Topics\TestingSettings.aml" />
+    <None Include="Topics\HydraGluingData.aml" />
+    <None Include="Topics\HydraSettingsIB.aml" />
+    <None Include="Topics\HydraSettingsIQFeed.aml" />
+    <None Include="Topics\IBScanner.aml" />
+    <None Include="Topics\SecurityLookup.aml" />
+    <None Include="Topics\Materials.aml" />
+    <None Include="Topics\IBHistory.aml" />
+    <None Include="Topics\IBAlgoOrders.aml" />
+    <None Include="Topics\IBSample.aml" />
+    <None Include="Topics\IBSettings.aml" />
+    <None Include="Topics\IB.aml" />
+    <None Include="Topics\HydraSettings.aml" />
+    <None Include="Topics\ConnectorsWestern.aml" />
+    <None Include="Topics\ConnectorsRussian.aml" />
+    <None Include="Topics\WealthLab.aml" />
+    <None Include="Topics\QuikSecuritiesChangesTable.aml" />
+    <None Include="Topics\QuikAsyncMode.aml" />
+    <None Include="Topics\OrdersEvents.aml" />
+    <None Include="Topics\OrdersTransactionId.aml" />
+    <None Include="Topics\MatLab.aml" />
+    <None Include="Topics\HydraSettingsBestPrivateInvestor.aml" />
+    <None Include="Topics\HydraExportTrades.aml" />
+    <None Include="Topics\HydraExportOrderLog.aml" />
+    <None Include="Topics\HydraExportSecurityChange.aml" />
+    <None Include="Topics\HydraExportDepth.aml" />
+    <None Include="Topics\HydraSettingsServer.aml" />
+    <None Include="Topics\HydraSettingsUX.aml" />
+    <None Include="Topics\HydraSettingsSmart.aml" />
+    <None Include="Topics\HydraSettingsSecurity.aml" />
+    <None Include="Topics\HydraSettingsRTS.aml" />
+    <None Include="Topics\HydraSettingsQuik.aml" />
+    <None Include="Topics\HydraSettingsPlaza.aml" />
+    <None Include="Topics\HydraSettingsOEC.aml" />
+    <None Include="Topics\HydraSettingsFinam.aml" />
+    <None Include="Topics\HydraSettingsAlfa.aml" />
+    <None Include="Topics\HydraSettingsSource.aml" />
+    <None Include="Topics\MarketRuleExclusive.aml" />
+    <None Include="Topics\MarketRuleSyncAndSuspend.aml" />
+    <None Include="Topics\MarketRule.aml" />
+    <None Include="Topics\MarketRuleUse.aml" />
+    <None Include="Topics\EventModel.aml" />
+    <None Include="Topics\WhatsNew.aml" />
+    <None Include="Topics\License.aml" />
+    <None Include="Topics\Commissions.aml" />
+    <None Include="Topics\SecurityIndex.aml" />
+    <None Include="Topics\SecurityContinuous.aml" />
+    <None Include="Topics\Security.aml" />
+    <None Include="Topics\OECStopOrder.aml" />
+    <None Include="Topics\OECSettings.aml" />
+    <None Include="Topics\OECSampleWork.aml" />
+    <None Include="Topics\OECRemoting.aml" />
+    <None Include="Topics\OEC.aml" />
+    <None Include="Settings\bibliography.xml" />
+    <None Include="Settings\conceptual_project.xml" />
+    <None Include="Settings\conceptual_version.xml" />
+    <None Include="Settings\links.xml" />
+    <None Include="Topics\Alfa.aml" />
+    <None Include="Topics\AlfaConfiguration.aml" />
+    <None Include="Topics\AlfaFirstStrategy.aml" />
+    <None Include="Topics\AlfaStopOrders.aml" />
+    <None Include="Topics\BasicAlgo.aml" />
+    <None Include="Topics\BasketTrader.aml" />
+    <None Include="Topics\Candles.aml" />
+    <None Include="Topics\CandlesCandleFactory.aml" />
+    <None Include="Topics\CandlesICandleSource.aml" />
+    <None Include="Topics\CandlesPatterns.aml" />
+    <None Include="Topics\CandlesUI.aml" />
+    <None Include="Topics\CandlesIndex.aml" />
+    <None Include="Topics\CandlesGluing.aml" />
+    <None Include="Topics\Currency.aml" />
+    <None Include="Topics\Equity.aml" />
+    <None Include="Topics\Hydra.aml" />
+    <None Include="Topics\HydraCandles.aml" />
+    <None Include="Topics\HydraExport.aml" />
+    <None Include="Topics\HydraPlugins.aml" />
+    <None Include="Topics\HydraUsing.aml" />
+    <None Include="Topics\Indicators.aml" />
+    <None Include="Topics\IndicatorsCustom.aml" />
+    <None Include="Topics\IndicatorsHistory.aml" />
+    <None Include="Topics\IndicatorsChart.aml" />
+    <None Include="Topics\Latency.aml" />
+    <None Include="Topics\Logging.aml" />
+    <None Include="Topics\LoggingITrader.aml" />
+    <None Include="Topics\LoggingCustomListener.aml" />
+    <None Include="Topics\LoggingStrategy.aml" />
+    <None Include="Topics\LoggingMonitorWindow.aml" />
+    <None Include="Topics\MarketTimeOffset.aml" />
+    <None Include="Topics\Orders.aml" />
+    <None Include="Topics\OrderStates.aml" />
+    <None Include="Topics\OrdersReRegister.aml" />
+    <None Include="Topics\OrdersCancel.aml" />
+    <None Include="Topics\OrdersCancelGroup.aml" />
+    <None Include="Topics\OrdersTransaction.aml" />
+    <None Include="Topics\Options.aml" />
+    <None Include="Topics\OptionsGreeks.aml" />
+    <None Include="Topics\OptionsHedge.aml" />
+    <None Include="Topics\OptionsQuoting.aml" />
+    <None Include="Topics\OptionsSynthetic.aml" />
+    <None Include="Topics\Plaza.aml" />
+    <None Include="Topics\PlazaAggregatedOrders.aml" />
+    <None Include="Topics\PlazaCustomTables.aml" />
+    <None Include="Topics\PlazaMetadata.aml" />
+    <None Include="Topics\PlazaSample.aml" />
+    <None Include="Topics\PlazaSingleRouter.aml" />
+    <None Include="Topics\PlazaRevisionManager.aml" />
+    <None Include="Topics\PlazaOrdersLog.aml" />
+    <None Include="Topics\PnL.aml" />
+    <None Include="Topics\Position.aml" />
+    <None Include="Topics\Quik.aml" />
+    <None Include="Topics\QuikAnyTableByDde.aml" />
+    <None Include="Topics\QuikExtendedInfoByDde.aml" />
+    <None Include="Topics\QuikFew.aml" />
+    <None Include="Topics\QuikFirstStrategy.aml" />
+    <None Include="Topics\QuikFormatTransaction.aml" />
+    <None Include="Topics\QuikPortfolio.aml" />
+    <None Include="Topics\QuikProcess.aml" />
+    <None Include="Topics\QuikQuotesByDde.aml" />
+    <None Include="Topics\QuikSetup.aml" />
+    <None Include="Topics\QuikVerifier.aml" />
+    <None Include="Topics\QuikWindow.aml" />
+    <None Include="Topics\QuikStopOrders.aml" />
+    <None Include="Topics\QuikRepoOrders.aml" />
+    <None Include="Topics\SparseDepth.aml" />
+    <None Include="Topics\Reconnect.aml" />
+    <None Include="Topics\SecurityId.aml" />
+    <None Include="Topics\Slippage.aml" />
+    <None Include="Topics\Smart.aml" />
+    <None Include="Topics\SmartComWrapper.aml" />
+    <None Include="Topics\SmartFirstStrategy.aml" />
+    <None Include="Topics\SmartHistory.aml" />
+    <None Include="Topics\SmartStopOrders.aml" />
+    <None Include="Topics\StockSharpAbout.aml" />
+    <None Include="Topics\StockSharpArchitecture.aml" />
+    <None Include="Topics\StockSharpIndependence.aml" />
+    <None Include="Topics\StockSharpSamples.aml" />
+    <None Include="Topics\StockSharpTradingAlgo.aml" />
+    <None Include="Topics\Storages.aml" />
+    <None Include="Topics\StoragesApi.aml" />
+    <None Include="Topics\StoragesDatabase.aml" />
+    <None Include="Topics\Strategy.aml" />
+    <None Include="Topics\StrategyAction.aml" />
+    <None Include="Topics\StrategyProtective.aml" />
+    <None Include="Topics\StrategyChilds.aml" />
+    <None Include="Topics\StrategyCreate.aml" />
+    <None Include="Topics\StrategyQuoting.aml" />
+    <None Include="Topics\StrategyReports.aml" />
+    <None Include="Topics\StrategyTesting.aml" />
+    <None Include="Topics\StrategyTestingOptimization.aml" />
+    <None Include="Topics\StrategyTestingEmulation.aml" />
+    <None Include="Topics\StrategyTestingHistory.aml" />
+    <None Include="Topics\StrategyTestingRealTime.aml" />
+    <None Include="Topics\StrategyStorage.aml" />
+    <None Include="Topics\StrategyOrdersLoad.aml" />
+    <None Include="Topics\UIMarshalling.aml" />
+    <None Include="Topics\Unit.aml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\hydra.png">
+      <ImageId>hydra</ImageId>
+      <AlternateText>hydra</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\hydra_main_first.png">
+      <ImageId>hydra_main_first</ImageId>
+      <AlternateText>hydra main first</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\hydra_securities.png">
+      <ImageId>hydra_securities</ImageId>
+      <AlternateText>hydra securities</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\hydra_security_edit.png">
+      <ImageId>hydra_security_edit</ImageId>
+      <AlternateText>hydra security edit</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\hydra_security_select.png">
+      <ImageId>hydra_security_select</ImageId>
+      <AlternateText>hydra security select</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\hydra_settings.png">
+      <ImageId>hydra_settings</ImageId>
+      <AlternateText>hydra settings</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\platform_independency.png">
+      <ImageId>platform_independency</ImageId>
+      <AlternateText>platform independency</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\portfolio_derivative_dde.png">
+      <ImageId>portfolio_derivative_dde</ImageId>
+      <AlternateText>portfolio derivative dde</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\portfolio_equity_dde.png">
+      <ImageId>portfolio_equity_dde</ImageId>
+      <AlternateText>portfolio equity dde</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\sample_candle_qpile.png">
+      <ImageId>sample_candle_qpile</ImageId>
+      <AlternateText>sample candle qpile</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Art\hydra_candles_tf.png">
+      <ImageId>hydra_candles_tf</ImageId>
+      <AlternateText>hydra candles tf</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_tf_chart.png">
+      <ImageId>hydra_candles_tf_chart</ImageId>
+      <AlternateText>hydra candles tf chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_volume.png">
+      <ImageId>hydra_candles_volume</ImageId>
+      <AlternateText>hydra candles volume</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_volume_chart.png">
+      <ImageId>hydra_candles_volume_chart</ImageId>
+      <AlternateText>hydra candles volume chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_find.png">
+      <ImageId>hydra_find</ImageId>
+      <AlternateText>hydra find</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles.png">
+      <ImageId>hydra_candles</ImageId>
+      <AlternateText>hydra candles</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_build.png">
+      <ImageId>hydra_candles_build</ImageId>
+      <AlternateText>hydra candles build</AlternateText>
+    </Image>
+    <Image Include="Art\LicenseTool.png">
+      <ImageId>LicenseTool</ImageId>
+      <AlternateText>License Tool</AlternateText>
+    </Image>
+    <Image Include="Art\OECTrader.png">
+      <ImageId>OECTrader</ImageId>
+      <AlternateText>OECTrader</AlternateText>
+    </Image>
+    <Image Include="Art\OECTraderMainWindow.png">
+      <ImageId>OECTraderMainWindow</ImageId>
+      <AlternateText>OECTrader Main Window</AlternateText>
+    </Image>
+    <Image Include="Art\OECTraderSecurity.png">
+      <ImageId>OECTraderSecurity</ImageId>
+      <AlternateText>OECTrader Security</AlternateText>
+    </Image>
+    <Image Include="Art\OECTraderSettings.png">
+      <ImageId>OECTraderSettings</ImageId>
+      <AlternateText>OECTrader Settings</AlternateText>
+    </Image>
+    <Image Include="Art\LicenseToolSend.png">
+      <ImageId>LicenseToolSend</ImageId>
+      <AlternateText>License Tool Send</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_main.png">
+      <ImageId>hydra_candles_main</ImageId>
+      <AlternateText>hydra candles main</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_edit.png">
+      <ImageId>hydra_edit</ImageId>
+      <AlternateText>hydra edit</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_depth.png">
+      <ImageId>hydra_export_depth</ImageId>
+      <AlternateText>hydra export depth</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_order_log.png">
+      <ImageId>hydra_export_order_log</ImageId>
+      <AlternateText>hydra export order log</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_trades.png">
+      <ImageId>hydra_export_trades</ImageId>
+      <AlternateText>hydra export trades</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_main_start.png">
+      <ImageId>hydra_main_start</ImageId>
+      <AlternateText>hydra main start</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_full_list.png">
+      <ImageId>hydra_security_full_list</ImageId>
+      <AlternateText>hydra security full list</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_alfa.png">
+      <ImageId>hydra_settings_alfa</ImageId>
+      <AlternateText>hydra settings alfa</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_finam.png">
+      <ImageId>hydra_settings_finam</ImageId>
+      <AlternateText>hydra settings finam</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_oec.png">
+      <ImageId>hydra_settings_oec</ImageId>
+      <AlternateText>hydra settings oec</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_plaza.png">
+      <ImageId>hydra_settings_plaza</ImageId>
+      <AlternateText>hydra settings plaza</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_quik.png">
+      <ImageId>hydra_settings_quik</ImageId>
+      <AlternateText>hydra settings quik</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_rts.png">
+      <ImageId>hydra_settings_rts</ImageId>
+      <AlternateText>hydra settings rts</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_server.png">
+      <ImageId>hydra_settings_server</ImageId>
+      <AlternateText>hydra settings server</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_source_on_off.png">
+      <ImageId>hydra_source_on_off</ImageId>
+      <AlternateText>hydra source on off</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_smart.png">
+      <ImageId>hydra_settings_smart</ImageId>
+      <AlternateText>hydra settings smart</AlternateText>
+    </Image>
+    <Image Include="Art\indicators_chart.png">
+      <ImageId>indicators_chart</ImageId>
+      <AlternateText>indicators chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_bpi.png">
+      <ImageId>hydra_settings_bpi</ImageId>
+      <AlternateText>hydra settings bpi</AlternateText>
+    </Image>
+    <Image Include="Art\matlab.png">
+      <ImageId>matlab</ImageId>
+      <AlternateText>matlab</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_quik_securities.png">
+      <ImageId>hydra_settings_quik_securities</ImageId>
+      <AlternateText>hydra settings quik securities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_quik_securities_changes.png">
+      <ImageId>hydra_settings_quik_securities_changes</ImageId>
+      <AlternateText>hydra settings quik securities changes</AlternateText>
+    </Image>
+    <Image Include="Art\security_changes_dde.png">
+      <ImageId>security_changes_dde</ImageId>
+      <AlternateText>security changes dde</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_connect.png">
+      <ImageId>wealthlab_connect</ImageId>
+      <AlternateText>wealthlab connect</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_menu.png">
+      <ImageId>wealthlab_menu</ImageId>
+      <AlternateText>wealthlab menu</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_settings_StockSharpStreamingDataProvider.png">
+      <ImageId>wealthlab_settings_StockSharpStreamingDataProvider</ImageId>
+      <AlternateText>wealthlab settings Stock Sharp Streaming Data Provider</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_settings_StreamingProvider.png">
+      <ImageId>wealthlab_settings_StreamingProvider</ImageId>
+      <AlternateText>wealthlab settings Streaming Provider</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securities_edit.png">
+      <ImageId>hydra_securities_edit</ImageId>
+      <AlternateText>hydra securities edit</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_security_change_selected.png">
+      <ImageId>hydra_export_security_change_selected</ImageId>
+      <AlternateText>hydra export security change selected</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_menu2.PNG">
+      <ImageId>wealthlab_menu2</ImageId>
+      <AlternateText>wealthlab menu 2</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_connect2.PNG">
+      <ImageId>wealthlab_connect2</ImageId>
+      <AlternateText>wealthlab connect 2</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_settings_quik.png">
+      <ImageId>wealthlab_settings_quik</ImageId>
+      <AlternateText>wealthlab settings quik</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_settings_StaticProvider.PNG">
+      <ImageId>wealthlab_settings_StaticProvider</ImageId>
+      <AlternateText>wealthlab settings Static Provider</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_menu3.PNG">
+      <ImageId>wealthlab_menu3</ImageId>
+      <AlternateText>wealthlab menu 3</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_account.PNG">
+      <ImageId>wealthlab_account</ImageId>
+      <AlternateText>wealthlab account</AlternateText>
+    </Image>
+    <Image Include="Art\wealthlab_settings_account.PNG">
+      <ImageId>wealthlab_settings_account</ImageId>
+      <AlternateText>wealthlab settings account</AlternateText>
+    </Image>
+    <Image Include="Art\ib_settings.png">
+      <ImageId>ib_settings</ImageId>
+      <AlternateText>ib settings</AlternateText>
+    </Image>
+    <Image Include="Art\ib_history.png">
+      <ImageId>ib_history</ImageId>
+      <AlternateText>ib history</AlternateText>
+    </Image>
+    <Image Include="Art\ib_main_window.png">
+      <ImageId>ib_main_window</ImageId>
+      <AlternateText>ib main window</AlternateText>
+    </Image>
+    <Image Include="Art\ib_market_depth.png">
+      <ImageId>ib_market_depth</ImageId>
+      <AlternateText>ib market depth</AlternateText>
+    </Image>
+    <Image Include="Art\ib_securities.png">
+      <ImageId>ib_securities</ImageId>
+      <AlternateText>ib securities</AlternateText>
+    </Image>
+    <Image Include="Art\ib_security_not_found.png">
+      <ImageId>ib_security_not_found</ImageId>
+      <AlternateText>ib security not found</AlternateText>
+    </Image>
+    <Image Include="Art\IBTrader.png">
+      <ImageId>IBTrader</ImageId>
+      <AlternateText>IBTrader</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_IB.png">
+      <ImageId>hydra_settings_IB</ImageId>
+      <AlternateText>hydra settings IB</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_IQFeed.png">
+      <ImageId>hydra_settings_IQFeed</ImageId>
+      <AlternateText>hydra settings IQFeed</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCandles.png">
+      <ImageId>HydraGluingCandles</ImageId>
+      <AlternateText>Hydra Gluing Candles</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCheckData.png">
+      <ImageId>HydraGluingCheckData</ImageId>
+      <AlternateText>Hydra Gluing Check Data</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCheckGluingData.png">
+      <ImageId>HydraGluingCheckGluingData</ImageId>
+      <AlternateText>Hydra Gluing Check Gluing Data</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCSAuto.png">
+      <ImageId>HydraGluingCSAuto</ImageId>
+      <AlternateText>Hydra GluingCSAuto</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCSCustom.png">
+      <ImageId>HydraGluingCSCustom</ImageId>
+      <AlternateText>Hydra GluingCSCustom</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingCSWindow.png">
+      <ImageId>HydraGluingCSWindow</ImageId>
+      <AlternateText>Hydra GluingCSWindow</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingTrades.png">
+      <ImageId>HydraGluingTrades</ImageId>
+      <AlternateText>Hydra Gluing Trades</AlternateText>
+    </Image>
+    <Image Include="Art\HydraGluingWindow.png">
+      <ImageId>HydraGluingWindow</ImageId>
+      <AlternateText>Hydra Gluing Window</AlternateText>
+    </Image>
+    <Image Include="Art\quik_mks_mytrades.jpg">
+      <ImageId>quik_mks_mytrades</ImageId>
+      <AlternateText>quik mks mytrades</AlternateText>
+    </Image>
+    <Image Include="Art\quik_mks_orders.jpg">
+      <ImageId>quik_mks_orders</ImageId>
+      <AlternateText>quik mks orders</AlternateText>
+    </Image>
+    <Image Include="Art\quik_mks_trades.jpg">
+      <ImageId>quik_mks_trades</ImageId>
+      <AlternateText>quik mks trades</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_setup1.png">
+      <ImageId>hydra_setup1</ImageId>
+      <AlternateText>hydra setup 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_setup3.png">
+      <ImageId>hydra_setup3</ImageId>
+      <AlternateText>hydra setup 3</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_setup4.png">
+      <ImageId>hydra_setup4</ImageId>
+      <AlternateText>hydra setup 4</AlternateText>
+    </Image>
+    <Image Include="Art\transaq_sample_main_window.png">
+      <ImageId>transaq_sample_main_window</ImageId>
+      <AlternateText>transaq sample main window</AlternateText>
+    </Image>
+    <Image Include="Art\transaq_sample_securities.png">
+      <ImageId>transaq_sample_securities</ImageId>
+      <AlternateText>transaq sample securities</AlternateText>
+    </Image>
+    <Image Include="Art\transaq_trader.png">
+      <ImageId>transaq_trader</ImageId>
+      <AlternateText>transaq trader</AlternateText>
+    </Image>
+    <Image Include="Art\blackwood_history.png">
+      <ImageId>blackwood_history</ImageId>
+      <AlternateText>blackwood history</AlternateText>
+    </Image>
+    <Image Include="Art\blackwood_main_window.png">
+      <ImageId>blackwood_main_window</ImageId>
+      <AlternateText>blackwood main window</AlternateText>
+    </Image>
+    <Image Include="Art\blackwood_market_depth.png">
+      <ImageId>blackwood_market_depth</ImageId>
+      <AlternateText>blackwood market depth</AlternateText>
+    </Image>
+    <Image Include="Art\blackwood_securities.png">
+      <ImageId>blackwood_securities</ImageId>
+      <AlternateText>blackwood securities</AlternateText>
+    </Image>
+    <Image Include="Art\blackwood_trader.png">
+      <ImageId>blackwood_trader</ImageId>
+      <AlternateText>blackwood trader</AlternateText>
+    </Image>
+    <Image Include="Art\micex_trader.png">
+      <ImageId>micex_trader</ImageId>
+      <AlternateText>micex trader</AlternateText>
+    </Image>
+    <Image Include="Art\quikfix_trader.png">
+      <ImageId>quikfix_trader</ImageId>
+      <AlternateText>quikfix trader</AlternateText>
+    </Image>
+    <Image Include="Art\lmax_sample_main_window.png">
+      <ImageId>lmax_sample_main_window</ImageId>
+      <AlternateText>lmax sample main window</AlternateText>
+    </Image>
+    <Image Include="Art\lmax_sample_market_depth.png">
+      <ImageId>lmax_sample_market_depth</ImageId>
+      <AlternateText>lmax sample market depth</AlternateText>
+    </Image>
+    <Image Include="Art\lmax_sample_securities.png">
+      <ImageId>lmax_sample_securities</ImageId>
+      <AlternateText>lmax sample securities</AlternateText>
+    </Image>
+    <Image Include="Art\lmax_sample_history.png">
+      <ImageId>lmax_sample_history</ImageId>
+      <AlternateText>lmax sample history</AlternateText>
+    </Image>
+    <Image Include="Art\LMaxTrader.png">
+      <ImageId>LMaxTrader</ImageId>
+      <AlternateText>LMax Trader</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_1.jpg">
+      <ImageId>studio_first_step_1</ImageId>
+      <AlternateText>studio first step 1</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_2.jpg">
+      <ImageId>studio_first_step_2</ImageId>
+      <AlternateText>studio first step 2</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_3.jpg">
+      <ImageId>studio_first_step_3</ImageId>
+      <AlternateText>studio first step 3</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_4.jpg">
+      <ImageId>studio_first_step_4</ImageId>
+      <AlternateText>studio first step 4</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_5.jpg">
+      <ImageId>studio_first_step_5</ImageId>
+      <AlternateText>studio first step 5</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_6.jpg">
+      <ImageId>studio_first_step_6</ImageId>
+      <AlternateText>studio first step 6</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_7.jpg">
+      <ImageId>studio_first_step_7</ImageId>
+      <AlternateText>studio first step 7</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_7_1.jpg">
+      <ImageId>studio_first_step_7_1</ImageId>
+      <AlternateText>studio first step 7 1</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_8.jpg">
+      <ImageId>studio_first_step_8</ImageId>
+      <AlternateText>studio first step 8</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_9.jpg">
+      <ImageId>studio_first_step_9</ImageId>
+      <AlternateText>studio first step 9</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_10.jpg">
+      <ImageId>studio_first_step_10</ImageId>
+      <AlternateText>studio first step 10</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_11.jpg">
+      <ImageId>studio_first_step_11</ImageId>
+      <AlternateText>studio first step 11</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_12.jpg">
+      <ImageId>studio_first_step_12</ImageId>
+      <AlternateText>studio first step 12</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_13.jpg">
+      <ImageId>studio_first_step_13</ImageId>
+      <AlternateText>studio first step 13</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_14.jpg">
+      <ImageId>studio_first_step_14</ImageId>
+      <AlternateText>studio first step 14</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_15.jpg">
+      <ImageId>studio_first_step_15</ImageId>
+      <AlternateText>studio first step 15</AlternateText>
+    </Image>
+    <Image Include="Art\studio_first_step_16.jpg">
+      <ImageId>studio_first_step_16</ImageId>
+      <AlternateText>studio first step 16</AlternateText>
+    </Image>
+    <Image Include="Art\studio_options_desk_1.jpg">
+      <ImageId>studio_options_desk_1</ImageId>
+      <AlternateText>studio options desk 1</AlternateText>
+    </Image>
+    <Image Include="Art\studio_options_desk_2.jpg">
+      <ImageId>studio_options_desk_2</ImageId>
+      <AlternateText>studio options desk 2</AlternateText>
+    </Image>
+    <Image Include="Art\studio_options_desk_3.jpg">
+      <ImageId>studio_options_desk_3</ImageId>
+      <AlternateText>studio options desk 3</AlternateText>
+    </Image>
+    <Image Include="Art\studio_options_desk_4.jpg">
+      <ImageId>studio_options_desk_4</ImageId>
+      <AlternateText>studio options desk 4</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_1.jpg">
+      <ImageId>studio_setup_1</ImageId>
+      <AlternateText>studio setup 1</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_2.jpg">
+      <ImageId>studio_setup_2</ImageId>
+      <AlternateText>studio setup 2</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_3.jpg">
+      <ImageId>studio_setup_3</ImageId>
+      <AlternateText>studio setup 3</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_4.jpg">
+      <ImageId>studio_setup_4</ImageId>
+      <AlternateText>studio setup 4</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_5.jpg">
+      <ImageId>studio_setup_5</ImageId>
+      <AlternateText>studio setup 5</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_6.jpg">
+      <ImageId>studio_setup_6</ImageId>
+      <AlternateText>studio setup 6</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_7.jpg">
+      <ImageId>studio_setup_7</ImageId>
+      <AlternateText>studio setup 7</AlternateText>
+    </Image>
+    <Image Include="Art\studio_setup_8.jpg">
+      <ImageId>studio_setup_8</ImageId>
+      <AlternateText>studio setup 8</AlternateText>
+    </Image>
+    <Image Include="Art\ETrade.png">
+      <ImageId>ETrade</ImageId>
+      <AlternateText>ETrade</AlternateText>
+    </Image>
+    <Image Include="Art\etrade_autoriazation.png">
+      <ImageId>etrade_autoriazation</ImageId>
+      <AlternateText>etrade autoriazation</AlternateText>
+    </Image>
+    <Image Include="Art\etrade_sample_main_window.png">
+      <ImageId>etrade_sample_main_window</ImageId>
+      <AlternateText>etrade sample main window</AlternateText>
+    </Image>
+    <Image Include="Art\etrade_sample_securities.png">
+      <ImageId>etrade_sample_securities</ImageId>
+      <AlternateText>etrade sample securities</AlternateText>
+    </Image>
+    <Image Include="Art\IQFeed.jpg">
+      <ImageId>IQFeed</ImageId>
+      <AlternateText>IQFeed</AlternateText>
+    </Image>
+    <Image Include="Art\IQFeedFindSecurity.jpg">
+      <ImageId>IQFeedFindSecurity</ImageId>
+      <AlternateText>IQFeed Find Security</AlternateText>
+    </Image>
+    <Image Include="Art\IQFeedHistoryCandles.jpg">
+      <ImageId>IQFeedHistoryCandles</ImageId>
+      <AlternateText>IQFeed History Candles</AlternateText>
+    </Image>
+    <Image Include="Art\IQFeedHistoryTrades.jpg">
+      <ImageId>IQFeedHistoryTrades</ImageId>
+      <AlternateText>IQFeed History Trades</AlternateText>
+    </Image>
+    <Image Include="Art\IQFeedNews.jpg">
+      <ImageId>IQFeedNews</ImageId>
+      <AlternateText>IQFeed News</AlternateText>
+    </Image>
+    <Image Include="Art\IqFeedSample.jpg">
+      <ImageId>IqFeedSample</ImageId>
+      <AlternateText>Iq Feed Sample</AlternateText>
+    </Image>
+    <Image Include="Art\OrderStates.png">
+      <ImageId>OrderStates</ImageId>
+      <AlternateText>Order States</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_blackwood.png">
+      <ImageId>hydra_settings_blackwood</ImageId>
+      <AlternateText>hydra settings blackwood</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_fix.png">
+      <ImageId>hydra_settings_fix</ImageId>
+      <AlternateText>hydra settings fix</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_lmax.png">
+      <ImageId>hydra_settings_lmax</ImageId>
+      <AlternateText>hydra settings lmax</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_transaq.png">
+      <ImageId>hydra_settings_transaq</ImageId>
+      <AlternateText>hydra settings transaq</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_micex.png">
+      <ImageId>hydra_settings_micex</ImageId>
+      <AlternateText>hydra settings micex</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_clear_filter.png">
+      <ImageId>hydra_security_clear_filter</ImageId>
+      <AlternateText>hydra security clear filter</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_find.png">
+      <ImageId>hydra_security_find</ImageId>
+      <AlternateText>hydra security find</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_main.png">
+      <ImageId>hydra_main</ImageId>
+      <AlternateText>hydra main</AlternateText>
+    </Image>
+    <Image Include="Art\LicenseAccount.png">
+      <ImageId>LicenseAccount</ImageId>
+      <AlternateText>License Account</AlternateText>
+    </Image>
+    <Image Include="Art\LicenseActivate.png">
+      <ImageId>LicenseActivate</ImageId>
+      <AlternateText>License Activate</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_allor.png">
+      <ImageId>hydra_settings_allor</ImageId>
+      <AlternateText>hydra settings allor</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_bitstamp.png">
+      <ImageId>hydra_settings_bitstamp</ImageId>
+      <AlternateText>hydra settings bitstamp</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_btce.png">
+      <ImageId>hydra_settings_btce</ImageId>
+      <AlternateText>hydra settings btce</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_finviz.png">
+      <ImageId>hydra_settings_finviz</ImageId>
+      <AlternateText>hydra settings finviz</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_gaincapital.png">
+      <ImageId>hydra_settings_gaincapital</ImageId>
+      <AlternateText>hydra settings gaincapital</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_google.png">
+      <ImageId>hydra_settings_google</ImageId>
+      <AlternateText>hydra settings google</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_mfd.png">
+      <ImageId>hydra_settings_mfd</ImageId>
+      <AlternateText>hydra settings mfd</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_mbtrading.png">
+      <ImageId>hydra_settings_mbtrading</ImageId>
+      <AlternateText>hydra settings mbtrading</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_oanda.png">
+      <ImageId>hydra_settings_oanda</ImageId>
+      <AlternateText>hydra settings oanda</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_quandl.png">
+      <ImageId>hydra_settings_quandl</ImageId>
+      <AlternateText>hydra settings quandl</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_rithmic.png">
+      <ImageId>hydra_settings_rithmic</ImageId>
+      <AlternateText>hydra settings rithmic</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_rss.png">
+      <ImageId>hydra_settings_rss</ImageId>
+      <AlternateText>hydra settings rss</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_sterling.png">
+      <ImageId>hydra_settings_sterling</ImageId>
+      <AlternateText>hydra settings sterling</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_truefx.png">
+      <ImageId>hydra_settings_truefx</ImageId>
+      <AlternateText>hydra settings truefx</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_yahoo.png">
+      <ImageId>hydra_settings_yahoo</ImageId>
+      <AlternateText>hydra settings yahoo</AlternateText>
+    </Image>
+    <Image Include="Art\QuikLua.png">
+      <ImageId>QuikLua</ImageId>
+      <AlternateText>Quik Lua</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_ux_ftp.png">
+      <ImageId>hydra_settings_ux_ftp</ImageId>
+      <AlternateText>hydra settings ux ftp</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_ux_site.png">
+      <ImageId>hydra_settings_ux_site</ImageId>
+      <AlternateText>hydra settings ux site</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_ducascopy.png">
+      <ImageId>hydra_settings_ducascopy</ImageId>
+      <AlternateText>hydra settings ducascopy</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks.png">
+      <ImageId>hydra_tasks</ImageId>
+      <AlternateText>hydra tasks</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_option.png">
+      <ImageId>hydra_tasks_option</ImageId>
+      <AlternateText>hydra tasks option</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_converter.png">
+      <ImageId>hydra_tasks_converter</ImageId>
+      <AlternateText>hydra tasks converter</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_export.png">
+      <ImageId>hydra_tasks_export</ImageId>
+      <AlternateText>hydra tasks export</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_connstring.png">
+      <ImageId>hydra_tasks_connstring</ImageId>
+      <AlternateText>hydra tasks connstring</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export.png">
+      <ImageId>hydra_export</ImageId>
+      <AlternateText>hydra export</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_context.png">
+      <ImageId>hydra_export_context</ImageId>
+      <AlternateText>hydra export context</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_level1.png">
+      <ImageId>hydra_export_level1</ImageId>
+      <AlternateText>hydra export level 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_news.png">
+      <ImageId>hydra_export_news</ImageId>
+      <AlternateText>hydra export news</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_export_executions.png">
+      <ImageId>hydra_export_executions</ImageId>
+      <AlternateText>hydra export executions</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_main.png">
+      <ImageId>hydra_analitics_main</ImageId>
+      <AlternateText>hydra analitics main</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_folder.png">
+      <ImageId>hydra_analitics_folder</ImageId>
+      <AlternateText>hydra analitics folder</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_compile.png">
+      <ImageId>hydra_analitics_compile</ImageId>
+      <AlternateText>hydra analitics compile</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_references.png">
+      <ImageId>hydra_analitics_references</ImageId>
+      <AlternateText>hydra analitics references</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_toolbar.png">
+      <ImageId>hydra_analitics_toolbar</ImageId>
+      <AlternateText>hydra analitics toolbar</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_parameters.png">
+      <ImageId>hydra_analitics_parameters</ImageId>
+      <AlternateText>hydra analitics parameters</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_run.png">
+      <ImageId>hydra_analitics_run</ImageId>
+      <AlternateText>hydra analitics run</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_chart.png">
+      <ImageId>hydra_analitics_chart</ImageId>
+      <AlternateText>hydra analitics chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_analitics_table.png">
+      <ImageId>hydra_analitics_table</ImageId>
+      <AlternateText>hydra analitics table</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_ind_chart.png">
+      <ImageId>hydra_candles_ind_chart</ImageId>
+      <AlternateText>hydra candles ind chart</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_candles_newarea.png">
+      <ImageId>hydra_candles_newarea</ImageId>
+      <AlternateText>hydra candles newarea</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_securities.png">
+      <ImageId>hydra_import_securities</ImageId>
+      <AlternateText>hydra import securities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_association.png">
+      <ImageId>hydra_import_association</ImageId>
+      <AlternateText>hydra import association</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_trades.png">
+      <ImageId>hydra_import_trades</ImageId>
+      <AlternateText>hydra import trades</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_depths.png">
+      <ImageId>hydra_import_depths</ImageId>
+      <AlternateText>hydra import depths</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_candles.png">
+      <ImageId>hydra_import_candles</ImageId>
+      <AlternateText>hydra import candles</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_orderlog.png">
+      <ImageId>hydra_import_orderlog</ImageId>
+      <AlternateText>hydra import orderlog</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_level1.png">
+      <ImageId>hydra_import_level1</ImageId>
+      <AlternateText>hydra import level 1</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_news.png">
+      <ImageId>hydra_import_news</ImageId>
+      <AlternateText>hydra import news</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_import_executions.png">
+      <ImageId>hydra_import_executions</ImageId>
+      <AlternateText>hydra import executions</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_data_delete.png">
+      <ImageId>hydra_data_delete</ImageId>
+      <AlternateText>hydra data delete</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_sync.png">
+      <ImageId>hydra_sync</ImageId>
+      <AlternateText>hydra sync</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_boards.png">
+      <ImageId>hydra_boards</ImageId>
+      <AlternateText>hydra boards</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_proxy_settings.png">
+      <ImageId>hydra_proxy_settings</ImageId>
+      <AlternateText>hydra proxy settings</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_delete.png">
+      <ImageId>hydra_delete</ImageId>
+      <AlternateText>hydra delete</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_zero.png">
+      <ImageId>hydra_zero</ImageId>
+      <AlternateText>hydra zero</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_add.png">
+      <ImageId>hydra_add</ImageId>
+      <AlternateText>hydra add</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_connectionparams.png">
+      <ImageId>hydra_settings_connectionparams</ImageId>
+      <AlternateText>hydra settings connectionparams</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_connectionperiods.png">
+      <ImageId>hydra_settings_connectionperiods</ImageId>
+      <AlternateText>hydra settings connectionperiods</AlternateText>
+    </Image>
+    <Image Include="Art\StockSharp_logo.png">
+      <ImageId>StockSharp_logo</ImageId>
+      <AlternateText>Stock Sharp logo</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation1.png">
+      <ImageId>stocksharp_instalation1</ImageId>
+      <AlternateText>stocksharp instalation 1</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation2.png">
+      <ImageId>stocksharp_instalation2</ImageId>
+      <AlternateText>stocksharp instalation 2</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation3.png">
+      <ImageId>stocksharp_instalation3</ImageId>
+      <AlternateText>stocksharp instalation 3</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation4.png">
+      <ImageId>stocksharp_instalation4</ImageId>
+      <AlternateText>stocksharp instalation 4</AlternateText>
+    </Image>
+    <Image Include="Art\stocksharp_instalation5.png">
+      <ImageId>stocksharp_instalation5</ImageId>
+      <AlternateText>stocksharp instalation 5</AlternateText>
+    </Image>
+    <Image Include="Art\SterlingSample.png">
+      <ImageId>SterlingSample</ImageId>
+      <AlternateText>Sterling Sample</AlternateText>
+    </Image>
+    <Image Include="Art\Sterling_securities.png">
+      <ImageId>Sterling_securities</ImageId>
+      <AlternateText>Sterling securities</AlternateText>
+    </Image>
+    <Image Include="Art\Sterling_StopOrder.png">
+      <ImageId>Sterling_StopOrder</ImageId>
+      <AlternateText>Sterling Stop Order</AlternateText>
+    </Image>
+    <Image Include="Art\Sterling_loging.png">
+      <ImageId>Sterling_loging</ImageId>
+      <AlternateText>Sterling loging</AlternateText>
+    </Image>
+    <Image Include="Art\CQGTraderSample.png">
+      <ImageId>CQGTraderSample</ImageId>
+      <AlternateText>CQGTrader Sample</AlternateText>
+    </Image>
+    <Image Include="Art\RithmicSample.png">
+      <ImageId>RithmicSample</ImageId>
+      <AlternateText>Rithmic Sample</AlternateText>
+    </Image>
+    <Image Include="Art\RithmicSecurities.png">
+      <ImageId>RithmicSecurities</ImageId>
+      <AlternateText>Rithmic Securities</AlternateText>
+    </Image>
+    <Image Include="Art\OandaSample.png">
+      <ImageId>OandaSample</ImageId>
+      <AlternateText>Oanda Sample</AlternateText>
+    </Image>
+    <Image Include="Art\OandaSecurities.png">
+      <ImageId>OandaSecurities</ImageId>
+      <AlternateText>Oanda Securities</AlternateText>
+    </Image>
+    <Image Include="Art\BtceSample.png">
+      <ImageId>BtceSample</ImageId>
+      <AlternateText>Btce Sample</AlternateText>
+    </Image>
+    <Image Include="Art\BtceSecurities.png">
+      <ImageId>BtceSecurities</ImageId>
+      <AlternateText>Btce Securities</AlternateText>
+    </Image>
+    <Image Include="Art\BitStampSample.png">
+      <ImageId>BitStampSample</ImageId>
+      <AlternateText>Bit Stamp Sample</AlternateText>
+    </Image>
+    <Image Include="Art\FixSample.png">
+      <ImageId>FixSample</ImageId>
+      <AlternateText>Fix Sample</AlternateText>
+    </Image>
+    <Image Include="Art\FixSecurities.png">
+      <ImageId>FixSecurities</ImageId>
+      <AlternateText>Fix Securities</AlternateText>
+    </Image>
+    <Image Include="Art\sample_candles.png">
+      <ImageId>sample_candles</ImageId>
+      <AlternateText>sample candles</AlternateText>
+    </Image>
+    <Image Include="Art\sample_candleschart.png">
+      <ImageId>sample_candleschart</ImageId>
+      <AlternateText>sample candleschart</AlternateText>
+    </Image>
+    <Image Include="Art\sample_logging.png">
+      <ImageId>sample_logging</ImageId>
+      <AlternateText>sample logging</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_LogControl.png">
+      <ImageId>GUI_LogControl</ImageId>
+      <AlternateText>GUI Log Control</AlternateText>
+    </Image>
+    <Image Include="Art\GUI_Monitor.png">
+      <ImageId>GUI_Monitor</ImageId>
+      <AlternateText>GUI Monitor</AlternateText>
+    </Image>
+    <Image Include="Art\sample_timeframecandles.png">
+      <ImageId>sample_timeframecandles</ImageId>
+      <AlternateText>sample timeframecandles</AlternateText>
+    </Image>
+    <Image Include="Art\sample_rangecandles.png">
+      <ImageId>sample_rangecandles</ImageId>
+      <AlternateText>sample rangecandles</AlternateText>
+    </Image>
+    <Image Include="Art\ssapi_schema.png">
+      <ImageId>ssapi_schema</ImageId>
+      <AlternateText>ssapi schema</AlternateText>
+    </Image>
+    <Image Include="Art\option_desk.png">
+      <ImageId>option_desk</ImageId>
+      <AlternateText>option desk</AlternateText>
+    </Image>
+    <Image Include="Art\option_volsmile.png">
+      <ImageId>option_volsmile</ImageId>
+      <AlternateText>option volsmile</AlternateText>
+    </Image>
+    <Image Include="Art\MicexSample.png">
+      <ImageId>MicexSample</ImageId>
+      <AlternateText>Micex Sample</AlternateText>
+    </Image>
+    <Image Include="Art\MicexSampleSecirities.png">
+      <ImageId>MicexSampleSecirities</ImageId>
+      <AlternateText>Micex Sample Secirities</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_source_first.png">
+      <ImageId>hydra_source_first</ImageId>
+      <AlternateText>hydra source first</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings_oanda_hist2.png">
+      <ImageId>hydra_settings_oanda_hist2</ImageId>
+      <AlternateText>hydra settings oanda hist 2</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_NewAccount.png">
+      <ImageId>Aws3_NewAccount</ImageId>
+      <AlternateText>Aws 3 New Account</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CallMeNow.png">
+      <ImageId>Aws3_CallMeNow</ImageId>
+      <AlternateText>Aws 3 Call Me Now</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateAccount.png">
+      <ImageId>Aws3_CreateAccount</ImageId>
+      <AlternateText>Aws 3 Create Account</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_console.png">
+      <ImageId>Aws3_console</ImageId>
+      <AlternateText>Aws 3 console</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateBucket.png">
+      <ImageId>Aws3_CreateBucket</ImageId>
+      <AlternateText>Aws 3 Create Bucket</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateBucketDialog.png">
+      <ImageId>Aws3_CreateBucketDialog</ImageId>
+      <AlternateText>Aws 3 Create Bucket Dialog</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_SecurityCredentials.png">
+      <ImageId>Aws3_SecurityCredentials</ImageId>
+      <AlternateText>Aws 3 Security Credentials</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_CreateNewAccessKey.png">
+      <ImageId>Aws3_CreateNewAccessKey</ImageId>
+      <AlternateText>Aws 3 Create New Access Key</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_SecurityCredentialsCreate.png">
+      <ImageId>Aws3_SecurityCredentialsCreate</ImageId>
+      <AlternateText>Aws 3 Security Credentials Create</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_backup.png">
+      <ImageId>hydra_tasks_backup</ImageId>
+      <AlternateText>hydra tasks backup</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_tasks_backup_add.png">
+      <ImageId>hydra_tasks_backup_add</ImageId>
+      <AlternateText>hydra tasks backup add</AlternateText>
+    </Image>
+    <Image Include="Art\Aws3_download.png">
+      <ImageId>Aws3_download</ImageId>
+      <AlternateText>Aws 3 download</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_source_add.png">
+      <ImageId>hydra_source_add</ImageId>
+      <AlternateText>hydra source add</AlternateText>
+    </Image>
+    <Image Include="Art\sample_realtaime_emulation.png">
+      <ImageId>sample_realtaime_emulation</ImageId>
+      <AlternateText>sample realtaime emulation</AlternateText>
+    </Image>
+    <Image Include="Art\giu_UniversalGridContext.png">
+      <ImageId>giu_UniversalGridContext</ImageId>
+      <AlternateText>giu Universal Grid Context</AlternateText>
+    </Image>
+    <Image Include="Art\giu_UniversalGridExport.png">
+      <ImageId>giu_UniversalGridExport</ImageId>
+      <AlternateText>giu Universal Grid Export</AlternateText>
+    </Image>
+    <Image Include="Art\giu_UniversalGridFormat.png">
+      <ImageId>giu_UniversalGridFormat</ImageId>
+      <AlternateText>giu Universal Grid Format</AlternateText>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\sample_options_calc.png">
+      <ImageId>sample_options_calc</ImageId>
+      <AlternateText>sample options calc</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\sample_quote_iv.png">
+      <ImageId>sample_quote_iv</ImageId>
+      <AlternateText>sample quote iv</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\security_options.png">
+      <ImageId>security_options</ImageId>
+      <AlternateText>security options</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\security_dde.png">
+      <ImageId>security_dde</ImageId>
+      <AlternateText>security dde</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Art\strategy_logging.png">
+      <ImageId>strategy_logging</ImageId>
+      <AlternateText>strategy logging</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Art\transactions.png">
+      <ImageId>transactions</ImageId>
+      <AlternateText>Внешние транзакции.</AlternateText>
+    </Image>
+    <Image Include="Art\security_dde.png">
+      <ImageId>securities</ImageId>
+      <AlternateText>Инструменты.</AlternateText>
+    </Image>
+    <Image Include="Art\order_dde.png">
+      <ImageId>orders</ImageId>
+      <AlternateText>Заявки.</AlternateText>
+    </Image>
+    <Image Include="Art\stoporder_dde.png">
+      <ImageId>stoporders</ImageId>
+      <AlternateText>Стоп-заявки.</AlternateText>
+    </Image>
+    <Image Include="Art\trade_dde.png">
+      <ImageId>trades</ImageId>
+      <AlternateText>Все сделки.</AlternateText>
+    </Image>
+    <Image Include="Art\trade_my_dde.png">
+      <ImageId>mytrades</ImageId>
+      <AlternateText>Мои сделки.</AlternateText>
+    </Image>
+    <Image Include="Art\quote_dde.png">
+      <ImageId>quotes</ImageId>
+      <AlternateText>Стакан.</AlternateText>
+    </Image>
+    <Image Include="Art\position_equity_dde.png">
+      <ImageId>positionsequity</ImageId>
+      <AlternateText>Позиции по бумагам.</AlternateText>
+    </Image>
+    <Image Include="Art\position_derivative_dde.png">
+      <ImageId>positionsderivative</ImageId>
+      <AlternateText>Позиции по деривативам.</AlternateText>
+    </Image>
+    <Image Include="Art\portfolio_equity_dde.png">
+      <ImageId>portfoliosequity</ImageId>
+      <AlternateText>Портфели по бумагам.</AlternateText>
+    </Image>
+    <Image Include="Art\portfolio_derivative_dde.png">
+      <ImageId>portfoliosderivative</ImageId>
+      <AlternateText>Портфели по деривативам.</AlternateText>
+    </Image>
+    <Image Include="Art\security_ex_dde.png">
+      <ImageId>securitiesex</ImageId>
+      <AlternateText>Инструменты (расширенные).</AlternateText>
+    </Image>
+    <Image Include="Art\quote_ex_dde.png">
+      <ImageId>quotesex</ImageId>
+      <AlternateText>Стакан (расширенный).</AlternateText>
+    </Image>
+    <Image Include="Art\portfolio_dde.png">
+      <ImageId>portfolio</ImageId>
+      <AlternateText>Портфель.</AlternateText>
+    </Image>
+    <Image Include="Art\compile_x86.png">
+      <ImageId>compile</ImageId>
+      <AlternateText>Компиляция приложений.</AlternateText>
+    </Image>
+    <Image Include="Art\QuikTrader.png">
+      <ImageId>quiktrader</ImageId>
+      <AlternateText>Архитектура взаимодействия с Quik.</AlternateText>
+    </Image>
+    <Image Include="Art\SmartTrader.png">
+      <ImageId>smarttrader</ImageId>
+      <AlternateText>Архитектура взаимодействия со SmartCOM.</AlternateText>
+    </Image>
+    <Image Include="Art\Ecng.Trading.png">
+      <ImageId>ecngtrading</ImageId>
+      <AlternateText>Архитектура StockSharp.</AlternateText>
+    </Image>
+    <Image Include="Art\quik_new_order.png">
+      <ImageId>quikneworder</ImageId>
+      <AlternateText>Ввод заявки в Quik-е.</AlternateText>
+    </Image>
+    <Image Include="Art\quik_connections.png">
+      <ImageId>quikconnections</ImageId>
+      <AlternateText>Настройка соединения в Quik-е.</AlternateText>
+    </Image>
+    <Image Include="Art\candle_qpile.png">
+      <ImageId>candleqpile</ImageId>
+      <AlternateText>Таблица со свечками, созданная через QPILE.</AlternateText>
+    </Image>
+    <Image Include="Art\sample.png">
+      <ImageId>sample</ImageId>
+      <AlternateText>Пример создания МТС.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_stop_order.png">
+      <ImageId>samplestoporder</ImageId>
+      <AlternateText>Пример работы со стоп заявками.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_quote_ex.png">
+      <ImageId>samplequotesex</ImageId>
+      <AlternateText>Пример экспорта расширенного стакана.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_securities_ex.png">
+      <ImageId>samplesecuritiesex</ImageId>
+      <AlternateText>Пример экспорта расширенных инструментов.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_portfolio.png">
+      <ImageId>sampleportfolio</ImageId>
+      <AlternateText>Пример экспорт таблицы Портфель.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_candle_qpile.png">
+      <ImageId>samplecandleqpile</ImageId>
+      <AlternateText>Пример экспорт QPILE свечек.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_sma.png">
+      <ImageId>samplesma</ImageId>
+      <AlternateText>Пример скользящих средних.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_currency.png">
+      <ImageId>samplecurrency</ImageId>
+      <AlternateText>Перевод валюты.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_connection_error.png">
+      <ImageId>sampleconnectionerror</ImageId>
+      <AlternateText>Разрыв соединения.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_connection_restored.png">
+      <ImageId>sampleconnectionrestore</ImageId>
+      <AlternateText>Восстановление соединения.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_metadata_trades.png">
+      <ImageId>samplemetadatatrades</ImageId>
+      <AlternateText>Расширенный экспорт всех сделок.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_metadata_securities.png">
+      <ImageId>samplemetadatasecurities</ImageId>
+      <AlternateText>Расширенный экспорт инструментов.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_metadata_quik_trades.png">
+      <ImageId>samplemetadataquiktrades</ImageId>
+      <AlternateText>Расширенная таблица Все Сделки в Quik-е.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_metadata_quik_securities.png">
+      <ImageId>samplemetadataquiksecurities</ImageId>
+      <AlternateText>Расширенная таблица Инструменты в Quik-е.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_async_error.png">
+      <ImageId>sampleasyncerror</ImageId>
+      <AlternateText>Ошибка при регистрации неправильной заявки в асинхронном режиме.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_quik_smart.png">
+      <ImageId>samplequiksmart</ImageId>
+      <AlternateText>Одновременная работа с Quik и SmartCOM.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_smart_history.png">
+      <ImageId>samplesmarthistory</ImageId>
+      <AlternateText>Исторические данные SmartCOM.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_history_test.png">
+      <ImageId>samplehistorytest</ImageId>
+      <AlternateText>Пример тестирования стратегии на истории.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_emulation_test.png">
+      <ImageId>sampleemulationtest</ImageId>
+      <AlternateText>Пример тестирования стратегии на случайных данных.</AlternateText>
+    </Image>
+    <Image Include="Art\verifier_error.png">
+      <ImageId>verifiererror</ImageId>
+      <AlternateText>Неправильная настройка Quik.</AlternateText>
+    </Image>
+    <Image Include="Art\verifier_success.png">
+      <ImageId>verifiersuccess</ImageId>
+      <AlternateText>Полностью правильная настройка Quik.</AlternateText>
+    </Image>
+    <Image Include="Art\verifier_warning.png">
+      <ImageId>verifierwarning</ImageId>
+      <AlternateText>Предупреждение о замене колонки другой.</AlternateText>
+    </Image>
+    <Image Include="Art\verifier_refresh.png">
+      <ImageId>verifierrefresh</ImageId>
+      <AlternateText>Кнопка Обновить.</AlternateText>
+    </Image>
+    <Image Include="Art\strategy.png">
+      <ImageId>strategy</ImageId>
+      <AlternateText>Архитектура стратегий.</AlternateText>
+    </Image>
+    <Image Include="Art\strategy_childs.png">
+      <ImageId>strategychilds</ImageId>
+      <AlternateText>Дочерние стратегий.</AlternateText>
+    </Image>
+    <Image Include="Art\strategy_logging.png">
+      <ImageId>strategylogging</ImageId>
+      <AlternateText>Логирование стратегий.</AlternateText>
+    </Image>
+    <Image Include="Art\strategy_monitor.png">
+      <ImageId>strategymonitor</ImageId>
+      <AlternateText>Мониторинг стратегий.</AlternateText>
+    </Image>
+    <Image Include="Art\platform_independency.png">
+      <ImageId>platformindep</ImageId>
+      <AlternateText>Макет платформо-независимого робота.</AlternateText>
+    </Image>
+    <Image Include="Art\hydra.png">
+      <ImageId>hydra</ImageId>
+      <AlternateText>Архитектура.</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_main_first.png">
+      <ImageId>hydra_main_first</ImageId>
+      <AlternateText>Главное окно.</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_settings.png">
+      <ImageId>hydra_settings</ImageId>
+      <AlternateText>Окно настроек.</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_securities.png">
+      <ImageId>hydra_securities</ImageId>
+      <AlternateText>Окно инструментов.</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_edit.png">
+      <ImageId>hydra_security_edit</ImageId>
+      <AlternateText>Окно нового инструмента.</AlternateText>
+    </Image>
+    <Image Include="Art\hydra_security_select.png">
+      <ImageId>hydra_security_select</ImageId>
+      <AlternateText>Окно выбора инструмента.</AlternateText>
+    </Image>
+    <Image Include="Art\security_options.png">
+      <ImageId>security_options</ImageId>
+      <AlternateText>Опционные инструменты.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_options_calc.png">
+      <ImageId>sample_options_calc</ImageId>
+      <AlternateText>Опционный калькулятор.</AlternateText>
+    </Image>
+    <Image Include="Art\sample_quote_iv.png">
+      <ImageId>sample_quote_iv</ImageId>
+      <AlternateText>Стакан волатильности.</AlternateText>
+    </Image>
+    <Image Include="Art\AlfaTrader.png">
+      <ImageId>AlfaTrader</ImageId>
+      <AlternateText>Архитектура взаимодействия с Альфа-Директ.</AlternateText>
+    </Image>
+    <Image Include="Art\PlazaTrader.png">
+      <ImageId>PlazaTrader</ImageId>
+      <AlternateText>Plaza Trader</AlternateText>
+    </Image>
+    <Image Include="Art\AlfaCfgMyPositions.png">
+      <ImageId>AlfaCfgMyPositions</ImageId>
+      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+    </Image>
+    <Image Include="Art\AlfaCfgDisableConfirmations.png">
+      <ImageId>AlfaCfgDisableConfirmations</ImageId>
+      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+    </Image>
+    <Image Include="Art\AlfaCfgUpdateBalance.png">
+      <ImageId>AlfaCfgUpdateBalance</ImageId>
+      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+    </Image>
+    <Image Include="Art\AlfaCfgMaxSpeed.png">
+      <ImageId>AlfaCfgMaxSpeed</ImageId>
+      <AlternateText>Настройка терминала Альфа-Директ</AlternateText>
+    </Image>
+    <Image Include="Art\AlfaConnectorTest.png">
+      <ImageId>AlfaConnectorTest</ImageId>
+      <AlternateText>Alfa Connector Test</AlternateText>
+    </Image>
+    <Image Include="Art\sample_history_test_parallel.png">
+      <ImageId>sample_history_test_parallel</ImageId>
+      <AlternateText>Оптимизация на истории.</AlternateText>
+    </Image>
+    <None Include="Art\verifier_warning.png">
+      <ImageId>verifier_warning</ImageId>
+      <AlternateText>verifier warning</AlternateText>
+    </None>
+    <None Include="Art\verifier_success.png">
+      <ImageId>verifier_success</ImageId>
+      <AlternateText>verifier success</AlternateText>
+    </None>
+    <None Include="Art\verifier_refresh.png">
+      <ImageId>verifier_refresh</ImageId>
+      <AlternateText>verifier refresh</AlternateText>
+    </None>
+    <None Include="Art\verifier_error.png">
+      <ImageId>verifier_error</ImageId>
+      <AlternateText>verifier error</AlternateText>
+    </None>
+    <None Include="Art\transactions.png">
+      <ImageId>transactions</ImageId>
+      <AlternateText>transactions</AlternateText>
+    </None>
+    <None Include="Art\trade_my_dde.png">
+      <ImageId>trade_my_dde</ImageId>
+      <AlternateText>trade my dde</AlternateText>
+    </None>
+    <None Include="Art\trade_dde.png">
+      <ImageId>trade_dde</ImageId>
+      <AlternateText>trade dde</AlternateText>
+    </None>
+    <None Include="Art\strategy_childs.png">
+      <ImageId>strategy_childs</ImageId>
+      <AlternateText>strategy childs</AlternateText>
+    </None>
+    <None Include="Art\strategy.png">
+      <ImageId>strategy</ImageId>
+      <AlternateText>strategy</AlternateText>
+    </None>
+    <None Include="Art\stoporder_dde.png">
+      <ImageId>stoporder_dde</ImageId>
+      <AlternateText>stoporder dde</AlternateText>
+    </None>
+    <None Include="Art\SmartTrader.png">
+      <ImageId>SmartTrader</ImageId>
+      <AlternateText>Smart Trader</AlternateText>
+    </None>
+    <None Include="Art\security_ex_dde.png">
+      <ImageId>security_ex_dde</ImageId>
+      <AlternateText>security ex dde</AlternateText>
+    </None>
+    <None Include="Art\sample_stop_order.png">
+      <ImageId>sample_stop_order</ImageId>
+      <AlternateText>sample stop order</AlternateText>
+    </None>
+    <None Include="Art\sample_smart_sma.png">
+      <ImageId>sample_smart_sma</ImageId>
+      <AlternateText>sample smart sma</AlternateText>
+    </None>
+    <None Include="Art\sample_smart_history.png">
+      <ImageId>sample_smart_history</ImageId>
+      <AlternateText>sample smart history</AlternateText>
+    </None>
+    <None Include="Art\sample_sma.png">
+      <ImageId>sample_sma</ImageId>
+      <AlternateText>sample sma</AlternateText>
+    </None>
+    <None Include="Art\sample_securities_ex.png">
+      <ImageId>sample_securities_ex</ImageId>
+      <AlternateText>sample securities ex</AlternateText>
+    </None>
+    <None Include="Art\sample_quik_smart.png">
+      <ImageId>sample_quik_smart</ImageId>
+      <AlternateText>sample quik smart</AlternateText>
+    </None>
+    <None Include="Art\sample_quote_ex.png">
+      <ImageId>sample_quote_ex</ImageId>
+      <AlternateText>sample quote ex</AlternateText>
+    </None>
+    <None Include="Art\sample_portfolio.png">
+      <ImageId>sample_portfolio</ImageId>
+      <AlternateText>sample portfolio</AlternateText>
+    </None>
+    <None Include="Art\sample_metadata_trades.png">
+      <ImageId>sample_metadata_trades</ImageId>
+      <AlternateText>sample metadata trades</AlternateText>
+    </None>
+    <None Include="Art\sample_metadata_securities.png">
+      <ImageId>sample_metadata_securities</ImageId>
+      <AlternateText>sample metadata securities</AlternateText>
+    </None>
+    <None Include="Art\sample_metadata_quik_trades.png">
+      <ImageId>sample_metadata_quik_trades</ImageId>
+      <AlternateText>sample metadata quik trades</AlternateText>
+    </None>
+    <None Include="Art\sample_metadata_quik_securities.png">
+      <ImageId>sample_metadata_quik_securities</ImageId>
+      <AlternateText>sample metadata quik securities</AlternateText>
+    </None>
+    <None Include="Art\sample_currency.png">
+      <ImageId>sample_currency</ImageId>
+      <AlternateText>sample currency</AlternateText>
+    </None>
+    <None Include="Art\sample_connection_restored.png">
+      <ImageId>sample_connection_restored</ImageId>
+      <AlternateText>sample connection restored</AlternateText>
+    </None>
+    <None Include="Art\sample_connection_error.png">
+      <ImageId>sample_connection_error</ImageId>
+      <AlternateText>sample connection error</AlternateText>
+    </None>
+    <None Include="Art\sample_async_error.png">
+      <ImageId>sample_async_error</ImageId>
+      <AlternateText>sample async error</AlternateText>
+    </None>
+    <None Include="Art\sample.png">
+      <ImageId>sample</ImageId>
+      <AlternateText>sample</AlternateText>
+    </None>
+    <None Include="Art\quote_ex_dde.png">
+      <ImageId>quote_ex_dde</ImageId>
+      <AlternateText>quote ex dde</AlternateText>
+    </None>
+    <None Include="Art\quote_dde.png">
+      <ImageId>quote_dde</ImageId>
+      <AlternateText>quote dde</AlternateText>
+    </None>
+    <None Include="Art\quik_new_order.png">
+      <ImageId>quik_new_order</ImageId>
+      <AlternateText>quik new order</AlternateText>
+    </None>
+    <None Include="Art\quik_connections.png">
+      <ImageId>quik_connections</ImageId>
+      <AlternateText>quik connections</AlternateText>
+    </None>
+    <None Include="Art\QuikTrader.png">
+      <ImageId>QuikTrader</ImageId>
+      <AlternateText>Quik Trader</AlternateText>
+    </None>
+    <None Include="Art\position_equity_dde.png">
+      <ImageId>position_equity_dde</ImageId>
+      <AlternateText>position equity dde</AlternateText>
+    </None>
+    <None Include="Art\position_derivative_dde.png">
+      <ImageId>position_derivative_dde</ImageId>
+      <AlternateText>position derivative dde</AlternateText>
+    </None>
+    <None Include="Art\portfolio_dde.png">
+      <ImageId>portfolio_dde</ImageId>
+      <AlternateText>portfolio dde</AlternateText>
+    </None>
+    <None Include="Art\order_dde.png">
+      <ImageId>order_dde</ImageId>
+      <AlternateText>order dde</AlternateText>
+    </None>
+    <None Include="Art\Ecng.Trading.png">
+      <ImageId>Ecng.Trading</ImageId>
+      <AlternateText>Ecng.Trading</AlternateText>
+    </None>
+    <None Include="Art\compile_x86.png">
+      <ImageId>compile_x86</ImageId>
+      <AlternateText>compile x 86</AlternateText>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeSnippets Include="Settings\conceptual_snippets.snippets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Tokens Include="Settings\tokens.tokens" />
+  </ItemGroup>
+  <ItemGroup>
+    <ContentLayout Include="ContentLayout.content" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\..\..\References\ru\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\..\..\References\ru\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\..\..\References\ru\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop">
+      <HintPath>..\..\..\References\ru\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Localization">
+      <HintPath>..\..\..\References\ru\Ecng.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Net">
+      <HintPath>..\..\..\References\ru\Ecng.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Security">
+      <HintPath>..\..\..\References\ru\Ecng.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\..\..\References\ru\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Web">
+      <HintPath>..\..\..\References\ru\Ecng.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\..\..\References\ru\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\References\ru\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\..\References\ru\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Alerts">
+      <HintPath>..\..\..\References\ru\StockSharp.Alerts.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo">
+      <HintPath>..\..\..\References\ru\StockSharp.Algo.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BusinessEntities">
+      <HintPath>..\..\..\References\ru\StockSharp.BusinessEntities.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Community">
+      <HintPath>..\..\..\References\ru\StockSharp.Community.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Localization">
+      <HintPath>..\..\..\References\ru\StockSharp.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Logging">
+      <HintPath>..\..\..\References\ru\StockSharp.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Messages">
+      <HintPath>..\..\..\References\ru\StockSharp.Messages.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Messages">
+      <HintPath>..\..\..\References\ru\StockSharp.Messages.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\..\..\References\ru\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="xNet">
+      <HintPath>..\..\..\References\ru\xNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="7d845e99-6bde-437e-b7f4-059be0438894" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+    	<para>Пункт главного меню приложения <legacyBold>Дополнительно => Настройки...</legacyBold>.</para>
+    	<para>
+    		Позволяет выполнить настройку <token>hydra</token> для работы в серверном режиме. Для того чтобы открыть окно с настройками <token>hydra</token> небходимо в главном меню нажать <legacyBold>Дополнительно</legacyBold> и в выпадающем меню выбрать <legacyBold>Настройки</legacyBold>.
+    	</para>
+		<mediaLink>
+        	<image placement="center" xlink:href="hydra_settings" />
+		</mediaLink>
+      
+       	<para> <legacyBold>S#.Data Server</legacyBold></para>
+      
+      <list class="bullet">
+        <listItem>
+          <legacyBold>Серверный режим</legacyBold> - перевести <token>hydra</token> в серверный режим.
+		</listItem>
+        <listItem>
+          <legacyBold>Авторизация</legacyBold> - метод авторизациии для получения доступа к <token>hydra</token>: Анонимно/Windows/Пользовательский/StockSharp.
+		</listItem>  
+		<listItem>
+          <legacyBold>Количество инструментов</legacyBold> - максимальное количество инструментов, которое можно запрашивать с сервера.
+		</listItem>	
+
+	  </list>			
+		
+	<para> <legacyBold>Основные</legacyBold></para>
+	<list class="bullet">
+	    <listItem>
+          <legacyBold>Автостарт</legacyBold> - автостарт скачивания котировок при запуске.
+		</listItem>
+        <listItem>
+          <legacyBold>Трей</legacyBold> - сворачивать в трей.
+		</listItem>
+        <listItem>
+          <legacyBold>Авто-стоп</legacyBold> - остановка работы по времени.
+		</listItem>		
+        <listItem>
+          <legacyBold>Время для Авто-стоп</legacyBold> - время для Авто-стоп.
+		</listItem>	
+        <listItem>
+          <legacyBold>Ошибки (кол-во)</legacyBold> - количество ошибок, после которого будет отправлено письмо на почту с сообщением об ошибке. Значение 0 означает выключенный режим.
+		</listItem>	
+        <listItem>
+          <legacyBold>Ошибки (email)</legacyBold> - адрес почты, куда будет отправлено сообщение о превышении максимально допустимого количества ошибок.
+		</listItem>	
+      </list>		
+	</introduction>
+	</developerWalkthroughDocument>
+</topic>

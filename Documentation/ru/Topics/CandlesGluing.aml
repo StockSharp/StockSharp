@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="f71010d3-135c-4fe9-a573-abf0245b3f5d" revisionNumber="1">
+	<developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<introduction>
+		<para>При создании <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.CandleManager</codeEntityReference> в нем сразу находятся различные типы источников свечек. 
+		Для того чтобы склеить исторические свечки с реал-тайм, надо инициализировать соответствующий источник.</para>
+		<para>Рассмотрим склеивание на примере <codeEntityReference qualifyHint="false">T:StockSharp.Algo.Candles.TimeFrameCandle</codeEntityReference> с использованием тиковых данных, сохраненных с помощью <token>hydra</token>:</para>
+        <code language="C#">
+        <![CDATA[
+private QuikTrader _trader;
+
+private Security _instr1;
+private const string _secCode1 = "RIM2";
+
+private CandleManager _candleManager;
+private CandleSeries _series;
+
+readonly TimeSpan _timeFrame = TimeSpan.FromMinutes(1);
+readonly DateTime _startTime = new DateTime(2012, 5, 3);
+readonly DateTime _endTime = DateTime.MaxValue;
+
+// Путь к данным истории
+private const string _historyPath = @"e:\DataServer\";
+
+private ChartArea _area;
+private ChartCandleElement _candlesElem;
+
+...
+
+_area = new ChartArea();
+_chart.Areas.Add(_area);
+
+_candlesElem = new ChartCandleElement();
+_area.Candles.Add(_candlesElem);
+
+...
+
+_candleManager = new CandleManager(_trader);
+
+// Добавление в источник свечек TimeFrameCandleBuilder источник данных в виде файлов гидры
+var storageRegistry = new StorageRegistry();
+((LocalMarketDataDrive)storageRegistry.DefaultDrive).Path = _historyPath;
+var cbs = new TradeStorageCandleBuilderSource { StorageRegistry = storageRegistry };
+_candleManager.Sources.OfType<TimeFrameCandleBuilder>().Single().Sources.Add(cbs);
+
+_candleManager.Processing += DrawCandles;
+
+...
+
+_series = new CandleSeries(typeof(TimeFrameCandle), _instr1, _timeFrame);
+
+...
+           
+_candleManager.Start(_series, _startTime, _endTime);
+		]]>
+		</code>
+		
+		<para>После этого, в обработчик события Processing - DrawCandles, начнут поступать свечки начиная с первой исторической и по текущую реал-тайм:</para>
+
+        <code language="C#">
+        <![CDATA[
+private void DrawCandles(CandleSeries series, Candle candle)
+{
+    if (series == _series) this.GuiAsync(() => _chart.ProcessCandle(_candlesElem, candle) );
+}
+		]]>
+		</code>
+		
+<para>При вызове метода 
+<codeEntityReference qualifyHint="true" autoUpgrade="true">M:StockSharp.Algo.Candles.CandleHelper.GetCandles``1(StockSharp.Algo.Candles.CandleSeries)</codeEntityReference>
+получим все свечки, история + реал-тайм:</para>		
+        <code language="C#">
+        <![CDATA[
+var allCandles = _series.GetCandles();
+		]]>
+		</code>
+	
+	
+	</introduction>
+
+	</developerWalkthroughDocument>
+</topic>

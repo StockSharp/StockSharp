@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="24a5c734-199f-4090-943d-6324a04f335b" revisionNumber="0">
+  <developerWalkthroughDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<summary>
+      <para>Optional abstract</para>
+    </summary>-->
+
+    <introduction>
+		<para>
+			Для осуществления процесса оптимизации стратегии при тестировании <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a">на истории</link>
+			можно применить параллельное вычисление, основанное на нескольких потоках. На компьютерах с несколькими ядрами или процессорами это позволит
+			сократить общее время тестирования за счет одновременного выполнения нескольких действий.
+		</para>
+		<alert class="caution">
+			Использование нескольких потоков увеличивает и потребление памяти (примерно во столько раз, сколько было создано потоков, если каждый поток
+			использует свой диапазон времени в истории). Поэтому, использование параллельного тестирования без достаточного объема свободной памяти не
+			даст существенного прироста в производительности, и даже ee снизит.
+		</alert>
+    </introduction>
+
+    <!--<prerequisites>
+      <content>
+        <para>Optional information on prerequisites</para>
+      </content>
+    </prerequisites>-->
+    
+    <!-- One or more procedure or section elements -->
+
+    <procedure>
+      <title>Пример тестирования в несколько потоков стратегии скользящих средних</title>
+
+		<steps class="ordered">
+			<step>
+				<content>
+					<para>
+						За основу взят пример SampleHistoryTesting, описанный в разделе тестирования <link xlink:href="5b90a23e-24b9-474a-a699-da47b666194a"/>.
+						Данный пример с обычного тестирования изменен на тестирование с оптимизацией через подбор оптимального значения длин скользящих средних:
+					</para>
+					<mediaLink>
+						<image placement="center" xlink:href="sample_history_test_parallel" />
+					</mediaLink>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>
+						Создается несколько настроек длин скользящих средних (первое значение отвечает за длину длинной, второе за длину короткой, третье за
+						цвет <link xlink:href="973860e9-8f2d-4035-98de-bb88b33b6751">кривой эквити</link>):
+					</para>
+					<code language="C#"><![CDATA[var periods = new[]
+{
+	new Triple<int, int, Color>(80, 10, Colors.DarkGreen),
+	new Triple<int, int, Color>(70, 8, Colors.Red),
+	new Triple<int, int, Color>(60, 6, Colors.DarkBlue),
+};]]></code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>
+						Создание объединенного шлюза <codeEntityReference>T:StockSharp.Algo.BasketTrader</codeEntityReference>, который будет
+						содержать все созданные на следующем шаге <codeEntityReference>T:StockSharp.Algo.Testing.HistoryEmulationConnector</codeEntityReference>:
+					</para>
+					<code language="C#">var basketTrader = new BasketTrader
+{
+	// не поддерживать контроль уникальности сделок
+	// (уменьшает потребление памяти)
+	SupportTradesUnique = false,
+};</code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>
+						Далее, для каждого периода создается свой отдельный инструмент, портфель, стратегия, шлюз для тестирования и т.д. Это сделано для
+						того, чтобы отдельные потоки могли менять свою копию данных, не создавая коллизии в других потоках тестирования.
+					</para>
+					<code language="C#"><![CDATA[
+var startTime = new DateTime(2009, 6, 1);
+var stopTime = new DateTime(2009, 9, 1);
+
+foreach (var period in periods)
+{
+	// создаем тестовый инструмент, на котором будет производится тестирование
+	var security = new Security
+	{
+		Id = "RIU9@FORTS", // по идентификатору инструмента будет искаться папка с историческими маркет данными
+		Code = "RIU9",
+		Name = "RTS-9.09",
+		MinStepSize = 5,
+		MinStepPrice = 2,
+		ExchangeBoard = Exchange.Rts,
+	};
+
+	// тестовый портфель
+	var portfolio = new Portfolio { Name = "test account" };
+
+	// создаем шлюз для эмуляции
+	// инициализируем настройки (инструмент в истории обновляется раз в секунду)
+	var trader = new EmulationTrader(
+		new [] { security },
+		new[] { portfolio },
+		storageRegistry)
+	{
+		MarketTimeChangedInterval = timeFrame,
+		StorageRegistry = storageRegistry,
+	};
+
+	trader.RegisterMarketDepth(new TrendMarketDepthGenerator(security)
+	{
+		// стакан для инструмента в истории обновляется раз в секунду
+		Interval = TimeSpan.FromSeconds(1),
+	});
+
+	// соединяемся с трейдером и запускаем экспорт,
+	// чтобы инициализировать переданными инструментами и портфелями необходимые свойства EmulationTrader
+	trader.Connect();
+	trader.StartExport();
+
+	var candleManager = new CandleManager(trader);
+
+	var series = new CandleSeries(typeof(TimeFrameCandle), security, timeFrame);
+	candleManager.Start(series);
+
+	// создаем торговую стратегию
+	var strategy = new SmaStrategy(series, new SimpleMovingAverage { Length = period.First }, new SimpleMovingAverage { Length = period.Second })
+	{
+		Volume = 1,
+		Security = security,
+		Portfolio = portfolio,
+		Trader = trader,
+	};
+
+	var curveItems = Curve.CreateCurve("Длинная {0} Короткая {1}".Put(period.First, period.Second), period.Third);
+	_strategy.PnLChanged += () =>
+	{
+		var data = new EquityData
+		{
+			Time = _strategy.Trader.MarketTime,
+			Value = _strategy.PnL,
+		};
+
+		this.GuiAsync(() => _curveItems.Add(data));
+	};
+
+	// полосу прогресса будет обновлять только первый период
+	if (periods.IndexOf(period) == 0)
+	{
+		// и подписываемся на событие изменения времени, чтобы обновить ProgressBar
+		trader.MarketTimeChanged += () =>
+		{
+			if (trader.MarketTime >= _nextTime || trader.MarketTime >= stopTime)
+			{
+				_nextTime += progressStep;
+				this.GuiAsync(() => TestingProcess.Value++);
+			}
+		};
+	}
+
+	trader.StateChanged += () =>
+	{
+		if (trader.State == EmulationStates.Stopped)
+		{
+			this.GuiAsync(() =>
+			{
+				if (Math.Abs(TestingProcess.Value - TestingProcess.Maximum) < double.Epsilon)
+					MessageBox.Show("Закончено за " + (DateTime.Now - _startEmulationTime));
+				else
+					MessageBox.Show("Отменено");
+			});
+		}
+		else if (trader.State == EmulationStates.Started)
+		{
+			// запускаем стратегию когда эмулятор запустился
+			strategy.Start();
+		}
+	};
+
+	basketTrader.InnerTraders.Add(trader);
+}
+}]]></code>
+				</content>
+			</step>
+			<step>
+				<content>
+					<para>
+						Запуск тестирования:
+					</para>
+					<code language="C#"><![CDATA[// соединяемся с трейдером и запускаем экспорт,
+// запускаем эмуляцию
+foreach (var trader in basketTrader.InnerTraders.OfType<IEmulationTrader>())
+{
+	// указываем даты начала и конца тестирования
+	trader.Start(startTime, stopTime);
+}]]></code>
+				</content>
+			</step>
+		</steps>
+    </procedure>
+
+	<!--<nextSteps>
+      <content>
+        <para>Optional next steps after reading this walk-through</para>
+      </content>
+    </nextSteps>-->
+    
+    <relatedTopics>
+      <!-- Supported Link Types
+    
+         All of the following linking mechanisms may be used in the topic's content 
+         as well as in the related topics section.
+    
+    Linking to API reference documentation: 
+    
+		    <codeEntityReference>API reference ID</codeEntityReference>
+
+    Linking to external resources and custom HTML topics: 
+
+        <externalLink>
+          <linkText>  Required hyperlink text  </linkText>
+          <linkAlternateText>  Optional link title  </linkAlternateText>
+          <linkUri>  Required URI  </linkUri>
+        </externalLink>
+    
+    Linking to other conceptual topics: 
+    
+        <link xlink:href="GUID topic name (without file extension)" />
+                
+    Linking to named references:
+    
+        (Refer to the project's Help\Settings\links.xml file for more information)
+    
+        <link xref="id"> Optional link text </link>
+        <link vref="id or URI"> Optional link text </link>
+        
+    -->
+
+      <!-- Example Usage 
+
+      <codeEntityReference>T:MyNamespace.MyClass</codeEntityReference>
+      <codeEntityReference>P:MyNamespace.MyClass.MyProp</codeEntityReference>
+      <codeEntityReference>M:System.IO.File.OpenText(System.String)</codeEntityReference>
+
+      <externalLink>
+        <linkText>Sandcastle Styles</linkText>
+        <linkAlternateText>Sandcastle Styles on CodePlex</linkAlternateText>
+        <linkUri>http://www.codeplex.com/SandcastleStyles</linkUri>
+      </externalLink>
+
+      <externalLink>
+        <linkText>Change Log</linkText>
+        <linkUri>ChangeLog.html</linkUri>
+      </externalLink>
+
+      <link xlink:href="2BFD9215-1216-403d-8C46-8420A4D01B83"/>
+      
+      <link xref="home">Our Home Page</link>
+      <link vref="/controls/design.aspx">Control Architecture</link>
+      -->
+    </relatedTopics>
+    
+  </developerWalkthroughDocument>
+</topic>
