@@ -1,6 +1,7 @@
 namespace StockSharp.Algo
 {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
@@ -3613,6 +3614,120 @@ namespace StockSharp.Algo
 				return orderId.Value;
 
 			throw new ArgumentOutOfRangeException("message", null, LocalizedStrings.Str925);
+		}
+
+		private class TickEnumerable : SimpleEnumerable<ExecutionMessage>, IEnumerableEx<ExecutionMessage>
+		{
+			private class TickEnumerator : IEnumerator<ExecutionMessage>
+			{
+				private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator;
+
+				public TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
+				{
+					if (level1Enumerator == null)
+						throw new ArgumentNullException("level1Enumerator");
+
+					_level1Enumerator = level1Enumerator;
+				}
+
+				public ExecutionMessage Current { get; private set; }
+
+				bool IEnumerator.MoveNext()
+				{
+					while (_level1Enumerator.MoveNext())
+					{
+						var level1 = _level1Enumerator.Current;
+
+						if (!level1.IsContainsTick())
+							continue;
+
+						Current = level1.ToTick();
+						return true;
+					}
+
+					Current = null;
+					return false;
+				}
+
+				public void Reset()
+				{
+					_level1Enumerator.Reset();
+					Current = null;
+				}
+
+				object IEnumerator.Current
+				{
+					get { return Current; }
+				}
+
+				void IDisposable.Dispose()
+				{
+					Reset();
+					_level1Enumerator.Dispose();
+				}
+			}
+
+			private readonly IEnumerableEx<Level1ChangeMessage> _level1;
+
+			public TickEnumerable(IEnumerableEx<Level1ChangeMessage> level1)
+				: base(() => new TickEnumerator(level1.GetEnumerator()))
+			{
+				if (level1 == null)
+					throw new ArgumentNullException("level1");
+
+				_level1 = level1;
+			}
+
+			int IEnumerableEx.Count
+			{
+				get { return _level1.Count; }
+			}
+		}
+
+		/// <summary>
+		/// Преобразовать level1 данные в тиковые.
+		/// </summary>
+		/// <param name="level1">Level1</param>
+		/// <returns>Тиковые данные.</returns>
+		public static IEnumerableEx<ExecutionMessage> ToTicks(this IEnumerableEx<Level1ChangeMessage> level1)
+		{
+			return new TickEnumerable(level1);
+		}
+
+		/// <summary>
+		/// Проверить, если ли в level1 данных тиковые.
+		/// </summary>
+		/// <param name="level1">Level1</param>
+		/// <returns>Результат проверки.</returns>
+		public static bool IsContainsTick(this Level1ChangeMessage level1)
+		{
+			if (level1 == null)
+				throw new ArgumentNullException("level1");
+
+			return level1.Changes.ContainsKey(Level1Fields.LastTradePrice);
+		}
+
+		/// <summary>
+		/// Преобразовать level1 данные в тиковые.
+		/// </summary>
+		/// <param name="level1">Level1</param>
+		/// <returns>Тиковые данные.</returns>
+		public static ExecutionMessage ToTick(this Level1ChangeMessage level1)
+		{
+			if (level1 == null)
+				throw new ArgumentNullException("level1");
+
+			return new ExecutionMessage
+			{
+				ExecutionType = ExecutionTypes.Tick,
+				SecurityId = level1.SecurityId,
+				TradeId = (long?)level1.Changes.TryGetValue(Level1Fields.LastTradeId),
+				TradePrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradePrice),
+				Volume = (decimal?)level1.Changes.TryGetValue(Level1Fields.LastTradeVolume),
+				OriginSide = (Sides?)level1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
+				ServerTime = (DateTimeOffset?)level1.Changes.TryGetValue(Level1Fields.LastTradeTime) ?? level1.ServerTime,
+				IsUpTick = (bool?)level1.Changes.TryGetValue(Level1Fields.LastTradeUpDown),
+			};
 		}
 	}
 }

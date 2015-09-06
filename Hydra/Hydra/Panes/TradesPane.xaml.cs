@@ -47,27 +47,43 @@ namespace StockSharp.Hydra.Panes
 
 		private IEnumerableEx<ExecutionMessage> GetTrades()
 		{
-			if (IsBuildFromOrderLog.IsChecked == true)
+			switch (BuildFrom.SelectedIndex)
 			{
-				var orderLog = StorageRegistry
-					.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
-					.Load(From, To + TimeHelper.LessOneDay);
+				case 0:
+				{
+					var trades = StorageRegistry
+						.GetExecutionStorage(SelectedSecurity, ExecutionTypes.Tick, Drive, StorageFormat)
+						.Load(From, To + TimeHelper.LessOneDay);
 
-				if (IsNonSystem.IsChecked == false)
-					orderLog = orderLog.Where(i => i.IsSystem != false).ToEx(orderLog.Count);
+					if (IsNonSystem.IsChecked == false)
+						trades = trades.Where(t => t.IsSystem != false).ToEx(trades.Count);
 
-				return orderLog.ToTicks();
-			}
-			else
-			{
-				var trades = StorageRegistry
-					.GetExecutionStorage(SelectedSecurity, ExecutionTypes.Tick, Drive, StorageFormat)
-					.Load(From, To + TimeHelper.LessOneDay);
+					return trades;
+				}
 
-				if (IsNonSystem.IsChecked == false)
-					trades = trades.Where(t => t.IsSystem != false).ToEx(trades.Count);
+				case 1:
+				{
+					var orderLog = StorageRegistry
+						.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
+						.Load(From, To + TimeHelper.LessOneDay);
 
-				return trades;
+					if (IsNonSystem.IsChecked == false)
+						orderLog = orderLog.Where(i => i.IsSystem != false).ToEx(orderLog.Count);
+
+					return orderLog.ToTicks();
+				}
+
+				case 2:
+				{
+					var level1 = StorageRegistry
+						.GetLevel1MessageStorage(SelectedSecurity, Drive, StorageFormat)
+						.Load(From, To + TimeHelper.LessOneDay);
+
+					return level1.ToTicks();
+				}
+
+				default:
+					throw new InvalidOperationException();
 			}
 		}
 
@@ -82,7 +98,7 @@ namespace StockSharp.Hydra.Panes
 
 		protected override bool CanDirectBinExport
 		{
-			get { return base.CanDirectBinExport && IsBuildFromOrderLog.IsChecked == false; }
+			get { return base.CanDirectBinExport && BuildFrom.SelectedIndex == 0; }
 		}
 
 		private void OnDateValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -108,7 +124,7 @@ namespace StockSharp.Hydra.Panes
 			base.Load(storage);
 
 			FindedTrades.Load(storage.GetValue<SettingsStorage>("FindedTrades"));
-			IsBuildFromOrderLog.IsChecked = storage.GetValue<bool>("IsBuildFromOrderLog");
+			BuildFrom.SelectedIndex = storage.GetValue<int>("BuildFrom");
 			IsNonSystem.IsChecked = storage.GetValue<bool>("IsNonSystem");
 		}
 
@@ -117,7 +133,7 @@ namespace StockSharp.Hydra.Panes
 			base.Save(storage);
 
 			storage.SetValue("FindedTrades", FindedTrades.Save());
-			storage.SetValue("IsBuildFromOrderLog", IsBuildFromOrderLog.IsChecked == true);
+			storage.SetValue("BuildFrom", BuildFrom.SelectedIndex);
 			storage.SetValue("IsNonSystem", IsNonSystem.IsChecked == true);
 		}
 	}

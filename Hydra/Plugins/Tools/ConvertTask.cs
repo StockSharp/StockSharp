@@ -42,6 +42,12 @@ namespace StockSharp.Hydra.Tools
 
 			[EnumDisplayNameLoc(LocalizedStrings.Str3777Key)]
 			DepthsToCandles,
+
+			[EnumDisplayNameLoc(LocalizedStrings.Level1ToTicksKey)]
+			Level1ToTicks,
+
+			[EnumDisplayNameLoc(LocalizedStrings.Level1ToCandlesKey)]
+			Level1ToCandles,
 		}
 
 		[TaskSettingsDisplayName(_sourceName)]
@@ -305,6 +311,27 @@ namespace StockSharp.Hydra.Tools
 							{
 								var candles = ((IMarketDataStorage<QuoteChangeMessage>)fromStorage)
 									.Load(date)
+									.ToCandles(new CandleSeries(_settings.CandleSettings.CandleType, security.Security, _settings.CandleSettings.Arg));
+
+								toStorage.Save(candles);
+								RaiseDataLoaded(security.Security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, candles.Count);
+								break;
+							}
+							case ConvertModes.Level1ToTicks:
+							{
+								var ticks = ((IMarketDataStorage<Level1ChangeMessage>)fromStorage)
+									.Load(date)
+									.ToTicks();
+
+								toStorage.Save(ticks);
+								RaiseDataLoaded(security.Security, typeof(ExecutionMessage), ExecutionTypes.Tick, date, ticks.Count);
+								break;
+							}
+							case ConvertModes.Level1ToCandles:
+							{
+								var candles = ((IMarketDataStorage<Level1ChangeMessage>)fromStorage)
+									.Load(date)
+									.ToTicks()
 									.ToCandles(new CandleSeries(_settings.CandleSettings.CandleType, security.Security, _settings.CandleSettings.Arg));
 
 								toStorage.Save(candles);

@@ -42,7 +42,7 @@
 			<xctk:DateTimePicker x:Name="ToCtrl" Grid.Column="4" Grid.Row="2" Format="ShortDate" ValueChanged="OnDateValueChanged" />
 
 			<StackPanel Grid.Column="6" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,1">
-				<TextBlock><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr529}"/></TextBlock>
+				<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr529}" VerticalAlignment="Center"/>
 
 				<ComboBox x:Name="BuildFrom" Margin="5,0,0,0" Width="103">
 					<ComboBoxItem IsSelected="True"><TextBlock Text="{x:Static loc:LocalizedStrings.NotBuild}"/></ComboBoxItem>
@@ -51,6 +51,7 @@
 					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.DepthsOf}"/></ComboBoxItem>
 					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr709}"/></ComboBoxItem>
 					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Candles1Min}"/></ComboBoxItem>
+					<ComboBoxItem><TextBlock Text="{x:Static loc:LocalizedStrings.Level1}"/></ComboBoxItem>
 				</ComboBox>
 			</StackPanel>
 

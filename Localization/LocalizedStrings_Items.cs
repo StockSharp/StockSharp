@@ -53629,5 +53629,31 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(OpenUrlKey); }
 		}
+
+		/// <summary>
+		/// Level1 to ticks
+		/// </summary>
+		public const string Level1ToTicksKey = "Level1ToTicks";
+
+		/// <summary>
+		/// Level1 to ticks
+		/// </summary>
+		public static string Level1ToTicks
+		{
+			get { return GetString(Level1ToTicksKey); }
+		}
+
+		/// <summary>
+		/// Level1 to candles
+		/// </summary>
+		public const string Level1ToCandlesKey = "Level1ToCandles";
+
+		/// <summary>
+		/// Level1 to candles
+		/// </summary>
+		public static string Level1ToCandles
+		{
+			get { return GetString(Level1ToCandlesKey); }
+		}
 	}
 }

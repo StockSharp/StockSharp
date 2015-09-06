@@ -7,7 +7,6 @@ namespace StockSharp.Hydra.Panes
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
-	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -90,6 +89,12 @@ namespace StockSharp.Hydra.Panes
 							.GetCandleMessageStorage(typeof(TimeFrameCandleMessage), SelectedSecurity, TimeSpan.FromMinutes(1), Drive, StorageFormat)
 							.Load(from, to)
 							.ToTrades(SelectedSecurity.VolumeStep ?? 1m)
+							.ToCandles(CandleSeries);
+				case 6:
+					return StorageRegistry
+							.GetLevel1MessageStorage(SelectedSecurity, Drive, StorageFormat)
+							.Load(from, to)
+							.ToTicks()
 							.ToCandles(CandleSeries);
 			
 				default:
