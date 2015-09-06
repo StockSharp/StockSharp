@@ -31,7 +31,8 @@ namespace StockSharp.Algo.Testing
 			PriceStep = 1,
 			VolumeStep = 1,
 		};
-		private bool _stepsUpdated;
+		private bool _priceStepUpdated;
+		private bool _volumeStepUpdated;
 
 		public ExecutionLogConverter(SecurityId securityId,
 			SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> bids,
@@ -72,7 +73,7 @@ namespace StockSharp.Algo.Testing
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			if (!_stepsUpdated)
+			if (!_priceStepUpdated || !_volumeStepUpdated)
 			{
 				var quote = message.GetBestBid() ?? message.GetBestAsk();
 
@@ -80,7 +81,9 @@ namespace StockSharp.Algo.Testing
 				{
 					_securityDefinition.PriceStep = quote.Price.GetDecimalInfo().EffectiveScale.GetPriceStep();
 					_securityDefinition.VolumeStep = quote.Volume.GetDecimalInfo().EffectiveScale.GetPriceStep();
-					_stepsUpdated = true;	
+					
+					_priceStepUpdated = true;
+					_volumeStepUpdated = true;
 				}
 			}
 
@@ -258,11 +261,16 @@ namespace StockSharp.Algo.Testing
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			if (!_stepsUpdated)
+			if (!_priceStepUpdated)
 			{
 				_securityDefinition.PriceStep = message.GetTradePrice().GetDecimalInfo().EffectiveScale.GetPriceStep();
+				_priceStepUpdated = true;
+			}
+
+			if (!_volumeStepUpdated)
+			{
 				_securityDefinition.VolumeStep = message.SafeGetVolume().GetDecimalInfo().EffectiveScale.GetPriceStep();
-				_stepsUpdated = true;
+				_volumeStepUpdated = true;
 			}
 
 			//if (message.DataType != ExecutionDataTypes.Trade)
@@ -281,7 +289,7 @@ namespace StockSharp.Algo.Testing
 			var bestAsk = _asks.FirstOrDefault();
 
 			var tradePrice = message.GetTradePrice();
-			var volume = message.SafeGetVolume();
+			var volume = message.Volume ?? 1;
 			var time = message.LocalTime;
 
 			if (bestBid.Value != null && tradePrice <= bestBid.Key)
@@ -289,7 +297,7 @@ namespace StockSharp.Algo.Testing
 				// тик попал в биды, значит была крупная заявка по рынку на продажу,
 				// которая возможна исполнила наши заявки
 
-				ProcessMarketOrder(retVal, _bids, message, Sides.Sell);
+				ProcessMarketOrder(retVal, _bids, message.ServerTime, message.LocalTime, Sides.Sell, tradePrice, volume);
 
 				// подтягиваем противоположные котировки и снимаем лишние заявки
 				TryCreateOppositeOrder(retVal, _asks, time, message.ServerTime, tradePrice, volume, Sides.Buy);
@@ -299,7 +307,7 @@ namespace StockSharp.Algo.Testing
 				// тик попал в аски, значит была крупная заявка по рынку на покупку,
 				// которая возможна исполнила наши заявки
 
-				ProcessMarketOrder(retVal, _asks, message, Sides.Buy);
+				ProcessMarketOrder(retVal, _asks, message.ServerTime, message.LocalTime, Sides.Buy, tradePrice, volume);
 
 				TryCreateOppositeOrder(retVal, _bids, time, message.ServerTime, tradePrice, volume, Sides.Sell);
 			}
@@ -498,13 +506,12 @@ namespace StockSharp.Algo.Testing
 			retVal.AddRange(ProcessExecution(exec));
 		}
 
-		private void ProcessMarketOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, ExecutionMessage tradeMessage, Sides orderSide)
+		private void ProcessMarketOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTimeOffset time, DateTime localTime, Sides orderSide, decimal tradePrice, decimal volume)
 		{
 			// вычисляем объем заявки по рынку, который смог бы пробить текущие котировки.
 
-			var tradePrice = tradeMessage.GetTradePrice();
 			// bigOrder - это наша большая рыночная заявка, которая способствовала появлению tradeMessage
-			var bigOrder = CreateMessage(tradeMessage.LocalTime, tradeMessage.ServerTime, orderSide, tradePrice, 0, tif: TimeInForce.MatchOrCancel);
+			var bigOrder = CreateMessage(localTime, time, orderSide, tradePrice, 0, tif: TimeInForce.MatchOrCancel);
 			var sign = orderSide == Sides.Buy ? -1 : 1;
 			var hasQuotes = false;
 
@@ -512,15 +519,15 @@ namespace StockSharp.Algo.Testing
 			{
 				var quote = pair.Value.Second;
 
-				if (quote.Price * sign > tradeMessage.TradePrice * sign)
+				if (quote.Price * sign > tradePrice * sign)
 				{
 					bigOrder.Volume += quote.Volume;
 				}
 				else
 				{
-					if (quote.Price == tradeMessage.TradePrice)
+					if (quote.Price == tradePrice)
 					{
-						bigOrder.Volume += tradeMessage.Volume;
+						bigOrder.Volume += volume;
 
 						//var diff = tradeMessage.Volume - quote.Volume;
 
@@ -552,7 +559,7 @@ namespace StockSharp.Algo.Testing
 
 			// если собрали все котировки, то оставляем заявку в стакане по цене сделки
 			if (!hasQuotes)
-				retVal.Add(CreateMessage(tradeMessage.LocalTime, tradeMessage.ServerTime, orderSide.Invert(), tradePrice, tradeMessage.SafeGetVolume()));
+				retVal.Add(CreateMessage(localTime, time, orderSide.Invert(), tradePrice, volume));
 		}
 
 		private void TryCreateOppositeOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTime localTime, DateTimeOffset serverTime, decimal tradePrice, decimal volume, Sides originSide)
@@ -786,7 +793,9 @@ namespace StockSharp.Algo.Testing
 				throw new ArgumentNullException("securityDefinition");
 
 			_securityDefinition = securityDefinition;
-			_stepsUpdated = true;
+
+			_priceStepUpdated = _securityDefinition.PriceStep != null;
+			_volumeStepUpdated = _securityDefinition.VolumeStep != null;
 		}
 	}
 }

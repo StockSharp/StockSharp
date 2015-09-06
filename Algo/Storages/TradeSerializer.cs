@@ -84,7 +84,7 @@ namespace StockSharp.Algo.Storages
 		public TradeSerializer(SecurityId securityId)
 			: base(securityId, 50)
 		{
-			Version = MarketDataVersions.Version52;
+			Version = MarketDataVersions.Version53;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TradeMetaInfo metaInfo)
@@ -118,17 +118,36 @@ namespace StockSharp.Algo.Storages
 				//if (msg.TradePrice < 0)
 				//	throw new ArgumentOutOfRangeException("messages", msg.TradePrice, LocalizedStrings.Str1021Params.Put(msg.TradeId));
 
+				metaInfo.PrevId = writer.SerializeId(tradeId, metaInfo.PrevId);
+
 				// pyhta4og.
 				// http://stocksharp.com/forum/yaf_postsm6450_Oshibka-pri-importie-instrumientov-s-Finama.aspx#post6450
 
-				var volume = msg.SafeGetVolume();
+				var volume = msg.Volume;
 
-				if (volume < 0)
-					throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
+				if (metaInfo.Version < MarketDataVersions.Version53)
+				{
+					if (volume == null)
+						throw new ArgumentException(LocalizedStrings.Str1022Params.Put((object)msg.TradeId ?? msg.TradeStringId), "messages");
 
-				metaInfo.PrevId = writer.SerializeId(tradeId, metaInfo.PrevId);
+					if (volume < 0)
+						throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
 
-				writer.WriteVolume(volume, metaInfo, SecurityId);
+					writer.WriteVolume(volume.Value, metaInfo, SecurityId);
+				}
+				else
+				{
+					writer.Write(volume != null);
+
+					if (volume != null)
+					{
+						if (volume < 0)
+							throw new ArgumentOutOfRangeException("messages", volume, LocalizedStrings.Str1022Params.Put(msg.TradeId));
+
+						writer.WriteVolume(volume.Value, metaInfo, SecurityId);
+					}
+				}
+				
 				writer.WritePriceEx(msg.GetTradePrice(), metaInfo, SecurityId);
 				writer.WriteSide(msg.OriginSide);
 
@@ -210,7 +229,11 @@ namespace StockSharp.Algo.Storages
 			var metaInfo = enumerator.MetaInfo;
 
 			metaInfo.FirstId += reader.ReadLong();
-			var volume = reader.ReadVolume(metaInfo);
+
+			var volume = metaInfo.Version < MarketDataVersions.Version53
+				? reader.ReadVolume(metaInfo)
+				: reader.Read() ? reader.ReadVolume(metaInfo) : (decimal?)null;
+
 			var price = reader.ReadPriceEx(metaInfo);
 
 			var orderDirection = reader.Read() ? (reader.Read() ? Sides.Buy : Sides.Sell) : (Sides?)null;

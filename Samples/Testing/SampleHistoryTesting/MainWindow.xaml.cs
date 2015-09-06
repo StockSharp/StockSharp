@@ -253,7 +253,7 @@ namespace SampleHistoryTesting
 					SecurityId = security.ToSecurityId(),
 					ServerTime = startTime,
 				}
-				.TryAdd(Level1Fields.PriceStep, 10m)
+				.TryAdd(Level1Fields.PriceStep, secIdParts.Item1 == "RIZ2" ? 10m : 1)
 				.TryAdd(Level1Fields.StepPrice, 6m)
 				.TryAdd(Level1Fields.MinPrice, 10m)
 				.TryAdd(Level1Fields.MaxPrice, 1000000m)
