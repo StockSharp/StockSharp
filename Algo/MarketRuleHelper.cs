@@ -614,7 +614,7 @@ namespace StockSharp.Algo
 			public PositionRule(Position position)
 				: this(position, p => true)
 			{
-				Name = LocalizedStrings.Str1042 + position.Portfolio.Name;
+				Name = LocalizedStrings.Str1042 + " " + position.Portfolio.Name;
 			}
 
 			public PositionRule(Position position, Func<Position, bool> changed)
@@ -742,7 +742,7 @@ namespace StockSharp.Algo
 
 				_condition = condition;
 
-				Name = LocalizedStrings.Str1046 + security;
+				Name = LocalizedStrings.Str1046 + " " + security;
 				Connector.SecuritiesChanged += OnSecuritiesChanged;
 			}
 
@@ -778,7 +778,7 @@ namespace StockSharp.Algo
 			public SecurityNewTradesRule(Security security, IConnector connector)
 				: base(security, connector)
 			{
-				Name = LocalizedStrings.Str1047 + security;
+				Name = LocalizedStrings.Str1047 + " " + security;
 				Connector.NewTrades += OnNewTrades;
 			}
 
@@ -826,7 +826,7 @@ namespace StockSharp.Algo
 			public SecurityNewOrderLogItems(Security security, IConnector connector)
 				: base(security, connector)
 			{
-				Name = LocalizedStrings.Str1048 + security;
+				Name = LocalizedStrings.Str1048 + " " + security;
 				Connector.NewOrderLogItems += OnNewOrderLogItems;
 			}
 
@@ -863,7 +863,7 @@ namespace StockSharp.Algo
 
 				_condition = condition;
 
-				Name = LocalizedStrings.Str1049 + security;
+				Name = LocalizedStrings.Str1049 + " " + security;
 
 				Connector.SecuritiesChanged += OnSecuritiesChanged;
 				Connector.NewTrades += OnNewTrades;
@@ -924,7 +924,7 @@ namespace StockSharp.Algo
 			public SecurityMarketDepthChangedRule(Security security, IConnector connector)
 				: base(security, connector)
 			{
-				Name = LocalizedStrings.Str1050 + security;
+				Name = LocalizedStrings.Str1050 + " " + security;
 				Connector.MarketDepthsChanged += OnMarketDepthsChanged;
 			}
 
@@ -948,7 +948,7 @@ namespace StockSharp.Algo
 			public BasketSecurityMarketDepthChangedRule(BasketSecurity security, IConnector connector)
 				: base(security, connector)
 			{
-				Name = LocalizedStrings.Str1050 + security;
+				Name = LocalizedStrings.Str1050 + " " + security;
 				Connector.MarketDepthsChanged += OnMarketDepthsChanged;
 			}
 
@@ -1305,7 +1305,7 @@ namespace StockSharp.Algo
 
 				_condition = condition;
 
-				Name = LocalizedStrings.Str1056 + depth.Security;
+				Name = LocalizedStrings.Str1056 + " " + depth.Security;
 				Depth.QuotesChanged += OnQuotesChanged;
 			}
 
