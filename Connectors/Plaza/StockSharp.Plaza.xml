@@ -2703,6 +2703,16 @@
             Признак нулевой волатильности.
             </summary>
     </member>
+    <member name="T:StockSharp.Plaza.PlazaBaseManager">
+      <summary>
+            Базовый менеджер.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaBaseManager.ConnectionPool">
+      <summary>
+            Пул подключений.
+            </summary>
+    </member>
     <member name="T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder">
       <summary>
             Построитель стакана из лога заявок Plaza 2.
@@ -2886,6 +2896,14 @@
       <remarks>Если значение установлено в <see cref="F:System.TimeSpan.Zero" />,
             то таймер сохранения ревизий в файл выключен,
             и необходимо самостоятельно вызывать метод <see cref="M:StockSharp.Plaza.PlazaRevisionManager.SaveRevisions" />.</remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaRevisionManager.RevisionPath">
+      <summary>
+            Путь к директории, куда будут сохраняться ревизии.
+            </summary>
+      <remarks>
+            По-умолчанию путь равен директории \StockSharp_Plaza\Revisions, которая будет создана в локальной директории.
+            </remarks>
     </member>
     <member name="T:StockSharp.Plaza.PlazaStreamMessageAdapter">
       <summary>
@@ -6989,9 +7007,17 @@
             </summary>
       <remarks>Используется только в случае "безбазового" клиента.</remarks>
     </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamManager.ConnectionPool">
+    <member name="P:StockSharp.Plaza.PlazaStreamManager.ConfigPath">
       <summary>
-            Пул подключений.
+            Путь к директории, в которой будут храниться схемы потоков Plaza.
+            </summary>
+      <remarks>
+            По-умолчанию путь равен директории StockSharp_Plaza\Configs, которая будет создана в локальной директории.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaStreamManager.ConnectionGroupping">
+      <summary>
+            Настройки группировки потоков по соединениям.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaTable">
@@ -7186,6 +7212,22 @@
       <summary>
             Менеджер потоков данных.
             </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaTrader.RevisionPath">
+      <summary>
+            Путь к директории, куда будут сохраняться ревизии.
+            </summary>
+      <remarks>
+            По-умолчанию путь равен директории \StockSharp_Plaza\Revisions, которая будет создана в локальной директории.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaTrader.ConfigPath">
+      <summary>
+            Путь к директории, в которой будут храниться схемы потоков Plaza.
+            </summary>
+      <remarks>
+            По-умолчанию путь равен директории StockSharp_Plaza\Configs, которая будет создана в локальной директории.
+            </remarks>
     </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.CreateDepthFromOrdersLog">
       <summary>
