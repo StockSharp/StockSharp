@@ -345,7 +345,11 @@ namespace StockSharp.Algo.Candles
 
 				enumerator = new CandleSourceEnumerator<ICandleManagerSource, Candle>(series, from, to,
 					series.Security is IndexSecurity ? (IEnumerable<ICandleManagerSource>)new[] { new IndexSecurityCandleManagerSource(this, from, to) } : Sources,
-					c => Processing.SafeInvoke(series, c),
+					c =>
+					{
+						Processing.SafeInvoke(series, c);
+						return c.OpenTime;
+					},
 					() =>
 					{
 						//Stop(series);

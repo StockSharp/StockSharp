@@ -35,12 +35,13 @@ namespace StockSharp.Algo.Candles
 		}
 
 		private readonly CandleSeries _series;
-		private readonly Action<TValue> _processing;
+		private readonly Func<TValue, DateTimeOffset> _processing;
 		private readonly Action _stopped;
 		private readonly SynchronizedQueue<SourceInfo> _sources = new SynchronizedQueue<SourceInfo>();
 		private bool _manualStopped;
+		private DateTimeOffset? _nextSourceBegin;
 
-		public CandleSourceEnumerator(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<TSource> sources, Action<TValue> processing, Action stopped)
+		public CandleSourceEnumerator(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<TSource> sources, Func<TValue, DateTimeOffset> processing, Action stopped)
 		{
 			if (series == null)
 				throw new ArgumentNullException("series");
@@ -136,6 +137,9 @@ namespace StockSharp.Algo.Candles
 			CurrentSource.Processing += OnProcessing;
 			CurrentSource.Stopped += OnStopped;
 
+			var next = _sources.Count > 0 ? _sources.Peek() : null;
+			_nextSourceBegin = next == null ? (DateTimeOffset?)null : next.Range.Min;
+
 			CurrentSource.Start(_series, info.Range.Min, info.Range.Max);
 		}
 
@@ -149,7 +153,10 @@ namespace StockSharp.Algo.Candles
 			if (series != _series)
 				return;
 
-			_processing(value);
+			var date = _processing(value);
+
+			if (_nextSourceBegin != null && date > _nextSourceBegin)
+				CurrentSource.Stop(series);
 		}
 
 		private void OnStopped(CandleSeries series)
@@ -164,6 +171,7 @@ namespace StockSharp.Algo.Candles
 				CurrentSource.Processing -= OnProcessing;
 				CurrentSource.Stopped -= OnStopped;
 				CurrentSource = null;
+				_nextSourceBegin = null;
 
 				if (_manualStopped || _sources.IsEmpty())
 					raiseStop = true;

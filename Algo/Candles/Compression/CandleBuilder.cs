@@ -46,7 +46,11 @@ namespace StockSharp.Algo.Candles.Compression
 					throw new ArgumentNullException("stopped");
 
 				_enumerator = new CandleSourceEnumerator<ICandleBuilderSource, IEnumerable<ICandleBuilderSourceValue>>(series, from, to,
-					sources, v => handler(series, v), () => stopped(series));
+					sources, v =>
+					{
+						handler(series, v);
+						return v.Last().Time;
+					}, () => stopped(series));
 			}
 
 			public Candle CurrentCandle { get; set; }
