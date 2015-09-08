@@ -1,4 +1,4 @@
-﻿<Window x:Class="Anywhere.MainWindow"
+﻿<Window x:Class="StockSharp.Anywhere.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
@@ -6,7 +6,7 @@
         xmlns:docking="clr-namespace:ActiproSoftware.Windows.Controls.Docking;assembly=ActiproSoftware.Docking.Wpf"
         xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="S#.Broker" Height="600" Width="800"
+        Title="S#.Anywhere" Height="600" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>

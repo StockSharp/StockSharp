@@ -1,23 +1,22 @@
-﻿using System;
-using System.Windows;
-using System.Linq;
-using System.IO;
-using System.Reflection;
-using System.Text;
-
-using Ecng.Xaml;
-using MoreLinq;
-
-using StockSharp.Algo;
-using StockSharp.BusinessEntities;
-using StockSharp.Quik;
-using StockSharp.Messages;
-using StockSharp.Logging;
-using StockSharp.Xaml;
-using StockSharp.Localization;
-
-namespace Anywhere
+﻿namespace StockSharp.Anywhere
 {
+	using System;
+	using System.Linq;
+	using System.IO;
+	using System.Reflection;
+	using System.Text;
+
+	using Ecng.Common;
+	using Ecng.Xaml;
+	using MoreLinq;
+
+	using StockSharp.Algo;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Quik;
+	using StockSharp.Messages;
+	using StockSharp.Logging;
+	using StockSharp.Xaml;
+	using StockSharp.Localization;
 
     public class UserSubscription
     {
@@ -36,32 +35,31 @@ namespace Anywhere
 
     }
     
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow 
     {
         private Connector _connector;
-        private LogManager _logManager = new LogManager();
+        private readonly LogManager _logManager = new LogManager();
 
         private bool _isUnloading;    // флаг - идет загрузка данных   
         private bool _isConnectClick; // флаг - выполнен щелчок по кнопке соединения
 
-        static private string _outputFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "OUTPUT"); // путь к папке в выгружаемыми данными 
+		private readonly static string _outputFolder = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "OUTPUT"); // путь к папке в выгружаемыми данными 
 
-        private string _tradesFilePath = Path.Combine(_outputFolder, "trades.txt");
-        private string _ordersFilePath = Path.Combine(_outputFolder, "orders.txt");
-        private string _myTradesFilePath = Path.Combine(_outputFolder, "mytrades.txt");
-        private string _level1FilePath = Path.Combine(_outputFolder, "level1.txt");
-        private string _positionsFilePath = Path.Combine(_outputFolder, "positions.txt");
+		private readonly string _tradesFilePath = Path.Combine(_outputFolder, "trades.txt");
+		private readonly string _ordersFilePath = Path.Combine(_outputFolder, "orders.txt");
+		private readonly string _myTradesFilePath = Path.Combine(_outputFolder, "mytrades.txt");
+		private readonly string _level1FilePath = Path.Combine(_outputFolder, "level1.txt");
+		private readonly string _positionsFilePath = Path.Combine(_outputFolder, "positions.txt");
 
         public MainWindow()
         {
             InitializeComponent();
 
-            ConnectCommand = new DelegateCommand(OnConnect, o => CanOnConnect(o));
-            UnloadingCommand = new DelegateCommand(Unloading, o => CanUnloading(o));
-            DeleteSubscriptionCommand = new DelegateCommand(DeleteSubscription, o => CanDeleteSubscription(o));
+			Title = TypeHelper.ApplicationNameWithVersion;
+
+            ConnectCommand = new DelegateCommand(OnConnect, CanOnConnect);
+            UnloadingCommand = new DelegateCommand(Unloading, CanUnloading);
+            DeleteSubscriptionCommand = new DelegateCommand(DeleteSubscription, CanDeleteSubscription);
 
             if (!Directory.Exists(_outputFolder))
             {
@@ -69,7 +67,7 @@ namespace Anywhere
             }
         }
 
-        private ObservableCollectionEx<UserSubscription> subscriptions;
+        private ObservableCollectionEx<UserSubscription> _subscriptions;
 
         /// <summary>
         /// Содержит информацию о подписке на данные
@@ -78,11 +76,11 @@ namespace Anywhere
         {
             get
             {
-                if (subscriptions == null) Subscriptions = new ObservableCollectionEx<UserSubscription>();
-                return subscriptions;
+                if (_subscriptions == null) Subscriptions = new ObservableCollectionEx<UserSubscription>();
+                return _subscriptions;
 
             }
-            set { subscriptions = value; }
+            set { _subscriptions = value; }
         }
 
         #region Commands
@@ -92,9 +90,9 @@ namespace Anywhere
         /// </summary>
         public DelegateCommand ConnectCommand { set; get; }
 
-        private void OnConnect(Object obj)
+        private void OnConnect(object obj)
         {
-            if (obj.ToString() == "Подключиться")
+            if ((string)obj == LocalizedStrings.Connect)
             {
                  Connect();
             }
@@ -116,20 +114,20 @@ namespace Anywhere
         /// </summary>
         public DelegateCommand UnloadingCommand { set; get; }
 
-        private void Unloading(Object obj)
+		private void Unloading(object obj)
         {
-            if (obj.ToString() == "Начать выгрузку")
+			if ((string)obj == "Начать выгрузку")
             {
                 _isUnloading = true;
              
                 SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_connector);
                 SecurityPicker.MarketDataProvider = _connector;
 
-                var securities =    SecurityPicker.FilteredSecurities.ToArray();
+                var securities = SecurityPicker.FilteredSecurities.ToArray();
 
                 foreach (var security in securities)
                 {
-                    if (!subscriptions.Any(s => s.Security == security))
+                    if (_subscriptions.All(s => s.Security != security))
                     {
                         SecurityPicker.ExcludeSecurities.Add(security);
                     }
@@ -176,11 +174,11 @@ namespace Anywhere
             }
         }
 
-        private bool CanUnloading(Object obj)
+        private bool CanUnloading(object obj)
         {
             return _connector != null && 
                    _connector.ConnectionState == ConnectionStates.Connected && 
-                   Subscriptions.Any(s => s.MarketDepth == true || s.Level1 == true || s.Trades == true);
+                   Subscriptions.Any(s => s.MarketDepth || s.Level1 || s.Trades);
         }
 
 
@@ -189,7 +187,7 @@ namespace Anywhere
         /// </summary>
         public DelegateCommand DeleteSubscriptionCommand { set; get; }
 
-        private void DeleteSubscription(Object obj)
+        private void DeleteSubscription(object obj)
         {
             if (Subscriptions.Contains((UserSubscription)obj))
             {
@@ -198,7 +196,7 @@ namespace Anywhere
             }
         }
 
-        private bool CanDeleteSubscription(Object obj)
+        private bool CanDeleteSubscription(object obj)
         {
             return (obj != null && !_isUnloading);
         }
@@ -209,11 +207,9 @@ namespace Anywhere
         {
             if (_connector == null)
             {
-                _connector = new QuikTrader();
+	            _connector = new QuikTrader { LogLevel = LogLevels.Debug };
 
-                _connector.LogLevel = LogLevels.Debug;
-
-                _logManager.Sources.Add(_connector);
+	            _logManager.Sources.Add(_connector);
 
                 _logManager.Listeners.Add(new GuiLogListener(Monitor));
 
@@ -353,38 +349,38 @@ namespace Anywhere
         #region Функции записи данных в текстовый файл 
 
         // возвращает строку сделки
-        private string TradeToString(Trade trade)
+		private static string TradeToString(Trade trade)
         {
             //securityId;tradeId;time;price;volume;orderdirection 
-            return string.Format("{0};{1};{2};{3};{4};{5}",
+            return "{0};{1};{2};{3};{4};{5}".Put(
                                    trade.Security.Id,
-                                   trade.Id.ToString(),
-                                   trade.Time.ToString(),
-                                   trade.Price.ToString(),
-                                   trade.Volume.ToString(),
-                                   trade.OrderDirection.ToString());
+                                   trade.Id,
+                                   trade.Time,
+                                   trade.Price,
+                                   trade.Volume,
+                                   trade.OrderDirection);
         }
 
         // возвращает строку своей сделки
-        private string MyTradeToString(MyTrade trade)
+        private static string MyTradeToString(MyTrade trade)
         {
             //securityId;tradeId;time;volume;price;orderdirection;orderId 
-            return string.Format("{0};{1};{2};{3};{4};{5};{6}",
+            return "{0};{1};{2};{3};{4};{5};{6}".Put(
                                    trade.Trade.Security.Id,
                                    trade.Trade.Id,
                                    trade.Trade.Time,
                                    trade.Trade.Volume,
                                    trade.Trade.Price,
-                                   trade.Trade.OrderDirection.ToString(),
+                                   trade.Trade.OrderDirection,
                                    trade.Order.Id);
 
         }
 
         // возвращает строку заявки
-        private string OrderToString(Order order)
+		private static string OrderToString(Order order)
         {
             //orderId;transactionId;time;securityId;portfolioName;volume;balance;price;direction;type;localTime 
-            return string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11}",
+            return "{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11}".Put(
                                    order.Id,
                                    order.TransactionId,
                                    order.Time,
@@ -393,16 +389,16 @@ namespace Anywhere
                                    order.Volume,
                                    order.Balance,
                                    order.Price,
-                                   order.Direction.ToString(),
-                                   order.Type.ToString(),
-                                   order.State.ToString(),
+                                   order.Direction,
+                                   order.Type,
+                                   order.State,
                                    order.LocalTime);
         }
 
         // возвращает строку позиции
-        private string PositionToString(Position position)
+		private static string PositionToString(Position position)
         {
-            return string.Format("{0};{1};{2};{3}",
+            return "{0};{1};{2};{3}".Put(
                                 position.Security.Id,
                                 position.Portfolio.Name,
                                 position.CurrentValue,
@@ -410,9 +406,9 @@ namespace Anywhere
         }
 
         // возвращает строку Level1
-        private string Level1ToString(Security security)
+		private static string Level1ToString(Security security)
         {
-                return string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13}",
+			return "{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13}".Put(
                                     security.Id,
                                     security.Board.Code,
                                     security.PriceStep,
@@ -432,42 +428,42 @@ namespace Anywhere
         }
 
         // возвращает строку котировки стакана
-        private string QuoteToString(Quote quote)
+        private static string QuoteToString(Quote quote)
         {
-            return string.Format("{0};{1};{2}{3}",
-                                quote.OrderDirection.ToString(),
+			return "{0};{1};{2}{3}".Put(
+                                quote.OrderDirection,
                                 quote.Price,
                                 quote.Volume,
                                 Environment.NewLine);
         }
 
         // записывает данные в файл
-        private void SaveToFile(string line, string filePath)
+        private static void SaveToFile(string line, string filePath)
         {
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(filePath, true))
+            using (var file = new StreamWriter(filePath, true))
             {
                 file.WriteLine(line);
             }
         }
 
         // преобразует стакан в MemoryStream и записывает в файл
-        private void DepthToFile(MarketDepth depth, string filePath)
+        private static void DepthToFile(MarketDepth depth, string filePath)
         {
-            using (MemoryStream mem = new MemoryStream(200))
+            using (var mem = new MemoryStream(200))
             {
                 for (var i = depth.Asks.GetUpperBound(0); i >= 0; i--)
                 {
-                    byte[] bytes = Encoding.UTF8.GetBytes(QuoteToString(depth.Asks[i]));
+                    var bytes = Encoding.UTF8.GetBytes(QuoteToString(depth.Asks[i]));
                     mem.Write(bytes, 0, bytes.Length);
                 }
 
                 for (var i = 0; i <= depth.Bids.GetUpperBound(0); i++)
                 {
-                    byte[] bytes = Encoding.UTF8.GetBytes(QuoteToString(depth.Bids[i]));
+                    var bytes = Encoding.UTF8.GetBytes(QuoteToString(depth.Bids[i]));
                     mem.Write(bytes, 0, bytes.Length);
                 }
 
-                using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                using (var file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
                 {
                     mem.WriteTo(file);
                 }
