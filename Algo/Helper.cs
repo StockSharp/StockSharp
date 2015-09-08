@@ -51,7 +51,7 @@ namespace StockSharp.Algo
 			return security;
 		}
 
-		public static int ChangeSubscribers<T>(this CachedSynchronizedDictionary<T, int> subscribers, T subscriber, int delta)
+		public static int ChangeSubscribers<T>(this CachedSynchronizedDictionary<T, int> subscribers, T subscriber, bool isSubscribe)
 		{
 			if (subscribers == null)
 				throw new ArgumentNullException("subscribers");
@@ -60,7 +60,13 @@ namespace StockSharp.Algo
 			{
 				var value = subscribers.TryGetValue2(subscriber) ?? 0;
 
-				value += delta;
+				if (isSubscribe)
+					value++;
+				else
+				{
+					if (value > 0)
+						value--;
+				}
 
 				if (value > 0)
 					subscribers[subscriber] = value;

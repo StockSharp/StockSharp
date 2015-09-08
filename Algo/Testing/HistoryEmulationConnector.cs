@@ -611,7 +611,7 @@ namespace StockSharp.Algo.Testing
 			var securityId = GetSecurityId(series.Security);
 			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
 
-			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), 1) != 1)
+			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), true) != 1)
 				return;
 
 			MarketDataAdapter.SendInMessage(new MarketDataMessage
@@ -630,7 +630,7 @@ namespace StockSharp.Algo.Testing
 			var securityId = GetSecurityId(series.Security);
 			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
 
-			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), -1) != 0)
+			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), false) != 0)
 				return;
 
 			MarketDataAdapter.SendInMessage(new MarketDataMessage

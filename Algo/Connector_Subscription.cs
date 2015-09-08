@@ -136,7 +136,7 @@ namespace StockSharp.Algo
 			{
 				var subscribers = GetSubscribers(type);
 
-				subscribers.ChangeSubscribers(security, 1);
+				subscribers.ChangeSubscribers(security, true);
 
 				var types = _unsubscribeActions.TryGetValue(security);
 
@@ -418,37 +418,18 @@ namespace StockSharp.Algo
 
 			private static bool TrySubscribe<T>(CachedSynchronizedDictionary<T, int> subscribers, T subscriber)
 			{
-				return subscribers.ChangeSubscribers(subscriber, 1) == 1;
+				return subscribers.ChangeSubscribers(subscriber, true) == 1;
 			}
 
 			private void TrySubscribe(Security subscriber, MarketDataTypes type)
 			{
-				var subscribers = GetSubscribers(type);
-
 				//Если уже выполняется поиск данного инструмента, то нет необходимости в повторном вызове OnRegisterXXX.
 				//Если на инструмент была подписка ранее, то просто вызываем событие SubscriptionSucceed.
-				bool? subscribed = false;
-
-				lock (subscribers.SyncRoot)
-				{
-					var value = subscribers.TryGetValue2(subscriber);
-
-					if (value == null)
-					{
-						subscribers[subscriber] = 0;
-						subscribed = null;
-					}
-
-					if (value > 0)
-					{
-						subscribers[subscriber] = (int)value + 1;
-						subscribed = true;
-					}
-				}
+				var subscribersCount = GetSubscribers(type).ChangeSubscribers(subscriber, true);
 
 				var securityId = _connector.GetSecurityId(subscriber);
 
-				if (subscribed == null)
+				if (subscribersCount == 1)
 				{
 					var lookupMessage = new SecurityLookupMessage
 					{
@@ -460,8 +441,7 @@ namespace StockSharp.Algo
 					_lookupMessages.Add(lookupMessage.TransactionId, Tuple.Create(lookupMessage, subscriber, type));
 					_connector.LookupSecurities(lookupMessage);
 				}
-
-				if (subscribed == true)
+				else// if (subscribed == true)
 				{
 					_connector.SendOutMessage(new MarketDataMessage
 					{
@@ -474,29 +454,13 @@ namespace StockSharp.Algo
 
 			private static bool TryUnSubscribe<T>(CachedSynchronizedDictionary<T, int> subscribers, T subscriber)
 			{
-				return subscribers.ChangeSubscribers(subscriber, -1) == 0;
+				return subscribers.ChangeSubscribers(subscriber, false) == 0;
 			}
 
 			private void TryUnSubscribe(Security subscriber, MarketDataTypes type)
 			{
-				var subscribers = GetSubscribers(type);
-				var subscribed = false;
-
-				lock (subscribers.SyncRoot)
-				{
-					var value = subscribers.TryGetValue2(subscriber);
-
-					if (value == 0)
-						_unsubscribeActions.SafeAdd(subscriber).Add(type);
-
-					if (value > 0)
-						subscribed = true;
-				}
-
-				if (!subscribed || !TryUnSubscribe(subscribers, subscriber))
-					return;
-
-				SendUnSubscribeMessage(subscriber, type);
+				if (TryUnSubscribe(GetSubscribers(type), subscriber))
+					SendUnSubscribeMessage(subscriber, type);
 			}
 
 			private void SendUnSubscribeMessage(Security subscriber, MarketDataTypes type)
