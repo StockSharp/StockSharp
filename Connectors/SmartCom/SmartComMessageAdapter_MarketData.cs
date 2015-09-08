@@ -377,7 +377,7 @@ namespace StockSharp.SmartCom
 
 			try
 			{
-				if (bidPrice != null)
+				if (bidPrice > 0)
 				{
 					tempDepth.Item1.Add(new QuoteChange(Sides.Buy, bidPrice.Value, bidVolume ?? 0));
 
@@ -385,7 +385,7 @@ namespace StockSharp.SmartCom
 						bestQuotes.First = Tuple.Create(bidPrice.Value, bidVolume ?? 0);
 				}
 
-				if (askPrice != null)
+				if (askPrice > 0)
 				{
 					tempDepth.Item2.Add(new QuoteChange(Sides.Sell, askPrice.Value, askVolume ?? 0));
 
