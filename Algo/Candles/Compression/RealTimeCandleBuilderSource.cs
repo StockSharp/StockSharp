@@ -171,7 +171,7 @@ namespace StockSharp.Algo.Candles.Compression
 
 			var trades = GetSecurityValues(series.Security);
 
-			yield return new Range<DateTimeOffset>(trades.IsEmpty() ? Connector.CurrentTime : trades.Min(v => v.Time).LocalDateTime, DateTimeOffset.MaxValue);
+			yield return new Range<DateTimeOffset>(trades.IsEmpty() ? Connector.CurrentTime : trades.Min(v => v.Time), DateTimeOffset.MaxValue);
 		}
 
 		/// <summary>
