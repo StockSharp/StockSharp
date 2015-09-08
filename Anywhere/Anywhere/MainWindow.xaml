@@ -1,0 +1,147 @@
+﻿<Window x:Class="Anywhere.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:sx="http://schemas.stocksharp.com/xaml"
+        xmlns:docking="clr-namespace:ActiproSoftware.Windows.Controls.Docking;assembly=ActiproSoftware.Docking.Wpf"
+        xmlns:ug="clr-namespace:Ecng.Xaml.Grids;assembly=Ecng.Xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="S#.Broker" Height="600" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ToolBarPanel Orientation="Horizontal">
+            <ToolBar>
+                <Button x:Name="ConnectButton"
+                        Margin="5"
+                        Content="{x:Static loc:LocalizedStrings.Connect}"
+                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ConnectCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+
+                <Button x:Name="UnloadingButton"
+                        Margin="5"
+                        Content="Начать выгрузку"
+                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UnloadingCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+            </ToolBar>
+        </ToolBarPanel>
+
+        <xctk:BusyIndicator Grid.Row="1" x:Name="BusyIndicator">
+            <docking:DockSite x:Name="DockSite" AreDocumentWindowsDestroyedOnClose="False">
+                <docking:SplitContainer Orientation="Vertical">
+                    <docking:SplitContainer>
+                        <docking:Workspace>
+                            <docking:TabbedMdiHost>
+                                <docking:TabbedMdiContainer>
+                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.Securities}" CanClose="False">
+                                        <sx:SecurityPicker x:Name="SecurityPicker" ShowCommonStatColumns="True" />
+                                    </docking:DocumentWindow>
+                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.Str985}" CanClose="False">
+                                        <sx:TradeGrid x:Name="TradeGrid" />
+                                    </docking:DocumentWindow>
+                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.Orders}" CanClose="False">
+                                        <sx:OrderGrid x:Name="OrderGrid" />
+                                    </docking:DocumentWindow>
+
+                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.MyTrades}" CanClose="False">
+                                        <sx:MyTradeGrid x:Name="MyTradeGrid" />
+                                    </docking:DocumentWindow>
+                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.Portfolios}" CanClose="False">
+                                        <sx:PortfolioGrid x:Name="PortfolioGrid" />
+                                    </docking:DocumentWindow>
+
+                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.MarketDataSubscription}" CanClose="False">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal" >
+                                                <sx:SecurityEditor x:Name="SecurityEditor" Height="22" Margin="5" Width="150" SecuritySelected="SecurityEditor_SecuritySelected" />
+                                                <Button x:Name="DeleteSecurityButton" Content="Удалить" Height="22" Margin="5"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.DeleteSubscriptionCommand}"
+                                                        CommandParameter="{Binding ElementName=UserSubscriptionGrid, Path=SelectedItem}" />
+                                            </StackPanel>
+
+                                            <ug:UniversalGrid x:Name="UserSubscriptionGrid" Grid.Row="1" 
+                                                              ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Subscriptions}"
+                                                              SelectionMode="Single" >
+                                                <ug:UniversalGrid.Columns>
+                                                    <DataGridTextColumn Width="120" Header="{x:Static loc:LocalizedStrings.Str349}" Binding="{Binding Path= Security.Id}" SortMemberPath="Security.Id" />
+                                                    <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Str985}" SortMemberPath="Trades" >
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <CheckBox IsChecked="{Binding Path=Trades, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="True" HorizontalAlignment="Center" IsEnabled="True" />
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                        <DataGridTemplateColumn.CellStyle>
+                                                            <Style />
+                                                        </DataGridTemplateColumn.CellStyle>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.MarketDepths}" SortMemberPath="MarketDepth">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <CheckBox IsChecked="{Binding Path=MarketDepth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="True" HorizontalAlignment="Center"/>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                        <DataGridTemplateColumn.CellStyle>
+                                                            <Style />
+                                                        </DataGridTemplateColumn.CellStyle>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Level1}" SortMemberPath="Level1">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <CheckBox IsChecked="{Binding Path=Level1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="True" HorizontalAlignment="Center"/>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                        <DataGridTemplateColumn.CellStyle>
+                                                            <Style />
+                                                        </DataGridTemplateColumn.CellStyle>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.Orders}" SortMemberPath="Orders">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <CheckBox IsChecked="{Binding Path=Orders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="True" HorizontalAlignment="Center"/>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                        <DataGridTemplateColumn.CellStyle>
+                                                            <Style />
+                                                        </DataGridTemplateColumn.CellStyle>
+                                                    </DataGridTemplateColumn>
+                                                    <DataGridTemplateColumn Header="{x:Static loc:LocalizedStrings.MyTrades}" SortMemberPath="MyTrades">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <CheckBox IsChecked="{Binding Path=MyTrades, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsHitTestVisible="True" HorizontalAlignment="Center"/>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                        <DataGridTemplateColumn.CellStyle>
+                                                            <Style />
+                                                        </DataGridTemplateColumn.CellStyle>
+                                                    </DataGridTemplateColumn>
+
+                                                </ug:UniversalGrid.Columns>
+                                            </ug:UniversalGrid>
+                                        </Grid>
+                                    </docking:DocumentWindow>
+                                </docking:TabbedMdiContainer>
+                            </docking:TabbedMdiHost>
+                        </docking:Workspace>
+                    </docking:SplitContainer>
+
+                    <docking:SplitContainer x:Name="BottomSplitContainer">
+                        <docking:ToolWindowContainer x:Name="RightBottomBar">
+                            <docking:ToolWindow x:Name="ToolWindowLogManager" Title="{x:Static loc:LocalizedStrings.Str3237}" CanClose="False">
+                                <sx:Monitor x:Name="Monitor" ShowStrategies="False" />
+                            </docking:ToolWindow>
+                        </docking:ToolWindowContainer>
+                    </docking:SplitContainer>
+                </docking:SplitContainer>
+            </docking:DockSite>
+        </xctk:BusyIndicator>
+    </Grid>
+</Window>
+
