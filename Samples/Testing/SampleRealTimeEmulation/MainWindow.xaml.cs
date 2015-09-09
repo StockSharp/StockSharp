@@ -120,14 +120,20 @@ namespace SampleRealTimeEmulation
 					// subscribe on connection successfully event
 					_connector.Connected += () =>
 					{
-						// set flag (connection is established)
-						_isConnected = true;
-
 						// update gui labels
 						this.GuiAsync(() =>
 						{
 							ChangeConnectStatus(true);
-							ConnectBtn.IsEnabled = false;
+						});
+					};
+
+					// subscribe on disconnection event
+					_connector.Disconnected += () =>
+					{
+						// update gui labels
+						this.GuiAsync(() =>
+						{
+							ChangeConnectStatus(false);
 						});
 					};
 
@@ -167,6 +173,7 @@ namespace SampleRealTimeEmulation
 						this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 				}
 
+				ConnectBtn.IsEnabled = false;
 				_connector.Connect();
 			}
 			else
@@ -199,8 +206,12 @@ namespace SampleRealTimeEmulation
 
 		private void ChangeConnectStatus(bool isConnected)
 		{
+			// set flag (connection is established or not)
 			_isConnected = isConnected;
+
 			ConnectBtn.Content = isConnected ? LocalizedStrings.Disconnect : LocalizedStrings.Connect;
+			ConnectBtn.IsEnabled = true;
+
 			Find.IsEnabled = _isConnected;
 		}
 
