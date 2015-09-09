@@ -87,6 +87,11 @@ namespace StockSharp.Algo.Storages
 				return;
 
 			stream.Write(ServerOffset);
+
+			if (Version < MarketDataVersions.Version56)
+				return;
+
+			WriteOffsets(stream);
 		}
 
 		private static void WriteList(Stream stream, IList<string> list)
@@ -136,6 +141,11 @@ namespace StockSharp.Algo.Storages
 				return;
 
 			ServerOffset = stream.Read<TimeSpan>();
+
+			if (Version < MarketDataVersions.Version56)
+				return;
+
+			ReadOffsets(stream);
 		}
 
 		public override void CopyFrom(ExecutionSerializerMetaInfo src)
@@ -174,7 +184,7 @@ namespace StockSharp.Algo.Storages
 		public ExecutionSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version55;
+			Version = MarketDataVersions.Version56;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)
@@ -195,6 +205,7 @@ namespace StockSharp.Algo.Storages
 
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version51;
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version56;
 
 			foreach (var msg in messages)
 			{
@@ -301,7 +312,9 @@ namespace StockSharp.Algo.Storages
 						writer.WriteVolume(msg.Balance.Value, metaInfo, SecurityId);
 				}
 
-				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset);
+				var lastOffset = metaInfo.LastServerOffset;
+				metaInfo.LastTime = writer.WriteTime(msg.ServerTime, metaInfo.LastTime, LocalizedStrings.Str930, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastServerOffset = lastOffset;
 
 				writer.WriteInt((int)msg.OrderType);
 
@@ -414,10 +427,13 @@ namespace StockSharp.Algo.Storages
 
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version51;
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version56;
 
 			var prevTime = metaInfo.FirstTime;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId));
+			var lastOffset = metaInfo.FirstServerOffset;
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
+			metaInfo.FirstServerOffset = lastOffset;
 
 			var type = reader.ReadInt().To<OrderTypes>();
 

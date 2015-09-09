@@ -27,6 +27,11 @@
 				return;
 
 			ServerOffset = stream.Read<TimeSpan>();
+
+			if (Version < MarketDataVersions.Version46)
+				return;
+
+			ReadOffsets(stream);
 		}
 
 		public override void Write(Stream stream)
@@ -37,6 +42,11 @@
 				return;
 
 			stream.Write(ServerOffset);
+
+			if (Version < MarketDataVersions.Version46)
+				return;
+
+			WriteOffsets(stream);
 		}
 	}
 
@@ -45,7 +55,7 @@
 		public NewsSerializer()
 			: base(default(SecurityId), 200)
 		{
-			Version = MarketDataVersions.Version45;
+			Version = MarketDataVersions.Version46;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<NewsMessage> messages, NewsMetaInfo metaInfo)
@@ -53,6 +63,8 @@
 			var isMetaEmpty = metaInfo.IsEmpty();
 
 			writer.WriteInt(messages.Count());
+
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version46;
 			
 			foreach (var news in messages)
 			{
@@ -112,7 +124,9 @@
 					writer.WriteString(news.Url.To<string>());
 				}
 
-				metaInfo.LastTime = writer.WriteTime(news.ServerTime, metaInfo.LastTime, LocalizedStrings.News, true, true, metaInfo.ServerOffset);
+				var lastOffset = metaInfo.LastServerOffset;
+				metaInfo.LastTime = writer.WriteTime(news.ServerTime, metaInfo.LastTime, LocalizedStrings.News, true, true, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastServerOffset = lastOffset;
 			}
 		}
 
@@ -132,9 +146,13 @@
 				Url = reader.Read() ? reader.ReadString().To<Uri>() : null,
 			};
 
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version46;
+
 			var prevTime = metaInfo.FirstTime;
-			message.ServerTime = reader.ReadTime(ref prevTime, true, true, metaInfo.ServerOffset);
+			var lastOffset = metaInfo.FirstServerOffset;
+			message.ServerTime = reader.ReadTime(ref prevTime, true, true, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
+			metaInfo.FirstServerOffset = lastOffset;
 
 			return message;
 		}

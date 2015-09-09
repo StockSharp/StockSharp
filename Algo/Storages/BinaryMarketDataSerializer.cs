@@ -35,6 +35,7 @@
 		public static readonly Version Version53 = new Version(5, 3);
 		public static readonly Version Version54 = new Version(5, 4);
 		public static readonly Version Version55 = new Version(5, 5);
+		public static readonly Version Version56 = new Version(5, 6);
 	}
 
 	abstract class BinaryMetaInfo<TMetaInfo> : MetaInfo
@@ -43,7 +44,7 @@
 		protected BinaryMetaInfo(DateTime date)
 			: base(date)
 		{
-			LocalOffset = TimeHelper.TimeZoneOffset;
+			LocalOffset = DateTimeOffset.Now.Offset;
 
 			FirstLocalTime = date;
 			LastLocalTime = date;
@@ -65,6 +66,12 @@
 
 		public DateTime FirstLocalTime { get; set; }
 		public DateTime LastLocalTime { get; set; }
+
+		public TimeSpan FirstLocalOffset { get; set; }
+		public TimeSpan LastLocalOffset { get; set; }
+
+		public TimeSpan FirstServerOffset { get; set; }
+		public TimeSpan LastServerOffset { get; set; }
 
 		public override object LastId
 		{
@@ -180,6 +187,24 @@
 			LastLocalTime = stream.Read<DateTime>();
 		}
 
+		protected void WriteOffsets(Stream stream)
+		{
+			stream.Write(FirstLocalOffset);
+			stream.Write(LastLocalOffset);
+
+			stream.Write(FirstServerOffset);
+			stream.Write(LastServerOffset);
+		}
+
+		protected void ReadOffsets(Stream stream)
+		{
+			FirstLocalOffset = stream.Read<TimeSpan>();
+			LastLocalOffset = stream.Read<TimeSpan>();
+
+			FirstServerOffset = stream.Read<TimeSpan>();
+			LastServerOffset = stream.Read<TimeSpan>();
+		}
+
 		//public override TMetaInfo Clone()
 		//{
 		//	var copy = typeof(TMetaInfo).CreateInstance<TMetaInfo>(Date);
@@ -204,6 +229,10 @@
 			LastFractionalVolume = src.LastFractionalVolume;
 			FirstLocalTime = src.FirstLocalTime;
 			LastLocalTime = src.LastLocalTime;
+			FirstLocalOffset = src.FirstLocalOffset;
+			LastLocalOffset = src.LastLocalOffset;
+			FirstServerOffset = src.FirstServerOffset;
+			LastServerOffset = src.LastServerOffset;
 		}
 	}
 

@@ -708,7 +708,7 @@ namespace StockSharp.Algo.Testing
 
 		private static DateTimeOffset GetTime(DateTimeOffset date, TimeSpan timeOfDay)
 		{
-			return new DateTime(date.Date.Ticks + timeOfDay.Ticks).ApplyTimeZone(date.Offset);
+			return (date.Date + timeOfDay).ApplyTimeZone(date.Offset);
 		}
 
 		private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTimeOffset date, TimeSpan lastTime)

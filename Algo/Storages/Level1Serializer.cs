@@ -195,6 +195,11 @@ namespace StockSharp.Algo.Storages
 				return;
 
 			stream.Write(ServerOffset);
+
+			if (Version < MarketDataVersions.Version54)
+				return;
+
+			WriteOffsets(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -282,6 +287,11 @@ namespace StockSharp.Algo.Storages
 				return;
 
 			ServerOffset = stream.Read<TimeSpan>();
+
+			if (Version < MarketDataVersions.Version54)
+				return;
+
+			ReadOffsets(stream);
 		}
 
 		private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -387,7 +397,7 @@ namespace StockSharp.Algo.Storages
 		public Level1Serializer(SecurityId securityId)
 			: base(securityId, 50)
 		{
-			Version = MarketDataVersions.Version53;
+			Version = MarketDataVersions.Version54;
 		}
 
 		private static int MapTo(Level1MetaInfo metaInfo, Level1Fields field)
@@ -433,19 +443,26 @@ namespace StockSharp.Algo.Storages
 
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version53;
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 
 			foreach (var message in messages)
 			{
 				if (metaInfo.Version >= MarketDataVersions.Version49)
 				{
-					metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset);
+					var lastOffset = metaInfo.LastServerOffset;
+					metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+					metaInfo.LastServerOffset = lastOffset;
 
 					var hasLocalTime = !message.LocalTime.IsDefault() && message.LocalTime != message.ServerTime;
 
 					writer.Write(hasLocalTime);
 
 					if (hasLocalTime)
-						metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, allowNonOrdered, isUtc, metaInfo.LocalOffset);
+					{
+						lastOffset = metaInfo.LastLocalOffset;
+						metaInfo.LastLocalTime = writer.WriteTime(message.LocalTime, metaInfo.LastLocalTime, LocalizedStrings.Str919, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset);
+						metaInfo.LastLocalOffset = lastOffset;
+					}
 
 					var count = message.Changes.Count;
 
@@ -458,7 +475,10 @@ namespace StockSharp.Algo.Storages
 				foreach (var change in message.Changes)
 				{
 					if (metaInfo.Version < MarketDataVersions.Version49)
-						metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset);
+					{
+						var offset = TimeSpan.Zero;
+						metaInfo.LastTime = writer.WriteTime(message.ServerTime, metaInfo.LastTime, "level1", allowNonOrdered, isUtc, metaInfo.ServerOffset, false, ref offset);
+					}
 
 					writer.WriteInt(MapTo(metaInfo, change.Key));
 
@@ -641,7 +661,9 @@ namespace StockSharp.Algo.Storages
 								metaInfo.FirstFieldTime = metaInfo.LastFieldTime = isUtc ? timeValue.UtcDateTime : timeValue.LocalDateTime;
 							}
 
-							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset);
+							var lastOffset = metaInfo.LastServerOffset;
+							metaInfo.LastFieldTime = writer.WriteTime(timeValue, metaInfo.LastFieldTime, LocalizedStrings.Str921Params.Put(change.Key), allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+							metaInfo.LastServerOffset = lastOffset;
 							break;
 						}
 						case Level1Fields.BidsCount:
@@ -822,6 +844,7 @@ namespace StockSharp.Algo.Storages
 			var metaInfo = enumerator.MetaInfo;
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version48;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version53;
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version54;
 
 			var l1Msg = new Level1ChangeMessage { SecurityId = SecurityId };
 
@@ -830,14 +853,18 @@ namespace StockSharp.Algo.Storages
 			if (metaInfo.Version >= MarketDataVersions.Version49)
 			{
 				var prevTime = metaInfo.FirstTime;
-				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId));
+				var lastOffset = metaInfo.FirstServerOffset;
+				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
 				metaInfo.FirstTime = prevTime;
+				metaInfo.FirstServerOffset = lastOffset;
 
 				if (reader.Read())
 				{
 					prevTime = metaInfo.FirstLocalTime;
-					l1Msg.LocalTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset).LocalDateTime;
+					lastOffset = metaInfo.FirstLocalOffset;
+					l1Msg.LocalTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, allowDiffOffsets, ref lastOffset).LocalDateTime;
 					metaInfo.FirstLocalTime = prevTime;
+					metaInfo.FirstLocalOffset = lastOffset;
 				}
 				//else
 				//	l1Msg.LocalTime = l1Msg.ServerTime;
@@ -847,7 +874,8 @@ namespace StockSharp.Algo.Storages
 			else
 			{
 				var prevTime = metaInfo.FirstTime;
-				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset);
+				var offset = TimeSpan.Zero;
+				l1Msg.ServerTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.LocalOffset, false, ref offset);
 				l1Msg.LocalTime = metaInfo.FirstTime = prevTime;
 			}
 
@@ -1043,8 +1071,10 @@ namespace StockSharp.Algo.Storages
 					case Level1Fields.BestAskTime:
 					{
 						var prevTime = metaInfo.FirstFieldTime;
-						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId)));
+						var lastOffset = metaInfo.FirstServerOffset;
+						l1Msg.Add(field, reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset));
 						metaInfo.FirstFieldTime = prevTime;
+						metaInfo.FirstServerOffset = lastOffset;
 						break;
 					}
 					case Level1Fields.BidsCount:

@@ -138,12 +138,28 @@ namespace StockSharp.Algo.Storages
 			return time.Truncate(TimeSpan.TicksPerMillisecond);
 		}
 
-		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset)
+		public static DateTime WriteTime(this BitArrayWriter writer, DateTimeOffset dto, DateTime prevTime, string name, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)
 		{
 			if (writer == null)
 				throw new ArgumentNullException("writer");
 
-			if (isUtc && dto.Offset != offset)
+			if (allowDiffOffsets)
+			{
+				writer.Write(dto.Offset == prevOffset);
+
+				if (prevOffset != dto.Offset)
+				{
+					prevOffset = dto.Offset;
+
+					writer.WriteInt(prevOffset.Hours);
+
+					writer.Write(prevOffset.Minutes == 0);
+
+					if (prevOffset.Minutes != 0)
+						writer.WriteInt(prevOffset.Minutes);
+				}
+			}
+			else if (isUtc && dto.Offset != offset)
 				throw new ArgumentException(LocalizedStrings.WrongTimeOffset.Put(dto, offset));
 
 			dto = dto.Truncate();
@@ -215,8 +231,18 @@ namespace StockSharp.Algo.Storages
 			return time;
 		}
 
-		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan timeZone)
+		public static DateTimeOffset ReadTime(this BitArrayReader reader, ref DateTime prevTime, bool allowNonOrdered, bool isUtc, TimeSpan offset, bool allowDiffOffsets, ref TimeSpan prevOffset)
 		{
+			if (allowDiffOffsets)
+			{
+				if (!reader.Read())
+				{
+					prevOffset = new TimeSpan(reader.ReadInt(), reader.Read() ? 0 : reader.ReadInt(), 0);
+				}
+
+				offset = prevOffset;
+			}
+
 			long time;
 
 			if (allowNonOrdered)
@@ -262,9 +288,7 @@ namespace StockSharp.Algo.Storages
 
 			prevTime = new DateTime(time, isUtc ? DateTimeKind.Utc : DateTimeKind.Unspecified);
 
-			return isUtc
-				? new DateTime(time + timeZone.Ticks).ApplyTimeZone(timeZone)
-				: prevTime.ApplyTimeZone(timeZone);
+			return (isUtc ? new DateTime(time + offset.Ticks) : prevTime).ApplyTimeZone(offset);
 		}
 
 		public static void WriteVolume<T>(this BitArrayWriter writer, decimal volume, BinaryMetaInfo<T> info, SecurityId securityId)

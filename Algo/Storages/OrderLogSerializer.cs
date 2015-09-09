@@ -81,6 +81,11 @@ namespace StockSharp.Algo.Storages
 				return;
 
 			stream.Write(ServerOffset);
+
+			if (Version < MarketDataVersions.Version52)
+				return;
+
+			WriteOffsets(stream);
 		}
 
 		public override void Read(Stream stream)
@@ -123,6 +128,11 @@ namespace StockSharp.Algo.Storages
 				return;
 
 			ServerOffset = stream.Read<TimeSpan>();
+
+			if (Version < MarketDataVersions.Version52)
+				return;
+
+			ReadOffsets(stream);
 		}
 
 		public override void CopyFrom(OrderLogMetaInfo src)
@@ -153,7 +163,7 @@ namespace StockSharp.Algo.Storages
 		public OrderLogSerializer(SecurityId securityId)
 			: base(securityId, 200)
 		{
-			Version = MarketDataVersions.Version51;
+			Version = MarketDataVersions.Version52;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> items, OrderLogMetaInfo metaInfo)
@@ -171,6 +181,7 @@ namespace StockSharp.Algo.Storages
 
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 
 			foreach (var item in items)
 			{
@@ -237,7 +248,9 @@ namespace StockSharp.Algo.Storages
 
 				writer.Write(item.Side == Sides.Buy);
 
-				metaInfo.LastTime = writer.WriteTime(item.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1013, allowNonOrdered, isUtc, metaInfo.ServerOffset);
+				var lastOffset = metaInfo.LastServerOffset;
+				metaInfo.LastTime = writer.WriteTime(item.ServerTime, metaInfo.LastTime, LocalizedStrings.Str1013, allowNonOrdered, isUtc, metaInfo.ServerOffset, allowDiffOffsets, ref lastOffset);
+				metaInfo.LastServerOffset = lastOffset;
 
 				if (hasTrade)
 				{
@@ -345,10 +358,13 @@ namespace StockSharp.Algo.Storages
 
 			var allowNonOrdered = metaInfo.Version >= MarketDataVersions.Version47;
 			var isUtc = metaInfo.Version >= MarketDataVersions.Version48;
+			var allowDiffOffsets = metaInfo.Version >= MarketDataVersions.Version52;
 
 			var prevTime = metaInfo.FirstTime;
-			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId));
+			var lastOffset = metaInfo.FirstServerOffset;
+			var serverTime = reader.ReadTime(ref prevTime, allowNonOrdered, isUtc, metaInfo.GetTimeZone(isUtc, SecurityId), allowDiffOffsets, ref lastOffset);
 			metaInfo.FirstTime = prevTime;
+			metaInfo.FirstServerOffset = lastOffset;
 
 			var execMsg = new ExecutionMessage
 			{
