@@ -4505,9 +4505,9 @@
             Формат FIX протокола.
             </summary>
     </member>
-    <member name="P:StockSharp.Fix.FixMessageAdapter.UtcOffset">
+    <member name="P:StockSharp.Fix.FixMessageAdapter.TimeZone">
       <summary>
-            Смещение времени относительно UTC для серверного времени данных.
+            Информация о временной зоне, где находится биржа.
             </summary>
     </member>
     <member name="P:StockSharp.Fix.FixMessageAdapter.DateFormat">

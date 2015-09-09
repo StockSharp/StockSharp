@@ -146,7 +146,7 @@
 			}
 		}
 
-		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeSpan dateTimeOffset, string dateTimeFormat, Func<QuikOrderCondition> getCondition)
+		public static bool ReadOrderCondition(this IFixReader reader, FixTags tag, TimeZoneInfo timeZone, string dateTimeFormat, Func<QuikOrderCondition> getCondition)
 		{
 			if (getCondition == null)
 				throw new ArgumentNullException("getCondition");
@@ -184,13 +184,13 @@
 					if (getCondition().ActiveTime == null)
 						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					getCondition().ActiveTime.Min = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(dateTimeOffset);
+					getCondition().ActiveTime.Min = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(timeZone);
 					return true;
 				case QuikFixTags.ActiveTimeTo:
 					if (getCondition().ActiveTime == null)
 						getCondition().ActiveTime = new Range<DateTimeOffset>();
 
-					getCondition().ActiveTime.Max = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(dateTimeOffset);
+					getCondition().ActiveTime.Max = reader.ReadDateTime(dateTimeFormat).ToDateTimeOffset(timeZone);
 					return true;
 				case QuikFixTags.ConditionOrderId:
 					getCondition().ConditionOrderId = reader.ReadLong();
