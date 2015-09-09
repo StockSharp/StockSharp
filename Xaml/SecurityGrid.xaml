@@ -61,6 +61,7 @@
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr382}" Binding="{Binding Path=LastTrade.Volume}" SortMemberPath="LastTrade.Volume" />
 		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr73}" Binding="{Binding Path=LastTrade.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:T\}'}" SortMemberPath="LastTrade.Time.TimeOfDay" />
 		<DataGridTextColumn Visibility="Collapsed" Width="100" Header="{x:Static loc:LocalizedStrings.XamlStr113}" Binding="{Binding Path=LastTrade.Time, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:d\}'}" SortMemberPath="LastTrade.Time.Date" />
+		<DataGridTextColumn Visibility="Collapsed" Width="50" Header="{x:Static loc:LocalizedStrings.TimeZone}" Binding="{Binding Path=LastTrade.Time, StringFormat=zzz}" SortMemberPath="LastTrade.Time.Offset"/>
 
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.Str79}" Binding="{Binding Path=OpenPrice}" SortMemberPath="OpenPrice" />
 		<DataGridTextColumn Visibility="Collapsed" Width="70" Header="{x:Static loc:LocalizedStrings.XamlStr830}" Binding="{Binding Path=HighPrice}" SortMemberPath="HighPrice" />
