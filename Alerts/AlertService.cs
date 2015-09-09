@@ -135,7 +135,7 @@ namespace StockSharp.Alerts
 		}
 
 		/// <summary>
-		/// Remove previously registered by <see cref="Alerts.AlertSchema)"/> schema.
+		/// Remove previously registered by <see cref="Register"/> schema.
 		/// </summary>
 		/// <param name="schema">Schema.</param>
 		public void UnRegister(AlertSchema schema)
