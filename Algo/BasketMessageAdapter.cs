@@ -13,6 +13,7 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
+	using SubscriptionInfo = System.Tuple<Messages.SecurityId, Messages.MarketDataTypes, System.DateTimeOffset, System.DateTimeOffset, long>;
 
 	/// <summary>
 	/// Интерфейс, описывающий список адаптеров к торговым системам, с которыми оперирует агрегатор.
@@ -101,11 +102,10 @@ namespace StockSharp.Algo
 			Unsubscribing,
 		}
 
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, SubscriptionStates> _subscriptionStates = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, SubscriptionStates>();
-		
-		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, IEnumerator<IMessageAdapter>>();
-		private readonly SynchronizedDictionary<long, Tuple<SecurityId, MarketDataTypes>> _subscriptionKeys = new SynchronizedDictionary<long, Tuple<SecurityId, MarketDataTypes>>();
-		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter> _subscriptions = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes>, IMessageAdapter>();
+		private readonly SynchronizedDictionary<SubscriptionInfo, SubscriptionStates> _subscriptionStates = new SynchronizedDictionary<SubscriptionInfo, SubscriptionStates>();
+		private readonly SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>> _subscriptionQueue = new SynchronizedPairSet<SubscriptionInfo, IEnumerator<IMessageAdapter>>();
+		private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionKeys = new SynchronizedDictionary<long, SubscriptionInfo>();
+		private readonly SynchronizedDictionary<SubscriptionInfo, IMessageAdapter> _subscriptions = new SynchronizedDictionary<SubscriptionInfo, IMessageAdapter>();
 		//private readonly SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>> _adapterStates = new SynchronizedDictionary<IMessageAdapter, RefPair<bool, Exception>>();
 		private readonly SynchronizedDictionary<IMessageAdapter, IMessageAdapter> _hearbeatAdapters = new SynchronizedDictionary<IMessageAdapter, IMessageAdapter>();
 		private readonly CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>> _connectedAdapters = new CachedSynchronizedDictionary<MessageTypes, CachedSynchronizedList<IMessageAdapter>>();
@@ -299,7 +299,7 @@ namespace StockSharp.Algo
 
 						default:
 						{
-							var key = Tuple.Create(mdMsg.SecurityId, mdMsg.DataType);
+							var key = CreateKey(mdMsg);
 
 							var state = _subscriptionStates.TryGetValue2(key);
 
@@ -471,7 +471,7 @@ namespace StockSharp.Algo
 				var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId);
 
 				if (key == null)
-					key = Tuple.Create(message.SecurityId, message.DataType);
+					key = CreateKey(message);
 				else
 					_subscriptionKeys.Remove(originalTransactionId);
 
@@ -480,10 +480,14 @@ namespace StockSharp.Algo
 			}
 		}
 
+		private static SubscriptionInfo CreateKey(MarketDataMessage message)
+		{
+			return Tuple.Create(message.SecurityId, message.DataType, message.From, message.To, message.Count);
+		}
+
 		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)
 		{
-			var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId)
-				?? Tuple.Create(message.SecurityId, message.DataType);
+			var key = _subscriptionKeys.TryGetValue(message.OriginalTransactionId) ?? CreateKey(message);
 			
 			var enumerator = _subscriptionQueue.TryGetValue(key);
 			var state = _subscriptionStates.TryGetValue2(key);
