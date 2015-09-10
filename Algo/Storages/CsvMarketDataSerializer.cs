@@ -15,6 +15,9 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Reflection.Path;
 	using Ecng.Serialization;
 
+	using SmartFormat;
+	using SmartFormat.Core.Formatting;
+
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -268,6 +271,7 @@ namespace StockSharp.Algo.Storages
 		private readonly string _format;
 		private readonly MemberProxy[] _members;
 		private readonly Func<string[], object> _toId;
+		private FormatCache _templateCache;
 
 		/// <summary>
 		/// Создать <see cref="CsvMarketDataSerializer{TData}"/>.
@@ -425,7 +429,8 @@ namespace StockSharp.Algo.Storages
 					else
 						appendLine = true;
 
-					writer.Write(_format.PutEx(item));
+					//writer.Write(_format.PutEx(item));
+					writer.Write(Smart.Default.FormatWithCache(ref _templateCache, _format, item));
 
 					var news = item as NewsMessage;
 					if (news == null)
