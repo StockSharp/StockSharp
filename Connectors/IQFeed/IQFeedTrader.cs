@@ -114,7 +114,7 @@ namespace StockSharp.IQFeed
 		/// Запросить новости для заданной даты.
 		/// </summary>
 		/// <param name="date">Дата.</param>
-		public virtual void RequestNews(DateTime date)
+		public virtual void RequestNews(DateTimeOffset date)
 		{
 			SendInMessage(new MarketDataMessage
 			{
@@ -134,7 +134,7 @@ namespace StockSharp.IQFeed
 		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
 		/// <returns>Исторические сделки.</returns>
 		[Obsolete("Метод устарел. Необходимо использовать метод GetHistoricalLevel1.")]
-		public IEnumerable<Trade> GetTrades(Security security, DateTime from, DateTime to, out bool isSuccess)
+		public IEnumerable<Trade> GetTrades(Security security, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
 			return GetHistoricalLevel1(GetSecurityId(security), from, to, out isSuccess).Select(l1 =>
 			{
@@ -200,7 +200,7 @@ namespace StockSharp.IQFeed
 		/// <param name="to">Дата окончания периода.</param>
 		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
 		/// <returns>Исторические сделки.</returns>
-		public IEnumerable<Level1ChangeMessage> GetHistoricalLevel1(SecurityId securityId, DateTime from, DateTime to, out bool isSuccess)
+		public IEnumerable<Level1ChangeMessage> GetHistoricalLevel1(SecurityId securityId, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
 			this.AddInfoLog(LocalizedStrings.Str2145Params, securityId, from, to);
 
@@ -291,7 +291,7 @@ namespace StockSharp.IQFeed
 		/// <param name="to">Дата окончания периода.</param>
 		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
 		/// <returns>Исторические свечи.</returns>
-		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, DateTime from, DateTime to, out bool isSuccess)
+		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");

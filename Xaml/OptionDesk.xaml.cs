@@ -189,7 +189,7 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Текущее время. Если оно установлено, то <see cref="IBlackScholes"/> использует это время.
 		/// </summary>
-		public DateTime? CurrentTime { get; set; }
+		public DateTimeOffset? CurrentTime { get; set; }
 
 		/// <summary>
 		/// Текущая цена базового актива. Если она установлено, то <see cref="IBlackScholes"/> использует эту цену.
@@ -276,7 +276,7 @@ namespace StockSharp.Xaml
 			decimal maxCallOI = 0;
 			decimal maxPutOI = 0;
 
-			var now = CurrentTime ?? TimeHelper.Now;
+			var now = CurrentTime ?? TimeHelper.NowWithOffset;
 
 			foreach (var row in rows)
 			{

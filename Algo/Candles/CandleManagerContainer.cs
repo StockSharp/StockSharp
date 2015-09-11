@@ -107,7 +107,7 @@ namespace StockSharp.Algo.Candles
 				_byTime.SyncGet(d => d.RemoveWhere(p => p.Key.UtcTicks < _firstCandleTime));
 			}
 
-			public IEnumerable<Candle> GetCandles(DateTime time)
+			public IEnumerable<Candle> GetCandles(DateTimeOffset time)
 			{
 				var candles = _byTime.TryGetValue(time);
 
@@ -179,7 +179,7 @@ namespace StockSharp.Algo.Candles
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="time">Период свечи.</param>
 		/// <returns>Свечи.</returns>
-		public IEnumerable<Candle> GetCandles(CandleSeries series, DateTime time)
+		public IEnumerable<Candle> GetCandles(CandleSeries series, DateTimeOffset time)
 		{
 			var info = GetInfo(series);
 			return info != null ? info.GetCandles(time) : Enumerable.Empty<Candle>();

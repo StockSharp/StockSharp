@@ -254,7 +254,7 @@ namespace SampleSMA
 				_candleManager.Start(series);
 
 				// вычисляем временные отрезки текущей свечи
-				var bounds = _timeFrame.GetCandleBounds(series.Security.ToExchangeTime(_trader.CurrentTime));
+				var bounds = _timeFrame.GetCandleBounds(_trader.CurrentTime);
 
 				candles = _candleManager.Container.GetCandles(series, new Range<DateTimeOffset>(lastCandleTime + _timeFrame, bounds.Min));
 

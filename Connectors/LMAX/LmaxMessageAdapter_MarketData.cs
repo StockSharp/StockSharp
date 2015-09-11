@@ -101,7 +101,7 @@ namespace StockSharp.LMAX
 							PriceStep = cells[4].To<decimal>(),
 							//security.MinStepPrice = cells[5].To<decimal>(),
 							Currency = cells[8].To<CurrencyTypes>(),
-							ExpiryDate = cells[7].IsEmpty() ? (DateTime?)null : cells[7].ToDateTime("dd/MM/yyyy HH:mm"),
+							ExpiryDate = cells[7].IsEmpty() ? (DateTimeOffset?)null : cells[7].ToDateTime("dd/MM/yyyy HH:mm").ApplyTimeZone(TimeZoneInfo.Utc),
 							OriginalTransactionId = lookupMsg.TransactionId
 						});
 					}
@@ -156,7 +156,7 @@ namespace StockSharp.LMAX
 					VolumeStep = instrument.OrderBook.QuantityIncrement,
 					Multiplier = instrument.Contract.ContractSize,
 					Currency = instrument.Contract.Currency.To<CurrencyTypes>(),
-					ExpiryDate = instrument.Calendar.ExpiryTime,
+					ExpiryDate = instrument.Calendar.ExpiryTime == null ? (DateTimeOffset?)null : instrument.Calendar.ExpiryTime.Value.ApplyTimeZone(TimeZoneInfo.Utc),
 					SecurityType = type,
 					OriginalTransactionId = transactionId,
 				});
@@ -334,7 +334,7 @@ namespace StockSharp.LMAX
 									var message = new TimeFrameCandleMessage
 									{
 										OriginalTransactionId = transactionId.Value,
-										OpenTime = TimeHelper.GregorianStart.AddMilliseconds(cells[0].To<long>()),
+										OpenTime = TimeHelper.GregorianStart.AddMilliseconds(cells[0].To<long>()).ApplyTimeZone(TimeZoneInfo.Utc),
 										IsFinished = index++ == (rows.Length - 2),
 										State = CandleStates.Finished,
 									};

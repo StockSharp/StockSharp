@@ -73,7 +73,7 @@ namespace StockSharp.Oanda
 							{
 								//OriginalTransactionId = message.TransactionId,
 								SecurityId = message.SecurityId,
-								ServerTime = TimeHelper.GregorianStart.AddSeconds(item.TimeStamp),
+								ServerTime = TimeHelper.GregorianStart.AddSeconds(item.TimeStamp).ApplyTimeZone(TimeZoneInfo.Utc),
 								Headline = item.Title,
 								Story = "unit={0} curr={1} market={2} forecast={3} previous={4} actual={5}"
 									.Put(item.Unit, item.Currency, item.Market, item.Forecast, item.Previous, item.Actual),

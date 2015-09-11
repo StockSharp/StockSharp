@@ -354,7 +354,7 @@ namespace StockSharp.Xaml
 				{
 					if (expiryDate == null || expiryDate == DateTimeOffset.MaxValue)
 						return "GTC";
-					else if (expiryDate == DateTimeOffset.Now.Date)
+					else if (expiryDate.Value.DateTime == DateTime.Today)
 						return "GTD";
 					else
 						return expiryDate.Value.LocalDateTime.ToString("d");

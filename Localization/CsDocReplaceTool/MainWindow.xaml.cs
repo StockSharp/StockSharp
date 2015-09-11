@@ -10,7 +10,9 @@ using Microsoft.Win32;
 using Ecng.Common;
 
 namespace CsDocReplaceTool {
-    /// <summary>
+	using System.Xml.Linq;
+
+	/// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
@@ -20,10 +22,11 @@ namespace CsDocReplaceTool {
         readonly Dictionary<string, StringResource> _resourcesDict = new Dictionary<string, StringResource>();
         readonly Dictionary<string, CodeXmlDoc> _newXmlDocDict = new Dictionary<string, CodeXmlDoc>();
         readonly Dictionary<string, CodeXmlDoc> _oldXmlDocDict = new Dictionary<string, CodeXmlDoc>();
+		readonly Dictionary<string, XElement[]> _docElements = new Dictionary<string, XElement[]>();
 
         VSSolution _solution;
 
-        string _resourcesFile, _csvDocFile, _solutionFile;
+        string _resourcesFile, _csvDocFile, _solutionFile, _xmlFile;
         bool _analysisDone, _rewriteDone;
 
         bool DataIsLoaded {get {return _resourcesFile != null && _csvDocFile != null && _solutionFile != null;}}
@@ -38,119 +41,204 @@ namespace CsDocReplaceTool {
                 if(_solution != null)
                     _solution.Dispose();
             };
+
+	        const string proj = "Licensing";
+
+			_xmlFile = Path.GetFullPath(@"..\..\..\..\..\StockSharpReleases\StockSharp_4.3.10\References\StockSharp.{0}.xml".Put(proj));
+			FillXmlFile();
+
+	        DoResourcesCsv(Path.GetFullPath(@"..\..\..\text.csv"));
+			DoDocCsv(Path.GetFullPath(@"..\..\..\XmlComments\StockSharp.{0}.csv".Put(proj)));
+			DoSolution(Path.GetFullPath(@"..\..\..\..\..\StockSharp (GitLab)\StockSharp.sln"));
+			_btnAnalysis_OnClick(this, new RoutedEventArgs());
+
+			File.Delete("missed_translation.txt");
         }
 
-        async void SelectResourcesCsv_Click(object sender, RoutedEventArgs e) {
+		private static string GetPath(XElement tag)
+		{
+			var basic = tag.Parent.Attribute("name").Value + "/" + tag.Name;
+
+			var nameAttr = tag.Attribute("name");
+			if (nameAttr != null)
+				return basic + "/" + nameAttr.Value;
+			else
+				return basic;
+		}
+
+		private static string CleanString(string s)
+		{
+			var ss = s.Split('\n').Select(s1 => s1.Trim()).Where(s1 => !s1.IsEmpty()).ToArray();
+			var v = ss.Join(" ").Trim().TrimEnd('.').Trim();
+			return v;
+		}
+
+		private void FillXmlFile()
+		{
+			var root = XDocument.Load(_xmlFile);
+			var members = root.Elements("doc").Elements("members").Elements("member");
+
+			foreach (var member in members)
+			{
+				var tags = member.Elements();
+
+				var memberName = member.Attribute("name").Value;
+
+				if (memberName.ContainsIgnoreCase("XamlGeneratedNamespace"))
+					continue;
+
+				var summary = member.Elements("summary").ToArray();
+
+				if (memberName.StartsWith("T:") && summary.Count() == 2 && memberName.EndsWith(CleanString(summary.Last().Value)))
+				{
+					//Console.WriteLine(member.Attribute("name"));
+					tags = tags.Take(1);
+				}
+
+				foreach (var tag in tags)
+				{
+					var tagPath = GetPath(tag);
+
+					var tagChildren = tag.Elements().ToArray();
+
+					_docElements.Add(tagPath, tagChildren);
+				}
+			}
+		}
+
+        void SelectResourcesCsv_Click(object sender, RoutedEventArgs e) {
             var filePath = SelectCsvFile(_tbResourcesCsvText.Text, "Выбор CSV файла ресурсов", "CSV files (*.csv)|*.csv");
             if(string.IsNullOrEmpty(filePath))
                 return;
 
-            _resourcesFile = null;
-            _analysisDone = false;
-
-            _tbResourcesCsvText.Text = filePath;
-            _resourcesDict.Clear();
-
-            await BlockInputAction(() => {
-                var csv = ReadCsvFile(filePath, 3);
-                foreach(var arr in csv) {
-                    var key = arr[0].Trim();
-                    _resourcesDict.Add(key, new StringResource(key, arr[1], arr[2]));
-                }
-
-                if(_resourcesDict.Count > 0)
-                    _resourcesFile = filePath;
-
-                return Task.FromResult(0);
-            }, "Загрузка CSV ресурсов...");
+			DoResourcesCsv(filePath);
         }
 
-        async void SelectDocCsv_Click(object sender, RoutedEventArgs e) {
+		async private void DoResourcesCsv(string filePath)
+	    {
+			_resourcesFile = null;
+			_analysisDone = false;
+
+			_tbResourcesCsvText.Text = filePath;
+			_resourcesDict.Clear();
+
+			await BlockInputAction(() =>
+			{
+				var csv = ReadCsvFile(filePath, 3);
+				foreach (var arr in csv)
+				{
+					var key = arr[0].Trim();
+					_resourcesDict.Add(key, new StringResource(key, arr[1], arr[2]));
+				}
+
+				if (_resourcesDict.Count > 0)
+					_resourcesFile = filePath;
+
+				return Task.FromResult(0);
+			}, "Загрузка CSV ресурсов...");
+	    }
+
+        void SelectDocCsv_Click(object sender, RoutedEventArgs e) {
             var filePath = SelectCsvFile(_tbDocDsvText.Text, "Выбор CSV файла со структурой XML документации", "CSV files (*.csv)|*.csv");
             if(string.IsNullOrEmpty(filePath))
                 return;
 
-            _csvDocFile = null;
-            _analysisDone = false;
-
-            _tbDocDsvText.Text = filePath;
-            _newXmlDocDict.Clear();
-
-            await BlockInputAction(() => {
-                var csv = ReadCsvFile(filePath, 2);
-                foreach(var arr in csv) {
-                    var docPartId = arr[0].Trim();
-                    var slashIndex = docPartId.IndexOf('/');
-
-                    if(slashIndex < 0) {
-                        Log("WARNING: в строке отсутствует символ /: {0}", docPartId);
-                        continue;
-                    }
-
-                    var symbolId = docPartId.Substring(0, slashIndex);
-                    var xmlPath = docPartId.Substring(slashIndex);
-
-                    CodeXmlDoc doc;
-                    if(!_newXmlDocDict.TryGetValue(symbolId, out doc))
-                        _newXmlDocDict.Add(symbolId, doc = new CodeXmlDoc(symbolId));
-
-                    doc.AddDocPart(xmlPath, arr[1].Trim());
-                }
-
-                if(_newXmlDocDict.Count > 0)
-                    _csvDocFile = filePath;
-
-                return Task.FromResult(0);
-            }, "Загрузка CSV файла со структурой XML документации");
-
-            //var paths = string.Join("\n", _newXmlDocDict.Keys.Select(k => k.Substring(k.IndexOf('/'))).Distinct());
-            //File.WriteAllText("paths.txt", paths);
-            //MessageBox.Show(this, "paths:\n" + , "paths");
+	        DoDocCsv(filePath);
         }
 
-        async void SelectSolution_Click(object sender, RoutedEventArgs e) {
+	    async private void DoDocCsv(string filePath)
+	    {
+			_csvDocFile = null;
+			_analysisDone = false;
+
+			_tbDocDsvText.Text = filePath;
+			_newXmlDocDict.Clear();
+
+			await BlockInputAction(() =>
+			{
+				var csv = ReadCsvFile(filePath, 2);
+				foreach (var arr in csv)
+				{
+					var docPartId = arr[0].Trim();
+					var slashIndex = docPartId.IndexOf('/');
+
+					if (slashIndex < 0)
+					{
+						Log("WARNING: в строке отсутствует символ /: {0}", docPartId);
+						continue;
+					}
+
+					var symbolId = docPartId.Substring(0, slashIndex);
+					var xmlPath = docPartId.Substring(slashIndex);
+
+					CodeXmlDoc doc;
+					if (!_newXmlDocDict.TryGetValue(symbolId, out doc))
+						_newXmlDocDict.Add(symbolId, doc = new CodeXmlDoc(symbolId));
+
+					doc.AddDocPart(xmlPath, arr[1].Trim());
+				}
+
+				if (_newXmlDocDict.Count > 0)
+					_csvDocFile = filePath;
+
+				return Task.FromResult(0);
+			}, "Загрузка CSV файла со структурой XML документации");
+
+			//var paths = string.Join("\n", _newXmlDocDict.Keys.Select(k => k.Substring(k.IndexOf('/'))).Distinct());
+			//File.WriteAllText("paths.txt", paths);
+			//MessageBox.Show(this, "paths:\n" + , "paths");
+	    }
+
+	    void SelectSolution_Click(object sender, RoutedEventArgs e) {
             var filePath = SelectCsvFile(_tbSlnText.Text, "Выбор файла решения Visual Studio", "Visual Studio solutions (*.sln)|*.sln");
             if(string.IsNullOrEmpty(filePath))
                 return;
 
-            if(_solution != null) {
-                _solution.Dispose();
-                _solution = null;
-            }
+		    DoSolution(filePath);
+	    }
 
-            _solutionFile = null;
-            _analysisDone = false;
-            _rewriteDone = false;
+		async void DoSolution(string filePath)
+	    {
+			if (_solution != null)
+			{
+				_solution.Dispose();
+				_solution = null;
+			}
 
-            _tbSlnText.Text = filePath;
-            var fileName = Path.GetFileName(filePath);
+			_solutionFile = null;
+			_analysisDone = false;
+			_rewriteDone = false;
 
-            await BlockInputAction(async () => {
-                Log("Загрузка решения {0}...", filePath);
+			_tbSlnText.Text = filePath;
+			var fileName = Path.GetFileName(filePath);
 
-                _solution = new VSSolution(filePath);
+			await BlockInputAction(async () =>
+			{
+				Log("Загрузка решения {0}...", filePath);
 
-                await _solution.LoadSolution();
+				_solution = new VSSolution(filePath);
 
-                Log("Загружено решение {0}. {1} проектов, {2} файлов.", fileName, _solution.NumProjects, _solution.NumDocuments);
+				await _solution.LoadSolution();
 
-                var progress = new Progress<string>(msg => {Dispatcher.MyGuiAsync(() => { _busyIndicator.BusyContent = msg; });});
+				Log("Загружено решение {0}. {1} проектов, {2} файлов.", fileName, _solution.NumProjects, _solution.NumDocuments);
 
-                await _solution.CreateSemanticModel(progress);
+				var progress = new Progress<string>(msg => { Dispatcher.MyGuiAsync(() => { _busyIndicator.BusyContent = msg; }); });
 
-                await _solution.CreateSymbolsTable(progress);
+				await _solution.CreateSemanticModel(progress);
 
-                // build and error check doesn't work for WPF projects
-                // if(CheckSolutionErrors())
-                //     return;
+				await _solution.CreateSymbolsTable(progress);
 
-                if(_solution.NumProjects > 0 && _solution.NumDocuments > 0)
-                    _solutionFile = fileName;
+				// build and error check doesn't work for WPF projects
+				// if(CheckSolutionErrors())
+				//     return;
 
-            }, "Загрузка " + fileName + "...");
-        }
+				if (_solution.NumProjects > 0 && _solution.NumDocuments > 0)
+					_solutionFile = fileName;
 
-        async void _btnAnalysis_OnClick(object sender, RoutedEventArgs args) {
+			}, "Загрузка " + fileName + "...");
+	    }
+
+	    async void _btnAnalysis_OnClick(object sender, RoutedEventArgs args) {
             if(!DataIsLoaded)
                 return;
 
@@ -217,7 +305,7 @@ namespace CsDocReplaceTool {
             await BlockInputAction(async () => {
                 var progress = new Progress<string>(msg => {Dispatcher.MyGuiAsync(() => { _busyIndicator.BusyContent = msg; });});
 
-                var numUpdatedFiles = await _solution.RewriteDocuments(progress, _oldXmlDocDict, _newXmlDocDict, _oldXmlDocDict.Keys.ToArray(), _resourcesDict);
+				var numUpdatedFiles = await _solution.RewriteDocuments(progress, _oldXmlDocDict, _newXmlDocDict, _oldXmlDocDict.Keys.ToArray(), _resourcesDict, _docElements);
 
                 _rewriteDone = numUpdatedFiles > 0;
             }, "Замена xml документации...");

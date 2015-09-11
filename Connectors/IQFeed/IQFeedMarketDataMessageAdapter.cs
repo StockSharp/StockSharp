@@ -324,7 +324,7 @@ namespace StockSharp.IQFeed
 							if (mdMsg.IsSubscribe)
 							{
 								// streaming
-								if (from == DateTimeOffset.MaxValue && mdMsg.Count == 0)
+								if (from == DateTime.MaxValue && mdMsg.Count == 0)
 								{
 									string strArg, intervalType;
 									GetCandleParams(mdMsg.DataType, mdMsg.Arg, out strArg, out intervalType);
@@ -970,7 +970,7 @@ namespace StockSharp.IQFeed
 						else// if (tf == TimeSpan.FromDays(7) || tf.Ticks == TimeHelper.TicksPerMonth)
 						{
 							candleMsg.CloseTime -= TimeSpan.FromTicks(1);
-							candleMsg.OpenTime = ((DateTimeOffset)tf.GetCandleBounds(candleMsg.CloseTime.ToLocalTime(TimeHelper.Est)).Min).Convert(TimeHelper.Est);
+							candleMsg.OpenTime = tf.GetCandleBounds(candleMsg.CloseTime).Min;
 						}
 					}
 					else

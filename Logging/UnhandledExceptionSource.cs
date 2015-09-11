@@ -32,12 +32,12 @@ namespace StockSharp.Logging
 
 		private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			RaiseLog(new LogMessage(this, TimeHelper.Now, LogLevels.Error, () => e.ExceptionObject.ToString()));
+			RaiseLog(new LogMessage(this, TimeHelper.NowWithOffset, LogLevels.Error, () => e.ExceptionObject.ToString()));
 		}
 
 		private void OnTaskSchedulerException(object sender, UnobservedTaskExceptionEventArgs e)
 		{
-			RaiseLog(new LogMessage(this, TimeHelper.Now, LogLevels.Error, () => e.Exception.ToString()));
+			RaiseLog(new LogMessage(this, TimeHelper.NowWithOffset, LogLevels.Error, () => e.Exception.ToString()));
 			e.SetObserved();
 		}
 

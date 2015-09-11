@@ -578,24 +578,24 @@ namespace StockSharp.Algo
 			return currentPrice * position.CurrentValue * security.StepPrice / security.PriceStep ?? 1;
 		}
 
-		/// <summary>
-		/// Получить текущее время с учетом часового пояса торговой площадки инструмента.
-		/// </summary>
-		/// <param name="connector">Подключение к торговой системе.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Текущее время.</returns>
-		public static DateTime GetMarketTime(this IConnector connector, Security security)
-		{
-			if (connector == null)
-				throw new ArgumentNullException("connector");
+		///// <summary>
+		///// Получить текущее время с учетом часового пояса торговой площадки инструмента.
+		///// </summary>
+		///// <param name="connector">Подключение к торговой системе.</param>
+		///// <param name="security">Инструмент.</param>
+		///// <returns>Текущее время.</returns>
+		//public static DateTime GetMarketTime(this IConnector connector, Security security)
+		//{
+		//	if (connector == null)
+		//		throw new ArgumentNullException("connector");
 
-			if (security == null)
-				throw new ArgumentNullException("security");
+		//	if (security == null)
+		//		throw new ArgumentNullException("security");
 
-			var localTime = connector.CurrentTime;
+		//	var localTime = connector.CurrentTime;
 
-			return security.ToExchangeTime(localTime);
-		}
+		//	return security.ToExchangeTime(localTime);
+		//}
 
 		/// <summary>
 		/// Проверить, является ли время торгуемым (началась ли сессия, не закончилась ли, нет ли клиринга).
@@ -605,28 +605,31 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true"/>, если торгуемое время, иначе, неторгуемое.</returns>
 		public static bool IsTradeTime(this ExchangeBoard board, DateTimeOffset time)
 		{
-			if (board == null)
-				throw new ArgumentNullException("board");
-
-			return board.WorkingTime.IsTradeTime(time.DateTime);
+			return board.ToMessage().IsTradeTime(time);
 		}
 
 		/// <summary>
 		/// Проверить, является ли время торгуемым (началась ли сессия, не закончилась ли, нет ли клиринга).
 		/// </summary>
-		/// <param name="workingTime">Информация о режиме работы биржи. Например, для FORTS будут значения 10:00-13:59, 14:03-18:49 и 19:00-23:49.</param>
+		/// <param name="board">Информация о площадке.</param>
 		/// <param name="time">Передаваемое время, которое нужно проверить.</param>
 		/// <returns><see langword="true"/>, если торгуемое время, иначе, неторгуемое.</returns>
-		public static bool IsTradeTime(this WorkingTime workingTime, DateTime time)
+		public static bool IsTradeTime(this BoardMessage board, DateTimeOffset time)
 		{
-			var isWorkingDay = workingTime.IsTradeDate(time.Date);
+			if (board == null)
+				throw new ArgumentNullException("board");
+
+			var exchangeTime = time.ToLocalTime(board.TimeZoneInfo);
+			var workingTime = board.WorkingTime;
+
+			var isWorkingDay = board.IsTradeDate(time);
 
 			if (!isWorkingDay)
 				return false;
 
-			var period = workingTime.GetPeriod(time);
+			var period = workingTime.GetPeriod(exchangeTime);
 
-			var tod = time.TimeOfDay;
+			var tod = exchangeTime.TimeOfDay;
 			return period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
 		}
 
@@ -639,32 +642,35 @@ namespace StockSharp.Algo
 		/// <returns><see langword="true"/>, если торгуемая дата, иначе, неторгуемая.</returns>
 		public static bool IsTradeDate(this ExchangeBoard board, DateTimeOffset date, bool checkHolidays = false)
 		{
-			return board.WorkingTime.IsTradeDate(date.DateTime, checkHolidays);
+			return board.ToMessage().IsTradeDate(date, checkHolidays);
 		}
 
 		/// <summary>
 		/// Проверить, является ли дата торгуемой.
 		/// </summary>
-		/// <param name="workingTime">Информация о режиме работы биржи.</param>
+		/// <param name="board">Информация о площадке.</param>
 		/// <param name="date">Передаваемая дата, которую необходимо проверить.</param>
 		/// <param name="checkHolidays">Проверять ли переданную дату на день недели (суббота и воскресенье являются выходными и для них будет возвращено <see langword="false"/>).</param>
 		/// <returns><see langword="true"/>, если торгуемая дата, иначе, неторгуемая.</returns>
-		public static bool IsTradeDate(this WorkingTime workingTime, DateTime date, bool checkHolidays = false)
+		public static bool IsTradeDate(this BoardMessage board, DateTimeOffset date, bool checkHolidays = false)
 		{
-			if (workingTime == null)
-				throw new ArgumentNullException("workingTime");
+			if (board == null)
+				throw new ArgumentNullException("board");
 
-			var period = workingTime.GetPeriod(date);
+			var exchangeTime = date.ToLocalTime(board.TimeZoneInfo);
+			var workingTime = board.WorkingTime;
+
+			var period = workingTime.GetPeriod(exchangeTime);
 
 			if ((period == null || period.Times.Length == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
 				return true;
 
 			bool isWorkingDay;
 
-			if (checkHolidays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday))
-				isWorkingDay = workingTime.SpecialWorkingDays.Contains(date.Date);
+			if (checkHolidays && (exchangeTime.DayOfWeek == DayOfWeek.Saturday || exchangeTime.DayOfWeek == DayOfWeek.Sunday))
+				isWorkingDay = workingTime.SpecialWorkingDays.Contains(exchangeTime.Date);
 			else
-				isWorkingDay = !workingTime.SpecialHolidays.Contains(date.Date);
+				isWorkingDay = !workingTime.SpecialHolidays.Contains(exchangeTime.Date);
 
 			return isWorkingDay;
 		}
@@ -1755,7 +1761,7 @@ namespace StockSharp.Algo
 		/// <param name="from">Дата, с которой нужно искать сделки.</param>
 		/// <param name="to">Дата, до которой нужно искать сделки.</param>
 		/// <returns>Отфильтрованные сделки.</returns>
-		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, DateTime from, DateTime to)
+		public static IEnumerable<Trade> Filter(this IEnumerable<Trade> trades, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (trades == null)
 				throw new ArgumentNullException("trades");
@@ -2047,20 +2053,20 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Получить T+N дату.
 		/// </summary>
-		/// <param name="time">Информация о режиме работы биржи.</param>
+		/// <param name="board">Информация о площадке.</param>
 		/// <param name="date">Начальная дата T.</param>
 		/// <param name="n">Размер N.</param>
 		/// <returns>Конечная дата T+N.</returns>
-		public static DateTime GetTPlusNDate(this WorkingTime time, DateTime date, int n)
+		public static DateTimeOffset GetTPlusNDate(this ExchangeBoard board, DateTimeOffset date, int n)
 		{
-			if (time == null)
-				throw new ArgumentNullException("time");
+			if (board == null)
+				throw new ArgumentNullException("board");
 
-			date = date.Date;
+			date = date.Date.ApplyTimeZone(date.Offset);
 
 			while (n > 0)
 			{
-				if (time.IsTradeDate(date))
+				if (board.IsTradeDate(date))
 					n--;
 
 				date = date.AddDays(1);
@@ -2069,19 +2075,19 @@ namespace StockSharp.Algo
 			return date;
 		}
 
-		/// <summary>
-		/// Перевести локальное время в биржевое.
-		/// </summary>
-		/// <param name="exchange">Информация о бирже.</param>
-		/// <param name="time">Локальное время.</param>
-		/// <returns>Время с биржевым сдвигом.</returns>
-		public static DateTime ToExchangeTime(this Exchange exchange, DateTimeOffset time)
-		{
-			if (exchange == null)
-				throw new ArgumentNullException("exchange");
+		///// <summary>
+		///// Перевести локальное время в биржевое.
+		///// </summary>
+		///// <param name="exchange">Информация о бирже.</param>
+		///// <param name="time">Локальное время.</param>
+		///// <returns>Время с биржевым сдвигом.</returns>
+		//public static DateTimeOffset ToExchangeTime(this Exchange exchange, DateTime time)
+		//{
+		//	if (exchange == null)
+		//		throw new ArgumentNullException("exchange");
 
-			return time.ToLocalTime(exchange.TimeZoneInfo);
-		}
+		//	return time.ToLocalTime(exchange.TimeZoneInfo).ApplyTimeZone(exchange.TimeZoneInfo);
+		//}
 
 		///// <summary>
 		///// Перевести локальное время в биржевое.
@@ -2098,25 +2104,25 @@ namespace StockSharp.Algo
 		//	return time.To(sourceZone, exchange.TimeZoneInfo);
 		//}
 
-		/// <summary>
-		/// Перевести локальное время в биржевое.
-		/// </summary>
-		/// <param name="security">Информация о инструменте.</param>
-		/// <param name="localTime">Локальное время.</param>
-		/// <returns>Время с биржевым сдвигом.</returns>
-		public static DateTime ToExchangeTime(this Security security, DateTimeOffset localTime)
-		{
-			if (security == null) 
-				throw new ArgumentNullException("security");
+		///// <summary>
+		///// Перевести локальное время в биржевое.
+		///// </summary>
+		///// <param name="security">Информация о инструменте.</param>
+		///// <param name="localTime">Локальное время.</param>
+		///// <returns>Время с биржевым сдвигом.</returns>
+		//public static DateTimeOffset ToExchangeTime(this Security security, DateTimeOffset localTime)
+		//{
+		//	if (security == null) 
+		//		throw new ArgumentNullException("security");
 
-			if (security.Board == null)
-				throw new ArgumentException(LocalizedStrings.Str903Params.Put(security.Id), "security");
+		//	if (security.Board == null)
+		//		throw new ArgumentException(LocalizedStrings.Str903Params.Put(security.Id), "security");
 
-			if (security.Board.Exchange == null)
-				throw new ArgumentException(LocalizedStrings.Str1216Params.Put(security.Id), "security");
+		//	if (security.Board.Exchange == null)
+		//		throw new ArgumentException(LocalizedStrings.Str1216Params.Put(security.Id), "security");
 
-			return security.Board.Exchange.ToExchangeTime(localTime);
-		}
+		//	return security.Board.Exchange.ToExchangeTime(localTime);
+		//}
 
 		///// <summary>
 		///// Перевести биржевое время в локальное.
@@ -2143,19 +2149,19 @@ namespace StockSharp.Algo
 		//	//return exchangeTime.To(exchange.TimeZoneInfo, TimeZoneInfo.Local);
 		//}
 
-		/// <summary>
-		/// Перевести биржевое время в UTC.
-		/// </summary>
-		/// <param name="exchange">Информация о бирже, из которой будет использоваться <see cref="Exchange.TimeZoneInfo"/>.</param>
-		/// <param name="exchangeTime">Биржевое время.</param>
-		/// <returns>Биржевое время в UTC.</returns>
-		public static DateTime ToUtc(this Exchange exchange, DateTime exchangeTime)
-		{
-			if (exchange == null)
-				throw new ArgumentNullException("exchange");
+		///// <summary>
+		///// Перевести биржевое время в UTC.
+		///// </summary>
+		///// <param name="exchange">Информация о бирже, из которой будет использоваться <see cref="Exchange.TimeZoneInfo"/>.</param>
+		///// <param name="exchangeTime">Биржевое время.</param>
+		///// <returns>Биржевое время в UTC.</returns>
+		//public static DateTime ToUtc(this Exchange exchange, DateTime exchangeTime)
+		//{
+		//	if (exchange == null)
+		//		throw new ArgumentNullException("exchange");
 
-			return TimeZoneInfo.ConvertTimeToUtc(exchangeTime, exchange.TimeZoneInfo);
-		}
+		//	return TimeZoneInfo.ConvertTimeToUtc(exchangeTime, exchange.TimeZoneInfo);
+		//}
 
 		/// <summary>
 		/// Вычислить задержку на основе разницы между серверным времени и локальным.
@@ -2210,7 +2216,7 @@ namespace StockSharp.Algo
 		/// <param name="from">Начало диапазона экспираций.</param>
 		/// <param name="to">Окончание диапазона экспираций.</param>
 		/// <returns>Даты экспирации.</returns>
-		public static IEnumerable<DateTime> GetExpiryDates(this DateTime from, DateTime to)
+		public static IEnumerable<DateTimeOffset> GetExpiryDates(this DateTime from, DateTime to)
 		{
 			if (from > to)
 				throw new ArgumentOutOfRangeException("from");
@@ -2229,8 +2235,9 @@ namespace StockSharp.Algo
 						case 9:
 						case 12:
 						{
-							var dt = new DateTime(year, month, 15);
-							while (!ExchangeBoard.Forts.WorkingTime.IsTradeDate(dt))
+							var dt = new DateTime(year, month, 15).ApplyTimeZone(ExchangeBoard.Forts.Exchange.TimeZoneInfo);
+
+							while (!ExchangeBoard.Forts.IsTradeDate(dt))
 							{
 								dt = dt.AddDays(1);
 							}

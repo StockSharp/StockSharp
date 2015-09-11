@@ -341,7 +341,7 @@ namespace StockSharp.InteractiveBrokers
 					// http://www.interactivebrokers.com/en/software/api/apiguide/java/currenttime.htm
 
 					var time = socket.ReadLongDateTime();
-					OnProcessTimeShift(TimeHelper.Now - time);
+					OnProcessTimeShift(TimeHelper.NowWithOffset - time);
 
 					break;
 				}

@@ -1524,7 +1524,7 @@ namespace StockSharp.Quik
 				var clientCode = func.Get<string>(DdeStopOrderColumns.ClientCode);
 
 				var isActiveTime = func.GetBool(DdeStopOrderColumns.ActiveTime);
-				var date = func.Get<DateTime>(DdeStopOrderColumns.Date);
+				var date = func.Get<DateTime>(DdeStopOrderColumns.Date).ApplyTimeZone(TimeHelper.Moscow);
 
 				var condition = new QuikOrderCondition
 				{
@@ -1636,7 +1636,7 @@ namespace StockSharp.Quik
 
 			//order.CancelTime = cancelTime == null ? null : order.Time.Date + cancelTime;
 			if (cancelTime != null)
-				message.ServerTime = message.ServerTime.Date + cancelTime.Value;
+				message.ServerTime = (message.ServerTime.Date + cancelTime.Value).ApplyTimeZone(message.ServerTime.Offset);
 
 			//TODO поддержка стопов через месседжи
 			//var derivedOrderId = func.GetZeroable<long>(DdeStopOrderColumns.DerivedOrderId);

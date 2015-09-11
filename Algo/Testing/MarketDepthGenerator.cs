@@ -330,7 +330,7 @@ namespace StockSharp.Algo.Testing
 			if (_currGenerations == 0 || _bestBidPrice == null || _bestAskPrice == null)
 				return null;
 
-			var isTradeTime = _boardDefinition.WorkingTime.IsTradeTime(message.LocalTime);
+			var isTradeTime = _boardDefinition.IsTradeTime(time);
 
 			var canProcess = GenerateDepthOnEachTrade && _newTrades
 				? isTradeTime

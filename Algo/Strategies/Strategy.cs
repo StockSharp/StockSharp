@@ -1596,7 +1596,7 @@ namespace StockSharp.Algo.Strategies
 		{
 			get
 			{
-				return Connector == null ? TimeHelper.Now : Connector.CurrentTime;
+				return Connector == null ? TimeHelper.NowWithOffset : Connector.CurrentTime;
 			}
 		}
 
@@ -2073,7 +2073,7 @@ namespace StockSharp.Algo.Strategies
 				if (date != _prevTradeDate)
 				{
 					_prevTradeDate = date;
-					_isPrevDateTradable = board.WorkingTime.IsTradeDate(_prevTradeDate.Date);
+					_isPrevDateTradable = board.IsTradeDate(_prevTradeDate);
 				}
 
 				if (!_isPrevDateTradable)

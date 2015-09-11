@@ -2,7 +2,6 @@
 {
 	using System.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Derivatives;
 	using StockSharp.BusinessEntities;
 
@@ -29,7 +28,7 @@
 
 		private void OnQuotesChanged()
 		{
-			DepthCtrl.UpdateDepth(_depth.ImpliedVolatility(Connector, Connector, _depth.Security.ToExchangeTime(Connector.CurrentTime)));
+			DepthCtrl.UpdateDepth(_depth.ImpliedVolatility(Connector, Connector, Connector.CurrentTime));
 		}
 
 		protected override void OnClosing(CancelEventArgs e)

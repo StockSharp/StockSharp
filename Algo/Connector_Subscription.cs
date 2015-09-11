@@ -390,7 +390,7 @@ namespace StockSharp.Algo
 								}
 								else
 								{
-									curr.Value.Elapsed = jumpInUtc - currSec.Board.Exchange.ToUtc(currSec.ToExchangeTime(_connector.CurrentTime));
+									curr.Value.Elapsed = jumpInUtc - _connector.CurrentTime.Convert(TimeZoneInfo.Utc);
 								}
 
 								underlyingSecurities.Add(Tuple.Create(curr.Value.Item1, curr.Value.Item2, curr.Value.Item1.ExpirationJumps.GetPrevSecurity(currSec), currSec));

@@ -10,7 +10,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
 
 namespace CsDocReplaceTool {
-    class VSSolution : IDisposable {
+	using System.Xml.Linq;
+
+	class VSSolution : IDisposable {
         readonly string _path;
         readonly Dictionary<string, ISymbol> _symbols = new Dictionary<string, ISymbol>(); 
         readonly Dictionary<string, SemanticModel> _semanticModelsDict = new Dictionary<string, SemanticModel>();
@@ -111,7 +113,8 @@ namespace CsDocReplaceTool {
             });
         }
 
-        public async Task<int> RewriteDocuments(IProgress<string> progress, Dictionary<string, CodeXmlDoc> oldXmlDocDict, Dictionary<string, CodeXmlDoc> newXmlDocDict, string[] idsToRewrite, Dictionary<string, StringResource> resourcesDict) {
+		public async Task<int> RewriteDocuments(IProgress<string> progress, Dictionary<string, CodeXmlDoc> oldXmlDocDict, Dictionary<string, CodeXmlDoc> newXmlDocDict, string[] idsToRewrite, Dictionary<string, StringResource> resourcesDict, Dictionary<string, XElement[]> docElements)
+		{
             return await Task.Run(() => {
                 var numUpdatedFiles = 0;
 
@@ -221,7 +224,7 @@ namespace CsDocReplaceTool {
                                 newTriviaList.Add(endLineTrivia);
 
                             var newDoc = newXmlDocDict[id];
-                            var newLines = newDoc.GetDocumentComments(resourcesDict);
+							var newLines = newDoc.GetDocumentComments(resourcesDict, docElements);
 
                             foreach(var commentLine in newLines) {
                                 newTriviaList.Add(indentTrivia);

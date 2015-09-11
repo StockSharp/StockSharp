@@ -38,7 +38,7 @@
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="time">Период свечи.</param>
 		/// <returns>Свечи.</returns>
-		IEnumerable<Candle> GetCandles(CandleSeries series, DateTime time);
+		IEnumerable<Candle> GetCandles(CandleSeries series, DateTimeOffset time);
 
 		/// <summary>
 		/// Получить для серии все ассоциированные с ней свечи.

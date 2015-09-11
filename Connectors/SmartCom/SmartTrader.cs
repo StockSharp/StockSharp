@@ -207,7 +207,7 @@ namespace StockSharp.SmartCom
 
 			using (new Scope<CandleSeries>(series, false))
 			{
-				to = timeFrame.GetCandleBounds(series.Security.ToExchangeTime(CurrentTime)).Min;
+				to = timeFrame.GetCandleBounds(CurrentTime).Min;
 
 				if (from >= (to - timeFrame))
 					from = to - timeFrame;

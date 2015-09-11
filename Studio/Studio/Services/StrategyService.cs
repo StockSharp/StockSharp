@@ -135,7 +135,7 @@ namespace StockSharp.Studio.Services
 				if (exchangeBoard == null)
 					return;
 
-				if (time <= exchangeBoard.Exchange.ToExchangeTime(_connectTime))
+				if (time.LocalDateTime <= _connectTime)
 					return;
 
 				_isInitialization = false;

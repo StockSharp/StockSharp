@@ -45,7 +45,7 @@ namespace StockSharp.Algo.Candles
 			_security = security;
 			_candleType = candleType;
 			_arg = arg;
-			_workingTime = security.CheckExchangeBoard().WorkingTime;
+			WorkingTime = security.CheckExchangeBoard().WorkingTime;
 		}
 
 		private Security _security;
@@ -93,16 +93,10 @@ namespace StockSharp.Algo.Candles
 			}
 		}
 
-		private WorkingTime _workingTime;
-
 		/// <summary>
 		/// Граница времени, в пределах которой должны транслироваться свечи для данной серии.
 		/// </summary>
-		public virtual WorkingTime WorkingTime
-		{
-			get { return _workingTime; }
-			set { _workingTime = value; }
-		}
+		public WorkingTime WorkingTime { get; set; }
 
 		private ICandleManager _candleManager;
 

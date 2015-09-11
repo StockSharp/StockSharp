@@ -4,7 +4,13 @@ using System.Linq;
 using System.Xml;
 
 namespace CsDocReplaceTool {
-    class CodeXmlDoc {
+	using System.IO;
+	using System.Text.RegularExpressions;
+	using System.Xml.Linq;
+
+	using Ecng.Common;
+
+	class CodeXmlDoc {
         const string NameSummary    = "summary";
         const string NameTypeParam  = "typeparam";
         const string NameParam      = "param";
@@ -20,6 +26,7 @@ namespace CsDocReplaceTool {
             NameRemarks
         };
 
+		static HashSet<string> _missedTranslations = new HashSet<string>();
         readonly Dictionary<string, string> _docParts = new Dictionary<string, string>();
 
         public string SymbolId {get {return _symbolId;}}
@@ -79,7 +86,8 @@ namespace CsDocReplaceTool {
             }
         }
 
-        public IEnumerable<string> GetDocumentComments(Dictionary<string, StringResource> resourcesDict) {
+		public IEnumerable<string> GetDocumentComments(Dictionary<string, StringResource> resourcesDict, Dictionary<string, XElement[]> docElements)
+		{
             var result = new List<string>();
             var sortedKeys = GetSortedValuesWithType();
 
@@ -87,7 +95,62 @@ namespace CsDocReplaceTool {
                 var elementName = t.Item1;
                 var keykey = t.Item2;
 
-                var newText = resourcesDict[_docParts[keykey]].Key; // todo: replace with .Eng
+	            var r = resourcesDict[_docParts[keykey]];
+
+				if (r.Rus == r.Eng && _missedTranslations.Add(r.Rus))
+	            {
+					File.AppendAllLines("missed_translation.txt", new[] { r.Rus });
+					MainWindow.Instance.Log("WARNING: '{0}' не имеет перевода", r.Rus);
+	            }
+
+                var newText = r.Eng;
+
+	            if (!newText.EndsWith("."))
+		            newText += ".";
+
+				newText = newText.Put(docElements[_symbolId + keykey].Select(x =>
+				{
+					if (x.Name != "see")
+						return x;
+
+					var attr = x.Attribute("cref");
+
+					if (attr == null)
+						return x;
+
+					var cref = attr.Value;
+
+					var ind = cref.LastIndexOf('.');
+					if (ind != -1)
+					{
+						if (!cref.StartsWith("T:"))
+						{
+							var ind2 = cref.LastIndexOf('.', ind - 1);
+
+							if (ind2 != -1)
+								ind = ind2;
+						}
+
+						cref = cref.Remove(0, ind + 1);
+					}
+
+					var match = Regex.Match(cref, @"`(?<count>\d+)$");
+					if (match.Success)
+					{
+						var group = match.Groups["count"];
+						var paramCount = group.Value.To<int>();
+						cref = cref.Substring(0, group.Index - 1) + "{";
+
+						if (paramCount == 1)
+							cref += "T";
+						else
+							cref += Enumerable.Repeat("T", paramCount).Select((v, i) => v + (i + 1)).Join(",");
+						
+						cref += "}";
+					}
+
+					return (object)"<see cref=\"{0}\"/>".Put(cref);
+				}).ToArray());
 
                 switch(elementName) {
                     case NameSummary:

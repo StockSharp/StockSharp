@@ -99,7 +99,7 @@ namespace StockSharp.Hydra
 					return;
 
 				ErrorEmailSent = true;
-				base.OnWriteMessage(new LogMessage(_parent._logManager.Application, TimeHelper.Now, LogLevels.Error, LocalizedStrings.Str2940Params.Put(maxCount)));
+				base.OnWriteMessage(new LogMessage(_parent._logManager.Application, TimeHelper.NowWithOffset, LogLevels.Error, LocalizedStrings.Str2940Params.Put(maxCount)));
 			}
 		}
 

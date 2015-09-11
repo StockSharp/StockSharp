@@ -470,7 +470,7 @@ namespace StockSharp.Algo.Storages
 
 		private static DateTimeOffset ParseTime(string str, DateTime date)
 		{
-			return (date + str.ToDateTime(_timeFormat).TimeOfDay).ChangeKind(DateTimeKind.Utc);
+			return (date + str.ToDateTime(_timeFormat).TimeOfDay).ApplyTimeZone(TimeZoneInfo.Utc);
 		}
 	}
 }

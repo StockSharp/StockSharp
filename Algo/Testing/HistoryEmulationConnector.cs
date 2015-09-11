@@ -581,7 +581,7 @@ namespace StockSharp.Algo.Testing
 					var dates = _historyAdapter.StorageRegistry.GetCandleMessageStorage(tuple.Item1, series.Security, arg, _historyAdapter.Drive, _historyAdapter.StorageFormat).Dates;
 
 					if (dates.Any())
-						yield return new Range<DateTimeOffset>(dates.First(), dates.Last());
+						yield return new Range<DateTimeOffset>(dates.First().ApplyTimeZone(TimeZoneInfo.Utc), dates.Last().ApplyTimeZone(TimeZoneInfo.Utc));
 
 					break;
 				}

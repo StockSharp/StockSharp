@@ -249,7 +249,7 @@ namespace SampleOptionQuoting
 			var trade = asset.LastTrade;
 
 			if (trade != null)
-				PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.Now, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
+				PosChart.Refresh(trade.Price, asset.PriceStep ?? 1m, TimeHelper.NowWithOffset, asset.ExpiryDate ?? DateTimeOffset.Now.Date + TimeSpan.FromDays(1));
 		}
 
 		private Security SelectedOption

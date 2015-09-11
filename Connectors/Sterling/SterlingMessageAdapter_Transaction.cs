@@ -162,7 +162,7 @@
 				OrderId = msg.OrderRecordID,
 				TradeId = msg.TradeRecordID,
 				ServerTime = msg.TradeTime.StrToDateTime(),
-				LocalTime = msg.UpdateTime.StrToDateTime()
+				LocalTime = msg.UpdateTime.StrToDateTime().LocalDateTime
 			});
 		}
 
@@ -180,8 +180,8 @@
 				OrderState = msg.OrderStatus.ToOrderStates(),
 				OrderId = msg.OrderRecordID,
 				VisibleVolume = msg.Display,
-				ServerTime =  msg.OrderTime.StrToDateTime(),
-				LocalTime =  msg.UpdateTime.StrToDateTime()
+				ServerTime = msg.OrderTime.StrToDateTime(),
+				LocalTime = msg.UpdateTime.StrToDateTime().LocalDateTime
 			});
 		}
 

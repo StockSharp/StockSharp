@@ -36,7 +36,7 @@ namespace StockSharp.Studio.Controls
 		private decimal _minAssetPrice;
 		private decimal _maxAssetPrice;
 
-		private DateTime? _expiryDate;
+		private DateTimeOffset? _expiryDate;
 		private decimal? _minStrike;
 		private decimal? _maxStrike;
 

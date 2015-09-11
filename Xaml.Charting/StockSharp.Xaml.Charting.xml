@@ -1086,15 +1086,6 @@
       <param name="element">Элемент графика, представляющий свечи.</param>
       <param name="candle">Свеча.</param>
     </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTime,StockSharp.Xaml.Charting.IChartElement,System.Object)">
-      <summary>
-            Обработать новые данные.
-            </summary>
-      <param name="chart">График.</param>
-      <param name="time">Временная отметка формирования новых данных.</param>
-      <param name="element">Элемент графика.</param>
-      <param name="value">Значение.</param>
-    </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,StockSharp.Xaml.Charting.IChartElement,System.Object)">
       <summary>
             Обработать новые данные.
@@ -1112,14 +1103,6 @@
       <param name="time">Временная отметка формирования новых данных.</param>
       <param name="element">Элемент графика.</param>
       <param name="value">Значение.</param>
-    </member>
-    <member name="M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTime,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})">
-      <summary>
-            Обработать новые данные.
-            </summary>
-      <param name="chart">График.</param>
-      <param name="time">Временная отметка формирования новых данных.</param>
-      <param name="values">Новые данные.</param>
     </member>
     <member name="M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})">
       <summary>

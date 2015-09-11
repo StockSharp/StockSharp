@@ -194,7 +194,7 @@ namespace StockSharp.Quik.Lua
 				}
 			};
 
-			_fixServer.TransactionSession.UtcOffset = TimeHelper.Moscow.BaseUtcOffset;
+			_fixServer.TransactionSession.TimeZone = TimeHelper.Moscow;
 
 			_logManager.Application = new QuikNativeApp();
 

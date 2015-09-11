@@ -73,7 +73,7 @@ namespace StockSharp.Oanda
 
 		public static DateTimeOffset FromOanda(this long time)
 		{
-			return TimeHelper.GregorianStart + (time * TimeHelper.TicksPerMicrosecond).To<TimeSpan>();
+			return (TimeHelper.GregorianStart + (time * TimeHelper.TicksPerMicrosecond).To<TimeSpan>()).ApplyTimeZone(TimeZoneInfo.Utc);
 		}
 
 		public static IRestRequest AddParameterIfNotNull<T>(this IRestRequest request, string paramName, T? value)

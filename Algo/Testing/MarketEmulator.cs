@@ -1742,7 +1742,7 @@ namespace StockSharp.Algo.Testing
 				if (execMsg.OrderType == OrderTypes.Market && !board.IsSupportMarketOrders)
 					return LocalizedStrings.Str1170Params.Put(board.Code);
 
-				if (!board.WorkingTime.IsTradeTime(execMsg.ServerTime.Convert(board.TimeZoneInfo).DateTime))
+				if (!board.IsTradeTime(execMsg.ServerTime))
 					return LocalizedStrings.Str1171;
 			}
 

@@ -137,7 +137,7 @@ namespace StockSharp.Logging
 		[Browsable(false)]
 		public virtual DateTimeOffset CurrentTime
 		{
-			get { return TimeHelper.Now; }
+			get { return TimeHelper.NowWithOffset; }
 		}
 
 		/// <summary>

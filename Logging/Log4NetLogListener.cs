@@ -91,7 +91,7 @@ namespace StockSharp.Logging
 
 		private void Log(LogLevels level, string message, string source)
 		{
-			WriteMessages(new[] { new LogMessage(_sources.SafeAdd(source, key => new Source(key)), TimeHelper.Now, level, message) });
+			WriteMessages(new[] { new LogMessage(_sources.SafeAdd(source, key => new Source(key)), TimeHelper.NowWithOffset, level, message) });
 		}
 
 		/// <summary>

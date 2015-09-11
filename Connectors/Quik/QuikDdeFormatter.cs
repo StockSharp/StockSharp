@@ -415,7 +415,7 @@ namespace StockSharp.Quik
 
 		public static DateTimeOffset GetTime(this Func<DdeTableColumn, object> func, DdeTable table, DdeTableColumn dateColumn, DdeTableColumn timeColumn, DdeTableColumn mcsColumn)
 		{
-			return func.GetNullableTime(table, dateColumn, timeColumn, mcsColumn) ?? DateTime.MinValue;
+			return func.GetNullableTime(table, dateColumn, timeColumn, mcsColumn) ?? DateTimeOffset.MinValue;
 		}
 
 		public static DateTimeOffset? GetNullableTime(this Func<DdeTableColumn, object> func, DdeTable table, DdeTableColumn dateColumn, DdeTableColumn timeColumn, DdeTableColumn mcsColumn)

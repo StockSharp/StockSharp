@@ -372,7 +372,7 @@ namespace StockSharp.Xaml
 			if (changes == null)
 				return;
 
-			data.ApplyChanges(changes, TimeHelper.Now, TimeHelper.Now);
+			data.ApplyChanges(changes, TimeHelper.NowWithOffset, TimeHelper.Now);
 			data.RefreshLastTradeDirection();
 		}
 

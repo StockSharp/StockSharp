@@ -394,7 +394,7 @@ namespace StockSharp.Algo.Strategies
 				StorageRegistry = storageRegistry
 			}))
 			{
-				var from = array.Min(o => o.Time).Date;
+				var from = array.Min(o => o.Time);
 				var to = from.EndOfDay();
 
 				var strategy = new EquityStrategy(array, openedPositions) { Connector = connector };

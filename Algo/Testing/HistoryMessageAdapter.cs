@@ -500,7 +500,7 @@ namespace StockSharp.Algo.Testing
 					{
 						this.AddInfoLog("Loading {0} Events: {1}", loadDate.Date, LoadedMessageCount);
 
-						var enumerator = BasketStorage.Load(loadDate.Date);
+						var enumerator = BasketStorage.Load(loadDate.UtcDateTime.Date);
 
 						// хранилище за указанную дату содержит только время и клиринг
 						var noData = !enumerator.DataTypes.Except(messageTypes).Any();
@@ -511,7 +511,7 @@ namespace StockSharp.Algo.Testing
 							SendOutMessages(loadDate, enumerator);
 					}
 
-					loadDate = loadDate.Date.AddDays(1);
+					loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
 				}
 
 				SendOutMessage(new LastMessage { LocalTime = StopDate.LocalDateTime });
@@ -551,7 +551,7 @@ namespace StockSharp.Algo.Testing
 
 		private void SendOutMessages(DateTimeOffset loadDate, IEnumerator<Message> enumerator)
 		{
-			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.Date != loadDate;
+			var checkFromTime = loadDate.Date == StartDate.Date && loadDate.TimeOfDay != TimeSpan.Zero;
 			var checkToTime = loadDate.Date == StopDate.Date;
 
 			while (enumerator.MoveNext() && !_disconnecting)
@@ -615,7 +615,7 @@ namespace StockSharp.Algo.Testing
 				.Where(b => b.IsTradeDate(date, true))
 				.SelectMany(board =>
 				{
-					var period = board.WorkingTime.GetPeriod(board.Exchange.ToExchangeTime(date));
+					var period = board.WorkingTime.GetPeriod(date.ToLocalTime(board.Exchange.TimeZoneInfo));
 
 					return period == null || period.Times.Length == 0
 						? new[] { Tuple.Create(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay)) }
@@ -668,7 +668,7 @@ namespace StockSharp.Algo.Testing
 				{
 					var serverTime = GetTime(date, time);
 
-					if (serverTime.Date < date)
+					if (serverTime.Date < date.Date)
 						continue;
 
 					lastTime = serverTime.TimeOfDay;
@@ -689,12 +689,12 @@ namespace StockSharp.Algo.Testing
 
 			foreach (var range in ranges)
 			{
-				var time = GetTime(date.Date, range.Item2.Min);
-				if (time.Date >= date)
+				var time = GetTime(date, range.Item2.Min);
+				if (time.Date >= date.Date)
 					yield return new TimeMessage { ServerTime = time };
 
-				time = GetTime(date.Date, range.Item2.Max);
-				if (time.Date >= date)
+				time = GetTime(date, range.Item2.Max);
+				if (time.Date >= date.Date)
 					yield return new TimeMessage { ServerTime = time };
 
 				lastTime = range.Item2.Max;

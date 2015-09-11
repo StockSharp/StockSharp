@@ -877,7 +877,7 @@ namespace StockSharp.Algo
 
 				while (cs != null)
 				{
-					order.Security = cs.GetSecurity(order.Security.ToExchangeTime(CurrentTime));
+					order.Security = cs.GetSecurity(CurrentTime);
 					cs = order.Security as ContinuousSecurity;
 				}
 
@@ -1133,7 +1133,7 @@ namespace StockSharp.Algo
 			order.Connector = this;
 
 			if (order.Security is ContinuousSecurity)
-				order.Security = ((ContinuousSecurity)order.Security).GetSecurity(order.Security.ToExchangeTime(CurrentTime));
+				order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
 
 			order.LocalTime = CurrentTime.LocalDateTime;
 			order.State = OrderStates.Pending;

@@ -6,6 +6,7 @@ namespace StockSharp.Algo.Storages
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using MoreLinq;
 
@@ -76,7 +77,7 @@ namespace StockSharp.Algo.Storages
 				return from innerSecurity in _security.InnerSecurities
 					let range = _security.ExpirationJumps.GetActivityRange(innerSecurity)
 					//let dates = _getStorage(innerSecurity, Drive.Drive).Dates.ToArray()
-					from date in _getStorage(innerSecurity, Drive.Drive).Dates.Where(d => range.Contains(d))
+					from date in _getStorage(innerSecurity, Drive.Drive).Dates.Where(d => range.Contains(d.ApplyTimeZone(TimeZoneInfo.Utc)))
 					select date;
 			}
 		}
@@ -173,7 +174,7 @@ namespace StockSharp.Algo.Storages
 
 		private IMarketDataStorage<T> GetStorage(DateTime date)
 		{
-			return _getStorage(_security.GetSecurity(date), Drive.Drive);
+			return _getStorage(_security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc)), Drive.Drive);
 		}
 
 		IMarketDataStorage IContinuousSecurityMarketDataStorage.GetStorage(DateTime date)
@@ -232,6 +233,8 @@ namespace StockSharp.Algo.Storages
 
 		IEnumerableEx<TEntity> IMarketDataStorage<TEntity>.Load(DateTime date)
 		{
+			var security = _security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc));
+
 			if (typeof(TEntity) == typeof(Candle))
 			{
 				var messages = Load(date);
@@ -239,11 +242,11 @@ namespace StockSharp.Algo.Storages
 				return messages
 					.Cast<CandleMessage>()
 					.ToEx(messages.Count)
-					.ToCandles<TEntity>(_security.GetSecurity(date))
+					.ToCandles<TEntity>(security)
 					.ToEx(messages.Count);
 			}
 			else
-				return Load(date).ToEntities<TMessage, TEntity>(_security.GetSecurity(date));
+				return Load(date).ToEntities<TMessage, TEntity>(security);
 		}
 
 		IMarketDataSerializer<TEntity> IMarketDataStorage<TEntity>.Serializer
@@ -289,7 +292,7 @@ namespace StockSharp.Algo.Storages
 			var messages = Load(date);
 
 			return messages
-				.ToCandles<TCandle>(_security.GetSecurity(date))
+				.ToCandles<TCandle>(_security.GetSecurity(date.ApplyTimeZone(TimeZoneInfo.Utc)))
 				.Cast<Candle>()
 				.ToEx(messages.Count);
 		}

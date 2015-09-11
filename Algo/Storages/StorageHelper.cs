@@ -27,8 +27,8 @@ namespace StockSharp.Algo.Storages
 			{
 				private DateTime _currDate;
 				private readonly IMarketDataStorage<TData> _storage;
-				private readonly DateTimeOffset _from;
-				private readonly DateTimeOffset _to;
+				private readonly DateTime _from;
+				private readonly DateTime _to;
 				private readonly Func<TData, DateTimeOffset> _getTime;
 				private IEnumerator<TData> _current;
 
@@ -47,13 +47,13 @@ namespace StockSharp.Algo.Storages
 						throw new ArgumentOutOfRangeException("from");
 
 					_storage = storage;
-					_from = from;
-					_to = to;
+					_from = from.UtcDateTime;
+					_to = to.UtcDateTime;
 					_getTime = getTime;
 					_currDate = from.UtcDateTime.Date;
 
 					_checkBounds = true; // проверяем нижнюю границу
-					_bounds = new Range<DateTime>(from.UtcDateTime, to.UtcDateTime);
+					_bounds = new Range<DateTime>(_from, _to);
 				}
 
 				void IDisposable.Dispose()
@@ -99,9 +99,9 @@ namespace StockSharp.Algo.Storages
 
 						do
 						{
-							var time = _getTime(Current);
+							var time = _getTime(Current).UtcDateTime;
 
-							if (_bounds.Contains(time.UtcDateTime))
+							if (_bounds.Contains(time))
 								return true;
 
 							if (time > _to)
@@ -122,7 +122,7 @@ namespace StockSharp.Algo.Storages
 					}
 
 					_checkBounds = true;
-					_currDate = _from.UtcDateTime.Date;
+					_currDate = _from.Date;
 				}
 
 				public TData Current
@@ -224,7 +224,7 @@ namespace StockSharp.Algo.Storages
 			if (range == null)
 				return Enumerable.Empty<Range<DateTimeOffset>>();
 
-			return storage.Dates.Select(d => (DateTimeOffset)d).GetRanges(range.Min, range.Max);
+			return storage.Dates.Select(d => d.ApplyTimeZone(TimeZoneInfo.Utc)).GetRanges(range.Min, range.Max);
 		}
 
 		/// <summary>
@@ -284,7 +284,7 @@ namespace StockSharp.Algo.Storages
 						data.RemoveWhere(d =>
 						{
 							var time = info.GetTime(d);
-							return time < min || time > range.Max;
+							return time.UtcDateTime < min || time > range.Max;
 						});
 						storage.Delete(data);
 					}
@@ -313,8 +313,8 @@ namespace StockSharp.Algo.Storages
 			if (dates.IsEmpty())
 				return null;
 
-			var first = dates.First();
-			var last = dates.Last().EndOfDay();
+			var first = dates.First().ApplyTimeZone(TimeZoneInfo.Utc);
+			var last = dates.Last().EndOfDay().ApplyTimeZone(TimeZoneInfo.Utc);
 
 			return new Range<DateTimeOffset>(first, last).Intersect(new Range<DateTimeOffset>((from ?? first).Truncate(), (to ?? last).Truncate()));
 		}

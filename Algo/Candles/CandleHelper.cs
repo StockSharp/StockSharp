@@ -135,7 +135,7 @@
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="time">Период свечи.</param>
 		/// <returns>Свечи.</returns>
-		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, DateTime time) 
+		public static IEnumerable<TCandle> GetCandles<TCandle>(this CandleSeries series, DateTimeOffset time) 
 			where TCandle : Candle
 		{
 			return series.GetContainer().GetCandles(series, time).OfType<TCandle>();
@@ -197,7 +197,7 @@
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="time">Дата свечи.</param>
 		/// <returns>Найденная свеча (<see langword="null"/>, если свеча по заданным критериям не существует).</returns>
-		public static TimeFrameCandle GetTimeFrameCandle(this CandleSeries series, DateTime time)
+		public static TimeFrameCandle GetTimeFrameCandle(this CandleSeries series, DateTimeOffset time)
 		{
 			return series.GetCandles<TimeFrameCandle>().FirstOrDefault(c => c.OpenTime == time);
 		}
@@ -659,16 +659,16 @@
 			return manager.GetSeries<TCandle>(security, arg) != null;
 		}
 
-		/// <summary>
-		/// Получить время формирования свечи.
-		/// </summary>
-		/// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить время формирования свечи.</param>
-		/// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
-		/// <returns>Время формирования свечи.</returns>
-		public static DateTime GetCandleTime(this TimeSpan timeFrame, DateTime currentTime)
-		{
-			return timeFrame.GetCandleBounds(currentTime).Min;
-		}
+		///// <summary>
+		///// Получить время формирования свечи.
+		///// </summary>
+		///// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить время формирования свечи.</param>
+		///// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
+		///// <returns>Время формирования свечи.</returns>
+		//public static DateTimeOffset GetCandleTime(this TimeSpan timeFrame, DateTimeOffset currentTime)
+		//{
+		//	return timeFrame.GetCandleBounds(currentTime).Min;
+		//}
 
 		/// <summary>
 		/// Получить временные рамки свечи.
@@ -676,7 +676,7 @@
 		/// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить временные рамки.</param>
 		/// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
 		/// <returns>Временные рамки свечи.</returns>
-		public static Range<DateTime> GetCandleBounds(this TimeSpan timeFrame, DateTime currentTime)
+		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime)
 		{
 			return timeFrame.GetCandleBounds(currentTime, ExchangeBoard.Associated);
 		}
@@ -688,12 +688,12 @@
 		/// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
 		/// <param name="board">Информация о площадке, из которой будет взято время работы <see cref="ExchangeBoard.WorkingTime"/>.</param>
 		/// <returns>Временные рамки свечи.</returns>
-		public static Range<DateTime> GetCandleBounds(this TimeSpan timeFrame, DateTime currentTime, ExchangeBoard board)
+		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board)
 		{
 			if (board == null)
 				throw new ArgumentNullException("board");
 
-			return timeFrame.GetCandleBounds(currentTime, board.WorkingTime);
+			return timeFrame.GetCandleBounds(currentTime, board, board.WorkingTime);
 		}
 
 		private static readonly long _weekTf = TimeSpan.FromDays(7).Ticks;
@@ -703,18 +703,25 @@
 		/// </summary>
 		/// <param name="timeFrame">Тайм-фрейм, по которому необходимо получить временные рамки.</param>
 		/// <param name="currentTime">Текущее время, входящее в диапазон временных рамок.</param>
+		/// <param name="board">Информация о площадке.</param>
 		/// <param name="time">Информация о режиме работы биржи.</param>
 		/// <returns>Временные рамки свечи.</returns>
-		public static Range<DateTime> GetCandleBounds(this TimeSpan timeFrame, DateTime currentTime, WorkingTime time)
+		public static Range<DateTimeOffset> GetCandleBounds(this TimeSpan timeFrame, DateTimeOffset currentTime, ExchangeBoard board, WorkingTime time)
 		{
+			if (board == null)
+				throw new ArgumentNullException("board");
+
 			if (time == null)
 				throw new ArgumentNullException("time");
 
+			var exchangeTime = currentTime.ToLocalTime(board.Exchange.TimeZoneInfo);
+			Range<DateTime> bounds;
+
 			if (timeFrame.Ticks == _weekTf)
 			{
-				var monday = currentTime.StartOfWeek(DayOfWeek.Monday);
+				var monday = exchangeTime.StartOfWeek(DayOfWeek.Monday);
 
-				var endDay = currentTime.Date;
+				var endDay = exchangeTime.Date;
 
 				while (endDay.DayOfWeek != DayOfWeek.Sunday)
 				{
@@ -726,47 +733,53 @@
 					endDay = nextDay;
 				}
 
-				return new Range<DateTime>(monday, endDay.EndOfDay());
+				bounds = new Range<DateTime>(monday, endDay.EndOfDay());
 			}
 			else if (timeFrame.Ticks == TimeHelper.TicksPerMonth)
 			{
-				var month = new DateTime(currentTime.Year, currentTime.Month, 1);
-				return new Range<DateTime>(month, (month + TimeSpan.FromDays(month.DaysInMonth())).EndOfDay());
-			}
-
-			var period = time.GetPeriod(currentTime);
-
-			// http://stocksharp.com/forum/yaf_postsm13887_RealtimeEmulationTrader---niepravil-nyie-sviechi.aspx#post13887
-			// отсчет свечек идет от начала сессии и игнорируются клиринги
-			var startTime = period != null && period.Times.Length > 0 ? period.Times[0].Min : TimeSpan.Zero;
-
-			var length = (currentTime.TimeOfDay - startTime).To<long>();
-			var beginTime = currentTime.Date + (startTime + length.Floor(timeFrame.Ticks).To<TimeSpan>());
-
-			//последняя свеча должна заканчиваться в конец торговой сессии
-			var tempEndTime = beginTime.TimeOfDay + timeFrame;
-			TimeSpan stopTime;
-
-			if (period != null && period.Times.Length > 0)
-			{
-				var last = period.Times.LastOrDefault(t => tempEndTime > t.Min);
-				stopTime = last == null ? TimeSpan.MaxValue : last.Max;
+				var month = new DateTime(exchangeTime.Year, exchangeTime.Month, 1);
+				bounds = new Range<DateTime>(month, (month + TimeSpan.FromDays(month.DaysInMonth())).EndOfDay());
 			}
 			else
-				stopTime = TimeSpan.MaxValue;
+			{
+				var period = time.GetPeriod(exchangeTime);
 
-			var endTime = beginTime + timeFrame.Min(stopTime - beginTime.TimeOfDay);
+				// http://stocksharp.com/forum/yaf_postsm13887_RealtimeEmulationTrader---niepravil-nyie-sviechi.aspx#post13887
+				// отсчет свечек идет от начала сессии и игнорируются клиринги
+				var startTime = period != null && period.Times.Length > 0 ? period.Times[0].Min : TimeSpan.Zero;
 
-			// если currentTime попало на клиринг
-			if (endTime < beginTime)
-				endTime = beginTime.Date + tempEndTime;
+				var length = (exchangeTime.TimeOfDay - startTime).To<long>();
+				var beginTime = exchangeTime.Date + (startTime + length.Floor(timeFrame.Ticks).To<TimeSpan>());
 
-			var days = timeFrame.Days > 1 ? timeFrame.Days - 1 : 0;
+				//последняя свеча должна заканчиваться в конец торговой сессии
+				var tempEndTime = beginTime.TimeOfDay + timeFrame;
+				TimeSpan stopTime;
 
-			var min = beginTime.Truncate(TimeSpan.TicksPerMillisecond);
-			var max = endTime.Truncate(TimeSpan.TicksPerMillisecond).AddDays(days);
+				if (period != null && period.Times.Length > 0)
+				{
+					var last = period.Times.LastOrDefault(t => tempEndTime > t.Min);
+					stopTime = last == null ? TimeSpan.MaxValue : last.Max;
+				}
+				else
+					stopTime = TimeSpan.MaxValue;
 
-			return new Range<DateTime>(min, max);
+				var endTime = beginTime + timeFrame.Min(stopTime - beginTime.TimeOfDay);
+
+				// если currentTime попало на клиринг
+				if (endTime < beginTime)
+					endTime = beginTime.Date + tempEndTime;
+
+				var days = timeFrame.Days > 1 ? timeFrame.Days - 1 : 0;
+
+				var min = beginTime.Truncate(TimeSpan.TicksPerMillisecond);
+				var max = endTime.Truncate(TimeSpan.TicksPerMillisecond).AddDays(days);
+
+				bounds = new Range<DateTime>(min, max);
+			}
+
+			return new Range<DateTimeOffset>(
+				bounds.Min.ApplyTimeZone(board.Exchange.TimeZoneInfo),
+				bounds.Max.ApplyTimeZone(board.Exchange.TimeZoneInfo));
 		}
 
 		/// <summary>
@@ -954,8 +967,8 @@
 
 			var workingTime = board.WorkingTime;
 
-			var to = board.Exchange.ToExchangeTime(range.Max);
-			var from = board.Exchange.ToExchangeTime(range.Min);
+			var to = range.Max.ToLocalTime(board.Exchange.TimeZoneInfo);
+			var from = range.Min.ToLocalTime(board.Exchange.TimeZoneInfo);
 
 			var days = (int)(to.Date - from.Date).TotalDays;
 
@@ -1067,10 +1080,10 @@
 					foreach (var series in registeredSeries.Cache)
 					{
 						var tf = (TimeSpan)series.Arg;
-						var time = connector.CurrentTime.LocalDateTime;
-            			var bounds = tf.GetCandleBounds(time, series.Security.Board);
+						var time = connector.CurrentTime;
+						var bounds = tf.GetCandleBounds(time, series.Security.Board);
 
-						var beginTime = time - bounds.Min < offset ? bounds.Min - tf : bounds.Min;
+						var beginTime = (time - bounds.Min) < offset ? (bounds.Min - tf) : bounds.Min;
 						var finishTime = bounds.Max;
 
 						requestNewCandles(series, new Range<DateTimeOffset>(beginTime, finishTime));

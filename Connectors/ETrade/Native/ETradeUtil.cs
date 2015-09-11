@@ -11,13 +11,13 @@
 		public static DateTimeOffset ETradeTimestampToUTC(long timestamp)
 		{
 			if (timestamp <= 0)
-				return TimeHelper.GregorianStart;
+				return TimeHelper.GregorianStart.ApplyTimeZone(TimeZoneInfo.Utc);
 
 			// ETrade sandbox returns 13-digit timestamp (10 digits for second and 3 digits for millisecond)
 			return TimeHelper.GregorianStart.AddSeconds(
 				timestamp > 2000000000L
 				? timestamp / 1000d
-				: timestamp);
+				: timestamp).ApplyTimeZone(TimeZoneInfo.Utc);
 		}
 
 		public static bool IsOrderInFinalState(Order nativeOrder)

@@ -142,7 +142,7 @@ namespace StockSharp.Hydra.Ux
 				if (!CanProcess())
 					break;
 
-				if (_settings.IgnoreWeekends && !ExchangeBoard.Ux.WorkingTime.IsTradeDate(date, true))
+				if (_settings.IgnoreWeekends && !ExchangeBoard.Ux.IsTradeDate(date.ApplyTimeZone(Exchange.Ux.TimeZoneInfo), true))
 				{
 					this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 					continue;

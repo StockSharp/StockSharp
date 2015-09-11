@@ -1882,14 +1882,14 @@ namespace StockSharp.Algo
 				callback();
 			});
 
-			var marketTime = series.Security.ToExchangeTime(connector.CurrentTime);
-			var candleBounds = timeFrame.GetCandleBounds(marketTime, series.Security.Board);
+			var time = connector.CurrentTime;
+			var candleBounds = timeFrame.GetCandleBounds(time, series.Security.Board);
 
 			percent = percent / 100;
 
 			var startTime = candleBounds.Min + TimeSpan.FromMilliseconds(timeFrame.TotalMilliseconds * (double)percent);
 
-			var diff = startTime - marketTime;
+			var diff = startTime - time;
 
 			if (diff == TimeSpan.Zero)
 				timer.Interval(timeFrame);

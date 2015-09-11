@@ -36,7 +36,7 @@ namespace SampleSmartSMA
 		private CandleManager _candleManager;
 		private SmartTrader _trader;
 		private SmaStrategy _strategy;
-		private DateTime _lastHistoryCandle;
+		private DateTimeOffset _lastHistoryCandle;
 		private Security _lkoh;
 		private readonly ChartArea _area;
 		private ChartCandleElement _candlesElem;
@@ -272,7 +272,7 @@ namespace SampleSmartSMA
 				};
 				_area.Elements.Add(_shortMaElem);
 
-				var marketTime = _lkoh.ToExchangeTime(_trader.CurrentTime);
+				var marketTime = _trader.CurrentTime;
 
 				// начинаем получать свечи за период в 5 дней
 				_candleManager.Start(series, DateTime.Today - TimeSpan.FromDays(5), marketTime);

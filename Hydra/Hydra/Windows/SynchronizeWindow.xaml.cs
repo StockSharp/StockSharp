@@ -180,7 +180,7 @@ namespace StockSharp.Hydra.Windows
 						Progress.Value++;
 
 						if (isNew)
-							Logs.Messages.Add(new LogMessage(logSource, TimeHelper.Now, LogLevels.Info, LocalizedStrings.Str2930Params.Put(security)));
+							Logs.Messages.Add(new LogMessage(logSource, TimeHelper.NowWithOffset, LogLevels.Info, LocalizedStrings.Str2930Params.Put(security)));
 					});
 				}
 
@@ -234,7 +234,7 @@ namespace StockSharp.Hydra.Windows
 						this.GuiSync(() =>
 						{
 							Progress.Value++;
-							Logs.Messages.Add(new LogMessage(logSource, TimeHelper.Now, LogLevels.Info,
+							Logs.Messages.Add(new LogMessage(logSource, TimeHelper.NowWithOffset, LogLevels.Info,
 								LocalizedStrings.Str2931Params.Put(security, drive.Path)));
 						});
 					}

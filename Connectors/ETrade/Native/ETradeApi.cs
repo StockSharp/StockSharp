@@ -447,7 +447,7 @@ namespace StockSharp.ETrade.Native
 
 			if (order.ExpiryDate == null || order.ExpiryDate == DateTimeOffset.MaxValue)
 				request.orderTerm = "GOOD_UNTIL_CANCEL";
-			else if (order.ExpiryDate == DateTimeOffset.Now.Date)
+			else if (order.ExpiryDate.Value.DateTime == DateTime.Today)
 				request.orderTerm = "GOOD_FOR_DAY";
 			else
 				throw new InvalidOperationException(LocalizedStrings.Str3354);

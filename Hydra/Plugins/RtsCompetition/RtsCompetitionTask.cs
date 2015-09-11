@@ -119,7 +119,7 @@ namespace StockSharp.Hydra.RtsCompetition
 						if (!CanProcess())
 							break;
 
-						if (_settings.IgnoreWeekends && !ExchangeBoard.Forts.WorkingTime.IsTradeDate(date, true))
+						if (_settings.IgnoreWeekends && !ExchangeBoard.Forts.IsTradeDate(date.ApplyTimeZone(Exchange.Moex.TimeZoneInfo), true))
 						{
 							this.AddDebugLog(LocalizedStrings.WeekEndDate, date);
 							continue;

@@ -108,12 +108,12 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// ¬ерхний предел даты погашени€ инструмента.
 		/// </summary>
-		public DateTime? MaturityDateAbove { get; set; }
+		public DateTimeOffset? MaturityDateAbove { get; set; }
 
 		/// <summary>
 		/// Ќижний предел даты погашени€ инструмента.
 		/// </summary>
-		public DateTime? MaturityDateBelow { get; set; }
+		public DateTimeOffset? MaturityDateBelow { get; set; }
 
 		/// <summary>
 		/// ¬ерхний предел купонной ставки.

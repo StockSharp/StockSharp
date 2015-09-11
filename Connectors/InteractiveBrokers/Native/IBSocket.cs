@@ -291,7 +291,7 @@ namespace StockSharp.InteractiveBrokers.Native
 
 		public DateTimeOffset ReadLongDateTime()
 		{
-			return TimeHelper.GregorianStart.AddSeconds(ReadLong());
+			return TimeHelper.GregorianStart.AddSeconds(ReadLong()).ApplyTimeZone(TimeZoneInfo.Utc);
 			//Check if date time string or seconds
 			//if (longDate < 30000000)
 			//	time =

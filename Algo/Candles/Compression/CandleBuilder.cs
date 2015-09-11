@@ -734,13 +734,12 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			var timeFrame = (TimeSpan)series.Arg;
 
-			var bounds = timeFrame.GetCandleBounds(value.Time.DateTime, series.WorkingTime);
+			var bounds = timeFrame.GetCandleBounds(value.Time, series.Security.Board, series.WorkingTime);
 
 			if (value.Time < bounds.Min)
 				return null;
-
-			//var openTime = new DateTimeOffset(bounds.Min + value.Time.Offset, value.Time.Offset);
-			var openTime = new DateTimeOffset(bounds.Min, value.Time.Offset);
+			
+			var openTime = value.Time.UtcDateTime.ToDateTimeOffset(value.Time.Offset);
 
 			var candle = FirstInitCandle(series, new TimeFrameCandle
 			{

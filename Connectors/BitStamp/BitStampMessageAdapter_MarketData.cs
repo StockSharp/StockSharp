@@ -79,7 +79,7 @@ namespace StockSharp.BitStamp
 				{
 					if (mdMsg.IsSubscribe)
 					{
-						if (mdMsg.From == DateTime.Today)
+						if (mdMsg.From.DateTime == DateTime.Today)
 						{
 							_httpClient.RequestTransactions().Select(t => new ExecutionMessage
 							{

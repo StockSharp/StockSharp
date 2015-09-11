@@ -1,9 +1,6 @@
 namespace StockSharp.Studio.Core
 {
 	using System;
-	using System.Globalization;
-	using System.IO;
-	using System.Text;
 
 	using Ecng.Common;
 	using Ecng.Configuration;

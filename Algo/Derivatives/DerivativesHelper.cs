@@ -150,7 +150,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="securities">Инструменты, которые необходимо отфильтровать.</param>
 		/// <param name="expirationDate">Дата экспирации.</param>
 		/// <returns>Отфильтрованные инструменты.</returns>
-		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, DateTime? expirationDate)
+		public static IEnumerable<Security> Filter(this IEnumerable<Security> securities, DateTimeOffset? expirationDate)
 		{
 			if (expirationDate == null)
 				return securities;
@@ -298,7 +298,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="expirationDate">Дата экспирации опционов.</param>
 		/// <param name="optionType">Тип опциона.</param>
 		/// <returns>Центральный страйк.</returns>
-		public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTime expirationDate, OptionTypes optionType)
+		public static Security GetCentralStrike(this Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTimeOffset expirationDate, OptionTypes optionType)
 		{
 			return underlyingAsset.GetCentralStrike(dataProvider, underlyingAsset.GetDerivatives(securityProvider, expirationDate).Filter(optionType));
 		}
@@ -502,7 +502,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="security">Инструмент.</param>
 		/// <param name="currentTime">Текущее время.</param>
 		/// <returns><see langword="true"/>, если инструмент закончил свое действие.</returns>
-		public static bool IsExpired(this Security security, DateTime currentTime)
+		public static bool IsExpired(this Security security, DateTimeOffset currentTime)
 		{
 			return security.GetExpirationTime() <= currentTime;
 		}
@@ -511,28 +511,32 @@ namespace StockSharp.Algo.Derivatives
 		/// Получить из названия опциона его информацию (базовый актив, страйк, дата экспирации и т.д.).
 		/// </summary>
 		/// <param name="optionName">Название опциона.</param>
+		/// <param name="board">Информация о площадке.</param>
 		/// <returns>Информация об опционе.</returns>
-		public static Security GetOptionInfo(this string optionName)
+		public static Security GetOptionInfo(this string optionName, ExchangeBoard board)
 		{
+			if (board == null)
+				throw new ArgumentNullException("board");
+
 			if (optionName.IsEmpty())
 				throw new ArgumentNullException("optionName");
 
 			var matches = _optionNameRegex.Matches(optionName);
 
-			if (matches.Count == 1)
-			{
-				var groups = matches[0].Groups;
+			if (matches.Count != 1)
+				return null;
 
-				if (groups.Count == 7)
+			var groups = matches[0].Groups;
+
+			if (groups.Count == 7)
+			{
+				return new Security
 				{
-					return new Security
-					{
-						UnderlyingSecurityId = groups["code"].Value,
-						ExpiryDate = groups["expiryDate"].Value.ToDateTime("ddMMyy"),
-						OptionType = groups["optionType"].Value == "C" ? OptionTypes.Call : OptionTypes.Put,
-						Strike = decimal.Parse(groups["strike"].Value, CultureInfo.InvariantCulture),
-					};
-				}
+					UnderlyingSecurityId = groups["code"].Value,
+					ExpiryDate = groups["expiryDate"].Value.ToDateTime("ddMMyy").ApplyTimeZone(board.Exchange.TimeZoneInfo),
+					OptionType = groups["optionType"].Value == "C" ? OptionTypes.Call : OptionTypes.Put,
+					Strike = decimal.Parse(groups["strike"].Value, CultureInfo.InvariantCulture),
+				};
 			}
 
 			return null;
@@ -543,9 +547,13 @@ namespace StockSharp.Algo.Derivatives
 		/// </summary>
 		/// <param name="futureName">Название фьючерса.</param>
 		/// <param name="optionCode">Код опциона.</param>
+		/// <param name="board">Информация о площадке.</param>
 		/// <returns>Информация о фьючерсе.</returns>
-		public static SecurityMessage GetFutureInfo(this string futureName, string optionCode)
+		public static SecurityMessage GetFutureInfo(this string futureName, string optionCode, ExchangeBoard board)
 		{
+			if (board == null)
+				throw new ArgumentNullException("board");
+
 			if (futureName.IsEmpty())
 				throw new ArgumentNullException("futureName");
 
@@ -574,7 +582,7 @@ namespace StockSharp.Algo.Derivatives
 				{
 					SecurityCode = optionMatch.Groups["code"].Value + _futureMonthCodes[month] + yearStr.Last(),
 				},
-				ExpiryDate = new DateTime(2000 + yearStr.To<int>(), month, 1),
+				ExpiryDate = new DateTime(2000 + yearStr.To<int>(), month, 1).ApplyTimeZone(board.Exchange.TimeZoneInfo),
 				Name = futureName,
 			};
 		}
@@ -589,7 +597,7 @@ namespace StockSharp.Algo.Derivatives
 		/// <param name="riskFree">Безрисковая процентная ставка.</param>
 		/// <param name="dividend">Размер дивиденда по акциям.</param>
 		/// <returns>Стакан волатильности.</returns>
-		public static MarketDepth ImpliedVolatility(this MarketDepth depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTime currentTime, decimal riskFree = 0, decimal dividend = 0)
+		public static MarketDepth ImpliedVolatility(this MarketDepth depth, ISecurityProvider securityProvider, IMarketDataProvider dataProvider, DateTimeOffset currentTime, decimal riskFree = 0, decimal dividend = 0)
 		{
 			if (depth == null)
 				throw new ArgumentNullException("depth");

@@ -265,14 +265,14 @@ namespace StockSharp.SmartCom
 
 			if (secMsg.SecurityType == SecurityTypes.Option)
 			{
-				var optionInfo = secMsg.Name.GetOptionInfo();
+				var optionInfo = secMsg.Name.GetOptionInfo(ExchangeBoard.Forts);
 
 				if (optionInfo != null)
 				{
 					// http://stocksharp.com/forum/yaf_postst1355_Exception-Change-Set-11052.aspx
 					if (!secCode.IsEmpty())
 					{
-						var futureInfo = optionInfo.UnderlyingSecurityId.GetFutureInfo(secCode);
+						var futureInfo = optionInfo.UnderlyingSecurityId.GetFutureInfo(secCode, ExchangeBoard.Forts);
 						if (futureInfo != null)
 							secMsg.UnderlyingSecurityCode = futureInfo.SecurityId.SecurityCode;
 					}

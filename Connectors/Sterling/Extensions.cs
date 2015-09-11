@@ -1,11 +1,14 @@
-using System;
-using SterlingLib;
-using StockSharp.Messages;
-using Ecng.Common;
-using StockSharp.Localization;
-
 namespace StockSharp.Sterling
 {
+	using System;
+
+	using Ecng.Common;
+
+	using SterlingLib;
+
+	using StockSharp.Messages;
+	using StockSharp.Localization;
+
 	static class Extensions
 	{
 		public static OrderStates ToOrderStates(this STIOrderStatus status)
@@ -106,9 +109,9 @@ namespace StockSharp.Sterling
 				case TimeInForce.PutInQueue:
 				case null:
 				{
-					if (expiryDate == null || expiryDate == DateTime.MaxValue)
+					if (expiryDate == null || expiryDate == DateTimeOffset.MaxValue)
 						return "G";	// GTC
-					else if (expiryDate == DateTime.Today)
+					else if (expiryDate.Value.DateTime == DateTime.Today)
 						return "D";	// DAY
 					else if (expiryDate.Value.TimeOfDay == TimeSpan.Zero)
 						return "O"; // OPG
@@ -280,7 +283,7 @@ namespace StockSharp.Sterling
 			//}
 		}
 
-		public static DateTime StrToDateTime(this string str)
+		public static DateTimeOffset StrToDateTime(this string str)
 		{
 			var parsedDate = new DateTime
 			(
@@ -292,10 +295,10 @@ namespace StockSharp.Sterling
 				int.Parse(str.Substring(12, 2))
 			);
 
-			return parsedDate;
+			return parsedDate.ApplyTimeZone(TimeHelper.Est);
 		}
 
-		public static DateTime StrToTime(this string str)
+		public static DateTimeOffset StrToTime(this string str)
 		{
 			var parsedDate = new DateTime
 			(
@@ -307,7 +310,7 @@ namespace StockSharp.Sterling
 				int.Parse(str.Substring(4, 2))
 			);
 
-			return parsedDate;
+			return parsedDate.ApplyTimeZone(TimeHelper.Est);
 		}
 
 		public static string ToBoard(this string exch)

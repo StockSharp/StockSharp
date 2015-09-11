@@ -242,7 +242,7 @@ namespace StockSharp.InteractiveBrokers.Native
 					{
 						if (msg.TillDate == null || msg.TillDate == DateTimeOffset.MaxValue)
 							return socket.Send("GTC");
-						else if (msg.TillDate != DateTimeOffset.Now.Date)
+						else if (msg.TillDate.Value.DateTime != DateTime.Today)
 							return socket.Send("GTD");
 						else
 							return socket.Send("DAY");

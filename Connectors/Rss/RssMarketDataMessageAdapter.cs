@@ -108,7 +108,7 @@ namespace StockSharp.Rss
 					{
 						Id = item.Id,
 						Source = feed.Authors.Select(a => a.Name).Join(","),
-						ServerTime = item.PublishDate.DateTime,
+						ServerTime = item.PublishDate,
 						Headline = item.Title.Text,
 						Story = item.Summary == null ? string.Empty : item.Summary.Text,
 						Url = item.Links.Any() ? item.Links[0].Uri : null

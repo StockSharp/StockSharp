@@ -270,7 +270,7 @@
 			protected override IEnumerable<ExecutionMessage> FilterNewData(IEnumerable<ExecutionMessage> data, IMarketDataMetaInfo metaInfo)
 			{
 				var prevId = (long)metaInfo.LastId;
-				var prevTime = metaInfo.LastTime;
+				var prevTime = metaInfo.LastTime.ApplyTimeZone(TimeZoneInfo.Utc);
 
 				return data.Where(t =>
 				{
