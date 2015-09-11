@@ -12,7 +12,7 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Высплывающее окно для выбора подходящего инструмента.
+	/// Всплывающее окно для выбора подходящего инструмента.
 	/// </summary>
 	public partial class AutoCompletePopUp
 	{
@@ -33,7 +33,7 @@
 		public static readonly DependencyProperty MatchTextProperty = DependencyProperty.Register("MatchText", typeof(string), typeof(AutoCompletePopUp));
 
 		/// <summary>
-		/// Текст для подстветки в идентификаторе инструмента <see cref="Security.Id"/>.
+		/// Текст для подсветки в идентификаторе инструмента <see cref="Security.Id"/>.
 		/// </summary>
 		public string MatchText { get; set; }
 
@@ -48,7 +48,7 @@
 		public event Action SecuritySelected;
 
 		/// <summary>
-		/// Выбранные инструмент.
+		/// Выбранные инструменты.
 		/// </summary>
 		public Security SelectedSecurity
 		{

@@ -9,7 +9,7 @@
 
 	/// <summary>
 	/// Логгер, записывающий данные в визуальные компоненты (например, <see cref="Monitor"/> или <see cref="LogControl"/>),
-	/// для которых требуется синхронизация с GUI потоков при записи новых сообщений <see cref="LogMessage"/>.
+	/// для которых требуется синхронизация с GUI потоками при записи новых сообщений <see cref="LogMessage"/>.
 	/// </summary>
 	public class GuiLogListener : LogListener
 	{
@@ -19,7 +19,7 @@
 		/// <summary>
 		/// Создать <see cref="GuiLogListener"/>.
 		/// </summary>
-		/// <param name="listener">Визуальный компонент, для которого требуется синхронизация с GUI потоков при записи новых сообщений <see cref="LogMessage"/>.</param>
+		/// <param name="listener">Визуальный компонент, для которого требуется синхронизация с GUI потоками при записи новых сообщений <see cref="LogMessage"/>.</param>
 		public GuiLogListener(ILogListener listener)
 		{
 			if (listener == null)

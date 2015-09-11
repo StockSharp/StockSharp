@@ -71,7 +71,7 @@
 		}
 
 		/// <summary>
-		/// Выбранный новости.
+		/// Выбранные новости.
 		/// </summary>
 		public IEnumerable<News> SelectedNews
 		{

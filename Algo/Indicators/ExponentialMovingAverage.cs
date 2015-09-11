@@ -63,7 +63,7 @@ namespace StockSharp.Algo.Indicators
 			else
 			{
 				// если sma сформирована 
-				// если IsFinal = true рассчитываем ema и сохраняем для последующих рассчетов с промежуточными значениями
+				// если IsFinal = true рассчитываем ema и сохраняем для последующих расчетов с промежуточными значениями
 				var curValue = (newValue - _prevFinalValue) * _multiplier + _prevFinalValue;
 
 				if (input.IsFinal)

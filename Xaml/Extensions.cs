@@ -148,7 +148,7 @@ namespace StockSharp.Xaml
 		/// </summary>
 		/// <param name="dockSite">Docking панель.</param>
 		/// <param name="toolWindowOnly">Сохранять только окна.</param>
-		/// <returns>Разметка ввиде строки.</returns>
+		/// <returns>Разметка в виде строки.</returns>
 		public static string SaveLayout(this DockSite dockSite, bool toolWindowOnly = false)
 		{
 			if (dockSite == null)
@@ -162,7 +162,7 @@ namespace StockSharp.Xaml
 		/// </summary>
 		/// <param name="dockSite">Docking панель.</param>
 		/// <param name="toolWindowOnly">Загружать только окна.</param>
-		/// <param name="layout">Разметка ввиде строки.</param>
+		/// <param name="layout">Разметка в виде строки.</param>
 		public static void LoadLayout(this DockSite dockSite, string layout, bool toolWindowOnly = false)
 		{
 			if (dockSite == null)
@@ -183,7 +183,7 @@ namespace StockSharp.Xaml
 		/// Сохранить разметку NavigationBar панели.
 		/// </summary>
 		/// <param name="navigationBar">NavigationBar панель.</param>
-		/// <returns>Разметка ввиде строки.</returns>
+		/// <returns>Разметка в виде строки.</returns>
 		public static string SaveLayout(this NavigationBar navigationBar)
 		{
 			if (navigationBar == null)
@@ -196,7 +196,7 @@ namespace StockSharp.Xaml
 		/// Загрузить разметку для NavigationBar панели.
 		/// </summary>
 		/// <param name="navigationBar">NavigationBar панель.</param>
-		/// <param name="layout">Разметка ввиде строки.</param>
+		/// <param name="layout">Разметка в виде строки.</param>
 		public static void LoadLayout(this NavigationBar navigationBar, string layout)
 		{
 			if (navigationBar == null)

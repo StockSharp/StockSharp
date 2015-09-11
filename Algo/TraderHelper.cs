@@ -2196,7 +2196,7 @@ namespace StockSharp.Algo
 		/// Получить размер свободных денежных средств в портфеле.
 		/// </summary>
 		/// <param name="portfolio">Портфель</param>
-		/// <param name="useLeverage">Использовать ли для рассчета размер плеча.</param>
+		/// <param name="useLeverage">Использовать ли для расчета размер плеча.</param>
 		/// <returns>Размер свободных денежных средств.</returns>
 		public static decimal GetFreeMoney(this Portfolio portfolio, bool useLeverage = false)
 		{

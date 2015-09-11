@@ -165,7 +165,7 @@ namespace StockSharp.Hydra.Panes
 			Gluing.Content = LocalizedStrings.Str2890;
 			_token = new CancellationTokenSource();
 
-			// так как ContinuousSecurity будет записывать данные в папки составных инструментов, то создаем клон ввиде обычного элемента
+			// так как ContinuousSecurity будет записывать данные в папки составных инструментов, то создаем клон в виде обычного элемента
 			var destinationStorage = createStorage(new Security { Id = _continuousSecurity.Id }, DrivePanel.SelectedDrive, DrivePanel.StorageFormat);
 
 			Task.Factory

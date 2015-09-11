@@ -18,7 +18,7 @@ namespace StockSharp.Xaml
 	using Row = System.Tuple<string, Messages.IMessageAdapter>;
 
 	/// <summary>
-	/// Окно создания редактирования сопоставлений портфелей и адаптеров.
+	/// Окно создания и редактирования сопоставлений портфелей и адаптеров.
 	/// </summary>
 	public partial class PortfolioMessageAdaptersWindow
 	{

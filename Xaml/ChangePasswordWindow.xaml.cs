@@ -19,14 +19,14 @@
 		}
 
 		/// <summary>
-		/// Событие обработки смена пароля.
+		/// Событие обработки смены пароля.
 		/// </summary>
 		public Action Process;
 
 		/// <summary>
 		/// Обновить результат смены пароля.
 		/// </summary>
-		/// <param name="result">Результат ввиде текстового сообщения.</param>
+		/// <param name="result">Результат в виде текстового сообщения.</param>
 		public void UpdateResult(string result)
 		{
 			Result.Text = result;

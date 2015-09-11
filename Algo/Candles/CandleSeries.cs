@@ -128,7 +128,7 @@ namespace StockSharp.Algo.Candles
 		}
 
 		/// <summary>
-		/// Производить рассчет <see cref="Candle.VolumeProfileInfo"/>.
+		/// Производить расчет <see cref="Candle.VolumeProfileInfo"/>.
 		/// По-умолчанию, выключено.
 		/// </summary>
 		public bool IsCalcVolumeProfile { get; set; }

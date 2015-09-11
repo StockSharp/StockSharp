@@ -3,7 +3,7 @@
 	using System;
 
 	/// <summary>
-	/// Интерфейс, описывающий тип с переменным количество свойств.
+	/// Интерфейс, описывающий тип с переменным количеством свойств.
 	/// </summary>
 	public interface INotifyPropertiesChanged
 	{

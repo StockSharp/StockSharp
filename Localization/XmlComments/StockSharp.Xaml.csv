@@ -9,7 +9,7 @@ M:StockSharp.Xaml.AutoCompletePopUp.InitializeComponent/summary;DocStr8
 P:StockSharp.Xaml.AutoCompletePopUp.MatchText/summary;DocStr8066
 P:StockSharp.Xaml.AutoCompletePopUp.Securities/summary;DocStr8067
 E:StockSharp.Xaml.AutoCompletePopUp.SecuritySelected/summary;DocStr1489
-P:StockSharp.Xaml.AutoCompletePopUp.SelectedSecurity/summary;DocStr8068
+P:StockSharp.Xaml.AutoCompletePopUp.SelectedSecurity/summary;DocStr8294
 E:StockSharp.Xaml.AutoCompletePopUp.MatchKeyDown/summary;DocStr8069
 T:StockSharp.Xaml.BaseApplication/summary;DocStr8070
 M:StockSharp.Xaml.BaseApplication.#ctor/summary;DocStr93

@@ -26,7 +26,7 @@
 	}
 
 	/// <summary>
-	/// Базовый индикатор, который строится ввиде комбинации нескольких индикаторов.
+	/// Базовый индикатор, который строится в виде комбинации нескольких индикаторов.
 	/// </summary>
 	public abstract class BaseComplexIndicator : BaseIndicator, IComplexIndicator
 	{

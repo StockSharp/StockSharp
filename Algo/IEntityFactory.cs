@@ -42,7 +42,7 @@
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
 		/// <param name="id">Идентификатор сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
-		/// <param name="stringId">Идентификатор сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
+		/// <param name="stringId">Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
 		/// <returns>Созданная сделка.</returns>
 		Trade CreateTrade(Security security, long? id, string stringId);
 
@@ -161,7 +161,7 @@
 		/// </summary>
 		/// <param name="security">Инструмент.</param>
 		/// <param name="id">Идентификатор сделки (равно <see langword="null"/>, если используется строковый идентификатор).</param>
-		/// <param name="stringId">Идентификатор сделки (ввиде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
+		/// <param name="stringId">Идентификатор сделки (в виде строки, если электронная площадка не использует числовое представление идентификатора сделки).</param>
 		/// <returns>Созданная сделка.</returns>
 		public virtual Trade CreateTrade(Security security, long? id, string stringId)
 		{

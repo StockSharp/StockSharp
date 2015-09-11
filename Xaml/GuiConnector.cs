@@ -11,14 +11,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Синхронизованное подключение. Оборачивает объект <see cref="IConnector"/> обычного подключения для того, чтобы все события приходили в GUI потоке.
+	/// Синхронизированное подключение. Оборачивает объект <see cref="IConnector"/> обычного подключения для того, чтобы все события приходили в GUI потоке.
 	/// </summary>
-	/// <typeparam name="TUnderlyingConnector">Тип подключения, которое необходимо синхронизовать.</typeparam>
+	/// <typeparam name="TUnderlyingConnector">Тип подключения, которое необходимо синхронизировать.</typeparam>
 	public class GuiConnector<TUnderlyingConnector> : BaseLogReceiver, IConnector
 		where TUnderlyingConnector : IConnector
 	{
 		/// <summary>
-		/// Создать синхронизованное подключение.
+		/// Создать синхронизированное подключение.
 		/// </summary>
 		/// <param name="connector">Подключение, которое необходимо обернуть в <see cref="GuiConnector{T}"/>.</param>
 		public GuiConnector(TUnderlyingConnector connector)
@@ -29,7 +29,7 @@ namespace StockSharp.Xaml
 		private TUnderlyingConnector _connector;
 
 		/// <summary>
-		/// Несинхронизованный объект подключения.
+		/// Несинхронизированный объект подключения.
 		/// </summary>
 		public TUnderlyingConnector Connector
 		{

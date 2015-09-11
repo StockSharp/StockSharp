@@ -20,7 +20,7 @@ namespace StockSharp.Xaml
 	public class ProxySettings : IPersistable
 	{
 		/// <summary>
-		/// Использовать прокси-сервера.
+		/// Использовать прокси-сервер.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1436Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1437Key)]

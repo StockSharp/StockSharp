@@ -187,7 +187,7 @@ namespace StockSharp.Xaml.Code
 		/// Показать результат компиляции.
 		/// </summary>
 		/// <param name="result">Результат компиляции.</param>
-		/// <param name="isRunning">Запущен ли ранее скопилированный код на исполнение в текущий момент.</param>
+		/// <param name="isRunning">Запущен ли ранее скомпилированный код на исполнение в текущий момент.</param>
 		public void ShowCompilationResult(CompilationResult result, bool isRunning)
 		{
 			if (result == null)

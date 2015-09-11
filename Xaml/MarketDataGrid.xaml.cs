@@ -203,7 +203,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Отменить операцию, запущенная через <see cref="BeginMakeEntries"/>.
+		/// Отменить операцию, запущенную через <see cref="BeginMakeEntries"/>.
 		/// </summary>
 		public void CancelMakeEntires()
 		{

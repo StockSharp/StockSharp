@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 
 	/// <summary>
-	/// Интерфейс индикатора, который строится ввиде комбинации нескольких индикаторов.
+	/// Интерфейс индикатора, который строится в виде комбинации нескольких индикаторов.
 	/// </summary>
 	public interface IComplexIndicator : IIndicator
 	{

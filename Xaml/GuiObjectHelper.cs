@@ -7,20 +7,19 @@ namespace StockSharp.Xaml
 	using Ecng.Xaml;
 
 	using StockSharp.BusinessEntities;
-
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс для синхронизованных объектов.
+	/// Вспомогательный класс для синхронизированных объектов.
 	/// </summary>
 	public static class GuiObjectHelper
 	{
 		/// <summary>
-		/// Создать синхронизованное подключение <see cref="GuiConnector{TUnderlyingConnector}"/>.
+		/// Создать синхронизированное подключение <see cref="GuiConnector{TUnderlyingConnector}"/>.
 		/// </summary>
-		/// <typeparam name="TUnderlyingConnector">Тип подключения, который необходимо синхронизовать.</typeparam>
+		/// <typeparam name="TUnderlyingConnector">Тип подключения, который необходимо синхронизировать.</typeparam>
 		/// <param name="connector">Подключение, которое необходимо обернуть в <see cref="GuiConnector{TUnderlyingConnector}"/>.</param>
-		/// <returns>Cинхронизованное подключение <see cref="GuiConnector{TUnderlyingConnector}"/>.</returns>
+		/// <returns>Синхронизированное подключение <see cref="GuiConnector{TUnderlyingConnector}"/>.</returns>
 		public static GuiConnector<TUnderlyingConnector> GuiSyncTrader<TUnderlyingConnector>(this TUnderlyingConnector connector)
 			where TUnderlyingConnector : IConnector
 		{

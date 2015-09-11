@@ -302,12 +302,12 @@
 		public event Action<Security, FundamentalReports, string> NewFundamentalReport;
 
 		/// <summary>
-		/// Событие о появлении новых параметров сканера, которые применяются через <see cref="ScannerFilter"/>. Параметры передаются ввиде xml.
+		/// Событие о появлении новых параметров сканера, которые применяются через <see cref="ScannerFilter"/>. Параметры передаются в виде xml.
 		/// </summary>
 		public event Action<string> NewScannerParameters;
 
 		/// <summary>
-		/// Событие о появлении новых финансовых консультаций. Параметры передаются ввиде xml.
+		/// Событие о появлении новых финансовых консультаций. Параметры передаются в виде xml.
 		/// </summary>
 		public event Action<int, string> NewFinancialAdvise;
 

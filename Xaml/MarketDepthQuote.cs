@@ -22,12 +22,12 @@
 				private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();
 
 				/// <summary>
-				/// Суммарный баланс на покупку. Рассчет идет по внутренним заявкам <see cref="Orders"/>.
+				/// Суммарный баланс на покупку. Расчет идет по внутренним заявкам <see cref="Orders"/>.
 				/// </summary>
 				public decimal TotalBuyBalance { get; private set; }
 
 				/// <summary>
-				/// Суммарный баланс на продажу. Рассчет идет по внутренним заявкам <see cref="Orders"/>.
+				/// Суммарный баланс на продажу. Расчет идет по внутренним заявкам <see cref="Orders"/>.
 				/// </summary>
 				public decimal TotalSellBalance { get; private set; }
 

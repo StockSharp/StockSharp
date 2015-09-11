@@ -93,7 +93,7 @@
 		}
 
 		/// <summary>
-		/// Событие измения выбранного портфеля.
+		/// Событие изменения выбранного портфеля.
 		/// </summary>
 		public event Action PortfolioSelected;
 
