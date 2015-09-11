@@ -101,16 +101,11 @@ namespace StockSharp.Algo
 					DataType = dataType,
 					IsSubscribe = true,
 					//SecurityId = _connector.GetSecurityId(subscriber),
-					From = DateTimeOffset.MinValue,
-					To = DateTimeOffset.MaxValue,
 					TransactionId = _connector.TransactionIdGenerator.GetNextId()
 				};
 
 				switch (dataType)
 				{
-					case MarketDataTypes.MarketDepth:
-						message.MaxDepth = MarketDataMessage.DefaultMaxDepth;
-						break;
 					case MarketDataTypes.Trades:
 						message.Arg = ExecutionTypes.Tick;
 						break;
@@ -469,7 +464,7 @@ namespace StockSharp.Algo
 				{
 					DataType = type,
 					IsSubscribe = false,
-					TransactionId = _connector.TransactionIdGenerator.GetNextId()
+					TransactionId = _connector.TransactionIdGenerator.GetNextId(),
 				};
 
 				switch (type)

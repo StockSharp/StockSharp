@@ -79,7 +79,7 @@ namespace StockSharp.Btce
 				case MarketDataTypes.MarketDepth:
 				{
 					if (mdMsg.IsSubscribe)
-						_subscribedDepths.Add(mdMsg.SecurityId, mdMsg.MaxDepth);
+						_subscribedDepths.Add(mdMsg.SecurityId, mdMsg.MaxDepth ?? MarketDataMessage.DefaultMaxDepth);
 					else
 						_subscribedDepths.Remove(mdMsg.SecurityId);
 

@@ -163,5 +163,13 @@
 
 			return estTime.Value.ApplyTimeZone(TimeHelper.Est);
 		}
+
+		public static DateTime ToEst(this DateTimeOffset? time)
+		{
+			if (time == null)
+				throw new ArgumentNullException("time");
+
+			return time.Value.ToLocalTime(TimeHelper.Est);
+		}
 	}
 }

@@ -65,7 +65,7 @@ namespace StockSharp.Oanda
 					if (message.IsSubscribe)
 					{
 						var calendar = _restClient.GetCalendar(message.SecurityId.ToOanda(),
-							(int)(3600 * message.Count));
+							(int)(3600 * (message.Count ?? 1)));
 
 						foreach (var item in calendar)
 						{
@@ -92,7 +92,7 @@ namespace StockSharp.Oanda
 						while (true)
 						{
 							var candles = _restClient.GetCandles(message.SecurityId.ToOanda(),
-								((TimeSpan)message.Arg).ToOanda(), message.Count, from.ToOanda());
+								((TimeSpan)message.Arg).ToOanda(), message.Count ?? 0, (from ?? DateTimeOffset.MinValue).ToOanda());
 
 							var count = 0;
 
@@ -118,7 +118,7 @@ namespace StockSharp.Oanda
 								from = time;
 							}
 
-							if (message.Count == 0 && count == 500)
+							if (message.Count == null && count == 500)
 								continue;
 
 							break;

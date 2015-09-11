@@ -204,9 +204,11 @@ namespace StockSharp.LMAX
 					IHistoricMarketDataRequest request;
 
 					var tf = (TimeSpan)mdMsg.Arg;
+					var from = (mdMsg.From ?? DateTimeOffset.MinValue).UtcDateTime;
+					var to = (mdMsg.To ?? DateTimeOffset.MaxValue).UtcDateTime;
 
 					if (tf.Ticks == 1)
-						request = new TopOfBookHistoricMarketDataRequest(mdMsg.TransactionId, lmaxId, mdMsg.From.UtcDateTime, mdMsg.To.UtcDateTime, Format.Csv);
+						request = new TopOfBookHistoricMarketDataRequest(mdMsg.TransactionId, lmaxId, from, to, Format.Csv);
 					else
 					{
 						Resolution resolution;
@@ -218,7 +220,7 @@ namespace StockSharp.LMAX
 						else
 							throw new InvalidOperationException(LocalizedStrings.Str3393Params.Put(tf));
 
-						request = new AggregateHistoricMarketDataRequest(mdMsg.TransactionId, lmaxId, mdMsg.From.UtcDateTime, mdMsg.To.UtcDateTime, resolution, Format.Csv, Option.Bid, Option.Ask);
+						request = new AggregateHistoricMarketDataRequest(mdMsg.TransactionId, lmaxId, from, to, resolution, Format.Csv, Option.Bid, Option.Ask);
 					}
 
 					if (!_isHistoricalSubscribed)

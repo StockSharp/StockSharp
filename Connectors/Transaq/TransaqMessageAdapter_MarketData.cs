@@ -108,7 +108,7 @@ namespace StockSharp.Transaq
 						{
 							var count = mdMsg.Count;
 
-							if (count == 0)
+							if (count == null)
 								count = MaxNewsHeaderCount;
 							else
 							{
@@ -119,7 +119,7 @@ namespace StockSharp.Transaq
 									throw new InvalidOperationException(LocalizedStrings.Str3512Params.Put(count, MaxNewsHeaderCount));
 							}
 							
-							SendCommand(new RequestOldNewsMessage { Count = (int)count });
+							SendCommand(new RequestOldNewsMessage { Count = (int)count.Value });
 						}
 						else
 						{
@@ -143,8 +143,8 @@ namespace StockSharp.Transaq
 						{
 							SecId = secId,
 							Period = periodId,
-							Count = mdMsg.Count,
-							Reset = mdMsg.To == DateTimeOffset.MaxValue,
+							Count = mdMsg.Count ?? 0,
+							Reset = mdMsg.To == null,
 						};
 
 						try

@@ -52,7 +52,7 @@ namespace StockSharp.OpenECry
 
 					if (message.IsSubscribe)
 					{
-						var subscription = _client.SubscribeTicks(contract, message.From.UtcDateTime);
+						var subscription = _client.SubscribeTicks(contract, (message.From ?? DateTimeOffset.MinValue).UtcDateTime);
 						_subscriptions.Add(key, subscription);
 					}
 					else
@@ -132,9 +132,9 @@ namespace StockSharp.OpenECry
 								throw new InvalidOperationException();
 						}
 
-						var subscription = message.Count == 0
-							? _client.SubscribeBars(contract, message.From.UtcDateTime, subscriptionType, interval)
-							: _client.SubscribeBars(contract, (int)message.Count, subscriptionType, interval, false);
+						var subscription = message.Count == null
+							? _client.SubscribeBars(contract, (message.From ?? DateTimeOffset.MinValue).UtcDateTime, subscriptionType, interval)
+							: _client.SubscribeBars(contract, (int)message.Count.Value, subscriptionType, interval, false);
 
 						_subscriptions.Add(key, subscription);
 					}

@@ -95,7 +95,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str343Key)]
 		[DescriptionLoc(LocalizedStrings.Str344Key)]
 		[MainCategory]
-		public DateTimeOffset From { get; set; }
+		public DateTimeOffset? From { get; set; }
 
 		/// <summary>
 		/// End date, until which data needs to be retrieved.
@@ -104,7 +104,7 @@ namespace StockSharp.Messages
 		[DisplayNameLoc(LocalizedStrings.Str345Key)]
 		[DescriptionLoc(LocalizedStrings.Str346Key)]
 		[MainCategory]
-		public DateTimeOffset To { get; set; }
+		public DateTimeOffset? To { get; set; }
 
 		/// <summary>
 		/// Market data type.
@@ -150,13 +150,13 @@ namespace StockSharp.Messages
 		/// Market-data count.
 		/// </summary>
 		[DataMember]
-		public long Count { get; set; }
+		public long? Count { get; set; }
 
 		/// <summary>
 		/// Max depth or requested order book. Uses in case <see cref="MarketDataMessage.DataType"/> = <see cref="MarketDataTypes.MarketDepth"/>.
 		/// </summary>
 		[DataMember]
-		public int MaxDepth { get; set; }
+		public int? MaxDepth { get; set; }
 
 		/// <summary>
 		/// News id. Uses in case of request news text.

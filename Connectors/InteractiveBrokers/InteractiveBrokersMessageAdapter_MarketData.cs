@@ -62,13 +62,14 @@ namespace StockSharp.InteractiveBrokers
 				}
 				case MarketDataTypes.CandleTimeFrame:
 				{
-					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)Tuple.Create(mdMsg.Arg, mdMsg.To == DateTimeOffset.MaxValue));
+					var isRealTime = mdMsg.To == null;
+					var key = Tuple.Create(mdMsg.DataType, mdMsg.SecurityId, (object)Tuple.Create(mdMsg.Arg, isRealTime));
 
 					if (mdMsg.IsSubscribe)
 					{
 						_requestIds.Add(key, mdMsg.TransactionId);
 
-						if (mdMsg.To == DateTimeOffset.MaxValue)
+						if (isRealTime)
 							SubscribeRealTimeCandles(mdMsg);
 						else
 							SubscribeHistoricalCandles(mdMsg, CandleDataTypes.Trades);
@@ -77,7 +78,7 @@ namespace StockSharp.InteractiveBrokers
 					{
 						var requestId = _requestIds[key];
 
-						if (mdMsg.To == DateTimeOffset.MaxValue)
+						if (isRealTime)
 							UnSubscribeRealTimeCandles(mdMsg, requestId);
 						else
 						{
@@ -451,9 +452,9 @@ namespace StockSharp.InteractiveBrokers
 						.SendSecurity(message)
 						.SendIf(ServerVersions.V68, s => socket.Send(message.Class))
 						.SendIncludeExpired(message.ExpiryDate)
-						.SendEndDate(message.To)
+						.SendEndDate(message.To ?? DateTimeOffset.MaxValue)
 						.SendTimeFrame(timeFrame)
-						.Send(ConvertPeriodtoIb(message.From, message.To))
+						.Send(ConvertPeriodtoIb(message.From ?? DateTimeOffset.MinValue, message.To ?? DateTimeOffset.MaxValue))
 						.Send(useRth)
 						.SendLevel1Field(field);
 
@@ -578,7 +579,7 @@ namespace StockSharp.InteractiveBrokers
 					.SendIf(ServerVersions.V68, s => socket.SendContractId(message.SecurityId))
 					.SendSecurity(message, false)
 					.SendIf(ServerVersions.V68, s => socket.Send(message.Class))
-					.SendIf(ServerVersions.V19, s => socket.Send(message.MaxDepth))
+					.SendIf(ServerVersions.V19, s => socket.Send(message.MaxDepth ?? MarketDataMessage.DefaultMaxDepth))
 					.SendIf(ServerVersions.V70, s =>
 					{
 						//StringBuilder realTimeBarsOptionsStr = new StringBuilder();

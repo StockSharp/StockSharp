@@ -13,7 +13,7 @@ namespace StockSharp.Algo
 	using StockSharp.Logging;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
-	using SubscriptionInfo = System.Tuple<Messages.SecurityId, Messages.MarketDataTypes, System.DateTimeOffset, System.DateTimeOffset, long>;
+	using SubscriptionInfo = System.Tuple<Messages.SecurityId, Messages.MarketDataTypes, System.DateTimeOffset?, System.DateTimeOffset?, long?, int?>;
 
 	/// <summary>
 	/// Интерфейс, описывающий список адаптеров к торговым системам, с которыми оперирует агрегатор.
@@ -482,7 +482,7 @@ namespace StockSharp.Algo
 
 		private static SubscriptionInfo CreateKey(MarketDataMessage message)
 		{
-			return Tuple.Create(message.SecurityId, message.DataType, message.From, message.To, message.Count);
+			return Tuple.Create(message.SecurityId, message.DataType, message.From, message.To, message.Count, message.MaxDepth);
 		}
 
 		private void ProcessMarketDataMessage(IMessageAdapter adapter, MarketDataMessage message)

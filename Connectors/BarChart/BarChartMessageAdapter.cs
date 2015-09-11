@@ -246,7 +246,7 @@
 							break;
 						case MarketDataTypes.Trades:
 						{
-							if (mdMsg.Count > 0 || mdMsg.From != DateTimeOffset.MinValue || mdMsg.To != DateTimeOffset.MaxValue)
+							if (mdMsg.Count != null || mdMsg.From != null || mdMsg.To != null)
 							{
 								var url = new Url("{0}/queryticks.ashx".Put(_historicalAddress));
 
@@ -256,14 +256,14 @@
 									.Append("symbol", mdMsg.SecurityId.SecurityCode)
 									.Append("order", "asc");
 
-								if (mdMsg.Count > 0)
-									url.QueryString.Append("maxrecords", mdMsg.Count);
+								if (mdMsg.Count != null)
+									url.QueryString.Append("maxrecords", mdMsg.Count.Value);
 
-								if (mdMsg.From != DateTimeOffset.MinValue)
-									url.QueryString.Append("start", mdMsg.From.FromDateTimeOffset(_defaultTimeFormatRequest));
+								if (mdMsg.From != null)
+									url.QueryString.Append("start", mdMsg.From.Value.FromDateTimeOffset(_defaultTimeFormatRequest));
 
-								if (mdMsg.To != DateTimeOffset.MaxValue)
-									url.QueryString.Append("end", mdMsg.To.FromDateTimeOffset(_defaultTimeFormatRequest));
+								if (mdMsg.To != null)
+									url.QueryString.Append("end", mdMsg.To.Value.FromDateTimeOffset(_defaultTimeFormatRequest));
 
 								using (var client = new WebClient())
 								{
@@ -334,14 +334,14 @@
 								.Append("symbol", mdMsg.SecurityId.SecurityCode)
 								.Append("order", "asc");
 
-							if (mdMsg.Count > 0)
-								url.QueryString.Append("maxrecords", mdMsg.Count);
+							if (mdMsg.Count != null)
+								url.QueryString.Append("maxrecords", mdMsg.Count.Value);
 
-							if (mdMsg.From != DateTimeOffset.MinValue)
-								url.QueryString.Append("start", mdMsg.From.FromDateTimeOffset(timeFormatRequest));
+							if (mdMsg.From != null)
+								url.QueryString.Append("start", mdMsg.From.Value.FromDateTimeOffset(timeFormatRequest));
 
-							if (mdMsg.To != DateTimeOffset.MaxValue)
-								url.QueryString.Append("end", mdMsg.To.FromDateTimeOffset(timeFormatRequest));
+							if (mdMsg.To != null)
+								url.QueryString.Append("end", mdMsg.To.Value.FromDateTimeOffset(timeFormatRequest));
 
 							using (var client = new WebClient())
 							{

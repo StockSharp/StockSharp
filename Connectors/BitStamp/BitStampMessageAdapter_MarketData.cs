@@ -14,7 +14,7 @@ namespace StockSharp.BitStamp
 
 	partial class BitStampMessageAdapter
 	{
-		private readonly CachedSynchronizedDictionary<SecurityId, int> _subscribedDepths = new CachedSynchronizedDictionary<SecurityId, int>();
+		private readonly CachedSynchronizedSet<SecurityId> _subscribedDepths = new CachedSynchronizedSet<SecurityId>();
 		private readonly CachedSynchronizedSet<SecurityId> _subscribedTicks = new CachedSynchronizedSet<SecurityId>();
 		private DateTimeOffset _prevLevel1Time;
 		private static readonly TimeSpan _level1Interval = TimeSpan.FromSeconds(10);
@@ -60,7 +60,7 @@ namespace StockSharp.BitStamp
 				{
 					if (mdMsg.IsSubscribe)
 					{
-						_subscribedDepths.Add(mdMsg.SecurityId, mdMsg.MaxDepth);
+						_subscribedDepths.Add(mdMsg.SecurityId);
 
 						if (_subscribedDepths.Count == 1)
 							_pusherClient.SubscribeDepths();
@@ -79,7 +79,7 @@ namespace StockSharp.BitStamp
 				{
 					if (mdMsg.IsSubscribe)
 					{
-						if (mdMsg.From.DateTime == DateTime.Today)
+						if (mdMsg.From != null && mdMsg.From.Value.DateTime == DateTime.Today)
 						{
 							_httpClient.RequestTransactions().Select(t => new ExecutionMessage
 							{

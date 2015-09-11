@@ -227,15 +227,12 @@ namespace StockSharp.IQFeed
 				{
 					var mdMsg = (MarketDataMessage)message;
 
-					var from = mdMsg.From.ToLocalTime(TimeHelper.Est);
-					var to = mdMsg.To.ToLocalTime(TimeHelper.Est);
-
 					switch (mdMsg.DataType)
 					{
 						case MarketDataTypes.Level1:
 						case MarketDataTypes.Trades:
 						{
-							if (mdMsg.To == DateTimeOffset.MaxValue)
+							if (mdMsg.To == null)
 							{
 								if (mdMsg.IsSubscribe)
 									_level1Feed.SubscribeSymbol(mdMsg.SecurityId.SecurityCode);
@@ -249,10 +246,10 @@ namespace StockSharp.IQFeed
 									_requestsType.Add(mdMsg.TransactionId, MessageTypes.Execution);
 									_secIds.Add(mdMsg.TransactionId, mdMsg.SecurityId);
 
-									if (mdMsg.Count != 0)
-										_lookupFeed.RequestTicks(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, mdMsg.Count);
+									if (mdMsg.Count != null)
+										_lookupFeed.RequestTicks(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, mdMsg.Count.Value);
 									else
-										_lookupFeed.RequestTicks(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, from, to);
+										_lookupFeed.RequestTicks(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, mdMsg.From.ToEst(), mdMsg.To.ToEst());
 								}
 							}
 
@@ -298,7 +295,7 @@ namespace StockSharp.IQFeed
 									else
 									{
 										_requestsType.Add(mdMsg.TransactionId, MessageTypes.News);
-										_lookupFeed.RequestNewsHeadlines(mdMsg.TransactionId, from);
+										_lookupFeed.RequestNewsHeadlines(mdMsg.TransactionId, mdMsg.From.ToEst());
 									}
 								}
 								else
@@ -324,7 +321,7 @@ namespace StockSharp.IQFeed
 							if (mdMsg.IsSubscribe)
 							{
 								// streaming
-								if (from == DateTime.MaxValue && mdMsg.Count == 0)
+								if (mdMsg.To == null && mdMsg.Count == null)
 								{
 									string strArg, intervalType;
 									GetCandleParams(mdMsg.DataType, mdMsg.Arg, out strArg, out intervalType);
@@ -333,7 +330,7 @@ namespace StockSharp.IQFeed
 									_secIds.Add(mdMsg.TransactionId, mdMsg.SecurityId);
 									_candleParsers.Add(mdMsg.TransactionId, Tuple.Create(_candleStreamingParser, mdMsg.Arg));
 
-									_derivativeFeed.SubscribeCandles(mdMsg.SecurityId.SecurityCode, intervalType, strArg, from, mdMsg.TransactionId);
+									_derivativeFeed.SubscribeCandles(mdMsg.SecurityId.SecurityCode, intervalType, strArg, mdMsg.From.ToEst(), mdMsg.TransactionId);
 									break;
 								}
 
@@ -347,10 +344,7 @@ namespace StockSharp.IQFeed
 										_secIds.Add(mdMsg.TransactionId, mdMsg.SecurityId);
 										_candleParsers.Add(mdMsg.TransactionId, Tuple.Create(_candleParser, mdMsg.Arg));
 
-										var count = mdMsg.Count;
-
-										if (count == 0)
-											count = ExchangeBoard.Associated.GetTimeFrameCount(new Range<DateTimeOffset>(mdMsg.From, mdMsg.To), tf);
+										var count = mdMsg.Count ?? ExchangeBoard.Associated.GetTimeFrameCount(new Range<DateTimeOffset>(mdMsg.From ?? DateTimeOffset.MinValue, mdMsg.To ?? DateTimeOffset.MaxValue), tf);
 
 										_lookupFeed.RequestMonthlyCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, count);
 									}
@@ -360,10 +354,7 @@ namespace StockSharp.IQFeed
 										_secIds.Add(mdMsg.TransactionId, mdMsg.SecurityId);
 										_candleParsers.Add(mdMsg.TransactionId, Tuple.Create(_candleParser, mdMsg.Arg));
 
-										var count = mdMsg.Count;
-
-										if (count == 0)
-											count = ExchangeBoard.Associated.GetTimeFrameCount(new Range<DateTimeOffset>(mdMsg.From, mdMsg.To), tf);
+										var count = mdMsg.Count ?? ExchangeBoard.Associated.GetTimeFrameCount(new Range<DateTimeOffset>(mdMsg.From ?? DateTimeOffset.MinValue, mdMsg.To ?? DateTimeOffset.MaxValue), tf);
 
 										_lookupFeed.RequestWeeklyCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, count);
 									}
@@ -373,10 +364,10 @@ namespace StockSharp.IQFeed
 										_secIds.Add(mdMsg.TransactionId, mdMsg.SecurityId);
 										_candleParsers.Add(mdMsg.TransactionId, Tuple.Create(_candleParser, mdMsg.Arg));
 
-										if (mdMsg.Count != 0)
-											_lookupFeed.RequestDailyCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, mdMsg.Count);
+										if (mdMsg.Count != null)
+											_lookupFeed.RequestDailyCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, mdMsg.Count.Value);
 										else
-											_lookupFeed.RequestDailyCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, from, to);
+											_lookupFeed.RequestDailyCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, mdMsg.From.ToEst(), mdMsg.To.ToEst());
 									}
 									else if (tf < TimeSpan.FromDays(1))
 									{
@@ -389,10 +380,10 @@ namespace StockSharp.IQFeed
 
 										//var interval = tf.TotalSeconds.To<int>();
 
-										if (mdMsg.Count != 0)
-											_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, mdMsg.Count);
+										if (mdMsg.Count != null)
+											_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, mdMsg.Count.Value);
 										else
-											_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, from, to);
+											_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, mdMsg.From.ToEst(), mdMsg.To.ToEst());
 									}
 									else
 									{
@@ -404,10 +395,10 @@ namespace StockSharp.IQFeed
 									string strArg, intervalType;
 									GetCandleParams(mdMsg.DataType, mdMsg.Arg, out strArg, out intervalType);
 
-									if (mdMsg.Count != 0)
-										_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, mdMsg.Count);
+									if (mdMsg.Count != null)
+										_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, mdMsg.Count.Value);
 									else
-										_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, from, to);
+										_lookupFeed.RequestCandles(mdMsg.TransactionId, mdMsg.SecurityId.SecurityCode, intervalType, strArg, mdMsg.From.ToEst(), mdMsg.To.ToEst());
 								}
 							}
 							else

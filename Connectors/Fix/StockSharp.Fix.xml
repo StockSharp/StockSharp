@@ -3522,7 +3522,7 @@
       <param name="requestId">Идентификатор запроса.</param>
       <param name="securityId">Идентификатор инструмента.</param>
     </member>
-    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Int32,System.Char[])">
+    <member name="M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Nullable{System.Int32},System.Char[])">
       <summary>
             Записать сообщение <see cref="F:StockSharp.Fix.Native.FixMessages.MarketDataRequest" /> (запрос).
             </summary>

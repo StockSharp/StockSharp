@@ -473,8 +473,8 @@ namespace StockSharp.Algo
 		{
 			var msg = LocalizedStrings.Str690Params.Put(security.Id, message.DataType);
 
-			if (message.From != DateTimeOffset.MinValue && message.To != DateTimeOffset.MaxValue)
-				msg += LocalizedStrings.Str691Params.Put(message.From, message.To);
+			if (message.From != null && message.To != null)
+				msg += LocalizedStrings.Str691Params.Put(message.From.Value, message.To.Value);
 
 			this.AddInfoLog(msg + ".");
 

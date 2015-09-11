@@ -64,7 +64,7 @@ namespace StockSharp.SmartCom
 				}
 				case MarketDataTypes.Trades:
 				{
-					if (mdMsg.From.IsDefault())
+					if (mdMsg.From == null)
 					{
 						if (mdMsg.IsSubscribe)
 							_wrapper.SubscribeTrades(smartId);
@@ -75,14 +75,14 @@ namespace StockSharp.SmartCom
 					{
 						const int maxTradeCount = 1000000;
 						this.AddDebugLog("RequestHistoryTrades SecId = {0} From {1} Count = {2}", smartId, mdMsg.From, maxTradeCount);
-						_wrapper.RequestHistoryTrades(smartId, mdMsg.From.ToLocalTime(TimeHelper.Moscow), maxTradeCount);
+						_wrapper.RequestHistoryTrades(smartId, mdMsg.From.Value.ToLocalTime(TimeHelper.Moscow), maxTradeCount);
 					}
 
 					break;
 				}
 				case MarketDataTypes.CandleTimeFrame:
 				{
-					var count = mdMsg.Count;
+					var count = mdMsg.Count ?? 0;
 					var direction = (SmartComHistoryDirections)mdMsg.ExtensionInfo["Direction"];
 
 					if (direction == SmartComHistoryDirections.Forward)
@@ -93,7 +93,7 @@ namespace StockSharp.SmartCom
 					_candleTransactions.SafeAdd(smartId)[tf] = Tuple.Create(mdMsg.TransactionId, new List<CandleMessage>());
 
 					this.AddDebugLog("RequestHistoryBars SecId {0} TF {1} From {2} Count {3}", smartId, tf, mdMsg.From, count);
-					_wrapper.RequestHistoryBars(smartId, tf, mdMsg.From.ToLocalTime(TimeHelper.Moscow), (int)count);
+					_wrapper.RequestHistoryBars(smartId, tf, (mdMsg.From ?? DateTimeOffset.MinValue).ToLocalTime(TimeHelper.Moscow), (int)count);
 
 					break;
 				}
