@@ -132,30 +132,30 @@
 
 					var loginElem = doc.Element("usersettings").Elements("login").First();
 
-					if (loginElem.GetAttributeValue("status") != "ok")
+					if (loginElem.GetAttributeValue<string>("status") != "ok")
 						throw new InvalidOperationException(LocalizedStrings.UnknownServerError);
 
-					if (loginElem.GetAttributeValue("credentials") != "ok")
+					if (loginElem.GetAttributeValue<string>("credentials") != "ok")
 						throw new InvalidOperationException(LocalizedStrings.Str3350);
 
 					foreach (var elem in doc.Element("usersettings").Element("servers").Elements())
 					{
-						switch (elem.GetAttributeValue("type"))
+						switch (elem.GetAttributeValue<string>("type"))
 						{
 							case "stream":
-								_streamAddress = elem.GetAttributeValue("primary");
+								_streamAddress = elem.GetAttributeValue<string>("primary");
 								break;
 
 							case "historicalv2":
-								_historicalAddress = elem.GetAttributeValue("primary");
+								_historicalAddress = elem.GetAttributeValue<string>("primary");
 								break;
 
 							case "extras":
-								_extrasAddress = elem.GetAttributeValue("primary");
+								_extrasAddress = elem.GetAttributeValue<string>("primary");
 								break;
 
 							case "news":
-								_newsAddress = elem.GetAttributeValue("primary");
+								_newsAddress = elem.GetAttributeValue<string>("primary");
 								break;
 						}
 					}
@@ -213,12 +213,12 @@
 							{
 								SecurityId = new SecurityId
 								{
-									SecurityCode = element.GetAttributeValue("guid"),
-									BoardCode = element.GetAttributeValue("exchange"),
+									SecurityCode = element.GetAttributeValue<string>("guid"),
+									BoardCode = element.GetAttributeValue<string>("exchange"),
 								},
-								Name = element.GetAttributeValue("symbol_description"),
+								Name = element.GetAttributeValue<string>("symbol_description"),
 								OriginalTransactionId = lookupMsg.TransactionId,
-								SecurityType = TraderHelper.FromIso10962(element.GetAttributeValue("symbol_cfi")),
+								SecurityType = TraderHelper.FromIso10962(element.GetAttributeValue<string>("symbol_cfi")),
 								PriceStep = element.GetAttributeValue<decimal?>("tick_increment"),
 								Multiplier = element.GetAttributeValue<decimal?>("point_value"),
 								Currency = element.GetAttributeValue<CurrencyTypes?>("currency")

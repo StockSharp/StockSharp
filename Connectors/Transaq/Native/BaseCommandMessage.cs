@@ -31,6 +31,7 @@
 		public const string CancelReport = "cancelreport4";
 		public const string GetFortsPositions = "get_forts_positions";
 		public const string GetClientLimits = "get_client_limits";
+		public const string GetUnitedPortfolio = "get_united_portfolio";
 		public const string GetMarkets = "get_markets";
 		public const string GetServTimeDifference = "get_servtime_difference";
 		public const string GetLeverageControl = "get_leverage_control";

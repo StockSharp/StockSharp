@@ -44,6 +44,7 @@
 			AddSerializer<CancelReportMessage>(SerializeCancelOrder);
 			AddSerializer<RequestFortsPositionsMessage>(SerializeRequestFortsPositions);
 			AddSerializer<RequestClientLimitsMessage>(SerializeRequestClientLimits);
+			AddSerializer<RequestUnitedPortfolioMessage>(SerializeRequestUnitedPortfolio);
 			AddSerializer<RequestMarketsMessage>(SerializeDefault);
 			AddSerializer<RequestServTimeDifferenceMessage>(SerializeDefault);
 			AddSerializer<RequestLeverageControlMessage>(SerializeRequestLeverageControl);
@@ -82,6 +83,7 @@
 			_deserializers.Add("quotations", DeserializeQuotations);
 			_deserializers.Add("trades", DeserializeTrades);
 			_deserializers.Add("clientlimits", DeserializeClientLimits);
+			_deserializers.Add("united_portfolio", DeserializeUnitedPortfolio);
 			_deserializers.Add("orders", DeserializeOrders);
 			_deserializers.Add("boards", DeserializeBoards);
 			_deserializers.Add("pits", DeserializePits);
@@ -155,10 +157,12 @@
 			rootElement.Add(new XElement("host", message.EndPoint.GetHost()));
 			rootElement.Add(new XElement("port", message.EndPoint.GetPort()));
 
-			if (!message.LogsDir.IsNull())
+			if (!message.LogsDir.IsEmpty())
 				rootElement.Add(new XElement("logsdir", message.LogsDir));
 
-			rootElement.Add(new XElement("loglevel", (int)message.LogLevel));
+			if (message.LogLevel != null)
+				rootElement.Add(new XElement("loglevel", (int)message.LogLevel.Value));
+
 			rootElement.Add(new XElement("autopos", message.Autopos.ToMyString()));
 			rootElement.Add(new XElement("micex_registers", message.MicexRegisters.ToMyString()));
 			rootElement.Add(new XElement("milliseconds", message.Milliseconds.ToMyString()));
@@ -462,12 +466,21 @@
 
 		private static void SerializeRequestFortsPositions(RequestFortsPositionsMessage message, XElement rootElement)
 		{
-			rootElement.Add(new XAttribute("client", message.Client.IsEmpty() ? string.Empty : message.Client));
+			if (!message.Client.IsEmpty())
+				rootElement.Add(new XAttribute("client", message.Client));
 		}
 
 		private static void SerializeRequestClientLimits(RequestClientLimitsMessage m, XElement rootElement)
 		{
 			SerializeRequestFortsPositions(m, rootElement);
+		}
+
+		private static void SerializeRequestUnitedPortfolio(RequestUnitedPortfolioMessage m, XElement rootElement)
+		{
+			SerializeRequestFortsPositions(m, rootElement);
+
+			if (!m.Union.IsEmpty())
+				rootElement.Add(new XAttribute("union", m.Union));
 		}
 
 		private static void SerializeRequestLeverageControl(RequestLeverageControlMessage message, XElement rootElement)
@@ -585,7 +598,7 @@
 					{
 						Id = node.GetElementValue<int>("id"),
 						Period = node.GetElementValue<int>("period"),
-						Name = node.GetElementValue("name")
+						Name = node.GetElementValue<string>("name")
 					})
 					.ToArray()
 			};
@@ -618,27 +631,27 @@
 				{
 					SecId = node.GetAttributeValue<int>("secid"),
 					Active = node.GetAttributeValue<bool>("active"),
-					SecCode = node.GetElementValue("seccode"),
-					Board = node.GetElementValue("board"),
-					Market = node.GetElementValue("market"),
-					ShortName = node.GetElementValue("shortname"),
+					SecCode = node.GetElementValue<string>("seccode"),
+					Board = node.GetElementValue<string>("board"),
+					Market = node.GetElementValue<string>("market"),
+					ShortName = node.GetElementValue<string>("shortname"),
 					Decimals = node.GetElementValue<int>("decimals"),
-					MinStep = node.GetElementValue("minstep").To<decimal>(),
+					MinStep = node.GetElementValue<string>("minstep").To<decimal>(),
 					LotSize = node.GetElementValue<int>("lotsize"),
-					PointCost = node.GetElementValue("point_cost").To<decimal>()
+					PointCost = node.GetElementValue<string>("point_cost").To<decimal>()
 				};
 
 				var opmask = node.Element("opmask");
 				if (opmask != null)
 				{
-					sec.OpMaskUseCredit = opmask.GetAttributeValue("usecredit").FromYesNo();
-					sec.OpMaskByMarket = opmask.GetAttributeValue("bymarket").FromYesNo();
-					sec.OpMaskNoSplit = opmask.GetAttributeValue("nosplit").FromYesNo();
-					sec.OpMaskImmorCancel = opmask.GetAttributeValue("immorcancel").FromYesNo();
-					sec.OpMaskCancelBalance = opmask.GetAttributeValue("cancelbalance").FromYesNo();
+					sec.OpMaskUseCredit = opmask.GetAttributeValue<string>("usecredit").FromYesNo();
+					sec.OpMaskByMarket = opmask.GetAttributeValue<string>("bymarket").FromYesNo();
+					sec.OpMaskNoSplit = opmask.GetAttributeValue<string>("nosplit").FromYesNo();
+					sec.OpMaskImmorCancel = opmask.GetAttributeValue<string>("immorcancel").FromYesNo();
+					sec.OpMaskCancelBalance = opmask.GetAttributeValue<string>("cancelbalance").FromYesNo();
 				}
 
-				sec.Type = node.GetElementValue("sectype");
+				sec.Type = node.GetElementValue<string>("sectype");
 
 				// http://www.transaq.ru/forum/index.php?topic=2878.0
 				sec.TimeZone = node.GetElementValue("sec_tz", string.Empty);
@@ -655,15 +668,18 @@
 		{
 			return new ClientResponse
 			{
-				Id = rootElement.GetAttributeValue("id"),
+				Id = rootElement.GetAttributeValue<string>("id"),
 				Remove = rootElement.GetAttributeValue<bool>("remove"),
-				Type = rootElement.GetElementValue("type").To<ClientTypes>(),
-				Currency = rootElement.GetElementValue("currency"),
-				MlIntraDay = rootElement.GetElementValueNullable<decimal>("ml_intraday"),
-				MlOverNight = rootElement.GetElementValueNullable<decimal>("ml_overnight"),
-				MlRestrict = rootElement.GetElementValueNullable<decimal>("ml_restrict"),
-				MlCall = rootElement.GetElementValueNullable<decimal>("ml_call"),
-				MlClose = rootElement.GetElementValueNullable<decimal>("ml_close")
+				Type = rootElement.GetElementValue<string>("type").To<ClientTypes>(),
+				Currency = rootElement.GetElementValue<string>("currency"),
+				MarketId = rootElement.GetAttributeValue<int>("market"),
+				Union = rootElement.GetElementValue<string>("union"),
+				FortsAcc = rootElement.GetElementValue<string>("forts_acc"),
+				//MlIntraDay = rootElement.GetElementValueNullable<decimal>("ml_intraday"),
+				//MlOverNight = rootElement.GetElementValueNullable<decimal>("ml_overnight"),
+				//MlRestrict = rootElement.GetElementValueNullable<decimal>("ml_restrict"),
+				//MlCall = rootElement.GetElementValueNullable<decimal>("ml_call"),
+				//MlClose = rootElement.GetElementValueNullable<decimal>("ml_close")
 			};
 		}
 
@@ -673,30 +689,30 @@
 			{
 				MoneyPositions = rootElement.Elements("money_position").Select(node => new MoneyPosition
 				{
-					Client = node.GetElementValue("client"),
+					Client = node.GetElementValue<string>("client"),
 					Markets = node
 						.Descendants("markets")
 						.Select(m => new Market { Id = m.GetElementValue<int>("market") })
 						.ToArray(),
-					Register = node.GetElementValue("register", null, false),
-					Asset = node.GetElementValue("asset"),
-					ShortName = node.GetElementValue("shortname"),
-					SaldoIn = node.GetElementValue("saldoin").To<decimal>(),
-					Bought = node.GetElementValue("bought").To<decimal>(),
-					Sold = node.GetElementValue("sold").To<decimal>(),
-					Saldo = node.GetElementValue("saldo").To<decimal>(),
-					OrdBuy = node.GetElementValue("ordbuy").To<decimal>(),
-					OrdBuyCond = node.GetElementValue("ordbuycond").To<decimal>(),
-					Commission = node.GetElementValue("comission").To<decimal>()
+					Register = node.GetElementValue<string>("register"),
+					Asset = node.GetElementValue<string>("asset"),
+					ShortName = node.GetElementValue<string>("shortname"),
+					SaldoIn = node.GetElementValue<string>("saldoin").To<decimal>(),
+					Bought = node.GetElementValue<string>("bought").To<decimal>(),
+					Sold = node.GetElementValue<string>("sold").To<decimal>(),
+					Saldo = node.GetElementValue<string>("saldo").To<decimal>(),
+					OrdBuy = node.GetElementValue<string>("ordbuy").To<decimal>(),
+					OrdBuyCond = node.GetElementValue<string>("ordbuycond").To<decimal>(),
+					Commission = node.GetElementValue<string>("comission").To<decimal>()
 				}).ToArray(),
 				SecPositions = rootElement.Elements("sec_position").Select(node => new SecPosition
 				{
-					Client = node.GetElementValue("client"),
+					Client = node.GetElementValue<string>("client"),
 					SecId = node.GetElementValue<int>("secid"),
 					Market = node.GetElementValue<int>("market"),
-					SecCode = node.GetElementValue("seccode"),
-					Register = node.GetElementValue("register", null, false),
-					ShortName = node.GetElementValue("shortname"),
+					SecCode = node.GetElementValue<string>("seccode"),
+					Register = node.GetElementValue<string>("register"),
+					ShortName = node.GetElementValue<string>("shortname"),
 					SaldoIn = node.GetElementValue<long>("saldoin"),
 					SaldoMin = node.GetElementValue<long>("saldomin"),
 					Bought = node.GetElementValue<long>("bought"),
@@ -712,16 +728,16 @@
 						.Select(m => new Market { Id = m.GetElementValue<int>("market") })
 						.ToArray(),
 					SecId = node.GetElementValue<int>("secid"),
-					SecCode = node.GetElementValue("seccode"),
-					Client = node.GetElementValue("client"),
+					SecCode = node.GetElementValue<string>("seccode"),
+					Client = node.GetElementValue<string>("client"),
 					StartNet = node.GetElementValue<int>("startnet"),
 					OpenBuys = node.GetElementValue<int>("openbuys"),
 					OpenSells = node.GetElementValue<int>("opensells"),
 					TotalNet = node.GetElementValue<int>("totalnet"),
 					TodayBuy = node.GetElementValue<int>("todaybuy"),
 					TodaySell = node.GetElementValue<int>("todaysell"),
-					OptMargin = node.GetElementValue("optmargin").To<decimal>(),
-					VarMargin = node.GetElementValue("varmargin").To<decimal>(),
+					OptMargin = node.GetElementValue<string>("optmargin").To<decimal>(),
+					VarMargin = node.GetElementValue<string>("varmargin").To<decimal>(),
 					ExpirationPos = node.GetElementValue<long>("expirationpos"),
 					UsedSellSpotLimit = node.GetElementValueNullable<decimal>("usedsellspotlimit"),
 					SellSpotLimit = node.GetElementValueNullable<decimal>("sellspotlimit"),
@@ -734,12 +750,12 @@
 						.Descendants("markets")
 						.Select(m => new Market { Id = m.GetElementValue<int>("market") })
 						.ToArray(),
-					Client = node.GetElementValue("client"),
-					ShortName = node.GetElementValue("shortname"),
-					Current = node.GetElementValue("current").To<decimal>(),
-					Blocked = node.GetElementValue("blocked").To<decimal>(),
-					Free = node.GetElementValue("free").To<decimal>(),
-					VarMargin = node.GetElementValue("varmargin").To<decimal>()
+					Client = node.GetElementValue<string>("client"),
+					ShortName = node.GetElementValue<string>("shortname"),
+					Current = node.GetElementValue<string>("current").To<decimal>(),
+					Blocked = node.GetElementValue<string>("blocked").To<decimal>(),
+					Free = node.GetElementValue<string>("free").To<decimal>(),
+					VarMargin = node.GetElementValue<string>("varmargin").To<decimal>()
 				}).ToArray(),
 				FortsCollateralses = rootElement.Elements("forts_collaterals").Select(node => new FortsCollaterals
 				{
@@ -747,11 +763,11 @@
 						.Descendants("markets")
 						.Select(m => new Market { Id = m.GetElementValue<int>("market") })
 						.ToArray(),
-					Client = node.GetElementValue("client"),
-					ShortName = node.GetElementValue("shortname"),
-					Current = node.GetElementValue("current").To<decimal>(),
-					Blocked = node.GetElementValue("blocked").To<decimal>(),
-					Free = node.GetElementValue("free").To<decimal>()
+					Client = node.GetElementValue<string>("client"),
+					ShortName = node.GetElementValue<string>("shortname"),
+					Current = node.GetElementValue<string>("current").To<decimal>(),
+					Blocked = node.GetElementValue<string>("blocked").To<decimal>(),
+					Free = node.GetElementValue<string>("free").To<decimal>()
 				}).ToArray(),
 				SpotLimits = rootElement.Elements("spot_limit").Select(node => new SpotLimit
 				{
@@ -759,10 +775,10 @@
 						.Descendants("markets")
 						.Select(m => new Market { Id = m.GetElementValue<int>("market") })
 						.ToArray(),
-					Client = node.GetElementValue("client"),
-					ShortName = node.GetElementValue("shortname"),
-					BuyLimit = node.GetElementValue("buylimit").To<decimal>(),
-					BuyLimitUsed = node.GetElementValue("buylimitused").To<decimal>()
+					Client = node.GetElementValue<string>("client"),
+					ShortName = node.GetElementValue<string>("shortname"),
+					BuyLimit = node.GetElementValue<string>("buylimit").To<decimal>(),
+					BuyLimitUsed = node.GetElementValue<string>("buylimitused").To<decimal>()
 				}).ToArray()
 			};
 		}
@@ -800,19 +816,19 @@
 			return new CandlesResponse
 			{
 				SecId = rootElement.GetAttributeValue<int>("secid"),
-				Board = rootElement.GetAttributeValue("board"),
-				SecCode = rootElement.GetAttributeValue("seccode"),
+				Board = rootElement.GetAttributeValue<string>("board"),
+				SecCode = rootElement.GetAttributeValue<string>("seccode"),
 				Period = rootElement.GetAttributeValue<int>("period"),
 				Status = (CandleResponseStatus)rootElement.GetAttributeValue<int>("status"),
 				Candles = rootElement
 					.Descendants("candle")
 					.Select(node => new TransaqCandle
 					{
-						Date = node.GetAttributeValue("date").ToDate(GetNow()),
-						Open = node.GetAttributeValue("open").To<decimal>(),
-						High = node.GetAttributeValue("high").To<decimal>(),
-						Low = node.GetAttributeValue("low").To<decimal>(),
-						Close = node.GetAttributeValue("close").To<decimal>(),
+						Date = node.GetAttributeValue<string>("date").ToDate(GetNow()),
+						Open = node.GetAttributeValue<string>("open").To<decimal>(),
+						High = node.GetAttributeValue<string>("high").To<decimal>(),
+						Low = node.GetAttributeValue<string>("low").To<decimal>(),
+						Close = node.GetAttributeValue<string>("close").To<decimal>(),
 						Volume = node.GetAttributeValue<int>("volume"),
 						Oi = node.GetAttributeValue<int>("oi")
 					})
@@ -833,10 +849,10 @@
 			return new SecInfoResponse
 			{
 				SecId = rootElement.GetElementValue<int>("secid"),
-				SecCode = rootElement.GetElementValue("seccode"),
+				SecCode = rootElement.GetElementValue<string>("seccode"),
 				Market = rootElement.GetElementValue<int>("market"),
-				SecName = rootElement.GetElementValue("secname", null, false),
-				PName = rootElement.GetElementValue("pname", null, false),
+				SecName = rootElement.GetElementValue<string>("secname"),
+				PName = rootElement.GetElementValue<string>("pname"),
 				MatDate = rootElement.GetElementValueNullable<DateTime>("mat_date", GetNow),
 				ClearingPrice = rootElement.GetElementValueNullable<decimal>("clearing_price"),
 				MinPrice = rootElement.GetElementValueNullable<decimal>("minprice"),
@@ -871,8 +887,8 @@
 			{
 				Id = rootElement.GetAttributeValue<int>("id"),
 				TimeStamp = rootElement.GetElementValueNullable<DateTime>("time_stamp", GetNow),
-				Text = rootElement.GetElementValue("source", null, false),
-				Title = rootElement.GetElementValue("title", null, false)
+				Text = rootElement.GetElementValue<string>("source"),
+				Title = rootElement.GetElementValue<string>("title")
 			};
 		}
 
@@ -881,7 +897,7 @@
 			return new NewsBodyResponse
 			{
 				Id = rootElement.GetAttributeValue<int>("id"),
-				Text = rootElement.GetElementValue("text")
+				Text = rootElement.GetElementValue<string>("text")
 			};
 		}
 
@@ -894,11 +910,11 @@
 					.Select(node => new Tick
 					{
 						SecId = node.GetElementValue<int>("secid"),
-						SecCode = node.GetElementValue("seccode"),
-						Board = node.GetElementValue("board"),
+						SecCode = node.GetElementValue<string>("seccode"),
+						Board = node.GetElementValue<string>("board"),
 						TradeNo = node.GetElementValue<long>("tradeno"),
-						TradeTime = node.GetElementValue("tradetime").ToDate(GetNow()),
-						Price = node.GetElementValue("price").To<decimal>(),
+						TradeTime = node.GetElementValue<string>("tradetime").ToDate(GetNow()),
+						Price = node.GetElementValue<string>("price").To<decimal>(),
 						Quantity = node.GetElementValue<int>("quantity"),
 						Period = node.GetElementValueNullable<TicksPeriods>("period"),
 						BuySell = node.GetElementValue<BuySells>("buysell"),
@@ -917,11 +933,11 @@
 					.Select(node => new Tick
 					{
 						SecId = node.GetAttributeValue<int>("secid"),
-						SecCode = node.GetElementValue("seccode"),
-						Board = node.GetElementValue("board"),
+						SecCode = node.GetElementValue<string>("seccode"),
+						Board = node.GetElementValue<string>("board"),
 						TradeNo = node.GetElementValue<long>("tradeno"),
-						TradeTime = node.GetElementValue("time").ToDate(GetNow()),
-						Price = node.GetElementValue("price").To<decimal>(),
+						TradeTime = node.GetElementValue<string>("time").ToDate(GetNow()),
+						Price = node.GetElementValue<string>("price").To<decimal>(),
 						Quantity = node.GetElementValue<int>("quantity"),
 						Period = node.GetElementValueNullable<TicksPeriods>("period"),
 						BuySell = node.GetElementValue<BuySells>("buysell"),
@@ -940,10 +956,10 @@
 					.Select(node => new TransaqQuote
 					{
 						SecId = node.GetAttributeValue<int>("secid"),
-						SecCode = node.GetElementValue("seccode"),
-						Source = node.GetElementValue("source", string.Empty),
-						Board = node.GetElementValue("board"),
-						Price = node.GetElementValue("price").To<decimal>(),
+						SecCode = node.GetElementValue<string>("seccode"),
+						Source = node.GetElementValue<string>("source"),
+						Board = node.GetElementValue<string>("board"),
+						Price = node.GetElementValue<string>("price").To<decimal>(),
 						Yield = node.GetElementValue<int>("yield"),
 						Buy = node.GetElementValueNullable<int>("buy"),
 						Sell = node.GetElementValueNullable<int>("sell")
@@ -957,8 +973,8 @@
 			return new MarketOrdResponse
 			{
 				SecId = rootElement.GetElementValue<int>("secid"),
-				SecCode = rootElement.GetElementValue("seccode"),
-				Permit = rootElement.GetAttributeValue("permit").FromYesNo()
+				SecCode = rootElement.GetElementValue<string>("seccode"),
+				Permit = rootElement.GetAttributeValue<string>("permit").FromYesNo()
 			};
 		}
 
@@ -966,15 +982,15 @@
 		{
 			return new LeverageControlResponse
 			{
-				Client = rootElement.GetAttributeValue("client"),
-				LeveragePlan = rootElement.GetAttributeValue("leverage_plan").To<decimal?>(),
-				LeverageFact = rootElement.GetAttributeValue("leverage_fact").To<decimal?>(),
+				Client = rootElement.GetAttributeValue<string>("client"),
+				LeveragePlan = rootElement.GetAttributeValue<string>("leverage_plan").To<decimal?>(),
+				LeverageFact = rootElement.GetAttributeValue<string>("leverage_fact").To<decimal?>(),
 				Items = rootElement
 					.Descendants("security")
 					.Select(node => new LeverageControlSecurity
 					{
-						SecCode = node.GetElementValue("seccode"),
-						Board = node.GetElementValue("board"),
+						SecCode = node.GetElementValue<string>("seccode"),
+						Board = node.GetElementValue<string>("board"),
 						MaxBuy = node.GetAttributeValue<long>("maxbuy"),
 						MaxSell = node.GetAttributeValue<long>("maxsell")
 					})
@@ -992,8 +1008,8 @@
 					.Select(node => new Quotation
 					{
 						SecId = node.GetAttributeValue<int>("secid"),
-						SecCode = node.GetElementValue("seccode"),
-						Board = node.GetElementValue("board"),
+						SecCode = node.GetElementValue<string>("seccode"),
+						Board = node.GetElementValue<string>("board"),
 						AccruedIntValue = node.GetElementValueNullable<decimal>("accrueedintValue"),
 						Open = node.GetElementValueNullable<decimal>("open"),
 						WAPrice = node.GetElementValueNullable<decimal>("waprice"),
@@ -1025,7 +1041,7 @@
 						ClosePrice = node.GetElementValueNullable<decimal>("closeprice"),
 						CloseYield = node.GetElementValueNullable<decimal>("closeyield"),
 						Status = node.GetElementValueNullable<TransaqSecurityStatus>("status"),
-						SessionStatus = node.GetElementValue("status", null, false),
+						SessionStatus = node.GetElementValue<string>("status"),
 						BuyDeposit = node.GetElementValueNullable<decimal>("buydeposit"),
 						SellDeposit = node.GetElementValueNullable<decimal>("selldeposit"),
 						Volatility = node.GetElementValueNullable<decimal>("volatility"),
@@ -1046,22 +1062,22 @@
 					.Select(node => new TransaqMyTrade
 					{
 						SecId = node.GetElementValue<int>("secid"),
-						SecCode = node.GetElementValue("seccode"),
+						SecCode = node.GetElementValue<string>("seccode"),
 						TradeNo = node.GetElementValue<long>("tradeno"),
 						OrderNo = node.GetElementValue<long>("orderno"),
-						Board = node.GetElementValue("board"),
-						Client = node.GetElementValue("client"),
+						Board = node.GetElementValue<string>("board"),
+						Client = node.GetElementValue<string>("client"),
 						BuySell = node.GetElementValue<BuySells>("buysell"),
-						Time = node.GetElementValue("time").ToDate(GetNow()),
-						BrokerRef = node.GetElementValue("brokerref"),
-						Value = node.GetElementValue("value").To<decimal>(),
+						Time = node.GetElementValue<string>("time").ToDate(GetNow()),
+						BrokerRef = node.GetElementValue<string>("brokerref"),
+						Value = node.GetElementValue<string>("value").To<decimal>(),
 						Commission = node.GetElementValueNullable<decimal>("commission"),
-						Price = node.GetElementValue("price").To<decimal>(),
+						Price = node.GetElementValue<string>("price").To<decimal>(),
 						Quantity = node.GetElementValue<int>("quantity"),
-						Yield = node.GetElementValue("yield").To<decimal>(),
+						Yield = node.GetElementValue<string>("yield").To<decimal>(),
 						AccrueEdint = node.GetElementValueNullable<decimal>("accrueedint"),
 						TradeType = node.GetElementValue<TradeTypes>("tradetype"),
-						SettleCode = node.GetElementValue("settlecode"),
+						SettleCode = node.GetElementValue<string>("settlecode"),
 						CurrentPos = node.GetElementValue<long>("currentpos")
 					})
 					.ToArray()
@@ -1072,28 +1088,37 @@
 		{
 			return new ClientLimitsResponse
 			{
-				Client = rootElement.GetAttributeValue("client"),
-				CBPLimit = rootElement.GetElementValue("cbplimit").To<decimal>(),
-				CBPlused = rootElement.GetElementValue("cbplused").To<decimal>(),
-				CBPLPlanned = rootElement.GetElementValue("cbplplanned").To<decimal>(),
-				FobVarMargin = rootElement.GetElementValue("fob_varmargin").To<decimal>(),
-				Coverage = rootElement.GetElementValue("coverage").To<decimal>(),
-				LiquidityC = rootElement.GetElementValue("liquidity_c").To<decimal>(),
-				Profit = rootElement.GetElementValue("profit").To<decimal>(),
-				MoneyCurrent = rootElement.GetElementValue("money_current").To<decimal>(),
-				MoneyBlocked = rootElement.GetElementValue("money_blocked").To<decimal>(),
-				MoneyFree = rootElement.GetElementValue("money_free").To<decimal>(),
-				OptionsPremium = rootElement.GetElementValue("options_premium").To<decimal>(),
-				ExchangeFee = rootElement.GetElementValue("exchange_fee").To<decimal>(),
-				FortsVarMargin = rootElement.GetElementValue("forts_varmargin").To<decimal>(),
-				VarMargin = rootElement.GetElementValue("varmargin").To<decimal>(),
-				PclMargin = rootElement.GetElementValue("pclmargin").To<decimal>(),
-				OptionsVm = rootElement.GetElementValue("options_vm").To<decimal>(),
-				SpotBuyLimit = rootElement.GetElementValue("spot_buy_limit").To<decimal>(),
-				UsedStopBuyLimit = rootElement.GetElementValue("used_stop_buy_limit").To<decimal>(),
-				CollatCurrent = rootElement.GetElementValue("collat_current").To<decimal>(),
-				CollatBlocked = rootElement.GetElementValue("collat_blocked").To<decimal>(),
-				CollatFree = rootElement.GetElementValue("collat_free").To<decimal>()
+				Client = rootElement.GetAttributeValue<string>("client"),
+				CBPLimit = rootElement.GetElementValue<string>("cbplimit").To<decimal>(),
+				CBPlused = rootElement.GetElementValue<string>("cbplused").To<decimal>(),
+				CBPLPlanned = rootElement.GetElementValue<string>("cbplplanned").To<decimal>(),
+				FobVarMargin = rootElement.GetElementValue<string>("fob_varmargin").To<decimal>(),
+				Coverage = rootElement.GetElementValue<string>("coverage").To<decimal>(),
+				LiquidityC = rootElement.GetElementValue<string>("liquidity_c").To<decimal>(),
+				Profit = rootElement.GetElementValue<string>("profit").To<decimal>(),
+				MoneyCurrent = rootElement.GetElementValue<string>("money_current").To<decimal>(),
+				MoneyBlocked = rootElement.GetElementValue<string>("money_blocked").To<decimal>(),
+				MoneyFree = rootElement.GetElementValue<string>("money_free").To<decimal>(),
+				OptionsPremium = rootElement.GetElementValue<string>("options_premium").To<decimal>(),
+				ExchangeFee = rootElement.GetElementValue<string>("exchange_fee").To<decimal>(),
+				FortsVarMargin = rootElement.GetElementValue<string>("forts_varmargin").To<decimal>(),
+				VarMargin = rootElement.GetElementValue<string>("varmargin").To<decimal>(),
+				PclMargin = rootElement.GetElementValue<string>("pclmargin").To<decimal>(),
+				OptionsVm = rootElement.GetElementValue<string>("options_vm").To<decimal>(),
+				SpotBuyLimit = rootElement.GetElementValue<string>("spot_buy_limit").To<decimal>(),
+				UsedStopBuyLimit = rootElement.GetElementValue<string>("used_stop_buy_limit").To<decimal>(),
+				CollatCurrent = rootElement.GetElementValue<string>("collat_current").To<decimal>(),
+				CollatBlocked = rootElement.GetElementValue<string>("collat_blocked").To<decimal>(),
+				CollatFree = rootElement.GetElementValue<string>("collat_free").To<decimal>()
+			};
+		}
+
+		private static BaseResponse DeserializeUnitedPortfolio(XElement rootElement)
+		{
+			return new UnitedPortfolioResponse
+			{
+				Client = rootElement.GetAttributeValue<string>("client"),
+				// TODO
 			};
 		}
 
@@ -1107,32 +1132,32 @@
 					{
 						TransactionId = orderElement.GetAttributeValue<int>("transactionid"),
 						OrderNo = orderElement.GetElementValue<long>("orderno"),
-						Board = orderElement.GetElementValue("board"),
+						Board = orderElement.GetElementValue<string>("board"),
 						SecId = orderElement.GetElementValue<int>("secid"),
-						SecCode = orderElement.GetElementValue("seccode"),
-						Client = orderElement.GetElementValue("client"),
+						SecCode = orderElement.GetElementValue<string>("seccode"),
+						Client = orderElement.GetElementValue<string>("client"),
 						Status = orderElement.GetElementValue<TransaqOrderStatus>("status"),
 						BuySell = orderElement.GetElementValue<BuySells>("buysell"),
 						Time = orderElement.GetElementValueNullable<DateTime>("time", GetNow),
 						ExpDate = orderElement.GetElementValueNullable<DateTime>("expdate", GetNow),
 						OriginOrderNo = orderElement.GetElementValueNullable<long>("origin_orderno"),
 						AcceptTime = orderElement.GetElementValueNullable<DateTime>("accepttime", GetNow),
-						BrokerRef = orderElement.GetElementValue("brokerref"),
-						Value = orderElement.GetElementValue("value").To<decimal>(),
-						AccruEdint = orderElement.GetElementValue("accruedint").To<decimal>(),
-						SettleCode = orderElement.GetElementValue("settlecode"),
+						BrokerRef = orderElement.GetElementValue<string>("brokerref"),
+						Value = orderElement.GetElementValue<string>("value").To<decimal>(),
+						AccruEdint = orderElement.GetElementValue<string>("accruedint").To<decimal>(),
+						SettleCode = orderElement.GetElementValue<string>("settlecode"),
 						Balance = orderElement.GetElementValue<int>("balance"),
-						Price = orderElement.GetElementValue("price").To<decimal>(),
+						Price = orderElement.GetElementValue<string>("price").To<decimal>(),
 						Quantity = orderElement.GetElementValue<int>("quantity"),
 						Hidden = orderElement.GetElementValue<int>("hidden"),
-						Yield = orderElement.GetElementValue("yield").To<decimal>(),
+						Yield = orderElement.GetElementValue<string>("yield").To<decimal>(),
 						WithdrawTime = orderElement.GetElementValueNullable<DateTime>("withdrawtime", GetNow),
 						ConditionType = orderElement.GetElementValue<TransaqAlgoOrderConditionTypes>("condition"),
 						ConditionValue = orderElement.GetElementValueNullable<decimal>("conditionvalue"),
 						ValidAfter = orderElement.GetElementValueNullable<DateTime>("validafter", GetNow),
 						ValidBefore = orderElement.GetElementValueNullable<DateTime>("validbefore", GetNow),
-						MaxCommission = orderElement.GetElementValue("maxcomission").To<decimal>(),
-						Result = orderElement.GetElementValue("result")
+						MaxCommission = orderElement.GetElementValue<string>("maxcomission").To<decimal>(),
+						Result = orderElement.GetElementValue<string>("result")
 					})
 					.ToArray(),
 
@@ -1144,15 +1169,15 @@
 						{
 							TransactionId = sOrderElement.GetAttributeValue<int>("transactionid"),
 							ActiveOrderNo = sOrderElement.GetElementValueNullable<long>("activeorderno"),
-							Board = sOrderElement.GetElementValue("board"),
-							SecCode = sOrderElement.GetElementValue("seccode"),
-							Client = sOrderElement.GetElementValue("client"),
+							Board = sOrderElement.GetElementValue<string>("board"),
+							SecCode = sOrderElement.GetElementValue<string>("seccode"),
+							Client = sOrderElement.GetElementValue<string>("client"),
 							BuySell = sOrderElement.GetElementValue<BuySells>("buysell"),
-							Canceller = sOrderElement.GetElementValue("canceller", null, false),
+							Canceller = sOrderElement.GetElementValue<string>("canceller"),
 							AllTradeNo = sOrderElement.GetElementValueNullable<long>("alltradeno"),
 							ValidBefore = sOrderElement.GetElementValueNullable<DateTime>("validbefore", GetNow),
-							Author = sOrderElement.GetElementValue("author"),
-							AcceptTime = sOrderElement.GetElementValue("accepttime").ToDate(GetNow()),
+							Author = sOrderElement.GetElementValue<string>("author"),
+							AcceptTime = sOrderElement.GetElementValue<string>("accepttime").ToDate(GetNow()),
 							LinkedOrderNo = sOrderElement.GetElementValueNullable<long>("linkedorderno"),
 							ExpDate = sOrderElement.GetElementValueNullable<DateTime>("expdate", GetNow),
 							Status = sOrderElement.GetElementValue<TransaqOrderStatus>("status")
@@ -1163,11 +1188,11 @@
 						{
 							var stopLoss = new StopLoss
 							{
-								UseCredit = stopLossElement.GetElementValue("usecredit", null, false).FromYesNo(),
-								ActivationPrice = stopLossElement.GetElementValue("activationprice").To<decimal>(),
+								UseCredit = stopLossElement.GetElementValue<string>("usecredit").FromYesNo(),
+								ActivationPrice = stopLossElement.GetElementValue<string>("activationprice").To<decimal>(),
 								GuardTime = stopLossElement.GetElementValueNullable<DateTime>("guardtime", GetNow),
-								BrokerRef = stopLossElement.GetElementValue("brokerref", null, false),
-								Quantity = stopLossElement.GetElementValue("quantity").To<decimal>(),
+								BrokerRef = stopLossElement.GetElementValue<string>("brokerref"),
+								Quantity = stopLossElement.GetElementValue<string>("quantity").To<decimal>(),
 								OrderPrice = stopLossElement.GetElementValueNullable<decimal>("orderprice")
 							};
 
@@ -1179,10 +1204,10 @@
 						{
 							var takeProfit = new TakeProfit
 							{
-								ActivationPrice = takeProfitElement.GetElementValue("activationprice").To<decimal>(),
+								ActivationPrice = takeProfitElement.GetElementValue<string>("activationprice").To<decimal>(),
 								GuardTime = takeProfitElement.GetElementValueNullable<DateTime>("guardtime", GetNow),
-								BrokerRef = takeProfitElement.GetElementValue("brokerref", null, false),
-								Quantity = takeProfitElement.GetElementValue("quantity").To<decimal>(),
+								BrokerRef = takeProfitElement.GetElementValue<string>("brokerref"),
+								Quantity = takeProfitElement.GetElementValue<string>("quantity").To<decimal>(),
 								Extremum = takeProfitElement.GetElementValueNullable<decimal>("extremum"),
 								Level = takeProfitElement.GetElementValueNullable<decimal>("level"),
 								Correction = takeProfitElement.GetElementValueToUnit("correction"),
@@ -1207,7 +1232,7 @@
 					.Select(node => new Board
 					{
 						Id = node.GetAttributeValue<string>("id"),
-						Name = node.GetElementValue("name"),
+						Name = node.GetElementValue<string>("name"),
 						Market = node.GetElementValue<int>("market"),
 						Type = node.GetElementValue<int>("type"),
 					})
@@ -1223,13 +1248,13 @@
 					.Descendants("pit")
 					.Select(node => new Pit
 					{
-						SecCode = node.GetAttributeValue("seccode"),
-						Board = node.GetAttributeValue("board"),
-						Market = node.GetElementValue("market"),
+						SecCode = node.GetAttributeValue<string>("seccode"),
+						Board = node.GetAttributeValue<string>("board"),
+						Market = node.GetElementValue<string>("market"),
 						Decimals = node.GetElementValue<int>("decimals"),
-						MinStep = node.GetElementValue("minstep").To<decimal>(),
+						MinStep = node.GetElementValue<string>("minstep").To<decimal>(),
 						LotSize = node.GetElementValue<int>("lotsize"),
-						PointCost = node.GetElementValue("point_cost").To<decimal>()
+						PointCost = node.GetElementValue<string>("point_cost").To<decimal>()
 					})
 					.ToArray()
 			};
@@ -1239,7 +1264,7 @@
 		{
 			var result = new PortfolioTPlusResponse
 			{
-				Client = rootElement.GetAttributeValue("client"),
+				Client = rootElement.GetAttributeValue<string>("client"),
 				CoverageFact = rootElement.GetElementValue<decimal>("coverage_fact"),
 				CoveragePlan = rootElement.GetElementValue<decimal>("coverage_plan"),
 				CoverageCrit = rootElement.GetElementValue<decimal>("coverage_crit"),
@@ -1267,7 +1292,7 @@
 					.Descendants("value_part")
 					.Select(node => new MoneyValuePart
 					{
-						Register = node.GetAttributeValue("register"),
+						Register = node.GetAttributeValue<string>("register"),
 						OpenBalance = node.GetElementValue<decimal>("open_balance"),
 						Bought = node.GetElementValue<decimal>("bought"),
 						Sold = node.GetElementValue<decimal>("sold"),
@@ -1281,9 +1306,9 @@
 				.Descendants("security")
 				.Select(node => new TPlusSecurity
 				{
-					SecId = node.GetAttributeValue("secid"),
+					SecId = node.GetAttributeValue<string>("secid"),
 					Market = node.GetElementValue<int>("market"),
-					SecCode = node.GetElementValue("seccode"),
+					SecCode = node.GetElementValue<string>("seccode"),
 					Price = node.GetElementValue<decimal>("price"),
 					OpenBalance = node.GetElementValue<int>("open_balance"),
 					Bought = node.GetElementValue<int>("bought"),
@@ -1322,7 +1347,7 @@
 		{
 			return new PortfolioMctResponse
 			{
-				Client = rootElement.GetAttributeValue("client"),
+				Client = rootElement.GetAttributeValue<string>("client"),
 				Capital = rootElement.GetElementValue<decimal>("capital"),
 				UtilizationFact = rootElement.GetElementValue<decimal>("utilization_fact"),
 				UtilizationPlan = rootElement.GetElementValue<decimal>("utilization_plan"),
@@ -1337,9 +1362,9 @@
 					.Descendants("security")
 					.Select(node => new MctSecurity
 					{
-						SecId = node.GetAttributeValue("secid"),
+						SecId = node.GetAttributeValue<string>("secid"),
 						Market = node.GetElementValue<int>("market"),
-						SecCode = node.GetElementValue("seccode"),
+						SecCode = node.GetElementValue<string>("seccode"),
 						GoRate = node.GetElementValue<decimal>("go_rate"),
 						GoRateLong = node.GetElementValue<decimal>("go_rate_long"),
 						GoRateShort = node.GetElementValue<decimal>("go_rate_short"),
@@ -1372,15 +1397,15 @@
 		{
 			return new MaxBuySellTPlusResponse
 			{
-				Client = rootElement.GetAttributeValue("client"),
+				Client = rootElement.GetAttributeValue<string>("client"),
 
 				Securities = rootElement
 					.Descendants("security")
 					.Select(node => new MaxBuySellTPlusSecurity
 					{
-						SecId = node.GetAttributeValue("secid"),
+						SecId = node.GetAttributeValue<string>("secid"),
 						Market = node.GetElementValue<int>("market"),
-						SecCode = node.GetElementValue("seccode"),
+						SecCode = node.GetElementValue<string>("seccode"),
 						MaxBuy = node.GetElementValue<long>("maxbuy"),
 						MaxSell = node.GetElementValue<long>("maxsell"),
 					})
@@ -1397,9 +1422,9 @@
 					.Select(node => new TransaqMessage
 					{
 						Date = node.GetElementValueNullable<DateTime>("date", GetNow),
-						Urgent = node.GetElementValue("urgent").FromYesNo(),
-						From = node.GetElementValue("from"),
-						Text = node.GetElementValue("text")
+						Urgent = node.GetElementValue<string>("urgent").FromYesNo(),
+						From = node.GetElementValue<string>("from"),
+						Text = node.GetElementValue<string>("text")
 					})
 					.ToArray()
 			};
