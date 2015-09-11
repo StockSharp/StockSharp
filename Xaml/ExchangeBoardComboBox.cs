@@ -15,14 +15,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Выпадающий список для выбора биржевой площадки.
+	/// The drop-down list for exchange board selection.
 	/// </summary>
 	public class ExchangeBoardComboBox : ComboBox
 	{
 		private static readonly ExchangeBoard _emptyBoard = new ExchangeBoard { Code = LocalizedStrings.Str1521 };
 
 		/// <summary>
-		/// Создать <see cref="ExchangeBoardComboBox"/>.
+		/// Initializes a new instance of the <see cref="ExchangeBoardComboBox"/>.
 		/// </summary>
 		public ExchangeBoardComboBox()
 		{
@@ -69,12 +69,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Все биржевые площадки.
+		/// All exchange boards.
 		/// </summary>
 		public IList<ExchangeBoard> Boards { get; private set; }
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="SelectedBoard"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ExchangeBoardComboBox.SelectedBoard"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedBoardProperty =
 			 DependencyProperty.Register("SelectedBoard", typeof(ExchangeBoard), typeof(ExchangeBoardComboBox),
@@ -83,7 +83,7 @@ namespace StockSharp.Xaml
 		private ExchangeBoard _selectedBoard;
 
 		/// <summary>
-		/// Выбранная биржевая площадка.
+		/// Selected exchange board.
 		/// </summary>
 		public ExchangeBoard SelectedBoard
 		{
@@ -107,9 +107,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Обработчик события смены выбранного элемента.
+		/// The selected item change event handler.
 		/// </summary>
-		/// <param name="e">Параметр события.</param>
+		/// <param name="e">The event parameter.</param>
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e)
 		{
 			base.OnSelectionChanged(e);

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,12 +10,12 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Окно выбора портфеля.
+	/// The portfolio selection window.
 	/// </summary>
 	partial class PortfolioPickerWindow
 	{
 		/// <summary>
-		/// Создать <see cref="PortfolioPickerWindow"/>.
+		/// Initializes a new instance of the <see cref="PortfolioPickerWindow"/>.
 		/// </summary>
 		public PortfolioPickerWindow()
 		{
@@ -27,7 +27,7 @@
 		}
 
 		/// <summary>
-		/// Выбранный портфель.
+		/// The selected portfolio.
 		/// </summary>
 		public Portfolio SelectedPortfolio
 		{
@@ -36,14 +36,14 @@
 		}
 
 		/// <summary>
-		/// Доступные портфели.
+		/// Available portfolios.
 		/// </summary>
 		public IListEx<Portfolio> Portfolios { get; private set; }
 
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		public IConnector Connector
 		{

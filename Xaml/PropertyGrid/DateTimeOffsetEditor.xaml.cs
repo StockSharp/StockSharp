@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml.PropertyGrid
+namespace StockSharp.Xaml.PropertyGrid
 {
 	using System;
 	using System.Windows;
@@ -8,14 +8,14 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Редактор для <see cref="DateTimeOffset"/>.
+	/// Editor for <see cref="DateTimeOffset"/>.
 	/// </summary>
 	public partial class DateTimeOffsetEditor
 	{
 		private TimeSpan _zoneOffset;
 
 		/// <summary>
-		/// Создать <see cref="DateTimeOffsetEditor"/>.
+		/// Initializes a new instance of the <see cref="DateTimeOffsetEditor"/>.
 		/// </summary>
 		public DateTimeOffsetEditor()
 		{
@@ -23,7 +23,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Offset"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="DateTimeOffsetEditor.Offset"/>.
 		/// </summary>
 		public static readonly DependencyProperty OffsetProperty =
 			DependencyProperty.Register("Offset", typeof(DateTimeOffset?),
@@ -47,7 +47,7 @@
 		}
 
 		/// <summary>
-		/// Время с временной зоной.
+		/// Time with time zone.
 		/// </summary>
 		public DateTimeOffset? Offset
 		{

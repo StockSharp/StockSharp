@@ -21,7 +21,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Компонент для мониторинга работы торговых стратегий.
+	/// The component for trading strategies work monitoring.
 	/// </summary>
 	public partial class Monitor : ILogListener
 	{
@@ -44,7 +44,7 @@ namespace StockSharp.Xaml
 		private int _totalMessageCount;
 
 		/// <summary>
-		/// Создать <see cref="Monitor"/>.
+		/// Initializes a new instance of the <see cref="Monitor"/>.
 		/// </summary>
 		public Monitor()
 		{
@@ -57,7 +57,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowStrategies"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Monitor.ShowStrategies"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowStrategiesProperty =
 			DependencyProperty.Register("ShowStrategies", typeof(bool), typeof(Monitor), new PropertyMetadata(true, ShowStrategiesPropertyChanged));
@@ -82,7 +82,7 @@ namespace StockSharp.Xaml
 		private bool _showStrategies = true;
 
 		/// <summary>
-		/// Показывать узел 'Стратегии'. По умолчанию включено.
+		/// To show the 'Strategy' node. Enabled by default.
 		/// </summary>
 		public bool ShowStrategies
 		{
@@ -91,7 +91,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="MaxItemsCount"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="Monitor.MaxItemsCount"/>.
 		/// </summary>
 		public static readonly DependencyProperty MaxItemsCountProperty = DependencyProperty.Register("MaxItemsCount", typeof(int), typeof(Monitor),
 				new PropertyMetadata(LogMessageCollection.DefaultMaxItemsCount, MaxItemsCountChanged));
@@ -104,9 +104,7 @@ namespace StockSharp.Xaml
 		private int _maxItemsCount = LogMessageCollection.DefaultMaxItemsCount;
 
 		/// <summary>
-		/// Максимальное число записей для отображения. Значение -1 обозначает бесконечный объем записей.
-		/// По умолчанию отображается последние 10000 записей для 64 битного процесса
-		/// и 1000 записей для 32 битного процесса.
+		/// The maximum number of entries to display. The -1 value means an unlimited amount of records. By default, the last 10000 records for 64-bit process and 1000 records for 32-bit process are displayed.
 		/// </summary>
 		public int MaxItemsCount
 		{
@@ -115,12 +113,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Графический компонент для отображения логов.
+		/// The graphical component for logs displaying.
 		/// </summary>
 		public LogControl LogControl { get { return LogCtrl; } }
 
 		/// <summary>
-		/// Удалить все сообщения.
+		/// To delete all messages.
 		/// </summary>
 		public void Clear()
 		{
@@ -150,9 +148,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		public void WriteMessages(IEnumerable<LogMessage> messages)
 		{
 			if (messages == null)
@@ -266,9 +264,9 @@ namespace StockSharp.Xaml
 		#region Implementation of IPersistable
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			var settings = storage.GetValue<SettingsStorage>("LogControl");
@@ -278,9 +276,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("LogControl", LogCtrl.Save());

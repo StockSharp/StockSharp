@@ -1,19 +1,19 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Windows;
 
 	/// <summary>
-	/// Панель для редактирования <see cref="ProxySettings"/>.
+	/// The panel for editing <see cref="ProxySettingsEditor.ProxySettings"/>.
 	/// </summary>
 	public partial class ProxySettingsEditor
 	{
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ProxySettings"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ProxySettingsEditor.ProxySettings"/>.
 		/// </summary>
 		public static readonly DependencyProperty ProxySettingsProperty = DependencyProperty.Register("ProxySettings", typeof(ProxySettings), typeof(ProxySettingsEditor));
 
 		/// <summary>
-		/// Настройки прокси-сервера.
+		/// Proxy-server settings.
 		/// </summary>
 		public ProxySettings ProxySettings
 		{
@@ -22,7 +22,7 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="ProxySettingsEditor"/>.
+		/// Initializes a new instance of the <see cref="ProxySettingsEditor"/>.
 		/// </summary>
 		public ProxySettingsEditor()
 		{

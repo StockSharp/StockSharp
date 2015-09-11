@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -9,14 +9,14 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Таблица для отображения сообщения <see cref="Level1ChangeMessage"/>.
+	/// The table to display a message <see cref="Level1ChangeMessage"/>.
 	/// </summary>
 	public partial class Level1Grid
 	{
 		private readonly ThreadSafeObservableCollection<Level1ChangeMessage> _messages;
 
 		/// <summary>
-		/// Создать <see cref="Level1Grid"/>.
+		/// Initializes a new instance of the <see cref="Level1Grid"/>.
 		/// </summary>
 		public Level1Grid()
 		{
@@ -29,8 +29,7 @@
 		}
 
 		/// <summary>
-		/// Максимальное число сообщений для показа. Значение -1 означает бесконечное количество.
-		/// По-умолчанию равно 10000.
+		/// The maximum number of messages to display. The -1 value means an unlimited amount. The default value is 10000.
 		/// </summary>
 		public int MaxCount
 		{
@@ -39,7 +38,7 @@
 		}
 
 		/// <summary>
-		/// Список сообщений, добавленных в таблицу.
+		/// The list of messages added to the table.
 		/// </summary>
 		public IListEx<Level1ChangeMessage> Messages
 		{
@@ -47,7 +46,7 @@
 		}
 
 		/// <summary>
-		/// Выбранное сообщение.
+		/// The selected message.
 		/// </summary>
 		public Level1ChangeMessage SelectedMessage
 		{
@@ -55,7 +54,7 @@
 		}
 
 		/// <summary>
-		/// Выбранные сообщения.
+		/// Selected messages.
 		/// </summary>
 		public IEnumerable<Level1ChangeMessage> SelectedMessages
 		{

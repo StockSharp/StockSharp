@@ -1,14 +1,14 @@
-﻿namespace StockSharp.Xaml.PropertyGrid
+namespace StockSharp.Xaml.PropertyGrid
 {
 	using System;
 
 	/// <summary>
-	/// Интерфейс, описывающий тип с переменным количеством свойств.
+	/// The interface describing the type with a variable number of properties.
 	/// </summary>
 	public interface INotifyPropertiesChanged
 	{
 		/// <summary>
-		/// Событие изменения доступных свойств.
+		/// The available properties change event.
 		/// </summary>
 		event Action PropertiesChanged;
 	}

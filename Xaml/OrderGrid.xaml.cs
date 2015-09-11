@@ -20,27 +20,27 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Таблица, отображающая заявки (<see cref="Order"/>).
+	/// The table showing orders (<see cref="Order"/>).
 	/// </summary>
 	public partial class OrderGrid
 	{
 		/// <summary>
-		/// Команда на регистрацию заявки.
+		/// The command for the order registration.
 		/// </summary>
 		public static RoutedCommand RegisterOrderCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда на перерегистрацию заявки.
+		/// The command for the order re-registration.
 		/// </summary>
 		public static RoutedCommand ReRegisterOrderCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда на отмену выбранных заявок.
+		/// The command for the cancel of selected orders.
 		/// </summary>
 		public static RoutedCommand CancelOrderCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда на копирование текста ошибки.
+		/// The command for the copying of the error text.
 		/// </summary>
 		public static RoutedCommand CopyErrorCommand = new RoutedCommand();
 
@@ -175,7 +175,7 @@ namespace StockSharp.Xaml
 		private readonly ConvertibleObservableCollection<Order, OrderItem> _orders;
 
 		/// <summary>
-		/// Создать <see cref="OrderGrid"/>.
+		/// Initializes a new instance of the <see cref="OrderGrid"/>.
 		/// </summary>
 		public OrderGrid()
 		{
@@ -195,8 +195,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Максимальное число заявок для показа. Значение -1 означает бесконечное количество.
-		/// По-умолчанию равно 100000.
+		/// The maximum number of orders to display. The -1 value means unlimited amount. The default is 100000.
 		/// </summary>
 		public int MaxCount
 		{
@@ -205,7 +204,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список заявок, добавленных в таблицу.
+		/// The list of orders that have been added to the table.
 		/// </summary>
 		public IListEx<Order> Orders
 		{
@@ -213,9 +212,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Добавить описание ошибки регистрации в таблицу.
+		/// To add a description of the registration error to the table.
 		/// </summary>
-		/// <param name="fail">Ошибка.</param>
+		/// <param name="fail">Error.</param>
 		public void AddRegistrationFail(OrderFail fail)
 		{
 			if (fail == null)
@@ -228,7 +227,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранная заявка.
+		/// The selected order.
 		/// </summary>
 		public Order SelectedOrder
 		{
@@ -236,7 +235,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранные заявки.
+		/// Selected orders.
 		/// </summary>
 		public IEnumerable<Order> SelectedOrders
 		{
@@ -244,24 +243,24 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие регистрации заявки.
+		/// The order registration event.
 		/// </summary>
 		public event Action OrderRegistering;
 
 		/// <summary>
-		/// Событие перерегистрации заявки.
+		/// The order re-registration event.
 		/// </summary>
 		public event Action<Order> OrderReRegistering;
 
 		/// <summary>
-		/// Событие отмены выбранных заявок.
+		/// The selected orders cancel event.
 		/// </summary>
 		public event Action<IEnumerable<Order>> OrderCanceling;
 
 		/// <summary>
-		/// Метод вызывается при добавлении новой заявки.
+		/// The method is called when a new order added.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		protected virtual void OnOrderAdded(Order order)
 		{
 		}

@@ -11,15 +11,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Текстовое поле, автоматически формирующее идентификатор инструмента на основе его изменяемых полей
-	/// <see cref="BusinessEntities.Security.Code"/> и <see cref="BusinessEntities.Security.Board"/>.
+	/// The text field is automatically generating the instrument identifier based on its variable fields <see cref="BusinessEntities.Security.Code"/> and <see cref="BusinessEntities.Security.Board"/>.
 	/// </summary>
 	public partial class SecurityIdTextBox
 	{
 		private Security _security;
 
 		/// <summary>
-		/// Создать <see cref="SecurityIdTextBox"/>.
+		/// Initializes a new instance of the <see cref="SecurityIdTextBox"/>.
 		/// </summary>
 		public SecurityIdTextBox()
 		{
@@ -27,7 +26,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		public Security Security
 		{
@@ -60,9 +59,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Проверить введенный идентификатор на правильность.
+		/// To check the correctness of the entered identifier.
 		/// </summary>
-		/// <returns>Текст сообщения с ошибкой, или <see langword="null"/>, если ошибки нет.</returns>
+		/// <returns>An error message text, or <see langword="null" /> if no error.</returns>
 		public string ValidateId()
 		{
 			var id = Text;
@@ -98,9 +97,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Invoked whenever an unhandled <see cref="E:System.Windows.UIElement.GotFocus"/> event reaches this element in its route.
+		/// Invoked whenever an unhandled <see cref="UIElement.GotFocus"/> event reaches this element in its route.
 		/// </summary>
-		/// <param name="e">The <see cref="T:System.Windows.RoutedEventArgs"/> that contains the event data.</param>
+		/// <param name="e">The <see cref="RoutedEventArgs"/> that contains the event data.</param>
 		protected override void OnGotFocus(RoutedEventArgs e)
 		{
 			if (!IsReadOnly && Security != null)
@@ -110,7 +109,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Raises the <see cref="E:System.Windows.UIElement.LostFocus"/> event (using the provided arguments).
+		/// Raises the <see cref="UIElement.LostFocus"/> event (using the provided arguments).
 		/// </summary>
 		/// <param name="e">Provides data about the event.</param>
 		protected override void OnLostFocus(RoutedEventArgs e)

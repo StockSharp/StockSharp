@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml.Code
+namespace StockSharp.Xaml.Code
 {
 	using System;
 	using System.Collections.Generic;
@@ -9,20 +9,20 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Вспомогательный класс.
+	/// Extension class.
 	/// </summary>
 	public static class CodeExtensions
 	{
 		/// <summary>
-		/// Скомпилировать код.
+		/// To compile the code.
 		/// </summary>
-		/// <param name="language">Язык программирования.</param>
-		/// <param name="code">Код.</param>
-		/// <param name="name">Имя сборки.</param>
-		/// <param name="references">Ссылки.</param>
-		/// <param name="outDir">Директория, куда будет сохранена скомпилированная сборка.</param>
-		/// <param name="tempPath">Временная директория.</param>
-		/// <returns>Результат компиляции.</returns>
+		/// <param name="language">Programming language.</param>
+		/// <param name="code">Code.</param>
+		/// <param name="name">The build name.</param>
+		/// <param name="references">References.</param>
+		/// <param name="outDir">The directory where the compiled build will be saved.</param>
+		/// <param name="tempPath">The temporary directory.</param>
+		/// <returns>The result of the compilation.</returns>
 		public static CompilationResult CompileCode(this CompilationLanguages language, string code, string name, IEnumerable<CodeReference> references, string outDir, string tempPath)
 		{
 			return Compiler.Create(language, outDir, tempPath)
@@ -30,10 +30,10 @@
 		}
 
 		/// <summary>
-		/// Есть ли ошибки в результате компиляции.
+		/// Are there any errors in the compilation.
 		/// </summary>
-		/// <param name="result">Результат компиляции.</param>
-		/// <returns><see langword="true"/> - если ошибки есть, <see langword="true"/> - если компиляция выполнена без ошибок.</returns>
+		/// <param name="result">The result of the compilation.</param>
+		/// <returns><see langword="true" /> - If there are errors, <see langword="true" /> - If the compilation is performed without errors.</returns>
 		public static bool HasErrors(this CompilationResult result)
 		{
 			return result.Errors.Any(e => e.Type == CompilationErrorTypes.Error);
@@ -79,7 +79,7 @@
 		};
 
 		/// <summary>
-		/// Сборки по-умолчанию.
+		/// Default builds.
 		/// </summary>
 		public static IEnumerable<string> DefaultReferences
 		{
@@ -87,10 +87,10 @@
 		}
 
 		/// <summary>
-		/// Преобразовать имя сборки в <see cref="CodeReference"/>.
+		/// To modify the build name to <see cref="CodeReference"/>.
 		/// </summary>
-		/// <param name="referenceName">Имя сборки.</param>
-		/// <param name="assemblies">Ранее загруженные сборки.</param>
+		/// <param name="referenceName">The build name.</param>
+		/// <param name="assemblies">Previously loaded builds.</param>
 		/// <returns><see cref="CodeReference"/>.</returns>
 		public static CodeReference ToReference(this string referenceName, Assembly[] assemblies)
 		{
@@ -122,9 +122,9 @@
 		}
 
 		/// <summary>
-		/// Преобразовать имена сборок в <see cref="CodeReference"/>.
+		/// To modify build names to the <see cref="CodeReference"/>.
 		/// </summary>
-		/// <param name="referenceNames">Имена сборок.</param>
+		/// <param name="referenceNames">Build names.</param>
 		/// <returns><see cref="CodeReference"/>.</returns>
 		public static IEnumerable<CodeReference> ToReferences(this IEnumerable<string> referenceNames)
 		{

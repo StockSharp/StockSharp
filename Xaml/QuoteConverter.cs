@@ -11,21 +11,19 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// WPF-конвертер для <see cref="Quote"/>, который преобразует объект котировки в строку для визуального отображения на форме.
+	/// The WPF converter for <see cref="Quote"/>, which transforms the quote object into a string for visual displaying on the form.
 	/// </summary>
 	[ValueConversion(typeof(TimeSpan), typeof(string))]
 	public class QuoteConverter : IValueConverter
 	{
 		/// <summary>
-		/// Сконвертировать котировку в строку. 
+		/// To convert the quote into a string.
 		/// </summary>
-		/// <returns>
-		/// Сконвертированная строка.
-		/// </returns>
 		/// <param name="value">The value produced by the binding source.</param>
 		/// <param name="targetType">The type of the binding target property.</param>
 		/// <param name="parameter">The converter parameter to use.</param>
 		/// <param name="culture">The culture to use in the converter.</param>
+		/// <returns>The string converted.</returns>
 		object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value == null)
@@ -38,15 +36,13 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сконвертировать котировку из строки. 
+		/// To convert a quote from a string.
 		/// </summary>
-		/// <returns>
-		/// Сконвертированная котировка.
-		/// </returns>
 		/// <param name="value">The value produced by the binding source.</param>
 		/// <param name="targetType">The type of the binding target property.</param>
 		/// <param name="parameter">The converter parameter to use.</param>
 		/// <param name="culture">The culture to use in the converter.</param>
+		/// <returns>The quote converted.</returns>
 		object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			return null;

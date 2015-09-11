@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -17,7 +17,7 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Панель отображения рекламных акций.
+	/// Panel for advertising action displaying.
 	/// </summary>
 	public partial class AdvertisePanel
 	{
@@ -28,7 +28,7 @@
 		private DispatcherTimer _timer;
 
 		/// <summary>
-		/// Создать <see cref="AdvertisePanel"/>.
+		/// Initializes a new instance of the <see cref="AdvertisePanel"/>.
 		/// </summary>
 		public AdvertisePanel()
 		{

@@ -17,7 +17,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для создания заявки.
+	/// The window for the order creating.
 	/// </summary>
 	public partial class OrderWindow
 	{
@@ -99,7 +99,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Создать <see cref="OrderWindow"/>.
+		/// Initializes a new instance of the <see cref="OrderWindow"/>.
 		/// </summary>
 		public OrderWindow()
 		{
@@ -114,7 +114,7 @@ namespace StockSharp.Xaml
 		private SecurityData Data { get; set; }
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		public IConnector Connector
 		{
@@ -137,7 +137,7 @@ namespace StockSharp.Xaml
 		private IMarketDataProvider _marketDataProvider;
 
 		/// <summary>
-		/// Поставщик маркет-данных.
+		/// The market data provider.
 		/// </summary>
 		public IMarketDataProvider MarketDataProvider
 		{
@@ -163,7 +163,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public FilterableSecurityProvider SecurityProvider
 		{
@@ -174,7 +174,7 @@ namespace StockSharp.Xaml
 		private Order _order;
 
 		/// <summary>
-		/// Заявка.
+		/// Order.
 		/// </summary>
 		public Order Order
 		{

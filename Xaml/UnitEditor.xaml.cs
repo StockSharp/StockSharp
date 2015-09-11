@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Windows;
@@ -8,12 +8,12 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Контрол для редактирования объекта класса <see cref="Unit"/>.
+	/// The control for the class object <see cref="Unit"/> editing.
 	/// </summary>
 	public partial class UnitEditor
 	{
 		/// <summary>
-		/// Создать объект класса <see cref="UnitEditor"/>.
+		/// To create an object of the class <see cref="UnitEditor"/>.
 		/// </summary>
 		public UnitEditor()
 		{
@@ -21,13 +21,13 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Value"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="UnitEditor.Value"/>.
 		/// </summary>
 		public static readonly DependencyProperty ValueProperty =
 			 DependencyProperty.Register("Value", typeof(Unit), typeof(UnitEditor), new FrameworkPropertyMetadata(null, OnValuePropertyChanged));
 
 		/// <summary>
-		/// Значение, которое необходимо редактировать визуально.
+		/// The value that should be edited visually.
 		/// </summary>
 		public Unit Value
 		{
@@ -40,7 +40,7 @@
 		}
 
 		/// <summary>
-		/// Событие изменения редактируемого значения.
+		/// The edited value change event.
 		/// </summary>
 		public event Action<Unit> ValueChanged;
 

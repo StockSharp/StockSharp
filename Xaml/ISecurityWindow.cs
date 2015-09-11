@@ -1,21 +1,21 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Интерфейс, описывающий окно создания или редактирования торгового инструмента.
+	/// The interface that describes a window for trading instrument creating or editing.
 	/// </summary>
 	public interface ISecurityWindow
 	{
 		/// <summary>
-		/// Обработчик, проверяющий доступность введенного идентификатора для <see cref="Security"/>.
+		/// The handler checking the entered identifier availability for <see cref="ISecurityWindow.Security"/>.
 		/// </summary>
 		Func<string, string> ValidateId { get; set; }
 
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		Security Security { get; set; }
 	}

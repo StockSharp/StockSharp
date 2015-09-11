@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,12 +8,12 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Окно для отображения логов.
+	/// The window to display logs.
 	/// </summary>
 	public partial class LogWindow : ILogListener
 	{
 		/// <summary>
-		/// Создать окно.
+		/// To create a window.
 		/// </summary>
 		public LogWindow()
 		{
@@ -21,7 +21,7 @@
 		}
 
 		/// <summary>
-		/// Формат конвертирования времени в строку.
+		/// Format for conversion time into a string.
 		/// </summary>
 		public string TimeFormat
 		{
@@ -30,7 +30,7 @@
 		}
 
 		/// <summary>
-		/// Коллекция лог-записей.
+		/// The log entries collection.
 		/// </summary>
 		public IList<LogMessage> Messages
 		{

@@ -13,14 +13,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Настройки прокси-сервера.
+	/// Proxy-server settings.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str1435Key)]
 	[ExpandableObject]
 	public class ProxySettings : IPersistable
 	{
 		/// <summary>
-		/// Использовать прокси-сервер.
+		/// To use proxy server.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1436Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1437Key)]
@@ -31,7 +31,7 @@ namespace StockSharp.Xaml
 		private EndPoint _address = "127.0.0.1:8080".To<EndPoint>();
 
 		/// <summary>
-		/// Адрес прокси-сервера.
+		/// Proxy server address.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1436Key)]
 		[DisplayNameLoc(LocalizedStrings.AddressKey)]
@@ -51,7 +51,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Использовать для локальных адресов.
+		/// Use for local addresses.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1436Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1441Key)]
@@ -60,7 +60,7 @@ namespace StockSharp.Xaml
 		public bool ByPassOnLocal { get; set; }
 
 		/// <summary>
-		/// Использовать авторизацию по логину и паролю.
+		/// Use login and password authorization.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1436Key)]
 		[DisplayNameLoc(LocalizedStrings.AuthorizationKey)]
@@ -69,7 +69,7 @@ namespace StockSharp.Xaml
 		public bool UseCredentials { get; set; }
 
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1436Key)]
 		[DisplayNameLoc(LocalizedStrings.LoginKey)]
@@ -78,7 +78,7 @@ namespace StockSharp.Xaml
 		public string Login { get; set; }
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str1436Key)]
 		[DisplayNameLoc(LocalizedStrings.PasswordKey)]
@@ -87,7 +87,7 @@ namespace StockSharp.Xaml
 		public SecureString Password { get; set; }
 
 		/// <summary>
-		/// Установить настройки прокси-сервера для приложения.
+		/// To set proxy settings for the application.
 		/// </summary>
 		public void ApplyProxySettings()
 		{
@@ -101,9 +101,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить настройки прокси-сервера.
+		/// To get proxy settings.
 		/// </summary>
-		/// <returns>Настройки прокси-сервера.</returns>
+		/// <returns>Proxy-server settings.</returns>
 		public static ProxySettings GetProxySettings()
 		{
 			var proxySettings = new ProxySettings();
@@ -133,9 +133,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Login", Login);
@@ -147,9 +147,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Login = storage.GetValue<string>("Login");
@@ -161,9 +161,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return UseProxy ? Address.ToString() : string.Empty;

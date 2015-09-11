@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Security;
@@ -11,19 +11,18 @@
 	using Ookii.Dialogs.Wpf;
 
 	/// <summary>
-	/// Визуальная панель настройки хранилища.
+	/// The visual panel for storage settings.
 	/// </summary>
 	public partial class StorageSettingsPanel : IPersistable
 	{
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="IsCredentialsEnabled"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="StorageSettingsPanel.IsCredentialsEnabled"/>.
 		/// </summary>
 		public static readonly DependencyProperty IsCredentialsEnabledProperty = DependencyProperty.Register("IsCredentialsEnabled", typeof(bool), typeof(StorageSettingsPanel), 
 			new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 		/// <summary>
-		/// <see cref="Login"/> и <see cref="Password"/> доступны только для редактирования.
-		/// Значение по умолчанию <see langword="true"/>.
+		/// <see cref="StorageSettingsPanel.Login"/> and <see cref="StorageSettingsPanel.Password"/> are only available for editing. The default value is <see langword="true" />.
 		/// </summary>
 		public bool IsCredentialsEnabled
 		{
@@ -32,12 +31,12 @@
 		}
 
 		/// <summary>
-		/// Событие изменения адреса удаленного хранилища.
+		/// The remote storage address change event.
 		/// </summary>
 		public event Action RemotePathChanged;
 
 		/// <summary>
-		/// Создать <see cref="StorageSettingsPanel"/>.
+		/// Initializes a new instance of the <see cref="StorageSettingsPanel"/>.
 		/// </summary>
 		public StorageSettingsPanel()
 		{
@@ -47,7 +46,7 @@
 		}
 
 		/// <summary>
-		/// Выбрано ли локальное хранилище.
+		/// Whether local storage is selected.
 		/// </summary>
 		public bool IsLocal
 		{
@@ -65,7 +64,7 @@
 		//}
 
 		/// <summary>
-		/// Путь к локальным данным.
+		/// The path to local data.
 		/// </summary>
 		public string Path
 		{
@@ -74,7 +73,7 @@
 		}
 
 		/// <summary>
-		/// Адрес удаленного хранилища.
+		/// The remote storage address.
 		/// </summary>
 		public string Address
 		{
@@ -83,7 +82,7 @@
 		}
 
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		public string Login
 		{
@@ -92,7 +91,7 @@
 		}
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		public SecureString Password
 		{

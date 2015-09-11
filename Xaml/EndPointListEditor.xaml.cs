@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -14,12 +14,12 @@
 	using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 
 	/// <summary>
-	/// Редактор для коллекции <see cref="EndPoint"/>.
+	/// Editor for the collection <see cref="EndPoint"/>.
 	/// </summary>
 	public partial class EndPointListEditor : ITypeEditor
 	{
 		/// <summary>
-		/// Создать <see cref="EndPointListEditor"/>.
+		/// Initializes a new instance of the <see cref="EndPointListEditor"/>.
 		/// </summary>
 		public EndPointListEditor()
 		{
@@ -28,13 +28,13 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="EndPoints"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="EndPointListEditor.EndPoints"/>.
 		/// </summary>
 		public static readonly DependencyProperty EndPointsProperty =
 			DependencyProperty.Register("EndPoints", typeof(IEnumerable<EndPoint>), typeof(EndPointListEditor), new PropertyMetadata(Enumerable.Empty<EndPoint>()));
 
 		/// <summary>
-		/// Адреса.
+		/// Addresses.
 		/// </summary>
 		public IEnumerable<EndPoint> EndPoints
 		{

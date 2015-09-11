@@ -20,7 +20,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Визуальная панель для отображения параметров <see cref="IStatisticParameter"/> нескольких стратегий.
+	/// The visual panel to display parameters <see cref="IStatisticParameter"/> of several strategies.
 	/// </summary>
 	public partial class StrategiesStatisticsPanel
 	{
@@ -57,22 +57,22 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Параметры стратегии исключенных из показа.
+		/// Parameters of the strategy which is excluded from the display.
 		/// </summary>
 		public HashSet<string> ExcludeParameters { get; private set; }
 
 		/// <summary>
-		/// Показывать столбец Прогресс тестирования.
+		/// To show the Test Progress column.
 		/// </summary>
 		public bool ShowProgress { get; set; }
 
 		/// <summary>
-		/// Показывать столбец Название стратегии.
+		/// To show the Name Strategy column.
 		/// </summary>
 		public bool ShowStrategyName { get; set; }
 
 		/// <summary>
-		/// Выбранная стратегия.
+		/// The selected strategy.
 		/// </summary>
 		public Strategy SelectedStrategy
 		{
@@ -84,7 +84,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранные стратегии.
+		/// Selected strategies.
 		/// </summary>
 		public IEnumerable<Strategy> SelectedStrategies
 		{
@@ -92,12 +92,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// События двойного нажатия мышкой на выбранную стратегию.
+		/// Events of double-clicking the mouse on the selected strategy.
 		/// </summary>
 		public event Action<Strategy> StrategyDoubleClick;
 
 		/// <summary>
-		/// Событие изменения выбранных стратегий.
+		/// The selected strategies change event.
 		/// </summary>
 		public event Action SelectionChanged;
 
@@ -105,7 +105,7 @@ namespace StockSharp.Xaml
 		private readonly ThreadSafeObservableCollection<StrategyItem> _strategies;
 
 		/// <summary>
-		/// Создать <see cref="StrategiesStatisticsPanel"/>.
+		/// Initializes a new instance of the <see cref="StrategiesStatisticsPanel"/>.
 		/// </summary>
 		public StrategiesStatisticsPanel()
 		{
@@ -126,9 +126,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Добавить стратегии в таблицу.
+		/// To add strategies to the table.
 		/// </summary>
-		/// <param name="strategies">Стратегии.</param>
+		/// <param name="strategies">Strategies.</param>
 		public void AddStrategies(IEnumerable<Strategy> strategies)
 		{
 			GuiDispatcher.GlobalDispatcher.AddAction(() =>
@@ -144,7 +144,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Очистить таблицу.
+		/// To clear the table.
 		/// </summary>
 		public void Clear()
 		{
@@ -189,19 +189,19 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Добавить пункт меню для таблицы.
+		/// To add a menu item for the table.
 		/// </summary>
-		/// <param name="menuItem">Пункт меню.</param>
+		/// <param name="menuItem">The menu item.</param>
 		public void AddContextMenuItem(object menuItem)
 		{
 			ResultsGrid.ContextMenu.Items.Add(menuItem);
 		}
 
 		/// <summary>
-		/// Установить видимость для столбца таблицы.
+		/// To set the visibility for a column of the table.
 		/// </summary>
-		/// <param name="name">Имя поля.</param>
-		/// <param name="visibility">Видимость.</param>
+		/// <param name="name">The field name.</param>
+		/// <param name="visibility">The visibility.</param>
 		public void SetColumnVisibility(string name, Visibility visibility)
 		{
 			ResultsGrid
@@ -211,10 +211,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Обновить прогресс для стратегии.
+		/// To update the progress for the strategy.
 		/// </summary>
-		/// <param name="strategy">Стратегия.</param>
-		/// <param name="progress">Прогресс.</param>
+		/// <param name="strategy">Strategy.</param>
+		/// <param name="progress">Progress.</param>
 		public void UpdateProgress(Strategy strategy, int progress)
 		{
 			var info = _map.TryGetValue(strategy);

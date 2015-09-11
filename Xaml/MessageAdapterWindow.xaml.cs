@@ -13,7 +13,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно редактирования настроек подключения <see cref="IMessageAdapter"/>.
+	/// The window for connection settings editing <see cref="IMessageAdapter"/>.
 	/// </summary>
 	public partial class MessageAdapterWindow
 	{
@@ -21,7 +21,7 @@ namespace StockSharp.Xaml
 		private IMessageAdapter _editableAdapter;
 
 		/// <summary>
-		/// Адаптер к торговой системе.
+		/// Adapter to the trading system.
 		/// </summary>
 		public IMessageAdapter Adapter
 		{
@@ -41,7 +41,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Создать <see cref="MessageAdapterWindow"/>.
+		/// Initializes a new instance of the <see cref="MessageAdapterWindow"/>.
 		/// </summary>
 		public MessageAdapterWindow()
 		{

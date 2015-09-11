@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.Generic;
 	using System.Windows.Controls;
@@ -8,12 +8,12 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Окно выбора инструмента.
+	/// The instrument selection window.
 	/// </summary>
 	public partial class SecurityPickerWindow
 	{
 		/// <summary>
-		/// Создать <see cref="SecurityPicker"/>.
+		/// Initializes a new instance of the <see cref="SecurityPicker"/>.
 		/// </summary>
 		public SecurityPickerWindow()
 		{
@@ -22,7 +22,7 @@
 		}
 
 		/// <summary>
-		/// Режим выделения элементов списка. По-умолчанию равен <see cref="DataGridSelectionMode.Extended"/>.
+		/// The list items selection mode. The default is <see cref="DataGridSelectionMode.Extended"/>.
 		/// </summary>
 		public DataGridSelectionMode SelectionMode
 		{
@@ -30,25 +30,25 @@
 			set { Picker.SelectionMode = value; }
 		}
 
-		///<summary>
-		/// Выбранный инструмент.
-		///</summary>
+		/// <summary>
+		/// The selected instrument.
+		/// </summary>
 		public Security SelectedSecurity
 		{
 			get { return Picker.SelectedSecurity; }
 			set { Picker.SelectedSecurity = value; }
 		}
 
-		///<summary>
-		/// Выбранные инструменты.
-		///</summary>
+		/// <summary>
+		/// Selected instruments.
+		/// </summary>
 		public IList<Security> SelectedSecurities
 		{
 			get { return Picker.SelectedSecurities; }
 		}
 
 		/// <summary>
-		/// Доступные инструменты.
+		/// Available instruments.
 		/// </summary>
 		public ISecurityList Securities
 		{
@@ -56,7 +56,7 @@
 		}
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public FilterableSecurityProvider SecurityProvider
 		{
@@ -65,7 +65,7 @@
 		}
 
 		/// <summary>
-		/// Показывать ли кнопку OK. По-умолчанию кнопка показывается.
+		/// To show the OK button. By default, the button is shown.
 		/// </summary>
 		public bool ShowOk
 		{

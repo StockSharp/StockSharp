@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml.PropertyGrid
+namespace StockSharp.Xaml.PropertyGrid
 {
 	using System;
 	using System.Collections.Generic;
@@ -20,7 +20,7 @@
 	using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 
 	/// <summary>
-	/// Редактор для <see cref="CandleSeries"/>.
+	/// Editor for <see cref="CandleSeries"/>.
 	/// </summary>
 	partial class CandleSettingsEditor : ITypeEditor
 	{
@@ -47,7 +47,7 @@
 		private bool _isLoaded;
 
 		/// <summary>
-		/// Создать <see cref="CandleSettingsEditor"/>.
+		/// Initializes a new instance of the <see cref="CandleSettingsEditor"/>.
 		/// </summary>
 		public CandleSettingsEditor()
 		{
@@ -72,7 +72,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Settings"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="CandleSettingsEditor.Settings"/>.
 		/// </summary>
 		public static readonly DependencyProperty SettingsProperty =
 			DependencyProperty.Register("Settings", typeof(CandleSeries),
@@ -135,7 +135,7 @@
 		}
 
 		/// <summary>
-		/// Настройки. По-умолчанию равно настройкам 1 минутных свечек.
+		/// Settings. The default setting is equal to 1 minute candles.
 		/// </summary>
 		public CandleSeries Settings
 		{

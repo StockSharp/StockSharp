@@ -20,7 +20,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Таблица, отображающая финансовые инструменты (<see cref="Security"/>).
+	/// The table showing financial instruments (<see cref="Security"/>).
 	/// </summary>
 	public partial class SecurityGrid
 	{
@@ -227,7 +227,7 @@ namespace StockSharp.Xaml
 		private readonly ConvertibleObservableCollection<Security, SecurityItem> _securities;
 
 		/// <summary>
-		/// Создать <see cref="SecurityGrid"/>.
+		/// Initializes a new instance of the <see cref="SecurityGrid"/>.
 		/// </summary>
 		public SecurityGrid()
 		{
@@ -270,7 +270,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранный инструмент.
+		/// The selected instrument.
 		/// </summary>
 		public Security SelectedSecurity
 		{
@@ -301,7 +301,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Все доступные инструменты.
+		/// All available instruments.
 		/// </summary>
 		public IListEx<Security> Securities
 		{
@@ -309,7 +309,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранные инструменты.
+		/// Selected instruments.
 		/// </summary>
 		public IList<Security> SelectedSecurities
 		{
@@ -319,7 +319,7 @@ namespace StockSharp.Xaml
 		private IMarketDataProvider _marketDataProvider;
 
 		/// <summary>
-		/// Поставщик маркет-данных.
+		/// The market data provider.
 		/// </summary>
 		public IMarketDataProvider MarketDataProvider
 		{

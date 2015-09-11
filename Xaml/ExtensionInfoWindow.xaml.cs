@@ -16,12 +16,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для редактирования расширенной информации <see cref="IExtendableEntity.ExtensionInfo"/>.
+	/// The window for extended information editing <see cref="IExtendableEntity.ExtensionInfo"/>.
 	/// </summary>
 	public partial class ExtensionInfoWindow
 	{
 		/// <summary>
-		/// Создать <see cref="ExtensionInfoWindow"/>.
+		/// Initializes a new instance of the <see cref="ExtensionInfoWindow"/>.
 		/// </summary>
 		public ExtensionInfoWindow()
 		{
@@ -31,7 +31,7 @@ namespace StockSharp.Xaml
 		private IDictionary<object, object> _data;
 
 		/// <summary>
-		/// Расширенная информация.
+		/// Extended information.
 		/// </summary>
 		public IDictionary<object, object> Data
 		{

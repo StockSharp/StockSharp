@@ -1,24 +1,24 @@
-﻿namespace StockSharp.Xaml.Code
+namespace StockSharp.Xaml.Code
 {
 	/// <summary>
-	/// Ссылка на .NET сборку.
+	/// The link to the .NET build.
 	/// </summary>
 	public class CodeReference
 	{
 		/// <summary>
-		/// Создать <see cref="CodeReference"/>.
+		/// Initializes a new instance of the <see cref="CodeReference"/>.
 		/// </summary>
 		public CodeReference()
 		{
 		}
 
 		/// <summary>
-		/// Название сборки.
+		/// The build name.
 		/// </summary>
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Путь к сборке.
+		/// The path to the build.
 		/// </summary>
 		public string Location { get; set; }
 	}

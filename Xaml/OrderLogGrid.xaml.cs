@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -9,14 +9,14 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Таблица, отображающая лог заявок (<see cref="OrderLogItem"/>).
+	/// The table displaying the orders log (<see cref="OrderLogItem"/>).
 	/// </summary>
 	public partial class OrderLogGrid
 	{
 		private readonly ThreadSafeObservableCollection<OrderLogItem> _items;
 
 		/// <summary>
-		/// Создать <see cref="OrderLogGrid"/>.
+		/// Initializes a new instance of the <see cref="OrderLogGrid"/>.
 		/// </summary>
 		public OrderLogGrid()
 		{
@@ -29,8 +29,7 @@
 		}
 
 		/// <summary>
-		/// Максимальное число строчек для показа. Значение -1 означает бесконечное количество.
-		/// По-умолчанию равно 100000.
+		/// The maximum number of rows to display. The -1 value means an unlimited amount. The default value is 100000.
 		/// </summary>
 		public int MaxCount
 		{
@@ -39,7 +38,7 @@
 		}
 
 		/// <summary>
-		/// Лог заявок.
+		/// Order log.
 		/// </summary>
 		public IListEx<OrderLogItem> LogItems
 		{
@@ -47,7 +46,7 @@
 		}
 
 		/// <summary>
-		/// Выбранная строчка.
+		/// The selected row.
 		/// </summary>
 		public OrderLogItem SelectedLogItem
 		{
@@ -55,7 +54,7 @@
 		}
 
 		/// <summary>
-		/// Выбранные строчки.
+		/// Selected rows.
 		/// </summary>
 		public IEnumerable<OrderLogItem> SelectedLogItems
 		{

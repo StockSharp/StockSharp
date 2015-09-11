@@ -13,12 +13,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для редактирования <see cref="ExpressionIndexSecurity"/>.
+	/// The window for editing <see cref="ExpressionIndexSecurity"/>.
 	/// </summary>
 	public partial class IndexSecurityWindow : ISecurityWindow
 	{
 		/// <summary>
-		/// Создать <see cref="IndexSecurityWindow"/>.
+		/// Initializes a new instance of the <see cref="IndexSecurityWindow"/>.
 		/// </summary>
 		public IndexSecurityWindow()
 		{
@@ -29,7 +29,7 @@ namespace StockSharp.Xaml
 		private Func<string, string> _validateId = id => null;
 
 		/// <summary>
-		/// Обработчик, проверяющий доступность введенного идентификатора для <see cref="Security"/>.
+		/// The handler checking the entered identifier availability for <see cref="Security"/>.
 		/// </summary>
 		public Func<string, string> ValidateId
 		{
@@ -50,7 +50,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Все доступные инструменты.
+		/// All available instruments.
 		/// </summary>
 		public IList<Security> Securities
 		{
@@ -58,7 +58,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Индекс.
+		/// Index.
 		/// </summary>
 		public ExpressionIndexSecurity IndexSecurity
 		{

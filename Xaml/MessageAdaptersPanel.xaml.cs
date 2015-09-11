@@ -22,7 +22,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Панель создания новых подключений <see cref="IMessageAdapter"/>.
+	/// The panel for the new connections creating <see cref="IMessageAdapter"/>.
 	/// </summary>
 	public partial class MessageAdaptersPanel
 	{
@@ -180,19 +180,19 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="RoutedCommand"/> на удаление подключения.
+		/// <see cref="RoutedCommand"/> for the connection removal.
 		/// </summary>
 		public static readonly RoutedCommand RemoveSessionCommand = new RoutedCommand();
 
 		/// <summary>
-		/// <see cref="RoutedCommand"/> на включение подключения.
+		/// <see cref="RoutedCommand"/> to enable connection.
 		/// </summary>
 		public static readonly RoutedCommand EnableSessionCommand = new RoutedCommand();
 
 		private readonly ObservableCollection<ConnectorRow> _connectorRows = new ObservableCollection<ConnectorRow>();
 
 		/// <summary>
-		/// Создать <see cref="MessageAdaptersPanel"/>.
+		/// Initializes a new instance of the <see cref="MessageAdaptersPanel"/>.
 		/// </summary>
 		public MessageAdaptersPanel()
 		{
@@ -203,7 +203,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Авто-подключение.
+		/// Auto connect.
 		/// </summary>
 		public bool AutoConnect
 		{
@@ -214,7 +214,7 @@ namespace StockSharp.Xaml
 		private BasketMessageAdapter _adapter;
 
 		/// <summary>
-		/// Адаптер-агрегатор.
+		/// Adapter aggregator.
 		/// </summary>
 		public BasketMessageAdapter Adapter
 		{
@@ -238,7 +238,7 @@ namespace StockSharp.Xaml
 		private readonly IList<ConnectorInfo> _connectorsInfo;
 
 		/// <summary>
-		/// Визуальное описание доступных подключений.
+		/// Visual description of available connections.
 		/// </summary>
 		public IList<ConnectorInfo> ConnectorsInfo
 		{
@@ -246,12 +246,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие изменения настроек.
+		/// The settings change event.
 		/// </summary>
 		public event Action ConnectorsChanged;
 
 		/// <summary>
-		/// Событие проверки состояния соединения.
+		/// The connection status check event.
 		/// </summary>
 		public event Func<ConnectionStates> CheckConnectionState;
 
@@ -362,50 +362,50 @@ namespace StockSharp.Xaml
 	}
 
 	/// <summary>
-	/// Информация о подключении.
+	/// Information about connection.
 	/// </summary>
 	public class ConnectorInfo
 	{
 		/// <summary>
-		/// Название подключения.
+		/// The connection name.
 		/// </summary>
 		public string Name { get; private set; }
 
 		/// <summary>
-		/// Описание подключения.
+		/// The connection description.
 		/// </summary>
 		public string Description { get; private set; }
 
 		/// <summary>
-		/// Описание подключения.
+		/// The connection description.
 		/// </summary>
 		public string Category { get; private set; }
 
 		/// <summary>
-		/// Целевая аудитория.
+		/// The target audience.
 		/// </summary>
 		public Languages PreferLanguage { get; private set; }
 
 		/// <summary>
-		/// Платформа.
+		/// Platform.
 		/// </summary>
 		public Platforms Platform { get; private set; }
 
 		/// <summary>
-		/// Тип транзакционного адаптера.
+		/// The type of transaction adapter.
 		/// </summary>
 		public Type TransactionAdapterType { get; set; }
 
 		/// <summary>
-		/// Тип маркет-дата адаптера.
+		/// The type of market data adapter.
 		/// </summary>
 		public Type MarketDataAdapterType { get; set; }
 
 		/// <summary>
-		/// Создать <see cref="ConnectorInfo"/>.
+		/// Initializes a new instance of the <see cref="ConnectorInfo"/>.
 		/// </summary>
-		/// <param name="transactionAdapterType">Тип транзакционного адаптера.</param>
-		/// <param name="marketDataAdapterType">Тип маркет-дата адаптера.</param>
+		/// <param name="transactionAdapterType">The type of transaction adapter.</param>
+		/// <param name="marketDataAdapterType">The type of market data adapter.</param>
 		public ConnectorInfo(Type transactionAdapterType, Type marketDataAdapterType)
 		{
 			if (transactionAdapterType == null && marketDataAdapterType == null)

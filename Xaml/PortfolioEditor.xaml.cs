@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,19 +12,19 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Контрол, активирующий <see cref="PortfolioPickerWindow"/>.
+	/// The control activating <see cref="PortfolioPickerWindow"/>.
 	/// </summary>
 	public partial class PortfolioEditor
 	{
 		/// <summary>
-		/// Команда на удаление выбранного инструмента.
+		/// The command to delete the selected instrument.
 		/// </summary>
 		public readonly static RoutedCommand ClearCommand = new RoutedCommand();
 
 		private readonly ThreadSafeObservableCollection<Portfolio> _portfolios;
 
 		/// <summary>
-		/// Создать <see cref="PortfolioEditor"/>.
+		/// Initializes a new instance of the <see cref="PortfolioEditor"/>.
 		/// </summary>
 		public PortfolioEditor()
 		{
@@ -51,7 +51,7 @@
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		public IConnector Connector
 		{
@@ -78,13 +78,13 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="SelectedPortfolio"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="PortfolioEditor.SelectedPortfolio"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedPortfolioProperty = DependencyProperty.Register("SelectedPortfolio", typeof(Portfolio), typeof(PortfolioEditor),
 				new FrameworkPropertyMetadata(null, OnSelectedPortfolioPropertyChanged));
 
 		/// <summary>
-		/// Выбранный портфель.
+		/// The selected portfolio.
 		/// </summary>
 		public Portfolio SelectedPortfolio
 		{
@@ -93,7 +93,7 @@
 		}
 
 		/// <summary>
-		/// Событие изменения выбранного портфеля.
+		/// The selected portfolio change event.
 		/// </summary>
 		public event Action PortfolioSelected;
 

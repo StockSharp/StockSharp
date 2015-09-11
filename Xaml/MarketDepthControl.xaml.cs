@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -19,7 +19,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Визуальный контрол, отображающий стакан с котировками (<see cref="MarketDepth"/>).
+	/// The visual control displaying the order book with quotes (<see cref="MarketDepth"/>).
 	/// </summary>
 	public partial class MarketDepthControl
 	{
@@ -34,7 +34,7 @@
 		private Security _prevSecurity;
 
 		/// <summary>
-		/// Создать <see cref="MarketDepthControl"/>.
+		/// Initializes a new instance of the <see cref="MarketDepthControl"/>.
 		/// </summary>
 		public MarketDepthControl()
 		{
@@ -107,12 +107,12 @@
 		}
 
 		/// <summary>
-		/// Максимальная глубина по-умолчанию, равная 20.
+		/// The maximum depth by default which is equal to 20.
 		/// </summary>
 		public const int DefaultDepth = 20;
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="MaxDepth"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="MarketDepthControl.MaxDepth"/>.
 		/// </summary>
 		public static readonly DependencyProperty MaxDepthProperty =
 			DependencyProperty.Register("MaxDepth", typeof(int), typeof(MarketDepthControl), new PropertyMetadata(
@@ -153,7 +153,7 @@
 		private int _maxDepth;
 
 		/// <summary>
-		/// Максимальная глубина отображения стакана. По-умолчанию равно <see cref="DefaultDepth"/>.
+		/// The maximum depth of order book display. The default value is <see cref="MarketDepthControl.DefaultDepth"/>.
 		/// </summary>
 		public int MaxDepth
 		{
@@ -162,12 +162,12 @@
 		}
 
 		/// <summary>
-		/// Показывать ли биды сверху. По-умолчанию выключено.
+		/// Whether to show the bids above. The default is off.
 		/// </summary>
 		public bool IsBidsOnTop { get; set; }
 
 		/// <summary>
-		/// Выбранная котировка.
+		/// The selected quote.
 		/// </summary>
 		public Quote SelectedQuote
 		{
@@ -181,7 +181,7 @@
 		private string _priceTextFormat = "0.00";
 
 		/// <summary>
-		/// Формат цены. По умолчанию равен "0.00".
+		/// The price format. The default value is "0.00".
 		/// </summary>
 		public string PriceTextFormat
 		{
@@ -198,7 +198,7 @@
 		private string _volumeTextFormat = "0";
 
 		/// <summary>
-		/// Формат объема. По умолчанию равен "0".
+		/// The amount format. The default value is "0".
 		/// </summary>
 		public string VolumeTextFormat
 		{
@@ -213,9 +213,9 @@
 		}
 
 		/// <summary>
-		/// Обновить <see cref="PriceTextFormat"/> и <see cref="VolumeTextFormat"/>.
+		/// To update <see cref="MarketDepthControl.PriceTextFormat"/> and <see cref="MarketDepthControl.VolumeTextFormat"/>.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
+		/// <param name="security">Security.</param>
 		public void UpdateFormat(Security security)
 		{
 			if (security == null)
@@ -237,9 +237,9 @@
 		}
 
 		/// <summary>
-		/// Обработать новую заявку.
+		/// To handle a new order.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		public void ProcessNewOrder(Order order)
 		{
 			if (order == null)
@@ -250,9 +250,9 @@
 		}
 
 		/// <summary>
-		/// Обработать изменившуюсю заявку.
+		/// To handle the changed order.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
+		/// <param name="order">Order.</param>
 		public void ProcessChangedOrder(Order order)
 		{
 			if (order == null)
@@ -263,9 +263,9 @@
 		}
 
 		/// <summary>
-		/// Обновить стакан.
+		/// To upfate the order book.
 		/// </summary>
-		/// <param name="depth">Стакан.</param>
+		/// <param name="depth">Market depth.</param>
 		public void UpdateDepth(MarketDepth depth)
 		{
 			if (depth == null)
@@ -282,9 +282,9 @@
 		}
 
 		/// <summary>
-		/// Обновить стакан.
+		/// To upfate the order book.
 		/// </summary>
-		/// <param name="message">Стакан.</param>
+		/// <param name="message">Market depth.</param>
 		public void UpdateDepth(QuoteChangeMessage message)
 		{
 			if (message == null)
@@ -302,7 +302,7 @@
 		}
 
 		/// <summary>
-		/// Очистить стакан.
+		/// To clear the order book.
 		/// </summary>
 		public void Clear()
 		{
@@ -381,10 +381,10 @@
 		}
 
 		/// <summary>
-		/// Получить тип колонки по ячейке.
+		/// To get the column type by cell.
 		/// </summary>
-		/// <param name="cell">Ячейка.</param>
-		/// <returns>Тип колонки.</returns>
+		/// <param name="cell">Cell.</param>
+		/// <returns>The column type.</returns>
 		public MarketDepthColumns GetColumnIndex(DataGridCell cell)
 		{
 			if (cell == null)

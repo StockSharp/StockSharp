@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -14,7 +14,7 @@
 	using StockSharp.Algo.Commissions;
 
 	/// <summary>
-	/// Панель для редактирования списка <see cref="ICommissionRule"/>.
+	/// The panel for the list editing <see cref="ICommissionRule"/>.
 	/// </summary>
 	public partial class CommissionPanel
 	{
@@ -28,7 +28,7 @@
 		private readonly ConvertibleObservableCollection<ICommissionRule, RuleItem> _rules;
 
 		/// <summary>
-		/// Создать <see cref="CommissionPanel"/>.
+		/// Initializes a new instance of the <see cref="CommissionPanel"/>.
 		/// </summary>
 		public CommissionPanel()
 		{
@@ -61,7 +61,7 @@
 		}
 
 		/// <summary>
-		/// Список правил комиссии, добавленных в таблицу.
+		/// The list of commission rules added to the table.
 		/// </summary>
 		public IListEx<ICommissionRule> Rules
 		{

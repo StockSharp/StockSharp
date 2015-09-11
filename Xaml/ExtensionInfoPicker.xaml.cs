@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.Generic;
 	using System.Windows;
@@ -6,12 +6,12 @@
 	using Ecng.Xaml;
 
 	/// <summary>
-	/// Кнопка, активирующая окно <see cref="ExtensionInfoWindow"/>.
+	/// The button activating the window <see cref="ExtensionInfoWindow"/>.
 	/// </summary>
 	public partial class ExtensionInfoPicker
 	{
 		/// <summary>
-		/// Создать <see cref="ExtensionInfoPicker"/>.
+		/// Initializes a new instance of the <see cref="ExtensionInfoPicker"/>.
 		/// </summary>
 		public ExtensionInfoPicker()
 		{
@@ -19,14 +19,14 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="SelectedExtensionInfo"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="ExtensionInfoPicker.SelectedExtensionInfo"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedExtensionInfoProperty =
 			 DependencyProperty.Register("SelectedExtensionInfo", typeof(IDictionary<object, object>), typeof(ExtensionInfoPicker),
 				new FrameworkPropertyMetadata(null, OnSelectedExtensionInfoPropertyChanged));
 
 		/// <summary>
-		/// Расширенная информация.
+		/// Extended information.
 		/// </summary>
 		public IDictionary<object, object> SelectedExtensionInfo
 		{

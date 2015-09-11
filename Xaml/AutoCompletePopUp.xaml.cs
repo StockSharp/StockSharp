@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.ObjectModel;
@@ -12,12 +12,12 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Всплывающее окно для выбора подходящего инструмента.
+	/// A pop-up window to select a suitable instrument.
 	/// </summary>
 	public partial class AutoCompletePopUp
 	{
 		/// <summary>
-		/// Создать <see cref="AutoCompletePopUp"/>.
+		/// Initializes a new instance of the <see cref="AutoCompletePopUp"/>.
 		/// </summary>
 		public AutoCompletePopUp()
 		{
@@ -28,27 +28,27 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="MatchText"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="AutoCompletePopUp.MatchText"/>.
 		/// </summary>
 		public static readonly DependencyProperty MatchTextProperty = DependencyProperty.Register("MatchText", typeof(string), typeof(AutoCompletePopUp));
 
 		/// <summary>
-		/// Текст для подсветки в идентификаторе инструмента <see cref="Security.Id"/>.
+		/// Text for backlight in the instrument identifier <see cref="Security.Id"/>.
 		/// </summary>
 		public string MatchText { get; set; }
 
 		/// <summary>
-		/// Все подходящие инструменты.
+		/// All suitable instruments.
 		/// </summary>
 		public ObservableCollection<Security> Securities { get; private set; }
 
 		/// <summary>
-		/// Событие изменения <see cref="SelectedSecurity"/>.
+		/// The change event <see cref="AutoCompletePopUp.SelectedSecurity"/>.
 		/// </summary>
 		public event Action SecuritySelected;
 
 		/// <summary>
-		/// Выбранные инструменты.
+		/// The selected instrument.
 		/// </summary>
 		public Security SelectedSecurity
 		{
@@ -71,7 +71,7 @@
 		}
 
 		/// <summary>
-		/// Событие нажатия клавиши.
+		/// Key press event.
 		/// </summary>
 		public event Action<Key> MatchKeyDown;
 
@@ -111,7 +111,7 @@
 		}
 
 		/// <summary>
-		/// Сфокусировать.
+		/// To focus.
 		/// </summary>
 		public void DoFocus()
 		{

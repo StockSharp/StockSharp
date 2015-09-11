@@ -26,19 +26,19 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Редактор биржевых площадок.
+	/// Editor of exchange boards.
 	/// </summary>
 	public partial class ExchangeBoardEditor : IPersistable
 	{
 		/// <summary>
-		/// Сообщение об ошибке сохранения данных.
+		/// The message about data saving error.
 		/// </summary>
 		public static readonly DependencyProperty SaveErrorMessageProperty = DependencyProperty.Register("SaveErrorMessage", typeof(string), typeof(ExchangeBoardEditor), new PropertyMetadata(default(string)));
 
 		private IExchangeInfoProvider Provider { get; set; }
 
 		/// <summary>
-		/// Список площадок.
+		/// List of boards.
 		/// </summary>
 		public ObservableCollection<ExchangeBoard> Boards { get; private set; }
 
@@ -59,7 +59,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Код площадки, которая в данный момент редактируется.
+		/// The code of board which is currently being edited.
 		/// </summary>
 		public string SelectedBoardCode { get { return ViewModel.BoardCode; }}
 
@@ -70,7 +70,7 @@ namespace StockSharp.Xaml
 		private bool _updatingUI;
 
 		/// <summary>
-		/// Создать <see cref="ExchangeBoardEditor"/>.
+		/// Initializes a new instance of the <see cref="ExchangeBoardEditor"/>.
 		/// </summary>
 		public ExchangeBoardEditor()
 		{
@@ -90,9 +90,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Установить редактируемую площадку.
+		/// To set the board for editing.
 		/// </summary>
-		/// <param name="boardCode">Код редактируемой площадки. Площадка для редактирования загружается по коду из EntityRegistry.</param>
+		/// <param name="boardCode">The editing board code. The board for editing is loaded by the code from EntityRegistry.</param>
 		public void SetBoardCode(string boardCode)
 		{
 			_updatingUI = true;
@@ -268,9 +268,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			var boardCode = SelectedBoardCode;
@@ -280,9 +280,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			SetBoardCode(storage.GetValue("SelectedBoard", ExchangeBoard.Nasdaq.Code));

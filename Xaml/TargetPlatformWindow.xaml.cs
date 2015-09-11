@@ -25,7 +25,7 @@ namespace StockSharp.Xaml
 	}
 
 	/// <summary>
-	/// Компонент для выбора платформы для приложения.
+	/// The component to select a platform for the application.
 	/// </summary>
 	public partial class TargetPlatformWindow
 	{
@@ -54,12 +54,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="AppName"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="TargetPlatformWindow.AppName"/>.
 		/// </summary>
 		public static readonly DependencyProperty AppNameProperty = DependencyProperty.Register("AppName", typeof(string), typeof(TargetPlatformWindow), new PropertyMetadata(TypeHelper.ApplicationName));
 
 		/// <summary>
-		/// Название приложения.
+		/// The application name.
 		/// </summary>
 		public string AppName
 		{
@@ -68,12 +68,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="AppIcon"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="TargetPlatformWindow.AppIcon"/>.
 		/// </summary>
 		public static readonly DependencyProperty AppIconProperty = DependencyProperty.Register("AppIcon", typeof(string), typeof(TargetPlatformWindow));
 
 		/// <summary>
-		/// Иконка приложения.
+		/// The application icon.
 		/// </summary>
 		public string AppIcon
 		{
@@ -82,12 +82,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="AutoStart"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="TargetPlatformWindow.AutoStart"/>.
 		/// </summary>
 		public static readonly DependencyProperty AutoStartProperty = DependencyProperty.Register("AutoStart", typeof(bool), typeof(TargetPlatformWindow));
 
 		/// <summary>
-		/// Автозапуск выбранной конфигурации.
+		/// Autostart of the selected configuration.
 		/// </summary>
 		public bool AutoStart
 		{
@@ -99,7 +99,7 @@ namespace StockSharp.Xaml
 		private readonly ListCollectionView _featuresView;
 
 		/// <summary>
-		/// Доступная функциональность для всех платформ.
+		/// Available functionality for all platforms.
 		/// </summary>
 		public ObservableCollection<TargetPlatformFeature> Features
 		{
@@ -107,14 +107,14 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранная платформа.
+		/// The selected platform.
 		/// </summary>
 		public Platforms SelectedPlatform { get; private set; }
 
 		private Languages _selectedLanguage;
 
 		/// <summary>
-		/// Выбранная культура.
+		/// The selected culture.
 		/// </summary>
 		public Languages SelectedLanguage
 		{
@@ -130,7 +130,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Создать <see cref="TargetPlatformWindow"/>.
+		/// Initializes a new instance of the <see cref="TargetPlatformWindow"/>.
 		/// </summary>
 		public TargetPlatformWindow()
 		{

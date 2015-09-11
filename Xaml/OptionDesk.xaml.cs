@@ -21,14 +21,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Доска опционов.
+	/// Options board.
 	/// </summary>
 	public partial class OptionDesk
 	{
 		private bool _updateSource = true;
 
 		/// <summary>
-		/// Создать <see cref="OptionDesk"/>.
+		/// Initializes a new instance of the <see cref="OptionDesk"/>.
 		/// </summary>
 		public OptionDesk()
 		{
@@ -177,30 +177,29 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; set; }
 
 		/// <summary>
-		/// Поставщик маркет-данных.
+		/// The market data provider.
 		/// </summary>
 		public IMarketDataProvider MarketDataProvider { get; set; }
 
 		/// <summary>
-		/// Текущее время. Если оно установлено, то <see cref="IBlackScholes"/> использует это время.
+		/// Current time. If it is set, then <see cref="IBlackScholes"/> uses this time.
 		/// </summary>
 		public DateTimeOffset? CurrentTime { get; set; }
 
 		/// <summary>
-		/// Текущая цена базового актива. Если она установлено, то <see cref="IBlackScholes"/> использует эту цену.
+		/// The current price of the underlying asset. If it is set, then <see cref="IBlackScholes"/> uses this price.
 		/// </summary>
 		public decimal? AssetPrice { get; set; }
 
 		private bool _useBlackModel;
 
 		/// <summary>
-		/// Использовать модель <see cref="Black"/> вместо модели <see cref="IBlackScholes"/>.
-		/// По-умолчанию выключено.
+		/// To use the model <see cref="Black"/> instead of <see cref="IBlackScholes"/> model. The default is off.
 		/// </summary>
 		public bool UseBlackModel
 		{
@@ -226,7 +225,7 @@ namespace StockSharp.Xaml
 		private IEnumerable<Security> _options;
 
 		/// <summary>
-		/// Страйк-опционы.
+		/// Strike options.
 		/// </summary>
 		public IEnumerable<Security> Options
 		{
@@ -248,7 +247,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Обновить значения доски.
+		/// To update the board values.
 		/// </summary>
 		public void RefreshOptions()
 		{
@@ -416,9 +415,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -427,9 +426,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);

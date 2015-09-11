@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,12 +12,12 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Коллекция отладочных сообщений.
+	/// The debug messages collection.
 	/// </summary>
 	public class LogMessageCollection : ThreadSafeObservableCollection<LogMessage>, INotifyPropertyChanged
 	{
 		/// <summary>
-		/// Значение по умолчанию для максимального числа записей для отображения.
+		/// The default value for the maximum number of entries to display.
 		/// </summary>
 		public static readonly int DefaultMaxItemsCount = Environment.Is64BitProcess ? 10000 : 1000;
 
@@ -27,38 +27,38 @@
 		}
 
 		/// <summary>
-		/// Количество сообщений типа <see cref="LogLevels.Info"/>.
+		/// Number of messages of type <see cref="LogLevels.Info"/>.
 		/// </summary>
 		public int InfoCount { get; private set; }
 
 		/// <summary>
-		/// Количество сообщений типа <see cref="LogLevels.Warning"/>.
+		/// Number of messages of type <see cref="LogLevels.Warning"/>.
 		/// </summary>
 		public int WarningCount { get; private set; }
 
 		/// <summary>
-		/// Количество сообщений типа <see cref="LogLevels.Error"/>.
+		/// Number of messages of type <see cref="LogLevels.Error"/>.
 		/// </summary>
 		public int ErrorCount { get; private set; }
 
 		/// <summary>
-		/// Количество сообщений типа <see cref="LogLevels.Debug"/>.
+		/// Number of messages of type <see cref="LogLevels.Debug"/>.
 		/// </summary>
 		public int DebugCount { get; private set; }
 
 		/// <summary>
-		/// Добавить элемент.
+		/// To add item.
 		/// </summary>
-		/// <param name="item">Новый элемент.</param>
+		/// <param name="item">New item.</param>
 		public override void Add(LogMessage item)
 		{
 			AddRange(new[] { item });
 		}
 
 		/// <summary>
-		/// Добавить элементы.
+		/// To add items.
 		/// </summary>
-		/// <param name="items">Новые элементы.</param>
+		/// <param name="items">New items.</param>
 		public override void AddRange(IEnumerable<LogMessage> items)
 		{
 			base.AddRange(items);
@@ -105,7 +105,7 @@
 		}
 
 		/// <summary>
-		/// Удалить все элементы.
+		/// To delete all items.
 		/// </summary>
 		public override void Clear()
 		{

@@ -13,12 +13,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для создания и редактирования <see cref="Security"/>.
+	/// The window for creating and editing <see cref="SecurityCreateWindow.Security"/>.
 	/// </summary>
 	public partial class SecurityCreateWindow : ISecurityWindow
 	{
 		/// <summary>
-		/// Создать <see cref="SecurityCreateWindow"/>.
+		/// Initializes a new instance of the <see cref="SecurityCreateWindow"/>.
 		/// </summary>
 		public SecurityCreateWindow()
 		{
@@ -33,7 +33,7 @@ namespace StockSharp.Xaml
 		private Func<string, string> _validateId = id => null;
 
 		/// <summary>
-		/// Обработчик, проверяющий доступность введенного идентификатора для <see cref="Security"/>.
+		/// The handler checking the entered identifier availability for <see cref="SecurityCreateWindow.Security"/>.
 		/// </summary>
 		public Func<string, string> ValidateId
 		{
@@ -48,7 +48,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		public Security Security
 		{

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Windows;
@@ -6,12 +6,12 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Окно для смены пароля.
+	/// The window for changing password.
 	/// </summary>
 	partial class ChangePasswordWindow
 	{
 		/// <summary>
-		/// Создать <see cref="ChangePasswordWindow"/>.
+		/// Initializes a new instance of the <see cref="ChangePasswordWindow"/>.
 		/// </summary>
 		public ChangePasswordWindow() 
 		{
@@ -19,14 +19,14 @@
 		}
 
 		/// <summary>
-		/// Событие обработки смены пароля.
+		/// Password change processing event.
 		/// </summary>
 		public Action Process;
 
 		/// <summary>
-		/// Обновить результат смены пароля.
+		/// To refresh password change result.
 		/// </summary>
-		/// <param name="result">Результат в виде текстового сообщения.</param>
+		/// <param name="result">The result in the form of a text message.</param>
 		public void UpdateResult(string result)
 		{
 			Result.Text = result;
@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Текущий пароль.
+		/// Current password.
 		/// </summary>
 		public string CurrentPassword
 		{
@@ -42,7 +42,7 @@
 		}
 
 		/// <summary>
-		/// Новый пароль.
+		/// New password.
 		/// </summary>
 		public string NewPassword
 		{

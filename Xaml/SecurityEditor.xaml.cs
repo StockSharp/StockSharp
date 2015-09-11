@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Linq;
@@ -14,17 +14,17 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Контрол, активирующий <see cref="SecurityPickerWindow"/>.
+	/// The control activating <see cref="SecurityPickerWindow"/>.
 	/// </summary>
 	public partial class SecurityEditor
 	{
 		/// <summary>
-		/// Команда на удаление выбранного инструмента.
+		/// The command to delete the selected instrument.
 		/// </summary>
 		public readonly static RoutedCommand ClearCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Создать <see cref="SecurityEditor"/>.
+		/// Initializes a new instance of the <see cref="SecurityEditor"/>.
 		/// </summary>
 		public SecurityEditor()
 		{
@@ -47,7 +47,7 @@
 		private FilterableSecurityProvider _securityProvider;
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public FilterableSecurityProvider SecurityProvider
 		{
@@ -75,7 +75,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="SelectedSecurity"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityEditor.SelectedSecurity"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedSecurityProperty =
 			 DependencyProperty.Register("SelectedSecurity", typeof(Security), typeof(SecurityEditor),
@@ -84,7 +84,7 @@
 		private Security _selectedSecurity;
 
 		/// <summary>
-		/// Выбранный инструмент.
+		/// The selected instrument.
 		/// </summary>
 		public Security SelectedSecurity
 		{
@@ -93,7 +93,7 @@
 		}
 
 		/// <summary>
-		/// Событие изменения выбранного инструмента.
+		/// The selected instrument change event.
 		/// </summary>
 		public event Action SecuritySelected;
 

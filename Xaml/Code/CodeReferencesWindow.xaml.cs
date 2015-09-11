@@ -12,14 +12,14 @@ namespace StockSharp.Xaml.Code
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для редактирования списка ссылок на .NET сборки.
+	/// The window for editing the list of references to the .NET builds.
 	/// </summary>
 	public partial class CodeReferencesWindow
 	{
 		private readonly ObservableCollection<CodeReference> _references = new ObservableCollection<CodeReference>();
 
 		/// <summary>
-		/// Создать <see cref="CodeReferencesWindow"/>.
+		/// Initializes a new instance of the <see cref="CodeReferencesWindow"/>.
 		/// </summary>
 		public CodeReferencesWindow()
 		{
@@ -29,7 +29,7 @@ namespace StockSharp.Xaml.Code
 		}
 
 		/// <summary>
-		/// Ссылки.
+		/// References.
 		/// </summary>
 		public IList<CodeReference> References
 		{

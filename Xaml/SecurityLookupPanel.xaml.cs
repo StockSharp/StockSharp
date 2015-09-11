@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Windows;
@@ -10,17 +10,17 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Панель поиска инструментов.
+	/// The instrument search panel.
 	/// </summary>
 	public partial class SecurityLookupPanel : IPersistable
 	{
 		/// <summary>
-		/// <see cref="RoutedCommand"/> для <see cref="Lookup"/>.
+		/// <see cref="RoutedCommand"/> for <see cref="SecurityLookupPanel.Lookup"/>.
 		/// </summary>
 		public static RoutedCommand SearchSecurityCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Создать <see cref="SecurityLookupPanel"/>.
+		/// Initializes a new instance of the <see cref="SecurityLookupPanel"/>.
 		/// </summary>
 		public SecurityLookupPanel()
 		{
@@ -30,7 +30,7 @@
 		}
 
 		/// <summary>
-		/// Фильтр для поиска инструментов.
+		/// The filter for instrument search.
 		/// </summary>
 		private Security Filter
 		{
@@ -45,7 +45,7 @@
 		}
 
 		/// <summary>
-		/// Событие запуска поиска инструментов.
+		/// The start of instrument search event.
 		/// </summary>
 		public event Action<Security> Lookup;
 
@@ -80,9 +80,9 @@
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			SecurityCodeLike.Text = storage.GetValue<string>("SecurityCodeLike");
@@ -90,9 +90,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("SecurityCodeLike", SecurityCodeLike.Text);

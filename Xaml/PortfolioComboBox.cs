@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.Generic;
 	using System.Windows;
@@ -11,12 +11,12 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Выпадающий список для выбора портфеля.
+	/// The drop-down list to select portfolio.
 	/// </summary>
 	public class PortfolioComboBox : ComboBox
 	{
 		/// <summary>
-		/// Создать <see cref="PortfolioComboBox"/>.
+		/// Initializes a new instance of the <see cref="PortfolioComboBox"/>.
 		/// </summary>
 		public PortfolioComboBox()
 		{
@@ -32,7 +32,7 @@
 		private IConnector _connector;
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		public IConnector Connector
 		{
@@ -59,7 +59,7 @@
 		}
 
 		/// <summary>
-		/// Доступные портфели.
+		/// Available portfolios.
 		/// </summary>
 		public IListEx<Portfolio> Portfolios { get; private set; }
 
@@ -69,14 +69,14 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="SelectedPortfolio"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="PortfolioComboBox.SelectedPortfolio"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedPortfolioProperty =
 			 DependencyProperty.Register("SelectedPortfolio", typeof(Portfolio), typeof(PortfolioComboBox),
 				new FrameworkPropertyMetadata(null, OnSelectedPortfolioPropertyChanged));
 
 		/// <summary>
-		/// Выбранный портфель.
+		/// The selected portfolio.
 		/// </summary>
 		public Portfolio SelectedPortfolio
 		{
@@ -96,9 +96,9 @@
 		}
 
 		/// <summary>
-		/// Обработчик события смены выбранного элемента.
+		/// The selected item change event handler.
 		/// </summary>
-		/// <param name="e">Параметр события.</param>
+		/// <param name="e">The event parameter.</param>
 		protected override void OnSelectionChanged(SelectionChangedEventArgs e)
 		{
 			SelectedPortfolio = (Portfolio)SelectedItem;

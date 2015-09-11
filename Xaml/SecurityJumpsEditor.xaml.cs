@@ -15,14 +15,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Описание перехода для инструмента.
+	/// Rollover description for the instrument.
 	/// </summary>
 	public sealed class SecurityJump
 	{
 		private Security _security;
 
 		/// <summary>
-		/// Инструмент.
+		/// Security.
 		/// </summary>
 		public Security Security
 		{
@@ -40,7 +40,7 @@ namespace StockSharp.Xaml
 		private DateTime _date;
 
 		/// <summary>
-		/// Дата перехода.
+		/// Rollover date.
 		/// </summary>
 		public DateTime Date
 		{
@@ -56,20 +56,20 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие изменения перехода.
+		/// The rollover change event.
 		/// </summary>
 		public event Action Changed;
 	}
 
 	/// <summary>
-	/// Графический компонент для редактирования переходов между инструментами.
+	/// Graphical component for editing of rollovers between tools.
 	/// </summary>
 	public partial class SecurityJumpsEditor
 	{
 		private readonly ObservableCollection<SecurityJump> _jumps = new ObservableCollection<SecurityJump>();
 
 		/// <summary>
-		/// Переходы.
+		/// Rollovers.
 		/// </summary>
 		public IList<SecurityJump> Jumps
 		{
@@ -77,7 +77,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранный переход.
+		/// Selected rollover.
 		/// </summary>
 		public SecurityJump SelectedJump
 		{
@@ -85,7 +85,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранные переходы.
+		/// Selected rollovers.
 		/// </summary>
 		public IEnumerable<SecurityJump> SelectedJumps
 		{
@@ -93,17 +93,17 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие изменения перехода.
+		/// The rollover change event.
 		/// </summary>
 		public event Action Changed;
 
 		/// <summary>
-		/// Событие изменения перехода.
+		/// The rollover change event.
 		/// </summary>
 		public event Action<SecurityJump> JumpSelected;
 
 		/// <summary>
-		/// Создать <see cref="SecurityJumpsEditor"/>.
+		/// Initializes a new instance of the <see cref="SecurityJumpsEditor"/>.
 		/// </summary>
 		public SecurityJumpsEditor()
 		{
@@ -126,9 +126,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Проверить правильность ввода данных.
+		/// To check for proper input.
 		/// </summary>
-		/// <returns>Описание ошибки.</returns>
+		/// <returns>Error detais.</returns>
 		public string Validate()
 		{
 			if (!_jumps.Any())

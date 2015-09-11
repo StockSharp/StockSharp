@@ -1,16 +1,16 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Risk;
 
 	/// <summary>
-	/// Окно для редактирования списка <see cref="IRiskRule"/>.
+	/// The window for the list editing <see cref="IRiskRule"/>.
 	/// </summary>
 	public partial class RiskWindow
 	{
 		/// <summary>
-		/// Создать <see cref="RiskWindow"/>.
+		/// Initializes a new instance of the <see cref="RiskWindow"/>.
 		/// </summary>
 		public RiskWindow()
 		{
@@ -18,7 +18,7 @@
 		}
 
 		/// <summary>
-		/// Список правил, добавленных в таблицу.
+		/// The list of rules added to the table.
 		/// </summary>
 		public IListEx<IRiskRule> Rules
 		{

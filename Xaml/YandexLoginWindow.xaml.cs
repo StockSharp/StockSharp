@@ -69,14 +69,14 @@ namespace StockSharp.Xaml
 	}
 
 	/// <summary>
-	/// Класс для работы с Яндекс.Диск.
+	/// The class for work with the Yandex.Disk.
 	/// </summary>
 	public class YandexDisk
 	{
 		private static string _rootPath = "/StockSharp";
 
 		/// <summary>
-		/// Директория на Яндекс.Диск-е, куда будут загружаться файлы.
+		/// The directory in the Yandex.Disk where the files will be downloaded.
 		/// </summary>
 		public static string RootPath
 		{
@@ -85,10 +85,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Поделиться файлом.
+		/// To share a file.
 		/// </summary>
-		/// <param name="file">Файл.</param>
-		/// <returns>Ссылка на файл.</returns>
+		/// <param name="file">File.</param>
+		/// <returns>The link to a file.</returns>
 		public static string Publish(string file)
 		{
 			if (file == null)
@@ -133,9 +133,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Заменить файл.
+		/// To replace a file.
 		/// </summary>
-		/// <param name="file">Файл.</param>
+		/// <param name="file">File.</param>
 		public static void Replace(string file)
 		{
 			if (file == null)

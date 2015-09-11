@@ -13,12 +13,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для создания условной заявки.
+	/// The window for the conditional order creating.
 	/// </summary>
 	public partial class OrderConditionalWindow
 	{
 		/// <summary>
-		/// Создать <see cref="OrderConditionalWindow"/>.
+		/// Initializes a new instance of the <see cref="OrderConditionalWindow"/>.
 		/// </summary>
 		public OrderConditionalWindow()
 		{
@@ -28,7 +28,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Подключение к торговой системе.
+		/// Connection to the trading system.
 		/// </summary>
 		public IConnector Connector
 		{
@@ -43,7 +43,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public FilterableSecurityProvider SecurityProvider
 		{
@@ -54,7 +54,7 @@ namespace StockSharp.Xaml
 		private Order _order;
 
 		/// <summary>
-		/// Заявка.
+		/// Order.
 		/// </summary>
 		public Order Order
 		{

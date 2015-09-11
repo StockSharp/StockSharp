@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -9,14 +9,14 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Таблица, отображающая собственные сделки (<see cref="MyTrade"/>).
+	/// A table showing own trades (<see cref="MyTrade"/>).
 	/// </summary>
 	public partial class MyTradeGrid
 	{
 		private readonly ThreadSafeObservableCollection<MyTrade> _trades;
 
 		/// <summary>
-		/// Создать <see cref="MyTradeGrid"/>.
+		/// Initializes a new instance of the <see cref="MyTradeGrid"/>.
 		/// </summary>
 		public MyTradeGrid()
 		{
@@ -29,8 +29,7 @@
 		}
 
 		/// <summary>
-		/// Максимальное число сделок для показа. Значение -1 означает бесконечное количество.
-		/// По-умолчанию равно 10000.
+		/// The maximum number of trades to display. The -1 value means an unlimited amount. The default value is 10000.
 		/// </summary>
 		public int MaxCount
 		{
@@ -39,7 +38,7 @@
 		}
 
 		/// <summary>
-		/// Список сделок, добавленных в таблицу.
+		/// List of trades added to the table.
 		/// </summary>
 		public IListEx<MyTrade> Trades
 		{
@@ -47,7 +46,7 @@
 		}
 
 		/// <summary>
-		/// Выбранная сделка.
+		/// The selected trade.
 		/// </summary>
 		public MyTrade SelectedTrade
 		{
@@ -55,7 +54,7 @@
 		}
 
 		/// <summary>
-		/// Выбранные сделки.
+		/// Selected trades.
 		/// </summary>
 		public IEnumerable<MyTrade> SelectedTrades
 		{

@@ -10,12 +10,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для редактирования <see cref="ServerCredentials"/>
+	/// The window for editing <see cref="ServerCredentials"/>.
 	/// </summary>
 	public partial class CredentialsWindow
 	{
 		/// <summary>
-		/// Создать <see cref="CredentialsWindow"/>.
+		/// Initializes a new instance of the <see cref="CredentialsWindow"/>.
 		/// </summary>
 		public CredentialsWindow()
 		{
@@ -23,7 +23,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		public string Login
 		{
@@ -32,7 +32,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		public SecureString Password
 		{
@@ -41,7 +41,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Входить автоматически.
+		/// Auto login.
 		/// </summary>
 		public bool AutoLogon
 		{
@@ -52,7 +52,7 @@ namespace StockSharp.Xaml
 		private bool _isLoggedIn;
 
 		/// <summary>
-		/// Находится ли пользователь в залогиненном состоянии.
+		/// Whether the user is logged in.
 		/// </summary>
 		public bool IsLoggedIn
 		{

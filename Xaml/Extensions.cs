@@ -16,12 +16,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс.
+	/// Extension class.
 	/// </summary>
 	public static class Extensions
 	{
 		/// <summary>
-		/// Локализовать <see cref="AutomaticUpdater"/>.
+		/// To localize <see cref="AutomaticUpdater"/>.
 		/// </summary>
 		/// <param name="automaticUpdater"><see cref="AutomaticUpdater"/>.</param>
 		public static void Translate(this AutomaticUpdater automaticUpdater)
@@ -144,11 +144,11 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить разметку Docking панели.
+		/// To save the Docking panel layout.
 		/// </summary>
-		/// <param name="dockSite">Docking панель.</param>
-		/// <param name="toolWindowOnly">Сохранять только окна.</param>
-		/// <returns>Разметка в виде строки.</returns>
+		/// <param name="dockSite">Docking panel.</param>
+		/// <param name="toolWindowOnly">To save windows only.</param>
+		/// <returns>Layout encoded as a string.</returns>
 		public static string SaveLayout(this DockSite dockSite, bool toolWindowOnly = false)
 		{
 			if (dockSite == null)
@@ -158,11 +158,11 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Загрузить разметку для Docking панели.
+		/// To download layout for the Docking panel.
 		/// </summary>
-		/// <param name="dockSite">Docking панель.</param>
-		/// <param name="toolWindowOnly">Загружать только окна.</param>
-		/// <param name="layout">Разметка в виде строки.</param>
+		/// <param name="dockSite">Docking panel.</param>
+		/// <param name="toolWindowOnly">To download windows only.</param>
+		/// <param name="layout">Layout encoded as a string.</param>
 		public static void LoadLayout(this DockSite dockSite, string layout, bool toolWindowOnly = false)
 		{
 			if (dockSite == null)
@@ -180,10 +180,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить разметку NavigationBar панели.
+		/// To save the NavigationBar panel layout.
 		/// </summary>
-		/// <param name="navigationBar">NavigationBar панель.</param>
-		/// <returns>Разметка в виде строки.</returns>
+		/// <param name="navigationBar">NavigationBar panel.</param>
+		/// <returns>Layout encoded as a string.</returns>
 		public static string SaveLayout(this NavigationBar navigationBar)
 		{
 			if (navigationBar == null)
@@ -193,10 +193,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Загрузить разметку для NavigationBar панели.
+		/// To download the NavigationBar panel layout.
 		/// </summary>
-		/// <param name="navigationBar">NavigationBar панель.</param>
-		/// <param name="layout">Разметка в виде строки.</param>
+		/// <param name="navigationBar">NavigationBar panel.</param>
+		/// <param name="layout">Layout encoded as a string.</param>
 		public static void LoadLayout(this NavigationBar navigationBar, string layout)
 		{
 			if (navigationBar == null)

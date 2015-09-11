@@ -19,19 +19,19 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Редактор биржевых площадок.
+	/// Editor of exchange boards.
 	/// </summary>
 	public partial class ExchangeEditor
 	{
 		private IExchangeInfoProvider Provider { get; set; }
 
 		/// <summary>
-		/// Список бирж.
+		/// List of exchanges.
 		/// </summary>
 		public ObservableCollection<Exchange> Exchanges { get; private set; }
 
 		/// <summary>
-		/// Список временных зон.
+		/// List of time zones.
 		/// </summary>
 		public IEnumerable<TimeZoneInfo> TimeZones { get; private set; }
 
@@ -45,7 +45,7 @@ namespace StockSharp.Xaml
 		private string _selectedExchangeName;
 
 		/// <summary>
-		/// Имя выбранной биржи.
+		/// The name of the selected exchange.
 		/// </summary>
 		public string SelectedExchangeName
 		{
@@ -64,12 +64,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие смены выбранной биржи.
+		/// The selected exchange change event .
 		/// </summary>
 		public event Action SelectedExchangeChanged;
 
 		/// <summary>
-		/// Создать <see cref="ExchangeEditor"/>.
+		/// Initializes a new instance of the <see cref="ExchangeEditor"/>.
 		/// </summary>
 		public ExchangeEditor()
 		{
@@ -110,9 +110,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Установить редактируемую биржу.
+		/// To set edited exchange.
 		/// </summary>
-		/// <param name="exchangeName">Код редактируемой биржи. Биржа для редактирования загружается из <see cref="IExchangeInfoProvider"/>.</param>
+		/// <param name="exchangeName">The code of edited exchange. The exchange for editing is loaded from <see cref="IExchangeInfoProvider"/>.</param>
 		public void SetExchange(string exchangeName)
 		{
 			if (exchangeName.IsEmpty())

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.Generic;
 	using System.Linq;
@@ -15,24 +15,24 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Таблица, отображающая новости (<see cref="News"/>).
+	/// The table showing the news (<see cref="NewsGrid.News"/>).
 	/// </summary>
 	public partial class NewsGrid
 	{
 		/// <summary>
-		/// Команда на запрос текста новостей.
+		/// The command for the news request.
 		/// </summary>
 		public static RoutedCommand RequestStoryCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда на открытие ссылки новости.
+		/// The command for the news link opening.
 		/// </summary>
 		public static RoutedCommand OpenUrlCommand = new RoutedCommand();
 
 		private readonly ThreadSafeObservableCollection<News> _news;
 
 		/// <summary>
-		/// Создать <see cref="NewsGrid"/>.
+		/// Initializes a new instance of the <see cref="NewsGrid"/>.
 		/// </summary>
 		public NewsGrid()
 		{
@@ -45,8 +45,7 @@
 		}
 
 		/// <summary>
-		/// Максимальное число новостей для показа. Значение -1 означает бесконечное количество.
-		/// По-умолчанию равно 10000.
+		/// The maximum number of news to display. The -1 value means an unlimited amount. The default value is 10000.
 		/// </summary>
 		public int MaxCount
 		{
@@ -55,7 +54,7 @@
 		}
 
 		/// <summary>
-		/// Список новостей, добавленных в таблицу.
+		/// The list of news added to the table.
 		/// </summary>
 		public IListEx<News> News
 		{
@@ -63,7 +62,7 @@
 		}
 
 		/// <summary>
-		/// Выбранная новость.
+		/// Selected news item.
 		/// </summary>
 		public News FirstSelectedNews
 		{
@@ -71,7 +70,7 @@
 		}
 
 		/// <summary>
-		/// Выбранные новости.
+		/// Selected news items.
 		/// </summary>
 		public IEnumerable<News> SelectedNews
 		{

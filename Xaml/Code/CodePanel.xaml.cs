@@ -22,7 +22,7 @@ namespace StockSharp.Xaml.Code
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Визуальная панель для редактирования и компилирования кода.
+	/// The visual panel for code editing and compiling.
 	/// </summary>
 	public partial class CodePanel : IPersistable
 	{
@@ -35,37 +35,37 @@ namespace StockSharp.Xaml.Code
 		}
 
 		/// <summary>
-		/// Команда для компиляции кода.
+		/// The command for the code compilation.
 		/// </summary>
 		public static RoutedCommand CompileCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда для сохранения кода.
+		/// The command for the code saving.
 		/// </summary>
 		public static RoutedCommand SaveCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда для модификации ссылок.
+		/// The command for the references modification.
 		/// </summary>
 		public static RoutedCommand ReferencesCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда для отмены изменений.
+		/// The command for undo the changes.
 		/// </summary>
 		public static RoutedCommand UndoCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда для возврата изменений.
+		/// The command for return the changes.
 		/// </summary>
 		public static RoutedCommand RedoCommand = new RoutedCommand();
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowToolBar"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="CodePanel.ShowToolBar"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowToolBarProperty = DependencyProperty.Register("ShowToolBar", typeof(bool), typeof(CodePanel), new PropertyMetadata(true));
 
 		/// <summary>
-		/// Показывать панель обзора.
+		/// To show the review panel.
 		/// </summary>
 		public bool ShowToolBar
 		{
@@ -79,7 +79,7 @@ namespace StockSharp.Xaml.Code
 		private static readonly SynchronizedDictionary<CodeReference, IProjectAssemblyReference> _references = new SynchronizedDictionary<CodeReference, IProjectAssemblyReference>();
 
 		/// <summary>
-		/// Создать <see cref="CodePanel"/>.
+		/// Initializes a new instance of the <see cref="CodePanel"/>.
 		/// </summary>
 		public CodePanel()
 		{
@@ -138,7 +138,7 @@ namespace StockSharp.Xaml.Code
 		}
 
 		/// <summary>
-		/// Код.
+		/// Code.
 		/// </summary>
 		public string Code
 		{
@@ -154,40 +154,40 @@ namespace StockSharp.Xaml.Code
 		}
 
 		/// <summary>
-		/// Ссылки.
+		/// References.
 		/// </summary>
 		public IList<CodeReference> References { get; private set; }
 
 		/// <summary>
-		/// Событие обновления ссылок.
+		/// The links update event.
 		/// </summary>
 		public event Action ReferencesUpdated;
 
 		/// <summary>
-		/// Событие компиляции кода.
+		/// The code compilation event.
 		/// </summary>
 		public event Action CompilingCode;
 
 		/// <summary>
-		/// Событие сохранения кода.
+		/// The code saving event.
 		/// </summary>
 		public event Action SavingCode;
 
 		/// <summary>
-		/// Событие изменения кода.
+		/// The code change event.
 		/// </summary>
 		public event Action CodeChanged;
 
 		/// <summary>
-		/// Событие проверки возможности компиляции.
+		/// The compilation possibility check event.
 		/// </summary>
 		public event Func<bool> CanCompile;
 
 		/// <summary>
-		/// Показать результат компиляции.
+		/// To show the result of the compilation.
 		/// </summary>
-		/// <param name="result">Результат компиляции.</param>
-		/// <param name="isRunning">Запущен ли ранее скомпилированный код на исполнение в текущий момент.</param>
+		/// <param name="result">The result of the compilation.</param>
+		/// <param name="isRunning">Whether the previously compiled code launched in the current moment.</param>
 		public void ShowCompilationResult(CompilationResult result, bool isRunning)
 		{
 			if (result == null)
@@ -223,7 +223,7 @@ namespace StockSharp.Xaml.Code
 		}
 
 		/// <summary>
-		/// Редактировать ссылки.
+		/// To edit links.
 		/// </summary>
 		public void EditReferences()
 		{
@@ -283,9 +283,9 @@ namespace StockSharp.Xaml.Code
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			ErrorsGrid.Load(storage.GetValue<SettingsStorage>("ErrorsGrid"));
@@ -296,9 +296,9 @@ namespace StockSharp.Xaml.Code
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("ErrorsGrid", ErrorsGrid.Save());

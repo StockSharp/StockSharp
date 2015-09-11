@@ -22,14 +22,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Визуальный компонент для поиска и выбора инструмента.
+	/// The visual component for instrument searching and selection.
 	/// </summary>
 	public partial class SecurityPicker : IPersistable
 	{
 		private const DataGridSelectionMode _defaultSelectionMode = DataGridSelectionMode.Extended;
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="SelectionMode"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.SelectionMode"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register("SelectionMode", typeof(DataGridSelectionMode), typeof(SecurityPicker), new PropertyMetadata(_defaultSelectionMode, OnSelectionModePropertyChanged));
 
@@ -40,7 +40,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Режим выделения элементов списка. По-умолчанию равен <see cref="DataGridSelectionMode.Extended"/>.
+		/// The list items selection mode. The default is <see cref="DataGridSelectionMode.Extended"/>.
 		/// </summary>
 		public DataGridSelectionMode SelectionMode
 		{
@@ -60,7 +60,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowCommonStatColumns"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.ShowCommonStatColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowCommonStatColumnsProperty = DependencyProperty.Register("ShowCommonStatColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonStatColumnsPropertyChanged));
 
@@ -79,7 +79,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Показать основные колонки со статистическими данными.
+		/// To show main columns with statistical data.
 		/// </summary>
 		public bool ShowCommonStatColumns
 		{
@@ -88,7 +88,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowCommonOptionColumns"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.ShowCommonOptionColumns"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowCommonOptionColumnsProperty = DependencyProperty.Register("ShowCommonOptionColumns", typeof(bool), typeof(SecurityPicker), new PropertyMetadata(false, ShowCommonOptionColumnsPropertyChanged));
 
@@ -105,7 +105,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Показать основные колонки со статистическими данными.
+		/// To show main columns with statistical data.
 		/// </summary>
 		public bool ShowCommonOptionColumns
 		{
@@ -121,7 +121,7 @@ namespace StockSharp.Xaml
 		private SecurityTypes? _prevType;
 
 		/// <summary>
-		/// Создать <see cref="SecurityPicker"/>.
+		/// Initializes a new instance of the <see cref="SecurityPicker"/>.
 		/// </summary>
 		public SecurityPicker()
 		{
@@ -162,22 +162,22 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// События двойного нажатия мышкой на выбранный инструмент.
+		/// Events of double-clicking the mouse on the selected instrument.
 		/// </summary>
 		public event Action<Security> SecurityDoubleClick;
 
 		/// <summary>
-		/// События изменения выбранного инструмента.
+		/// The selected instrument change events.
 		/// </summary>
 		public event Action<Security> SecuritySelected;
 
 		/// <summary>
-		/// Событие изменения таблицы.
+		/// The table change event.
 		/// </summary>
 		public event Action GridChanged;
 
 		/// <summary>
-		/// Выбранный инструмент.
+		/// The selected instrument.
 		/// </summary>
 		public Security SelectedSecurity
 		{
@@ -186,7 +186,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранные инструменты.
+		/// Selected instruments.
 		/// </summary>
 		public IList<Security> SelectedSecurities
 		{
@@ -194,7 +194,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Отфильтрованные инструменты.
+		/// Instruments filtered.
 		/// </summary>
 		public IListEx<Security> FilteredSecurities
 		{
@@ -204,7 +204,7 @@ namespace StockSharp.Xaml
 		private SecurityTypes? _selectedType;
 
 		/// <summary>
-		/// Выбранный тип инструмента.
+		/// The selected instrument type.
 		/// </summary>
 		public SecurityTypes? SelectedType
 		{
@@ -215,7 +215,7 @@ namespace StockSharp.Xaml
 		private string _securityFilter = string.Empty;
 
 		/// <summary>
-		/// Текущий фильтр по инструменту.
+		/// The current filter by the instrument.
 		/// </summary>
 		public string SecurityFilter
 		{
@@ -224,7 +224,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Title"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityPicker.Title"/>.
 		/// </summary>
 		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(SecurityPicker),
 			new PropertyMetadata(string.Empty, (d, e) =>
@@ -239,7 +239,7 @@ namespace StockSharp.Xaml
 		private string _title = string.Empty;
 
 		/// <summary>
-		/// Заголовок для таблицы. По умолчанию отсутствует.
+		/// The title for a table. By default, it is empty.
 		/// </summary>
 		public string Title
 		{
@@ -248,7 +248,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Доступные инструменты.
+		/// Available instruments.
 		/// </summary>
 		public ISecurityList Securities
 		{
@@ -256,7 +256,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Инструменты, которые необходимо скрыть.
+		/// Instruments that should be hidden.
 		/// </summary>
 		public ISet<Security> ExcludeSecurities
 		{
@@ -266,7 +266,7 @@ namespace StockSharp.Xaml
 		private FilterableSecurityProvider _securityProvider;
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public FilterableSecurityProvider SecurityProvider
 		{
@@ -294,7 +294,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Поставщик маркет-данных.
+		/// The market data provider.
 		/// </summary>
 		public IMarketDataProvider MarketDataProvider
 		{
@@ -303,10 +303,10 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Установить видимость для столбца таблицы.
+		/// To set the visibility for a column of the table.
 		/// </summary>
-		/// <param name="name">Имя поля.</param>
-		/// <param name="visibility">Видимость.</param>
+		/// <param name="name">The field name.</param>
+		/// <param name="visibility">The visibility.</param>
 		public void SetColumnVisibility(string name, Visibility visibility)
 		{
 			SecuritiesCtrl
@@ -316,9 +316,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Добавить пункт меню для таблицы.
+		/// To add a menu item for the table.
 		/// </summary>
-		/// <param name="menuItem">Пункт меню.</param>
+		/// <param name="menuItem">The menu item.</param>
 		public void AddContextMenuItem(Control menuItem)
 		{
 			if (menuItem == null)
@@ -485,9 +485,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			var gridSettings = storage.GetValue<SettingsStorage>("GridSettings");
@@ -500,9 +500,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("GridSettings", SecuritiesCtrl.Save());

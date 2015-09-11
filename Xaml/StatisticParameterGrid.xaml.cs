@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -12,12 +12,12 @@
 	using StockSharp.Algo.Statistics;
 
 	/// <summary>
-	/// Визуальная панель для отображения параметров <see cref="IStatisticParameter"/>.
+	/// The visual panel to display parameters <see cref="IStatisticParameter"/>.
 	/// </summary>
 	public partial class StatisticParameterGrid
 	{
 		/// <summary>
-		/// Создать <see cref="StatisticParameterGrid"/>.
+		/// Initializes a new instance of the <see cref="StatisticParameterGrid"/>.
 		/// </summary>
 		public StatisticParameterGrid()
 		{
@@ -28,14 +28,14 @@
 		}
 
 		/// <summary>
-		/// Параметры, которые необходимо отображать.
+		/// The parameters to be displayed.
 		/// </summary>
 		public IList<IStatisticParameter> Parameters { get; private set; }
 
 		private StatisticManager _statisticManager;
 
 		/// <summary>
-		/// Стратегия, статистические параметры <see cref="Algo.Strategies.Strategy.StatisticManager"/> которой необходимо отображать.
+		/// The strategy for which statistical parameters <see cref="Algo.Strategies.Strategy.StatisticManager"/> should be displayed.
 		/// </summary>
 		public StatisticManager StatisticManager
 		{
@@ -51,7 +51,7 @@
 		}
 
 		/// <summary>
-		/// Сбросить текущие значения параметров статистики.
+		/// To reset current settings of statistics.
 		/// </summary>
 		public void Reset()
 		{

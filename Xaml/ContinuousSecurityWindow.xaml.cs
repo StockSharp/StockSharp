@@ -15,12 +15,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно для создания или редактирования <see cref="ContinuousSecurity"/>.
+	/// The window for creating or editing <see cref="ContinuousSecurityWindow.ContinuousSecurity"/>.
 	/// </summary>
 	public partial class ContinuousSecurityWindow : ISecurityWindow
 	{
 		/// <summary>
-		/// Создать <see cref="ContinuousSecurityWindow"/>.
+		/// Initializes a new instance of the <see cref="ContinuousSecurityWindow"/>.
 		/// </summary>
 		public ContinuousSecurityWindow()
 		{
@@ -35,7 +35,7 @@ namespace StockSharp.Xaml
 		private Func<string, string> _validateId = id => null;
 
 		/// <summary>
-		/// Обработчик, проверяющий доступность введенного идентификатора для <see cref="Security"/>.
+		/// The handler checking the entered identifier availability for <see cref="Security"/>.
 		/// </summary>
 		public Func<string, string> ValidateId
 		{
@@ -56,12 +56,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Поставщик информации об инструментах.
+		/// The provider of information about instruments.
 		/// </summary>
 		public ISecurityProvider SecurityProvider { get; set; }
 
 		/// <summary>
-		/// Непрерывный инструмент.
+		/// Continuous security.
 		/// </summary>
 		public ContinuousSecurity ContinuousSecurity
 		{

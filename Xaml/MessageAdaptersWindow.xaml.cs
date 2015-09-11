@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,12 +10,12 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Окно создания новых подключений <see cref="IMessageAdapter"/>.
+	/// The window for new connections creating <see cref="IMessageAdapter"/>.
 	/// </summary>
 	public partial class MessageAdaptersWindow
 	{
 		/// <summary>
-		/// Создать <see cref="MessageAdaptersWindow"/>.
+		/// Initializes a new instance of the <see cref="MessageAdaptersWindow"/>.
 		/// </summary>
 		public MessageAdaptersWindow()
 		{
@@ -23,7 +23,7 @@
 		}
 
 		/// <summary>
-		/// Событие проверки состояния соединения
+		/// The connection status check event.
 		/// </summary>
 		public event Func<ConnectionStates> CheckConnectionState
 		{
@@ -32,7 +32,7 @@
 		}
 
 		/// <summary>
-		/// Авто-подключение.
+		/// Auto connect.
 		/// </summary>
 		public bool AutoConnect
 		{
@@ -43,7 +43,7 @@
 		private BasketMessageAdapter _adapter;
 
 		/// <summary>
-		/// Адаптер-агрегатор.
+		/// Adapter aggregator.
 		/// </summary>
 		public BasketMessageAdapter Adapter
 		{
@@ -65,7 +65,7 @@
 		}
 
 		/// <summary>
-		/// Визуальное описание доступных подключений.
+		/// Visual description of available connections.
 		/// </summary>
 		public IList<ConnectorInfo> ConnectorsInfo
 		{

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,14 +11,14 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Таблица, отображающая (<see cref="ExecutionMessage"/>.
+	/// Table showing (<see cref="ExecutionMessage"/>.
 	/// </summary>
 	public partial class ExecutionGrid
 	{
 		private readonly ThreadSafeObservableCollection<ExecutionMessage> _messages;
 
 		/// <summary>
-		/// Создать <see cref="ExecutionGrid"/>.
+		/// Initializes a new instance of the <see cref="ExecutionGrid"/>.
 		/// </summary>
 		public ExecutionGrid()
 		{
@@ -31,8 +31,7 @@
 		}
 
 		/// <summary>
-		/// Максимальное число строк для показа. Значение -1 означает бесконечное количество.
-		/// По-умолчанию равно 1000000.
+		/// The maximum number of rows to display. The -1 value means an unlimited amount. The default is 1000000.
 		/// </summary>
 		public int MaxCount
 		{
@@ -41,7 +40,7 @@
 		}
 
 		/// <summary>
-		/// Список сообщений, добавленных в таблицу.
+		/// The list of messages added to the table.
 		/// </summary>
 		public IListEx<ExecutionMessage> Messages
 		{
@@ -49,7 +48,7 @@
 		}
 
 		/// <summary>
-		/// Выбранное сообщение.
+		/// The selected message.
 		/// </summary>
 		public ExecutionMessage SelectedMessage
 		{
@@ -57,7 +56,7 @@
 		}
 
 		/// <summary>
-		/// Выбранные сообщения.
+		/// Selected messages.
 		/// </summary>
 		public IEnumerable<ExecutionMessage> SelectedMessages
 		{
@@ -65,9 +64,9 @@
 		}
 
 		/// <summary>
-		/// Скрыть колонки, не показывающие данные для переданного типа.
+		/// To hide columns which do not show data for the passed type.
 		/// </summary>
-		/// <param name="type">Тип информации в <see cref="ExecutionMessage"/>.</param>
+		/// <param name="type">Information type in <see cref="ExecutionMessage"/>.</param>
 		public void HideColumns(ExecutionTypes type)
 		{
 			switch (type)

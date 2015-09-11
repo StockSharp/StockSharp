@@ -18,26 +18,26 @@ namespace StockSharp.Xaml
 	using Row = System.Tuple<string, Messages.IMessageAdapter>;
 
 	/// <summary>
-	/// Окно создания и редактирования сопоставлений портфелей и адаптеров.
+	/// The window for creation and editing of portfolios and adapters comparisons.
 	/// </summary>
 	public partial class PortfolioMessageAdaptersWindow
 	{
 		private readonly ObservableCollection<Row> _items = new ObservableCollection<Row>();
 
 		/// <summary>
-		/// <see cref="RoutedCommand"/> на удаление сопоставления.
+		/// <see cref="RoutedCommand"/> to remove comparison.
 		/// </summary>
 		public static readonly RoutedCommand RemoveCommand = new RoutedCommand();
 
 		/// <summary>
-		/// <see cref="RoutedCommand"/> на добавление сопоставления.
+		/// <see cref="RoutedCommand"/> to add comparison.
 		/// </summary>
 		public static readonly RoutedCommand AddCommand = new RoutedCommand();
 
 		private BasketMessageAdapter _adapter;
 
 		/// <summary>
-		/// Адаптер-агрегатор.
+		/// Adapter aggregator.
 		/// </summary>
 		public BasketMessageAdapter Adapter
 		{
@@ -65,7 +65,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Создать <see cref="PortfolioMessageAdaptersWindow"/>.
+		/// Initializes a new instance of the <see cref="PortfolioMessageAdaptersWindow"/>.
 		/// </summary>
 		public PortfolioMessageAdaptersWindow()
 		{

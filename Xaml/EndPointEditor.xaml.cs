@@ -14,12 +14,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Редактор для <see cref="EndPoint"/>.
+	/// Editor for <see cref="EndPointEditor.EndPoint"/>.
 	/// </summary>
 	public partial class EndPointEditor
 	{
 		/// <summary>
-		/// Создать <see cref="EndPointEditor"/>.
+		/// Initializes a new instance of the <see cref="EndPointEditor"/>.
 		/// </summary>
 		public EndPointEditor()
 		{
@@ -28,13 +28,13 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="EndPoint"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="EndPointEditor.EndPoint"/>.
 		/// </summary>
 		public static readonly DependencyProperty EndPointProperty =
 			DependencyProperty.Register("EndPoint", typeof(EndPoint), typeof(EndPointEditor), new PropertyMetadata(default(EndPoint)));
 
 		/// <summary>
-		/// Адрес.
+		/// Address.
 		/// </summary>
 		public EndPoint EndPoint
 		{

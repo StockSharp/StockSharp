@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Collections.ObjectModel;
 	using System;
@@ -10,39 +10,39 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Окно редактирования корзины портфелей.
+	/// The window for portfolios basket editing.
 	/// </summary>
 	public partial class BasketPortfolioWindow
 	{
 		/// <summary>
-		/// Команда сохранения корзины портфелей.
+		/// The command for the portfolio basket saving.
 		/// </summary>
 		public readonly static RoutedCommand OkCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда добавления портфеля в корзину.
+		/// The command for adding portfolio to a basket.
 		/// </summary>
 		public readonly static RoutedCommand AddCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Команда удаления портфеля из корзины.
+		/// The command for removal of portfolio from the basket.
 		/// </summary>
 		public readonly static RoutedCommand RemoveCommand = new RoutedCommand();
 
 		/// <summary>
-		/// Все доступные портфели.
+		/// All available portfolios.
 		/// </summary>
 		public ObservableCollection<Portfolio> AllPortfolios { set; private get; }
 
 		/// <summary>
-		/// Портфели, входящие в корзину.
+		/// Portfolios included in the basket.
 		/// </summary>
 		public ObservableCollection<Portfolio> InnerPortfolios { set; private get; }
 
 		private IConnector _connector;
 
 		/// <summary>
-		/// Интерфейс к торговой системе.
+		/// The interface to the trading system.
 		/// </summary>
 		public IConnector Connector
 		{
@@ -65,7 +65,7 @@
 		private WeightedPortfolio _portfolio = new WeightedPortfolio();
 
 		/// <summary>
-		/// Корзина портфелей.
+		/// Basket portfolio.
 		/// </summary>
 		public WeightedPortfolio Portfolio
 		{
@@ -84,7 +84,7 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="BasketPortfolioWindow"/>.
+		/// Initializes a new instance of the <see cref="BasketPortfolioWindow"/>.
 		/// </summary>
 		public BasketPortfolioWindow()
 		{

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -14,7 +14,7 @@
 	using StockSharp.Algo.Risk;
 
 	/// <summary>
-	/// Панель для редактирования списка <see cref="IRiskRule"/>.
+	/// The panel for the list editing <see cref="IRiskRule"/>.
 	/// </summary>
 	public partial class RiskPanel
 	{
@@ -28,7 +28,7 @@
 		private readonly ConvertibleObservableCollection<IRiskRule, RuleItem> _rules;
 
 		/// <summary>
-		/// Создать <see cref="RiskPanel"/>.
+		/// Initializes a new instance of the <see cref="RiskPanel"/>.
 		/// </summary>
 		public RiskPanel()
 		{
@@ -61,7 +61,7 @@
 		}
 
 		/// <summary>
-		/// Список правил, добавленных в таблицу.
+		/// The list of rules added to the table.
 		/// </summary>
 		public IListEx<IRiskRule> Rules
 		{

@@ -1,32 +1,32 @@
 namespace StockSharp.Xaml
 {
 	/// <summary>
-	/// Колонки окна стакана.
+	/// Columns of order book window.
 	/// </summary>
 	public enum MarketDepthColumns
 	{
 		/// <summary>
-		/// Собственный объем на покупку (+ стоп-объем на покупку).
+		/// The own amount to buy (+ stop amount to buy).
 		/// </summary>
 		OwnBuy,
 
 		/// <summary>
-		/// Объем на покупку.
+		/// The amount to buy.
 		/// </summary>
 		Buy,
 
 		/// <summary>
-		/// Цена.
+		/// Price.
 		/// </summary>
 		Price,
 
 		/// <summary>
-		/// Объем на продажу.
+		/// The amount to sale.
 		/// </summary>
 		Sell,
 
 		/// <summary>
-		/// Собственный объем на продажу (+ стоп-объем на продажу).
+		/// The net amount to sale (+ stop amount to sale).
 		/// </summary>
 		OwnSell,
 	}

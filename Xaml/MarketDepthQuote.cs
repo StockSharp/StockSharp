@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -15,19 +15,19 @@
 		public class OrderRegistry
 		{
 			/// <summary>
-			/// Контейнер заявок, сгруппированных по цене <see cref="Order.Price"/>.
+			/// The container of orders grouped by price <see cref="Order.Price"/>.
 			/// </summary>
 			public sealed class OrderContainer
 			{
 				private readonly CachedSynchronizedList<Order> _orders = new CachedSynchronizedList<Order>();
 
 				/// <summary>
-				/// Суммарный баланс на покупку. Расчет идет по внутренним заявкам <see cref="Orders"/>.
+				/// The total balance to buy. Calculation by internal orders <see cref="OrderContainer.Orders"/>.
 				/// </summary>
 				public decimal TotalBuyBalance { get; private set; }
 
 				/// <summary>
-				/// Суммарный баланс на продажу. Расчет идет по внутренним заявкам <see cref="Orders"/>.
+				/// The total balance to sale. Calculation by internal orders <see cref="OrderContainer.Orders"/>.
 				/// </summary>
 				public decimal TotalSellBalance { get; private set; }
 

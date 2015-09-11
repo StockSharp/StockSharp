@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,12 +10,12 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Окно для мониторинга работы торговых стратегий.
+	/// The window for trading strategies work monitoring.
 	/// </summary>
 	public partial class MonitorWindow : ILogListener
 	{
 		/// <summary>
-		/// Создать <see cref="MonitorWindow"/>.
+		/// Initializes a new instance of the <see cref="MonitorWindow"/>.
 		/// </summary>
 		public MonitorWindow()
 		{
@@ -23,12 +23,12 @@
 		}
 
 		/// <summary>
-		/// Выводить окно на передний экран в случае ошибки.
+		/// To display the window on top of screen when an error occurred.
 		/// </summary>
 		public bool BringToFrontOnError { get; set; }
 
 		/// <summary>
-		/// Удалить все сообщения.
+		/// To delete all messages.
 		/// </summary>
 		public void Clear()
 		{

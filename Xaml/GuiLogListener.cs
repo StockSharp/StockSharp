@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,8 +8,7 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Логгер, записывающий данные в визуальные компоненты (например, <see cref="Monitor"/> или <see cref="LogControl"/>),
-	/// для которых требуется синхронизация с GUI потоками при записи новых сообщений <see cref="LogMessage"/>.
+	/// The logger recording data to visual components (for example, <see cref="Monitor"/> or <see cref="LogControl"/>) that require synchronization with the GUI threads when new messages are recorded <see cref="LogMessage"/>.
 	/// </summary>
 	public class GuiLogListener : LogListener
 	{
@@ -17,9 +16,9 @@
 		private readonly ILogListener _listener;
 
 		/// <summary>
-		/// Создать <see cref="GuiLogListener"/>.
+		/// Initializes a new instance of the <see cref="GuiLogListener"/>.
 		/// </summary>
-		/// <param name="listener">Визуальный компонент, для которого требуется синхронизация с GUI потоками при записи новых сообщений <see cref="LogMessage"/>.</param>
+		/// <param name="listener">The visual component that requires synchronization with GUI threads when new messages are recorded <see cref="LogMessage"/>.</param>
 		public GuiLogListener(ILogListener listener)
 		{
 			if (listener == null)
@@ -29,9 +28,9 @@
 		}
 
 		/// <summary>
-		/// Записать сообщения.
+		/// To record messages.
 		/// </summary>
-		/// <param name="messages">Отладочные сообщения.</param>
+		/// <param name="messages">Debug messages.</param>
 		protected override void OnWriteMessages(IEnumerable<LogMessage> messages)
 		{
 			_dispatcher.AddAction(() => _listener.WriteMessages(messages));

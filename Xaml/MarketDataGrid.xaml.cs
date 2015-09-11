@@ -24,7 +24,7 @@ namespace StockSharp.Xaml
 	using Query = System.Tuple<Algo.Storages.IStorageRegistry, BusinessEntities.Security, Algo.Storages.StorageFormats, Algo.Storages.IMarketDataDrive>;
 
 	/// <summary>
-	/// Таблица доступных рыночных данных.
+	/// The table of available market data.
 	/// </summary>
 	public partial class MarketDataGrid
 	{
@@ -115,17 +115,17 @@ namespace StockSharp.Xaml
 		private bool _isChanged;
 
 		/// <summary>
-		/// Событие начала загрузки данных.
+		/// The data loading start event.
 		/// </summary>
 		public event Action DataLoading;
 
 		/// <summary>
-		/// Событие окончания загрузки данных.
+		/// The data loading end event.
 		/// </summary>
 		public event Action DataLoaded;
 
 		/// <summary>
-		/// Создать <see cref="MarketDataGrid"/>.
+		/// Initializes a new instance of the <see cref="MarketDataGrid"/>.
 		/// </summary>
 		public MarketDataGrid()
 		{
@@ -167,7 +167,7 @@ namespace StockSharp.Xaml
 		private readonly IList<DataGridColumn> _serializableColumns;
 
 		/// <summary>
-		/// Сохраняемые колонки.
+		/// Saved columns.
 		/// </summary>
 		protected override IList<DataGridColumn> SerializableColumns
 		{
@@ -175,12 +175,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Обновить таблицу. Выполняется асинхронно.
+		/// To refresh the table. It is carried out asynchronously.
 		/// </summary>
-		/// <param name="storageRegistry">Хранилище маркет-данных.</param>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="format">Формат данных.</param>
-		/// <param name="drive">Хранилище.</param>
+		/// <param name="storageRegistry">Market-data storage.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="format">Data format.</param>
+		/// <param name="drive">Storage.</param>
 		public void BeginMakeEntries(IStorageRegistry storageRegistry, Security security, StorageFormats format, IMarketDataDrive drive)
 		{
 			if (storageRegistry == null)
@@ -203,7 +203,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Отменить операцию, запущенную через <see cref="BeginMakeEntries"/>.
+		/// To cancel the operation launched by <see cref="BeginMakeEntries"/>.
 		/// </summary>
 		public void CancelMakeEntires()
 		{

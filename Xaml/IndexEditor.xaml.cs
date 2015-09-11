@@ -23,7 +23,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Графический контрол для редактирования <see cref="ExpressionIndexSecurity"/>.
+	/// The graphic control for editing <see cref="ExpressionIndexSecurity"/>.
 	/// </summary>
 	[CLSCompliant(false)]
 	public partial class IndexEditor
@@ -69,7 +69,7 @@ namespace StockSharp.Xaml
 		private readonly AutoCompletePopUp _ppBox = new AutoCompletePopUp();
 
 		/// <summary>
-		/// Создать <see cref="IndexEditor"/>.
+		/// Initializes a new instance of the <see cref="IndexEditor"/>.
 		/// </summary>
 		public IndexEditor()
 		{
@@ -108,12 +108,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Все доступные инструменты.
+		/// All available instruments.
 		/// </summary>
 		public IList<Security> Securities { get; private set; }
 
 		/// <summary>
-		/// Математическая формула.
+		/// Mathematical formula.
 		/// </summary>
 		public Expression Expression
 		{
@@ -123,7 +123,7 @@ namespace StockSharp.Xaml
 		private string _text = string.Empty;
 
 		/// <summary>
-		/// Текст.
+		/// Text.
 		/// </summary>
 		public string Text
 		{
@@ -166,7 +166,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выражение содержит ошибку.
+		/// The expression contains an error.
 		/// </summary>
 		public bool HasError { get; private set; }
 
@@ -195,10 +195,10 @@ namespace StockSharp.Xaml
 		};
 
 		/// <summary>
-		/// Список подсвечиваемых функций.
+		/// The list of highlighted features.
 		/// </summary>
 		/// <remarks>
-		/// По умолчанию содержит: abs, acos, asin, atan, ceiling, cos, exp, floor, ieeeremainder, log, log10, max, min, pow, round, sign, sin, sqrt, tan, truncate.
+		/// By default, it includes: abs, acos, asin, atan, ceiling, cos, exp, floor, ieeeremainder, log, log10, max, min, pow, round, sign, sin, sqrt, tan, truncate.
 		/// </remarks>
 		public IList<string> HighligthFunctions
 		{
@@ -208,7 +208,7 @@ namespace StockSharp.Xaml
 		private Brush _highligthForeColor = Brushes.Red;
 
 		/// <summary>
-		/// Цвет шрифта функций. По умолчанию равен <see cref="Brushes.Red"/>.
+		/// The functions font color. The default value is <see cref="Brushes.Red"/>.
 		/// </summary>
 		public Brush HighligthForeColor
 		{
@@ -225,7 +225,7 @@ namespace StockSharp.Xaml
 		private Brush _highligthBackColor = Brushes.White;
 
 		/// <summary>
-		/// Цвет фона функций. По умолчанию равен <see cref="Brushes.White"/>.
+		/// The functions background color. The default value is <see cref="Brushes.White"/>.
 		/// </summary>
 		public Brush HighligthBackColor
 		{
@@ -508,7 +508,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие клика на инструмент.
+		/// The event of click on the instrument.
 		/// </summary>
 		public event Action<Security> SecurityClicked;
 
@@ -793,7 +793,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Событие изменения <see cref="Text"/>.
+		/// The change event <see cref="IndexEditor.Text"/>.
 		/// </summary>
 		public event TextChangedEventHandler TextChanged;
 

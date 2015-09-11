@@ -15,13 +15,13 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Строчка доски.
+	/// The board row.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str1525Key)]
 	class OptionDeskRow : NotifiableObject
 	{
 		/// <summary>
-		/// Информация <see cref="OptionTypes.Call"/> или <see cref="OptionTypes.Put"/> строчки доски.
+		/// Information <see cref="OptionTypes.Call"/> or <see cref="OptionTypes.Put"/> of board row.
 		/// </summary>
 		[ExpandableObject]
 		public sealed class OptionDeskRowSide
@@ -43,22 +43,22 @@ namespace StockSharp.Xaml
 			}
 
 			/// <summary>
-			/// Цена лучшей покупки.
+			/// The best buy price.
 			/// </summary>
 			public decimal? BestBidPrice { get; set; }
 
 			/// <summary>
-			/// Цена лучшей покупки.
+			/// The best buy price.
 			/// </summary>
 			public decimal? BestAskPrice { get; set; }
 
 			/// <summary>
-			/// Объем за сессию.
+			/// Volume per session.
 			/// </summary>
 			public decimal? Volume { get; set; }
 
 			/// <summary>
-			/// Теоретическая цена.
+			/// Theoretical price.
 			/// </summary>
 			public decimal? TheorPrice { get; set; }
 
@@ -69,7 +69,7 @@ namespace StockSharp.Xaml
 			public decimal MaxOpenInterest { get; set; }
 
 			/// <summary>
-			/// Информация об опционе.
+			/// Information about the option.
 			/// </summary>
 			[ReadOnly(true)]
 			[DisplayNameLoc(LocalizedStrings.OptionsContractKey)]
@@ -77,49 +77,49 @@ namespace StockSharp.Xaml
 			public Security Option { get; private set; }
 
 			/// <summary>
-			/// Дельта опциона.
+			/// Option delta.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.DeltaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionDeltaKey)]
 			public decimal? Delta { get; set; }
 
 			/// <summary>
-			/// Гамма опциона.
+			/// Option gamma.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.GammaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionGammaKey)]
 			public decimal? Gamma { get; set; }
 
 			/// <summary>
-			/// Тета опциона.
+			/// Option theta.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.ThetaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionThetaKey)]
 			public decimal? Theta { get; set; }
 
 			/// <summary>
-			/// Вега опциона.
+			/// Option vega.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.VegaKey)]
 			[DescriptionLoc(LocalizedStrings.OptionVegaKey)]
 			public decimal? Vega { get; set; }
 
 			/// <summary>
-			/// Ро опциона.
+			/// Option rho.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.RhoKey)]
 			[DescriptionLoc(LocalizedStrings.OptionRhoKey)]
 			public decimal? Rho { get; set; }
 
 			/// <summary>
-			/// Открытый интерес.
+			/// Open interest.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.OIKey)]
 			[DescriptionLoc(LocalizedStrings.OpenInterestKey)]
 			public decimal? OpenInterest { get; set; }
 
 			/// <summary>
-			/// Прибыльность опциона.
+			/// Profitability of an option contract.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str1527Key)]
 			[DescriptionLoc(LocalizedStrings.Str1528Key)]
@@ -133,9 +133,9 @@ namespace StockSharp.Xaml
 			public decimal MaxVolume { get; set; }
 
 			/// <summary>
-			/// Получить строковое представление.
+			/// Returns a string that represents the current object.
 			/// </summary>
-			/// <returns>Строковое представление.</returns>
+			/// <returns>A string that represents the current object.</returns>
 			public override string ToString()
 			{
 				return string.Empty;
@@ -171,7 +171,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Страйк цена опциона.
+		/// Option strike price.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.StrikeKey)]
 		[DescriptionLoc(LocalizedStrings.OptionStrikePriceKey)]
@@ -179,7 +179,7 @@ namespace StockSharp.Xaml
 		public decimal? Strike { get; private set; }
 
 		/// <summary>
-		/// Волатильность (подразумеваемая) опциона.
+		/// Option volatility (implied).
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str293Key)]
 		[DescriptionLoc(LocalizedStrings.Str1531Key)]
@@ -198,7 +198,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Волатильность (историческая) опциона.
+		/// Option volatility (historic).
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str299Key)]
 		[DescriptionLoc(LocalizedStrings.Str1532Key)]
@@ -217,7 +217,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Прибыльность опциона.
+		/// Profitability of an option contract.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.Str1527Key)]
 		[DescriptionLoc(LocalizedStrings.Str1528Key)]
@@ -262,7 +262,7 @@ namespace StockSharp.Xaml
 		public decimal MaxPnL { get; set; }
 
 		/// <summary>
-		/// Информация о базовом активе.
+		/// Information about the underlying asset.
 		/// </summary>
 		[DisplayNameLoc(LocalizedStrings.UnderlyingAssetKey)]
 		[DescriptionLoc(LocalizedStrings.Str1533Key)]
@@ -271,7 +271,7 @@ namespace StockSharp.Xaml
 		public Security UnderlyingAsset { get; private set; }
 
 		/// <summary>
-		/// Параметры <see cref="OptionTypes.Call"/> опциона.
+		/// Option parameters <see cref="OptionTypes.Call"/>.
 		/// </summary>
 		[DisplayName("Call")]
 		[DescriptionLoc(LocalizedStrings.Str1534Key)]
@@ -279,7 +279,7 @@ namespace StockSharp.Xaml
 		public OptionDeskRowSide Call { get; private set; }
 
 		/// <summary>
-		/// Параметры <see cref="OptionTypes.Put"/> опциона.
+		/// Option parameters <see cref="OptionTypes.Put"/>.
 		/// </summary>
 		[DisplayName("Put")]
 		[DescriptionLoc(LocalizedStrings.Str1535Key)]

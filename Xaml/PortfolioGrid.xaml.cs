@@ -13,7 +13,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Таблица, отображающая портфели и позиции.
+	/// The table showing portfolios and positions.
 	/// </summary>
 	public partial class PortfolioGrid
 	{
@@ -60,7 +60,7 @@ namespace StockSharp.Xaml
 		private readonly ConvertibleObservableCollection<BasePosition, PositionItem> _positions;
 
 		/// <summary>
-		/// Создать <see cref="PortfolioGrid"/>.
+		/// Initializes a new instance of the <see cref="PortfolioGrid"/>.
 		/// </summary>
 		public PortfolioGrid()
 		{
@@ -75,7 +75,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список портфелей, добавленных в таблицу.
+		/// The list of portfolios added to the table.
 		/// </summary>
 		public IListEx<BasePosition> Portfolios
 		{
@@ -83,7 +83,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Список позиций, добавленных в таблицу.
+		/// The list of positions added to the table.
 		/// </summary>
 		public IListEx<BasePosition> Positions
 		{
@@ -91,7 +91,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранная позиция.
+		/// The selected position.
 		/// </summary>
 		public BasePosition SelectedPosition
 		{
@@ -99,7 +99,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранные сделки.
+		/// Selected trades.
 		/// </summary>
 		public IEnumerable<BasePosition> SelectedPositions
 		{

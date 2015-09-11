@@ -9,13 +9,13 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Визуальное дерево источников логов.
+	/// The visual logs sources tree.
 	/// </summary>
 	[CLSCompliant(false)]
 	public class LogSourceTree : TreeViewBase<LogSourceNode>
 	{
 		/// <summary>
-		/// Создать <see cref="LogSourceTree"/>.
+		/// Initializes a new instance of the <see cref="LogSourceTree"/>.
 		/// </summary>
 		public LogSourceTree()
 		{
@@ -32,7 +32,7 @@ namespace StockSharp.Xaml
 		private readonly LogSourceNode _strategyRootNode;
 
 		/// <summary>
-		/// Корневой узел дерева стратегий.
+		/// The root node of the strategies tree.
 		/// </summary>
 		public LogSourceNode StrategyRootNode
 		{
@@ -42,7 +42,7 @@ namespace StockSharp.Xaml
 		private readonly LogSourceNode _coreRootNode;
 
 		/// <summary>
-		/// Корневой узел логгера.
+		/// The root node of the logger.
 		/// </summary>
 		public LogSourceNode CoreRootNode
 		{

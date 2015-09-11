@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Diagnostics;
 	using System.Windows;
@@ -6,12 +6,12 @@
 	using Ecng.Common;
 
 	/// <summary>
-	/// Кнопка вызова справки.
+	/// Help button.
 	/// </summary>
 	public partial class HelpButton
 	{
 		/// <summary>
-		/// Создать <see cref="HelpButton"/>.
+		/// Initializes a new instance of the <see cref="HelpButton"/>.
 		/// </summary>
 		public HelpButton()
 		{
@@ -19,7 +19,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="DocUrl"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="HelpButton.DocUrl"/>.
 		/// </summary>
 		public static readonly DependencyProperty DocUrlProperty =
 			DependencyProperty.Register("DocUrl", typeof(string), typeof(HelpButton), new PropertyMetadata(null, (o, args) =>
@@ -29,7 +29,7 @@
 			}));
 
 		/// <summary>
-		/// Адрес справки в интернете.
+		/// Internet address of help site.
 		/// </summary>
 		public string DocUrl
 		{
@@ -38,7 +38,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowText"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="HelpButton.ShowText"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowTextProperty =
 			DependencyProperty.Register("ShowText", typeof(bool), typeof(HelpButton), new PropertyMetadata(false, (o, args) =>
@@ -51,7 +51,7 @@
 			}));
 
 		/// <summary>
-		/// Показывать текст вместо картинки. По-умолчанию выключено.
+		/// Show text instead of image. The default is off.
 		/// </summary>
 		public bool ShowText
 		{
@@ -60,7 +60,7 @@
 		}
 
 		/// <summary>
-		/// Called when a <see cref="T:System.Windows.Controls.Button"/> is clicked. 
+		/// Called when a <see cref="T:System.Windows.Controls.Button"/> is clicked.
 		/// </summary>
 		protected override void OnClick()
 		{

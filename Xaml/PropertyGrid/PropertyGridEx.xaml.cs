@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml.PropertyGrid
+namespace StockSharp.Xaml.PropertyGrid
 {
 	using System;
 	using System.ComponentModel;
@@ -52,7 +52,7 @@
 	}
 
 	/// <summary>
-	/// Расширенная таблица настроек.
+	/// The extended table of settings.
 	/// </summary>
 	public partial class PropertyGridEx
 	{
@@ -79,15 +79,15 @@
 		private static readonly ReadOnlyTypeDescriptionProvider _provider = new ReadOnlyTypeDescriptionProvider();
 
 		/// <summary>
-		/// Раскрывать вложенные свойства по-умолчанию.
+		/// To open the enclosed properties by default.
 		/// </summary>
 		public bool AutoExpandProperties { get; set; }
 
 		/// <summary>
-		/// Обработчик изменения значения.
+		/// The value change handle.
 		/// </summary>
-		/// <param name="oldValue">Предыдущее значение.</param>
-		/// <param name="newValue">Новое значение.</param>
+		/// <param name="oldValue">Previous value.</param>
+		/// <param name="newValue">The new value.</param>
 		protected override void OnSelectedObjectChanged(object oldValue, object newValue)
 		{
 			base.OnSelectedObjectChanged(oldValue, newValue);
@@ -247,7 +247,7 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="PropertyGridEx"/>.
+		/// Initializes a new instance of the <see cref="PropertyGridEx"/>.
 		/// </summary>
 		public PropertyGridEx()
 		{

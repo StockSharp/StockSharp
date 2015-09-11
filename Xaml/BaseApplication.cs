@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -24,14 +24,14 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Базовый класс для WPF приложений.
+	/// The base class for WPF applications.
 	/// </summary>
 	public abstract class BaseApplication : Application
 	{
 		private bool _isInitialized;
 
 		/// <summary>
-		/// Инициализировать <see cref="BaseApplication"/>.
+		/// Initialize <see cref="BaseApplication"/>.
 		/// </summary>
 		protected BaseApplication()
 		{
@@ -48,12 +48,12 @@
 		}
 
 		/// <summary>
-		/// Показывать на экран ошибки, или только передавать их в <see cref="LogManager"/>. По-умолчанию ошибки показываются.
+		/// To show errors on the screen or just to pass them to <see cref="LogManager"/>. By default, errors are displayed.
 		/// </summary>
 		public bool ShowExceptions { get; set; }
 
 		/// <summary>
-		/// Расширенная функциональность, которая будет отображена в окне <see cref="TargetPlatformWindow"/>.
+		/// The extended functionality that will be displayed in the window <see cref="TargetPlatformWindow"/>.
 		/// </summary>
 		protected internal virtual IEnumerable<TargetPlatformFeature> ExtendedFeatures
 		{
@@ -143,22 +143,22 @@
 		}
 
 		/// <summary>
-		/// Путь к директории с настройками.
+		/// The path to the settings directory.
 		/// </summary>
 		public static readonly string AppDataPath;
 
 		/// <summary>
-		/// Путь к конфигурационному файлу определения платформы.
+		/// The path to the configuration file of platform definition.
 		/// </summary>
 		public static readonly string PlatformConfigurationFile;
 
 		/// <summary>
-		/// Путь к конфигурационному файлу настроек прокси-сервера.
+		/// The path to the configuration file of proxy settings.
 		/// </summary>
 		public static readonly string ProxyConfigurationFile;
 
 		/// <summary>
-		/// Настройки прокси-сервера.
+		/// Proxy-server settings.
 		/// </summary>
 		public static ProxySettings ProxySettings { get; private set; }
 
@@ -181,21 +181,21 @@
 		}
 
 		/// <summary>
-		/// Иконка приложения.
+		/// The application icon.
 		/// </summary>
 		protected internal string AppIcon { get; set; }
 
 		/// <summary>
-		/// Проверять ли платформу при запуске.
+		/// Whether to check the platform at start.
 		/// </summary>
 		protected bool CheckTargetPlatform { get; set; }
 
 		private const string _langPrefix = "lang=";
 
 		/// <summary>
-		/// Обработка запуска приложения.
+		/// Processing the application start.
 		/// </summary>
-		/// <param name="e">Аргумент.</param>
+		/// <param name="e">Argument.</param>
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			Extensions.TranslateActiproDocking();
@@ -276,7 +276,7 @@
 		}
 
 		/// <summary>
-		/// Редактировать настройки прокси-сервера.
+		/// To edit the proxy settings.
 		/// </summary>
 		public static void EditProxySettigs()
 		{

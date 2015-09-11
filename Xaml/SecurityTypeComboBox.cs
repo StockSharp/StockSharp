@@ -5,14 +5,14 @@ namespace StockSharp.Xaml
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Выпадающий список для выбора типа инструмента.
+	/// The drop-down list to select the instrument type.
 	/// </summary>
 	public class SecurityTypeComboBox : EnumComboBox
 	{
 		private const SecurityTypes _nullType = (SecurityTypes)(-1);
 
 		/// <summary>
-		/// Создать <see cref="SecurityTypeComboBox"/>.
+		/// Initializes a new instance of the <see cref="SecurityTypeComboBox"/>.
 		/// </summary>
 		public SecurityTypeComboBox()
 		{
@@ -30,12 +30,12 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Элемент для <see cref="SelectedType"/> равного <see langword="null"/>.
+		/// The entry for <see cref="SecurityTypeComboBox.SelectedType"/> which equals to <see langword="null" />.
 		/// </summary>
 		public EnumComboBoxHelper.EnumerationMember NullItem { get; private set; }
 
 		/// <summary>
-		/// Выбранный тип инструмента.
+		/// The selected instrument type.
 		/// </summary>
 		public SecurityTypes? SelectedType
 		{

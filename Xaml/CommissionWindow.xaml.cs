@@ -1,16 +1,16 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using Ecng.Collections;
 
 	using StockSharp.Algo.Commissions;
 
 	/// <summary>
-	/// Окно для редактирования списка <see cref="ICommissionRule"/>.
+	/// The window for the list editing <see cref="ICommissionRule"/>.
 	/// </summary>
 	public partial class CommissionWindow
 	{
 		/// <summary>
-		/// Создать <see cref="CommissionWindow"/>.
+		/// Initializes a new instance of the <see cref="CommissionWindow"/>.
 		/// </summary>
 		public CommissionWindow()
 		{
@@ -18,7 +18,7 @@
 		}
 
 		/// <summary>
-		/// Список правил, добавленных в таблицу.
+		/// The list of rules added to the table.
 		/// </summary>
 		public IListEx<ICommissionRule> Rules
 		{

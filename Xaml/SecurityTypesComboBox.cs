@@ -17,7 +17,7 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Выпадающий список для выбора типов инструмента.
+	/// The drop-down list to select the instrument types.
 	/// </summary>
 	public class SecurityTypesComboBox : CheckComboBox
 	{
@@ -31,7 +31,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Создать <see cref="SecurityTypesComboBox"/>.
+		/// Initializes a new instance of the <see cref="SecurityTypesComboBox"/>.
 		/// </summary>
 		public SecurityTypesComboBox()
 		{
@@ -44,7 +44,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="SelectedTypes"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="SecurityTypesComboBox.SelectedTypes"/>.
 		/// </summary>
 		public static readonly DependencyProperty SelectedTypesProperty = DependencyProperty.Register("SelectedTypes",
 			typeof(IEnumerable<SecurityTypes>), typeof(SecurityTypesComboBox), new UIPropertyMetadata((s, e) =>
@@ -76,7 +76,7 @@ namespace StockSharp.Xaml
 			}));
 
 		/// <summary>
-		/// Список выбранных типов.
+		/// List of selected types.
 		/// </summary>
 		public IEnumerable<SecurityTypes> SelectedTypes
 		{
@@ -85,9 +85,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Метод, который вызывается при изменении значения у элемента.
+		/// The method that is called when the value of the item is changed.
 		/// </summary>
-		/// <param name="e">Аргументы.</param>
+		/// <param name="e">Arguments.</param>
 		protected override void OnItemSelectionChanged(ItemSelectionChangedEventArgs e)
 		{
 			base.OnItemSelectionChanged(e);

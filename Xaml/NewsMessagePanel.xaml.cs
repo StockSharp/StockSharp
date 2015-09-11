@@ -1,16 +1,16 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System.Windows.Controls;
 
 	using Ecng.Common;
 
 	/// <summary>
-	/// Визуальная панель с новостями.
+	/// The visual panel with the news.
 	/// </summary>
 	public partial class NewsMessagePanel
 	{
 		/// <summary>
-		/// Создать <see cref="NewsMessagePanel"/>.
+		/// Initializes a new instance of the <see cref="NewsMessagePanel"/>.
 		/// </summary>
 		public NewsMessagePanel()
 		{

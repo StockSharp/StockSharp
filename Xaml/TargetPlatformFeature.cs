@@ -9,31 +9,31 @@ namespace StockSharp.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Функциональность.
+	/// Features.
 	/// </summary>
 	public class TargetPlatformFeature
 	{
 		/// <summary>
-		/// Ключ для <see cref="LocalizedStrings"/>, по которому будет получено локализованное название.
+		/// The key for <see cref="LocalizedStrings"/>, by which a localized name will be obtained.
 		/// </summary>
 		public string LocalizationKey { get; private set; }
 
 		/// <summary>
-		/// Целевая аудитория.
+		/// The target audience.
 		/// </summary>
 		public Languages PreferLanguage { get; private set; }
 
 		/// <summary>
-		/// Платформа.
+		/// Platform.
 		/// </summary>
 		public Platforms Platform { get; private set; }
 
 		/// <summary>
-		/// Создать <see cref="TargetPlatformFeature"/>.
+		/// Initializes a new instance of the <see cref="TargetPlatformFeature"/>.
 		/// </summary>
-		/// <param name="localizationKey">Ключ для <see cref="LocalizedStrings"/>, по которому будет получено локализованное название.</param>
-		/// <param name="preferLanguage">Целевая аудитория.</param>
-		/// <param name="platform">Платформа.</param>
+		/// <param name="localizationKey">The key for <see cref="LocalizedStrings"/>, by which a localized name will be obtained.</param>
+		/// <param name="preferLanguage">The target audience.</param>
+		/// <param name="platform">Platform.</param>
 		public TargetPlatformFeature(string localizationKey, Languages preferLanguage = Languages.English, Platforms platform = Platforms.AnyCPU)
 		{
 			if (localizationKey.IsEmpty())
@@ -45,9 +45,9 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			var str = LocalizedStrings.GetString(LocalizationKey);

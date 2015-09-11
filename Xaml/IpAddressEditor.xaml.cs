@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Globalization;
@@ -14,12 +14,12 @@
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Редактор для <see cref="IPAddress"/>.
+	/// Editor for <see cref="IPAddress"/>.
 	/// </summary>
 	public partial class IpAddressEditor
 	{
 		/// <summary>
-		/// Создать <see cref="IpAddressEditor"/>.
+		/// Initializes a new instance of the <see cref="IpAddressEditor"/>.
 		/// </summary>
 		public IpAddressEditor()
 		{
@@ -28,13 +28,13 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Address"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="IpAddressEditor.Address"/>.
 		/// </summary>
 		public static readonly DependencyProperty AddressProperty =
 			DependencyProperty.Register("Address", typeof(IPAddress), typeof(IpAddressEditor), new PropertyMetadata(default(IPAddress)));
 
 		/// <summary>
-		/// Адрес.
+		/// Address.
 		/// </summary>
 		public IPAddress Address
 		{

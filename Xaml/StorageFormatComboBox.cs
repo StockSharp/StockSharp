@@ -5,12 +5,12 @@ namespace StockSharp.Xaml
 	using StockSharp.Algo.Storages;
 
 	/// <summary>
-	/// Выпадающий список для выбора типа инструмента.
+	/// The drop-down list to select the instrument type.
 	/// </summary>
 	public class StorageFormatComboBox : EnumComboBox
 	{
 		/// <summary>
-		/// Создать <see cref="StorageFormatComboBox"/>.
+		/// Initializes a new instance of the <see cref="StorageFormatComboBox"/>.
 		/// </summary>
 		public StorageFormatComboBox()
 		{
@@ -19,7 +19,7 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
-		/// Выбранный формат.
+		/// The selected format.
 		/// </summary>
 		public StorageFormats SelectedFormat
 		{

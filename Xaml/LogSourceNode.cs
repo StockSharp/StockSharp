@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 
@@ -6,28 +6,28 @@
 	using Ecng.Xaml;
 
 	/// <summary>
-	/// Узел дерева источника логов.
+	/// The logs source tree node.
 	/// </summary>
 	public class LogSourceNode : Disposable
 	{
 		/// <summary>
-		/// Уникальный ключ.
+		/// The unique key.
 		/// </summary>
 		public Guid Key { get; private set; }
 
 		internal readonly string KeyStr;
 
 		/// <summary>
-		/// Отображаемое имя.
+		/// The display name.
 		/// </summary>
 		public string Name { get; private set; }
 
 		/// <summary>
-		/// Создать <see cref="LogSourceNode"/>.
+		/// Initializes a new instance of the <see cref="LogSourceNode"/>.
 		/// </summary>
-		/// <param name="key">Уникальный ключ.</param>
-		/// <param name="name">Отображаемое имя.</param>
-		/// <param name="parentNode">Родительский узел.</param>
+		/// <param name="key">The unique key.</param>
+		/// <param name="name">The display name.</param>
+		/// <param name="parentNode">The parent node.</param>
 		public LogSourceNode(Guid key, string name, LogSourceNode parentNode)
 		{
 			//if (key.IsEmpty())
@@ -45,19 +45,19 @@
 		}
 
 		/// <summary>
-		/// Родительский узел.
+		/// The parent node.
 		/// </summary>
 		public LogSourceNode ParentNode { get; private set; }
 
 		/// <summary>
-		/// Дочерние узлы.
+		/// Child nodes.
 		/// </summary>
 		public ThreadSafeObservableCollection<LogSourceNode> ChildNodes { get; private set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Name;

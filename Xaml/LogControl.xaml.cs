@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Xaml
+namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
@@ -15,12 +15,12 @@
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Графический компонент для отображения логов.
+	/// The graphical component for logs displaying.
 	/// </summary>
 	public partial class LogControl : ILogListener
 	{
 		/// <summary>
-		/// Создать <see cref="LogControl"/>.
+		/// Initializes a new instance of the <see cref="LogControl"/>.
 		/// </summary>
 		public LogControl()
 		{
@@ -34,7 +34,7 @@
 		#region Dependency properties
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="AutoScroll"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoScroll"/>.
 		/// </summary>
 		public static readonly DependencyProperty AutoScrollProperty =
 			DependencyProperty.Register("AutoScroll", typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoScrollChanged));
@@ -50,7 +50,7 @@
 		private bool _autoScroll;
 
 		/// <summary>
-		/// Автоматически скроллировать контрол на последнюю добавленную строку. По умолчанию выключено.
+		/// Automatically to scroll control on the last row added. The default is off.
 		/// </summary>
 		public bool AutoScroll
 		{
@@ -59,7 +59,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="AutoResize"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoResize"/>.
 		/// </summary>
 		public static readonly DependencyProperty AutoResizeProperty =
 			DependencyProperty.Register("AutoResize", typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoResizeChanged));
@@ -73,7 +73,7 @@
 		}
 
 		/// <summary>
-		/// Автоматически выравнивать ширину колонок по содержимому. По умолчанию выключено.
+		/// Automatically to align the width of the columns by content. The default is off.
 		/// </summary>
 		public bool AutoResize
 		{
@@ -82,7 +82,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="MaxItemsCount"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.MaxItemsCount"/>.
 		/// </summary>
 		public static readonly DependencyProperty MaxItemsCountProperty =
 			DependencyProperty.Register("MaxItemsCount", typeof(int), typeof(LogControl),
@@ -94,9 +94,7 @@
 		}
 
 		/// <summary>
-		/// Максимальное число записей для отображения. Значение -1 обозначает бесконечный объем записей.
-		/// По умолчанию отображается последние 10000 записей для 64 битного процесса
-		/// и 1000 записей для 32 битного процесса.
+		/// The maximum number of entries to display. The -1 value means an unlimited amount of records. By default, the last 10000 records for 64-bit process and 1000 records for 32-bit process are displayed.
 		/// </summary>
 		public int MaxItemsCount
 		{
@@ -105,7 +103,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowSourceNameColumn"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowSourceNameColumn"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowSourceNameColumnProperty =
 			DependencyProperty.Register("ShowSourceNameColumn", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowSourceNameColumnChanged));
@@ -116,7 +114,7 @@
 		}
 
 		/// <summary>
-		/// Показывать столбец с названием источника. По-умолчанию включено.
+		/// To show the column with the source name. Enabled by default.
 		/// </summary>
 		public bool ShowSourceNameColumn
 		{
@@ -127,7 +125,7 @@
 		private const string _defaultTimeFormat = "yy/MM/dd HH:mm:ss.fff";
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="TimeFormat"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.TimeFormat"/>.
 		/// </summary>
 		public static readonly DependencyProperty TimeFormatProperty =
 			DependencyProperty.Register("TimeFormat", typeof(string), typeof(LogControl), new PropertyMetadata(_defaultTimeFormat, TimeFormatChanged));
@@ -146,7 +144,7 @@
 		private string _timeFormat = _defaultTimeFormat;
 
 		/// <summary>
-		/// Формат конвертирования времени в строку. По-умолчанию формат равен yy/MM/dd HH:mm:ss.fff
+		/// Format for conversion time into a string. The default format is yy/MM/dd HH:mm:ss.fff.
 		/// </summary>
 		public string TimeFormat
 		{
@@ -155,7 +153,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowError"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowError"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowErrorProperty =
 			DependencyProperty.Register("ShowError", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
@@ -163,7 +161,7 @@
 		private bool _showError = true;
 
 		/// <summary>
-		/// Показывать сообщения типа <see cref="LogLevels.Error"/>. По умолчанию включено.
+		/// To show messages of type <see cref="LogLevels.Error"/>. Enabled by default.
 		/// </summary>
 		public bool ShowError
 		{
@@ -172,7 +170,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowWarning"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowWarning"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowWarningProperty =
 			DependencyProperty.Register("ShowWarning", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
@@ -180,7 +178,7 @@
 		private bool _showWarning = true;
 
 		/// <summary>
-		/// Показывать сообщения типа <see cref="LogLevels.Warning"/>. По умолчанию включено.
+		/// To show messages of type <see cref="LogLevels.Warning"/>. Enabled by default.
 		/// </summary>
 		public bool ShowWarning
 		{
@@ -189,7 +187,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowInfo"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowInfo"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowInfoProperty =
 			DependencyProperty.Register("ShowInfo", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
@@ -197,7 +195,7 @@
 		private bool _showInfo = true;
 
 		/// <summary>
-		/// Показывать сообщения типа <see cref="LogLevels.Info"/>. По умолчанию включено.
+		/// To show messages of type <see cref="LogLevels.Info"/>. Enabled by default.
 		/// </summary>
 		public bool ShowInfo
 		{
@@ -206,7 +204,7 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowDebug"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowDebug"/>.
 		/// </summary>
 		public static readonly DependencyProperty ShowDebugProperty =
 			DependencyProperty.Register("ShowDebug", typeof(bool), typeof(LogControl), new PropertyMetadata(true, ShowChanged));
@@ -214,7 +212,7 @@
 		private bool _showDebug = true;
 
 		/// <summary>
-		/// Показывать сообщения типа <see cref="LogLevels.Debug"/>. По умолчанию включено.
+		/// To show messages of type <see cref="LogLevels.Debug"/>. Enabled by default.
 		/// </summary>
 		public bool ShowDebug
 		{
@@ -241,13 +239,13 @@
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="Messages"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.Messages"/>.
 		/// </summary>
 		public static readonly DependencyProperty MessagesProperty =
 			DependencyProperty.Register("Messages", typeof(LogMessageCollection), typeof(LogControl), new PropertyMetadata(null, MessagesChanged));
 
 		/// <summary>
-		/// Коллекция лог-записей.
+		/// The log entries collection.
 		/// </summary>
 		public LogMessageCollection Messages
 		{
@@ -268,104 +266,104 @@
 		#region Attached properties
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="AutoScroll"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoScroll"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogAutoScrollProperty = 
 			DependencyProperty.RegisterAttached("LogAutoScroll", typeof(bool),  typeof(LogControl), new PropertyMetadata(false, AutoScrollChanged));
 
 		/// <summary>
-		/// Установить значение для <see cref="AutoScroll"/>.
+		/// To set the value for <see cref="LogControl.AutoScroll"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <param name="value">Новое значение для <see cref="AutoScroll"/>.</param>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <param name="value">New value for <see cref="LogControl.AutoScroll"/>.</param>
 		public static void SetLogAutoScroll(UIElement element, bool value)
 		{
 			element.SetValue(LogAutoScrollProperty, value);
 		}
 
 		/// <summary>
-		/// Получить значение для <see cref="AutoScroll"/>.
+		/// To get the value for <see cref="LogControl.AutoScroll"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <returns>Значение <see cref="AutoScroll"/>.</returns>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <returns>The value of <see cref="LogControl.AutoScroll"/>.</returns>
 		public static bool GetLogAutoScroll(UIElement element)
 		{
 			return (bool)element.GetValue(LogAutoScrollProperty);
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="AutoResize"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.AutoResize"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogAutoResizeProperty =
 			DependencyProperty.Register("LogAutoResize", typeof(bool), typeof(LogControl), new PropertyMetadata(false, AutoResizeChanged));
 
 		/// <summary>
-		/// Установить значение для <see cref="AutoResize"/>.
+		/// To set the value for <see cref="LogControl.AutoResize"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <param name="value">Новое значение для <see cref="AutoResize"/>.</param>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <param name="value">New value for <see cref="LogControl.AutoResize"/>.</param>
 		public static void SetLogAutoResize(UIElement element, bool value)
 		{
 			element.SetValue(LogAutoResizeProperty, value);
 		}
 
 		/// <summary>
-		/// Получить значение для <see cref="AutoResize"/>.
+		/// To get the value for <see cref="LogControl.AutoResize"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <returns>Значение <see cref="AutoResize"/>.</returns>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <returns>The value of <see cref="LogControl.AutoResize"/>.</returns>
 		public static bool GetLogAutoResize(UIElement element)
 		{
 			return (bool)element.GetValue(LogAutoResizeProperty);
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="MaxItemsCount"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.MaxItemsCount"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogMaxItemsCountProperty =
 			DependencyProperty.RegisterAttached("LogMaxItemsCount", typeof(int), typeof(LogControl), new PropertyMetadata(LogMessageCollection.DefaultMaxItemsCount, MaxItemsCountChanged));
 
 		/// <summary>
-		/// Установить значение для <see cref="MaxItemsCount"/>.
+		/// To set the value for <see cref="LogControl.MaxItemsCount"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <param name="value">Новое значение для <see cref="MaxItemsCount"/>.</param>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <param name="value">New value for <see cref="LogControl.MaxItemsCount"/>.</param>
 		public static void SetLogMaxItemsCount(UIElement element, int value)
 		{
 			element.SetValue(LogMaxItemsCountProperty, value);
 		}
 
 		/// <summary>
-		/// Получить значение для <see cref="MaxItemsCount"/>.
+		/// To get the value for <see cref="LogControl.MaxItemsCount"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <returns>Значение <see cref="MaxItemsCount"/>.</returns>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <returns>The value of <see cref="LogControl.MaxItemsCount"/>.</returns>
 		public static int GetLogMaxItemsCount(UIElement element)
 		{
 			return (int)element.GetValue(LogMaxItemsCountProperty);
 		}
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="ShowSourceNameColumn"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="LogControl.ShowSourceNameColumn"/>.
 		/// </summary>
 		public static readonly DependencyProperty LogShowSourceNameColumnProperty =
 			DependencyProperty.RegisterAttached("LogShowSourceNameColumn", typeof(bool), typeof(LogControl), new PropertyMetadata(ShowSourceNameColumnChanged));
 
 		/// <summary>
-		/// Установить значение для <see cref="ShowSourceNameColumn"/>.
+		/// To set the value for <see cref="LogControl.ShowSourceNameColumn"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <param name="value">Новое значение для <see cref="ShowSourceNameColumn"/>.</param>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <param name="value">New value for <see cref="LogControl.ShowSourceNameColumn"/>.</param>
 		public static void SetLogShowSourceNameColumn(UIElement element, bool value)
 		{
 			element.SetValue(LogShowSourceNameColumnProperty, value);
 		}
 
 		/// <summary>
-		/// Получить значение для <see cref="ShowSourceNameColumn"/>.
+		/// To get the value for <see cref="LogControl.ShowSourceNameColumn"/>.
 		/// </summary>
-		/// <param name="element">Объект <see cref="LogControl"/>.</param>
-		/// <returns>Значение <see cref="ShowSourceNameColumn"/>.</returns>
+		/// <param name="element">Object <see cref="LogControl"/>.</param>
+		/// <returns>The value of <see cref="LogControl.ShowSourceNameColumn"/>.</returns>
 		public static bool GetLogShowSourceNameColumn(UIElement element)
 		{
 			return (bool)element.GetValue(LogShowSourceNameColumnProperty);
@@ -456,9 +454,9 @@
 		#region Implementation of IPersistable
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			AutoScroll = storage.GetValue("AutoScroll", false);
@@ -473,9 +471,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("AutoScroll", AutoScroll);
