@@ -45,6 +45,7 @@ namespace StockSharp.Algo.Export
 
 						writer.WriteAttribute("id", trade.TradeId == null ? trade.TradeStringId : trade.TradeId.To<string>());
 						writer.WriteAttribute("serverTime", trade.ServerTime.ToString(_timeFormat));
+						writer.WriteAttribute("localTime", trade.LocalTime.ToString(_timeFormat));
 						writer.WriteAttribute("price", trade.TradePrice);
 						writer.WriteAttribute("volume", trade.Volume);
 
@@ -70,6 +71,7 @@ namespace StockSharp.Algo.Export
 
 						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
 						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
+						writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
 						writer.WriteAttribute("price", item.Price);
 						writer.WriteAttribute("volume", item.Volume);
 						writer.WriteAttribute("side", item.Side);
@@ -99,6 +101,7 @@ namespace StockSharp.Algo.Export
 						writer.WriteStartElement("item");
 
 						writer.WriteAttribute("serverTime", item.ServerTime.ToString(_timeFormat));
+						writer.WriteAttribute("localTime", item.LocalTime.ToString(_timeFormat));
 						writer.WriteAttribute("portfolio", item.PortfolioName);
 						writer.WriteAttribute("transactionId", item.TransactionId);
 						writer.WriteAttribute("id", item.OrderId == null ? item.OrderStringId : item.OrderId.To<string>());
@@ -159,7 +162,8 @@ namespace StockSharp.Algo.Export
 			{
 				writer.WriteStartElement("message");
 
-				writer.WriteAttribute("time", message.LocalTime.ToString(_timeFormat));
+				writer.WriteAttribute("serverTime", message.ServerTime.ToString(_timeFormat));
+				writer.WriteAttribute("localTime", message.LocalTime.ToString(_timeFormat));
 
 				foreach (var pair in message.Changes)
 					writer.WriteAttribute(pair.Key.ToString(), pair.Value is DateTime ? ((DateTime)pair.Value).ToString(_timeFormat) : pair.Value);

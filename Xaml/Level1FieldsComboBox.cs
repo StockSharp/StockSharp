@@ -8,13 +8,12 @@ namespace StockSharp.Xaml
 	using Ecng.ComponentModel;
 
 	using StockSharp.Messages;
+	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit;
 	using Xceed.Wpf.Toolkit.Primitives;
 
 	using ComboItem = System.Collections.Generic.KeyValuePair<StockSharp.Messages.Level1Fields, string>;
-
-	using StockSharp.Localization;
 
 	/// <summary>
 	/// Выпадающий список для выбора набора полей <see cref="Level1Fields"/>.

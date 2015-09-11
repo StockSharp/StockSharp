@@ -5,11 +5,14 @@ namespace StockSharp.Hydra.Panes
 	using System.Collections.ObjectModel;
 	using System.Linq;
 	using System.Windows;
+	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+
+	using MoreLinq;
 
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -17,8 +20,12 @@ namespace StockSharp.Hydra.Panes
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	using Xceed.Wpf.Toolkit.Primitives;
+
 	public partial class Level1Pane
 	{
+		private readonly Dictionary<Level1Fields, DataGridColumn> _columns = new Dictionary<Level1Fields, DataGridColumn>();
+
 		public Level1Pane()
 		{
 			InitializeComponent();
@@ -26,6 +33,16 @@ namespace StockSharp.Hydra.Panes
 			Init(ExportBtn, MainGrid, GetMessages);
 
 			Level1FieldsCtrl.SelectedFields = Enumerator.GetValues<Level1Fields>();
+
+			foreach (var column in FindedChanges.Columns)
+			{
+				Level1Fields field;
+
+				if (!Enum.TryParse(column.SortMemberPath, out field))
+					continue;
+
+				_columns.Add(field, column);
+			}
 		}
 
 		protected override Type DataType
@@ -46,14 +63,22 @@ namespace StockSharp.Hydra.Panes
 
 		private IEnumerableEx<Level1ChangeMessage> GetMessages()
 		{
-			var types = new HashSet<Level1Fields>(Level1FieldsCtrl.SelectedFields);
+			var excludedTypes = Enumerator
+				.GetValues<Level1Fields>()
+				.Except(Level1FieldsCtrl.SelectedFields)
+				.ToArray();
 
 			var messages = StorageRegistry
 				.GetLevel1MessageStorage(SelectedSecurity, Drive, StorageFormat)
 				.Load(From, To + TimeHelper.LessOneDay);
 
 			return messages
-				.Where(m => types.IsSupersetOf(m.Changes.Keys))
+				.Select(m =>
+				{
+					excludedTypes.ForEach(t => m.Changes.Remove(t));
+					return m;
+				})
+				.Where(m => m.Changes.Any())
 				.ToEx(messages.Count);
 		}
 
@@ -118,6 +143,18 @@ namespace StockSharp.Hydra.Panes
 			}
 		}
 
+		private void Level1FieldsCtrl_OnItemSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+		{
+			var pair = (KeyValuePair<Level1Fields, string>)e.Item;
+
+			var column = _columns.TryGetValue(pair.Key);
+
+			if (column == null)
+				return;
+
+			column.Visibility = e.IsSelected ? Visibility.Visible : Visibility.Collapsed;
+		}
+
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -132,6 +169,13 @@ namespace StockSharp.Hydra.Panes
 			}
 
 			FindedChanges.Load(storage.GetValue<SettingsStorage>("FindedChanges"));
+
+			var selectedFields = Level1FieldsCtrl.SelectedFields.ToArray();
+
+			foreach (var pair in _columns)
+			{
+				pair.Value.Visibility = selectedFields.Contains(pair.Key) ? Visibility.Visible : Visibility.Collapsed;
+			}
 		}
 
 		public override void Save(SettingsStorage storage)

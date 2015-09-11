@@ -222,64 +222,39 @@ namespace StockSharp.Algo.Export
 		{
 			Do(worker =>
 			{
-				var columns = new Dictionary<Level1Fields, int>
-				{
-					{ Level1Fields.LastTradeId, 1 },
-					{ Level1Fields.LastTradePrice, 2 },
-					{ Level1Fields.LastTradeVolume, 3 },
-					{ Level1Fields.LastTradeOrigin, 4 },
-					{ Level1Fields.BestBidPrice, 5 },
-					{ Level1Fields.BestBidVolume, 6 },
-					{ Level1Fields.BestAskPrice, 7 },
-					{ Level1Fields.BestAskVolume, 8 },
-					{ Level1Fields.StepPrice, 9 },
-					{ Level1Fields.OpenInterest, 10 },
-					{ Level1Fields.TheorPrice, 11 },
-					{ Level1Fields.ImpliedVolatility, 12 },
-					{ Level1Fields.OpenPrice, 13 },
-					{ Level1Fields.HighPrice, 14 },
-					{ Level1Fields.LowPrice, 15 },
-					{ Level1Fields.ClosePrice, 16 },
-					{ Level1Fields.Volume, 17 },
-				};
+				var columns = new Dictionary<Level1Fields, int>();
+				//{
+				//	{ Level1Fields.LastTradeId, 1 },
+				//	{ Level1Fields.LastTradePrice, 2 },
+				//	{ Level1Fields.LastTradeVolume, 3 },
+				//	{ Level1Fields.LastTradeOrigin, 4 },
+				//	{ Level1Fields.BestBidPrice, 5 },
+				//	{ Level1Fields.BestBidVolume, 6 },
+				//	{ Level1Fields.BestAskPrice, 7 },
+				//	{ Level1Fields.BestAskVolume, 8 },
+				//	{ Level1Fields.StepPrice, 9 },
+				//	{ Level1Fields.OpenInterest, 10 },
+				//	{ Level1Fields.TheorPrice, 11 },
+				//	{ Level1Fields.ImpliedVolatility, 12 },
+				//	{ Level1Fields.OpenPrice, 13 },
+				//	{ Level1Fields.HighPrice, 14 },
+				//	{ Level1Fields.LowPrice, 15 },
+				//	{ Level1Fields.ClosePrice, 16 },
+				//	{ Level1Fields.Volume, 17 },
+				//};
 
 				worker
 					.SetCell(0, 0, LocalizedStrings.Time).SetStyle(0, "yyyy-MM-dd HH:mm:ss.fff");
 
-				foreach (var field in Enumerator.GetValues<Level1Fields>())
-				{
-					var columnIndex = columns.TryGetValue2(field);
+				//foreach (var pair in columns)
+				//{
+				//	var field = pair.Key;
+				//	var columnIndex = pair.Value;
 
-					if (columnIndex == null)
-					{
-						columnIndex = columns.Count;
-						columns.Add(field, columnIndex.Value);
-					}
+				//	worker.SetCell(columnIndex, 0, field.GetDisplayName());
 
-					var cell = worker.SetCell(columns[field], 0, field.GetDisplayName());
-
-					switch (field)
-					{
-						case Level1Fields.LastTrade:
-						case Level1Fields.BestAsk:
-						case Level1Fields.BestBid:
-							continue;
-						case Level1Fields.LastTradeId:
-						case Level1Fields.BidsCount:
-						case Level1Fields.AsksCount:
-						case Level1Fields.TradesCount:
-							cell.SetStyle(columns[field], typeof(long));
-							break;
-						case Level1Fields.LastTradeTime:
-						case Level1Fields.BestAskTime:
-						case Level1Fields.BestBidTime:
-							cell.SetStyle(columns[field], typeof(DateTimeOffset));
-							break;
-						default:
-							cell.SetStyle(columns[field], typeof(decimal));
-							break;
-					}
-				}
+				//	ApplyCellStyle(worker, field, columnIndex);
+				//}
 
 				var row = 1;
 
@@ -288,12 +263,52 @@ namespace StockSharp.Algo.Export
 					worker.SetCell(0, row, message.LocalTime);
 
 					foreach (var pair in message.Changes)
-						worker.SetCell(columns[pair.Key], row, pair.Value);
+					{
+						var field = pair.Key;
+
+						var columnIndex = columns.TryGetValue2(field);
+
+						if (columnIndex == null)
+						{
+							columnIndex = columns.Count;
+							columns.Add(field, columnIndex.Value);
+
+							worker.SetCell(columnIndex.Value, 0, field.GetDisplayName());
+							ApplyCellStyle(worker, field, columnIndex.Value);
+						}
+
+						worker.SetCell(columns[field], row, pair.Value);
+					}
 
 					if (!Check(++row))
 						break;
 				}
 			});
+		}
+
+		private static void ApplyCellStyle(ExcelWorker worker, Level1Fields field, int column)
+		{
+			switch (field)
+			{
+				case Level1Fields.LastTrade:
+				case Level1Fields.BestAsk:
+				case Level1Fields.BestBid:
+					break;
+				case Level1Fields.LastTradeId:
+				case Level1Fields.BidsCount:
+				case Level1Fields.AsksCount:
+				case Level1Fields.TradesCount:
+					worker.SetStyle(column, typeof(long));
+					break;
+				case Level1Fields.LastTradeTime:
+				case Level1Fields.BestAskTime:
+				case Level1Fields.BestBidTime:
+					worker.SetStyle(column, typeof(DateTimeOffset));
+					break;
+				default:
+					worker.SetStyle(column, typeof(decimal));
+					break;
+			}
 		}
 
 		/// <summary>
