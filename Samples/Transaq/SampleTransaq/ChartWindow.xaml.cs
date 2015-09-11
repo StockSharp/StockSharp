@@ -4,8 +4,6 @@
 	using System.Collections.Generic;
 	using System.Windows.Media;
 
-	using Ecng.Common;
-	
 	using StockSharp.Algo.Candles;
 	using StockSharp.Transaq;
 	using StockSharp.Xaml.Charting;
@@ -20,7 +18,7 @@
 		{
 			InitializeComponent();
 
-			if (candleSeries.IsNull())
+			if (candleSeries == null)
 				throw new ArgumentNullException("candleSeries");
 
 			_candleSeries = candleSeries;
