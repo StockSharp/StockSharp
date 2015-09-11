@@ -91,7 +91,7 @@ namespace SampleHistoryTesting
 			{
 				SecId.Text = "@ES#@CMEMINI";
 
-				From.Value = new DateTime(2015, 8, 5);
+				From.Value = new DateTime(2015, 8, 1);
 				To.Value = new DateTime(2015, 8, 31);
 
 				TimeFrame.SelectedIndex = 0;
