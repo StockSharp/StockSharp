@@ -32,7 +32,7 @@ namespace StockSharp.Hydra.Tools
 			OrderLogToTicks,
 
 			[EnumDisplayNameLoc(LocalizedStrings.Str3774Key)]
-			OrderLogToDepths,
+			OrderLogToOrderBooks,
 
 			[EnumDisplayNameLoc(LocalizedStrings.Str3775Key)]
 			OrderLogToCandles,
@@ -41,13 +41,16 @@ namespace StockSharp.Hydra.Tools
 			TicksToCandles,
 
 			[EnumDisplayNameLoc(LocalizedStrings.Str3777Key)]
-			DepthsToCandles,
+			OrderBooksToCandles,
 
 			[EnumDisplayNameLoc(LocalizedStrings.Level1ToTicksKey)]
 			Level1ToTicks,
 
 			[EnumDisplayNameLoc(LocalizedStrings.Level1ToCandlesKey)]
 			Level1ToCandles,
+
+			[EnumDisplayNameLoc(LocalizedStrings.Level1ToOrderBooksKey)]
+			Level1ToOrderBooks,
 		}
 
 		[TaskSettingsDisplayName(_sourceName)]
@@ -223,7 +226,7 @@ namespace StockSharp.Hydra.Tools
 						fromStorage = StorageRegistry.GetOrderLogMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 						toStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.DestinationDrive, _settings.DestinationStorageFormat);
 						break;
-					case ConvertModes.OrderLogToDepths:
+					case ConvertModes.OrderLogToOrderBooks:
 						fromStorage = StorageRegistry.GetOrderLogMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 						toStorage = StorageRegistry.GetQuoteMessageStorage(security.Security, _settings.DestinationDrive, _settings.DestinationStorageFormat);
 						break;
@@ -235,9 +238,21 @@ namespace StockSharp.Hydra.Tools
 						fromStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 						toStorage = StorageRegistry.GetCandleMessageStorage(_settings.CandleSettings.CandleType.ToCandleMessageType(), security.Security, _settings.CandleSettings.Arg, _settings.DestinationDrive, _settings.DestinationStorageFormat);
 						break;
-					case ConvertModes.DepthsToCandles:
+					case ConvertModes.OrderBooksToCandles:
 						fromStorage = StorageRegistry.GetQuoteMessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
 						toStorage = StorageRegistry.GetCandleMessageStorage(_settings.CandleSettings.CandleType.ToCandleMessageType(), security.Security, _settings.CandleSettings.Arg, _settings.DestinationDrive, _settings.DestinationStorageFormat);
+						break;
+					case ConvertModes.Level1ToTicks:
+						fromStorage = StorageRegistry.GetLevel1MessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
+						toStorage = StorageRegistry.GetTickMessageStorage(security.Security, _settings.DestinationDrive, _settings.DestinationStorageFormat);
+						break;
+					case ConvertModes.Level1ToCandles:
+						fromStorage = StorageRegistry.GetLevel1MessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
+						toStorage = StorageRegistry.GetCandleMessageStorage(_settings.CandleSettings.CandleType.ToCandleMessageType(), security.Security, _settings.CandleSettings.Arg, _settings.DestinationDrive, _settings.DestinationStorageFormat);
+						break;
+					case ConvertModes.Level1ToOrderBooks:
+						fromStorage = StorageRegistry.GetLevel1MessageStorage(security.Security, _settings.Drive, _settings.StorageFormat);
+						toStorage = StorageRegistry.GetQuoteMessageStorage(security.Security, _settings.DestinationDrive, _settings.DestinationStorageFormat);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -276,7 +291,7 @@ namespace StockSharp.Hydra.Tools
 								RaiseDataLoaded(security.Security, typeof(ExecutionMessage), ExecutionTypes.Tick, date, ticks.Count);
 								break;
 							}
-							case ConvertModes.OrderLogToDepths:
+							case ConvertModes.OrderLogToOrderBooks:
 							{
 								var depths = ((IMarketDataStorage<ExecutionMessage>)fromStorage)
 									.Load(date)
@@ -307,7 +322,7 @@ namespace StockSharp.Hydra.Tools
 								RaiseDataLoaded(security.Security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, candles.Count);
 								break;
 							}
-							case ConvertModes.DepthsToCandles:
+							case ConvertModes.OrderBooksToCandles:
 							{
 								var candles = ((IMarketDataStorage<QuoteChangeMessage>)fromStorage)
 									.Load(date)
@@ -336,6 +351,16 @@ namespace StockSharp.Hydra.Tools
 
 								toStorage.Save(candles);
 								RaiseDataLoaded(security.Security, _settings.CandleSettings.CandleType, _settings.CandleSettings.Arg, date, candles.Count);
+								break;
+							}
+							case ConvertModes.Level1ToOrderBooks:
+							{
+								var orderBooks = ((IMarketDataStorage<Level1ChangeMessage>)fromStorage)
+									.Load(date)
+									.ToOrderBooks();
+
+								toStorage.Save(orderBooks);
+								RaiseDataLoaded(security.Security, typeof(QuoteChangeMessage), null, date, orderBooks.Count);
 								break;
 							}
 							default:

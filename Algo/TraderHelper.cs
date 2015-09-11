@@ -3738,9 +3738,9 @@ namespace StockSharp.Algo
 			};
 		}
 
-		private class QuoteEnumerable : SimpleEnumerable<QuoteChangeMessage>, IEnumerableEx<QuoteChangeMessage>
+		private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>, IEnumerableEx<QuoteChangeMessage>
 		{
-			private class QuoteEnumerator : IEnumerator<QuoteChangeMessage>
+			private class OrderBookEnumerator : IEnumerator<QuoteChangeMessage>
 			{
 				private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator;
 
@@ -3749,7 +3749,7 @@ namespace StockSharp.Algo
 				private decimal? _prevAskPrice;
 				private decimal? _prevAskVolume;
 
-				public QuoteEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
+				public OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
 				{
 					if (level1Enumerator == null)
 						throw new ArgumentNullException("level1Enumerator");
@@ -3823,8 +3823,8 @@ namespace StockSharp.Algo
 
 			private readonly IEnumerableEx<Level1ChangeMessage> _level1;
 
-			public QuoteEnumerable(IEnumerableEx<Level1ChangeMessage> level1)
-				: base(() => new QuoteEnumerator(level1.GetEnumerator()))
+			public OrderBookEnumerable(IEnumerableEx<Level1ChangeMessage> level1)
+				: base(() => new OrderBookEnumerator(level1.GetEnumerator()))
 			{
 				if (level1 == null)
 					throw new ArgumentNullException("level1");
@@ -3843,9 +3843,9 @@ namespace StockSharp.Algo
 		/// </summary>
 		/// <param name="level1">Level1 данные.</param>
 		/// <returns>Стаканы.</returns>
-		public static IEnumerableEx<QuoteChangeMessage> ToQuotes(this IEnumerableEx<Level1ChangeMessage> level1)
+		public static IEnumerableEx<QuoteChangeMessage> ToOrderBooks(this IEnumerableEx<Level1ChangeMessage> level1)
 		{
-			return new QuoteEnumerable(level1);
+			return new OrderBookEnumerable(level1);
 		}
 
 		/// <summary>

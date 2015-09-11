@@ -45152,12 +45152,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// OL to market depths
+		/// OL to order books
 		/// </summary>
 		public const string Str3774Key = "Str3774";
 
 		/// <summary>
-		/// OL to market depths
+		/// OL to order books
 		/// </summary>
 		public static string Str3774
 		{
@@ -45191,12 +45191,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// Market depths in candle
+		/// Order books to candle
 		/// </summary>
 		public const string Str3777Key = "Str3777";
 
 		/// <summary>
-		/// Market depths in candle
+		/// Order books to candle
 		/// </summary>
 		public static string Str3777
 		{
@@ -53654,6 +53654,19 @@ namespace StockSharp.Localization
 		public static string Level1ToCandles
 		{
 			get { return GetString(Level1ToCandlesKey); }
+		}
+
+		/// <summary>
+		/// Level1 to order books
+		/// </summary>
+		public const string Level1ToOrderBooksKey = "Level1ToOrderBooks";
+
+		/// <summary>
+		/// Level1 to order books
+		/// </summary>
+		public static string Level1ToOrderBooks
+		{
+			get { return GetString(Level1ToOrderBooksKey); }
 		}
 	}
 }

@@ -101,7 +101,7 @@ namespace StockSharp.Hydra.Panes
 						.GetLevel1MessageStorage(SelectedSecurity, Drive, StorageFormat)
 						.Load(From, To + TimeHelper.LessOneDay);
 
-					return level1.ToQuotes();
+					return level1.ToOrderBooks();
 				}
 
 				default:

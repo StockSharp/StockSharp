@@ -3481,10 +3481,10 @@ Str3770;No data to convert.;Нет данных для конвертации.
 Str3771;Too much data to export to Excel.;Слишком много данных для экспорта в Excel.
 Str3772Params;{0}. Export {1} to {2}. Date {3}.;{0}. Экспорт {1} в {2}. Дата {3}.
 Str3773;OL to ticks;ОЛ в тики
-Str3774;OL to market depths;ОЛ в стаканы
+Str3774;OL to order books;ОЛ в стаканы
 Str3775;OL to candles;ОЛ в свечи
 Str3776;Ticks to candles;Тики в свечи
-Str3777;Market depths in candle;Стаканы в свечи
+Str3777;Order books to candle;Стаканы в свечи
 Str3778;Time offset in days from date of launching task.;Временной отступ в днях от даты запуска задачи.
 Str3779;From what date to start data convertion.;С какой даты начать конвертировать данные.
 Str3781;Market depths generation interval.;Интервал генерации стаканов.
@@ -4154,7 +4154,8 @@ CsvHeader;Header at the first line. Do not add header while empty string.;Заг
 RequestNewsBody;Request news body;Получить текст новости
 OpenUrl;Open url;Открыть ссылку
 Level1ToTicks;Level1 to ticks;Level в тики
-Level1ToCandles;Level1 to candles;Level1 в стаканы
+Level1ToCandles;Level1 to candles;Level1 в свечи
+Level1ToOrderBooks;Level1 to order books;Level1 в стаканы
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
