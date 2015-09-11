@@ -9,7 +9,7 @@ M:StockSharp.Xaml.AutoCompletePopUp.InitializeComponent/summary;DocStr8
 P:StockSharp.Xaml.AutoCompletePopUp.MatchText/summary;DocStr8066
 P:StockSharp.Xaml.AutoCompletePopUp.Securities/summary;DocStr8067
 E:StockSharp.Xaml.AutoCompletePopUp.SecuritySelected/summary;DocStr1489
-P:StockSharp.Xaml.AutoCompletePopUp.SelectedSecurity/summary;DocStr8294
+P:StockSharp.Xaml.AutoCompletePopUp.SelectedSecurity/summary;DocStr8068
 E:StockSharp.Xaml.AutoCompletePopUp.MatchKeyDown/summary;DocStr8069
 T:StockSharp.Xaml.BaseApplication/summary;DocStr8070
 M:StockSharp.Xaml.BaseApplication.#ctor/summary;DocStr93
@@ -516,12 +516,12 @@ M:StockSharp.Xaml.SecurityEditor.#ctor/summary;DocStr1
 F:StockSharp.Xaml.SecurityEditor.SelectedSecurityProperty/summary;DocStr29
 M:StockSharp.Xaml.SecurityEditor.InitializeComponent/summary;DocStr8
 P:StockSharp.Xaml.SecurityEditor.SecurityProvider/summary;DocStr972
-P:StockSharp.Xaml.SecurityEditor.SelectedSecurity/summary;DocStr8291
+P:StockSharp.Xaml.SecurityEditor.SelectedSecurity/summary;DocStr8068
 E:StockSharp.Xaml.SecurityEditor.SecuritySelected/summary;DocStr8292
 T:StockSharp.Xaml.SecurityGrid/summary;DocStr8293
 M:StockSharp.Xaml.SecurityGrid.#ctor/summary;DocStr1
 M:StockSharp.Xaml.SecurityGrid.InitializeComponent/summary;DocStr8
-P:StockSharp.Xaml.SecurityGrid.SelectedSecurity/summary;DocStr8291
+P:StockSharp.Xaml.SecurityGrid.SelectedSecurity/summary;DocStr8068
 P:StockSharp.Xaml.SecurityGrid.Securities/summary;DocStr2513
 P:StockSharp.Xaml.SecurityGrid.SelectedSecurities/summary;DocStr8294
 P:StockSharp.Xaml.SecurityGrid.MarketDataProvider/summary;DocStr973
@@ -881,7 +881,7 @@ P:StockSharp.Xaml.SecurityPicker.ShowCommonOptionColumns/summary;DocStr8375
 E:StockSharp.Xaml.SecurityPicker.SecurityDoubleClick/summary;DocStr8376
 E:StockSharp.Xaml.SecurityPicker.SecuritySelected/summary;DocStr8377
 E:StockSharp.Xaml.SecurityPicker.GridChanged/summary;DocStr8378
-P:StockSharp.Xaml.SecurityPicker.SelectedSecurity/summary;DocStr8291
+P:StockSharp.Xaml.SecurityPicker.SelectedSecurity/summary;DocStr8068
 P:StockSharp.Xaml.SecurityPicker.SelectedSecurities/summary;DocStr8294
 P:StockSharp.Xaml.SecurityPicker.FilteredSecurities/summary;DocStr1016
 P:StockSharp.Xaml.SecurityPicker.SelectedType/summary;DocStr8308
@@ -895,7 +895,7 @@ T:StockSharp.Xaml.SecurityPickerWindow/summary;DocStr8382
 M:StockSharp.Xaml.SecurityPickerWindow.#ctor/summary;DocStr1
 M:StockSharp.Xaml.SecurityPickerWindow.InitializeComponent/summary;DocStr8
 P:StockSharp.Xaml.SecurityPickerWindow.SelectionMode/summary;DocStr8374
-P:StockSharp.Xaml.SecurityPickerWindow.SelectedSecurity/summary;DocStr8291
+P:StockSharp.Xaml.SecurityPickerWindow.SelectedSecurity/summary;DocStr8068
 P:StockSharp.Xaml.SecurityPickerWindow.SelectedSecurities/summary;DocStr8294
 P:StockSharp.Xaml.SecurityPickerWindow.Securities/summary;DocStr2822
 P:StockSharp.Xaml.SecurityPickerWindow.SecurityProvider/summary;DocStr972

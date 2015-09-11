@@ -79,7 +79,7 @@ namespace SampleSync
 				// производим соединение
 				_connector.Connect();
 
-				// создаем менеджер свечек по синхронизованному подключению
+				// создаем менеджер свечек по синхронизированному подключению
 				_candleManager = new CandleManager(_connector);
 
 				ConnectBtn.IsEnabled = false;
