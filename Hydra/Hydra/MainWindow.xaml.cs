@@ -508,7 +508,7 @@ namespace StockSharp.Hydra
 			{
 				_timer.Stop();
 
-				if (!_killTimer.IsNull())
+				if (_killTimer != null)
 					_killTimer.Stop();
 			}
 
