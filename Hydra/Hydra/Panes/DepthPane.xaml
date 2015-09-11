@@ -50,7 +50,21 @@
 
 				<controls:SecurityPickerButton x:Name="SelectSecurityBtn" Grid.Column="4" SecuritySelected="SelectSecurityBtn_SecuritySelected" />
 				
-				<CheckBox x:Name="IsBuildFromOrderLog" Grid.Column="6" ToolTip="{x:Static loc:LocalizedStrings.XamlStr531}" VerticalAlignment="Center" Margin="0,4" HorizontalAlignment="Left"><TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr191}"/></CheckBox>
+				<StackPanel Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,1">
+					<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr529}" VerticalAlignment="Center"/>
+
+					<ComboBox x:Name="BuildFrom" Margin="5,0,0,0" Width="103">
+						<ComboBoxItem IsSelected="True">
+							<TextBlock Text="{x:Static loc:LocalizedStrings.NotBuild}"/>
+						</ComboBoxItem>
+						<ComboBoxItem>
+							<TextBlock Text="{x:Static loc:LocalizedStrings.OrderLog}"/>
+						</ComboBoxItem>
+						<ComboBoxItem>
+							<TextBlock Text="{x:Static loc:LocalizedStrings.Level1}"/>
+						</ComboBoxItem>
+					</ComboBox>
+				</StackPanel>
 
 				<ComboBox x:Name="Depth" Width="60" Height="23" Grid.Column="8" ToolTip="{x:Static loc:LocalizedStrings.XamlStr98}" IsEditable="True" HorizontalContentAlignment="Right">
 					<ComboBoxItem IsSelected="True">5</ComboBoxItem>

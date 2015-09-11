@@ -3694,7 +3694,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Преобразовать level1 данные в тиковые.
 		/// </summary>
-		/// <param name="level1">Level1</param>
+		/// <param name="level1">Level1 данные.</param>
 		/// <returns>Тиковые данные.</returns>
 		public static IEnumerableEx<ExecutionMessage> ToTicks(this IEnumerableEx<Level1ChangeMessage> level1)
 		{
@@ -3704,7 +3704,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Проверить, если ли в level1 данных тиковые.
 		/// </summary>
-		/// <param name="level1">Level1</param>
+		/// <param name="level1">Level1 данные.</param>
 		/// <returns>Результат проверки.</returns>
 		public static bool IsContainsTick(this Level1ChangeMessage level1)
 		{
@@ -3717,7 +3717,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Преобразовать level1 данные в тиковые.
 		/// </summary>
-		/// <param name="level1">Level1</param>
+		/// <param name="level1">Level1 данные.</param>
 		/// <returns>Тиковые данные.</returns>
 		public static ExecutionMessage ToTick(this Level1ChangeMessage level1)
 		{
@@ -3734,7 +3734,131 @@ namespace StockSharp.Algo
 				OriginSide = (Sides?)level1.Changes.TryGetValue(Level1Fields.LastTradeOrigin),
 				ServerTime = (DateTimeOffset?)level1.Changes.TryGetValue(Level1Fields.LastTradeTime) ?? level1.ServerTime,
 				IsUpTick = (bool?)level1.Changes.TryGetValue(Level1Fields.LastTradeUpDown),
+				LocalTime = level1.LocalTime,
 			};
+		}
+
+		private class QuoteEnumerable : SimpleEnumerable<QuoteChangeMessage>, IEnumerableEx<QuoteChangeMessage>
+		{
+			private class QuoteEnumerator : IEnumerator<QuoteChangeMessage>
+			{
+				private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator;
+
+				private decimal? _prevBidPrice;
+				private decimal? _prevBidVolume;
+				private decimal? _prevAskPrice;
+				private decimal? _prevAskVolume;
+
+				public QuoteEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator)
+				{
+					if (level1Enumerator == null)
+						throw new ArgumentNullException("level1Enumerator");
+
+					_level1Enumerator = level1Enumerator;
+				}
+
+				public QuoteChangeMessage Current { get; private set; }
+
+				bool IEnumerator.MoveNext()
+				{
+					while (_level1Enumerator.MoveNext())
+					{
+						var level1 = _level1Enumerator.Current;
+
+						if (!level1.IsContainsQuotes())
+							continue;
+
+						var prevBidPrice = _prevBidPrice;
+						var prevBidVolume = _prevBidVolume;
+						var prevAskPrice = _prevAskPrice;
+						var prevAskVolume = _prevAskVolume;
+
+						_prevBidPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _prevBidPrice;
+						_prevBidVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _prevBidVolume;
+						_prevAskPrice = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _prevAskPrice;
+						_prevAskVolume = (decimal?)level1.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _prevAskVolume;
+
+						if (_prevBidPrice == 0)
+							_prevBidPrice = null;
+
+						if (_prevAskPrice == 0)
+							_prevAskPrice = null;
+
+						if (prevBidPrice == _prevBidPrice && prevBidVolume == _prevBidVolume && prevAskPrice == _prevAskPrice && prevAskVolume == _prevAskVolume)
+							continue;
+
+						Current = new QuoteChangeMessage
+						{
+							SecurityId = level1.SecurityId,
+							LocalTime = level1.LocalTime,
+							ServerTime = level1.ServerTime,
+							Bids = _prevBidPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, _prevBidPrice.Value, _prevBidVolume ?? 0) },
+							Asks = _prevAskPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, _prevAskPrice.Value, _prevAskVolume ?? 0) },
+						};
+
+						return true;
+					}
+
+					Current = null;
+					return false;
+				}
+
+				public void Reset()
+				{
+					_level1Enumerator.Reset();
+					Current = null;
+				}
+
+				object IEnumerator.Current
+				{
+					get { return Current; }
+				}
+
+				void IDisposable.Dispose()
+				{
+					Reset();
+					_level1Enumerator.Dispose();
+				}
+			}
+
+			private readonly IEnumerableEx<Level1ChangeMessage> _level1;
+
+			public QuoteEnumerable(IEnumerableEx<Level1ChangeMessage> level1)
+				: base(() => new QuoteEnumerator(level1.GetEnumerator()))
+			{
+				if (level1 == null)
+					throw new ArgumentNullException("level1");
+
+				_level1 = level1;
+			}
+
+			int IEnumerableEx.Count
+			{
+				get { return _level1.Count; }
+			}
+		}
+
+		/// <summary>
+		/// Преобразовать level1 данные в стаканы.
+		/// </summary>
+		/// <param name="level1">Level1 данные.</param>
+		/// <returns>Стаканы.</returns>
+		public static IEnumerableEx<QuoteChangeMessage> ToQuotes(this IEnumerableEx<Level1ChangeMessage> level1)
+		{
+			return new QuoteEnumerable(level1);
+		}
+
+		/// <summary>
+		/// Проверить, если ли в level1 котировки.
+		/// </summary>
+		/// <param name="level1">Level1 данные.</param>
+		/// <returns>Котировки.</returns>
+		public static bool IsContainsQuotes(this Level1ChangeMessage level1)
+		{
+			if (level1 == null)
+				throw new ArgumentNullException("level1");
+
+			return level1.Changes.ContainsKey(Level1Fields.BestBidPrice) || level1.Changes.ContainsKey(Level1Fields.BestAskPrice);
 		}
 	}
 }

@@ -67,28 +67,46 @@ namespace StockSharp.Hydra.Panes
 
 			var interval = TimeSpan.FromMilliseconds(DepthGenerationInterval.Value ?? 0);
 
-			if (IsBuildFromOrderLog.IsChecked == true)
+			switch (BuildFrom.SelectedIndex)
 			{
-				return StorageRegistry
-					.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
-					.Load(From + new TimeSpan(18, 45, 0), To + TimeHelper.LessOneDay + new TimeSpan(18, 45, 0))
-					// TODO
-					.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(SelectedSecurity.ToSecurityId()), interval, maxDepth);
-			}
-
-			var retVal = StorageRegistry
-				.GetQuoteMessageStorage(SelectedSecurity, Drive, StorageFormat)
-				.Load(From, To + TimeHelper.LessOneDay);
-
-			return retVal
-				.Select(md =>
+				case 0:
 				{
-					md.Bids = md.Bids.Take(maxDepth).ToArray();
-					md.Asks = md.Asks.Take(maxDepth).ToArray();
-					return md;
-				})
-				.WhereWithPrevious((prev, curr) => (curr.ServerTime - prev.ServerTime) >= interval)
-				.ToEx(retVal.Count);
+					var retVal = StorageRegistry
+						.GetQuoteMessageStorage(SelectedSecurity, Drive, StorageFormat)
+						.Load(From, To + TimeHelper.LessOneDay);
+
+					return retVal
+						.Select(md =>
+						{
+							md.Bids = md.Bids.Take(maxDepth).ToArray();
+							md.Asks = md.Asks.Take(maxDepth).ToArray();
+							return md;
+						})
+						.WhereWithPrevious((prev, curr) => (curr.ServerTime - prev.ServerTime) >= interval)
+						.ToEx(retVal.Count);
+				}
+
+				case 1:
+				{
+					return StorageRegistry
+						.GetExecutionStorage(SelectedSecurity, ExecutionTypes.OrderLog, Drive, StorageFormat)
+						.Load(From + new TimeSpan(18, 45, 0), To + TimeHelper.LessOneDay + new TimeSpan(18, 45, 0))
+						// TODO
+						.ToMarketDepths(OrderLogBuilders.Plaza2.CreateBuilder(SelectedSecurity.ToSecurityId()), interval, maxDepth);	
+				}
+
+				case 2:
+				{
+					var level1 = StorageRegistry
+						.GetLevel1MessageStorage(SelectedSecurity, Drive, StorageFormat)
+						.Load(From, To + TimeHelper.LessOneDay);
+
+					return level1.ToQuotes();
+				}
+
+				default:
+					throw new InvalidOperationException();
+			}
 		}
 
 		private void FindClick(object sender, RoutedEventArgs e)
@@ -142,7 +160,7 @@ namespace StockSharp.Hydra.Panes
 
 		protected override bool CanDirectBinExport
 		{
-			get { return base.CanDirectBinExport && IsBuildFromOrderLog.IsChecked == false; }
+			get { return base.CanDirectBinExport && BuildFrom.SelectedIndex == 0; }
 		}
 
 		//protected override void OnClosed(EventArgs e)
@@ -175,8 +193,7 @@ namespace StockSharp.Hydra.Panes
 			if (storage.ContainsKey("DepthGenerationInterval"))
 				DepthGenerationInterval.Value = storage.GetValue<int>("DepthGenerationInterval");
 
-			if (storage.ContainsKey("IsBuildFromOrderLog"))
-				IsBuildFromOrderLog.IsChecked = storage.GetValue<bool>("IsBuildFromOrderLog");
+			BuildFrom.SelectedIndex = storage.GetValue<int>("BuildFrom");
 		}
 
 		public override void Save(SettingsStorage storage)
@@ -189,7 +206,7 @@ namespace StockSharp.Hydra.Panes
 			if (DepthGenerationInterval.Value != null)
 				storage.SetValue("DepthGenerationInterval", (int)DepthGenerationInterval.Value);
 
-			storage.SetValue("IsBuildFromOrderLog", IsBuildFromOrderLog.IsChecked == true);
+			storage.SetValue("BuildFrom", BuildFrom.SelectedIndex);
 		}
 	}
 }
