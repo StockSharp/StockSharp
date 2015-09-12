@@ -130,7 +130,12 @@
 
 					foreach (var paneWnd in MainWindow.DockSite.DocumentWindows.OfType<PaneWindow>())
 					{
-						var settings = paneWnd.Pane.SaveEntire(false);
+						var pane = paneWnd.Pane;
+
+						if (!pane.IsValid)
+							continue;
+
+						var settings = pane.SaveEntire(false);
 						settings.SetValue("isActive", MainWindow.DockSite.ActiveWindow == paneWnd);
 						panes.Add(settings);
 					}
