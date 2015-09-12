@@ -5,6 +5,6 @@
     
     <Grid>
         <sx:ChartPanel x:Name="ChartPanel" />
-        <Button x:Name="CancelButton" Content="{x:Static loc:LocalizedStrings.XamlStr425}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,35,0,0" Click="Cancel_OnClick"/>
+        <Button x:Name="CancelButton" Content="{x:Static loc:LocalizedStrings.XamlStr425}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,35,0,0" Click="Cancel_OnClick" Visibility="Collapsed" />
     </Grid>
 </UserControl>

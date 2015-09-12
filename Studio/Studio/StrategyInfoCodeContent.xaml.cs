@@ -37,8 +37,8 @@ namespace StockSharp.Studio
 		{
 			InitializeComponent();
 
-			_timer = new ResettableTimer(TimeSpan.FromSeconds(1));
-			_timer.Elapsed += () => GuiDispatcher.GlobalDispatcher.AddAction(CompileCode);
+			_timer = new ResettableTimer(TimeSpan.FromSeconds(1), "Compilation");
+			_timer.Elapsed += canProcess => GuiDispatcher.GlobalDispatcher.AddAction(CompileCode);
 
 			var persSvc = ConfigManager.GetService<IPersistableService>();
 			CodePanel.References.AddRange(persSvc.GetReferences());
@@ -46,7 +46,7 @@ namespace StockSharp.Studio
 			
 			CodePanel.SavingCode += SaveCode;
 			CodePanel.CompilingCode += CompileCode;
-			CodePanel.CodeChanged += _timer.Reset;
+			CodePanel.CodeChanged += _timer.Activate;
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();
 			cmdSvc.Register<CompileStrategyInfoResultCommand>(this, true, cmd => CodePanel.ShowCompilationResult(cmd.Result, GetStrategiesState()));
