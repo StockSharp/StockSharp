@@ -1271,7 +1271,7 @@ F:StockSharp.Fix.FixStopOrderType.StopLoss/summary;StopLoss
 F:StockSharp.Fix.FixStopOrderType.StopLossTrailing/summary;TrailingStopLoss
 F:StockSharp.Fix.FixStopOrderType.TakeProfit/summary;DocStr3351
 F:StockSharp.Fix.FixStopOrderType.TakeProfitTrailing/summary;TrailingTakeProfit
-T:StockSharp.Fix.FixOrderCondition/summary;DocStr2570
+T:StockSharp.Fix.FixOrderCondition/summary;DocStr60
 M:StockSharp.Fix.FixOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Fix.FixOrderCondition.Type/summary;Str1737
 P:StockSharp.Fix.FixOrderCondition.StopPrice/summary;StopPrice

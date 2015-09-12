@@ -113,7 +113,7 @@ namespace StockSharp.Sterling
 	}
 
 	/// <summary>
-	/// Условия заявок, специфичных для <see cref="Sterling"/>.
+	/// Условие заявок, специфичных для <see cref="Sterling"/>.
 	/// </summary>
 	[Serializable]
 	[DataContract]

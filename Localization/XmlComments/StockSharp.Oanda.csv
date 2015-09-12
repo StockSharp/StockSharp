@@ -25,7 +25,7 @@ P:StockSharp.Oanda.OandaMessageAdapter.IsSupportNativePortfolioLookup/summary;Do
 P:StockSharp.Oanda.OandaMessageAdapter.Server/summary;Str3416
 P:StockSharp.Oanda.OandaMessageAdapter.Token/summary;Str3451
 P:StockSharp.Oanda.OandaMessageAdapter.TimeFrames/summary;DocStr2531
-T:StockSharp.Oanda.OandaOrderCondition/summary;DocStr2570
+T:StockSharp.Oanda.OandaOrderCondition/summary;DocStr60
 M:StockSharp.Oanda.OandaOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Oanda.OandaOrderCondition.IsMarket/summary;Str3442
 P:StockSharp.Oanda.OandaOrderCondition.LowerBound/summary;Str3444

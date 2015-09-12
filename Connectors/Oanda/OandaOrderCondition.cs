@@ -9,7 +9,7 @@ namespace StockSharp.Oanda
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Условия заявок, специфичных для <see cref="Oanda"/>.
+	/// Условие заявок, специфичных для <see cref="Oanda"/>.
 	/// </summary>
 	[Serializable]
 	[DataContract]

@@ -9,7 +9,7 @@ namespace StockSharp.CQG
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Условия заявок, специфичных для <see cref="CQG"/>.
+	/// Условие заявок, специфичных для <see cref="CQG"/>.
 	/// </summary>
 	[Serializable]
 	[DataContract]
