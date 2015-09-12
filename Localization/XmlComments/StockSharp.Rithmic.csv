@@ -31,7 +31,7 @@ P:StockSharp.Rithmic.RithmicMessageAdapter.LicenseServerAddress/summary;Str3490
 P:StockSharp.Rithmic.RithmicMessageAdapter.LocalBrokerAddress/summary;Str3491
 P:StockSharp.Rithmic.RithmicMessageAdapter.LoggerAddress/summary;Str3493
 P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames/summary;DocStr2531
-T:StockSharp.Rithmic.RithmicOrderCondition/summary;DocStr2570
+T:StockSharp.Rithmic.RithmicOrderCondition/summary;DocStr60
 M:StockSharp.Rithmic.RithmicOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Rithmic.RithmicOrderCondition.TriggerPrice/summary;Str3460
 T:StockSharp.Rithmic.RithmicServers/summary;DocStr7414

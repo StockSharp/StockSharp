@@ -358,5 +358,40 @@ namespace StockSharp.Sterling
 					throw new ArgumentOutOfRangeException("exch");
 			}
 		}
+
+		public static double ToDouble(this decimal? value)
+		{
+			return (double)(value ?? 0);
+		}
+
+		public static int ToInt(this decimal? value)
+		{
+			return (int)(value ?? 0);
+		}
+
+		public static string ToSterling(this SterlingExecutionInstructions instruction)
+		{
+			throw new NotImplementedException();
+		}
+
+		public static string ToSterling(this DateTime? date)
+		{
+			throw new NotImplementedException();
+		}
+
+		public static string ToSterling(this bool? date)
+		{
+			throw new NotImplementedException();
+		}
+
+		public static string ToSterling(this OptionTypes? date)
+		{
+			throw new NotImplementedException();
+		}
+
+		public static string ToSterling(this SecurityTypes? date)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

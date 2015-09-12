@@ -67,7 +67,7 @@
 						First = propertyInfo.Name,
 						Second = propertyInfo.GetValue(_ddeColumns, null).ToString(),
 					})
-					.ToList();
+					.ToArray();
 
 				_columnsAll.AddRange(columns);
 			}
@@ -149,7 +149,7 @@
 		private void EnableOrDisableUpDownButton()
 		{
 			var items = lsvColumnsSelected.SelectedItems;
-			var ind = (from object item in items select lsvColumnsSelected.Items.IndexOf(item)).ToList();
+			var ind = (from object item in items select lsvColumnsSelected.Items.IndexOf(item)).ToArray();
 
 			btnDown.IsEnabled = ind.Max() < lsvColumnsSelected.Items.Count - 1;
 			btnUp.IsEnabled = ind.Min() > 0;

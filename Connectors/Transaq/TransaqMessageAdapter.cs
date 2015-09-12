@@ -32,6 +32,7 @@ namespace StockSharp.Transaq
 		{
 			AddHandler<ClientLimitsResponse>(OnClientLimitsResponse);
 			AddHandler<ClientResponse>(OnClientResponse);
+			AddHandler<UnitedPortfolioResponse>(OnUnitedPortfolioResponse);
 			AddHandler<LeverageControlResponse>(OnLeverageControlResponse);
 			AddHandler<MarketOrdResponse>(OnMarketOrdResponse);
 			AddHandler<OrdersResponse>(OnOrdersResponse);
@@ -157,12 +158,13 @@ namespace StockSharp.Transaq
 					ProcessReplaceMessage((OrderReplaceMessage)message);
 					break;
 
-				//case MessageTypes.PortfolioChange:
-				//{
-				//	var pfMsg = (PortfolioChangeMessage)message;
-				//	SendCommand(new RequestLeverageControlMessage { Client = pfMsg.PortfolioName });
-				//	break;
-				//}
+				case MessageTypes.PortfolioChange:
+				{
+					var pfMsg = (PortfolioChangeMessage)message;
+					//SendCommand(new RequestLeverageControlMessage { Client = pfMsg.PortfolioName });
+					SendCommand(new RequestUnitedPortfolioMessage { Client = pfMsg.PortfolioName });
+					break;
+				}
 
 				case MessageTypes.MarketData:
 					ProcessMarketDataMessage((MarketDataMessage)message);

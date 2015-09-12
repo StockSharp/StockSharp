@@ -5,6 +5,7 @@ namespace StockSharp.Algo.Testing
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.Collections;
 
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -25,7 +26,7 @@ namespace StockSharp.Algo.Testing
 		private decimal _prevTickPrice;
 		// указывает, есть ли реальные стаканы, чтобы своей псевдо генерацией не портить настоящую историю
 		private DateTime _lastDepthDate;
-		private DateTime _lastTradeDate;
+		//private DateTime _lastTradeDate;
 		private SecurityMessage _securityDefinition = new SecurityMessage
 		{
 			PriceStep = 1,
@@ -33,6 +34,11 @@ namespace StockSharp.Algo.Testing
 		};
 		private bool _priceStepUpdated;
 		private bool _volumeStepUpdated;
+
+		private decimal? _prevBidPrice;
+		private decimal? _prevBidVolume;
+		private decimal? _prevAskPrice;
+		private decimal? _prevAskVolume;
 
 		public ExecutionLogConverter(SecurityId securityId,
 			SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> bids,
@@ -276,7 +282,7 @@ namespace StockSharp.Algo.Testing
 			//if (message.DataType != ExecutionDataTypes.Trade)
 			//	throw new ArgumentOutOfRangeException("Тип данных не может быть {0}.".Put(message.DataType), "message");
 
-			_lastTradeDate = message.LocalTime.Date;
+			//_lastTradeDate = message.LocalTime.Date;
 
 			return ProcessExecution(message);
 		}
@@ -417,93 +423,45 @@ namespace StockSharp.Algo.Testing
 		/// Преобразовать первый уровень маркет-данных.
 		/// </summary>
 		/// <param name="message">Первый уровень маркет-данных.</param>
-		/// <returns>Поток <see cref="ExecutionMessage"/>.</returns>
-		public IEnumerable<ExecutionMessage> ToExecutionLog(Level1ChangeMessage message)
+		/// <returns>Поток <see cref="Message"/>.</returns>
+		public IEnumerable<Message> ToExecutionLog(Level1ChangeMessage message)
 		{
 			if (message == null)
 				throw new ArgumentNullException("message");
 
-			var retVal = new List<ExecutionMessage>();
+			if (message.IsContainsTick())
+				yield return message.ToTick();
 
-			var bestBidPrice = 0m;
-			var bestBidVolume = 0m;
-			var bestAskPrice = 0m;
-			var bestAskVolume = 0m;
-			var lastTradePrice = 0m;
-			var lastTradeVolume = 0m;
-
-			foreach (var change in message.Changes)
+			if (message.IsContainsQuotes())
 			{
-				switch (change.Key)
+				var prevBidPrice = _prevBidPrice;
+				var prevBidVolume = _prevBidVolume;
+				var prevAskPrice = _prevAskPrice;
+				var prevAskVolume = _prevAskVolume;
+
+				_prevBidPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidPrice) ?? _prevBidPrice;
+				_prevBidVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? _prevBidVolume;
+				_prevAskPrice = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskPrice) ?? _prevAskPrice;
+				_prevAskVolume = (decimal?)message.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? _prevAskVolume;
+
+				if (_prevBidPrice == 0)
+					_prevBidPrice = null;
+
+				if (_prevAskPrice == 0)
+					_prevAskPrice = null;
+
+				if (prevBidPrice == _prevBidPrice && prevBidVolume == _prevBidVolume && prevAskPrice == _prevAskPrice && prevAskVolume == _prevAskVolume)
+					yield break;
+
+				yield return new QuoteChangeMessage
 				{
-					case Level1Fields.LastTradePrice:
-						lastTradePrice = (decimal)change.Value;
-						break;
-					case Level1Fields.LastTradeVolume:
-						lastTradeVolume = (decimal)change.Value;
-						break;
-					case Level1Fields.BestBidPrice:
-						bestBidPrice = (decimal)change.Value;
-						break;
-					case Level1Fields.BestBidVolume:
-						bestBidVolume = (decimal)change.Value;
-						break;
-					case Level1Fields.BestAskPrice:
-						bestAskPrice = (decimal)change.Value;
-						break;
-					case Level1Fields.BestAskVolume:
-						bestAskVolume = (decimal)change.Value;
-						break;
-				}
+					SecurityId = message.SecurityId,
+					LocalTime = message.LocalTime,
+					ServerTime = message.ServerTime,
+					Bids = _prevBidPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Buy, _prevBidPrice.Value, _prevBidVolume ?? 0) },
+					Asks = _prevAskPrice == null ? Enumerable.Empty<QuoteChange>() : new[] { new QuoteChange(Sides.Sell, _prevAskPrice.Value, _prevAskVolume ?? 0) },
+				};
 			}
-
-			ProcessLevel1Depth(message, bestBidPrice, bestBidVolume, bestAskPrice, bestAskVolume, retVal);
-			ProcessLevel1Trade(message, lastTradePrice, lastTradeVolume, retVal);
-
-			return retVal;
-		}
-
-		private void ProcessLevel1Depth(Level1ChangeMessage message, decimal bestBidPrice, decimal bestBidVolume, decimal bestAskPrice, decimal bestAskVolume, List<ExecutionMessage> retVal)
-		{
-			if (message.LocalTime.Date == _lastDepthDate)
-				return;
-
-			QuoteChange ask = null;
-			QuoteChange bid = null;
-
-			if (bestAskPrice != 0 && bestAskVolume != 0)
-				ask = new QuoteChange(Sides.Sell, bestAskPrice, bestAskVolume);
-
-			if (bestBidPrice != 0 && bestBidVolume != 0)
-				bid = new QuoteChange(Sides.Buy, bestBidPrice, bestBidVolume);
-
-			if (ask == null && bid == null)
-				return;
-
-			retVal.AddRange(ProcessQuoteChange(message.LocalTime, message.ServerTime,
-				bid != null ? new[] { bid } : ArrayHelper.Empty<QuoteChange>(),
-				ask != null ? new[] { ask } : ArrayHelper.Empty<QuoteChange>()));
-		}
-
-		private void ProcessLevel1Trade(Level1ChangeMessage message, decimal lastTradePrice, decimal lastTradeVolume, List<ExecutionMessage> retVal)
-		{
-			if (message.LocalTime.Date == _lastTradeDate)
-				return;
-
-			if (lastTradePrice == 0 || lastTradeVolume == 0)
-				return;
-
-			var exec = new ExecutionMessage
-			{
-				LocalTime = message.LocalTime,
-				ServerTime = message.ServerTime,
-				SecurityId = message.SecurityId,
-				ExecutionType = ExecutionTypes.Tick,
-				TradePrice = lastTradePrice,
-				Volume = lastTradeVolume,
-			};
-
-			retVal.AddRange(ProcessExecution(exec));
 		}
 
 		private void ProcessMarketOrder(List<ExecutionMessage> retVal, SortedDictionary<decimal, RefPair<List<ExecutionMessage>, QuoteChange>> quotes, DateTimeOffset time, DateTime localTime, Sides orderSide, decimal tradePrice, decimal volume)

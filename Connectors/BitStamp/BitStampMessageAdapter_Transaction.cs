@@ -1,4 +1,4 @@
-﻿namespace StockSharp.BitStamp
+namespace StockSharp.BitStamp
 {
 	using System;
 	using System.Linq;
@@ -11,6 +11,9 @@
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// The message adapter for BitStamp.
+	/// </summary>
 	partial class BitStampMessageAdapter
 	{
 		private void ProcessOrderRegister(OrderRegisterMessage regMsg)

@@ -12,6 +12,9 @@ namespace StockSharp.BitStamp
 	using StockSharp.BitStamp.Native;
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// The message adapter for BitStamp.
+	/// </summary>
 	partial class BitStampMessageAdapter
 	{
 		private readonly CachedSynchronizedSet<SecurityId> _subscribedDepths = new CachedSynchronizedSet<SecurityId>();

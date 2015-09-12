@@ -413,7 +413,7 @@ namespace StockSharp.Studio
 
 		private void SetSource(ChartIndicatorElement element, CandleSeries candleSeries, IIndicator indicator)
 		{
-			List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> values = null;
+			RefPair<DateTimeOffset, IDictionary<IChartElement, object>>[] values = null;
 
 			lock (_syncRoot)
 			{
@@ -434,11 +434,11 @@ namespace StockSharp.Studio
 				_elementsBySeries.SafeAdd(candleSeries).Add(element);
 			}
 
-			if (values != null && values.Count > 0)
+			if (values != null && values.Length > 0)
 				new ChartDrawCommand(values).Process(this);
 		}
 
-		private List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> ProcessHistoryCandles(ChartIndicatorElement element, CandleSeries series)
+		private RefPair<DateTimeOffset, IDictionary<IChartElement, object>>[] ProcessHistoryCandles(ChartIndicatorElement element, CandleSeries series)
 		{
 			var candles = series.GetCandles<Candle>().Where(c => c.State == CandleStates.Finished).ToArray();
 
@@ -447,7 +447,7 @@ namespace StockSharp.Studio
 				{
 					{ element, CreateIndicatorValue(element, candle) }
 				}))
-				.ToList();
+				.ToArray();
 		}
 
 		private IIndicatorValue CreateIndicatorValue(ChartIndicatorElement element, Candle candle)

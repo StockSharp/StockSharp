@@ -5,7 +5,7 @@ namespace StockSharp.Rss.Xaml
 	using Ecng.Common;
 
 	/// <summary>
-	/// јдреса RSS попул€рных фидов.
+	/// The most popular RSS feeds.
 	/// </summary>
 	public static class RssAddresses
 	{

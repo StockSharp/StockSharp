@@ -6,7 +6,7 @@
   <members>
     <member name="T:StockSharp.Micex.MicexOrderCondition">
       <summary>
-            Условия заявок, специфичных для <see cref="N:StockSharp.Micex" />.
+            Условие заявок, специфичных для <see cref="N:StockSharp.Micex" />.
             </summary>
     </member>
     <member name="M:StockSharp.Micex.MicexOrderCondition.#ctor">

@@ -22,7 +22,7 @@ P:StockSharp.LMAX.LmaxMessageAdapter.IsDownloadSecurityFromSite/summary;Str3389
 P:StockSharp.LMAX.LmaxMessageAdapter.IsValid/summary;DocStr53
 P:StockSharp.LMAX.LmaxMessageAdapter.TimeFrames/summary;DocStr2531
 P:StockSharp.LMAX.LmaxMessageAdapter.IsSupportNativeSecurityLookup/summary;DocStr52
-T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr2570
+T:StockSharp.LMAX.LmaxOrderCondition/summary;DocStr60
 M:StockSharp.LMAX.LmaxOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.LMAX.LmaxOrderCondition.StopLossOffset/summary;Str3383
 P:StockSharp.LMAX.LmaxOrderCondition.TakeProfitOffset/summary;Str3385

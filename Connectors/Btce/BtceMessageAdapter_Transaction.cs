@@ -12,6 +12,9 @@ namespace StockSharp.Btce
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The messages adapter for BTC-e.
+	/// </summary>
 	partial class BtceMessageAdapter
 	{
 		private long _lastMyTradeId;

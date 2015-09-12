@@ -10,7 +10,7 @@ namespace StockSharp.Btce
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер сообщений для BTC-e.
+	/// The messages adapter for BTC-e.
 	/// </summary>
 	public partial class BtceMessageAdapter : MessageAdapter
 	{
@@ -18,9 +18,9 @@ namespace StockSharp.Btce
 		private BtceClient _client;
 		
 		/// <summary>
-		/// Создать <see cref="BtceMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="BtceMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public BtceMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -31,7 +31,7 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{
@@ -39,7 +39,7 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск портфелей.
+		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
 		protected override bool IsSupportNativePortfolioLookup
 		{
@@ -47,9 +47,9 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

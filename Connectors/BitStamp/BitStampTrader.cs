@@ -1,4 +1,4 @@
-﻿namespace StockSharp.BitStamp
+namespace StockSharp.BitStamp
 {
 	using System.Security;
 
@@ -8,14 +8,14 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с биржей BitStamp.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the BitStamp.
 	/// </summary>
 	public class BitStampTrader : Connector
     {
 		private readonly BitStampMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="BitStampTrader"/>.
+		/// Initializes a new instance of the <see cref="BitStampTrader"/>.
 		/// </summary>
 		public BitStampTrader()
 		{
@@ -25,8 +25,8 @@
 		}
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
-		/// в виде одной транзакции. По-умолчанию включено.
+		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
+		/// as a single transaction. The default is enabled.
 		/// </summary>
 		public override bool IsSupportAtomicReRegister
 		{
@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Ключ.
+		/// Key.
 		/// </summary>
 		public string Key
 		{
@@ -43,7 +43,7 @@
 		}
 
 		/// <summary>
-		/// Секрет.
+		/// Secret.
 		/// </summary>
 		public string Secret
 		{
@@ -52,7 +52,7 @@
 		}
 
 		/// <summary>
-		/// Идентификатор клиента.
+		/// Client ID.
 		/// </summary>
 		public int ClientId
 		{

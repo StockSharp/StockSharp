@@ -99,7 +99,7 @@ namespace StockSharp.ETrade
 		/// <param name="portName">Имя портфеля.</param>
 		/// <param name="data">Результат запроса списка заявок.</param>
 		/// <param name="ex">Ошибка запроса списка заявок.</param>
-		private void ClientOnOrdersData(string portName, List<Order> data, Exception ex)
+		private void ClientOnOrdersData(string portName, IEnumerable<Order> data, Exception ex)
 		{
 			if (ex != null)
 			{
@@ -213,7 +213,7 @@ namespace StockSharp.ETrade
 		/// <param name="portfName">Имя портфеля.</param>
 		/// <param name="data">Результат запроса списка позиций.</param>
 		/// <param name="ex">Ошибка запроса списка позиций.</param>
-		private void ClientOnPositionsData(string portfName, List<PositionInfo> data, Exception ex)
+		private void ClientOnPositionsData(string portfName, IEnumerable<PositionInfo> data, Exception ex)
 		{
 			if (ex != null)
 			{

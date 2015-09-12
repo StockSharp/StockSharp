@@ -5,7 +5,6 @@
 		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
 		xmlns:ss="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
 		xmlns:charting="http://schemas.stocksharp.com/xaml"
-		xmlns:sampleRealTimeEmulation="clr-namespace:SampleRealTimeEmulation"
 		Title="{x:Static loc:LocalizedStrings.XamlStr561}" Height="800" Width="1050">
     
     <Grid>
@@ -37,22 +36,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     
-                    <ComboBox x:Name="CandleTypeComboBox"
-                              Grid.Column="0" Text="Combo box"
-                              ItemsSource="{Binding ChartTypeCollection}"
-                              DisplayMemberPath="Name"
-                              SelectedItem="{Binding CandleType}"
-                              />
-
-                    <TextBlock Grid.Column="1" Text="Chart interval"
-                               Width="Auto" 
-                               >
-                        <TextBox Width="40" Height="25"
-                                 VerticalContentAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
-                                 Text="{Binding ChartArg}"
-                                 />
-                    </TextBlock>
-                    
+                    <charting:CandleSettingsEditor x:Name="CandleSettingsEditor" />
                 </Grid>
                 <!--End chart control grid-->
                 
@@ -173,43 +157,43 @@
 
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
 
-            <sx:SecurityPicker x:Name="SecurityPicker" 
-                               Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
-                               SecuritySelected="SecurityPicker_OnSecuritySelected"
-                />
+			<sx:SecurityPicker x:Name="SecurityPicker" 
+					Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
+					SecuritySelected="SecurityPicker_OnSecuritySelected"/>
 
-            <sx:MyTradeGrid x:Name="TradeGrid"
-                            Grid.Row="2" Grid.Column="0" 
-                            HorizontalScrollBarVisibility="Auto" />
-            <GridSplitter Grid.Column="1" Grid.Row="2" Width="3" 
-                          Background="LightSteelBlue"
-                          VerticalAlignment="Stretch" HorizontalAlignment="Center" />
-            <sx:OrderGrid x:Name="OrderGrid" Grid.Row="2" Grid.Column="2"
-                           HorizontalScrollBarVisibility="Auto"
-                          OrderRegistering="OrderGrid_OrderRegistering" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
+			<sx:MyTradeGrid x:Name="TradeGrid"
+				Grid.Row="2" Grid.Column="0" 
+				HorizontalScrollBarVisibility="Auto" />
+			
+			<GridSplitter Grid.Column="1" Grid.Row="2" Width="3" 
+				Background="LightSteelBlue"
+				VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+			
+			<sx:OrderGrid x:Name="OrderGrid" Grid.Row="2" Grid.Column="2"
+				HorizontalScrollBarVisibility="Auto"
+				OrderRegistering="OrderGrid_OrderRegistering" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
 
-            <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
-                          Background="LightSteelBlue"
-                          VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+			<GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
+				Background="LightSteelBlue"
+				VerticalAlignment="Center" HorizontalAlignment="Stretch" />
 
+			<GridSplitter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
+				Background="LightSteelBlue"
+				VerticalAlignment="Center" HorizontalAlignment="Stretch" />
 
-            <GridSplitter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
-                          Background="LightSteelBlue"
-                          VerticalAlignment="Center" HorizontalAlignment="Stretch" />
-
-            <sx:LogControl Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" x:Name="Log"></sx:LogControl>
+			<sx:LogControl Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" x:Name="Log"></sx:LogControl>
 		</Grid>
 	</Grid>
 </Window>

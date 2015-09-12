@@ -249,21 +249,48 @@ namespace StockSharp.Transaq
 		{
 		}
 
+		private void OnUnitedPortfolioResponse(UnitedPortfolioResponse response)
+		{
+			SendOutMessage(new PortfolioMessage
+			{
+				PortfolioName = response.Client,
+			});
+		}
+
 		private void OnClientResponse(ClientResponse response)
 		{
+			if (response.Remove)
+				return;
+
 			SendOutMessage(new PortfolioMessage
 			{
 				PortfolioName = response.Id,
 				Currency = TransaqHelper.ToCurrency(response.Currency),
 			});
 
-			if (response.MlIntraDay != null)
+			if (!response.Union.IsEmpty())
 			{
-				SendOutMessage(
-					this
-						.CreatePortfolioChangeMessage(response.Id)
-							.Add(PositionChangeTypes.Leverage, response.MlIntraDay.Value));	
+				SendOutMessage(new PortfolioMessage
+				{
+					PortfolioName = response.Union
+				});
 			}
+
+			if (!response.FortsAcc.IsEmpty())
+			{
+				SendOutMessage(new PortfolioMessage
+				{
+					PortfolioName = response.FortsAcc
+				});
+			}
+
+			//if (response.MlIntraDay != null)
+			//{
+			//	SendOutMessage(
+			//		this
+			//			.CreatePortfolioChangeMessage(response.Id)
+			//				.Add(PositionChangeTypes.Leverage, response.MlIntraDay.Value));	
+			//}
 			
 			//if (MicexRegisters)
 			//    SendCommand(new RequestPortfolioTPlusMessage {Client = response.Id});

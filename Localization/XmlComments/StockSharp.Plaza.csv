@@ -569,6 +569,8 @@ M:StockSharp.Plaza.PlazaRevisionManager.DisposeManaged/summary;DocStr7
 P:StockSharp.Plaza.PlazaRevisionManager.Tables/summary;DocStr6272
 P:StockSharp.Plaza.PlazaRevisionManager.Interval/summary;DocStr6273
 P:StockSharp.Plaza.PlazaRevisionManager.Interval/remarks;DocStr6274
+P:StockSharp.Plaza.PlazaRevisionManager.RevisionPath/summary;Str2623
+P:StockSharp.Plaza.PlazaRevisionManager.RevisionPath/remarks;DocStr6281
 T:StockSharp.Plaza.PlazaStreamMessageAdapter/summary;DocStr6275
 M:StockSharp.Plaza.PlazaStreamMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.Plaza.PlazaConnectionPool)/summary;DocStr1
 M:StockSharp.Plaza.PlazaStreamMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.Plaza.PlazaConnectionPool)/param/transactionIdGenerator;DocStr43
@@ -1442,6 +1444,9 @@ M:StockSharp.Plaza.PlazaStreamManager.DisposeManaged/summary;DocStr7
 P:StockSharp.Plaza.PlazaStreamManager.Streams/summary;DocStr6782
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/summary;DocStr6270
 P:StockSharp.Plaza.PlazaStreamManager.RevisionManager/remarks;DocStr6783
+P:StockSharp.Plaza.PlazaStreamManager.ConfigPath/summary;Str2621
+P:StockSharp.Plaza.PlazaStreamManager.ConfigPath/remarks;DocStr6284
+P:StockSharp.Plaza.PlazaStreamManager.ConnectionGroupping/summary;DocStr6285
 T:StockSharp.Plaza.Metadata.PlazaTable/summary;DocStr6784
 M:StockSharp.Plaza.Metadata.PlazaTable.ToString/summary;DocStr49
 M:StockSharp.Plaza.Metadata.PlazaTable.ToString/returns;DocStr50
@@ -1457,7 +1462,7 @@ E:StockSharp.Plaza.Metadata.PlazaTable.Begin/summary;DocStr6793
 E:StockSharp.Plaza.Metadata.PlazaTable.End/summary;DocStr6794
 E:StockSharp.Plaza.Metadata.PlazaTable.Cleared/summary;DocStr6795
 E:StockSharp.Plaza.Metadata.PlazaTable.Inserted/summary;DocStr6796
-E:StockSharp.Plaza.Metadata.PlazaTable.RevisionChanged/summary;DocStr1489
+E:StockSharp.Plaza.Metadata.PlazaTable.RevisionChanged/summary;DocStr3900
 E:StockSharp.Plaza.Metadata.PlazaTable.Flushed/summary;DocStr6797
 P:StockSharp.Plaza.Metadata.PlazaTable.LogTableData/summary;DocStr6798
 T:StockSharp.Plaza.PlazaTrader/summary;DocStr6799
@@ -1491,6 +1496,10 @@ P:StockSharp.Plaza.PlazaTrader.UseLocalProtocol/summary;Str2605
 P:StockSharp.Plaza.PlazaTrader.IsControlConnectionLost/summary;IsControlConnectionLost
 P:StockSharp.Plaza.PlazaTrader.BrokerCode/summary;Str2619
 P:StockSharp.Plaza.PlazaTrader.StreamManager/summary;DocStr6286
+P:StockSharp.Plaza.PlazaTrader.RevisionPath/summary;Str2623
+P:StockSharp.Plaza.PlazaTrader.RevisionPath/remarks;DocStr6281
+P:StockSharp.Plaza.PlazaTrader.ConfigPath/summary;Str2621
+P:StockSharp.Plaza.PlazaTrader.ConfigPath/remarks;DocStr6284
 P:StockSharp.Plaza.PlazaTrader.CreateDepthFromOrdersLog/summary;Str2616
 P:StockSharp.Plaza.PlazaTrader.CreateDepthFromOrdersLog/remarks;DocStr6279
 P:StockSharp.Plaza.PlazaTrader.CreateTradesFromOrdersLog/summary;Str2614

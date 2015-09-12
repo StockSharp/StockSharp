@@ -8,32 +8,30 @@ namespace StockSharp.OpenECry
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Тип условной заявки OEC.
+	/// The type of the conditional order OEC.
 	/// </summary>
 	public enum OpenECryStopType
 	{
 		/// <summary>
-		/// После достижения стоп-цены автоматически выставляется рыночная заявка.
+		/// The market order is automatically registered after reaching the stop price.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str242Key)]
 		StopMarket,
 
 		/// <summary>
-		/// После достижения стоп-цены автоматически выставляется лимитная заявка.
+		/// The limit order is automatically registered after reaching the stop price.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1733Key)]
 		StopLimit,
 
 		/// <summary>
-		/// Стоп-цена автоматически следует за рынком, но только в выгодном для позиции направлении, 
-		/// оставаясь на заранее заявленном интервале от рыночной цены. 
-		/// В случае, если рынок достигает стоп-цены, автоматически выставляется рыночная заявка.
+		/// Stop price automatically follows the market, but only in a profitable direction for position, staying on specified in advance interval from market price. If the market reaches the stop price, the market order is automatically registered.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.TrailingStopLossKey)]
 		TrailingStopMarket,
 
 		/// <summary>
-		/// Как <see cref="TrailingStopMarket"/>, но при достижении стоп-цены выставляется лимитная заявка.
+		/// As <see cref="OpenECryStopType.TrailingStopMarket"/>, but when it reaches the stop price the limit order is registered.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.TrailingStopLimitKey)]
 		TrailingStopLimit
@@ -45,7 +43,7 @@ namespace StockSharp.OpenECry
 
 
 	/// <summary>
-	/// Условие заявок, специфичных для <see cref="OEC"/>.
+	/// <see cref="OpenECry"/> order condition.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str2264Key, "OpenECry")]
 	public class OpenECryOrderCondition : OrderCondition
@@ -66,97 +64,14 @@ namespace StockSharp.OpenECry
 		private const string _keyAssetType = "AssetType";
 
 		/// <summary>
-		/// Создать <see cref="OpenECryOrderCondition"/>.
+		/// Initializes a new instance of the <see cref="OpenECryOrderCondition"/>.
 		/// </summary>
 		public OpenECryOrderCondition()
 		{
-			//AssetType = AssetTypeEnum.Equity;
-			//StopType = OpenECryStopType.StopLimit;
-			//StopPrice = 0;
-			//Delta = 0;
-			//IsPercentDelta = false;
-			//TriggerType = Level1Fields.LastTrade;
 		}
 
-		///// <summary>
-		///// Конструктор для <see cref="OECStopType.StopMarket"/> или <see cref="OECStopType.StopLimit"/> типов.
-		///// </summary>
-		///// <param name="type">Тип стопа: <see cref="OECStopType.StopMarket"/> или <see cref="OECStopType.StopLimit"/>.</param>
-		///// <param name="stopPrice">Стоп-цена. Для типа <see cref="OECStopType.StopMarket"/> используется вместо <see cref="Order.Price"/>.</param>
-		//public OECOrderCondition(OECStopType type, decimal stopPrice)
-		//{
-		//	if (!(type == OECStopType.StopLimit || type == OECStopType.StopMarket))
-		//		throw new ArgumentException("Для Trailing типов используйте другой конструктор.");
-
-		//	AssetType = AssetTypeEnum.All;
-		//	StopType = type;
-		//	StopPrice = stopPrice;
-		//}
-
-		///// <summary>
-		///// Конструктор для Trailing стопов.
-		///// </summary>
-		///// <remarks>
-		///// <para>
-		///// Если тип стопа <paramref name="type"/> равен <see cref="OECStopType.TrailingStopLimit"/>,
-		///// то после срабатывания стопа будет выставлена заявка по цене <see cref="Order.Price"/>,
-		///// сдвинутой логикой trailing стопа на соответствующее значение.
-		///// </para>
-		///// <para>
-		///// Если тип стопа <paramref name="type"/> равен <see cref="OECStopType.TrailingStopMarket"/>,
-		///// то после срабатывания стопа будет выставлена рыночная заявка.
-		///// </para>
-		///// </remarks>
-		///// <param name="type">Тип стопа: <see cref="OECStopType.TrailingStopMarket"/> или <see cref="OECStopType.TrailingStopLimit"/>.</param>
-		///// <param name="delta">Trailing стоп следует за рынком в выгодном направлении если разница между рыночной ценой и стопом больше <paramref name="delta"/>.</param>
-		///// <param name="isPercentDelta"><see langword="true"/>, если <paramref name="delta"/> выражена в процентах.</param>
-		///// <param name="triggerType">Тип срабатывания стопа.</param>
-		///// <param name="stopPrice">Начальная стоп-цена, которая двигается логикой trailing-стопа.</param>
-		//[CLSCompliant(false)]
-		//public OECOrderCondition(OECStopType type, decimal delta, bool isPercentDelta, SecurityChangeTypes triggerType, decimal stopPrice)
-		//{
-		//	if (!(type == OECStopType.TrailingStopLimit || type == OECStopType.TrailingStopMarket))
-		//		throw new ArgumentException("Для не-Trailing стопов используйте другой конструктор.");
-
-		//	AssetType = AssetTypeEnum.Equity;
-		//	StopType = type;
-		//	StopPrice = stopPrice;
-		//	Delta = delta;
-		//	IsPercentDelta = isPercentDelta;
-		//	TriggerType = triggerType;
-		//}
-
-		///// <summary>
-		///// Конструктор для Trailing стопов для Futures.
-		///// </summary>
-		///// <remarks>
-		///// <para>
-		///// Если тип стопа <paramref name="type"/> равен <see cref="OECStopType.TrailingStopLimit"/>, то после срабатывания стопа будет выставлена
-		///// заявка по цене <see cref="Order.Price"/>, сдвинутой логикой trailing стопа на соответствующее значение.
-		///// </para>
-		///// <para>
-		///// Если тип стопа <paramref name="type"/> равен <see cref="OECStopType.TrailingStopMarket"/>, то после срабатывания стопа будет выставлена
-		///// рыночная заявка.
-		///// </para>
-		///// </remarks>
-		///// <param name="type"><see cref="OECStopType.TrailingStopMarket"/> или <see cref="OECStopType.TrailingStopLimit"/>.</param>
-		///// <param name="delta">Trailing стоп следует за рынком в выгодном направлении если разница между рыночной ценой и стопом больше <paramref name="delta"/>.</param>
-		///// <param name="referencePrice">Trailing стоп начинает слежение, как только цена достигает <paramref name="referencePrice"/>.</param>
-		///// <param name="stopPrice">Начальная стоп-цена, которая двигается логикой trailing-стопа после активации по <paramref name="referencePrice"/>.</param>
-		//public OECOrderCondition(OECStopType type, decimal delta, decimal referencePrice, decimal stopPrice)
-		//{
-		//	if (!(type == OECStopType.TrailingStopLimit || type == OECStopType.TrailingStopMarket))
-		//		throw new ArgumentException("Для не-Trailing стопов используйте другой конструктор.");
-
-		//	AssetType = AssetTypeEnum.Future;
-		//	StopType = type;
-		//	StopPrice = stopPrice;
-		//	Delta = delta;
-		//	ReferencePrice = referencePrice;
-		//}
-
 		/// <summary>
-		/// Тип стопа.
+		/// Stop type.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2570Key)]
@@ -168,7 +83,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Стоп-цена.
+		/// Stop-price.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.StopPriceKey)]
@@ -180,7 +95,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Trailing стоп следует за рынком если изменение цены больше чем Delta.
+		/// Trailing stop follows the market if price change is larger than Delta.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayName("Trailing Delta")]
@@ -192,7 +107,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// <see langword="true"/>, если <see cref="Delta"/> выражена в процентах.
+		/// <see langword="true" />, if <see cref="OpenECryOrderCondition.Delta"/> expressed in percentage.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2573Key)]
@@ -204,7 +119,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Поле срабатывания.
+		/// Trigger field.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2575Key)]
@@ -216,7 +131,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Trailing стоп начинает слежение, как только цена достигает ReferencePrice.
+		/// Trailing stop begins tracking once the price reaches ReferencePrice.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayName("Trailing ReferencePrice")]

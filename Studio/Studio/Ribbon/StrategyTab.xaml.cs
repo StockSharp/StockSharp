@@ -297,7 +297,7 @@
 				.GetService<IStudioEntityRegistry>()
 				.Strategies
 				.Where(s => s.IsStrategy())
-				.ToList();
+				.ToArray();
 		}
 
 		private void Strategy_OnPopupOpening(object sender, CancelRoutedEventArgs e)
@@ -314,7 +314,7 @@
 
 			menu.ItemsSource = SelectedStrategyInfo
 				.Strategies
-				.ToList();
+				.ToArray();
 		}
 	}
 }

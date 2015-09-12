@@ -147,7 +147,7 @@
         </member>
         <member name="T:StockSharp.Rithmic.RithmicOrderCondition">
             <summary>
-            Условия заявок, специфичных для <see cref="N:StockSharp.Rithmic"/>.
+            Условие заявок, специфичных для <see cref="N:StockSharp.Rithmic"/>.
             </summary>
         </member>
         <member name="M:StockSharp.Rithmic.RithmicOrderCondition.#ctor">

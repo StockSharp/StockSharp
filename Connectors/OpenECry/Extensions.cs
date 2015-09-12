@@ -68,10 +68,10 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Получить <see cref="SecurityStates"/> для инструмента, соответствующего контракту <paramref name="contract"/>.
+		/// To get <see cref="SecurityStates"/> for the instrument according to the <paramref name="contract" /> contract.
 		/// </summary>
-		/// <param name="contract">Контракт OEC.</param>
-		/// <returns>Состояние инструмента <see cref="SecurityStates"/>.</returns>
+		/// <param name="contract">The OEC contract.</param>
+		/// <returns>The instrument condition <see cref="SecurityStates"/>.</returns>
 		public static SecurityStates GetSecurityState(this OEC.API.Contract contract)
 		{
 			var times = contract.GetWorkingTimesUtc();
@@ -80,10 +80,10 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Получить время торгов по инструменту.
+		/// To get the trading time by the instrument.
 		/// </summary>
-		/// <param name="contract">Контракт OEC.</param>
-		/// <returns>Список диапазонов времени дня (UTC), в течение которых инструмент торгуется.</returns>
+		/// <param name="contract">The OEC contract.</param>
+		/// <returns>The list of time ranges of day (UTC), during which the instrument is traded.</returns>
 		public static Range<TimeSpan>[] GetWorkingTimesUtc(this OEC.API.Contract contract)
 		{
 			// sometimes OEC returns timespans for working time > 24 hours (some internal oec date conversion problem)

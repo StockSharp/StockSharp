@@ -14,7 +14,7 @@
 		public string Password { get; set; }
 		public EndPoint EndPoint { get; set; }
 		public string LogsDir { get; set; }
-		public ApiLogLevels LogLevel { get; set; }
+		public ApiLogLevels? LogLevel { get; set; }
 		public bool Autopos { get; set; }
 		public string NotesFile { get; set; }
 		public Proxy Proxy { get; set; }

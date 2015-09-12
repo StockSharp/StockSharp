@@ -14,6 +14,9 @@ namespace StockSharp.OpenECry
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The messages adapter for OpenECry.
+	/// </summary>
 	partial class OpenECryMessageAdapter
 	{
 		private readonly PairSet<OEC.API.Order, long> _orderTransactions = new PairSet<OEC.API.Order, long>();

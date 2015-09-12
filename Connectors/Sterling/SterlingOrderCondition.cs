@@ -11,109 +11,109 @@ namespace StockSharp.Sterling
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Расширенные типы заявок.
+	/// Extended order types.
 	/// </summary>
 	public enum SterlingExtendedOrderTypes
 	{
 		/// <summary>
-		/// Рыночная по закрытию.
+		/// Market on close.
 		/// </summary>
 		MarketOnClose,
 
 		/// <summary>
-		/// Рыночная или лучше.
+		/// Market or better.
 		/// </summary>
 		MarketOrBetter,
 
 		/// <summary>
-		/// Рыночная без ожидания.
+		/// Market no wait.
 		/// </summary>
 		MarketNoWait,
 
 		/// <summary>
-		/// Лимитная по закрытию.
+		/// Limit on close.
 		/// </summary>
 		LimitOnClose,
 
 		/// <summary>
-		/// Стоп.
+		/// Stop.
 		/// </summary>
 		Stop,
 
 		/// <summary>
-		/// Стоп-лимит
+		/// Stop-limit.
 		/// </summary>
 		StopLimit,
 
 		/// <summary>
-		/// Лимитная или лучше
+		/// Limit or better.
 		/// </summary>
 		LimitOrBetter,
 
 		/// <summary>
-		/// Лимитная без ожидания.
+		/// Limit no wait.
 		/// </summary>
 		LimitNoWait,
 
 		/// <summary>
-		/// Без ожидания
+		/// Not wait.
 		/// </summary>
 		NoWait,
 
 		/// <summary>
-		/// 
+		/// NYSE.
 		/// </summary>
 		Nyse,
 
 		/// <summary>
-		/// По закрытию.
+		/// On close.
 		/// </summary>
 		Close,
 
 		/// <summary>
-		/// Привязанная.
+		/// Pegged.
 		/// </summary>
 		Pegged,
 
 		/// <summary>
-		/// Серверный стоп.
+		/// Server stop.
 		/// </summary>
 		ServerStop,
 
 		/// <summary>
-		/// Серверный стоп-лимит.
+		/// Server stop-limit.
 		/// </summary>
 		ServerStopLimit,
 
 		/// <summary>
-		/// Скользящий стоп.
+		/// Trailing stop-loss.
 		/// </summary>
 		TrailingStop,
 
 		/// <summary>
-		/// По последней цене.
+		/// By last price.
 		/// </summary>
 		Last
 	}
 
 	/// <summary>
-	/// Инструкции исполнения.
+	/// Execution instructions.
 	/// </summary>
 	public enum SterlingExecutionInstructions
 	{
 		/// <summary>
-		/// С резервированием.
+		/// Reservation.
 		/// </summary>
 		SweepReserve,
 
 		/// <summary>
-		/// Без преференций.
+		/// No preference.
 		/// </summary>
 		NoPreference
 	}
 
 	/// <summary>
-	/// Условия заявок, специфичных для <see cref="Sterling"/>.
+	/// <see cref="Sterling"/> order condition.
 	/// </summary>
 	[Serializable]
 	[DataContract]
@@ -121,7 +121,7 @@ namespace StockSharp.Sterling
 	public class SterlingOrderCondition : OrderCondition
 	{
 		/// <summary>
-		/// Настройки для заявок на опционы.
+		/// Options orders settings.
 		/// </summary>
 		public class SterlingOptionOrderCondition
 		{
@@ -133,7 +133,7 @@ namespace StockSharp.Sterling
 			}
 
 			/// <summary>
-			/// Открытие.
+			/// Open time.
 			/// </summary>
 			public bool? IsOpen
 			{
@@ -142,7 +142,7 @@ namespace StockSharp.Sterling
 			}
 
 			/// <summary>
-			/// Дата поставки.
+			/// Settlement date.
 			/// </summary>
 			public DateTime? Maturity
 			{
@@ -151,7 +151,7 @@ namespace StockSharp.Sterling
 			}
 
 			/// <summary>
-			/// Тип опциона.
+			/// Option type.
 			/// </summary>
 			public OptionTypes? Type
 			{
@@ -169,7 +169,7 @@ namespace StockSharp.Sterling
 			}
 
 			/// <summary>
-			/// Покрытый опцион.
+			/// Covered option.
 			/// </summary>
 			public bool? IsCover
 			{
@@ -178,7 +178,7 @@ namespace StockSharp.Sterling
 			}
 
 			/// <summary>
-			/// Тип базового актива.
+			/// Asset type.
 			/// </summary>
 			public SecurityTypes? UnderlyingType
 			{
@@ -187,7 +187,7 @@ namespace StockSharp.Sterling
 			}
 
 			/// <summary>
-			/// Страйк-цена.
+			/// Strike price.
 			/// </summary>
 			public decimal? StrikePrice
 			{
@@ -197,7 +197,7 @@ namespace StockSharp.Sterling
 		}
 
 		/// <summary>
-		/// Создать <see cref="SterlingOrderCondition"/>.
+		/// Initializes a new instance of the <see cref="SterlingOrderCondition"/>.
 		/// </summary>
 		public SterlingOrderCondition()
 		{
@@ -205,7 +205,7 @@ namespace StockSharp.Sterling
 		}
 
 		/// <summary>
-		/// Цена активации, при достижении которой будет выставлена заявка.
+		/// Activation price, when reached an order will be placed.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str242Key)]
@@ -218,7 +218,7 @@ namespace StockSharp.Sterling
 		}
 
 		/// <summary>
-		/// Расширенный тип заявки.
+		/// Extended type of order.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
@@ -231,72 +231,72 @@ namespace StockSharp.Sterling
 		}
 
 		/// <summary>
-		/// 
+		/// .
 		/// </summary>
 		public decimal? Discretion { get; set; }
 
 		/// <summary>
-		/// Инструкция исполнения.
+		/// Execution instruction.
 		/// </summary>
 		public SterlingExecutionInstructions ExecutionInstruction { get; set; }
 
 		/// <summary>
-		/// Исполняющий брокер.
+		/// Execution brokerage.
 		/// </summary>
 		public string ExecutionBroker { get; set; }
 
 		/// <summary>
-		/// Лимит цены исполнения.
+		/// Limit price.
 		/// </summary>
 		public decimal? ExecutionPriceLimit { get; set; }
 
 		/// <summary>
-		/// 
+		/// Peg diff.
 		/// </summary>
 		public decimal? PegDiff { get; set; }
 
 		/// <summary>
-		/// Объем скользящего стопа.
+		/// Trailing stop volume.
 		/// </summary>
 		public decimal? TrailingVolume { get; set; }
 
 		/// <summary>
-		/// Шаг увеличения цены скользящего стопа.
+		/// Trailing stop price step.
 		/// </summary>
 		public decimal? TrailingIncrement { get; set; }
 
 		/// <summary>
-		/// Минимальный объем.
+		/// Minimum volume.
 		/// </summary>
 		public decimal? MinVolume { get; set; }
 
 		/// <summary>
-		/// Средняя цена исполнения.
+		/// Average price.
 		/// </summary>
 		public decimal? AveragePriceLimit { get; set; }
 
 		/// <summary>
-		/// Продолжительность.
+		/// Duration.
 		/// </summary>
 		public int? Duration { get; set; }
 
 		/// <summary>
-		/// 
+		/// Broker.
 		/// </summary>
 		public string LocateBroker { get; set; }
 
 		/// <summary>
-		/// 
+		/// Volume.
 		/// </summary>
 		public decimal? LocateVolume { get; set; }
 
 		/// <summary>
-		/// 
+		/// Time.
 		/// </summary>
 		public DateTime? LocateTime { get; set; }
 
 		/// <summary>
-		/// Настройки для заявок на опционы.
+		/// Options orders settings.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1529Key)]

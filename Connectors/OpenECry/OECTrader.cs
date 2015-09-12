@@ -17,7 +17,7 @@ namespace StockSharp.OpenECry
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/>, предоставляющая подключение к брокеру OEC.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the OEC broker.
 	/// </summary>
 	public sealed class OECTrader : Connector, IExternalCandleSource
 	{
@@ -25,7 +25,7 @@ namespace StockSharp.OpenECry
 		private readonly OpenECryMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="OECTrader"/>.
+		/// Initializes a new instance of the <see cref="OECTrader"/>.
 		/// </summary>
 		public OECTrader()
 		{
@@ -35,7 +35,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Уникальный идентификатор программного обеспечения.
+		/// Unique software ID.
 		/// </summary>
 		public string Uuid
 		{
@@ -44,7 +44,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Имя пользователя OpenECry.
+		/// OpenECry login.
 		/// </summary>
 		public string Login
 		{
@@ -53,7 +53,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Пароль пользователя OpenECry.
+		/// OpenECry password.
 		/// </summary>
 		public string Password
 		{
@@ -62,7 +62,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Требуемый режим подключения к терминалу. По умолчанию <see cref="OpenECryRemoting.None"/>.
+		/// The required mode of connection to the terminal. The default is <see cref="OpenECryRemoting.None"/>.
 		/// </summary>
 		public OpenECryRemoting RemotingRequired
 		{
@@ -71,8 +71,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Использовать "родной" механизм восстановления соединения.
-		/// По умолчанию включено.
+		/// To use the 'native' reconnection process. Enabled by default.
 		/// </summary>
 		public bool UseNativeReconnect
 		{
@@ -81,7 +80,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Адрес API сервера OpenECry. По-умолчанию равен <see cref="OpenECryAddresses.Api"/>.
+		/// The OpenECry server API address. The default is <see cref="OpenECryAddresses.Api"/>.
 		/// </summary>
 		public EndPoint Address
 		{
@@ -90,7 +89,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Использовать логирование библиотеки OEC.
+		/// To use the OEC library logging.
 		/// </summary>
 		public bool EnableOECLogging
 		{
@@ -108,10 +107,10 @@ namespace StockSharp.OpenECry
 		//}
 
 		/// <summary>
-		/// Отправить сообщение другому пользователю.
+		/// To send a message to another user.
 		/// </summary>
-		/// <param name="userName">Имя получателя.</param>
-		/// <param name="text">Текст сообщения.</param>
+		/// <param name="userName">The recipient name.</param>
+		/// <param name="text">Message text.</param>
 		public void SendMessage(string userName, string text)
 		{
 			SendInMessage(new NewsMessage
@@ -134,21 +133,21 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Событие появления новых свечек, полученных после подписки через <see cref="IExternalCandleSource.SubscribeCandles"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
 		/// </summary>
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Подписаться на получение свечек.
+		/// Subscribe to receive new candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -177,9 +176,9 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="IExternalCandleSource.SubscribeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
 			var originalTransactionId = _series.TryGetKey(series);
@@ -199,9 +198,9 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			var candleMsg = message as CandleMessage;

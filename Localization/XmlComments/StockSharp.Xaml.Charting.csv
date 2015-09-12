@@ -311,11 +311,6 @@ M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,Stoc
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)/param/chart;Str3200
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)/param/element;DocStr7766
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,StockSharp.Xaml.Charting.ChartCandleElement,StockSharp.Algo.Candles.Candle)/param/candle;DocStr491
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTime,StockSharp.Xaml.Charting.IChartElement,System.Object)/summary;DocStr486
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTime,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/chart;Str3200
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTime,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/time;DocStr7780
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTime,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/element;DocStr7710
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTime,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/value;Str3099
 M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,StockSharp.Xaml.Charting.IChartElement,System.Object)/summary;DocStr486
 M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/chart;Str3200
 M:StockSharp.Xaml.Charting.ChartHelper.ProcessValue(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/time;DocStr7780
@@ -326,10 +321,6 @@ M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,Syst
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/time;DocStr7780
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/element;DocStr7710
 M:StockSharp.Xaml.Charting.ChartHelper.Draw(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,StockSharp.Xaml.Charting.IChartElement,System.Object)/param/value;Str3099
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTime,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})/summary;DocStr486
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTime,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})/param/chart;Str3200
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTime,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})/param/time;DocStr7780
-M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTime,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})/param/values;DocStr467
 M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})/summary;DocStr486
 M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})/param/chart;Str3200
 M:StockSharp.Xaml.Charting.ChartHelper.ProcessValues(StockSharp.Xaml.Charting.IChart,System.DateTimeOffset,System.Collections.Generic.IDictionary{StockSharp.Xaml.Charting.IChartElement,System.Object})/param/time;DocStr7780

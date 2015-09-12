@@ -34,7 +34,7 @@ namespace StockSharp.Algo.Candles.Compression
 		{
 			private readonly CandleSourceEnumerator<ICandleBuilderSource, IEnumerable<ICandleBuilderSourceValue>> _enumerator;
 
-			public CandleSeriesInfo(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<ICandleBuilderSource> sources, Action<CandleSeries, IEnumerable<ICandleBuilderSourceValue>> handler, Action<CandleSeries> stopped)
+			public CandleSeriesInfo(CandleSeries series, DateTimeOffset from, DateTimeOffset to, IEnumerable<ICandleBuilderSource> sources, Func<CandleSeries, IEnumerable<ICandleBuilderSourceValue>, DateTimeOffset> handler, Action<CandleSeries> stopped)
 			{
 				if (series == null)
 					throw new ArgumentNullException("series");
@@ -46,11 +46,7 @@ namespace StockSharp.Algo.Candles.Compression
 					throw new ArgumentNullException("stopped");
 
 				_enumerator = new CandleSourceEnumerator<ICandleBuilderSource, IEnumerable<ICandleBuilderSourceValue>>(series, from, to,
-					sources, v =>
-					{
-						handler(series, v);
-						return v.Last().Time;
-					}, () => stopped(series));
+					sources, v => handler(series, v), () => stopped(series));
 			}
 
 			public Candle CurrentCandle { get; set; }
@@ -283,7 +279,8 @@ namespace StockSharp.Algo.Candles.Compression
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
 		/// <param name="values">Новые данные.</param>
-		protected virtual void OnNewValues(CandleSeries series, IEnumerable<ICandleBuilderSourceValue> values)
+		/// <returns>Время последнего элемента.</returns>
+		protected virtual DateTimeOffset OnNewValues(CandleSeries series, IEnumerable<ICandleBuilderSourceValue> values)
 		{
 			if (values == null)
 				throw new ArgumentNullException("values");
@@ -291,7 +288,9 @@ namespace StockSharp.Algo.Candles.Compression
 			var info = _info.TryGetValue(series);
 
 			if (info == null)
-				return;
+				return default(DateTimeOffset);
+
+			ICandleBuilderSourceValue lastValue = null;
 
 			foreach (var value in values)
 			{
@@ -339,7 +338,11 @@ namespace StockSharp.Algo.Candles.Compression
 						RaiseProcessing(series, candle);
 					}
 				}
+
+				lastValue = value;
 			}
+
+			return lastValue == null ? default(DateTimeOffset) : lastValue.Time;
 		}
 
 		/// <summary>

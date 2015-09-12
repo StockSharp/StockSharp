@@ -58,13 +58,13 @@ namespace StockSharp.ETrade.Native
 		public event Action ConnectionStateChanged;
 		public event Action<Exception> ConnectionError;
 		public event Action<Exception> Error;
-		public event Action<long, List<ProductInfo>, Exception> ProductLookupResult;
+		public event Action<long, IEnumerable<ProductInfo>, Exception> ProductLookupResult;
 		public event Action<long, PlaceEquityOrderResponse2, Exception> OrderRegisterResult;
 		public event Action<long, PlaceEquityOrderResponse2, Exception> OrderReRegisterResult;
 		public event Action<long, long, CancelOrderResponse2, Exception> OrderCancelResult;
 		public event Action<List<AccountInfo>, Exception> AccountsData;
-		public event Action<string, List<PositionInfo>, Exception> PositionsData;
-		public event Action<string, List<Order>, Exception> OrdersData;
+		public event Action<string, IEnumerable<PositionInfo>, Exception> PositionsData;
+		public event Action<string, IEnumerable<Order>, Exception> OrdersData;
 		public event Action ExportStarted;
 		public event Action ExportStopped;
 
@@ -175,15 +175,15 @@ namespace StockSharp.ETrade.Native
 			if (!Sandbox || SandboxSecurities == null)
 				return;
 
-			var list = SandboxSecurities.Select(sec => new ProductInfo
+			var products = SandboxSecurities.Select(sec => new ProductInfo
 			{
 				companyName = sec.Name, 
 				exchange = sec.Board.Exchange.Name, 
 				securityType = "EQ", 
 				symbol = sec.Code
-			}).ToList();
+			}).ToArray();
 
-			ProductLookupResult.SafeInvoke(0, list, null);
+			ProductLookupResult.SafeInvoke(0, products, null);
 		}
 
 		private void RaiseError(Exception exception)

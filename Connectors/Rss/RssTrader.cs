@@ -6,14 +6,14 @@ namespace StockSharp.Rss
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с RSS фидами.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to RSS feed.
 	/// </summary>
 	public class RssTrader : Connector
     {
 		private readonly RssMarketDataMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="RssTrader"/>.
+		/// Initializes a new instance of the <see cref="RssTrader"/>.
 		/// </summary>
 		public RssTrader()
 		{
@@ -23,7 +23,7 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
-		/// Адрес RSS фида.
+		/// RSS feed address.
 		/// </summary>
 		public Uri Address
 		{
@@ -32,7 +32,7 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
-		/// Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy hh:mm:ss.
+		/// The format of dates. Should be fill in, if the format is different from ddd, dd MMM yyyy hh:mm:ss.
 		/// </summary>
 		public string CustomDateFormat
 		{

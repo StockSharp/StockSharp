@@ -422,7 +422,7 @@ namespace StockSharp.Hydra
 		private void CheckIsRunning()
 		{
 			var settings = ConfigurationManager.ConnectionStrings;
-			var connectionStrings = (settings.Cast<ConnectionStringSettings>().Select(setting => setting.ConnectionString)).ToList();
+			var connectionStrings = (settings.Cast<ConnectionStringSettings>().Select(setting => setting.ConnectionString)).ToArray();
 
 			var str = connectionStrings.Aggregate(string.Empty, (current, connectionString) => current + connectionString).GetHashCode().To<string>();
 
@@ -508,7 +508,7 @@ namespace StockSharp.Hydra
 			{
 				_timer.Stop();
 
-				if (!_killTimer.IsNull())
+				if (_killTimer != null)
 					_killTimer.Stop();
 			}
 

@@ -12,6 +12,9 @@ namespace StockSharp.Btce
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// The messages adapter for BTC-e.
+	/// </summary>
 	[DisplayName("BTC-e")]
 	[CategoryLoc(LocalizedStrings.BitcoinsKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "BTC-e")]
@@ -21,7 +24,7 @@ namespace StockSharp.Btce
 	partial class BtceMessageAdapter
 	{
 		/// <summary>
-		/// Ключ.
+		/// Key.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3304Key)]
@@ -30,7 +33,7 @@ namespace StockSharp.Btce
 		public SecureString Key { get; set; }
 
 		/// <summary>
-		/// Секрет.
+		/// Secret.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3306Key)]
@@ -39,7 +42,7 @@ namespace StockSharp.Btce
 		public SecureString Secret { get; set; }
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
 		public override bool IsValid
@@ -54,9 +57,9 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -66,9 +69,9 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -78,9 +81,9 @@ namespace StockSharp.Btce
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str3304 + " = " + Key;

@@ -9,6 +9,9 @@ namespace StockSharp.CQG
 
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// CQG message adapter.
+	/// </summary>
 	partial class CQGMessageAdapter
 	{
 		private void SendLevel1Message(CQGInstrument cqgInstrument)

@@ -5,22 +5,22 @@ namespace StockSharp.OpenECry
 	using Ecng.Common;
 
 	/// <summary>
-	/// Адреса серверов системы OpenECry.
+	/// Addresses of OpenECry system servers.
 	/// </summary>
 	public static class OpenECryAddresses
 	{
 		/// <summary>
-		/// Порт сервера по умолчанию, равный 9200.
+		/// The server port default value is 9200.
 		/// </summary>
 		public const int DefaultPort = 9200;
 
 		/// <summary>
-		/// Основной сервер. Адрес api.openecry.com, порт 9200.
+		/// The main server. Address is api.openecry.com, port 9200.
 		/// </summary>
 		public static readonly EndPoint Api = "api.openecry.com:9200".To<EndPoint>();
 
 		/// <summary>
-		/// Демо сервер. Адрес sim.openecry.com, порт 9200.
+		/// Demo server. Address is sim.openecry.com, port 9200.
 		/// </summary>
 		public static readonly EndPoint Sim = "sim.openecry.com:9200".To<EndPoint>();
 	}

@@ -1,5 +1,18 @@
 StockSharp Data (Hydra) Change log
 ========================
+###v4.3.11:
+* (bug) Config fix.
+* (bug) Chart pane fix.
+* (feature) Transaq. v2.16.1
+* (feature) Level1 export improved.
+* (feature) Build level1 -> depths.
+* (bug) DateTime to DateTimeOffset casting fix.
+* (feature) Storage (bin). Allow different time zones.
+* (feature) Leve1 -> Ticks + Candles.
+* (bug) IQFeed fix.
+* (bug) NewsSerializer fix.
+* (feature) AdvertisePanel changes.
+
 ###v4.3.10:
 * (bug) Hydra. Level1 csv export fix.
 * (bug) Storage. Level1 fix.

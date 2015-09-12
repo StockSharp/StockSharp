@@ -11,16 +11,16 @@ namespace StockSharp.Rss
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Маркет-дата адаптер сообщений для Rss.
+	/// The market-data message adapter for Rss.
 	/// </summary>
 	public partial class RssMarketDataMessageAdapter : MessageAdapter
 	{
 		private bool _isSubscribed;
 
 		/// <summary>
-		/// Создать <see cref="RssMarketDataMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="RssMarketDataMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public RssMarketDataMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -30,9 +30,9 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

@@ -50,7 +50,7 @@ P:StockSharp.Fix.FixServer.InitialTransactionId/summary;DocStr3172
 P:StockSharp.Fix.FixServer.TransactionSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.MarketDataSession/summary;TransactionalSession
 P:StockSharp.Fix.FixServer.State/summary;DocStr3173
-E:StockSharp.Fix.FixServer.StateChanged/summary;DocStr1489
+E:StockSharp.Fix.FixServer.StateChanged/summary;DocStr3900
 E:StockSharp.Fix.FixServer.SessionCreated/summary;DocStr3174
 E:StockSharp.Fix.FixServer.UserLoggedOut/summary;DocStr3175
 E:StockSharp.Fix.FixServer.UserPasswordChanging/summary;DocStr3176
@@ -69,7 +69,7 @@ P:StockSharp.Fix.FixSession.Format/summary;FixFormat
 P:StockSharp.Fix.FixSession.HeartBeat/summary;DocStr3179
 P:StockSharp.Fix.FixSession.Encoding/summary;DocStr3180
 P:StockSharp.Fix.FixSession.IncrementalDepthUpdates/summary;DocStr3181
-P:StockSharp.Fix.FixSession.UtcOffset/summary;TimeOffsetDescription
+P:StockSharp.Fix.FixSession.TimeZone/summary;Str68
 P:StockSharp.Fix.FixSession.DateFormat/summary;DocStr3182
 P:StockSharp.Fix.FixSession.DateTimeFormat/summary;DateTimeFormat
 P:StockSharp.Fix.FixSession.TimeFormat/summary;TimeFormat
@@ -894,12 +894,12 @@ M:StockSharp.Fix.Native.FixMessageWriter.WriteQuoteRequest(System.String,StockSh
 M:StockSharp.Fix.Native.FixMessageWriter.WriteQuoteCancel(System.String,StockSharp.Messages.SecurityId)/summary;DocStr3291
 M:StockSharp.Fix.Native.FixMessageWriter.WriteQuoteCancel(System.String,StockSharp.Messages.SecurityId)/param/requestId;DocStr3166
 M:StockSharp.Fix.Native.FixMessageWriter.WriteQuoteCancel(System.String,StockSharp.Messages.SecurityId)/param/securityId;SecurityId
-M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Int32,System.Char[])/summary;DocStr3291
-M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Int32,System.Char[])/param/requestId;DocStr3166
-M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Int32,System.Char[])/param/securityId;SecurityId
-M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Int32,System.Char[])/param/isSubscribe;DocStr3290
-M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Int32,System.Char[])/param/bookDepth;Str1197
-M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Int32,System.Char[])/param/types;DocStr3292
+M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Nullable{System.Int32},System.Char[])/summary;DocStr3291
+M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Nullable{System.Int32},System.Char[])/param/requestId;DocStr3166
+M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Nullable{System.Int32},System.Char[])/param/securityId;SecurityId
+M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Nullable{System.Int32},System.Char[])/param/isSubscribe;DocStr3290
+M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Nullable{System.Int32},System.Char[])/param/bookDepth;Str1197
+M:StockSharp.Fix.Native.FixMessageWriter.WriteMarketDataRequest(System.String,StockSharp.Messages.SecurityId,System.Boolean,System.Nullable{System.Int32},System.Char[])/param/types;DocStr3292
 M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityListRequest(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr3291
 M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityListRequest(StockSharp.Messages.SecurityLookupMessage)/param/message;DocStr2430
 M:StockSharp.Fix.Native.FixMessageWriter.WriteSecurityDefinitionRequest(StockSharp.Messages.SecurityLookupMessage)/summary;DocStr3291
@@ -1198,7 +1198,7 @@ P:StockSharp.Fix.FixMessageAdapter.RequestAllSecurities/summary;RequestAllSecuri
 P:StockSharp.Fix.FixMessageAdapter.Encoding/summary;DocStr3180
 P:StockSharp.Fix.FixMessageAdapter.IsResetCounter/summary;DocStr3330
 P:StockSharp.Fix.FixMessageAdapter.Format/summary;FixFormat
-P:StockSharp.Fix.FixMessageAdapter.UtcOffset/summary;TimeOffsetDescription
+P:StockSharp.Fix.FixMessageAdapter.TimeZone/summary;Str68
 P:StockSharp.Fix.FixMessageAdapter.DateFormat/summary;DocStr3182
 P:StockSharp.Fix.FixMessageAdapter.DateTimeFormat/summary;DateTimeFormat
 P:StockSharp.Fix.FixMessageAdapter.TimeFormat/summary;TimeFormat
@@ -1271,7 +1271,7 @@ F:StockSharp.Fix.FixStopOrderType.StopLoss/summary;StopLoss
 F:StockSharp.Fix.FixStopOrderType.StopLossTrailing/summary;TrailingStopLoss
 F:StockSharp.Fix.FixStopOrderType.TakeProfit/summary;DocStr3351
 F:StockSharp.Fix.FixStopOrderType.TakeProfitTrailing/summary;TrailingTakeProfit
-T:StockSharp.Fix.FixOrderCondition/summary;DocStr2570
+T:StockSharp.Fix.FixOrderCondition/summary;DocStr60
 M:StockSharp.Fix.FixOrderCondition.#ctor/summary;DocStr1
 P:StockSharp.Fix.FixOrderCondition.Type/summary;Str1737
 P:StockSharp.Fix.FixOrderCondition.StopPrice/summary;StopPrice

@@ -22,7 +22,6 @@
 		 *	}}
 		*/
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal struct Rights
 	{
 		[JsonProperty(PropertyName = "info")]
@@ -31,7 +30,7 @@
 		[JsonProperty(PropertyName = "trade")]
 		public bool CanTrade { get; set; }
 
-		// на BTCE вроде никак не используется
+		// BTCE looks like not used
 		[JsonProperty(PropertyName = "withdraw")]
 		public bool CanWithdraw { get; set; }
 
@@ -41,7 +40,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class AccountState
 	{
 		[JsonProperty(PropertyName = "funds")]
@@ -72,7 +70,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class InfoReply
 	{
 		[JsonProperty(PropertyName = "success")]
@@ -111,16 +108,15 @@
 		}	 
 	*/
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class Transaction
 	{
 		[JsonProperty(PropertyName = "tid")]
 		public long Id { get; internal set; }
 
 		// 1 - redeem
-		// 4 - забрали по сделке
-		// 5 - заблокировали на сделку
-		// другие пока не нашел
+		// 4 - matched
+		// 5 - blocked
+		// other values not yet found
 		[JsonProperty(PropertyName = "type")]
 		public int Type { get; set; }
 
@@ -146,7 +142,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class TransactionsReply
 	{
 		[JsonProperty(PropertyName = "success")]
@@ -159,7 +154,6 @@
 		private readonly IDictionary<long, Transaction> _items = new SortedDictionary<long, Transaction>();
 
 		[JsonIgnore]
-		// так удобнее получить инфу по конкретной заявке
 		public IDictionary<long, Transaction> Items
 		{
 			get { return _items; }
@@ -192,21 +186,6 @@
 		}
 	 */
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
-	//internal enum Directions
-	//{
-	//	Sell,
-	//	Buy,
-
-	//	sell = Sell,
-	//	buy = Buy,
-
-	//	// указывается в public-API https://btc-e.com/api/3/trades/btc_usd
-	//	ask = sell,
-	//	bid = buy
-	//}
-
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class Trade
 	{
 		[JsonProperty(PropertyName = "pair")]
@@ -249,7 +228,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class MyTradesReply
 	{
 		[JsonProperty(PropertyName = "success")]
@@ -262,7 +240,6 @@
 		private readonly IDictionary<long, Trade> _items = new SortedDictionary<long, Trade>();
 
 		[JsonIgnore]
-		// так удобнее получить инфу по конкретной заявке
 		public IDictionary<long, Trade> Items
 		{
 			get { return _items; }
@@ -294,7 +271,6 @@
 		}
 	 */
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class Order
 	{
 		[JsonProperty(PropertyName = "pair")]
@@ -309,8 +285,8 @@
 		[JsonProperty(PropertyName = "rate")]
 		public double Price { get; set; }
 
-		// 0 - активна (висит в стакане)
-		// остальные пока не нашел
+		// 0 - active (in order book)
+		// other values not yet found
 		[JsonProperty(PropertyName = "status")]
 		public int Status { get; set; }
 
@@ -327,7 +303,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class OrdersReply
 	{
 		[JsonProperty(PropertyName = "success")]
@@ -340,7 +315,6 @@
 		private readonly IDictionary<long, Order> _items = new SortedDictionary<long, Order>();
 
 		[JsonIgnore]
-		// так удобнее получить инфу по конкретной заявке
 		public IDictionary<long, Order> Items
 		{
 			get { return _items; }
@@ -356,26 +330,8 @@
 
 	#region make/cancel order
 
-	// в командах у нас пока создать/отменить заявку
-
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class Command
 	{
-		//// для создания заявки указываются эти аргументы
-		//[JsonProperty(PropertyName = "instrument")]
-		//public string Instrument { get; set; }
-
-		//[JsonProperty(PropertyName = "direction")]
-		//public string Side { get; set; }
-
-		//[JsonProperty(PropertyName = "volume")]
-		//public double Volume { get; set; }
-
-		//[JsonProperty(PropertyName = "price")]
-		//public double Price { get; set; }
-
-		// после создания заявки здесь можно узнать ее идентификатор
-		// для отмены заявки указывавается ее идентификатор
 		[JsonProperty(PropertyName = "order_id")]
 		public long OrderId { get; set; }
 
@@ -400,7 +356,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class CommandReply
 	{
 		[JsonProperty(PropertyName = "success")]
@@ -422,7 +377,6 @@
 
 	#region instruments
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	// https://btc-e.com/api/3/documentation#info
 	// "btc_usd":{"decimal_places":3,"min_price":0.1,"max_price":3200,"min_amount":0.01,"hidden":0,"fee":0.2}
 	internal class InstrumentInfo
@@ -454,7 +408,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class InstrumentsReply
 	{
 		[JsonProperty(PropertyName = "server_time")]
@@ -465,7 +418,6 @@
 		private readonly IDictionary<string, InstrumentInfo> _items = new SortedDictionary<string, InstrumentInfo>();
 
 		[JsonIgnore]
-		// так удобнее получить инфу по конкретному инструменту
 		public IDictionary<string, InstrumentInfo> Items
 		{
 			get { return _items; }
@@ -483,7 +435,6 @@
 
 	// https://btc-e.com/api/3/documentation#ticker
 	// {"btc_usd":{"high":637.90002,"low":610,"avg":623.95001,"vol":4049518.45004,"vol_cur":6521.73554,"last":625.5,"buy":625.5,"sell":623.56,"updated":1394529316}}
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class Ticker
 	{
 		[JsonProperty(PropertyName = "instrument")]
@@ -498,11 +449,9 @@
 		[JsonProperty(PropertyName = "avg")]
 		public double AveragePrice { get; set; }
 
-		// Для btc_usd объем в BTC
 		[JsonProperty(PropertyName = "vol_cur")]
 		public double Volume { get; set; }
 
-		// Для btc_usd объем в USD
 		[JsonProperty(PropertyName = "vol")]
 		public double MoneyVolume { get; set; }
 
@@ -525,7 +474,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class TickersReply
 	{
 		private readonly IDictionary<string, Ticker> _items = new SortedDictionary<string, Ticker>();
@@ -548,7 +496,6 @@
 
 	// https://btc-e.com/api/3/documentation#depth
 	// {"btc_usd":{"asks":[[624.001,0.9591],[624.002,1.60614105],[625.3,0.33259]],"bids":[[623,32.35859875],[622.85,0.05],[622.835,0.01]]}}
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class Depth
 	{
 		[JsonProperty(PropertyName = "bids")]
@@ -563,7 +510,6 @@
 		}
 	}
 
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class DepthsReply
 	{
 		private readonly IDictionary<string, Depth> _items = new SortedDictionary<string, Depth>();
@@ -586,7 +532,6 @@
 
 	// https://btc-e.com/api/3/documentation#trades
 	// {"btc_usd":[{"type":"ask","price":625.35,"amount":0.0104049,"tid":32254816,"timestamp":1394532697},{"type":"bid","price":627.87,"amount":0.0216,"tid":32254810,"timestamp":1394532683}]}
-	//[Obfuscation(Feature = "Apply to member * when property: renaming", Exclude = true)]
 	internal class TradesReply
 	{
 		private readonly IDictionary<string, List<Trade>> _items = new SortedDictionary<string, List<Trade>>();

@@ -1,5 +1,38 @@
 StockSharp API Change log
 ========================
+###v4.3.11:
+* (feature) Backtesting on level1.
+* (feature) CSV storage. Time zone.
+* (feature) Transaq. v2.16.1
+* (feature) level1 -> depths.
+* (feature) MarketDataMessage. Nullable fields.
+* (bug) DateTime to DateTimeOffset casting fix.
+* (feature) CSV storage perf improve.
+* (bug) BasketMessageAdapter. Subscription fix.
+* (feature) Storage (bin). Allow different time zones.
+* (feature) FIX connector. TimeSpan -> TimeZoneInfo.
+* (feature) SecurityGrid. TimeZone column
+* (bug) Connector. Unsubscription fixes.
+* (feature) CandleManager. Priority source switch in runtime.
+* (feature) SmartCOM. Extended quote price check.
+* (feature) Plaza. Multi connections.
+* (feature) Storage. Volume-less ticks support.
+* (feature) SampleHistoryTesting. ES mini test.
+* (bug) ChartPanel.Save fix.
+* (feature) Leve1 -> Ticks + Candles.
+* (bug) Quik lua. Fix zero transaction id.
+* (feature) ILogListener. Implements IDisposable
+* (bug) IQFeed. Candle timezone fix.
+* (bug) NewsSerializer fix.
+* (feature) NewsGrid. Request story + open url.
+* (bug) IQFeed. News fixes.
+* (bug) Lmax, IQFeed, IB. Tick subscription fix.
+* (feature) MarketEmulator. Fill server time.
+* (feature) IQFeed. COMM3 security type.
+* (feature) SampleRealTimeEmulation. Look up securities.
+* (feature) SampleRealTimeEmulation. IQFeed support.
+* (bug) TraderHelper.ToDecimal fix.
+
 ###v4.3.10
 * (bug) Storage. Level1 fix.
 * (bug) ITCH. Fixes.

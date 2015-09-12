@@ -1,4 +1,4 @@
-﻿namespace StockSharp.MatLab
+namespace StockSharp.MatLab
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,26 +8,26 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Подключение, предоставляющий возможность использовать из MatLab скриптов подключения <see cref="IConnector"/>.
+	/// The interface <see cref="IConnector"/> implementation which provides ability to use from MatLab scripts.
 	/// </summary>
 	public class MatLabConnector : Disposable
 	{
 		private readonly bool _ownTrader;
 
 		/// <summary>
-		/// Создать <see cref="MatLabConnector"/>.
+		/// Initializes a new instance of the <see cref="MatLabConnector"/>.
 		/// </summary>
-		/// <param name="realConnector">Подключение, через которое будут отправляться заявки и получатся маркет-данные.</param>
+		/// <param name="realConnector">The connection for market-data and transactions.</param>
 		public MatLabConnector(IConnector realConnector)
 			: this(realConnector, true)
 		{
 		}
 
 		/// <summary>
-		/// Создать <see cref="MatLabConnector"/>.
+		/// Initializes a new instance of the <see cref="MatLabConnector"/>.
 		/// </summary>
-		/// <param name="realConnector">Подключение, через которое будут отправляться заявки и получатся маркет-данные.</param>
-		/// <param name="ownTrader">Контролировать время жизни подключения <paramref name="realConnector"/>.</param>
+		/// <param name="realConnector">The connection for market-data and transactions.</param>
+		/// <param name="ownTrader">Track the connection <paramref name="realConnector" /> lifetime.</param>
 		public MatLabConnector(IConnector realConnector, bool ownTrader)
 		{
 			if (realConnector == null)
@@ -64,128 +64,127 @@
 		}
 
 		/// <summary>
-		/// Подключение, через которое будут отправляться заявки и получатся маркет-данные.
+		/// The connection for market-data and transactions.
 		/// </summary>
 		public IConnector RealConnector { get; private set; }
 
 		/// <summary>
-		/// Событие успешного подключения.
+		/// Connected.
 		/// </summary>
 		public event EventHandler Connected;
 
 		/// <summary>
-		/// Событие ошибки подключения (например, соединения было разорвано).
+		/// Connection error (for example, the connection was aborted by server).
 		/// </summary>
 		public event EventHandler<ErrorEventArgs> ConnectionError;
 
 		/// <summary>
-		/// Событие успешного отключения.
+		/// Disconnected.
 		/// </summary>
 		public event EventHandler Disconnected;
 
 		/// <summary>
-		/// Событие, сигнализирующее об ошибке при получении или обработке новых данных с сервера.
+		/// Dats process error.
 		/// </summary>
 		public event EventHandler<ErrorEventArgs> Error;
 
 		/// <summary>
-		/// Событие, сигнализирующее об изменении текущего времени на площадках <see cref="IConnector.ExchangeBoards"/>.
-		/// Передается разница во времени, прошедшее с последнего вызова события. Первый раз событие передает значение <see cref="TimeSpan.Zero"/>.
+		/// Server time changed <see cref="IConnector.ExchangeBoards"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 		/// </summary>
 		public event EventHandler MarketTimeChanged;
 
 		/// <summary>
-		/// Событие появления новых инструментов.
+		/// Securities received.
 		/// </summary>
 		public event EventHandler<SecuritiesEventArgs> NewSecurities;
 
 		/// <summary>
-		/// Событие изменения параметров инструментов.
+		/// Securities changed.
 		/// </summary>
 		public event EventHandler<SecuritiesEventArgs> SecuritiesChanged;
 
 		/// <summary>
-		/// Событие появления новых портфелей.
+		/// Portfolios received.
 		/// </summary>
 		public event EventHandler<PortfoliosEventArgs> NewPortfolios;
 
 		/// <summary>
-		/// Событие изменения параметров портфелей.
+		/// Portfolios changed.
 		/// </summary>
 		public event EventHandler<PortfoliosEventArgs> PortfoliosChanged;
 
 		/// <summary>
-		/// Событие появления новых позиций.
+		/// Positions received.
 		/// </summary>
 		public event EventHandler<PositionsEventArgs> NewPositions;
 
 		/// <summary>
-		/// Событие изменения параметров позиций.
+		/// Positions changed.
 		/// </summary>
 		public event EventHandler<PositionsEventArgs> PositionsChanged;
 
 		/// <summary>
-		/// Событие появления всех новых сделок.
+		/// Tick tades received.
 		/// </summary>
 		public event EventHandler<TradesEventArgs> NewTrades;
 
 		/// <summary>
-		/// Событие появления собственных новых сделок.
+		/// Own trades received.
 		/// </summary>
 		public event EventHandler<MyTradesEventArgs> NewMyTrades;
 
 		/// <summary>
-		/// Событие появления новых заявок.
+		/// Orders received.
 		/// </summary>
 		public event EventHandler<OrdersEventArgs> NewOrders;
 
 		/// <summary>
-		/// Событие изменения состояния заявок (снята, удовлетворена).
+		/// Orders changed (cancelled, matched).
 		/// </summary>
 		public event EventHandler<OrdersEventArgs> OrdersChanged;
 
 		/// <summary>
-		/// Событие об ошибках, связанных с регистрацией заявок.
+		/// Order registration errors event.
 		/// </summary>
 		public event EventHandler<OrderFailsEventArgs> OrdersRegisterFailed;
 
 		/// <summary>
-		/// Событие об ошибках, связанных со снятием заявок.
+		/// Order cancellation errors event.
 		/// </summary>
 		public event EventHandler<OrderFailsEventArgs> OrdersCancelFailed;
 
 		/// <summary>
-		/// Событие появления новых стоп-заявок.
+		/// Stop-orders received.
 		/// </summary>
 		public event EventHandler<OrdersEventArgs> NewStopOrders;
 
 		/// <summary>
-		/// Событие изменения состояния стоп-заявок.
+		/// Stop orders state change event .
 		/// </summary>
 		public event EventHandler<OrdersEventArgs> StopOrdersChanged;
 
 		/// <summary>
-		/// Событие об ошибках, связанных с регистрацией стоп-заявок.
+		/// Stop-order registration errors event.
 		/// </summary>
 		public event EventHandler<OrderFailsEventArgs> StopOrdersRegisterFailed;
 
 		/// <summary>
-		/// Событие об ошибках, связанных со снятием стоп-заявок.
+		/// Stop-order cancellation errors event.
 		/// </summary>
 		public event EventHandler<OrderFailsEventArgs> StopOrdersCancelFailed;
 
 		/// <summary>
-		/// Событие появления новых стаканов с котировками.
+		/// Order books received.
 		/// </summary>
 		public event EventHandler<MarketDepthsEventArgs> NewMarketDepths;
 
 		/// <summary>
-		/// Событие изменения стаканов с котировками.
+		/// Order books changed.
 		/// </summary>
 		public event EventHandler<MarketDepthsEventArgs> MarketDepthsChanged;
 
 		/// <summary>
-		/// Событие появления новых записей в логе заявок.
+		/// Order log received.
 		/// </summary>
 		public event EventHandler<OrderLogItemsEventArg> NewOrderLogItems;
 
@@ -310,7 +309,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

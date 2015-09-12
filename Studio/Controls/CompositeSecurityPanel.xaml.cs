@@ -224,14 +224,14 @@ namespace StockSharp.Studio.Controls
 			DateFrom = DateTime.Today.AddDays(-180);
 			DateTo = DateTime.Today;
 
-			_timer = new ResettableTimer(TimeSpan.FromSeconds(30));
-			_timer.Elapsed += () =>
+			_timer = new ResettableTimer(TimeSpan.FromSeconds(30), "Composite");
+			_timer.Elapsed += canProcess =>
 			{
 				GuiDispatcher.GlobalDispatcher.AddAction(() => IsStarted = false);
 				_bufferedChart.IsAutoRange = false;
 			};
 
-			_drawTimer = new ResettableTimer(TimeSpan.FromSeconds(2));
+			_drawTimer = new ResettableTimer(TimeSpan.FromSeconds(2), "Composite 2");
 			_drawTimer.Elapsed += DrawTimerOnElapsed;
 
 			ChartPanel.SubscribeCandleElement += OnChartPanelSubscribeCandleElement;
@@ -370,7 +370,7 @@ namespace StockSharp.Studio.Controls
 
 			_changedElements.Add(element);
 			_skipElements.Add(element);
-			_drawTimer.Reset();
+			_drawTimer.Activate();
 		}
 
 		#region IStudioControl
@@ -468,7 +468,7 @@ namespace StockSharp.Studio.Controls
 			if (_sourceElements.ContainsKey(series.Security))
 				return;
 
-			List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> allValues;
+			IEnumerable<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> allValues;
 
 			lock (_syncRoot)
 			{
@@ -479,7 +479,7 @@ namespace StockSharp.Studio.Controls
 					{
 						{ element, CreateIndicatorValue(element, candle) }
 					}))
-					.ToList();
+					.ToArray();
 
 				_skipElements.Remove(element);
 			}
@@ -494,7 +494,7 @@ namespace StockSharp.Studio.Controls
 			if (!_isStarted)
 				this.GuiAsync(() => IsStarted = true);
 
-			_timer.Reset();
+			_timer.Activate();
 
 			_candlesCount++;
 
@@ -568,7 +568,7 @@ namespace StockSharp.Studio.Controls
 			return indicator.Process(candle);
 		}
 
-		private void DrawTimerOnElapsed()
+		private void DrawTimerOnElapsed(Func<bool> canProcess)
 		{
 			try
 			{
@@ -697,8 +697,7 @@ namespace StockSharp.Studio.Controls
 				_candleManager.Stop(series);
 			}
 
-			_timer.Reset();
-			_timer.Flush();
+			_timer.Cancel();
 		}
 
 		private void ExecutedSaveSecurityCommand(object sender, ExecutedRoutedEventArgs e)

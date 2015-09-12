@@ -337,7 +337,7 @@ namespace StockSharp.Studio
 			{
 				{ "Settings", sessionStrategy.Settings },
 				{ "Statistics", sessionStrategy.Statistics },
-				{ "Positions", sessionStrategy.Positions.Select(p => p.Position).ToList() },
+				{ "Positions", sessionStrategy.Positions.Select(p => p.Position).ToArray() },
 			};
 
 			strategy.SafeLoadState(storage);
@@ -575,7 +575,7 @@ namespace StockSharp.Studio
                 cmdSvc.Bind(strategy.Strategy, control);
 		}
 
-		public static List<ControlType> GetControlTypes(this AppConfig config)
+		public static IEnumerable<ControlType> GetControlTypes(this AppConfig config)
 		{
 			var types = config.StrategyControls;
 
@@ -589,7 +589,7 @@ namespace StockSharp.Studio
 						type.GetDescription(),
 						iconAttr == null ? null : iconAttr.GetResourceUrl(type));
 				})
-				.ToList();
+				.ToArray();
 		}
 
 		public static Tuple<StrategyInfo, StrategyInfoTypes> GetKey(this StrategyInfo info)

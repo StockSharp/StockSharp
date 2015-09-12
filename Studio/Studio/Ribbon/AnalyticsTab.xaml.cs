@@ -173,7 +173,7 @@
 				.GetService<IStudioEntityRegistry>()
 				.Strategies
 				.ReadByType(StrategyInfoTypes.Analytics)
-				.ToList();
+				.ToArray();
 		}
 
 		private void OpenAnalytics_OnPopupOpening(object sender, CancelRoutedEventArgs e)
@@ -190,7 +190,7 @@
 
 			menu.ItemsSource = SelectedStrategyInfo
 				.Strategies
-				.ToList();
+				.ToArray();
 		}
 
 		private void ExecutedOpenAnalyticsCommand(object sender, ExecutedRoutedEventArgs e)

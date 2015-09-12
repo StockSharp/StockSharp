@@ -55,6 +55,7 @@ namespace SampleHistoryTesting
 			public Color CurveColor { get; set; }
 			public string StrategyName { get; set; }
 			public bool UseOrderLog { get; set; }
+			public bool UseLevel1 { get; set; }
 		}
 
 		private readonly List<ProgressBar> _progressBars = new List<ProgressBar>();
@@ -104,7 +105,8 @@ namespace SampleHistoryTesting
 				DepthsTestingProcess,
 				CandlesTestingProcess,
 				CandlesAndDepthsTestingProcess,
-				OrderLogTestingProcess
+				OrderLogTestingProcess,
+				Level1TestingProcess,
 			});
 		}
 
@@ -192,7 +194,14 @@ namespace SampleHistoryTesting
 					OrderLogTestingProcess,
 					OrderLogParameterGrid,
 					// order log
-					new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog})
+					new EmulationInfo {UseOrderLog = true, CurveColor = Colors.CornflowerBlue, StrategyName = LocalizedStrings.OrderLog}),
+
+				Tuple.Create(
+					Level1CheckBox,
+					Level1TestingProcess,
+					Level1ParameterGrid,
+					// order log
+					new EmulationInfo {UseLevel1 = true, CurveColor = Colors.Aquamarine, StrategyName = LocalizedStrings.Level1})
 			};
 
 			// storage to historical data
@@ -392,6 +401,11 @@ namespace SampleHistoryTesting
 						connector.RegisterTrades(security);
 					}
 
+					if (emulationInfo.UseLevel1)
+					{
+						connector.RegisterSecurity(security);
+					}
+
 					// start strategy before emulation started
 					strategy.Start();
 					candleManager.Start(series);
@@ -516,11 +530,12 @@ namespace SampleHistoryTesting
 		private void CheckBoxClick(object sender, RoutedEventArgs e)
 		{
 			var isEnabled = TicksCheckBox.IsChecked == true ||
-			                TicksAndDepthsCheckBox.IsChecked == true ||
-					DepthsCheckBox.IsChecked == true ||
-			            	CandlesCheckBox.IsChecked == true ||
-			                CandlesAndDepthsCheckBox.IsChecked == true ||
-			               	OrderLogCheckBox.IsChecked == true;
+							TicksAndDepthsCheckBox.IsChecked == true ||
+							DepthsCheckBox.IsChecked == true ||
+							CandlesCheckBox.IsChecked == true ||
+							CandlesAndDepthsCheckBox.IsChecked == true ||
+							OrderLogCheckBox.IsChecked == true ||
+							Level1CheckBox.IsChecked == true;
 
 			StartBtn.IsEnabled = isEnabled;
 			TabControl.Visibility = isEnabled ? Visibility.Visible : Visibility.Collapsed;
@@ -556,8 +571,10 @@ namespace SampleHistoryTesting
 			{
 				StopBtn.IsEnabled = started;
 				StartBtn.IsEnabled = !started;
+
 				TicksCheckBox.IsEnabled = TicksAndDepthsCheckBox.IsEnabled = DepthsCheckBox.IsEnabled =
-				CandlesCheckBox.IsEnabled = CandlesAndDepthsCheckBox.IsEnabled = OrderLogCheckBox.IsEnabled = !started;
+				CandlesCheckBox.IsEnabled = CandlesAndDepthsCheckBox.IsEnabled = OrderLogCheckBox.IsEnabled = 
+				Level1CheckBox.IsEnabled = !started;
 
 				_bufferedChart.IsAutoRange = started;
 			});

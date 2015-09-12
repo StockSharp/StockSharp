@@ -8,6 +8,9 @@ namespace StockSharp.Btce
 	using StockSharp.Algo;
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// The messages adapter for BTC-e.
+	/// </summary>
 	partial class BtceMessageAdapter
 	{
 		private readonly CachedSynchronizedSet<SecurityId> _subscribedLevel1 = new CachedSynchronizedSet<SecurityId>();

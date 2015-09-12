@@ -9,7 +9,7 @@ namespace StockSharp.LMAX
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Условия заявок, специфичных для <see cref="LMAX"/>.
+	/// Условие заявок, специфичных для <see cref="LMAX"/>.
 	/// </summary>
 	[Serializable]
 	[DataContract]

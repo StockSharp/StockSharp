@@ -46,24 +46,8 @@ namespace StockSharp.Xaml
 				Level1Fields.BestAskTime,
 				Level1Fields.BestAskVolume
 			}).ToArray();
-		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Level1FieldsComboBox"/>.
-		/// </summary>
-		public Level1FieldsComboBox()
-		{
-			ValueMemberPath = "Key";
-			DisplayMemberPath = "Value";
-
-			ItemsSource = _allFields;
-		}
-
-		/// <summary>
-		/// <see cref="DependencyProperty"/> for <see cref="Level1FieldsComboBox.SelectedFields"/>.
-		/// </summary>
-		public static readonly DependencyProperty SelectedFieldsProperty = DependencyProperty.Register("SelectedFields",
-			typeof(IEnumerable<Level1Fields>), typeof(Level1FieldsComboBox), new UIPropertyMetadata(DefaultFields, (s, e) =>
+			SelectedFieldsProperty = DependencyProperty.Register("SelectedFields", typeof(IEnumerable<Level1Fields>), typeof(Level1FieldsComboBox), new UIPropertyMetadata(DefaultFields, (s, e) =>
 			{
 				var comboBox = s as Level1FieldsComboBox;
 
@@ -90,6 +74,23 @@ namespace StockSharp.Xaml
 
 				comboBox.Text = LocalizedStrings.Str1544 + count;
 			}));
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Level1FieldsComboBox"/>.
+		/// </summary>
+		public Level1FieldsComboBox()
+		{
+			ValueMemberPath = "Key";
+			DisplayMemberPath = "Value";
+
+			ItemsSource = _allFields;
+		}
+
+		/// <summary>
+		/// <see cref="DependencyProperty"/> for <see cref="Level1FieldsComboBox.SelectedFields"/>.
+		/// </summary>
+		public static readonly DependencyProperty SelectedFieldsProperty;
 
 		/// <summary>
 		/// The list of selected fields.

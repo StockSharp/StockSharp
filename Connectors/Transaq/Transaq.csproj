@@ -84,8 +84,10 @@
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ApiLogLevels.cs" />
+    <Compile Include="Native\Commands\RequestUnitedPortfolioMessage.cs" />
     <Compile Include="Native\Responses\MaxBuySellTPlusResponse.cs" />
     <Compile Include="Native\Responses\PortfolioMctResponse.cs" />
+    <Compile Include="Native\Responses\UnitedPortfolioResponse.cs" />
     <Compile Include="TransaqMessageAdapter_MarketData.cs" />
     <Compile Include="TransaqMessageAdapter.cs" />
     <Compile Include="TransaqOrderCondition.cs" />

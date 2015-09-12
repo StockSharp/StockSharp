@@ -130,7 +130,7 @@
 
 			menu.ItemsSource = SelectedStrategyInfo
 				.Strategies
-				.ToList();
+				.ToArray();
 		}
 	}
 }

@@ -14,30 +14,32 @@ namespace StockSharp.OpenECry
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Режимы подключения к терминалу.
-	/// Описание функциональности http://www.openecry.com/api/OECAPIRemoting.pdf
+	/// Connection to the terminal modes. Description of functionality http://www.openecry.com/api/OECAPIRemoting.pdf.
 	/// </summary>
 	public enum OpenECryRemoting
 	{
 		/// <summary>
-		/// Отключен.
+		/// Disabled.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str2558Key)]
 		None,
 
 		/// <summary>
-		/// Если существует другое подключение с теми же Login/Password, оно может быть разорвано.
+		/// If there is another connection with the same Login/Password, it can be diconnected.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.MainKey)]
 		Primary,
 
 		/// <summary>
-		/// Попытка активировать в режиме <see cref="Secondary"/>, в случае неудачи - режим <see cref="None"/>.
+		/// An attempt to activate the mode <see cref="OpenECryRemoting.Secondary"/>, in case of failure the mode <see cref="OpenECryRemoting.None"/> is activated.
 		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str2560Key)]
 		Secondary
 	}
 
+	/// <summary>
+	/// The messages adapter for OpenECry.
+	/// </summary>
 	[DisplayName("OpenECry")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "OpenECry")]
@@ -49,7 +51,7 @@ namespace StockSharp.OpenECry
 		private EndPoint _address = OpenECryAddresses.Api;
 
 		/// <summary>
-		/// Адрес API сервера OpenECry. По-умолчанию равен <see cref="OpenECryAddresses.Api"/>.
+		/// The OpenECry server API address. The default is <see cref="OpenECryAddresses.Api"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.AddressKey)]
@@ -68,7 +70,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Имя пользователя OpenECry.
+		/// OpenECry login.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.LoginKey)]
@@ -77,7 +79,7 @@ namespace StockSharp.OpenECry
 		public string Login { get; set; }
 
 		/// <summary>
-		/// Пароль пользователя OpenECry.
+		/// OpenECry password.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.LoginKey)]
@@ -86,7 +88,7 @@ namespace StockSharp.OpenECry
 		public SecureString Password { get; set; }
 
 		/// <summary>
-		/// Уникальный идентификатор программного обеспечения.
+		/// Unique software ID.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayName("UUID")]
@@ -95,7 +97,7 @@ namespace StockSharp.OpenECry
 		public string Uuid { get; set; }
 
 		/// <summary>
-		/// Требуемый режим подключения к терминалу. По умолчанию <see cref="OpenECryRemoting.None"/>.
+		/// The required mode of connection to the terminal. The default is <see cref="OpenECryRemoting.None"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayName("Remoting")]
@@ -104,8 +106,7 @@ namespace StockSharp.OpenECry
 		public OpenECryRemoting Remoting { get; set; }
 
 		/// <summary>
-		/// Использовать "родной" механизм восстановления соединения.
-		/// По умолчанию включено.
+		/// To use the 'native' reconnection process. Enabled by default.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str180Key)]
@@ -114,7 +115,7 @@ namespace StockSharp.OpenECry
 		public bool UseNativeReconnect { get; set; }
 
 		/// <summary>
-		/// Использовать логирование OpenECry API.
+		/// Use OpenECry API logging.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str9Key)]
@@ -133,7 +134,7 @@ namespace StockSharp.OpenECry
 		});
 
 		/// <summary>
-		/// Доступные тайм-фреймы.
+		/// Available time frames.
 		/// </summary>
 		[Browsable(false)]
 		public static IEnumerable<TimeSpan> TimeFrames
@@ -142,9 +143,9 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -159,9 +160,9 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
