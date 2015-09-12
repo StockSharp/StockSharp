@@ -61,7 +61,7 @@ namespace StockSharp.Sterling
 		NoWait,
 
 		/// <summary>
-		/// 
+		/// NYSE.
 		/// </summary>
 		Nyse,
 
@@ -251,7 +251,7 @@ namespace StockSharp.Sterling
 		public decimal? ExecutionPriceLimit { get; set; }
 
 		/// <summary>
-		/// 
+		/// Peg diff.
 		/// </summary>
 		public decimal? PegDiff { get; set; }
 
@@ -281,17 +281,17 @@ namespace StockSharp.Sterling
 		public int? Duration { get; set; }
 
 		/// <summary>
-		/// 
+		/// Брокер.
 		/// </summary>
 		public string LocateBroker { get; set; }
 
 		/// <summary>
-		/// 
+		/// Объем.
 		/// </summary>
 		public decimal? LocateVolume { get; set; }
 
 		/// <summary>
-		/// 
+		/// Время.
 		/// </summary>
 		public DateTime? LocateTime { get; set; }
 
