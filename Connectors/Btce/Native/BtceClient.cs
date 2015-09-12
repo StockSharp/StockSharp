@@ -17,24 +17,11 @@ namespace StockSharp.Btce.Native
 	using StockSharp.Logging;
 	using StockSharp.Localization;
 
-	/// <summary>
-	/// Объект этого класса отвечает за общение с биржей BTCE.
-	/// На одну пару ключ-секрет надо создавать один объект из-за параметра биржи "nonce".
-	/// </summary>
-	internal class BtceClient : BaseLogReceiver
+	class BtceClient : BaseLogReceiver
 	{
-		#region конструктор
-
-		// приватный Ключ для подписи запросов
 		private readonly SecureString _key;
-		// подписчик запросов на основе Секрета
 		private readonly HashAlgorithm _hasher;
 
-		/// <summary>
-		/// Конструктор объекта
-		/// </summary>
-		/// <param name="key">API-ключ. NB не храните в коде!</param>
-		/// <param name="secret">Секрет для подписи запросов. NB не храните в коде!</param>
 		public BtceClient(SecureString key, SecureString secret)
 		{
 			//if (key == null)
@@ -59,12 +46,6 @@ namespace StockSharp.Btce.Native
 			_nonce = (int)(DateTime.UtcNow - TimeHelper.GregorianStart).TotalSeconds;
 		}
 
-		// после обфускации название типа нечитаемо
-		public override string Name
-		{
-			get { return "BtceClient"; }
-		}
-
 		protected override void DisposeManaged()
 		{
 			_hasher.Dispose();
@@ -72,18 +53,6 @@ namespace StockSharp.Btce.Native
 		}
 
 		private volatile IDictionary<string, InstrumentInfo> _instruments;
-
-		#endregion
-
-		//#region tutty-frutty
-		//// на случай, чтобы можно было отличать один аккаунт BTCE от другого
-		//public string Key { get { return _key; } }
-
-		//// с объектом можно связать какие-то свои данные
-		//public object Tag { get; set; }
-		//#endregion
-
-		#region nonce
 
 		// проверил, BTCE значения больше 4294967295 не принимает
 		// если равен -1, значит еще не запрашивали у биржи
@@ -95,28 +64,22 @@ namespace StockSharp.Btce.Native
 			return (uint)Interlocked.Increment(ref _nonce);
 		}
 
+		// количество проблемных запросов.
+		// Мы послали запрос с определенным nonce, а сервер сказал, что nonce неправильный.
+		// И приходится пересылать запрос еще раз с новым nonce.
 		private long _nonceProblems;
 
-		/// <summary>
-		/// Возвращает количество проблемных запросов.
-		/// Мы послали запрос с определенным nonce, а сервер сказал, что nonce неправильный.
-		/// И приходится пересылать запрос еще раз с новым nonce.
-		/// </summary>
 		public long NonceProblemCount
 		{
 			get { return _nonceProblems; }
 		}
 
-		#endregion
-
 		#region getInfo
 
-		/// <summary>
-		/// Возвращает ИНФО от биржи.
-		/// NB: Должен быть первым запросом к бирже, поскольку настраивает nonce.
-		/// </summary>
 		public InfoReply GetInfo()
 		{
+			// Должен быть первым запросом к бирже, поскольку настраивает nonce.
+
 			var res = JsonConvert.DeserializeObject<InfoReply>(MakePrivateRequest("method=getInfo"));
 
 			if (!res.Success)
@@ -129,20 +92,12 @@ namespace StockSharp.Btce.Native
 
 		#region transactions
 
-		/// <summary>
-		/// Возвращает транзакции на счете с последнего полного месяца.
-		/// Если сегодня 10 марта, то полный месяц начинается с 1 февраля.
-		/// </summary>
 		public TransactionsReply GetTransactions()
 		{
 			var full = FullMonth(DateTime.Now);
 			return GetTransactions(full);
 		}
 
-		/// <summary>
-		/// Возвращает транзакции на счете с некоторой даты.
-		/// </summary>
-		/// <param name="since">Дата, с которой вернуть транзакции.</param>
 		public TransactionsReply GetTransactions(DateTime since)
 		{
 			var args = "method=TransHistory&since={0}".Put((long)(since - TimeHelper.GregorianStart).TotalSeconds);
@@ -159,19 +114,6 @@ namespace StockSharp.Btce.Native
 
 		#region trades
 
-		///// <summary>
-		///// Возвращает сделки на счете по всем инструментам с последнего полного месяца.
-		///// </summary>
-		//public MyTradesReply GetMyTrades()
-		//{
-		//	var full = FullMonth(DateTime.Now);
-		//	return GetMyTrades(full);
-		//}
-
-		/// <summary>
-		/// Возвращает свои сделки на счете месяц по всем инструментам c определенной даты.
-		/// </summary>
-		/// <param name="fromId">Идентификатор сделки, с которой нужны новые сделки.</param>
 		public MyTradesReply GetMyTrades(long fromId)
 		{
 			//var unixtime = (long)(since - Converter.GregorianStart).TotalSeconds;
@@ -193,21 +135,12 @@ namespace StockSharp.Btce.Native
 			return res;
 		}
 
-		/// <summary>
-		/// Возвращает свои сделки на счете месяц по конкретному инструменту с последнего полного месяца.
-		/// </summary>
-		/// <param name="instrument">Интересующий инструмент (BTC_RUR).</param>
 		public MyTradesReply GetMyTrades(string instrument)
 		{
 			var full = FullMonth(DateTime.Now);
 			return GetMyTrades(instrument, full);
 		}
 
-		/// <summary>
-		/// Возвращает свои сделки на счете месяц по конкретному инструменту c определенной даты.
-		/// </summary>
-		/// <param name="instrument">Интересующий инструмент (BTC_RUR).</param>
-		/// <param name="since">Дата, с которой нужны сделки.</param>
 		public MyTradesReply GetMyTrades(string instrument, DateTime since)
 		{
 			var args = "method=TradeHistory&pair={0}&since={1}"
@@ -226,9 +159,6 @@ namespace StockSharp.Btce.Native
 
 		#region orders
 
-		/// <summary>
-		/// Возвращает заявки на счете месяц по всем инструментам.
-		/// </summary>
 		public OrdersReply GetOrders()
 		{
 			var res = JsonConvert.DeserializeObject<OrdersReply>(MakePrivateRequest("method=ActiveOrders"));
@@ -248,10 +178,6 @@ namespace StockSharp.Btce.Native
 			return res;
 		}
 
-		/// <summary>
-		/// Возвращает заявки на счете месяц по конкретному инструменту.
-		/// </summary>
-		/// <param name="instrument">Интересующий инструмент (BTC_RUR).</param>
 		public OrdersReply GetOrders(string instrument)
 		{
 			var args = "method=ActiveOrders&pair={0}".Put(instrument.ToLower());
@@ -268,13 +194,6 @@ namespace StockSharp.Btce.Native
 
 		#region make/cancel order
 
-		/// <summary>
-		/// Создает заявку новую.
-		/// </summary>
-		/// <param name="instrument">Инструмент.</param>
-		/// <param name="side">Тип: sell или buy.</param>
-		/// <param name="price">Цена.</param>
-		/// <param name="volume">Объем.</param>
 		public CommandReply MakeOrder(string instrument,
 			string side,
 			decimal price,
@@ -313,19 +232,11 @@ namespace StockSharp.Btce.Native
 			return res;
 		}
 
-		/// <summary>
-		/// Отменяет заявку.
-		/// </summary>
-		/// <param name="orderId">Идентификатор заявки.</param>
 		public CommandReply CancelOrder(long orderId)
 		{
 			return CancelOrder(new Command { OrderId = orderId });
 		}
 
-		/// <summary>
-		/// Отменяет заявку.
-		/// </summary>
-		/// <param name="command">Параметры отмены, где обязательным является OrderId.</param>
 		public CommandReply CancelOrder(Command command)
 		{
 			if (command == null)
@@ -438,11 +349,6 @@ namespace StockSharp.Btce.Native
 		private const string _btcePublicApi = @"https://btc-e.com/api/3/";
 		private const string _btcePrivateApi = @"https://btc-e.com/tapi";
 
-		/// <summary>
-		/// Запрашивает BTCE приватно, предварительно подписав запрос.
-		/// </summary>
-		/// <param name="request">Параметры запроса. без nonce, который добавится автоматически.</param>
-		/// <returns></returns>
 		private string MakePrivateRequest(string request)
 		{
 			// выполняем запрос до тех пор, пока не будет проблем с nonce
@@ -514,11 +420,6 @@ namespace StockSharp.Btce.Native
 			return false;
 		}
 
-		/// <summary>
-		/// Запрашивает открытое АПИ BTCE.
-		/// </summary>
-		/// <param name="request">Параметры запроса</param>
-		/// <returns></returns>
 		private string MakePublicRequest(string request)
 		{
 			return GetResponse(WebRequest.Create(_btcePublicApi + request), request);
