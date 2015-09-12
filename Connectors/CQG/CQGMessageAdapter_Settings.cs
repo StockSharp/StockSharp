@@ -4,15 +4,18 @@ namespace StockSharp.CQG
 
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// CQG message adapter.
+	/// </summary>
 	[DisplayName("CQG")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "CQG")]
 	partial class CQGMessageAdapter
 	{
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return string.Empty;

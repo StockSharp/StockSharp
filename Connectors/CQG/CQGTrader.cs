@@ -1,15 +1,15 @@
-﻿namespace StockSharp.CQG
+namespace StockSharp.CQG
 {
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с системой CQG.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the CQG.
 	/// </summary>
 	public class CQGTrader : Connector
     {
 		/// <summary>
-		/// Создать <see cref="CQGTrader"/>.
+		/// Initializes a new instance of the <see cref="CQGTrader"/>.
 		/// </summary>
 		public CQGTrader()
 		{

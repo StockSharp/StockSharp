@@ -11,7 +11,7 @@ namespace StockSharp.CQG
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер сообщений для CQG.
+	/// CQG message adapter.
 	/// </summary>
 	public partial class CQGMessageAdapter : MessageAdapter
 	{
@@ -21,9 +21,9 @@ namespace StockSharp.CQG
 		private CQGCEL _session;
 
 		/// <summary>
-		/// Создать <see cref="CQGMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="CQGMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public CQGMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -32,9 +32,9 @@ namespace StockSharp.CQG
 		}
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new CQGOrderCondition();
@@ -79,9 +79,9 @@ namespace StockSharp.CQG
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

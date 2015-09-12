@@ -1,7 +1,10 @@
-﻿namespace StockSharp.CQG
+namespace StockSharp.CQG
 {
 	using global::CQG;
 
+	/// <summary>
+	/// CQG message adapter.
+	/// </summary>
 	partial class CQGMessageAdapter
 	{
 		private void SessionOnPositionsStatementResolved(CQGPositionsStatement cqgPositionsStatement, CQGError cqgError)

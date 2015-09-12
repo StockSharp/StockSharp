@@ -9,7 +9,7 @@ namespace StockSharp.CQG
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Условие заявок, специфичных для <see cref="CQG"/>.
+	/// <see cref="CQG"/> order condition.
 	/// </summary>
 	[Serializable]
 	[DataContract]
@@ -17,14 +17,14 @@ namespace StockSharp.CQG
 	public class CQGOrderCondition : OrderCondition
 	{
 		/// <summary>
-		/// Создать <see cref="CQGOrderCondition"/>.
+		/// Initializes a new instance of the <see cref="CQGOrderCondition"/>.
 		/// </summary>
 		public CQGOrderCondition()
 		{
 		}
 
 		/// <summary>
-		/// Цена активации, при достижении которой будет выставлена заявка.
+		/// Activation price, when reached an order will be placed.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.StopLossKey)]
