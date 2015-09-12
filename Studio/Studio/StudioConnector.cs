@@ -421,7 +421,7 @@ namespace StockSharp.Studio
 			if (emu == null)
 				yield break;
 
-			var portfolios = ConfigManager.GetService<IStudioEntityRegistry>().Portfolios.ToList();
+			var portfolios = ConfigManager.GetService<IStudioEntityRegistry>().Portfolios.ToArray();
 
 			foreach (var portfolio in portfolios)
 			{

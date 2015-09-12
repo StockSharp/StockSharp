@@ -222,8 +222,8 @@ namespace StockSharp.Studio.Controls
 			if (!window.ShowModal(this))
 				return;
 
-			var toRemove = selectedSecurities.Except(window.SelectedSecurities).ToList();
-			var toAdd = window.SelectedSecurities.Except(selectedSecurities).ToList();
+			var toRemove = selectedSecurities.Except(window.SelectedSecurities).ToArray();
+			var toAdd = window.SelectedSecurities.Except(selectedSecurities).ToArray();
 
 			toRemove.ForEach(ProcessRemoveSecurity);
 			toAdd.ForEach(ProcessAddSecurity);

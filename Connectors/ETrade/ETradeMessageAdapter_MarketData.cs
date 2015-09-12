@@ -22,7 +22,7 @@ namespace StockSharp.ETrade
 		/// <param name="lookupTransId">Номер транзакции операции Lookup.</param>
 		/// <param name="data">Список инструментов, удовлетворяющих условию поиска.</param>
 		/// <param name="ex">Ошибка поиска.</param>
-		private void ClientOnProductLookupResult(long lookupTransId, List<ProductInfo> data, Exception ex)
+		private void ClientOnProductLookupResult(long lookupTransId, IEnumerable<ProductInfo> data, Exception ex)
 		{
 			if (ex != null)
 			{

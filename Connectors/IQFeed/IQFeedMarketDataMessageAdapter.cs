@@ -458,10 +458,7 @@ namespace StockSharp.IQFeed
 											// below line has incorrect tabulation
 											// CS.17.CB	CREDIT SUISSE NEW YORK 1.375% 05/26/17		NYSE	NYSE	BONDS			
 
-											var list = parts.ToList();
-											list.RemoveAt(2);
-
-											parts = list.ToArray();
+											parts = parts.Exclude(2, 1).ToArray();
 										}
 
 										var secType = parts[4].ToSecurityType();

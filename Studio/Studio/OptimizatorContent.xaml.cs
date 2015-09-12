@@ -301,7 +301,7 @@ namespace StockSharp.Studio
 		{
 			EmulationService.EmulationConnector.AddInfoLog(LocalizedStrings.Str3581);
 
-			var parameters = _parameters.Where(p => p.IsEnabled).ToList();
+			var parameters = _parameters.Where(p => p.IsEnabled).ToArray();
 
 			parameters.ForEach(pv => pv.Value = pv.From);
 
@@ -315,7 +315,7 @@ namespace StockSharp.Studio
 
 				yield return strategy;
 			}
-			while (GetNext(parameters, parameters.Count - 1));
+			while (GetNext(parameters, parameters.Length - 1));
 
 			EmulationService.EmulationConnector.AddInfoLog(LocalizedStrings.Str3583);
 		}

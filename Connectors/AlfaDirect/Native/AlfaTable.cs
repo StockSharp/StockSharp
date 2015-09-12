@@ -84,8 +84,8 @@
 				return;
 			}
 
-			var oldPapers = _activeFilter.Except(FilterPapers).ToList();
-			var newPapers = FilterPapers.Except(_activeFilter).ToList();
+			var oldPapers = _activeFilter.Except(FilterPapers).ToArray();
+			var newPapers = FilterPapers.Except(_activeFilter).ToArray();
 
 			foreach (var paperNo in oldPapers)
 				Unsubscribe("paper_no = {0}".Put(paperNo), new[] { paperNo }, false);
@@ -107,7 +107,7 @@
 			if (!_filtered || _supportInFilter)
 				Unsubscribe(string.Empty, _activeFilter, true);
 			else
-				_activeFilter.ToList().ForEach(paperNo => Unsubscribe("paper_no = {0}".Put(paperNo), new[] { paperNo }, false));
+				_activeFilter.ToArray().ForEach(paperNo => Unsubscribe("paper_no = {0}".Put(paperNo), new[] { paperNo }, false));
 
 			UpdateGlobalFilter();
 		}
@@ -117,13 +117,17 @@
 			string message;
 			var result = _ad.SubscribeTable(Name, _strFields, where, _supportUpdates ? eSubsctibeOptions.UpdatesOnly : eSubsctibeOptions.Default, out message);
 			Log("subscribe {0}: {1}", where, message);
+
 			if (result == tagStateCodes.stcSuccess)
 			{
 				_isRegistered = true;
+
 				if (replace)
 					_activeFilter.Clear();
-				_activeFilter.AddRange(paperNumbers.ToList());
+
+				_activeFilter.AddRange(paperNumbers.ToArray());
 			}
+
 			ThrowInError(result, message);
 		}
 
@@ -131,16 +135,20 @@
 		{
 			string message;
 			Log("unsubscribe {0}", !where.IsEmpty() ? where : paperNumbers.Count.To<string>());
+
 			var result = _ad.UnSubscribeTable(Name, where, out message);
+
 			if (result == tagStateCodes.stcSuccess)
 			{
-				if(!_filtered)
+				if (!_filtered)
 					_isRegistered = false;
 				else
 				{
-					var toremove = paperNumbers.ToList();
+					var toremove = paperNumbers.ToArray();
+
 					_activeFilter.RemoveRange(toremove);
 					FilterPapers.RemoveRange(toremove);
+
 					if (clear)
 					{
 						FilterPapers.Clear();
@@ -151,6 +159,7 @@
 						_isRegistered = false;
 				}
 			}
+
 			ThrowInError(result, message);
 		}
 

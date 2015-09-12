@@ -80,7 +80,7 @@ namespace StockSharp.Xaml
 			TimeZones = TimeZoneInfo.GetSystemTimeZones()
 				.Concat(new[] { Exchange.Moex.TimeZoneInfo, Exchange.Test.TimeZoneInfo, Exchange.Ux.TimeZoneInfo })
 				.Distinct()
-				.ToList();
+				.ToArray();
 
 			InitializeComponent();
 

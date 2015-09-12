@@ -158,7 +158,7 @@ namespace StockSharp.Studio.Core
 
 		protected override IEnumerable<News> OnGetGroup(long startIndex, long count, Field orderBy, ListSortDirection direction)
 		{
-			return _newsList.ReadAll(startIndex, count, orderBy, direction).Select(n => n.News).ToList();
+			return _newsList.ReadAll(startIndex, count, orderBy, direction).Select(n => n.News).ToArray();
 		}
 
 		public override void Add(News item)

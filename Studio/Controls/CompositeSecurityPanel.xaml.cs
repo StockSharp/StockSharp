@@ -468,7 +468,7 @@ namespace StockSharp.Studio.Controls
 			if (_sourceElements.ContainsKey(series.Security))
 				return;
 
-			List<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> allValues;
+			IEnumerable<RefPair<DateTimeOffset, IDictionary<IChartElement, object>>> allValues;
 
 			lock (_syncRoot)
 			{
@@ -479,7 +479,7 @@ namespace StockSharp.Studio.Controls
 					{
 						{ element, CreateIndicatorValue(element, candle) }
 					}))
-					.ToList();
+					.ToArray();
 
 				_skipElements.Remove(element);
 			}

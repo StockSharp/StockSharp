@@ -65,7 +65,7 @@
 				var columns = _ddeColumns
 					.GetProperties()
 					.Select(propertyInfo => (DdeTableColumn)propertyInfo.GetValue(_ddeColumns, null))
-					.ToList();
+					.ToArray();
 
 				_columnsAll.AddRange(columns);
 			}
@@ -137,7 +137,7 @@
 		private void EnableOrDisableUpDownButton()
 		{
 			var items = lsvColumnsSelected.SelectedItems;
-			var ind = items.Cast<object>().Select(item => lsvColumnsSelected.Items.IndexOf(item)).ToList();
+			var ind = items.Cast<object>().Select(item => lsvColumnsSelected.Items.IndexOf(item)).ToArray();
 
 			var min = _columnsSelected.Where(c => c.IsMandatory).Select(item => lsvColumnsSelected.Items.IndexOf(item)).Max();
 

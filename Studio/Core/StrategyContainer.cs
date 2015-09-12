@@ -243,7 +243,7 @@ namespace StockSharp.Studio.Core
 				Security = p.Security,
 				Portfolio = p.Portfolio,
 				CurrentValue = p.CurrentValue
-			}).ToList();
+			}).ToArray();
 		}
 
 		private void OnLog(LogMessage message)
