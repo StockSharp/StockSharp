@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Sterling
+namespace StockSharp.Sterling
 {
 	using System;
 
@@ -8,16 +8,16 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Адаптер сообщений для Sterling.
+	/// The message adapter for Sterling.
 	/// </summary>
 	public partial class SterlingMessageAdapter : MessageAdapter
 	{
 		private SterlingClient _client;
 
 		/// <summary>
-		/// Создать <see cref="SterlingMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="SterlingMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public SterlingMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -27,9 +27,9 @@
 		}
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new SterlingOrderCondition();
@@ -44,7 +44,7 @@
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск портфелей.
+		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
 		protected override bool IsSupportNativePortfolioLookup
 		{
@@ -72,9 +72,9 @@
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

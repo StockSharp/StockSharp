@@ -11,6 +11,9 @@ namespace StockSharp.Sterling
 	using StockSharp.Algo;
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// The message adapter for Sterling.
+	/// </summary>
 	partial class SterlingMessageAdapter
 	{
 		private readonly CachedSynchronizedSet<string> _subscribedSecuritiesToTrade = new CachedSynchronizedSet<string>(); 
@@ -155,7 +158,7 @@ namespace StockSharp.Sterling
 			l1CngMsg.TryAdd(Level1Fields.Volume, (decimal)structQuoteSnap.nCumVolume);
 			l1CngMsg.TryAdd(Level1Fields.VWAP, (decimal)structQuoteSnap.fVwap);
 
-			l1CngMsg.TryAdd(Level1Fields.ClosePrice, (decimal)structQuoteSnap.fClosePrice); // цена закрытия прошлого дня.
+			l1CngMsg.TryAdd(Level1Fields.ClosePrice, (decimal)structQuoteSnap.fClosePrice); // Г¶ГҐГ­Г  Г§Г ГЄГ°Г»ГІГЁГї ГЇГ°Г®ГёГ«Г®ГЈГ® Г¤Г­Гї.
 
 			SendOutMessage(l1CngMsg);
 

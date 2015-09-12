@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Sterling
+namespace StockSharp.Sterling
 {
 	using System;
 	using System.Linq;
@@ -10,6 +10,9 @@
 	using StockSharp.Algo;
 	using StockSharp.Messages;
 
+	/// <summary>
+	/// The message adapter for Sterling.
+	/// </summary>
 	partial class SterlingMessageAdapter
 	{
 		private void ProcessOrderRegisterMessage(OrderRegisterMessage regMsg)

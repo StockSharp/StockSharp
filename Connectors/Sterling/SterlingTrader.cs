@@ -1,15 +1,15 @@
-﻿namespace StockSharp.Sterling
+namespace StockSharp.Sterling
 {
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с терминалом Sterling.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the Sterling.
 	/// </summary>
 	public class SterlingTrader : Connector
     {
 		/// <summary>
-		/// Создать <see cref="SterlingTrader"/>.
+		/// Initializes a new instance of the <see cref="SterlingTrader"/>.
 		/// </summary>
 		public SterlingTrader()
 		{
