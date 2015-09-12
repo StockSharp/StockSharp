@@ -83,8 +83,8 @@ namespace StockSharp.Algo.Storages
 
 					if (firstLine != null)
 					{
-						FirstTime = ParseTime(firstLine.Split(';')[0], Date).UtcDateTime;
-						LastTime = ParseTime(lastLine.Split(';')[0], Date).UtcDateTime;
+						FirstTime = ParseTime(firstLine.Split(';'), Date).UtcDateTime;
+						LastTime = ParseTime(lastLine.Split(';'), Date).UtcDateTime;
 
 						if (_toId != null)
 							_lastId = _toId(lastLine.Split(';'));
@@ -134,7 +134,7 @@ namespace StockSharp.Algo.Storages
 
 					var item = _ctor.Ctor(null);
 
-					var time = ParseTime(parts[0], _date);
+					var time = ParseTime(parts, _date);
 
 					if (_isLevel1)
 					{
@@ -143,14 +143,14 @@ namespace StockSharp.Algo.Storages
 						l1.ServerTime = time;
 						l1.SecurityId = _securityId;
 
-						for (var i = 1; i < parts.Length; i++)
+						for (var i = _skipColumns; i < parts.Length; i++)
 						{
 							var part = parts[i];
 
 							if (part.IsEmpty())
 								continue;
 
-							var field = _level1Fields[i - 1];
+							var field = _level1Fields[i - _skipColumns];
 							object value;
 
 							switch (field)
@@ -190,15 +190,17 @@ namespace StockSharp.Algo.Storages
 					{
 						_dateMember.SetValue(item, time);
 
-						for (var i = 1; i < parts.Length; i++)
+						for (var i = _skipColumns; i < parts.Length; i++)
 						{
 							if (parts[i].IsEmpty())
 								continue;
 
-							if (_isNews && i == 6)
-								_members[i].SetValue(item, new SecurityId { SecurityCode = parts[i] });
+							var member = _members[i - _skipColumns];
+
+							if (_isNews && i == 7)
+								member.SetValue(item, new SecurityId { SecurityCode = parts[i] });
 							else
-								_members[i].SetValue(item, parts[i].To(_members[i].ReturnType));
+								member.SetValue(item, parts[i].To(member.ReturnType));
 						}
 
 						if (_setSecurityId != null)
@@ -245,6 +247,7 @@ namespace StockSharp.Algo.Storages
 		private static readonly Level1Fields[] _level1Fields = _isLevel1 ? Enumerator.GetValues<Level1Fields>().Where(l1 => l1 != Level1Fields.ExtensionInfo && l1 != Level1Fields.BestAsk && l1 != Level1Fields.BestBid && l1 != Level1Fields.LastTrade).OrderBy(l1 => (int)l1).ToArray() : null;
 		private static readonly MemberProxy _dateMember;
 		private static readonly UTF8Encoding _utf = new UTF8Encoding(false);
+		private const int _skipColumns = 2;
 		// ReSharper restore StaticFieldInGenericType
 
 		static CsvMarketDataSerializer()
@@ -312,6 +315,7 @@ namespace StockSharp.Algo.Storages
 			_members = _info.SafeAdd(Tuple.Create(typeof(TData), executionType), key =>
 				_format
 					.Split(';')
+					.Skip(_skipColumns)
 					.Select(s =>
 						MemberProxy.Create(typeof(TData),
 							s.Substring(1, s.Length - 2).Replace(timeFormat, string.Empty)))
@@ -324,7 +328,7 @@ namespace StockSharp.Algo.Storages
 				{
 					case ExecutionTypes.Tick:
 					case ExecutionTypes.OrderLog:
-						_toId = lines => lines[1].To<long>();
+						_toId = lines => lines[_skipColumns].To<long>();
 						break;
 				}
 			}
@@ -342,9 +346,9 @@ namespace StockSharp.Algo.Storages
 				switch (executionType)
 				{
 					case ExecutionTypes.Tick:
-						return "{ServerTime:{0}};{TradeId};{TradePrice};{Volume};{OriginSide};{OpenInterest};{IsSystem}";
+						return "{ServerTime:{0}};{ServerTime:zzz};{TradeId};{TradePrice};{Volume};{OriginSide};{OpenInterest};{IsSystem}";
 					case ExecutionTypes.OrderLog:
-						return "{ServerTime:{0}};{TransactionId};{OrderId};{Price};{Volume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice};{PortfolioName};{IsSystem}";
+						return "{ServerTime:{0}};{ServerTime:zzz};{TransactionId};{OrderId};{Price};{Volume};{Side};{OrderState};{TimeInForce};{TradeId};{TradePrice};{PortfolioName};{IsSystem}";
 					case null:
 						throw new ArgumentNullException("executionType");
 					default:
@@ -353,7 +357,7 @@ namespace StockSharp.Algo.Storages
 			}
 			
 			if (typeof(TData) == typeof(TimeQuoteChange))
-				return "{ServerTime:{0}};{Price};{Volume};{Side}";
+				return "{ServerTime:{0}};{ServerTime:zzz};{Price};{Volume};{Side}";
 
 			if (typeof(TData) == typeof(Level1ChangeMessage))
 			{
@@ -373,16 +377,16 @@ namespace StockSharp.Algo.Storages
 					return "{" + s + "}";
 				}).Join(";");
 
-				return "{ServerTime:{0}};" + "{{Changes:{0}}}".Put(fields);
+				return "{ServerTime:{0}};{ServerTime:zzz};" + "{{Changes:{0}}}".Put(fields);
 			}
 
 			if (typeof(TData).IsSubclassOf(typeof(CandleMessage)))
-				return "{OpenTime:{0}};{OpenPrice};{HighPrice};{LowPrice};{ClosePrice};{TotalVolume}";
+				return "{OpenTime:{0}};{OpenTime:zzz};{OpenPrice};{HighPrice};{LowPrice};{ClosePrice};{TotalVolume}";
 
 			if (typeof(TData) == typeof(NewsMessage))
 			{
 				// NewsMessage.Story do not supported
-				return "{ServerTime:{0}};{Headline};{Source};{Url};{Id};{BoardCode}";
+				return "{ServerTime:{0}};{ServerTime:zzz};{Headline};{Source};{Url};{Id};{BoardCode}";
 			}
 
 			throw new InvalidOperationException(LocalizedStrings.Str888Params.Put(typeof(TData).Name));
@@ -468,9 +472,9 @@ namespace StockSharp.Algo.Storages
 				.ToEx(metaInfo.Count);
 		}
 
-		private static DateTimeOffset ParseTime(string str, DateTime date)
+		private static DateTimeOffset ParseTime(string[] parts, DateTime date)
 		{
-			return (date + str.ToDateTime(_timeFormat).TimeOfDay).ApplyTimeZone(TimeZoneInfo.Utc);
+			return (date + parts[0].ToDateTime(_timeFormat).TimeOfDay).ToDateTimeOffset(TimeSpan.Parse(parts[1].Replace("+", string.Empty)));
 		}
 	}
 }
