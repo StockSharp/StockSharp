@@ -13,7 +13,7 @@ namespace StockSharp.OpenECry
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер сообщений для OpenECry.
+	/// The messages adapter for OpenECry.
 	/// </summary>
 	public partial class OpenECryMessageAdapter : MessageAdapter
 	{
@@ -91,9 +91,9 @@ namespace StockSharp.OpenECry
 		private OECClient _client;
 
 		/// <summary>
-		/// Создать <see cref="OpenECryMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="OpenECryMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public OpenECryMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -102,9 +102,9 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new OpenECryOrderCondition();
@@ -154,7 +154,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
@@ -162,7 +162,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск портфелей.
+		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
 		protected override bool IsSupportNativePortfolioLookup
 		{
@@ -170,7 +170,7 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{
@@ -234,9 +234,9 @@ namespace StockSharp.OpenECry
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

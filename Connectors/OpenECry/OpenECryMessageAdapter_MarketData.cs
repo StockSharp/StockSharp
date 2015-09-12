@@ -15,6 +15,9 @@ namespace StockSharp.OpenECry
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The messages adapter for OpenECry.
+	/// </summary>
 	partial class OpenECryMessageAdapter
 	{
 		private readonly SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, Subscription> _subscriptions = new SynchronizedPairSet<Tuple<SecurityId, MarketDataTypes>, Subscription>();

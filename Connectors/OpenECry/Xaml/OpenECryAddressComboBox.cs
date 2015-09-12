@@ -4,12 +4,12 @@ namespace StockSharp.OpenECry.Xaml
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Выпадающий список для выбора адреса сервера OpenECry.
+	/// The drop-down list to select the OpenECry server address.
 	/// </summary>
 	public class OpenECryAddressComboBox : EndPointComboBox
 	{
 		/// <summary>
-		/// Создать <see cref="OpenECryAddressComboBox"/>.
+		/// Initializes a new instance of the <see cref="OpenECryAddressComboBox"/>.
 		/// </summary>
 		public OpenECryAddressComboBox()
 		{
