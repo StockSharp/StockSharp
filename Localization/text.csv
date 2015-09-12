@@ -11480,11 +11480,11 @@ DocStr7414;Server types;Типы серверов
 DocStr7415;The interface {0} implementation which provides a connection to the Rithmic;Реализация интерфейса {0} для взаимодействия с системой Rithmic
 DocStr7416;The drop-down list to select {0};Выпадающий список для выбора {0}
 DocStr7417;The selected server;Выбранный сервер
-DocStr7418;Маркет-дата адаптер сообщений для Rss;Маркет-дата адаптер сообщений для Rss
-DocStr7419;Реализация интерфейса {0} для взаимодействия с RSS фидами;Реализация интерфейса {0} для взаимодействия с RSS фидами
-DocStr7420;Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy hh:mm:ss;Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy hh:mm:ss
+DocStr7418;The market-data message adapter for Rss;Маркет-дата адаптер сообщений для Rss
+DocStr7419;The interface <see cref="IConnector"/> implementation which provides a connection to RSS feed;Реализация интерфейса {0} для взаимодействия с RSS фидами
+DocStr7420;The format of dates. Should be fill in, if the format is different from ddd, dd MMM yyyy hh:mm:ss;Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy hh:mm:ss
 DocStr7421;The drop-down list to select the RSS feed address;Выпадающий список для выбора адреса RSS фида
-DocStr7422;Адреса RSS популярных фидов;Адреса RSS популярных фидов
+DocStr7422;The most popular RSS feeds;Адреса RSS популярных фидов
 DocStr7423;Reuters (ecomony);Reuters (ecomony)
 DocStr7424;Bloomberg;Bloomberg
 DocStr7425;NYSE;NYSE

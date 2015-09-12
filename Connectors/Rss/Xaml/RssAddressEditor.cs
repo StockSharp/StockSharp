@@ -10,7 +10,7 @@ namespace StockSharp.Rss.Xaml
 	using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
 
 	/// <summary>
-	/// ¬ыпадающий список дл€ выбора адреса RSS фида.
+	/// The drop-down list to select the RSS feed address.
 	/// </summary>
 	public class RssAddressEditor : ITypeEditor
 	{

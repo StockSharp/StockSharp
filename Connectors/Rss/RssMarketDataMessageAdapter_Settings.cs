@@ -11,6 +11,9 @@ namespace StockSharp.Rss
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// The market-data message adapter for Rss.
+	/// </summary>
 	[DisplayName("RSS")]
 	[DescriptionLoc(LocalizedStrings.Str3504Key)]
 	[CategoryOrder(_rss, 0)]
@@ -23,7 +26,7 @@ namespace StockSharp.Rss
 		private Uri _address;
 
 		/// <summary>
-		/// Адрес RSS фида.
+		/// RSS feed address.
 		/// </summary>
 		[Category(_rss)]
 		[DisplayNameLoc(LocalizedStrings.AddressKey)]
@@ -45,7 +48,7 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
-		/// Формат дат. Необходимо заполнить, если формат RSS потока отличается от ddd, dd MMM yyyy HH:mm:ss zzzz.
+		/// Dates format. Required to be filled if RSS stream format is different from ddd, dd MMM yyyy HH:mm:ss zzzz.
 		/// </summary>
 		[Category(_rss)]
 		[DisplayNameLoc(LocalizedStrings.Str3506Key)]
@@ -54,7 +57,7 @@ namespace StockSharp.Rss
 		public string CustomDateFormat { get; set; }
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
 		public override bool IsValid
@@ -63,9 +66,9 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -75,9 +78,9 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -87,9 +90,9 @@ namespace StockSharp.Rss
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Address == null ? string.Empty : Address.To<string>();

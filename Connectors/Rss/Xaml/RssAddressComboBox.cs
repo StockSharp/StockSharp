@@ -1,16 +1,16 @@
-﻿namespace StockSharp.Rss.Xaml
+namespace StockSharp.Rss.Xaml
 {
 	using System;
 
 	using Ecng.Xaml;
 
 	/// <summary>
-	/// Выпадающий список для выбора адреса RSS фида.
+	/// The drop-down list to select the RSS feed address.
 	/// </summary>
 	public class RssAddressComboBox : AddressComboBox<Uri>
 	{
 		/// <summary>
-		/// Создать <see cref="RssAddressComboBox"/>.
+		/// Initializes a new instance of the <see cref="RssAddressComboBox"/>.
 		/// </summary>
 		public RssAddressComboBox()
 		{
