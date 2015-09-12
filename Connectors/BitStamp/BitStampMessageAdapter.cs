@@ -11,7 +11,7 @@ namespace StockSharp.BitStamp
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер сообщений для BitStamp.
+	/// The message adapter for BitStamp.
 	/// </summary>
 	public partial class BitStampMessageAdapter : MessageAdapter
 	{
@@ -37,9 +37,9 @@ namespace StockSharp.BitStamp
 		private PusherClient _pusherClient;
 		
 		/// <summary>
-		/// Создать <see cref="BitStampMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="BitStampMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public BitStampMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -52,7 +52,7 @@ namespace StockSharp.BitStamp
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{
@@ -60,7 +60,7 @@ namespace StockSharp.BitStamp
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск портфелей.
+		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
 		protected override bool IsSupportNativePortfolioLookup
 		{
@@ -79,9 +79,9 @@ namespace StockSharp.BitStamp
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

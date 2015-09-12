@@ -12,6 +12,9 @@ namespace StockSharp.BitStamp
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// The message adapter for BitStamp.
+	/// </summary>
 	[DisplayName("BitStamp")]
 	[CategoryLoc(LocalizedStrings.BitcoinsKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "BitStamp")]
@@ -21,7 +24,7 @@ namespace StockSharp.BitStamp
 	partial class BitStampMessageAdapter
 	{
 		/// <summary>
-		/// Ключ.
+		/// Key.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3304Key)]
@@ -30,7 +33,7 @@ namespace StockSharp.BitStamp
 		public SecureString Key { get; set; }
 
 		/// <summary>
-		/// Секрет.
+		/// Secret.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3306Key)]
@@ -39,7 +42,7 @@ namespace StockSharp.BitStamp
 		public SecureString Secret { get; set; }
 
 		/// <summary>
-		/// Идентификатор клиента.
+		/// Client ID.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.ClientKey)]
@@ -48,7 +51,7 @@ namespace StockSharp.BitStamp
 		public int ClientId { get; set; }
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
 		public override bool IsValid
@@ -63,9 +66,9 @@ namespace StockSharp.BitStamp
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -76,9 +79,9 @@ namespace StockSharp.BitStamp
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -89,9 +92,9 @@ namespace StockSharp.BitStamp
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str3304 + " = " + Key;

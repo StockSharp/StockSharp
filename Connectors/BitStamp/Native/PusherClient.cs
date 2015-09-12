@@ -174,7 +174,7 @@ namespace StockSharp.BitStamp.Native
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{
