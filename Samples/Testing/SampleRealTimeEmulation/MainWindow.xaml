@@ -5,7 +5,8 @@
 		xmlns:sx="clr-namespace:StockSharp.Xaml;assembly=StockSharp.Xaml"
 		xmlns:ss="clr-namespace:StockSharp.SmartCom.Xaml;assembly=StockSharp.SmartCom"
 		xmlns:charting="http://schemas.stocksharp.com/xaml"
-		Title="{x:Static loc:LocalizedStrings.XamlStr561}" Height="700" Width="900">
+		xmlns:sampleRealTimeEmulation="clr-namespace:SampleRealTimeEmulation"
+		Title="{x:Static loc:LocalizedStrings.XamlStr561}" Height="800" Width="1050">
     
     <Grid>
 		<Grid.RowDefinitions>
@@ -15,16 +16,58 @@
 
 		<Grid Grid.Row="0">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="230" />
-				<ColumnDefinition Width="300" />
+                <ColumnDefinition MinWidth="500" Width="*" />
+                <ColumnDefinition MinWidth="250" MaxWidth="260" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition MinWidth="300" Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
-            <charting:Chart x:Name="Chart" Grid.Column="0" />
-			
-			<sx:MarketDepthControl x:Name="DepthControl" Grid.Column="1" MaxDepth="10" />
+            <!--Chart and chart control grid-->
+            <Grid Grid.Row="0" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="25"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!--Chart control grid-->
+                <Grid Grid.Row="0" Grid.Column="0" Margin="-25,0,25,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <ComboBox x:Name="CandleTypeComboBox"
+                              Grid.Column="0" Text="Combo box"
+                              ItemsSource="{Binding ChartTypeCollection}"
+                              DisplayMemberPath="Name"
+                              SelectedItem="{Binding CandleType}"
+                              />
 
-			<Grid Grid.Column="2">
+                    <TextBlock Grid.Column="1" Text="Chart interval"
+                               Width="Auto" 
+                               >
+                        <TextBox Width="40" Height="25"
+                                 VerticalContentAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
+                                 Text="{Binding ChartArg}"
+                                 />
+                    </TextBlock>
+                    
+                </Grid>
+                <!--End chart control grid-->
+                
+                <charting:Chart x:Name="Chart" Grid.Row="1" />
+            </Grid>
+            <!--End chart and chart control grid-->
+
+
+            <sx:MarketDepthControl x:Name="DepthControl" Grid.Column="1" MaxDepth="10" />
+
+            <GridSplitter Grid.Row="0" Grid.Column="2" Width="3" 
+                          Background="LightSteelBlue"
+                          VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+			<Grid Grid.Column="3">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -107,16 +150,16 @@
 
 				<Button x:Name="ConnectBtn" Grid.Column="0" Width="100" Grid.ColumnSpan="2" Grid.Row="3" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
 
-				<TextBlock Grid.Column="0" Grid.Row="4">
+				<!--<TextBlock Grid.Column="0" Grid.Row="4">
 					<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
-				</TextBlock>
+				</TextBlock>-->
 				<Grid Grid.Column="1" Grid.Row="4">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
-						<ColumnDefinition Width="Auto" />
+						<!--<ColumnDefinition Width="Auto" />-->
 					</Grid.ColumnDefinitions>
 					
-					<sx:SecurityEditor x:Name="SecurityEditor" SecuritySelected="SecurityEditor_OnSecuritySelected" />
+					<!--<sx:SecurityEditor x:Name="SecurityEditor" SecuritySelected="SecurityEditor_OnSecuritySelected" />-->
 					<Button x:Name="Find" Width="100" Grid.Column="1" IsEnabled="False" Click="FindClick">
 						<TextBlock><Run Text="{x:Static loc:LocalizedStrings.Find}" />...</TextBlock>
 					</Button>
@@ -130,18 +173,43 @@
 
 		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="400" />
-				<ColumnDefinition Width="*" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
 			</Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-			<sx:OrderGrid x:Name="OrderGrid" Grid.Column="1" OrderRegistering="OrderGrid_OrderRegistering" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
-            <sx:MyTradeGrid x:Name="TradeGrid" Grid.Row="0" Grid.Column="0" />
-            
-            <sx:LogControl Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" x:Name="Log"></sx:LogControl>
+            <sx:SecurityPicker x:Name="SecurityPicker" 
+                               Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
+                               SecuritySelected="SecurityPicker_OnSecuritySelected"
+                />
+
+            <sx:MyTradeGrid x:Name="TradeGrid"
+                            Grid.Row="2" Grid.Column="0" 
+                            HorizontalScrollBarVisibility="Auto" />
+            <GridSplitter Grid.Column="1" Grid.Row="2" Width="3" 
+                          Background="LightSteelBlue"
+                          VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+            <sx:OrderGrid x:Name="OrderGrid" Grid.Row="2" Grid.Column="2"
+                           HorizontalScrollBarVisibility="Auto"
+                          OrderRegistering="OrderGrid_OrderRegistering" OrderCanceling="OrderGrid_OnOrderCanceling" OrderReRegistering="OrderGrid_OnOrderReRegistering" />
+
+            <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
+                          Background="LightSteelBlue"
+                          VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+
+
+            <GridSplitter Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Height="3"
+                          Background="LightSteelBlue"
+                          VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+
+            <sx:LogControl Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="0" x:Name="Log"></sx:LogControl>
 		</Grid>
 	</Grid>
 </Window>

@@ -26,22 +26,33 @@ namespace SampleRealTimeEmulation
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 
-	public partial class MainWindow
+	public partial class MainWindow : Window
 	{
+	    private readonly RealTimeHelper _realTimeHelper;
 		private bool _isConnected;
-		private CandleManager _candleManager;
-		private RealTimeEmulationTrader<IMessageAdapter> _connector;
+
+	    public CandleManager MyCandleManager { get; private set; }
+
+	    public CandleSeries MyCandleSeries { get; set; }
+	    public LogManager MyLogManager { get; private set; }
+
+	    private RealTimeEmulationTrader<IMessageAdapter> _connector;
 		private readonly ChartCandleElement _candlesElem;
-		private readonly LogManager _logManager;
-		private Security _security;
-		private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>(); 
+
+	    public Security MySecurity { get; private set; }
+
+	    private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>(); 
 
 		public MainWindow()
 		{
-			InitializeComponent();
+            _realTimeHelper = new RealTimeHelper(this);
 
-			_logManager = new LogManager();
-			_logManager.Listeners.Add(new GuiLogListener(Log));
+		    this.DataContext = _realTimeHelper;
+
+			InitializeComponent();
+            
+			this.MyLogManager = new LogManager();
+			this.MyLogManager.Listeners.Add(new GuiLogListener(Log));
 
 			var area = new ChartArea();
 			Chart.Areas.Add(area);
@@ -108,11 +119,11 @@ namespace SampleRealTimeEmulation
 
 					_connector.EmulationAdapter.Emulator.Settings.ConvertTime = true;
 
-					SecurityEditor.SecurityProvider = new FilterableSecurityProvider(_connector);
+					SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_connector);
 
-					_candleManager = new CandleManager(_connector);
+					this.MyCandleManager = new CandleManager(_connector);
 
-					_logManager.Sources.Add(_connector);
+					this.MyLogManager.Sources.Add(_connector);
 					
 					// clear password for security reason
 					//Password.Clear();
@@ -158,7 +169,7 @@ namespace SampleRealTimeEmulation
 					// subscribe on error of order registration event
 					_connector.OrdersRegisterFailed += OrdersFailed;
 
-					_candleManager.Processing += (s, candle) =>
+					this.MyCandleManager.Processing += (s, candle) =>
 					{
 						if (candle.State == CandleStates.Finished)
 							_buffer.Add(candle);
@@ -184,10 +195,10 @@ namespace SampleRealTimeEmulation
 
 		private void OnDepths(IEnumerable<MarketDepth> depths)
 		{
-			if (_security == null)
+			if (this.MySecurity == null)
 				return;
 
-			var depth = depths.FirstOrDefault(d => d.Security == _security);
+			var depth = depths.FirstOrDefault(d => d.Security == this.MySecurity);
 
 			if (depth == null)
 				return;
@@ -221,16 +232,18 @@ namespace SampleRealTimeEmulation
 				Chart.Draw(_candlesElem, candle);
 		}
 
-		private void SecurityEditor_OnSecuritySelected()
+		private void SecurityPicker_OnSecuritySelected(Security security)
 		{
-			_security = SecurityEditor.SelectedSecurity;
+		    if (security == null) return;
+		    this.MySecurity = security;// SecurityPicker.SelectedSecurity;
 
 			Chart.Reset(new[] { _candlesElem });
 
-			_connector.RegisterMarketDepth(_security);
-			_connector.RegisterTrades(_security);
+			_connector.RegisterMarketDepth(security);
+			_connector.RegisterTrades(security);
 
-			_candleManager.Start(new CandleSeries(typeof(TimeFrameCandle), _security, TimeSpan.FromMinutes(1)));
+		    _realTimeHelper.CreateCandleChart(security);
+            //_candleManager.Start(new CandleSeries(typeof(TickCandle), _security, 15));
 		}
 
 		private void NewOrder_OnClick(object sender, RoutedEventArgs e)
@@ -242,7 +255,7 @@ namespace SampleRealTimeEmulation
 		{
 			var newOrder = new OrderWindow
 			{
-				Order = new Order { Security = _security },
+				Order = new Order { Security = this.MySecurity },
 				Connector = _connector,
 			};
 
