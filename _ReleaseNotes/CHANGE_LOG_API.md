@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###v4.3.11:
+* (feature) Backtesting on level1.
 * (feature) CSV storage. Time zone.
 * (feature) Transaq. v2.16.1
 * (feature) level1 -> depths.
