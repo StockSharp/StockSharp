@@ -1,4 +1,4 @@
-﻿namespace StockSharp.MatLab
+namespace StockSharp.MatLab
 {
 	using System;
 	using System.Collections.Generic;
@@ -7,7 +7,7 @@
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
-	/// Аргумент, передающий информацию об ошибке.
+	/// Argument which contains an error information.
 	/// </summary>
 	public class ErrorEventArgs : EventArgs
 	{
@@ -20,13 +20,13 @@
 		}
 
 		/// <summary>
-		/// Информация об ошибке.
+		/// Error info.
 		/// </summary>
 		public Exception Error { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию об инструментах.
+	/// Argument which contains instruments.
 	/// </summary>
 	public class SecuritiesEventArgs : EventArgs
 	{
@@ -39,13 +39,13 @@
 		}
 
 		/// <summary>
-		/// Инструменты.
+		/// Securities.
 		/// </summary>
 		public Security[] Securities { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию о заявках.
+	/// Argument which contains orders.
 	/// </summary>
 	public class OrdersEventArgs : EventArgs
 	{
@@ -58,13 +58,13 @@
 		}
 
 		/// <summary>
-		/// Заявки.
+		/// Orders.
 		/// </summary>
 		public Order[] Orders { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию об ошибках заявок (регистрации, снятия).
+	/// Argument which contains order errors (registration or cancellation).
 	/// </summary>
 	public class OrderFailsEventArgs : EventArgs
 	{
@@ -77,13 +77,13 @@
 		}
 
 		/// <summary>
-		/// Ошибки.
+		/// Errors.
 		/// </summary>
 		public OrderFail[] OrderFails { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию о тиковых сделках.
+	/// Argument which contains tick teades.
 	/// </summary>
 	public class TradesEventArgs : EventArgs
 	{
@@ -96,13 +96,13 @@
 		}
 
 		/// <summary>
-		/// Сделки.
+		/// Trades.
 		/// </summary>
 		public Trade[] Trades { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию о собственных сделках.
+	/// Argument which contains own trades.
 	/// </summary>
 	public class MyTradesEventArgs : EventArgs
 	{
@@ -115,13 +115,13 @@
 		}
 
 		/// <summary>
-		/// Сделки.
+		/// Trades.
 		/// </summary>
 		public MyTrade[] Trades { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию о портфелях.
+	/// Argument which contains portfolios.
 	/// </summary>
 	public class PortfoliosEventArgs : EventArgs
 	{
@@ -134,13 +134,13 @@
 		}
 
 		/// <summary>
-		/// Портфели.
+		/// Portfolios.
 		/// </summary>
 		public Portfolio[] Portfolios { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию о позициях.
+	/// Argument which contains positions.
 	/// </summary>
 	public class PositionsEventArgs : EventArgs
 	{
@@ -153,13 +153,13 @@
 		}
 
 		/// <summary>
-		/// Позиции.
+		/// Positions.
 		/// </summary>
 		public Position[] Positions { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию о стаканах.
+	/// Argument which contains order books.
 	/// </summary>
 	public class MarketDepthsEventArgs : EventArgs
 	{
@@ -172,13 +172,13 @@
 		}
 
 		/// <summary>
-		/// Стаканы.
+		/// Market depths.
 		/// </summary>
 		public MarketDepth[] Depths { get; private set; }
 	}
 
 	/// <summary>
-	/// Аргумент, передающий информацию о строчках лога заявок.
+	/// Argument which contains order logs.
 	/// </summary>
 	public class OrderLogItemsEventArg : EventArgs
 	{
@@ -191,7 +191,7 @@
 		}
 
 		/// <summary>
-		/// Строчки.
+		/// Order log.
 		/// </summary>
 		public OrderLogItem[] Items { get; private set; }
 	}

@@ -30,7 +30,7 @@ E:StockSharp.MatLab.MatLabConnector.Connected/summary;DocStr890
 E:StockSharp.MatLab.MatLabConnector.ConnectionError/summary;DocStr892
 E:StockSharp.MatLab.MatLabConnector.Disconnected/summary;DocStr891
 E:StockSharp.MatLab.MatLabConnector.Error/summary;DocStr893
-E:StockSharp.MatLab.MatLabConnector.MarketTimeChanged/summary;DocStr4038
+E:StockSharp.MatLab.MatLabConnector.MarketTimeChanged/summary;DocStr886
 E:StockSharp.MatLab.MatLabConnector.NewSecurities/summary;DocStr877
 E:StockSharp.MatLab.MatLabConnector.SecuritiesChanged/summary;DocStr878
 E:StockSharp.MatLab.MatLabConnector.NewPortfolios/summary;DocStr879
