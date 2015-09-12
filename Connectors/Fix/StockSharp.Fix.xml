@@ -4789,7 +4789,7 @@
     </member>
     <member name="T:StockSharp.Fix.FixOrderCondition">
       <summary>
-            Условия заявок, специфичных для <see cref="N:StockSharp.Fix" />.
+            Условие заявок, специфичных для <see cref="N:StockSharp.Fix" />.
             </summary>
     </member>
     <member name="M:StockSharp.Fix.FixOrderCondition.#ctor">

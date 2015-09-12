@@ -342,7 +342,7 @@
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodOrderCondition">
       <summary>
-            Условия заявок, специфичных для <see cref="N:StockSharp.Blackwood" />.
+            Условие заявок, специфичных для <see cref="N:StockSharp.Blackwood" />.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodOrderCondition.#ctor">
