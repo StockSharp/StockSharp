@@ -4156,6 +4156,9 @@ OpenUrl;Open url;Открыть ссылку
 Level1ToTicks;Level1 to ticks;Level в тики
 Level1ToCandles;Level1 to candles;Level1 в свечи
 Level1ToOrderBooks;Level1 to order books;Level1 в стаканы
+Solicited;Solicited;Запрошенная
+RandomizeSize;Randomize size;Произвольный размер
+RandomizePrice;Randomize price books;Произвольная цена
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

@@ -649,7 +649,7 @@ namespace StockSharp.InteractiveBrokers
 				}
 
 				socket
-					.SendSecurity(criteria, false)
+					.SendSecurity(criteria, socket.ServerVersion >= ServerVersions.V70, socket.ServerVersion >= ServerVersions.V75)
 					.SendIf(ServerVersions.V68, s => socket.Send(criteria.Class))
 					.SendIncludeExpired(criteria.ExpiryDate)
 					.SendSecurityId(criteria.SecurityId);

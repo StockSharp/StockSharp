@@ -94,13 +94,17 @@ namespace StockSharp.InteractiveBrokers
 		[Browsable(false)]
 		public DateTime ConnectedTime { get; internal set; }
 
-		internal bool ExtraAuth { get; set; }
+		/// <summary>
+		/// Экстра подключение.
+		/// </summary>
+		[Browsable(false)]
+		public bool ExtraAuth { get; set; }
 
-		//internal TimeSpan TimeDiff { get; private set; }
-
-		//internal readonly SynchronizedDictionary<SecurityId, SecurityMessage> Securities = new SynchronizedDictionary<SecurityId, SecurityMessage>();
-
-		
+		/// <summary>
+		/// Дополнительные возможности.
+		/// </summary>
+		[Browsable(false)]
+		public string OptionalCapabilities { get; set; }
 
 		/// <summary>
 		/// Загрузить настройки.
@@ -115,6 +119,8 @@ namespace StockSharp.InteractiveBrokers
 			IsRealTimeMarketData = storage.GetValue<bool>("IsRealTimeMarketData");
 			ServerLogLevel = storage.GetValue<ServerLogLevels>("ServerLogLevel");
 			Fields = storage.GetValue<string>("Fields").Split(",").Select(n => n.To<GenericFieldTypes>()).ToArray();
+			ExtraAuth = storage.GetValue<bool>("ExtraAuth");
+			OptionalCapabilities = storage.GetValue<string>("OptionalCapabilities");
 		}
 
 		/// <summary>
@@ -130,6 +136,8 @@ namespace StockSharp.InteractiveBrokers
 			storage.SetValue("IsRealTimeMarketData", IsRealTimeMarketData);
 			storage.SetValue("ServerLogLevel", ServerLogLevel.To<string>());
 			storage.SetValue("Fields", Fields.Select(t => t.To<string>()).Join(","));
+			storage.SetValue("ExtraAuth", ExtraAuth);
+			storage.SetValue("OptionalCapabilities", OptionalCapabilities);
 		}
 
 		/// <summary>

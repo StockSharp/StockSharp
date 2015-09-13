@@ -53,7 +53,7 @@ namespace StockSharp.InteractiveBrokers
 
 					socket
 						.SendSide(message.Side)
-						.Send(message.Volume)
+						.SendQuantity(message.Volume)
 						.SendOrderType(message.OrderType, condition.ExtendedType)
 						.Send(message.Price)
 						.Send(condition.StopPrice)
@@ -347,6 +347,17 @@ namespace StockSharp.InteractiveBrokers
 							? condition.MiscOptions.Select(t => t.Item1 + "=" + t.Item2).Join(";")
 							: string.Empty);
 					}
+
+					if (socket.ServerVersion >= ServerVersions.V73)
+					{
+						socket.Send(condition.Solicited);
+					}
+
+					if (socket.ServerVersion >= ServerVersions.V76)
+					{
+						socket.Send(condition.RandomizeSize);
+						socket.Send(condition.RandomizePrice);
+					}
 				});
 		}
 
@@ -526,7 +537,7 @@ namespace StockSharp.InteractiveBrokers
 			var status = socket.ReadOrderStatus();
 			/* filled */
 			socket.ReadInt();
-			var balance = socket.ReadInt();
+			var balance = socket.ReadDecimal();
 			var avgPrice = socket.ReadDecimal();
 			var permId = version >= ServerVersions.V2 ? socket.ReadInt() : (int?)null;
 			var parentId = version >= ServerVersions.V3 ? socket.ReadInt() : (int?)null;
@@ -632,7 +643,7 @@ namespace StockSharp.InteractiveBrokers
 
 			var secClass = (version >= ServerVersions.V8) ? socket.ReadStr() : null;
 
-			var position = socket.ReadInt();
+			var position = socket.ReadDecimal();
 			var marketPrice = socket.ReadDecimal();
 			var marketValue = socket.ReadDecimal();
 
@@ -677,7 +688,7 @@ namespace StockSharp.InteractiveBrokers
 			SendOutMessage(
 				this
 					.CreatePositionChangeMessage(portfolio, secId)
-						.Add(PositionChangeTypes.CurrentValue, (decimal)position)
+						.Add(PositionChangeTypes.CurrentValue, position)
 						.Add(PositionChangeTypes.CurrentPrice, marketPrice)
 						.Add(PositionChangeTypes.AveragePrice, averagePrice)
 						.Add(PositionChangeTypes.UnrealizedPnL, unrealizedPnL)
@@ -714,7 +725,7 @@ namespace StockSharp.InteractiveBrokers
 
 			// read order fields
 			var direction = socket.ReadOrderSide();
-			var volume = socket.ReadInt();
+			var volume = socket.ReadDecimal();
 
 			OrderTypes orderType;
 			IBOrderCondition.ExtendedOrderTypes? extendedType;
@@ -1173,7 +1184,7 @@ namespace StockSharp.InteractiveBrokers
 			/* exchange */
 			socket.ReadStr();
 			var side = socket.ReadTradeSide();
-			var volume = socket.ReadInt();
+			var volume = socket.ReadDecimal();
 			var price = socket.ReadDecimal();
 			var permId = version >= ServerVersions.V2 ? socket.ReadInt() : (int?)null;
 			var clientId = version >= ServerVersions.V3 ? socket.ReadInt() : (int?)null;
@@ -1297,7 +1308,7 @@ namespace StockSharp.InteractiveBrokers
 			var secCode = socket.ReadLocalCode(secName);
 			var secClass = (version >= ServerVersions.V2) ? socket.ReadStr() : null;
 
-			var pos = socket.ReadInt();
+			var pos = socket.ReadDecimal();
 
 			var avgCost = 0m;
 			if (version >= ServerVersions.V3)
@@ -1325,7 +1336,7 @@ namespace StockSharp.InteractiveBrokers
 
 			SendOutMessage(this
 				.CreatePositionChangeMessage(account, secId)
-					.Add(PositionChangeTypes.CurrentValue, (decimal)pos)
+					.Add(PositionChangeTypes.CurrentValue, pos)
 					.Add(PositionChangeTypes.AveragePrice, avgCost));
 		}
 

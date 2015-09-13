@@ -192,8 +192,13 @@ namespace StockSharp.InteractiveBrokers
 							if (!ExtraAuth)
 							{
 								_socket.Send((int)RequestMessages.StartApi);
-								_socket.Send((int)ServerVersions.V1);
+								_socket.Send((int)ServerVersions.V2);
 								_socket.Send(ClientId);
+
+								if (_socket.ServerVersion >= ServerVersions.V72)
+								{
+									_socket.Send(OptionalCapabilities);
+								}
 							}
 						}
 						else

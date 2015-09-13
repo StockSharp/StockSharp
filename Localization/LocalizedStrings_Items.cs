@@ -53668,5 +53668,44 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(Level1ToOrderBooksKey); }
 		}
+
+		/// <summary>
+		/// Solicited
+		/// </summary>
+		public const string SolicitedKey = "Solicited";
+
+		/// <summary>
+		/// Solicited
+		/// </summary>
+		public static string Solicited
+		{
+			get { return GetString(SolicitedKey); }
+		}
+
+		/// <summary>
+		/// Randomize size
+		/// </summary>
+		public const string RandomizeSizeKey = "RandomizeSize";
+
+		/// <summary>
+		/// Randomize size
+		/// </summary>
+		public static string RandomizeSize
+		{
+			get { return GetString(RandomizeSizeKey); }
+		}
+
+		/// <summary>
+		/// Randomize price
+		/// </summary>
+		public const string RandomizePriceKey = "RandomizePrice";
+
+		/// <summary>
+		/// Randomize price
+		/// </summary>
+		public static string RandomizePrice
+		{
+			get { return GetString(RandomizePriceKey); }
+		}
 	}
 }

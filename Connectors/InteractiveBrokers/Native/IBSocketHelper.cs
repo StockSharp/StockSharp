@@ -134,7 +134,7 @@ namespace StockSharp.InteractiveBrokers.Native
 			return socket;
 		}
 
-		public static IBSocket SendSecurity(this IBSocket socket, SecurityMessage security, bool sendPrimExchange = true)
+		public static IBSocket SendSecurity(this IBSocket socket, SecurityMessage security, bool sendPrimExchange = true, bool sendPrimExchange2 = true)
 		{
 			if (security == null)
 				throw new ArgumentNullException("security");
@@ -150,7 +150,12 @@ namespace StockSharp.InteractiveBrokers.Native
 				.SendIf(ServerVersions.V15, s => s.Send(multiplier == 1 ? string.Empty : multiplier.To<string>()))
 				.SendBoardCode(security.SecurityId.BoardCode);
 
-			if (sendPrimExchange)
+			if (sendPrimExchange2)
+			{
+				socket.Send(security.SecurityId.BoardCode);
+				socket.Send(security.GetRoutingBoard());	
+			}
+			else if (sendPrimExchange)
 				socket.SendPrimaryExchange(security);
 
 			return socket
@@ -534,6 +539,11 @@ namespace StockSharp.InteractiveBrokers.Native
 				default:
 					throw new ArgumentOutOfRangeException("report");
 			}
+		}
+
+		public static IBSocket SendQuantity(this IBSocket socket, decimal volume)
+		{
+			return socket.ServerVersion >= ServerVersions.V101 ? socket.Send(volume) : socket.Send((int)volume);
 		}
 
 		public static DateTimeOffset? ReadExpiry(this IBSocket socket)

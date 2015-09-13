@@ -1735,12 +1735,49 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Дополнительные параметры.
 		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str225Key)]
 		[DescriptionLoc(LocalizedStrings.Str2492Key)]
 		public IEnumerable<Tuple<string, string>> MiscOptions
 		{
 			get { return (IEnumerable<Tuple<string, string>>)Parameters.TryGetValue("MiscOptions") ?? Enumerable.Empty<Tuple<string, string>>(); }
 			set { Parameters["MiscOptions"] = value; }
+		}
+
+		/// <summary>
+		/// Запрошенная.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str225Key)]
+		[DisplayNameLoc(LocalizedStrings.SolicitedKey, true)]
+		[DescriptionLoc(LocalizedStrings.SolicitedKey, true)]
+		public bool Solicited
+		{
+			get { return (bool)Parameters["Solicited"]; }
+			set { Parameters["Solicited"] = value; }
+		}
+
+		/// <summary>
+		/// Произвольный размер.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str225Key)]
+		[DisplayNameLoc(LocalizedStrings.RandomizeSizeKey, true)]
+		[DescriptionLoc(LocalizedStrings.RandomizeSizeKey, true)]
+		public bool RandomizeSize
+		{
+			get { return (bool)Parameters["RandomizeSize"]; }
+			set { Parameters["RandomizeSize"] = value; }
+		}
+
+		/// <summary>
+		/// Произвольная цена.
+		/// </summary>
+		[CategoryLoc(LocalizedStrings.Str225Key)]
+		[DisplayNameLoc(LocalizedStrings.RandomizePriceKey, true)]
+		[DescriptionLoc(LocalizedStrings.RandomizePriceKey, true)]
+		public bool RandomizePrice
+		{
+			get { return (bool)Parameters["RandomizePrice"]; }
+			set { Parameters["RandomizePrice"] = value; }
 		}
 
 		/// <summary>
