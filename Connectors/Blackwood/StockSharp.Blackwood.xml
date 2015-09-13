@@ -6,67 +6,67 @@
   <members>
     <member name="T:StockSharp.Blackwood.BlackwoodAddresses">
       <summary>
-            Адреса серверов Blackwood.
+            Blackwood address list.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodAddresses.ExecutionPort">
       <summary>
-            Порт по-умолчанию для сервера исполнения транзакций.
+            Transaction server default port.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodAddresses.MarketDataPort">
       <summary>
-            Порт по-умолчанию для сервера рыночных данных.
+            Realtime data server default port.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodAddresses.HistoricalDataPort">
       <summary>
-            Порт по-умолчанию для сервера исторических данных.
+            Historical data server default port.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodAddresses.WetBush">
       <summary>
-            Адрес сервера брокера WedBush и GTCapital.
+            WedBush brokerage server address.
             </summary>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodImbalance">
       <summary>
-            Дисбаланс объема заявок типа <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, которые не были исполнены.
+            Imbalance volume <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" /> orders, which have not been filled.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.Time">
       <summary>
-            Время формирования.
+            Creation time.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ImbalanceVolume">
       <summary>
-            Размер дисбаланса объема.
+            The size of the imbalance volume.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.TotalVolume">
       <summary>
-            Общий объем.
+            Total volume.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.PairedVolume">
       <summary>
-            Объем пары.
+            Pair volume.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ReferencePrice">
       <summary>
-            Цена.
+            Price.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.InitTime">
       <summary>
-            Время.
+            Time.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.InitImbalanceVolume">
       <summary>
-            Первоначальный дисбаланс объема.
+            The initial imbalance volume.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.RegImbalance">
@@ -75,170 +75,180 @@
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.InitRegImbalanceVolume">
       <summary>
-            Первоначальный дисбаланс объема при регистрации.
+            The initial volume imbalance at registration.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.CurrInitImbalanceVolume">
       <summary>
-            Текущий дисбаланс объема при регистрации.
+            The current volume imbalance at registration.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ClearingPrice">
       <summary>
-            Цена в последний клиринг.
+            Price at last clearing.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodImbalance.ClosingOnlyClearingPrice">
       <summary>
-            Цена закрытия предыдущей торговой сессии.
+            The closing price of the previous trading session.
             </summary>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodMessageAdapter">
       <summary>
-            Адаптер сообщений для Blackwood (или Fusion) DMA.
+            The messages adapter for Blackwood (Fusion) DMA.
+            </summary>
+      <summary>
+            The messages adapter for Blackwood (Fusion) DMA.
+            </summary>
+      <summary>
+            The messages adapter for Blackwood (Fusion) DMA.
+            </summary>
+      <summary>
+            The messages adapter for Blackwood (Fusion) DMA.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
       <summary>
-            Создать <see cref="T:StockSharp.Blackwood.BlackwoodMessageAdapter" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.BlackwoodMessageAdapter" />.
             </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+      <param name="transactionIdGenerator">Transaction id generator.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.CreateOrderCondition">
       <summary>
-            Создать для заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" /> условие, которое поддерживается подключением.
+            Create condition for order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, that supports the adapter.
             </summary>
-      <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, то будет возвращено <see langword="null" />.</returns>
+      <returns>Order condition. If the connection does not support the order type <see cref="F:StockSharp.Messages.OrderTypes.Conditional" />, it will be returned <see langword="null" />.</returns>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
       <summary>
-            Отправить сообщение.
+            Send message.
             </summary>
-      <param name="message">Сообщение.</param>
+      <param name="message">Message.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.IsConnectionAlive">
       <summary>
-            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+            Check the connection is alive. Uses only for connected states.
             </summary>
       <returns>
-        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
+        <see langword="true" />, is the connection still alive, <see langword="false" />, if the connection was rejected.</returns>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodMessageAdapter.ToString">
       <summary>
-            Получить строковое представление.
+            Returns a string that represents the current object.
             </summary>
-      <returns>Строковое представление.</returns>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.SecurityLookupRequired">
       <summary>
-            Требуется ли дополнительное сообщение <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> для получения списка инструментов.
+        <see cref="T:StockSharp.Messages.SecurityLookupMessage" /> required to get securities.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Login">
       <summary>
-            Логин.
+            Login.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.Password">
       <summary>
-            Пароль.
+            Password.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.MarketDataAddress">
       <summary>
-            Адрес сервера рыночных данных.
+            Market data server address.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.HistoricalDataAddress">
       <summary>
-            Адрес сервера исторических данных.
+            History data server address.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.ExecutionAddress">
       <summary>
-            Адрес сервера исполнения транзакций.
+            Server address of transactions execution.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.LogPath">
       <summary>
-            Путь к директории, где будет создан файл BWOrders.log.
+            Path to directory, where BWOrders.log file will be created.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.IsValid">
       <summary>
-            Проверить введенные параметры на валидность.
+            The parameters validity check.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodMessageAdapter.TimeFrames">
       <summary>
-            Доступные тайм-фреймы.
+            Available time frames.
             </summary>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodOrderConditionTypes">
       <summary>
-            Типы условий для <see cref="T:StockSharp.Blackwood.BlackwoodOrderCondition" />.
+            Condition types for <see cref="T:StockSharp.Blackwood.BlackwoodOrderCondition" />.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.StopMarket">
       <summary>
-            Активировать стоп-заявку по рыночной цене <see cref="F:StockSharp.Messages.OrderTypes.Market" />.
+            Activate a stop order by market price <see cref="F:StockSharp.Messages.OrderTypes.Market" />.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.StopLimit">
       <summary>
-            Активировать стоп-заявку по лимитированной цене <see cref="F:StockSharp.Messages.OrderTypes.Limit" />.
+            Activate a stop order by limit price <see cref="F:StockSharp.Messages.OrderTypes.Limit" />.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketOrBetter">
       <summary>
-            Активировать стоп-заявку по рыночной или лучшей цене.
+            Activate a stop order by market price or better.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose">
       <summary>
-            Активировать стоп-заявку по рыночной цене закрытия торгов.
+            Activate a stop order by market closing price.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketOpen">
       <summary>
-            Активировать стоп-заявку по рыночной цене открытия торгов.
+            Activate a stop order by market opening price.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitOpen">
       <summary>
-            Активировать стоп-заявку по лимитированной цене открытия торгов.
+            Activate a stop order by limit opening price.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketNyse">
       <summary>
-            Активировать стоп-заявку по рыночной цене на <see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Nyse" />.
+            Activate a stop order by market price on <see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Nyse" />.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitNyse">
       <summary>
-            Активировать стоп-заявку по лимитированной цене на <see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Nyse" />.
+            Activate a stop order by limit price on <see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Nyse" />.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.LimitClose">
       <summary>
-            Активировать стоп-заявку по лимитированной цене закрытия торгов.
+            Activate a stop order by limit closing price.
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.Pegged">
       <summary>
-      </summary>
+            Pegged.
+            </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.ReversePegged">
       <summary>
@@ -306,22 +316,22 @@
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartBid">
       <summary>
-            Бид (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> площадка).
+            Bid (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartAsk">
       <summary>
-            Оффер (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> площадка).
+            Ask (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartLast">
       <summary>
-            Последняя (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> площадка).
+            Last (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartMiddle">
       <summary>
-            Спред (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> площадка).
+            Spread (<see cref="P:StockSharp.BusinessEntities.ExchangeBoard.Smart" /> board).
             </summary>
     </member>
     <member name="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.SmartFixed">
@@ -342,143 +352,140 @@
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodOrderCondition">
       <summary>
-            Условие заявок, специфичных для <see cref="N:StockSharp.Blackwood" />.
+        <see cref="N:StockSharp.Blackwood" /> order condition.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodOrderCondition.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Blackwood.BlackwoodOrderCondition" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.BlackwoodOrderCondition" />.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodOrderCondition.StopPrice">
       <summary>
-            Стоп-цена заявки.
+            Order stop-price.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodOrderCondition.Type">
       <summary>
-            Тип стоп-заявки.
+            Stop-order type.
             </summary>
     </member>
     <member name="T:StockSharp.Blackwood.BlackwoodTrader">
       <summary>
-            Реализация интерфейса <see cref="T:StockSharp.BusinessEntities.IConnector" /> для взаимодействия с системой Blackwood (или Fusion) DMA.
+            The interface <see cref="T:StockSharp.BusinessEntities.IConnector" /> implementation which provides a connection to the Blackwood (Fusion) DMA.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Blackwood.BlackwoodTrader" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Blackwood.BlackwoodTrader" />.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCrossLock">
       <summary>
-            Подписаться на событие дисбаланса цен спроса и предложения, данные о котором будут приходить через <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock" />.
+            Subscribe to the event imbalance prices of bids and asks. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock" />.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeImbalance">
       <summary>
-            Подписаться на событие нового дисбаланс объема заявок типа <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, которые не были исполнены.
-            Данные будут приходить через <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance" />.
+            Subscribe to the new imbalance event for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance" />.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestPreMarketIndications">
       <summary>
-            Запросить информацию о ценовых показателях в пре-маркет.
-            Данные будут приходить через <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication" />.
+            Request information about prices in the pre-market. The data will transfer through event <see cref="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication" />.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeHighLow(System.Boolean)">
       <summary>
-            Подписаться на событие получения максимальных и минимальных значений по инструментам.
-            Данные будут приходить через <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
+            Subscribe to the event getting the maximum and minimum values of a instruments. The data will transfer through event <see cref="E:StockSharp.BusinessEntities.IConnector.SecuritiesChanged" />.
             </summary>
       <param name="isSubscribe">
-        <see langword="true" />, если необходимо подписаться на получение данны. Иначе, <see langword="false" />.</param>
+        <see langword="true" />, if you want to subscribe to data, otherwise, <see langword="false" />.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeMarketSorter">
       <summary>
-            Подписаться на получение данных о лучших и худших инструментах за сессию.
+            Subscribe to receive information about the best and worst instruments per session.
             </summary>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)">
       <summary>
-            Подписаться на получение свечек.
+            Subscribe to receive new candles.
             </summary>
-      <param name="series">Серия свечек.</param>
-      <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-      <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+      <param name="series">Candles series.</param>
+      <param name="from">The initial date from which you need to get data.</param>
+      <param name="to">The final date by which you need to get data.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.UnSubscribeCandles(StockSharp.Algo.Candles.CandleSeries)">
       <summary>
-            Остановить подписку получения свечек, ранее созданную через <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            To stop the candles receiving subscription, previously created by <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
             </summary>
-      <param name="series">Серия свечек.</param>
+      <param name="series">Candles series.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.RequestNewsStory(StockSharp.BusinessEntities.News)">
       <summary>
-            Запросить текст новости <see cref="P:StockSharp.BusinessEntities.News.Story" />. После получения текста будет вызвано событие <see cref="E:StockSharp.Algo.Connector.NewsChanged" />.
+            Request news <see cref="P:StockSharp.BusinessEntities.News.Story" /> body. After receiving the event <see cref="E:StockSharp.Algo.Connector.NewsChanged" /> will be triggered.
             </summary>
-      <param name="news">Новость.</param>
+      <param name="news">News.</param>
     </member>
     <member name="M:StockSharp.Blackwood.BlackwoodTrader.OnProcessMessage(StockSharp.Messages.Message)">
       <summary>
-            Обработать сообщение.
+            Process message.
             </summary>
-      <param name="message">Сообщение.</param>
+      <param name="message">Message.</param>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.Login">
       <summary>
-            Логин.
+            Login.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.Password">
       <summary>
-            Пароль.
+            Password.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.ExecutionAddress">
       <summary>
-            Адрес сервера исполнения транзакций.
+            Server address of transactions execution.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.MarketDataAddress">
       <summary>
-            Адрес сервера рыночных данных.
+            Market data server address.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.HistoricalDataAddress">
       <summary>
-            Адрес сервера исторических данных.
+            History data server address.
             </summary>
     </member>
     <member name="P:StockSharp.Blackwood.BlackwoodTrader.LogPath">
       <summary>
-            Путь к директории, где будет создан файл BWOrders.log.
+            Path to directory, where BWOrders.log file will be created.
             </summary>
     </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCrossLock">
       <summary>
-            Событие дисбаланса цен спроса и предложения, когда цена покупки на одной площадке больше или равна цене продажи на другой.
+            Event imbalance in prices, when a bid price of one board more than or equal to ask price on another board.
             </summary>
     </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewImbalance">
       <summary>
-            Событие появления нового дисбаланса объема заявок типа <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, которые не были исполнены.
+            Event receiving of imbalance for orders type <see cref="F:StockSharp.Blackwood.BlackwoodOrderConditionTypes.MarketClose" />, which have not been filled.
             </summary>
     </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewPreMarketIndication">
       <summary>
-            Событие появления нового показателя в пре-маркет.
+            Event receiving of a new signal in the pre-market.
             </summary>
     </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.NewCandles">
       <summary>
-            Событие появления новых свечек, полученных после подписки через <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
+            Event of new candles occurring, that are received after the subscription by <see cref="M:StockSharp.Blackwood.BlackwoodTrader.SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)" />.
             </summary>
     </member>
     <member name="E:StockSharp.Blackwood.BlackwoodTrader.Stopped">
       <summary>
-            Событие окончания обработки серии.
+            The series processing end event.
             </summary>
     </member>
   </members>
