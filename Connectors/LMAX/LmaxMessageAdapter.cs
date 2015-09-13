@@ -11,7 +11,7 @@ namespace StockSharp.LMAX
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер сообщений для LMAX.
+	/// The messages adapter for LMAX.
 	/// </summary>
 	public partial class LmaxMessageAdapter : MessageAdapter
 	{
@@ -19,9 +19,9 @@ namespace StockSharp.LMAX
 		private ISession _session;
 
 		/// <summary>
-		/// Создать <see cref="LmaxMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="LmaxMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public LmaxMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -32,18 +32,18 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new LmaxOrderCondition();
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -145,7 +145,7 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
@@ -153,10 +153,10 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Привести инструкцию к идентификатору транзакции.
+		/// Convert the instruction code to numeric transaction id.
 		/// </summary>
-		/// <param name="instructionId">Инструкция.</param>
-		/// <returns>Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="instructionId">Instruction.</param>
+		/// <returns>Converted instruction. If the instruction cannot be converter, the <see langword="null" /> will be returned.</returns>
 		private static long? TryParseTransactionId(string instructionId)
 		{
 			long transactionId;

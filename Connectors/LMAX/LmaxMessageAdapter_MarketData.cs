@@ -21,6 +21,9 @@ namespace StockSharp.LMAX
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The messages adapter for LMAX.
+	/// </summary>
 	partial class LmaxMessageAdapter
 	{
 		private static readonly string[] _indexCodes =
@@ -39,7 +42,7 @@ namespace StockSharp.LMAX
 		private bool _isHistoricalSubscribed;
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{

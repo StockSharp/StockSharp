@@ -17,6 +17,9 @@ namespace StockSharp.LMAX
 	using LmaxTimeInForce = Com.Lmax.Api.TimeInForce;
 	using StockSharpTimeInForce = StockSharp.Messages.TimeInForce;
 
+	/// <summary>
+	/// The messages adapter for LMAX.
+	/// </summary>
 	partial class LmaxMessageAdapter
 	{
 		private void ProcessOrderRegisterMessage(OrderRegisterMessage message)

@@ -16,7 +16,7 @@ namespace StockSharp.LMAX
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с биржей LMAX.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the LMAX.
 	/// </summary>
 	public class LmaxTrader : Connector, IExternalCandleSource
 	{
@@ -24,7 +24,7 @@ namespace StockSharp.LMAX
 		private readonly LmaxMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="LmaxTrader"/>.
+		/// Initializes a new instance of the <see cref="LmaxTrader"/>.
 		/// </summary>
 		public LmaxTrader()
 		{
@@ -34,8 +34,8 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Поддерживается ли перерегистрация заявок через метод <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
-		/// в виде одной транзакции. По-умолчанию включено.
+		/// Gets a value indicating whether the re-registration orders via the method <see cref="IConnector.ReRegisterOrder(StockSharp.BusinessEntities.Order,StockSharp.BusinessEntities.Order)"/>
+		/// as a single transaction. The default is enabled.
 		/// </summary>
 		public override bool IsSupportAtomicReRegister
 		{
@@ -43,7 +43,7 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		public string Login
 		{
@@ -52,7 +52,7 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		public string Password
 		{
@@ -61,7 +61,7 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Подключаться ли к демо торгам вместо сервера с реальной торговлей.
+		/// Connect to demo trading instead of real trading server.
 		/// </summary>
 		public bool IsDemo
 		{
@@ -70,7 +70,7 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Загружать ли инструменты из архива с сайта LMAX. По-умолчанию выключено.
+		/// Should the whole set of securities be loaded from LMAX website. Switched off by default.
 		/// </summary>
 		public bool IsDownloadSecurityFromSite
 		{
@@ -90,21 +90,21 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Событие появления новых свечек, полученных после подписки через <see cref="SubscribeCandles"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
 		/// </summary>
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Подписаться на получение свечек.
+		/// Subscribe to receive new candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -133,17 +133,17 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="SubscribeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			var candleMsg = message as CandleMessage;

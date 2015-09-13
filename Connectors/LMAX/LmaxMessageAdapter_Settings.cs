@@ -12,6 +12,9 @@ namespace StockSharp.LMAX
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// The messages adapter for LMAX.
+	/// </summary>
 	[DisplayName("LMAX")]
 	[CategoryLoc(LocalizedStrings.ForexKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "LMAX")]
@@ -22,7 +25,7 @@ namespace StockSharp.LMAX
 	partial class LmaxMessageAdapter
 	{
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.LoginKey)]
@@ -31,7 +34,7 @@ namespace StockSharp.LMAX
 		public string Login { get; set; }
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.PasswordKey)]
@@ -40,7 +43,7 @@ namespace StockSharp.LMAX
 		public SecureString Password { get; set; }
 
 		/// <summary>
-		/// Подключаться ли к демо торгам вместо сервера с реальной торговлей.
+		/// Connect to demo trading instead of real trading server.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.DemoKey)]
@@ -49,7 +52,7 @@ namespace StockSharp.LMAX
 		public bool IsDemo { get; set; }
 
 		/// <summary>
-		/// Загружать ли инструменты из архива с сайта LMAX. По-умолчанию выключено.
+		/// Should the whole set of securities be loaded from LMAX website. Switched off by default.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.GeneralKey)]
 		[DisplayNameLoc(LocalizedStrings.Str2135Key)]
@@ -58,7 +61,7 @@ namespace StockSharp.LMAX
 		public bool IsDownloadSecurityFromSite { get; set; }
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
 		public override bool IsValid
@@ -74,7 +77,7 @@ namespace StockSharp.LMAX
 		});
 
 		/// <summary>
-		/// Доступные тайм-фреймы.
+		/// Available time frames.
 		/// </summary>
 		[Browsable(false)]
 		public static IEnumerable<TimeSpan> TimeFrames
@@ -83,9 +86,9 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -97,9 +100,9 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -111,9 +114,9 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str3390Params.Put(Login, IsDemo);

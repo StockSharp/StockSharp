@@ -8002,10 +8002,10 @@ DocStr3901;License verification error event;Событие ошибки пров
 DocStr3902;Download licenses;Текущие лицензии на компьютере
 DocStr3903;UI component for {0};Графический компонент для представления информации о {0}
 DocStr3904;The messages adapter for LMAX;Адаптер сообщений для LMAX
-DocStr3905;Привести инструкцию к идентификатору транзакции;Привести инструкцию к идентификатору транзакции
-DocStr3906;Инструкция;Инструкция
-DocStr3907;Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено {0};Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено {0}
-DocStr3908;Реализация интерфейса {0} для взаимодействия с биржей LMAX;Реализация интерфейса {0} для взаимодействия с биржей LMAX
+DocStr3905;Convert the instruction code to numeric transaction id;Привести инструкцию к идентификатору транзакции
+DocStr3906;Instruction;Инструкция
+DocStr3907;Converted instruction. If the instruction cannot be converter, the {0} will be returned;Идентификатор транзакции. Если инструкцию невозможно привести к числу, то будет возвращено {0}
+DocStr3908;The interface {0} implementation which provides a connection to the LMAX;Реализация интерфейса {0} для взаимодействия с биржей LMAX
 DocStr3909;The logger that records the data to the console window;Логгер, записывающий данные в консольное окно
 DocStr3910;The base class that monitors the event {0} and saves to some storage;Базовый класс, который мониторит событие {0} и сохраняет в некое хранилище
 DocStr3911;The class interface that monitors the event {0} and saves to some storage;Интерфейс класса, который мониторит событие {0} и сохраняет в некое хранилище

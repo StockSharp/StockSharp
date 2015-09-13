@@ -9,7 +9,7 @@ namespace StockSharp.LMAX
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Условие заявок, специфичных для <see cref="LMAX"/>.
+	/// <see cref="LMAX"/> order condition.
 	/// </summary>
 	[Serializable]
 	[DataContract]
@@ -17,14 +17,14 @@ namespace StockSharp.LMAX
 	public class LmaxOrderCondition : OrderCondition
 	{
 		/// <summary>
-		/// Создать <see cref="LmaxOrderCondition"/>.
+		/// Initializes a new instance of the <see cref="LmaxOrderCondition"/>.
 		/// </summary>
 		public LmaxOrderCondition()
 		{
 		}
 
 		/// <summary>
-		/// Отступ стоп-лосса.
+		/// Stop-loss offset.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
@@ -37,7 +37,7 @@ namespace StockSharp.LMAX
 		}
 
 		/// <summary>
-		/// Отступ тейк-профита.
+		/// Take-profit offset.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
