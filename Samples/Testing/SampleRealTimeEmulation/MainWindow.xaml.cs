@@ -29,23 +29,13 @@ namespace SampleRealTimeEmulation
 	public partial class MainWindow
 	{
 		private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>();
-
 		private readonly ChartCandleElement _candlesElem;
-
 		private readonly LogManager _logManager;
-
 		private CandleManager _candleManager;
-
 		private CandleSeries _candleSeries;
-
 		private RealTimeEmulationTrader<IMessageAdapter> _connector;
-
-		private string _content;
-
 		private bool _isConnected;
-
 		private Security _security;
-
 		private CandleSeries _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
 
 		public MainWindow()
@@ -72,11 +62,11 @@ namespace SampleRealTimeEmulation
 
 		private void CandleSettingsEditorOnClosed(object sender, RoutedEventArgs routedEventArgs)
 		{
-			if (this._tempCandleSeries != CandleSettingsEditor.Settings && _candleSeries != null)
-			{
-				this._tempCandleSeries = CandleSettingsEditor.Settings.Clone();
-				SecurityPicker_OnSecuritySelected(SecurityPicker.SelectedSecurity);
-			}
+			if (_tempCandleSeries == CandleSettingsEditor.Settings || _candleSeries == null)
+				return;
+
+			_tempCandleSeries = CandleSettingsEditor.Settings.Clone();
+			SecurityPicker_OnSecuritySelected(SecurityPicker.SelectedSecurity);
 		}
 
 		protected override void OnClosing(CancelEventArgs e)
@@ -100,7 +90,8 @@ namespace SampleRealTimeEmulation
 							MessageBox.Show(this, LocalizedStrings.Str2974);
 							return;
 						}
-						if (this.Password.Password.IsEmpty())
+
+						if (Password.Password.IsEmpty())
 						{
 							MessageBox.Show(this, LocalizedStrings.Str2975);
 							return;
@@ -248,21 +239,36 @@ namespace SampleRealTimeEmulation
 			_candleManager.Start(_candleSeries);
 		}
 
-		private void NewOrder_OnClick(object sender, RoutedEventArgs e) { OrderGrid_OrderRegistering(); }
+		private void NewOrder_OnClick(object sender, RoutedEventArgs e)
+		{
+			OrderGrid_OrderRegistering();
+		}
 
 		private void OrderGrid_OrderRegistering()
 		{
-			OrderWindow newOrder = new OrderWindow { Order = new Order { Security = _security }, Connector = _connector };
+			var newOrder = new OrderWindow
+			{
+				Order = new Order { Security = _security },
+				Connector = _connector
+			};
 
 			if (newOrder.ShowModal(this))
 				_connector.RegisterOrder(newOrder.Order);
 		}
 
-		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders) { orders.ForEach(_connector.CancelOrder); }
+		private void OrderGrid_OnOrderCanceling(IEnumerable<Order> orders)
+		{
+			orders.ForEach(_connector.CancelOrder);
+		}
 
 		private void OrderGrid_OnOrderReRegistering(Order order)
 		{
-			OrderWindow window = new OrderWindow { Title = LocalizedStrings.Str2976Params.Put(order.TransactionId), Connector = _connector, Order = order.ReRegisterClone(newVolume: order.Balance) };
+			var window = new OrderWindow
+			{
+				Title = LocalizedStrings.Str2976Params.Put(order.TransactionId),
+				Connector = _connector,
+				Order = order.ReRegisterClone(newVolume: order.Balance)
+			};
 
 			if (window.ShowModal(this))
 				_connector.ReRegisterOrder(order, window.Order);
@@ -270,7 +276,7 @@ namespace SampleRealTimeEmulation
 
 		private void FindClick(object sender, RoutedEventArgs e)
 		{
-			FindSecurityWindow wnd = new FindSecurityWindow();
+			var wnd = new FindSecurityWindow();
 
 			if (!wnd.ShowModal(this))
 				return;
