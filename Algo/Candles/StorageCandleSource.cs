@@ -78,7 +78,7 @@ namespace StockSharp.Algo.Candles
 		ICandleManager ICandleManagerSource.CandleManager { get; set; }
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источниках для передаваемой серии свечек есть данные.
+		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
 		/// </summary>
 		/// <param name="series">Серия свечек.</param>
 		/// <returns>Временные диапазоны.</returns>

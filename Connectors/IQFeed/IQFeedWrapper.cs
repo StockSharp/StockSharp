@@ -524,7 +524,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отписаться на получение новостей.
+		/// Отписаться от получения новостей.
 		/// </summary>
 		public void UnSubscribeNews()
 		{
