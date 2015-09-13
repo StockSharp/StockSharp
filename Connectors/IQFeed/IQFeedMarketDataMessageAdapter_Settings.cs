@@ -14,6 +14,9 @@ namespace StockSharp.IQFeed
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// The messages adapter for IQFeed.
+	/// </summary>
 	[DisplayName("IQFeed")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "IQFeed")]
@@ -26,7 +29,7 @@ namespace StockSharp.IQFeed
 		private EndPoint _level1Address = IQFeedAddresses.DefaultLevel1Address;
 
 		/// <summary>
-		/// Адрес для получения данных по Level1.
+		/// Address for obtaining data on Level1.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2122Key)]
@@ -47,7 +50,7 @@ namespace StockSharp.IQFeed
 		private EndPoint _level2Address = IQFeedAddresses.DefaultLevel2Address;
 
 		/// <summary>
-		/// Адрес для получения данных по Level2.
+		/// Address for obtaining data on Level2.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2124Key)]
@@ -68,7 +71,7 @@ namespace StockSharp.IQFeed
 		private EndPoint _lookupAddress = IQFeedAddresses.DefaultLookupAddress;
 
 		/// <summary>
-		/// Адрес для получения исторических данных.
+		/// Address for obtaining history data.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2126Key)]
@@ -89,7 +92,7 @@ namespace StockSharp.IQFeed
 		private EndPoint _adminAddress = IQFeedAddresses.DefaultAdminAddress;
 
 		/// <summary>
-		/// Адрес для получения служебных данных.
+		/// Address for obtaining service data.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2128Key)]
@@ -110,7 +113,7 @@ namespace StockSharp.IQFeed
 		private EndPoint _derivativeAddress = IQFeedAddresses.DefaultDerivativeAddress;
 
 		/// <summary>
-		/// Адрес для получения производных данных.
+		/// Address for obtaining derivative data.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2128Key)]
@@ -131,7 +134,7 @@ namespace StockSharp.IQFeed
 		private IQFeedLevel1Column[] _level1Columns;
 
 		/// <summary>
-		/// Все <see cref="IQFeedLevel1Column"/>, которые необходимо транслировать.
+		/// All <see cref="IQFeedLevel1Column"/> to be transmit.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2121Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2131Key)]
@@ -156,7 +159,7 @@ namespace StockSharp.IQFeed
 		private IEnumerable<SecurityTypes> _securityTypesFilter = Enumerator.GetValues<SecurityTypes>();
 
 		/// <summary>
-		/// Типы инструментов, по которым необходимо получить данные.
+		/// Securities types, for which data must be received.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2121Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2133Key)]
@@ -175,7 +178,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Загружать ли инструменты из архива с сайта IQFeed. По-умолчанию выключено.
+		/// Whether to load instruments from the archive of the IQFeed site. The default is off.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2121Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2135Key)]
@@ -184,8 +187,7 @@ namespace StockSharp.IQFeed
 		public bool IsDownloadSecurityFromSite { get; set; }
 
 		/// <summary>
-		/// Путь к файлу со списком инструментов IQFeed, скаченный с сайта.
-		/// Если путь задан, то повторное скачивание с сайта не происходит, и парсится только локальная копия.
+		/// Path to file with IQFeed list of securities, downloaded from the website. If path is specified, then secondary download from website does not occur, and only the local copy gets parsed.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str2121Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2137Key)]
@@ -194,7 +196,7 @@ namespace StockSharp.IQFeed
 		public string SecuritiesFile { get; set; }
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
 		public override bool IsValid
@@ -203,7 +205,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Список всех доступных <see cref="IQFeedLevel1Column"/>.
+		/// The list of all available <see cref="IQFeedLevel1Column"/>.
 		/// </summary>
 		[Browsable(false)]
 		public IQFeedLevel1ColumnRegistry Level1ColumnRegistry { get; private set; }
@@ -222,7 +224,7 @@ namespace StockSharp.IQFeed
 		});
 
 		/// <summary>
-		/// Доступные тайм-фреймы.
+		/// Available time frames.
 		/// </summary>
 		[Browsable(false)]
 		public static IEnumerable<TimeSpan> TimeFrames
@@ -231,9 +233,9 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -261,9 +263,9 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -282,9 +284,9 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return "Level1 = {0} Level2 = {1}".Put(Level1Address, Level2Address);

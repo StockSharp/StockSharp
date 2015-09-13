@@ -24,7 +24,7 @@ namespace StockSharp.IQFeed
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Маркет-дата адаптер сообщений для IQFeed.
+	/// The messages adapter for IQFeed.
 	/// </summary>
 	public partial class IQFeedMarketDataMessageAdapter : MessageAdapter
 	{
@@ -54,9 +54,9 @@ namespace StockSharp.IQFeed
 		private readonly SynchronizedDictionary<long, Tuple<string, StringBuilder>> _newsIds = new SynchronizedDictionary<long, Tuple<string, StringBuilder>>();
 
 		/// <summary>
-		/// Создать <see cref="IQFeedMarketDataMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="IQFeedMarketDataMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public IQFeedMarketDataMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -95,7 +95,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{
@@ -103,7 +103,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
@@ -151,9 +151,9 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)

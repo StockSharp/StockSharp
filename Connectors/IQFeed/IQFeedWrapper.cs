@@ -11,11 +11,10 @@ namespace StockSharp.IQFeed
 	using Ecng.Common;
 
 	using StockSharp.Logging;
-
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Обертка для работы с IQFeed c помощью протокола TCP/IP.
+	/// The wrapper to work with the IQFeed using the TCP/IP protocol.
 	/// </summary>
 	class IQFeedWrapper
 	{
@@ -24,22 +23,22 @@ namespace StockSharp.IQFeed
 		private Socket _socket;
 
 		/// <summary>
-		/// Адрес сервера.
+		/// Server address.
 		/// </summary>
 		public EndPoint Address { get; private set; }
 
 		/// <summary>
-		/// Запущен ли экспорт. Экспорт запускается при отправке IQFeed команды.
+		/// Whether export is started. The export starts when the IQFeed command sending.
 		/// </summary>
 		private bool IsExportStarted { get; set; }
 
 		/// <summary>
-		/// Событие ошибки подключения (например, соединение было разорвано).
+		/// The connection error event (for example, the connection was aborted).
 		/// </summary>
 		public event Action<Exception> ConnectionError;
 
 		/// <summary>
-		/// Событие появления новых данных.
+		/// New data occurring event.
 		/// </summary>
 		public event Action<string> ProcessReply;
 
@@ -62,7 +61,7 @@ namespace StockSharp.IQFeed
 		public string Name { get; private set; }
 
 		/// <summary>
-		/// Подключиться к серверу.
+		/// To connect to the server.
 		/// </summary>
 		public void Connect()
 		{
@@ -190,7 +189,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отключиться от сервера.
+		/// To disconnect from the server.
 		/// </summary>
 		public void Disconnect()
 		{
@@ -209,9 +208,9 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение данных.
+		/// To send the request for data receiving.
 		/// </summary>
-		/// <param name="command">Запрос в формате IQFeed.</param>
+		/// <param name="command">The request in the IQFeed format.</param>
 		public void Request(string command)
 		{
 			command += "\r\n";
@@ -230,7 +229,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение списка торговых площадок.
+		/// To send the request for the list of market boards.
 		/// </summary>
 		public void RequestListedMarkets()
 		{
@@ -243,7 +242,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение списка типов инструментов.
+		/// To send the request for the list of instruments types.
 		/// </summary>
 		public void RequestSecurityTypes()
 		{
@@ -258,13 +257,13 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение списка инструментов по заданному фильтру.
+		/// To send the request for the list of instruments by the specified filter.
 		/// </summary>
-		/// <param name="requestId">Идентификатор запроса.</param>
-		/// <param name="searchField">Поле, по которому необходимо искать данные.</param>
-		/// <param name="searchText">Строка поиска.</param>
-		/// <param name="filterType">Тип фильтра.</param>
-		/// <param name="filterValue">Значения фильтра.</param>
+		/// <param name="requestId">Request identifier.</param>
+		/// <param name="searchField">The field by which you need to search for data.</param>
+		/// <param name="searchText">The search string.</param>
+		/// <param name="filterType">Filter type.</param>
+		/// <param name="filterValue">Filter value.</param>
 		public void RequestSecurities(long requestId, IQFeedSearchField searchField, string searchText, IQFeedFilterType filterType, params string[] filterValue)
 		{
 			//Symbols By Filter - A symbol search by symbol or description. Can be filtered by providing a list of Listed Markets or Security Types. 
@@ -301,12 +300,12 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение истории сделок по инструменту за указанный период.
+		/// To send the request for the trades history by the instrument for the specified period.
 		/// </summary>
-		/// <param name="requestId">Идентификатор запроса.</param>
-		/// <param name="symbol">Код инструмента.</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
+		/// <param name="requestId">Request identifier.</param>
+		/// <param name="symbol">Security code.</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
 		public void RequestTicks(long requestId, string symbol, DateTime from, DateTime to)
 		{
 			//HTT,[Symbol],[BeginDate BeginTime],[EndDate EndTime],[MaxDatapoints],[BeginFilterTime],[EndFilterTime],[DataDirection],[RequestID],[DatapointsPerSend]<CR><LF> 
@@ -345,14 +344,14 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение истории свечек по инструменту за указанный период.
+		/// To send the request for the candles history by the instrument for the specified period.
 		/// </summary>
-		/// <param name="requestId">Идентификатор запроса.</param>
-		/// <param name="symbol">Код инструмента.</param>
-		/// <param name="intervalType">Тип свечек.</param>
-		/// <param name="arg">Параметр свечи.</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
+		/// <param name="requestId">Request identifier.</param>
+		/// <param name="symbol">Security code.</param>
+		/// <param name="intervalType">The candles type.</param>
+		/// <param name="arg">Candle arg.</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
 		public void RequestCandles(long requestId, string symbol, string intervalType, string arg, DateTime from, DateTime to)
 		{
 			//HIT,[Symbol],[Interval],[BeginDate BeginTime],[EndDate EndTime],[MaxDatapoints],[BeginFilterTime],[EndFilterTime],[DataDirection],[RequestID],[DatapointsPerSend],[IntervalType]<CR><LF> 
@@ -376,12 +375,12 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение истории дневных свечек по инструменту за указанный период.
+		/// To send the request for the daily candles history by the instrument for the specified period.
 		/// </summary>
-		/// <param name="requestId">Идентификатор запроса.</param>
-		/// <param name="symbol">Код инструмента.</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
+		/// <param name="requestId">Request identifier.</param>
+		/// <param name="symbol">Security code.</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
 		public void RequestDailyCandles(long requestId, string symbol, DateTime from, DateTime to)
 		{
 			//HDT,[Symbol],[BeginDate],[EndDate],[MaxDatapoints],[DataDirection],[RequestID],[DatapointsPerSend]<CR><LF> 
@@ -401,11 +400,11 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение истории дневных свечек по инструменту.
+		/// To send the request for the daily candles history by the instrument.
 		/// </summary>
-		/// <param name="requestId">Идентификатор запроса.</param>
-		/// <param name="symbol">Код инструмента.</param>
-		/// <param name="count">Количесто свечей.</param>
+		/// <param name="requestId">Request identifier.</param>
+		/// <param name="symbol">Security code.</param>
+		/// <param name="count">Candles count.</param>
 		public void RequestDailyCandles(long requestId, string symbol, long count)
 		{
 			//HDX,[Symbol],[MaxDatapoints],[DataDirection],[RequestID],[DatapointsPerSend]<CR><LF> 
@@ -422,11 +421,11 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение истории недельных свечек по инструменту.
+		/// To send the request for the weekly candles history by the instrument.
 		/// </summary>
-		/// <param name="requestId">Идентификатор запроса.</param>
-		/// <param name="symbol">Код инструмента.</param>
-		/// <param name="count">Количество свечек.</param>
+		/// <param name="requestId">Request identifier.</param>
+		/// <param name="symbol">Security code.</param>
+		/// <param name="count">Number of candles.</param>
 		public void RequestWeeklyCandles(long requestId, string symbol, long count)
 		{
 			//HWX,[Symbol],[MaxDatapoints],[DataDirection],[RequestID],[DatapointsPerSend]<CR><LF> 
@@ -443,11 +442,11 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение истории месячных свечек по инструменту.
+		/// To send the request for the monthly candles history by the instrument.
 		/// </summary>
-		/// <param name="requestId">Идентификатор запроса.</param>
-		/// <param name="symbol">Код инструмента.</param>
-		/// <param name="count">Количество свечек.</param>
+		/// <param name="requestId">Request identifier.</param>
+		/// <param name="symbol">Security code.</param>
+		/// <param name="count">Number of candles.</param>
 		public void RequestMonthlyCandles(long requestId, string symbol, long count)
 		{
 			//HMX,[Symbol],[MaxDatapoints],[DataDirection],[RequestID],[DatapointsPerSend]<CR><LF> 
@@ -498,25 +497,25 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Подписаться на получение данных по инструменту.
+		/// To subscribe to get data by the instrument.
 		/// </summary>
-		/// <param name="symbol">Код инструмента.</param>
+		/// <param name="symbol">Security code.</param>
 		public void SubscribeSymbol(string symbol)
 		{
 			Request("w{0}".Put(symbol));
 		}
 
 		/// <summary>
-		/// Отписаться от получения данных по инструменту.
+		/// To unsubscribe from the data getting by the instrument.
 		/// </summary>
-		/// <param name="symbol">Код инструмента.</param>
+		/// <param name="symbol">Security code.</param>
 		public void UnSubscribeSymbol(string symbol)
 		{
 			Request("r{0}".Put(symbol));
 		}
 
 		/// <summary>
-		/// Подписаться на получение новостей.
+		/// To subscribe to news.
 		/// </summary>
 		public void SubscribeNews()
 		{
@@ -524,7 +523,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отписаться от получения новостей.
+		/// To unsubscribe from the news.
 		/// </summary>
 		public void UnSubscribeNews()
 		{
@@ -532,7 +531,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение описания новости.
+		/// To send the request for the news description.
 		/// </summary>
 		public void RequestNewsStory(long requestId, string newsId)
 		{
@@ -549,7 +548,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Отправить запрос на получение описания новости.
+		/// To send the request for the news description.
 		/// </summary>
 		public void RequestNewsHeadlines(long requestId, DateTime date)
 		{
@@ -568,9 +567,9 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Установить набор полей для получения данных по Level1.
+		/// To specify the set of fields for data by the Level1.
 		/// </summary>
-		/// <param name="fields">Названия полей.</param>
+		/// <param name="fields">Field names.</param>
 		public void SetLevel1FieldSet(params string[] fields)
 		{
 			Request("S,SELECT UPDATE FIELDS,{0}".Put(fields.Join(",")));

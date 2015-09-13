@@ -1,4 +1,4 @@
-﻿namespace StockSharp.IQFeed
+namespace StockSharp.IQFeed
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,6 +10,9 @@
 	using StockSharp.Messages;
 	using StockSharp.Algo;
 
+	/// <summary>
+	/// The messages adapter for IQFeed.
+	/// </summary>
 	partial class IQFeedMarketDataMessageAdapter
 	{
 		private IEnumerable<Message> ToSecurityFundamentalMessages(string value)

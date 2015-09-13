@@ -17,7 +17,7 @@ namespace StockSharp.IQFeed
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с DTN IQFeed для скачивания исторических и реал-тайм маркет-данных (level 1, level 2).
+	/// The interface <see cref="IConnector"/> implementation for the interaction with DTN IQFeed for download of historical and real-time market data (level 1, level 2).
 	/// </summary>
 	public class IQFeedTrader : Connector, IExternalCandleSource
 	{
@@ -28,7 +28,7 @@ namespace StockSharp.IQFeed
 		private readonly IQFeedMarketDataMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="IQFeedTrader"/>.
+		/// Initializes a new instance of the <see cref="IQFeedTrader"/>.
 		/// </summary>
 		public IQFeedTrader()
 		{
@@ -40,7 +40,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Список всех доступных <see cref="IQFeedLevel1Column"/>.
+		/// The list of all available <see cref="IQFeedLevel1Column"/>.
 		/// </summary>
 		public IQFeedLevel1ColumnRegistry Level1ColumnRegistry
 		{
@@ -48,7 +48,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Адрес для получения данных по Level1.
+		/// Address for obtaining data on Level1.
 		/// </summary>
 		public EndPoint Level1Address
 		{
@@ -57,7 +57,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Адрес для получения данных по Level2.
+		/// Address for obtaining data on Level2.
 		/// </summary>
 		public EndPoint Level2Address
 		{
@@ -66,7 +66,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Адрес для получения исторических данных.
+		/// Address for obtaining history data.
 		/// </summary>
 		public EndPoint LookupAddress
 		{
@@ -75,7 +75,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Адрес для получения служебных данных.
+		/// Address for obtaining service data.
 		/// </summary>
 		public EndPoint AdminAddress
 		{
@@ -84,7 +84,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Загружать ли инструменты из архива с сайта IQFeed. По-умолчанию выключено.
+		/// Whether to load instruments from the archive of the IQFeed site. The default is off.
 		/// </summary>
 		public bool IsDownloadSecurityFromSite
 		{
@@ -93,7 +93,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Типы инструментов, которые будут скачены с сайта при включенной опции <see cref="IsDownloadSecurityFromSite"/>.
+		/// Instruments types that will be downloaded from the site when the option <see cref="IQFeedTrader.IsDownloadSecurityFromSite"/> enabled.
 		/// </summary>
 		public IEnumerable<SecurityTypes> SecurityTypesFilter
 		{
@@ -102,7 +102,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Все <see cref="IQFeedLevel1Column"/>, которые необходимо транслировать.
+		/// All <see cref="IQFeedLevel1Column"/> to be transmit.
 		/// </summary>
 		public IEnumerable<IQFeedLevel1Column> Level1Columns
 		{
@@ -111,9 +111,9 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Запросить новости для заданной даты.
+		/// To query news for a specified date.
 		/// </summary>
-		/// <param name="date">Дата.</param>
+		/// <param name="date">Date.</param>
 		public virtual void RequestNews(DateTimeOffset date)
 		{
 			SendInMessage(new MarketDataMessage
@@ -126,13 +126,13 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Загрузить исторические сделки.
+		/// Load historical ticks.
 		/// </summary>
-		/// <param name="security">Инструмент, для которого необходимо получить все сделки.</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические сделки.</returns>
+		/// <param name="security">The instrument for which you need to get all trades.</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical ticks.</returns>
 		[Obsolete("Метод устарел. Необходимо использовать метод GetHistoricalLevel1.")]
 		public IEnumerable<Trade> GetTrades(Security security, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
@@ -157,12 +157,12 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Получить исторические тиков.
+		/// To get historical ticks.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо получить все сделки.</param>
-		/// <param name="count">Максимальное количество тиков.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические сделки.</returns>
+		/// <param name="securityId">The instrument identifier for which you need to get all trades.</param>
+		/// <param name="count">Maximum ticks count.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical ticks.</returns>
 		public IEnumerable<Level1ChangeMessage> GetHistoricalLevel1(SecurityId securityId, long count, out bool isSuccess)
 		{
 			this.AddInfoLog(LocalizedStrings.Str2144Params, securityId, count);
@@ -193,13 +193,13 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Получить исторические тиков.
+		/// To get historical ticks.
 		/// </summary>
-		/// <param name="securityId">Идентификатор инструмента, для которого необходимо получить все сделки.</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические сделки.</returns>
+		/// <param name="securityId">The instrument identifier for which you need to get all trades.</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical ticks.</returns>
 		public IEnumerable<Level1ChangeMessage> GetHistoricalLevel1(SecurityId securityId, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
 			this.AddInfoLog(LocalizedStrings.Str2145Params, securityId, from, to);
@@ -231,14 +231,14 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Получить исторические свечи.
+		/// To get historical candles.
 		/// </summary>
-		/// <param name="security">Инструмент, для которого необходимо получить свечи.</param>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="arg">Параметр свечки (например, тайм-фрейм).</param>
-		/// <param name="count">Максимальное количество тиков.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические свечи.</returns>
+		/// <param name="security">The instrument for which you need to get candles.</param>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="arg">The candle parameter (for example, time-frame).</param>
+		/// <param name="count">Maximum ticks count.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical candles.</returns>
 		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
 		{
 			if (security == null)
@@ -282,15 +282,15 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Получить исторические свечи.
+		/// To get historical candles.
 		/// </summary>
-		/// <param name="security">Инструмент, для которого необходимо получить свечи.</param>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="arg">Параметр свечки (например, тайм-фрейм).</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические свечи.</returns>
+		/// <param name="security">The instrument for which you need to get candles.</param>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="arg">The candle parameter (for example, time-frame).</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical candles.</returns>
 		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, DateTimeOffset from, DateTimeOffset to, out bool isSuccess)
 		{
 			if (security == null)
@@ -362,10 +362,10 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan)
@@ -376,38 +376,38 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Событие появления новых свечек, полученных после подписки через <see cref="SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
 		/// </summary>
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Подписаться на получение свечек.
+		/// Subscribe to receive new candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			SubscribeCandles(series, from, to, TransactionIdGenerator.GetNextId());
 		}
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			switch (message.Type)

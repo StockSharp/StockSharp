@@ -1,4 +1,4 @@
-﻿namespace StockSharp.IQFeed
+namespace StockSharp.IQFeed
 {
 	using System;
 
@@ -7,7 +7,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Колонка, описывающая поток данных Level1.
+	/// The column describing the Level1 data flow.
 	/// </summary>
 	public class IQFeedLevel1Column
 	{
@@ -35,17 +35,17 @@
 		}
 
 		/// <summary>
-		/// Название колонки.
+		/// Column name.
 		/// </summary>
 		public string Name { get; private set; }
 
 		/// <summary>
-		/// Тип данных.
+		/// Data type.
 		/// </summary>
 		public Type Type { get; private set; }
 
 		/// <summary>
-		/// Формат данных (в случае, если <see cref="Type"/> равен <see cref="DateTime"/> или <see cref="TimeSpan"/>).
+		/// The data format (if <see cref="IQFeedLevel1Column.Type"/> equals to <see cref="DateTime"/> or <see cref="TimeSpan"/>).
 		/// </summary>
 		public string Format { get; private set; }
 
@@ -54,11 +54,9 @@
 		internal Level1Fields Field { get; set; }
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>
-		/// Строковое представление.
-		/// </returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return Name;
