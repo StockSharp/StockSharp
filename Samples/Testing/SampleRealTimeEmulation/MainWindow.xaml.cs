@@ -1,45 +1,52 @@
 namespace SampleRealTimeEmulation
 {
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Linq;
-	using System.Net;
-	using System.Security;
-	using System.Windows;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Net;
+    using System.Security;
+    using System.Windows;
 
-	using Ecng.Common;
-	using Ecng.Collections;
-	using Ecng.Serialization;
-	using Ecng.Xaml;
+    using Ecng.Collections;
+    using Ecng.Common;
+    using Ecng.Serialization;
+    using Ecng.Xaml;
 
-	using MoreLinq;
+    using MoreLinq;
 
-	using StockSharp.Algo;
-	using StockSharp.Algo.Candles;
-	using StockSharp.Algo.Testing;
-	using StockSharp.BusinessEntities;
-	using StockSharp.IQFeed;
-	using StockSharp.Logging;
-	using StockSharp.Messages;
-	using StockSharp.SmartCom;
-	using StockSharp.Xaml;
-	using StockSharp.Xaml.Charting;
-	using StockSharp.Localization;
+    using StockSharp.Algo;
+    using StockSharp.Algo.Candles;
+    using StockSharp.Algo.Testing;
+    using StockSharp.BusinessEntities;
+    using StockSharp.IQFeed;
+    using StockSharp.Localization;
+    using StockSharp.Logging;
+    using StockSharp.Messages;
+    using StockSharp.SmartCom;
+    using StockSharp.Xaml;
+    using StockSharp.Xaml.Charting;
 
-	public partial class MainWindow
+    public partial class MainWindow
 	{
 		private bool _isConnected;
 
 		private CandleManager _candleManager;
+        private CandleSeries _candleSeries;
+        private CandleSeries _tempCandleSeries; // used to determine if chart settings have changed and new chart is needed
 	    private RealTimeEmulationTrader<IMessageAdapter> _connector;
 		private readonly ChartCandleElement _candlesElem;
 	    private readonly LogManager _logManager;
 		private Security _security;
-	    private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>(); 
+	    private readonly SynchronizedList<Candle> _buffer = new SynchronizedList<Candle>();
 
-		public MainWindow()
+        private string _content;
+
+
+        public MainWindow()
 		{
 			InitializeComponent();
+
+            CandleSettingsEditor.Closed += CandleSettingsEditorOnClosed;
 
 			_logManager = new LogManager();
 			_logManager.Listeners.Add(new GuiLogListener(Log));
@@ -57,7 +64,16 @@ namespace SampleRealTimeEmulation
 			LookupAddressCtrl.Text = IQFeedAddresses.DefaultLookupAddress.To<string>();
 		}
 
-		protected override void OnClosing(CancelEventArgs e)
+        private void CandleSettingsEditorOnClosed(object sender, RoutedEventArgs routedEventArgs)
+        {
+            if (this._tempCandleSeries != CandleSettingsEditor.Settings && _candleSeries != null)
+            {
+                this._tempCandleSeries = CandleSettingsEditor.Settings.Clone();
+                SecurityPicker_OnSecuritySelected(SecurityPicker.SelectedSecurity);
+            }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
 		{
 			if (_connector != null)
 				_connector.Dispose();
@@ -227,17 +243,19 @@ namespace SampleRealTimeEmulation
 		    if (security == null) 
 				return;
 
-			_security = security;// SecurityPicker.SelectedSecurity;
+            if (_candleSeries != null) _candleManager.Stop(_candleSeries); // give back series memory
+			_security = security;
 
 			Chart.Reset(new[] { _candlesElem });
 
 			_connector.RegisterMarketDepth(security);
 			_connector.RegisterTrades(security);
 
-			_candleManager.Start(CandleSettingsEditor.Settings.Clone());
+            _candleSeries = new CandleSeries(CandleSettingsEditor.Settings.CandleType, security, CandleSettingsEditor.Settings.Arg);
+			_candleManager.Start(_candleSeries);
 		}
 
-		private void NewOrder_OnClick(object sender, RoutedEventArgs e)
+        private void NewOrder_OnClick(object sender, RoutedEventArgs e)
 		{
 			OrderGrid_OrderRegistering();
 		}

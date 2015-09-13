@@ -29,18 +29,18 @@
                 </Grid.RowDefinitions>
                 
                 <!--Chart control grid-->
-                <Grid Grid.Row="0" Grid.Column="0" Margin="-25,0,25,0">
+                <Grid Grid.Row="0" Grid.Column="0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <charting:CandleSettingsEditor x:Name="CandleSettingsEditor" />
                 </Grid>
                 <!--End chart control grid-->
                 
-                <charting:Chart x:Name="Chart" Grid.Row="1" />
+                <charting:ChartPanel x:Name="Chart" Grid.Row="1" />
             </Grid>
             <!--End chart and chart control grid-->
 
