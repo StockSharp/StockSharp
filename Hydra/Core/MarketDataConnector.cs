@@ -3,6 +3,7 @@ namespace StockSharp.Hydra.Core
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Runtime.ExceptionServices;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -281,7 +282,9 @@ namespace StockSharp.Hydra.Core
 			{
 				var copy = LastError;
 				LastError = null;
-				throw copy;
+
+				// http://stackoverflow.com/questions/57383/in-c-how-can-i-rethrow-innerexception-without-losing-stack-trace
+				ExceptionDispatchInfo.Capture(copy).Throw();
 			}
 		}
 
