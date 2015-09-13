@@ -1,4 +1,4 @@
-﻿namespace StockSharp.BarChart
+namespace StockSharp.BarChart
 {
 	using System;
 	using System.Collections.Generic;
@@ -24,7 +24,7 @@
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Маркет-дата адаптер сообщений для BarChart.
+	/// The message adapter for BarChart.
 	/// </summary>
 	[DisplayName("BarChart")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
@@ -40,16 +40,16 @@
 		private Client _client;
 
 		/// <summary>
-		/// Создать <see cref="BarChartMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="BarChartMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public BarChartMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
 		}
 
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.LoginKey)]
@@ -58,7 +58,7 @@
 		public string Login { get; set; }
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.PasswordKey)]
@@ -73,7 +73,7 @@
 		});
 
 		/// <summary>
-		/// Доступные тайм-фреймы.
+		/// Available time frames.
 		/// </summary>
 		[Browsable(false)]
 		public static IEnumerable<TimeSpan> TimeFrames
@@ -92,9 +92,9 @@
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -473,9 +473,9 @@
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -485,9 +485,9 @@
 		}
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.BarChart
+namespace StockSharp.BarChart
 {
 	using System;
 	using System.Collections.Generic;
@@ -17,7 +17,7 @@
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с BarChart для скачивания исторических и реал-тайм маркет-данных.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the BarChart.
 	/// </summary>
 	public class BarChartTrader : Connector, IExternalCandleSource
 	{
@@ -28,7 +28,7 @@
 		private readonly BarChartMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="BarChartTrader"/>.
+		/// Initializes a new instance of the <see cref="BarChartTrader"/>.
 		/// </summary>
 		public BarChartTrader()
 		{
@@ -39,7 +39,7 @@
 		}
 
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		public string Login
 		{
@@ -48,7 +48,7 @@
 		}
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		public string Password
 		{
@@ -57,12 +57,12 @@
 		}
 
 		/// <summary>
-		/// Получить исторические тиков.
+		/// To get historical ticks.
 		/// </summary>
-		/// <param name="security">Инструмент, для которого необходимо получить все сделки.</param>
-		/// <param name="count">Максимальное количество тиков.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические сделки.</returns>
+		/// <param name="security">The instrument for which you need to get all trades.</param>
+		/// <param name="count">Maximum ticks count.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical ticks.</returns>
 		public IEnumerable<Trade> GetHistoricalTicks(Security security, long count, out bool isSuccess)
 		{
 			if (security == null)
@@ -96,13 +96,13 @@
 		}
 
 		/// <summary>
-		/// Получить исторические тиков.
+		/// To get historical ticks.
 		/// </summary>
-		/// <param name="security">Инструмент, для которого необходимо получить все сделки.</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические сделки.</returns>
+		/// <param name="security">The instrument for which you need to get all trades.</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical ticks.</returns>
 		public IEnumerable<Trade> GetHistoricalTicks(Security security, DateTime from, DateTime to, out bool isSuccess)
 		{
 			if (security == null)
@@ -137,14 +137,14 @@
 		}
 
 		/// <summary>
-		/// Получить исторические свечи.
+		/// To get historical candles.
 		/// </summary>
-		/// <param name="security">Инструмент, для которого необходимо получить свечи.</param>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="arg">Параметр свечки (например, тайм-фрейм).</param>
-		/// <param name="count">Максимальное количество тиков.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические свечи.</returns>
+		/// <param name="security">The instrument for which you need to get candles.</param>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="arg">The candle parameter (for example, time-frame).</param>
+		/// <param name="count">Maximum ticks count.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical candles.</returns>
 		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, long count, out bool isSuccess)
 		{
 			if (security == null)
@@ -188,15 +188,15 @@
 		}
 
 		/// <summary>
-		/// Получить исторические свечи.
+		/// To get historical candles.
 		/// </summary>
-		/// <param name="security">Инструмент, для которого необходимо получить свечи.</param>
-		/// <param name="candleType">Тип свечи.</param>
-		/// <param name="arg">Параметр свечки (например, тайм-фрейм).</param>
-		/// <param name="from">Дата начала периода.</param>
-		/// <param name="to">Дата окончания периода.</param>
-		/// <param name="isSuccess">Успешно ли получены все данные или процесс загрузки был прерван.</param>
-		/// <returns>Исторические свечи.</returns>
+		/// <param name="security">The instrument for which you need to get candles.</param>
+		/// <param name="candleType">The candle type.</param>
+		/// <param name="arg">The candle parameter (for example, time-frame).</param>
+		/// <param name="from">Begin period.</param>
+		/// <param name="to">End period.</param>
+		/// <param name="isSuccess">Whether all data were obtained successfully or the download process has been interrupted.</param>
+		/// <returns>Historical candles.</returns>
 		public IEnumerable<Candle> GetHistoricalCandles(Security security, Type candleType, object arg, DateTime from, DateTime to, out bool isSuccess)
 		{
 			if (security == null)
@@ -256,10 +256,10 @@
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series.CandleType == typeof(TimeFrameCandle) && series.Arg is TimeSpan)
@@ -270,38 +270,38 @@
 		}
 
 		/// <summary>
-		/// Событие появления новых свечек, полученных после подписки через <see cref="IExternalCandleSource.SubscribeCandles"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
 		/// </summary>
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Подписаться на получение свечек.
+		/// Subscribe to receive new candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			SubscribeCandles(series, from, to, TransactionIdGenerator.GetNextId());
 		}
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="IExternalCandleSource.SubscribeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			switch (message.Type)
