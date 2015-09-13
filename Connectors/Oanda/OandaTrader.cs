@@ -16,7 +16,7 @@ namespace StockSharp.Oanda
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с брокером OANDA.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the OANDA.
 	/// </summary>
 	public class OandaTrader : Connector, IExternalCandleSource
     {
@@ -24,7 +24,7 @@ namespace StockSharp.Oanda
 		private readonly OandaMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="OandaTrader"/>.
+		/// Initializes a new instance of the <see cref="OandaTrader"/>.
 		/// </summary>
 		public OandaTrader()
 		{
@@ -34,7 +34,7 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Сервер.
+		/// Server.
 		/// </summary>
 		public OandaServers Server
 		{
@@ -43,7 +43,7 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Токен.
+		/// Token.
 		/// </summary>
 		public SecureString Token
 		{
@@ -63,21 +63,21 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Событие появления новых свечек, полученных после подписки через <see cref="SubscribeCandles"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
 		/// </summary>
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Подписаться на получение свечек.
+		/// Subscribe to receive new candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			if (series == null)
@@ -106,17 +106,17 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="SubscribeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			var candleMsg = message as CandleMessage;

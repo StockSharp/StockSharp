@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Oanda.Native
+namespace StockSharp.Oanda.Native
 {
 	using System;
 	using System.Collections.Generic;
@@ -88,20 +88,20 @@
 		}
 
 		/// <summary>
-		/// Gets account specific details for the given account
+		/// Gets account specific details for the given account.
 		/// </summary>
-		/// <param name="accountId">the ID of the account to retrieve</param>
-		/// <returns>the AccountDetails for the account</returns>
+		/// <param name="accountId">the ID of the account to retrieve.</param>
+		/// <returns>the AccountDetails for the account.</returns>
 		public AccountDetails GetAccountDetails(int accountId)
 		{
 			return MakeRequest<AccountDetails>(CreateUrl("accounts/{0}".PutEx(accountId)));
 		}
 
 		/// <summary>
-		/// Get the current open positions for the account specified
+		/// Get the current open positions for the account specified.
 		/// </summary>
-		/// <param name="accountId">the ID of the account</param>
-		/// <returns>list of positions (or empty list if there are none)</returns>
+		/// <param name="accountId">the ID of the account.</param>
+		/// <returns>list of positions (or empty list if there are none).</returns>
 		public IEnumerable<Position> GetPositions(int accountId)
 		{
 			return MakeRequest<PositionsResponse>(CreateUrl("accounts/{0}/positions".Put(accountId))).Positions;
@@ -174,9 +174,9 @@
 		}
 
 		/// <summary>
-		/// Gets the list of instruments that are available
+		/// Gets the list of instruments that are available.
 		/// </summary>
-		/// <returns>a list of the available instruments</returns>
+		/// <returns>a list of the available instruments.</returns>
 		public IEnumerable<Instrument> GetInstruments(int accountId, IEnumerable<string> instruments)
 		{
 			var url = CreateUrl("instruments");
@@ -192,10 +192,10 @@
 		}
 
 		/// <summary>
-		/// Gets the current rates for the given instruments
+		/// Gets the current rates for the given instruments.
 		/// </summary>
-		/// <param name="instruments">The list of instruments to request</param>
-		/// <returns>The list of prices</returns>
+		/// <param name="instruments">The list of instruments to request.</param>
+		/// <returns>The list of prices.</returns>
 		public IEnumerable<Price> GetRates(IEnumerable<string> instruments)
 		{
 			var url = CreateUrl("prices");

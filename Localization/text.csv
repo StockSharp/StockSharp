@@ -9997,8 +9997,8 @@ DocStr5920;Gets the current rates for the given instruments;Gets the current rat
 DocStr5921;The list of instruments to request;The list of instruments to request
 DocStr5922;The list of prices;The list of prices
 DocStr5923;The messages adapter for OANDA (REST protocol);Адаптер сообщений для OANDA через протокол REST
-DocStr5924;Виды серверов;Виды серверов
-DocStr5925;Реализация интерфейса {0} для взаимодействия с брокером OANDA;Реализация интерфейса {0} для взаимодействия с брокером OANDA
+DocStr5924;Servers types;Виды серверов
+DocStr5925;The interface {0} implementation which provides a connection to the OANDA;Реализация интерфейса {0} для взаимодействия с брокером OANDA
 DocStr5926;The messages adapter for OpenECry;Адаптер сообщений для OpenECry
 DocStr5927;The OpenECry server API address. The default is {0};Адрес API сервера OpenECry. По-умолчанию равен {0}
 DocStr5928;The required mode of connection to the terminal. The default is {0};Требуемый режим подключения к терминалу. По умолчанию {0}

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Oanda
+namespace StockSharp.Oanda
 {
 	using System;
 	using System.Linq;
@@ -11,6 +11,9 @@
 	using StockSharp.Messages;
 	using StockSharp.Oanda.Native.DataTypes;
 
+	/// <summary>
+	/// The messages adapter for OANDA (REST protocol).
+	/// </summary>
 	partial class OandaMessageAdapter
 	{
 		private const string _orderImit = "marketIfTouched";

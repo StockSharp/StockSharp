@@ -8,6 +8,9 @@ namespace StockSharp.Oanda
 	using StockSharp.Messages;
 	using StockSharp.Oanda.Native.DataTypes;
 
+	/// <summary>
+	/// The messages adapter for OANDA (REST protocol).
+	/// </summary>
 	partial class OandaMessageAdapter
 	{
 		private void ProcessSecurityLookupMessage(SecurityLookupMessage message)

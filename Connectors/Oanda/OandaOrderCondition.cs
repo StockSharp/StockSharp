@@ -9,7 +9,7 @@ namespace StockSharp.Oanda
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Условие заявок, специфичных для <see cref="Oanda"/>.
+	/// <see cref="Oanda"/> order condition.
 	/// </summary>
 	[Serializable]
 	[DataContract]
@@ -17,14 +17,14 @@ namespace StockSharp.Oanda
 	public class OandaOrderCondition : OrderCondition
 	{
 		/// <summary>
-		/// Создать <see cref="OandaOrderCondition"/>.
+		/// Initializes a new instance of the <see cref="OandaOrderCondition"/>.
 		/// </summary>
 		public OandaOrderCondition()
 		{
 		}
 
 		/// <summary>
-		/// Режим If Market If Touched.
+		/// If Market If Touched mode.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
@@ -37,7 +37,7 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Минимальная цена исполнения.
+		/// Minimum execution price.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
@@ -50,7 +50,7 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Максимальная цена исполнения.
+		/// Maximum execution price.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
@@ -63,7 +63,7 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Отступ стоп-лосса.
+		/// Stop-loss offset.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
@@ -76,7 +76,7 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Отступ тейк-профита.
+		/// Take-profit offset.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
@@ -89,7 +89,7 @@ namespace StockSharp.Oanda
 		}
 
 		/// <summary>
-		/// Отступ скользящего стоп-лосса.
+		/// Offset of a trailing stop-loss.
 		/// </summary>
 		[DataMember]
 		[CategoryLoc(LocalizedStrings.Str225Key)]
