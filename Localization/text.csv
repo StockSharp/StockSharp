@@ -7926,13 +7926,13 @@ DocStr3788;New data occurring event;Событие появления новых
 DocStr3789;ITCH market-data message adapter;Маркет-дата адаптер сообщений для ITCH
 DocStr3790;Create market depth builder;Создать построитель стакана
 DocStr3791;The main recovery state address;Основной адрес рассылки
-DocStr3792;Адрес сервера восстановления состояния;Адрес сервера восстановления состояния
-DocStr3793;Адрес сервера проигрывания данных;Адрес сервера проигрывания данных
-DocStr3794;Загружать из {0} только действующие инструменты;Загружать из {0} только действующие инструменты
-DocStr3795;Построитель стакана из лога заявок ITCH протокола;Построитель стакана из лога заявок ITCH протокола
+DocStr3792;Restore state server address;Адрес сервера восстановления состояния
+DocStr3793;Replay state server address;Адрес сервера проигрывания данных
+DocStr3794;Download from {0} only active instruments;Загружать из {0} только действующие инструменты
+DocStr3795;Order log to order book builder for ITCH data;Построитель стакана из лога заявок ITCH протокола
 DocStr3796;Process order log item;Добавить новую строчку из лога заявок к стакану
 DocStr3797;Order book was changed;Был ли изменен стакан
-DocStr3798;Реализация интерфейса {0} для взаимодействия с протоколом ITCH (LSE и NASDAQ);Реализация интерфейса {0} для взаимодействия с протоколом ITCH (LSE и NASDAQ)
+DocStr3798;The interface {0} implementation which provides a connection to the ITCH (LSE or NASDAQ);Реализация интерфейса {0} для взаимодействия с протоколом ITCH (LSE и NASDAQ)
 DocStr3835;Broker information;Информация о брокере
 DocStr3836;Criteria;Критерии
 DocStr3837;Open an account link;Ссылка на открытие счета
