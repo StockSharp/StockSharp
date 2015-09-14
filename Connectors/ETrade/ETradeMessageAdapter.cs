@@ -10,16 +10,16 @@ namespace StockSharp.ETrade
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Адаптер сообщений для ETrade.
+	/// The messages adapter for ETrade.
 	/// </summary>
 	public partial class ETradeMessageAdapter : MessageAdapter
 	{
 		private ETradeClient _client;
 
 		/// <summary>
-		/// Создать <see cref="ETradeMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="ETradeMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public ETradeMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -30,7 +30,7 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
@@ -38,9 +38,9 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new ETradeOrderCondition();
@@ -65,9 +65,9 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Отправить входящее сообщение.
+		/// Send incoming message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -199,15 +199,19 @@ namespace StockSharp.ETrade
 			}
 		}
 
-		/// <summary>Коллбэк изменения статуса соединения.</summary>
+		/// <summary>
+		/// Connection state changed callback.
+		/// </summary>
 		private void ClientOnConnectionStateChanged()
 		{
 			this.AddInfoLog(LocalizedStrings.Str3364Params, _client.IsConnected ? LocalizedStrings.Str3365 : LocalizedStrings.Str3366);
 			SendOutMessage(_client.IsConnected ? (Message)new ConnectMessage() : new DisconnectMessage());
 		}
 
-		/// <summary>Коллбэк ошибки подключения.</summary>
-		/// <param name="ex">Ошибка подключения.</param>
+		/// <summary>
+		/// Connection error callback.
+		/// </summary>
+		/// <param name="ex">Error connection.</param>
 		private void ClientOnConnectionError(Exception ex)
 		{
 			this.AddInfoLog(LocalizedStrings.Str3458Params.Put(ex.Message));
@@ -215,9 +219,9 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Установить свой метод авторизации (по-умолчанию запускается браузер).
+		/// Set own authorization mode (the default is browser uses).
 		/// </summary>
-		/// <param name="method">Метод, принимающий в качестве параметра URL, по которому происходит авторизация на сайте ETrade.</param>
+		/// <param name="method">ETrade authorization method.</param>
 		public void SetCustomAuthorizationMethod(Action<string> method)
 		{
 			_client.SetCustomAuthorizationMethod(method);

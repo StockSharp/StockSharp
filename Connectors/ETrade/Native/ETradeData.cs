@@ -8,14 +8,18 @@ namespace StockSharp.ETrade.Native
 
 	#region Accounts
 
-	/// <summary>Ответ на запрос accountlist.</summary>
+	/// <summary>
+	/// accountlist response.
+	/// </summary>
 	[Serializable]
 	public class AccountListResponse
 	{
 		public List<AccountInfo> response {get; set;} 
 	}
 
-	/// <summary>Информация о счете.</summary>
+	/// <summary>
+	/// The account information.
+	/// </summary>
 	[Serializable]
 	public class AccountInfo
 	{
@@ -30,7 +34,9 @@ namespace StockSharp.ETrade.Native
 
 	#region Positions
 
-	/// <summary>Ответ на запрос accountpositions.</summary>
+	/// <summary>
+	/// accountpositions response.
+	/// </summary>
 	[Serializable]
 	public class AccountPositionsResponse
 	{
@@ -40,7 +46,9 @@ namespace StockSharp.ETrade.Native
 		public List<PositionInfo> response {get; set;} 
 	}
 
-	/// <summary>Информация о позиции.</summary>
+	/// <summary>
+	/// The position information.
+	/// </summary>
 	[Serializable]
 	public class PositionInfo
 	{
@@ -58,7 +66,9 @@ namespace StockSharp.ETrade.Native
 		public ProductId productId { get; set; }
 	}
 
-	/// <summary>Информация об инструменте позиции.</summary>
+	/// <summary>
+	/// Position security information.
+	/// </summary>
 	[Serializable]
 	public class ProductId
 	{
@@ -75,14 +85,18 @@ namespace StockSharp.ETrade.Native
 
 	#region OrderList
 
-	/// <summary>ETrade ответ на запрос OrderList.</summary>
+	/// <summary>
+	/// OrderList response.
+	/// </summary>
 	[Serializable]
 	public class GetOrderListResponse
 	{
 		public OrderListResponse orderListResponse { get; set; }
 	}
 
-	/// <summary>ETrade ответ на запрос OrderList.</summary>
+	/// <summary>
+	/// OrderList response.
+	/// </summary>
 	[Serializable]
 	public class OrderListResponse
 	{
@@ -91,14 +105,18 @@ namespace StockSharp.ETrade.Native
 		public List<OrderDetails> orderDetails { get; set; }
 	}
 
-	/// <summary>Контейнер для данных заявки ETrade.</summary>
+	/// <summary>
+	/// ETrade data container for an order.
+	/// </summary>
 	[Serializable]
 	public class OrderDetails
 	{
 		public Order order { get; set; }
 	}
 
-	/// <summary>Нога заявки ETrade.</summary>
+	/// <summary>
+	/// ETrade order leg.
+	/// </summary>
 	[Serializable]
 	public class LegDetails
 	{
@@ -114,14 +132,18 @@ namespace StockSharp.ETrade.Native
 		public SymbolInfo symbolInfo { get; set; }
 	}
 
-	/// <summary>Информация об инструменте ETrade.</summary>
+	/// <summary>
+	/// The instrument information.
+	/// </summary>
 	[Serializable]
 	public class SymbolInfo
 	{
 		public string symbol { get; set; }
 	}
 
-	/// <summary>Информация о заявке ETrade в формате, используемом в OrderListResponse.</summary>
+	/// <summary>
+	/// THe order information ETrade.
+	/// </summary>
 	[Serializable]
 	public class Order
 	{
@@ -154,7 +176,9 @@ namespace StockSharp.ETrade.Native
 
 	#region OrderRequest
 
-	/// <summary>Базовый класс для запросов на создание/изменение заявки ETrade.</summary>
+	/// <summary>
+	/// Base class for ETrade requests.
+	/// </summary>
 	[Serializable]
 	public abstract class OrderRequestBase
 	{
@@ -172,7 +196,9 @@ namespace StockSharp.ETrade.Native
 	}
 
 
-	/// <summary>Запрос на создание заявки ETrade.</summary>
+	/// <summary>
+	/// The order registration request.
+	/// </summary>
 	[Serializable]
 	public class EquityOrderRequest : OrderRequestBase
 	{
@@ -182,14 +208,18 @@ namespace StockSharp.ETrade.Native
 		public string routingDestination { get; set; }
 	}
 
-	/// <summary>Ответ на запрос о создании заявки ETrade</summary>
+	/// <summary>
+	/// The order registration response.
+	/// </summary>
 	[Serializable]
 	public class PlaceEquityOrderResponse
 	{
 		public PlaceEquityOrderResponse2 EquityOrderResponse { get; set; }
 	}
 
-	/// <summary>Ответ на запрос о создании заявки ETrade</summary>
+	/// <summary>
+	/// The order registration response.
+	/// </summary>
 	[Serializable]
 	public class PlaceEquityOrderResponse2
 	{
@@ -213,7 +243,9 @@ namespace StockSharp.ETrade.Native
 		public string routingDestination { get; set; }
 	}
 
-	/// <summary>Текстовое сообщение ТС ETrade о деталях создания/изменения заявки.</summary>
+	/// <summary>
+	/// ETrade text message about the order.
+	/// </summary>
 	[Serializable]
 	public class PlaceOrderResponseMessage
 	{
@@ -225,14 +257,18 @@ namespace StockSharp.ETrade.Native
 
 	#region OrderChange
 
-	/// <summary>Запрос на изменение заявки ETrade.</summary>
+	/// <summary>
+	/// The order modification request.
+	/// </summary>
 	[Serializable]
 	public class changeEquityOrderRequest : OrderRequestBase
 	{
 		public int orderNum { get; set; }
 	}
 
-	/// <summary>Ответ на запрос об изменении заявки ETrade.</summary>
+	/// <summary>
+	/// The order modification response.
+	/// </summary>
 	[Serializable]
 	public class placeChangeEquityOrderResponse
 	{
@@ -243,7 +279,9 @@ namespace StockSharp.ETrade.Native
 
 	#region OrderCancel
 
-	/// <summary>Запрос на отмену заявки ETrade.</summary>
+	/// <summary>
+	/// The order cancellation request.
+	/// </summary>
 	[Serializable]
 	public class cancelOrderRequest
 	{
@@ -251,14 +289,18 @@ namespace StockSharp.ETrade.Native
 		public int orderNum { get; set; }
 	}
 
-	/// <summary>Ответ на запрос об отмене заявки ETrade.</summary>
+	/// <summary>
+	/// The order cancellation response.
+	/// </summary>
 	[Serializable]
 	public class cancelOrderResponse
 	{
 		public CancelOrderResponse2 cancelResponse { get; set; }
 	}
 
-	/// <summary>Ответ на запрос об отмене заявки ETrade.</summary>
+	/// <summary>
+	/// The order cancellation response.
+	/// </summary>
 	[Serializable]
 	public class CancelOrderResponse2
 	{
@@ -272,14 +314,18 @@ namespace StockSharp.ETrade.Native
 
 	#region lookup product
 
-	/// <summary>ETrade ответ на запрос ProductLookup.</summary>
+	/// <summary>
+	/// ProductLookup response.
+	/// </summary>
 	[Serializable]
 	public class productLookupResponse
 	{
 		public List<ProductInfo> productList { get; set; }
 	}
 
-	/// <summary>Информация об инструменте в ответе ETrade на запрос ProductLookup.</summary>
+	/// <summary>
+	/// The instrument information.
+	/// </summary>
 	[Serializable]
 	public class ProductInfo
 	{
@@ -293,7 +339,9 @@ namespace StockSharp.ETrade.Native
 
 	#region Rate Limits
 
-	/// <summary>ETrade ответ на запрос limits.</summary>
+	/// <summary>
+	/// limits response.
+	/// </summary>
 	[Serializable]
 	class RateLimitStatus
 	{

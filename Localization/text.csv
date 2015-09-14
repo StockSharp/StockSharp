@@ -7224,74 +7224,74 @@ DocStr3083;Description;Детальное описание
 DocStr3084;Registration date;Дата регистрации
 DocStr3085;CQG message adapter;Адаптер сообщений для CQG
 DocStr3086;The interface {0} implementation which provides a connection to the CQG;Реализация интерфейса {0} для взаимодействия с системой CQG
-DocStr3087;Ответ на запрос accountlist;Ответ на запрос accountlist
-DocStr3088;Информация о счете;Информация о счете
-DocStr3089;Ответ на запрос accountpositions;Ответ на запрос accountpositions
-DocStr3090;Информация о позиции;Информация о позиции
-DocStr3091;Информация об инструменте позиции;Информация об инструменте позиции
-DocStr3092;ETrade ответ на запрос OrderList;ETrade ответ на запрос OrderList
-DocStr3093;Контейнер для данных заявки ETrade;Контейнер для данных заявки ETrade
-DocStr3094;Нога заявки ETrade;Нога заявки ETrade
-DocStr3095;Информация об инструменте ETrade;Информация об инструменте ETrade
-DocStr3096;Информация о заявке ETrade в формате, используемом в OrderListResponse;Информация о заявке ETrade в формате, используемом в OrderListResponse
-DocStr3097;Базовый класс для запросов на создание/изменение заявки ETrade;Базовый класс для запросов на создание/изменение заявки ETrade
-DocStr3098;Запрос на создание заявки ETrade;Запрос на создание заявки ETrade
-DocStr3099;Ответ на запрос о создании заявки ETrade;Ответ на запрос о создании заявки ETrade
-DocStr3100;Текстовое сообщение ТС ETrade о деталях создания/изменения заявки;Текстовое сообщение ТС ETrade о деталях создания/изменения заявки
-DocStr3101;Запрос на изменение заявки ETrade;Запрос на изменение заявки ETrade
-DocStr3102;Ответ на запрос об изменении заявки ETrade;Ответ на запрос об изменении заявки ETrade
-DocStr3103;Запрос на отмену заявки ETrade;Запрос на отмену заявки ETrade
-DocStr3104;Ответ на запрос об отмене заявки ETrade;Ответ на запрос об отмене заявки ETrade
-DocStr3105;ETrade ответ на запрос ProductLookup;ETrade ответ на запрос ProductLookup
-DocStr3106;Информация об инструменте в ответе ETrade на запрос ProductLookup;Информация об инструменте в ответе ETrade на запрос ProductLookup
-DocStr3107;ETrade ответ на запрос limits;ETrade ответ на запрос limits
+DocStr3087;accountlist response;Ответ на запрос accountlist
+DocStr3088;The account information;Информация о счете
+DocStr3089;accountpositions response;Ответ на запрос accountpositions
+DocStr3090;The position information;Информация о позиции
+DocStr3091;Position security information;Информация об инструменте позиции
+DocStr3092;OrderList response;ETrade ответ на запрос OrderList
+DocStr3093;ETrade data container for an order;Контейнер для данных заявки ETrade
+DocStr3094;ETrade order leg;Нога заявки ETrade
+DocStr3095;The instrument information;Информация об инструменте ETrade
+DocStr3096;THe order information ETrade;Информация о заявке ETrade в формате, используемом в OrderListResponse
+DocStr3097;Base class for ETrade requests;Базовый класс для запросов на создание/изменение заявки ETrade
+DocStr3098;The order registration request;Запрос на создание заявки ETrade
+DocStr3099;The order registration response;Ответ на запрос о создании заявки ETrade
+DocStr3100;ETrade text message about the order;Текстовое сообщение ТС ETrade о деталях создания/изменения заявки
+DocStr3101;The order modification request;Запрос на изменение заявки ETrade
+DocStr3102;The order modification response;Ответ на запрос об изменении заявки ETrade
+DocStr3103;The order cancellation request;Запрос на отмену заявки ETrade
+DocStr3104;The order cancellation response;Ответ на запрос об отмене заявки ETrade
+DocStr3105;ProductLookup response;ETrade ответ на запрос ProductLookup
+DocStr3106;The instrument information;Информация об инструменте в ответе ETrade на запрос ProductLookup
+DocStr3107;limits response;ETrade ответ на запрос limits
 DocStr3108;The messages adapter for ETrade;Адаптер сообщений для ETrade
-DocStr3109;Коллбэк результата поиска инструментов;Коллбэк результата поиска инструментов
-DocStr3110;Номер транзакции операции Lookup;Номер транзакции операции Lookup
-DocStr3111;Список инструментов, удовлетворяющих условию поиска;Список инструментов, удовлетворяющих условию поиска
-DocStr3112;Ошибка поиска;Ошибка поиска
+DocStr3109;Lookup instrument result callback;Коллбэк результата поиска инструментов
+DocStr3110;Lookup transaction id;Номер транзакции операции Lookup
+DocStr3111;Found instruments;Список инструментов, удовлетворяющих условию поиска
+DocStr3112;Lookup error;Ошибка поиска
 DocStr3113;Send incoming message;Отправить входящее сообщение
-DocStr3114;Коллбэк изменения статуса соединения;Коллбэк изменения статуса соединения
-DocStr3115;Коллбэк ошибки подключения;Коллбэк ошибки подключения
+DocStr3114;Connection state changed callback;Коллбэк изменения статуса соединения
+DocStr3115;Connection error callback;Коллбэк ошибки подключения
 DocStr3116;Error connection;Ошибка подключения
-DocStr3117;Установить свой метод авторизации (по-умолчанию запускается браузер);Установить свой метод авторизации (по-умолчанию запускается браузер)
-DocStr3118;Метод, принимающий в качестве параметра URL, по которому происходит авторизация на сайте ETrade;Метод, принимающий в качестве параметра URL, по которому происходит авторизация на сайте ETrade
-DocStr3119;Коллбэк результата (пере)регистрации заявки;Коллбэк результата (пере)регистрации заявки
-DocStr3120;Результат (пере)регистрации;Результат (пере)регистрации
-DocStr3121;Ошибка (пере)регистрации;Ошибка (пере)регистрации
-DocStr3122;Коллбэк результата отмены заявки;Коллбэк результата отмены заявки
-DocStr3123;Идентификатор транзакции отмены заявки;Идентификатор транзакции отмены заявки
-DocStr3124;Результат отмены;Результат отмены
+DocStr3117;Set own authorization mode (the default is browser uses);Установить свой метод авторизации (по-умолчанию запускается браузер)
+DocStr3118;ETrade authorization method;Метод, принимающий в качестве параметра URL, по которому происходит авторизация на сайте ETrade
+DocStr3119;Callback of the order (re)registration;Коллбэк результата (пере)регистрации заявки
+DocStr3120;(Re)registration result;Результат (пере)регистрации
+DocStr3121;(Re)registration error;Ошибка (пере)регистрации
+DocStr3122;Cancellation order result callback;Коллбэк результата отмены заявки
+DocStr3123;Cancellation transaction id;Идентификатор транзакции отмены заявки
+DocStr3124;Cancellation result;Результат отмены
 DocStr3125;Error cancellation;Ошибка отмены
-DocStr3126;Коллбэк результата запроса списка заявок;Коллбэк результата запроса списка заявок
+DocStr3126;Callback of the orders request;Коллбэк результата запроса списка заявок
 DocStr3127;Portfolio name;Имя портфеля
-DocStr3128;Результат запроса списка заявок;Результат запроса списка заявок
-DocStr3129;Ошибка запроса списка заявок;Ошибка запроса списка заявок
-DocStr3130;Коллбэк результата запроса списка портфелей;Коллбэк результата запроса списка портфелей
-DocStr3131;Результат запроса списка портфелей;Результат запроса списка портфелей
-DocStr3132;Ошибка запроса списка портфелей;Ошибка запроса списка портфелей
-DocStr3133;Коллбэк результата запроса позиций;Коллбэк результата запроса позиций
-DocStr3134;Результат запроса списка позиций;Результат запроса списка позиций
-DocStr3135;Ошибка запроса списка позиций;Ошибка запроса списка позиций
-DocStr3136;OAuth access token. Нужен для восстановления соединения по упрощенной процедуре. Сохраненный AccessToken может быть использован до полуночи по EST;OAuth access token. Нужен для восстановления соединения по упрощенной процедуре. Сохраненный AccessToken может быть использован до полуночи по EST
-DocStr3137;Тип условной заявки ETrade;Тип условной заявки ETrade
+DocStr3128;Result of the orders request;Результат запроса списка заявок
+DocStr3129;Error of the orders request;Ошибка запроса списка заявок
+DocStr3130;Callback of the portfolios request;Коллбэк результата запроса списка портфелей
+DocStr3131;Result of the portfolios request;Результат запроса списка портфелей
+DocStr3132;Error of the portfolios request;Ошибка запроса списка портфелей
+DocStr3133;Callback of the positions request;Коллбэк результата запроса позиций
+DocStr3134;Result of the positions request;Результат запроса списка позиций
+DocStr3135;Error of the positions request;Ошибка запроса списка позиций
+DocStr3136;OAuth access token. Required to restore connection. Saved AccessToken can be valid until EST midnight;OAuth access token. Нужен для восстановления соединения по упрощенной процедуре. Сохраненный AccessToken может быть использован до полуночи по EST
+DocStr3137;ETrade condition order type;Тип условной заявки ETrade
 DocStr3138;The market order is automatically registered after reaching the stop price;После достижения стоп-цены автоматически выставляется рыночная заявка
 DocStr3139;The limit order is automatically registered after reaching the stop price;После достижения стоп-цены автоматически выставляется лимитная заявка
 DocStr3140;The interface {0} implementation which provides a connection to the ETrade;Реализация интерфейса {0} для взаимодействия с системой ETrade
-DocStr3141;Режим sandbox;Режим sandbox
-DocStr3142;Token. Используется в процедуре авторизации OAuth 1.0a;Token. Используется в процедуре авторизации OAuth 1.0a
+DocStr3141;Sandbox mode;Режим sandbox
+DocStr3142;Token. Uses in OAuth 1.0a;Token. Используется в процедуре авторизации OAuth 1.0a
 DocStr3143;Initializes a new instance of the {0} class;Initializes a new instance of the {0} class
 DocStr3144;Consumer key;Consumer key
 DocStr3145;Token;Token
 DocStr3146;Secret;Secret
-DocStr3147;Сериализация токена;Сериализация токена
-DocStr3148;Строка с сериализованным токеном;Строка с сериализованным токеном
-DocStr3149;Десериализация токена;Десериализация токена
-DocStr3150;Окно авторизации E*TRADE;Окно авторизации E*TRADE
-DocStr3151;Код верификации для продолжения процесса авторизации в системе E*TRADE;Код верификации для продолжения процесса авторизации в системе E*TRADE
-DocStr3152;Сервер, работающий через FIX протокол;Сервер, работающий через FIX протокол
+DocStr3147;Token serialization;Сериализация токена
+DocStr3148;Serialized as string the token;Строка с сериализованным токеном
+DocStr3149;Toke deserialization;Десериализация токена
+DocStr3150;E*TRADE authorization window;Окно авторизации E*TRADE
+DocStr3151;E*TRADE verification code to continue authorization;Код верификации для продолжения процесса авторизации в системе E*TRADE
+DocStr3152;FIX server;Сервер, работающий через FIX протокол
 DocStr3153;Прочитать условие регистрации заявки {0};Прочитать условие регистрации заявки {0}
-DocStr3154;Читатель данных;Читатель данных
+DocStr3154;Data reader;Читатель данных
 DocStr3155;Tag;Тэг
 DocStr3156;Функция, возвращающая условие заявки;Функция, возвращающая условие заявки
 DocStr3157;Успешно ли обработаны данные;Успешно ли обработаны данные

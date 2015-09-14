@@ -8,7 +8,7 @@ namespace StockSharp.ETrade.Native
 
 	
 	/// <summary>
-	/// Token. Используется в процедуре авторизации OAuth 1.0a.
+	/// Token. Uses in OAuth 1.0a.
 	/// </summary>
 	public class OAuthToken
 	{
@@ -41,18 +41,18 @@ namespace StockSharp.ETrade.Native
 		public string Secret { get; private set; }
 
 		/// <summary>
-		/// Сериализация токена.
+		/// Token serialization.
 		/// </summary>
-		/// <returns>Строка с сериализованным токеном.</returns>
+		/// <returns>Serialized as string the token.</returns>
 		public string Serialize()
 		{
 			return "{0}\n{1}\n{2}".Put(ConsumerKey, Token, Secret);
 		}
 
 		/// <summary>
-		/// Десериализация токена.
+		/// Toke deserialization.
 		/// </summary>
-		/// <returns>Токен.</returns>
+		/// <returns>Token.</returns>
 		public static OAuthToken Deserialize(string serialized)
 		{
 			if(serialized.IsEmpty()) return null;

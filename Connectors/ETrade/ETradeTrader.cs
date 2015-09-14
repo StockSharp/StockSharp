@@ -1,4 +1,4 @@
-﻿namespace StockSharp.ETrade
+namespace StockSharp.ETrade
 {
 	using System;
 	using System.Security;
@@ -10,12 +10,12 @@
 	using StockSharp.ETrade.Native;
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/> для взаимодействия с системой ETrade.
+	/// The interface <see cref="IConnector"/> implementation which provides a connection to the ETrade.
 	/// </summary>
 	public class ETradeTrader : Connector
 	{
 		/// <summary>
-		/// Ключ.
+		/// Key.
 		/// </summary>
 		public string ConsumerKey
 		{
@@ -24,7 +24,7 @@
 		}
 
 		/// <summary>
-		/// Секрет.
+		/// Secret.
 		/// </summary>
 		public string ConsumerSecret
 		{
@@ -33,8 +33,7 @@
 		}
 
 		/// <summary>
-		/// OAuth access token. Нужен для восстановления соединения по упрощенной процедуре.
-		/// Сохраненный AccessToken может быть использован до полуночи по EST.
+		/// OAuth access token. Required to restore connection. Saved AccessToken can be valid until EST midnight.
 		/// </summary>
 		public OAuthToken AccessToken
 		{
@@ -43,7 +42,7 @@
 		}
 
 		/// <summary>
-		/// Код верификации, полученный пользователем в браузере после подтверждения разрешения на работу приложения.
+		/// Verification code, received by user in browser, after confirming program's permission to work.
 		/// </summary>
 		public string VerificationCode
 		{
@@ -52,7 +51,7 @@
 		}
 
 		/// <summary>
-		/// Режим sandbox.
+		/// Sandbox mode.
 		/// </summary>
 		public bool Sandbox
 		{
@@ -63,7 +62,7 @@
 		private readonly ETradeMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="ETradeTrader"/>.
+		/// Initializes a new instance of the <see cref="ETradeTrader"/>.
 		/// </summary>
 		public ETradeTrader()
 		{
@@ -79,9 +78,9 @@
 		}
 
 		/// <summary>
-		/// Установить свой метод авторизации (по-умолчанию запускается браузер).
+		/// Set own authorization mode (the default is browser uses).
 		/// </summary>
-		/// <param name="method">Метод, принимающий в качестве параметра URL, по которому происходит авторизация на сайте ETrade.</param>
+		/// <param name="method">ETrade authorization method.</param>
 		public void SetCustomAuthorizationMethod(Action<string> method)
 		{
 			_adapter.SetCustomAuthorizationMethod(method);

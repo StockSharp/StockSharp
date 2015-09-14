@@ -6,23 +6,24 @@ namespace StockSharp.ETrade.Xaml
 
 	using Ecng.Common;
 	using Ecng.Xaml;
+
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Окно авторизации E*TRADE.
+	/// E*TRADE authorization window.
 	/// </summary>
 	public partial class AuthDialog
 	{
 		private readonly string _authUrl;
 
 		/// <summary>
-		/// <see cref="DependencyProperty"/> для <see cref="VerificationCode"/>.
+		/// <see cref="DependencyProperty"/> for <see cref="VerificationCode"/>.
 		/// </summary>
 		public static readonly DependencyProperty VerificationCodeProperty
 			= DependencyProperty.Register("VerificationCode", typeof(string), typeof(AuthDialog), new PropertyMetadata(default(string)));
 
 		/// <summary>
-		/// Создать <see cref="AuthDialog"/>.
+		/// Initializes a new instance of the <see cref="AuthDialog"/>.
 		/// </summary>
 		public AuthDialog(string authUrl)
 		{
@@ -34,7 +35,7 @@ namespace StockSharp.ETrade.Xaml
 		}
 
 		/// <summary>
-		/// Код верификации для продолжения процесса авторизации в системе E*TRADE.
+		/// E*TRADE verification code to continue authorization.
 		/// </summary>
 		public string VerificationCode
 		{

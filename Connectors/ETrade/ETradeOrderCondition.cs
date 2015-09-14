@@ -4,21 +4,25 @@ namespace StockSharp.ETrade
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Тип условной заявки ETrade.
+	/// ETrade condition order type.
 	/// </summary>
 	public enum ETradeStopTypes
 	{
-		/// <summary>После достижения стоп-цены автоматически выставляется рыночная заявка.</summary>
+		/// <summary>
+		/// The market order is automatically registered after reaching the stop price.
+		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str242Key)]
 		StopMarket,
 
-		/// <summary>После достижения стоп-цены автоматически выставляется лимитная заявка.</summary>
+		/// <summary>
+		/// The limit order is automatically registered after reaching the stop price.
+		/// </summary>
 		[EnumDisplayNameLoc(LocalizedStrings.Str1733Key)]
 		StopLimit,
 	}
 
 	/// <summary>
-	/// Условие заявок, специфичных для <see cref="ETrade"/>.
+	/// <see cref="ETrade"/> order condition.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str2264Key, "ETrade")]
 	public class ETradeOrderCondition : OrderCondition
@@ -27,7 +31,7 @@ namespace StockSharp.ETrade
 		private const string _keyStopPrice = "StopPrice";
 
 		/// <summary>
-		/// Создать <see cref="ETradeOrderCondition"/>.
+		/// Initializes a new instance of the <see cref="ETradeOrderCondition"/>.
 		/// </summary>
 		public ETradeOrderCondition()
 		{
@@ -36,7 +40,7 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Тип стопа.
+		/// Stop type.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str132Key)]
@@ -48,7 +52,7 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Стоп-цена.
+		/// Stop-price.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.StopPriceKey)]

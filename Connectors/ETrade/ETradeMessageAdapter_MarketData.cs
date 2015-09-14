@@ -8,10 +8,13 @@ namespace StockSharp.ETrade
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The messages adapter for ETrade.
+	/// </summary>
 	partial class ETradeMessageAdapter
 	{
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{

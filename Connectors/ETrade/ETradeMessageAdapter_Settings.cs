@@ -11,6 +11,9 @@ namespace StockSharp.ETrade
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// The messages adapter for ETrade.
+	/// </summary>
 	[DisplayName("E*TRADE")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "E*TRADE")]
@@ -22,7 +25,7 @@ namespace StockSharp.ETrade
 		#region properties
 
 		/// <summary>
-		/// Ключ.
+		/// Key.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3304Key)]
@@ -31,7 +34,7 @@ namespace StockSharp.ETrade
 		public string ConsumerKey { get; set; }
 
 		/// <summary>
-		/// Секрет.
+		/// Secret.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3306Key)]
@@ -40,7 +43,7 @@ namespace StockSharp.ETrade
 		public SecureString ConsumerSecret { get; set; }
 
 		/// <summary>
-		/// Демо режим.
+		/// Demo mode.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.DemoKey)]
@@ -49,8 +52,7 @@ namespace StockSharp.ETrade
 		public bool Sandbox { get; set; }
 
 		/// <summary>
-		/// OAuth access token. Нужен для восстановления соединения по упрощенной процедуре.
-		/// Сохраненный AccessToken может быть использован до полуночи по EST.
+		/// OAuth access token. Required to restore connection. Saved AccessToken can be valid until EST midnight.
 		/// </summary>
 		[Browsable(false)]
 		public OAuthToken AccessToken { get; set; }
@@ -66,7 +68,7 @@ namespace StockSharp.ETrade
 		//}
 
 		/// <summary>
-		/// Код верификации, полученный пользователем в браузере после подтверждения разрешения на работу приложения.
+		/// Verification code, received by user in browser, after confirming program's permission to work.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str3370Key)]
@@ -75,7 +77,7 @@ namespace StockSharp.ETrade
 		public string VerificationCode { get; set; }
 
 		/// <summary>
-		/// Проверить введенные параметры на валидность.
+		/// The parameters validity check.
 		/// </summary>
 		[Browsable(false)]
 		public override bool IsValid
@@ -86,9 +88,9 @@ namespace StockSharp.ETrade
 		#endregion
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -99,9 +101,9 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -112,9 +114,9 @@ namespace StockSharp.ETrade
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return ConsumerKey.IsEmpty() ? string.Empty : "ConsumerKey = {0}".Put(ConsumerKey);
