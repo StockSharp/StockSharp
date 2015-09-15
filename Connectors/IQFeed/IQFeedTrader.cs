@@ -376,7 +376,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
 		/// </summary>
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
@@ -397,7 +397,7 @@ namespace StockSharp.IQFeed
 		}
 
 		/// <summary>
-		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles(StockSharp.Algo.Candles.CandleSeries,System.DateTimeOffset,System.DateTimeOffset)"/>.
 		/// </summary>
 		/// <param name="series">Candles series.</param>
 		public void UnSubscribeCandles(CandleSeries series)

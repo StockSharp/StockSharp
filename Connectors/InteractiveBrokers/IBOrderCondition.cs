@@ -1748,7 +1748,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Запрошенная.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
-		[DisplayNameLoc(LocalizedStrings.SolicitedKey, true)]
+		[DisplayNameLoc(LocalizedStrings.SolicitedKey)]
 		[DescriptionLoc(LocalizedStrings.SolicitedKey, true)]
 		public bool Solicited
 		{
@@ -1760,7 +1760,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Произвольный размер.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
-		[DisplayNameLoc(LocalizedStrings.RandomizeSizeKey, true)]
+		[DisplayNameLoc(LocalizedStrings.RandomizeSizeKey)]
 		[DescriptionLoc(LocalizedStrings.RandomizeSizeKey, true)]
 		public bool RandomizeSize
 		{
@@ -1772,7 +1772,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Произвольная цена.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
-		[DisplayNameLoc(LocalizedStrings.RandomizePriceKey, true)]
+		[DisplayNameLoc(LocalizedStrings.RandomizePriceKey)]
 		[DescriptionLoc(LocalizedStrings.RandomizePriceKey, true)]
 		public bool RandomizePrice
 		{
