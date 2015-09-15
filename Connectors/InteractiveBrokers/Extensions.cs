@@ -266,7 +266,7 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Получить количество прибыльных контрактов в сделке.
 		/// </summary>
-		/// <param name="trade">>Собственная сделка.</param>
+		/// <param name="trade">Собственная сделка.</param>
 		/// <returns>Количество прибыльных контрактов в сделке. Если количество отсутствует, то будет возвращено <see langword="null"/>.</returns>
 		public static int? GetCumulativeQuantity(this MyTrade trade)
 		{

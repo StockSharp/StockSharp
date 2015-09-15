@@ -439,7 +439,7 @@ M:StockSharp.InteractiveBrokers.Extensions.GetLiquidation(StockSharp.BusinessEnt
 M:StockSharp.InteractiveBrokers.Extensions.GetLiquidation(StockSharp.BusinessEntities.MyTrade)/param/trade;Str502
 M:StockSharp.InteractiveBrokers.Extensions.GetLiquidation(StockSharp.BusinessEntities.MyTrade)/returns;DocStr3600
 M:StockSharp.InteractiveBrokers.Extensions.GetCumulativeQuantity(StockSharp.BusinessEntities.MyTrade)/summary;DocStr3601
-M:StockSharp.InteractiveBrokers.Extensions.GetCumulativeQuantity(StockSharp.BusinessEntities.MyTrade)/param/trade;DocStr3602
+M:StockSharp.InteractiveBrokers.Extensions.GetCumulativeQuantity(StockSharp.BusinessEntities.MyTrade)/param/trade;Str502
 M:StockSharp.InteractiveBrokers.Extensions.GetCumulativeQuantity(StockSharp.BusinessEntities.MyTrade)/returns;DocStr3603
 M:StockSharp.InteractiveBrokers.Extensions.GetAveragePrice(StockSharp.BusinessEntities.MyTrade)/summary;DocStr3604
 M:StockSharp.InteractiveBrokers.Extensions.GetAveragePrice(StockSharp.BusinessEntities.MyTrade)/param/trade;Str502
