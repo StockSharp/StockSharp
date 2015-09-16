@@ -70,12 +70,6 @@
             Защитный уровень для стоп-лосса. По-умолчанию уровень равен 0, что означает отключено.
             </summary>
         </member>
-        <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossActivationOffset">
-            <summary>
-            Защитный сдвиг от расcчитанной цены стопа <see cref="P:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ActivationPrice"/>, который позволяет активировать защиту до достижения рынком данной цены.
-            По-умолчанию выключено.
-            </summary>
-        </member>
         <member name="P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.IsTrailingStopLoss">
             <summary>
             Использовать ли механизм скольжения для <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>. По-умолчанию выключено.
@@ -652,7 +646,7 @@
             Базовая стратегия защиты позиции.
             </summary>
         </member>
-        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)">
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)">
             <summary>
             Инициализировать <see cref="T:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy"/>.
             </summary>
@@ -663,6 +657,7 @@
             Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
             то задается конкретная цена. Иначе, указывается величина сдвига от <paramref name="protectivePrice"/>.
             </param>
+            <param name="isUpTrend">Отслеживать рост или падение цены.</param>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.GetNotificationRules">
             <summary>
@@ -678,6 +673,11 @@
         <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStopping">
             <summary>
             Метод вызывается тогда, когда состояние процесса <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState"/> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Stopping"/>.
+            </summary>
+        </member>
+        <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnReseted">
+            <summary>
+            Вызывается из метода <see cref="M:StockSharp.Algo.Strategies.Strategy.Reset"/>. 
             </summary>
         </member>
         <member name="M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProcessTimeOut">
@@ -817,17 +817,6 @@
             то задается конкретная цена. Иначе, указывается величина сдвига от <paramref name="protectivePrice"/>.
             </param>
         </member>
-        <member name="P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationOffset">
-            <summary>
-            Защитный сдвиг от расcчитанной цены стопа <see cref="P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationPrice"/>, который позволяет активировать защиту до достижения рынком данной цены.
-            По-умолчанию выключено.
-            </summary>
-        </member>
-        <member name="P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationPrice">
-            <summary>
-            Абсолютное значение цены, при достижении которой автивизируется защитная стратегия. Если цена равна <see langword="null"/>, то активация не требуется.
-            </summary>
-        </member>
         <member name="T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy">
             <summary>
             Стратегия, защищающая сделки одновременно стратегиями <see cref="T:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy"/> и <see cref="T:StockSharp.Algo.Strategies.Protective.StopLossStrategy"/>.
@@ -886,11 +875,6 @@
             Защитный уровень. Если тип <see cref="P:StockSharp.Messages.Unit.Type"/> равен <see cref="F:StockSharp.Messages.UnitTypes.Limit"/>,
             то задается конкретная цена. Иначе, указывается величина сдвига от <paramref name="protectivePrice"/>.
             </param>
-        </member>
-        <member name="P:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.ActivationPrice">
-            <summary>
-            Абсолютное значение цены, при достижении которой автивизируется защитная стратегия. Если цена равна <see langword="null"/>, то активация не требуется.
-            </summary>
         </member>
         <member name="T:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy">
             <summary>
