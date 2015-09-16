@@ -6,714 +6,714 @@
   <members>
     <member name="T:StockSharp.Xaml.Diagram.CompositionDiagramElement">
       <summary>
-            Составной элемент.
+            Composite element.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElement">
       <summary>
-            Элемент схемы.
+            The diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddParam``1(System.String,``0)">
       <summary>
-            Добавить параметр.
+            To add a parameter.
             </summary>
-      <typeparam name="T">Тип параметра.</typeparam>
-      <param name="name">Имя.</param>
-      <param name="value">Значение.</param>
-      <returns>Параметр.</returns>
+      <typeparam name="T">Parameter type.</typeparam>
+      <param name="name">Name.</param>
+      <param name="value">Value.</param>
+      <returns>Parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddParam(StockSharp.Xaml.Diagram.IDiagramElementParam)">
       <summary>
-            Добавить параметр.
+            To add a parameter.
             </summary>
-      <param name="param">Параметр.</param>
+      <param name="param">Parameter.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RemoveParam(StockSharp.Xaml.Diagram.IDiagramElementParam)">
       <summary>
-            Удалить параметр.
+            To remove a parameter.
             </summary>
-      <param name="param">Параметр.</param>
+      <param name="param">Parameter.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddInput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.String,System.String)">
       <summary>
-            Добавить входящее соединение.
+            To add an incoming connection.
             </summary>
-      <param name="name">Название соединения.</param>
-      <param name="type">Тип соединения.</param>
-      <param name="linkableMax">Максимальное число подключений.</param>
-      <param name="id">Идентификатор соединения.</param>
-      <param name="externalId">Внешний идентификатор.</param>
+      <param name="name">The connection name.</param>
+      <param name="type">Connection type.</param>
+      <param name="linkableMax">The maximum number of connections.</param>
+      <param name="id">The connection identifier.</param>
+      <param name="externalId">External ID.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddOutput(System.String,StockSharp.Xaml.Diagram.DiagramSocketType,System.Int32,System.String,System.String)">
       <summary>
-            Добавить исходящее соединение.
+            To add an outgoing connection.
             </summary>
-      <param name="name">Название соединения.</param>
-      <param name="type">Тип соединения.</param>
-      <param name="linkableMax">Максимальное число подключений.</param>
-      <param name="id">Идентификатор соединения.</param>
-      <param name="externalId">Внешний идентификатор.</param>
+      <param name="name">The connection name.</param>
+      <param name="type">Connection type.</param>
+      <param name="linkableMax">The maximum number of connections.</param>
+      <param name="id">The connection identifier.</param>
+      <param name="externalId">External ID.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.AddSocket(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            Добавить соединение.
+            To add a connection.
             </summary>
-      <param name="socket">Соединение.</param>
+      <param name="socket">Connection.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSocket(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            Удалить соединение.
+            To remove a connection.
             </summary>
-      <param name="socket">Соединение.</param>
+      <param name="socket">Connection.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RemoveSockets">
       <summary>
-            Удалить все входящие и исходящие соединения.
+            To remove all incoming and outgoing connections.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.GetSocket(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Получить соединение по объекту-отправителю сообщения.
+            To get the connection by the message sender object.
             </summary>
-      <param name="sender">Отправитель.</param>
-      <returns>Соединение.</returns>
+      <param name="sender">Sender.</param>
+      <returns>Connection.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaiseProcessOutput(StockSharp.Xaml.Diagram.DiagramElement,System.Object)">
       <summary>
-            Вызвать событие <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput" />.
+            To call the event <see cref="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput" />.
             </summary>
-      <param name="sender">Инициатор.</param>
-      <param name="value">Значение.</param>
+      <param name="sender">Initiator.</param>
+      <param name="value">Value.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Init(StockSharp.Xaml.Diagram.DiagramStrategy)">
       <summary>
-            Инициализировать элемент.
+            To initialize the element.
             </summary>
-      <param name="strategy">Стратегия.</param>
+      <param name="strategy">Strategy.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnInit">
       <summary>
-            Метод вызывается при инициализации элемента схемы.
+            The method is called at initialization of the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Process(StockSharp.Xaml.Diagram.DiagramElement,System.Object)">
       <summary>
-            Обработать входящее значение.
+            To handle the incoming value.
             </summary>
-      <param name="sender">Отправитель.</param>
-      <param name="value">Значение.</param>
+      <param name="sender">Sender.</param>
+      <param name="value">Value.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.UnInit">
       <summary>
-            Деинициализировать элемент.
+            The deinitialization of the element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnUnInit">
       <summary>
-            Метод вызывается при деинициализации элемента схемы.
+            The method is called at deinitialization of the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Bind(StockSharp.Xaml.Diagram.DiagramElement,System.String)">
       <summary>
-            Подписаться на обработку выходных значений элемента схемы.
+            To subscribe to the diagram element output values processing.
             </summary>
-      <param name="source">Элемент схемы.</param>
-      <param name="destPortId">Идентификатор порта, к которому биндится элемент.</param>
+      <param name="source">The diagram element.</param>
+      <param name="destPortId">The port identifier to which the element is binded.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnBind(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Метод вызывается при подписке на обработку выходных значений элемента схемы.
+            The method is called at subscription to the processing of diagram element output values.
             </summary>
-      <param name="element">Элемент схемы.</param>
+      <param name="element">The diagram element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.UnBind(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Отписаться от обработки выходных значений элемента схемы.
+            To unsubscribe from the diagram element output values processing.
             </summary>
-      <param name="source">Элемент схемы.</param>
+      <param name="source">The diagram element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnUnBind(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Метод вызывается при отписке от обработки выходных значений элемента схемы.
+            The method is called at unsubscription from the processing of diagram element output values.
             </summary>
-      <param name="element">Элемент схемы.</param>
+      <param name="element">The diagram element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Start">
       <summary>
-            Запустить алгоритм элемента схемы.
+            To start the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Stop">
       <summary>
-            Остановить алгоритм элемента схемы.
+            To stop the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Reset">
       <summary>
-            Переинициализировать состояние элемента схемы.
+            To reinitialize the diagram element state.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.OnReseted">
       <summary>
-            Метод вызывается при переинициализации состояния элемента схемы.
+            The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.String)">
       <summary>
-            Вызвать событие изменения значения свойства элемента схемы.
+            To call the diagram element property value change event.
             </summary>
-      <param name="propertyName">Название свойства.</param>
+      <param name="propertyName">Property name.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
       <summary>
-            Вызвать событие изменения значения свойства элемента схемы.
+            To call the diagram element property value change event.
             </summary>
-      <param name="sender">Отправитель.</param>
-      <param name="args">Аргументы.</param>
+      <param name="sender">Sender.</param>
+      <param name="args">Arguments.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Clone(System.Boolean)">
       <summary>
-            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
             </summary>
-      <param name="cloneSockets">Создавать копии соединений.</param>
-      <returns>Копия.</returns>
+      <param name="cloneSockets">To create copies of connections.</param>
+      <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElement.RaisePropertiesChanged">
       <summary>
-            Вызвать событие изменения доступных свойств.
+            To call the available properties change event.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.InputSockets">
       <summary>
-            Входящие соединения.
+            Incoming connections.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.OutputSockets">
       <summary>
-            Исходящие соединения.
+            Outgoing connections.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Parameters">
       <summary>
-            Параметры элемента схемы.
+            Diagram element settings.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Category">
       <summary>
-            Нзавание группы, в которую входит элемент схемы.
+            The name of the group which includes a diagram element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Name">
       <summary>
-            Название.
+            Name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Description">
       <summary>
-            Описание элемента схемы.
+            The diagram element description.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.LogLevel">
       <summary>
-            Уровень логирования. По-умолчанию установлено в <see cref="F:StockSharp.Logging.LogLevels.Inherit" />.
+            The logging level. The default is set to <see cref="F:StockSharp.Logging.LogLevels.Inherit" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.ShowParameters">
       <summary>
-            Отображать параметры элемента в элементах более высокого уровня.
+            Show element parameters in higher order elements.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.Strategy">
       <summary>
-            Стратегия, к которой привязан элемент.
+            The strategy to which the element is attached.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElement.DebuggerSyncObject">
       <summary>
-            Объект синхронизации для отладчика.
+            The synchronization object for the debugger.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.ProcessOutput">
       <summary>
-            Событие появления новых данных.
+            New data occurring event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.NameChanging">
       <summary>
-            Событие изменения имени элемента схемы.
+            The diagram element name change event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertyChanged">
       <summary>
-            Событие изменения значения свойств элемента схемы.
+            The diagram element properties value change event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElement.PropertiesChanged">
       <summary>
-            Событие изменения доступных свойств.
+            The available properties change event.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.RaisePropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
       <summary>
-            Вызвать событие изменения значения свойства элемента схемы.
+            To call the diagram element property value change event.
             </summary>
-      <param name="sender">Отправитель.</param>
-      <param name="args">Аргументы.</param>
+      <param name="sender">Sender.</param>
+      <param name="args">Arguments.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnInit">
       <summary>
-            Метод вызывается при инициализации элемента схемы.
+            The method is called at initialization of the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnInit">
       <summary>
-            Метод вызывается при деинициализации элемента схемы.
+            The method is called at deinitialization of the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnBind(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Метод вызывается при подписке на обработку выходных значений элемента схемы.
+            The method is called at subscription to the processing of diagram element output values.
             </summary>
-      <param name="element">Элемент схемы.</param>
+      <param name="element">The diagram element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnUnBind(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Метод вызывается при отписке от обработки выходных значений элемента схемы.
+            The method is called at unsubscription from the processing of diagram element output values.
             </summary>
-      <param name="element">Элемент схемы.</param>
+      <param name="element">The diagram element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.OnReseted">
       <summary>
-            Метод вызывается при переинициализации состояния элемента схемы.
+            The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionDiagramElement.Clone(System.Boolean)">
       <summary>
-            Создать копию <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
             </summary>
-      <param name="cloneSockets">Создавать копии соединений.</param>
-      <returns>Копия.</returns>
+      <param name="cloneSockets">To create copies of connections.</param>
+      <returns>Copy.</returns>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Parameters">
       <summary>
-            Параметры элемента схемы.
+            Diagram element settings.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Category">
       <summary>
-            Нзавание группы, в которую входит элемент схемы.
+            The name of the group which includes a diagram element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.Description">
       <summary>
-            Описание элемента схемы.
+            The diagram element description.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.IsModifiable">
       <summary>
-            Возможно ли редактирование схемы составного элемента.
+            Is it possible to edit a composite element diagram.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionDiagramElement.HasErrors">
       <summary>
-            Проверить составной элемент на наличие ошибок в схеме.
+            To check the composite element for errors in diagram.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.CompositionDiagramElement.Changed">
       <summary>
-            Событие изменения схемы составного элемента.
+            The composite element diagram change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.IDiagramElementParam">
       <summary>
-            Параметр элемента схемы.
+            The diagram element parameter.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.Name">
       <summary>
-            Название параметра.
+            Parameter name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.DisplayName">
       <summary>
-            Отображаемое название.
+            The displayed name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.Description">
       <summary>
-            Описание параметра.
+            The parameter description.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.Category">
       <summary>
-            Категория.
+            Category.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.Type">
       <summary>
-            Тип параметра.
+            Parameter type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.Attributes">
       <summary>
-            Атрибуты.
+            Attributes.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.Value">
       <summary>
-            Значение параметра.
+            The parameter value.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsDefault">
       <summary>
-            Указано значение по умолчанию.
+            The default value is specified.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsSealed">
       <summary>
-            Закрытый параметр.
+            The sealed parameter.
             </summary>
       <remarks>
-            Параметр не будет показываться в родительском элементе.
+            The parameter will not be shown in the parent element.
             </remarks>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.IsParam">
       <summary>
-            Изменяемый параметр.
+            The changeable parameter.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.IDiagramElementParam.IgnoreOnSave">
       <summary>
-            Игнорировать при сохранении.
+            To ignore when saving.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.CompositionRegistry">
       <summary>
-            Хранилище составных элементов.
+            The storage of composite elements.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.CompositionRegistry" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.CompositionRegistry" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Save(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="composition">Составной элемент.</param>
+      <param name="composition">Composite element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.TryRemove(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
-            Удалить составной элемент, если он не используется в других составных схемах.
+            To remove the composite element, if it is not used in other composite diagrams.
             </summary>
-      <param name="element">Составной элемент.</param>
+      <param name="element">Composite element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Load(Ecng.Serialization.SettingsStorage,System.Boolean)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="data">Строка с данными.</param>
-      <param name="readOnly">Возможна ли модификация элемента.</param>
+      <param name="data">The data string.</param>
+      <param name="readOnly">Is it possible to modify the element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Serialize(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
-            Сериализовать составной элемент.
+            To serialize the composite element.
             </summary>
-      <param name="composition">Составной элемент.</param>
-      <returns>Хранилище настроек.</returns>
+      <param name="composition">Composite element.</param>
+      <returns>Settings storage.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.Deserialize(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Десериализовать составной элемент.
+            To deserialize the composite element.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
-      <returns>Составной элемент.</returns>
+      <param name="storage">Settings storage.</param>
+      <returns>Composite element.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.CompositionRegistry.DeserializeExported(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Десериализовать составной элемент.
+            To deserialize the composite element.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
-      <returns>Составной элемент.</returns>
+      <param name="storage">Settings storage.</param>
+      <returns>Composite element.</returns>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.CompositionRegistry.DiagramElements">
       <summary>
-            Список элементов.
+            List of elements.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.SaveComposition">
       <summary>
-            Событие сохранения составного элемента схемы.
+            The diagram composite element saving event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.CompositionRegistry.RemoveComposition">
       <summary>
-            Событие удаления составного элемента схемы.
+            The diagram composite element removing event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DebuggerSyncObject">
       <summary>
-            Объект синхронизации для отладчика составных элементов.
+            The synchronization object for the composite elements debugger.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.#ctor(System.Func{StockSharp.Xaml.Diagram.DiagramElement,System.Boolean},System.Action{StockSharp.Xaml.Diagram.DebuggerSyncObject})">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DebuggerSyncObject" />.
             </summary>
-      <param name="isBreak">Обработчик, возвращающий признак остановки для элемента.</param>
-      <param name="breakAction">Действие с элементом при остановке.</param>
+      <param name="isBreak">The handler that returns a stop flag for the element.</param>
+      <param name="breakAction">The action with the element at stop.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsBreakpointAt(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Проверить наличие точки останова на элементе.
+            To check the breakpoint presence in an element.
             </summary>
-      <param name="element">Элемент.</param>
+      <param name="element">Element.</param>
       <returns>
-        <see langword="true" />, если для элемента схемы есть точка останова. Иначе, <see langword="false" />.</returns>
+        <see langword="true" />, if there is a breakpoint in the diagram element. Otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnNext">
       <summary>
-            Установить флаг для ожидания на входе следующего элемента схемы.
+            To set the flag for waiting at the entry of the next diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.SetWaitOnOutput">
       <summary>
-            Установить флаг для ожидания на выходе текущего элемента схемы.
+            To set the flag for waiting at the exit of the current diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.Continue">
       <summary>
-            Продолжить.
+            Continue.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.ContinueAndWaitOnNext">
       <summary>
-            Продолжить и остановиться на следующем элементе.
+            To continue and stop at the next element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DebuggerSyncObject.ContinueAndWaitOnOutput">
       <summary>
-            Продолжить и остановиться на выходе текущего элемента схемы.
+            To continue and stop at the exit of the current diagram element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.CurrentElement">
       <summary>
-            Текущий элемент.
+            The current element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnInput">
       <summary>
-        <see langword="true" />, если отладчик остановлен на входе элемента схемы. Иначе, <see langword="false" />.
+        <see langword="true" />, if the debugger is stopped at the entry of the diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DebuggerSyncObject.IsWaitingOnOutput">
       <summary>
-        <see langword="true" />, если отладчик остановлен на выходе элемента схемы. Иначе, <see langword="false" />.
+        <see langword="true" />, if the debugger is stopped at the exit of the diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramDebugger">
       <summary>
-            Отладчик cоставного элемента схемы.
+            The debugger of the diagram composite element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramDebugger" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramDebugger" />.
             </summary>
-      <param name="composition">Составной элемент.</param>
+      <param name="composition">Composite element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.AddBreak(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Добавить точку останова на элементе.
+            To add a breakpoint in the element.
             </summary>
-      <param name="element">Элемент.</param>
+      <param name="element">Element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.RemoveBreak(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Удалить точку останова на элементе.
+            To remove the breakpoint from the element.
             </summary>
-      <param name="element">Элемент.</param>
+      <param name="element">Element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.IsBreak(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Является ли элемент точкой останова.
+            Whether the element is the breakpoint.
             </summary>
-      <param name="element">Элемент.</param>
+      <param name="element">Element.</param>
       <returns>
-        <see langword="true" />, если является, иначе, <see langword="false" />.</returns>
+        <see langword="true" />, if the element is the breakpoint, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepNext">
       <summary>
-            Перейти к следующему элементу.
+            To go to the next element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepToOutput">
       <summary>
-            Перейти к выходу из элемента схемы.
+            To go to the exit from the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepInto">
       <summary>
-            Перейти внутрь составного элемента схемы.
+            To go inside the diagram composite element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.StepOut">
       <summary>
-            Выйти из составного элемента схемы.
+            To exit from the diagram composite element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Continue">
       <summary>
-            Продолжить.
+            Continue.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramDebugger.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.Breakpoints">
       <summary>
-            Точки останова (элементы, на которых будет выполнена остановка передачи данных).
+            Breakpoints (elements, on which the data transmission will be stopped).
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnInput">
       <summary>
-        <see langword="true" />, если отладчик остановлен на входе элемента схемы. Иначе, <see langword="false" />.
+        <see langword="true" />, if the debugger is stopped at the entry of the diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaitingOnOutput">
       <summary>
-        <see langword="true" />, если отладчик остановлен на выходе элемента схемы. Иначе, <see langword="false" />.
+        <see langword="true" />, if the debugger is stopped at the exit of the diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsWaiting">
       <summary>
-        <see langword="true" />, если отладчик остановлен на входе или выходе элемента схемы. Иначе, <see langword="false" />.
+        <see langword="true" />, if the debugger is stopped at the entry or exit of the diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.CanStepInto">
       <summary>
-        <see langword="true" />, если можно зайти внутрь текущего элемента схемы. Иначе, <see langword="false" />.
+        <see langword="true" />, if it is possible to go inside of the current diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.CanStepOut">
       <summary>
-        <see langword="true" />, если можно выйти из текущего элемента схемы. Иначе, <see langword="false" />.
+        <see langword="true" />, if it is possible to go outside from the current diagram element. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.IsEnabled">
       <summary>
-        <see langword="true" />, если отладчик используется. Иначе, <see langword="false" />.
+        <see langword="true" />, if the debugger is used. Otherwise, <see langword="false" />.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramDebugger.Composition">
       <summary>
-            Составной элемент.
+            Composite element.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramDebugger.CompositionChanged">
       <summary>
-            Событие изменения составного элемента схемы.
+            The diagram composite element change event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramDebugger.Break">
       <summary>
-            Событие остановки на точке останова.
+            The event of the stop at the breakpoint.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramEditorControl">
       <summary>
-            Графический компонент для редактирования <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
+            Graphical component for editing <see cref="T:StockSharp.Xaml.Diagram.CompositionDiagramElement" />.
             </summary>
       <summary>
             DiagramEditorControl
@@ -721,47 +721,47 @@
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.CompositionProperty">
       <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> для <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition" />.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition" />.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverviewProperty">
       <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> для <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverview" />.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverview" />.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramEditorControl.ScaleProperty">
       <summary>
-        <see cref="T:System.Windows.DependencyProperty" /> для <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale" />.
+        <see cref="T:System.Windows.DependencyProperty" /> for <see cref="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramEditorControl" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramEditorControl" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.GetSelectionCopyElement">
       <summary>
-            Создать новый элемент из выделенных элементов на схеме.
+            To create a new element from the selected elements in the diagram.
             </summary>
-      <returns>Составной элемент.</returns>
+      <returns>Composite element.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.SaveToImage(System.String)">
       <summary>
-            Сохранить схему в изображение.
+            To save the diagram as an image.
             </summary>
-      <param name="fileName">Полный путь к файлу.</param>
+      <param name="fileName">The full path to the file.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramEditorControl.InitializeComponent">
       <summary>
@@ -770,313 +770,313 @@
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Composition">
       <summary>
-            Составной элемент.
+            Composite element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.ShowOverview">
       <summary>
-            Показывать панель обзора.
+            To show the review panel.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.Scale">
       <summary>
-            Масштаб.
+            Scale.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectionChanged">
       <summary>
-            Событие выделения элемента схемы на схеме.
+            The event of the element selection on the diagram.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramEditorControl.ElementDoubleClicked">
       <summary>
-            Событие двойного клика по элементу на схеме.
+            The event of the double click on the diagram element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElements">
       <summary>
-            Выбранные элементы.
+            Selected elements.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.SelectedElement">
       <summary>
-            Выбранный элемент.
+            The selected element.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramEditorControl.IndicatorTypes">
       <summary>
-            Список доступных типов индикаторов.
+            The list of available indicators types.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElementParam`1">
       <summary>
-            Параметр элемента схемы.
+            The diagram element parameter.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.op_Implicit(StockSharp.Xaml.Diagram.DiagramElementParam{`0})~`0">
       <summary>
-            Привести значение параметра к объекту <typeparamref name="T" />.
+            To reduce the parameter value to the object <typeparamref name="T" />.
             </summary>
-      <param name="param">Параметр.</param>
-      <returns>Объект <typeparamref name="T" />.</returns>
+      <param name="param">Parameter.</param>
+      <returns>Object <typeparamref name="T" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.OnPropertyChanged(System.String)">
       <summary>
-            Вызвать событие изменения значения свойства соединения.
+            To call the connection property value change event.
             </summary>
-      <param name="propertyName">Название свойства.</param>
+      <param name="propertyName">Property name.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParam`1.ToString">
       <summary>
-            Получить строковое представление.
+            Returns a string that represents the current object.
             </summary>
-      <returns>Строковое представление.</returns>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElementParam`1.ValueChanging">
       <summary>
-            Событие начала изменения значения параметра.
+            The parameter value change start event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElementParam`1.ValueChanged">
       <summary>
-            Событие изменения значения параметра.
+            The parameter value change event.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Name">
       <summary>
-            Название параметра.
+            Parameter name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.DisplayName">
       <summary>
-            Отображаемое название.
+            The displayed name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Description">
       <summary>
-            Описание параметра.
+            The parameter description.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Category">
       <summary>
-            Категория.
+            Category.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Type">
       <summary>
-            Тип параметра.
+            Parameter type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Attributes">
       <summary>
-            Атрибуты.
+            Attributes.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.Value">
       <summary>
-            Значение параметра.
+            The parameter value.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IsDefault">
       <summary>
-            Указано значение по умолчанию.
+            The default value is specified.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IsSealed">
       <summary>
-            Закрытый параметр.
+            The sealed parameter.
             </summary>
       <remarks>
-            Параметр не будет показываться в родительском элементе.
+            The parameter will not be shown in the parent element.
             </remarks>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IsParam">
       <summary>
-            Изменяемый параметр.
+            The changeable parameter.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.IgnoreOnSave">
       <summary>
-            Игнорировать при сохранении.
+            To ignore when saving.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.SaveHandler">
       <summary>
-            Обработчик сохранения значения параметра.
+            The parameter value saving handler.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramElementParam`1.LoadHandler">
       <summary>
-            Обработчик загрузки значения параметра.
+            The parameter value loading handler.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramElementParam`1.PropertyChanged">
       <summary>
-            Событие изменения значения свойств соединения.
+            The connection properties value change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElementParameters">
       <summary>
-            Текущие значения параметров элемента схемы.
+            Current values of diagram element parameters.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParameters.#ctor(StockSharp.Xaml.Diagram.DiagramElement)">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramElementParameters" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramElementParameters" />.
             </summary>
-      <param name="element">Элемент схемы.</param>
+      <param name="element">The diagram element.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramElementParamHelper">
       <summary>
-            Вспомогательный класс для работы с <see cref="T:StockSharp.Xaml.Diagram.IDiagramElementParam" />.
+            Extension class for <see cref="T:StockSharp.Xaml.Diagram.IDiagramElementParam" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetExpandable``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0})">
       <summary>
-            Установить атрибут <see cref="T:Xceed.Wpf.Toolkit.PropertyGrid.Attributes.ExpandableObjectAttribute" /> для параметра элемента схемы.
+            To set the <see cref="T:Xceed.Wpf.Toolkit.PropertyGrid.Attributes.ExpandableObjectAttribute" /> attribute for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetEditor``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Attribute)">
       <summary>
-            Добавить атрибут <see cref="T:System.Attribute" /> для параметра элемента схемы.
+            To add the attribute <see cref="T:System.Attribute" /> for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="editor">Атрибут.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="editor">Attribute.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetOrder``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Int32)">
       <summary>
-            Установить атрибут <see cref="T:Xceed.Wpf.Toolkit.PropertyGrid.Attributes.PropertyOrderAttribute" /> для параметра элемента схемы.
+            To set the <see cref="T:Xceed.Wpf.Toolkit.PropertyGrid.Attributes.PropertyOrderAttribute" /> attribute for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="order">Порядок свойства.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="order">The property order.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetDisplayName``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.String)">
       <summary>
-            Установить отображаемое имя для параметра элемента схемы.
+            To set the displayed name for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="text">Отображаемое имя.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="text">The display name.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetDescription``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.String)">
       <summary>
-            Установить отписание для параметра элемента схемы.
+            To set a description for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="text">Описание параметра элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="text">The description of the diagram element parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetCategory``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.String)">
       <summary>
-            Установить категорию для параметра элемента схемы.
+            To set a category for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="text">Категория параметра элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="text">The category of the diagram element parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetReadOnly``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Boolean)">
       <summary>
-            Установить атрибут <see cref="T:System.ComponentModel.ReadOnlyAttribute" /> для параметра элемента схемы.
+            To set the <see cref="T:System.ComponentModel.ReadOnlyAttribute" /> attribute for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="readOnly">Только для чтения.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="readOnly">Read-only.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetBrowsable``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Boolean)">
       <summary>
-            Установить атрибут <see cref="T:System.ComponentModel.BrowsableAttribute" /> для параметра элемента схемы.
+            To set the <see cref="T:System.ComponentModel.BrowsableAttribute" /> attribute for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="browsable">Видимый параметр.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="browsable">Visible parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetOnValueChangingHandler``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Action{``0,``0})">
       <summary>
-            Установить обработчик на начало изменения значения для параметра элемента схемы.
+            To set the handler at the start of the value change for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="handler">Обработчик.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="handler">The handler.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetOnValueChangedHandler``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Action{``0})">
       <summary>
-            Установить обработчик на изменение значения для параметра элемента схемы.
+            To set the handler to the value change for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="handler">Обработчик изменения значения элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="handler">The handler of the diagram element value change.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetSaveLoadHandlers``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0},System.Func{``0,Ecng.Serialization.SettingsStorage},System.Func{Ecng.Serialization.SettingsStorage,``0})">
       <summary>
-            Установить обработчик сохранения/загрузки для параметра элемента схемы.
+            To set the handler of saving/loading for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <param name="save">Обработчик для сохранения параметра.</param>
-      <param name="load">Обработчик для загрузки параметра.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <param name="save">The handler for the parameter saving.</param>
+      <param name="load">The handler for the parameter loading.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetColorSaveLoadHandlers(StockSharp.Xaml.Diagram.DiagramElementParam{System.Windows.Media.Color})">
       <summary>
-            Установить обработчик сохранения/загрузки цвета для параметра элемента схемы.
+            To set the handler of color saving/loading for the diagram element parameter.
             </summary>
-      <param name="param">Параметр элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <param name="param">The diagram element parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetSealed``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0})">
       <summary>
-            Сделать параметр элемента схемы закрытым.
+            To modify diagram element parameter to sealed.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.SetIsParam``1(StockSharp.Xaml.Diagram.DiagramElementParam{``0})">
       <summary>
-            Сделать параметр элемента схемы изменяемым.
+            To modify diagram element parameter to changeable.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramElementParamHelper.RemoveAttribute``2(StockSharp.Xaml.Diagram.DiagramElementParam{``0})">
       <summary>
-            Удалить атрибут для параметра элемента схемы.
+            To remove the attribute for the diagram element parameter.
             </summary>
-      <typeparam name="T">Тип параметра элемента схемы.</typeparam>
-      <typeparam name="TParam">Тип атрибута.</typeparam>
-      <param name="param">Параметр элемента схемы.</param>
-      <returns>Параметр элемента схемы.</returns>
+      <typeparam name="T">The diagram element parameter type.</typeparam>
+      <typeparam name="TParam">The attribute type.</typeparam>
+      <param name="param">The diagram element parameter.</param>
+      <returns>The diagram element parameter.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramPaletteControl">
       <summary>
-            Графический компонент для для отображения доступных <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
+            The graphical component to display available <see cref="T:StockSharp.Xaml.Diagram.DiagramElement" />.
             </summary>
       <summary>
             DiagramPaletteControl
@@ -1084,7 +1084,7 @@
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramPaletteControl.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramPaletteControl" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramPaletteControl" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramPaletteControl.InitializeComponent">
@@ -1094,168 +1094,166 @@
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElements">
       <summary>
-            Доступные элементы.
+            Available elements.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElement">
       <summary>
-            Выбранный элемент на панели элементов.
+            The selected element in the Toolbox.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteSelectionChanged">
       <summary>
-            Событие выделения элемента схемы на панели элементов.
+            The event of the diagram element selection in the Toolbox .
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramPaletteControl.PaletteElementDoubleClicked">
       <summary>
-            Событие двойного клика по элементу на панели элементов.
+            The event of the double click on the element in the Toolbox .
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketDirection">
       <summary>
-            Направления соединений.
+            Directions of connections.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketDirection.In">
       <summary>
-            Входящее.
+            Incoming.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketDirection.Out">
       <summary>
-            Исходяещее.
+            Outgoing.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocket">
       <summary>
-            Соединение.
+            Connection.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.CanConnect(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            Проверить возможность выполнить соединение с указанным соединением.
+            To check the ability to make a connection.
             </summary>
-      <param name="to">Соединение.</param>
-      <returns>Результат проверки.</returns>
+      <param name="to">Connection.</param>
+      <returns>The test result.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue">
       <summary>
-            Получить значение для соединения.
+            To get the value for the connection.
             </summary>
-      <returns>Значение.</returns>
+      <returns>Value.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.GetValue``1">
       <summary>
-            Получить значение для соединения.
+            To get the value for the connection.
             </summary>
-      <typeparam name="T">Тип данных.</typeparam>
-      <returns>Значение.</returns>
+      <typeparam name="T">Data type.</typeparam>
+      <returns>Value.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnPropertyChanged(System.String)">
       <summary>
-            Вызвать событие изменения значения свойства соединения.
+            To call the connection property value change event.
             </summary>
-      <param name="propertyName">Название свойства.</param>
+      <param name="propertyName">Property name.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.Clone">
       <summary>
-            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" />.
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" />.
             </summary>
-      <returns>Копия.</returns>
+      <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.OnEquals(StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            Сравнить <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" /> на эквивалентность.
+            Compare <see cref="T:StockSharp.Xaml.Diagram.DiagramSocket" /> on the equivalence.
             </summary>
-      <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+      <param name="other">Another value with which to compare.</param>
       <returns>
-        <see langword="true" />, если другое значение равно текущему, иначе, <see langword="false" />.</returns>
+        <see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocket.ToString">
       <summary>
-            Получить строковое представление.
+            Returns a string that represents the current object.
             </summary>
-      <returns>Строковое представление.</returns>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Id">
       <summary>
-            Идентификатор соединения.
+            The connection identifier.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.ExternalId">
       <summary>
-            Дополнительный идентификатор соединения.
+            The additional connection identifier.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Name">
       <summary>
-            Название соединения.
+            The connection name.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Type">
       <summary>
-            Тип соединения.
+            Connection type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Directon">
       <summary>
-            Направление соединения.
+            The connection direction.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.LinkableMaximum">
       <summary>
-            Максимальное число подключений.
+            The maximum number of connections.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocket.Value">
       <summary>
-            Текущее значение.
+            The current value.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.Connected">
       <summary>
-            Событие соединения сокета с другим.
+            The event of the socket connection with another one.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.Disconnected">
       <summary>
-            Событие отсоединения сокета.
+            The socket disconnection event.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocket.PropertyChanged">
       <summary>
-            Событие изменения значения свойств соединения.
+            The connection properties value change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketListBox">
       <summary>
-            Графический компонент для отображения списка соединений элемента схемы.
+            The graphical component to display the diagram element connections list.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketListBox.GetContainerForItemOverride">
       <summary>
-            Creates or identifies the element used to display a specified item. 
+            Creates or identifies the element used to display a specified item.
             </summary>
-      <returns>
-            A <see cref="T:System.Windows.Controls.ListBoxItem" />.
-            </returns>
+      <returns>A <see cref="T:System.Windows.Controls.ListBoxItem" />.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketListBoxItem">
       <summary>
-            Графический компонент для элемента списка для отображения соединений элемента схемы.
+            The graphical component for the list element to display the diagram element connections.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketListBoxItem.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
@@ -1266,1103 +1264,1103 @@
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketType">
       <summary>
-            Тип соединения.
+            Connection type.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.#ctor(System.Type,System.String,System.Windows.Media.Color)">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
             </summary>
-      <param name="type">Тип данных.</param>
-      <param name="name">Название типа соединения.</param>
-      <param name="color">Цвет соединения.</param>
+      <param name="type">Data type.</param>
+      <param name="name">The name of the connection type.</param>
+      <param name="color">The connection color.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.RegisterType``1(System.String,System.Windows.Media.Color)">
       <summary>
-            Зарегистрировать тип соединения.
+            To register the connection type.
             </summary>
-      <param name="name">Название типа соединения.</param>
-      <param name="color">Цвет соединения.</param>
+      <param name="name">The name of the connection type.</param>
+      <param name="color">The connection color.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.OnPropertyChanged(System.String)">
       <summary>
-            Вызвать событие изменения значения свойства соединения.
+            To call the connection property value change event.
             </summary>
-      <param name="propertyName">Название свойства.</param>
+      <param name="propertyName">Property name.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.Clone">
       <summary>
-            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" />.
             </summary>
-      <returns>Копия.</returns>
+      <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.OnEquals(StockSharp.Xaml.Diagram.DiagramSocketType)">
       <summary>
-            Сравнить <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" /> на эквивалентность.
+            Compare <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketType" /> on the equivalence.
             </summary>
-      <param name="other">Другое значение, с которым необходимо сравнивать.</param>
+      <param name="other">Another value with which to compare.</param>
       <returns>
-        <see langword="true" />, если другое значение равно текущему, иначе, <see langword="false" />.</returns>
+        <see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketType.ToString">
       <summary>
-            Получить строковое представление.
+            Returns a string that represents the current object.
             </summary>
-      <returns>Строковое представление.</returns>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Any">
       <summary>
-            Неизвестный тип данных.
+            Unknown data type.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Security">
       <summary>
-            Инструмент.
+            Security.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.MarketDepth">
       <summary>
-            Стакан.
+            Market depth.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Quote">
       <summary>
-            Котировка.
+            Quote.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Candles">
       <summary>
-            Свечи.
+            Candles.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.IndicatorValue">
       <summary>
-            Значение индикатора.
+            Indicator value.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Order">
       <summary>
-            Заявка.
+            Order.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.MyTrade">
       <summary>
-            Собственная сделка.
+            Own trade.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Bool">
       <summary>
-            Флаг.
+            Flag.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Unit">
       <summary>
-            Числовое значение.
+            Numeric value.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.DiagramSocketType.Comparable">
       <summary>
-            Сравнимые значения.
+            Comparable values.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Name">
       <summary>
-            Название типа соединения.
+            The name of the connection type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Type">
       <summary>
-            Тип соединения.
+            Connection type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.Color">
       <summary>
-            Цвет соединения.
+            The connection color.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketType.AllTypes">
       <summary>
-            Все доступные типы соединений для элементов.
+            All available connection types for elements.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramSocketType.PropertyChanged">
       <summary>
-            Событие изменения значения свойств соединения.
+            The connection properties value change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramSocketValue">
       <summary>
-            Значение для соединения.
+            The value for the connection.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.#ctor(StockSharp.Xaml.Diagram.DiagramElement,StockSharp.Xaml.Diagram.DiagramSocket)">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketValue" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramSocketValue" />.
             </summary>
-      <param name="sender">Элемент-отправитель значения.</param>
-      <param name="socket">Соединение.</param>
+      <param name="sender">The element sender of the value.</param>
+      <param name="socket">Connection.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.GetValue``1">
       <summary>
-            Получить значение для соединения.
+            To get the value for the connection.
             </summary>
-      <typeparam name="T">Тип значения.</typeparam>
-      <returns>Значение.</returns>
+      <typeparam name="T">Value type.</typeparam>
+      <returns>Value.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramSocketValue.ToString">
       <summary>
-            Получить строковое представление.
+            Returns a string that represents the current object.
             </summary>
-      <returns>Строковое представление.</returns>
+      <returns>A string that represents the current object.</returns>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Sender">
       <summary>
-            Элемент-отправитель значения.
+            The element sender of the value.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Socket">
       <summary>
-            Соединение.
+            Connection.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramSocketValue.Value">
       <summary>
-            Значение.
+            Value.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.DiagramStrategy">
       <summary>
-            Стратегия, алгоритм которой представлен в виде схемы.
+            The strategy whose algorithm is presented in the form of a diagram.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.DiagramStrategy" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.DiagramStrategy" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.OnStarted">
       <summary>
-            Метод вызывается тогда, когда вызвался метод <see cref="M:StockSharp.Algo.Strategies.Strategy.Start" />, и состояние <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" /> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Started" />.
+            The method is called when the <see cref="M:StockSharp.Algo.Strategies.Strategy.Start" /> method has been called and the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" /> state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Started" /> value.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.OnStopped">
       <summary>
-            Метод вызывается тогда, когда состояние процесса <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" /> перешло в значение <see cref="F:StockSharp.Algo.ProcessStates.Stopped" />.
+            The method is called when the <see cref="P:StockSharp.Algo.Strategies.Strategy.ProcessState" /> process state has been taken the <see cref="F:StockSharp.Algo.ProcessStates.Stopped" /> value.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.OnReseted">
       <summary>
-            Вызывается из метода <see cref="M:StockSharp.Algo.Strategies.Strategy.Reset" />. 
+            It is called from the <see cref="M:StockSharp.Algo.Strategies.Strategy.Reset" /> method.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.Clone">
       <summary>
-            Создать копию <see cref="T:StockSharp.Xaml.Diagram.DiagramStrategy" />.
+            Create a copy of <see cref="T:StockSharp.Xaml.Diagram.DiagramStrategy" />.
             </summary>
-      <returns>Копия.</returns>
+      <returns>Copy.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.NeedShowProperty(System.ComponentModel.PropertyDescriptor)">
       <summary>
-            Возвращает <see langword="true" />, если свойство необходимо отображать в настройках.
+            It returns <see langword="true" />, if the property is to be displayed in the settings.
             </summary>
-      <param name="propertyDescriptor">Описание свойства.</param>
+      <param name="propertyDescriptor">The property description.</param>
       <returns>
-        <see langword="true" />, если необходимо показывать свойство, иначе <see langword="false" />.</returns>
+        <see langword="true" />, if necessary to show the property, otherwise <see langword="false" />.</returns>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.DiagramStrategy.RaisePropertiesChanged">
       <summary>
-            Вызвать событие изменения доступных свойств.
+            To call the available properties change event.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.DiagramStrategy.Composition">
       <summary>
-            Схема стратегии.
+            The strategy diagram.
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramStrategy.CompositionChanged">
       <summary>
-            Событие изменения схемы стратегии.
+            The strategy diagram change event .
             </summary>
     </member>
     <member name="E:StockSharp.Xaml.Diagram.DiagramStrategy.PropertiesChanged">
       <summary>
-            Событие изменения доступных свойств.
+            The available properties change event.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement">
       <summary>
-            Элемент источника свечек.
+            Candles source element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Series">
       <summary>
-            Серия свечек.
+            Candles series.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.CandleSourceDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement">
       <summary>
-            Элемент панель графика (область отображения свечек, индикаторов, заявок и сделок).
+            Chart panel element (candles display area, indicators, orders and trades).
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddElement(System.Type)">
       <summary>
-            Добавить новый элемент.
+            To add a new element.
             </summary>
-      <param name="type">Тип элемента.</param>
+      <param name="type">The element type.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveElement(StockSharp.Xaml.Charting.IChartElement)">
       <summary>
-            Удалить элемент.
+            To remove the element.
             </summary>
-      <param name="element">Элемент.</param>
+      <param name="element">Element.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddXAxis">
       <summary>
-            Добавить ось X.
+            To add the X-axis.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.AddYAxis">
       <summary>
-            Добавить ось Y.
+            To add the Y-axis.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.RemoveAxis(StockSharp.Xaml.Charting.ChartAxis)">
       <summary>
-            Удалить ось.
+            To remove the axis.
             </summary>
-      <param name="axis">Ось.</param>
+      <param name="axis">The axis.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnUnInit">
       <summary>
-            Метод вызывается при деинициализации элемента схемы.
+            The method is called at deinitialization of the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnReseted">
       <summary>
-            Метод вызывается при переинициализации состояния элемента схемы.
+            The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement">
       <summary>
-            Элемент проверки рабочего времени для указанного инструмента.
+            Working time verification element for a specified security.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.CheckWorkingTimeDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement">
       <summary>
-            Элемент сравнения два значения.
+            Two values comparison element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ComparisonDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement">
       <summary>
-            Элемент элемента коллекции или словаря.
+            The element of collection or dictionary.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.IndexerDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement">
       <summary>
-            Элемент индикатора.
+            Indicator element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnInit">
       <summary>
-            Метод вызывается при инициализации элемента схемы.
+            The method is called at initialization of the diagram element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnReseted">
       <summary>
-            Метод вызывается при переинициализации состояния элемента схемы.
+            The method is called at re-initialisation of the diagram element state.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.IndicatorType">
       <summary>
-            Тип индикатора.
+            Indicator type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Indicator">
       <summary>
-            Параметры индикатора.
+            The indicator parameters.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.IndicatorDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement">
       <summary>
-            Элемент логического условия.
+            Logical condition element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Condition">
       <summary>
-            Тип логического условия.
+            The logical condition type.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Condition.And">
       <summary>
-            И.
+            AND.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Condition.Or">
       <summary>
-            ИЛИ.
+            OR.
             </summary>
     </member>
     <member name="F:StockSharp.Xaml.Diagram.Elements.LogicalConditionDiagramElement.Condition.Xor">
       <summary>
-            Исключающее ИЛИ.
+            Exclusive OR.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement">
       <summary>
-            Элемент логической функции с одним аргументом.
+            Logical function with one argument element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.LogicOneParamFunctionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement">
       <summary>
-            Элемент получения изменений стакана по инструменту.
+            Security market depth changes receiving element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.MarketDepthDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement">
       <summary>
-            Элемент формулы с одним аргументом.
+            Formula with one argument element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OneParamFunctionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement">
       <summary>
-            Элемент формулы с двумя аргументами.
+            Formula with two arguments element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.TwoParamFunctionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement">
       <summary>
-            Элемент открытия позиции.
+            Position opening element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OpenPositionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement">
       <summary>
-            Элемент сделок по заявке.
+            Trades per order element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement">
       <summary>
-            Элемент получения составного значения сложного объекта.
+            Composite value of a complex object receiving element.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement">
       <summary>
-            Элемент схемы с изменяемым типом данных.
+            The diagram element with the changeable data type.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.SetTypes(System.Collections.Generic.IEnumerable{StockSharp.Xaml.Diagram.DiagramSocketType})">
       <summary>
-            Установить доступные типы данных.
+            To set available data types.
             </summary>
-      <param name="types">Типы данных.</param>
+      <param name="types">Data type.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.TypeChanged">
       <summary>
-            Метод вызывается при изменении типа данных.
+            The method is called when the data type is changed.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.TypedDiagramElement.Type">
       <summary>
-            Тип данных.
+            Data type.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PartDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.TypeChanged">
       <summary>
-            Метод вызывается при изменении типа данных.
+            The method is called when the data type is changed.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PartDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement">
       <summary>
-            Элемент объединения значений.
+            Combined values element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.TypeChanged">
       <summary>
-            Метод вызывается при изменении типа данных.
+            The method is called when the data type is changed.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PassThroughDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement">
       <summary>
-            Элемент позиции (по инструменту или деньгами) для указанного портфеля.
+            Position element (for security and money) for the specified portfolio.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PositionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement">
       <summary>
-            Элемент получения предыдущего значения.
+            Previous value receiving element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.PreviousValueDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement">
       <summary>
-            Элемент защиты открытой позиции.
+            Open position protection element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.OnStop">
       <summary>
-            Метод вызывается при остановке алгоритма элемента схемы.
+            The method is called at the stop of the diagram element algorithm.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.ProtectPositionDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement">
       <summary>
-            Элемент получения изменений инструмента.
+            Security changes receiving element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.SecurityDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement">
       <summary>
-            Элемент сделок стратегии.
+            Strategy trades element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.OrderTradesDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.StrategyTradesDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement">
       <summary>
-            Элемент хранения значение.
+            Value storage element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeChanged">
       <summary>
-            Метод вызывается при изменении типа данных.
+            The method is called when the data type is changed.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке нового входящего значения.
+            The method is called at the processing of the new incoming value.
             </summary>
-      <param name="value">Обрабатываемое значение.</param>
+      <param name="value">The processed value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.VariableDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.ExportDiagramElement">
       <summary>
-            Экспортируемый составной элемент.
+            The exported composite element.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.ExportDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.ExportDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.#ctor(StockSharp.Xaml.Diagram.CompositionDiagramElement)">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.ExportDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.ExportDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.OnStart">
       <summary>
-            Метод вызывается при запуске алгоритма элемента схемы.
+            The method is called at the start of the diagram element algorithm.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.Load(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Загрузить настройки.
+            Load settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.ExportDiagramElement.Save(Ecng.Serialization.SettingsStorage)">
       <summary>
-            Сохранить настройки.
+            Save settings.
             </summary>
-      <param name="storage">Хранилище настроек.</param>
+      <param name="storage">Settings storage.</param>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource">
       <summary>
-            Графический компонент для выбора типа индикатора.
+            The graphical component for the indicator type choosing.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.IndicatorTypeItemsSource.GetValues">
       <summary>
-            Получить список доступных типов индикаторов.
+            To get a list of available indicators types.
             </summary>
-      <returns>Список типов индикаторов.</returns>
+      <returns>The indicators types list.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.SocketTypesSource">
       <summary>
-            Графический компонент для выбора типа соединения.
+            The graphical component for the connection type choosing.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.SocketTypesSource.GetValues">
       <summary>
-            Получить список доступных типов соединений.
+            To get a list of available connection types.
             </summary>
-      <returns>Список типов соединений.</returns>
+      <returns>The list of connection types.</returns>
     </member>
     <member name="T:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement">
       <summary>
-            Элемент уведомления (звук, окно и т.д.) на определенные рыночные события.
+            Notification element (sound, window etc.) for speceific market events.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.#ctor">
       <summary>
-            Создать <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
+            Initializes a new instance of the <see cref="T:StockSharp.Xaml.Diagram.Elements.ChartDiagramElement" />.
             </summary>
     </member>
     <member name="M:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.OnProcess(StockSharp.Xaml.Diagram.DiagramSocketValue)">
       <summary>
-            Метод вызывается при обработке входящего значения.
+            The method is called when an input value is processed.
             </summary>
-      <param name="value">Значение.</param>
+      <param name="value">Value.</param>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.TypeId">
       <summary>
-            Уникальный идентификатор типа элемента схемы.
+            The unique identifier of the diagram element type.
             </summary>
     </member>
     <member name="P:StockSharp.Xaml.Diagram.Elements.AlertDiagramElement.Icon">
       <summary>
-            Иконка.
+            Icon.
             </summary>
     </member>
   </members>
