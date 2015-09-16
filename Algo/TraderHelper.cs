@@ -552,7 +552,7 @@ namespace StockSharp.Algo
 		/// <summary>
 		/// Рассчитать прибыль-убыток на основе портфеля.
 		/// </summary>
-		/// <param name="portfolio">Портфель, для которого необходимо расcчитать прибыль-убыток.</param>
+		/// <param name="portfolio">Портфель, для которого необходимо рассчитать прибыль-убыток.</param>
 		/// <returns>Прибыль-убыток.</returns>
 		public static decimal GetPnL(this Portfolio portfolio)
 		{
@@ -1404,9 +1404,9 @@ namespace StockSharp.Algo
 		}
 
 		/// <summary>
-		/// Расcчитать реализованную часть объема для заявки.
+		/// Рассчитать реализованную часть объема для заявки.
 		/// </summary>
-		/// <param name="order">Заявка, для которой необходимо расcчитать реализованную часть объема.</param>
+		/// <param name="order">Заявка, для которой необходимо рассчитать реализованную часть объема.</param>
 		/// <param name="byOrder">Проверять реализованный объем по балансу заявке (<see cref="Order.Balance"/>) или по полученным сделкам.
 		/// По-умолчанию проверяется по заявке.</param>
 		/// <returns>Реализованная часть объема.</returns>
@@ -1487,7 +1487,7 @@ namespace StockSharp.Algo
 		/// Получить вероятные сделки по стакану для заданной заявки.
 		/// </summary>
 		/// <param name="depth">Стакан, который в момент вызова функции отражает ситуацию на рынке.</param>
-		/// <param name="order">Заявку, для которой необходимо расcчитать вероятные сделки.</param>
+		/// <param name="order">Заявку, для которой необходимо рассчитать вероятные сделки.</param>
 		/// <returns>Вероятные сделки.</returns>
 		public static IEnumerable<MyTrade> GetTheoreticalTrades(this MarketDepth depth, Order order)
 		{
