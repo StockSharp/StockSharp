@@ -148,6 +148,7 @@ M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.OnStopped(StockSharp.Algo.
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.OnNewValues(StockSharp.Algo.Candles.CandleSeries,System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue})/summary;DocStr486
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.OnNewValues(StockSharp.Algo.Candles.CandleSeries,System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue})/param/series;CandlesSeries
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.OnNewValues(StockSharp.Algo.Candles.CandleSeries,System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue})/param/values;DocStr467
+M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.OnNewValues(StockSharp.Algo.Candles.CandleSeries,System.Collections.Generic.IEnumerable{StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue})/returns;DocStr8458
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.CreateCandle(StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/summary;DocStr487
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.CreateCandle(StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/series;CandlesSeries
 M:StockSharp.Algo.Candles.Compression.CandleBuilder`1.CreateCandle(StockSharp.Algo.Candles.CandleSeries,StockSharp.Algo.Candles.Compression.ICandleBuilderSourceValue)/param/value;DocStr488

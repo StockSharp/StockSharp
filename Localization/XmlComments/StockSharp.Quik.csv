@@ -1087,9 +1087,9 @@ M:StockSharp.Quik.Xaml.DdeTableColumnsEditor.#ctor/summary;DocStr1
 M:StockSharp.Quik.Xaml.DdeTableColumnsEditor.InitializeComponent/summary;DocStr8
 P:StockSharp.Quik.Xaml.DdeTableColumnsEditor.SelectedColumns/summary;DocStr7401
 T:StockSharp.Quik.Xaml.DdeTableColumnsPicker/summary;DocStr7404
-F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.LeftDoubleClickCommand/summary;DocStr2550
-F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.AddCommand/summary;DocStr2550
-F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.RemoveCommand/summary;DocStr2550
+F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.LeftDoubleClickCommand/summary;DocStr8459
+F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.AddCommand/summary;DocStr8459
+F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.RemoveCommand/summary;DocStr8459
 F:StockSharp.Quik.Xaml.DdeTableColumnsPicker.SelectedColumnsProperty/summary;DocStr7397
 M:StockSharp.Quik.Xaml.DdeTableColumnsPicker.#ctor/summary;DocStr1
 M:StockSharp.Quik.Xaml.DdeTableColumnsPicker.InitializeComponent/summary;DocStr8
@@ -1102,7 +1102,7 @@ M:StockSharp.Quik.Xaml.Extensions.GetColumns(System.Type,System.Collections.Gene
 M:StockSharp.Quik.Xaml.Extensions.GetColumns(System.Type,System.Collections.Generic.IEnumerable{System.String})/param/columns;DocStr7399
 M:StockSharp.Quik.Xaml.Extensions.GetColumns(System.Type,System.Collections.Generic.IEnumerable{System.String})/returns;DocStr7400
 T:StockSharp.Quik.Xaml.DdeColumnsPicker/summary;DocStr7404
-F:StockSharp.Quik.Xaml.DdeColumnsPicker.LeftDoubleClickCommand/summary;DocStr2550
+F:StockSharp.Quik.Xaml.DdeColumnsPicker.LeftDoubleClickCommand/summary;DocStr8459
 F:StockSharp.Quik.Xaml.DdeColumnsPicker.SelectedColumnsProperty/summary;DocStr7397
 M:StockSharp.Quik.Xaml.DdeColumnsPicker.#ctor/summary;DocStr1
 M:StockSharp.Quik.Xaml.DdeColumnsPicker.GetSelectedColumns/summary;DocStr7409

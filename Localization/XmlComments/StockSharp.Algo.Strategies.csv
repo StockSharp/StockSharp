@@ -19,7 +19,6 @@ M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrade
 M:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.ProcessNewMyTrades(System.Collections.Generic.IEnumerable{StockSharp.BusinessEntities.MyTrade})/param/trades;Str985
 P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.TakeProfitLevel/summary;DocStr295
 P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossLevel/summary;DocStr296
-P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossActivationOffset/summary;DocStr297
 P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.IsTrailingStopLoss/summary;DocStr298
 P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.IsTrailingTakeProfit/summary;DocStr298
 P:StockSharp.Algo.Strategies.Protective.AutoProtectiveStrategy.StopLossTimeOut/summary;DocStr299
@@ -201,15 +200,17 @@ P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceType/summary;Doc
 P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.PriceOffset/summary;DocStr364
 P:StockSharp.Algo.Strategies.Quoting.MarketQuotingStrategy.BestPrice/summary;DocStr344
 T:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy/summary;DocStr392
-M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/summary;DocStr93
-M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveSide;DocStr381
-M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectivePrice;DocStr380
-M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveVolume;DocStr393
-M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveLevel;DocStr394
+M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)/summary;DocStr93
+M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)/param/protectiveSide;DocStr381
+M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)/param/protectivePrice;DocStr380
+M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)/param/protectiveVolume;DocStr393
+M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)/param/protectiveLevel;DocStr394
+M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit,System.Boolean)/param/isUpTrend;DocStr8457
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.GetNotificationRules/summary;DocStr320
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.GetNotificationRules/returns;DocStr321
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStarted/summary;DocStr282
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnStopping/summary;DocStr322
+M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.OnReseted/summary;DocStr1657
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.ProcessTimeOut/summary;DocStr323
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.RegisterQuotingOrder(StockSharp.BusinessEntities.Order)/summary;DocStr327
 M:StockSharp.Algo.Strategies.Protective.ProtectiveStrategy.RegisterQuotingOrder(StockSharp.BusinessEntities.Order)/param/order;DocStr328
@@ -245,8 +246,6 @@ M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.Messag
 M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectivePrice;DocStr380
 M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveVolume;DocStr393
 M:StockSharp.Algo.Strategies.Protective.StopLossStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveLevel;DocStr394
-P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationOffset/summary;DocStr297
-P:StockSharp.Algo.Strategies.Protective.StopLossStrategy.ActivationPrice/summary;DocStr398
 T:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy/summary;DocStr406
 M:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.#ctor(StockSharp.Algo.Strategies.Protective.TakeProfitStrategy,StockSharp.Algo.Strategies.Protective.StopLossStrategy)/summary;DocStr1
 M:StockSharp.Algo.Strategies.Protective.TakeProfitStopLossStrategy.#ctor(StockSharp.Algo.Strategies.Protective.TakeProfitStrategy,StockSharp.Algo.Strategies.Protective.StopLossStrategy)/param/takeProfit;DocStr407
@@ -264,7 +263,6 @@ M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Mess
 M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectivePrice;DocStr380
 M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveVolume;DocStr393
 M:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,System.Decimal,StockSharp.Messages.Unit)/param/protectiveLevel;DocStr394
-P:StockSharp.Algo.Strategies.Protective.TakeProfitStrategy.ActivationPrice/summary;DocStr398
 T:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy/summary;DocStr408
 M:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{StockSharp.Messages.Unit})/summary;DocStr1
 M:StockSharp.Algo.Strategies.Derivatives.TheorPriceQuotingStrategy.#ctor(StockSharp.Messages.Sides,System.Decimal,Ecng.ComponentModel.Range{StockSharp.Messages.Unit})/param/quotingDirection;DocStr304
