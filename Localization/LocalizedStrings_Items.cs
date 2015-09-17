@@ -53707,5 +53707,35 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(RandomizePriceKey); }
 		}
-	}
+
+
+        /// <summary>
+		/// Start Unloading
+		/// </summary>
+		public const string StartUnloadingKey = "StartUnloading";
+
+        /// <summary>
+        /// Start Unloading
+        /// </summary>
+        public static string StartUnloading
+        {
+            get { return GetString(StartUnloadingKey); }
+        }
+
+        /// <summary>
+        /// Stop Unloading
+        /// </summary>
+        public const string StopUnloadingKey = "StopUnloading";
+
+        /// <summary>
+        /// Stop Unloading
+        /// </summary>
+        public static string StoptUnloading
+        {
+            get { return GetString(StopUnloadingKey); }
+        }
+
+
+
+    }
 }

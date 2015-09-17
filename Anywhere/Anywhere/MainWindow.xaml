@@ -17,14 +17,23 @@
         <ToolBarPanel Orientation="Horizontal">
             <ToolBar>
                 <Button x:Name="ConnectButton"
-                        Margin="5"
-                        Content="{x:Static loc:LocalizedStrings.Connect}"
-                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ConnectCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ConnectCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Content" Value="{x:Static loc:LocalizedStrings.Connect}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsConnected}" Value="true" >
+                                    <Setter Property="Content" Value="{x:Static loc:LocalizedStrings.Disconnect}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
                 <Button x:Name="UnloadingButton"
                         Margin="5"
-                        Content="Начать выгрузку"
+                        Content="{x:Static loc:LocalizedStrings.StartUnloading}"
                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UnloadingCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
             </ToolBar>
@@ -54,7 +63,9 @@
                                         <sx:PortfolioGrid x:Name="PortfolioGrid" />
                                     </docking:DocumentWindow>
 
-                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.MarketDataSubscription}" CanClose="False">
+                                    <docking:DocumentWindow Title="{x:Static loc:LocalizedStrings.MarketDataSubscription}"
+                                                            CanClose="False"
+                                                            IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsConnected}" >
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
