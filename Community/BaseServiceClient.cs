@@ -79,7 +79,7 @@
 		/// Вызвать метод сервиса <typeparamref name="TService"/>.
 		/// </summary>
 		/// <typeparam name="TResult">Тип результата, возвращающий метод сервиса.</typeparam>
-		/// <param name="handler">Обработчик, в котором вызывает метод.</param>
+		/// <param name="handler">Обработчик, в котором вызывается метод.</param>
 		/// <returns>Результат, возвращающий метод сервиса.</returns>
 		protected virtual TResult Invoke<TResult>(Func<TService, TResult> handler)
 		{
@@ -95,7 +95,7 @@
 		/// <summary>
 		/// Вызвать метод сервиса <typeparamref name="TService"/>.
 		/// </summary>
-		/// <param name="handler">Обработчик, в котором вызывает метод.</param>
+		/// <param name="handler">Обработчик, в котором вызывается метод.</param>
 		protected void Invoke(Action<TService> handler)
 		{
 			if (handler == null)

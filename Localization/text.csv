@@ -4248,38 +4248,38 @@ DocStr88;Временной отступ для нового запроса по
 DocStr89;Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек;Необходим для того, чтобы сервер успел сформировать данные в своем хранилище свечек
 DocStr90;Event of new candles occurring, that are received after the subscription by {0};Событие появления новых свечек, полученных после подписки через {0}
 DocStr91;The series processing end event;Событие окончания обработки серии
-DocStr92;Базовый источник маркет-данных;Базовый источник маркет-данных
+DocStr92;The base source of market data;Базовый источник маркет-данных
 DocStr93;Initialize {0};Инициализировать {0}
-DocStr94;Получить код инструмента по его идентификатору;Получить код инструмента по его идентификатору
-DocStr95;Получить площадку инструмента по его идентификатору;Получить площадку инструмента по его идентификатору
+DocStr94;To get the instrument code by its identifier;Получить код инструмента по его идентификатору
+DocStr95;To get the instrument board by its identifier;Получить площадку инструмента по его идентификатору
 DocStr96;Security boeard;Площадка инструмента
 DocStr97;Security id generator;Генератор идентификаторов инструментов
-DocStr98;Базовый источник маркет-данных, который сохраняет скаченные данные во временную директорию;Базовый источник маркет-данных, который сохраняет скаченные данные во временную директорию
+DocStr98;The base source of market data, which saves the downloaded data to a temporary directory;Базовый источник маркет-данных, который сохраняет скаченные данные во временную директорию
 DocStr99;Upload or download text file;Загрузить или скачать текстовый файл
 DocStr100;Loader;Загрузчик
 DocStr101;Text file;Текстовый файл
 DocStr102;Get the full path to the downloaded file;Получить полный путь к скаченному файлу
 DocStr103;Full path to the downloaded file;Полный путь к скаченному файлу
-DocStr104;Можно ли сохранять файлы;Можно ли сохранять файлы
+DocStr104;Is it possible to save files;Можно ли сохранять файлы
 DocStr105;The path to the directory where the downloaded files will be saved;Путь к директории, куда будут сохранятся скаченные файлы
 DocStr106;If the value is an empty string, the data will not stored locally;Если значение равно пустой строке, то данные не сохраняются локально
 DocStr107;The source for downloading historical data from FinViz;Источник исторических маркет-данных от FinViz
-DocStr108;Интерфейс загрузчика информации об инструментах;Интерфейс загрузчика информации об инструментах
+DocStr108;The interface of the loader of information about instruments;Интерфейс загрузчика информации об инструментах
 DocStr109;Download new securities;Закачать новые инструменты
 DocStr110;Securities meta info storage;Хранилище информации об инструментах
 DocStr111;The instrument whose fields will be used as a filter;Инструмент, поля которого будут использоваться в качестве фильтра
-DocStr112;Обработчик, через который будет передан новый инструмент;Обработчик, через который будет передан новый инструмент
-DocStr113;Обработчик, возвращающий признак отмены поиска;Обработчик, возвращающий признак отмены поиска
-DocStr114;Загрузить изменения маркет-данных;Загрузить изменения маркет-данных
-DocStr115;Изменения маркет-данных;Изменения маркет-данных
-DocStr116;Источник для скачивания исторических данных с DukasCopy;Источник для скачивания исторических данных с DukasCopy
-DocStr117;Скачать исторические тиковые данные за весь день;Скачать исторические тиковые данные за весь день
-DocStr118;Время, указывающее с точностью до дня;Время, указывающее с точностью до дня
+DocStr112;The handler through which a new instrument will be passed;Обработчик, через который будет передан новый инструмент
+DocStr113;The handler which returns an attribute of search cancel;Обработчик, возвращающий признак отмены поиска
+DocStr114;To download changes of market data;Загрузить изменения маркет-данных
+DocStr115;Changes of market data;Изменения маркет-данных
+DocStr116;The source for historical data downloading from the DukasCopy;Источник для скачивания исторических данных с DukasCopy
+DocStr117;To download historical tick data for the entire day;Скачать исторические тиковые данные за весь день
+DocStr118;The time is specified up to date;Время, указываемое с точностью до дня
 DocStr119;Historical ticks;Исторические тиковые данные
-DocStr120;Скачать исторические тайм-фрейм свечи;Скачать исторические тайм-фрейм свечи
+DocStr120;To download historical timeframe candles;Скачать исторические тайм-фрейм свечи
 DocStr121;Time-frame. Possible values {0};Тайм-фрейм. Возможные значения {0}
 DocStr122;Historical time-frames;Исторические тайм-фрейм свечи
-DocStr123;Доступные тайм-фреймы исторических данных;Доступные тайм-фреймы исторических данных
+DocStr123;Available timeframes of historical data;Доступные тайм-фреймы исторических данных
 DocStr124;The source for downloading historical data from Gain Capital;Источник для скачивания исторических данных с Gain Capital
 DocStr125;Download historical quotes;Скачать исторические котировки
 DocStr126;Historical quotes;Исторические котировки
@@ -4287,151 +4287,151 @@ DocStr127;The source for downloading historical data from MBTrading;Источн
 DocStr128;Download historical ticks;Загрузить исторические тиковые данные
 DocStr129;From downloading date;Скачивать с даты
 DocStr130;Till downloading date;Скачивать до даты
-DocStr131;Максимальное количество попыток залогиниться на сайте. По-умолчанию равно 10;Максимальное количество попыток залогиниться на сайте. По-умолчанию равно 10
+DocStr131;The maximum number of attempts to login to the site. The default is 10;Максимальное количество попыток залогиниться на сайте. По-умолчанию равно 10
 DocStr132;The source for downloading historical data from TrueFX;Источник для скачивания исторических данных с TrueFX
-DocStr133;Источник маркет-данных от Google Finance;Источник маркет-данных от Google Finance
+DocStr133;The market data source from the Google Finance;Источник маркет-данных от Google Finance
 DocStr134;Download candles from the site;Скачать свечи с сайта
-DocStr135;Тайм-фреймы, которые можно передать в {0};Тайм-фреймы, которые можно передать в {0}
-DocStr136;Интерфейс, описывающий внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, {0});Интерфейс, описывающий внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, {0})
-DocStr137;Найти идентификаторы инструментов, соответствующие фильтру {0};Найти идентификаторы инструментов, соответствующие фильтру {0}
+DocStr135;Timeframes which can be passed to {0};Тайм-фреймы, которые можно передать в {0}
+DocStr136;The interface describing the external market data storage access to which is organized through the WCF network connection (for more details see {0});Интерфейс, описывающий внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, {0})
+DocStr137;To find instrument identifiers that match the filter {0};Найти идентификаторы инструментов, соответствующие фильтру {0}
 DocStr138;Session ID;Идентификатор сессии
-DocStr139;Инструмент, поля которого будут использоваться в качестве фильтра. Если значение равно {0}, то идет поиск всех имеющихся инструментов;Инструмент, поля которого будут использоваться в качестве фильтра. Если значение равно {0}, то идет поиск всех имеющихся инструментов
+DocStr139;The instrument which fields will be used as a filter. If the value is {0} then there is a search of all available instruments;Инструмент, поля которого будут использоваться в качестве фильтра. Если значение равно {0}, то идет поиск всех имеющихся инструментов
 DocStr140;Found IDs securities;Найденные идентификаторы инструментов
 DocStr141;Get securities;Получить инструменты
 DocStr142;IDs securities;Идентификаторы инструментов
-DocStr143;Получить все даты, для которых записаны маркет-данные;Получить все даты, для которых записаны маркет-данные
-DocStr144;Параметр, ассоциированный с типом {0}. Например, {1};Параметр, ассоциированный с типом {0}. Например, {1}
+DocStr143;To get all the dates for which market data are recorded;Получить все даты, для которых записаны маркет-данные
+DocStr144;The parameter associated with the {0} type. For example, {1};Параметр, ассоциированный с типом {0}. Например, {1}
 DocStr145;Format type;Тип формата
 DocStr146;The range of available dates;Диапазон доступных дат
-DocStr147;Получить все типы и параметры свечек, для которых записаны маркет-данные;Получить все типы и параметры свечек, для которых записаны маркет-данные
+DocStr147;To get all the types and parameters of candles for which market data are recorded;Получить все типы и параметры свечек, для которых записаны маркет-данные
 DocStr148;Available types and arguments of candles;Все типы и параметры свечек
 DocStr149;Save market-data into StockSharp storage format;Сохранить маркет-данные в формате хранилища StockSharp
-DocStr150;Дата, для которой необходимо сохранить маркет-данные;Дата, для которой необходимо сохранить маркет-данные
-DocStr151;Маркет-данные в формате хранилища StockSharp;Маркет-данные в формате хранилища StockSharp
-DocStr152;Удалить маркет-данные из хранилища за указанную дату;Удалить маркет-данные из хранилища за указанную дату
-DocStr153;Дата, для которой необходимо удалить маркет-данные;Дата, для которой необходимо удалить маркет-данные
-DocStr154;Загрузить маркет-данные в формате хранилища StockSharp;Загрузить маркет-данные в формате хранилища StockSharp
-DocStr155;Дата, для которой необходимо загрузить маркет-данные;Дата, для которой необходимо загрузить маркет-данные
-DocStr156;Маркет-данные в формате хранилища StockSharp. Если данных не существует, то будет возвращено {0};Маркет-данные в формате хранилища StockSharp. Если данных не существует, то будет возвращено {0}
-DocStr157;Интерфейс, описывающий модуль проверки доступа соединения с {0};Интерфейс, описывающий модуль проверки доступа соединения с {0}
+DocStr150;The date for which you need to save the market data;Дата, для которой необходимо сохранить маркет-данные
+DocStr151;Market data in the StockSharp storage format;Маркет-данные в формате хранилища StockSharp
+DocStr152;To remove market data on specified date from the storage;Удалить маркет-данные из хранилища за указанную дату
+DocStr153;The date on which you need to remove market data;Дата, для которой необходимо удалить маркет-данные
+DocStr154;To download market data in the StockSharp storage format;Загрузить маркет-данные в формате хранилища StockSharp
+DocStr155;The date on which you need to download market data;Дата, для которой необходимо загрузить маркет-данные
+DocStr156;Market data in the StockSharp storage format. If the data does not exist then {0} will be returned;Маркет-данные в формате хранилища StockSharp. Если данных не существует, то будет возвращено {0}
+DocStr157;The interface describing the connection to {0} access check module;Интерфейс, описывающий модуль проверки доступа соединения с {0}
 DocStr158;Get permission for request;Получить набор разрешений для запроса
 DocStr159;Possible permissions;Допустимые разрешения
-DocStr160;Модуль проверки доступа соединения с {0}, предоставляющий доступ всем соединениям;Модуль проверки доступа соединения с {0}, предоставляющий доступ всем соединениям
-DocStr161;Модуль проверки доступа соединения с {0}, основанный на Windows авторизации;Модуль проверки доступа соединения с {0}, основанный на Windows авторизации
-DocStr162;Модуль проверки доступа соединения с {0}, основанный на {1} авторизации;Модуль проверки доступа соединения с {0}, основанный на {1} авторизации
-DocStr163;Доступные разрешения работы с данными, которые получает клиент;Доступные разрешения работы с данными, которые получает клиент
+DocStr160;The connection to {0} access check module which provides access to all connections;Модуль проверки доступа соединения с {0}, предоставляющий доступ всем соединениям
+DocStr161;The connection to {0} access check module based on Windows authentication;Модуль проверки доступа соединения с {0}, основанный на Windows авторизации
+DocStr162;The connection to {0} access check module based on the {1} authentication;Модуль проверки доступа соединения с {0}, основанный на {1} авторизации
+DocStr163;Available permissions which customer receives for work with data;Доступные разрешения работы с данными, которые получает клиент
 DocStr164;Market-data downloading;Сохранение данных
 DocStr165;Market-data uploading;Загрузка данных
-DocStr166;Внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, {0});Внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, {0})
-DocStr167;Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. Равно 200;Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. Равно 200
+DocStr166;The external market data storage access to which is organized through the WCF network connection (for more details see {0});Внешнее хранилище маркет-данных, доступ к которому организован через сетевое соединение WCF (подробнее, {0})
+DocStr167;The maximum number of instruments which can be requested from the server via the {0} method. It equals to 200;Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. Равно 200
 DocStr168;Market-data storage;Хранилище маркет-данных
 DocStr169;Trading entities storage;Хранилище торговых сущностей
-DocStr170;Добавить тип данных, который сможет передавать {0};Добавить тип данных, который сможет передавать {0}
-DocStr171;Получить список доступных хранилищ маркет-данных;Получить список доступных хранилищ маркет-данных
-DocStr172;Хранилища маркет-данных;Хранилища маркет-данных
+DocStr170;To add the data type that can pass {0};Добавить тип данных, который сможет передавать {0}
+DocStr171;To get a list of available market data storages;Получить список доступных хранилищ маркет-данных
+DocStr172;Market data storages;Хранилища маркет-данных
 DocStr173;Authorizaton module;Модуль проверки доступа
-DocStr174;Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. По-умолчанию равно {1};Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. По-умолчанию равно {1}
-DocStr175;Клиент для доступа к серверу истории {0};Клиент для доступа к серверу истории {0}
-DocStr176;Передача данных через WCF Streaming;Передача данных через WCF Streaming
+DocStr174;The maximum number of instruments which can be requested from the server via the {0} method. The default is {1};Максимальное количество инструментов, которое можно запрашивать с сервера через метод {0}. По-умолчанию равно {1}
+DocStr175;The client for access to the history server {0};Клиент для доступа к серверу истории {0}
+DocStr176;Data transfer via WCF Streaming;Передача данных через WCF Streaming
 DocStr177;Create WCF channel;Создать WCF канал
 DocStr178;WCF channel;WCF канал
-DocStr179;Получить обертку для доступа к удаленным маркет-данным;Получить обертку для доступа к удаленным маркет-данным
-DocStr180;Обертка для доступа к удаленным маркет-данным;Обертка для доступа к удаленным маркет-данным
-DocStr181;Получить для инструмента доступные типы свечек с параметрами;Получить для инструмента доступные типы свечек с параметрами
-DocStr182;Доступные типы свечек с параметрами;Доступные типы свечек с параметрами
-DocStr183;Вызвать метод сервиса {0};Вызвать метод сервиса {0}
-DocStr184;Тип результата, возвращающий метод сервиса;Тип результата, возвращающий метод сервиса
-DocStr185;Обработчик, в котором вызывает метод;Обработчик, в котором вызывает метод
-DocStr186;Результат, возвращающий метод сервиса;Результат, возвращающий метод сервиса
-DocStr187;Информация о логине и пароле для доступа к удаленному хранилищу;Информация о логине и пароле для доступа к удаленному хранилищу
-DocStr188;Идентификатор сессии, полученный из {0};Идентификатор сессии, полученный из {0}
-DocStr189;Размер блока запроса новых инструментов. По-умолчанию он не превышает 1000 элементов;Размер блока запроса новых инструментов. По-умолчанию он не превышает 1000 элементов
+DocStr179;To get a wrapper for access to remote market data;Получить обертку для доступа к удаленным маркет-данным
+DocStr180;The wrapper for access to remote market data;Обертка для доступа к удаленным маркет-данным
+DocStr181;To get available candles types with parameters for the instrument;Получить для инструмента доступные типы свечек с параметрами
+DocStr182;Available candles types with parameters;Доступные типы свечек с параметрами
+DocStr183;To call the service {0} method;Вызвать метод сервиса {0}
+DocStr184;The result type returning the service method;Тип результата, возвращающий метод сервиса
+DocStr185;The handler in which the method is called;Обработчик, в котором вызывается метод
+DocStr186;The result returning the service method;Результат, возвращающий метод сервиса
+DocStr187;Information about the login and password for access to remote storage;Информация о логине и пароле для доступа к удаленному хранилищу
+DocStr188;The session identifier received from {0};Идентификатор сессии, полученный из {0}
+DocStr189;The new instruments request block size. By default it does not exceed 1000 elements;Размер блока запроса новых инструментов. По-умолчанию он не превышает 1000 элементов
 DocStr190;The source for downloading historical data from Oanda;Источник исторических маркет-данных от Oanda
-DocStr191;Получить исторический курс валютной пары;Получить исторический курс валютной пары
+DocStr191;To get the historical rate of the currency pair;Получить исторический курс валютной пары
 DocStr192;Currency pair;Валютная пара
 DocStr193;Historical rate;Исторический курс
-DocStr194;Источник маркет-данных от Quandl;Источник маркет-данных от Quandl
-DocStr195;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор источника;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор источника
-DocStr196;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор инструмента;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор инструмента
-DocStr197;Идентификатор зарегистрированного пользователя;Идентификатор зарегистрированного пользователя
+DocStr194;The market data source from Quandl;Источник маркет-данных от Quandl
+DocStr195;The key by which the source Quandl identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор источника
+DocStr196;The key by which the instrument Quandl identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Quandl-идентификатор инструмента
+DocStr197;The registered user identifier;Идентификатор зарегистрированного пользователя
 DocStr198;The source for downloading historical data from Alor;Источник для скачивания исторических сделок с Alor
-DocStr199;Адрес сервера истории. По-умолчанию равен http://history.alor.ru;Адрес сервера истории. По-умолчанию равен http://history.alor.ru
-DocStr200;Загрузить свечи;Загрузить свечи
+DocStr199;The history server address. The default is http://history.alor.ru;Адрес сервера истории. По-умолчанию равен http://history.alor.ru
+DocStr200;To download candles;Загрузить свечи
 DocStr201;The instrument for which you need to get candles;Инструмент, для которого необходимо получить свечи
-DocStr204;Максимальное количество свеч, которое нужно получить (не менее 1 и не более 10000);Максимальное количество свеч, которое нужно получить (не менее 1 и не более 10000)
+DocStr204;The maximum number of candles you need to get (at least 1 and not more than 10000);Максимальное количество свеч, которое нужно получить (не менее 1 и не более 10000)
 DocStr205;Downloaded candles;Загруженные свечи
 DocStr206;Possible time-frames;Возможные тайм-фреймы
-DocStr207;Источник для скачивания исторических сделок с Finam;Источник для скачивания исторических сделок с Finam
-DocStr208;Ключ, по которому в {0} будет присутствовать Finam-идентификатор рынка;Ключ, по которому в {0} будет присутствовать Finam-идентификатор рынка
-DocStr209;Ключ, по которому в {0} будет присутствовать Finam-идентификатор инструмента;Ключ, по которому в {0} будет присутствовать Finam-идентификатор инструмента
-DocStr210;Загрузить информацию об инструментах;Загрузить информацию об инструментах
+DocStr207;The source for download of historical trades from Finam;Источник для скачивания исторических сделок с Finam
+DocStr208;The key by which the market Finam identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Finam-идентификатор рынка
+DocStr209;The key by which the instrument Finam identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Finam-идентификатор инструмента
+DocStr210;To download information about instruments;Загрузить информацию об инструментах
 DocStr211;Information about securities;Информация об инструментах
 DocStr213;The instrument for which you need to get all trades;Инструмент, для которого необходимо получить все сделки
-DocStr214;Информация об инструменте, загруженная через {0};Информация об инструменте, загруженная через {0}
+DocStr214;Information about instrument loaded via {0};Информация об инструменте, загруженная через {0}
 DocStr215;Finam security id;Идентификатор инструмента на сайте Finam
 DocStr216;Finam market id;Идентификатор рынка на сайте Finam
 DocStr217;Security name;Имя инструмента
 DocStr218;Number of decimal places;Количество знаков после запятой
 DocStr219;The source for downloading historical data from Mdf.ru;Источник для скачивания исторических сделок с Mdf.ru
-DocStr220;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор рынка;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор рынка
-DocStr221;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор инструмента;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор инструмента
-DocStr222;Загрузить тиковые сделки;Загрузить тиковые сделки
-DocStr223;Инструмент, для которого необходимо получить сделки;Инструмент, для которого необходимо получить сделки
+DocStr220;The key by which the market Mfd identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор рынка
+DocStr221;The key by which the instrument Mfd identifier will be present in {0} ;Ключ, по которому в {0} будет присутствовать Mfd-идентификатор инструмента
+DocStr222;To download tick trades;Загрузить тиковые сделки
+DocStr223;The instrument for which you need to get trades;Инструмент, для которого необходимо получить сделки
 DocStr224;Loaded ticks;Загруженные сделки
-DocStr225;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://www.micex.ru;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://www.micex.ru
-DocStr226;Обновить информацию по инструменту;Обновить информацию по инструменту
-DocStr227;Скачивать ли информацию с сайта, если она не была найдена локально;Скачивать ли информацию с сайта, если она не была найдена локально
-DocStr228;{0}, если инструмент был успешно обновлен. Иначе, {1};{0}, если инструмент был успешно обновлен. Иначе, {1}
-DocStr229;Класс для получения данных к итогам конкурса ЛЧИ;Класс для получения данных к итогам конкурса ЛЧИ
-DocStr230;Получить итоги за определенный год;Получить итоги за определенный год
+DocStr225;The helper class that filling fields in {0} and {1} based on information from the site http://www.micex.ru;Вспомогательный класс, заполняющий поля {0} и {1} на основе информации с сайта http://www.micex.ru
+DocStr226;To update information for the instrument;Обновить информацию по инструменту
+DocStr227;Whether to download information from the site, if it is not found locally;Скачивать ли информацию с сайта, если она не была найдена локально
+DocStr228;{0}, if the instrument has been updated successfully. Otherwise, {1};{0}, если инструмент был успешно обновлен. Иначе, {1}
+DocStr229;The class to obtain data by the Best Private Investor contest results;Класс для получения данных к итогам конкурса ЛЧИ
+DocStr230;To get results for the specified year;Получить итоги за определенный год
 DocStr231;Year of competition;Год конкурса
 DocStr232;Results;Итоги
-DocStr233;Все года, когда проводился конкурс;Все года, когда проводился конкурс
-DocStr234;Итог конкурса ЛЧИ за определенный год;Итог конкурса ЛЧИ за определенный год
-DocStr235;Получить сделки участника за определенную дату;Получить сделки участника за определенную дату
-DocStr236;Участник;Участник
+DocStr233;All years when the contest held;Все года, когда проводился конкурс
+DocStr234;Results of the Best Private Investor contest for the specified year;Итог конкурса ЛЧИ за определенный год
+DocStr235;To get trades of the participant on the specified date;Получить сделки участника за определенную дату
+DocStr236;Participant;Участник
 DocStr237;Date of competition;Дата соревнования
-DocStr238;Сделки участника;Сделки участника
+DocStr238;Trades of the participant;Сделки участника
 DocStr239;BPI year;Год проведения ЛЧИ
-DocStr240;Участники соревнования;Участники соревнования
-DocStr241;Даты, для которых есть информация о сделках;Даты, для которых есть информация о сделках
-DocStr242;Класс для доступа с историческим дневным данный рынка FORTS;Класс для доступа с историческим дневным данный рынка FORTS
-DocStr243;Возвращает вчерашние данные на конец дня (EOD, End-Of-Day) по выбранному инструменту;Возвращает вчерашние данные на конец дня (EOD, End-Of-Day) по выбранному инструменту
-DocStr244;Дата определяется на основе системного времени;Дата определяется на основе системного времени
+DocStr240;Competitors;Участники соревнования
+DocStr241;Dates for which there is information about trades;Даты, для которых есть информация о сделках
+DocStr242;The class for access to the historical daily data of the FORTS market;Класс для доступа с историческим дневным данным рынка FORTS
+DocStr243;It returns yesterday's data at the end of day (EOD, End-Of-Day) by the selected instrument;Возвращает вчерашние данные на конец дня (EOD, End-Of-Day) по выбранному инструменту
+DocStr244;Date is determined by the system time;Дата определяется на основе системного времени
 DocStr245;Yesterday's market-data;Вчерашние данные
-DocStr246;Возвращает список данных на конец дня (EOD, End-Of-Day) по выбранному инструменту за выбранный период;Возвращает список данных на конец дня (EOD, End-Of-Day) по выбранному инструменту за выбранный период
+DocStr246;It returns a list of the data at the end of day (EOD, End-Of-Day) by the selected instrument for the specified period;Возвращает список данных на конец дня (EOD, End-Of-Day) по выбранному инструменту за выбранный период
 DocStr247;Begin period;Дата начала периода
 DocStr249;Historical market-data;Исторические данные
-DocStr250;Получить индикативный курс валютной пары;Получить индикативный курс валютной пары
+DocStr250;To get an indicative exchange rate of a currency pair;Получить индикативный курс валютной пары
 DocStr251;End period;Дата окончания периода
-DocStr252;Индикативный курс доллара США к российскому рублю;Индикативный курс доллара США к российскому рублю
-DocStr253;Минимальная дата, для которой есть индикативный курс доллара США к российскому рублю. Равен 2 ноября 2009 года;Минимальная дата, для которой есть индикативный курс доллара США к российскому рублю. Равен 2 ноября 2009 года
-DocStr254;Источник для скачивания исторических сделок с RTS;Источник для скачивания исторических сделок с RTS
-DocStr255;Минимальная дата RTS, для которой есть исторические данные;Минимальная дата RTS, для которой есть исторические данные
-DocStr256;Минимальная дата UX, для которой есть исторические данные;Минимальная дата UX, для которой есть исторические данные
+DocStr252;The indicative rate of US dollar to the Russian ruble;Индикативный курс доллара США к российскому рублю
+DocStr253;The earliest date for which there is an indicative rate of US dollar to the Russian ruble. It is 2 November 2009;Самая ранняя дата, для которой есть индикативный курс доллара США к российскому рублю. Равна 2 ноября 2009 года
+DocStr254;The source for download of historical trades from RTS;Источник для скачивания исторических сделок с RTS
+DocStr255;The earliest date in RTS, for which there are historical data;Самая ранняя дата RTS, для которой есть исторические данные
+DocStr256;The earliest date in UX, for which there are historical data;Самая ранняя дата UX, для которой есть исторические данные
 DocStr257;Load historical ticks;Загрузить исторические сделки
-DocStr258;Дата торговой сессии, для которой необходимо получить сделки;Дата торговой сессии, для которой необходимо получить сделки
+DocStr258;The date of the trading session for which you need to get trades;Дата торговой сессии, для которой необходимо получить сделки
 DocStr259;Market-data time zone;Временная зона маркет-данных
 DocStr260;RTS FTP server address;Адрес ftp RTS сервера
 DocStr261;FTP login;Логин к ftp
 DocStr262;FTP password;Пароль к ftp
-DocStr263;Путь к папке с историческими данными в формате DBF;Путь к папке с историческими данными в формате DBF
-DocStr264;Если значение равно пустой строке, то данные в формате DBF не обрабатываются;Если значение равно пустой строке, то данные в формате DBF не обрабатываются
-DocStr265;Путь к папке с историческими данными в формате CSV и Excel;Путь к папке с историческими данными в формате CSV и Excel
-DocStr266;Если значение равно пустой строке, то данные в формате CSV и Excel не обрабатываются;Если значение равно пустой строке, то данные в формате CSV и Excel не обрабатываются
-DocStr267;Сохранять сделки для инструментов РТС Стандарт. По-умолчанию выключено;Сохранять сделки для инструментов РТС Стандарт. По-умолчанию выключено
-DocStr268;Склеивать сделки для инструментов РТС Стандарт (сделки для T+N не разбиваются по папкам). По-умолчанию выключено;Склеивать сделки для инструментов РТС Стандарт (сделки для T+N не разбиваются по папкам). По-умолчанию выключено
-DocStr269;Сохранять только системные сделки. По-умолчанию включено;Сохранять только системные сделки. По-умолчанию включено
-DocStr270;Источник для скачивания исторических данных с сайта украинской биржи;Источник для скачивания исторических данных с сайта украинской биржи
-DocStr271;Удаленное хранилище маркет-данных, работающее через {0};Удаленное хранилище маркет-данных, работающее через {0}
+DocStr263;The path to the folder with historical data in the DBF format;Путь к папке с историческими данными в формате DBF
+DocStr264;If the value is an empty string, the data in the DBF format are not processed;Если значение равно пустой строке, то данные в формате DBF не обрабатываются
+DocStr265;The path to the folder with historical data in CSV and Excel formats;Путь к папке с историческими данными в формате CSV и Excel
+DocStr266;If the value is an empty string, the data in CSV and Excel formats are not processed;Если значение равно пустой строке, то данные в формате CSV и Excel не обрабатываются
+DocStr267;To save trades for RTS Standard instruments. The default is off;Сохранять сделки для инструментов РТС Стандарт. По-умолчанию выключено
+DocStr268;To merge trades for RTS Standard instruments (trades for T+N are not divided by folders). The default is off;Склеивать сделки для инструментов РТС Стандарт (сделки для T+N не разбиваются по папкам). По-умолчанию выключено
+DocStr269;To save only system trades. The default is enabled;Сохранять только системные сделки. По-умолчанию включено
+DocStr270;The source for download of historical data from the site of the Ukrainian stock exchange;Источник для скачивания исторических данных с сайта украинской биржи
+DocStr271;Remote storage of market data working via {0};Удаленное хранилище маркет-данных, работающее через {0}
 DocStr272;Create storage for {0};Создать хранилище для {0}
 DocStr273;Storage for {0};Хранилище для {0}
 DocStr274;Path to market data;Путь к данными
-DocStr275;Источник маркет-данных от Yahoo Finance;Источник маркет-данных от Yahoo Finance
-DocStr276;Получить level1 маркет-данные;Получить level1 маркет-данные
-DocStr277;Поля маркет-данных. Если было передано {0}, то будет использоваться значение {1};Поля маркет-данных. Если было передано {0}, то будет использоваться значение {1}
-DocStr278;Level1 маркет-данные;Level1 маркет-данные
-DocStr279;Доступные поля маркет-данных, которые можно передать в {0};Доступные поля маркет-данных, которые можно передать в {0}
+DocStr275;The market data source from Yahoo Finance;Источник маркет-данных от Yahoo Finance
+DocStr276;To get level1 market data;Получить level1 маркет-данные
+DocStr277;Market data fields. If {0} was passed, then {1} value will be used;Поля маркет-данных. Если было передано {0}, то будет использоваться значение {1}
+DocStr278;Level1 market data;Level1 маркет-данные
+DocStr279;Available fields of market data which can be passed to {0};Доступные поля маркет-данных, которые можно передать в {0}
 DocStr280;Стратегия автоматической защиты позиции;Стратегия автоматической защиты позиции
 DocStr281;Новые сделки в стратегию поступают через {0}. Они автоматически защищаются с помощью {1}. Дополнительно, {2} переворачивает стопы в случае переворота позиции;Новые сделки в стратегию поступают через {0}. Они автоматически защищаются с помощью {1}. Дополнительно, {2} переворачивает стопы в случае переворота позиции
 DocStr282;The method is called when the {0} method has been called and the {1} state has been taken the {2} value;Метод вызывается тогда, когда вызвался метод {0}, и состояние {1} перешло в значение {2}
