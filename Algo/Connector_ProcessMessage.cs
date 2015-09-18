@@ -1236,6 +1236,12 @@ namespace StockSharp.Algo
 			{
 				var tuple = _entityCache.ProcessOrderMessage(security, message);
 
+				if (tuple == null)
+				{
+					this.AddWarningLog(LocalizedStrings.Str1156Params, message.OrderId.To<string>() ?? message.OrderStringId);
+					return;
+				}
+
 				var order = tuple.Item1;
 				var isNew = tuple.Item2;
 				var isChanged = tuple.Item3;

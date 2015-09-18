@@ -800,7 +800,11 @@ namespace StockSharp.Algo
 				});
 
 				if (info == null)
-					throw new InvalidOperationException(LocalizedStrings.Str1156Params.Put(orderId.To<string>() ?? orderStringId));
+				{
+					isNew = false;
+					return null;
+					//throw new InvalidOperationException(LocalizedStrings.Str1156Params.Put(orderId.To<string>() ?? orderStringId));
+				}
 			}
 			else
 			{
