@@ -405,6 +405,9 @@ namespace StockSharp.Algo
 				return o;
 			}, out isNew, true);
 
+			if (orderInfo == null)
+				return null;
+
 			var order = orderInfo.Item1;
 			var isCancelled = orderInfo.Item2;
 			//var isReReregisterCancelled = orderInfo.Item3;
