@@ -24,7 +24,7 @@
 				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
 			</Button>
 			<Button x:Name="NewStopOrder" Width="120" IsEnabled="False" Click="NewStopOrderClick">
-				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewOrder}" />...</TextBlock>
+				<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NewStopOrder}" />...</TextBlock>
 			</Button>
 		</StackPanel>
 	</Grid>
