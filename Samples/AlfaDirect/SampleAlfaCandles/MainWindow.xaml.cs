@@ -1,14 +1,11 @@
 namespace SampleAlfaCandles
 {
 	using System;
-	using System.Collections.ObjectModel;
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
 
 	using Ecng.Common;
-	using Ecng.Collections;
 	using Ecng.Xaml;
 
 	using MoreLinq;
@@ -22,7 +19,6 @@ namespace SampleAlfaCandles
 	partial class MainWindow
 	{
 		private AlfaTrader _trader;
-		private readonly ObservableCollection<Security> _securitiesSource = new ObservableCollection<Security>();
 
 		private readonly LogManager _logManager = new LogManager();
 
@@ -35,8 +31,6 @@ namespace SampleAlfaCandles
 			HistoryInterval.SelectedIndex = 2;
 			From.Value = DateTime.Today - TimeSpan.FromDays(7);
 			To.Value = DateTime.Now;
-
-			Security.ItemsSource = _securitiesSource;
 
 			_logManager.Listeners.Add(new FileLogListener());
 		}
@@ -58,14 +52,14 @@ namespace SampleAlfaCandles
 			
 			_trader.NewSecurities += securities =>
 			{
-				this.GuiAsync(() => _securitiesSource.AddRange(securities));
-
 				// начинаем получать текущие сделки (для построения свечек в реальном времени)
 
 				// альфа не выдержит нагрузки получения сделок по всем инструментам
 				// нужно подписываться только на те, которые необходимы
 				// securities.ForEach(_trader.RegisterTrades);
 			};
+
+			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
 			_trader.NewPortfolios += portfolios => portfolios.ForEach(_trader.RegisterPortfolio);
 
@@ -95,7 +89,7 @@ namespace SampleAlfaCandles
 
 		private Security SelectedSecurity
 		{
-			get { return (Security)Security.SelectedValue; }
+			get { return Security.SelectedSecurity; }
 		}
 
 		private void ShowChartClick(object sender, RoutedEventArgs e)
@@ -138,7 +132,7 @@ namespace SampleAlfaCandles
 			_trader.SubscribeCandles(series, from, to);
 		}
 
-		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void OnSelectedSecurity()
 		{
 			ShowChart.IsEnabled = SelectedSecurity != null;
 		}

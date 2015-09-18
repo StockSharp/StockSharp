@@ -4,7 +4,6 @@ namespace SampleSync
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Windows;
-	using System.Windows.Controls;
 
 	using Ookii.Dialogs.Wpf;
 
@@ -73,8 +72,7 @@ namespace SampleSync
 				// (пред. нужно закомментировать, это - раскомментировать)
 				// new GuiTrader<QuikTrader>(new QuikTrader(Path.Text));
 
-				// теперь можно обратиться к элементу окна 'Security' (это выпадающий список) без конструкции Sync
-				_connector.NewSecurities += securities => Security.ItemsSource = _connector.Securities;
+				Security.SecurityProvider = new FilterableSecurityProvider(_connector);
 
 				// производим соединение
 				_connector.Connect();
@@ -88,7 +86,7 @@ namespace SampleSync
 
 		private void ShowChartClick(object sender, RoutedEventArgs e)
 		{
-			var security = (Security)Security.SelectedValue;
+			var security = Security.SelectedSecurity;
 			var series = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5));
 
 			_chartWindows.SafeAdd(series, key =>
@@ -114,10 +112,9 @@ namespace SampleSync
 			_candleManager.Start(series);
 		}
 
-		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void OnSecuritySelected()
 		{
-			if (Security.SelectedIndex != -1)
-				ShowChart.IsEnabled = true;
+			ShowChart.IsEnabled = Security.SelectedSecurity != null;
 		}
 	}
 }

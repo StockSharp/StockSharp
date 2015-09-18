@@ -2,11 +2,8 @@ namespace SampleSmartCandles
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Windows;
-	using System.Windows.Controls;
 
 	using Ecng.Common;
 	using Ecng.Collections;
@@ -17,7 +14,6 @@ namespace SampleSmartCandles
 	using StockSharp.SmartCom;
 	using StockSharp.Xaml.Charting;
 	using StockSharp.SmartCom.Native;
-	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	partial class MainWindow
@@ -25,8 +21,7 @@ namespace SampleSmartCandles
 		private readonly Dictionary<CandleSeries, ChartWindow> _chartWindows = new Dictionary<CandleSeries, ChartWindow>();
 		private SmartTrader _trader;
 		private CandleManager _candleManager;
-		private readonly ObservableCollection<Security> _securitiesSource = new ObservableCollection<Security>();
-
+		
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -36,8 +31,6 @@ namespace SampleSmartCandles
 			HistoryInterval.SelectedIndex = 2;
 			From.Value = DateTime.Today - TimeSpan.FromDays(7);
 			To.Value = DateTime.Now;
-
-			Security.ItemsSource = _securitiesSource;
 		}
 
 		private void ConnectClick(object sender, RoutedEventArgs e)
@@ -75,13 +68,7 @@ namespace SampleSmartCandles
 			_trader.MarketDataSubscriptionFailed += (security, type, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
-			_trader.NewSecurities += securities =>
-			{
-				// так как инструментов слишком много, то выводим только два популярных с ММВБ и РТС
-				securities = securities.Where(s => s.Code == "LKOH" || (s.Type == SecurityTypes.Future && s.Id.Like("RI%FORTS")));
-
-				this.GuiAsync(() => _securitiesSource.AddRange(securities));
-			};
+			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
 			_candleManager = new CandleManager(_trader);
 
@@ -102,7 +89,7 @@ namespace SampleSmartCandles
 
 		private Security SelectedSecurity
 		{
-			get { return (Security)Security.SelectedValue; }
+			get { return Security.SelectedSecurity; }
 		}
 
 		private void ShowChartClick(object sender, RoutedEventArgs e)
@@ -147,7 +134,7 @@ namespace SampleSmartCandles
 				_candleManager.Start(series, (DateTimeOffset)From.Value, (DateTimeOffset)To.Value);
 		}
 
-		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void OnSecuritySelected()
 		{
 			ShowChart.IsEnabled = SelectedSecurity != null;
 		}

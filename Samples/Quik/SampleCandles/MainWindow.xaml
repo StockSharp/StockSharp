@@ -57,7 +57,7 @@
 		<sx:CandleSettingsEditor x:Name="CandlesSettings" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" />
 
 		<Button x:Name="ConnectBtn" Grid.Column="1" Width="100" Grid.ColumnSpan="2" Grid.Row="1" Content="{x:Static loc:LocalizedStrings.Connect}" Click="ConnectClick" />
-		<ComboBox x:Name="Security" DisplayMemberPath="Code" Grid.Column="1" Grid.Row="2" SelectionChanged="SecuritySelectionChanged"  />
+		<sx:SecurityEditor x:Name="Security" Grid.Column="1" Grid.Row="2" SecuritySelected="OnSecuritySelected"  />
 		
 		<Button x:Name="ShowChart" Grid.Column="1" Width="100" Grid.Row="4" Content="{x:Static loc:LocalizedStrings.Str3200}" IsEnabled="False" Click="ShowChartClick" />
 	</Grid>

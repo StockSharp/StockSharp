@@ -4,6 +4,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
 		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:sx="http://schemas.stocksharp.com/xaml"
 		Title="{x:Static loc:LocalizedStrings.XamlStr568}" Height="260" Width="350"
 		WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
@@ -31,7 +32,7 @@
 				<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
 			</TextBlock>
 		</Label>
-		<ComboBox x:Name="Security" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="2" SelectionChanged="SecuritySelectionChanged"  Margin="5"/>
+		<sx:SecurityEditor x:Name="Security" Grid.Column="1" Grid.Row="2" SecuritySelected="OnSelectedSecurity" Margin="5"/>
 
 		<TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right">
 			<Run Text="{x:Static loc:LocalizedStrings.History}" />:

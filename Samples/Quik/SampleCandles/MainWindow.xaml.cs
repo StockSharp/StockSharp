@@ -5,7 +5,6 @@ namespace SampleCandles
 	using System.Net;
 	using System.Security;
 	using System.Windows;
-	using System.Windows.Controls;
 
 	using Ecng.Collections;
 	using Ecng.Common;
@@ -126,7 +125,7 @@ namespace SampleCandles
 				_trader.MarketDataSubscriptionFailed += (security, type, error) =>
 					this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 				
-				_trader.NewSecurities += securities => this.GuiAsync(() => Security.ItemsSource = _trader.Securities);
+				Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
 				_trader.Connect();
 
@@ -160,10 +159,10 @@ namespace SampleCandles
 
 		private Security SelectedSecurity
 		{
-			get { return (Security)Security.SelectedValue; }
+			get { return Security.SelectedSecurity; }
 		}
 
-		private void SecuritySelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void OnSecuritySelected()
 		{
 			ShowChart.IsEnabled = SelectedSecurity != null;
 		}

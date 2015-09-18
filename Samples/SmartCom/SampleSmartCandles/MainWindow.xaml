@@ -43,7 +43,7 @@
 				<Run Text="{x:Static loc:LocalizedStrings.Security}"/><Run Text=":"/>
 			</TextBlock>
 		</Label>
-		<ComboBox x:Name="Security" DisplayMemberPath="Name" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" SelectionChanged="SecuritySelectionChanged"  />
+		<sx:SecurityEditor x:Name="Security" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" SecuritySelected="OnSecuritySelected"  />
 		
 		<RadioButton x:Name="IsRealTime" IsChecked="True" Content="Real-Time" Grid.Column="0" Grid.Row="2" FlowDirection="RightToLeft" VerticalAlignment="Center" Click="OnChartTypeChanged" />
 		<sx:CandleSettingsEditor x:Name="RealTimeSettings" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Center" />
