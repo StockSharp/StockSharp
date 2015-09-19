@@ -53720,5 +53720,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(CovarianceKey); }
 		}
+
+		/// <summary>
+		/// Correlation
+		/// </summary>
+		public const string CorrelationKey = "Correlation";
+
+		/// <summary>
+		/// Correlation
+		/// </summary>
+		public static string Correlation
+		{
+			get { return GetString(CorrelationKey); }
+		}
 	}
 }
