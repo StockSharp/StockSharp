@@ -53707,5 +53707,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(RandomizePriceKey); }
 		}
+
+		/// <summary>
+		/// Covariance
+		/// </summary>
+		public const string CovarianceKey = "Covariance";
+
+		/// <summary>
+		/// Covariance
+		/// </summary>
+		public static string Covariance
+		{
+			get { return GetString(CovarianceKey); }
+		}
 	}
 }

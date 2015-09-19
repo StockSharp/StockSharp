@@ -488,6 +488,47 @@ namespace StockSharp.Algo.Indicators
 	}
 
 	/// <summary>
+	/// Значение индикатора, работающее с парой <see ref="Tuple{TValue, TValue}"/>.
+	/// </summary>
+	public class PairIndicatorValue<TValue> : SingleIndicatorValue<Tuple<TValue, TValue>>
+	{
+		/// <summary>
+		/// Создать <see cref="PairIndicatorValue{TValue}"/>.
+		/// </summary>
+		/// <param name="indicator">Индикатор.</param>
+		/// <param name="value">Значение.</param>
+		public PairIndicatorValue(IIndicator indicator, Tuple<TValue, TValue> value)
+			: base(indicator, value)
+		{
+		}
+
+		/// <summary>
+		/// Создать <see cref="PairIndicatorValue{TValue}"/>.
+		/// </summary>
+		/// <param name="indicator">Индикатор.</param>
+		public PairIndicatorValue(IIndicator indicator)
+			: base(indicator)
+		{
+		}
+
+		/// <summary>
+		/// Изменить входное значение индикатора новым значением (например, оно получено от другого индикатора).
+		/// </summary>
+		/// <typeparam name="T">Тип данных, которым оперирует индикатор.</typeparam>
+		/// <param name="indicator">Индикатор.</param>
+		/// <param name="value">Значение.</param>
+		/// <returns>Новый объект, содержащий входное значение.</returns>
+		public override IIndicatorValue SetValue<T>(IIndicator indicator, T value)
+		{
+			return new PairIndicatorValue<TValue>(indicator, GetValue<Tuple<TValue, TValue>>())
+			{
+				IsFinal = IsFinal,
+				InputValue = this
+			};
+		}
+	}
+
+	/// <summary>
 	/// Комплексное значение индикатора <see cref="IComplexIndicator"/>, которое получается в результате вычисления.
 	/// </summary>
 	public class ComplexIndicatorValue : BaseIndicatorValue
