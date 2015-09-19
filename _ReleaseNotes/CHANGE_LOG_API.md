@@ -1,7 +1,19 @@
 StockSharp API Change log
 ========================
-###v4.3.11:
+###v4.3.12:
+* (feature) Correlation indicator.
+* (feature) Covariance indicator.
+* (feature) Chart.TimeZone
+* (feature) Oanda + BitStamp. Control error count.
+* (feature) WpfToolkit 2.5.0
+* (bug) FixServer. Error handling fix.
+* (bug) Fix http://stocksharp.com/forum/yaf_postst5724_QuikLua--System-InvalidOperationException-pri-poluchienii-ordierov-biez-transactionId.aspx
+* (feature) Plaza. CGate router 1.3.12.5
+* (bug) YahooHistorySource fix
+* (feature) Interactive Brokers. 9.72
 * (feature) Backtesting on level1.
+
+###v4.3.11:
 * (feature) CSV storage. Time zone.
 * (feature) Transaq. v2.16.1
 * (feature) level1 -> depths.
