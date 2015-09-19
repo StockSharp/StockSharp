@@ -741,8 +741,8 @@ namespace StockSharp.Algo.Candles.Compression
 
 			if (value.Time < bounds.Min)
 				return null;
-			
-			var openTime = value.Time.UtcDateTime.ToDateTimeOffset(value.Time.Offset);
+
+			var openTime = bounds.Min;
 
 			var candle = FirstInitCandle(series, new TimeFrameCandle
 			{
