@@ -464,6 +464,11 @@
             The order creation mode. The default is off.
             </summary>
     </member>
+    <member name="P:StockSharp.Xaml.Charting.Chart.TimeZone">
+      <summary>
+            Local time zone for all <see cref="T:System.DateTimeOffset" /> values convertion.
+            </summary>
+    </member>
     <member name="P:StockSharp.Xaml.Charting.Chart.IndicatorTypes">
       <summary>
             The list of available indicators types.
