@@ -25,8 +25,8 @@
 
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr249}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.Commission}" SortMemberPath="Position.Commission"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr54}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.VariationMargin}" SortMemberPath="Position.VariationMargin"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr536}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.RealizedPnL}" SortMemberPath="Position.RealizedPnL"/>
-		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.XamlStr535}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.UnrealizedPnL}" SortMemberPath="Position.UnrealizedPnL"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.PnLRealized}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.RealizedPnL}" SortMemberPath="Position.RealizedPnL"/>
+		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.PnLUnreal}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.UnrealizedPnL}" SortMemberPath="Position.UnrealizedPnL"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Str257}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.AveragePrice}" SortMemberPath="Position.AveragePrice"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Price}" Visibility="Collapsed" Width="50" Binding="{Binding Path=Position.CurrentPrice}" SortMemberPath="Position.CurrentPrice"/>
 		<DataGridTextColumn Header="{x:Static loc:LocalizedStrings.Time}" Visibility="Collapsed" Width="120" Binding="{Binding Path=Position.LastChangeTime, Converter={StaticResource ValueConverter}, ConverterParameter='\{0:G\}'}" SortMemberPath="Position.LastChangeTime"/>

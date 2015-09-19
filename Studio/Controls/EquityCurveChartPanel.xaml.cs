@@ -1,7 +1,6 @@
 namespace StockSharp.Studio.Controls
 {
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Windows.Media;
 
 	using Ecng.Configuration;
@@ -10,7 +9,7 @@ namespace StockSharp.Studio.Controls
 	using StockSharp.Xaml.Charting;
 	using StockSharp.Localization;
 
-	[DisplayName("P&L")]
+	[DisplayNameLoc(LocalizedStrings.PnLKey)]
 	[DescriptionLoc(LocalizedStrings.Str3260Key)]
 	[Icon("images/equity_24x24.png")]
 	public partial class EquityCurveChartPanel
@@ -23,8 +22,8 @@ namespace StockSharp.Studio.Controls
 		{
 			InitializeComponent();
 
-			_totalPnL = EquityChart.CreateCurve("P&L", Colors.Green, Colors.Red, EquityCurveChartStyles.Area);
-			_unrealizedPnL = EquityChart.CreateCurve(LocalizedStrings.Str3261, Colors.Black);
+			_totalPnL = EquityChart.CreateCurve(LocalizedStrings.PnL, Colors.Green, Colors.Red, EquityCurveChartStyles.Area);
+			_unrealizedPnL = EquityChart.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
 			_commission = EquityChart.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
 
 			var cmdSvc = ConfigManager.GetService<IStudioCommandService>();

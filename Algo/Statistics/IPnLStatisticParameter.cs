@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Statistics
 {
 	using System;
-	using System.ComponentModel;
 
 	using Ecng.Serialization;
 
@@ -25,7 +24,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str958Key)]
 	[DescriptionLoc(LocalizedStrings.Str959Key)]
-	[Category("P&L")]
+	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class MaxProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		/// <summary>
@@ -44,7 +43,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str960Key)]
 	[DescriptionLoc(LocalizedStrings.Str961Key)]
-	[Category("P&L")]
+	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class MaxDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private decimal _maxEquity = decimal.MinValue;
@@ -86,7 +85,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str962Key)]
 	[DescriptionLoc(LocalizedStrings.Str963Key)]
-	[Category("P&L")]
+	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class MaxRelativeDrawdownParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private decimal _maxEquity = decimal.MinValue;
@@ -130,7 +129,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str964Key)]
 	[DescriptionLoc(LocalizedStrings.Str965Key)]
-	[Category("P&L")]
+	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class ReturnParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private decimal _minEquity = decimal.MaxValue;
@@ -174,7 +173,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str966Key)]
 	[DescriptionLoc(LocalizedStrings.Str967Key)]
-	[Category("P&L")]
+	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class RecoveryFactorParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private readonly MaxDrawdownParameter _maxDrawdown = new MaxDrawdownParameter();
@@ -223,7 +222,7 @@ namespace StockSharp.Algo.Statistics
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str968Key)]
 	[DescriptionLoc(LocalizedStrings.Str969Key)]
-	[Category("P&L")]
+	[CategoryLoc(LocalizedStrings.PnLKey)]
 	public class NetProfitParameter : BaseStatisticParameter<decimal>, IPnLStatisticParameter
 	{
 		private decimal? _firstPnL;

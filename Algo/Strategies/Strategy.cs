@@ -486,7 +486,7 @@ namespace StockSharp.Algo.Strategies
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str436Key)]
 		[PropertyOrder(5)]
-		[DisplayName("P&L")]
+		[DisplayNameLoc(LocalizedStrings.PnLKey)]
 		[DescriptionLoc(LocalizedStrings.Str1364Key)]
 		[ReadOnly(true)]
 		public decimal PnL

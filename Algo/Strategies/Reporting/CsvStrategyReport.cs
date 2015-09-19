@@ -50,7 +50,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 			{
 				foreach (var strategy in Strategies)
 				{
-					WriteValues(writer, LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Str862, "P&L", LocalizedStrings.Str159, LocalizedStrings.Str163, LocalizedStrings.Str161);
+					WriteValues(writer, LocalizedStrings.Strategy, LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.Str1321, LocalizedStrings.Str862, LocalizedStrings.PnL, LocalizedStrings.Str159, LocalizedStrings.Str163, LocalizedStrings.Str161);
 					WriteValues(writer,
 						strategy.Name, strategy.Security != null ? strategy.Security.Id : string.Empty, strategy.Portfolio != null ? strategy.Portfolio.Name : string.Empty,
 						strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);

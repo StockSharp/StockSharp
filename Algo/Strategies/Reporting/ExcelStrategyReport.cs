@@ -141,7 +141,7 @@ namespace StockSharp.Algo.Strategies.Reporting
 						.SetCell(0, 5, LocalizedStrings.Str862 + ":")
 						.SetCell(1, 5, strategy.Position)
 
-						.SetCell(0, 6, "P&L:")
+						.SetCell(0, 6, LocalizedStrings.PnL + ":")
 						.SetCell(1, 6, strategy.PnL)
 
 						.SetCell(0, 7, LocalizedStrings.Str159 + ":")

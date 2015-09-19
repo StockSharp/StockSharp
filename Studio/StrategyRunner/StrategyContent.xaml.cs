@@ -39,8 +39,8 @@
 		{
 			InitializeComponent();
 
-			_totalPnL = EquityCurveChart.CreateCurve("P&L", Colors.Green, Colors.Red, EquityCurveChartStyles.Area);
-			_unrealizedPnL = EquityCurveChart.CreateCurve(LocalizedStrings.Str3261, Colors.Black);
+			_totalPnL = EquityCurveChart.CreateCurve(LocalizedStrings.PnL, Colors.Green, Colors.Red, EquityCurveChartStyles.Area);
+			_unrealizedPnL = EquityCurveChart.CreateCurve(LocalizedStrings.PnLUnreal, Colors.Black);
 			_commission = EquityCurveChart.CreateCurve(LocalizedStrings.Str159, Colors.Red, EquityCurveChartStyles.DashedLine);
 		}
 

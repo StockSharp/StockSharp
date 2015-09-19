@@ -39055,16 +39055,16 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// P&amp;L (unrealized)
+		/// P&L (realized)
 		/// </summary>
-		public const string Str3261Key = "Str3261";
+		public const string PnLRealizedKey = "PnLRealized";
 
 		/// <summary>
-		/// P&amp;L (unrealized)
+		/// P&L (realized)
 		/// </summary>
-		public static string Str3261
+		public static string PnLRealized
 		{
-			get { return GetString(Str3261Key); }
+			get { return GetString(PnLRealizedKey); }
 		}
 
 		/// <summary>
@@ -50056,32 +50056,6 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// P&amp;L (unrealised.)
-		/// </summary>
-		public const string XamlStr535Key = "XamlStr535";
-
-		/// <summary>
-		/// P&amp;L (unrealised.)
-		/// </summary>
-		public static string XamlStr535
-		{
-			get { return GetString(XamlStr535Key); }
-		}
-
-		/// <summary>
-		/// P&amp;L (realized.)
-		/// </summary>
-		public const string XamlStr536Key = "XamlStr536";
-
-		/// <summary>
-		/// P&amp;L (realized.)
-		/// </summary>
-		public static string XamlStr536
-		{
-			get { return GetString(XamlStr536Key); }
-		}
-
-		/// <summary>
 		/// Apply
 		/// </summary>
 		public const string XamlStr537Key = "XamlStr537";
@@ -53732,6 +53706,19 @@ namespace StockSharp.Localization
 		public static string Correlation
 		{
 			get { return GetString(CorrelationKey); }
+		}
+
+		/// <summary>
+		/// P&L
+		/// </summary>
+		public const string PnLKey = "PnL";
+
+		/// <summary>
+		/// P&L
+		/// </summary>
+		public static string PnL
+		{
+			get { return GetString(PnLKey); }
 		}
 	}
 }
