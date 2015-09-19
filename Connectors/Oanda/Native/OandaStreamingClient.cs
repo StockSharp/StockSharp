@@ -86,7 +86,10 @@ namespace StockSharp.Oanda.Native
 
 				ThreadingHelper.Thread(() =>
 				{
-					while (true)
+					var errorCount = 0;
+					const int maxErrorCount = 10;
+
+					while (!_parent.IsDisposed)
 					{
 						var dataVersion = 0;
 
@@ -101,8 +104,11 @@ namespace StockSharp.Oanda.Native
 								switch (_currState)
 								{
 									case States.Starting:
-										cachedData = _data.Cache;
-										dataVersion = _dataVersion;
+										lock (_data.SyncRoot)
+										{
+											cachedData = _data.Cache;
+											dataVersion = _dataVersion;	
+										}
 										break;
 									case States.Started:
 									case States.Stopped:
@@ -153,15 +159,25 @@ namespace StockSharp.Oanda.Native
 								{
 									string line;
 
-									while ((line = reader.ReadLine()) != null)
+									var lineErrorCount = 0;
+									const int maxLineErrorCount = 100;
+
+									while (!_parent.IsDisposed && (line = reader.ReadLine()) != null)
 									{
 										try
 										{
 											_newLine(JsonConvert.DeserializeObject<TResponse>(line));
+											lineErrorCount = 0;
 										}
 										catch (Exception ex)
 										{
 											_parent.NewError.SafeInvoke(ex);
+
+											if (++lineErrorCount >= maxLineErrorCount)
+											{
+												//this.AddErrorLog("Max error {0} limit reached.", maxLineErrorCount);
+												break;
+											}
 										}
 									}
 								}
@@ -179,7 +195,17 @@ namespace StockSharp.Oanda.Native
 							}
 
 							if (needLog)
+							{
 								_parent.NewError.SafeInvoke(ex);
+
+								if (++errorCount >= maxErrorCount)
+								{
+									//this.AddErrorLog("Max error {0} limit reached.", maxErrorCount);
+									break;
+								}
+							}
+							else
+								errorCount = 0;
 						}
 						finally
 						{
