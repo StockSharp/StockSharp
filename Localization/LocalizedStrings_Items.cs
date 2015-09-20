@@ -39055,12 +39055,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// P&L (realized)
+		/// P&amp;L (realized)
 		/// </summary>
 		public const string PnLRealizedKey = "PnLRealized";
 
 		/// <summary>
-		/// P&L (realized)
+		/// P&amp;L (realized)
 		/// </summary>
 		public static string PnLRealized
 		{
@@ -53709,12 +53709,12 @@ namespace StockSharp.Localization
 		}
 
 		/// <summary>
-		/// P&L
+		/// P&amp;L
 		/// </summary>
 		public const string PnLKey = "PnL";
 
 		/// <summary>
-		/// P&L
+		/// P&amp;L
 		/// </summary>
 		public static string PnL
 		{

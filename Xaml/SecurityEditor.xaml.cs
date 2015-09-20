@@ -93,6 +93,15 @@ namespace StockSharp.Xaml
 		}
 
 		/// <summary>
+		/// Gets or sets the text of the currently selected item.
+		/// </summary>
+		public string Text
+		{
+			get { return SecurityTextBox.Text; }
+			set { SecurityTextBox.Text = value; }
+		}
+
+		/// <summary>
 		/// The selected instrument change event.
 		/// </summary>
 		public event Action SecuritySelected;

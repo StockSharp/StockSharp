@@ -143,7 +143,7 @@
 
 			DiagramPanel.SaveToImage(fileName);
 
-			var link = YandexDisk.Publish(fileName);
+			var link = YandexDisk.Publish(fileName, this.GetWindow());
 
 			if (link.IsEmpty())
 				return;
