@@ -339,7 +339,7 @@ namespace StockSharp.Quik
 				}
 
 				if (error != null)
-					throw error;
+					error.Throw();
 			}
 		}
 

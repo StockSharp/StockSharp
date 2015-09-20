@@ -280,11 +280,9 @@ namespace StockSharp.Hydra.Core
 		{
 			if (LastError != null)
 			{
-				var copy = LastError;
+				var error = LastError;
 				LastError = null;
-
-				// http://stackoverflow.com/questions/57383/in-c-how-can-i-rethrow-innerexception-without-losing-stack-trace
-				ExceptionDispatchInfo.Capture(copy).Throw();
+				error.Throw();
 			}
 		}
 

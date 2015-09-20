@@ -202,7 +202,7 @@ namespace StockSharp.InteractiveBrokers.Native
 				if (error != null)
 				{
 					if (blocked)
-						throw error;
+						error.Throw();
 					else
 						return null;
 				}

@@ -11,6 +11,7 @@ namespace StockSharp.Xaml
 	using Disk.SDK.Provider;
 
 	using Ecng.Common;
+	using Ecng.Xaml;
 
 	using StockSharp.Localization;
 
@@ -19,7 +20,7 @@ namespace StockSharp.Xaml
 		private const string _clientId = "fa16e5e894684f479fd32f7578f0d4a4";
 		private const string _returnUrl = "https://oauth.yandex.ru/verification_code";
 
-		private bool _authCompleted ;
+		private bool _authCompleted;
 
 		public event EventHandler<GenericSdkEventArgs<string>> AuthCompleted;
 
@@ -88,8 +89,9 @@ namespace StockSharp.Xaml
 		/// To share a file.
 		/// </summary>
 		/// <param name="file">File.</param>
+		/// <param name="owner">The login window owner.</param>
 		/// <returns>The link to a file.</returns>
-		public static string Publish(string file)
+		public static string Publish(string file, Window owner)
 		{
 			if (file == null)
 				throw new ArgumentNullException("file");
@@ -98,7 +100,7 @@ namespace StockSharp.Xaml
 				throw new FileNotFoundException(LocalizedStrings.Str1575, file);
 
 			Exception error = null;
-			String result = null;
+			string result = null;
 
 			var loginWindow = new YandexLoginWindow();
 			loginWindow.AuthCompleted += (s, e) =>
@@ -124,10 +126,10 @@ namespace StockSharp.Xaml
 				else
 					error = e.Error;
 			};
-			loginWindow.ShowDialog();
+			loginWindow.ShowModal(owner);
 
 			if (error != null)
-				throw error;
+				error.Throw();
 
 			return result;
 		}
@@ -136,7 +138,8 @@ namespace StockSharp.Xaml
 		/// To replace a file.
 		/// </summary>
 		/// <param name="file">File.</param>
-		public static void Replace(string file)
+		/// <param name="owner">The login window owner.</param>
+		public static void Replace(string file, Window owner)
 		{
 			if (file == null)
 				throw new ArgumentNullException("file");
@@ -169,10 +172,10 @@ namespace StockSharp.Xaml
 				else
 					error = e.Error;
 			};
-			loginWindow.ShowDialog();
+			loginWindow.ShowModal(owner);
 
 			if (error != null)
-				throw error;
+				error.Throw();
 		}
 
 		private static void TryCreateDirectory(DiskSdkClient client, string path)
@@ -199,7 +202,7 @@ namespace StockSharp.Xaml
 			client.GetListCompleted -= listHandler;
 
 			if (error != null)
-				throw error;
+				error.Throw();
 
 			if (items.Any(i => i.IsDirectory && i.OriginalFullPath.TrimEnd("/") == path))
 				return;
@@ -217,7 +220,7 @@ namespace StockSharp.Xaml
 			client.MakeFolderCompleted -= createHandler;
 
 			if (error != null)
-				throw error;
+				error.Throw();
 		}
 
 		private static void UploadFile(DiskSdkClient client, string remotePath, string localPath)
@@ -236,7 +239,7 @@ namespace StockSharp.Xaml
 			sync.Wait();
 
 			if (error != null)
-				throw error;
+				error.Throw();
 		}
 
 		private static string Publish(DiskSdkClient client, string remotePath)
@@ -244,7 +247,7 @@ namespace StockSharp.Xaml
 			var sync = new SyncObject();
 
 			Exception error = null;
-			String result = null;
+			string result = null;
 
 			EventHandler<GenericSdkEventArgs<string>> handler = (s, e) =>
 			{
@@ -263,7 +266,7 @@ namespace StockSharp.Xaml
 			client.PublishCompleted -= handler;
 
 			if (error != null)
-				throw error;
+				error.Throw();
 
 			return result;
 		}
