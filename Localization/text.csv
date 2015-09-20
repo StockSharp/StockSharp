@@ -4159,8 +4159,10 @@ Level1ToOrderBooks;Level1 to order books;Level1 в стаканы
 Solicited;Solicited;Запрошенная
 RandomizeSize;Randomize size;Произвольный размер
 RandomizePrice;Randomize price books;Произвольная цена
-StartUnloading;Start Unloading; Начать выгрузку
-StopUnloading;Stop Unloading; Остановить выгрузку
+StartUnloading;Start Unloading;Начать выгрузку
+StopUnloading;Stop Unloading;Остановить выгрузку
+StartParsing;Start Parsing;Начать парсинг
+StoptParsing;Stopt Parsing;Остановить парсинг
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

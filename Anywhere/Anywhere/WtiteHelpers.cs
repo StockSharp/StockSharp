@@ -44,15 +44,48 @@ namespace StockSharp.Anywhere
         {
             DepthToFile(depth, Path.Combine(_outputFolder, string.Format("{0}_depth.txt", depth.Security.Code)));
         }
+
         public static void WriteLevel1(this Security security)
         {
             SaveToFile(Level1ToString(security), _level1FilePath);
         }
+
         public static void WriteOrder(this Order order)
         {
             SaveToFile(OrderToString(order), _ordersFilePath);
         }
+
         public static void WritePosition(this Position position)
+        {
+            SaveToFile(PositionToString(position), _positionsFilePath);
+        }
+
+        public static void WriteTrade(this ExecutionMessage tick)
+        {
+            SaveToFile(TradeToString(tick), _tradesFilePath);
+        }
+
+        public static void WriteMyTrade(this ExecutionMessage trade)
+        {
+            SaveToFile(MyTradeToString(trade), _myTradesFilePath);
+        }
+
+        public static void WriteMarketDepth(this QuoteChangeMessage quotes)
+        {
+            DepthToFile(QuotesToString(quotes), Path.Combine(_outputFolder, string.Format("{0}_depth.txt", quotes.SecurityId.SecurityCode)));
+        }
+
+        public static void WriteLevel1(this Level1ChangeMessage level)
+        {
+            SaveToFile(Level1ToString(level), _level1FilePath);
+        }
+
+        public static void WriteOrder(this ExecutionMessage order)
+        {
+            SaveToFile(OrderToString(order), _ordersFilePath);
+        }
+
+        public static void WritePosition(this PositionChangeMessage position)
         {
             SaveToFile(PositionToString(position), _positionsFilePath);
         }
@@ -132,7 +165,6 @@ namespace StockSharp.Anywhere
                                 security.BestAsk.Price,
                                 security.BestAsk.Volume
                                 );
-
         }
 
         // returns a string of marketdepth quote
@@ -143,6 +175,92 @@ namespace StockSharp.Anywhere
                                 quote.Price,
                                 quote.Volume,
                                 Environment.NewLine);
+        }
+
+        private static string TradeToString(ExecutionMessage tick)
+        {
+            //securityId;tradeId;time;price;volume;orderdirection 
+            return string.Format("{0};{1};{2};{3};{4};{5}",
+                                   tick.SecurityId.SecurityCode,
+                                   tick.TradeId,
+                                   tick.ServerTime.ToString(),
+                                   tick.TradePrice,
+                                   tick.Volume,
+                                   tick.Side.ToString());
+        }
+
+        private static string MyTradeToString(ExecutionMessage trade)
+        {
+            return string.Format("{0};{1};{2};{3};{4};{5};{6}",
+                                   trade.SecurityId.SecurityCode,
+                                   trade.TradeId.ToString(),
+                                   trade.ServerTime.ToString(),
+                                   trade.TradePrice.ToString(),
+                                   trade.Volume.ToString(),
+                                   trade.Side.ToString(),
+                                   trade.OrderId);
+        }
+
+        private static string OrderToString(ExecutionMessage order)
+        {
+            return string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12}",
+                         order.OrderId,
+                         order.OriginalTransactionId,
+                         order.ServerTime,
+                         order.SecurityId.SecurityCode,
+                         order.PortfolioName,
+                         order.Volume,
+                         order.Balance,
+                         order.Price,
+                         order.OriginSide.ToString(),
+                         order.OrderType.ToString(),
+                         order.OrderState.ToString(),
+                         order.IsCancelled.ToString(),
+                         order.LocalTime);
+        }
+
+        private static string PositionToString(PositionChangeMessage position)
+        {
+            return string.Format("{0};{1};{2};{3};{4}",
+                                position.SecurityId.SecurityCode,
+                                position.PortfolioName,
+                                position.Changes[PositionChangeTypes.BeginValue],
+                                position.Changes[PositionChangeTypes.CurrentValue],
+                                position.Changes[PositionChangeTypes.AveragePrice]);
+        }
+
+        private static string QuotesToString(QuoteChangeMessage quotes)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var quote in quotes.Bids)
+            {
+                sb.Append(string.Format("Bid:{0}:{1};", quote.Price, quote.Volume));
+            }
+            foreach (var quote in quotes.Asks)
+            {
+                sb.Append(string.Format("Ask:{0}:{1};", quote.Price, quote.Volume));
+            }
+
+            return string.Format("{0};{1};{2}",
+                                quotes.ServerTime,
+                                quotes.SecurityId.SecurityCode,
+                                sb.ToString()
+                                );
+        }
+
+        private static string Level1ToString(Level1ChangeMessage level)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var kvp in level.Changes)
+            {
+                sb.Append(string.Format("{0}:{1};", kvp.Key, kvp.Value));
+            }
+
+            return string.Format("{0};{1};{2}",
+                                level.ServerTime,
+                                level.SecurityId.SecurityCode,
+                                sb.ToString()
+                                );
         }
 
         // writing data to a file
@@ -179,31 +297,18 @@ namespace StockSharp.Anywhere
 
         }
 
-        private static string TickMessageToString(ExecutionMessage tick)
+        private static void DepthToFile(string quotes, string filePath)
         {
-            //securityId;tradeId;time;price;volume;orderdirection 
-            return string.Format("{0};{1};{2};{3};{4};{5}",
-                                   tick.SecurityId.SecurityCode,
-                                   tick.TradeId,
-                                   tick.ServerTime.ToString(),
-                                   tick.TradePrice,
-                                   tick.Volume,
-                                   tick.Side.ToString());
+            using (MemoryStream mem = new MemoryStream(quotes.Length + 2))
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(quotes);
+                mem.Write(bytes, 0, bytes.Length);
+                using (FileStream file = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    mem.WriteTo(file);
+                }
+            }
         }
-
-        private static string MyTradeMessageToString(ExecutionMessage trade)
-        {
-            return string.Format("{0};{1};{2};{3};{4};{5};{6}",
-                                   trade.SecurityId.SecurityCode,
-                                   trade.TradeId.ToString(),
-                                   trade.ServerTime.ToString(),
-                                   trade.TradePrice.ToString(),
-                                   trade.Volume.ToString(),
-                                   trade.Side.ToString(),
-                                   trade.OrderId);
-        }
-
 
     }
 }
-

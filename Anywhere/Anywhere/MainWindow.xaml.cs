@@ -50,8 +50,9 @@ namespace StockSharp.Anywhere
         LuaFixTransactionMessageAdapter _transAdapter;
         FixMessageAdapter _messAdapter;
 
+        private InputTranParser _parser;
+
         private List<Security> _securities;
-        private List<Portfolio> _portfolios;
 
         private class SecurityList : SynchronizedList<Security>, ISecurityList
         {
@@ -67,9 +68,9 @@ namespace StockSharp.Anywhere
             ConnectCommand = new DelegateCommand(OnConnect, o => CanOnConnect(o));
             UnloadingCommand = new DelegateCommand(Unloading, o => CanUnloading(o));
             DeleteSubscriptionCommand = new DelegateCommand(DeleteSubscription, o => CanDeleteSubscription(o));
+            ParsingCommand = new DelegateCommand(Parsing, o => CanParsing(o));
 
             _securities = new List<Security>();
-            _portfolios = new List<Portfolio>();
 
             _transAdapter = new LuaFixTransactionMessageAdapter(new MillisecondIncrementalIdGenerator())
             {
@@ -238,8 +239,31 @@ namespace StockSharp.Anywhere
             return IsConnected && Subscriptions.Any(s => s.MarketDepth == true || s.Level1 == true || s.Trades == true);
         }
 
+
+        public DelegateCommand ParsingCommand { set; get; }
+
+        private void Parsing(object obj)
+        {
+            if (obj.ToString() == LocalizedStrings.StartParsing)
+            {
+                _parser = new InputTranParser(_transAdapter, _messAdapter, _securities);
+                ParseButton.Content = LocalizedStrings.StopParsing;
+                _parser.Start();
+            }
+            else
+            {
+                _parser.Stop();
+                ParseButton.Content = LocalizedStrings.StartParsing;
+            }
+        }
+
+        private bool CanParsing(object obj)
+        {
+            return true;
+        }
+
         /// <summary>
-        /// Удалает элемент подписки
+        /// Remove usersubscription
         /// </summary>
         public DelegateCommand DeleteSubscriptionCommand { set; get; }
 
@@ -402,38 +426,31 @@ namespace StockSharp.Anywhere
         {
             try
             {
-                Security security = null;
+
                 switch (message.Type)
                 {
                     case MessageTypes.QuoteChange:
                         //Debug.WriteLine("QuoteChange");
 
-                        QuoteChangeMessage qtCngMsg = (QuoteChangeMessage)message;
-
-                        security = Subscriptions.FirstOrDefault(s => s.Security.Code == qtCngMsg.SecurityId.SecurityCode && s.Security.Type == qtCngMsg.SecurityId.SecurityType).Security;
-
-                        if (security == null) return;
-
-                        var depth = qtCngMsg.ToMarketDepth(security);
-
-                        depth.WriteMarketDepth();
+                        ((QuoteChangeMessage)message).WriteMarketDepth();
 
                         break;
-
                     case MessageTypes.Board:
                         //Debug.WriteLine("Board");
                         break;
-
                     case MessageTypes.Security:
                         //Debug.WriteLine("Security");
-                        _securities.Add(((SecurityMessage)message).ToSecurity());
-                        break;
 
+                        _securities.Add(((SecurityMessage)message).ToSecurity());
+
+                        break;
                     case MessageTypes.SecurityLookupResult:
                         //Debug.WriteLine("SecurityLookupResult");
+
                         var lst = new SecurityList();
                         lst.AddRange(_securities);
                         this.GuiSync(() => SecurityEditor.SecurityProvider = new FilterableSecurityProvider(lst));
+
                         break;
                     case MessageTypes.PortfolioLookupResult:
                         //Debug.WriteLine("PortfolioLookupResult");
@@ -441,59 +458,35 @@ namespace StockSharp.Anywhere
 
                     case MessageTypes.Level1Change:
                         //Debug.WriteLine("Level1Change");
-                        Level1ChangeMessage lvCngMsg = (Level1ChangeMessage)message;
 
-                        security = _securities.FirstOrDefault(s => s.Code == lvCngMsg.SecurityId.SecurityCode && s.Type == lvCngMsg.SecurityId.SecurityType);
-
-                        if (security == null) return;
-
-                        security.ApplyChanges(lvCngMsg);
-
-                        security.WriteLevel1();
+                        ((Level1ChangeMessage)message).WriteLevel1();
 
                         break;
-
                     case MessageTypes.News:
                         break;
 
                     case MessageTypes.Execution:
                         //Debug.WriteLine("Execution");
 
-                        if (_securities.Count == 0) return;
-
                         ExecutionMessage execMsg = (ExecutionMessage)message;
-
-                        security = _securities.FirstOrDefault(s => s.Code == execMsg.SecurityId.SecurityCode && s.Type == execMsg.SecurityId.SecurityType);
-
-                        if (security == null) return;
 
                         switch (execMsg.ExecutionType)
                         {
                             case ExecutionTypes.Tick:
                                 {
-                                    var trade = execMsg.ToTrade(security);
-                                    trade.WriteTrade();
+                                    execMsg.WriteTrade();
+
                                     break;
                                 }
                             case ExecutionTypes.Trade:
                                 {
-                                    //Debug.WriteLine("MyTrade");
-
-                                    var trade = execMsg.ToTrade(security);
-                                    var order = execMsg.ToOrder(security);
-                                    var mytrade = new MyTrade() { Trade = trade, Order = order };
-
-                                    mytrade.WriteMyTrade();
+                                    execMsg.WriteMyTrade();
 
                                     break;
                                 }
                             case ExecutionTypes.Order:
                                 {
-                                    //Debug.WriteLine("Order");
-
-                                    var order = execMsg.ToOrder(security);
-
-                                    order.WriteOrder();
+                                    execMsg.WriteOrder();
 
                                     break;
                                 }
@@ -516,41 +509,16 @@ namespace StockSharp.Anywhere
                     case MessageTypes.Position:
                         //Debug.WriteLine("Position");
 
-                        if (_securities.Count == 0) return;
-
                         PositionMessage posMsg = (PositionMessage)message;
 
-                        security = _securities.FirstOrDefault(s => s.Code == posMsg.SecurityId.SecurityCode && s.Type == posMsg.SecurityId.SecurityType);
-
-                        if (security == null) return;
-
-                        var position = GetPosition(new Portfolio() { Name = posMsg.PortfolioName }, security);
-
-                        posMsg.CopyExtensionInfo(position);
-
-                        position.WritePosition();
+                        //position.WritePosition();
 
                         break;
 
                     case MessageTypes.PositionChange:
                         //Debug.WriteLine("PositionChange");
 
-                        if (_securities.Count == 0) return;
-
-                        PositionChangeMessage posChMsg = (PositionChangeMessage)message;
-
-                        if (_securities.Count == 0) return;
-
-                        security = _securities.FirstOrDefault(s => s.Code == posChMsg.SecurityId.SecurityCode && s.Type == posChMsg.SecurityId.SecurityType);
-
-                        if (security == null) return;
-
-                        //var position = posChMsg.Changes.
-                        var chgPosition = GetPosition(new Portfolio() { Name = posChMsg.PortfolioName }, security);
-
-                        chgPosition.ApplyChanges(posChMsg);
-
-                        chgPosition.WritePosition();
+                        ((PositionChangeMessage)message).WritePosition();
 
                         break;
 
@@ -596,6 +564,7 @@ namespace StockSharp.Anywhere
                         }
                     case MessageTypes.Disconnect:
                         //Debug.WriteLine("Disconnect");
+
                         IsConnected = false;
                         _isConnectClick = false;
 
@@ -693,26 +662,6 @@ namespace StockSharp.Anywhere
             }
         }
         #endregion
-
-        private Position GetPosition(Portfolio portfolio, Security security)
-        {
-            if (portfolio == null)
-                throw new ArgumentNullException("portfolio");
-
-            if (security == null)
-                throw new ArgumentNullException("security");
-
-            Position position;
-
-            var ef = new EntityFactory();
-
-            position = ef.CreatePosition(portfolio, security);
-
-            position.LimitType = null;
-            position.Description = "";
-
-            return position;
-        }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {

@@ -36,6 +36,13 @@
                         Content="{x:Static loc:LocalizedStrings.StartUnloading}"
                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UnloadingCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+                <Button x:Name="ParseButton"
+                        Margin="5"
+                        Content="{x:Static loc:LocalizedStrings.StartParsing}"
+                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ParsingCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
+
+
             </ToolBar>
         </ToolBarPanel>
 
@@ -155,4 +162,3 @@
         </xctk:BusyIndicator>
     </Grid>
 </Window>
-
