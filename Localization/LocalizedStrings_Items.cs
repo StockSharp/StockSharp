@@ -53720,5 +53720,64 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(PnLKey); }
 		}
-	}
+
+        /// <summary>
+        /// Start Unloading
+        /// </summary>
+        public const string StartUnloadingKey = "StartUnloading";
+
+        /// <summary>
+        /// Start Unloading
+        /// </summary>
+        public static string StartUnloading
+        {
+            get { return GetString(StartUnloadingKey); }
+        }
+
+        /// <summary>
+        /// Stop Unloading
+        /// </summary>
+        public const string StopUnloadingKey = "StopUnloading";
+
+        /// <summary>
+        /// Stop Unloading
+        /// </summary>
+        public static string StopUnloading
+        {
+            get { return GetString(StopUnloadingKey); }
+        }
+
+        /// <summary>
+        /// Start Parsing
+        /// </summary>
+        public const string StartParsingKey = "StarParsing";
+
+        /// <summary>
+        /// Start Parsing
+        /// </summary>
+        public static string StartParsing
+        {
+            get { return GetString(StartParsingKey); }
+        }
+
+        /// <summary>
+        /// Stop Parsing
+        /// </summary>
+        public const string StopParsingKey = "StopParsing";
+
+        /// <summary>
+        /// Stop Parsing
+        /// </summary>
+        public static string StopParsing
+        {
+            get { return GetString(StopParsingKey); }
+        }
+
+
+
+
+
+
+
+    }
 }

@@ -4160,6 +4160,10 @@ RandomizePrice;Randomize price books;Произвольная цена
 Covariance;Covariance;Ковариация
 Correlation;Correlation;Корреляция
 PnL;P&L;П/У
+StartUnloading;Star tUnloading;Начать выгрузку
+StopUnloading;Stop Unloading;Остановить выгрузку
+StartParsing;Start Parsing;Начать парсинг
+StopParsing;Stop Parsing;Остановить парсинг
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки
