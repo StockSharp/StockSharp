@@ -1,9 +1,11 @@
-﻿namespace StockSharp.Anywhere
-{
-    using System.Collections.Generic;
-    using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-    using StockSharp.Messages;
+
+using StockSharp.Messages;
+
+namespace StockSharp.Anywhere
+{
 
     public enum TransValueTypes
     {
@@ -12,11 +14,13 @@
         Long,
         Boolean,
         String,
-        PredefinedSet
+        PredefinedSet,
     }
 
     public abstract class TransactionKey
     {
+        public TransactionKey() { }
+
         public string KeyWord { set; get; }
 
         public TransValueTypes ValueType { set; get; }
@@ -47,6 +51,7 @@
                     return null;
             }
             return null;
+
         }
 
         private object PredefinedSetValidate(string value)
@@ -54,13 +59,11 @@
             IsValid = PredefinedValues.Contains(value.Trim().ToUpper());
             return IsValid ? value : null;
         }
-
         private string StringValidate(string value)
         {
             IsValid = !string.IsNullOrWhiteSpace(value);
             return IsValid ? value : null;
         }
-
         private decimal? ConvertToDecimal(string value)
         {
             decimal decValue;
@@ -68,8 +71,8 @@
             IsValid = decimal.TryParse(value, out decValue);
 
             return IsValid ? (decimal?)decValue : null;
-        }
 
+        }
         private int? ConvertToInteger(string value)
         {
             int intValue;
@@ -77,8 +80,8 @@
             IsValid = int.TryParse(value, out intValue);
 
             return IsValid ? (int?)intValue : null;
-        }
 
+        }
         private long? ConvertToLong(string value)
         {
             long longValue;
@@ -86,34 +89,38 @@
             IsValid = long.TryParse(value, out longValue);
 
             return IsValid ? (long?)longValue : null;
+
         }
+
     }
 
     public class ClassCodeKey : TransactionKey
     {
         public ClassCodeKey()
         {
-            KeyWord = "CLASSCODE";
-            ValueType = TransValueTypes.String;
+            this.KeyWord = "CLASSCODE";
+            this.ValueType = TransValueTypes.String;
         }
+
     }
 
     public class SecCodeKey : TransactionKey
     {
         public SecCodeKey()
         {
-            KeyWord = "SECCODE";
-            ValueType = TransValueTypes.String;
+            this.KeyWord = "SECCODE";
+            this.ValueType = TransValueTypes.String;
         }
+
     }
 
     public class ActionKey : TransactionKey
     {
         public ActionKey()
         {
-            KeyWord = "ACTION";
-            ValueType = TransValueTypes.PredefinedSet;
-            PredefinedValues = new List<string>
+            this.KeyWord = "ACTION";
+            this.ValueType = TransValueTypes.PredefinedSet;
+            PredefinedValues = new List<string>()
             {
                 "NEW_ORDER",
                 "NEW_NEG_DEAL",
@@ -135,15 +142,16 @@
                 "UNREGISTER_MARKETDEPTH"
             };
         }
+
     }
 
     public class AccountKey : TransactionKey
     {
         public AccountKey()
         {
-            KeyWord = "ACCOUNT";
-            ValueType = TransValueTypes.String;
-            IsRequired = true;
+            this.KeyWord = "ACCOUNT";
+            this.ValueType = TransValueTypes.String;
+            this.IsRequired = true;
         }
     }
 
@@ -151,9 +159,9 @@
     {
         public ClientCodeKey()
         {
-            KeyWord = "CLIENT_CODE";
-            ValueType = TransValueTypes.String;
-            IsRequired = true;
+            this.KeyWord = "CLIENT_CODE";
+            this.ValueType = TransValueTypes.String;
+            this.IsRequired = true;
         }
     }
 
@@ -161,13 +169,14 @@
     {
         public TypeKey()
         {
-            KeyWord = "TYPE";
-            ValueType = TransValueTypes.PredefinedSet;
-            PredefinedValues = new List<string>
+            this.KeyWord = "TYPE";
+            this.ValueType = TransValueTypes.PredefinedSet;
+            PredefinedValues = new List<string>()
             {
                 "L",
                 "M"
             };
+
         }
 
         public override object GetValue(string value)
@@ -175,49 +184,57 @@
             var valValue = base.GetValue(value);
 
             if (valValue != null)
+            {
                 return valValue.ToString() == "M" ? OrderTypes.Market : OrderTypes.Limit;
+            }
             return null;
         }
+
     }
 
     public class OperationKey : TransactionKey
     {
         public OperationKey()
         {
-            KeyWord = "OPERATION";
-            ValueType = TransValueTypes.PredefinedSet;
-            PredefinedValues = new List<string>
+            this.KeyWord = "OPERATION";
+            this.ValueType = TransValueTypes.PredefinedSet;
+            PredefinedValues = new List<string>()
             {
                 "S",
                 "B"
             };
-        }
 
+        }
         public override object GetValue(string value)
         {
+
             var valValue = base.GetValue(value);
 
             if (valValue != null)
+            {
                 return valValue.ToString() == "S" ? Sides.Sell : Sides.Buy;
+            }
             return null;
         }
+
     }
 
     public class QuantityKey : TransactionKey
     {
         public QuantityKey()
         {
-            KeyWord = "QUANTITY";
-            ValueType = TransValueTypes.Decimal;
+            this.KeyWord = "QUANTITY";
+            this.ValueType = TransValueTypes.Decimal;
         }
+
     }
 
     public class PriceKey : TransactionKey
     {
         public PriceKey()
         {
-            KeyWord = "PRICE";
-            ValueType = TransValueTypes.Decimal;
+            this.KeyWord = "PRICE";
+            this.ValueType = TransValueTypes.Decimal;
         }
     }
 
@@ -225,47 +242,53 @@
     {
         public StopPriceKey()
         {
-            KeyWord = "STOPPRICE";
-            ValueType = TransValueTypes.Decimal;
+            this.KeyWord = "STOPPRICE";
+            this.ValueType = TransValueTypes.Decimal;
         }
+
     }
 
     public class TransIdKey : TransactionKey
     {
         public TransIdKey()
         {
-            KeyWord = "TRANS_ID";
-            ValueType = TransValueTypes.Long;
-            IsRequired = true;
+            this.KeyWord = "TRANS_ID";
+            this.ValueType = TransValueTypes.Long;
+            this.IsRequired = true;
         }
+
     }
 
     public class OriginalTransIdKey : TransactionKey
     {
         public OriginalTransIdKey()
         {
-            KeyWord = "ORIGINAL_TRANS_ID";
-            ValueType = TransValueTypes.Long;
+            this.KeyWord = "ORIGINAL_TRANS_ID";
+            this.ValueType = TransValueTypes.Long;
         }
+
     }
 
     public class OrderKeyKey : TransactionKey
     {
         public OrderKeyKey()
         {
-            KeyWord = "ORDER_KEY";
-            ValueType = TransValueTypes.Long;
+            this.KeyWord = "ORDER_KEY";
+            this.ValueType = TransValueTypes.Long;
         }
+
     }
 
     public class CommentKey : TransactionKey
     {
         public CommentKey()
         {
-            KeyWord = "COMMENT";
-            ValueType = TransValueTypes.String;
+            this.KeyWord = "COMMENT";
+            this.ValueType = TransValueTypes.String;
         }
+
     }
+
 }
 
 //"REGISTER_ORDER",
