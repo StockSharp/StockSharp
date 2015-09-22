@@ -33,12 +33,12 @@
 
                 <Button x:Name="UnloadingButton"
                         Margin="5"
-                        Content="{x:Static loc:LocalizedStrings.StartUnloading}"
+                        Content="{x:Static loc:LocalizedStrings.MarketData}"
                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.UnloadingCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
                 <Button x:Name="ParseButton"
                         Margin="5"
-                        Content="{x:Static loc:LocalizedStrings.StartParsing}"
+                        Content="{x:Static loc:LocalizedStrings.Transactions}"
                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ParsingCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Content}"/>
 

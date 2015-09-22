@@ -13,7 +13,7 @@
     </ug:UniversalGrid.Resources>
     
 	<ug:UniversalGrid.Columns>
-		<DataGridTemplateColumn Width="200" Header="{x:Static loc:LocalizedStrings.NameKey}" SortMemberPath="DisplayName">
+		<DataGridTemplateColumn Width="200" Header="{x:Static loc:LocalizedStrings.Name}" SortMemberPath="DisplayName">
 			<DataGridTemplateColumn.CellStyle>
 				<Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}" />
 			</DataGridTemplateColumn.CellStyle>

@@ -16,11 +16,8 @@ using StockSharp.BusinessEntities;
 using StockSharp.Quik;
 using StockSharp.Messages;
 using StockSharp.Logging;
-using StockSharp.Xaml;
 using StockSharp.Quik.Lua;
 using StockSharp.Fix;
-using StockSharp.Localization;
-
 
 namespace StockSharp.Anywhere
 {
@@ -42,17 +39,19 @@ namespace StockSharp.Anywhere
 
     }
 
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : INotifyPropertyChanged
     {
         //private Connector _connector;
         private LogManager _logManager = new LogManager();
 
-        LuaFixTransactionMessageAdapter _transAdapter;
-        FixMessageAdapter _messAdapter;
+	    readonly LuaFixTransactionMessageAdapter _transAdapter;
+	    readonly FixMessageAdapter _messAdapter;
 
         private InputTranParser _parser;
 
-        private List<Security> _securities;
+        private readonly List<Security> _securities;
+	    private bool _marketDataStarted;
+		private bool _transactionsStarted;
 
         private class SecurityList : SynchronizedList<Security>, ISecurityList
         {
@@ -164,9 +163,9 @@ namespace StockSharp.Anywhere
 
         public DelegateCommand UnloadingCommand { set; get; }
 
-        private void Unloading(Object obj)
+        private void Unloading(object e)
         {
-            if (obj.ToString() == LocalizedStrings.StartUnloading)
+            if (!_marketDataStarted)
             {
                 _isUnloading = true;
 
@@ -195,16 +194,13 @@ namespace StockSharp.Anywhere
 
                 }
 
-                UnloadingButton.Content = LocalizedStrings.StopUnloading;
-
+	            _marketDataStarted = true;
             }
-            else if (obj.ToString() == LocalizedStrings.StopUnloading)
+            else
             {
-
                 foreach (var subscr in Subscriptions)
                 {
-
-                    SecurityId secId = subscr.Security.ToSecurityId();
+                    var secId = subscr.Security.ToSecurityId();
 
                     if (subscr.MarketDepth)
                     {
@@ -227,10 +223,9 @@ namespace StockSharp.Anywhere
                 //SecurityPicker.MarketDataProvider = null;
                 //SecurityPicker.ExcludeSecurities.Clear();
 
-                UnloadingButton.Content = LocalizedStrings.StartUnloading;
-
                 _isUnloading = false;
 
+	            _marketDataStarted = false;
             }
         }
 
@@ -242,18 +237,18 @@ namespace StockSharp.Anywhere
 
         public DelegateCommand ParsingCommand { set; get; }
 
-        private void Parsing(object obj)
+		private void Parsing(object e)
         {
-            if (obj.ToString() == LocalizedStrings.StartParsing)
+            if (!_transactionsStarted)
             {
                 _parser = new InputTranParser(_transAdapter, _messAdapter, _securities);
-                ParseButton.Content = LocalizedStrings.StopParsing;
                 _parser.Start();
+	            _transactionsStarted = true;
             }
             else
             {
                 _parser.Stop();
-                ParseButton.Content = LocalizedStrings.StartParsing;
+				_transactionsStarted = false;
             }
         }
 

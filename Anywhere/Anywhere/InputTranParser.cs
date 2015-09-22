@@ -14,7 +14,9 @@ using StockSharp.Algo;
 
 namespace StockSharp.Anywhere
 {
-    public class InputTranParser
+	using Ecng.Collections;
+
+	public class InputTranParser
     {
         private Timer _tmr;
         private int _tmrDelay = 1000;
@@ -92,7 +94,8 @@ namespace StockSharp.Anywhere
                                 }
                                 else
                                 {
-                                    if (newlines.Count() == 0) return;
+                                    if (newlines.IsEmpty())
+										return;
                                 }
                             }
 
