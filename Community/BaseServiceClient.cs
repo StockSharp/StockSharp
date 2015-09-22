@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.ServiceModel;
@@ -7,9 +7,9 @@
 	using Ecng.Net;
 
 	/// <summary>
-	/// Базовый клиент для доступа к WCF сервисам.
+	/// The base client for access to the WCF services.
 	/// </summary>
-	/// <typeparam name="TService">Тип WCF сервиса.</typeparam>
+	/// <typeparam name="TService">WCF service type.</typeparam>
 	public abstract class BaseServiceClient<TService> : Disposable
 		where TService : class
 	{
@@ -19,11 +19,11 @@
 		private ChannelFactory<TService> _factory;
 
 		/// <summary>
-		/// Инициализировать <see cref="BaseCommunityClient{TService}"/>.
+		/// Initialize <see cref="BaseCommunityClient{TService}"/>.
 		/// </summary>
-		/// <param name="address">Адрес сервера.</param>
-		/// <param name="endpointName">Название точки доступа в конфиг-файле.</param>
-		/// <param name="hasCallbacks">Имеет ли <typeparamref name="TService"/> события.</param>
+		/// <param name="address">Server address.</param>
+		/// <param name="endpointName">The access point name in the configuration file.</param>
+		/// <param name="hasCallbacks">Whether the <typeparamref name="TService" /> has events.</param>
 		protected BaseServiceClient(Uri address, string endpointName, bool hasCallbacks = false)
 		{
 			if (address == null)
@@ -35,26 +35,26 @@
 		}
 
 		/// <summary>
-		/// Адрес сервера.
+		/// Server address.
 		/// </summary>
 		public Uri Address { get; private set; }
 
 		/// <summary>
-		/// Было ли установлено подключение.
+		/// Whether the connection has been established.
 		/// </summary>
 		public bool IsConnected { get; private set; }
 
 		/// <summary>
-		/// Создать WCF канал.
+		/// Create WCF channel.
 		/// </summary>
-		/// <returns>WCF канал.</returns>
+		/// <returns>WCF channel.</returns>
 		protected virtual ChannelFactory<TService> CreateChannel()
 		{
 			return new ChannelFactory<TService>(new WSHttpBinding { Security = { Mode = SecurityMode.None }, UseDefaultWebProxy = true }, new EndpointAddress(Address));
 		}
 
 		/// <summary>
-		/// Подключиться. Соединение устанавливается автоматически при обращении к методам <see cref="Invoke"/> или <see cref="Invoke{TResult}"/>.
+		/// To connect. The connection is established automatically when the method <see cref="Invoke"/> or <see cref="Invoke{TService}"/> is called.
 		/// </summary>
 		public virtual void Connect()
 		{
@@ -69,18 +69,18 @@
 		}
 
 		/// <summary>
-		/// Подключиться.
+		/// Connect.
 		/// </summary>
 		protected virtual void OnConnect()
 		{
 		}
 
 		/// <summary>
-		/// Вызвать метод сервиса <typeparamref name="TService"/>.
+		/// To call the service <typeparamref name="TService" /> method.
 		/// </summary>
-		/// <typeparam name="TResult">Тип результата, возвращающий метод сервиса.</typeparam>
-		/// <param name="handler">Обработчик, в котором вызывается метод.</param>
-		/// <returns>Результат, возвращающий метод сервиса.</returns>
+		/// <typeparam name="TResult">The result type returning the service method.</typeparam>
+		/// <param name="handler">The handler in which the method is called.</param>
+		/// <returns>The result returning the service method.</returns>
 		protected virtual TResult Invoke<TResult>(Func<TService, TResult> handler)
 		{
 			if (handler == null)
@@ -93,9 +93,9 @@
 		}
 
 		/// <summary>
-		/// Вызвать метод сервиса <typeparamref name="TService"/>.
+		/// To call the service <typeparamref name="TService" /> method.
 		/// </summary>
-		/// <param name="handler">Обработчик, в котором вызывается метод.</param>
+		/// <param name="handler">The handler in which the method is called.</param>
 		protected void Invoke(Action<TService> handler)
 		{
 			if (handler == null)
@@ -109,7 +109,7 @@
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

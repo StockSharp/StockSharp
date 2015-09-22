@@ -1,41 +1,41 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.Runtime.Serialization;
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Информация о профиле.
+	/// The profile Information.
 	/// </summary>
 	[DataContract]
 	public class Profile
 	{
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		[DataMember]
 		public string Login { get; set; }
 
 		/// <summary>
-		/// Пароль (не заполняется при получении с сервера).
+		/// Password (not filled in when obtaining from the server).
 		/// </summary>
 		[DataMember]
 		public string Password { get; set; }
 
 		/// <summary>
-		/// Адрес электронной почты.
+		/// E-mail address.
 		/// </summary>
 		[DataMember]
 		public string Email { get; set; }
 
 		/// <summary>
-		/// Номер телефона.
+		/// Phone.
 		/// </summary>
 		[DataMember]
 		public string Phone { get; set; }
 
 		/// <summary>
-		/// Сайт.
+		/// Web site.
 		/// </summary>
 		[DataMember]
 		public string Homepage { get; set; }
@@ -47,109 +47,109 @@
 		public string Skype { get; set; }
 
 		/// <summary>
-		/// Город.
+		/// City.
 		/// </summary>
 		[DataMember]
 		public string City { get; set; }
 
 		/// <summary>
-		/// Пол.
+		/// Gender.
 		/// </summary>
 		[DataMember]
 		public bool? Gender { get; set; }
 
 		/// <summary>
-		/// Включена ли рассылка.
+		/// Is the mailout enabled.
 		/// </summary>
 		[DataMember]
 		public bool IsSubscription { get; set; }
 	}
 
 	/// <summary>
-	/// Интерфейс, описывающий сервис регистрации.
+	/// The interface describing the registration service.
 	/// </summary>
 	[ServiceContract(Namespace = "http://stocksharp.com/services/registrationservice.svc")]
 	public interface IProfileService
 	{
 		/// <summary>
-		/// Начать процедуру регистрации.
+		/// To start the registration.
 		/// </summary>
-		/// <param name="profile">Информация о профиле.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="profile">The profile Information.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte CreateProfile(Profile profile);
 
 		/// <summary>
-		/// Отправить на электронную почту письмо.
+		/// To send an e-mail message.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte SendEmail(string email, string login);
 
 		/// <summary>
-		/// Подтвердить адрес электронной почты.
+		/// To confirm the e-mail address.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
-		/// <param name="emailCode">Email код подтверждения.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="emailCode">The e-mail confirmation code.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte ValidateEmail(string email, string login, string emailCode);
 
 		/// <summary>
-		/// Отправить SMS.
+		/// To send SMS.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
-		/// <param name="phone">Номер телефона.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="phone">Phone.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte SendSms(string email, string login, string phone);
 
 		/// <summary>
-		/// Подтвердить телефон.
+		/// To confirm the phone number.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
-		/// <param name="smsCode">SMS код подтверждения.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="smsCode">SMS verification code.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte ValidatePhone(string email, string login, string smsCode);
 
 		/// <summary>
-		/// Обновить данные профиля.
+		/// To update profile information.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="profile">Информация о профиле.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="profile">The profile Information.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte UpdateProfile(Guid sessionId, Profile profile);
 
 		/// <summary>
-		/// Получить данные профиля.
+		/// To get profile information.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Информация о профиле.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>The profile Information.</returns>
 		[OperationContract]
 		Profile GetProfile(Guid sessionId);
 
 		/// <summary>
-		/// Обновить фотографию профиля.
+		/// To update the profile photo.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="fileName">Название файла.</param>
-		/// <param name="body">Содержимое графического файла.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="fileName">The file name.</param>
+		/// <param name="body">The contents of the image file.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte UpdateAvatar(Guid sessionId, string fileName, byte[] body);
 
 		/// <summary>
-		/// Получить фотографию профиля.
+		/// To get a profile photo.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Содержимое графического файла.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>The contents of the image file.</returns>
 		[OperationContract]
 		byte[] GetAvatar(Guid sessionId);
 	}

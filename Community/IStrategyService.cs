@@ -1,79 +1,79 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Интерфейс, описывающий сервис магазина стратегий.
+	/// The interface describing the strategy store service.
 	/// </summary>
 	[ServiceContract(Namespace = "http://stocksharp.com/services/strategyservice.svc", CallbackContract = typeof(IStrategyServiceCallback))]
 	public interface IStrategyService
 	{
 		/// <summary>
-		/// Добавить стратегию в магазин.
+		/// To add the strategy to the store .
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="strategy">Данные о стратегии.</param>
-		/// <returns>Идентификатор стратегии.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="strategy">The strategy data.</param>
+		/// <returns>The strategy identifier.</returns>
 		long CreateStrategy(Guid sessionId, StrategyData strategy);
 
 		/// <summary>
-		/// Обновить стратегию в магазине.
+		/// To update the strategy in the store.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="strategy">Данные о стратегии.</param>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="strategy">The strategy data.</param>
 		void UpdateStrategy(Guid sessionId, StrategyData strategy);
 
 		/// <summary>
-		/// Удалить стратегию из магазина.
+		/// To remove the strategy from the store.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="strategyId">Идентификатор стратегии.</param>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="strategyId">The strategy identifier.</param>
 		void DeleteStrategy(Guid sessionId, long strategyId);
 
 		/// <summary>
-		/// Получить все идентификаторы стратегий.
+		/// To get all strategies identifiers.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Идентификаторы стратегий.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>Strategies identifiers.</returns>
 		IEnumerable<long> GetStrategies(Guid sessionId);
 
 		/// <summary>
-		/// Получить идентификаторы стратегий, подписанные через <see cref="Subscribe"/>.
+		/// To get strategies identifiers signed by <see cref="Subscribe"/>.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Идентификаторы стратегий.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>Strategies identifiers.</returns>
 		IEnumerable<long> GetSubscribedStrategies(Guid sessionId);
 
 		/// <summary>
-		/// Получить название и описание стратегий.
+		/// To get the name and description of strategies.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="strategyIds">Идентификаторы стратегий.</param>
-		/// <returns>Информация о стратегиях.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="strategyIds">Strategies identifiers.</param>
+		/// <returns>Information about strategies.</returns>
 		IEnumerable<StrategyData> GetLiteInfo(Guid sessionId, long[] strategyIds);
 
 		/// <summary>
-		/// Получить полное описание стратегии, включая исходный и исполняемый коды.
+		/// To get the complete description of the strategy, including the source and executable codes.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="strategyId">Идентификатор стратегии.</param>
-		/// <returns>Информация о стратегии.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="strategyId">The strategy identifier.</param>
+		/// <returns>Information about the strategy.</returns>
 		StrategyData GetFullInfo(Guid sessionId, long strategyId);
 
 		/// <summary>
-		/// Подписаться на стратегию.
+		/// To subscribe for the strategy.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="strategyId">Идентификатор стратегии.</param>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="strategyId">The strategy identifier.</param>
 		void Subscribe(Guid sessionId, long strategyId);
 
 		/// <summary>
-		/// Отписаться от стратегии.
+		/// To unsubscribe from the strategy.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="strategyId">Идентификатор стратегии.</param>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="strategyId">The strategy identifier.</param>
 		void UnSubscribe(Guid sessionId, long strategyId);
 	}
 }

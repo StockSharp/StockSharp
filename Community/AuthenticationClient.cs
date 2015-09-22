@@ -8,7 +8,7 @@ namespace StockSharp.Community
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Клиент для доступа к сервису авторизации StockSharp.
+	/// The client for access to the StockSharp authentication service.
 	/// </summary>
 	public class AuthenticationClient : BaseServiceClient<IAuthenticationService>
 	{
@@ -18,7 +18,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Создать <see cref="AuthenticationClient"/>.
+		/// Initializes a new instance of the <see cref="AuthenticationClient"/>.
 		/// </summary>
 		public AuthenticationClient()
 			: this(new Uri("http://stocksharp.com/services/authenticationservice.svc"))
@@ -26,9 +26,9 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Создать <see cref="AuthenticationClient"/>.
+		/// Initializes a new instance of the <see cref="AuthenticationClient"/>.
 		/// </summary>
-		/// <param name="address">Адрес сервиса.</param>
+		/// <param name="address">Service address.</param>
 		public AuthenticationClient(Uri address)
 			: base(address, "authentication")
 		{
@@ -38,7 +38,7 @@ namespace StockSharp.Community
 		private static readonly Lazy<AuthenticationClient> _instance;
 
 		/// <summary>
-		/// Общий клиент авторизации для всего приложения.
+		/// The common authorization client for the whole application.
 		/// </summary>
 		public static AuthenticationClient Instance
 		{
@@ -46,19 +46,19 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Информация о логине и пароле для доступа к StockSharp.
+		/// Information about the login and password for access to the StockSharp.
 		/// </summary>
 		public ServerCredentials Credentials { get; private set; }
 
 		/// <summary>
-		/// Прошел ли успешно авторизацию клиент.
+		/// Has the client successfully authenticated.
 		/// </summary>
 		public bool IsLoggedIn { get; private set; }
 
 		private Guid _sessionId;
 
 		/// <summary>
-		/// Идентификатор сессии.
+		/// Session ID.
 		/// </summary>
 		public Guid SessionId
 		{
@@ -91,7 +91,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Произвести вход в систему.
+		/// To log in.
 		/// </summary>
 		public void Login()
 		{
@@ -99,10 +99,10 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Произвести вход в систему.
+		/// To log in.
 		/// </summary>
-		/// <param name="login">Логин.</param>
-		/// <param name="password">Пароль.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="password">Password.</param>
 		public void Login(string login, string password)
 		{
 			if (login.IsEmpty())
@@ -125,7 +125,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Выйти из системы.
+		/// Logout.
 		/// </summary>
 		public void Logout()
 		{
@@ -134,17 +134,17 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Получить идентификатор пользователя.
+		/// Get a user id.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Идентификатор пользователя.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>User id.</returns>
 		public long GetId(Guid sessionId)
 		{
 			return Invoke(f => f.GetId(sessionId));
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

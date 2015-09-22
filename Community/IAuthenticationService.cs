@@ -1,35 +1,35 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Интерфейс, описывающий сервис авторизации.
+	/// The interface describing the authorization service.
 	/// </summary>
 	[ServiceContract(Namespace = "http://stocksharp.com/services/authenticationservice.svc")]
 	public interface IAuthenticationService
 	{
 		/// <summary>
-		/// Произвести вход в систему.
+		/// To log in.
 		/// </summary>
-		/// <param name="login">Логин.</param>
-		/// <param name="password">Пароль.</param>
-		/// <returns>Идентификатор сессии.</returns>
+		/// <param name="login">Login.</param>
+		/// <param name="password">Password.</param>
+		/// <returns>Session ID.</returns>
 		[OperationContract]
 		Guid Login(string login, string password);
 
 		/// <summary>
-		/// Выйти из системы.
+		/// Logout.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
+		/// <param name="sessionId">Session ID.</param>
 		[OperationContract]
 		void Logout(Guid sessionId);
 
 		/// <summary>
-		/// Получить идентификатор пользователя.
+		/// Get a user id.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Идентификатор пользователя.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>User id.</returns>
 		[OperationContract]
 		long GetId(Guid sessionId);
 	}

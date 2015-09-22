@@ -1,59 +1,59 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Новость.
+	/// News.
 	/// </summary>
 	[DataContract]
 	public class CommunityNews
 	{
 		/// <summary>
-		/// Новость <see cref="CommunityNews"/>.
+		/// News <see cref="CommunityNews"/>.
 		/// </summary>
 		public CommunityNews()
 		{
 		}
 
 		/// <summary>
-		/// Идентификатор новости.
+		/// News ID.
 		/// </summary>
 		[DataMember]
 		public long Id { get; set; }
 
 		/// <summary>
-		/// Частота обновления новости (в часах).
+		/// The news update frequency (in hours).
 		/// </summary>
 		[DataMember]
 		public int Frequency { get; set; }
 
 		/// <summary>
-		/// Окончания новости.
+		/// News ends.
 		/// </summary>
 		[DataMember]
 		public DateTime EndDate { get; set; }
 
 		/// <summary>
-		/// Заголовок на английском языке.
+		/// Headline in English.
 		/// </summary>
 		[DataMember]
 		public string EnglishTitle { get; set; }
 
 		/// <summary>
-		/// Текст на английском языке.
+		/// Text in English.
 		/// </summary>
 		[DataMember]
 		public string EnglishBody { get; set; }
 
 		/// <summary>
-		/// Заголовок на русском языке.
+		/// Headline in Russian.
 		/// </summary>
 		[DataMember]
 		public string RussianTitle { get; set; }
 
 		/// <summary>
-		/// Текст на русском языке.
+		/// Text in Russian.
 		/// </summary>
 		[DataMember]
 		public string RussianBody { get; set; }

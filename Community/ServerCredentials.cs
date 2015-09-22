@@ -5,12 +5,12 @@ namespace StockSharp.Community
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Класс, хранящий в себе логин и пароль для доступа к сервисам http://stocksharp.com
+	/// The class that contains a login and password to access the services http://stocksharp.com.
 	/// </summary>
 	public sealed class ServerCredentials : IPersistable
 	{
 		/// <summary>
-		/// Создать <see cref="ServerCredentials"/>.
+		/// Initializes a new instance of the <see cref="ServerCredentials"/>.
 		/// </summary>
 		public ServerCredentials()
 		{
@@ -18,24 +18,24 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Логин.
+		/// Login.
 		/// </summary>
 		public string Login { get; set; }
 
 		/// <summary>
-		/// Пароль.
+		/// Password.
 		/// </summary>
 		public SecureString Password { get; set; }
 
 		/// <summary>
-		/// Входить автоматически.
+		/// Auto login.
 		/// </summary>
 		public bool AutoLogon { get; set; }
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Load(SettingsStorage storage)
 		{
 			Login = storage.GetValue<string>("Login");
@@ -44,9 +44,9 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public void Save(SettingsStorage storage)
 		{
 			storage.SetValue("Login", Login);

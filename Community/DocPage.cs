@@ -1,57 +1,57 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	/// <summary>
-	/// Контент страницы документации.
+	/// The documentation page content.
 	/// </summary>
 	public class DocPageContent
 	{
 		/// <summary>
-		/// Создать <see cref="DocPageContent"/>.
+		/// Initializes a new instance of the <see cref="DocPageContent"/>.
 		/// </summary>
 		public DocPageContent()
 		{
 		}
 
 		/// <summary>
-		/// Заголовок.
+		/// Header.
 		/// </summary>
 		public string Title { get; set; }
 
 		/// <summary>
-		/// Тело.
+		/// Body.
 		/// </summary>
 		public string Body { get; set; }
 	}
 
 	/// <summary>
-	/// Страница документации.
+	/// Doc page.
 	/// </summary>
 	public class DocPage
 	{
 		/// <summary>
-		/// Создать <see cref="DocPage"/>.
+		/// Initializes a new instance of the <see cref="DocPage"/>.
 		/// </summary>
 		public DocPage()
 		{
 		}
 
 		/// <summary>
-		/// Контент на русском языке.
+		/// Content in Russian.
 		/// </summary>
 		public DocPageContent RussianContent { get; set; }
 
 		/// <summary>
-		/// Контент на английском языке.
+		/// Content in English.
 		/// </summary>
 		public DocPageContent EnglishContent { get; set; }
 
 		/// <summary>
-		/// Строка запроса.
+		/// Url.
 		/// </summary>
 		public string Url { get; set; }
 
 		/// <summary>
-		/// Признак наличия дочерних страниц.
+		/// The attribute of child pages presence .
 		/// </summary>
 		public bool HasChild { get; set; }
 	}

@@ -1,34 +1,34 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.Runtime.Serialization;
 
 	/// <summary>
-	/// Пользователь.
+	/// User.
 	/// </summary>
 	[DataContract]
 	public class User
 	{
 		/// <summary>
-		/// Идентификатор.
+		/// Identifier.
 		/// </summary>
 		[DataMember]
 		public long Id { get; set; }
 
 		/// <summary>
-		/// Имя.
+		/// Name.
 		/// </summary>
 		[DataMember]
 		public string Name { get; set; }
 
 		/// <summary>
-		/// Детальное описание.
+		/// Description.
 		/// </summary>
 		[DataMember]
 		public string Description { get; set; }
 
 		/// <summary>
-		/// Дата регистрации.
+		/// Registration date.
 		/// </summary>
 		[DataMember]
 		public DateTime CreationDate { get; set; }

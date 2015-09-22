@@ -1,55 +1,55 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Интерфейс к сервису отправки уведомлений на телефон или почту.
+	/// The interface to the notification sending service to the phone or e-mail.
 	/// </summary>
 	[ServiceContract(Namespace = "http://stocksharp.com/services/notificationservice.svc")]
 	public interface INotificationService
 	{
 		/// <summary>
-		/// Получить доступное количество SMS-сообщений.
+		/// To get the available number of SMS messages.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Доступное количество SMS-сообщений.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>The available number of SMS-messages.</returns>
 		[OperationContract]
 		int GetSmsCount(Guid sessionId);
 
 		/// <summary>
-		/// Получить доступное количество email-сообщений.
+		/// To get the available number of email messages.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <returns>Доступное количество email-сообщений.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <returns>The available number of email messages.</returns>
 		[OperationContract]
 		int GetEmailCount(Guid sessionId);
 
 		/// <summary>
-		/// Послать SMS-сообщение.
+		/// To send a SMS message.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="message">Тело сообщения.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="message">Message body.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte SendSms(Guid sessionId, string message);
 
 		/// <summary>
-		/// Послать email-сообщение.
+		/// To send an email message.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="caption">Заголовок сообщения.</param>
-		/// <param name="message">Тело сообщения.</param>
-		/// <returns>Код результата выполнения.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="caption">The message title.</param>
+		/// <param name="message">Message body.</param>
+		/// <returns>The execution result code.</returns>
 		[OperationContract]
 		byte SendEmail(Guid sessionId, string caption, string message);
 
 		/// <summary>
-		/// Получить последние новости.
+		/// To get the latest news.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии. Может быть пустым, если запрос идет анонимно.</param>
-		/// <param name="fromId">Идентификатор, с которого необходимо получить новости.</param>
-		/// <returns>Последние новости.</returns>
+		/// <param name="sessionId">Session ID. It can be empty if the request is anonymous.</param>
+		/// <param name="fromId">The identifier from which you need to receive the news.</param>
+		/// <returns>Last news.</returns>
 		[OperationContract]
 		CommunityNews[] GetNews(Guid sessionId, long fromId);
 	}

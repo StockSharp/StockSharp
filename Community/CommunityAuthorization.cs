@@ -7,23 +7,23 @@ namespace StockSharp.Community
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Модуль проверки доступа соединения, основанный на <see cref="IAuthenticationService"/> авторизации.
+	/// The module of the connection access check based on the <see cref="IAuthenticationService"/> authorization.
 	/// </summary>
 	public class CommunityAuthorization : IAuthorization
 	{
 		/// <summary>
-		/// Создать <see cref="CommunityAuthorization"/>.
+		/// Initializes a new instance of the <see cref="CommunityAuthorization"/>.
 		/// </summary>
 		public CommunityAuthorization()
 		{
 		}
 
 		/// <summary>
-		/// Проверить логин и пароль на правильность.
+		/// To check the username and password on correctness.
 		/// </summary>
-		/// <param name="login">Логин.</param>
-		/// <param name="password">Пароль.</param>
-		/// <returns>Идентификатор сессии.</returns>
+		/// <param name="login">Login.</param>
+		/// <param name="password">Password.</param>
+		/// <returns>Session ID.</returns>
 		public virtual Guid ValidateCredentials(string login, string password)
 		{
 			try

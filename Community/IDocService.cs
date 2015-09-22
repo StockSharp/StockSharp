@@ -1,83 +1,83 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.Runtime.Serialization;
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Продукты.
+	/// Products.
 	/// </summary>
 	[DataContract]
 	public enum Products
 	{
 		/// <summary>
-		/// S#.API
+		/// S#.API.
 		/// </summary>
 		[EnumMember]
 		Api,
 
 		/// <summary>
-		/// S#.Data
+		/// S#.Data.
 		/// </summary>
 		[EnumMember]
 		Hydra,
 
 		/// <summary>
-		/// S#.Studio
+		/// S#.Studio.
 		/// </summary>
 		[EnumMember]
 		Studio,
 
 		/// <summary>
-		/// S#.Server
+		/// S#.Server.
 		/// </summary>
 		[EnumMember]
 		Server,
 
 		/// <summary>
-		/// S#.StrategyRunner
+		/// S#.StrategyRunner.
 		/// </summary>
 		[EnumMember]
 		StrategyRunner
 	}
 
 	/// <summary>
-	/// Интерфейс, описывающий сервис документации.
+	/// The interface describing the documentation service.
 	/// </summary>
 	[ServiceContract]
 	public interface IDocService
 	{
 		/// <summary>
-		/// Получить дочерние страницы.
+		/// To get child pages.
 		/// </summary>
-		/// <param name="parentUrl">Строка запроса родительской страницы.</param>
-		/// <returns>Дочерние страницы. Если страниц нет, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="parentUrl">The query string of the parent page.</param>
+		/// <returns>Child pages. If no pages the <see langword="null" /> will be returned.</returns>
 		[OperationContract]
 		DocPage[] GetChildPages(string parentUrl);
 
 		/// <summary>
-		/// Получить тело страницы.
+		/// To get the body of the page.
 		/// </summary>
-		/// <param name="url">Строка запроса страницы.</param>
-		/// <returns>Тело страницы.</returns>
+		/// <param name="url">The page query string.</param>
+		/// <returns>The body of the page.</returns>
 		[OperationContract]
 		string GetContentBody(string url);
 
 		/// <summary>
-		/// Загрузить новую документацию.
+		/// To download new documentation.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="pages">Новые страницы документации.</param>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="pages">New pages of documentation.</param>
 		[OperationContract]
 		void Upload(Guid sessionId, DocPage[] pages);
 
 		/// <summary>
-		/// Загрузить описание новой версии.
+		/// To download the new version description.
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="version">Номер новой версии.</param>
-		/// <param name="product">Тип продукта.</param>
-		/// <param name="description">Описание новой версии.</param>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="version">New version.</param>
+		/// <param name="product">Product type.</param>
+		/// <param name="description">New version description.</param>
 		[OperationContract]
 		void PostNewVersion(Guid sessionId, Products product, string version, string description);
 	}

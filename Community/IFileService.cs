@@ -4,18 +4,18 @@ namespace StockSharp.Community
 	using System.ServiceModel;
 
 	/// <summary>
-	/// Интерфейс, описывающий сервис работы с файлами и документами.
+	/// The interface describing the service to work with files and documents.
 	/// </summary>
 	[ServiceContract(Namespace = "http://stocksharp.com/services/fileservice.svc")]
 	public interface IFileService
 	{
 		/// <summary>
-		/// Выложить на сайт файл.
+		/// To upload the file to the site .
 		/// </summary>
-		/// <param name="sessionId">Идентификатор сессии.</param>
-		/// <param name="fileName">Имя файла.</param>
-		/// <param name="body">Тело файла.</param>
-		/// <returns>Ссылка на выложенный файл.</returns>
+		/// <param name="sessionId">Session ID.</param>
+		/// <param name="fileName">File name.</param>
+		/// <param name="body">File body.</param>
+		/// <returns>Uploaded file link.</returns>
 		[OperationContract]
 		string Upload(Guid sessionId, string fileName, byte[] body);
 	}

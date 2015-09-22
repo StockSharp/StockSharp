@@ -7,12 +7,12 @@ namespace StockSharp.Community
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Клиент для доступа к сервису регистрации.
+	/// The client for access to the registration service.
 	/// </summary>
 	public class ProfileClient : BaseCommunityClient<IProfileService>
 	{
 		/// <summary>
-		/// Создать <see cref="ProfileClient"/>.
+		/// Initializes a new instance of the <see cref="ProfileClient"/>.
 		/// </summary>
 		public ProfileClient()
 			: this("http://stocksharp.com/services/registrationservice.svc".To<Uri>())
@@ -20,98 +20,98 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Создать <see cref="ProfileClient"/>.
+		/// Initializes a new instance of the <see cref="ProfileClient"/>.
 		/// </summary>
-		/// <param name="address">Адрес сервиса.</param>
+		/// <param name="address">Service address.</param>
 		public ProfileClient(Uri address)
 			: base(address, "profile")
 		{
 		}
 
 		/// <summary>
-		/// Начать процедуру регистрации.
+		/// To start the registration.
 		/// </summary>
-		/// <param name="profile">Информация о профиле.</param>
+		/// <param name="profile">The profile Information.</param>
 		public void CreateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.CreateProfile(profile)));
 		}
 
 		/// <summary>
-		/// Отправить на электронную почту письмо.
+		/// To send an e-mail message.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
 		public void SendEmail(string email, string login)
 		{
 			ValidateError(Invoke(f => f.SendEmail(email, login)));
 		}
 
 		/// <summary>
-		/// Подтвердить адрес электронной почты.
+		/// To confirm the e-mail address.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
-		/// <param name="emailCode">Email код подтверждения.</param>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="emailCode">The e-mail confirmation code.</param>
 		public void ValidateEmail(string email, string login, string emailCode)
 		{
 			ValidateError(Invoke(f => f.ValidateEmail(email, login, emailCode)));
 		}
 
 		/// <summary>
-		/// Отправить SMS.
+		/// To send SMS.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
-		/// <param name="phone">Номер телефона.</param>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="phone">Phone.</param>
 		public void SendSms(string email, string login, string phone)
 		{
 			ValidateError(Invoke(f => f.SendSms(email, login, phone)));
 		}
 
 		/// <summary>
-		/// Подтвердить телефон.
+		/// To confirm the phone number.
 		/// </summary>
-		/// <param name="email">Адрес электронной почты.</param>
-		/// <param name="login">Логин.</param>
-		/// <param name="smsCode">SMS код подтверждения.</param>
+		/// <param name="email">E-mail address.</param>
+		/// <param name="login">Login.</param>
+		/// <param name="smsCode">SMS verification code.</param>
 		public void ValidatePhone(string email, string login, string smsCode)
 		{
 			ValidateError(Invoke(f => f.ValidatePhone(email, login, smsCode)));
 		}
 
 		/// <summary>
-		/// Обновить данные профиля.
+		/// To update profile information.
 		/// </summary>
-		/// <param name="profile">Информация о профиле.</param>
+		/// <param name="profile">The profile Information.</param>
 		public void UpdateProfile(Profile profile)
 		{
 			ValidateError(Invoke(f => f.UpdateProfile(SessionId, profile)));
 		}
 
 		/// <summary>
-		/// Получить данные профиля.
+		/// To get profile information.
 		/// </summary>
-		/// <returns>Информация о профиле.</returns>
+		/// <returns>The profile Information.</returns>
 		public Profile GetProfile()
 		{
 			return Invoke(f => f.GetProfile(SessionId));
 		}
 
 		/// <summary>
-		/// Обновить фотографию профиля.
+		/// To update the profile photo.
 		/// </summary>
-		/// <param name="fileName">Название файла.</param>
-		/// <param name="body">Содержимое графического файла.</param>
+		/// <param name="fileName">The file name.</param>
+		/// <param name="body">The contents of the image file.</param>
 		public void UpdateAvatar(string fileName, byte[] body)
 		{
 			ValidateError(Invoke(f => f.UpdateAvatar(SessionId, fileName, body)));
 		}
 
 		/// <summary>
-		/// Получить фотографию профиля.
+		/// To get a profile photo.
 		/// </summary>
-		/// <returns>Содержимое графического файла.</returns>
+		/// <returns>The contents of the image file.</returns>
 		public byte[] GetAvatar()
 		{
 			return Invoke(f => f.GetAvatar(SessionId));

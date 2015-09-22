@@ -9,7 +9,7 @@ namespace StockSharp.Community
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Клиент для доступа к сервису уведомлений StockSharp.
+	/// The client for access to the StockSharp notification service.
 	/// </summary>
 	public class NotificationClient : BaseCommunityClient<INotificationService>
 	{
@@ -17,7 +17,7 @@ namespace StockSharp.Community
 		//private long _lastNewsId;
 
 		/// <summary>
-		/// Создать <see cref="NotificationClient"/>.
+		/// Initializes a new instance of the <see cref="NotificationClient"/>.
 		/// </summary>
 		public NotificationClient()
 			: this("http://stocksharp.com/services/notificationservice.svc".To<Uri>())
@@ -25,16 +25,16 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Создать <see cref="NotificationClient"/>.
+		/// Initializes a new instance of the <see cref="NotificationClient"/>.
 		/// </summary>
-		/// <param name="address">Адрес сервиса.</param>
+		/// <param name="address">Service address.</param>
 		public NotificationClient(Uri address)
 			: base(address, "notification")
 		{
 		}
 
 		/// <summary>
-		/// Доступное количество SMS-сообщений.
+		/// The available number of SMS-messages.
 		/// </summary>
 		public int SmsCount
 		{
@@ -42,7 +42,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Доступное количество email-сообщений.
+		/// The available number of email messages.
 		/// </summary>
 		public int EmailCount
 		{
@@ -50,31 +50,31 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Послать SMS-сообщение.
+		/// To send a SMS message.
 		/// </summary>
-		/// <param name="message">Тело сообщения.</param>
+		/// <param name="message">Message body.</param>
 		public void SendSms(string message)
 		{
 			ValidateError(Invoke(f => f.SendSms(SessionId, message)));
 		}
 
 		/// <summary>
-		/// Послать email-сообщение.
+		/// To send an email message.
 		/// </summary>
-		/// <param name="caption">Заголовок сообщения.</param>
-		/// <param name="message">Тело сообщения.</param>
+		/// <param name="caption">The message title.</param>
+		/// <param name="message">Message body.</param>
 		public void SendEmail(string caption, string message)
 		{
 			ValidateError(Invoke(f => f.SendEmail(SessionId, caption, message)));
 		}
 
 		/// <summary>
-		/// Событие появления новости.
+		/// News received.
 		/// </summary>
 		public event Action<CommunityNews> NewsReceived; 
 
 		/// <summary>
-		/// Подписаться на новости.
+		/// To subscribe for news.
 		/// </summary>
 		public void SubscribeNews()
 		{
@@ -93,7 +93,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Отписаться от новостей.
+		/// To unsubscribe from news.
 		/// </summary>
 		public void UnSubscribeNews()
 		{
@@ -123,7 +123,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Освободить занятые ресурсы.
+		/// Release resources.
 		/// </summary>
 		protected override void DisposeManaged()
 		{

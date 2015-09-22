@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 	using System.Collections.Generic;
@@ -8,7 +8,7 @@
 	using Ecng.Collections;
 
 	/// <summary>
-	/// Клиент для доступа к <see cref="IStrategyService"/>.
+	/// The client for access to <see cref="IStrategyService"/>.
 	/// </summary>
 	[CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
 	public class StrategyClient : BaseCommunityClient<IStrategyService>, IStrategyServiceCallback
@@ -17,7 +17,7 @@
 		private readonly CachedSynchronizedList<long> _subscribedStrategies = new CachedSynchronizedList<long>(); 
 
 		/// <summary>
-		/// Создать <see cref="StrategyClient"/>.
+		/// Initializes a new instance of the <see cref="StrategyClient"/>.
 		/// </summary>
 		public StrategyClient()
 			: this(new Uri("http://stocksharp.com/services/strategyservice.svc"))
@@ -25,16 +25,16 @@
 		}
 
 		/// <summary>
-		/// Создать <see cref="StrategyClient"/>.
+		/// Initializes a new instance of the <see cref="StrategyClient"/>.
 		/// </summary>
-		/// <param name="address">Адрес сервера.</param>
+		/// <param name="address">Server address.</param>
 		public StrategyClient(Uri address)
 			: base(address, "strategy", true)
 		{
 		}
 
 		/// <summary>
-		/// Стратегии, подписанные через <see cref="Subscribe"/>.
+		/// Strategies signed by <see cref="Subscribe"/>.
 		/// </summary>
 		public IEnumerable<StrategyData> SubscribedStrategies
 		{
@@ -42,7 +42,7 @@
 		}
 
 		/// <summary>
-		/// Подключиться.
+		/// Connect.
 		/// </summary>
 		public override void Connect()
 		{
@@ -58,27 +58,27 @@
 		}
 
 		/// <summary>
-		/// Добавить стратегию в магазин.
+		/// To add the strategy to the store .
 		/// </summary>
-		/// <param name="strategy">Данные о стратегии.</param>
+		/// <param name="strategy">The strategy data.</param>
 		public void CreateStrategy(StrategyData strategy)
 		{
 			strategy.Id = Invoke(f => f.CreateStrategy(SessionId, strategy));
 		}
 
 		/// <summary>
-		/// Обновить стратегию в магазине.
+		/// To update the strategy in the store.
 		/// </summary>
-		/// <param name="strategy">Данные о стратегии.</param>
+		/// <param name="strategy">The strategy data.</param>
 		public void UpdateStrategy(StrategyData strategy)
 		{
 			Invoke(f => f.UpdateStrategy(SessionId, strategy));
 		}
 
 		/// <summary>
-		/// Удалить стратегию из магазина.
+		/// To remove the strategy from the store.
 		/// </summary>
-		/// <param name="strategy">Данные о стратегии.</param>
+		/// <param name="strategy">The strategy data.</param>
 		public void DeleteStrategy(StrategyData strategy)
 		{
 			if (strategy == null)
@@ -88,9 +88,9 @@
 		}
 
 		/// <summary>
-		/// Получить полное описание стратегии, включая исходный и исполняемый коды.
+		/// To get the complete description of the strategy, including the source and executable codes.
 		/// </summary>
-		/// <param name="strategy">Данные о стратегии.</param>
+		/// <param name="strategy">The strategy data.</param>
 		public void Download(StrategyData strategy)
 		{
 			if (strategy == null)
@@ -103,9 +103,9 @@
 		}
 
 		/// <summary>
-		/// Подписаться на стратегию.
+		/// To subscribe for the strategy.
 		/// </summary>
-		/// <param name="strategy">Данные о стратегии.</param>
+		/// <param name="strategy">The strategy data.</param>
 		public void Subscribe(StrategyData strategy)
 		{
 			if (strategy == null)
@@ -115,9 +115,9 @@
 		}
 
 		/// <summary>
-		/// Отписаться от стратегии.
+		/// To unsubscribe from the strategy.
 		/// </summary>
-		/// <param name="strategy">Данные о стратегии.</param>
+		/// <param name="strategy">The strategy data.</param>
 		public void UnSubscribe(StrategyData strategy)
 		{
 			if (strategy == null)

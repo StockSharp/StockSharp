@@ -1,27 +1,27 @@
-﻿namespace StockSharp.Community
+namespace StockSharp.Community
 {
 	using System;
 
 	/// <summary>
-	/// Базовый клиент для доступа к сервисам StockSharp.
+	/// The base client for access to the StockSharp services.
 	/// </summary>
-	/// <typeparam name="TService">Тип WCF сервиса.</typeparam>
+	/// <typeparam name="TService">WCF service type.</typeparam>
 	public abstract class BaseCommunityClient<TService> : BaseServiceClient<TService>
 		where TService : class
 	{
 		/// <summary>
-		/// Инициализировать <see cref="BaseCommunityClient{TService}"/>.
+		/// Initialize <see cref="BaseCommunityClient{TService}"/>.
 		/// </summary>
-		/// <param name="address">Адрес сервера.</param>
-		/// <param name="endpointName">Название точки доступа в конфиг-файле.</param>
-		/// <param name="hasCallbacks">Имеет ли <typeparamref name="TService"/> события.</param>
+		/// <param name="address">Server address.</param>
+		/// <param name="endpointName">The access point name in the configuration file.</param>
+		/// <param name="hasCallbacks">Whether the <typeparamref name="TService" /> has events.</param>
 		protected BaseCommunityClient(Uri address, string endpointName, bool hasCallbacks = false)
 			: base(address, endpointName, hasCallbacks)
 		{
 		}
 
 		/// <summary>
-		/// Идентификатор сессии, полученный из <see cref="IAuthenticationService.Login"/>.
+		/// The session identifier received from <see cref="IAuthenticationService.Login"/>.
 		/// </summary>
 		protected virtual Guid SessionId
 		{
@@ -29,7 +29,7 @@
 		}
 
 		/// <summary>
-		/// Идентификатор пользователя для <see cref="SessionId"/>.
+		/// The user identifier for <see cref="SessionId"/>.
 		/// </summary>
 		public long UserId
 		{
