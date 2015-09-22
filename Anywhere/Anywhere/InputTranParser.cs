@@ -1,35 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.Threading;
-
-using StockSharp.Quik.Lua;
-using StockSharp.Fix;
-using StockSharp.Messages;
-using StockSharp.BusinessEntities;
-using StockSharp.Algo;
-
-
-namespace StockSharp.Anywhere
+﻿namespace StockSharp.Anywhere
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
+    using Algo;
+    using BusinessEntities;
+    using Fix;
+    using Messages;
+    using Quik.Lua;
+
     public class InputTranParser
     {
-        private Timer _tmr;
-        private int _tmrDelay = 1000;
-        private string _tranFilePath = "InputCommands.txt";
-        private long _lastTranId = 0;
+        private readonly char _endOfLine = '?'; // a line terminator
+        private readonly object _lock = new object();
+        private readonly FixMessageAdapter _messAdapter;
+        private readonly List<Security> _securities;
+        private readonly string _tranFilePath = "InputCommands.tri";
 
-        private IList<TransactionKey> _tranKeys;
+        private readonly IList<TransactionKey> _tranKeys;
 
-        string _transIDpattern = @"TRANS_ID\s+=\s+\d|TRANS_ID=\s+\d|TRANS_ID=\d"; //  
+        private readonly LuaFixTransactionMessageAdapter _transAdapter;
 
-        private Object _lock = new Object();
+        private readonly string _transIDpattern = @"TRANS_ID\s+=\s+\d|TRANS_ID=\s+\d|TRANS_ID=\d"; //  
 
-        LuaFixTransactionMessageAdapter _transAdapter;
-        FixMessageAdapter _messAdapter;
-        List<Security> _securities;
+        private readonly FileSystemWatcher _watcher;
+        private long _lastTranId;
 
         public InputTranParser(LuaFixTransactionMessageAdapter transAdapter, FixMessageAdapter messAdapter, List<Security> securities)
         {
@@ -37,113 +36,99 @@ namespace StockSharp.Anywhere
             _messAdapter = messAdapter;
             _securities = securities;
 
-            _tranKeys = new List<TransactionKey>();
+            _watcher = new FileSystemWatcher(_tranFilePath, "*.tri");
 
-            _tranKeys.Add(new TransIdKey());
-            _tranKeys.Add(new AccountKey());
-            _tranKeys.Add(new ClientCodeKey());
-            _tranKeys.Add(new ClassCodeKey());
-            _tranKeys.Add(new SecCodeKey());
-            _tranKeys.Add(new ActionKey());
-            _tranKeys.Add(new OperationKey());
-            _tranKeys.Add(new PriceKey());
-            _tranKeys.Add(new StopPriceKey());
-            _tranKeys.Add(new QuantityKey());
-            _tranKeys.Add(new TypeKey());
-            _tranKeys.Add(new OrderKeyKey());
-            _tranKeys.Add(new OriginalTransIdKey());
-            _tranKeys.Add(new CommentKey());
-
-            _tmr = new Timer(new TimerCallback(tmr_tick), null, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-
+            _tranKeys = new List<TransactionKey>
+            {
+                new TransIdKey(),
+                new AccountKey(),
+                new ClientCodeKey(),
+                new ClassCodeKey(),
+                new SecCodeKey(),
+                new ActionKey(),
+                new OperationKey(),
+                new PriceKey(),
+                new StopPriceKey(),
+                new QuantityKey(),
+                new TypeKey(),
+                new OrderKeyKey(),
+                new OriginalTransIdKey(),
+                new CommentKey()
+            };
         }
 
         public void Start()
         {
-            _tmr.Change(0, _tmrDelay);
+            _watcher.Changed += OnFileChanged;
         }
 
         public void Stop()
         {
-            _tmr.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+            _watcher.Changed -= OnFileChanged;
         }
 
-        private void tmr_tick(Object obj)
+        private void OnFileChanged(object source, FileSystemEventArgs e)
         {
-
-            lock (_lock)
+            try
             {
-                for (int i = 0; i < 10; i++)
+                var strings = string.Empty;
+
+                using (var fs = new FileStream(_tranFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var sr = new StreamReader(fs))
+                    strings = sr.ReadToEnd();
+
+                if (string.IsNullOrEmpty(strings))
+                    return;
+
+                var lines = strings.Split(_endOfLine);
+
+                var newlines = new List<string>();
+
+                if (_lastTranId > 0)
                 {
-                    try
+                    for (var i = lines.Count() - 1; i >= 0; i--)
                     {
-                        string[] lines = System.IO.File.ReadAllLines(_tranFilePath);
+                        if (!lines[i].Contains(_endOfLine))
+                            continue;
 
-                        List<string> newlines = new List<string>();
-
-                        if (_lastTranId > 0)
-                        {
-                            for (i = lines.Count() - 1; i >= 0; i--)
-                            {
-                                var id = GetTransId(lines[i]);
-                                if (id > _lastTranId)
-                                {
-                                    newlines.Add(lines[i]);
-                                }
-                                else
-                                {
-                                    if (newlines.Count() == 0) return;
-                                }
-                            }
-
-                            newlines.Reverse();
-                        }
+                        var id = GetTransId(lines[i]);
+                        if (id > _lastTranId)
+                            newlines.Add(lines[i]);
                         else
                         {
-                            newlines.AddRange(lines);
+                            if (!newlines.Any())
+                                return;
                         }
+                    }
 
-                        NewLinesParsing(newlines);
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        Debug.WriteLine(ex);
-                        this.Stop();
-                        return;
-                    }
-                    catch (Exception)
-                    {
-                        Thread.Sleep(10);
-                    }
+                    newlines.Reverse();
                 }
-            }
+                else
+                    newlines.AddRange(lines.Where(l => l.Contains(_endOfLine)));
 
+                NewLinesParsing(newlines);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                Stop();
+            }
         }
 
         // teturn Trans_id from line 
         private long GetTransId(string line)
         {
-            Match trmatch = Regex.Match(line, _transIDpattern, RegexOptions.IgnoreCase);
-            if (trmatch.Success)
-            {
-                Match idmatch = Regex.Match(trmatch.Value, @"\d");
-                if (idmatch.Success)
-                {
-                    return long.Parse(idmatch.Value);
-                }
-                else
-                {
-                    throw new ArgumentException("TRANS_ID value is not valid.");
-                }
-            }
-            else
-            {
+            var trmatch = Regex.Match(line, _transIDpattern, RegexOptions.IgnoreCase);
+            if (!trmatch.Success)
                 throw new ArgumentException("TRANS_ID key not found.");
-            }
+            var idmatch = Regex.Match(trmatch.Value, @"\d");
+            if (idmatch.Success)
+                return long.Parse(idmatch.Value);
+            throw new ArgumentException("TRANS_ID value is not valid.");
         }
 
         // command lines parsing
-        private void NewLinesParsing(IList<string> lines)
+        private void NewLinesParsing(IEnumerable<string> lines)
         {
             foreach (var line in lines)
             {
@@ -153,7 +138,8 @@ namespace StockSharp.Anywhere
 
                 foreach (var item in temp)
                 {
-                    if (string.IsNullOrWhiteSpace(item)) continue;
+                    if (string.IsNullOrWhiteSpace(item))
+                        continue;
 
                     var key = item.Split('=')[0].Trim();
                     var value = item.Split('=')[1].Trim();
@@ -161,126 +147,115 @@ namespace StockSharp.Anywhere
                     var kvp = ConvertAndValidateCommandParams(key, value);
 
                     actions.Add(kvp.Key, kvp.Value);
-
                 }
 
                 if (actions.Count > 0)
                     SendCommand(actions);
 
                 _lastTranId = (long)actions["TRANS_ID"];
-
             }
-
         }
 
         // validate and convert of command line values
         private KeyValuePair<string, object> ConvertAndValidateCommandParams(string key, string value)
         {
-            TransactionKey tk = _tranKeys.FirstOrDefault(t => t.KeyWord == key.ToUpper());
+            var tk = _tranKeys.FirstOrDefault(t => t.KeyWord == key.ToUpper());
 
-            Debug.WriteLine(string.Format("key - {0}, value {1}", key, value));
+            Debug.WriteLine("key - {0}, value {1}", key, value);
 
-            if (tk != null)
-            {
+            if (tk == null)
+                throw new ArgumentException("Transaction key or value is not valid.");
+            var tranValue = tk.GetValue(value);
 
-                var tranValue = tk.GetValue(value);
+            Debug.WriteLine("value {0}", tranValue);
 
-                Debug.WriteLine(string.Format("value {0}", tranValue));
-
-                if (tranValue != null)
-                    return new KeyValuePair<string, object>(tk.KeyWord, tranValue);
-            }
+            if (tranValue != null)
+                return new KeyValuePair<string, object>(tk.KeyWord, tranValue);
 
             throw new ArgumentException("Transaction key or value is not valid.");
-
         }
 
         // create and send message
-        private void SendCommand(Dictionary<string, object> actions)
+        private void SendCommand(IReadOnlyDictionary<string, object> actions)
         {
-
             Message message = null;
 
             switch (actions["ACTION"].ToString())
             {
                 case "NEW_ORDER":
+                {
+                    message = new OrderRegisterMessage
                     {
-                        message = new OrderRegisterMessage()
-                        {
-                            SecurityId = _securities.FirstOrDefault(s => s.Code == actions["SECCODE"].ToString() &&
-                                                                         s.Class == actions["CLASSCODE"].ToString()).ToSecurityId(),
-                            ClientCode = actions["CLIENTCODE"].ToString(),
-                            PortfolioName = actions["ACCOUNT"].ToString(),
-                            OrderType = (OrderTypes)actions["TYPE"],
-                            Price = (decimal)actions["PRICE"],
-                            Side = (Sides)actions["OPERATION"],
-                            Volume = (decimal)actions["QUANTITY"],
-                            TransactionId = _transAdapter.TransactionIdGenerator.GetNextId(),
-                            Comment = actions["COMMENT"].ToString()
-                        };
-                    }
+                        SecurityId = _securities.FirstOrDefault(s => s.Code == actions["SECCODE"].ToString() &&
+                                                                     s.Class == actions["CLASSCODE"].ToString()).ToSecurityId(),
+                        ClientCode = actions["CLIENTCODE"].ToString(),
+                        PortfolioName = actions["ACCOUNT"].ToString(),
+                        OrderType = (OrderTypes)actions["TYPE"],
+                        Price = (decimal)actions["PRICE"],
+                        Side = (Sides)actions["OPERATION"],
+                        Volume = (decimal)actions["QUANTITY"],
+                        TransactionId = _transAdapter.TransactionIdGenerator.GetNextId(),
+                        Comment = actions["COMMENT"].ToString()
+                    };
+                }
                     break;
                 case "KILL_ORDER":
+                {
+                    message = new OrderCancelMessage
                     {
-                        message = new OrderCancelMessage()
-                        {
-                            OrderId = (long)actions["ORDER_KEY"],
-                            OriginalTransactionId = (long)actions["ORIGINAL_TRANS_ID"],
-                            TransactionId = _transAdapter.TransactionIdGenerator.GetNextId(),
-                        };
-                    }
+                        OrderId = (long)actions["ORDER_KEY"],
+                        OriginalTransactionId = (long)actions["ORIGINAL_TRANS_ID"],
+                        TransactionId = _transAdapter.TransactionIdGenerator.GetNextId()
+                    };
+                }
                     break;
                 case "KILL_ALL_ORDERS":
+                {
+                    message = new OrderGroupCancelMessage
                     {
-                        message = new OrderGroupCancelMessage()
-                        {
-                            TransactionId = _transAdapter.TransactionIdGenerator.GetNextId()
-                        };
-                    }
+                        TransactionId = _transAdapter.TransactionIdGenerator.GetNextId()
+                    };
+                }
                     break;
                 case "MOVE_ORDERS":
-                    {
-                        //TODO
-                    }
+                {
+                    //TODO
+                }
                     break;
                 case "REGISTER_SECURITY":
-                    {
-                        //TODO
-                    }
+                {
+                    //TODO
+                }
                     break;
                 case "UNREGISTER_SECURITY":
-                    {
-                        //TODO
-                    }
+                {
+                    //TODO
+                }
                     break;
                 case "REGISTER_TRADES":
-                    {
-                        //TODO
-                    }
+                {
+                    //TODO
+                }
                     break;
                 case "UNREGISTER_TRADES":
-                    {
-                        //TODO
-                    }
+                {
+                    //TODO
+                }
                     break;
                 case "REGISTER_MARKETDEPTH":
-                    {
-                        //TODO
-                    }
+                {
+                    //TODO
+                }
                     break;
                 case "UNREGISTER_MARKETDEPTH":
-                    {
-                        //TODO
-                    }
-                    break;
-
-                default:
+                {
+                    //TODO
+                }
                     break;
             }
 
             if (message != null)
                 _transAdapter.SendInMessage(message);
         }
-
     }
 }
