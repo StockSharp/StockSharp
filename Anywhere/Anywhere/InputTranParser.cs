@@ -17,18 +17,18 @@
 
     public class InputTranParser
     {
-        private readonly char _endOfLine = '?'; // a line terminator
-        private readonly FixMessageAdapter _messAdapter;
+	    private const char _endOfLine = '?'; // a line terminator
+	    private readonly FixMessageAdapter _messAdapter;
         private readonly List<Security> _securities;
-        private readonly string _tranFilePath = "InputCommands.tri";
+	    private const string _tranFilePath = "InputCommands.tri";
 
-        private readonly IList<TransactionKey> _tranKeys;
+	    private readonly IList<TransactionKey> _tranKeys;
 
         private readonly LuaFixTransactionMessageAdapter _transAdapter;
 
-        private readonly string _transIDpattern = @"TRANS_ID\s+=\s+\d|TRANS_ID=\s+\d|TRANS_ID=\d"; //  
+	    private const string _transIDpattern = @"TRANS_ID\s+=\s+\d|TRANS_ID=\s+\d|TRANS_ID=\d"; //  
 
-        private readonly FileSystemWatcher _watcher;
+	    private readonly FileSystemWatcher _watcher;
         private long _lastTranId;
 
         public InputTranParser(LuaFixTransactionMessageAdapter transAdapter, FixMessageAdapter messAdapter, List<Security> securities)
@@ -72,7 +72,7 @@
         {
             try
             {
-                var strings = string.Empty;
+				string strings;
 
                 using (var fs = new FileStream(_tranFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (var sr = new StreamReader(fs))
