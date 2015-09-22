@@ -20,7 +20,7 @@ namespace StockSharp.SmartCom
 		//public static readonly EndPoint Major = "82.204.220.34:8090".To<EndPoint>();
 
 		///// <summary>
-		///// Вспомагательный сервер. IP адрес 213.247.232.238, порт 8090.
+		///// Вспомогательный сервер. IP адрес 213.247.232.238, порт 8090.
 		///// </summary>
 		//public static readonly EndPoint Minor = "213.247.232.238:8090".To<EndPoint>();
 

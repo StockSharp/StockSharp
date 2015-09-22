@@ -156,7 +156,7 @@ namespace StockSharp.InteractiveBrokers.Web
 		/// </summary>
 		/// <param name="product">Инструмент.</param>
 		/// <returns>Детальная информация.</returns>
-		public ProductDescripton DownloadDescription(Product product) // Страница с описание акции  Specifications
+		public ProductDescripton DownloadDescription(Product product)
 		{
 			if (product == null)
 				throw new ArgumentNullException("product");

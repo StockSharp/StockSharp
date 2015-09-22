@@ -91,7 +91,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Произвести вхов в систему.
+		/// Произвести вход в систему.
 		/// </summary>
 		public void Login()
 		{
@@ -99,7 +99,7 @@ namespace StockSharp.Community
 		}
 
 		/// <summary>
-		/// Произвести вхов в систему.
+		/// Произвести вход в систему.
 		/// </summary>
 		/// <param name="login">Логин.</param>
 		/// <param name="password">Пароль.</param>

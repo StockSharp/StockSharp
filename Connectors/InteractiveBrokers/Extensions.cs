@@ -9,7 +9,7 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомагательный класс, который используется для доступа к специфичной Interactive Brokers информации через <see cref="IExtendableEntity.ExtensionInfo"/>.
+	/// Вспомогательный класс, который используется для доступа к специфичной Interactive Brokers информации через <see cref="IExtendableEntity.ExtensionInfo"/>.
 	/// </summary>
 	public static class Extensions
 	{

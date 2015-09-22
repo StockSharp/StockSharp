@@ -10,7 +10,7 @@
 	public interface IAuthenticationService
 	{
 		/// <summary>
-		/// Произвести вхов в систему.
+		/// Произвести вход в систему.
 		/// </summary>
 		/// <param name="login">Логин.</param>
 		/// <param name="password">Пароль.</param>

@@ -5,7 +5,7 @@
 	using StockSharp.SmartCom.Native;
 
 	/// <summary>
-	/// Вспомагательный класс, который используется для доступа к специфичной SmartCOM информации через <see cref="IExtendableEntity.ExtensionInfo"/>.
+	/// Вспомогательный класс, который используется для доступа к специфичной SmartCOM информации через <see cref="IExtendableEntity.ExtensionInfo"/>.
 	/// </summary>
 	public static class SmartComExtensionInfoHelper
 	{

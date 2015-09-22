@@ -34,7 +34,7 @@
 		}
 
 		/// <summary>
-		/// Стратегий, подписанные через <see cref="Subscribe"/>.
+		/// Стратегии, подписанные через <see cref="Subscribe"/>.
 		/// </summary>
 		public IEnumerable<StrategyData> SubscribedStrategies
 		{

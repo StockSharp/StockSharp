@@ -5,7 +5,7 @@ namespace StockSharp.Community
 	using Ecng.Serialization;
 
 	/// <summary>
-	/// Класс, хранящих в себе логин и пароль для доступа к сервисам http://stocksharp.com
+	/// Класс, хранящий в себе логин и пароль для доступа к сервисам http://stocksharp.com
 	/// </summary>
 	public sealed class ServerCredentials : IPersistable
 	{

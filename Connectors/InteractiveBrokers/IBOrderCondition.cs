@@ -668,7 +668,7 @@ namespace StockSharp.InteractiveBrokers
 		public enum ShortSaleSlots
 		{
 			/// <summary>
-			/// Частрый трейдер или нет короткая нога.
+			/// Частный трейдер или нет короткая нога.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str1658Key)]
 			Unapplicable,
@@ -1136,7 +1136,7 @@ namespace StockSharp.InteractiveBrokers
 			Away,
 
 			/// <summary>
-			/// После торговое размещение.
+			/// Послеторговое размещение.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2411Key)]
 			PostTradeAllocation
