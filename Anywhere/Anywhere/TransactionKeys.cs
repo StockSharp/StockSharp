@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-
-using StockSharp.Messages;
-
-namespace StockSharp.Anywhere
+﻿namespace StockSharp.Anywhere
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using StockSharp.Messages;
 
     public enum TransValueTypes
     {
@@ -14,13 +12,11 @@ namespace StockSharp.Anywhere
         Long,
         Boolean,
         String,
-        PredefinedSet,
+        PredefinedSet
     }
 
     public abstract class TransactionKey
     {
-        public TransactionKey() { }
-
         public string KeyWord { set; get; }
 
         public TransValueTypes ValueType { set; get; }
@@ -51,7 +47,6 @@ namespace StockSharp.Anywhere
                     return null;
             }
             return null;
-
         }
 
         private object PredefinedSetValidate(string value)
@@ -59,11 +54,13 @@ namespace StockSharp.Anywhere
             IsValid = PredefinedValues.Contains(value.Trim().ToUpper());
             return IsValid ? value : null;
         }
+
         private string StringValidate(string value)
         {
             IsValid = !string.IsNullOrWhiteSpace(value);
             return IsValid ? value : null;
         }
+
         private decimal? ConvertToDecimal(string value)
         {
             decimal decValue;
@@ -71,8 +68,8 @@ namespace StockSharp.Anywhere
             IsValid = decimal.TryParse(value, out decValue);
 
             return IsValid ? (decimal?)decValue : null;
-
         }
+
         private int? ConvertToInteger(string value)
         {
             int intValue;
@@ -80,8 +77,8 @@ namespace StockSharp.Anywhere
             IsValid = int.TryParse(value, out intValue);
 
             return IsValid ? (int?)intValue : null;
-
         }
+
         private long? ConvertToLong(string value)
         {
             long longValue;
@@ -89,38 +86,34 @@ namespace StockSharp.Anywhere
             IsValid = long.TryParse(value, out longValue);
 
             return IsValid ? (long?)longValue : null;
-
         }
-
     }
 
     public class ClassCodeKey : TransactionKey
     {
         public ClassCodeKey()
         {
-            this.KeyWord = "CLASSCODE";
-            this.ValueType = TransValueTypes.String;
+            KeyWord = "CLASSCODE";
+            ValueType = TransValueTypes.String;
         }
-
     }
 
     public class SecCodeKey : TransactionKey
     {
         public SecCodeKey()
         {
-            this.KeyWord = "SECCODE";
-            this.ValueType = TransValueTypes.String;
+            KeyWord = "SECCODE";
+            ValueType = TransValueTypes.String;
         }
-
     }
 
     public class ActionKey : TransactionKey
     {
         public ActionKey()
         {
-            this.KeyWord = "ACTION";
-            this.ValueType = TransValueTypes.PredefinedSet;
-            PredefinedValues = new List<string>()
+            KeyWord = "ACTION";
+            ValueType = TransValueTypes.PredefinedSet;
+            PredefinedValues = new List<string>
             {
                 "NEW_ORDER",
                 "NEW_NEG_DEAL",
@@ -142,16 +135,15 @@ namespace StockSharp.Anywhere
                 "UNREGISTER_MARKETDEPTH"
             };
         }
-
     }
 
     public class AccountKey : TransactionKey
     {
         public AccountKey()
         {
-            this.KeyWord = "ACCOUNT";
-            this.ValueType = TransValueTypes.String;
-            this.IsRequired = true;
+            KeyWord = "ACCOUNT";
+            ValueType = TransValueTypes.String;
+            IsRequired = true;
         }
     }
 
@@ -159,9 +151,9 @@ namespace StockSharp.Anywhere
     {
         public ClientCodeKey()
         {
-            this.KeyWord = "CLIENT_CODE";
-            this.ValueType = TransValueTypes.String;
-            this.IsRequired = true;
+            KeyWord = "CLIENT_CODE";
+            ValueType = TransValueTypes.String;
+            IsRequired = true;
         }
     }
 
@@ -169,14 +161,13 @@ namespace StockSharp.Anywhere
     {
         public TypeKey()
         {
-            this.KeyWord = "TYPE";
-            this.ValueType = TransValueTypes.PredefinedSet;
-            PredefinedValues = new List<string>()
+            KeyWord = "TYPE";
+            ValueType = TransValueTypes.PredefinedSet;
+            PredefinedValues = new List<string>
             {
                 "L",
                 "M"
             };
-
         }
 
         public override object GetValue(string value)
@@ -184,57 +175,49 @@ namespace StockSharp.Anywhere
             var valValue = base.GetValue(value);
 
             if (valValue != null)
-            {
                 return valValue.ToString() == "M" ? OrderTypes.Market : OrderTypes.Limit;
-            }
             return null;
         }
-
     }
 
     public class OperationKey : TransactionKey
     {
         public OperationKey()
         {
-            this.KeyWord = "OPERATION";
-            this.ValueType = TransValueTypes.PredefinedSet;
-            PredefinedValues = new List<string>()
+            KeyWord = "OPERATION";
+            ValueType = TransValueTypes.PredefinedSet;
+            PredefinedValues = new List<string>
             {
                 "S",
                 "B"
             };
-
         }
+
         public override object GetValue(string value)
         {
-
             var valValue = base.GetValue(value);
 
             if (valValue != null)
-            {
                 return valValue.ToString() == "S" ? Sides.Sell : Sides.Buy;
-            }
             return null;
         }
-
     }
 
     public class QuantityKey : TransactionKey
     {
         public QuantityKey()
         {
-            this.KeyWord = "QUANTITY";
-            this.ValueType = TransValueTypes.Decimal;
+            KeyWord = "QUANTITY";
+            ValueType = TransValueTypes.Decimal;
         }
-
     }
 
     public class PriceKey : TransactionKey
     {
         public PriceKey()
         {
-            this.KeyWord = "PRICE";
-            this.ValueType = TransValueTypes.Decimal;
+            KeyWord = "PRICE";
+            ValueType = TransValueTypes.Decimal;
         }
     }
 
@@ -242,53 +225,47 @@ namespace StockSharp.Anywhere
     {
         public StopPriceKey()
         {
-            this.KeyWord = "STOPPRICE";
-            this.ValueType = TransValueTypes.Decimal;
+            KeyWord = "STOPPRICE";
+            ValueType = TransValueTypes.Decimal;
         }
-
     }
 
     public class TransIdKey : TransactionKey
     {
         public TransIdKey()
         {
-            this.KeyWord = "TRANS_ID";
-            this.ValueType = TransValueTypes.Long;
-            this.IsRequired = true;
+            KeyWord = "TRANS_ID";
+            ValueType = TransValueTypes.Long;
+            IsRequired = true;
         }
-
     }
 
     public class OriginalTransIdKey : TransactionKey
     {
         public OriginalTransIdKey()
         {
-            this.KeyWord = "ORIGINAL_TRANS_ID";
-            this.ValueType = TransValueTypes.Long;
+            KeyWord = "ORIGINAL_TRANS_ID";
+            ValueType = TransValueTypes.Long;
         }
-
     }
 
     public class OrderKeyKey : TransactionKey
     {
         public OrderKeyKey()
         {
-            this.KeyWord = "ORDER_KEY";
-            this.ValueType = TransValueTypes.Long;
+            KeyWord = "ORDER_KEY";
+            ValueType = TransValueTypes.Long;
         }
-
     }
 
     public class CommentKey : TransactionKey
     {
         public CommentKey()
         {
-            this.KeyWord = "COMMENT";
-            this.ValueType = TransValueTypes.String;
+            KeyWord = "COMMENT";
+            ValueType = TransValueTypes.String;
         }
-
     }
-
 }
 
 //"REGISTER_ORDER",
