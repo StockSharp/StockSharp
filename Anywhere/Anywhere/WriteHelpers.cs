@@ -4,8 +4,8 @@
     using System.IO;
     using System.Text;
 
-    using StockSharp.BusinessEntities;
-    using StockSharp.Messages;
+    using BusinessEntities;
+    using Messages;
 
     /// <summary>
     ///     The write functions to text files

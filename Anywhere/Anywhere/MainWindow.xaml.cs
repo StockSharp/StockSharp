@@ -23,7 +23,10 @@ namespace StockSharp.Anywhere
     {
         public Security Security { set; get; }
 
-        public string SecurityId => Security.Id;
+        public string SecurityId
+        {
+            get { return Security.Id; }
+        }
 
         public bool Trades { set; get; }
         public bool MarketDepth { set; get; }
