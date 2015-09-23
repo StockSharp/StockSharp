@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###v4.3.12:
+* (feature) ICandleBuilder. Direct value processing.
 * (feature) Correlation indicator.
 * (feature) Covariance indicator.
 * (feature) Chart.TimeZone

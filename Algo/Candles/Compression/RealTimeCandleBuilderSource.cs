@@ -126,13 +126,13 @@ namespace StockSharp.Algo.Candles.Compression
 
 				var seriesCache = registeredSeries.Cache;
 
-				var securityValues = group.OrderBy(v => v.Id).ToArray();
+				var securityValues = group.OrderBy(v => v.Time).ToArray();
 
 				foreach (var series in seriesCache)
 				{
 					if (series.IsNew)
 					{
-						RaiseProcessing(series, Convert(GetSecurityValues(security)).OrderBy(v => v.Id));
+						RaiseProcessing(series, Convert(GetSecurityValues(security)).OrderBy(v => v.Time));
 						series.IsNew = false;
 					}
 					else

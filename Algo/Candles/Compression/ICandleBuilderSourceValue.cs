@@ -3,8 +3,6 @@
 	using System;
 	using System.Diagnostics;
 
-	using Ecng.Common;
-
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 
@@ -13,11 +11,6 @@
 	/// </summary>
 	public interface ICandleBuilderSourceValue
 	{
-		/// <summary>
-		/// Уникальный идентификатор.
-		/// </summary>
-		long Id { get; }
-
 		/// <summary>
 		/// Инструмент, по которому были сформированы данные.
 		/// </summary>
@@ -64,11 +57,6 @@
 		/// </summary>
 		public Trade Trade { get; private set; }
 
-		long ICandleBuilderSourceValue.Id
-		{
-			get { return Trade.Id; }
-		}
-
 		Security ICandleBuilderSourceValue.Security
 		{
 			get { return Trade.Security; }
@@ -96,13 +84,61 @@
 	}
 
 	/// <summary>
+	/// Данные источника <see cref="ICandleBuilderSource"/>, созданные на основе <see cref="Trade"/>.
+	/// </summary>
+	[DebuggerDisplay("{Tick}")]
+	public class TickCandleBuilderSourceValue : ICandleBuilderSourceValue
+	{
+		/// <summary>
+		/// Создать <see cref="TickCandleBuilderSourceValue"/>.
+		/// </summary>
+		/// <param name="security">Инструмент, по которому были сформированы данные.</param>
+		/// <param name="tick">Тиковая сделка.</param>
+		public TickCandleBuilderSourceValue(Security security, ExecutionMessage tick)
+		{
+			_security = security;
+			Tick = tick;
+		}
+
+		/// <summary>
+		/// Тиковая сделка.
+		/// </summary>
+		public ExecutionMessage Tick { get; private set; }
+
+		private readonly Security _security;
+
+		Security ICandleBuilderSourceValue.Security
+		{
+			get { return _security; }
+		}
+
+		DateTimeOffset ICandleBuilderSourceValue.Time
+		{
+			get { return Tick.ServerTime; }
+		}
+
+		decimal ICandleBuilderSourceValue.Price
+		{
+			get { return Tick.TradePrice ?? 0; }
+		}
+
+		decimal ICandleBuilderSourceValue.Volume
+		{
+			get { return Tick.Volume ?? 0; }
+		}
+
+		Sides? ICandleBuilderSourceValue.OrderDirection
+		{
+			get { return Tick.OriginSide; }
+		}
+	}
+
+	/// <summary>
 	/// Данные источника <see cref="ICandleBuilderSource"/>, созданные на основе <see cref="MarketDepth"/>.
 	/// </summary>
 	[DebuggerDisplay("{Depth}")]
 	public class DepthCandleBuilderSourceValue : ICandleBuilderSourceValue
 	{
-		private static readonly IdGenerator _idGenerator = new MillisecondIncrementalIdGenerator();
-
 		/// <summary>
 		/// Создать <see cref="DepthCandleBuilderSourceValue"/>.
 		/// </summary>
@@ -116,11 +152,6 @@
 		/// Стакан.
 		/// </summary>
 		public MarketDepth Depth { get; private set; }
-
-		long ICandleBuilderSourceValue.Id
-		{
-			get { return _idGenerator.GetNextId(); }
-		}
 
 		Security ICandleBuilderSourceValue.Security
 		{
