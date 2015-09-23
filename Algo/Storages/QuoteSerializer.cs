@@ -74,9 +74,8 @@ namespace StockSharp.Algo.Storages
 	class QuoteSerializer : BinaryMarketDataSerializer<QuoteChangeMessage, QuoteMetaInfo>
 	{
 		public QuoteSerializer(SecurityId securityId)
-			: base(securityId, 16 + 20 * 25)
+			: base(securityId, 16 + 20 * 25, MarketDataVersions.Version52)
 		{
-			Version = MarketDataVersions.Version52;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<QuoteChangeMessage> messages, QuoteMetaInfo metaInfo)

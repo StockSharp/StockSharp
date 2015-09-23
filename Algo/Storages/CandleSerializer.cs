@@ -74,13 +74,12 @@ namespace StockSharp.Algo.Storages
 		private readonly object _arg;
 
 		public CandleSerializer(SecurityId securityId, object arg)
-			: base(securityId, 74)
+			: base(securityId, 74, MarketDataVersions.Version53)
 		{
 			if (arg == null)
 				throw new ArgumentNullException("arg");
 
 			_arg = arg;
-			Version = MarketDataVersions.Version53;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<TCandleMessage> candles, CandleMetaInfo metaInfo)

@@ -161,9 +161,8 @@ namespace StockSharp.Algo.Storages
 	class OrderLogSerializer : BinaryMarketDataSerializer<ExecutionMessage, OrderLogMetaInfo>
 	{
 		public OrderLogSerializer(SecurityId securityId)
-			: base(securityId, 200)
+			: base(securityId, 200, MarketDataVersions.Version52)
 		{
-			Version = MarketDataVersions.Version52;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> items, OrderLogMetaInfo metaInfo)

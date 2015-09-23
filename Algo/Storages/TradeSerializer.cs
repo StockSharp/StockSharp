@@ -92,9 +92,8 @@ namespace StockSharp.Algo.Storages
 	class TradeSerializer : BinaryMarketDataSerializer<ExecutionMessage, TradeMetaInfo>
 	{
 		public TradeSerializer(SecurityId securityId)
-			: base(securityId, 50)
+			: base(securityId, 50, MarketDataVersions.Version54)
 		{
-			Version = MarketDataVersions.Version54;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TradeMetaInfo metaInfo)

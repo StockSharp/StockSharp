@@ -182,9 +182,8 @@ namespace StockSharp.Algo.Storages
 	class ExecutionSerializer : BinaryMarketDataSerializer<ExecutionMessage, ExecutionSerializerMetaInfo>
 	{
 		public ExecutionSerializer(SecurityId securityId)
-			: base(securityId, 200)
+			: base(securityId, 200, MarketDataVersions.Version56)
 		{
-			Version = MarketDataVersions.Version56;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, ExecutionSerializerMetaInfo metaInfo)

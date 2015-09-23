@@ -395,9 +395,8 @@ namespace StockSharp.Algo.Storages
 		};
 
 		public Level1Serializer(SecurityId securityId)
-			: base(securityId, 50)
+			: base(securityId, 50, MarketDataVersions.Version54)
 		{
-			Version = MarketDataVersions.Version54;
 		}
 
 		private static int MapTo(Level1MetaInfo metaInfo, Level1Fields field)

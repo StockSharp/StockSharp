@@ -53,9 +53,8 @@
 	class NewsSerializer : BinaryMarketDataSerializer<NewsMessage, NewsMetaInfo>
 	{
 		public NewsSerializer()
-			: base(default(SecurityId), 200)
+			: base(default(SecurityId), 200, MarketDataVersions.Version46)
 		{
-			Version = MarketDataVersions.Version46;
 		}
 
 		protected override void OnSave(BitArrayWriter writer, IEnumerable<NewsMessage> messages, NewsMetaInfo metaInfo)

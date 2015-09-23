@@ -320,7 +320,7 @@
 			}
 		}
 
-		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize)
+		protected BinaryMarketDataSerializer(SecurityId securityId, int dataSize, Version version)
 		{
 			if (securityId == null)
 				throw new ArgumentNullException("securityId");
@@ -328,7 +328,7 @@
 			SecurityId = securityId;
 			DataSize = dataSize;
 
-			Version = MarketDataVersions.Version44;
+			Version = version;
 		}
 
 		protected SecurityId SecurityId { get; private set; }
