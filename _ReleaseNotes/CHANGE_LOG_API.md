@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###v4.3.12:
+* (feature) ISecurityStorage. CSV implementation.
 * (feature) ICandleBuilder. Direct value processing.
 * (feature) Correlation indicator.
 * (feature) Covariance indicator.

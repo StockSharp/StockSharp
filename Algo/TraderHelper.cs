@@ -16,6 +16,7 @@ namespace StockSharp.Algo
 
 	using StockSharp.Algo.PnL;
 	using StockSharp.Algo.Positions;
+	using StockSharp.Algo.Storages;
 	using StockSharp.Algo.Testing;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Logging;
@@ -3317,6 +3318,18 @@ namespace StockSharp.Algo
 				throw new ArgumentNullException("provider");
 
 			return provider.Lookup(new Security { Code = "*" });
+		}
+
+		/// <summary>
+		/// Удалить все инструменты.
+		/// </summary>
+		/// <param name="storage">Хранилище информации об инструментах.</param>
+		public static void DeleteAll(this ISecurityStorage storage)
+		{
+			if (storage == null)
+				throw new ArgumentNullException("storage");
+
+			storage.DeleteBy(new Security { Code = "*" });
 		}
 
 		/// <summary>

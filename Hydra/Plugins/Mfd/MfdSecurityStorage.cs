@@ -71,5 +71,15 @@
 			if (mfdId != null)
 				_cacheByMfdId.SafeAdd(mfdId, key => security);
 		}
+
+		void ISecurityStorage.Delete(Security security)
+		{
+			throw new NotSupportedException();
+		}
+
+		void ISecurityStorage.DeleteBy(Security criteria)
+		{
+			throw new NotSupportedException();
+		}
 	}
 }

@@ -139,6 +139,14 @@
 		IMarketDataStorage GetStorage(Security security, Type dataType, object arg, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
 
 		/// <summary>
+		/// Получить хранилище инструментов.
+		/// </summary>
+		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
+		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
+		/// <returns>Хранилище инструментов.</returns>
+		ISecurityStorage GetSecurityStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary);
+
+		/// <summary>
 		/// Зарегистрировать хранилище тиковых сделок.
 		/// </summary>
 		/// <param name="storage">Хранилище тиковых сделок</param>

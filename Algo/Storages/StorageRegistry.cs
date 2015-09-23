@@ -2,12 +2,14 @@ namespace StockSharp.Algo.Storages
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 
 	using Ecng.Collections;
 	using Ecng.Common;
 	using Ecng.Reflection;
+	using Ecng.Reflection.Path;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
@@ -497,6 +499,7 @@ namespace StockSharp.Algo.Storages
 		private readonly SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>> _candleStorages = new SynchronizedDictionary<Tuple<SecurityId, IMarketDataStorageDrive>, IMarketDataStorage<CandleMessage>>();
 		private readonly SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>> _executionStorages = new SynchronizedDictionary<Tuple<SecurityId, ExecutionTypes, IMarketDataStorageDrive>, IMarketDataStorage<ExecutionMessage>>();
 		private readonly SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>> _newsStorages = new SynchronizedDictionary<IMarketDataStorageDrive, IMarketDataStorage<NewsMessage>>();
+		private readonly SynchronizedDictionary<IMarketDataDrive, ISecurityStorage> _securityStorages = new SynchronizedDictionary<IMarketDataDrive, ISecurityStorage>();
 
 		/// <summary>
 		/// Создать <see cref="StorageRegistry"/>.
@@ -1013,6 +1016,116 @@ namespace StockSharp.Algo.Storages
 
 				return new NewsStorage(_newsSecurity, serializer, key);
 			});
+		}
+
+		private class SecurityStorage : CollectionSecurityProvider, ISecurityStorage
+		{
+			private const string _format = "{Id};{Type};{Decimals};{PriceStep};{VolumeStep};{Multiplier};{Name};{ShortName};{UnderlyingSecurityId};{Class};{Currency};{OptionType};{Strike};{BinaryOptionType}";
+			private readonly string _file;
+
+			public SecurityStorage(IMarketDataDrive drive)
+				: base(Enumerable.Empty<Security>())
+			{
+				if (drive == null)
+					throw new ArgumentNullException("drive");
+
+				_file = Path.Combine(drive.Path, "instruments.csv");
+				Load();
+			}
+
+			private void Load()
+			{
+				if (!File.Exists(_file))
+					return;
+
+				var proxySet = _format
+					.Split(';')
+					.Select(s => MemberProxy.Create(typeof(Security), s.Substring(1, s.Length - 2)))
+					.ToArray();
+
+				CultureInfo.InvariantCulture.DoInCulture(() =>
+				{
+					var idGen = new SecurityIdGenerator();
+
+					foreach (var line in File.ReadAllLines(_file))
+					{
+						var security = new Security();
+
+						var cells = line.Split(';');
+
+						for (var i = 0; i < proxySet.Length; i++)
+						{
+							proxySet[i].SetValue(security, cells[i].To(proxySet[i].ReturnType));
+						}
+
+						var parts = idGen.Split(security.Id);
+						security.Code = parts.Item1;
+						security.Board = ExchangeBoard.GetOrCreateBoard(parts.Item2);
+
+						_securities.Add(security);
+					}
+				});
+			}
+
+			private readonly CachedSynchronizedSet<Security> _securities = new CachedSynchronizedSet<Security>();
+
+			protected override IEnumerable<Security> Securities
+			{
+				get { return _securities.Cache; }
+			}
+
+			public void Save(Security security)
+			{
+				if (!_securities.TryAdd(security))
+					return;
+
+				CultureInfo.InvariantCulture.DoInCulture(() =>
+				{
+					using (var file = File.AppendText(_file))
+						file.WriteLine(_format.PutEx(security));
+				});
+			}
+
+			public void Delete(Security security)
+			{
+				_securities.Remove(security);
+				Save();
+			}
+
+			public void DeleteBy(Security criteria)
+			{
+				_securities.RemoveRange(_securities.Cache.Filter(criteria));
+				Save();
+			}
+
+			private void Save()
+			{
+				var securities = _securities.Cache;
+
+				if (securities.Length == 0)
+					File.Delete(_file);
+
+				CultureInfo.InvariantCulture.DoInCulture(() =>
+				{
+					File.WriteAllLines(_file, securities.Select(s => _format.PutEx(s)));
+				});
+			}
+
+			public IEnumerable<string> GetSecurityIds()
+			{
+				return Securities.Select(s => s.Id);
+			}
+		}
+
+		/// <summary>
+		/// Получить хранилище инструментов.
+		/// </summary>
+		/// <param name="drive">Хранилище. Если значение равно <see langword="null"/>, то будет использоваться <see cref="DefaultDrive"/>.</param>
+		/// <param name="format">Тип формата. По-умолчанию передается <see cref="StorageFormats.Binary"/>.</param>
+		/// <returns>Хранилище инструментов.</returns>
+		public ISecurityStorage GetSecurityStorage(IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+		{
+			return _securityStorages.SafeAdd(drive ?? DefaultDrive, key => new SecurityStorage(key));
 		}
 	}
 }

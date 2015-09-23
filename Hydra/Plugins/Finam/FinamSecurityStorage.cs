@@ -73,5 +73,15 @@
 			if (finamId != null)
 				_cacheByFinamId.SafeAdd((long)finamId, key => security);
 		}
+
+		void ISecurityStorage.Delete(Security security)
+		{
+			throw new NotSupportedException();
+		}
+
+		void ISecurityStorage.DeleteBy(Security criteria)
+		{
+			throw new NotSupportedException();
+		}
 	}
 }

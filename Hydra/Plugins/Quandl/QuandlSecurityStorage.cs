@@ -86,5 +86,15 @@
 			if (sourceCode != null && secCode != null)
 				_cacheByQuandlId.SafeAdd(Tuple.Create(sourceCode, secCode), key => security);
 		}
+
+		void ISecurityStorage.Delete(Security security)
+		{
+			throw new NotSupportedException();
+		}
+
+		void ISecurityStorage.DeleteBy(Security criteria)
+		{
+			throw new NotSupportedException();
+		}
 	}
 }

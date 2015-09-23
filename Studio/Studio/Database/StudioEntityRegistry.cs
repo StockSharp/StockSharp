@@ -475,6 +475,16 @@ namespace StockSharp.Studio.Database
 			{
 				return new MultiEnumerator<Security>(base.GetEnumerator(), _registry.IndexSecurities.GetEnumerator(), _registry.ContinuousSecurities.GetEnumerator());
 			}
+
+			void ISecurityStorage.Delete(Security security)
+			{
+				Remove(security);
+			}
+
+			void ISecurityStorage.DeleteBy(Security criteria)
+			{
+				this.Filter(criteria).ForEach(s => Remove(s));
+			}
 		}
 
 		#endregion

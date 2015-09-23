@@ -10,6 +10,8 @@ namespace StockSharp.Algo.Storages
 	using Ecng.Data.Sql;
 	using Ecng.Serialization;
 
+	using MoreLinq;
+
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
@@ -256,6 +258,24 @@ namespace StockSharp.Algo.Storages
 			_registry.ExchangeBoards.Save(entity.Board);
 
 			base.OnAdd(entity);
+		}
+
+		/// <summary>
+		/// Удалить инструмент.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		public void Delete(Security security)
+		{
+			Remove(security);
+		}
+
+		/// <summary>
+		/// Удалить инструменты по критерию.
+		/// </summary>
+		/// <param name="criteria">Критерий.</param>
+		public void DeleteBy(Security criteria)
+		{
+			this.Filter(criteria).ForEach(s => Remove(s));
 		}
 	}
 }
