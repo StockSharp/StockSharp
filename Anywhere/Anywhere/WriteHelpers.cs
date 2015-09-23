@@ -4,8 +4,8 @@
     using System.IO;
     using System.Text;
 
-    using StockSharp.BusinessEntities;
-    using StockSharp.Messages;
+    using BusinessEntities;
+    using Messages;
 
     /// <summary>
     ///     The write functions to text files
@@ -53,7 +53,7 @@
 
         public static void WriteMarketDepth(this MarketDepth depth)
         {
-            DepthToFile(depth, Path.Combine(_outputFolder, $"{depth.Security.Code}_depth.txt"));
+            DepthToFile(depth, Path.Combine(_outputFolder, string.Format("{0}_depth.txt", depth.Security.Code)));
         }
 
         public static void WriteLevel1(this Security security)
@@ -83,7 +83,7 @@
 
         public static void WriteMarketDepth(this QuoteChangeMessage quotes)
         {
-            MemoryToFile(QuotesToString(quotes), Path.Combine(_outputFolder, $"{quotes.SecurityId.SecurityCode}_depth.txt"));
+            MemoryToFile(QuotesToString(quotes), Path.Combine(_outputFolder, string.Format("{0}_depth.txt", quotes.SecurityId.SecurityCode)));
         }
 
         public static void WriteLevel1(this Level1ChangeMessage level)
