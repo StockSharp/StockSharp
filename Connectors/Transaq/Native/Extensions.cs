@@ -11,8 +11,8 @@
 	static class Extensions
 	{
 		private const string _dateFormat = "dd.MM.yyyy";
-		private const string _timeFormat = "hh\\:mm\\:ss";
-		private const string _timeFormatMls = "hh\\:mm\\:ss\\.fff";
+		private const string _timeFormat = "h\\:mm\\:ss";
+		private const string _timeFormatMls = "h\\:mm\\:ss\\.fff";
 		private const string _dateTimeFormat = _dateFormat + " HH\\:mm\\:ss\\.fff";
 		
 		public static string ToMyString(this DateTime date)
