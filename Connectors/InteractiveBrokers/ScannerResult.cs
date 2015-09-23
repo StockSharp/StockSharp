@@ -3,37 +3,37 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Результат фильтра сканера, запускаемого через <see cref="IBTrader.SubscribeScanner"/>.
+	/// The filter result of scanner starting via <see cref="IBTrader.SubscribeScanner"/>.
 	/// </summary>
 	public class ScannerResult
 	{
 		/// <summary>
-		/// Идентификатор инструмента.
+		/// Security ID.
 		/// </summary>
 		public SecurityId SecurityId { get; set; }
 		
 		/// <summary>
-		/// Ранк.
+		/// Rank.
 		/// </summary>
 		public int Rank { get; set; }
 		
 		/// <summary>
-		/// Значение запроса.
+		/// The query value.
 		/// </summary>
 		public string Distance { get; set; }
 
 		/// <summary>
-		/// Значение запроса.
+		/// The query value.
 		/// </summary>
 		public string Benchmark { get; set; }
 
 		/// <summary>
-		/// Значение запроса.
+		/// The query value.
 		/// </summary>
 		public string Projection { get; set; }
 
 		/// <summary>
-		/// Описание комбинированного инструмента.
+		/// The combined instrument description.
 		/// </summary>
 		public string Legs { get; set; }
 	}

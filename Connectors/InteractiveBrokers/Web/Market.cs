@@ -1,29 +1,29 @@
 namespace StockSharp.InteractiveBrokers.Web
 {
 	/// <summary>
-	/// Информация о бирже.
+	/// Exchange info.
 	/// </summary>
 	public class Market
 	{
 		/// <summary>
-		/// Уникальный идентификатор.
+		/// Unique ID.
 		/// </summary>
 		public string Id;
 
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		public string Name;
 
 		/// <summary>
-		/// Страна.
+		/// Country.
 		/// </summary>
 		public string Country;
 
 		//public string Products;
 
 		/// <summary>
-		/// Часы работы.
+		/// Work hours.
 		/// </summary>
 		public string Hours;
 	}

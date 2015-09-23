@@ -3,62 +3,62 @@ namespace StockSharp.InteractiveBrokers.Web
 	using StockSharp.Messages;
 
 	/// <summary>
-	/// Детальная информация об инструменте.
+	/// Detailed information about the instrument.
 	/// </summary>
 	public class ProductDescripton
 	{
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		public string Name;
 
 		/// <summary>
-		/// Код.
+		/// Code.
 		/// </summary>
 		public string Symbol;
 
 		/// <summary>
-		/// Тип.
+		/// Type.
 		/// </summary>
 		public SecurityTypes Type;
 
 		/// <summary>
-		/// Страна.
+		/// Country.
 		/// </summary>
 		public string Country;
 
 		/// <summary>
-		/// Цена закрытия.
+		/// Closing price.
 		/// </summary>
 		public decimal ClosingPrice;
 
 		/// <summary>
-		/// Валюта.
+		/// Currency.
 		/// </summary>
 		public string Currency;
 
 		/// <summary>
-		/// Базовый актив.
+		/// Underlying asset.
 		/// </summary>
 		public string AssetId;
 
 		/// <summary>
-		/// Тип акции.
+		/// Type of shares.
 		/// </summary>
 		public string StockType;
 
 		/// <summary>
-		/// Маржинальное обеспечение.
+		/// Margin funds.
 		/// </summary>
 		public string InitialMargin;
 
 		/// <summary>
-		/// Маржинальное обеспечение.
+		/// Margin funds.
 		/// </summary>
 		public string MaintenanceMargin;
 
 		/// <summary>
-		/// Маржинальное обеспечение при короткой позиции.
+		/// Margin funds under short position.
 		/// </summary>
 		public string ShortMargin;
 	}

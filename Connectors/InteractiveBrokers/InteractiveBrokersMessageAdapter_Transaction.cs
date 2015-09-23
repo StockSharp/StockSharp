@@ -14,6 +14,9 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The messages adapter for InteractiveBrokers.
+	/// </summary>
 	public partial class InteractiveBrokersMessageAdapter
 	{
 		private readonly Dictionary<string, SecurityId> _secIdByTradeIds = new Dictionary<string, SecurityId>();
@@ -362,24 +365,13 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Call the exerciseOptions() method to exercise options. 
-		/// “SMART” is not an allowed exchange in exerciseOptions() calls, and that TWS does a moneyness request for the position in question whenever any API initiated exercise or lapse is attempted.
+		/// Call the exerciseOptions() method to exercise options. “SMART” is not an allowed exchange in exerciseOptions() calls, and that TWS does a moneyness request for the position in question whenever any API initiated exercise or lapse is attempted.
 		/// </summary>
 		/// <param name="message">this structure contains a description of the contract to be exercised.  If no multiplier is specified, a default of 100 is assumed.</param>
-		/// <param name="isExercise">this can have two values:
-		/// 1 = specifies exercise
-		/// 2 = specifies lapse
-		/// </param>
-		/// <param name="volume">the number of contracts to be exercised</param>
-		/// <param name="portfolioName">specifies whether your setting will override the system's natural action. For example, if your action is "exercise" and the option is not in-the-money, by natural action the option would not exercise. If you have override set to "yes" the natural action would be overridden and the out-of-the money option would be exercised. Values are: 
-		/// 0 = no
-		/// 1 = yes
-		/// </param>
-		/// <param name="isOverride">
-		/// specifies whether your setting will override the system's natural action. For example, if your action is "exercise" and the option is not in-the-money, by natural action the option would not exercise. If you have override set to "yes" the natural action would be overridden and the out-of-the money option would be exercised. Values are: 
-		/// 0 = no
-		/// 1 = yes
-		/// </param>
+		/// <param name="isExercise">this can have two values: 1 = specifies exercise 2 = specifies lapse.</param>
+		/// <param name="volume">the number of contracts to be exercised.</param>
+		/// <param name="portfolioName">specifies whether your setting will override the system's natural action. For example, if your action is "exercise" and the option is not in-the-money, by natural action the option would not exercise. If you have override set to "yes" the natural action would be overridden and the out-of-the money option would be exercised. Values are: 0 = no 1 = yes.</param>
+		/// <param name="isOverride">specifies whether your setting will override the system's natural action. For example, if your action is "exercise" and the option is not in-the-money, by natural action the option would not exercise. If you have override set to "yes" the natural action would be overridden and the out-of-the money option would be exercised. Values are: 0 = no 1 = yes.</param>
 		private void ExerciseOptions(OrderRegisterMessage message, bool isExercise, decimal volume, string portfolioName, bool isOverride)
 		{
 			//var option = SessionHolder.Securities[regMsg.SecurityId];
@@ -399,7 +391,7 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Call this function to start getting account values, portfolio, and last update time information.
 		/// </summary>
-		/// <param name="isSubscribe">If set to <see langword="true"/>, the client will start receiving account and portfolio updates. If set to <see langword="false"/>, the client will stop receiving this information.</param>
+		/// <param name="isSubscribe">If set to <see langword="true" />, the client will start receiving account and portfolio updates. If set to <see langword="false" />, the client will stop receiving this information.</param>
 		/// <param name="portfolioName">the account code for which to receive account and portfolio updates.</param>
 		private void SubscribePortfolio(string portfolioName, bool isSubscribe)
 		{
@@ -443,9 +435,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Call this method to request the open orders that were placed from this client. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper.
-		/// 
-		/// The client with a clientId of "0" will also receive the TWS-owned open orders. These orders will be associated with the client and a new orderId will be generated. This association will persist over multiple API and TWS sessions.
+		/// Call this method to request the open orders that were placed from this client. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper. The client with a clientId of "0" will also receive the TWS-owned open orders. These orders will be associated with the client and a new orderId will be generated. This association will persist over multiple API and TWS sessions.
 		/// </summary>
 		private void RequestOpenOrders()
 		{
@@ -453,20 +443,16 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Call this method to request that newly created TWS orders be implicitly associated with the client. When a new TWS order is created, the order will be associated with the client and fed back through the openOrder() and orderStatus() methods on the EWrapper.
-		/// 
-		/// TWS orders can only be bound to clients with a clientId of “0”.
+		/// Call this method to request that newly created TWS orders be implicitly associated with the client. When a new TWS order is created, the order will be associated with the client and fed back through the openOrder() and orderStatus() methods on the EWrapper. TWS orders can only be bound to clients with a clientId of “0”.
 		/// </summary>
-		/// <param name="autoBind">If set to <see langword="true"/>, newly created TWS orders will be implicitly associated with the client. If set to <see langword="false"/>, no association will be made.</param>
+		/// <param name="autoBind">If set to <see langword="true" />, newly created TWS orders will be implicitly associated with the client. If set to <see langword="false" />, no association will be made.</param>
 		private void RequestAutoOpenOrders(bool autoBind)
 		{
 			ProcessRequest(RequestMessages.RequestAllOpenOrders, 0, ServerVersions.V1, socket => socket.Send(autoBind));
 		}
 
 		/// <summary>
-		/// Call this method to request the open orders that were placed from all clients and also from TWS. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper.
-		/// 
-		/// No association is made between the returned orders and the requesting client.
+		/// Call this method to request the open orders that were placed from all clients and also from TWS. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper. No association is made between the returned orders and the requesting client.
 		/// </summary>
 		private void RequestAllOpenOrders()
 		{
@@ -474,9 +460,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Call this method to request the list of managed accounts. The list will be returned by the managedAccounts() function on the EWrapper.
-		/// 
-		/// This request can only be made when connected to a Financial Advisor (FA) account.
+		/// Call this method to request the list of managed accounts. The list will be returned by the managedAccounts() function on the EWrapper. This request can only be made when connected to a Financial Advisor (FA) account.
 		/// </summary>
 		private void RequestPortfolios()
 		{

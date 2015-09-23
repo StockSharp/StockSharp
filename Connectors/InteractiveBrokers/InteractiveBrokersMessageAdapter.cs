@@ -11,7 +11,7 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.Logging;
 
 	/// <summary>
-	/// Адаптер сообщений для InteractiveBrokers.
+	/// The messages adapter for InteractiveBrokers.
 	/// </summary>
 	public partial class InteractiveBrokersMessageAdapter : MessageAdapter
 	{
@@ -24,9 +24,9 @@ namespace StockSharp.InteractiveBrokers
 		private IBSocket _socket;
 
 		/// <summary>
-		/// Создать <see cref="InteractiveBrokersMessageAdapter"/>.
+		/// Initializes a new instance of the <see cref="InteractiveBrokersMessageAdapter"/>.
 		/// </summary>
-		/// <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+		/// <param name="transactionIdGenerator">Transaction id generator.</param>
 		public InteractiveBrokersMessageAdapter(IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
 		{
@@ -38,9 +38,9 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Создать для заявки типа <see cref="OrderTypes.Conditional"/> условие, которое поддерживается подключением.
+		/// Create condition for order type <see cref="OrderTypes.Conditional"/>, that supports the adapter.
 		/// </summary>
-		/// <returns>Условие для заявки. Если подключение не поддерживает заявки типа <see cref="OrderTypes.Conditional"/>, то будет возвращено <see langword="null"/>.</returns>
+		/// <returns>Order condition. If the connection does not support the order type <see cref="OrderTypes.Conditional"/>, it will be returned <see langword="null" />.</returns>
 		public override OrderCondition CreateOrderCondition()
 		{
 			return new IBOrderCondition();
@@ -105,7 +105,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Требуется ли дополнительное сообщение <see cref="SecurityLookupMessage"/> для получения списка инструментов.
+		/// <see cref="SecurityLookupMessage"/> required to get securities.
 		/// </summary>
 		public override bool SecurityLookupRequired
 		{
@@ -113,7 +113,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск инструментов.
+		/// Gets a value indicating whether the connector supports security lookup.
 		/// </summary>
 		protected override bool IsSupportNativeSecurityLookup
 		{
@@ -121,7 +121,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Поддерживается ли торговой системой поиск портфелей.
+		/// Gets a value indicating whether the connector supports position lookup.
 		/// </summary>
 		protected override bool IsSupportNativePortfolioLookup
 		{
@@ -129,9 +129,9 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Отправить сообщение.
+		/// Send message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnSendInMessage(Message message)
 		{
 			switch (message.Type)
@@ -485,9 +485,9 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Returns one next valid Id...
+		/// Returns one next valid Id.
 		/// </summary>
-		/// <param name="numberOfIds">Has No Effect</param>
+		/// <param name="numberOfIds">Has No Effect.</param>
 		private void RequestIds(int numberOfIds)
 		{
 			ProcessRequest(RequestMessages.RequestIds, 0, ServerVersions.V1, socket => socket.Send(numberOfIds));

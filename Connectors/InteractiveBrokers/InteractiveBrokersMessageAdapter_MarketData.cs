@@ -14,6 +14,9 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
+	/// <summary>
+	/// The messages adapter for InteractiveBrokers.
+	/// </summary>
 	public partial class InteractiveBrokersMessageAdapter
 	{
 		private readonly Dictionary<SecurityId, Tuple<SortedDictionary<decimal, decimal>, SortedDictionary<decimal, decimal>>> _depths = new Dictionary<SecurityId, Tuple<SortedDictionary<decimal, decimal>, SortedDictionary<decimal, decimal>>>();
@@ -157,9 +160,9 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Запустить сканер инструментов на основе заданных параметров.
+		/// To start the instrument scanner based on specified parameters.
 		/// </summary>
-		/// <param name="message">Настройки фильтра сканера инструментов.</param>
+		/// <param name="message">Instrument scanner filter settings.</param>
 		private void SubscribeScanner(ScannerMarketDataMessage message)
 		{
 			if (message == null)
@@ -237,7 +240,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Остановить сканер инструментов, запущенный ранее через <see cref="SubscribeScanner"/>.
+		/// To stop the instrument scanner previously started via <see cref="SubscribeScanner"/>.
 		/// </summary>
 		private void UnSubscribeScanner(long requestId)
 		{
@@ -257,7 +260,7 @@ namespace StockSharp.InteractiveBrokers
 		/// Call this method to request market data. The market data will be returned by the tickPrice, tickSize, tickOptionComputation(), tickGeneric(), tickString() and tickEFP() methods.
 		/// </summary>
 		/// <param name="message">this structure contains a description of the contract for which market data is being requested.</param>
-		/// <param name="genericFields">comma delimited list of generic tick types. Tick types can be found here: (new Generic Tick Types page) </param>
+		/// <param name="genericFields">comma delimited list of generic tick types. Tick types can be found here: (new Generic Tick Types page).</param>
 		/// <param name="snapshot">Allows client to request snapshot market data.</param>
 		/// <param name="marketDataOff">Market Data Off - used in conjunction with RTVolume Generic tick type causes only volume data to be sent.</param>
 		private void SubscribeMarketData(MarketDataMessage message, IEnumerable<GenericFieldTypes> genericFields, bool snapshot, bool marketDataOff)
@@ -366,7 +369,7 @@ namespace StockSharp.InteractiveBrokers
 		//}
 
 		/// <summary>
-		/// used for reqHistoricalData
+		/// used for reqHistoricalData.
 		/// </summary>
 		private static string ConvertPeriodtoIb(DateTimeOffset startTime, DateTimeOffset endTime)
 		{
@@ -400,34 +403,21 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Подписаться на получение исторических значений инструмента с заданной периодичностью.
+		/// To subscribe for instrument historic values geting at specified intervals.
 		/// </summary>
-		/// <param name="message">Сообщение о подписке или отписки на маркет-данные.</param>
-		/// <param name="field">Поле маркет-данных. Поддерживаются следующие значения:
+		/// <param name="message">The message about subscription or unsubscription for market data.</param>
+		/// <param name="field">The market data field. Following values are supported:
 		/// <list type="number">
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Trades"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Bid"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Ask"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Midpoint"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.BidAsk"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.ImpliedVolatility"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.HistoricalVolatility"/>.</description>
-		/// </item>
-		/// </list></param>
-		/// <param name="useRth">Получать данные только по торговому времени. По-умолчанию используется торговое время.</param>
+		///	<item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Trades" />.</description></item> 
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Bid" />.</description></item>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Ask" />.</description></item>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Midpoint" />.</description></item>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.BidAsk" />.</description></item>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.ImpliedVolatility" />.</description></item> 
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.HistoricalVolatility" />.</description></item>
+		/// </list>.
+		/// </param>
+		/// <param name="useRth">To get data only by the trading time. By default the trading time is used.</param>
 		private void SubscribeHistoricalCandles(MarketDataMessage message, Level1Fields field, bool useRth = true)
 		{
 			if (message == null)
@@ -491,26 +481,17 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Подписаться на получение свечек реального времени.
+		/// To subscribe for real-time candles receiving.
 		/// </summary>
 		/// <param name="message"></param>
-		/// <param name="field">Поля маркет-данных, на основе которых будут строяться свечи. Поддерживаются следующие значения:
+		/// <param name="field">Market data fields upon which candles will be created. The following values are supported:
 		/// <list type="number">
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Trades"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Bid"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Ask"/>.</description>
-		/// </item>
-		/// <item>
-		/// <description><see cref="CandleDataTypes.Midpoint"/>.</description>
-		/// </item>
-		/// </list>
-		/// </param>
-		/// <param name="useRth">Строить свечи только по торговому времени. По-умолчанию используется торговое время.</param>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Trades" />.</description></item>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Bid" />.</description></item>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Ask" />.</description></item>
+		/// <item><description><see cref="F:StockSharp.InteractiveBrokers.CandleDataTypes.Midpoint" />.</description></item>
+		/// </list>.</param>
+		/// <param name="useRth">To create candles only by the trading time. By default the trading time is used.</param>
 		private void SubscribeRealTimeCandles(MarketDataMessage message, Level1Fields field = CandleDataTypes.Trades, bool useRth = true)
 		{
 			if (message == null)
@@ -549,7 +530,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="SubscribeRealTimeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeRealTimeCandles"/>.
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="requestId"></param>
@@ -612,7 +593,7 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Call this method to start receiving news bulletins. Each bulletin will be returned by the updateNewsBulletin() method.
 		/// </summary>
-		/// <param name="allMessages">if set to <see langword="true"/>, returns all the existing bulletins for the current day and any new ones. IF set to <see langword="false"/>, will only return new bulletins.</param>
+		/// <param name="allMessages">if set to <see langword="true" />, returns all the existing bulletins for the current day and any new ones. IF set to <see langword="false" />, will only return new bulletins.</param>
 		private void SubscribeNewsBulletins(bool allMessages)
 		{
 			ProcessRequest(RequestMessages.SubscribeNewsBulletins, 0, ServerVersions.V1, socket => socket.Send(allMessages));
@@ -657,7 +638,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Подписаться на получение отчетов по рынку для заданного инструмента.
+		/// To subscribe for receiving of market reports by the specified instrument.
 		/// </summary>
 		/// <param name="message"></param>
 		private void SubscribeFundamentalReport(FundamentalReportMarketDataMessage message)
@@ -681,7 +662,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Остановить подписку на получение отчетов по рынку для заданного инструмента, созданная ранее через <see cref="SubscribeFundamentalReport"/>.
+		/// To stop subscription for receiving of market reports by the specified instrument, created earlier via <see cref="SubscribeFundamentalReport"/>.
 		/// </summary>
 		/// <param name="requestId"></param>
 		private void UnSubscribeFundamentalReport(long requestId)
@@ -691,7 +672,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Подписаться на получение подразумеваемой волатильности для заданного инструмента.
+		/// To subscribe for receiving of the implied volatility for the specified instrument.
 		/// </summary>
 		/// <param name="message"></param>
 		private void SubscribeCalculateImpliedVolatility(OptionCalcMarketDataMessage message)
@@ -711,8 +692,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Остановить подписку на получение подразумеваемой волатильности для заданного инструмента,
-		/// созданная ранее через <see cref="SubscribeCalculateImpliedVolatility"/>.
+		/// To stop subscription for receiving of the implied volatility for the specified instrument, created earlier via <see cref="SubscribeCalculateImpliedVolatility"/>.
 		/// </summary>
 		/// <param name="requestId"></param>
 		private void UnSubscribeCalculateImpliedVolatility(long requestId)
@@ -722,9 +702,9 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Подписаться на получение греков для заданного инструмента.
+		/// To subscribe for Greeks getting for the specified instrument.
 		/// </summary>
-		/// <param name="message">Инструмент.</param>
+		/// <param name="message">Security.</param>
 		private void SubscribeCalculateOptionPrice(OptionCalcMarketDataMessage message)
 		{
 			if (message == null)
@@ -744,8 +724,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Остановить подписку на получение греков для заданного инструмента,
-		/// созданная ранее через <see cref="SubscribeCalculateOptionPrice"/>.
+		/// To stop subscription for receiving of the Greeks for the specified instrument, created earlier via <see cref="SubscribeCalculateOptionPrice"/>.
 		/// </summary>
 		/// <param name="requestId"></param>
 		private void UnSubscribeCalculateOptionPrice(long requestId)

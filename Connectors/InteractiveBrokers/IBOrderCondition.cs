@@ -15,13 +15,13 @@ namespace StockSharp.InteractiveBrokers
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 	/// <summary>
-	/// Условие заявок, специфичных для <see cref="InteractiveBrokers"/>.
+	/// <see cref="InteractiveBrokers"/> order condition.
 	/// </summary>
 	[DisplayNameLoc(LocalizedStrings.Str2264Key, "Interactive Brokers")]
 	public class IBOrderCondition : OrderCondition
 	{
 		/// <summary>
-		/// Базовое условие.
+		/// Base condition.
 		/// </summary>
 		public abstract class BaseCondition
 		{
@@ -36,11 +36,11 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Получить значение параметра.
+			/// Get parameter value.
 			/// </summary>
-			/// <typeparam name="T">Тип значения.</typeparam>
-			/// <param name="name">Название параметра.</param>
-			/// <returns>Значение параметра.</returns>
+			/// <typeparam name="T">Value type.</typeparam>
+			/// <param name="name">Parameter name.</param>
+			/// <returns>The parameter value.</returns>
 			protected T GetValue<T>(string name)
 			{
 				if (!_condition.Parameters.ContainsKey(name))
@@ -50,22 +50,22 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Получить значение параметра. Если значение не существует, будет возвращено <see langword="null"/>.
+			/// To get the parameter value. If the value does not exist the <see langword="null" /> will be returned.
 			/// </summary>
-			/// <typeparam name="T">Тип значения.</typeparam>
-			/// <param name="name">Название параметра.</param>
-			/// <returns>Значение параметра.</returns>
+			/// <typeparam name="T">Value type.</typeparam>
+			/// <param name="name">Parameter name.</param>
+			/// <returns>The parameter value.</returns>
 			protected T TryGetValue<T>(string name)
 			{
 				return (T)_condition.Parameters.TryGetValue(name);
 			}
 
 			/// <summary>
-			/// Установить новое значение параметра.
+			/// To set a new parameter value.
 			/// </summary>
-			/// <typeparam name="T">Тип значения.</typeparam>
-			/// <param name="name">Название параметра.</param>
-			/// <param name="value">Значение параметра.</param>
+			/// <typeparam name="T">Value type.</typeparam>
+			/// <param name="name">Parameter name.</param>
+			/// <param name="value">The parameter value.</param>
 			protected void SetValue<T>(string name, T value)
 			{
 				_condition.Parameters[name] = value;
@@ -73,69 +73,69 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Расширенные типы заявок, специфичных для <see cref="IBTrader"/>.
+		/// Extended orders types which are specific to <see cref="IBTrader"/>.
 		/// </summary>
 		public enum ExtendedOrderTypes
 		{
 			/// <summary>
-			/// Исполнить по рыночной цене, если цена закрытия превысила ожидаемую цену.
+			/// To match at the market price, if the closing price is higher than the expected price.
 			/// </summary>
 			/// <remarks>
-			/// Не действует для US <see cref="SecurityTypes.Future"/>, US <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>.
+			/// Not valid for US <see cref="SecurityTypes.Future"/>, US <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2312Key)]
 			MarketOnClose,
 
 			/// <summary>
-			/// Исполнить по заданной цене, если цена закрытия превысила ожидаемую цену.
+			/// To match at the specified price, if the closing price is higher than the expected price.
 			/// </summary>
 			/// <remarks>
-			/// Не действует для US <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Stock"/>.
+			/// Not valid for US <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Stock"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.LimitOnCloseKey)]
 			LimitOnClose,
 
 			/// <summary>
-			/// По лучшей цене.
+			/// At best price.
 			/// </summary>
 			/// <remarks>
-			/// Действует для <see cref="SecurityTypes.Stock"/>.
+			/// Valid until <see cref="SecurityTypes.Stock"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2314Key)]
 			PeggedToMarket,
 
 			/// <summary>
-			/// Стоп с рыночной ценой активации.
+			/// The stop with the market activation price.
 			/// </summary>
 			/// <remarks>
-			/// Действует для <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>, <see cref="SecurityTypes.Warrant"/>.
+			/// Valid for <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>, <see cref="SecurityTypes.Warrant"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.Str242Key)]
 			Stop,
 
 			/// <summary>
-			/// Стоп с заданной ценой активации.
+			/// Stop with the specified activation price.
 			/// </summary>
 			/// <remarks>
-			/// Действует для <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>.
+			/// Valid for <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.Str1733Key)]
 			StopLimit,
 
 			/// <summary>
-			/// Скользящий стоп.
+			/// Trailing stop-loss.
 			/// </summary>
 			/// <remarks>
-			/// Действует для <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>, <see cref="SecurityTypes.Warrant"/>.
+			/// Valid for <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>, <see cref="SecurityTypes.Warrant"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.TrailingKey)]
 			TrailingStop,
 
 			/// <summary>
-			/// Со сдвигом.
+			/// With offset.
 			/// </summary>
 			/// <remarks>
-			/// Действует для <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>.
+			/// Valid for <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2316Key)]
 			Relative,
@@ -144,83 +144,83 @@ namespace StockSharp.InteractiveBrokers
 			/// VWAP.
 			/// </summary>
 			/// <remarks>
-			/// Действует для <see cref="SecurityTypes.Stock"/>.
+			/// Valid until <see cref="SecurityTypes.Stock"/>.
 			/// </remarks>
 			[EnumDisplayName("VWAP")]
 			VolumeWeightedAveragePrice,
 
 			/// <summary>
-			/// Лимитированный скользящий стоп.
+			/// Limit trailing stop.
 			/// </summary>
 			/// <remarks>
-			/// Действует для <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>, <see cref="SecurityTypes.Warrant"/>.
+			/// Valid for <see cref="SecurityTypes.Currency"/>, <see cref="SecurityTypes.Future"/>, <see cref="SecurityTypes.Option"/>, <see cref="SecurityTypes.Stock"/>, <see cref="SecurityTypes.Warrant"/>.
 			/// </remarks>
 			[EnumDisplayNameLoc(LocalizedStrings.TrailingStopLimitKey)]
 			TrailingStopLimit,
 
 			/// <summary>
-			/// Волатильность.
+			/// Volatility.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.VolatilityKey)]
 			Volatility,
 
 			/// <summary>
-			/// Используется для дельта заявок.
+			/// It used for delta orders.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str1658Key)]
 			Empty,
 
 			/// <summary>
-			/// Используется для дельта-нейтральных типов заявок.
+			/// It used for delta neutral orders types.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2319Key)]
 			Default,
 
 			/// <summary>
-			/// Изменяемый на шаг цены.
+			/// To be changed on price increment.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2320Key)]
 			Scale,
 
 			/// <summary>
-			/// С рыночной ценой при исполнении условия.
+			/// With the market price when the condition is fulfilled.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.MarketOnTouchKey)]
 			MarketIfTouched,
 
 			/// <summary>
-			/// С заданной ценой при исполнении условия.
+			/// With the specified price when the condition is fulfilled.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.LimitOnTouchKey)]
 			LimitIfTouched
 		}
 
 		/// <summary>
-		/// Режимы заявок типа OCA (One-Cancels All).
+		/// Orders modes such as OCA (One-Cancels All).
 		/// </summary>
 		public enum OcaTypes
 		{
 			/// <summary>
-			/// Отменить все оставшиеся блоки.
+			/// To cancel all remaining blocks.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.CancelAllKey)]
 			CancelAll = 1,
 
 			/// <summary>
-			/// Оставшиеся заявки пропорционально уменьшить на размер блока.
+			/// The remaining orders proportionally to decrease by the size of the block.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2324Key)]
 			ReduceWithBlock = 2,
 
 			/// <summary>
-			/// Оставшиеся заявки пропорционально уменьшить на размер вне блока.
+			/// The remaining orders proportionally to decrease by the size out of the block.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2325Key)]
 			ReduceWithNoBlock = 3
 		}
 
 		/// <summary>
-		/// Настройки OCA (One-Cancels All).
+		/// OCA (One-Cancels All) settings.
 		/// </summary>
 		public class OcaCondition : BaseCondition
 		{
@@ -230,7 +230,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Идентификатор группы.
+			/// Group ID.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.GroupIdKey)]
 			[DescriptionLoc(LocalizedStrings.GroupIdKey, true)]
@@ -241,7 +241,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Тип группы.
+			/// Group type.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.GroupTypeKey)]
 			[DescriptionLoc(LocalizedStrings.GroupTypeKey, true)]
@@ -253,146 +253,145 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условия для активации стоп-заявок.
+		/// Conditions for stop orders activation.
 		/// </summary>
 		public enum TriggerMethods
 		{
 			/// <summary>
-			/// Для NASDAQ <see cref="SecurityTypes.Stock"/> и US <see cref="SecurityTypes.Option"/> используется условие <see cref="DoubleBidAsk"/>.
-			/// Иначе, используется условие <see cref="BidAsk"/>.
+			/// For NASDAQ <see cref="SecurityTypes.Stock"/> and US <see cref="SecurityTypes.Option"/> the <see cref="TriggerMethods.DoubleBidAsk"/> condition is used. Otherwise, the <see cref="TriggerMethods.BidAsk"/> condition is used.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2319Key)]
 			Default = 0,
 
 			/// <summary>
-			/// Двойное превышение или понижение текущей лучшей цены перед стоп-ценой.
+			/// Double increase or decrease of the current best price before the stop price.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2330Key)]
 			DoubleBidAsk = 1,
 
 			/// <summary>
-			/// Превышение или понижение цены последней сделки перед стоп-ценой.
+			/// Increase or decrease of the last trade price before the stop price.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2331Key)]
 			Last = 2,
 
 			/// <summary>
-			/// Двойное превышение или понижение цены последней сделки перед стоп-ценой.
+			/// Double increase or decrease of the last trade price before the stop price.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2332Key)]
 			DoubleLast = 3,
 
 			/// <summary>
-			/// Превышение или понижение текущей лучшей цены перед стоп-ценой.
+			/// Increase or decrease of the current best price before the stop price.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str273Key)]
 			BidAsk = 4,
 
 			/// <summary>
-			/// Превышение или понижение текущей лучшей цены или цены последней сделки перед стоп-ценой.
+			/// Increase or decrease of the current best price or the last trade price before the stop price.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2333Key)]
 			LastOrBidAsk = 7,
 
 			/// <summary>
-			/// Превышение или понижение середины спреда перед стоп-ценой.
+			/// Increase or decrease of the mid-spread before the stop price.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str500Key)]
 			MidpointMethod = 8
 		}
 
 		/// <summary>
-		/// Описания типа трейдера по правилу 80A.
+		/// Descriptions of trader type by the 80A rule.
 		/// </summary>
 		public enum AgentDescriptions
 		{
 			/// <summary>
-			/// Частный трейдер.
+			/// Private trader.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2334Key)]
 			Individual,
 
 			/// <summary>
-			/// Агенство.
+			/// Agency.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.AgencyKey)]
 			Agency,
 
 			/// <summary>
-			/// Агенство или другой тип.
+			/// Agency of other type.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2336Key)]
 			AgentOtherMember,
 
 			/// <summary>
-			/// Частный PTIA.
+			/// Individual PTIA.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2337Key)]
 			IndividualPTIA,
 
 			/// <summary>
-			/// Агенство PTIA.
+			/// Agency PTIA.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2338Key)]
 			AgencyPTIA,
 
 			/// <summary>
-			/// Агенство или другой тип PTIA.
+			/// Agency of other type PTIA.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2339Key)]
 			AgentOtherMemberPTIA,
 
 			/// <summary>
-			/// Частный PT.
+			/// Individual PT.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2340Key)]
 			IndividualPT,
 
 			/// <summary>
-			/// Агенство PT.
+			/// Agency PT.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2341Key)]
 			AgencyPT,
 
 			/// <summary>
-			/// Агенство или другой тип PT.
+			/// Agency of other type PT.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2342Key)]
 			AgentOtherMemberPT,
 		}
 
 		/// <summary>
-		/// Методы автоматических расчетов объемов для группы счетов.
+		/// Methods for volumes automatic calculation for the accounts group.
 		/// </summary>
 		public enum FinancialAdvisorAllocations
 		{
 			/// <summary>
-			/// Процентное изменение.
+			/// Percentage change.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2343Key)]
 			PercentChange,
 
 			/// <summary>
-			/// Через свободные денежные средства плюс заемные.
+			/// Using free cash plus borrowed.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.EquityKey)]
 			AvailableEquity,
 
 			/// <summary>
-			/// Через свободные денежные средства.
+			/// Using free cash.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2345Key)]
 			NetLiquidity,
 
 			/// <summary>
-			/// Равный объем.
+			/// An equal volume.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.VolumeKey)]
 			EqualQuantity,
 		}
 
 		/// <summary>
-		/// Найстройки для автоматического расчета объема заявок.
+		/// Settings for automatic order volume calculation.
 		/// </summary>
 		public class FinancialAdvisorCondition : BaseCondition
 		{
@@ -402,7 +401,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Группа.
+			/// Group.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.GroupKey)]
 			[DescriptionLoc(LocalizedStrings.GroupKey, true)]
@@ -413,7 +412,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Профайл.
+			/// Profile.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.ProfileKey)]
 			[DescriptionLoc(LocalizedStrings.ProfileKey, true)]
@@ -424,7 +423,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Метод расчета.
+			/// Calculation method.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2349Key)]
 			[DescriptionLoc(LocalizedStrings.Str2349Key, true)]
@@ -435,7 +434,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Процент отношения к заполнению объема.
+			/// Ration percentage to filled volume.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2351Key)]
 			[DescriptionLoc(LocalizedStrings.Str2351Key, true)]
@@ -447,67 +446,67 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Отправители.
+		/// Senders.
 		/// </summary>
 		public enum OrderOrigins
 		{
 			/// <summary>
-			/// Клиент.
+			/// Client.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.ClientKey)]
 			Customer,
 
 			/// <summary>
-			/// Фирма.
+			/// Firm.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.FirmKey)]
 			Firm
 		}
 
 		/// <summary>
-		/// Торги.
+		/// Trading.
 		/// </summary>
 		public enum AuctionStrategies
 		{
 			/// <summary>
-			/// Совпадение.
+			/// Match.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2355Key)]
 			AuctionMatch,
 
 			/// <summary>
-			/// Лучше.
+			/// Better.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.BetterKey)]
 			AuctionImprovement,
 
 			/// <summary>
-			/// Прозрачный.
+			/// Transparent.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.TransparentKey)]
 			AuctionTransparent
 		}
 
 		/// <summary>
-		/// Тайм-фреймы волатильности.
+		/// Volatility timeframes.
 		/// </summary>
 		public enum VolatilityTimeFrames
 		{
 			/// <summary>
-			/// Дневной.
+			/// Daily.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.DailyKey)]
 			Daily = 1,
 
 			/// <summary>
-			/// Среднегодовой.
+			/// Average annual.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2359Key)]
 			Annual = 2
 		}
 
 		/// <summary>
-		/// Настройки для заявок типа <see cref="ExtendedOrderTypes.Volatility"/>.
+		/// The settings for the orders type <see cref="ExtendedOrderTypes.Volatility"/>.
 		/// </summary>
 		public class VolatilityCondition : BaseCondition
 		{
@@ -523,7 +522,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Обновлять цену лимита при изменении базового актива. 
+			/// Refresh limit price if underlying asset price has changed.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2360Key)]
 			[DescriptionLoc(LocalizedStrings.Str2361Key)]
@@ -534,7 +533,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Средняя лучшая цена или лучшая цена.
+			/// Average best price or best price.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2362Key)]
 			[DescriptionLoc(LocalizedStrings.Str2363Key)]
@@ -545,7 +544,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Волатильность.
+			/// Volatility.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.VolatilityKey)]
 			[DescriptionLoc(LocalizedStrings.VolatilityKey, true)]
@@ -556,7 +555,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Тайм-фрейм волатильности. 
+			/// Volatility time-frame.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2365Key)]
 			[DescriptionLoc(LocalizedStrings.Str2366Key)]
@@ -567,7 +566,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Тип заявки.
+			/// Order type.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str132Key)]
 			[DescriptionLoc(LocalizedStrings.Str132Key, true)]
@@ -578,7 +577,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Расширенный тип заявки.
+			/// Extended type of order.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2368Key)]
 			[DescriptionLoc(LocalizedStrings.Str2369Key)]
@@ -589,7 +588,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Стоп-цена. 
+			/// Stop-price.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.StopPriceKey)]
 			[DescriptionLoc(LocalizedStrings.StopPriceKey, true)]
@@ -600,7 +599,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			[DisplayName("ConId")]
 			[Description("ConId.")]
@@ -611,7 +609,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Фирма.
+			/// Firm.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.FirmKey)]
 			[DescriptionLoc(LocalizedStrings.FirmKey, true)]
@@ -622,7 +620,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Клиринговый счет.
+			/// Clearing account.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2372Key)]
 			[DescriptionLoc(LocalizedStrings.Str2372Key, true)]
@@ -633,7 +631,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Клиринговая цель.
+			/// Clearing chain.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2374Key)]
 			[DescriptionLoc(LocalizedStrings.Str2374Key, true)]
@@ -644,7 +642,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Является ли заявка короткой продажей.
+			/// Is the order a short sell.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2376Key)]
 			[DescriptionLoc(LocalizedStrings.Str2377Key)]
@@ -655,7 +653,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Условие для коротких продаж комбинированных ног.
+			/// Condition for short sales of combined legs.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2378Key)]
 			[DescriptionLoc(LocalizedStrings.Str2379Key)]
@@ -663,31 +661,31 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Типы коротких продаж комбинированных ног.
+		/// Short sales types of combined legs.
 		/// </summary>
 		public enum ShortSaleSlots
 		{
 			/// <summary>
-			/// Частный трейдер или нет короткая нога.
+			/// Private trader or not short leg.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str1658Key)]
 			Unapplicable,
 
 			/// <summary>
-			/// Клиринговый брокер.
+			/// Clearing broker.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.ClearingKey)]
 			ClearingBroker,
 
 			/// <summary>
-			/// Другое.
+			/// Other.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2381Key)]
 			ThirdParty
 		}
 
 		/// <summary>
-		/// Условие для коротких продаж комбинированных ног.
+		/// Condition for short sales of combined legs.
 		/// </summary>
 		public class ShortSaleCondition : BaseCondition
 		{
@@ -706,7 +704,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Тип короткой продажи комбинированных ног.
+			/// Short sale type of combined legs.
 			/// </summary>
 			public ShortSaleSlots Slot
 			{
@@ -715,10 +713,10 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Уточнение типа короткой продажи комбинированных ног.
+			/// Clarification of the short sale type of combined legs.
 			/// </summary>
 			/// <remarks>
-			/// Используется при <see cref="Slot"/> равным <see cref="ShortSaleSlots.ThirdParty"/>.
+			/// Used when <see cref="ShortSaleCondition.Slot"/> equals to <see cref="ShortSaleSlots.ThirdParty"/>.
 			/// </remarks>
 			public string Location
 			{
@@ -727,7 +725,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Exempt Code for Short Sale Exemption Orders
+			/// Exempt Code for Short Sale Exemption Orders.
 			/// </summary>
 			public int ExemptCode
 			{
@@ -736,7 +734,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Является ли заявка открывающей или закрывающей.
+			/// Is the order opening or closing.
 			/// </summary>
 			public bool? IsOpenOrClose
 			{
@@ -746,7 +744,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Настройки EFP заявок.
+		/// EFP orders settings.
 		/// </summary>
 		public class ComboCondition : BaseCondition
 		{
@@ -758,7 +756,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Базовые пункты.
+			/// Basic points.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2382Key)]
 			[DescriptionLoc(LocalizedStrings.Str2382Key, true)]
@@ -769,7 +767,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Тип базовых пунктов.
+			/// Base points type.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2382Key)]
 			[DescriptionLoc(LocalizedStrings.Str2382Key, true)]
@@ -780,7 +778,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Описание ног.
+			/// Legs description.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2386Key)]
 			[DescriptionLoc(LocalizedStrings.Str2386Key, true)]
@@ -791,7 +789,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Цены ног.
+			/// Legs prices.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2388Key)]
 			[DescriptionLoc(LocalizedStrings.Str2388Key, true)]
@@ -802,7 +800,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Условие для коротких продаж.
+			/// Condition for short sales.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2378Key)]
 			[DescriptionLoc(LocalizedStrings.Str2390Key)]
@@ -814,7 +812,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Настройки для заявок, отправляемых в Smart биржу.
+		/// Settings for orders that are sent to the Smart exchange.
 		/// </summary>
 		public class SmartRoutingCondition : BaseCondition
 		{
@@ -829,7 +827,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Диапазон сдвига цены заявки.
+			/// Order price shift range.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2391Key)]
 			[DescriptionLoc(LocalizedStrings.Str2392Key)]
@@ -840,7 +838,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Электронные торги.
+			/// Electronic trading.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.ElectronicTradingKey)]
 			[DescriptionLoc(LocalizedStrings.ElectronicTradingKey, true)]
@@ -851,7 +849,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Котировки фирмы.
+			/// Company quotes.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2395Key)]
 			[DescriptionLoc(LocalizedStrings.Str2395Key, true)]
@@ -862,7 +860,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Максимальный сдвиг от лучших пар.
+			/// Maximum offset from best pairs.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2397Key)]
 			[DescriptionLoc(LocalizedStrings.Str2398Key)]
@@ -873,10 +871,10 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Удерживать в стакане.
+			/// Keep in market depth.
 			/// </summary>
 			/// <remarks>
-			/// Только для биржи IBDARK.
+			/// Only for the IBDARK exchange.
 			/// </remarks>
 			[DisplayNameLoc(LocalizedStrings.Str2399Key)]
 			[DescriptionLoc(LocalizedStrings.Str2400Key)]
@@ -887,7 +885,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Прямая отправка ASX заявок.
+			/// Direct sending of ASX orders.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2401Key)]
 			[DescriptionLoc(LocalizedStrings.Str2402Key)]
@@ -898,7 +896,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Параметры.
+			/// Parameters.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str225Key)]
 			[DescriptionLoc(LocalizedStrings.Str2403Key)]
@@ -910,7 +908,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условие для изменяемой заявки.
+		/// Condition for order being changed.
 		/// </summary>
 		public class ScaleCondition : BaseCondition
 		{
@@ -923,7 +921,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// split order into X buckets
+			/// split order into X buckets.
 			/// </summary>
 			public int? InitLevelSize
 			{
@@ -932,7 +930,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// split order so each bucket is of the size X
+			/// split order so each bucket is of the size X.
 			/// </summary>
 			public int? SubsLevelSize
 			{
@@ -941,7 +939,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// price increment per bucket
+			/// price increment per bucket.
 			/// </summary>
 			public decimal? PriceIncrement
 			{
@@ -950,7 +948,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public decimal? PriceAdjustValue
 			{
@@ -959,7 +956,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public int PriceAdjustInterval
 			{
@@ -968,7 +964,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public decimal? ProfitOffset
 			{
@@ -977,7 +972,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public bool AutoReset
 			{
@@ -986,7 +980,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public int? InitPosition
 			{
@@ -995,7 +988,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public int? InitFillQty
 			{
@@ -1004,7 +996,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public bool RandomPercent
 			{
@@ -1013,7 +1004,6 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// 
 			/// </summary>
 			public string Table
 			{
@@ -1023,37 +1013,37 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Типы параметров для хеджирования.
+		/// Parameters types for hedging.
 		/// </summary>
 		public enum HedgeTypes
 		{
 			/// <summary>
-			/// Дельта.
+			/// Delta.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.DeltaKey)]
 			Delta,
 
 			/// <summary>
-			/// Бета.
+			/// Beta.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.BetaKey)]
 			Beta,
 
 			/// <summary>
-			/// Валюта.
+			/// Currency.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.CurrencyKey)]
 			FX,
 
 			/// <summary>
-			/// Пара.
+			/// Pair.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.PairKey)]
 			Pair
 		}
 
 		/// <summary>
-		/// Условие для хедж-заявок.
+		/// Condition for hedge-orders.
 		/// </summary>
 		public class HedgeCondition : BaseCondition
 		{
@@ -1063,7 +1053,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Тип параметра для хеджирования.
+			/// Parameter type for hedging.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.ParameterTypeKey)]
 			[DescriptionLoc(LocalizedStrings.Str2406Key)]
@@ -1074,7 +1064,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Параметр.
+			/// Parameter.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.ParameterKey)]
 			[DescriptionLoc(LocalizedStrings.ParameterKey, true)]
@@ -1086,7 +1076,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условие для алго-заявок.
+		/// Condition for algo-orders.
 		/// </summary>
 		public class AlgoCondition : BaseCondition
 		{
@@ -1096,7 +1086,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Стратегия.
+			/// Strategy.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.StrategyKey)]
 			[DescriptionLoc(LocalizedStrings.StrategyKey, true)]
@@ -1107,7 +1097,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Параметры.
+			/// Parameters.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str225Key)]
 			[DescriptionLoc(LocalizedStrings.Str2403Key)]
@@ -1119,34 +1109,34 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Цели клиринга.
+		/// Clearing objectives.
 		/// </summary>
 		public enum ClearingIntents
 		{
 			/// <summary>
-			/// Брокер.
+			/// Broker.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.BrokerKey)]
 			Broker,
 
 			/// <summary>
-			/// Другое.
+			/// Other.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2381Key)]
 			Away,
 
 			/// <summary>
-			/// Послеторговое размещение.
+			/// Post-trading placement.
 			/// </summary>
 			[EnumDisplayNameLoc(LocalizedStrings.Str2411Key)]
 			PostTradeAllocation
 		}
 
 		/// <summary>
-		/// Условие для клиринговой информации.
+		/// Condition for clearing information.
 		/// </summary>
 		/// <remarks>
-		/// Только для институциональных клиентов.
+		/// Only for institutional clients.
 		/// </remarks>
 		public class ClearingCondition : BaseCondition
 		{
@@ -1157,7 +1147,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Счет.
+			/// Account.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.AccountKey)]
 			[DescriptionLoc(LocalizedStrings.AccountKey, true)]
@@ -1168,7 +1158,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Фирма.
+			/// Firm.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.FirmKey)]
 			[DescriptionLoc(LocalizedStrings.FirmKey, true)]
@@ -1179,7 +1169,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Клиринговый счет.
+			/// Clearing account.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2414Key)]
 			[DescriptionLoc(LocalizedStrings.Str2372Key, true)]
@@ -1190,7 +1180,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Цель клиринга.
+			/// Aim of clearing.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2415Key)]
 			[DescriptionLoc(LocalizedStrings.Str2416Key)]
@@ -1202,7 +1192,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условие для заявок типа <see cref="OrderTypes.Execute"/>.
+		/// Order condition <see cref="OrderTypes.Execute"/>.
 		/// </summary>
 		public class OptionExerciseCondition : BaseCondition
 		{
@@ -1214,7 +1204,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Исполнить опцион.
+			/// Exercise the option.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2417Key)]
 			[DescriptionLoc(LocalizedStrings.Str2418Key)]
@@ -1225,7 +1215,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Заместить действие.
+			/// Replace action.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2419Key)]
 			[DescriptionLoc(LocalizedStrings.Str2420Key)]
@@ -1237,7 +1227,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условие для заявок GTC.
+		/// The condition for GTC orders.
 		/// </summary>
 		public class ActiveCondition : BaseCondition
 		{
@@ -1247,7 +1237,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Время старта.
+			/// Start time.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str2421Key)]
 			[DescriptionLoc(LocalizedStrings.Str2422Key)]
@@ -1258,7 +1248,7 @@ namespace StockSharp.InteractiveBrokers
 			}
 
 			/// <summary>
-			/// Время окончания.
+			/// Ending time.
 			/// </summary>
 			[DisplayNameLoc(LocalizedStrings.Str242Key)]
 			[DescriptionLoc(LocalizedStrings.Str727Key, true)]
@@ -1270,7 +1260,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Создать <see cref="IBOrderCondition"/>.
+		/// Initializes a new instance of the <see cref="IBOrderCondition"/>.
 		/// </summary>
 		public IBOrderCondition()
 		{
@@ -1304,7 +1294,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Расширенное условие.
+		/// Extended condition.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2424Key)]
@@ -1316,7 +1306,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Стоп-цена.
+		/// Stop-price.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.StopPriceKey)]
@@ -1328,7 +1318,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// По открытию торгов.
+		/// At trading opening.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2426Key)]
@@ -1340,7 +1330,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Настройки OCA (One-Cancels All).
+		/// OCA (One-Cancels All) settings.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2428Key)]
@@ -1349,7 +1339,7 @@ namespace StockSharp.InteractiveBrokers
 		public OcaCondition Oca { get; private set; }
 
 		/// <summary>
-		/// Отправлять заявку в TWS.
+		/// Send order in TWS.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2430Key)]
@@ -1361,7 +1351,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Идентификатор родительской заявки.
+		/// Parent order ID.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2432Key)]
@@ -1373,7 +1363,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Разбивать объем заявки.
+		/// Split order volume.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2434Key)]
@@ -1385,7 +1375,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// По лучшей цене.
+		/// At best price.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2314Key)]
@@ -1397,7 +1387,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условие активации стоп-заявки.
+		/// Stop-order activation condition.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2437Key)]
@@ -1409,7 +1399,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Позволить активировать стоп-заявку вне торгового времени.
+		/// Allow to activate a stop-order outside of trading time.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2439Key)]
@@ -1421,10 +1411,10 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Прятать заявку в стакане.
+		/// Hide order in market depth.
 		/// </summary>
 		/// <remarks>
-		/// Возможно только при отправке заявки на биржу ISLAND.
+		/// It is possible only when the order is sending to the ISLAND exchange.
 		/// </remarks>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2441Key)]
@@ -1436,7 +1426,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Активировать после заданного времени.
+		/// Activate after given time.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2443Key)]
@@ -1448,7 +1438,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Отменять заявки с некорректной ценой. 
+		/// Cancel orders with wrong price.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2445Key)]
@@ -1460,7 +1450,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Идентификатор трейдера.
+		/// Trader ID.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2447Key)]
@@ -1472,7 +1462,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Ожидать появления необходимого объема.
+		/// Wait for required volume to appear.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2449Key)]
@@ -1484,7 +1474,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Минимальный объем заявки.
+		/// Minimum order volume.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2451Key)]
@@ -1496,7 +1486,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Сдвиг в цене для заявки типа <see cref="ExtendedOrderTypes.Relative"/>.
+		/// The shift in the price for the order type <see cref="ExtendedOrderTypes.Relative"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2453Key)]
@@ -1508,7 +1498,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Цена активации скользящего стопа.
+		/// Moving stop activation price.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2455Key)]
@@ -1520,7 +1510,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Объем скользящего стопа, выраженный в процентах.
+		/// Trailing stop volume вas percentage.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2457Key)]
@@ -1532,7 +1522,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Найстройки для автоматического расчета объема заявок.
+		/// Settings for automatic order volume calculation.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2459Key)]
@@ -1541,10 +1531,10 @@ namespace StockSharp.InteractiveBrokers
 		public FinancialAdvisorCondition FinancialAdvisor { get; private set; }
 
 		/// <summary>
-		/// Является ли заявка открывающей или закрывающей.
+		/// Is the order opening or closing.
 		/// </summary>
 		/// <remarks>
-		/// Только для институциональных клиентов.
+		/// Only for institutional clients.
 		/// </remarks>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2461Key)]
@@ -1556,10 +1546,10 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Отправитель.
+		/// Sender.
 		/// </summary>
 		/// <remarks>
-		/// Только для институциональных клиентов.
+		/// Only for institutional clients.
 		/// </remarks>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str1664Key)]
@@ -1571,7 +1561,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условие для коротких продаж комбинированных ног.
+		/// Condition for short sales of combined legs.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2378Key)]
@@ -1580,9 +1570,11 @@ namespace StockSharp.InteractiveBrokers
 		public ShortSaleCondition ShortSale { get; private set; }
 
 		/// <summary>
-		/// Торги.
+		/// Trading.
 		/// </summary>
-		/// <remarks>Только для биржи BOX.</remarks>
+		/// <remarks>
+		/// Only BOX board.
+		/// </remarks>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2464Key)]
 		[DescriptionLoc(LocalizedStrings.Str2465Key)]
@@ -1593,9 +1585,11 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Стартовая цена.
+		/// Starting price.
 		/// </summary>
-		/// <remarks>Только для биржи BOX.</remarks>
+		/// <remarks>
+		/// Only BOX board.
+		/// </remarks>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2466Key)]
 		[DescriptionLoc(LocalizedStrings.Str2467Key)]
@@ -1606,7 +1600,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Цена базового актива.
+		/// Underlying asset price.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2468Key)]
@@ -1618,9 +1612,11 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Дельта базового актива.
+		/// Underlying asset delta.
 		/// </summary>
-		/// <remarks>Только для биржи BOX.</remarks>
+		/// <remarks>
+		/// Only BOX board.
+		/// </remarks>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2470Key)]
 		[DescriptionLoc(LocalizedStrings.Str2470Key, true)]
@@ -1631,7 +1627,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Минимальная цена базового актива.
+		/// Minimum price of underlying asset.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2472Key)]
@@ -1643,7 +1639,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Максимальная цена базового актива.
+		/// Maximum price of underlying asset.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2474Key)]
@@ -1655,7 +1651,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Настройки для заявок типа <see cref="ExtendedOrderTypes.Volatility"/>.
+		/// The settings for the orders type <see cref="ExtendedOrderTypes.Volatility"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2476Key)]
@@ -1664,7 +1660,7 @@ namespace StockSharp.InteractiveBrokers
 		public VolatilityCondition Volatility { get; private set; }
 
 		/// <summary>
-		/// Настройки для заявок, отправляемых в Smart биржу.
+		/// Settings for orders that are sent to the Smart exchange.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2478Key)]
@@ -1673,7 +1669,7 @@ namespace StockSharp.InteractiveBrokers
 		public SmartRoutingCondition SmartRouting { get; private set; }
 
 		/// <summary>
-		/// Настройки EFP заявок.
+		/// EFP orders settings.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2480Key)]
@@ -1682,7 +1678,7 @@ namespace StockSharp.InteractiveBrokers
 		public ComboCondition Combo { get; private set; }
 
 		/// <summary>
-		/// Условие для изменяемой заявки.
+		/// Condition for order being changed.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2482Key)]
@@ -1691,7 +1687,7 @@ namespace StockSharp.InteractiveBrokers
 		public ScaleCondition Scale { get; private set; }
 
 		/// <summary>
-		/// Условие для клиринговой информации.
+		/// Condition for clearing information.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2484Key)]
@@ -1700,7 +1696,7 @@ namespace StockSharp.InteractiveBrokers
 		public ClearingCondition Clearing { get; private set; }
 
 		/// <summary>
-		/// Условие для алго-заявок.
+		/// Condition for algo-orders.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2486Key)]
@@ -1709,7 +1705,7 @@ namespace StockSharp.InteractiveBrokers
 		public AlgoCondition Algo { get; private set; }
 
 		/// <summary>
-		/// Вовзращать для заявки информацию о комиссии и марже.
+		/// For order return information about commission and margin.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2488Key)]
@@ -1721,7 +1717,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Идентификатор алгоритма.
+		/// Algorithm ID.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2490Key)]
@@ -1733,7 +1729,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Дополнительные параметры.
+		/// Additional parameters.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str225Key)]
@@ -1745,7 +1741,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Запрошенная.
+		/// Solicited.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.SolicitedKey)]
@@ -1757,7 +1753,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Произвольный размер.
+		/// Randomize size.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.RandomizeSizeKey)]
@@ -1769,7 +1765,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Произвольная цена.
+		/// Randomize price books.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.RandomizePriceKey)]
@@ -1781,7 +1777,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Условие для хедж-заявок.
+		/// Condition for hedge-orders.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2493Key)]
@@ -1790,7 +1786,7 @@ namespace StockSharp.InteractiveBrokers
 		public HedgeCondition Hedge { get; private set; }
 
 		/// <summary>
-		/// Условие для заявок типа <see cref="OrderTypes.Execute"/>.
+		/// Order condition <see cref="OrderTypes.Execute"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2495Key)]
@@ -1799,7 +1795,7 @@ namespace StockSharp.InteractiveBrokers
 		public OptionExerciseCondition OptionExercise { get; private set; }
 
 		/// <summary>
-		/// Условие для GTC заявки.
+		/// Condition for GTC orders.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str225Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2497Key)]

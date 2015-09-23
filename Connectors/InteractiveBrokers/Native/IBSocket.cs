@@ -45,7 +45,7 @@ namespace StockSharp.InteractiveBrokers.Native
 		}
 
 		/// <summary>
-		/// Returns the version of the TWS instance the API application is connected to
+		/// Returns the version of the TWS instance the API application is connected to.
 		/// </summary>
 		public ServerVersions ServerVersion { get; internal set; }
 

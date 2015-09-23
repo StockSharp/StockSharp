@@ -14,14 +14,14 @@ namespace StockSharp.InteractiveBrokers.Web
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Загрузчик информации с сайта InteractiveBrokers.
+	/// The loader of information from the InteractiveBrokers site.
 	/// </summary>
 	public class Downloader
 	{
 		private readonly CookieDictionary _cookie = new CookieDictionary();
 
 		/// <summary>
-		/// Создать <see cref="Downloader"/>.
+		/// Initializes a new instance of the <see cref="Downloader"/>.
 		/// </summary>
 		public Downloader()
 		{
@@ -48,9 +48,9 @@ namespace StockSharp.InteractiveBrokers.Web
 		//}
 
 		/// <summary>
-		/// Скачать информацию по биржам.
+		/// To download information by exchanges.
 		/// </summary>
-		/// <returns>Биржи.</returns>
+		/// <returns>Exchanges.</returns>
 		public IEnumerable<Market> DownloadMarkets()
 		{
 			const string startUrl = "https://www.interactivebrokers.com.hk/en/index.php?f=products&p=stk";
@@ -113,10 +113,10 @@ namespace StockSharp.InteractiveBrokers.Web
 		}
 
 		/// <summary>
-		/// Скачать информацию об инструментах биржи.
+		/// To download information about exchange instruments.
 		/// </summary>
-		/// <param name="market">Биржа.</param>
-		/// <returns>Инструменты.</returns>
+		/// <param name="market">Exchange.</param>
+		/// <returns>Securities.</returns>
 		public IEnumerable<Product> DownloadProducts(Market market) //Страница  Market
 		{
 			if (market == null)
@@ -152,10 +152,10 @@ namespace StockSharp.InteractiveBrokers.Web
 		}
 
 		/// <summary>
-		/// Скачать детальную информацию об инструменте.
+		/// To download detailed information about the instrument.
 		/// </summary>
-		/// <param name="product">Инструмент.</param>
-		/// <returns>Детальная информация.</returns>
+		/// <param name="product">Security.</param>
+		/// <returns>Details.</returns>
 		public ProductDescripton DownloadDescription(Product product)
 		{
 			if (product == null)
@@ -222,10 +222,10 @@ namespace StockSharp.InteractiveBrokers.Web
 		}
 
 		/// <summary>
-		/// Скачать площадки.
+		/// To download boards.
 		/// </summary>
-		/// <param name="product">Инструмент.</param>
-		/// <returns>Площадки.</returns>
+		/// <param name="product">Security.</param>
+		/// <returns>Boards.</returns>
 		public IEnumerable<ProductBoard> DownloadBoards(Product product)
 		{
 			if (product == null)

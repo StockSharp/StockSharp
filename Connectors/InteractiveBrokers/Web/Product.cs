@@ -1,17 +1,17 @@
 namespace StockSharp.InteractiveBrokers.Web
 {
 	/// <summary>
-	/// Информация об инструменте.
+	/// Security info.
 	/// </summary>
 	public class Product
 	{
 		/// <summary>
-		/// Идентификатор контакта.
+		/// The contact identifier.
 		/// </summary>
 		public long ContractId;
 
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		public string Name;
 	}

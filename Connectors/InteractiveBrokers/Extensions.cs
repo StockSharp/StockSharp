@@ -9,7 +9,7 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.Localization;
 
 	/// <summary>
-	/// Вспомогательный класс, который используется для доступа к специфичной Interactive Brokers информации через <see cref="IExtendableEntity.ExtensionInfo"/>.
+	/// The helper class that is used to access to specific Interactive Brokers information via <see cref="IExtendableEntity.ExtensionInfo"/>.
 	/// </summary>
 	public static class Extensions
 	{
@@ -86,10 +86,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _routingExchange = "RoutingBoard";
 
 		/// <summary>
-		/// Получить для инструмента биржевую площадку исполнения заявок.
+		/// To get the exchange board of orders fulfilment for the instrument.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <returns>Биржевая площадка исполнения заявок. Если площадка отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="security">Security.</param>
+		/// <returns>The exchange board of orders fulfilment. If the board does not exist then <see langword="null" /> will be returned.</returns>
 		public static ExchangeBoard GetRoutingBoard(this Security security)
 		{
 			return ExchangeBoard.GetOrCreateBoard(security.GetValue<string>(_routingExchange));
@@ -206,10 +206,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _clientId = "ClientId";
 
 		/// <summary>
-		/// Получить идентификатор клиента.
+		/// To get the customer identifier.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>The customer identifier. If the identifier does not exist then <see langword="null" /> will be returned.</returns>
 		public static int? GetClientId(this MyTrade trade)
 		{
 			return trade.GetValue<int?>(_clientId);
@@ -227,10 +227,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _liquidation = "Liquidation";
 
 		/// <summary>
-		/// Получить позицию ликвидации.
+		/// To get the liquidation position.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Позиция ликвидации. Если позиция отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>The liquidation position. If the position does not exist then <see langword="null" /> will be returned.</returns>
 		public static int? GetLiquidation(this MyTrade trade)
 		{
 			return trade.GetValue<int?>(_liquidation);
@@ -264,10 +264,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _cumulativeQuantity = "CumulativeQuantity";
 
 		/// <summary>
-		/// Получить количество прибыльных контрактов в сделке.
+		/// To get a number of profitable contracts in the trade.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Количество прибыльных контрактов в сделке. Если количество отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>A number of profitable contracts in the trade. If a number does not exist then <see langword="null" /> will be returned.</returns>
 		public static int? GetCumulativeQuantity(this MyTrade trade)
 		{
 			return trade.GetValue<int?>(_cumulativeQuantity);
@@ -285,10 +285,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _averagePrice = "AveragePrice";
 
 		/// <summary>
-		/// Получить среднюю цену исполнения сделки.
+		/// To get the average price of matched order.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Средняя цена исполнения сделки. Если цена отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>The average price of the matched order. If the price does not exist then <see langword="null" /> will be returned.</returns>
 		public static decimal? GetAveragePrice(this MyTrade trade)
 		{
 			return trade.GetValue<decimal?>(_averagePrice);
@@ -306,10 +306,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _orderRef = "OrderRef";
 
 		/// <summary>
-		/// Получить описание заявки.
+		/// To get the order description.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Описание заявки. Если описание отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>The order description. If the description does not exist then <see langword="null" /> will be returned.</returns>
 		public static string GetOrderRef(this MyTrade trade)
 		{
 			return trade.GetValue<string>(_orderRef);
@@ -327,10 +327,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _evRule = "EvRule";
 
 		/// <summary>
-		/// Получить Economic Value правило.
+		/// To get the Economic Value rule.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Economic Value правило. Если правило отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>The Economic Value rule. If the rule does not exist then <see langword="null" /> will be returned.</returns>
 		public static string GetEvRule(this MyTrade trade)
 		{
 			return trade.GetValue<string>(_evRule);
@@ -348,10 +348,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _evMultiplier = "EvMultiplier";
 
 		/// <summary>
-		/// Получить множитель рыночной цены контракта при изменении цены на 1.
+		/// To get the contract market price factor when the price changes by 1.
 		/// </summary>
-		/// <param name="trade">Собственная сделка.</param>
-		/// <returns>Множитель рыночной цены. Если множитель отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="trade">Own trade.</param>
+		/// <returns>The market price factor. If the factor does not exist then <see langword="null" /> will be returned.</returns>
 		public static decimal? GetEvMultiplier(this MyTrade trade)
 		{
 			return trade.GetValue<decimal?>(_evMultiplier);
@@ -381,10 +381,10 @@ namespace StockSharp.InteractiveBrokers
 		#region ClientId
 
 		/// <summary>
-		/// Получить идентификатор клиента.
+		/// To get the customer identifier.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <returns>Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="order">Order.</param>
+		/// <returns>The customer identifier. If the identifier does not exist then <see langword="null" /> will be returned.</returns>
 		public static int? GetClientId(this Order order)
 		{
 			return order.GetValue<int?>(_clientId);
@@ -397,10 +397,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _lastTradePrice = "LastTradePrice";
 
 		/// <summary>
-		/// Получить цену последней сделки.
+		/// To get the last trade price.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <returns>Цена последней сделки. Если цена отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="order">Order.</param>
+		/// <returns>The last trade price. If the price does not exist then <see langword="null" /> will be returned.</returns>
 		public static decimal GetLastTradePrice(this Order order)
 		{
 			return order.GetValue<decimal>(_lastTradePrice);
@@ -418,10 +418,10 @@ namespace StockSharp.InteractiveBrokers
 		private const string _whyHeld = "WhyHeld";
 
 		/// <summary>
-		/// Получить причину удержания заявки.
+		/// To get the order retention reason.
 		/// </summary>
-		/// <param name="order">Заявка.</param>
-		/// <returns>Причина удержания. Если причина отсутствует, то будет возвращено <see langword="null"/>.</returns>
+		/// <param name="order">Order.</param>
+		/// <returns>The order retention reason. If the reason does not exist then <see langword="null" /> will be returned.</returns>
 		public static string GetWhyHeld(this Order order)
 		{
 			return order.GetValue<string>(_whyHeld);

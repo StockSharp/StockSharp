@@ -1,4 +1,4 @@
-﻿namespace StockSharp.InteractiveBrokers
+namespace StockSharp.InteractiveBrokers
 {
 	using System;
 	using System.Collections.Generic;
@@ -29,20 +29,19 @@
 	}
 
 	/// <summary>
-	/// Сообщение запуска сканера инструментов на основе заданных параметров.
-	/// Результаты будут приходить через событие <see cref="IBTrader.NewScannerResults"/>.
+	/// The message about start of the instruments scanner based on specified parameters. The results will come through the <see cref="IBTrader.NewScannerResults"/> event.
 	/// </summary>
 	public class ScannerMarketDataMessage : MarketDataMessage
 	{
 		/// <summary>
-		/// Фильтр.
+		/// Filter.
 		/// </summary>
 		public ScannerFilter Filter { get; private set; }
 
 		/// <summary>
-		/// Создать <see cref="ScannerMarketDataMessage"/>.
+		/// Initializes a new instance of the <see cref="ScannerMarketDataMessage"/>.
 		/// </summary>
-		/// <param name="filter">Фильтр.</param>
+		/// <param name="filter">Filter.</param>
 		public ScannerMarketDataMessage(ScannerFilter filter)
 		{
 			if (filter == null)
@@ -54,12 +53,12 @@
 	}
 
 	/// <summary>
-	/// Сообщение с результатами сканера, запущенного сообщением <see cref="ScannerMarketDataMessage"/>.
+	/// The message with the results of scanner starting by the message <see cref="ScannerMarketDataMessage"/>.
 	/// </summary>
 	public class ScannerResultMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="ScannerResultMessage"/>.
+		/// Initializes a new instance of the <see cref="ScannerResultMessage"/>.
 		/// </summary>
 		public ScannerResultMessage()
 			: base(ExtendedMessageTypes.Scanner)
@@ -67,23 +66,23 @@
 		}
 
 		/// <summary>
-		/// Результаты.
+		/// The results.
 		/// </summary>
 		public IEnumerable<ScannerResult> Results { get; set; }
 
 		/// <summary>
-		/// Идентификатор запроса <see cref="ScannerMarketDataMessage"/>.
+		/// The query identifier <see cref="ScannerMarketDataMessage"/>.
 		/// </summary>
 		public long OriginalTransactionId { get; set; }
 	}
 
 	/// <summary>
-	/// Сообщение с параметрами сканера.
+	/// The message with scanner parameters.
 	/// </summary>
 	public class ScannerParametersMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="ScannerParametersMessage"/>.
+		/// Initializes a new instance of the <see cref="ScannerParametersMessage"/>.
 		/// </summary>
 		public ScannerParametersMessage()
 			: base(ExtendedMessageTypes.ScannerParameters)
@@ -91,18 +90,18 @@
 		}
 
 		/// <summary>
-		/// Параметры в формате xml.
+		/// The parameters in the xml format.
 		/// </summary>
 		public string Parameters { get; set; }
 	}
 
 	/// <summary>
-	/// Сообщение с финансовой консультацией.
+	/// The messgae with financial advice.
 	/// </summary>
 	public class FinancialAdviseMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="FinancialAdviseMessage"/>.
+		/// Initializes a new instance of the <see cref="FinancialAdviseMessage"/>.
 		/// </summary>
 		public FinancialAdviseMessage()
 			: base(ExtendedMessageTypes.FinancialAdvise)
@@ -110,31 +109,30 @@
 		}
 
 		/// <summary>
-		/// Тип.
+		/// Type.
 		/// </summary>
 		public int AdviseType { get; set; }
 
 		/// <summary>
-		/// Данные в формате xml.
+		/// Data in the xml format.
 		/// </summary>
 		public string Data { get; set; }
 	}
 
 	/// <summary>
-	/// Сообщение на получение отчетов по рынку для заданного инструмента.
-	/// Результаты будут приходить через событие <see cref="IBTrader.NewFundamentalReport"/>.
+	/// The message to receive market reports for the specified instrument. The results will come through the <see cref="IBTrader.NewFundamentalReport"/> event.
 	/// </summary>
 	public class FundamentalReportMarketDataMessage : MarketDataMessage
 	{
 		/// <summary>
-		/// Тип отчета.
+		/// The report type.
 		/// </summary>
 		public FundamentalReports Report { get; private set; }
 
 		/// <summary>
-		/// Создать <see cref="FundamentalReportMarketDataMessage"/>.
+		/// Initializes a new instance of the <see cref="FundamentalReportMarketDataMessage"/>.
 		/// </summary>
-		/// <param name="report">Тип отчета.</param>
+		/// <param name="report">The report type.</param>
 		public FundamentalReportMarketDataMessage(FundamentalReports report)
 		{
 			Report = report;
@@ -143,12 +141,12 @@
 	}
 
 	/// <summary>
-	/// Сообщение с отчетом по рынку, инициированного сообщением <see cref="FundamentalReportMarketDataMessage"/>.
+	/// The message with the market report initiated by the message <see cref="FundamentalReportMarketDataMessage"/>.
 	/// </summary>
 	public class FundamentalReportMessage : Message
 	{
 		/// <summary>
-		/// Создать <see cref="FundamentalReportMessage"/>.
+		/// Initializes a new instance of the <see cref="FundamentalReportMessage"/>.
 		/// </summary>
 		public FundamentalReportMessage()
 			: base(ExtendedMessageTypes.FundamentalReport)
@@ -156,27 +154,27 @@
 		}
 
 		/// <summary>
-		/// Текст отчета.
+		/// Text of report.
 		/// </summary>
 		public string Data { get; set; }
 
 		/// <summary>
-		/// Идентификатор запроса <see cref="FundamentalReportMarketDataMessage"/>.
+		/// The query identifier <see cref="FundamentalReportMarketDataMessage"/>.
 		/// </summary>
 		public long OriginalTransactionId { get; set; }
 	}
 
 	/// <summary>
-	/// Сообщение подписки на получение расчетных значений опциона.
+	/// The message about subscription to the estimated option values getting.
 	/// </summary>
 	public class OptionCalcMarketDataMessage : MarketDataMessage
 	{
 		/// <summary>
-		/// Создать <see cref="OptionCalcMarketDataMessage"/>.
+		/// Initializes a new instance of the <see cref="OptionCalcMarketDataMessage"/>.
 		/// </summary>
-		/// <param name="impliedVolatility">Подразумеваемая волатильность.</param>
-		/// <param name="optionPrice">Цена опциона.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
+		/// <param name="impliedVolatility">The implied volatility.</param>
+		/// <param name="optionPrice">The option price.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
 		public OptionCalcMarketDataMessage(decimal impliedVolatility, decimal optionPrice, decimal assetPrice)
 		{
 			AssetPrice = assetPrice;
@@ -187,23 +185,23 @@
 		}
 
 		/// <summary>
-		/// Подразумеваемая волатильность.
+		/// The implied volatility.
 		/// </summary>
 		public decimal ImpliedVolatility { get; private set; }
 
 		/// <summary>
-		/// Цена опциона.
+		/// The option price.
 		/// </summary>
 		public decimal OptionPrice { get; private set; }
 
 		/// <summary>
-		/// Цена базового актива.
+		/// Underlying asset price.
 		/// </summary>
 		public decimal AssetPrice { get; private set; }
 	}
 
 	/// <summary>
-	/// Реализация интерфейса <see cref="IConnector"/>, предоставляющая подключение к Interactive Brokers через IB Gateway.
+	/// The implementation of the <see cref="IConnector"/> interface which provides a connection to Interactive Brokers via the IB Gateway.
 	/// </summary>
 	public class IBTrader : Connector, IExternalCandleSource
 	{
@@ -212,7 +210,7 @@
 		private readonly InteractiveBrokersMessageAdapter _adapter;
 
 		/// <summary>
-		/// Создать <see cref="IBTrader"/>.
+		/// Initializes a new instance of the <see cref="IBTrader"/>.
 		/// </summary>
 		public IBTrader()
 		{
@@ -224,7 +222,7 @@
 		}
 
 		/// <summary>
-		/// Адрес.
+		/// Address.
 		/// </summary>
 		public EndPoint Address
 		{
@@ -250,7 +248,7 @@
 		//}
 
 		/// <summary>
-		/// Уникальный идентификатор. Используется в случае подключения нескольких клиентов к одному терминалу или gateway.
+		/// Unique ID. Used when several clients are connected to one terminal or gateway.
 		/// </summary>
 		public int ClientId
 		{
@@ -259,7 +257,7 @@
 		}
 
 		/// <summary>
-		/// Уровень логирования сообщений сервера. По-умолчанию равен <see cref="ServerLogLevels.Detail"/>.
+		/// The server messages logging level. The default is <see cref="ServerLogLevels.Detail"/>.
 		/// </summary>
 		public ServerLogLevels ServerLogLevel
 		{
@@ -268,7 +266,7 @@
 		}
 
 		/// <summary>
-		/// Использовать ли данные реального времени или "замороженные" на сервере брокера. По-умолчанию используются "замороженные" данные.
+		/// Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
 		/// </summary>
 		public bool IsRealTimeMarketData
 		{
@@ -277,7 +275,7 @@
 		}
 
 		/// <summary>
-		/// Событие появление новых результатов сканера, запущенного ранее через <see cref="SubscribeScanner"/>.
+		/// The new results occurring event of the scanner started previously via <see cref="SubscribeScanner"/>.
 		/// </summary>
 		public event Action<ScannerFilter, IEnumerable<ScannerResult>> NewScannerResults;
 		
@@ -287,27 +285,27 @@
 		//public event Action<TimeFrameCandle> NewRealTimeCandle;
 
 		/// <summary>
-		/// Событие появления новых свечек, полученных после подписки через <see cref="SubscribeCandles"/>.
+		/// Event of new candles occurring, that are received after the subscription by <see cref="SubscribeCandles"/>.
 		/// </summary>
 		public event Action<CandleSeries, IEnumerable<Candle>> NewCandles;
 
 		/// <summary>
-		/// Событие окончания обработки серии.
+		/// The series processing end event.
 		/// </summary>
 		public event Action<CandleSeries> Stopped;
 
 		/// <summary>
-		/// Событие появление нового отчета, полученного по подписке <see cref="SubscribeFundamentalReport"/>.
+		/// The new report occurring event obtained by subscription <see cref="SubscribeFundamentalReport"/>.
 		/// </summary>
 		public event Action<Security, FundamentalReports, string> NewFundamentalReport;
 
 		/// <summary>
-		/// Событие о появлении новых параметров сканера, которые применяются через <see cref="ScannerFilter"/>. Параметры передаются в виде xml.
+		/// The event of occurring of new scanner parameters which are applied via <see cref="ScannerFilter"/>. Parameters are passed in the xml format.
 		/// </summary>
 		public event Action<string> NewScannerParameters;
 
 		/// <summary>
-		/// Событие о появлении новых финансовых консультаций. Параметры передаются в виде xml.
+		/// The new financial advice occurring event. Parameters are passed in the xml format.
 		/// </summary>
 		public event Action<int, string> NewFinancialAdvise;
 
@@ -317,14 +315,14 @@
 		//public event Action<IBCommission> NewCommission;
 
 		/// <summary>
-		/// Отменить группу заявок на бирже по фильтру.
+		/// Cancel orders by filter.
 		/// </summary>
-		/// <param name="transactionId">Идентификатор транзакции отмены.</param>
-		/// <param name="isStopOrder"><see langword="true"/>, если нужно отменить только стоп-заявки, <see langword="false"/> - если только обычный и <see langword="null"/> - если оба типа.</param>
-		/// <param name="portfolio">Портфель. Если значение равно <see langword="null"/>, то портфель не попадает в фильтр снятия заявок.</param>
-		/// <param name="direction">Направление заявки. Если значение равно <see langword="null"/>, то направление не попадает в фильтр снятия заявок.</param>
-		/// <param name="board">Торговая площадка. Если значение равно <see langword="null"/>, то площадка не попадает в фильтр снятия заявок.</param>
-		/// <param name="security">Инструмент. Если значение равно <see langword="null"/>, то инструмент не попадает в фильтр снятия заявок.</param>
+		/// <param name="transactionId">Order cancellation transaction id.</param>
+		/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+		/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+		/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+		/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+		/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 		protected override void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null)
 		{
 			if (isStopOrder == null && portfolio == null && direction == null && board == null && security == null)
@@ -334,11 +332,10 @@
 		}
 
 		/// <summary>
-		/// Запустить или остановить сканер инструментов на основе заданных параметров.
-		/// Результаты будут приходить через событие <see cref="IBTrader.NewScannerResults"/>.
+		/// To start or stop the instruments scanner based on specified parameters. The results will come through the <see cref="IBTrader.NewScannerResults"/> event.
 		/// </summary>
-		/// <param name="filter">Фильтр.</param>
-		/// <param name="isSubscribe"><see langword="true"/> если необходимо подписаться, иначе <see langword="false"/>.</param>
+		/// <param name="filter">Filter.</param>
+		/// <param name="isSubscribe"><see langword="true" /> if you need to subscribe, otherwise <see langword="false" />.</param>
 		public void SubscribeScanner(ScannerFilter filter, bool isSubscribe)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
@@ -353,12 +350,11 @@
 		}
 
 		/// <summary>
-		/// Подписаться или отписаться на получение отчетов по рынку для заданного инструмента.
-		/// Результаты будут приходить через событие <see cref="NewFundamentalReport"/>.
+		/// To subscribe or unsubscribe to receive market reports for the specified instrument. The results will come through the <see cref="IBTrader.NewFundamentalReport"/> event.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="report">Тип отчета.</param>
-		/// <param name="isSubscribe"><see langword="true"/> если необходимо подписаться, иначе <see langword="false"/>.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="report">The report type.</param>
+		/// <param name="isSubscribe"><see langword="true" /> if you need to subscribe, otherwise <see langword="false" />.</param>
 		public void SubscribeFundamentalReport(Security security, FundamentalReports report, bool isSubscribe)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
@@ -374,14 +370,13 @@
 		}
 
 		/// <summary>
-		/// Подписаться или отписаться на получение расчетных значений опциона.
-		/// Результаты будут приходить через событие <see cref="IConnector.SecuritiesChanged"/>.
+		/// To subscribe or unsubscribe to receive the estimated option values. The results will come through the <see cref="IConnector.SecuritiesChanged"/> event.
 		/// </summary>
-		/// <param name="security">Инструмент.</param>
-		/// <param name="impliedVolatility">Подразумеваемая волатильность.</param>
-		/// <param name="optionPrice">Цена опциона.</param>
-		/// <param name="assetPrice">Цена базового актива.</param>
-		/// <param name="isSubscribe"><see langword="true"/> если необходимо подписаться, иначе <see langword="false"/>.</param>
+		/// <param name="security">Security.</param>
+		/// <param name="impliedVolatility">The implied volatility.</param>
+		/// <param name="optionPrice">The option price.</param>
+		/// <param name="assetPrice">Underlying asset price.</param>
+		/// <param name="isSubscribe"><see langword="true" /> if you need to subscribe, otherwise <see langword="false" />.</param>
 		public void SubscribeOptionCalc(Security security, decimal impliedVolatility, decimal optionPrice, decimal assetPrice, bool isSubscribe)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
@@ -395,10 +390,10 @@
 		}
 
 		/// <summary>
-		/// Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные.
+		/// To get time ranges for which this source of passed candles series has data.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <returns>Временные диапазоны.</returns>
+		/// <param name="series">Candles series.</param>
+		/// <returns>Time ranges.</returns>
 		public IEnumerable<Range<DateTimeOffset>> GetSupportedRanges(CandleSeries series)
 		{
 			if (series.CandleType == typeof(TimeFrameCandle) &&
@@ -410,11 +405,11 @@
 		}
 
 		/// <summary>
-		/// Подписаться на получение свечек.
+		/// Subscribe to receive new candles.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
-		/// <param name="from">Начальная дата, с которой необходимо получать данные.</param>
-		/// <param name="to">Конечная дата, до которой необходимо получать данные.</param>
+		/// <param name="series">Candles series.</param>
+		/// <param name="from">The initial date from which you need to get data.</param>
+		/// <param name="to">The final date by which you need to get data.</param>
 		public void SubscribeCandles(CandleSeries series, DateTimeOffset from, DateTimeOffset to)
 		{
 			var transactionId = TransactionIdGenerator.GetNextId();
@@ -434,9 +429,9 @@
 		}
 
 		/// <summary>
-		/// Остановить подписку получения свечек, ранее созданную через <see cref="SubscribeCandles"/>.
+		/// To stop the candles receiving subscription, previously created by <see cref="SubscribeCandles"/>.
 		/// </summary>
-		/// <param name="series">Серия свечек.</param>
+		/// <param name="series">Candles series.</param>
 		public void UnSubscribeCandles(CandleSeries series)
 		{
 			SendInMessage(new MarketDataMessage
@@ -450,9 +445,9 @@
 		}
 
 		/// <summary>
-		/// Обработать сообщение.
+		/// Process message.
 		/// </summary>
-		/// <param name="message">Сообщение.</param>
+		/// <param name="message">Message.</param>
 		protected override void OnProcessMessage(Message message)
 		{
 			switch (message.Type)

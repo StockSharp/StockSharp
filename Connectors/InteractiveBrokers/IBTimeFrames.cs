@@ -8,7 +8,7 @@ namespace StockSharp.InteractiveBrokers
 	using StockSharp.Localization;
 	
 	/// <summary>
-	/// Тайм-фреймы для исторических свечек InteractiveBrokers.
+	/// Time frames for InteractiveBrokers historical candles.
 	/// </summary>
 	public sealed class IBTimeFrames
 	{
@@ -43,7 +43,7 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Возможные тайм-фреймы.
+		/// Possible time-frames.
 		/// </summary>
 		public static IEnumerable<TimeSpan> AllTimeFrames
 		{
@@ -58,10 +58,10 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Привести <see cref="TimeSpan"/> значение к объекту <see cref="IBTimeFrames"/>.
+		/// Cast <see cref="TimeSpan"/> object to the type <see cref="IBTimeFrames"/>.
 		/// </summary>
-		/// <param name="value"><see cref="TimeSpan"/> значение.</param>
-		/// <returns>Объект <see cref="IBTimeFrames"/>.</returns>
+		/// <param name="value"><see cref="TimeSpan"/> value.</param>
+		/// <returns>Object <see cref="IBTimeFrames"/>.</returns>
 		public static implicit operator IBTimeFrames(TimeSpan value)
 		{
 			if (!CanConvert(value))
@@ -71,10 +71,10 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Привести объект <see cref="IBTimeFrames"/> к <see cref="TimeSpan"/> значению.
+		/// Cast object from <see cref="IBTimeFrames"/> to <see cref="TimeSpan"/>.
 		/// </summary>
-		/// <param name="timeFrame">Объект <see cref="IBTimeFrames"/>.</param>
-		/// <returns><see cref="TimeSpan"/> значение.</returns>
+		/// <param name="timeFrame">Object <see cref="IBTimeFrames"/>.</param>
+		/// <returns><see cref="TimeSpan"/> value.</returns>
 		public static explicit operator TimeSpan(IBTimeFrames timeFrame)
 		{
 			if (timeFrame == null)
@@ -84,77 +84,77 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Секундный тайм-фрейм.
+		/// One second time frame.
 		/// </summary>
 		public static TimeSpan Second1 { get; private set; }
 
 		/// <summary>
-		/// Пяти секундный тайм-фрейм.
+		/// Five second time frame.
 		/// </summary>
 		public static TimeSpan Second5 { get; private set; }
 
 		/// <summary>
-		/// Пятнадцати секундный тайм-фрейм.
+		/// Fifteen second time frame.
 		/// </summary>
 		public static TimeSpan Second15 { get; private set; }
 
 		/// <summary>
-		/// Тридцати секундный тайм-фрейм.
+		/// Thirty second time frame.
 		/// </summary>
 		public static TimeSpan Second30 { get; private set; }
 
 		/// <summary>
-		/// Минутный тайм-фрейм.
+		/// 1 min time-frame.
 		/// </summary>
 		public static TimeSpan Minute1 { get; private set; }
 
 		/// <summary>
-		/// Двух минутный тайм-фрейм.
+		/// Two minute time frame.
 		/// </summary>
 		public static TimeSpan Minute2 { get; private set; }
 
 		/// <summary>
-		/// Трех минутный тайм-фрейм.
+		/// Three minute time frame.
 		/// </summary>
 		public static TimeSpan Minute3 { get; private set; }
 
 		/// <summary>
-		/// Пяти минутный тайм-фрейм.
+		/// 5 min time-frame.
 		/// </summary>
 		public static TimeSpan Minute5 { get; private set; }
 
 		/// <summary>
-		/// Пятнадцати минутный тайм-фрейм.
+		/// 15 min time-frame.
 		/// </summary>
 		public static TimeSpan Minute15 { get; private set; }
 
 		/// <summary>
-		/// Тридцати минутный тайм-фрейм.
+		/// 30 min time-frame.
 		/// </summary>
 		public static TimeSpan Minute30 { get; private set; }
 
 		/// <summary>
-		/// Часовой тайм-фрейм.
+		/// Hour time frame.
 		/// </summary>
 		public static TimeSpan Hour { get; private set; }
 
 		/// <summary>
-		/// Дневной тайм-фрейм.
+		/// Day time frame.
 		/// </summary>
 		public static TimeSpan Day { get; private set; }
 
 		/// <summary>
-		/// Недельный тайм-фрейм.
+		/// Weekly time frame.
 		/// </summary>
 		public static TimeSpan Week { get; private set; }
 
 		/// <summary>
-		/// Месячный тайм-фрейм.
+		/// Monthly time frame.
 		/// </summary>
 		public static TimeSpan Month { get; private set; }
 
 		/// <summary>
-		/// Годовой тайм-фрейм.
+		/// Annual time frame.
 		/// </summary>
 		public static TimeSpan Year { get; private set; }
 	}

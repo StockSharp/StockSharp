@@ -3,140 +3,139 @@ namespace StockSharp.InteractiveBrokers
 	using System;
 
 	/// <summary>
-	/// Типы исключений акций.
+	/// Shares exclusions types.
 	/// </summary>
 	public enum ScannerFilterStockExcludes
 	{
 		/// <summary>
-		/// Не исключать ничего.
+		/// Not to exclude anything.
 		/// </summary>
 		All,
 
 		/// <summary>
-		/// Исключить <see cref="Etf"/>.
+		/// To exclude <see cref="Etf"/>.
 		/// </summary>
 		Stock,
 
 		/// <summary>
-		/// Только Exchange-traded fund.
+		/// Only the Exchange-traded fund.
 		/// </summary>
 		Etf
 	}
 
 	/// <summary>
-	/// Настройки фильтра сканера, запускаемого через <see cref="IBTrader.SubscribeScanner"/>.
+	/// Filter settings of the scanner starting via <see cref="IBTrader.SubscribeScanner"/>.
 	/// </summary>
 	public class ScannerFilter
 	{
 		/// <summary>
-		/// Создать <see cref="ScannerFilter"/>.
+		/// Initializes a new instance of the <see cref="ScannerFilter"/>.
 		/// </summary>
 		public ScannerFilter()
 		{
 		}
 
 		/// <summary>
-		/// Количество строк в запросе.
+		/// The number of strings in the query.
 		/// </summary>
 		public int? RowCount { get; set; }
 
 		/// <summary>
-		/// Тип инструмента.
+		/// Security type.
 		/// </summary>
 		public string SecurityType { get; set; }
 
 		/// <summary>
-		/// Биржевая площадка.
+		/// Exchange board.
 		/// </summary>
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		///  
 		/// </summary>
 		public string ScanCode { get; set; }
 
 		/// <summary>
-		/// Верхний предел рыночной цены инструмента.
+		/// The upper limit of the instrument market price.
 		/// </summary>
 		public decimal? AbovePrice { get; set; }
 
 		/// <summary>
-		/// Нижний предел рыночной цены инструмента.
+		/// The lower limit of the instrument market price.
 		/// </summary>
 		public decimal? BelowPrice { get; set; }
 
 		/// <summary>
-		/// Верхний предел объема торгов по инструменту.
+		/// The upper limit of the instrument trading volume.
 		/// </summary>
 		public int? AboveVolume { get; set; }
 
 		/// <summary>
-		/// Верхний предел объема торгов по опциону.
+		/// The upper limit of the option trading volume.
 		/// </summary>
 		public int? AverageOptionVolumeAbove { get; set; }
 
 		/// <summary>
-		/// Верхний предел капитализации.
+		/// The upper limit of capitalization.
 		/// </summary>
 		public decimal? MarketCapAbove { get; set; }
 
 		/// <summary>
-		/// Нижний предел капитализации.
+		/// The lower limit of capitalization.
 		/// </summary>
 		public decimal? MarketCapBelow { get; set; }
 
 		/// <summary>
-		/// Верхний предел рейтинга Moody.
+		/// The upper limit of the Moody rating.
 		/// </summary>
 		public string MoodyRatingAbove { get; set; }
 
 		/// <summary>
-		/// Нижний предел рейтинга Moody.
+		/// The lower limit of the Moody rating.
 		/// </summary>
 		public string MoodyRatingBelow { get; set; }
 
 		/// <summary>
-		/// Верхний предел рейтинга SP.
+		/// The upper limit of the SP rating.
 		/// </summary>
 		public string SpRatingAbove { get; set; }
 
 		/// <summary>
-		/// Нижний предел рейтинга SP.
+		/// The lower limit of the SP rating.
 		/// </summary>
 		public string SpRatingBelow { get; set; }
 
 		/// <summary>
-		/// Верхний предел даты погашения инструмента.
+		/// The upper limit of the instrument maturity date.
 		/// </summary>
 		public DateTimeOffset? MaturityDateAbove { get; set; }
 
 		/// <summary>
-		/// Нижний предел даты погашения инструмента.
+		/// The lower limit of the instrument maturity date.
 		/// </summary>
 		public DateTimeOffset? MaturityDateBelow { get; set; }
 
 		/// <summary>
-		/// Верхний предел купонной ставки.
+		/// The upper limit of the coupon rate.
 		/// </summary>
 		public decimal? CouponRateAbove { get; set; }
 
 		/// <summary>
-		/// Нижний предел купонной ставки.
+		/// The lower limit of the coupon rate.
 		/// </summary>
 		public decimal? CouponRateBelow { get; set; }
 
 		/// <summary>
-		/// Исключать конвертируемые облигации.
+		/// To exclude convertible bonds.
 		/// </summary>
 		public bool ExcludeConvertibleBonds { get; set; }
 
 		/// <summary>
-		/// Расширенные параметры. Подробнее, http://www.interactivebrokers.com/en/software/tws/usersguidebook/technicalanalytics/market_scanner_types.htm .
+		/// Extended settings. For more details see http://www.interactivebrokers.com/en/software/tws/usersguidebook/technicalanalytics/market_scanner_types.htm.
 		/// </summary>
 		public string ScannerSettingPairs { get; set; }
 
 		/// <summary>
-		/// Тип исключений акций.
+		/// The shares exclusions type.
 		/// </summary>
 		public ScannerFilterStockExcludes StockTypeExclude { get; set; }
 	}

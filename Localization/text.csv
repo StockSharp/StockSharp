@@ -4231,11 +4231,11 @@ DocStr70;5 min time-frame;Пяти минутный тайм-фрейм
 DocStr71;10 min time-frame;Десяти минутный тайм-фрейм
 DocStr72;15 min time-frame;Пятнадцати минутный тайм-фрейм
 DocStr73;30 min time-frame;Тридцати минутный тайм-фрейм
-DocStr74;Часовой тайм-фрейм;Часовой тайм-фрейм
-DocStr75;Дневной тайм-фрейм;Дневной тайм-фрейм
-DocStr76;Недельный тайм-фрейм;Недельный тайм-фрейм
-DocStr77;Месячный тайм-фрейм;Месячный тайм-фрейм
-DocStr78;Годовой тайм-фрейм;Годовой тайм-фрейм
+DocStr74;Hour time frame;Часовой тайм-фрейм
+DocStr75;Day time frame;Дневной тайм-фрейм
+DocStr76;Weekly time frame;Недельный тайм-фрейм
+DocStr77;Monthly time frame;Месячный тайм-фрейм
+DocStr78;Annual time frame;Годовой тайм-фрейм
 DocStr79;Реализация интерфейса {0}, предоставляющая подключение к брокеру AlfaDirect;Реализация интерфейса {0}, предоставляющая подключение к брокеру AlfaDirect
 DocStr80;Process message;Обработать сообщение
 DocStr81;To get time ranges for which this source of passed candles series has data;Получить временные диапазоны, для которых у данного источника для передаваемой серии свечек есть данные
@@ -7491,7 +7491,7 @@ DocStr3349;The implementation of the interface {0} for interaction with the exch
 DocStr3350;The stop orders types that are specific for {0};Типы стоп-заявок, специфичных для {0}
 DocStr3351;Take;Тейк
 DocStr3352;The data recorder which records in the text FIX protocol format;Писатель данных, записывающий в текстовом формате FIX протокола
-DocStr3353;Типы финансовых отчетов;Типы финансовых отчетов
+DocStr3353;Financial reports types;Типы финансовых отчетов
 DocStr3354;Overview;Обзор
 DocStr3355;Statements;Отчетность
 DocStr3356;Summary;Общая финансовая информация
@@ -7529,83 +7529,83 @@ DocStr3387;Realtime Historical Volatility;Realtime Historical Volatility
 DocStr3388;Monetary Close Price;Monetary Close Price
 DocStr3389;RTCLOSE;RTCLOSE
 DocStr3390;MonitorTickTag;MonitorTickTag
-DocStr3391;Возможно только при отправке заявки на биржу ISLAND;Возможно только при отправке заявки на биржу ISLAND
-DocStr3392;Сдвиг в цене для заявки типа {0};Сдвиг в цене для заявки типа {0}
-DocStr3393;Является ли заявка открывающей или закрывающей;Является ли заявка открывающей или закрывающей
-DocStr3394;Только для институциональных клиентов;Только для институциональных клиентов
+DocStr3391;It is possible only when the order is sending to the ISLAND exchange;Возможно только при отправке заявки на биржу ISLAND
+DocStr3392;The shift in the price for the order type {0};Сдвиг в цене для заявки типа {0}
+DocStr3393;Is the order opening or closing;Является ли заявка открывающей или закрывающей
+DocStr3394;Only for institutional clients;Только для институциональных клиентов
 DocStr3395;Trading;Торги
 DocStr3396;Only BOX board;Только для биржи BOX
-DocStr3397;Настройки для заявок типа {0};Настройки для заявок типа {0}
-DocStr3398;Настройки для заявок, отправляемых в Smart биржу;Настройки для заявок, отправляемых в Smart биржу
-DocStr3399;Настройки EFP заявок;Настройки EFP заявок
+DocStr3397;The settings for the orders type {0};Настройки для заявок типа {0}
+DocStr3398;Settings for orders that are sent to the Smart exchange;Настройки для заявок, отправляемых в Smart биржу
+DocStr3399;EFP orders settings;Настройки EFP заявок
 DocStr3400;Order condition {0};Условие для заявок типа {0}
 DocStr3401;Base condition;Базовое условие
 DocStr3402;Get parameter value;Получить значение параметра
-DocStr3403;Получить значение параметра. Если значение не существует, будет возвращено {0};Получить значение параметра. Если значение не существует, будет возвращено {0}
-DocStr3404;Установить новое значение параметра;Установить новое значение параметра
-DocStr3405;Расширенные типы заявок, специфичных для {0};Расширенные типы заявок, специфичных для {0}
-DocStr3406;Исполнить по рыночной цене, если цена закрытия превысила ожидаемую цену;Исполнить по рыночной цене, если цена закрытия превысила ожидаемую цену
-DocStr3407;Не действует для US {0}, US {1}, {2};Не действует для US {0}, US {1}, {2}
-DocStr3408;Исполнить по заданной цене, если цена закрытия превысила ожидаемую цену;Исполнить по заданной цене, если цена закрытия превысила ожидаемую цену
-DocStr3409;Не действует для US {0}, {1};Не действует для US {0}, {1}
+DocStr3403;To get the parameter value. If the value does not exist the {0} will be returned;Получить значение параметра. Если значение не существует, будет возвращено {0}
+DocStr3404;To set a new parameter value;Установить новое значение параметра
+DocStr3405;Extended orders types which are specific to {0};Расширенные типы заявок, специфичных для {0}
+DocStr3406;To match at the market price, if the closing price is higher than the expected price;Исполнить по рыночной цене, если цена закрытия превысила ожидаемую цену
+DocStr3407;Not valid for US {0}, US {1}, {2};Не действует для US {0}, US {1}, {2}
+DocStr3408;To match at the specified price, if the closing price is higher than the expected price;Исполнить по заданной цене, если цена закрытия превысила ожидаемую цену
+DocStr3409;Not valid for US {0}, {1};Не действует для US {0}, {1}
 DocStr3410;Valid until {0};Действует для {0}
-DocStr3411;Стоп с рыночной ценой активации;Стоп с рыночной ценой активации
-DocStr3412;Действует для {0}, {1}, {2}, {3}, {4};Действует для {0}, {1}, {2}, {3}, {4}
-DocStr3413;Стоп с заданной ценой активации;Стоп с заданной ценой активации
-DocStr3414;Действует для {0}, {1}, {2}, {3};Действует для {0}, {1}, {2}, {3}
-DocStr3415;Действует для {0}, {1};Действует для {0}, {1}
+DocStr3411;The stop with the market activation price;Стоп с рыночной ценой активации
+DocStr3412;Valid for {0}, {1}, {2}, {3}, {4};Действует для {0}, {1}, {2}, {3}, {4}
+DocStr3413;Stop with the specified activation price;Стоп с заданной ценой активации
+DocStr3414;Valid for {0}, {1}, {2}, {3};Действует для {0}, {1}, {2}, {3}
+DocStr3415;Valid for {0}, {1};Действует для {0}, {1}
 DocStr3416;VWAP;VWAP
 DocStr3417;Limit trailing stop;Лимитированный скользящий стоп
-DocStr3418;Используется для дельта заявок;Используется для дельта заявок
-DocStr3419;Используется для дельта-нейтральных типов заявок;Используется для дельта-нейтральных типов заявок
-DocStr3420;Изменяемый на шаг цены;Изменяемый на шаг цены
-DocStr3421;С рыночной ценой при исполнении условия;С рыночной ценой при исполнении условия
-DocStr3422;С заданной ценой при исполнении условия;С заданной ценой при исполнении условия
-DocStr3423;Режимы заявок типа OCA (One-Cancels All);Режимы заявок типа OCA (One-Cancels All)
-DocStr3424;Отменить все оставшиеся блоки;Отменить все оставшиеся блоки
-DocStr3425;Оставшиеся заявки пропорционально уменьшить на размер блока;Оставшиеся заявки пропорционально уменьшить на размер блока
-DocStr3426;Оставшиеся заявки пропорционально уменьшить на размер вне блока;Оставшиеся заявки пропорционально уменьшить на размер вне блока
-DocStr3427;Условия для активации стоп-заявок;Условия для активации стоп-заявок
-DocStr3428;Для NASDAQ {0} и US {1} используется условие {2}. Иначе, используется условие {3};Для NASDAQ {0} и US {1} используется условие {2}. Иначе, используется условие {3}
-DocStr3429;Двойное превышение или понижение текущей лучшей цены перед стоп-ценой;Двойное превышение или понижение текущей лучшей цены перед стоп-ценой
-DocStr3430;Превышение или понижение цены последней сделки перед стоп-ценой;Превышение или понижение цены последней сделки перед стоп-ценой
-DocStr3431;Двойное превышение или понижение цены последней сделки перед стоп-ценой;Двойное превышение или понижение цены последней сделки перед стоп-ценой
-DocStr3432;Превышение или понижение текущей лучшей цены перед стоп-ценой;Превышение или понижение текущей лучшей цены перед стоп-ценой
-DocStr3433;Превышение или понижение текущей лучшей цены или цены последней сделки перед стоп-ценой;Превышение или понижение текущей лучшей цены или цены последней сделки перед стоп-ценой
-DocStr3434;Превышение или понижение середины спреда перед стоп-ценой;Превышение или понижение середины спреда перед стоп-ценой
-DocStr3435;Описания типа трейдера по правилу 80A;Описания типа трейдера по правилу 80A
-DocStr3436;Методы автоматических расчетов объемов для группы счетов;Методы автоматических расчетов объемов для группы счетов
-DocStr3437;Процентное изменение;Процентное изменение
-DocStr3438;Через свободные денежные средства плюс заемные;Через свободные денежные средства плюс заемные
-DocStr3439;Через свободные денежные средства;Через свободные денежные средства
-DocStr3440;Равный объем;Равный объем
-DocStr3441;Отправители;Отправители
-DocStr3442;Тайм-фреймы волатильности;Тайм-фреймы волатильности
-DocStr3443;Типы коротких продаж комбинированных ног;Типы коротких продаж комбинированных ног
-DocStr3444;Частный трейдер или нет короткая нога;Частный трейдер или нет короткая нога
-DocStr3445;Клиринговый брокер;Клиринговый брокер
-DocStr3446;Тип короткой продажи комбинированных ног;Тип короткой продажи комбинированных ног
-DocStr3447;Уточнение типа короткой продажи комбинированных ног;Уточнение типа короткой продажи комбинированных ног
-DocStr3448;Используется при {0} равным {1};Используется при {0} равным {1}
+DocStr3418;It used for delta orders;Используется для дельта заявок
+DocStr3419;It used for delta neutral orders types;Используется для дельта-нейтральных типов заявок
+DocStr3420;To be changed on price increment;Изменяемый на шаг цены
+DocStr3421;With the market price when the condition is fulfilled;С рыночной ценой при исполнении условия
+DocStr3422;With the specified price when the condition is fulfilled;С заданной ценой при исполнении условия
+DocStr3423;Orders modes such as OCA (One-Cancels All);Режимы заявок типа OCA (One-Cancels All)
+DocStr3424;To cancel all remaining blocks;Отменить все оставшиеся блоки
+DocStr3425;The remaining orders proportionally to decrease by the size of the block;Оставшиеся заявки пропорционально уменьшить на размер блока
+DocStr3426;The remaining orders proportionally to decrease by the size out of the block;Оставшиеся заявки пропорционально уменьшить на размер вне блока
+DocStr3427;Conditions for stop orders activation;Условия для активации стоп-заявок
+DocStr3428;For NASDAQ {0} and US {1} the {2} condition is used. Otherwise, the {3} condition is used;Для NASDAQ {0} и US {1} используется условие {2}. Иначе, используется условие {3}
+DocStr3429;Double increase or decrease of the current best price before the stop price;Двойное превышение или понижение текущей лучшей цены перед стоп-ценой
+DocStr3430;Increase or decrease of the last trade price before the stop price;Превышение или понижение цены последней сделки перед стоп-ценой
+DocStr3431;Double increase or decrease of the last trade price before the stop price;Двойное превышение или понижение цены последней сделки перед стоп-ценой
+DocStr3432;Increase or decrease of the current best price before the stop price;Превышение или понижение текущей лучшей цены перед стоп-ценой
+DocStr3433;Increase or decrease of the current best price or the last trade price before the stop price;Превышение или понижение текущей лучшей цены или цены последней сделки перед стоп-ценой
+DocStr3434;Increase or decrease of the mid-spread before the stop price;Превышение или понижение середины спреда перед стоп-ценой
+DocStr3435;Descriptions of trader type by the 80A rule;Описания типа трейдера по правилу 80A
+DocStr3436;Methods for volumes automatic calculation for the accounts group;Методы автоматических расчетов объемов для группы счетов
+DocStr3437;Percentage change;Процентное изменение
+DocStr3438;Using free cash plus borrowed;Через свободные денежные средства плюс заемные
+DocStr3439;Using free cash;Через свободные денежные средства
+DocStr3440;An equal volume;Равный объем
+DocStr3441;Senders;Отправители
+DocStr3442;Volatility timeframes;Тайм-фреймы волатильности
+DocStr3443;Short sales types of combined legs;Типы коротких продаж комбинированных ног
+DocStr3444;Private trader or not short leg;Частный трейдер или нет короткая нога
+DocStr3445;Clearing broker;Клиринговый брокер
+DocStr3446;Short sale type of combined legs;Тип короткой продажи комбинированных ног
+DocStr3447;Clarification of the short sale type of combined legs;Уточнение типа короткой продажи комбинированных ног
+DocStr3448;Used when {0} equals to {1};Используется при {0} равным {1}
 DocStr3449;Exempt Code for Short Sale Exemption Orders;Exempt Code for Short Sale Exemption Orders
-DocStr3450;Тип базовых пунктов;Тип базовых пунктов
-DocStr3451;Только для биржи IBDARK;Только для биржи IBDARK
+DocStr3450;Base points type;Тип базовых пунктов
+DocStr3451;Only for the IBDARK exchange;Только для биржи IBDARK
 DocStr3452;split order into X buckets;split order into X buckets
 DocStr3453;split order so each bucket is of the size X;split order so each bucket is of the size X
 DocStr3454;price increment per bucket;price increment per bucket
-DocStr3455;Типы параметров для хеджирования;Типы параметров для хеджирования
-DocStr3456;Цели клиринга;Цели клиринга
-DocStr3457;Послеторговое размещение;Послеторговое размещение
-DocStr3458;Условие для заявок GTC;Условие для заявок GTC
-DocStr3459;Типы новостей;Типы новостей
-DocStr3460;Неизвестный тип;Неизвестный тип
+DocStr3455;Parameters types for hedging;Типы параметров для хеджирования
+DocStr3456;Clearing objectives;Цели клиринга
+DocStr3457;Post-trading placement;Послеторговое размещение
+DocStr3458;The condition for GTC orders;Условие для заявок GTC
+DocStr3459;News types;Типы новостей
+DocStr3460;Unknown type;Неизвестный тип
 DocStr3461;The messages adapter for InteractiveBrokers;Адаптер сообщений для InteractiveBrokers
 DocStr3462;Returns the current system time on the server side;Returns the current system time on the server side
 DocStr3463;Returns one next valid Id;Returns one next valid Id
 DocStr3464;Has No Effect;Has No Effect
-DocStr3465;Запустить сканер инструментов на основе заданных параметров;Запустить сканер инструментов на основе заданных параметров
-DocStr3466;Настройки фильтра сканера инструментов;Настройки фильтра сканера инструментов
-DocStr3467;Остановить сканер инструментов, запущенный ранее через {0};Остановить сканер инструментов, запущенный ранее через {0}
+DocStr3465;To start the instrument scanner based on specified parameters;Запустить сканер инструментов на основе заданных параметров
+DocStr3466;Instrument scanner filter settings;Настройки фильтра сканера инструментов
+DocStr3467;To stop the instrument scanner previously started via {0};Остановить сканер инструментов, запущенный ранее через {0}
 DocStr3468;Call the reqScannerParameters() method to receive an XML document that describes the valid parameters that a scanner subscription can have;Call the reqScannerParameters() method to receive an XML document that describes the valid parameters that a scanner subscription can have
 DocStr3469;Call this method to request market data. The market data will be returned by the tickPrice, tickSize, tickOptionComputation(), tickGeneric(), tickString() and tickEFP() methods;Call this method to request market data. The market data will be returned by the tickPrice, tickSize, tickOptionComputation(), tickGeneric(), tickString() and tickEFP() methods
 DocStr3470;this structure contains a description of the contract for which market data is being requested;this structure contains a description of the contract for which market data is being requested
@@ -7614,13 +7614,13 @@ DocStr3472;Allows client to request snapshot market data;Allows client to reques
 DocStr3473;Market Data Off - used in conjunction with RTVolume Generic tick type causes only volume data to be sent;Market Data Off - used in conjunction with RTVolume Generic tick type causes only volume data to be sent
 DocStr3474;After calling this method, market data for the specified Id will stop flowing;After calling this method, market data for the specified Id will stop flowing
 DocStr3475;used for reqHistoricalData;used for reqHistoricalData
-DocStr3476;Подписаться на получение исторических значений инструмента с заданной периодичностью;Подписаться на получение исторических значений инструмента с заданной периодичностью
-DocStr3477;Сообщение о подписке или отписки на маркет-данные;Сообщение о подписке или отписки на маркет-данные
-DocStr3478;Поле маркет-данных. Поддерживаются следующие значения: {0};Поле маркет-данных. Поддерживаются следующие значения: {0}
-DocStr3479;Получать данные только по торговому времени. По-умолчанию используется торговое время;Получать данные только по торговому времени. По-умолчанию используется торговое время
-DocStr3480;Подписаться на получение свечек реального времени;Подписаться на получение свечек реального времени
-DocStr3481;Поля маркет-данных, на основе которых будут строяться свечи. Поддерживаются следующие значения: {0};Поля маркет-данных, на основе которых будут строяться свечи. Поддерживаются следующие значения: {0}
-DocStr3482;Строить свечи только по торговому времени. По-умолчанию используется торговое время;Строить свечи только по торговому времени. По-умолчанию используется торговое время
+DocStr3476;To subscribe for instrument historic values geting at specified intervals;Подписаться на получение исторических значений инструмента с заданной периодичностью
+DocStr3477;The message about subscription or unsubscription for market data;Сообщение о подписке или отписки на маркет-данные
+DocStr3478;The market data field. Following values are supported: {0};Поле маркет-данных. Поддерживаются следующие значения: {0}
+DocStr3479;To get data only by the trading time. By default the trading time is used;Получать данные только по торговому времени. По-умолчанию используется торговое время
+DocStr3480;To subscribe for real-time candles receiving;Подписаться на получение свечек реального времени
+DocStr3481;Market data fields upon which candles will be created. The following values are supported: {0};Поля маркет-данных, на основе которых будут строиться свечи. Поддерживаются следующие значения: {0}
+DocStr3482;To create candles only by the trading time. By default the trading time is used;Строить свечи только по торговому времени. По-умолчанию используется торговое время
 DocStr3483;Call this method to request market depth for a specific contract. The market depth will be returned by the updateMktDepth() and updateMktDepthL2() methods;Call this method to request market depth for a specific contract. The market depth will be returned by the updateMktDepth() and updateMktDepthL2() methods
 DocStr3484;this structure contains a description of the contract for which market depth data is being requested;this structure contains a description of the contract for which market depth data is being requested
 DocStr3485;After calling this method, market depth data for the specified Id will stop flowing;After calling this method, market depth data for the specified Id will stop flowing
@@ -7629,12 +7629,12 @@ DocStr3487;if set to {0}, returns all the existing bulletins for the current day
 DocStr3488;Call this method to stop receiving news bulletins;Call this method to stop receiving news bulletins
 DocStr3489;Call this function to download all details for a particular underlying. the contract details will be received via the contractDetails() function on the EWrapper;Call this function to download all details for a particular underlying. the contract details will be received via the contractDetails() function on the EWrapper
 DocStr3490;summary description of the contract being looked up;summary description of the contract being looked up
-DocStr3491;Подписаться на получение отчетов по рынку для заданного инструмента;Подписаться на получение отчетов по рынку для заданного инструмента
-DocStr3492;Остановить подписку на получение отчетов по рынку для заданного инструмента, созданная ранее через {0};Остановить подписку на получение отчетов по рынку для заданного инструмента, созданная ранее через {0}
-DocStr3493;Подписаться на получение подразумеваемой волатильности для заданного инструмента;Подписаться на получение подразумеваемой волатильности для заданного инструмента
-DocStr3494;Остановить подписку на получение подразумеваемой волатильности для заданного инструмента, созданная ранее через {0};Остановить подписку на получение подразумеваемой волатильности для заданного инструмента, созданная ранее через {0}
-DocStr3495;Подписаться на получение греков для заданного инструмента;Подписаться на получение греков для заданного инструмента
-DocStr3496;Остановить подписку на получение греков для заданного инструмента, созданная ранее через {0};Остановить подписку на получение греков для заданного инструмента, созданная ранее через {0}
+DocStr3491;To subscribe for receiving of market reports by the specified instrument;Подписаться на получение отчетов по рынку для заданного инструмента
+DocStr3492;To stop subscription for receiving of market reports by the specified instrument, created earlier via {0};Остановить подписку на получение отчетов по рынку для заданного инструмента, созданную ранее через {0}
+DocStr3493;To subscribe for receiving of the implied volatility for the specified instrument;Подписаться на получение подразумеваемой волатильности для заданного инструмента
+DocStr3494;To stop subscription for receiving of the implied volatility for the specified instrument, created earlier via {0};Остановить подписку на получение подразумеваемой волатильности для заданного инструмента, созданную ранее через {0}
+DocStr3495;To subscribe for Greeks getting for the specified instrument;Подписаться на получение греков для заданного инструмента
+DocStr3496;To stop subscription for receiving of the Greeks for the specified instrument, created earlier via {0};Остановить подписку на получение греков для заданного инструмента, созданную ранее через {0}
 DocStr3497;Call the exerciseOptions() method to exercise options. “SMART” is not an allowed exchange in exerciseOptions() calls, and that TWS does a moneyness request for the position in question whenever any API initiated exercise or lapse is attempted;Call the exerciseOptions() method to exercise options. “SMART” is not an allowed exchange in exerciseOptions() calls, and that TWS does a moneyness request for the position in question whenever any API initiated exercise or lapse is attempted
 DocStr3498;this structure contains a description of the contract to be exercised.  If no multiplier is specified, a default of 100 is assumed;this structure contains a description of the contract to be exercised.  If no multiplier is specified, a default of 100 is assumed
 DocStr3499;this can have two values: 1 = specifies exercise 2 = specifies lapse;this can have two values: 1 = specifies exercise 2 = specifies lapse
@@ -7650,10 +7650,10 @@ DocStr3508;Call this method to request that newly created TWS orders be implicit
 DocStr3509;If set to {0}, newly created TWS orders will be implicitly associated with the client. If set to {1}, no association will be made;If set to {0}, newly created TWS orders will be implicitly associated with the client. If set to {1}, no association will be made
 DocStr3510;Call this method to request the open orders that were placed from all clients and also from TWS. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper. No association is made between the returned orders and the requesting client;Call this method to request the open orders that were placed from all clients and also from TWS. Each open order will be fed back through the openOrder() and orderStatus() functions on the EWrapper. No association is made between the returned orders and the requesting client
 DocStr3511;Call this method to request the list of managed accounts. The list will be returned by the managedAccounts() function on the EWrapper. This request can only be made when connected to a Financial Advisor (FA) account;Call this method to request the list of managed accounts. The list will be returned by the managedAccounts() function on the EWrapper. This request can only be made when connected to a Financial Advisor (FA) account
-DocStr3512;Адрес по-умолчанию;Адрес по-умолчанию
-DocStr3513;"Использовать ли данные реального времени или ""замороженные"" на сервере брокера. По-умолчанию используются ""замороженные"" данные";"Использовать ли данные реального времени или ""замороженные"" на сервере брокера. По-умолчанию используются ""замороженные"" данные"
-DocStr3514;Уровень логирования сообщений сервера. По-умолчанию равен {0};Уровень логирования сообщений сервера. По-умолчанию равен {0}
-DocStr3515;Время подключения;Время подключения
+DocStr3512;Address by default;Адрес по-умолчанию
+DocStr3513;Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used;"Использовать ли данные реального времени или ""замороженные"" на сервере брокера. По-умолчанию используются ""замороженные"" данные"
+DocStr3514;The server messages logging level. The default is {0};Уровень логирования сообщений сервера. По-умолчанию равен {0}
+DocStr3515;The connection time;Время подключения
 DocStr3516;Undefined Incoming Message;Undefined Incoming Message
 DocStr3517;Incoming Tick Types;Incoming Tick Types
 DocStr3518;Bid Size;Bid Size
@@ -7727,112 +7727,112 @@ DocStr3585;Refer to the Contract struct for the list of valid security types;Ref
 DocStr3586;Filter the results of the ReqExecutions() method based on the order exchange;Filter the results of the ReqExecutions() method based on the order exchange
 DocStr3587;Filter the results of the ReqExecutions() method based on the order action;Filter the results of the ReqExecutions() method based on the order action
 DocStr3588;Refer to the Order struct for the list of valid order actions;Refer to the Order struct for the list of valid order actions
-DocStr3589;Типы данных, на основе которых должны строиться свечи;Типы данных, на основе которых должны строиться свечи
-DocStr3590;Лучший доходный оффер;Лучший доходный оффер
-DocStr3591;Лучший доходных бид;Лучший доходных бид
-DocStr3592;Лучшая доходная пара котировок;Лучшая доходная пара котировок
-DocStr3593;Доходная последняя сделка;Доходная последняя сделка
-DocStr3594;Вспомогательный класс, который используется для доступа к специфичной Interactive Brokers информации через {0};Вспомогательный класс, который используется для доступа к специфичной Interactive Brokers информации через {0}
-DocStr3595;Получить для инструмента биржевую площадку исполнения заявок;Получить для инструмента биржевую площадку исполнения заявок
-DocStr3596;Биржевая площадка исполнения заявок. Если площадка отсутствует, то будет возвращено {0};Биржевая площадка исполнения заявок. Если площадка отсутствует, то будет возвращено {0}
-DocStr3597;Получить идентификатор клиента;Получить идентификатор клиента
-DocStr3598;Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено {0};Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено {0}
-DocStr3599;Получить позицию ликвидации;Получить позицию ликвидации
-DocStr3600;Позиция ликвидации. Если позиция отсутствует, то будет возвращено {0};Позиция ликвидации. Если позиция отсутствует, то будет возвращено {0}
-DocStr3601;Получить количество прибыльных контрактов в сделке;Получить количество прибыльных контрактов в сделке
-DocStr3603;Количество прибыльных контрактов в сделке. Если количество отсутствует, то будет возвращено {0};Количество прибыльных контрактов в сделке. Если количество отсутствует, то будет возвращено {0}
-DocStr3604;Получить среднюю цену исполнения сделки;Получить среднюю цену исполнения сделки
-DocStr3605;Средняя цена исполнения сделки. Если цена отсутствует, то будет возвращено {0};Средняя цена исполнения сделки. Если цена отсутствует, то будет возвращено {0}
-DocStr3606;Получить описание заявки;Получить описание заявки
-DocStr3607;Описание заявки. Если описание отсутствует, то будет возвращено {0};Описание заявки. Если описание отсутствует, то будет возвращено {0}
-DocStr3608;Получить Economic Value правило;Получить Economic Value правило
-DocStr3609;Economic Value правило. Если правило отсутствует, то будет возвращено {0};Economic Value правило. Если правило отсутствует, то будет возвращено {0}
-DocStr3610;Получить множитель рыночной цены контракта при изменении цены на 1;Получить множитель рыночной цены контракта при изменении цены на 1
-DocStr3611;Множитель рыночной цены. Если множитель отсутствует, то будет возвращено {0};Множитель рыночной цены. Если множитель отсутствует, то будет возвращено {0}
-DocStr3612;Получить цену последней сделки;Получить цену последней сделки
-DocStr3613;Цена последней сделки. Если цена отсутствует, то будет возвращено {0};Цена последней сделки. Если цена отсутствует, то будет возвращено {0}
-DocStr3614;Получить причину удержания заявки;Получить причину удержания заявки
-DocStr3615;Причина удержания. Если причина отсутствует, то будет возвращено {0};Причина удержания. Если причина отсутствует, то будет возвращено {0}
+DocStr3589;Data types on which candles should be based;Типы данных, на основе которых должны строиться свечи
+DocStr3590;The best profitable offer;Лучший доходный оффер
+DocStr3591;The best profitable bid;Лучший доходных бид
+DocStr3592;Best profitable couple of quotes;Лучшая доходная пара котировок
+DocStr3593;The last profitable trade;Доходная последняя сделка
+DocStr3594;The helper class that is used to access to specific Interactive Brokers information via {0};Вспомогательный класс, который используется для доступа к специфичной Interactive Brokers информации через {0}
+DocStr3595;To get the exchange board of orders fulfilment for the instrument;Получить для инструмента биржевую площадку исполнения заявок
+DocStr3596;The exchange board of orders fulfilment. If the board does not exist then {0} will be returned;Биржевая площадка исполнения заявок. Если площадка отсутствует, то будет возвращено {0}
+DocStr3597;To get the customer identifier;Получить идентификатор клиента
+DocStr3598;The customer identifier. If the identifier does not exist then {0} will be returned;Идентификатор клиента. Если идентификатор отсутствует, то будет возвращено {0}
+DocStr3599;To get the liquidation position;Получить позицию ликвидации
+DocStr3600;The liquidation position. If the position does not exist then {0} will be returned;Позиция ликвидации. Если позиция отсутствует, то будет возвращено {0}
+DocStr3601;To get a number of profitable contracts in the trade;Получить количество прибыльных контрактов в сделке
+DocStr3603;A number of profitable contracts in the trade. If a number does not exist then {0} will be returned;Количество прибыльных контрактов в сделке. Если количество отсутствует, то будет возвращено {0}
+DocStr3604;To get the average price of matched order;Получить среднюю цену исполнения сделки
+DocStr3605;The average price of the matched order. If the price does not exist then {0} will be returned;Средняя цена исполнения сделки. Если цена отсутствует, то будет возвращено {0}
+DocStr3606;To get the order description;Получить описание заявки
+DocStr3607;The order description. If the description does not exist then {0} will be returned;Описание заявки. Если описание отсутствует, то будет возвращено {0}
+DocStr3608;To get the Economic Value rule;Получить Economic Value правило
+DocStr3609;The Economic Value rule. If the rule does not exist then {0} will be returned;Economic Value правило. Если правило отсутствует, то будет возвращено {0}
+DocStr3610;To get the contract market price factor when the price changes by 1;Получить множитель рыночной цены контракта при изменении цены на 1
+DocStr3611;The market price factor. If the factor does not exist then {0} will be returned;Множитель рыночной цены. Если множитель отсутствует, то будет возвращено {0}
+DocStr3612;To get the last trade price;Получить цену последней сделки
+DocStr3613;The last trade price. If the price does not exist then {0} will be returned;Цена последней сделки. Если цена отсутствует, то будет возвращено {0}
+DocStr3614;To get the order retention reason;Получить причину удержания заявки
+DocStr3615;The order retention reason. If the reason does not exist then {0} will be returned;Причина удержания. Если причина отсутствует, то будет возвращено {0}
 DocStr3616;Returns the version of the TWS instance the API application is connected to;Returns the version of the TWS instance the API application is connected to
-DocStr3617;Сообщение запуска сканера инструментов на основе заданных параметров. Результаты будут приходить через событие {0};Сообщение запуска сканера инструментов на основе заданных параметров. Результаты будут приходить через событие {0}
-DocStr3618;Сообщение с результатами сканера, запущенного сообщением {0};Сообщение с результатами сканера, запущенного сообщением {0}
-DocStr3619;Результаты;Результаты
-DocStr3620;Идентификатор запроса {0};Идентификатор запроса {0}
-DocStr3621;Сообщение с параметрами сканера;Сообщение с параметрами сканера
-DocStr3622;Параметры в формате xml;Параметры в формате xml
-DocStr3623;Сообщение с финансовой консультацией;Сообщение с финансовой консультацией
-DocStr3624;Данные в формате xml;Данные в формате xml
-DocStr3625;Сообщение на получение отчетов по рынку для заданного инструмента. Результаты будут приходить через событие {0};Сообщение на получение отчетов по рынку для заданного инструмента. Результаты будут приходить через событие {0}
-DocStr3626;Тип отчета;Тип отчета
-DocStr3627;Сообщение с отчетом по рынку, инициированного сообщением {0};Сообщение с отчетом по рынку, инициированного сообщением {0}
-DocStr3628;Текст отчета;Текст отчета
-DocStr3629;Сообщение подписки на получение расчетных значений опциона;Сообщение подписки на получение расчетных значений опциона
-DocStr3630;Подразумеваемая волатильность;Подразумеваемая волатильность
-DocStr3631;Цена опциона;Цена опциона
-DocStr3632;Реализация интерфейса {0}, предоставляющая подключение к Interactive Brokers через IB Gateway;Реализация интерфейса {0}, предоставляющая подключение к Interactive Brokers через IB Gateway
-DocStr3633;Запустить или остановить сканер инструментов на основе заданных параметров. Результаты будут приходить через событие {0};Запустить или остановить сканер инструментов на основе заданных параметров. Результаты будут приходить через событие {0}
-DocStr3634;{0} если необходимо подписаться, иначе {1};{0} если необходимо подписаться, иначе {1}
-DocStr3635;Подписаться или отписаться на получение отчетов по рынку для заданного инструмента. Результаты будут приходить через событие {0};Подписаться или отписаться на получение отчетов по рынку для заданного инструмента. Результаты будут приходить через событие {0}
-DocStr3636;Подписаться или отписаться на получение расчетных значений опциона. Результаты будут приходить через событие {0};Подписаться или отписаться на получение расчетных значений опциона. Результаты будут приходить через событие {0}
-DocStr3637;Событие появление новых результатов сканера, запущенного ранее через {0};Событие появление новых результатов сканера, запущенного ранее через {0}
-DocStr3638;Событие появление нового отчета, полученного по подписке {0};Событие появление нового отчета, полученного по подписке {0}
-DocStr3639;Событие о появлении новых параметров сканера, которые применяются через {0}. Параметры передаются в виде xml;Событие о появлении новых параметров сканера, которые применяются через {0}. Параметры передаются в виде xml
-DocStr3640;Событие о появлении новых финансовых консультаций. Параметры передаются в виде xml;Событие о появлении новых финансовых консультаций. Параметры передаются в виде xml
-DocStr3641;Результат фильтра сканера, запускаемого через {0};Результат фильтра сканера, запускаемого через {0}
-DocStr3642;Ранк;Ранк
-DocStr3643;Значение запроса;Значение запроса
-DocStr3644;Описание комбинированного инструмента;Описание комбинированного инструмента
-DocStr3645;Уровни логирования серверной стороны;Уровни логирования серверной стороны
-DocStr3646;Информационные сообщения;Информационные сообщения
-DocStr3647;Детальные сообщения;Детальные сообщения
-DocStr3648;Типы исключений акций;Типы исключений акций
-DocStr3649;Не исключать ничего;Не исключать ничего
-DocStr3650;Исключить {0};Исключить {0}
-DocStr3651;Только Exchange-traded fund;Только Exchange-traded fund
-DocStr3652;Настройки фильтра сканера, запускаемого через {0};Настройки фильтра сканера, запускаемого через {0}
-DocStr3653;Количество строк в запросе;Количество строк в запросе
-DocStr3654;Верхний предел рыночной цены инструмента;Верхний предел рыночной цены инструмента
-DocStr3655;Нижний предел рыночной цены инструмента;Нижний предел рыночной цены инструмента
-DocStr3656;Верхний предел объема торгов по инструменту;Верхний предел объема торгов по инструменту
-DocStr3657;Верхний предел объема торгов по опциону;Верхний предел объема торгов по опциону
-DocStr3658;Верхний предел капитализации;Верхний предел капитализации
-DocStr3659;Нижний предел капитализации;Нижний предел капитализации
-DocStr3660;Верхний предел рейтинга Moody;Верхний предел рейтинга Moody
-DocStr3661;Нижний предел рейтинга Moody;Нижний предел рейтинга Moody
-DocStr3662;Верхний предел рейтинга SP;Верхний предел рейтинга SP
-DocStr3663;Нижний предел рейтинга SP;Нижний предел рейтинга SP
-DocStr3664;Верхний предел даты погашения инструмента;Верхний предел даты погашения инструмента
-DocStr3665;Нижний предел даты погашения инструмента;Нижний предел даты погашения инструмента
-DocStr3666;Верхний предел купонной ставки;Верхний предел купонной ставки
-DocStr3667;Нижний предел купонной ставки;Нижний предел купонной ставки
-DocStr3668;Исключать конвертируемые облигации;Исключать конвертируемые облигации
-DocStr3669;Расширенные параметры. Подробнее, http://www.interactivebrokers.com/en/software/tws/usersguidebook/technicalanalytics/market_scanner_types.htm;Расширенные параметры. Подробнее, http://www.interactivebrokers.com/en/software/tws/usersguidebook/technicalanalytics/market_scanner_types.htm
-DocStr3670;Тип исключений акций;Тип исключений акций
-DocStr3671;Тайм-фреймы для исторических свечек InteractiveBrokers;Тайм-фреймы для исторических свечек InteractiveBrokers
-DocStr3672;Секундный тайм-фрейм;Секундный тайм-фрейм
-DocStr3673;Пяти секундный тайм-фрейм;Пяти секундный тайм-фрейм
-DocStr3674;Пятнадцати секундный тайм-фрейм;Пятнадцати секундный тайм-фрейм
-DocStr3675;Тридцати секундный тайм-фрейм;Тридцати секундный тайм-фрейм
-DocStr3676;Двух минутный тайм-фрейм;Двух минутный тайм-фрейм
-DocStr3677;Трех минутный тайм-фрейм;Трех минутный тайм-фрейм
-DocStr3678;Страна;Страна
-DocStr3679;Часы работы;Часы работы
-DocStr3680;Идентификатор контакта;Идентификатор контакта
-DocStr3681;Информация об инструменте на конкретной площадке;Информация об инструменте на конкретной площадке
-DocStr3682;Поставочный;Поставочный
+DocStr3617;The message about start of the instruments scanner based on specified parameters. The results will come through the {0} event;Сообщение запуска сканера инструментов на основе заданных параметров. Результаты будут приходить через событие {0}
+DocStr3618;The message with the results of scanner starting by the message {0};Сообщение с результатами сканера, запущенного сообщением {0}
+DocStr3619;The results;Результаты
+DocStr3620;The query identifier {0};Идентификатор запроса {0}
+DocStr3621;The message with scanner parameters;Сообщение с параметрами сканера
+DocStr3622;The parameters in the xml format;Параметры в формате xml
+DocStr3623;The messgae with financial advice;Сообщение с финансовой консультацией
+DocStr3624;Data in the xml format;Данные в формате xml
+DocStr3625;The message to receive market reports for the specified instrument. The results will come through the {0} event;Сообщение на получение отчетов по рынку для заданного инструмента. Результаты будут приходить через событие {0}
+DocStr3626;The report type;Тип отчета
+DocStr3627;The message with the market report initiated by the message {0};Сообщение с отчетом по рынку, инициированного сообщением {0}
+DocStr3628;Text of report;Текст отчета
+DocStr3629;The message about subscription to the estimated option values getting;Сообщение подписки на получение расчетных значений опциона
+DocStr3630;The implied volatility;Подразумеваемая волатильность
+DocStr3631;The option price;Цена опциона
+DocStr3632;The implementation of the {0} interface which provides a connection to Interactive Brokers via the IB Gateway;Реализация интерфейса {0}, предоставляющая подключение к Interactive Brokers через IB Gateway
+DocStr3633;To start or stop the instruments scanner based on specified parameters. The results will come through the {0} event;Запустить или остановить сканер инструментов на основе заданных параметров. Результаты будут приходить через событие {0}
+DocStr3634;{0} if you need to subscribe, otherwise {1};{0} если необходимо подписаться, иначе {1}
+DocStr3635;To subscribe or unsubscribe to receive market reports for the specified instrument. The results will come through the {0} event;Подписаться или отписаться на получение отчетов по рынку для заданного инструмента. Результаты будут приходить через событие {0}
+DocStr3636;To subscribe or unsubscribe to receive the estimated option values. The results will come through the {0} event;Подписаться или отписаться на получение расчетных значений опциона. Результаты будут приходить через событие {0}
+DocStr3637;The new results occurring event of the scanner started previously via {0};Событие появление новых результатов сканера, запущенного ранее через {0}
+DocStr3638;The new report occurring event obtained by subscription {0};Событие появление нового отчета, полученного по подписке {0}
+DocStr3639;The event of occurring of new scanner parameters which are applied via {0}. Parameters are passed in the xml format;Событие о появлении новых параметров сканера, которые применяются через {0}. Параметры передаются в виде xml
+DocStr3640;The new financial advice occurring event. Parameters are passed in the xml format;Событие о появлении новых финансовых консультаций. Параметры передаются в виде xml
+DocStr3641;The filter result of scanner starting via {0};Результат фильтра сканера, запускаемого через {0}
+DocStr3642;Rank;Ранк
+DocStr3643;The query value;Значение запроса
+DocStr3644;The combined instrument description;Описание комбинированного инструмента
+DocStr3645;Server-side logging levels;Уровни логирования серверной стороны
+DocStr3646;Information messages;Информационные сообщения
+DocStr3647;Detailed messages;Детальные сообщения
+DocStr3648;Shares exclusions types;Типы исключений акций
+DocStr3649;Not to exclude anything;Не исключать ничего
+DocStr3650;To exclude {0};Исключить {0}
+DocStr3651;Only the Exchange-traded fund;Только Exchange-traded fund
+DocStr3652;Filter settings of the scanner starting via {0};Настройки фильтра сканера, запускаемого через {0}
+DocStr3653;The number of strings in the query;Количество строк в запросе
+DocStr3654;The upper limit of the instrument market price;Верхний предел рыночной цены инструмента
+DocStr3655;The lower limit of the instrument market price;Нижний предел рыночной цены инструмента
+DocStr3656;The upper limit of the instrument trading volume;Верхний предел объема торгов по инструменту
+DocStr3657;The upper limit of the option trading volume;Верхний предел объема торгов по опциону
+DocStr3658;The upper limit of capitalization;Верхний предел капитализации
+DocStr3659;The lower limit of capitalization;Нижний предел капитализации
+DocStr3660;The upper limit of the Moody rating;Верхний предел рейтинга Moody
+DocStr3661;The lower limit of the Moody rating;Нижний предел рейтинга Moody
+DocStr3662;The upper limit of the SP rating;Верхний предел рейтинга SP
+DocStr3663;The lower limit of the SP rating;Нижний предел рейтинга SP
+DocStr3664;The upper limit of the instrument maturity date;Верхний предел даты погашения инструмента
+DocStr3665;The lower limit of the instrument maturity date;Нижний предел даты погашения инструмента
+DocStr3666;The upper limit of the coupon rate;Верхний предел купонной ставки
+DocStr3667;The lower limit of the coupon rate;Нижний предел купонной ставки
+DocStr3668;To exclude convertible bonds;Исключать конвертируемые облигации
+DocStr3669;Extended settings. For more details see http://www.interactivebrokers.com/en/software/tws/usersguidebook/technicalanalytics/market_scanner_types.htm;Расширенные параметры. Подробнее, http://www.interactivebrokers.com/en/software/tws/usersguidebook/technicalanalytics/market_scanner_types.htm
+DocStr3670;The shares exclusions type;Тип исключений акций
+DocStr3671;Time frames for InteractiveBrokers historical candles;Тайм-фреймы для исторических свечек InteractiveBrokers
+DocStr3672;One second time frame;Секундный тайм-фрейм
+DocStr3673;Five second time frame;Пяти секундный тайм-фрейм
+DocStr3674;Fifteen second time frame;Пятнадцати секундный тайм-фрейм
+DocStr3675;Thirty second time frame;Тридцати секундный тайм-фрейм
+DocStr3676;Two minute time frame;Двух минутный тайм-фрейм
+DocStr3677;Three minute time frame;Трех минутный тайм-фрейм
+DocStr3678;Country;Страна
+DocStr3679;Work hours;Часы работы
+DocStr3680;The contact identifier;Идентификатор контакта
+DocStr3681;Information about the instrument on the specific board;Информация об инструменте на конкретной площадке
+DocStr3682;Deliverable;Поставочный
 DocStr3683;Exchange web site;Сайт биржи
 DocStr3684;Business hours;Часы торговли
-DocStr3685;Ценовой диапазон;Ценовой диапазон
-DocStr3686;Сайз диапазон;Сайз диапазон
-DocStr3687;Детальная информация об инструменте;Детальная информация об инструменте
+DocStr3685;The price range;Ценовой диапазон
+DocStr3686;The volume range;Сайз диапазон
+DocStr3687;Detailed information about the instrument;Детальная информация об инструменте
 DocStr3688;Type of shares;Тип акции
-DocStr3689;Маржинальное обеспечение;Маржинальное обеспечение
-DocStr3690;Маржинальное обеспечение при короткой позиции;Маржинальное обеспечение при короткой позиции
-DocStr3691;Загрузчик информации с сайта InteractiveBrokers;Загрузчик информации с сайта InteractiveBrokers
-DocStr3692;Скачать информацию по биржам;Скачать информацию по биржам
-DocStr3693;Скачать информацию об инструментах биржи;Скачать информацию об инструментах биржи
-DocStr3694;Скачать детальную информацию об инструменте;Скачать детальную информацию об инструменте
-DocStr3695;Скачать площадки;Скачать площадки
+DocStr3689;Margin funds;Маржинальное обеспечение
+DocStr3690;Margin funds under short position;Маржинальное обеспечение при короткой позиции
+DocStr3691;The loader of information from the InteractiveBrokers site;Загрузчик информации с сайта InteractiveBrokers
+DocStr3692;To download information by exchanges;Скачать информацию по биржам
+DocStr3693;To download information about exchange instruments;Скачать информацию об инструментах биржи
+DocStr3694;To download detailed information about the instrument;Скачать детальную информацию об инструменте
+DocStr3695;To download boards;Скачать площадки
 DocStr3696;The messages adapter for IQFeed;Маркет-дата адаптер сообщений для IQFeed
 DocStr3697;All {0} to be transmit;Все {0}, которые необходимо транслировать
 DocStr3698;Whether to load instruments from the archive of the IQFeed site. The default is off;Загружать ли инструменты из архива с сайта IQFeed. По-умолчанию выключено
@@ -12506,5 +12506,5 @@ DocStr8456;Peg diff;Peg diff
 DocStr8457;Отслеживать рост или падение цены;Отслеживать рост или падение цены
 DocStr8458;Время последнего элемента;Время последнего элемента
 DocStr8459;;
-DocStr8460;Экстра подключение;Экстра подключение
-DocStr8461;Дополнительные возможности;Дополнительные возможности
+DocStr8460;Extra authentication;Экстра подключение
+DocStr8461;Optional capabilities;Дополнительные возможности

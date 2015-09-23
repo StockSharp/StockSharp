@@ -17,13 +17,17 @@ namespace StockSharp.InteractiveBrokers
 		/// <summary>
 		/// Filter the results of the ReqExecutions() method based on an account code.
 		/// </summary>
-		/// <remarks>This is only relevant for Financial Advisor (FA) accounts.</remarks>
+		/// <remarks>
+		/// This is only relevant for Financial Advisor (FA) accounts.
+		/// </remarks>
 		public string Portfolio { get; set; }
 
 		/// <summary>
-		/// Filter the results of the ReqExecutions() method based on execution reports received after the specified time. 
+		/// Filter the results of the ReqExecutions() method based on execution reports received after the specified time.
 		/// </summary>
-		/// <remarks>The format for timeFilter is "yyyymmdd-hh:mm:ss"</remarks>
+		/// <remarks>
+		/// The format for timeFilter is "yyyymmdd-hh:mm:ss".
+		/// </remarks>
 		public DateTime Time { get; set; }
 
 		/// <summary>
@@ -32,9 +36,11 @@ namespace StockSharp.InteractiveBrokers
 		public SecurityId SecurityId { get; set; }
 
 		/// <summary>
-		/// Filter the results of the ReqExecutions() method based on the order security type. 
+		/// Filter the results of the ReqExecutions() method based on the order security type.
 		/// </summary>
-		/// <remarks>Refer to the Contract struct for the list of valid security types.</remarks>
+		/// <remarks>
+		/// Refer to the Contract struct for the list of valid security types.
+		/// </remarks>
 		public SecurityTypes? SecurityType { get; set; }
 
 		/// <summary>
@@ -43,9 +49,11 @@ namespace StockSharp.InteractiveBrokers
 		public string BoardCode { get; set; }
 
 		/// <summary>
-		/// Filter the results of the ReqExecutions() method based on the order action. 
+		/// Filter the results of the ReqExecutions() method based on the order action.
 		/// </summary>
-		/// <remarks>Refer to the Order struct for the list of valid order actions.</remarks>
+		/// <remarks>
+		/// Refer to the Order struct for the list of valid order actions.
+		/// </remarks>
 		public Sides? Side { get; set; }
 	}
 }

@@ -1,42 +1,36 @@
 namespace StockSharp.InteractiveBrokers
 {
 	/// <summary>
-	/// Типы новостей.
+	/// News types.
 	/// </summary>
 	public enum ExchangeNewsTypes
 	{
 		/// <summary>
-		/// Неизвестный тип.
+		/// Unknown type.
 		/// </summary>
 		Unknown,
 
 		/// <summary>
-		/// 
 		/// </summary>
 		Bbs,
 
 		/// <summary>
-		/// 
 		/// </summary>
 		LiveExchange,
 
 		/// <summary>
-		/// 
 		/// </summary>
 		DeadExchange,
 
 		/// <summary>
-		/// 
 		/// </summary>
 		Html,
 
 		/// <summary>
-		/// 
 		/// </summary>
 		PopupText,
 
 		/// <summary>
-		/// 
 		/// </summary>
 		PopupHtml
 	}

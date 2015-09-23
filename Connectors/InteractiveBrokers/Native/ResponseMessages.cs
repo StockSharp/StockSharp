@@ -3,7 +3,7 @@ namespace StockSharp.InteractiveBrokers.Native
 	internal enum ResponseMessages
 	{
 		/// <summary>
-		/// Undefined Incoming Message
+		/// Undefined Incoming Message.
 		/// </summary>
 		Undefined = 0,
 

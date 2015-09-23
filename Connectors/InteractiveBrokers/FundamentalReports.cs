@@ -1,37 +1,37 @@
 namespace StockSharp.InteractiveBrokers
 {
 	/// <summary>
-	/// Типы финансовых отчетов.
+	/// Financial reports types.
 	/// </summary>
 	public enum FundamentalReports
 	{
 		/// <summary>
-		/// Обзор.
+		/// Overview.
 		/// </summary>
 		Overview,
 
 		/// <summary>
-		/// Отчетность.
+		/// Statements.
 		/// </summary>
 		Statements,
 		
 		/// <summary>
-		/// Общая финансовая информация.
+		/// Summary.
 		/// </summary>
 		Summary,
 
 		/// <summary>
-		/// Соотношение показателей.
+		/// Ratio.
 		/// </summary>
 		Ratio,
 
 		/// <summary>
-		/// Прогноз.
+		/// Estimates.
 		/// </summary>
 		Estimates,
 		
 		/// <summary>
-		/// График.
+		/// Chart.
 		/// </summary>
 		Calendar,
 	}

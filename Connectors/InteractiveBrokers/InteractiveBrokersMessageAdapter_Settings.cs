@@ -13,6 +13,9 @@ namespace StockSharp.InteractiveBrokers
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	/// <summary>
+	/// The messages adapter for InteractiveBrokers.
+	/// </summary>
 	[DisplayName("Interactive Brokers")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "Interactive Brokers")]
@@ -22,17 +25,17 @@ namespace StockSharp.InteractiveBrokers
 	partial class InteractiveBrokersMessageAdapter
 	{
 		/// <summary>
-		/// Адрес по-умолчанию.
+		/// Address by default.
 		/// </summary>
 		public static readonly EndPoint DefaultAddress = new IPEndPoint(IPAddress.Loopback, 7496);
 
 		/// <summary>
-		/// Адрес по-умолчанию.
+		/// Address by default.
 		/// </summary>
 		public static readonly EndPoint DefaultGatewayAddress = new IPEndPoint(IPAddress.Loopback, 4001);
 
 		/// <summary>
-		/// Адрес.
+		/// Address.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.AddressKey)]
@@ -41,7 +44,7 @@ namespace StockSharp.InteractiveBrokers
 		public EndPoint Address { get; set; }
 
 		/// <summary>
-		/// Уникальный идентификатор. Используется в случае подключения нескольких клиентов к одному терминалу или gateway.
+		/// Unique ID. Used when several clients are connected to one terminal or gateway.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str361Key)]
@@ -50,7 +53,7 @@ namespace StockSharp.InteractiveBrokers
 		public int ClientId { get; set; }
 
 		/// <summary>
-		/// Использовать ли данные реального времени или "замороженные" на сервере брокера. По-умолчанию используются "замороженные" данные.
+		/// Whether to use real-time data or 'frozen' on the broker server. By default, the 'frozen' data is used.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.RealTimeKey)]
@@ -59,7 +62,7 @@ namespace StockSharp.InteractiveBrokers
 		public bool IsRealTimeMarketData { get; set; }
 
 		/// <summary>
-		/// Уровень логирования сообщений сервера. По-умолчанию равен <see cref="ServerLogLevels.Detail"/>.
+		/// The server messages logging level. The default is <see cref="ServerLogLevels.Detail"/>.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str9Key)]
@@ -70,7 +73,7 @@ namespace StockSharp.InteractiveBrokers
 		private IEnumerable<GenericFieldTypes> _fields = Enumerable.Empty<GenericFieldTypes>();
 
 		/// <summary>
-		/// Поля маркет-данных, которые будут получаться при подписке на Level1 сообщения.
+		/// Market data fields, which will be received with subscribed to Level1 messages.
 		/// </summary>
 		[CategoryLoc(LocalizedStrings.Str174Key)]
 		[DisplayNameLoc(LocalizedStrings.Str2522Key)]
@@ -89,27 +92,27 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Время подключения.
+		/// The connection time.
 		/// </summary>
 		[Browsable(false)]
 		public DateTime ConnectedTime { get; internal set; }
 
 		/// <summary>
-		/// Экстра подключение.
+		/// Extra authentication.
 		/// </summary>
 		[Browsable(false)]
 		public bool ExtraAuth { get; set; }
 
 		/// <summary>
-		/// Дополнительные возможности.
+		/// Optional capabilities.
 		/// </summary>
 		[Browsable(false)]
 		public string OptionalCapabilities { get; set; }
 
 		/// <summary>
-		/// Загрузить настройки.
+		/// Load settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Load(SettingsStorage storage)
 		{
 			base.Load(storage);
@@ -124,9 +127,9 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Сохранить настройки.
+		/// Save settings.
 		/// </summary>
-		/// <param name="storage">Хранилище настроек.</param>
+		/// <param name="storage">Settings storage.</param>
 		public override void Save(SettingsStorage storage)
 		{
 			base.Save(storage);
@@ -141,9 +144,9 @@ namespace StockSharp.InteractiveBrokers
 		}
 
 		/// <summary>
-		/// Получить строковое представление.
+		/// Returns a string that represents the current object.
 		/// </summary>
-		/// <returns>Строковое представление.</returns>
+		/// <returns>A string that represents the current object.</returns>
 		public override string ToString()
 		{
 			return LocalizedStrings.Str2526Params.Put(Address);

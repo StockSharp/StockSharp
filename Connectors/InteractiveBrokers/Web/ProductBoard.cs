@@ -1,72 +1,72 @@
 namespace StockSharp.InteractiveBrokers.Web
 {
 	/// <summary>
-	/// Информация об инструменте на конкретной площадке.
+	/// Information about the instrument on the specific board.
 	/// </summary>
 	public class ProductBoard
 	{
 		/// <summary>
-		/// Список бирж.
+		/// List of exchanges.
 		/// </summary>
 		public string Markets;
 
 		/// <summary>
-		/// Уникальный идентификатор.
+		/// Unique ID.
 		/// </summary>
 		public string Id;
 
 		/// <summary>
-		/// Название.
+		/// Name.
 		/// </summary>
 		public string Name;
 
 		/// <summary>
-		/// Класс.
+		/// Class.
 		/// </summary>
 		public string Class;
 
 		/// <summary>
-		/// Поставочный.
+		/// Deliverable.
 		/// </summary>
 		public string SettlementMethod;
 
 		/// <summary>
-		/// Сайт биржи.
+		/// Exchange web site.
 		/// </summary>
 		public string ExchangeWebsite;
 
 		/// <summary>
-		/// Часы торговли.
+		/// Business hours.
 		/// </summary>
 		public string[] TradingHours;
 
 		/// <summary>
-		/// Ценовой диапазон.
+		/// The price range.
 		/// </summary>
 		public string PriceRange1;
 
 		/// <summary>
-		/// Ценовой диапазон.
+		/// The price range.
 		/// </summary>
 		public string PriceRange2;
 
 		/// <summary>
-		/// Ценовой диапазон.
+		/// The price range.
 		/// </summary>
 		public string PriceRange3;
 
 		/// <summary>
-		/// Сайз диапазон.
+		/// The volume range.
 		/// </summary>
 		public decimal VolumeRange1;
 
 		/// <summary>
-		/// Сайз диапазон.
+		/// The volume range.
 		/// </summary>
 		public decimal VolumeRange2;
 
 		/// <summary>
-		/// Сайз диапазон.
+		/// The volume range.
 		/// </summary>
 		public decimal VolumeRange3;
 	}
