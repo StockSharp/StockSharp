@@ -53720,5 +53720,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(PnLKey); }
 		}
+
+		/// <summary>
+		/// Apart
+		/// </summary>
+		public const string ApartKey = "Apart";
+
+		/// <summary>
+		/// Apart
+		/// </summary>
+		public static string Apart
+		{
+			get { return GetString(ApartKey); }
+		}
     }
 }
