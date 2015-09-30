@@ -214,6 +214,9 @@ namespace StockSharp.SmartCom
 				Isin = isin
 			};
 
+			if (secClass.IsEmpty())
+				secClass = board;
+
 			var secMsg = new SecurityMessage
 			{
 				PriceStep = priceStep,

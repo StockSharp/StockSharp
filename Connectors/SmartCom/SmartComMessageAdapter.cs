@@ -30,7 +30,6 @@ namespace StockSharp.SmartCom
 			SecurityClassInfo.Add("OPT", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("OPTM", RefTuple.Create(SecurityTypes.Option, ExchangeBoard.Forts.Code));
 			SecurityClassInfo.Add("FUT", RefTuple.Create(SecurityTypes.Future, ExchangeBoard.Forts.Code));
-			SecurityClassInfo.Add(string.Empty, RefTuple.Create(SecurityTypes.Currency, ExchangeBoard.Micex.Code));
 
 			PortfolioBoardCodes = new Dictionary<string, string>
 			{
