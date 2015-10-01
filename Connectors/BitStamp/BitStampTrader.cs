@@ -3,6 +3,7 @@ namespace StockSharp.BitStamp
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -10,6 +11,7 @@ namespace StockSharp.BitStamp
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the BitStamp.
 	/// </summary>
+	[Icon("BitStamp_logo.png")]
 	public class BitStampTrader : Connector
     {
 		private readonly BitStampMessageAdapter _adapter;

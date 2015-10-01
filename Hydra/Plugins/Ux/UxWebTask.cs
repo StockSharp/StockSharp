@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Ux
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -24,8 +25,8 @@ namespace StockSharp.Hydra.Ux
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/184da0f9-29db-4397-8497-1ed4c8f7ea0d.htm")]
-	[TaskIcon("ux_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/184da0f9-29db-4397-8497-1ed4c8f7ea0d.htm")]
+	[Icon("ux_logo.png")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]
 	class UxWebTask : BaseHydraTask, ISecurityDownloader

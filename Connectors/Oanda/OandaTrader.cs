@@ -18,6 +18,7 @@ namespace StockSharp.Oanda
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the OANDA.
 	/// </summary>
+	[Icon("Oanda_logo.png")]
 	public class OandaTrader : Connector, IExternalCandleSource
     {
 		private readonly SynchronizedDictionary<long, CandleSeries> _series = new SynchronizedDictionary<long, CandleSeries>();

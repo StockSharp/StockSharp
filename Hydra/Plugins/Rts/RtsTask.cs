@@ -9,6 +9,7 @@ namespace StockSharp.Hydra.Rts
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History.Russian.Rts;
@@ -23,8 +24,8 @@ namespace StockSharp.Hydra.Rts
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2822Key)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/0da19c49-1f11-455e-bbd5-c20e428e5149.htm")]
-	[TaskIcon("rts_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/0da19c49-1f11-455e-bbd5-c20e428e5149.htm")]
+	[Icon("rts_logo.png")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks)]
 	class RtsTask : BaseHydraTask

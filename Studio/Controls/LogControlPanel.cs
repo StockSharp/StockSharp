@@ -3,6 +3,7 @@ namespace StockSharp.Studio.Controls
 	using System.Runtime.InteropServices;
 
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Xaml;

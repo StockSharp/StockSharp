@@ -4,6 +4,7 @@ namespace StockSharp.ETrade
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -12,6 +13,7 @@ namespace StockSharp.ETrade
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the ETrade.
 	/// </summary>
+	[Icon("ETrade_logo.png")]
 	public class ETradeTrader : Connector
 	{
 		/// <summary>

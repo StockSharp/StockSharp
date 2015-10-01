@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.InteractiveBrokers;
@@ -17,8 +18,7 @@ namespace StockSharp.Hydra.InteractiveBrokers
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/bcb8050d-d330-4071-affc-b6ed5639e1fb.htm")]
-	[TaskIcon("ib_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/bcb8050d-d330-4071-affc-b6ed5639e1fb.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

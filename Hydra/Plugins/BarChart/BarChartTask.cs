@@ -22,8 +22,7 @@ namespace StockSharp.Hydra.BarChart
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	// TODO
-	//[TaskDoc("")]
-	[TaskIcon("barchart_logo.png")]
+	//[Doc("")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.History |
 		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Stock | TaskCategories.Level1 | TaskCategories.Candles)]

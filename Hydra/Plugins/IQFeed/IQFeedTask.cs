@@ -23,8 +23,7 @@ namespace StockSharp.Hydra.IQFeed
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/f9e23239-7587-41ad-9644-c6df8e467c38.htm")]
-	[TaskIcon("iqfeed_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/f9e23239-7587-41ad-9644-c6df8e467c38.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.History |
 		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Stock | TaskCategories.Forex)]

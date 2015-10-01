@@ -19,6 +19,7 @@ namespace StockSharp.OpenECry
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the OEC broker.
 	/// </summary>
+	[Icon("OpenECry_logo.png")]
 	public sealed class OECTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedPairSet<long, CandleSeries> _series = new SynchronizedPairSet<long, CandleSeries>();

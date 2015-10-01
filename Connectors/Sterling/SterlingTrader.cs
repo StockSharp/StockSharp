@@ -1,11 +1,14 @@
 namespace StockSharp.Sterling
 {
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the Sterling.
 	/// </summary>
+	[Icon("Sterling_logo.png")]
 	public class SterlingTrader : Connector
     {
 		/// <summary>

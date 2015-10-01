@@ -8,7 +8,9 @@ namespace StockSharp.Hydra.Mfd
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Russian;
@@ -24,8 +26,8 @@ namespace StockSharp.Hydra.Mfd
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2.htm")]
-	[TaskIcon("mfd_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/01af89f1-bba1-4935-9a3c-ee3cb9f3c1e2.htm")]
+	[Icon("mfd_logo.png")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.History | TaskCategories.Stock |
 		TaskCategories.Forex | TaskCategories.Candles | TaskCategories.Free | TaskCategories.Ticks)]
 	class MfdTask : BaseHydraTask, ISecurityDownloader

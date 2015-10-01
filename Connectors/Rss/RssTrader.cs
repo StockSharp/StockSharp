@@ -2,12 +2,15 @@ namespace StockSharp.Rss
 {
 	using System;
 
+	using Ecng.ComponentModel;
+
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to RSS feed.
 	/// </summary>
+	[Icon("Rss_logo.png")]
 	public class RssTrader : Connector
     {
 		private readonly RssMarketDataMessageAdapter _adapter;

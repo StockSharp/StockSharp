@@ -6,6 +6,7 @@ namespace StockSharp.Hydra.RtsCompetition
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Localization;
 
 	using StockSharp.Algo;
@@ -21,8 +22,8 @@ namespace StockSharp.Hydra.RtsCompetition
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2826Key)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/53c15f3a-4320-422d-850a-22ef6c90d76b.htm")]
-	[TaskIcon("rts_competition_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/53c15f3a-4320-422d-850a-22ef6c90d76b.htm")]
+	[Icon("rts_competition_logo.png")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.OrderLog)]
 	class RtsCompetitionTask : BaseHydraTask

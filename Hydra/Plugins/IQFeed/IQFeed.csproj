@@ -73,9 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="iqfeed_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Algo.History\Algo.History.csproj">
       <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
       <Name>Algo.History</Name>

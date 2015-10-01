@@ -8,6 +8,7 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Common;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Indicators;

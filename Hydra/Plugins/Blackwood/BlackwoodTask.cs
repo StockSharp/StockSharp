@@ -9,6 +9,7 @@ namespace StockSharp.Hydra.Blackwood
 
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Blackwood;
 	using StockSharp.BusinessEntities;
@@ -20,8 +21,7 @@ namespace StockSharp.Hydra.Blackwood
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/89a8b34c-63cf-4623-bbb7-90251d53e8e6.htm")]
-	[TaskIcon("bw_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/89a8b34c-63cf-4623-bbb7-90251d53e8e6.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.Ticks |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

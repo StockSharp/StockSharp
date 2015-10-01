@@ -21,6 +21,7 @@ namespace StockSharp.SmartCom
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/>, предоставляющая подключение к брокеру IT Invest через SmartCOM.
 	/// </summary>
+	[Icon("SmartCom_logo.png")]
 	public class SmartTrader : Connector, IExternalCandleSource
 	{
 		private readonly CachedSynchronizedSet<CandleSeries> _realTimeSeries = new CachedSynchronizedSet<CandleSeries>();

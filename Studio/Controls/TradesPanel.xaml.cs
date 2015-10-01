@@ -10,6 +10,7 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Collections;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 

@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.LMAX
 
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
@@ -18,8 +19,7 @@ namespace StockSharp.Hydra.LMAX
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/0b962432-d81d-4646-a818-9fa7093cbe4f.htm")]
-	[TaskIcon("lmax_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/0b962432-d81d-4646-a818-9fa7093cbe4f.htm")]
 	[TaskCategory(TaskCategories.Forex | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.History | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

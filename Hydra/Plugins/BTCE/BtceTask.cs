@@ -5,6 +5,7 @@ namespace StockSharp.Hydra.Btce
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Btce;
 	using StockSharp.Localization;
@@ -14,8 +15,7 @@ namespace StockSharp.Hydra.Btce
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/4e435654-38af-4ede-9987-e268a6ae3b96.htm")]
-	[TaskIcon("btce_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/4e435654-38af-4ede-9987-e268a6ae3b96.htm")]
 	[TaskCategory(TaskCategories.Crypto | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Transactions)]

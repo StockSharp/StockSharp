@@ -4,8 +4,11 @@ namespace StockSharp.Hydra.FinViz
 	using System.Collections.Generic;
 	using System.Linq;
 
+	using Ecng.ComponentModel;
+
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
@@ -18,8 +21,8 @@ namespace StockSharp.Hydra.FinViz
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/34b9a25a-ecb2-4d82-b342-3fa46ec155ba.htm")]
-	[TaskIcon("finviz_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/34b9a25a-ecb2-4d82-b342-3fa46ec155ba.htm")]
+	[Icon("finviz_logo.png")]
 	[TaskCategory(TaskCategories.America | TaskCategories.History |
 		TaskCategories.Stock | TaskCategories.Paid | TaskCategories.Level1)]
 	class FinVizTask : BaseHydraTask, ISecurityDownloader

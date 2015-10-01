@@ -8,6 +8,7 @@
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Collections;
+	using Ecng.Reflection;
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
@@ -321,8 +322,13 @@
 		/// <returns>Иконка задачи.</returns>
 		public static Uri GetIcon(this Type taskType)
 		{
-			var attr = taskType.GetAttribute<TaskIconAttribute>();
-			return attr == null ? null : attr.Icon.GetResourceUrl(taskType);
+			var url = taskType.GetIconUrl();
+
+			if (url != null)
+				return url;
+
+			var connectorType = taskType.GetGenericType(typeof(ConnectorHydraTask<>));
+			return connectorType == null ? null : connectorType.GenericTypeArguments[0].GetIconUrl();
 		}
 
 		/// <summary>

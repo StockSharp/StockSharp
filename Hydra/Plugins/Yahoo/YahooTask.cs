@@ -6,7 +6,9 @@ namespace StockSharp.Hydra.Yahoo
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
@@ -20,8 +22,8 @@ namespace StockSharp.Hydra.Yahoo
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/c60b2dd2-518c-49e5-8ba4-edabbda04222.htm")]
-	[TaskIcon("yahoo_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/c60b2dd2-518c-49e5-8ba4-edabbda04222.htm")]
+	[Icon("yahoo_logo.png")]
 	[TaskCategory(TaskCategories.America | TaskCategories.History | TaskCategories.Stock |
 		TaskCategories.Free | TaskCategories.Candles | TaskCategories.Level1)]
 	class YahooTask : BaseHydraTask, ISecurityDownloader

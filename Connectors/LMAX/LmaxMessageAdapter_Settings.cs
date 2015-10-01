@@ -6,8 +6,10 @@ namespace StockSharp.LMAX
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -15,6 +17,8 @@ namespace StockSharp.LMAX
 	/// <summary>
 	/// The messages adapter for LMAX.
 	/// </summary>
+	[Icon("Lmax_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/4f50724b-00de-4ed4-b043-7dacb6277c98.htm")]
 	[DisplayName("LMAX")]
 	[CategoryLoc(LocalizedStrings.ForexKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "LMAX")]

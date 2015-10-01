@@ -5,8 +5,10 @@ namespace StockSharp.BitStamp
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -15,6 +17,8 @@ namespace StockSharp.BitStamp
 	/// <summary>
 	/// The message adapter for BitStamp.
 	/// </summary>
+	[Icon("BitStamp_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/345fa341-661d-4992-a9a6-9c89af399feb.htm")]
 	[DisplayName("BitStamp")]
 	[CategoryLoc(LocalizedStrings.BitcoinsKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "BitStamp")]

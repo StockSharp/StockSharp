@@ -203,6 +203,7 @@ namespace StockSharp.InteractiveBrokers
 	/// <summary>
 	/// The implementation of the <see cref="IConnector"/> interface which provides a connection to Interactive Brokers via the IB Gateway.
 	/// </summary>
+	[Icon("InteractiveBrokers_logo.png")]
 	public class IBTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();

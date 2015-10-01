@@ -3,6 +3,7 @@ namespace StockSharp.Btce
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
@@ -10,6 +11,7 @@ namespace StockSharp.Btce
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the BTC-e.
 	/// </summary>
+	[Icon("Btce_logo.png")]
 	public class BtceTrader : Connector
 	{
 		private readonly BtceMessageAdapter _adapter;

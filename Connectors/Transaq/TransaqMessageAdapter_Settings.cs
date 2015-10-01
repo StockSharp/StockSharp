@@ -7,15 +7,19 @@ namespace StockSharp.Transaq
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Localization;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	[Icon("Transaq_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/a010f9bd-15bb-4858-a067-590101087dff.htm")]
 	[DisplayName("Transaq")]
 	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "Transaq")]

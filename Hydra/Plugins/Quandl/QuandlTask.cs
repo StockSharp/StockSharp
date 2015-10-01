@@ -8,7 +8,9 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
@@ -21,8 +23,8 @@
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/bb5fedcc-9226-448e-8bb9-42969fba227e.htm")]
-	[TaskIcon("quandl_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/bb5fedcc-9226-448e-8bb9-42969fba227e.htm")]
+	[Icon("quandl_logo.png")]
 	[TaskCategory(TaskCategories.America | TaskCategories.History | TaskCategories.Forex |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Candles)]
 	class QuandlTask : BaseHydraTask, ISecurityDownloader

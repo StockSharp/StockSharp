@@ -18,6 +18,7 @@
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/>, предоставляющая подключение к брокеру AlfaDirect.
 	/// </summary>
+	[Icon("AlfaDirect_logo.png")]
 	public sealed class AlfaTrader : Connector, IExternalCandleSource
 	{
 		private Timer _candlesTimer;

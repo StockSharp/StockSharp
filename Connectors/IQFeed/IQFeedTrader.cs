@@ -19,6 +19,7 @@ namespace StockSharp.IQFeed
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation for the interaction with DTN IQFeed for download of historical and real-time market data (level 1, level 2).
 	/// </summary>
+	[Icon("IQFeed_logo.png")]
 	public class IQFeedTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>> _candleInfo = new SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>>();

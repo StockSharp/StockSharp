@@ -6,9 +6,11 @@ namespace StockSharp.SmartCom
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Localization;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.SmartCom.Native;
 	using StockSharp.SmartCom.Xaml;
@@ -16,6 +18,8 @@ namespace StockSharp.SmartCom
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	[Icon("SmartCom_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/7f488b0b-0f59-42b4-845b-fd766f5699dc.htm")]
 	[DisplayName("SmartCOM")]
 	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "IT Invest (SmartCOM)")]

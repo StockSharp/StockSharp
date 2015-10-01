@@ -12,6 +12,7 @@ namespace StockSharp.Hydra.Plaza
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Plaza;
@@ -24,8 +25,7 @@ namespace StockSharp.Hydra.Plaza
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/53930a42-ae5a-45fc-b9cf-8295584bf8fc.htm")]
-	[TaskIcon("plaza_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/53930a42-ae5a-45fc-b9cf-8295584bf8fc.htm")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Stock |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Transactions |
 		TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog)]

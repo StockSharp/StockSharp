@@ -11,6 +11,7 @@ namespace StockSharp.Hydra.AlfaDirect
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.AlfaDirect;
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -19,8 +20,7 @@ namespace StockSharp.Hydra.AlfaDirect
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/2a908a19-0272-48e1-b143-df7ff9e2607c.htm")]
-	[TaskIcon("alfa_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/2a908a19-0272-48e1-b143-df7ff9e2607c.htm")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.Transactions | TaskCategories.RealTime |
 		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks | TaskCategories.News)]

@@ -11,6 +11,7 @@ namespace StockSharp.Hydra.Transaq
 	using Ecng.Localization;
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Transaq;
@@ -22,8 +23,7 @@ namespace StockSharp.Hydra.Transaq
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/065a9dec-12d0-49d0-be8c-9f9b48f6a899.htm")]
-	[TaskIcon("transaq_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/065a9dec-12d0-49d0-be8c-9f9b48f6a899.htm")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.Transactions | TaskCategories.RealTime |
 		TaskCategories.Candles | TaskCategories.Level1 | TaskCategories.MarketDepth |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks | TaskCategories.News)]

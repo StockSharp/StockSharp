@@ -4,8 +4,10 @@ namespace StockSharp.ETrade
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.ETrade.Native;
 	using StockSharp.Localization;
 
@@ -14,6 +16,8 @@ namespace StockSharp.ETrade
 	/// <summary>
 	/// The messages adapter for ETrade.
 	/// </summary>
+	[Icon("ETrade_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/84d6a0fb-607f-4d87-be8a-e2b58006493e.htm")]
 	[DisplayName("E*TRADE")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "E*TRADE")]

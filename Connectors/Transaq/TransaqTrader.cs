@@ -19,6 +19,7 @@ namespace StockSharp.Transaq
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/>, предоставляющая подключение к Transaq через TXmlConnector.
 	/// </summary>
+	[Icon("Transaq_logo.png")]
 	public class TransaqTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _candleSeries = new SynchronizedDictionary<long, CandleSeries>();

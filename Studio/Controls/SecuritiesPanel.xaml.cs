@@ -11,6 +11,7 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Configuration;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 

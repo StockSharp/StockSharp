@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Rss
 
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Rss;
@@ -17,8 +18,7 @@ namespace StockSharp.Hydra.Rss
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.RssSourceKey)]
-	[TaskDoc("http://stocksharp.com/doc/html/91454878-ec26-4872-9a85-1bfbc76dc77a.htm")]
-	[TaskIcon("rss_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/91454878-ec26-4872-9a85-1bfbc76dc77a.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.Russia | TaskCategories.News)]
 	class RssTask : ConnectorHydraTask<RssTrader>
 	{

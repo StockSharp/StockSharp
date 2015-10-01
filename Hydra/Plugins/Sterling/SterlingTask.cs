@@ -1,5 +1,6 @@
 namespace StockSharp.Hydra.Sterling
 {
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
 	using StockSharp.Sterling;
@@ -8,8 +9,7 @@ namespace StockSharp.Hydra.Sterling
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/f43591c9-c215-4dee-b297-4b9ed34fd465.htm")]
-	[TaskIcon("sterling_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/f43591c9-c215-4dee-b297-4b9ed34fd465.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Ticks |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

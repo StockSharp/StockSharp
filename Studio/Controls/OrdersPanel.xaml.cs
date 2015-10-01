@@ -6,6 +6,7 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Serialization;
 	using Ecng.Common;
 	using Ecng.Xaml;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;

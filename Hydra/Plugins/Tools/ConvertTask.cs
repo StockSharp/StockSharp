@@ -6,6 +6,7 @@ namespace StockSharp.Hydra.Tools
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Algo;
@@ -21,8 +22,8 @@ namespace StockSharp.Hydra.Tools
 
 	[DisplayNameLoc(LocalizedStrings.Str3131Key)]
 	[DescriptionLoc(LocalizedStrings.Str3785Key)]
-	[TaskDoc("http://stocksharp.com/doc/html/272eef99-c7e4-4245-ae83-7efa4d2345bc.htm")]
-	[TaskIcon("convert_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/272eef99-c7e4-4245-ae83-7efa4d2345bc.htm")]
+	[Icon("convert_logo.png")]
 	[TaskCategory(TaskCategories.Tool)]
 	class ConvertTask : BaseHydraTask
 	{

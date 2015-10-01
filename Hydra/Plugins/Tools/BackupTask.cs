@@ -9,6 +9,7 @@
 	using Amazon;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -22,8 +23,8 @@
 
 	[DisplayNameLoc(LocalizedStrings.BackupKey)]
 	[DescriptionLoc(LocalizedStrings.BackupDescriptionKey)]
-	[TaskDoc("http://stocksharp.com/doc/html/5a056352-64c7-41ea-87a8-2e112935e3b9.htm")]
-	[TaskIcon("backup_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/5a056352-64c7-41ea-87a8-2e112935e3b9.htm")]
+	[Icon("backup_logo.png")]
 	[TaskCategory(TaskCategories.Tool)]
 	class BackupTask : BaseHydraTask
     {

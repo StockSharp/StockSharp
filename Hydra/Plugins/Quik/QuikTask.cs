@@ -11,6 +11,7 @@ namespace StockSharp.Hydra.Quik
 	using Ecng.Common;
 	using Ecng.Localization;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -23,8 +24,7 @@ namespace StockSharp.Hydra.Quik
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/54a1e95e-ea39-4322-9613-e74859a3a596.htm")]
-	[TaskIcon("quik_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/54a1e95e-ea39-4322-9613-e74859a3a596.htm")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
 		TaskCategories.Transactions | TaskCategories.Free | TaskCategories.Ticks)]

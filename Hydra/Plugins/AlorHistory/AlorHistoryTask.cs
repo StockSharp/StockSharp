@@ -8,7 +8,9 @@ namespace StockSharp.Hydra.AlorHistory
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History.Russian;
 	using StockSharp.Logging;
@@ -21,8 +23,8 @@ namespace StockSharp.Hydra.AlorHistory
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/cec19cef-4bf7-4dcb-90fb-fccba4c0248c.htm")]
-	[TaskIcon("alor_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/cec19cef-4bf7-4dcb-90fb-fccba4c0248c.htm")]
+	[Icon("alor_logo.png")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.History |
 		TaskCategories.Stock | TaskCategories.Candles | TaskCategories.Free)]
 	class AlorHistoryTask : BaseHydraTask

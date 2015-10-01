@@ -7,8 +7,10 @@ namespace StockSharp.IQFeed
 	using System.Net;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -17,6 +19,8 @@ namespace StockSharp.IQFeed
 	/// <summary>
 	/// The messages adapter for IQFeed.
 	/// </summary>
+	[Icon("IQFeed_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/c7ff5937-e230-4db3-857f-4cd68583ebfc.htm")]
 	[DisplayName("IQFeed")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "IQFeed")]

@@ -6,8 +6,10 @@ namespace StockSharp.Oanda
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -39,6 +41,8 @@ namespace StockSharp.Oanda
 	/// <summary>
 	/// The messages adapter for OANDA (REST protocol).
 	/// </summary>
+	[Icon("Oanda_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/c2162c96-d12f-4107-ac96-0238b793f466.htm")]
 	[DisplayName("OANDA")]
 	[CategoryLoc(LocalizedStrings.ForexKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "OANDA")]

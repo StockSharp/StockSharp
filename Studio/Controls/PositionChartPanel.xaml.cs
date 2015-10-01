@@ -4,6 +4,7 @@ namespace StockSharp.Studio.Controls
 	using System.Windows.Media;
 
 	using Ecng.Configuration;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Xaml.Charting;

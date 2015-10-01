@@ -6,6 +6,7 @@ namespace StockSharp.Hydra.Fix
 	using Ecng.Common;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Fix;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
@@ -14,8 +15,7 @@ namespace StockSharp.Hydra.Fix
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/e81b1b7f-5c96-488e-a90d-e60cb8675977.htm")]
-	[TaskIcon("fix_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/e81b1b7f-5c96-488e-a90d-e60cb8675977.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.Russia | TaskCategories.RealTime |
 		TaskCategories.Stock | TaskCategories.Paid | TaskCategories.Ticks | TaskCategories.OrderLog |
 		TaskCategories.Forex | TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

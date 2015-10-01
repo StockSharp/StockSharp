@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.TrueFX
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History;
@@ -22,8 +23,8 @@ namespace StockSharp.Hydra.TrueFX
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/a92bca75-1a0c-4581-a75a-6f13afd7975e.htm")]
-	[TaskIcon("truefx_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/a92bca75-1a0c-4581-a75a-6f13afd7975e.htm")]
+	[Icon("truefx_logo.png")]
 	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
 		TaskCategories.Free | TaskCategories.Level1)]
 	class TrueFXTask : BaseHydraTask, ISecurityDownloader

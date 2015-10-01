@@ -15,8 +15,7 @@ namespace StockSharp.Hydra.ITCH
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	// TODO
-	//[TaskDoc("")]
-	[TaskIcon("itch_logo.png")]
+	//[Doc("")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.OrderLog |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
 		TaskCategories.Transactions | TaskCategories.Paid | TaskCategories.Ticks)]

@@ -14,6 +14,7 @@ namespace StockSharp.BarChart
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 	using Ecng.Web;
 
@@ -26,6 +27,9 @@ namespace StockSharp.BarChart
 	/// <summary>
 	/// The message adapter for BarChart.
 	/// </summary>
+	[Icon("BarChart_logo.png")]
+	// TODO
+	//[Doc("")]
 	[DisplayName("BarChart")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "BarChart")]

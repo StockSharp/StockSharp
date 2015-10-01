@@ -6,7 +6,9 @@ namespace StockSharp.Hydra.Google
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Hydra.Core;
@@ -17,8 +19,8 @@ namespace StockSharp.Hydra.Google
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/0166d686-9fb0-4e78-8578-f5b706ad6a07.htm")]
-	[TaskIcon("google_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/0166d686-9fb0-4e78-8578-f5b706ad6a07.htm")]
+	[Icon("google_logo.png")]
 	[TaskCategory(TaskCategories.America | TaskCategories.History |
 		TaskCategories.Stock | TaskCategories.Free | TaskCategories.Candles)]
 	class GoogleTask : BaseHydraTask

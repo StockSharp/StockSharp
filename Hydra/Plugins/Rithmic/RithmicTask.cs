@@ -8,6 +8,7 @@ namespace StockSharp.Hydra.Rithmic
 	using Ecng.Common;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -18,8 +19,7 @@ namespace StockSharp.Hydra.Rithmic
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/26ff0aad-623b-47e2-a8f8-a337506cd2ff.htm")]
-	[TaskIcon("rithmic_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/26ff0aad-623b-47e2-a8f8-a337506cd2ff.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

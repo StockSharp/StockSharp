@@ -4,6 +4,7 @@ namespace StockSharp.Rss
 	using System.ComponentModel;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.Rss.Xaml;
@@ -14,6 +15,9 @@ namespace StockSharp.Rss
 	/// <summary>
 	/// The market-data message adapter for Rss.
 	/// </summary>
+	[Icon("Rss_logo.png")]
+	// TODO
+	//[Doc("")]
 	[DisplayName("RSS")]
 	[DescriptionLoc(LocalizedStrings.Str3504Key)]
 	[CategoryOrder(_rss, 0)]

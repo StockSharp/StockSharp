@@ -9,6 +9,7 @@ namespace StockSharp.Hydra.OpenECry
 	using Ecng.Common;
 	using Ecng.Collections;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
@@ -19,8 +20,7 @@ namespace StockSharp.Hydra.OpenECry
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/4d84a1e0-fe23-4b14-8323-c5f68f117cc7.htm")]
-	[TaskIcon("oec_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/4d84a1e0-fe23-4b14-8323-c5f68f117cc7.htm")]
 	[TaskCategory(TaskCategories.America | TaskCategories.RealTime | TaskCategories.Stock |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth | TaskCategories.Forex |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

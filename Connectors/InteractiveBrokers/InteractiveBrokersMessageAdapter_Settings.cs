@@ -7,8 +7,10 @@ namespace StockSharp.InteractiveBrokers
 	using System.Net;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -16,6 +18,8 @@ namespace StockSharp.InteractiveBrokers
 	/// <summary>
 	/// The messages adapter for InteractiveBrokers.
 	/// </summary>
+	[Icon("InteractiveBrokers_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/bae7b613-dcf6-4abb-b595-6c61fc4e5c46.htm")]
 	[DisplayName("Interactive Brokers")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "Interactive Brokers")]

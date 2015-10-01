@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Micex
 	using Ecng.Localization;
 	using Ecng.Collections;
 
+	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Micex;
@@ -17,8 +18,7 @@ namespace StockSharp.Hydra.Micex
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49.htm")]
-	[TaskIcon("micex_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/cb2a6b0f-ddf5-4a18-91f2-a460f2a9aa49.htm")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.RealTime | TaskCategories.Forex |
 		TaskCategories.Level1 | TaskCategories.MarketDepth | TaskCategories.Stock |
 		TaskCategories.Transactions | TaskCategories.Paid | TaskCategories.Ticks)]
@@ -33,9 +33,9 @@ namespace StockSharp.Hydra.Micex
 			public MicexSettings(HydraTaskSettings settings)
 				: base(settings)
 			{
-				ExtensionInfo.TryAdd("OrderBookDepth", null);
+				CollectionHelper.TryAdd(ExtensionInfo, "OrderBookDepth", null);
 				ExtensionInfo.TryAdd("RequestAllDepths", true);
-				ExtensionInfo.TryAdd("MicexLogLevel", null);
+				CollectionHelper.TryAdd(ExtensionInfo, "MicexLogLevel", null);
 				ExtensionInfo.TryAdd("OverrideDll", true);
 			}
 

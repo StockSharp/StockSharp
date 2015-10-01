@@ -21,9 +21,7 @@
 			var type = GetType();
 
 			Title = type.GetDisplayName();
-
-			var iconAttr = type.GetAttribute<IconAttribute>();
-			Icon = iconAttr == null ? null : iconAttr.GetResourceUrl(type);
+			Icon = type.GetIconUrl();
 		}
 
 		#region OnLoaded
@@ -74,26 +72,6 @@
 		{
 			add { _propertyChanged += value; }
 			remove { _propertyChanged -= value; }
-		}
-	}
-
-	public class IconAttribute : Attribute
-	{
-		public string Path { get; private set; }
-		public bool IsFullPath { get; private set; }
-
-		public IconAttribute(string path, bool isFullPath = false)
-		{
-			if (path.IsEmpty())
-				throw new ArgumentNullException("path");
-
-			Path = path;
-			IsFullPath = isFullPath;
-		}
-
-		public Uri GetResourceUrl(Type type)
-		{
-			return IsFullPath ? new Uri(Path, UriKind.Relative) : Path.GetResourceUrl(type);
 		}
 	}
 }

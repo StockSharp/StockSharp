@@ -5,7 +5,9 @@ namespace StockSharp.Hydra.Oanda
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Forex;
 	using StockSharp.Algo.Storages;
@@ -19,8 +21,8 @@ namespace StockSharp.Hydra.Oanda
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/21734ebc-faae-4b42-9088-1c2f4c92ead4.htm")]
-	[TaskIcon("oanda_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/21734ebc-faae-4b42-9088-1c2f4c92ead4.htm")]
+	[Icon("/StockSharp.Oanda;component/oanda_logo.png", true)]
 	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
 		TaskCategories.Free | TaskCategories.Level1)]
 	class OandaHistoryTask : BaseHydraTask, ISecurityDownloader

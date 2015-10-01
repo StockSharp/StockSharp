@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.Tools
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Data.Providers;
 	using Ecng.Serialization;
 	using Ecng.Xaml;
@@ -26,8 +27,8 @@ namespace StockSharp.Hydra.Tools
 
 	[DisplayNameLoc(LocalizedStrings.Str3754Key)]
 	[DescriptionLoc(LocalizedStrings.Str3767Key)]
-	[TaskDoc("http://stocksharp.com/doc/html/9e075b32-abb2-4fad-bfb2-b822dd7d9f30.htm")]
-	[TaskIcon("export_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/9e075b32-abb2-4fad-bfb2-b822dd7d9f30.htm")]
+	[Icon("export_logo.png")]
 	[TaskCategory(TaskCategories.Tool)]
 	class ExportTask : BaseHydraTask
 	{

@@ -19,6 +19,7 @@ namespace StockSharp.BarChart
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the BarChart.
 	/// </summary>
+	[Icon("BarChart_logo.png")]
 	public class BarChartTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>> _candleInfo = new SynchronizedDictionary<long, RefFive<List<Candle>, SyncObject, bool, CandleSeries, bool>>();

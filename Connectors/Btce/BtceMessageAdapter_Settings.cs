@@ -5,8 +5,10 @@ namespace StockSharp.Btce
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -15,6 +17,8 @@ namespace StockSharp.Btce
 	/// <summary>
 	/// The messages adapter for BTC-e.
 	/// </summary>
+	[Icon("Btce_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/5d162089-902a-4a4e-885f-f38ff94fbe58.htm")]
 	[DisplayName("BTC-e")]
 	[CategoryLoc(LocalizedStrings.BitcoinsKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "BTC-e")]

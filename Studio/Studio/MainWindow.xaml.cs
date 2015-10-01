@@ -686,13 +686,13 @@ namespace StockSharp.Studio
 			if (type == null)
 				throw new ArgumentNullException("type");
 
-			var iconAttr = type.GetAttribute<IconAttribute>();
+			var iconUrl = type.GetIconUrl();
 
 			return new RibbonButton
 			{
 				Label = type.GetDisplayName(),
 				ToolTip = type.GetDescription(),
-				ImageSourceLarge = iconAttr == null ? null : new BitmapImage(iconAttr.GetResourceUrl(type))
+				ImageSourceLarge = iconUrl == null ? null : new BitmapImage(iconUrl)
 			};
 		}
 
@@ -701,13 +701,13 @@ namespace StockSharp.Studio
 			if (controlType == null)
 				throw new ArgumentNullException("controlType");
 
-			var iconAttr = controlType.GetAttribute<IconAttribute>();
+			var iconUrl = controlType.GetIconUrl();
 
 			return new SecurityPopupButton(securityType, getSecurities, open)
 			{
 				Label = controlType.GetDisplayName(),
 				ToolTip = controlType.GetDescription(),
-				ImageSourceLarge = iconAttr == null ? null : new BitmapImage(iconAttr.GetResourceUrl(controlType))
+				ImageSourceLarge = iconUrl == null ? null : new BitmapImage(iconUrl)
 			};
 		}
 

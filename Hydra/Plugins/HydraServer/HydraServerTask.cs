@@ -9,6 +9,7 @@ namespace StockSharp.Hydra.HydraServer
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -25,8 +26,8 @@ namespace StockSharp.Hydra.HydraServer
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f.htm")]
-	[TaskIcon("hydra_server_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/c84d96f5-d466-4dbd-b7d4-9f87cba8ea7f.htm")]
+	[Icon("hydra_server_logo.png")]
 	[TaskCategory(TaskCategories.History | TaskCategories.Ticks | TaskCategories.Stock |
 		TaskCategories.Forex | TaskCategories.Free | TaskCategories.MarketDepth | TaskCategories.OrderLog |
 		TaskCategories.Level1 | TaskCategories.Candles | TaskCategories.Transactions)]

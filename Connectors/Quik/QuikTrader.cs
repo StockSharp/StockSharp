@@ -7,6 +7,7 @@ namespace StockSharp.Quik
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
 	using StockSharp.BusinessEntities;
@@ -19,6 +20,7 @@ namespace StockSharp.Quik
 	/// <summary>
 	/// Реализация интерфейса <see cref="IConnector"/>, предоставляющая подключение к терминалу Quik.
 	/// </summary>
+	[Icon("Quik_logo.png")]
 	public class QuikTrader : Connector
 	{
 		private readonly QuikTrans2QuikAdapter _trans2QuikAdapter;

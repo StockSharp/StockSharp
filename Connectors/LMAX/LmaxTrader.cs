@@ -18,6 +18,7 @@ namespace StockSharp.LMAX
 	/// <summary>
 	/// The interface <see cref="IConnector"/> implementation which provides a connection to the LMAX.
 	/// </summary>
+	[Icon("Lmax_logo.png")]
 	public class LmaxTrader : Connector, IExternalCandleSource
 	{
 		private readonly SynchronizedDictionary<long, CandleSeries> _series = new SynchronizedDictionary<long, CandleSeries>();

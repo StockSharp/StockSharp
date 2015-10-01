@@ -5,6 +5,7 @@ namespace StockSharp.Hydra.BitStamp
 	using Ecng.Collections;
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.BitStamp;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
@@ -14,8 +15,7 @@ namespace StockSharp.Hydra.BitStamp
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2281ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/7a11d9ff-17c9-406b-ab88-c4b9c080912d.htm")]
-	[TaskIcon("bitstamp_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/7a11d9ff-17c9-406b-ab88-c4b9c080912d.htm")]
 	[TaskCategory(TaskCategories.Crypto | TaskCategories.RealTime |
 		TaskCategories.Free | TaskCategories.Ticks | TaskCategories.MarketDepth |
 		TaskCategories.Level1 | TaskCategories.Transactions)]

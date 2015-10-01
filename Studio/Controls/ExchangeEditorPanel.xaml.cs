@@ -1,6 +1,7 @@
 namespace StockSharp.Studio.Controls
 {
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Localization;
 

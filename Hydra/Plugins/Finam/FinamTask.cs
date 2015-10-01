@@ -8,7 +8,9 @@ namespace StockSharp.Hydra.Finam
 	using Ecng.Common;
 	using Ecng.Localization;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.History.Russian.Finam;
@@ -24,8 +26,8 @@ namespace StockSharp.Hydra.Finam
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
 	[TargetPlatform(Languages.Russian)]
-	[TaskDoc("http://stocksharp.com/doc/html/bad33f32-1a13-4ba7-a335-326e6249d1be.htm")]
-	[TaskIcon("finam_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/bad33f32-1a13-4ba7-a335-326e6249d1be.htm")]
+	[Icon("finam_logo.png")]
 	[TaskCategory(TaskCategories.Russia | TaskCategories.History | TaskCategories.Forex |
 		TaskCategories.Stock | TaskCategories.Candles | TaskCategories.Free | TaskCategories.Ticks)]
 	class FinamTask : BaseHydraTask, ISecurityDownloader

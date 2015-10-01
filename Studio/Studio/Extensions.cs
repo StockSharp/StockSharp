@@ -18,6 +18,7 @@ namespace StockSharp.Studio
 	using Ecng.ComponentModel;
 	using Ecng.Configuration;
 	using Ecng.Serialization;
+	using Ecng.Xaml;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
@@ -580,15 +581,10 @@ namespace StockSharp.Studio
 			var types = config.StrategyControls;
 
 			return types
-				.Select(type =>
-				{
-					var iconAttr = type.GetAttribute<IconAttribute>();
-
-					return new ControlType(type,
-						type.GetDisplayName(),
-						type.GetDescription(),
-						iconAttr == null ? null : iconAttr.GetResourceUrl(type));
-				})
+				.Select(type => new ControlType(type,
+					type.GetDisplayName(),
+					type.GetDescription(),
+					type.GetIconUrl()))
 				.ToArray();
 		}
 

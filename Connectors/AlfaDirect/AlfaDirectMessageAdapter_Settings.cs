@@ -4,15 +4,19 @@ namespace StockSharp.AlfaDirect
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Interop;
 	using Ecng.Localization;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
+	[Icon("AlfaDirect_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/fdfe3e0b-60b8-4915-8db5-8bfab7d9e391.htm")]
 	[DisplayName("AlfaDirect")]
 	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "Alfa Direct")]

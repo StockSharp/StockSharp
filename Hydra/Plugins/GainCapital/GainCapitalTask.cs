@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.GainCapital
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.History;
@@ -22,8 +23,8 @@ namespace StockSharp.Hydra.GainCapital
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/c1863414-25cb-4994-818f-3e4fa511f21b.htm")]
-	[TaskIcon("gain_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/c1863414-25cb-4994-818f-3e4fa511f21b.htm")]
+	[Icon("gain_logo.png")]
 	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
 		TaskCategories.Free | TaskCategories.Level1)]
 	class GainCapitalTask : BaseHydraTask, ISecurityDownloader

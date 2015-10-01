@@ -7,8 +7,10 @@ namespace StockSharp.OpenECry
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
+	using StockSharp.Algo;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
@@ -40,6 +42,8 @@ namespace StockSharp.OpenECry
 	/// <summary>
 	/// The messages adapter for OpenECry.
 	/// </summary>
+	[Icon("OpenECry_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/f8cae46b-57e1-4954-a4cf-832854840981.htm")]
 	[DisplayName("OpenECry")]
 	[CategoryLoc(LocalizedStrings.AmericaKey)]
 	[DescriptionLoc(LocalizedStrings.Str1770Key, "OpenECry")]

@@ -7,6 +7,7 @@ namespace StockSharp.Hydra.DukasCopy
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
@@ -23,8 +24,8 @@ namespace StockSharp.Hydra.DukasCopy
 
 	[DisplayNameLoc(_sourceName)]
 	[DescriptionLoc(LocalizedStrings.Str2288ParamsKey, _sourceName)]
-	[TaskDoc("http://stocksharp.com/doc/html/bba0059b-526b-406c-ba6e-a80d6c9e4ae0.htm")]
-	[TaskIcon("dukas_logo.png")]
+	[Doc("http://stocksharp.com/doc/html/bba0059b-526b-406c-ba6e-a80d6c9e4ae0.htm")]
+	[Icon("dukas_logo.png")]
 	[TaskCategory(TaskCategories.Forex | TaskCategories.History |
 		TaskCategories.Free | TaskCategories.Level1 | TaskCategories.Candles)]
 	class DukasCopyTask : BaseHydraTask, ISecurityDownloader
