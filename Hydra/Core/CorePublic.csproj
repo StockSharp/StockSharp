@@ -126,8 +126,8 @@
     <Compile Include="MarketDataConnector.cs" />
     <Compile Include="ConnectorHydraTask.cs" />
     <Compile Include="HydraTaskSecurity.cs" />
-    <Compile Include="Attributes.cs" />
     <Compile Include="TaskCategories.cs" />
+    <Compile Include="TaskSettingsDisplayNameAttribute.cs" />
     <Compile Include="TempFiles.cs" />
     <Compile Include="TemplateTxtRegistry.cs" />
   </ItemGroup>

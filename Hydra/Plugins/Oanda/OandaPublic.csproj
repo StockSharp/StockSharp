@@ -39,6 +39,7 @@
       <HintPath>..\..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
@@ -71,9 +72,6 @@
     <Compile Include="OandaHistoryTask.cs" />
     <Compile Include="OandaTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="oanda_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo\Algo.csproj">

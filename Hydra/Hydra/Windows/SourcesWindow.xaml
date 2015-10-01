@@ -33,8 +33,12 @@
 			<RowDefinition Height="5" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		
-		<GroupBox Grid.Column="0" Grid.Row="0" Header="{x:Static loc:LocalizedStrings.Region}" HeaderTemplate="{StaticResource GroupBoxHeader}">
+
+		<GroupBox Grid.Column="0" Grid.Row="0" Header="{x:Static loc:LocalizedStrings.Find}" HeaderTemplate="{StaticResource GroupBoxHeader}">
+			<TextBox x:Name="NameLike" TextChanged="NameLike_OnTextChanged" />
+		</GroupBox>
+
+		<GroupBox Grid.Column="0" Grid.Row="1" Header="{x:Static loc:LocalizedStrings.Region}" HeaderTemplate="{StaticResource GroupBoxHeader}">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -52,7 +56,7 @@
 			</Grid>
 		</GroupBox>
 		
-		<GroupBox Grid.Column="0" Grid.Row="1" Header="{x:Static loc:LocalizedStrings.Str511}" HeaderTemplate="{StaticResource GroupBoxHeader}">
+		<GroupBox Grid.Column="0" Grid.Row="2" Header="{x:Static loc:LocalizedStrings.Str511}" HeaderTemplate="{StaticResource GroupBoxHeader}">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -76,7 +80,7 @@
 			</Grid>
 		</GroupBox>
 		
-		<GroupBox Grid.Column="0" Grid.Row="2" Header="{x:Static loc:LocalizedStrings.DataType}" HeaderTemplate="{StaticResource GroupBoxHeader}">
+		<GroupBox Grid.Column="0" Grid.Row="3" Header="{x:Static loc:LocalizedStrings.DataType}" HeaderTemplate="{StaticResource GroupBoxHeader}">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -124,7 +128,7 @@
 			</Grid>
 		</GroupBox>
 
-		<GroupBox Grid.Column="0" Grid.Row="3" Header="{x:Static loc:LocalizedStrings.Cost}" HeaderTemplate="{StaticResource GroupBoxHeader}">
+		<GroupBox Grid.Column="0" Grid.Row="4" Header="{x:Static loc:LocalizedStrings.Cost}" HeaderTemplate="{StaticResource GroupBoxHeader}">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -142,7 +146,7 @@
 			</Grid>
 		</GroupBox>
 
-		<GroupBox Grid.Column="0" Grid.Row="4" Header="{x:Static loc:LocalizedStrings.Type}" HeaderTemplate="{StaticResource GroupBoxHeader}">
+		<GroupBox Grid.Column="0" Grid.Row="5" Header="{x:Static loc:LocalizedStrings.Type}" HeaderTemplate="{StaticResource GroupBoxHeader}">
 			<Grid>
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -158,10 +162,6 @@
 					<TextBlock Text="{x:Static loc:LocalizedStrings.History}" />
 				</CheckBox>
 			</Grid>
-		</GroupBox>
-
-		<GroupBox Grid.Column="0" Grid.Row="5" Header="{x:Static loc:LocalizedStrings.Find}" HeaderTemplate="{StaticResource GroupBoxHeader}">
-			<TextBox x:Name="NameLike" TextChanged="NameLike_OnTextChanged" />
 		</GroupBox>
 
 		<ListBox Grid.Column="2" Grid.Row="0" Grid.RowSpan="7" x:Name="TasksCtrl">
