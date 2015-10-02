@@ -2,8 +2,10 @@ namespace StockSharp.Xaml
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Windows;
 
+	using Ecng.Collections;
 	using Ecng.Serialization;
 
 	using StockSharp.Algo;
@@ -59,6 +61,7 @@ namespace StockSharp.Xaml
 				_adapter = value;
 
 				var clone = new BasketMessageAdapter(_adapter.TransactionIdGenerator);
+				clone.InnerAdapters.AddRange(_adapter.InnerAdapters.Select(a => (IMessageAdapter)a.Clone()));
 				clone.Load(_adapter.Save());
 				ConnectorsPanel.Adapter = clone;
 			}

@@ -7,7 +7,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Message channel base interface.
 	/// </summary>
-	public interface IMessageChannel : IDisposable
+	public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>
 	{
 		/// <summary>
 		/// Is channel opened.
@@ -39,7 +39,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Message channel, which passes directly to the output all incoming messages.
 	/// </summary>
-	public class PassThroughMessageChannel : IMessageChannel
+	public class PassThroughMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PassThroughMessageChannel"/>.
@@ -76,6 +76,15 @@ namespace StockSharp.Messages
 		{
 			add { _newMessage += value; }
 			remove { _newMessage -= value; }
+		}
+
+		/// <summary>
+		/// Create a copy of <see cref="PassThroughMessageChannel"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override IMessageChannel Clone()
+		{
+			return new PassThroughMessageChannel();
 		}
 	}
 }

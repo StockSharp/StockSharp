@@ -563,6 +563,22 @@ namespace StockSharp.Messages
 
 			base.Save(storage);
 		}
+
+		/// <summary>
+		/// Create a copy of <see cref="MessageAdapter"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public virtual IMessageChannel Clone()
+		{
+			var clone = GetType().CreateInstance<MessageAdapter>(TransactionIdGenerator);
+			clone.Load(this.Save());
+			return clone;
+		}
+
+		object ICloneable.Clone()
+		{
+			return Clone();
+		}
 	}
 
 	/// <summary>
