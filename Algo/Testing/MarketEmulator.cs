@@ -1801,5 +1801,15 @@ namespace StockSharp.Algo.Testing
 		void IMessageChannel.Close()
 		{
 		}
+
+		IMessageChannel ICloneable<IMessageChannel>.Clone()
+		{
+			return new MarketEmulator();
+		}
+
+		object ICloneable.Clone()
+		{
+			return ((ICloneable<IMessageChannel>)this).Clone();
+		}
 	}
 }
