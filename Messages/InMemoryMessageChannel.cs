@@ -13,7 +13,7 @@ namespace StockSharp.Messages
 	/// <summary>
 	/// Message channel, based on the queue and operate within a single process.
 	/// </summary>
-	public class InMemoryMessageChannel : IMessageChannel
+	public class InMemoryMessageChannel : Cloneable<IMessageChannel>, IMessageChannel
 	{
 		private class BlockingPriorityQueue : BaseBlockingQueue<KeyValuePair<DateTime, Message>, OrderedPriorityQueue<DateTime, Message>>
 		{
@@ -221,6 +221,15 @@ namespace StockSharp.Messages
 		void IDisposable.Dispose()
 		{
 			Close();
+		}
+
+		/// <summary>
+		/// Create a copy of <see cref="InMemoryMessageChannel"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override IMessageChannel Clone()
+		{
+			return new InMemoryMessageChannel(Name, _errorHandler) { MaxMessageCount = MaxMessageCount };
 		}
 	}
 }

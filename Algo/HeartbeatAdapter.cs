@@ -1,13 +1,10 @@
 ﻿namespace StockSharp.Algo
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Threading;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
 
-	using StockSharp.Logging;
 	using StockSharp.Messages;
 
 	class RestoredConnectMessage : ConnectMessage
@@ -17,10 +14,8 @@
 	/// <summary>
 	/// Адаптер сообщений, контролирующий соединение.
 	/// </summary>
-	public class HeartbeatAdapter : IMessageAdapter
+	public class HeartbeatAdapter : MessageAdapterWrapper
 	{
-		private readonly IMessageAdapter _adapter;
-
 		private readonly SyncObject _timeSync = new SyncObject();
 
 		// дополнительные состояния для ConnectionStates
@@ -46,16 +41,13 @@
 		/// <summary>
 		/// Создать <see cref="HeartbeatAdapter"/>.
 		/// </summary>
-		/// <param name="adapter">Адаптер.</param>
-		public HeartbeatAdapter(IMessageAdapter adapter)
+		/// <param name="innerAdapter">Underlying adapter.</param>
+		public HeartbeatAdapter(IMessageAdapter innerAdapter)
+			: base(innerAdapter)
 		{
-			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+			InnerAdapter.NewOutMessage += AdapterOnNewOutMessage;
 
-			_adapter = adapter;
-			_adapter.NewOutMessage += AdapterOnNewOutMessage;
-
-			_reConnectionSettings = _adapter.ReConnectionSettings;
+			_reConnectionSettings = InnerAdapter.ReConnectionSettings;
 		}
 
 		private void AdapterOnNewOutMessage(Message message)
@@ -70,13 +62,13 @@
 							_prevState = _currState = ConnectionStates.Connected;
 
 						// heart beat is disabled
-						if (_adapter.HeartbeatInterval == TimeSpan.Zero)
+						if (InnerAdapter.HeartbeatInterval == TimeSpan.Zero)
 							break;
 
 						lock (_timeSync)
 						{
 							_canSendTime = true;
-							_heartBeatTimer = ThreadingHelper.Timer(OnHeartbeatTimer).Interval(_adapter.HeartbeatInterval);	
+							_heartBeatTimer = ThreadingHelper.Timer(OnHeartbeatTimer).Interval(InnerAdapter.HeartbeatInterval);	
 						}
 					}
 					else
@@ -120,7 +112,11 @@
 			_newOutMessage.SafeInvoke(message);
 		}
 
-		void IMessageChannel.SendInMessage(Message message)
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public override void SendInMessage(Message message)
 		{
 			switch (message.Type)
 			{
@@ -129,7 +125,7 @@
 					if (_isFirstTimeConnect)
 						_isFirstTimeConnect = false;
 					else
-						_adapter.SendInMessage(new ResetMessage());
+						InnerAdapter.SendInMessage(new ResetMessage());
 
 				//	lock (_timeSync)
 				//	{
@@ -168,7 +164,7 @@
 				}
 			}
 
-			_adapter.SendInMessage(message);
+			InnerAdapter.SendInMessage(message);
 		}
 
 		private void OnHeartbeatTimer()
@@ -185,7 +181,7 @@
 			}
 
 			_timeMessage.IsBack = true;
-			_adapter.SendInMessage(_timeMessage);
+			InnerAdapter.SendInMessage(_timeMessage);
 		}
 
 		//private void ProcessReconnection(TimeSpan diff)
@@ -287,153 +283,34 @@
 			//return SessionHolder.ReConnectionSettings.WorkingTime.IsTradeTime(TimeHelper.Now);
 		}
 
-		bool IMessageChannel.IsOpened
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public override void Dispose()
 		{
-			get { return _adapter.IsOpened; }
-		}
+			InnerAdapter.NewOutMessage -= AdapterOnNewOutMessage;
 
-		void IDisposable.Dispose()
-		{
-			_adapter.NewOutMessage -= AdapterOnNewOutMessage;
-			//_adapter.Dispose();
-		}
-
-		void IMessageChannel.Open()
-		{
-			_adapter.Open();
-		}
-
-		void IMessageChannel.Close()
-		{
-			_adapter.Close();
+			base.Dispose();
 		}
 
 		private Action<Message> _newOutMessage;
 
-		event Action<Message> IMessageChannel.NewOutMessage
+		/// <summary>
+		/// New message event.
+		/// </summary>
+		public override event Action<Message> NewOutMessage
 		{
 			add { _newOutMessage += value; }
 			remove { _newOutMessage -= value; }
 		}
 
-		void IPersistable.Load(SettingsStorage storage)
+		/// <summary>
+		/// Create a copy of <see cref="HeartbeatAdapter"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override IMessageChannel Clone()
 		{
-			_adapter.Load(storage);
-		}
-
-		void IPersistable.Save(SettingsStorage storage)
-		{
-			_adapter.Save(storage);
-		}
-
-		Guid ILogSource.Id
-		{
-			get { return _adapter.Id; }
-		}
-
-		string ILogSource.Name
-		{
-			get { return _adapter.Name; }
-		}
-
-		ILogSource ILogSource.Parent
-		{
-			get { return _adapter.Parent; }
-			set { _adapter.Parent = value; }
-		}
-
-		LogLevels ILogSource.LogLevel
-		{
-			get { return _adapter.LogLevel; }
-			set { _adapter.LogLevel = value; }
-		}
-
-		DateTimeOffset ILogSource.CurrentTime
-		{
-			get { return _adapter.CurrentTime; }
-		}
-
-		bool ILogSource.IsRoot
-		{
-			get { return _adapter.IsRoot; }
-		}
-
-		event Action<LogMessage> ILogSource.Log
-		{
-			add { _adapter.Log += value; }
-			remove { _adapter.Log -= value; }
-		}
-
-		void ILogReceiver.AddLog(LogMessage message)
-		{
-			_adapter.AddLog(message);
-		}
-
-		ReConnectionSettings IMessageAdapter.ReConnectionSettings
-		{
-			get { return _adapter.ReConnectionSettings; }
-		}
-
-		IdGenerator IMessageAdapter.TransactionIdGenerator
-		{
-			get { return _adapter.TransactionIdGenerator; }
-		}
-
-		MessageTypes[] IMessageAdapter.SupportedMessages
-		{
-			get { return _adapter.SupportedMessages; }
-			set { _adapter.SupportedMessages = value; }
-		}
-
-		bool IMessageAdapter.IsValid
-		{
-			get { return _adapter.IsValid; }
-		}
-
-		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo
-		{
-			get { return _adapter.SecurityClassInfo; }
-		}
-
-		TimeSpan IMessageAdapter.HeartbeatInterval
-		{
-			get { return _adapter.HeartbeatInterval; }
-			set { _adapter.HeartbeatInterval = value; }
-		}
-
-		bool IMessageAdapter.PortfolioLookupRequired
-		{
-			get { return _adapter.PortfolioLookupRequired; }
-		}
-
-		bool IMessageAdapter.SecurityLookupRequired
-		{
-			get { return _adapter.SecurityLookupRequired; }
-		}
-
-		bool IMessageAdapter.OrderStatusRequired
-		{
-			get { return _adapter.OrderStatusRequired; }
-		}
-
-		string IMessageAdapter.AssociatedBoardCode
-		{
-			get { return _adapter.AssociatedBoardCode; }
-		}
-
-		OrderCondition IMessageAdapter.CreateOrderCondition()
-		{
-			return _adapter.CreateOrderCondition();
-		}
-
-		bool IMessageAdapter.IsConnectionAlive()
-		{
-			return _adapter.IsConnectionAlive();
-		}
-
-		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
-		{
-			return _adapter.CreateOrderLogMarketDepthBuilder(securityId);
+			return new HeartbeatAdapter((IMessageAdapter)InnerAdapter.Clone());
 		}
 	}
 }

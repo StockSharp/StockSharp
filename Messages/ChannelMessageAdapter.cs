@@ -1,33 +1,28 @@
 namespace StockSharp.Messages
 {
 	using System;
-	using System.Collections.Generic;
 
 	using Ecng.Common;
-	using Ecng.Serialization;
-
-	using StockSharp.Logging;
 
 	/// <summary>
 	/// Message adapter, forward messages through a transport channel <see cref="IMessageChannel"/>.
 	/// </summary>
-	public class ChannelMessageAdapter : IMessageAdapter
+	public class ChannelMessageAdapter : MessageAdapterWrapper
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ChannelMessageAdapter"/>.
 		/// </summary>
-		/// <param name="adapter">Adapter.</param>
+		/// <param name="innerAdapter">Underlying adapter.</param>
 		/// <param name="inputChannel">Incomming messages channgel.</param>
 		/// <param name="outputChannel">Outgoing message channel.</param>
-		public ChannelMessageAdapter(IMessageAdapter adapter, IMessageChannel inputChannel, IMessageChannel outputChannel)
+		public ChannelMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inputChannel, IMessageChannel outputChannel)
+			: base(innerAdapter)
 		{
-			if (adapter == null)
-				throw new ArgumentNullException("adapter");
-
 			if (inputChannel == null)
 				throw new ArgumentNullException("inputChannel");
 
-			Adapter = adapter;
+			if (outputChannel == null)
+				throw new ArgumentNullException("outputChannel");
 
 			InputChannel = inputChannel;
 			OutputChannel = outputChannel;
@@ -35,13 +30,8 @@ namespace StockSharp.Messages
 			InputChannel.NewOutMessage += InputChannelOnNewOutMessage;
 			OutputChannel.NewOutMessage += OutputChannelOnNewOutMessage;
 
-			Adapter.NewOutMessage += AdapterOnNewOutMessage;
+			InnerAdapter.NewOutMessage += AdapterOnNewOutMessage;
 		}
-
-		/// <summary>
-		/// Adapter.
-		/// </summary>
-		public IMessageAdapter Adapter { get; private set; }
 
 		/// <summary>
 		/// Adapter.
@@ -78,10 +68,13 @@ namespace StockSharp.Messages
 
 		private void InputChannelOnNewOutMessage(Message message)
 		{
-			Adapter.SendInMessage(message);
+			InnerAdapter.SendInMessage(message);
 		}
 
-		void IDisposable.Dispose()
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public override void Dispose()
 		{
 			InputChannel.NewOutMessage -= InputChannelOnNewOutMessage;
 			OutputChannel.NewOutMessage -= OutputChannelOnNewOutMessage;
@@ -92,26 +85,16 @@ namespace StockSharp.Messages
 			if (OwnOutputChannel)
 				OutputChannel.Dispose();
 
-			Adapter.NewOutMessage -= AdapterOnNewOutMessage;
-			//Adapter.Dispose();
+			InnerAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+
+			base.Dispose();
 		}
 
-		bool IMessageChannel.IsOpened
-		{
-			get { return Adapter.IsOpened; }
-		}
-
-		void IMessageChannel.Open()
-		{
-			Adapter.Open();
-		}
-
-		void IMessageChannel.Close()
-		{
-			Adapter.Close();
-		}
-
-		void IMessageChannel.SendInMessage(Message message)
+		/// <summary>
+		/// Send message.
+		/// </summary>
+		/// <param name="message">Message.</param>
+		public override void SendInMessage(Message message)
 		{
 			if (!InputChannel.IsOpened)
 				InputChannel.Open();
@@ -121,130 +104,22 @@ namespace StockSharp.Messages
 
 		private Action<Message> _newMessage;
 
-		event Action<Message> IMessageChannel.NewOutMessage
+		/// <summary>
+		/// New message event.
+		/// </summary>
+		public override event Action<Message> NewOutMessage
 		{
 			add { _newMessage += value; }
 			remove { _newMessage -= value; }
 		}
 
-		void IPersistable.Load(SettingsStorage storage)
+		/// <summary>
+		/// Create a copy of <see cref="ChannelMessageAdapter"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override IMessageChannel Clone()
 		{
-			Adapter.Load(storage);
-		}
-
-		void IPersistable.Save(SettingsStorage storage)
-		{
-			Adapter.Save(storage);
-		}
-
-		Guid ILogSource.Id
-		{
-			get { return Adapter.Id; }
-		}
-
-		string ILogSource.Name
-		{
-			get { return Adapter.Name; }
-		}
-
-		ILogSource ILogSource.Parent
-		{
-			get { return Adapter.Parent; }
-			set { Adapter.Parent = value; }
-		}
-
-		LogLevels ILogSource.LogLevel
-		{
-			get { return Adapter.LogLevel; }
-			set { Adapter.LogLevel = value; }
-		}
-
-		DateTimeOffset ILogSource.CurrentTime
-		{
-			get { return Adapter.CurrentTime; }
-		}
-
-		bool ILogSource.IsRoot
-		{
-			get { return Adapter.IsRoot; }
-		}
-
-		event Action<LogMessage> ILogSource.Log
-		{
-			add { Adapter.Log += value; }
-			remove { Adapter.Log -= value; }
-		}
-
-		void ILogReceiver.AddLog(LogMessage message)
-		{
-			Adapter.AddLog(message);
-		}
-
-		ReConnectionSettings IMessageAdapter.ReConnectionSettings
-		{
-			get { return Adapter.ReConnectionSettings; }
-		}
-
-		IdGenerator IMessageAdapter.TransactionIdGenerator
-		{
-			get { return Adapter.TransactionIdGenerator; }
-		}
-
-		MessageTypes[] IMessageAdapter.SupportedMessages
-		{
-			get { return Adapter.SupportedMessages; }
-			set { Adapter.SupportedMessages = value; }
-		}
-
-		bool IMessageAdapter.IsValid
-		{
-			get { return Adapter.IsValid; }
-		}
-
-		IDictionary<string, RefPair<SecurityTypes, string>> IMessageAdapter.SecurityClassInfo
-		{
-			get { return Adapter.SecurityClassInfo; }
-		}
-
-		TimeSpan IMessageAdapter.HeartbeatInterval
-		{
-			get { return Adapter.HeartbeatInterval; }
-			set { Adapter.HeartbeatInterval = value; }
-		}
-
-		bool IMessageAdapter.PortfolioLookupRequired
-		{
-			get { return Adapter.PortfolioLookupRequired; }
-		}
-
-		bool IMessageAdapter.SecurityLookupRequired
-		{
-			get { return Adapter.SecurityLookupRequired; }
-		}
-
-		bool IMessageAdapter.OrderStatusRequired
-		{
-			get { return Adapter.OrderStatusRequired; }
-		}
-
-		string IMessageAdapter.AssociatedBoardCode
-		{
-			get { return Adapter.AssociatedBoardCode; }
-		}
-
-		OrderCondition IMessageAdapter.CreateOrderCondition()
-		{
-			return Adapter.CreateOrderCondition();
-		}
-
-		bool IMessageAdapter.IsConnectionAlive()
-		{
-			return Adapter.IsConnectionAlive();
-		}
-
-		IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
-		{
-			return Adapter.CreateOrderLogMarketDepthBuilder(securityId);
+			return new ChannelMessageAdapter(InnerAdapter, InputChannel.Clone(), OutputChannel.Clone());
 		}
 	}
 }

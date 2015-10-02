@@ -7,7 +7,8 @@
 			 xmlns:local="clr-namespace:StockSharp.Xaml"
 			 xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 			 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="450">
+			 xmlns:propertyGrid="clr-namespace:StockSharp.Xaml.PropertyGrid"
+			 mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="450">
     
 	<UserControl.Resources>
 		<Style x:Key="myItemStyle" TargetType="{x:Type ListViewItem}">
@@ -49,22 +50,26 @@
                     Executed="ExecutedAddConnection"
                     CanExecute="CanExecuteAddConnection" />-->
 
-		<CommandBinding Command="{x:Static local:MessageAdaptersPanel.RemoveSessionCommand}"
-                    Executed="ExecutedRemoveSession"
-                    CanExecute="CanExecuteRemoveSession" />
+		<CommandBinding Command="{x:Static local:MessageAdaptersPanel.RemoveCommand}"
+                    Executed="ExecutedRemove"
+                    CanExecute="CanExecuteRemove" />
 
-		<CommandBinding Command="{x:Static local:MessageAdaptersPanel.EnableSessionCommand}"
-                    Executed="ExecutedEnableSession"
-                    CanExecute="CanExecuteEnableSession" />
+		<CommandBinding Command="{x:Static local:MessageAdaptersPanel.EnableCommand}"
+                    Executed="ExecutedEnable"
+                    CanExecute="CanExecuteEnable" />
 	</UserControl.CommandBindings>
 
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
-		<ToolBar Grid.Row="0" ToolBarTray.IsLocked="True">
+		<ToolBar Grid.Row="0" Grid.ColumnSpan="3" ToolBarTray.IsLocked="True">
 			<xctk:DropDownButton ToolTip="{x:Static loc:LocalizedStrings.XamlStr144}">
 				<xctk:DropDownButton.Content>
                     <ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/add_16x16.png" Style="{StaticResource toolbarImageStyle}" />
@@ -80,13 +85,13 @@
 				</xctk:DropDownButton.DropDownContent>
 			</xctk:DropDownButton>
 
-			<Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr795}" Command="{x:Static local:MessageAdaptersPanel.RemoveSessionCommand}">
+			<Button ToolTip="{x:Static loc:LocalizedStrings.XamlStr795}" Command="{x:Static local:MessageAdaptersPanel.RemoveCommand}">
                 <ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png" Style="{StaticResource toolbarImageStyle}" />
 			</Button>
 			
 			<Separator/>
 
-			<Button ToolTip="{x:Static loc:LocalizedStrings.Str1557}" Command="{x:Static local:MessageAdaptersPanel.EnableSessionCommand}">
+			<Button ToolTip="{x:Static loc:LocalizedStrings.Str1557}" Command="{x:Static local:MessageAdaptersPanel.EnableCommand}">
                 <ex:BmpImage x:Name="EnableImg" Source="pack://application:,,,/StockSharp.Xaml;component/Images/enabled.png" Style="{StaticResource toolbarImageStyle}" />
 			</Button>
 
@@ -148,5 +153,8 @@
                 </GridView>
 			</ListView.View>
 		</ListView>
+
+		<GridSplitter Grid.Column="0" Grid.Row="1" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+		<propertyGrid:PropertyGridEx Grid.Row="1" Grid.Column="1" x:Name="PropertyGrid" />
 	</Grid>
 </UserControl>

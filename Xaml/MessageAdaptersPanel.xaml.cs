@@ -17,7 +17,6 @@ namespace StockSharp.Xaml
 	using Ecng.Xaml;
 
 	using StockSharp.Algo;
-	using StockSharp.Algo.Testing;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 
@@ -26,9 +25,9 @@ namespace StockSharp.Xaml
 	/// </summary>
 	public partial class MessageAdaptersPanel
 	{
-		private sealed class ConnectorRow : NotifiableObject
+		private sealed class GridRow : NotifiableObject
 		{
-			public ConnectorRow(ConnectorInfo info, IMessageAdapter adapter)
+			public GridRow(ConnectorInfo info, IMessageAdapter adapter, IMessageAdapter innerAdapter)
 			{
 				if (info == null)
 					throw new ArgumentNullException("info");
@@ -36,13 +35,18 @@ namespace StockSharp.Xaml
 				if (adapter == null)
 					throw new ArgumentNullException("adapter");
 
+				if (innerAdapter == null)
+					throw new ArgumentNullException("innerAdapter");
+
 				Info = info;
 				Adapter = adapter;
+				InnerAdapter = innerAdapter;
 			}
 
 			public ConnectorInfo Info { get; private set; }
 
 			public IMessageAdapter Adapter { get; private set; }
+			public IMessageAdapter InnerAdapter { get; private set; }
 
 			private bool _isEnabled = true;
 
@@ -58,7 +62,7 @@ namespace StockSharp.Xaml
 
 			public string Description
 			{
-				get { return Adapter.ToString(); }
+				get { return InnerAdapter.ToString(); }
 			}
 
 			public void Refresh()
@@ -110,7 +114,7 @@ namespace StockSharp.Xaml
 					if (!wnd.ShowModal(_parent))
 						return;
 
-					var row = new ConnectorRow(item, wnd.Adapter);
+					var row = new GridRow(item, wnd.Adapter, _parent.GetInnerAdapter(wnd.Adapter));
 
 					_parent.Adapter.InnerAdapters[wnd.Adapter] = 0;
 
@@ -182,14 +186,14 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// <see cref="RoutedCommand"/> for the connection removal.
 		/// </summary>
-		public static readonly RoutedCommand RemoveSessionCommand = new RoutedCommand();
+		public static readonly RoutedCommand RemoveCommand = new RoutedCommand();
 
 		/// <summary>
 		/// <see cref="RoutedCommand"/> to enable connection.
 		/// </summary>
-		public static readonly RoutedCommand EnableSessionCommand = new RoutedCommand();
+		public static readonly RoutedCommand EnableCommand = new RoutedCommand();
 
-		private readonly ObservableCollection<ConnectorRow> _connectorRows = new ObservableCollection<ConnectorRow>();
+		private readonly ObservableCollection<GridRow> _connectorRows = new ObservableCollection<GridRow>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MessageAdaptersPanel"/>.
@@ -221,18 +225,48 @@ namespace StockSharp.Xaml
 			get { return _adapter; }
 			set
 			{
-				_adapter = value;
+				if (_adapter == value)
+					return;
 
+				_adapter = value;
 				_connectorRows.Clear();
 
 				if (_adapter == null)
 					return;
 
-				// TODO добавить панель настроек для эмуляционной сессии
-				var adapters = _adapter.InnerAdapters.Where(s => !(s is HistoryMessageAdapter));
-
-				_connectorRows.AddRange(adapters.Select(a => new ConnectorRow(GetInfo(a), a) { IsEnabled = _adapter.InnerAdapters[a] != -1 }));
+				_connectorRows.AddRange(_adapter.InnerAdapters.Select(CreateRow));
 			}
+		}
+
+		private IMessageAdapter GetInnerAdapter(IMessageAdapter adapter)
+		{
+			while (true)
+			{
+				var wrapper = adapter as IMessageAdapterWrapper;
+				if (wrapper == null)
+					break;
+
+				adapter = wrapper.InnerAdapter;
+			}
+
+			return adapter;
+		}
+
+		private GridRow CreateRow(IMessageAdapter adapter)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
+
+			var innerAdapter = GetInnerAdapter(adapter);
+
+			var info = ConnectorsInfo.FirstOrDefault(i =>
+				(i.TransactionAdapterType != null && i.TransactionAdapterType.IsInstanceOfType(innerAdapter)) ||
+				(i.MarketDataAdapterType != null && i.MarketDataAdapterType.IsInstanceOfType(innerAdapter)));
+
+			if (info == null)
+				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(innerAdapter.GetType()), "adapter");
+
+			return new GridRow(info, adapter, innerAdapter) { IsEnabled = _adapter.InnerAdapters[adapter] != -1 };
 		}
 
 		private readonly IList<ConnectorInfo> _connectorsInfo;
@@ -255,27 +289,14 @@ namespace StockSharp.Xaml
 		/// </summary>
 		public event Func<ConnectionStates> CheckConnectionState;
 
-		private ConnectorRow SelectedInfo
+		private GridRow SelectedRow
 		{
-			get { return ConnectorsGrid != null ? (ConnectorRow)ConnectorsGrid.SelectedItem : null; }
-		}
-
-		private ConnectorInfo GetInfo(IMessageAdapter adapter)
-		{
-			if (adapter == null)
-				throw new ArgumentNullException("adapter");
-
-			var info = ConnectorsInfo.FirstOrDefault(i => i.TransactionAdapterType.IsInstanceOfType(adapter) || i.MarketDataAdapterType.IsInstanceOfType(adapter));
-
-			if (info == null)
-				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(adapter.GetType()), "adapter");
-
-			return info;
+			get { return ConnectorsGrid != null ? (GridRow)ConnectorsGrid.SelectedItem : null; }
 		}
 
 		private bool CheckConnected(string message)
 		{
-			if (!SelectedInfo.IsEnabled || CheckConnectionState == null)
+			if (!SelectedRow.IsEnabled || CheckConnectionState == null)
 				return true;
 
 			var connectionState = CheckConnectionState();
@@ -292,24 +313,24 @@ namespace StockSharp.Xaml
 			return false;
 		}
 
-		private void ExecutedRemoveSession(object sender, ExecutedRoutedEventArgs e)
+		private void ExecutedRemove(object sender, ExecutedRoutedEventArgs e)
 		{
 			if (!CheckConnected(LocalizedStrings.Str1554))
 				return;
 
-			Adapter.InnerAdapters.Remove(SelectedInfo.Adapter);
-			_connectorRows.Remove(SelectedInfo);
+			Adapter.InnerAdapters.Remove(SelectedRow.Adapter);
+			_connectorRows.Remove(SelectedRow);
 			ConnectorsChanged.SafeInvoke();
 		}
 
-		private void CanExecuteRemoveSession(object sender, CanExecuteRoutedEventArgs e)
+		private void CanExecuteRemove(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = SelectedInfo != null;
+			e.CanExecute = SelectedRow != null;
 		}
 
 		private void ConnectorsGrid_DoubleClick(object sender, MouseButtonEventArgs e)
 		{
-			if (SelectedInfo == null)
+			if (SelectedRow == null)
 				return;
 
 			if (!CheckConnected(LocalizedStrings.Str1555))
@@ -317,38 +338,39 @@ namespace StockSharp.Xaml
 
 			var wnd = new MessageAdapterWindow
 			{
-				Adapter = SelectedInfo.Adapter
+				Adapter = SelectedRow.Adapter
 			};
 
 			if (!wnd.ShowModal(this))
 				return;
 
-			SelectedInfo.Refresh();
+			SelectedRow.Refresh();
 
 			ConnectorsChanged.SafeInvoke();
 		}
 
 		private void ConnectorsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			ChangeDisableEnableIcon(SelectedInfo != null && SelectedInfo.IsEnabled);
+			ChangeDisableEnableIcon(SelectedRow != null && SelectedRow.IsEnabled);
+			PropertyGrid.SelectedObject = SelectedRow == null ? null : SelectedRow.InnerAdapter;
 		}
 
-		private void ExecutedEnableSession(object sender, ExecutedRoutedEventArgs e)
+		private void ExecutedEnable(object sender, ExecutedRoutedEventArgs e)
 		{
 			if (!CheckConnected(LocalizedStrings.Str1556))
 				return;
 
-			SelectedInfo.IsEnabled = !SelectedInfo.IsEnabled;
+			SelectedRow.IsEnabled = !SelectedRow.IsEnabled;
 
-			Adapter.InnerAdapters[SelectedInfo.Adapter] = SelectedInfo.IsEnabled ? 0 : -1;
+			Adapter.InnerAdapters[SelectedRow.Adapter] = SelectedRow.IsEnabled ? 0 : -1;
 
-			ChangeDisableEnableIcon(SelectedInfo.IsEnabled);
+			ChangeDisableEnableIcon(SelectedRow.IsEnabled);
 			ConnectorsChanged.SafeInvoke();
 		}
 
-		private void CanExecuteEnableSession(object sender, CanExecuteRoutedEventArgs e)
+		private void CanExecuteEnable(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = SelectedInfo != null;
+			e.CanExecute = SelectedRow != null;
 		}
 
 		private void ChangeDisableEnableIcon(bool isEnabled)
@@ -404,6 +426,15 @@ namespace StockSharp.Xaml
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConnectorInfo"/>.
 		/// </summary>
+		/// <param name="adapterType">The type of transaction and market data adapter.</param>
+		public ConnectorInfo(Type adapterType)
+			: this(adapterType, adapterType)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ConnectorInfo"/>.
+		/// </summary>
 		/// <param name="transactionAdapterType">The type of transaction adapter.</param>
 		/// <param name="marketDataAdapterType">The type of market data adapter.</param>
 		public ConnectorInfo(Type transactionAdapterType, Type marketDataAdapterType)
@@ -416,6 +447,9 @@ namespace StockSharp.Xaml
 
 			if (marketDataAdapterType != null && !typeof(IMessageAdapter).IsAssignableFrom(marketDataAdapterType))
 				throw new ArgumentException("marketDataAdapterType");
+
+			TransactionAdapterType = transactionAdapterType;
+			MarketDataAdapterType = marketDataAdapterType;
 
 			var adapterType = transactionAdapterType ?? marketDataAdapterType;
 
