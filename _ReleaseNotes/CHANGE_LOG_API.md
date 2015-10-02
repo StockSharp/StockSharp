@@ -1,7 +1,12 @@
 StockSharp API Change log
 ========================
-###v4.3.12:
+###v4.3.13:
 * (bug) MessageAdaptersPanel fix.
+* (bug) Chart fix (draw values in hidden mode).
+* (bug) SmartCOM sec info fix.
+* (feature) Connectors. Doc + Icon attributes.
+
+###v4.3.12:
 * (feature) ISecurityStorage. CSV implementation.
 * (feature) ICandleBuilder. Direct value processing.
 * (feature) Correlation indicator.

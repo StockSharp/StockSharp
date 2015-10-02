@@ -2708,9 +2708,234 @@
             Базовый менеджер.
             </summary>
     </member>
-    <member name="P:StockSharp.Plaza.PlazaBaseManager.ConnectionPool">
+    <member name="T:StockSharp.Plaza.PlazaMessageAdapter">
       <summary>
-            Пул подключений.
+            Адаптер сообщений для Plaza 2.
+            </summary>
+    </member>
+    <member name="F:StockSharp.Plaza.PlazaMessageAdapter.DemoCGateKey">
+      <summary>
+            Идентификатор клиентского ПО для подключения через CGate к тестовому серверу.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Загрузить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
+      <summary>
+            Сохранить настройки.
+            </summary>
+      <param name="storage">Хранилище настроек.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
+      <summary>
+            Создать <see cref="T:StockSharp.Plaza.PlazaMessageAdapter" />.
+            </summary>
+      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
+      <summary>
+            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
+      <summary>
+            Отправить сообщение.
+            </summary>
+      <param name="message">Сообщение.</param>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.IsConnectionAlive">
+      <summary>
+            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
+            </summary>
+      <returns>
+        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.ToString">
+      <summary>
+            Получить строковое представление.
+            </summary>
+      <returns>Строковое представление.</returns>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.DisposeManaged">
+      <summary>
+            Освободить занятые ресурсы.
+            </summary>
+    </member>
+    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
+      <summary>
+            Создать построитель стакана.
+            </summary>
+      <param name="securityId">Идентификатор инструмента.</param>
+      <returns>Построитель стакана.</returns>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Address">
+      <summary>
+            Адрес сервера. По-умолчанию значение равно адресу локального компьютера 127.0.0.1:4001.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.AppName">
+      <summary>
+            Префикс в имени приложения Plaza соединения.
+            </summary>
+      <remarks>
+            Все созданные <see cref="T:StockSharp.Plaza.PlazaTrader" /> соединения именуются как <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.AppName" />_N, где N - порядковый номер соединение в пределах одного робота.
+            Если планируется подключать несколько <see cref="T:StockSharp.Plaza.PlazaTrader" /> к одному роутеру, они должны иметь уникальные <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.AppName" />.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate">
+      <summary>
+            Использовать ли CGate для торговли через Plaza или использовать старый COM.
+            По-умолчанию, выключено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.CGateKey">
+      <summary>
+            Идентификатор клиентского ПО. Используется при режиме <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.IsCGate" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Login">
+      <summary>
+            Логин. Используется в случае авторизованного подключения к роутеру.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Password">
+      <summary>
+            Пароль. Используется в случае авторизованного подключения к роутеру.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.PollTimeOut">
+      <summary>
+            Время, в течение которого ожидается получение сообщения из потока данных или отправка транзакций.
+            </summary>
+      <remarks>
+            По-умолчанию равно 10 милисекундам.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.UseLocalProtocol">
+      <summary>
+            Использовать SharedMem протокол при соединении с локальным роутером. По-умолчанию не используется.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsControlConnectionLost">
+      <summary>
+            Контролировать потерю соединения с роутером. По-умолчанию включено.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.ApiPath">
+      <summary>
+            Путь к директории, куда будут сохраняться файлы Plaza SDK.
+            </summary>
+      <remarks>
+            По-умолчанию путь равен локальной директории.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsValid">
+      <summary>
+            Проверить введенные параметры на валидность.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.TableRegistry">
+      <summary>
+            Реестр всех таблиц сервера Плазы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.CreateTradesFromOrdersLog">
+      <summary>
+            Использовать лог заявок (orders log) для создания тиковых сделок. По-умолчанию выключено.
+            </summary>
+      <remarks>
+            Режим автоматически добавляет или удаляет из <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.Tables" /> таблицу <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.AnonymousOrdersLog" />.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.CreateDepthFromOrdersLog">
+      <summary>
+            Использовать лог заявок (orders log) для создания стаканов. По-умолчанию выключено.
+            </summary>
+      <remarks>
+            Режим автоматически добавляет или удаляет из <see cref="P:StockSharp.Plaza.PlazaMessageAdapter.Tables" /> таблицу <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.AnonymousOrdersLog" />.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.OnlySystemTrades">
+      <summary>
+            Передавать только системные сделки. По-умолчанию значение равно <see langword="true" />.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.RevisionPath">
+      <summary>
+            Путь к директории, куда будут сохраняться ревизии.
+            </summary>
+      <remarks>
+            По-умолчанию путь равен директории \StockSharp_Plaza\Revisions, которая будет создана в локальной директории.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.DefaultFutureDepthTable">
+      <summary>
+            Таблица данных для стакана фьючерсных контрактов, которая будет запускаться при запуске потоков репликации.
+            </summary>
+      <remarks>
+            Значение по умолчанию равно <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Aggregation5Future" />.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.DefaultOptionDepthTable">
+      <summary>
+            Таблица данных для стакана опционных контрактов, которая будет запускаться при запуске потоков репликации.
+            </summary>
+      <remarks>
+            Значение по умолчанию равно <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Aggregation5Option" />.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.ConfigPath">
+      <summary>
+            Путь к директории, в которой будут храниться схемы потоков Plaza.
+            </summary>
+      <remarks>
+            По-умолчанию путь равен директории StockSharp_Plaza\Configs, которая будет создана в локальной директории.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.ConnectionGroupping">
+      <summary>
+            Настройки группировки потоков по соединениям.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.StreamManager">
+      <summary>
+            Менеджер потоков данных.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.Tables">
+      <summary>
+            Таблицы, которые будут запущены при подключении.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.TransactionTimeOut">
+      <summary>
+            Время, в течении которого ожидается ответ для транзакции.
+            </summary>
+      <remarks>
+            По-умолчанию равно 5 секундам.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.ThreadCount">
+      <summary>
+            Число транзакционных потоков.
+            </summary>
+      <remarks>
+            Значение по умолчанию равно 1.
+            </remarks>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.BrokerCode">
+      <summary>
+            Код брокерской фирмы.
+            </summary>
+    </member>
+    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.TransactionManager">
+      <summary>
+            Менеджер транзакций.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder">
@@ -2740,133 +2965,6 @@
     <member name="P:StockSharp.Plaza.PlazaOrderLogMarketDepthBuilder.Depth">
       <summary>
             Стакан.
-            </summary>
-    </member>
-    <member name="T:StockSharp.Plaza.PlazaConnectionPoolSettings">
-      <summary>
-            Настройки <see cref="T:StockSharp.Plaza.PlazaConnectionPool" />.
-            </summary>
-    </member>
-    <member name="F:StockSharp.Plaza.PlazaConnectionPoolSettings.DemoCGateKey">
-      <summary>
-            Идентификатор клиентского ПО для подключения через CGate к тестовому серверу.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaConnectionPoolSettings.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.Plaza.PlazaConnectionPoolSettings" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaConnectionPoolSettings.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaConnectionPoolSettings.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.Address">
-      <summary>
-            Адрес сервера. По-умолчанию значение равно адресу локального компьютера 127.0.0.1:4001.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.AppName">
-      <summary>
-            Префикс в имени приложения Plaza соединения.
-            </summary>
-      <remarks>
-            Все созданные <see cref="T:StockSharp.Plaza.PlazaTrader" /> соединения именуются как <see cref="P:StockSharp.Plaza.PlazaConnectionPoolSettings.AppName" />_N, где N - порядковый номер соединение в пределах одного робота.
-            Если планируется подключать несколько <see cref="T:StockSharp.Plaza.PlazaTrader" /> к одному роутеру, они должны иметь уникальные <see cref="P:StockSharp.Plaza.PlazaConnectionPoolSettings.AppName" />.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.IsCGate">
-      <summary>
-            Использовать ли CGate для торговли через Plaza или использовать старый COM.
-            По-умолчанию, выключено.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.CGateKey">
-      <summary>
-            Идентификатор клиентского ПО. Используется при режиме <see cref="P:StockSharp.Plaza.PlazaConnectionPoolSettings.IsCGate" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.Login">
-      <summary>
-            Логин. Используется в случае авторизованного подключения к роутеру.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.Password">
-      <summary>
-            Пароль. Используется в случае авторизованного подключения к роутеру.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.PollTimeOut">
-      <summary>
-            Время, в течение которого ожидается получение сообщения из потока данных или отправка транзакций.
-            </summary>
-      <remarks>
-            По-умолчанию равно 10 милисекундам.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.UseLocalProtocol">
-      <summary>
-            Использовать SharedMem протокол при соединении с локальным роутером. По-умолчанию не используется.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.IsControlConnectionLost">
-      <summary>
-            Контролировать потерю соединения с роутером. По-умолчанию включено.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPoolSettings.ApiPath">
-      <summary>
-            Путь к директории, куда будут сохраняться файлы Plaza SDK.
-            </summary>
-      <remarks>
-            По-умолчанию путь равен локальной директории.
-            </remarks>
-    </member>
-    <member name="T:StockSharp.Plaza.PlazaMessageAdapter">
-      <summary>
-            Базовый адаптер сообщений для Plaza 2.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.#ctor(Ecng.Common.IdGenerator)">
-      <summary>
-            Инициализировать <see cref="T:StockSharp.Plaza.PlazaMessageAdapter" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaMessageAdapter.ToString">
-      <summary>
-            Получить строковое представление.
-            </summary>
-      <returns>Строковое представление.</returns>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.ConnectionPoolSettings">
-      <summary>
-            Настройки.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaMessageAdapter.IsValid">
-      <summary>
-            Проверить введенные параметры на валидность.
             </summary>
     </member>
     <member name="T:StockSharp.Plaza.PlazaRevisionManager">
@@ -2904,134 +3002,6 @@
       <remarks>
             По-умолчанию путь равен директории \StockSharp_Plaza\Revisions, которая будет создана в локальной директории.
             </remarks>
-    </member>
-    <member name="T:StockSharp.Plaza.PlazaStreamMessageAdapter">
-      <summary>
-            Маркет-дата адаптер сообщений для Плаза.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.Plaza.PlazaConnectionPool)">
-      <summary>
-            Создать <see cref="T:StockSharp.Plaza.PlazaStreamMessageAdapter" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-      <param name="connectionPool">Пул подключений.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.IsConnectionAlive">
-      <summary>
-            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
-      <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
-            </summary>
-      <param name="message">Сообщение.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.CreateOrderLogMarketDepthBuilder(StockSharp.Messages.SecurityId)">
-      <summary>
-            Создать построитель стакана.
-            </summary>
-      <param name="securityId">Идентификатор инструмента.</param>
-      <returns>Построитель стакана.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaStreamMessageAdapter.DisposeManaged">
-      <summary>
-            Освободить занятые ресурсы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.TableRegistry">
-      <summary>
-            Реестр всех таблиц сервера Плазы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.CreateTradesFromOrdersLog">
-      <summary>
-            Использовать лог заявок (orders log) для создания тиковых сделок. По-умолчанию выключено.
-            </summary>
-      <remarks>
-            Режим автоматически добавляет или удаляет из <see cref="P:StockSharp.Plaza.PlazaStreamMessageAdapter.Tables" /> таблицу <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.AnonymousOrdersLog" />.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.CreateDepthFromOrdersLog">
-      <summary>
-            Использовать лог заявок (orders log) для создания стаканов. По-умолчанию выключено.
-            </summary>
-      <remarks>
-            Режим автоматически добавляет или удаляет из <see cref="P:StockSharp.Plaza.PlazaStreamMessageAdapter.Tables" /> таблицу <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.AnonymousOrdersLog" />.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.OnlySystemTrades">
-      <summary>
-            Передавать только системные сделки. По-умолчанию значение равно <see langword="true" />.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.RevisionPath">
-      <summary>
-            Путь к директории, куда будут сохраняться ревизии.
-            </summary>
-      <remarks>
-            По-умолчанию путь равен директории \StockSharp_Plaza\Revisions, которая будет создана в локальной директории.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.DefaultFutureDepthTable">
-      <summary>
-            Таблица данных для стакана фьючерсных контрактов, которая будет запускаться при запуске потоков репликации.
-            </summary>
-      <remarks>
-            Значение по умолчанию равно <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Aggregation5Future" />.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.DefaultOptionDepthTable">
-      <summary>
-            Таблица данных для стакана опционных контрактов, которая будет запускаться при запуске потоков репликации.
-            </summary>
-      <remarks>
-            Значение по умолчанию равно <see cref="F:StockSharp.Plaza.Metadata.PlazaTableRegistry.Aggregation5Option" />.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.ConfigPath">
-      <summary>
-            Путь к директории, в которой будут храниться схемы потоков Plaza.
-            </summary>
-      <remarks>
-            По-умолчанию путь равен директории StockSharp_Plaza\Configs, которая будет создана в локальной директории.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.ConnectionGroupping">
-      <summary>
-            Настройки группировки потоков по соединениям.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.StreamManager">
-      <summary>
-            Менеджер потоков данных.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaStreamMessageAdapter.Tables">
-      <summary>
-            Таблицы, которые будут запущены при подключении.
-            </summary>
     </member>
     <member name="T:StockSharp.Plaza.PlazaStreamRegistry">
       <summary>
@@ -4575,31 +4545,6 @@
             Адрес демо сервера. 194.247.133.43.
             </summary>
     </member>
-    <member name="T:StockSharp.Plaza.PlazaConnectionPool">
-      <summary>
-            Пул подключений.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaConnectionPool.#ctor">
-      <summary>
-            Создать <see cref="T:StockSharp.Plaza.PlazaConnectionPool" />.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaConnectionPool.DisposeManaged">
-      <summary>
-            Освободить занятые ресурсы.
-            </summary>
-    </member>
-    <member name="E:StockSharp.Plaza.PlazaConnectionPool.Error">
-      <summary>
-            Событие ошибки обработки.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaConnectionPool.Settings">
-      <summary>
-            Настройки.
-            </summary>
-    </member>
     <member name="T:StockSharp.Plaza.Metadata.PlazaTableRegistry">
       <summary>
             Реестр всех таблиц сервера Плазы.
@@ -5218,80 +5163,6 @@
             </summary>
       <param name="registry">Реестр всех таблиц сервера Плазы.</param>
       <param name="tableIds">Идентификаторы таблиц.</param>
-    </member>
-    <member name="T:StockSharp.Plaza.PlazaTransactionMessageAdapter">
-      <summary>
-            Транзакционный адаптер сообщений для Плаза.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTransactionMessageAdapter.#ctor(Ecng.Common.IdGenerator,StockSharp.Plaza.PlazaConnectionPool)">
-      <summary>
-            Создать <see cref="T:StockSharp.Plaza.PlazaTransactionMessageAdapter" />.
-            </summary>
-      <param name="transactionIdGenerator">Генератор идентификаторов транзакций.</param>
-      <param name="connectionPool">Пул подключений.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTransactionMessageAdapter.IsConnectionAlive">
-      <summary>
-            Проверить, установлено ли еще соединение. Проверяется только в том случае, если было успешно установлено подключение.
-            </summary>
-      <returns>
-        <see langword="true" />, если соединение еще установлено, <see langword="false" />, если торговая система разорвала подключение.</returns>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTransactionMessageAdapter.OnSendInMessage(StockSharp.Messages.Message)">
-      <summary>
-            Отправить сообщение.
-            </summary>
-      <param name="message">Сообщение.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTransactionMessageAdapter.SendOutMessage(StockSharp.Messages.Message)">
-      <summary>
-            Добавить <see cref="T:StockSharp.Messages.Message" /> в выходную очередь <see cref="T:StockSharp.Messages.IMessageAdapter" />.
-            </summary>
-      <param name="message">Сообщение.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTransactionMessageAdapter.Load(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Загрузить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTransactionMessageAdapter.Save(Ecng.Serialization.SettingsStorage)">
-      <summary>
-            Сохранить настройки.
-            </summary>
-      <param name="storage">Хранилище настроек.</param>
-    </member>
-    <member name="M:StockSharp.Plaza.PlazaTransactionMessageAdapter.DisposeManaged">
-      <summary>
-            Освободить занятые ресурсы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTransactionMessageAdapter.TransactionTimeOut">
-      <summary>
-            Время, в течении которого ожидается ответ для транзакции.
-            </summary>
-      <remarks>
-            По-умолчанию равно 5 секундам.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTransactionMessageAdapter.ThreadCount">
-      <summary>
-            Число транзакционных потоков.
-            </summary>
-      <remarks>
-            Значение по умолчанию равно 1.
-            </remarks>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTransactionMessageAdapter.BrokerCode">
-      <summary>
-            Код брокерской фирмы.
-            </summary>
-    </member>
-    <member name="P:StockSharp.Plaza.PlazaTransactionMessageAdapter.TransactionManager">
-      <summary>
-            Менеджер транзакций.
-            </summary>
     </member>
     <member name="T:StockSharp.Plaza.Transaction">
       <summary>
@@ -7145,11 +7016,6 @@
       <param name="oldOrder2">Вторая заявка, которую нужно снять.</param>
       <param name="newOrder2">Вторая новая заявка, которую нужно зарегистрировать.</param>
     </member>
-    <member name="M:StockSharp.Plaza.PlazaTrader.DisposeManaged">
-      <summary>
-            Освободить занятые ресурсы.
-            </summary>
-    </member>
     <member name="P:StockSharp.Plaza.PlazaTrader.IsCGate">
       <summary>
             Использовать ли CGate для торговли через Plaza или использовать старый COM.
@@ -7655,11 +7521,6 @@
     <member name="T:StockSharp.Plaza.TransactionManager">
       <summary>
             Менеджер транзакций.
-            </summary>
-    </member>
-    <member name="M:StockSharp.Plaza.TransactionManager.DisposeManaged">
-      <summary>
-            Освободить занятые ресурсы.
             </summary>
     </member>
     <member name="M:StockSharp.Plaza.TransactionManager.SendTransaction(StockSharp.Plaza.Transaction)">
