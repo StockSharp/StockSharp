@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-			<Button x:Name="OkBtn" Grid.Column="1" Content="OK" IsDefault="True" Width="80" Margin="3,3,0,0" IsEnabled="False" TabIndex="3" ex:XamlHelper.DialogResult="True" />
+			<Button x:Name="OkBtn" Grid.Column="1" Content="{x:Static loc:LocalizedStrings.OK}" IsDefault="True" Width="80" Margin="3,3,0,0" IsEnabled="False" TabIndex="3" ex:XamlHelper.DialogResult="True" />
             <Button Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True" Width="80" Margin="3,3,0,0" TabIndex="4" />
         </Grid>
     </Grid>

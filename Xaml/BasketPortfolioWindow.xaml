@@ -80,7 +80,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="1" Content="OK" IsDefault="True" Width="120" Margin="3" Command="{x:Static Xaml:BasketPortfolioWindow.OkCommand}" TabIndex="3" />
+			<Button Grid.Column="1" Content="{x:Static loc:LocalizedStrings.OK}" IsDefault="True" Width="120" Margin="3" Command="{x:Static Xaml:BasketPortfolioWindow.OkCommand}" TabIndex="3" />
             <Button Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True" Width="120" Margin="3" TabIndex="4" />
         </Grid>
     </Grid>

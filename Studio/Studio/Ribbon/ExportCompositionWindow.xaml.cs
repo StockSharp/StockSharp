@@ -93,7 +93,7 @@
 
 				new MessageBoxBuilder()
 					.Error()
-					.Text("Ошибка экспорта схемы. Детальная информация указана в логе.")
+					.Text(ex.Message)
 					.Owner(this)
 					.Button(MessageBoxButton.OK)
 					.Show();

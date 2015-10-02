@@ -71,7 +71,7 @@
 						</Label>
 						<local:PortfolioComboBox Grid.Column="1" Grid.Row="1" x:Name="PortfoliosComboBox"/>
 
-						<Button Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.XamlStr385}" Command="{x:Static local:PortfolioMessageAdaptersWindow.AddCommand}"/>
+						<Button Grid.Column="1" Grid.Row="2" Content="{x:Static loc:LocalizedStrings.OK}" Command="{x:Static local:PortfolioMessageAdaptersWindow.AddCommand}"/>
                     </Grid>
                 </xctk:DropDownButton.DropDownContent>
             </xctk:DropDownButton>

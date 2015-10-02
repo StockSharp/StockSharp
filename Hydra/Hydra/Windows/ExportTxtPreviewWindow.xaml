@@ -52,7 +52,7 @@
 				<Run Text="{x:Static loc:LocalizedStrings.Preview}"/>
 			</Button>
 			
-			<Button x:Name="OkBtn" Grid.Column="1" IsDefault="True" xaml:XamlHelper.DialogResult="True" Content="OK" Width="75" IsEnabled="False" />
+			<Button x:Name="OkBtn" Grid.Column="1" IsDefault="True" xaml:XamlHelper.DialogResult="True" Content="{x:Static loc:LocalizedStrings.OK}" Width="75" IsEnabled="False" />
 		</Grid>
 	</Grid>
 </Window>

@@ -88,7 +88,7 @@
 				<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/Images/remove_16x16.png" Style="{StaticResource BmpStyle}" />
 			</Button>-->
 
-			<Button Content="OK" Grid.Column="4" x:Name="Ok" IsDefault="True" IsEnabled="False" ex:XamlHelper.DialogResult="True" />
+			<Button Content="{x:Static loc:LocalizedStrings.OK}" Grid.Column="4" x:Name="Ok" IsDefault="True" IsEnabled="False" ex:XamlHelper.DialogResult="True" />
 			<Button Content="{x:Static loc:LocalizedStrings.Cancel}" Grid.Column="6" IsCancel="True" />
 		</Grid>
     </Grid>

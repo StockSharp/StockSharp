@@ -16,15 +16,20 @@
 			<ColumnDefinition Width="120"/>
 			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="90"/>
+			<ColumnDefinition Width="5"/>
 			<ColumnDefinition Width="90"/>
 		</Grid.ColumnDefinitions>
 
-		<local:MessageAdaptersPanel Grid.Column="0" Grid.ColumnSpan="4" x:Name="ConnectorsPanel" />
+		<local:MessageAdaptersPanel Grid.Column="0" Grid.ColumnSpan="5" x:Name="ConnectorsPanel" />
 
-		<Button Grid.Row="2" Grid.Column="0" Margin="1" Click="ProxySettings_OnClick">
+		<Button Grid.Row="2" Grid.Column="0" Click="ProxySettings_OnClick">
 			<TextBlock><Run Text="{x:Static loc:LocalizedStrings.NetworkSettings}" />...</TextBlock>
 		</Button>
-		<Button Grid.Row="2" Grid.Column="2" Margin="1" Content="OK" IsDefault="True" Click="Ok_OnClick" />
-		<Button Grid.Row="2" Grid.Column="3" Margin="1" Content="Cancel" IsCancel="True" ex:XamlHelper.DialogResult="False" />
+		<Button Grid.Row="2" Grid.Column="2" IsDefault="True" Click="Ok_OnClick">
+			<Run Text="{x:Static loc:LocalizedStrings.OK}" />
+		</Button>
+		<Button Grid.Row="2" Grid.Column="4" IsCancel="True" ex:XamlHelper.DialogResult="False">
+			<Run Text="{x:Static loc:LocalizedStrings.Cancel}" />
+		</Button>
 	</Grid>
 </Window>

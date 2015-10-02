@@ -50,7 +50,7 @@
 			</Button>
 
 			<Button x:Name="Auto" Grid.Column="4" Content="{x:Static loc:LocalizedStrings.XamlStr11}" ToolTip="{x:Static loc:LocalizedStrings.XamlStr15}" IsEnabled="False" Width="80" Click="Auto_Click" />
-			<Button x:Name="Ok" Grid.Column="6" Content="OK" IsEnabled="False" Width="80" Click="OK_Click" />
+			<Button x:Name="Ok" Grid.Column="6" Content="{x:Static loc:LocalizedStrings.OK}" IsEnabled="False" Width="80" Click="OK_Click" />
 		</Grid>
 	</Grid>
 </Window>

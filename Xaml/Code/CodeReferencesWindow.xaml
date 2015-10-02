@@ -43,7 +43,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="1" Content="OK" Width="80" Margin="3" IsDefault="True" xaml:XamlHelper.DialogResult="True" />
+			<Button Grid.Column="1" Content="{x:Static loc:LocalizedStrings.OK}" Width="80" Margin="3" IsDefault="True" xaml:XamlHelper.DialogResult="True" />
             <Button Grid.Column="2" Content="{x:Static loc:LocalizedStrings.Cancel}" Width="80" Margin="3" IsCancel="True" xaml:XamlHelper.DialogResult="False" />
         </Grid>
     </Grid>

@@ -1,6 +1,7 @@
 <Window x:Class="StockSharp.Xaml.TargetPlatformWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
         xmlns:xaml="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
         xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
         xmlns:xaml1="clr-namespace:StockSharp.Xaml"
@@ -170,6 +171,6 @@
 		<CheckBox Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="3" x:Name="AutoCheckBox" VerticalAlignment="Center"
 				  IsChecked="{Binding AutoStart}" Content="{x:Static loc:LocalizedStrings.XamlStr176}"/>
 
-		<Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Margin="3" Name="OkButton" Content="OK" MinWidth="100" Click="OkButton_OnClick"/>
+		<Button Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Margin="3" Name="OkButton" Content="{x:Static loc:LocalizedStrings.OK}" MinWidth="100" Click="OkButton_OnClick"/>
     </Grid>
 </Window>

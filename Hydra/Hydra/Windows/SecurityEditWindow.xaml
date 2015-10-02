@@ -77,7 +77,7 @@
 			</TextBlock>
 			<sx:SecurityTypeComboBox x:Name="TypeCtrl" Grid.Column="1" Grid.Row="14" />
 
-			<Button x:Name="Ok" Content="OK" IsDefault="True" Click="OkClick" HorizontalAlignment="Right" Width="90" Grid.Column="1" Grid.Row="16" />
+			<Button x:Name="Ok" Content="{x:Static loc:LocalizedStrings.OK}" IsDefault="True" Click="OkClick" HorizontalAlignment="Right" Width="90" Grid.Column="1" Grid.Row="16" />
 		</Grid>
 	</Grid>
 </Window>

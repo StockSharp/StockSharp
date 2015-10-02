@@ -48589,14 +48589,14 @@ namespace StockSharp.Localization
 		/// <summary>
 		/// OK
 		/// </summary>
-		public const string XamlStr385Key = "XamlStr385";
+		public const string OKKey = "OK";
 
 		/// <summary>
 		/// OK
 		/// </summary>
-		public static string XamlStr385
+		public static string OK
 		{
-			get { return GetString(XamlStr385Key); }
+			get { return GetString(OKKey); }
 		}
 
 		/// <summary>

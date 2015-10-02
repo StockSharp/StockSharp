@@ -19,7 +19,7 @@
 
         <sx:PropertyGridEx Grid.ColumnSpan="3" Margin="3" x:Name="PropertyGrid"/>
 
-        <Button Grid.Row="2" Grid.Column="1" Margin="3" Content="{x:Static loc:LocalizedStrings.XamlStr385}" IsDefault="True" Click="OkButton_Click"/>
+		<Button Grid.Row="2" Grid.Column="1" Margin="3" Content="{x:Static loc:LocalizedStrings.OK}" IsDefault="True" Click="OkButton_Click"/>
         <Button Grid.Row="2" Grid.Column="2" Margin="3" Content="{x:Static loc:LocalizedStrings.Cancel}" IsCancel="True"/>
     </Grid>
 </Window>

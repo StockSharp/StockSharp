@@ -65,7 +65,7 @@
 					<ex:BmpImage Source="pack://application:,,,/StockSharp.Xaml;component/images/add_16x16.png" />
 				</Button>
 
-				<Button Content="OK" Grid.Column="2" x:Name="Ok" ex:XamlHelper.DialogResult="True" />
+				<Button Content="{x:Static loc:LocalizedStrings.OK}" Grid.Column="2" x:Name="Ok" ex:XamlHelper.DialogResult="True" />
 				<Button Content="{x:Static loc:LocalizedStrings.Cancel}" Grid.Column="4" IsCancel="True" />
 			</Grid>
 		</Grid>

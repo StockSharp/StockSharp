@@ -1,7 +1,8 @@
 <Window
 		x:Class="StockSharp.Hydra.Windows.DatabaseConnectionWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
 		xmlns:db="clr-namespace:Ecng.Xaml.Database;assembly=Ecng.Xaml"
 		xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 		xmlns:core="clr-namespace:StockSharp.Hydra.Core;assembly=StockSharp.Hydra.Core"
@@ -37,7 +38,7 @@
 			</Grid.ColumnDefinitions>
 
 			<Button x:Name="TestBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr572}" Width="75" Click="TestBtn_OnClick" />
-			<Button x:Name="OkBtn" Grid.Column="4" IsDefault="True" ex:XamlHelper.DialogResult="True" IsEnabled="False" Content="OK" Width="75" />
+			<Button x:Name="OkBtn" Grid.Column="4" IsDefault="True" ex:XamlHelper.DialogResult="True" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.OK}" Width="75" />
 		</Grid>
     </Grid>
 </Window>

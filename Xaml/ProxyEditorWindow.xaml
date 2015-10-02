@@ -25,7 +25,7 @@
 
 		<xaml:HelpButton Grid.Row="2" Grid.Column="0" DocUrl="http://stocksharp.com/doc/html/938a2834-a3cc-4d92-8a41-e4c11cf84d78.htm" />
 
-		<Button Grid.Row="2" Grid.Column="2" IsDefault="True" Content="{x:Static loc:LocalizedStrings.XamlStr385}" ex:XamlHelper.DialogResult="True" />
+		<Button Grid.Row="2" Grid.Column="2" IsDefault="True" Content="{x:Static loc:LocalizedStrings.OK}" ex:XamlHelper.DialogResult="True" />
         <Button Grid.Row="2" Grid.Column="4" IsCancel="True" Content="{x:Static loc:LocalizedStrings.Cancel}"/>
     </Grid>
 </Window>
