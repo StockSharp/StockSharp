@@ -4,8 +4,8 @@ namespace StockSharp.Hydra.Btce
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Btce;
 	using StockSharp.Localization;

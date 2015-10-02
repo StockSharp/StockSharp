@@ -8,8 +8,8 @@ namespace StockSharp.Hydra.SmartCom
 
 	using Ecng.Common;
 	using Ecng.Localization;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;

@@ -12,7 +12,6 @@ namespace StockSharp.Transaq
 	using Ecng.Serialization;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 

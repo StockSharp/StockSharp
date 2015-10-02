@@ -8,9 +8,9 @@ namespace StockSharp.Hydra.Windows
 	using System.Windows.Controls;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 	using Ecng.Xaml;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
@@ -56,8 +56,7 @@ namespace StockSharp.Hydra.Windows
 				DescriptionCtrl.Text = _task.GetDescription();
 				AbilitiesCtrl.Text = _task.SupportedMarketDataTypes.Select(t => _dataTypes[t]).Join(", ");
 
-				var attr = _task.GetType().GetAttribute<DocAttribute>();
-				Help.DocUrl = attr == null ? null : attr.DocUrl;
+				Help.DocUrl = _task.GetType().GetDocUrl();
 			}
 		}
 

@@ -4,7 +4,6 @@ namespace StockSharp.CQG
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Localization;
 
 	/// <summary>

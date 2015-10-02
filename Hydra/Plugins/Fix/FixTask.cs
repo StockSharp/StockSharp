@@ -5,8 +5,8 @@ namespace StockSharp.Hydra.Fix
 
 	using Ecng.Common;
 	using Ecng.Serialization;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Fix;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;

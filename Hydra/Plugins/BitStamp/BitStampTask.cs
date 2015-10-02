@@ -4,8 +4,8 @@ namespace StockSharp.Hydra.BitStamp
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.BitStamp;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;

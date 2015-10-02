@@ -10,7 +10,6 @@ namespace StockSharp.IQFeed
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
 

@@ -6,8 +6,8 @@ namespace StockSharp.Hydra.Rss
 	using System.Linq;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Rss;

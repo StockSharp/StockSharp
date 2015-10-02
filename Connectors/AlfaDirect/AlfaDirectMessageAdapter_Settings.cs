@@ -9,7 +9,6 @@ namespace StockSharp.AlfaDirect
 	using Ecng.Localization;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 

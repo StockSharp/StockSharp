@@ -1,14 +1,12 @@
 namespace StockSharp.Btce
 {
 	using System.ComponentModel;
-	using System.Linq;
 	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 
@@ -53,7 +51,7 @@ namespace StockSharp.Btce
 		{
 			get
 			{
-				if (SupportedMessages.Contains(MessageTypes.OrderRegister))
+				if (this.IsMessageSupported(MessageTypes.OrderRegister))
 					return !Key.IsEmpty() && !Secret.IsEmpty();
 				else
 					return true;

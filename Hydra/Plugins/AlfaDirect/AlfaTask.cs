@@ -7,11 +7,11 @@ namespace StockSharp.Hydra.AlfaDirect
 
 	using Ecng.Common;
 	using Ecng.Localization;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.AlfaDirect;
-	using StockSharp.Algo;
 	using StockSharp.Localization;
 	using StockSharp.Messages;
 

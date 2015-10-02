@@ -10,7 +10,6 @@ namespace StockSharp.SmartCom
 	using Ecng.Localization;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.SmartCom.Native;
 	using StockSharp.SmartCom.Xaml;

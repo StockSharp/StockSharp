@@ -10,7 +10,6 @@ namespace StockSharp.OpenECry
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.Localization;
 
 	using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;

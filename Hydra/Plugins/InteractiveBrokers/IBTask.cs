@@ -6,8 +6,8 @@ namespace StockSharp.Hydra.InteractiveBrokers
 	using System.Net;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.InteractiveBrokers;

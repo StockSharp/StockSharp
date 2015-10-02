@@ -9,10 +9,10 @@ namespace StockSharp.Hydra.Plaza
 
 	using Ecng.Common;
 	using Ecng.Localization;
+	using Ecng.ComponentModel;
 
 	using MoreLinq;
 
-	using StockSharp.Algo;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;
 	using StockSharp.Plaza;

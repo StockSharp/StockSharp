@@ -7,7 +7,6 @@ namespace StockSharp.ETrade
 	using Ecng.ComponentModel;
 	using Ecng.Serialization;
 
-	using StockSharp.Algo;
 	using StockSharp.ETrade.Native;
 	using StockSharp.Localization;
 

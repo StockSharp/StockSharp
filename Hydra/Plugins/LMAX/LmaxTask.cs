@@ -6,8 +6,8 @@ namespace StockSharp.Hydra.LMAX
 	using System.Security;
 
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;

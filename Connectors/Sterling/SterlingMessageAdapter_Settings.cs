@@ -4,7 +4,6 @@ namespace StockSharp.Sterling
 
 	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Localization;
 
 	/// <summary>

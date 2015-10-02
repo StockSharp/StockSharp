@@ -8,6 +8,7 @@ namespace StockSharp.Hydra.IQFeed
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
 	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;

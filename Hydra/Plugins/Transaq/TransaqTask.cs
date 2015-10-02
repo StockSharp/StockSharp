@@ -10,8 +10,8 @@ namespace StockSharp.Hydra.Transaq
 	using Ecng.Collections;
 	using Ecng.Localization;
 	using Ecng.Common;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Messages;
 	using StockSharp.Transaq;

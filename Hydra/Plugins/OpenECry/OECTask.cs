@@ -8,8 +8,8 @@ namespace StockSharp.Hydra.OpenECry
 
 	using Ecng.Common;
 	using Ecng.Collections;
+	using Ecng.ComponentModel;
 
-	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Messages;

@@ -42,6 +42,7 @@
       <HintPath>..\..\..\Connectors\Rithmic\StockSharp.Rithmic.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />

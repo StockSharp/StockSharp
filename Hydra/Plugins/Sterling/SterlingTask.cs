@@ -1,6 +1,7 @@
 namespace StockSharp.Hydra.Sterling
 {
-	using StockSharp.Algo;
+	using Ecng.ComponentModel;
+
 	using StockSharp.Hydra.Core;
 	using StockSharp.Localization;
 	using StockSharp.Sterling;
