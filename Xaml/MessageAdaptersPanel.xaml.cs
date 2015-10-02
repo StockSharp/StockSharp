@@ -340,6 +340,11 @@ namespace StockSharp.Xaml
 			get { return ConnectorsGrid != null ? (GridRow)ConnectorsGrid.SelectedItem : null; }
 		}
 
+		private IEnumerable<GridRow> SelectedRows
+		{
+			get { return ConnectorsGrid != null ? ConnectorsGrid.SelectedItems.Cast<GridRow>() : Enumerable.Empty<GridRow>(); }
+		}
+
 		private bool CheckConnected(string message)
 		{
 			if (!SelectedRow.IsEnabled || CheckConnectionState == null)
@@ -364,8 +369,12 @@ namespace StockSharp.Xaml
 			if (!CheckConnected(LocalizedStrings.Str1554))
 				return;
 
-			Adapter.InnerAdapters.Remove(SelectedRow.Adapter);
-			_connectorRows.Remove(SelectedRow);
+			foreach (var row in SelectedRows.ToArray())
+			{
+				Adapter.InnerAdapters.Remove(row.Adapter);
+				_connectorRows.Remove(row);	
+			}
+			
 			ConnectorsChanged.SafeInvoke();
 		}
 
@@ -424,9 +433,11 @@ namespace StockSharp.Xaml
 			if (!CheckConnected(LocalizedStrings.Str1556))
 				return;
 
-			SelectedRow.IsEnabled = !SelectedRow.IsEnabled;
-
-			Adapter.InnerAdapters[SelectedRow.Adapter] = SelectedRow.IsEnabled ? 0 : -1;
+			foreach (var row in SelectedRows)
+			{
+				row.IsEnabled = !row.IsEnabled;
+				Adapter.InnerAdapters[row.Adapter] = row.IsEnabled ? 0 : -1;	
+			}
 
 			ChangeDisableEnableIcon(SelectedRow.IsEnabled);
 			ConnectorsChanged.SafeInvoke();

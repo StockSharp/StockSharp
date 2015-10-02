@@ -113,7 +113,7 @@
 
 		<ListView x:Name="ConnectorsGrid" Grid.Column="0" Grid.Row="1" ItemContainerStyle="{StaticResource myItemStyle}" 
                   IsSynchronizedWithCurrentItem="True" ex:GridViewSort.AutoSort="True" HorizontalAlignment="Stretch" 
-                  SelectionMode="Single" SelectionChanged="ConnectorsGrid_SelectionChanged">
+                  SelectionMode="Extended" SelectionChanged="ConnectorsGrid_SelectionChanged">
 			<ListView.View>
 				<GridView>
 					<GridViewColumn Width="30" ex:GridViewSort.PropertyName="State">
@@ -135,7 +135,7 @@
 					<GridViewColumn Width="70" ex:GridViewSort.PropertyName="Info.Name">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
-								<ex:BmpImage Source="{Binding Path=Icon, Converter={StaticResource NullImageConverter}}" VerticalAlignment="Center" />
+								<ex:BmpImage Source="{Binding Path=Icon, Converter={StaticResource NullImageConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
