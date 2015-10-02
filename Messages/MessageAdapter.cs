@@ -152,7 +152,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual bool SecurityLookupRequired
 		{
-			get { return SupportedMessages.Contains(MessageTypes.SecurityLookup); }
+			get { return this.IsMessageSupported(MessageTypes.SecurityLookup); }
 		}
 
 		/// <summary>
@@ -161,7 +161,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual bool PortfolioLookupRequired
 		{
-			get { return SupportedMessages.Contains(MessageTypes.PortfolioLookup); }
+			get { return this.IsMessageSupported(MessageTypes.PortfolioLookup); }
 		}
 
 		/// <summary>
@@ -170,7 +170,7 @@ namespace StockSharp.Messages
 		[Browsable(false)]
 		public virtual bool OrderStatusRequired
 		{
-			get { return SupportedMessages.Contains(MessageTypes.OrderStatus); }
+			get { return this.IsMessageSupported(MessageTypes.OrderStatus); }
 		}
 
 		/// <summary>

@@ -8,13 +8,13 @@
 			 xmlns:ex="clr-namespace:Ecng.Xaml;assembly=Ecng.Xaml"
 			 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 xmlns:propertyGrid="clr-namespace:StockSharp.Xaml.PropertyGrid"
-			 mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="450">
+			 xmlns:converters="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+			 mc:Ignorable="d" d:DesignHeight="500" d:DesignWidth="750">
     
 	<UserControl.Resources>
 		<Style x:Key="myItemStyle" TargetType="{x:Type ListViewItem}">
 			<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 			<Setter Property="VerticalContentAlignment" Value="Stretch" />
-			<EventSetter Event="MouseDoubleClick" Handler="ConnectorsGrid_DoubleClick" />
 		</Style>
 
 		<Style TargetType="{x:Type ex:BmpImage}" x:Key="toolbarImageStyle">
@@ -43,6 +43,15 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		
+		<DataTemplate x:Key="ListBoxItemTemplate">
+			<WrapPanel>
+				<CheckBox Focusable="False" IsChecked="{Binding IsSelected}" VerticalAlignment="Center" />
+				<ContentPresenter Content="{Binding Name, Mode=OneTime}" Margin="2,0" />
+			</WrapPanel>
+		</DataTemplate>
+
+		<converters:NullImageConverter x:Key="NullImageConverter"/>
 	</UserControl.Resources>
 	
 	<UserControl.CommandBindings>
@@ -66,6 +75,8 @@
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="2*" />
+			<RowDefinition Height="5" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 
@@ -120,41 +131,84 @@
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
+					
+					<GridViewColumn Width="70" ex:GridViewSort.PropertyName="Info.Name">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<ex:BmpImage Source="{Binding Path=Icon, Converter={StaticResource NullImageConverter}}" VerticalAlignment="Center" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
                     <GridViewColumn Width="70" Header="{x:Static loc:LocalizedStrings.Type}" ex:GridViewSort.PropertyName="Info.Name">
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding Path=Info.Name}" TextAlignment="Center" />
+								<TextBlock Text="{Binding Path=Info.Name}" TextAlignment="Center" VerticalAlignment="Center" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>
 					</GridViewColumn>
 
-					<GridViewColumn Width="50" Header="{x:Static loc:LocalizedStrings.MarketData}" ex:GridViewSort.PropertyName="SessionHolder.IsMarketDataEnabled">
+					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.MarketData}" ex:GridViewSort.PropertyName="IsMarketDataEnabled">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-								<CheckBox IsChecked="{Binding SessionHolder.IsMarketDataEnabled, Mode=OneWay}" IsEnabled="False"/>
+								<CheckBox IsChecked="{Binding IsMarketDataEnabled, Mode=OneWay}" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-					<GridViewColumn Width="50" Header="{x:Static loc:LocalizedStrings.Transactions}" ex:GridViewSort.PropertyName="SessionHolder.IsTransactionEnabled">
+					<GridViewColumn Width="100" Header="{x:Static loc:LocalizedStrings.Transactions}" ex:GridViewSort.PropertyName="IsTransactionEnabled">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-								<CheckBox IsChecked="{Binding SessionHolder.IsTransactionEnabled, Mode=OneWay}" IsEnabled="False"/>
+								<CheckBox IsChecked="{Binding IsTransactionEnabled, Mode=OneWay}" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Width="300" Header="{x:Static loc:LocalizedStrings.Str225}" ex:GridViewSort.PropertyName="Description">
+                    <!--<GridViewColumn Width="300" Header="{x:Static loc:LocalizedStrings.Str225}" ex:GridViewSort.PropertyName="Description">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=Description}" TextAlignment="Left" ToolTip="{Binding Path=Description}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                    </GridViewColumn>-->
                 </GridView>
 			</ListView.View>
 		</ListView>
 
-		<GridSplitter Grid.Column="0" Grid.Row="1" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
-		<propertyGrid:PropertyGridEx Grid.Row="1" Grid.Column="1" x:Name="PropertyGrid" />
+		<ListBox x:Name="SupportedMessages" Grid.Column="0" Grid.Row="3" ItemTemplate="{DynamicResource ListBoxItemTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel Orientation="Horizontal"></WrapPanel>
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+		</ListBox>
+
+		<GridSplitter Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Width="5" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+
+		<Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="3">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="5" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			
+			<propertyGrid:PropertyGridEx x:Name="PropertyGrid" />
+
+			<Grid x:Name="AdapterButtons" Grid.Row="2" IsEnabled="False">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="50"/>
+					<ColumnDefinition Width="5"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+
+				<local:HelpButton x:Name="HelpButton" />
+
+				<ex:LoadingAnimation x:Name="BusyIndicator" VerticalAlignment="Center" Grid.Column="2" IsBusy="False"/>
+
+				<Button x:Name="Test" Grid.Column="4" Background="LightPink" Click="Test_Click">
+					<TextBlock Text="{x:Static loc:LocalizedStrings.XamlStr572}"/>
+				</Button>
+			</Grid>
+		</Grid>
 	</Grid>
 </UserControl>

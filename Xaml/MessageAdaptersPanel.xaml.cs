@@ -5,6 +5,7 @@ namespace StockSharp.Xaml
 	using System.Collections.ObjectModel;
 	using System.Linq;
 	using System.Threading;
+	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
 	using System.Windows.Media.Imaging;
@@ -16,6 +17,8 @@ namespace StockSharp.Xaml
 	using Ecng.Localization;
 	using Ecng.Xaml;
 
+	using MoreLinq;
+
 	using StockSharp.Algo;
 	using StockSharp.Messages;
 	using StockSharp.Localization;
@@ -25,6 +28,37 @@ namespace StockSharp.Xaml
 	/// </summary>
 	public partial class MessageAdaptersPanel
 	{
+		private class SupportedMessage
+		{
+			private readonly IMessageAdapter _adapter;
+
+			public SupportedMessage(IMessageAdapter adapter, MessageTypes type)
+			{
+				_adapter = adapter;
+				Type = type;
+				Name = type.GetDisplayName();
+			}
+
+			public MessageTypes Type { get; private set; }
+			public string Name { get; private set; }
+
+			public event Action SelectedChanged;
+
+			public bool IsSelected
+			{
+				get { return _adapter.IsMessageSupported(Type); }
+				set
+				{
+					if (value)
+						_adapter.AddSupportedMessage(Type);
+					else
+						_adapter.RemoveSupportedMessage(Type);
+
+					SelectedChanged.SafeInvoke();
+				}
+			}
+		}
+
 		private sealed class GridRow : NotifiableObject
 		{
 			public GridRow(ConnectorInfo info, IMessageAdapter adapter, IMessageAdapter innerAdapter)
@@ -41,12 +75,29 @@ namespace StockSharp.Xaml
 				Info = info;
 				Adapter = adapter;
 				InnerAdapter = innerAdapter;
+				SupportedMessages = innerAdapter.GetType().CreateInstance<IMessageAdapter>(innerAdapter.TransactionIdGenerator).SupportedMessages.Select(m => new SupportedMessage(adapter, m)).ToArray();
+				SupportedMessages.ForEach(m => m.SelectedChanged += () =>
+				{
+					NotifyChanged("IsTransactionEnabled");
+					NotifyChanged("IsMarketDataEnabled");
+				});
+				Icon = innerAdapter.GetType().GetIconUrl();
 			}
 
 			public ConnectorInfo Info { get; private set; }
 
 			public IMessageAdapter Adapter { get; private set; }
 			public IMessageAdapter InnerAdapter { get; private set; }
+
+			public bool IsTransactionEnabled
+			{
+				get { return Adapter.IsMessageSupported(MessageTypes.OrderRegister); }
+			}
+
+			public bool IsMarketDataEnabled
+			{
+				get { return Adapter.IsMessageSupported(MessageTypes.MarketData) || Adapter.IsMessageSupported(MessageTypes.SecurityLookup); }
+			}
 
 			private bool _isEnabled = true;
 
@@ -65,12 +116,16 @@ namespace StockSharp.Xaml
 				get { return InnerAdapter.ToString(); }
 			}
 
-			public void Refresh()
-			{
-				NotifyChanged("Description");
-				NotifyChanged("IsTransactionEnabled");
-				NotifyChanged("IsMarketDataEnabled");
-			}
+			public Uri Icon { get; private set; }
+
+			//public void Refresh()
+			//{
+			//	NotifyChanged("Description");
+			//	NotifyChanged("IsTransactionEnabled");
+			//	NotifyChanged("IsMarketDataEnabled");
+			//}
+
+			public SupportedMessage[] SupportedMessages { get; private set; }
 		}
 
 		private sealed class ConnectorInfoList : BaseList<ConnectorInfo>
@@ -103,20 +158,10 @@ namespace StockSharp.Xaml
 
 				mi.Click += (sender, args) =>
 				{
-					// TODO
-					var adapter = item.TransactionAdapterType.CreateInstanceArgs<IMessageAdapter>(new object[] { _parent.Adapter.TransactionIdGenerator });
+					var adapter = item.AdapterType.CreateInstanceArgs<IMessageAdapter>(new object[] { _parent.Adapter.TransactionIdGenerator });
+					var row = new GridRow(item, adapter, _parent.GetInnerAdapter(adapter));
 
-					var wnd = new MessageAdapterWindow
-					{
-						Adapter = adapter,
-					};
-
-					if (!wnd.ShowModal(_parent))
-						return;
-
-					var row = new GridRow(item, wnd.Adapter, _parent.GetInnerAdapter(wnd.Adapter));
-
-					_parent.Adapter.InnerAdapters[wnd.Adapter] = 0;
+					_parent.Adapter.InnerAdapters[adapter] = 0;
 
 					_parent._connectorRows.Add(row);
 					_parent.ConnectorsChanged.SafeInvoke();
@@ -194,6 +239,7 @@ namespace StockSharp.Xaml
 		public static readonly RoutedCommand EnableCommand = new RoutedCommand();
 
 		private readonly ObservableCollection<GridRow> _connectorRows = new ObservableCollection<GridRow>();
+		private readonly ObservableCollection<SupportedMessage> _supportedMessages = new ObservableCollection<SupportedMessage>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MessageAdaptersPanel"/>.
@@ -204,6 +250,8 @@ namespace StockSharp.Xaml
 
 			ConnectorsGrid.ItemsSource = _connectorRows;
 			_connectorsInfo = new ConnectorInfoList(this);
+
+			SupportedMessages.ItemsSource = _supportedMessages;
 		}
 
 		/// <summary>
@@ -259,9 +307,7 @@ namespace StockSharp.Xaml
 
 			var innerAdapter = GetInnerAdapter(adapter);
 
-			var info = ConnectorsInfo.FirstOrDefault(i =>
-				(i.TransactionAdapterType != null && i.TransactionAdapterType.IsInstanceOfType(innerAdapter)) ||
-				(i.MarketDataAdapterType != null && i.MarketDataAdapterType.IsInstanceOfType(innerAdapter)));
+			var info = ConnectorsInfo.FirstOrDefault(i => i.AdapterType.IsInstanceOfType(innerAdapter));
 
 			if (info == null)
 				throw new ArgumentException(LocalizedStrings.Str1553Params.Put(innerAdapter.GetType()), "adapter");
@@ -328,31 +374,49 @@ namespace StockSharp.Xaml
 			e.CanExecute = SelectedRow != null;
 		}
 
-		private void ConnectorsGrid_DoubleClick(object sender, MouseButtonEventArgs e)
-		{
-			if (SelectedRow == null)
-				return;
+		//private void ConnectorsGrid_DoubleClick(object sender, MouseButtonEventArgs e)
+		//{
+		//	if (SelectedRow == null)
+		//		return;
 
-			if (!CheckConnected(LocalizedStrings.Str1555))
-				return;
+		//	if (!CheckConnected(LocalizedStrings.Str1555))
+		//		return;
 
-			var wnd = new MessageAdapterWindow
-			{
-				Adapter = SelectedRow.Adapter
-			};
+		//	var wnd = new MessageAdapterWindow
+		//	{
+		//		Adapter = SelectedRow.Adapter
+		//	};
 
-			if (!wnd.ShowModal(this))
-				return;
+		//	if (!wnd.ShowModal(this))
+		//		return;
 
-			SelectedRow.Refresh();
+		//	SelectedRow.Refresh();
 
-			ConnectorsChanged.SafeInvoke();
-		}
+		//	ConnectorsChanged.SafeInvoke();
+		//}
 
 		private void ConnectorsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			ChangeDisableEnableIcon(SelectedRow != null && SelectedRow.IsEnabled);
-			PropertyGrid.SelectedObject = SelectedRow == null ? null : SelectedRow.InnerAdapter;
+			_supportedMessages.Clear();
+
+			var row = SelectedRow;
+
+			if (row == null)
+			{
+				ChangeDisableEnableIcon(false);
+				PropertyGrid.SelectedObject = null;
+				HelpButton.DocUrl = null;
+				AdapterButtons.IsEnabled = false;
+			}
+			else
+			{
+				ChangeDisableEnableIcon(row.IsEnabled);
+				PropertyGrid.SelectedObject = row.InnerAdapter;
+				HelpButton.DocUrl = row.InnerAdapter.GetType().GetDocUrl();
+				AdapterButtons.IsEnabled = true;
+
+				_supportedMessages.AddRange(row.SupportedMessages);
+			}
 		}
 
 		private void ExecutedEnable(object sender, ExecutedRoutedEventArgs e)
@@ -380,6 +444,82 @@ namespace StockSharp.Xaml
 			bmp.InvalidateMeasure();
 			bmp.InvalidateVisual();
 			bmp.SetToolTip(isEnabled ? LocalizedStrings.Str1557 : LocalizedStrings.Str1558);
+		}
+
+		private bool CheckIsValid(IMessageAdapter adapter)
+		{
+			if (!adapter.IsValid)
+			{
+				new MessageBoxBuilder()
+					.Text(LocalizedStrings.Str1562)
+					.Owner(this)
+					.Error()
+					.Show();
+
+				return false;
+			}
+
+			if (adapter.SupportedMessages.IsEmpty())
+			{
+				new MessageBoxBuilder()
+					.Text(LocalizedStrings.Str1563)
+					.Owner(this)
+					.Error()
+					.Show();
+
+				return false;
+			}
+
+			return true;
+		}
+
+		private void Test_Click(object sender, RoutedEventArgs e)
+		{
+			var adapter = SelectedRow.InnerAdapter;
+
+			if (!CheckIsValid(adapter))
+				return;
+
+			BusyIndicator.IsBusy = true;
+			Test.IsEnabled = false;
+
+			var connector = new Connector();
+			connector.Adapter.InnerAdapters.Add(adapter);
+
+			connector.Connected += () =>
+			{
+				connector.Dispose();
+
+				GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
+				{
+					new MessageBoxBuilder()
+						.Text(LocalizedStrings.Str1560)
+						.Owner(this)
+						.Show();
+
+					BusyIndicator.IsBusy = false;
+					Test.IsEnabled = true;
+				});
+			};
+
+			connector.ConnectionError += error =>
+			{
+				connector.Dispose();
+
+				GuiDispatcher.GlobalDispatcher.AddSyncAction(() =>
+				{
+					new MessageBoxBuilder()
+						.Text(LocalizedStrings.Str1561 + Environment.NewLine + error)
+						.Error()
+						.Owner(this)
+						.Show();
+
+					BusyIndicator.IsBusy = false;
+					Test.IsEnabled = true;
+				});
+			};
+
+			connector.Connect();
 		}
 	}
 
@@ -414,45 +554,23 @@ namespace StockSharp.Xaml
 		public Platforms Platform { get; private set; }
 
 		/// <summary>
-		/// The type of transaction adapter.
+		/// The type of adapter.
 		/// </summary>
-		public Type TransactionAdapterType { get; set; }
-
-		/// <summary>
-		/// The type of market data adapter.
-		/// </summary>
-		public Type MarketDataAdapterType { get; set; }
+		public Type AdapterType { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConnectorInfo"/>.
 		/// </summary>
 		/// <param name="adapterType">The type of transaction and market data adapter.</param>
 		public ConnectorInfo(Type adapterType)
-			: this(adapterType, adapterType)
 		{
-		}
+			if (adapterType == null)
+				throw new ArgumentNullException("adapterType");
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ConnectorInfo"/>.
-		/// </summary>
-		/// <param name="transactionAdapterType">The type of transaction adapter.</param>
-		/// <param name="marketDataAdapterType">The type of market data adapter.</param>
-		public ConnectorInfo(Type transactionAdapterType, Type marketDataAdapterType)
-		{
-			if (transactionAdapterType == null && marketDataAdapterType == null)
-				throw new ArgumentNullException("transactionAdapterType");
+			if (!typeof(IMessageAdapter).IsAssignableFrom(adapterType))
+				throw new ArgumentException("adapterType");
 
-			if (transactionAdapterType != null && !typeof(IMessageAdapter).IsAssignableFrom(transactionAdapterType))
-				throw new ArgumentException("transactionAdapterType");
-
-			if (marketDataAdapterType != null && !typeof(IMessageAdapter).IsAssignableFrom(marketDataAdapterType))
-				throw new ArgumentException("marketDataAdapterType");
-
-			TransactionAdapterType = transactionAdapterType;
-			MarketDataAdapterType = marketDataAdapterType;
-
-			var adapterType = transactionAdapterType ?? marketDataAdapterType;
-
+			AdapterType = adapterType;
 			Name = adapterType.GetDisplayName();
 			Description = adapterType.GetDescription();
 			Category = adapterType.GetCategory(LocalizedStrings.Str1559);

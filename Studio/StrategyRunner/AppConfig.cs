@@ -29,7 +29,14 @@ namespace StockSharp.Studio.StrategyRunner
 		{
 			var section = ConfigManager.GetSection<StockSharpSection>();
 
-			SafeAdd<ConnectionElement>(section.Connections, elem => _connections.Add(new ConnectorInfo(elem.TransactionAdapter == null ? null : elem.TransactionAdapter.To<Type>(), elem.MarketDataAdapter == null ? null : elem.MarketDataAdapter.To<Type>())));
+			SafeAdd<ConnectionElement>(section.Connections, elem =>
+			{
+				if (elem.TransactionAdapter != null)
+					_connections.Add(new ConnectorInfo(elem.TransactionAdapter.To<Type>()));
+
+				if (elem.MarketDataAdapter != null)
+					_connections.Add(new ConnectorInfo(elem.MarketDataAdapter.To<Type>()));
+			});
 			SafeAdd<DiagramElement>(section.DiagramElements, elem => _diagramElements.Add(elem.Type.To<Type>()));
 		}
 

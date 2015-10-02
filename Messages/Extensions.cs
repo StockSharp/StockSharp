@@ -331,5 +331,19 @@ namespace StockSharp.Messages
 
 			adapter.SupportedMessages = adapter.SupportedMessages.Except(new[] { type }).ToArray();
 		}
+
+		/// <summary>
+		/// Determines whether the specified message type is supported by the adapter.
+		/// </summary>
+		/// <param name="adapter">Adapter.</param>
+		/// <param name="type">Message type.</param>
+		/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
+		public static bool IsMessageSupported(this IMessageAdapter adapter, MessageTypes type)
+		{
+			if (adapter == null)
+				throw new ArgumentNullException("adapter");
+
+			return adapter.SupportedMessages.Contains(type);
+		}
 	}
 }

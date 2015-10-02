@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###v4.3.12:
+* (bug) MessageAdaptersPanel fix.
 * (feature) ISecurityStorage. CSV implementation.
 * (feature) ICandleBuilder. Direct value processing.
 * (feature) Correlation indicator.

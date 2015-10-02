@@ -336,10 +336,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MessageAdapterWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="StrategiesStatisticsPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -635,9 +631,6 @@
     </Compile>
     <Compile Include="MessageAdaptersWindow.xaml.cs">
       <DependentUpon>MessageAdaptersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MessageAdapterWindow.xaml.cs">
-      <DependentUpon>MessageAdapterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatisticParameterGrid.xaml.cs">
       <DependentUpon>StatisticParameterGrid.xaml</DependentUpon>
