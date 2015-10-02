@@ -55,35 +55,8 @@ namespace StockSharp.Quik
 
 			_trans2QuikAdapter.GetTerminal = _ddeAdapter.GetTerminal = () => Terminal;
 
-			_luaTransactionAdapter = new LuaFixTransactionMessageAdapter(TransactionIdGenerator)
-			{
-				Login = "quik",
-				Password = "quik".To<SecureString>(),
-				Address = DefaultLuaAddress,
-				TargetCompId = "StockSharpTS",
-				SenderCompId = "quik",
-				//ExchangeBoard = ExchangeBoard.Forts,
-				Version = FixVersions.Fix44_Lua,
-				RequestAllPortfolios = true,
-				MarketData = FixMarketData.None,
-				TimeZone = TimeHelper.Moscow
-			};
-
-			_luaMarketDataAdapter = new FixMessageAdapter(TransactionIdGenerator)
-			{
-				Login = "quik",
-				Password = "quik".To<SecureString>(),
-				Address = DefaultLuaAddress,
-				TargetCompId = "StockSharpMD",
-				SenderCompId = "quik",
-				//ExchangeBoard = ExchangeBoard.Forts,
-				Version = FixVersions.Fix44_Lua,
-				RequestAllSecurities = true,
-				MarketData = FixMarketData.MarketData,
-				TimeZone = TimeHelper.Moscow,
-			};
-
-			_luaMarketDataAdapter.RemoveTransactionalSupport();
+			_luaTransactionAdapter = new LuaFixTransactionMessageAdapter(TransactionIdGenerator);
+			_luaMarketDataAdapter = new LuaFixMarketDataMessageAdapter(TransactionIdGenerator);
 
 			IsDde = false;
 		}

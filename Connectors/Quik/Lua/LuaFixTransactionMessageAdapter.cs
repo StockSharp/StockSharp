@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Quik.Lua
 {
 	using System;
+	using System.Security;
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
@@ -25,6 +26,17 @@
 			: base(transactionIdGenerator)
 		{
 			this.RemoveMarketDataSupport();
+
+			Login = "quik";
+			Password = "quik".To<SecureString>();
+			Address = QuikTrader.DefaultLuaAddress;
+			TargetCompId = "StockSharpTS";
+			SenderCompId = "quik";
+			//ExchangeBoard = ExchangeBoard.Forts;
+			Version = FixVersions.Fix44_Lua;
+			RequestAllPortfolios = true;
+			MarketData = FixMarketData.None;
+			TimeZone = TimeHelper.Moscow;
 		}
 
 		/// <summary>
