@@ -68,6 +68,10 @@ namespace SampleSmartCandles
 			_trader.MarketDataSubscriptionFailed += (security, type, error) =>
 				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2956Params.Put(type, security)));
 
+			// подписываемся на ошибки соединения
+			_trader.ConnectionError += (error) =>
+				this.GuiAsync(() => MessageBox.Show(this, error.ToString(), LocalizedStrings.Str2959));
+
 			Security.SecurityProvider = new FilterableSecurityProvider(_trader);
 
 			_candleManager = new CandleManager(_trader);
