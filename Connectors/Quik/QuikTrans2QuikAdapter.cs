@@ -22,6 +22,7 @@ namespace StockSharp.Quik
 	/// <summary>
 	/// Транзакционный адаптер сообщений для Quik, работающий через библиотеку Trans2Quik.dll.
 	/// </summary>
+	[DisplayName("Quik. Trans DLL")]
 	public class QuikTrans2QuikAdapter : QuikMessageAdapter
 	{
 		private readonly Regex _changeOrdersRegex = new Regex(@"ID:(?<order>\s\d+)", RegexOptions.Compiled);

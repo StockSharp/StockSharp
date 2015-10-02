@@ -5,17 +5,21 @@
 
 	using Ecng.Common;
 	using Ecng.ComponentModel;
+	using Ecng.Localization;
 
-	using StockSharp.Algo;
 	using StockSharp.Fix;
 	using StockSharp.Fix.Native;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// Адаптер сообщений для Quik LUA FIX.
 	/// </summary>
 	[Icon("Quik_logo.png")]
+	[DisplayNameLoc("Quik LUA. Transactions")]
 	[Doc("http://stocksharp.com/doc/html/769f74c8-6f8e-4312-a867-3dc6e8482636.htm")]
+	[TargetPlatform(Languages.Russian)]
+	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	public class LuaFixTransactionMessageAdapter : FixMessageAdapter
 	{
 		/// <summary>

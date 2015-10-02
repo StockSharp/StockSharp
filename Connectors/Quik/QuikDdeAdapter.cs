@@ -25,6 +25,7 @@ namespace StockSharp.Quik
 	/// <summary>
 	/// Маркет-дата адаптер сообщений для Quik, работающий через протокол DDE.
 	/// </summary>
+	[DisplayName("Quik. DDE")]
 	public class QuikDdeAdapter : QuikMessageAdapter
 	{
 		private const string _ddeCategory = "DDE";

@@ -6,13 +6,14 @@ namespace StockSharp.Quik
 	using Ecng.ComponentModel;
 	using Ecng.Localization;
 
-	using StockSharp.Algo;
+	using StockSharp.Localization;
 	using StockSharp.Messages;
 
 	/// <summary>
 	/// Базовый адаптер сообщений для Quik.
 	/// </summary>
 	[TargetPlatform(Languages.Russian)]
+	[CategoryLoc(LocalizedStrings.RussiaKey)]
 	[Icon("Quik_logo.png")]
 	[Doc("http://stocksharp.com/doc/html/c338d4b4-ba54-4671-9206-976c07ef655e.htm")]
 	public abstract class QuikMessageAdapter : MessageAdapter

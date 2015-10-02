@@ -118,6 +118,7 @@
     <Compile Include="..\..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Lua\LuaFixMarketDataMessageAdapter.cs" />
     <Compile Include="Lua\LuaFixServer.cs" />
     <Compile Include="Lua\LuaFixTransactionMessageAdapter.cs" />
     <Compile Include="Lua\LuaRequest.cs" />
