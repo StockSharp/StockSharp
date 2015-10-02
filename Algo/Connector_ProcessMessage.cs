@@ -261,10 +261,10 @@ namespace StockSharp.Algo
 
 		private void InnerAdaptersOnAdded(IMessageAdapter adapter)
 		{
-			if (adapter.SupportedMessages.Contains(MessageTypes.OrderRegister))
+			if (adapter.IsMessageSupported(MessageTypes.OrderRegister))
 				TransactionAdapter = adapter;
 
-			if (adapter.SupportedMessages.Contains(MessageTypes.MarketData))
+			if (adapter.IsMessageSupported(MessageTypes.MarketData))
 				MarketDataAdapter = adapter;
 		}
 
@@ -526,6 +526,15 @@ namespace StockSharp.Algo
 		{
 			var isConnect = message is ConnectMessage;
 			var adapter = message.Adapter;
+
+			if (adapter == null)
+			{
+				if (message.Error != null)
+					RaiseConnectionError(message.Error);
+
+				return;
+			}
+
 			var state = _adapterStates[adapter];
 
 			switch (state)

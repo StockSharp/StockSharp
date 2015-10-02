@@ -55,8 +55,8 @@ namespace SampleFix
 				Trader.Load(new XmlSerializer<SettingsStorage>().Deserialize(_settingsFile));
 			}
 
-			MarketDataSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.MarketDataAdapter).Adapter;
-			TransactionSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.TransactionAdapter).Adapter;
+			MarketDataSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.MarketDataAdapter).InnerAdapter;
+			TransactionSessionSettings.SelectedObject = ((ChannelMessageAdapter)Trader.TransactionAdapter).InnerAdapter;
 
 			Instance = this;
 
