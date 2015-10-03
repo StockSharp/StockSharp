@@ -7,11 +7,23 @@
 
 	using Ecng.Collections;
 	using Ecng.Common;
+	using Ecng.Reflection;
 
 	using MoreLinq;
 
-	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
+
+	/// <summary>
+	/// Загрузчик сообщений хранилища-агрегатора.
+	/// </summary>
+	/// <typeparam name="T">Тип сообщения.</typeparam>
+	public interface IBasketMarketDataStorageEnumerator<T> : IEnumerator<T>
+	{
+		/// <summary>
+		/// Доступные типы данных.
+		/// </summary>
+		IEnumerable<MessageTypes> DataTypes { get; }
+	}
 
 	/// <summary>
 	/// Хранилище-агрегатор, позволяющее загружать данные одновременно из нескольких хранилищ маркет-данных.
@@ -20,17 +32,14 @@
 	public class BasketMarketDataStorage<T> : Disposable
 		where T : Message
 	{
-		/// <summary>
-		/// Загрузчик сообщений хранилища-агрегатора.
-		/// </summary>
-		public class BasketMarketDataStorageEnumerator : IEnumerator<T>
+		private class BasketMarketDataStorageEnumerator : IBasketMarketDataStorageEnumerator<T>
 		{
 			private readonly BasketMarketDataStorage<T> _storage;
 			private readonly DateTime _date;
 			private readonly SynchronizedQueue<Tuple<ActionType, IMarketDataStorage>> _actions = new SynchronizedQueue<Tuple<ActionType, IMarketDataStorage>>();
 			private readonly OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator, IMarketDataStorage>> _enumerators = new OrderedPriorityQueue<DateTimeOffset, Tuple<IEnumerator, IMarketDataStorage>>();
 
-			internal BasketMarketDataStorageEnumerator(BasketMarketDataStorage<T> storage, DateTime date)
+			public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<T> storage, DateTime date)
 			{
 				if (storage == null)
 					throw new ArgumentNullException("storage");
@@ -42,7 +51,7 @@
 
 				foreach (var s in storage._innerStorages.Cache)
 				{
-					if (!s.Dates.Contains(date))
+					if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.Dates.Contains(date))
 						continue;
 
 					_actions.Add(Tuple.Create(ActionType.Add, s));
@@ -169,7 +178,7 @@
 				return true;
 			}
 
-			private DateTimeOffset GetServerTime(IEnumerator enumerator)
+			private static DateTimeOffset GetServerTime(IEnumerator enumerator)
 			{
 				var serverTime = ((Message)enumerator.Current).GetServerTime();
 
@@ -202,13 +211,13 @@
 				_storage._enumerators.Remove(this);
 			}
 
-			internal void AddAction(ActionType type, IMarketDataStorage storage)
+			public void AddAction(ActionType type, IMarketDataStorage storage)
 			{
 				_actions.Add(Tuple.Create(type, storage));
 			}
 		}
 
-		internal enum ActionType
+		private enum ActionType
 		{
 			Add,
 			Remove,
@@ -275,97 +284,9 @@
 		/// </summary>
 		/// <param name="date">Дата.</param>
 		/// <returns>Загрузчик сообщений.</returns>
-		public BasketMarketDataStorageEnumerator Load(DateTime date)
+		public IBasketMarketDataStorageEnumerator<T> Load(DateTime date)
 		{
 			return new BasketMarketDataStorageEnumerator(this, date);
-		}
-	}
-
-	/// <summary>
-	/// Хранилище, генерирующее данные в процессе работы.
-	/// </summary>
-	/// <typeparam name="T">Тип данных.</typeparam>
-	public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
-	{
-		private readonly Func<DateTime, IEnumerable<T>> _getData;
-
-		IEnumerable<DateTime> IMarketDataStorage.Dates { get { return Enumerable.Empty<DateTime>(); } }
-
-		Security IMarketDataStorage.Security { get { return null; } }
-
-		object IMarketDataStorage.Arg { get { return null; } }
-
-		IMarketDataStorageDrive IMarketDataStorage.Drive { get { return null; } }
-
-		bool IMarketDataStorage.AppendOnlyNew { get; set; }
-
-		Type IMarketDataStorage.DataType { get { return typeof(T); } }
-
-		IMarketDataSerializer IMarketDataStorage.Serializer
-		{
-			get { return ((IMarketDataStorage<T>)this).Serializer; }
-		}
-
-		IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer
-		{
-			get { throw new NotSupportedException(); }
-		}
-
-		/// <summary>
-		/// Создать <see cref="InMemoryMarketDataStorage{T}"/>.
-		/// </summary>
-		/// <param name="getData">Метод генерации данных для указанной даты.</param>
-		public InMemoryMarketDataStorage(Func<DateTime, IEnumerable<T>> getData)
-		{
-			if (getData == null)
-				throw new ArgumentNullException("getData");
-
-			_getData = getData;
-		}
-
-		/// <summary>
-		/// Загрузить данные.
-		/// </summary>
-		/// <param name="date">Дата, для которой необходимо загрузить данные.</param>
-		/// <returns>Данные. Если данных не существует, то будет возвращено пустое множество.</returns>
-		public IEnumerableEx<T> Load(DateTime date)
-		{
-			return _getData(date).ToEx();
-		}
-
-		IEnumerable IMarketDataStorage.Load(DateTime date)
-		{
-			return Load(date);
-		}
-
-		IMarketDataMetaInfo IMarketDataStorage.GetMetaInfo(DateTime date)
-		{
-			return null;
-		}
-
-		void IMarketDataStorage.Save(IEnumerable data)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataStorage.Delete(IEnumerable data)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataStorage.Delete(DateTime date)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataStorage<T>.Save(IEnumerable<T> data)
-		{
-			throw new NotSupportedException();
-		}
-
-		void IMarketDataStorage<T>.Delete(IEnumerable<T> data)
-		{
-			throw new NotSupportedException();
 		}
 	}
 }

@@ -148,6 +148,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Algo.History\Algo.History.csproj">
+      <Project>{5814D093-FA6D-44A5-B75B-4CC7E8F11EB0}</Project>
+      <Name>Algo.History</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\StockSharp %28GitLab%29\Algo.Strategies\Algo.Strategies.csproj">
       <Project>{FCB47C52-E1EA-4020-B88C-E750924F5716}</Project>
       <Name>Algo.Strategies</Name>

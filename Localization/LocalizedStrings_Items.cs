@@ -53733,5 +53733,31 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(ApartKey); }
 		}
+
+		/// <summary>
+		/// Finam (сandles)
+		/// </summary>
+		public const string FinamCandlesKey = "FinamCandles";
+
+		/// <summary>
+		/// Finam (сandles)
+		/// </summary>
+		public static string FinamCandles
+		{
+			get { return GetString(FinamCandlesKey); }
+		}
+
+		/// <summary>
+		/// Yahoo (сandles)
+		/// </summary>
+		public const string YahooCandlesKey = "YahooCandles";
+
+		/// <summary>
+		/// Yahoo (сandles)
+		/// </summary>
+		public static string YahooCandles
+		{
+			get { return GetString(YahooCandlesKey); }
+		}
     }
 }

@@ -61,6 +61,10 @@
     <ApplicationIcon>..\..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StockSharp.Algo.History, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Algo.History\StockSharp.Algo.History.dll</HintPath>
+    </Reference>
     <Reference Include="StockSharp.Xaml.Charting">
       <HintPath>..\..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
     </Reference>

@@ -2021,6 +2021,20 @@ namespace StockSharp.Algo
 				if (criteria.ExpiryDate != null && s.ExpiryDate != null && s.ExpiryDate != criteria.ExpiryDate)
 					return false;
 
+				if (criteria.ExtensionInfo != null && criteria.ExtensionInfo.Count > 0)
+				{
+					if (s.ExtensionInfo == null)
+						return false;
+
+					foreach (var pair in criteria.ExtensionInfo)
+					{
+						var value = s.ExtensionInfo.TryGetValue(pair.Key);
+
+						if (!pair.Value.Equals(value))
+							return false;
+					}
+				}
+
 				return true;
 			}).ToArray();
 		}

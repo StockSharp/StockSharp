@@ -61,6 +61,8 @@ namespace StockSharp.Algo.Testing
 		}
 
 		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _subscribedCandles = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
+		private readonly CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int> _historySourceSubscriptions = new CachedSynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, int>();
+		private readonly SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries> _series = new SynchronizedDictionary<Tuple<SecurityId, MarketDataTypes, object>, CandleSeries>();
 		
 		private readonly InMemoryMessageChannel _historyChannel;
 
@@ -427,8 +429,7 @@ namespace StockSharp.Algo.Testing
 								if (!UseExternalCandleSource)
 									break;
 
-								var security = GetSecurity(candleMsg.SecurityId);
-								var series = _series.TryGetValue(security);
+								var series = _series.TryGetValue(Tuple.Create(candleMsg.SecurityId, candleMsg.Type.ToCandleMarketDataType(), candleMsg.Arg));
 
 								if (series != null)
 								{
@@ -559,14 +560,69 @@ namespace StockSharp.Algo.Testing
 				SendPortfolio(portfolio);
 		}
 
-		private readonly SynchronizedDictionary<Security, CandleSeries> _series = new SynchronizedDictionary<Security, CandleSeries>();
+		/// <summary>
+		/// Зарегистрировать исторические данные.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <param name="dataType">Тип данных.</param>
+		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		/// <param name="getMessages">Функция получения исторических данных.</param>
+		public void RegisterHistorySource(Security security, MarketDataTypes dataType, object arg, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
+		{
+			SendInHistorySourceMessage(security, dataType, arg, getMessages);
+		}
+		
+		/// <summary>
+		/// Удалить регистрацию, ранее осуществленную через <see cref="RegisterHistorySource"/>.
+		/// </summary>
+		/// <param name="security">Инструмент.</param>
+		/// <param name="dataType">Тип данных.</param>
+		/// <param name="arg">Параметр, ассоциированный с типом <paramref name="dataType"/>. Например, <see cref="Candle.Arg"/>.</param>
+		public void UnRegisterHistorySource(Security security, MarketDataTypes dataType, object arg)
+		{
+			SendInHistorySourceMessage(security, dataType, arg, null);
+		}
+
+		private void SendInHistorySourceMessage(Security security, MarketDataTypes dataType, object arg, Func<DateTimeOffset, IEnumerable<Message>> getMessages)
+		{
+			var isSubscribe = getMessages != null;
+
+			if (isSubscribe)
+			{
+				if (_historySourceSubscriptions.ChangeSubscribers(Tuple.Create(security.ToSecurityId(), dataType, arg), true) != 1)
+					return;
+			}
+			else
+			{
+				if (_historySourceSubscriptions.ChangeSubscribers(Tuple.Create(security.ToSecurityId(), dataType, arg), false) != 0)
+					return;
+			}
+
+			SendInMessage(new HistorySourceMessage
+			{
+				IsSubscribe = isSubscribe,
+				SecurityId = security.ToSecurityId(),
+				DataType = dataType,
+				Arg = arg,
+				GetMessages = getMessages
+			});
+		}
 
 		IEnumerable<Range<DateTimeOffset>> IExternalCandleSource.GetSupportedRanges(CandleSeries series)
 		{
 			if (!UseExternalCandleSource)
 				yield break;
 
-			var types = _historyAdapter.Drive.GetCandleTypes(series.Security.ToSecurityId(), _historyAdapter.StorageFormat);
+			var securityId = series.Security.ToSecurityId();
+			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+
+			if (_historySourceSubscriptions.ContainsKey(Tuple.Create(securityId, dataType, series.Arg)))
+			{
+				yield return new Range<DateTimeOffset>(DateTimeOffset.MinValue, DateTimeOffset.MaxValue);
+				yield break;
+			}
+
+			var types = _historyAdapter.Drive.GetCandleTypes(securityId, _historyAdapter.StorageFormat);
 
 			foreach (var tuple in types)
 			{
@@ -610,38 +666,46 @@ namespace StockSharp.Algo.Testing
 		{
 			var securityId = GetSecurityId(series.Security);
 			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+			var key = Tuple.Create(securityId, dataType, series.Arg);
 
-			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), true) != 1)
-				return;
-
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			if (!_historySourceSubscriptions.ContainsKey(key))
 			{
-				//SecurityId = securityId,
-				DataType = dataType,
-				Arg = series.Arg,
-				IsSubscribe = true,
-			}.FillSecurityInfo(this, series.Security));
+				if (_subscribedCandles.ChangeSubscribers(key, true) != 1)
+					return;
 
-			_series.Add(series.Security, series);
+				MarketDataAdapter.SendInMessage(new MarketDataMessage
+				{
+					//SecurityId = securityId,
+					DataType = dataType,
+					Arg = series.Arg,
+					IsSubscribe = true,
+				}.FillSecurityInfo(this, series.Security));
+			}
+
+			_series.Add(key, series);
 		}
 
 		void IExternalCandleSource.UnSubscribeCandles(CandleSeries series)
 		{
 			var securityId = GetSecurityId(series.Security);
 			var dataType = series.CandleType.ToCandleMessageType().ToCandleMarketDataType();
+			var key = Tuple.Create(securityId, dataType, series.Arg);
 
-			if (_subscribedCandles.ChangeSubscribers(Tuple.Create(securityId, dataType, series.Arg), false) != 0)
-				return;
-
-			MarketDataAdapter.SendInMessage(new MarketDataMessage
+			if (!_historySourceSubscriptions.ContainsKey(key))
 			{
-				//SecurityId = securityId,
-				DataType = MarketDataTypes.CandleTimeFrame,
-				Arg = series.Arg,
-				IsSubscribe = false,
-			}.FillSecurityInfo(this, series.Security));
+				if (_subscribedCandles.ChangeSubscribers(key, false) != 0)
+					return;
 
-			_series.Remove(series.Security);
+				MarketDataAdapter.SendInMessage(new MarketDataMessage
+				{
+					//SecurityId = securityId,
+					DataType = MarketDataTypes.CandleTimeFrame,
+					Arg = series.Arg,
+					IsSubscribe = false,
+				}.FillSecurityInfo(this, series.Security));
+			}
+
+			_series.Remove(key);
 		}
 	}
 }

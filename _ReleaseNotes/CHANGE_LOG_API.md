@@ -1,5 +1,8 @@
 StockSharp API Change log
 ========================
+###v4.3.14:
+* (feature) Backtesting. Use history source (Finam, Google, Yahoo) directly.
+
 ###v4.3.13:
 * (bug) MessageAdaptersPanel fix.
 * (bug) Chart fix (draw values in hidden mode).

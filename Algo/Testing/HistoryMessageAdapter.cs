@@ -139,7 +139,6 @@ namespace StockSharp.Algo.Testing
 			: base(transactionIdGenerator)
 		{
 			BasketStorage = new BasketMarketDataStorage<Message>();
-			BasketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<TimeMessage>(d => GetTimeLine(d)));
 
 			StartDate = DateTimeOffset.MinValue;
 			StopDate = DateTimeOffset.MaxValue;
@@ -157,6 +156,7 @@ namespace StockSharp.Algo.Testing
 			
 			this.AddMarketDataSupport();
 			this.AddSupportedMessage(ExtendedMessageTypes.EmulationState);
+			this.AddSupportedMessage(ExtendedMessageTypes.HistorySource);
 		}
 
 		/// <summary>
@@ -282,6 +282,7 @@ namespace StockSharp.Algo.Testing
 				}
 
 				case MessageTypes.MarketData:
+				case ExtendedMessageTypes.HistorySource:
 					ProcessMarketDataMessage((MarketDataMessage)message);
 					return;
 
@@ -330,19 +331,23 @@ namespace StockSharp.Algo.Testing
 
 		private void ProcessMarketDataMessage(MarketDataMessage message)
 		{
-			var security = SecurityProvider.LookupById(message.SecurityId.SecurityCode + "@" + message.SecurityId.BoardCode);
+			var securityId = message.SecurityId;
+			var security = SecurityProvider.LookupById(securityId.SecurityCode + "@" + securityId.BoardCode);
 
 			if (security == null)
 			{
-				RaiseMarketDataMessage(message,  new InvalidOperationException(LocalizedStrings.Str704Params.Put(message.SecurityId)));
+				RaiseMarketDataMessage(message, new InvalidOperationException(LocalizedStrings.Str704Params.Put(securityId)));
 				return;
 			}
 
 			if (StorageRegistry == null)
 			{
-				RaiseMarketDataMessage(message, new InvalidOperationException(LocalizedStrings.Str1117Params.Put(message.DataType, message.SecurityId)));
+				RaiseMarketDataMessage(message, new InvalidOperationException(LocalizedStrings.Str1117Params.Put(message.DataType, securityId)));
 				return;
 			}
+
+			var history = message as HistorySourceMessage;
+			var storages = BasketStorage.InnerStorages;
 
 			Exception error = null;
 
@@ -352,22 +357,29 @@ namespace StockSharp.Algo.Testing
 				{
 					if (message.IsSubscribe)
 					{
-						BasketStorage.InnerStorages.Add(StorageRegistry.GetLevel1MessageStorage(security, Drive, StorageFormat));
-
-						BasketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<ClearingMessage>(date => new[]
+						if (history == null)
 						{
-							new ClearingMessage
+							storages.Add(StorageRegistry.GetLevel1MessageStorage(security, Drive, StorageFormat));
+
+							storages.Add(new InMemoryMarketDataStorage<ClearingMessage>(security, null, date => new[]
 							{
-								LocalTime = date.Date + security.Board.ExpiryTime,
-								SecurityId = message.SecurityId,
-								ClearMarketDepth = true
-							}
-						}));
+								new ClearingMessage
+								{
+									LocalTime = date.Date + security.Board.ExpiryTime,
+									SecurityId = securityId,
+									ClearMarketDepth = true
+								}
+							}));
+						}
+						else
+						{
+							storages.Add(new InMemoryMarketDataStorage<Level1ChangeMessage>(security, null, history.GetMessages));
+						}
 					}
 					else
 					{
-						RemoveStorage<IMarketDataStorage<Level1ChangeMessage>>(security, MessageTypes.Level1Change, message.Arg);
-						RemoveStorage<InMemoryMarketDataStorage<ClearingMessage>>(security, ExtendedMessageTypes.Clearing, message.Arg);
+						RemoveStorage<IMarketDataStorage<Level1ChangeMessage>>(security, MessageTypes.Level1Change, null);
+						RemoveStorage<InMemoryMarketDataStorage<ClearingMessage>>(security, ExtendedMessageTypes.Clearing, null);
 					}
 
 					break;
@@ -376,9 +388,14 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.MarketDepth:
 				{
 					if (message.IsSubscribe)
-						BasketStorage.InnerStorages.Add((IMarketDataStorage<QuoteChangeMessage>)StorageRegistry.GetMarketDepthStorage(security, Drive, StorageFormat));
+					{
+						if (history == null)
+							storages.Add((IMarketDataStorage<QuoteChangeMessage>)StorageRegistry.GetMarketDepthStorage(security, Drive, StorageFormat));
+						else
+							storages.Add(new InMemoryMarketDataStorage<QuoteChangeMessage>(security, null, history.GetMessages));
+					}
 					else
-						RemoveStorage<IMarketDataStorage<QuoteChangeMessage>>(security, MessageTypes.QuoteChange, message.Arg);
+						RemoveStorage<IMarketDataStorage<QuoteChangeMessage>>(security, MessageTypes.QuoteChange, null);
 					
 					break;
 				}
@@ -386,9 +403,14 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.Trades:
 				{
 					if (message.IsSubscribe)
-						BasketStorage.InnerStorages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetTradeStorage(security, Drive, StorageFormat));
+					{
+						if (history == null)
+							storages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetTradeStorage(security, Drive, StorageFormat));
+						else
+							storages.Add(new InMemoryMarketDataStorage<ExecutionMessage>(security, null, history.GetMessages));
+					}
 					else
-						RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, message.Arg);
+						RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, ExecutionTypes.Tick);
 					
 					break;
 				}
@@ -396,9 +418,14 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.OrderLog:
 				{
 					if (message.IsSubscribe)
-						BasketStorage.InnerStorages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetOrderLogStorage(security, Drive, StorageFormat));
+					{
+						if (history == null)
+							storages.Add((IMarketDataStorage<ExecutionMessage>)StorageRegistry.GetOrderLogStorage(security, Drive, StorageFormat));
+						else
+							storages.Add(new InMemoryMarketDataStorage<ExecutionMessage>(security, null, history.GetMessages));
+					}
 					else
-						RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, message.Arg);
+						RemoveStorage<IMarketDataStorage<ExecutionMessage>>(security, MessageTypes.Execution, ExecutionTypes.OrderLog);
 
 					break;
 				}
@@ -410,41 +437,17 @@ namespace StockSharp.Algo.Testing
 				case MarketDataTypes.CandlePnF:
 				case MarketDataTypes.CandleRenko:
 				{
-					Type candleMessageType;
-					MessageTypes msgType;
-
-					switch (message.DataType)
-					{
-						case MarketDataTypes.CandleTimeFrame:
-							msgType = MessageTypes.CandleTimeFrame;
-							candleMessageType = typeof(TimeFrameCandleMessage);
-							break;
-						case MarketDataTypes.CandleTick:
-							msgType = MessageTypes.CandleTick;
-							candleMessageType = typeof(TickCandleMessage);
-							break;
-						case MarketDataTypes.CandleVolume:
-							msgType = MessageTypes.CandleVolume;
-							candleMessageType = typeof(VolumeCandleMessage);
-							break;
-						case MarketDataTypes.CandleRange:
-							msgType = MessageTypes.CandleRange;
-							candleMessageType = typeof(RangeCandleMessage);
-							break;
-						case MarketDataTypes.CandlePnF:
-							msgType = MessageTypes.CandlePnF;
-							candleMessageType = typeof(PnFCandleMessage);
-							break;
-						case MarketDataTypes.CandleRenko:
-							msgType = MessageTypes.CandleRenko;
-							candleMessageType = typeof(RenkoCandleMessage);
-							break;
-						default:
-							throw new InvalidOperationException();
-					}
+					var msgType = message.DataType.ToCandleMessageType();
 
 					if (message.IsSubscribe)
-						BasketStorage.InnerStorages.Add(StorageRegistry.GetCandleMessageStorage(candleMessageType, security, message.Arg, Drive, StorageFormat));
+					{
+						var candleType = message.DataType.ToCandleMessage();
+
+						if (history == null)
+							storages.Add(StorageRegistry.GetCandleMessageStorage(candleType, security, message.Arg, Drive, StorageFormat));
+						else
+							storages.Add(new InMemoryMarketDataStorage<CandleMessage>(security, message.Arg, history.GetMessages, candleType));
+					}
 					else
 						RemoveStorage<IMarketDataStorage<CandleMessage>>(security, msgType, message.Arg);
 
@@ -494,21 +497,24 @@ namespace StockSharp.Algo.Testing
 
 				var messageTypes = new[] { MessageTypes.Time, ExtendedMessageTypes.Clearing };
 
+				BasketStorage.InnerStorages.Add(new InMemoryMarketDataStorage<TimeMessage>(null, null, GetTimeLine));
+
 				while (loadDate.Date <= StopDate.Date && !_disconnecting)
 				{
 					if (Boards.Any(b => b.IsTradeDate(loadDate, true)))
 					{
 						this.AddInfoLog("Loading {0} Events: {1}", loadDate.Date, LoadedMessageCount);
 
-						var enumerator = BasketStorage.Load(loadDate.UtcDateTime.Date);
+						using (var enumerator = BasketStorage.Load(loadDate.UtcDateTime.Date))
+						{
+							// storage for the specified date contains only time messages and clearing events
+							var noData = !enumerator.DataTypes.Except(messageTypes).Any();
 
-						// хранилище за указанную дату содержит только время и клиринг
-						var noData = !enumerator.DataTypes.Except(messageTypes).Any();
-
-						if (noData)
-							SendOutMessages(loadDate, GetSimpleTimeLine(loadDate).GetEnumerator());
-						else
-							SendOutMessages(loadDate, enumerator);
+							if (noData)
+								SendOutMessages(loadDate, GetSimpleTimeLine(loadDate).GetEnumerator());
+							else
+								SendOutMessages(loadDate, enumerator);	
+						}
 					}
 
 					loadDate = loadDate.Date.AddDays(1).ApplyTimeZone(loadDate.Offset);
@@ -531,6 +537,7 @@ namespace StockSharp.Algo.Testing
 				SendOutMessage(new ResetMessage());
 
 			_loadingThread = null;
+			BasketStorage.InnerStorages.Clear();
 		}
 
 		/// <summary>

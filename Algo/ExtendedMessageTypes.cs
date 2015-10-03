@@ -12,5 +12,6 @@
 		public const MessageTypes EmulationState = (MessageTypes)(-5);
 		public const MessageTypes Generator = (MessageTypes)(-6);
 		public const MessageTypes CommissionRule = (MessageTypes)(-7);
+		public const MessageTypes HistorySource = (MessageTypes)(-8);
 	}
 }

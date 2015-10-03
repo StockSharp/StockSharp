@@ -67,6 +67,8 @@
 						<RowDefinition Height="23" />
 						<RowDefinition Height="23" />
 						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
+						<RowDefinition Height="23" />
 					</Grid.RowDefinitions>
 
 					<TextBox x:Name="SecId" />
@@ -77,13 +79,15 @@
 						<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr117}" VerticalAlignment="Center" Name="DebugLogCheckBox" Click="CheckBoxClick" />
 					</StackPanel>
 
-					<ProgressBar x:Name="TicksTestingProcess" Grid.Column="1" Grid.Row="2" />
-					<ProgressBar x:Name="TicksAndDepthsTestingProcess" Grid.Column="1" Grid.Row="3" />
-					<ProgressBar x:Name="DepthsTestingProcess" Grid.Column="1" Grid.Row="4" />
-					<ProgressBar x:Name="CandlesTestingProcess" Grid.Column="1" Grid.Row="5" />
-					<ProgressBar x:Name="CandlesAndDepthsTestingProcess" Grid.Column="1" Grid.Row="6" />
-					<ProgressBar x:Name="OrderLogTestingProcess" Grid.Column="1" Grid.Row="7" />
-					<ProgressBar x:Name="Level1TestingProcess" Grid.Column="1" Grid.Row="8" />
+					<ProgressBar x:Name="TicksProgress" Grid.Column="1" Grid.Row="2" />
+					<ProgressBar x:Name="TicksAndDepthsProgress" Grid.Column="1" Grid.Row="3" />
+					<ProgressBar x:Name="DepthsProgress" Grid.Column="1" Grid.Row="4" />
+					<ProgressBar x:Name="CandlesProgress" Grid.Column="1" Grid.Row="5" />
+					<ProgressBar x:Name="CandlesAndDepthsProgress" Grid.Column="1" Grid.Row="6" />
+					<ProgressBar x:Name="OrderLogProgress" Grid.Column="1" Grid.Row="7" />
+					<ProgressBar x:Name="Level1Progress" Grid.Column="1" Grid.Row="8" />
+					<ProgressBar x:Name="FinamCandlesProgress" Grid.Column="1" Grid.Row="9" />
+					<ProgressBar x:Name="YahooCandlesProgress" Grid.Column="1" Grid.Row="10" />
 
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Ticks}" Grid.Row="2" Grid.Column="0" Name="TicksCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr757}" Grid.Row="3" Grid.Column="0" Name="TicksAndDepthsCheckBox" Click="CheckBoxClick" />
@@ -92,16 +96,18 @@
 					<CheckBox Content="{x:Static loc:LocalizedStrings.XamlStr635}" Grid.Row="6" Grid.Column="0" Name="CandlesAndDepthsCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.OrderLog}" Grid.Row="7" Grid.Column="0" Name="OrderLogCheckBox" Click="CheckBoxClick" />
 					<CheckBox Content="{x:Static loc:LocalizedStrings.Level1}" Grid.Row="8" Grid.Column="0" Name="Level1CheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.FinamCandles}" Grid.Row="9" Grid.Column="0" Name="FinamCandlesCheckBox" Click="CheckBoxClick" />
+					<CheckBox Content="{x:Static loc:LocalizedStrings.YahooCandles}" Grid.Row="10" Grid.Column="0" Name="YahooCandlesCheckBox" Click="CheckBoxClick" />
 
-					<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="9" Grid.Column="0" Click="StartBtnClick" IsEnabled="False"/>
-                    <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Grid.Row="9" Grid.Column="1" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
-					<CheckBox x:Name="GenDepthsCheckBox" Content="{x:Static loc:LocalizedStrings.XamlStr97}" Grid.Row="10" Grid.Column="0" Click="CheckBoxClick" />
-					<CheckBox x:Name="ShowDepth" Content="{x:Static loc:LocalizedStrings.XamlStr85}" Grid.Row="11" Grid.Column="0" IsChecked="True" />
+					<Button x:Name="StartBtn" Content="{x:Static loc:LocalizedStrings.Str2421}" Grid.Row="11" Grid.Column="0" Click="StartBtnClick" IsEnabled="False"/>
+                    <Button x:Name="StopBtn" Content="{x:Static loc:LocalizedStrings.Str242}" Grid.Row="11" Grid.Column="1" Width="100" HorizontalAlignment="Left" Click="StopBtnClick" IsEnabled="False"/>
+					<CheckBox x:Name="GenDepthsCheckBox" Content="{x:Static loc:LocalizedStrings.XamlStr97}" Grid.Row="12" Grid.Column="0" Click="CheckBoxClick" />
+					<CheckBox x:Name="ShowDepth" Content="{x:Static loc:LocalizedStrings.XamlStr85}" Grid.Row="13" Grid.Column="0" IsChecked="True" />
 					
-					<TextBox x:Name="MaxDepth" Grid.Row="12" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr291}">1</TextBox>
-					<TextBox x:Name="MaxVolume" Grid.Row="13" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr293}">1</TextBox>
+					<TextBox x:Name="MaxDepth" Grid.Row="14" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr291}">1</TextBox>
+					<TextBox x:Name="MaxVolume" Grid.Row="15" Grid.Column="0" IsEnabled="{Binding ElementName=GenDepthsCheckBox, Path=IsChecked}" TextAlignment="Right" ToolTip="{x:Static loc:LocalizedStrings.XamlStr293}">1</TextBox>
 
-					<ComboBox x:Name="TimeFrame" Grid.Row="14" Grid.Column="0">
+					<ComboBox x:Name="TimeFrame" Grid.Row="16" Grid.Column="0">
 						<ComboBoxItem>1min</ComboBoxItem>
 						<ComboBoxItem>5min</ComboBoxItem>
 					</ComboBox>
@@ -136,6 +142,12 @@
 						</TabItem>
 						<TabItem Header="{x:Static loc:LocalizedStrings.Level1}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=Level1CheckBox, Path=IsChecked}">
 							<sx:StatisticParameterGrid x:Name="Level1ParameterGrid" />
+						</TabItem>
+						<TabItem Header="{x:Static loc:LocalizedStrings.FinamCandles}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=FinamCandlesCheckBox, Path=IsChecked}">
+							<sx:StatisticParameterGrid x:Name="FinamCandlesParameterGrid" />
+						</TabItem>
+						<TabItem Header="{x:Static loc:LocalizedStrings.YahooCandles}" Visibility="{Binding Converter={StaticResource Converter}, ElementName=YahooCandlesCheckBox, Path=IsChecked}">
+							<sx:StatisticParameterGrid x:Name="YahooCandlesParameterGrid" />
 						</TabItem>
 					</TabControl>
 					<Grid Grid.Column="1">

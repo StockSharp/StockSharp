@@ -73,6 +73,21 @@ namespace StockSharp.Algo
 		};
 
 		/// <summary>
+		/// Преобразовать тип свечек <see cref="MarketDataTypes"/> в тип сообщения <see cref="CandleMessage"/>.
+		/// </summary>
+		/// <param name="type">Тип свечек.</param>
+		/// <returns>Тип сообщения <see cref="CandleMessage"/>.</returns>
+		public static Type ToCandleMessage(this MarketDataTypes type)
+		{
+			var messageType = _candleMarketDataTypes.TryGetKey(type);
+
+			if (messageType == null)
+				throw new ArgumentOutOfRangeException("type", type, LocalizedStrings.WrongCandleType);
+
+			return messageType;
+		}
+
+		/// <summary>
 		/// Преобразовать тип сообщения <see cref="CandleMessage"/> в <see cref="MarketDataTypes"/>.
 		/// </summary>
 		/// <param name="messageType">Тип сообщения <see cref="CandleMessage"/>.</param>
@@ -190,6 +205,7 @@ namespace StockSharp.Algo
 			message.LowVolume = candle.LowVolume;
 			message.CloseVolume = candle.CloseVolume;
 			message.RelativeVolume = candle.RelativeVolume;
+			message.Arg = candle.Arg;
 			message.State = candle.State;
 
 			return message;
