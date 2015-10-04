@@ -42,13 +42,21 @@ namespace StockSharp.Quik.Native
 		{
 			_api = new Api(dllPath);
 
-			var msg = new StringBuilder(_msgSize);
-			var extEc = 0L;
-			_api.SetConnectionStatusCallback(Marshaler.WrapDelegate<Api.ConnectionStatusCallback>(OnConnectionStatusCallback), ref extEc, msg, _msgSize).ThrowIfNeed(msg);
+			try
+			{
+				var msg = new StringBuilder(_msgSize);
+				var extEc = 0L;
+				_api.SetConnectionStatusCallback(Marshaler.WrapDelegate<Api.ConnectionStatusCallback>(OnConnectionStatusCallback), ref extEc, msg, _msgSize).ThrowIfNeed(msg);
 
-			msg = new StringBuilder(_msgSize);
-			extEc = 0L;
-			_api.SetTransactionsReply(Marshaler.WrapDelegate<Api.TransactionReplyCallback>(OnTransactionReplyCallback), ref extEc, msg, _msgSize);
+				msg = new StringBuilder(_msgSize);
+				extEc = 0L;
+				_api.SetTransactionsReply(Marshaler.WrapDelegate<Api.TransactionReplyCallback>(OnTransactionReplyCallback), ref extEc, msg, _msgSize);
+			}
+			catch (Exception)
+			{
+				_api.Dispose();
+				throw;
+			}
 		}
 
 		public string DllPath

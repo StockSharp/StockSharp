@@ -31,10 +31,18 @@
 
 			_api = new Api(dllPath, OnCallback);
 
-			Directory.CreateDirectory(logsPath);
+			try
+			{
+				Directory.CreateDirectory(logsPath);
 
-			using (var handle = _encoding.ToHGlobal(logsPath + "\0"))
-				CheckErrorResult(_api.Initialize(handle.DangerousGetHandle(), (int)logLevel));
+				using (var handle = _encoding.ToHGlobal(logsPath + "\0"))
+					CheckErrorResult(_api.Initialize(handle.DangerousGetHandle(), (int)logLevel));
+			}
+			catch (Exception)
+			{
+				_api.Dispose();
+				throw;
+			}
 		}
 
 		public string SendCommand(string command)
