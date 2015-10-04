@@ -159,7 +159,7 @@ namespace StockSharp.Transaq
 		[PropertyOrder(4)]
 		public TimeSpan? MarketDataInterval { get; set; }
 
-		private string _apiLogsPath = Path.Combine(Directory.GetCurrentDirectory(), "StockSharp.Transaq", "Logs") + "\0";
+		private string _apiLogsPath = Path.Combine(Directory.GetCurrentDirectory(), "StockSharp.Transaq", "Logs");
 
 		/// <summary>
 		/// Путь к логам коннектора.

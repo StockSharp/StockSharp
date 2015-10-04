@@ -16,7 +16,7 @@
 		private readonly Action<string> _callback;
 		private static readonly Encoding _encoding = Encoding.UTF8;
 
-		public ApiClient(Action<string> callback, string dllPath, bool overrideDll, bool isHft, string path, ApiLogLevels logLevel)
+		public ApiClient(Action<string> callback, string dllPath, bool overrideDll, bool isHft, string logsPath, ApiLogLevels logLevel)
 		{
 			if (callback == null)
 				throw new ArgumentNullException("callback");
@@ -31,7 +31,9 @@
 
 			_api = new Api(dllPath, OnCallback);
 
-			using (var handle = _encoding.ToHGlobal(path))
+			Directory.CreateDirectory(logsPath);
+
+			using (var handle = _encoding.ToHGlobal(logsPath + "\0"))
 				CheckErrorResult(_api.Initialize(handle.DangerousGetHandle(), (int)logLevel));
 		}
 

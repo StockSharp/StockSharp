@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
-###v4.3.14:
+###current:
+* (bug) Transaq fix.
 * (feature) Backtesting. Use history source (Finam, Google, Yahoo) directly.
 
 ###v4.3.13:
