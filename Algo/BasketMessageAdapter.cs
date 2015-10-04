@@ -610,5 +610,31 @@ namespace StockSharp.Algo
 
 			base.Load(storage);
 		}
+
+		/// <summary>
+		/// Create a copy of <see cref="MessageAdapter"/>.
+		/// </summary>
+		/// <returns>Copy.</returns>
+		public override IMessageChannel Clone()
+		{
+			var clone = new BasketMessageAdapter(TransactionIdGenerator);
+
+			foreach (var adapter in InnerAdapters)
+			{
+				clone.InnerAdapters[adapter] = InnerAdapters[adapter];
+			}
+
+			return clone;
+		}
+
+		/// <summary>
+		/// Освободить занятые ресурсы.
+		/// </summary>
+		protected override void DisposeManaged()
+		{
+			_hearbeatAdapters.Values.ForEach(a => a.Parent = null);
+
+			base.DisposeManaged();
+		}
 	}
 }
