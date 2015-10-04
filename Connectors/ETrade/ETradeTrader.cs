@@ -72,7 +72,7 @@ namespace StockSharp.ETrade
 
 			_adapter = new ETradeMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 
 			ReConnectionSettings.TimeOutInterval = TimeSpan.FromMinutes(5);
 			ReConnectionSettings.Interval = TimeSpan.FromMinutes(1);

@@ -38,7 +38,7 @@ namespace StockSharp.SmartCom
 		{
 			_adapter = new SmartComMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

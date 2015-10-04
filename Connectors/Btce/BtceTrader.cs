@@ -23,7 +23,7 @@ namespace StockSharp.Btce
 		{
 			_adapter = new BtceMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

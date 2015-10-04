@@ -32,7 +32,7 @@ namespace StockSharp.Transaq
 		{
 			_adapter = new TransaqMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

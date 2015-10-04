@@ -32,7 +32,7 @@ namespace StockSharp.OpenECry
 		{
 			_adapter = new OpenECryMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

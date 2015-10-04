@@ -37,7 +37,7 @@ namespace StockSharp.IQFeed
 
 			_adapter = new IQFeedMarketDataMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

@@ -20,7 +20,7 @@ namespace StockSharp.CQG
 
 			var adapter = new CQGMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(adapter);
 		}
     }
 }

@@ -23,7 +23,7 @@ namespace StockSharp.BitStamp
 		{
 			_adapter = new BitStampMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

@@ -31,7 +31,7 @@ namespace StockSharp.Oanda
 		{
 			_adapter = new OandaMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

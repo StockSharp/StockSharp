@@ -36,7 +36,7 @@ namespace StockSharp.BarChart
 			_adapter = new BarChartMessageAdapter(TransactionIdGenerator);
 			_adapter.AddMarketDataSupport();
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

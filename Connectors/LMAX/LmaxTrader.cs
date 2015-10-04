@@ -31,7 +31,7 @@ namespace StockSharp.LMAX
 		{
 			_adapter = new LmaxMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

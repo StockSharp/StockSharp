@@ -96,7 +96,7 @@ namespace StockSharp.Algo.Testing
 			if (_ownAdapter)
 				UnderlyngMarketDataAdapter.Log += RaiseLog;
 
-			Adapter.InnerAdapters.Add(EmulationAdapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(EmulationAdapter);
 		}
 
 		/// <summary>

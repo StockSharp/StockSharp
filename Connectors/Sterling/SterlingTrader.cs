@@ -20,7 +20,7 @@ namespace StockSharp.Sterling
 
 			var adapter = new SterlingMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(adapter);
 		}
 
 		//public void StartExport()

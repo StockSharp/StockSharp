@@ -22,7 +22,7 @@ namespace StockSharp.Rss
 		{
 			_adapter = new RssMarketDataMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

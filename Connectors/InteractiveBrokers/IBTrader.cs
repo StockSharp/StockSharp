@@ -219,7 +219,7 @@ namespace StockSharp.InteractiveBrokers
 
 			_adapter = new InteractiveBrokersMessageAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 		}
 
 		/// <summary>

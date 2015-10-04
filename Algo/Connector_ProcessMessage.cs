@@ -217,7 +217,7 @@ namespace StockSharp.Algo
 				if (_adapter != null)
 				{
 					if (CalculateMessages)
-						_inAdapter = new ManagedMessageAdapter(_inAdapter);
+						_inAdapter = new ManagedMessageAdapter(_inAdapter).ToChannel(this);
 
 					_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 					_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;

@@ -374,7 +374,7 @@ namespace StockSharp.Studio
 
 			_marketDataAdapter = new StudioMarketDataAdapter(TransactionIdGenerator);
 
-			Adapter.InnerAdapters.Add(_marketDataAdapter.ToChannel(this, "MD"));
+			Adapter.InnerAdapters.Add(_marketDataAdapter);
 
 			CreateEmulationSessionHolder();
 
@@ -663,7 +663,7 @@ namespace StockSharp.Studio
 			EntityFactory = new StudioConnectorEntityFactory();
 
 			_adapter = new PassThroughMessageAdapter(TransactionIdGenerator);
-			Adapter.InnerAdapters.Add(_adapter.ToChannel(this));
+			Adapter.InnerAdapters.Add(_adapter);
 
 			_entityRegistry = ConfigManager.GetService<IStudioEntityRegistry>();
 			_entityRegistry.Securities.Added += s => _adapter.SendOutMessage(s.ToMessage(GetSecurityId(s)));
