@@ -42,6 +42,9 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			//anothar:SQLite не поддерживает datetime2, а только datetime то есть округляет до трех знаков в миллисекундах-нам не подходит.
 			if (t == typeof(DateTime))
 				return "TEXT";
+			// SQLite также не поддерживает datetimeoffset (это -- тип даты MicroSoft)
+			if (t == typeof(DateTimeOffset))
+				return "TEXT";
 			if (t == typeof(bool))
 				return "boolean";
 
