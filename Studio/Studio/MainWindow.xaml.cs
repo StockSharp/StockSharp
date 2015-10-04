@@ -1403,12 +1403,11 @@ namespace StockSharp.Studio
 
 		private bool ProcessConnectionSettings()
 		{
-			var wnd = new MessageAdaptersWindow();
+			var wnd = new ConnectorWindow();
 
-			wnd.CheckConnectionState += () => _algoService.Connector.ConnectionState;
-			wnd.AutoConnect = _persistableService.GetAutoConnect();
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
 			wnd.Adapter = _algoService.Connector.Adapter;
+			wnd.AutoConnect = _persistableService.GetAutoConnect();
 
 			var retVal = wnd.ShowModal(this);
 

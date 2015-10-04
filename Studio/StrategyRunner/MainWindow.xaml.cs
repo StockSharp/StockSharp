@@ -215,8 +215,7 @@
 
 		private void ExecutedConnectionSettings(object sender, ExecutedRoutedEventArgs e)
 		{
-			var wnd = new MessageAdaptersWindow();
-			wnd.CheckConnectionState += () => _connector.ConnectionState;
+			var wnd = new ConnectorWindow();
 			wnd.ConnectorsInfo.AddRange(AppConfig.Instance.Connections);
 			wnd.Adapter = _connector.Adapter;
 

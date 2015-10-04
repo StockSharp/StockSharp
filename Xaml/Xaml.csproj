@@ -328,11 +328,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MessageAdaptersPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MessageAdaptersWindow.xaml">
+    <Page Include="ConnectorWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -481,6 +477,7 @@
       <DependentUpon>CommissionWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ConnectorInfo.cs" />
     <Compile Include="EndPointListEditor.xaml.cs">
       <DependentUpon>EndPointListEditor.xaml</DependentUpon>
     </Compile>
@@ -626,11 +623,8 @@
     <Compile Include="StorageFormatComboBox.cs" />
     <Compile Include="SecurityTypeComboBox.cs" />
     <Compile Include="SecurityTypesComboBox.cs" />
-    <Compile Include="MessageAdaptersPanel.xaml.cs">
-      <DependentUpon>MessageAdaptersPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MessageAdaptersWindow.xaml.cs">
-      <DependentUpon>MessageAdaptersWindow.xaml</DependentUpon>
+    <Compile Include="ConnectorWindow.xaml.cs">
+      <DependentUpon>ConnectorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="StatisticParameterGrid.xaml.cs">
       <DependentUpon>StatisticParameterGrid.xaml</DependentUpon>
