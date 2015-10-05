@@ -52,6 +52,8 @@
 			return finamId.IsDefault() ? null : (object)finamId;
 		}
 
+		public event Action<Security> NewSecurity;
+
 		void ISecurityStorage.Save(Security security)
 		{
 			_entityRegistry.Securities.Save(security);
@@ -71,7 +73,13 @@
 			var finamId = security.ExtensionInfo.TryGetValue(FinamHistorySource.SecurityIdField);
 
 			if (finamId != null)
-				_cacheByFinamId.SafeAdd((long)finamId, key => security);
+			{
+				bool isNew;
+				_cacheByFinamId.SafeAdd((long)finamId, key => security, out isNew);
+
+				if (isNew)
+					NewSecurity.SafeInvoke(security);
+			}
 		}
 
 		void ISecurityStorage.Delete(Security security)

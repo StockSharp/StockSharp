@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Algo.Storages
 {
+	using System;
 	using System.Collections.Generic;
 
 	using StockSharp.BusinessEntities;
@@ -9,6 +10,11 @@
 	/// </summary>
 	public interface ISecurityStorage : ISecurityProvider
 	{
+		/// <summary>
+		/// Событие добавление нового инструмента.
+		/// </summary>
+		event Action<Security> NewSecurity; 
+
 		/// <summary>
 		/// Сохранить инструмент.
 		/// </summary>

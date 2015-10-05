@@ -119,7 +119,6 @@
     <Compile Include="CategoryAttributes.cs" />
     <Compile Include="Exchange.cs" />
     <Compile Include="ExchangeBoard.cs" />
-    <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="IConnector.cs" />
     <Compile Include="IExchangeInfoProvider.cs" />
     <Compile Include="IMarketDataProvider.cs" />

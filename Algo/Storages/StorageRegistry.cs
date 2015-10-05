@@ -1074,6 +1074,8 @@ namespace StockSharp.Algo.Storages
 				get { return _securities.Cache; }
 			}
 
+			public event Action<Security> NewSecurity;
+
 			public void Save(Security security)
 			{
 				if (!_securities.TryAdd(security))
@@ -1084,6 +1086,8 @@ namespace StockSharp.Algo.Storages
 					using (var file = File.AppendText(_file))
 						file.WriteLine(_format.PutEx(security));
 				});
+
+				NewSecurity.SafeInvoke(security);
 			}
 
 			public void Delete(Security security)

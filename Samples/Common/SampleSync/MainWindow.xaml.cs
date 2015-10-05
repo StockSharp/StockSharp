@@ -11,8 +11,8 @@ namespace SampleSync
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Quik;
 	using StockSharp.Xaml;
 	using StockSharp.Xaml.Charting;

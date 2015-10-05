@@ -55,6 +55,8 @@ namespace SampleHistoryTesting
 			{
 			}
 
+			public event Action<Security> NewSecurity;
+
 			void ISecurityStorage.Save(Security security)
 			{
 			}

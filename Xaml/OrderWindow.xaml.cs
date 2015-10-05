@@ -12,6 +12,7 @@ namespace StockSharp.Xaml
 	using Ecng.ComponentModel;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Messages;
 	using StockSharp.Localization;

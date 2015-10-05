@@ -9,6 +9,7 @@
 	using Ecng.Xaml;
 	using Ecng.Common;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Xaml;
 

@@ -12,6 +12,7 @@ namespace SampleCandles
 
 	using Ookii.Dialogs.Wpf;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Localization;

@@ -5,6 +5,7 @@
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
@@ -64,6 +65,8 @@
 			return _cacheByQuandlId.SyncGet(d => d.FirstOrDefault(p => p.Value == security).Key);
 		}
 
+		public event Action<Security> NewSecurity;
+
 		void ISecurityStorage.Save(Security security)
 		{
 			_entityRegistry.Securities.Save(security);
@@ -84,7 +87,13 @@
 			var secCode = (string)security.ExtensionInfo.TryGetValue(QuandlHistorySource.SecurityCodeField);
 
 			if (sourceCode != null && secCode != null)
-				_cacheByQuandlId.SafeAdd(Tuple.Create(sourceCode, secCode), key => security);
+			{
+				bool isNew;
+				_cacheByQuandlId.SafeAdd(Tuple.Create(sourceCode, secCode), key => security, out isNew);
+
+				if (isNew)
+					NewSecurity.SafeInvoke(security);
+			}
 		}
 
 		void ISecurityStorage.Delete(Security security)

@@ -1,6 +1,8 @@
 StockSharp API Change log
 ========================
 ###current:
+* (bug) FilterableSecurityProvider. Moved to Algo.
+* (bug) ISecurityStorage.NewSecurity event.
 * (bug) BasketMessageAdapter. Save/Load fix.
 * (feature) ConnectorWindow.
 * (bug) Transaq fix.

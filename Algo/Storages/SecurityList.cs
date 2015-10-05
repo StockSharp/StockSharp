@@ -226,6 +226,11 @@ namespace StockSharp.Algo.Storages
 		}
 
 		/// <summary>
+		/// Событие добавление нового инструмента.
+		/// </summary>
+		public event Action<Security> NewSecurity;
+
+		/// <summary>
 		/// Сохранить торговый объект.
 		/// </summary>
 		/// <param name="entity">Торговый объект.</param>
@@ -256,7 +261,7 @@ namespace StockSharp.Algo.Storages
 		protected override void OnAdd(Security entity)
 		{
 			_registry.ExchangeBoards.Save(entity.Board);
-
+			NewSecurity.SafeInvoke(entity);
 			base.OnAdd(entity);
 		}
 

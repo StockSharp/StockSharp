@@ -14,6 +14,7 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Xaml;
 	using Ecng.ComponentModel;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Community;

@@ -9,6 +9,7 @@ namespace SampleSmartCandles
 	using Ecng.Collections;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.SmartCom;

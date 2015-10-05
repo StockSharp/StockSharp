@@ -11,6 +11,7 @@ namespace StockSharp.Hydra.Windows
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.Algo.History;
 	using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;

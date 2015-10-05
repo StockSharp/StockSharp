@@ -160,6 +160,7 @@
     <Compile Include="..\StockSharpAssemblyInfo.cs">
       <Link>Properties\StockSharpAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="FilterableSecurityProvider.cs" />
     <Compile Include="Indicators\Correlation.cs" />
     <Compile Include="Indicators\Covariance.cs" />
     <Compile Include="Storages\Backup\AmazonExtensions.cs" />

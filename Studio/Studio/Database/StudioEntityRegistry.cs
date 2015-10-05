@@ -398,6 +398,8 @@ namespace StockSharp.Studio.Database
 				}
 				else
 					base.Add(item);
+
+				NewSecurity.SafeInvoke(item);
 			}
 
 			public override bool Remove(Security item)
@@ -427,6 +429,8 @@ namespace StockSharp.Studio.Database
 				else
 					return base.Contains(item);
 			}
+
+			public event Action<Security> NewSecurity;
 
 			public override void Save(Security item)
 			{

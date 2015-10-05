@@ -5,6 +5,7 @@ namespace StockSharp.Xaml
 
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 
 	/// <summary>

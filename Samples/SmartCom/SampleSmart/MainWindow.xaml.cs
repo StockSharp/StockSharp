@@ -11,6 +11,7 @@ namespace SampleSmart
 
 	using MoreLinq;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.SmartCom;
 	using StockSharp.SmartCom.Native;

@@ -5,6 +5,7 @@
 	using System.Linq;
 
 	using Ecng.Collections;
+	using Ecng.Common;
 
 	using StockSharp.Algo.History.Russian;
 	using StockSharp.Algo.Storages;
@@ -50,6 +51,8 @@
 			return _cacheByMfdId.SyncGet(d => d.FirstOrDefault(p => p.Value == security).Key);
 		}
 
+		public event Action<Security> NewSecurity;
+
 		void ISecurityStorage.Save(Security security)
 		{
 			_entityRegistry.Securities.Save(security);
@@ -69,7 +72,13 @@
 			var mfdId = (string)security.ExtensionInfo.TryGetValue(MfdHistorySource.SecurityIdField);
 
 			if (mfdId != null)
-				_cacheByMfdId.SafeAdd(mfdId, key => security);
+			{
+				bool isNew;
+				_cacheByMfdId.SafeAdd(mfdId, key => security, out isNew);
+
+				if (isNew)
+					NewSecurity.SafeInvoke(security);
+			}
 		}
 
 		void ISecurityStorage.Delete(Security security)

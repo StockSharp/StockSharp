@@ -12,6 +12,7 @@ namespace SampleITCH
 
 	using Ookii.Dialogs.Wpf;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.ITCH;
 	using StockSharp.Localization;

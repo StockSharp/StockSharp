@@ -1,4 +1,4 @@
-namespace StockSharp.BusinessEntities
+namespace StockSharp.Algo
 {
 	using System;
 	using System.Collections.Generic;
@@ -11,6 +11,9 @@ namespace StockSharp.BusinessEntities
 	using Gma.DataStructures.StringSearch;
 
 	using MoreLinq;
+
+	using StockSharp.Algo.Storages;
+	using StockSharp.BusinessEntities;
 
 	/// <summary>
 	/// Interface describing a list of items.
@@ -28,6 +31,7 @@ namespace StockSharp.BusinessEntities
 		{
 		}
 
+		private ISecurityStorage _storage;
 		private readonly ITrie<Security> _trie = new SuffixTrie<Security>(1);
 
 		/// <summary>
@@ -59,17 +63,17 @@ namespace StockSharp.BusinessEntities
 				if (_connector == null)
 					return;
 
-				if (!OnlyNewSecurities)
-					OnNewSecurities(_connector.Securities);
+				//if (!OnlyNewSecurities)
+				OnNewSecurities(_connector.Securities);
 
 				_connector.NewSecurities += OnNewSecurities;
 			}
 		}
 
-		/// <summary>
-		/// To get only new instruments from the trading system.
-		/// </summary>
-		public bool OnlyNewSecurities { get; set; }
+		///// <summary>
+		///// To get only new instruments from the trading system.
+		///// </summary>
+		//public bool OnlyNewSecurities { get; set; }
 
 		/// <summary>
 		/// Filter for instruments exclusion.
@@ -138,16 +142,32 @@ namespace StockSharp.BusinessEntities
 		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 		/// </summary>
 		/// <param name="connector">Connection to the trading system.</param>
-		/// <param name="onlyNewSecurities">To get only new instruments from the trading system.</param>
 		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
-		public FilterableSecurityProvider(IConnector connector, bool onlyNewSecurities = false, Func<Security, bool> excludeFilter = null)
+		public FilterableSecurityProvider(IConnector connector, Func<Security, bool> excludeFilter = null)
 			: this(excludeFilter)
 		{
 			if (connector == null)
 				throw new ArgumentNullException("connector");
 
-			OnlyNewSecurities = onlyNewSecurities;
+			//OnlyNewSecurities = onlyNewSecurities;
 			Connector = connector;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
+		/// </summary>
+		/// <param name="storage">Security meta info storage.</param>
+		/// <param name="excludeFilter">Filter for instruments exclusion.</param>
+		public FilterableSecurityProvider(ISecurityStorage storage, Func<Security, bool> excludeFilter = null)
+			: this(excludeFilter)
+		{
+			if (storage == null)
+				throw new ArgumentNullException("storage");
+
+			OnNewSecurities(storage.LookupAll());
+
+			_storage = storage;
+			_storage.NewSecurity += OnNewSecurity;
 		}
 
 		/// <summary>
@@ -198,6 +218,11 @@ namespace StockSharp.BusinessEntities
 			Securities.AddRange(securities);
 		}
 
+		private void OnNewSecurity(Security security)
+		{
+			Securities.Add(security);
+		}
+
 		private void AddSuffix(Security security)
 		{
 			lock (_trie)
@@ -233,6 +258,12 @@ namespace StockSharp.BusinessEntities
 		protected override void DisposeManaged()
 		{
 			Connector = null;
+
+			if (_storage != null)
+			{
+				_storage.NewSecurity -= OnNewSecurity;
+				_storage = null;
+			}
 
 			base.DisposeManaged();
 		}

@@ -13,6 +13,7 @@ namespace SampleAlfaCandles
 	using StockSharp.Algo.Candles;
 	using StockSharp.BusinessEntities;
 	using StockSharp.AlfaDirect;
+	using StockSharp.Algo;
 	using StockSharp.Logging;
 	using StockSharp.Localization;
 

@@ -10,6 +10,7 @@ namespace StockSharp.Studio.Controls
 	using Ecng.Configuration;
 	using Ecng.Xaml;
 
+	using StockSharp.Algo;
 	using StockSharp.BusinessEntities;
 	using StockSharp.Studio.Core.Commands;
 	using StockSharp.Localization;
