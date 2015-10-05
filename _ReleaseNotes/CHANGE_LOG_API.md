@@ -1,6 +1,7 @@
 StockSharp API Change log
 ========================
 ###current:
+* (bug) BasketMessageAdapter. Save/Load fix.
 * (feature) ConnectorWindow.
 * (bug) Transaq fix.
 * (feature) Backtesting. Use history source (Finam, Google, Yahoo) directly.

@@ -141,7 +141,7 @@ namespace StockSharp.Algo
 		/// </summary>
 		public override MessageTypes[] SupportedMessages
 		{
-			get { return GetSortedAdapters().SelectMany(a => a.SupportedMessages).ToArray(); }
+			get { return GetSortedAdapters().SelectMany(a => a.SupportedMessages).Distinct().ToArray(); }
 		}
 
 		/// <summary>
@@ -579,15 +579,19 @@ namespace StockSharp.Algo
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Save(SettingsStorage storage)
 		{
-			storage.SetValue("InnerAdapters", _innerAdapters.Cache.Select(a =>
+			lock (InnerAdapters.SyncRoot)
 			{
-				var s = new SettingsStorage();
+				storage.SetValue("InnerAdapters", InnerAdapters.Select(a =>
+				{
+					var s = new SettingsStorage();
 
-				s.SetValue("Priority", _innerAdapters[a]);
-				s.SetValue("Adapter", a.Save());
+					s.SetValue("AdapterType", a.GetType().GetTypeName(false));
+					s.SetValue("AdapterSettings", a.Save());
+					s.SetValue("Priority", InnerAdapters[a]);
 
-				return s;
-			}).ToArray());
+					return s;
+				}).ToArray());
+			}
 
 			base.Save(storage);
 		}
@@ -598,33 +602,19 @@ namespace StockSharp.Algo
 		/// <param name="storage">Хранилище настроек.</param>
 		public override void Load(SettingsStorage storage)
 		{
-			var index = 0;
-
-			foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>("InnerAdapters"))
+			lock (InnerAdapters.SyncRoot)
 			{
-				var adapter = _innerAdapters.Cache[index++];
+				InnerAdapters.Clear();
 
-				_innerAdapters[adapter] = s.GetValue<int>("Priority");
-				adapter.Load(s.GetValue<SettingsStorage>("Adapter"));
+				foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>("InnerAdapters"))
+				{
+					var adapter = s.GetValue<Type>("AdapterType").CreateInstance<IMessageAdapter>(TransactionIdGenerator);
+					adapter.Load(s.GetValue<SettingsStorage>("AdapterSettings"));
+					InnerAdapters[adapter] = s.GetValue<int>("Priority");
+				}	
 			}
 
 			base.Load(storage);
-		}
-
-		/// <summary>
-		/// Create a copy of <see cref="MessageAdapter"/>.
-		/// </summary>
-		/// <returns>Copy.</returns>
-		public override IMessageChannel Clone()
-		{
-			var clone = new BasketMessageAdapter(TransactionIdGenerator);
-
-			foreach (var adapter in InnerAdapters)
-			{
-				clone.InnerAdapters[adapter] = InnerAdapters[adapter];
-			}
-
-			return clone;
 		}
 
 		/// <summary>
