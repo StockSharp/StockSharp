@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Terminal.SecuritiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xaml="http://schemas.stocksharp.com/xaml"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+
+        
+        <ContextMenu x:Key="CntxMenu" >
+            <MenuItem Header="{x:Static loc:LocalizedStrings.Str3200}" 
+                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.NewChartCommand}" 
+                      CommandParameter="{Binding}" />
+            <MenuItem Header="{x:Static loc:LocalizedStrings.MarketDepth}" 
+                      Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.NewMarketDepthCommand}" 
+                      CommandParameter="{Binding}" />
+        </ContextMenu>
+
+        <Style x:Key="DataGridRowStyle"  TargetType="DataGridRow" >
+            <Setter Property="ContextMenu" Value="{StaticResource CntxMenu}" />
+        </Style>
+
+    </UserControl.Resources>
+    
+    <Grid>
+        <xaml:SecurityGrid x:Name="SecurityGrid" 
+                           ItemsSource="{Binding Securities}" 
+                           RowStyle="{StaticResource DataGridRowStyle}"/>
+    </Grid>
+</UserControl>

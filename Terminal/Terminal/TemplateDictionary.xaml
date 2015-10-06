@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Terminal">
+
+    <DataTemplate DataType="{x:Type local:MainViewModel}">
+        <local:MainView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:SecuritiesViewModel}">
+        <local:SecuritiesView />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type local:ChartViewModel}">
+        <local:ChartView Security="{Binding Security}" />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type local:MarketDepthViewModel}">
+        <local:MarketDepthView Security="{Binding Security}" />
+    </DataTemplate>
+
+</ResourceDictionary>
