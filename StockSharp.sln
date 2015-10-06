@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hydra", "Hydra", "{D17343AD-2FD2-4CC4-B840-B071DE0AAD5B}"
 EndProject
@@ -338,6 +338,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Anywhere", "Anywhere", "{AC4F6F45-E6A6-43F6-AB9F-843486A864CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnywherePublic", "Anywhere\Anywhere\AnywherePublic.csproj", "{BDDB57FB-3404-48C8-B730-94B0957BBBD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Terminal", "Terminal", "{9828D9EF-0EFE-4315-9EFB-25171FF51D0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terminal", "Terminal\Terminal\Terminal.csproj", "{0B9F6527-5AA5-4ACC-8D31-2797351E7BED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -815,6 +819,10 @@ Global
 		{BDDB57FB-3404-48C8-B730-94B0957BBBD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDDB57FB-3404-48C8-B730-94B0957BBBD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDDB57FB-3404-48C8-B730-94B0957BBBD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B9F6527-5AA5-4ACC-8D31-2797351E7BED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B9F6527-5AA5-4ACC-8D31-2797351E7BED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B9F6527-5AA5-4ACC-8D31-2797351E7BED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B9F6527-5AA5-4ACC-8D31-2797351E7BED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -959,6 +967,7 @@ Global
 		{D6540BA6-8719-4E27-8182-C32026C08B7E} = {7A2867F3-4D22-4F81-A0AA-09246B9B1E34}
 		{B2CA9D8B-DF41-42B9-8A93-4AC90B987297} = {551390E7-41EB-4451-AF9B-49C64439F664}
 		{BDDB57FB-3404-48C8-B730-94B0957BBBD8} = {AC4F6F45-E6A6-43F6-AB9F-843486A864CE}
+		{0B9F6527-5AA5-4ACC-8D31-2797351E7BED} = {9828D9EF-0EFE-4315-9EFB-25171FF51D0E}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Trading.vsmdi

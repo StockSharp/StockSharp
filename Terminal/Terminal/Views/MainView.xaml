@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Terminal.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             xmlns:docking="clr-namespace:ActiproSoftware.Windows.Controls.Docking;assembly=ActiproSoftware.Docking.Wpf"
+             xmlns:local="clr-namespace:Terminal"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="400">
+    <UserControl.Resources>
+
+        <Style x:Key="DockingItemStyle" TargetType="docking:DockingWindow">
+            <Setter Property="ImageSource" Value="{Binding ImageSource}" />
+            <Setter Property="Title" Value="{Binding Title}" />
+        </Style>
+
+        <Style x:Key="ToolItemStyle" TargetType="docking:ToolWindow" BasedOn="{StaticResource DockingItemStyle}" />
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ToolBar>
+            <Button 
+                Command="{Binding ConnectCommand}" >
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="{x:Static loc:LocalizedStrings.Connect}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ConnectionState}" Value="Connected" >
+                                <Setter Property="Content" Value="{x:Static loc:LocalizedStrings.Disconnect}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </ToolBar>
+        <docking:DockSite Grid.Row="1" 
+            local:DockSiteViewModelBehavior.IsManaged="true"
+            ToolItemsSource="{Binding ToolItems}"
+			ToolItemContainerStyle="{StaticResource ToolItemStyle}">
+            <docking:Workspace>
+                <docking:TabbedMdiHost>
+                    <docking:TabbedMdiContainer>
+                    </docking:TabbedMdiContainer>
+                </docking:TabbedMdiHost>
+            </docking:Workspace>
+        </docking:DockSite>
+    </Grid>
+
+
+</UserControl>

@@ -1,0 +1,9 @@
+﻿<Window x:Class="Terminal.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="600" Width="800">
+    <DockPanel LastChildFill="True">
+        <ContentControl Content="{Binding}" />
+    </DockPanel>
+</Window>
+
