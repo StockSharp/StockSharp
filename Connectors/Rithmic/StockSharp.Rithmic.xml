@@ -140,6 +140,11 @@
             Logger address.
             </summary>
         </member>
+        <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.IsValid">
+            <summary>
+            Проверить введенные параметры на валидность.
+            </summary>
+        </member>
         <member name="P:StockSharp.Rithmic.RithmicMessageAdapter.TimeFrames">
             <summary>
             Available time frames.
