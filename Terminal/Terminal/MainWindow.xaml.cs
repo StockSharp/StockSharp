@@ -1,15 +1,11 @@
 ﻿namespace Terminal
 {
-    using System.Windows;
-
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainViewModel();
+            DataContext = new MainViewModel();
         }
-
     }
 }

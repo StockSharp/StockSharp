@@ -208,7 +208,7 @@
         public static bool GetIsManaged(DockSite obj)
         {
             if (null == obj)
-                throw new ArgumentNullException(nameof(obj));
+                throw new ArgumentNullException("obj");
             return (bool)obj.GetValue(DockSiteViewModelBehavior.IsManagedProperty);
         }
 
@@ -222,7 +222,8 @@
         public static void SetIsManaged(DockSite obj, bool value)
         {
             if (null == obj)
-                throw new ArgumentNullException(nameof(obj));
+				throw new ArgumentNullException("obj");
+
             obj.SetValue(DockSiteViewModelBehavior.IsManagedProperty, value);
         }
 

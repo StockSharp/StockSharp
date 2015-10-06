@@ -2,7 +2,6 @@
 {
     using ActiproSoftware.Windows;
 
-    using StockSharp.Quik;
     using StockSharp.Algo;
 
     public class Root
@@ -11,7 +10,7 @@
 
         private Root()
         {
-            Connector = new QuikTrader();
+            Connector = new Connector();
         }
 
         public static Root GetInstance()

@@ -38,6 +38,9 @@
                     </Style>
                 </Button.Style>
             </Button>
+
+			<Button Command="{Binding SettingsCommand}" Content="{x:Static loc:LocalizedStrings.Settings}">
+			</Button>
         </ToolBar>
         <docking:DockSite Grid.Row="1" 
             local:DockSiteViewModelBehavior.IsManaged="true"
