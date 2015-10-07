@@ -73,7 +73,6 @@ namespace StockSharp.Hydra.Controls
 
 					if (wnd.ShowModal(this))
 					{
-						DatabaseConnectionCache.Instance.AddConnection(wnd.Connection);
 						return wnd.Connection;
 					}
 

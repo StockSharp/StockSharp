@@ -1,6 +1,7 @@
 StockSharp Data (Hydra) Change log
 ========================
 ###current
+* (bug) DB export fix.
 * (bug) http://stocksharp.com/forum/yaf_postst5740_oshibka-pri-eksportie-dannykh-v-sqlite.aspx
 
 ###v4.3.11:

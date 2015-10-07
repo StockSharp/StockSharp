@@ -24,7 +24,7 @@ namespace StockSharp.Hydra.Core
 
 		private static readonly DatabaseConnectionPair _newConnection = new NewConnectionPair();
 		private readonly ObservableCollection<DatabaseConnectionPair> _connections = new ObservableCollection<DatabaseConnectionPair>();
-		private int _prevIndex;
+		private int _prevIndex = -1;
  
 		/// <summary>
 		/// Создать <see cref="DatabaseConnectionComboBox"/>.
@@ -37,7 +37,7 @@ namespace StockSharp.Hydra.Core
 			_connections.AddRange(DatabaseConnectionCache.Instance.AllConnections);
 			_connections.Add(_newConnection);
 
-			_prevIndex = SelectedIndex;
+			//_prevIndex = SelectedIndex;
 		}
 
 		private void AddNewConnection(DatabaseConnectionPair connection)

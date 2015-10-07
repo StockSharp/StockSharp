@@ -37,7 +37,7 @@
 				<ColumnDefinition Width="Auto" />
 			</Grid.ColumnDefinitions>
 
-			<Button x:Name="TestBtn" Grid.Column="0" Content="{x:Static loc:LocalizedStrings.XamlStr572}" Width="75" Click="TestBtn_OnClick" />
+			<Button x:Name="TestBtn" Grid.Column="0" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.XamlStr572}" Width="75" Click="TestBtn_OnClick" />
 			<Button x:Name="OkBtn" Grid.Column="4" IsDefault="True" ex:XamlHelper.DialogResult="True" IsEnabled="False" Content="{x:Static loc:LocalizedStrings.OK}" Width="75" />
 		</Grid>
     </Grid>
