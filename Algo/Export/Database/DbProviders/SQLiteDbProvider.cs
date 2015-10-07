@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace StockSharp.Algo.Export.Database.DbProviders
+﻿namespace StockSharp.Algo.Export.Database.DbProviders
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+
 	using Ecng.Common;
 	using Ecng.Xaml.Database;
 
@@ -18,18 +19,52 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 		{
 			using (var trans = Database.BeginBatch())
 			{
-				base.InsertBatch(table, parameters);
+				using (var connection = Database.CreateConnection())
+				{
+					foreach (var value in parameters)
+					{
+						using (var command = CreateCommand(connection, CreateInsertSqlString(table, value), value.ToDictionary(par => "@" + par.Key, par => par.Value)))
+							command.ExecuteNonQuery();
+					}
+				}
+
 				trans.Commit();
 			}
 		}
 
-		protected override string CreatePrimaryKeyString(Table table)
+		private static string CreateInsertSqlString(Table table, IDictionary<string, object> parameters)
 		{
-			var keyColumns = (from column in table.Columns where column.IsPrimaryKey select column).ToArray();
-			//SQLite не поддреживает больше одного primary key - по идее нужно делать триггер...
-			if (!keyColumns.Any() || keyColumns.Count() > 1)
+			var sb = new StringBuilder();
+			sb.Append("INSERT OR IGNORE INTO ");
+			sb.Append(table.Name);
+			sb.Append(" (");
+			foreach (var par in parameters)
+			{
+				sb.Append("[");
+				sb.Append(par.Key);
+				sb.Append("],");
+			}
+			sb.Remove(sb.Length - 1, 1);
+			sb.Append(") VALUES (");
+			foreach (var par in parameters)
+			{
+				sb.Append("@");
+				sb.Append(par.Key);
+				sb.Append(",");
+			}
+			sb.Remove(sb.Length - 1, 1);
+			sb.AppendLine(")");
+			return sb.ToString();
+		}
+
+		protected override string CreatePrimaryKeyString(IEnumerable<ColumnDescription> columns)
+		{
+			var str = columns.Select(c => "[{0}]".Put(c.Name)).Join(",");
+
+			if (str.IsEmpty())
 				return null;
-			return base.CreatePrimaryKeyString(table);
+
+			return "UNIQUE (" + str + ")";
 		}
 
 		protected override string CreateIsTableExistsString(Table table)
@@ -41,6 +76,8 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 		{
 			//anothar:SQLite не поддерживает datetime2, а только datetime то есть округляет до трех знаков в миллисекундах-нам не подходит.
 			if (t == typeof(DateTime))
+				return "TEXT";
+			if (t == typeof(DateTimeOffset))
 				return "TEXT";
 			if (t == typeof(bool))
 				return "boolean";

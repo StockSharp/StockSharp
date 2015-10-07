@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Data;
-
-namespace StockSharp.Algo.Export.Database.DbProviders
+﻿namespace StockSharp.Algo.Export.Database.DbProviders
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Data.SqlClient;
+	using System.Data;
+	using System.Linq;
+	using System.Text;
+
 	using Ecng.Common;
 	using Ecng.Xaml.Database;
 
@@ -19,7 +21,15 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 		{
 			if (CheckUnique)
 			{
-				base.InsertBatch(table, parameters);
+				using (var connection = Database.CreateConnection())
+				{
+					foreach (var value in parameters)
+					{
+						using (var command = CreateCommand(connection, CreateInsertSqlString(table, value), value.ToDictionary(par => "@" + par.Key, par => par.Value)))
+							command.ExecuteNonQuery();
+					}
+				}
+
 				return;
 			}
 
@@ -29,6 +39,34 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 				blkcopy.DestinationTableName = table.Name;
 				blkcopy.WriteToServer(CreateTable(table, parameters));
 			}
+		}
+
+		private static string CreateInsertSqlString(Table table, IDictionary<string, object> parameters)
+		{
+			var sb = new StringBuilder();
+			sb.AppendLine("IF NOT EXISTS (SELECT * FROM {0} WHERE {1})".Put(table.Name, table.Columns.Where(c => c.IsPrimaryKey).Select(c => "{0} = @{0}".Put(c.Name)).Join(" AND ")));
+			sb.AppendLine("BEGIN");
+			sb.Append("INSERT INTO ");
+			sb.Append(table.Name);
+			sb.Append(" (");
+			foreach (var par in parameters)
+			{
+				sb.Append("[");
+				sb.Append(par.Key);
+				sb.Append("],");
+			}
+			sb.Remove(sb.Length - 1, 1);
+			sb.Append(") VALUES (");
+			foreach (var par in parameters)
+			{
+				sb.Append("@");
+				sb.Append(par.Key);
+				sb.Append(",");
+			}
+			sb.Remove(sb.Length - 1, 1);
+			sb.AppendLine(")");
+			sb.Append("END");
+			return sb.ToString();
 		}
 
 		private static DataTable CreateTable(Table table, IEnumerable<IDictionary<string, object>> parameters)
@@ -63,6 +101,16 @@ namespace StockSharp.Algo.Export.Database.DbProviders
 			}
 
 			return result;
+		}
+
+		protected override string CreatePrimaryKeyString(IEnumerable<ColumnDescription> columns)
+		{
+			var str = columns.Select(c => "[{0}]".Put(c.Name)).Join(",");
+
+			if (str.IsEmpty())
+				return null;
+
+			return "PRIMARY KEY (" + str + ")";
 		}
 
 		protected override string GetDbType(Type t, object restriction)
