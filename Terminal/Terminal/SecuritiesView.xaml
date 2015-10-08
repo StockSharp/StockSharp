@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xaml="http://schemas.stocksharp.com/xaml"
              xmlns:loc="clr-namespace:StockSharp.Localization;assembly=StockSharp.Localization"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -27,7 +28,6 @@
     
     <Grid>
         <xaml:SecurityGrid x:Name="SecurityGrid" 
-                           ItemsSource="{Binding Securities}" 
                            RowStyle="{StaticResource DataGridRowStyle}"/>
     </Grid>
 </UserControl>

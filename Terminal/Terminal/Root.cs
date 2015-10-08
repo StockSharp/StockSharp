@@ -1,21 +1,21 @@
 ﻿namespace Terminal
 {
-	using System;
+    using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
-	using ActiproSoftware.Windows;
+    using ActiproSoftware.Windows;
 
-	using Ecng.Collections;
+    using Ecng.Collections;
 	using Ecng.Configuration;
 
 	using StockSharp.Algo;
     using StockSharp.Algo.Storages;
 	using StockSharp.BusinessEntities;
 
-	public class Root
+    class Root
     {
-		private class StorageEntityFactory : EntityFactory
+        private class StorageEntityFactory : EntityFactory
 		{
 			private readonly ISecurityStorage _securityStorage;
 			private readonly Dictionary<string, Security> _securities;
@@ -44,10 +44,10 @@
 
         private Root()
         {
-			var storageRegistry = new StorageRegistry { DefaultDrive = new LocalMarketDataDrive("Data") };
-			var securityStorage = storageRegistry.GetSecurityStorage();
-			Connector = new Connector { EntityFactory = new StorageEntityFactory(securityStorage) };
-			ConfigManager.RegisterService(new FilterableSecurityProvider(securityStorage));
+            var storageRegistry = new StorageRegistry { DefaultDrive = new LocalMarketDataDrive("Data") };
+            var securityStorage = storageRegistry.GetSecurityStorage();
+            Connector = new Connector { EntityFactory = new StorageEntityFactory(securityStorage) };
+            ConfigManager.RegisterService(new FilterableSecurityProvider(securityStorage));
         }
 
         public static Root GetInstance()
@@ -63,17 +63,7 @@
         }
 
         public Connector Connector { private set; get; }
-
-        private DeferrableObservableCollection<ToolItemViewModel> _toolItems;
-        public DeferrableObservableCollection<ToolItemViewModel> ToolItems
-        {
-            get
-            {
-                if (_toolItems == null) ToolItems = new DeferrableObservableCollection<ToolItemViewModel>();
-                return _toolItems;
-            }
-            set { _toolItems = value; }
-        }
+        
 
     }
 }
