@@ -24,6 +24,9 @@
             <Button x:Name="ConnectButton" 
 					Content="{x:Static loc:LocalizedStrings.Connect}"
 					Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.ConnectCommand}" />
+            <Button Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.SettingsCommand}" 
+                    Content="{x:Static loc:LocalizedStrings.Settings}">
+                </Button>
         </ToolBar>
 
         <docking:DockSite x:Name="DockSite" Grid.Row="1" 
