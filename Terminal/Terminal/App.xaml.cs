@@ -25,9 +25,8 @@
 
             try
             {
-                Root.GetInstance();
                 var mnd = new MainWindow();
-                this.MainWindow = mnd;
+                MainWindow = mnd;
                 this.MainWindow.Show();
             }
             catch (Exception ex)

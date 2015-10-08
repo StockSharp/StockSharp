@@ -129,25 +129,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Common\DockSiteViewModelBehavior.cs" />
-    <Compile Include="Common\Helpers.cs" />
-    <Compile Include="Common\Root.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="ViewModels\ChartViewModel.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\MarketDepthViewModel.cs" />
-    <Compile Include="ViewModels\SecuritiesViewModel.cs" />
-    <Compile Include="ViewModels\ToolItemViewModel.cs" />
-    <Compile Include="Views\ChartView.xaml.cs">
-      <DependentUpon>ChartView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MarketDepthView.xaml.cs">
-      <DependentUpon>MarketDepthView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SecuritiesView.xaml.cs">
+    <Compile Include="Helpers.cs" />
+    <Compile Include="SecuritiesView.xaml.cs">
       <DependentUpon>SecuritiesView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -162,23 +145,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TemplateDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ChartView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MarketDepthView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SecuritiesView.xaml">
+    <Page Include="SecuritiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
