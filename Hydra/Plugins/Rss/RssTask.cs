@@ -73,7 +73,7 @@ namespace StockSharp.Hydra.Rss
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{
-			get { return Enumerable.Empty<Type>(); }
+			get { return new[] { typeof(NewsMessage) }; }
 		}
 
 		public override HydraTaskSettings Settings

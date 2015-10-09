@@ -222,7 +222,7 @@ namespace StockSharp.Hydra
 							info = taskSecurity == null ? null : taskSecurity.ExecutionInfo;
 							allInfo = allSecurity == null ? null : allSecurity.ExecutionInfo;
 
-							LoadedExecutions += count;
+							LoadedTransactions += count;
 							break;
 						}
 						default:

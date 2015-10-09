@@ -190,6 +190,11 @@ namespace StockSharp.Hydra.Panes
 				get { return GetIsEnabled(typeof(ExecutionMessage)); }
 			}
 
+			public bool IsNewsEnabled
+			{
+				get { return GetIsEnabled(typeof(NewsMessage)); }
+			}
+
 			public bool IsInvalid
 			{
 				get
@@ -200,7 +205,8 @@ namespace StockSharp.Hydra.Panes
 						!IsLevel1Enabled &&
 						!IsOrderLogEnabled &&
 						!IsCandleEnabled &&
-						!IsExecutionEnabled;
+						!IsExecutionEnabled &&
+						!IsNewsEnabled;
 				}
 			}
 		}
@@ -228,7 +234,8 @@ namespace StockSharp.Hydra.Panes
 			AddDataType<MarketDepth>(Depths);
 			AddDataType<Level1ChangeMessage>(Level1Changes);
 			AddDataType<OrderLogItem>(OrderLog);
-			AddDataType<ExecutionMessage>(Executions);
+			AddDataType<ExecutionMessage>(Transactions);
+			AddDataType<NewsMessage>(News);
 		}
 
 		private void AddDataType<T>(CheckBox checkBox)

@@ -30,6 +30,7 @@ namespace StockSharp.Hydra.Windows
 			{ typeof(Level1ChangeMessage), LocalizedStrings.Level1 },
 			{ typeof(Candle), LocalizedStrings.Candles },
 			{ typeof(ExecutionMessage), LocalizedStrings.Transactions },
+			{ typeof(NewsMessage), LocalizedStrings.News },
 		};
 
 		public TaskSettingsWindow()
