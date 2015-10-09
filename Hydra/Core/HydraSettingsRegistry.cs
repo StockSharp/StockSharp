@@ -154,7 +154,7 @@ namespace StockSharp.Hydra.Core
 		/// Реестр шаблонов для экспорта в формат txt.
 		/// </summary>
 		[Category("CSV")]
-		[DisplayName(LocalizedStrings.TemplateKey)]
+		[DisplayNameLoc(LocalizedStrings.TemplateKey)]
 		[DescriptionLoc(LocalizedStrings.TemplateKey, true)]
 		[ExpandableObject]
 		public TemplateTxtRegistry TemplateTxtRegistry

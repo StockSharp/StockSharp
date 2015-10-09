@@ -152,7 +152,7 @@ namespace StockSharp.Hydra.Tools
 			}
 
 			[Category("CSV")]
-			[DisplayName(LocalizedStrings.TemplateKey)]
+			[DisplayNameLoc(LocalizedStrings.TemplateKey)]
 			[DescriptionLoc(LocalizedStrings.TemplateKey, true)]
 			[ExpandableObject]
 			public TemplateTxtRegistry TemplateTxtRegistry
@@ -162,7 +162,7 @@ namespace StockSharp.Hydra.Tools
 			}
 
 			[Category("CSV")]
-			[DisplayName(LocalizedStrings.Str215Key)]
+			[DisplayNameLoc(LocalizedStrings.Str215Key)]
 			[DescriptionLoc(LocalizedStrings.CsvHeaderKey, true)]
 			[ExpandableObject]
 			public string Header

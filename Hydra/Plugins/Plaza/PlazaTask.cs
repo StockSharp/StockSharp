@@ -83,7 +83,7 @@ namespace StockSharp.Hydra.Plaza
 			}
 
 			[CategoryLoc(_sourceName)]
-			[DisplayName("CGate")]
+			[DisplayNameLoc(LocalizedStrings.UseCGateKey)]
 			[DescriptionLoc(LocalizedStrings.Str2798Key)]
 			[PropertyOrder(4)]
 			public bool IsCGate
