@@ -25,7 +25,7 @@ namespace StockSharp.Hydra.Windows
 		private readonly Dictionary<Type, string> _dataTypes = new Dictionary<Type, string>
 		{
 			{ typeof(Trade), LocalizedStrings.Str985 },
-			{ typeof(MarketDepth), LocalizedStrings.MarketDepths },
+			{ typeof(QuoteChangeMessage), LocalizedStrings.MarketDepths },
 			{ typeof(OrderLogItem), LocalizedStrings.OrderLog },
 			{ typeof(Level1ChangeMessage), LocalizedStrings.Level1 },
 			{ typeof(Candle), LocalizedStrings.Candles },

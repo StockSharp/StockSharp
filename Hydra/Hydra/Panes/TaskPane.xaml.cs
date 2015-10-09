@@ -167,7 +167,7 @@ namespace StockSharp.Hydra.Panes
 
 			public bool IsDepthEnabled
 			{
-				get { return GetIsEnabled(typeof(MarketDepth)); }
+				get { return GetIsEnabled(typeof(QuoteChangeMessage)); }
 			}
 
 			public bool IsLevel1Enabled
@@ -231,7 +231,7 @@ namespace StockSharp.Hydra.Panes
 			});
 
 			AddDataType<Trade>(Trades);
-			AddDataType<MarketDepth>(Depths);
+			AddDataType<QuoteChangeMessage>(Depths);
 			AddDataType<Level1ChangeMessage>(Level1Changes);
 			AddDataType<OrderLogItem>(OrderLog);
 			AddDataType<ExecutionMessage>(Transactions);

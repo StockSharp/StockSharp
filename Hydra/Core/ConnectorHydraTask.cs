@@ -33,7 +33,7 @@
 		/// </summary>
 		protected ConnectorHydraTask()
 		{
-			_supportedMarketDataTypes = new[] { typeof(MarketDepth), typeof(Trade), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
+			_supportedMarketDataTypes = new[] { typeof(QuoteChangeMessage), typeof(Trade), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
 
 			if (_isExternalCandleSource)
 				_supportedMarketDataTypes = _supportedMarketDataTypes.Concat(typeof(Candle)).ToArray();
@@ -133,7 +133,7 @@
 
 			Connector.Connector.RegisterSecurity(security);
 
-			if (CheckSecurity<MarketDepth>(security))
+			if (CheckSecurity<QuoteChangeMessage>(security))
 				Connector.Connector.RegisterMarketDepth(security);
 
 			if (CheckSecurity<Trade>(security))

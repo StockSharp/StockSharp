@@ -156,7 +156,7 @@ namespace StockSharp.Hydra.Windows
 
 			Task.Factory.StartNew(() =>
 			{
-				var dataTypes = new[] { typeof(Trade), typeof(MarketDepth), typeof(Level1ChangeMessage), typeof(OrderLogItem), typeof(CandleMessage) };
+				var dataTypes = new[] { typeof(Trade), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage), typeof(OrderLogItem), typeof(CandleMessage) };
 				var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 
 				var iterCount = drives.Length * securities.Length * dataTypes.Length * formats.Length;

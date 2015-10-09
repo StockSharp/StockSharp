@@ -137,7 +137,7 @@ namespace StockSharp.Hydra.Plaza
 		private int _changesCount;
 		private PlazaSettings _settings;
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Trade), typeof(MarketDepth), typeof(OrderLogItem), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
+		private readonly Type[] _supportedMarketDataTypes = { typeof(Trade), typeof(QuoteChangeMessage), typeof(OrderLogItem), typeof(Level1ChangeMessage), typeof(ExecutionMessage) };
 
 		/// <summary>
 		/// Поддерживаемые маркет-данные.

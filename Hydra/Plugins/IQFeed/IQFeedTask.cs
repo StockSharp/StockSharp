@@ -180,7 +180,7 @@ namespace StockSharp.Hydra.IQFeed
 			}).ToArray();
 		}
 
-		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(MarketDepth), typeof(Level1ChangeMessage) };
+		private readonly Type[] _supportedMarketDataTypes = { typeof(Candle), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage) };
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{

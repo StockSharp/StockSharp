@@ -166,7 +166,6 @@ namespace StockSharp.Hydra.Tools
 			[Category("CSV")]
 			[DisplayNameLoc(LocalizedStrings.Str215Key)]
 			[DescriptionLoc(LocalizedStrings.CsvHeaderKey, true)]
-			[ExpandableObject]
 			public string Header
 			{
 				get { return (string)ExtensionInfo["Header"]; }
@@ -191,7 +190,7 @@ namespace StockSharp.Hydra.Tools
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{
-			get { return new[] { typeof(Trade), typeof(MarketDepth), typeof(Level1ChangeMessage), typeof(OrderLogItem), typeof(ExecutionMessage), typeof(NewsMessage), typeof(Candle) }; }
+			get { return new[] { typeof(Trade), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage), typeof(OrderLogItem), typeof(ExecutionMessage), typeof(NewsMessage), typeof(Candle) }; }
 		}
 
 		protected override void ApplySettings(HydraTaskSettings settings)

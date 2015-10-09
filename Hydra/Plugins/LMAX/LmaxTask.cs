@@ -9,7 +9,6 @@ namespace StockSharp.Hydra.LMAX
 	using Ecng.ComponentModel;
 
 	using StockSharp.Algo.Candles;
-	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.LMAX;
 	using StockSharp.Messages;
@@ -95,7 +94,7 @@ namespace StockSharp.Hydra.LMAX
 
 		public override IEnumerable<Type> SupportedMarketDataTypes
 		{
-			get { return new[] { typeof(Candle), typeof(MarketDepth), typeof(Level1ChangeMessage), typeof(ExecutionMessage) }; }
+			get { return new[] { typeof(Candle), typeof(QuoteChangeMessage), typeof(Level1ChangeMessage), typeof(ExecutionMessage) }; }
 		}
 
 		private readonly IEnumerable<CandleSeries> _supportedCandleSeries;

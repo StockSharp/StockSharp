@@ -156,7 +156,7 @@ namespace StockSharp.Hydra.HydraServer
 		private readonly Type[] _supportedMarketDataTypes =
 		{
 			typeof(Trade),
-			typeof(MarketDepth),
+			typeof(QuoteChangeMessage),
 			typeof(OrderLogItem),
 			typeof(Level1ChangeMessage),
 			typeof(Candle)
@@ -287,7 +287,6 @@ namespace StockSharp.Hydra.HydraServer
 						stream.Position = 0;
 						info.Read(stream);
 
-						// TODO Remove after few releases
 						if (dataType == typeof(Trade))
 						{
 							dataType = typeof(ExecutionMessage);
@@ -297,10 +296,6 @@ namespace StockSharp.Hydra.HydraServer
 						{
 							dataType = typeof(ExecutionMessage);
 							arg = ExecutionTypes.OrderLog;
-						}
-						else if (dataType == typeof(MarketDepth))
-						{
-							dataType = typeof(QuoteChangeMessage);
 						}
 						else if (dataType.IsSubclassOf(typeof(Candle)))
 						{
