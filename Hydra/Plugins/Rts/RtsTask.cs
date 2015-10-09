@@ -174,6 +174,11 @@ namespace StockSharp.Hydra.Rts
 			get { return _settings; }
 		}
 
+		public override IEnumerable<Type> SupportedMarketDataTypes
+		{
+			get { return new[] { typeof(Trade) }; }
+		}
+
 		protected override TimeSpan OnProcess()
 		{
 			var source = new RtsHistorySource

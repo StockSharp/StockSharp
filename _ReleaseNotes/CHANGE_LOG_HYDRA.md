@@ -1,5 +1,9 @@
 StockSharp Data (Hydra) Change log
 ========================
+###current
+* (bug) Hydra. Export task fix.
+* (feature) Hydra. Show news counter.
+
 ###v4.3.13
 * (bug) DB export fix.
 * (bug) http://stocksharp.com/forum/yaf_postst5740_oshibka-pri-eksportie-dannykh-v-sqlite.aspx

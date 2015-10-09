@@ -141,6 +141,11 @@
 			}
 		}
 
+		public override IEnumerable<Type> SupportedMarketDataTypes
+		{
+			get { return Enumerable.Empty<Type>(); }
+		}
+
 		protected override TimeSpan OnProcess()
 		{
 			IBackupService service;

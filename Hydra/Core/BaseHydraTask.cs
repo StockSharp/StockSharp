@@ -364,10 +364,7 @@ namespace StockSharp.Hydra.Core
 		/// <summary>
 		/// Поддерживаемые маркет-данные.
 		/// </summary>
-		public virtual IEnumerable<Type> SupportedMarketDataTypes
-		{
-			get { return new[] { typeof(Trade) }; }
-		}
+		public abstract IEnumerable<Type> SupportedMarketDataTypes { get; }
 
 		/// <summary>
 		/// Поддерживаемые серии свечек.
