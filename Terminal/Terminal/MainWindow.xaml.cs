@@ -1,121 +1,162 @@
-﻿namespace Terminal
+﻿namespace StockSharp.Terminal
 {
-    using System;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.IO;
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Linq;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.IO;
 
-    using ActiproSoftware.Windows;
-    using ActiproSoftware.Windows.Controls.Docking;
+	using ActiproSoftware.Windows.Controls.Docking;
+	using ActiproSoftware.Windows.Controls.Docking.Serialization;
 
-    using Ecng.Xaml;
-    using Ecng.Serialization;
+	using Ecng.Collections;
+	using Ecng.Configuration;
+	using Ecng.Xaml;
+	using Ecng.Serialization;
 
-    using MoreLinq;
+	using StockSharp.BusinessEntities;
+	using StockSharp.Localization;
+	using StockSharp.Messages;
+	using StockSharp.Quik;
+	using StockSharp.Xaml;
+	using StockSharp.Xaml.Charting;
+	using StockSharp.AlfaDirect;
+	using StockSharp.Algo;
+	using StockSharp.Algo.Storages;
+	using StockSharp.BarChart;
+	using StockSharp.BitStamp;
+	using StockSharp.Blackwood;
+	using StockSharp.Btce;
+	using StockSharp.CQG;
+	using StockSharp.ETrade;
+	using StockSharp.Fix;
+	using StockSharp.InteractiveBrokers;
+	using StockSharp.IQFeed;
+	using StockSharp.ITCH;
+	using StockSharp.LMAX;
+	using StockSharp.Micex;
+	using StockSharp.Oanda;
+	using StockSharp.OpenECry;
+	using StockSharp.Plaza;
+	using StockSharp.Quik.Lua;
+	using StockSharp.Rithmic;
+	using StockSharp.Rss;
+	using StockSharp.SmartCom;
+	using StockSharp.Sterling;
+	using StockSharp.Transaq;
 
-    using StockSharp.Algo;
-    using StockSharp.BusinessEntities;
-    using StockSharp.Localization;
-    using StockSharp.Messages;
-    using StockSharp.Quik;
-    using StockSharp.Xaml;
-    using StockSharp.Xaml.Charting;
- 
-    using StockSharp.AlfaDirect;
-    using StockSharp.BarChart;
-    using StockSharp.BitStamp;
-    using StockSharp.Blackwood;
-    using StockSharp.Btce;
-    using StockSharp.CQG;
-    using StockSharp.ETrade;
-    using StockSharp.Fix;
-    using StockSharp.InteractiveBrokers;
-    using StockSharp.IQFeed;
-    using StockSharp.ITCH;
-    using StockSharp.LMAX;
-    using StockSharp.Micex;
-    using StockSharp.Oanda;
-    using StockSharp.OpenECry;
-    using StockSharp.Plaza;
-    using StockSharp.Quik.Lua;
-    using StockSharp.Rithmic;
-    using StockSharp.Rss;
-    using StockSharp.SmartCom;
-    using StockSharp.Sterling;
-    using StockSharp.Transaq;
+	public partial class MainWindow
+	{
+		private class StorageEntityFactory : Algo.EntityFactory
+		{
+			private readonly ISecurityStorage _securityStorage;
+			private readonly Dictionary<string, Security> _securities;
 
+			public StorageEntityFactory(ISecurityStorage securityStorage)
+			{
+				if (securityStorage == null)
+					throw new ArgumentNullException("securityStorage");
 
-    public partial class MainWindow : Window, INotifyPropertyChanged
-    {
+				_securityStorage = securityStorage;
+				_securities = _securityStorage.LookupAll().ToDictionary(s => s.Id, s => s, StringComparer.InvariantCultureIgnoreCase);
+			}
 
-        private readonly Root _root;
+			public override Security CreateSecurity(string id)
+			{
+				return _securities.SafeAdd(id, key =>
+				{
+					var s = base.CreateSecurity(id);
+					_securityStorage.Save(s);
+					return s;
+				});
+			}
+		}
 
-        private readonly SecuritiesView _secView;
+		private readonly SecuritiesView _secView;
+		private int _lastChartWindowId;
+		private int _lastDepthWindowId;
+		private readonly SynchronizedDictionary<Security, MarketDepthControl> _depths = new SynchronizedDictionary<Security, MarketDepthControl>();
+		private const string _settingsFolder = "Settings";
+		private readonly string _connectionFile;
+		private readonly string _layoutFile;
+		private bool _isLoaded;
 
-        private int _lastChartWindowId;
+		public MainWindow()
+		{
+			InitializeComponent();
 
-        private int _lastDepthWindowId;
+			ConnectCommand = new DelegateCommand(Connect, CanConnect);
+			SettingsCommand = new DelegateCommand(Settings, CanSettings);
 
-        private DeferrableObservableCollection<DockingWindow> _toolItems;
+			Directory.CreateDirectory(_settingsFolder);
 
-        public MainWindow()
-        {
-            InitializeComponent();
+			var storageRegistry = new StorageRegistry { DefaultDrive = new LocalMarketDataDrive(_settingsFolder) };
+			var securityStorage = storageRegistry.GetSecurityStorage();
+			
+			Connector = new Connector { EntityFactory = new StorageEntityFactory(securityStorage) };
+			ConfigManager.RegisterService(new FilterableSecurityProvider(securityStorage));
+			ConfigManager.RegisterService<IConnector>(Connector);
+			ConfigManager.RegisterService<IMarketDataProvider>(Connector);
 
-            _root = Root.GetInstance();
+			_connectionFile = Path.Combine(_settingsFolder, "connection.xml");
+			_layoutFile = Path.Combine(_settingsFolder, "layout.xml");
 
-            _secView = new SecuritiesView(this) { SecurityGrid = { MarketDataProvider = _root.Connector } };
-            ToolItems.Add(CreateToolWindow(LocalizedStrings.Securities, "SecuritiesWindow", _secView));
+			if (File.Exists(_connectionFile))
+				Connector.Adapter.Load(new XmlSerializer<SettingsStorage>().Deserialize(_connectionFile));
 
-            ConnectCommand = new DelegateCommand(Connect, CanConnect);
-            SettingsCommand = new DelegateCommand(Settings, CanSettings);
+			_secView = new SecuritiesView(this) { SecurityGrid = { MarketDataProvider = Connector } };
 
-            if (File.Exists("connection.xml"))
-                _root.Connector.Adapter.Load(new XmlSerializer<SettingsStorage>().Deserialize("connection.xml"));
+			Connector.NewSecurities += _secView.SecurityGrid.Securities.AddRange;
 
-        }
+			Connector.MarketDepthsChanged += depths =>
+			{
+				foreach (var depth in depths)
+				{
+					var ctrl = _depths.TryGetValue(depth.Security);
 
-        public DeferrableObservableCollection<DockingWindow> ToolItems
-        {
-            get
-            {
-                if (_toolItems == null)
-                    ToolItems = new DeferrableObservableCollection<DockingWindow>();
-                return _toolItems;
-            }
-            set { _toolItems = value; }
-        }
+					if (ctrl != null)
+						ctrl.UpdateDepth(depth);
+				}
+			};
+		}
 
-        public DelegateCommand ConnectCommand { private set; get; }
+		public Connector Connector { private set; get; }
 
-        private void Connect(object obj)
-        {
-            switch (_root.Connector.ConnectionState)
-            {
-                case ConnectionStates.Disconnected:
-                    Connect();
-                    break;
-                case ConnectionStates.Connected:
-                    _root.Connector.Disconnect();
-                    break;
-                default:
-                    break;
-            }
-        }
+		private readonly ObservableCollection<DockingWindow> _toolItems = new ObservableCollection<DockingWindow>();
 
-        private bool CanConnect(object obj)
-        {
-            return true;
-        }
+		public ObservableCollection<DockingWindow> ToolItems
+		{
+			get { return _toolItems; }
+		}
 
-        public DelegateCommand SettingsCommand { private set; get; }
-     
-        private void Settings(object obj)
-	    {
-		    var wnd = new ConnectorWindow();
+		public DelegateCommand ConnectCommand { private set; get; }
+
+		private void Connect(object obj)
+		{
+			switch (Connector.ConnectionState)
+			{
+				case ConnectionStates.Failed:
+				case ConnectionStates.Disconnected:
+					Connect();
+					break;
+				case ConnectionStates.Connected:
+					Connector.Disconnect();
+					break;
+			}
+		}
+
+		private bool CanConnect(object obj)
+		{
+			return Connector.Adapter.InnerAdapters.SortedAdapters.Any();
+		}
+
+		public DelegateCommand SettingsCommand { private set; get; }
+
+		private void Settings(object obj)
+		{
+			var wnd = new ConnectorWindow();
 
 			AddConnectorInfo(wnd, typeof(AlfaDirectMessageAdapter));
 			AddConnectorInfo(wnd, typeof(BarChartMessageAdapter));
@@ -142,130 +183,134 @@
 			AddConnectorInfo(wnd, typeof(SmartComMessageAdapter));
 			AddConnectorInfo(wnd, typeof(SterlingMessageAdapter));
 			AddConnectorInfo(wnd, typeof(TransaqMessageAdapter));
-			wnd.Adapter = _root.Connector.Adapter;
 
-			// TODO
-		    if (wnd.ShowModal())
-		    {
-			    _root.Connector.Adapter.Load(wnd.Adapter.Save());
-				new XmlSerializer<SettingsStorage>().Serialize(_root.Connector.Adapter.Save(), "connection.xml");
-		    }
-	    }
+			wnd.Adapter = Connector.Adapter;
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			Connector.Adapter.Load(wnd.Adapter.Save());
+			new XmlSerializer<SettingsStorage>().Serialize(Connector.Adapter.Save(), _connectionFile);
+		}
 
 		private bool CanSettings(object obj)
-	    {
-		    return true;
-	    }
-        private static void AddConnectorInfo(ConnectorWindow wnd, Type adapterType)
-        {
-            wnd.ConnectorsInfo.Add(new ConnectorInfo(adapterType));
-        }
+		{
+			return true;
+		}
 
-        private void Connect()
-        {
-            _root.Connector.Connected += () => ConnectButton.Content = LocalizedStrings.Disconnect;
+		private static void AddConnectorInfo(ConnectorWindow wnd, Type adapterType)
+		{
+			wnd.ConnectorsInfo.Add(new ConnectorInfo(adapterType));
+		}
 
-            _root.Connector.Disconnected += () => ConnectButton.Content = LocalizedStrings.Connected;
+		private void Connect()
+		{
+			Connector.Connect();
+		}
 
-            _root.Connector.NewSecurities += securities => _secView.SecurityGrid.Securities.AddRange(securities);
+		private void CreateToolWindow(string title, string name, object content, bool canClose = false)
+		{
+			var wnd = new ToolWindow(DockSite)
+			{
+				Name = name,
+				Title = title,
+				Content = content,
+				CanClose = canClose
+			};
+			ToolItems.Add(wnd);
+			OpenDockingWindow(wnd);
+			//return wnd;
+		}
 
-            _root.Connector.MarketDepthsChanged += depths =>
-            {
-                depths.ForEach(depth =>
-                {
-                    var depthControls = ToolItems.Where(w => w.Content.GetType() == typeof(MarketDepthControl) &&
-                                                             w.Title == depth.Security.Id).Select(w => w.Content);
+		public void CreateNewChart(Security security)
+		{
+			if (security == null)
+				return;
 
-                    this.GuiAsync(() => depthControls.ForEach(dc => ((MarketDepthControl)dc).UpdateDepth(depth)));
-                }
-                    );
-            };
+			_lastChartWindowId++;
 
-            _root.Connector.Connect();
-        }
+			CreateToolWindow(security.Id, "Chart" + _lastChartWindowId, new ChartPanel(), true);
+		}
 
-        public ToolWindow CreateToolWindow(string title, string name, object content)
-        {
-            return new ToolWindow(DockSite)
-            {
-                Name = name,
-                Title = title,
-                Content = content
-            };
-        }
+		public void CreateNewMarketDepth(Security security)
+		{
+			if (security == null)
+				return;
 
-        public void CreateNewChart(Security security)
-        {
-            if (security == null)
-                return;
+			_lastDepthWindowId++;
 
-            _lastChartWindowId++;
+			if (!Connector.RegisteredMarketDepths.Contains(security))
+				Connector.RegisterMarketDepth(security);
 
-            var wnd = CreateToolWindow(security.Id, string.Format("ChartWindow{0}", _lastChartWindowId), new ChartPanel());
+			var depthControl = new MarketDepthControl();
+			depthControl.UpdateFormat(security);
 
-            ToolItems.Add(wnd);
+			_depths.Add(security, depthControl);
 
-            OpenDockingWindow(wnd);
-        }
+			CreateToolWindow(security.Id, "Depth" + _lastDepthWindowId, depthControl, true);
+		}
 
-        public void CreateNewMarketDepth(Security security)
-        {
-            if (security == null)
-                return;
+		private void OpenDockingWindow(DockingWindow dockingWindow)
+		{
+			if (dockingWindow.IsOpen)
+				return;
 
-            _lastDepthWindowId++;
+			var toolWindow = dockingWindow as ToolWindow;
 
-            if (! _root.Connector.RegisteredMarketDepths.Contains(security))
-                 _root.Connector.RegisterMarketDepth(security);
+			if (toolWindow != null)
+				toolWindow.Dock(DockSite, Dock.Top);
 
-            var depthControl = new MarketDepthControl();
-            depthControl.UpdateFormat(security);
+			if (!_isLoaded)
+				return;
 
-            var wnd = CreateToolWindow(security.Id, string.Format("DepthWindow{0}", _lastDepthWindowId), depthControl);
+			LayoutSerializer.SaveToFile(_layoutFile, DockSite);
+		}
 
-            ToolItems.Add(wnd);
+		private void DockSite_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			var dockSite = sender as DockSite;
+			if (dockSite == null)
+				return;
 
-            OpenDockingWindow(wnd);
-        }
+			CreateToolWindow(LocalizedStrings.Securities, "Securities", _secView);
+			CreateToolWindow(LocalizedStrings.Str972, "Positions", new PortfolioGrid());
+			CreateToolWindow(LocalizedStrings.Ticks, "Trades", new TradeGrid());
+			CreateToolWindow(LocalizedStrings.Orders, "Orders", new OrderGrid());
+			CreateToolWindow(LocalizedStrings.MyTrades, "MyTrades", new MyTradeGrid());
+			CreateToolWindow(LocalizedStrings.OrderLog, "OrderLog", new OrderLogGrid());
+			CreateToolWindow(LocalizedStrings.News, "News", new NewsGrid());
 
-        private void OpenDockingWindow(DockingWindow dockingWindow)
-        {
-            if (dockingWindow.IsOpen)
-                return;
+			_isLoaded = true;
+		}
 
-            var toolWindow = dockingWindow as ToolWindow;
+		private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)
+		{
+			ToolItems.Remove(e.Window);
+		}
 
-            if (toolWindow != null)
-                toolWindow.Dock(DockSite, Dock.Top);
-        }
+		protected override void OnClosed(EventArgs e)
+		{
+			LayoutSerializer.SaveToFile(_layoutFile, DockSite);
+			base.OnClosed(e);
+		}
 
-        private void DockSite_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var dockSite = sender as DockSite;
-            if (dockSite == null)
-                return;
-            ToolItems.ForEach(OpenDockingWindow);
-        }
+		private static DockSiteLayoutSerializer LayoutSerializer
+		{
+			get
+			{
+				return new DockSiteLayoutSerializer
+				{
+					SerializationBehavior = DockSiteSerializationBehavior.All,
+					DocumentWindowDeserializationBehavior = DockingWindowDeserializationBehavior.AutoCreate,
+					ToolWindowDeserializationBehavior = DockingWindowDeserializationBehavior.LazyLoad
+				};
+			}
+		}
 
-        private void DockSite_OnWindowClosed(object sender, DockingWindowEventArgs e)
-        {
-            if (e.Window.Content.GetType() != typeof(MarketDepthControl) && e.Window.Content.GetType() != typeof(ChartPanel))
-                return;
-            if (ToolItems.Contains(e.Window))
-                ToolItems.Remove(e.Window);
-        }
-
-
-        #region INotifyPropertyChanged releases
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-    }
+		private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+		{
+			if (File.Exists(_layoutFile))
+				LayoutSerializer.LoadFromFile(_layoutFile, DockSite);
+		}
+	}
 }

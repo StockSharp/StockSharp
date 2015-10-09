@@ -7,7 +7,7 @@
     <ProjectGuid>{0B9F6527-5AA5-4ACC-8D31-2797351E7BED}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Terminal</RootNamespace>
+    <RootNamespace>StockSharp.Terminal</RootNamespace>
     <AssemblyName>Terminal</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -50,9 +50,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>stocksharp.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\References\stocksharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ActiproSoftware.Docking.Wpf, Version=11.2.555.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
@@ -103,29 +104,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\References\Ecng\MoreLinq.dll</HintPath>
     </Reference>
-    <Reference Include="StockSharp.Blackwood">
-      <HintPath>..\..\Connectors\Blackwood\StockSharp.Blackwood.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Fix, Version=4.3.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Connectors\Fix\StockSharp.Fix.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.ITCH">
-      <HintPath>..\..\Connectors\ITCH\StockSharp.ITCH.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Micex">
-      <HintPath>..\..\Connectors\Micex\StockSharp.Micex.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Plaza">
-      <HintPath>..\..\Connectors\Plaza\StockSharp.Plaza.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Rithmic">
-      <HintPath>..\..\Connectors\Rithmic\StockSharp.Rithmic.dll</HintPath>
-    </Reference>
-    <Reference Include="StockSharp.Xaml.Charting, Version=4.3.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Xaml.Charting\StockSharp.Xaml.Charting.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -148,8 +126,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helpers.cs" />
-    <Compile Include="Root.cs" />
+    <Compile Include="..\..\StockSharpAssemblyInfo.cs">
+      <Link>Properties\StockSharpAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="SecuritiesView.xaml.cs">
       <DependentUpon>SecuritiesView.xaml</DependentUpon>
     </Compile>
@@ -198,9 +177,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="stocksharp.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5.1 %28x86 и x64%29</ProductName>
@@ -236,6 +212,10 @@
     <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Connectors\Rithmic\Rithmic.csproj">
       <Project>{FFBC7740-0D2B-49BA-8F95-59E4FC915D06}</Project>
       <Name>Rithmic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\StockSharp %28GitLab%29\Xaml.Charting\Xaml.Charting.csproj">
+      <Project>{C449D618-DEA4-41C3-BA86-9F827C7421DC}</Project>
+      <Name>Xaml.Charting</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Algo\Algo.csproj">
       <Project>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</Project>
@@ -325,6 +305,11 @@
       <Project>{64E4D6F0-36B6-4904-9BA7-FFFBE5FF71D8}</Project>
       <Name>Xaml</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\..\References\stocksharp.ico">
+      <Link>stocksharp.ico</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

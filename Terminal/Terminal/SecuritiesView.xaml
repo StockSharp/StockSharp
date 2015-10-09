@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Terminal.SecuritiesView"
+﻿<UserControl x:Class="StockSharp.Terminal.SecuritiesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,10 +8,9 @@
              DataContext="{Binding RelativeSource={RelativeSource Self}}"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+	
     <UserControl.Resources>
-
-        
-        <ContextMenu x:Key="CntxMenu" >
+        <ContextMenu x:Key="CntxMenu">
             <MenuItem Header="{x:Static loc:LocalizedStrings.Str3200}" 
                       Command="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=DataContext.NewChartCommand}" 
                       CommandParameter="{Binding}" />
@@ -20,14 +19,13 @@
                       CommandParameter="{Binding}" />
         </ContextMenu>
 
-        <Style x:Key="DataGridRowStyle"  TargetType="DataGridRow" >
+        <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
             <Setter Property="ContextMenu" Value="{StaticResource CntxMenu}" />
         </Style>
 
     </UserControl.Resources>
     
     <Grid>
-        <xaml:SecurityGrid x:Name="SecurityGrid" 
-                           RowStyle="{StaticResource DataGridRowStyle}"/>
+        <xaml:SecurityPicker x:Name="SecurityGrid" />
     </Grid>
 </UserControl>

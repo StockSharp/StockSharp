@@ -2,7 +2,7 @@
 using System.Windows;
 
 [assembly: AssemblyTitle("Terminal")]
-[assembly: AssemblyDescription("S#.Anywhere is a free application for integration trading applications with brokerage systems.")]
+[assembly: AssemblyDescription("S#.Terminal is a free trading terminal.")]
 
 [assembly: ThemeInfo(
 	ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located

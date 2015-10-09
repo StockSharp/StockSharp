@@ -1,44 +1,49 @@
-﻿namespace Terminal
+﻿namespace StockSharp.Terminal
 {
-    using System.Windows.Controls;
+	using Ecng.Configuration;
+	using Ecng.Xaml;
 
-    using Ecng.Xaml;
-    using StockSharp.BusinessEntities;
+	using StockSharp.Algo;
+	using StockSharp.BusinessEntities;
 
-    public partial class SecuritiesView : UserControl
-    {
-        private readonly MainWindow _parent;
+	public partial class SecuritiesView
+	{
+		private readonly MainWindow _parent;
 
-        public SecuritiesView(MainWindow parent)
-        {
-            InitializeComponent();
-            _parent = parent;
-            NewChartCommand = new DelegateCommand(CreateNewChart, CanCreateNewChart);
-            NewMarketDepthCommand = new DelegateCommand(CreateNewMarketDepth, CanCreateNewMarketDepth);
-        }
+		public SecuritiesView(MainWindow parent)
+		{
+			InitializeComponent();
 
-        public DelegateCommand NewChartCommand { private set; get; }
+			_parent = parent;
 
-        public DelegateCommand NewMarketDepthCommand { private set; get; }
+			NewChartCommand = new DelegateCommand(CreateNewChart, CanCreateNewChart);
+			NewMarketDepthCommand = new DelegateCommand(CreateNewMarketDepth, CanCreateNewMarketDepth);
 
-        private void CreateNewChart(object obj)
-        {
-            _parent.CreateNewChart(obj as Security);
-        }
+			SecurityGrid.SecurityProvider = ConfigManager.GetService<FilterableSecurityProvider>();
+		}
 
-        private bool CanCreateNewChart(object obj)
-        {
-            return true;
-        }
+		public DelegateCommand NewChartCommand { private set; get; }
 
-        private void CreateNewMarketDepth(object obj)
-        {
-            _parent.CreateNewMarketDepth(obj as Security);
-        }
+		public DelegateCommand NewMarketDepthCommand { private set; get; }
 
-        private bool CanCreateNewMarketDepth(object obj)
-        {
-            return true;
-        }
-    }
+		private void CreateNewChart(object obj)
+		{
+			_parent.CreateNewChart(obj as Security);
+		}
+
+		private bool CanCreateNewChart(object obj)
+		{
+			return true;
+		}
+
+		private void CreateNewMarketDepth(object obj)
+		{
+			_parent.CreateNewMarketDepth(obj as Security);
+		}
+
+		private bool CanCreateNewMarketDepth(object obj)
+		{
+			return true;
+		}
+	}
 }
