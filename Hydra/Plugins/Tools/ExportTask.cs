@@ -1,6 +1,7 @@
 namespace StockSharp.Hydra.Tools
 {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
@@ -17,6 +18,7 @@ namespace StockSharp.Hydra.Tools
 	using StockSharp.Algo.Candles;
 	using StockSharp.Algo.Export;
 	using StockSharp.Algo.Storages;
+	using StockSharp.BusinessEntities;
 	using StockSharp.Hydra.Core;
 	using StockSharp.Logging;
 	using StockSharp.Xaml.PropertyGrid;
@@ -187,6 +189,11 @@ namespace StockSharp.Hydra.Tools
 			get { return _settings; }
 		}
 
+		public override IEnumerable<Type> SupportedMarketDataTypes
+		{
+			get { return new[] { typeof(Trade), typeof(MarketDepth), typeof(Level1ChangeMessage), typeof(OrderLogItem), typeof(ExecutionMessage), typeof(NewsMessage), typeof(Candle) }; }
+		}
+
 		protected override void ApplySettings(HydraTaskSettings settings)
 		{
 			_settings = new ExportSettings(settings);
@@ -235,18 +242,25 @@ namespace StockSharp.Hydra.Tools
 				if (!CanProcess())
 					break;
 
-				var path = _settings.ExportFolder;
-
-				if (path.IsEmpty())
-					path = DriveCache.Instance.DefaultDrive.Path;
-
 				foreach (var t in (allSecurity == null ? security.MarketDataTypes : supportedDataTypes))
 				{
 					if (!CanProcess())
 						break;
 
 					var arg = _settings.CandleSettings.Arg;
-					var dataType = t.ToMessageType(ref arg);
+					Type dataType;
+
+					if (t.IsSubclassOf(typeof(Message)))
+					{
+						if (t == typeof(ExecutionMessage))
+							arg = ExecutionTypes.Order;
+
+						dataType = t;
+					}
+					else
+					{
+						dataType = t == typeof(Candle) ? _settings.CandleSettings.CandleType : t.ToMessageType(ref arg);
+					}
 
 					this.AddInfoLog(LocalizedStrings.Str3769Params.Put(security.Security.Id, dataType.Name, _settings.ExportType));
 
@@ -279,6 +293,11 @@ namespace StockSharp.Hydra.Tools
 					}
 					else
 					{
+						var path = _settings.ExportFolder;
+
+						if (path.IsEmpty())
+							path = DriveCache.Instance.DefaultDrive.Path;
+
 						var fileName = Path.Combine(path, security.Security.GetFileName(
 							dataType, arg, from.Value, to.Value, _settings.ExportType));
 
