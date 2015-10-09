@@ -4163,6 +4163,7 @@ PnL;P&L;П/У
 Apart;Apart;Раздельно
 FinamCandles;Finam (сandles);Финам (свечи)
 YahooCandles;Yahoo (сandles);Yahoo (свечи)
+OrderLogBuilder;Order log to order book builder;Построитель стакана из лога заявок
 DocStr0;Button activation alert settings;Кнопка активации настроек сигнала
 DocStr1;Initializes a new instance of the {0};Создать {0}
 DocStr2;Load settings;Загрузить настройки

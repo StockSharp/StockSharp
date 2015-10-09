@@ -53759,5 +53759,18 @@ namespace StockSharp.Localization
 		{
 			get { return GetString(YahooCandlesKey); }
 		}
+
+		/// <summary>
+		/// Order log to order book builder
+		/// </summary>
+		public const string OrderLogBuilderKey = "OrderLogBuilder";
+
+		/// <summary>
+		/// Order log to order book builder
+		/// </summary>
+		public static string OrderLogBuilder
+		{
+			get { return GetString(OrderLogBuilderKey); }
+		}
     }
 }

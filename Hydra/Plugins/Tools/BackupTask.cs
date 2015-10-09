@@ -47,8 +47,8 @@
 			}
 
 			[CategoryLoc(_sourceName)]
-			[DisplayNameLoc(LocalizedStrings.AddressKey)]
-			[DescriptionLoc(LocalizedStrings.AddressKey, true)]
+			[DisplayNameLoc(LocalizedStrings.Str3427Key)]
+			[DescriptionLoc(LocalizedStrings.Str3427Key, true)]
 			[PropertyOrder(0)]
 			public BackupServices Service
 			{

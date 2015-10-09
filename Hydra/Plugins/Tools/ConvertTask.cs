@@ -144,8 +144,8 @@ namespace StockSharp.Hydra.Tools
 			}
 
 			[CategoryLoc(LocalizedStrings.MarketDepthsKey)]
-			[DisplayNameLoc(LocalizedStrings.Str1660Key)]
-			[DescriptionLoc(LocalizedStrings.Str3782Key)]
+			[DisplayNameLoc(LocalizedStrings.OrderLogKey)]
+			[DescriptionLoc(LocalizedStrings.OrderLogBuilderKey, true)]
 			[PropertyOrder(1)]
 			public OrderLogBuilders MarketDepthBuilder
 			{
